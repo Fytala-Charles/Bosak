@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Compiler\Bosak.XPath.Compiler.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj" />
+  </ItemGroup>
+
+</Project>

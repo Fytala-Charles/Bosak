@@ -1,0 +1,184 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 19 mei 2026
+// PURPOSE              : Opcodes for the register-based XPath intermediate representation. These are lowered from the AST ...
+// SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : License.txt
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+namespace Bosak.XPath.Compiler.Ir;
+
+/// <summary>
+/// Opcodes for the register-based XPath intermediate representation.
+/// These are lowered from the AST and consumed by the bytecode emitter or IL JIT.
+/// </summary>
+public enum IrOpCode : byte
+{
+    // ---- Control flow ------------------------------------------------
+    Nop = 0,
+    Return,
+    Jump,
+    JumpIfTrue,
+    JumpIfFalse,
+    JumpIfEmpty,
+    Call,
+    TailCall,
+    
+    // ---- Context -----------------------------------------------------
+    LoadContext,
+    LoadContextItem,
+    LoadContextPosition,
+    LoadContextSize,
+    SetContext,
+    
+    // ---- Variables ---------------------------------------------------
+    LoadVariable,
+    StoreVariable,
+    
+    // ---- Literals ----------------------------------------------------
+    LoadString,
+    LoadInteger,
+    LoadDecimal,
+    LoadDouble,
+    LoadBoolean,
+    LoadEmptySequence,
+    Move,
+    
+    // ---- Sequences ---------------------------------------------------
+    SequenceStart,
+    SequenceAdd,
+    SequenceEnd,
+    Singleton,
+    Range,
+    Concatenate,
+    
+    // ---- Nodes / Axes ------------------------------------------------
+    Axis,
+    Attribute,
+    Child,
+    Descendant,
+    DescendantOrSelf,
+    Ancestor,
+    AncestorOrSelf,
+    Parent,
+    Self,
+    Following,
+    FollowingSibling,
+    Preceding,
+    PrecedingSibling,
+    Namespace,
+    
+    // ---- Node tests --------------------------------------------------
+    NameTest,
+    KindTest,
+    
+    // ---- Predicates / Filtering ---------------------------------------
+    Filter,
+    Subscript,          // [n]
+    First,
+    Last,
+    Position,
+    
+    // ---- Comparisons -------------------------------------------------
+    Equal,
+    NotEqual,
+    LessThan,
+    LessThanOrEqual,
+    GreaterThan,
+    GreaterThanOrEqual,
+    ValueEqual,
+    ValueNotEqual,
+    ValueLessThan,
+    ValueLessThanOrEqual,
+    ValueGreaterThan,
+    ValueGreaterThanOrEqual,
+    GeneralEqual,
+    GeneralNotEqual,
+    GeneralLessThan,
+    GeneralLessThanOrEqual,
+    GeneralGreaterThan,
+    GeneralGreaterThanOrEqual,
+    IsSameNode,
+    PrecedesNode,
+    FollowsNode,
+    
+    // ---- Arithmetic --------------------------------------------------
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+    IntegerDivide,
+    Modulo,
+    UnaryPlus,
+    UnaryMinus,
+    
+    // ---- Boolean logic -----------------------------------------------
+    And,
+    Or,
+    Not,
+    
+    // ---- String ------------------------------------------------------
+    StringConcat,
+    StringLength,
+    Substring,
+    Contains,
+    StartsWith,
+    EndsWith,
+    NormalizeSpace,
+    Translate,
+    UpperCase,
+    LowerCase,
+    MatchesRegex,
+    ReplaceRegex,
+    TokenizeRegex,
+    
+    // ---- Type operations ---------------------------------------------
+    Cast,
+    Castable,
+    InstanceOf,
+    TreatAs,
+    
+    // ---- Sequence functions ------------------------------------------
+    Count,
+    Exists,
+    Empty,
+    Head,
+    Tail,
+    InsertBefore,
+    Remove,
+    Reverse,
+    Subsequence,
+    DistinctValues,
+    IndexOf,
+    
+    // ---- Aggregation -------------------------------------------------
+    Sum,
+    Avg,
+    Min,
+    Max,
+    StringJoin,
+    
+    // ---- Higher-order (XPath 3.1) ------------------------------------
+    Map,
+    Array,
+    Lookup,
+    LookupWildcard,
+    Curry,              // Partial function application
+    Apply,
+    
+    // ---- Constructors ------------------------------------------------
+    ElementConstructor,
+    AttributeConstructor,
+    TextConstructor,
+    DocumentConstructor,
+    
+    // ---- Error -------------------------------------------------------
+    Error
+}
