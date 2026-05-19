@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added Map and Array value support                                                      |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added DateTime, Date, and Time value factories and accessors                           |
+//                      | Charles Korthout | 0.4   | 19-05-2026     | Added QName value factory and accessor                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
@@ -95,6 +96,10 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value)
         => new(XdmValueKind.Time, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromQName(XsQName value)
+        => new(XdmValueKind.QName, reference: value);
 
     // ------------------------------------------------------------------
     // Accessors
@@ -240,6 +245,16 @@ public readonly struct XdmValue
         }
     }
 
+    public XsQName QNameValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.QName)
+                ThrowInvalidAccess(nameof(QNameValue));
+            return (XsQName)_reference!;
+        }
+    }
+
     /// <summary>
     /// Returns the effective boolean value per XPath/XQuery semantics.
     /// </summary>
@@ -277,6 +292,7 @@ public readonly struct XdmValue
             XdmValueKind.DateTime => ((DateTimeOffset)_reference!).ToString("yyyy-MM-ddTHH:mm:sszzz", System.Globalization.CultureInfo.InvariantCulture),
             XdmValueKind.Date => ((DateTimeOffset)_reference!).ToString("yyyy-MM-ddzzz", System.Globalization.CultureInfo.InvariantCulture),
             XdmValueKind.Time => ((DateTimeOffset)_reference!).ToString("HH:mm:sszzz", System.Globalization.CultureInfo.InvariantCulture),
+            XdmValueKind.QName => ((XsQName)_reference!).ToString(),
             XdmValueKind.External => $"(external: {_reference?.GetType().Name})",
             _ => $"(kind: {_kind})"
         };

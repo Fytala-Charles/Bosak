@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added numeric and node-name accessor tests                                               |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added date/time and fn:node-name tests                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -564,5 +565,45 @@ public class FunctionLibraryTests
         Assert.Equal(1, dto.Month);
         Assert.Equal(1, dto.Day);
         Assert.True(Math.Abs((now.TimeOfDay - dto.TimeOfDay).TotalMinutes) < 1);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:node-name
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void NodeName_ContextItem()
+    {
+        var doc = new System.Xml.Linq.XElement("{http://example.com}root");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var result = XPath31Expression.Compile("fn:node-name()").Evaluate(node);
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        var qn = result.QNameValue;
+        Assert.Equal("root", qn.LocalName);
+        Assert.Equal("http://example.com", qn.NamespaceUri);
+    }
+
+    [Fact]
+    public void NodeName_Argument()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:node-name(child)").Evaluate(node);
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        var qn = result.QNameValue;
+        Assert.Equal("child", qn.LocalName);
+        Assert.Equal("", qn.NamespaceUri);
+    }
+
+    [Fact]
+    public void NodeName_EmptySequence() => Assert.True(Evaluate("fn:node-name(())").IsUndefined);
+
+    [Fact]
+    public void NodeName_TextNode()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root>hello</root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:node-name(child::text())").Evaluate(node);
+        Assert.True(result.IsUndefined);
     }
 }

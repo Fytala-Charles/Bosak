@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added map:* and array:* standard functions                                             |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added numeric and node-name accessor functions                                         |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added current-dateTime, current-date, current-time functions                           |
+//                      | Charles Korthout | 0.6   | 19-05-2026     | Added fn:node-name                                                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -857,6 +858,26 @@ public static class FunctionLibrary
                 ParameterTypes = [],
                 ReturnType = XdmValueKind.Time,
                 Implementation = CurrentTime
+            },
+
+            // ----- fn:node-name -----------------------------------------------
+            [(Namespaces.Fn, "node-name", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "node-name",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.QName,
+                Implementation = NodeName_0
+            },
+            [(Namespaces.Fn, "node-name", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "node-name",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.QName,
+                Implementation = NodeName_1
             },
         };
 
@@ -1727,6 +1748,28 @@ public static class FunctionLibrary
     {
         var now = DateTimeOffset.Now;
         return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Offset));
+    }
+
+    private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (!item.IsNode)
+            return XdmValue.Undefined;
+        return NodeToQName(item.NodeValue);
+    }
+
+    private static XdmValue NodeName_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = GetNodeFromValue(args[0]);
+        return node is null ? XdmValue.Undefined : NodeToQName(node);
+    }
+
+    private static XdmValue NodeToQName(IXdmNode node)
+    {
+        var kind = node.NodeKind;
+        if (kind is not XdmNodeKind.Element and not XdmNodeKind.Attribute and not XdmNodeKind.Namespace and not XdmNodeKind.ProcessingInstruction)
+            return XdmValue.Undefined;
+        return XdmValue.FromQName(new XsQName(node.LocalName, node.NamespaceUri));
     }
 }
 
