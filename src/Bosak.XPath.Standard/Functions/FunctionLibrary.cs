@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added current-dateTime, current-date, current-time functions                           |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Added fn:node-name                                                                     |
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Added fn:number, fn:data, fn:root                                                      |
+//                      | Charles Korthout | 0.8   | 19-05-2026     | Added date/time component extractors                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -939,6 +940,120 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Node,
                 Implementation = Root_1
+            },
+
+            // ----- fn:*-from-dateTime -----------------------------------------
+            [(Namespaces.Fn, "year-from-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "year-from-dateTime",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.DateTime],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = YearFromDateTime
+            },
+            [(Namespaces.Fn, "month-from-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "month-from-dateTime",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.DateTime],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = MonthFromDateTime
+            },
+            [(Namespaces.Fn, "day-from-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "day-from-dateTime",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.DateTime],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = DayFromDateTime
+            },
+            [(Namespaces.Fn, "hours-from-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "hours-from-dateTime",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.DateTime],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = HoursFromDateTime
+            },
+            [(Namespaces.Fn, "minutes-from-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "minutes-from-dateTime",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.DateTime],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = MinutesFromDateTime
+            },
+            [(Namespaces.Fn, "seconds-from-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "seconds-from-dateTime",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.DateTime],
+                ReturnType = XdmValueKind.Decimal,
+                Implementation = SecondsFromDateTime
+            },
+
+            // ----- fn:*-from-date ---------------------------------------------
+            [(Namespaces.Fn, "year-from-date", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "year-from-date",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Date],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = YearFromDate
+            },
+            [(Namespaces.Fn, "month-from-date", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "month-from-date",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Date],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = MonthFromDate
+            },
+            [(Namespaces.Fn, "day-from-date", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "day-from-date",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Date],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = DayFromDate
+            },
+
+            // ----- fn:*-from-time ---------------------------------------------
+            [(Namespaces.Fn, "hours-from-time", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "hours-from-time",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Time],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = HoursFromTime
+            },
+            [(Namespaces.Fn, "minutes-from-time", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "minutes-from-time",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Time],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = MinutesFromTime
+            },
+            [(Namespaces.Fn, "seconds-from-time", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "seconds-from-time",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Time],
+                ReturnType = XdmValueKind.Decimal,
+                Implementation = SecondsFromTime
             },
         };
 
@@ -1906,6 +2021,54 @@ public static class FunctionLibrary
         while (current.Parent is not null)
             current = current.Parent;
         return XdmValue.FromNode(current);
+    }
+
+    // ------------------------------------------------------------------
+    // Date / Time component extractors
+    // ------------------------------------------------------------------
+
+    private static XdmValue YearFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Year);
+
+    private static XdmValue MonthFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Month);
+
+    private static XdmValue DayFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Day);
+
+    private static XdmValue HoursFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Hour);
+
+    private static XdmValue MinutesFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Minute);
+
+    private static XdmValue SecondsFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (args[0].IsUndefined) return XdmValue.Undefined;
+        var dto = args[0].DateTimeValue;
+        return XdmValue.FromDecimal(dto.Second + dto.Millisecond / 1000.0m + dto.Microsecond / 1_000_000.0m + dto.Nanosecond / 1_000_000_000.0m);
+    }
+
+    private static XdmValue YearFromDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateValue.Year);
+
+    private static XdmValue MonthFromDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateValue.Month);
+
+    private static XdmValue DayFromDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateValue.Day);
+
+    private static XdmValue HoursFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].TimeValue.Hour);
+
+    private static XdmValue MinutesFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].TimeValue.Minute);
+
+    private static XdmValue SecondsFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (args[0].IsUndefined) return XdmValue.Undefined;
+        var dto = args[0].TimeValue;
+        return XdmValue.FromDecimal(dto.Second + dto.Millisecond / 1000.0m + dto.Microsecond / 1_000_000.0m + dto.Nanosecond / 1_000_000_000.0m);
     }
 }
 

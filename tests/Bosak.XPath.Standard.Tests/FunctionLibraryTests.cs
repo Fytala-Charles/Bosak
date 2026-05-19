@@ -765,4 +765,104 @@ public class FunctionLibraryTests
 
     [Fact]
     public void Root_EmptySequence() => Assert.True(Evaluate("fn:root(())").IsUndefined);
+
+    // ------------------------------------------------------------------
+    // Date/time component extractors
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void YearFromDateTime()
+    {
+        var result = Evaluate("fn:year-from-dateTime(fn:current-dateTime())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue >= 2026);
+    }
+
+    [Fact]
+    public void MonthFromDateTime()
+    {
+        var result = Evaluate("fn:month-from-dateTime(fn:current-dateTime())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue is >= 1 and <= 12);
+    }
+
+    [Fact]
+    public void DayFromDateTime()
+    {
+        var result = Evaluate("fn:day-from-dateTime(fn:current-dateTime())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue is >= 1 and <= 31);
+    }
+
+    [Fact]
+    public void HoursFromDateTime()
+    {
+        var result = Evaluate("fn:hours-from-dateTime(fn:current-dateTime())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue is >= 0 and <= 23);
+    }
+
+    [Fact]
+    public void MinutesFromDateTime()
+    {
+        var result = Evaluate("fn:minutes-from-dateTime(fn:current-dateTime())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue is >= 0 and <= 59);
+    }
+
+    [Fact]
+    public void SecondsFromDateTime()
+    {
+        var result = Evaluate("fn:seconds-from-dateTime(fn:current-dateTime())");
+        Assert.Equal(XdmValueKind.Decimal, result.Kind);
+        Assert.True(result.DecimalValue is >= 0m and < 60m);
+    }
+
+    [Fact]
+    public void YearFromDate()
+    {
+        var result = Evaluate("fn:year-from-date(fn:current-date())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue >= 2026);
+    }
+
+    [Fact]
+    public void MonthFromDate()
+    {
+        var result = Evaluate("fn:month-from-date(fn:current-date())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue is >= 1 and <= 12);
+    }
+
+    [Fact]
+    public void DayFromDate()
+    {
+        var result = Evaluate("fn:day-from-date(fn:current-date())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue is >= 1 and <= 31);
+    }
+
+    [Fact]
+    public void HoursFromTime()
+    {
+        var result = Evaluate("fn:hours-from-time(fn:current-time())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue is >= 0 and <= 23);
+    }
+
+    [Fact]
+    public void MinutesFromTime()
+    {
+        var result = Evaluate("fn:minutes-from-time(fn:current-time())");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.True(result.IntegerValue is >= 0 and <= 59);
+    }
+
+    [Fact]
+    public void SecondsFromTime()
+    {
+        var result = Evaluate("fn:seconds-from-time(fn:current-time())");
+        Assert.Equal(XdmValueKind.Decimal, result.Kind);
+        Assert.True(result.DecimalValue is >= 0m and < 60m);
+    }
 }
