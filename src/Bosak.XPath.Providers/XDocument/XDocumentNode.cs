@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Fixed Prefix resolution and implemented namespace axis                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -30,10 +31,19 @@ public sealed class XDocumentNode : IXdmNode
     private static readonly ConditionalWeakTable<System.Xml.Linq.XDocument, Dictionary<XObject, long>> OrderMaps = new();
 
     private readonly XObject _node;
+    private readonly bool _isNamespaceNode;
+    private readonly XElement? _namespaceOwner;
 
     public XDocumentNode(XObject node)
     {
         _node = node ?? throw new ArgumentNullException(nameof(node));
+    }
+
+    private XDocumentNode(XAttribute declaration, XElement owner)
+    {
+        _node = declaration;
+        _isNamespaceNode = true;
+        _namespaceOwner = owner;
     }
 
     internal static void RegisterOrderMap(System.Xml.Linq.XDocument doc, Dictionary<XObject, long> map)
@@ -43,40 +53,72 @@ public sealed class XDocumentNode : IXdmNode
     // Node metadata
     // ------------------------------------------------------------------
 
-    public XdmNodeKind NodeKind => GetNodeKind(_node);
+    public XdmNodeKind NodeKind => _isNamespaceNode ? XdmNodeKind.Namespace : GetNodeKind(_node);
 
-    public string LocalName => _node switch
+    public string LocalName
     {
-        XElement e => e.Name.LocalName,
-        XAttribute a => a.Name.LocalName,
-        XProcessingInstruction pi => pi.Target,
-        _ => string.Empty
-    };
+        get
+        {
+            if (_isNamespaceNode)
+            {
+                return _node is XAttribute attr && attr.Name.LocalName != "xmlns"
+                    ? attr.Name.LocalName
+                    : string.Empty;
+            }
+            return _node switch
+            {
+                XElement e => e.Name.LocalName,
+                XAttribute a => a.Name.LocalName,
+                XProcessingInstruction pi => pi.Target,
+                _ => string.Empty
+            };
+        }
+    }
 
-    public string NamespaceUri => _node switch
+    public string NamespaceUri => _isNamespaceNode
+        ? string.Empty
+        : _node switch
+        {
+            XElement e => e.Name.NamespaceName,
+            XAttribute a => a.Name.NamespaceName,
+            _ => string.Empty
+        };
+
+    public string Prefix => _isNamespaceNode
+        ? string.Empty
+        : _node switch
+        {
+            XElement e => e.GetPrefixOfNamespace(e.Name.Namespace) ?? string.Empty,
+            XAttribute a => (a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty,
+            _ => string.Empty
+        };
+
+    public string StringValue
     {
-        XElement e => e.Name.NamespaceName,
-        XAttribute a => a.Name.NamespaceName,
-        _ => string.Empty
-    };
-
-    public string Prefix => string.Empty; // TODO: resolve prefix from in-scope namespace declarations
-
-    public string StringValue => _node switch
-    {
-        XElement e => e.Value,
-        XAttribute a => a.Value,
-        XText t => t.Value,
-        XComment c => c.Value,
-        XProcessingInstruction pi => pi.Data,
-        System.Xml.Linq.XDocument d => d.Root?.Value ?? string.Empty,
-        _ => string.Empty
-    };
+        get
+        {
+            if (_isNamespaceNode)
+                return _node is XAttribute attr ? attr.Value : string.Empty;
+            return _node switch
+            {
+                XElement e => e.Value,
+                XAttribute a => a.Value,
+                XText t => t.Value,
+                XComment c => c.Value,
+                XProcessingInstruction pi => pi.Data,
+                System.Xml.Linq.XDocument d => d.Root?.Value ?? string.Empty,
+                _ => string.Empty
+            };
+        }
+    }
 
     public XdmValue TypedValue => XdmValue.FromString(StringValue);
 
     public bool IsSameNode(IXdmNode other)
-        => other is XDocumentNode xn && ReferenceEquals(_node, xn._node);
+        => other is XDocumentNode xn
+           && ReferenceEquals(_node, xn._node)
+           && _isNamespaceNode == xn._isNamespaceNode
+           && ReferenceEquals(_namespaceOwner, xn._namespaceOwner);
 
     public long DocumentOrder
     {
@@ -97,6 +139,8 @@ public sealed class XDocumentNode : IXdmNode
     {
         get
         {
+            if (_isNamespaceNode)
+                return _namespaceOwner is not null ? new XDocumentNode(_namespaceOwner) : null;
             var parent = _node.Parent;
             return parent is not null ? new XDocumentNode(parent) : null;
         }
@@ -170,7 +214,7 @@ public sealed class XDocumentNode : IXdmNode
             XdmAxis.PrecedingSibling => GetPrecedingSiblingAxis(),
             XdmAxis.Following => GetFollowingAxis(),
             XdmAxis.Preceding => GetPrecedingAxis(),
-            XdmAxis.Namespace => XdmSequence.Empty, // TODO: namespace nodes
+            XdmAxis.Namespace => GetNamespaceAxis(),
             _ => XdmSequence.Empty
         };
     }
@@ -254,6 +298,42 @@ public sealed class XDocumentNode : IXdmNode
         {
             items.Add(XdmValue.FromNode(new XDocumentNode(attr)));
         }
+        return MaterializedSequence.FromList(items);
+    }
+
+    private XdmSequence GetNamespaceAxis()
+    {
+        if (_node is not XElement element)
+            return XdmSequence.Empty;
+
+        var items = new List<XdmValue>();
+        var seen = new HashSet<string>();
+        var current = element;
+
+        while (current is not null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (!attr.IsNamespaceDeclaration)
+                    continue;
+
+                string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                if (seen.Add(prefix))
+                {
+                    items.Add(XdmValue.FromNode(new XDocumentNode(attr, element)));
+                }
+            }
+            current = current.Parent;
+        }
+
+        // The xml namespace is always implicitly in scope
+        if (seen.Add("xml"))
+        {
+            items.Add(XdmValue.FromNode(new XDocumentNode(
+                new XAttribute(XNamespace.Xmlns + "xml", XNamespace.Xml.NamespaceName),
+                element)));
+        }
+
         return MaterializedSequence.FromList(items);
     }
 

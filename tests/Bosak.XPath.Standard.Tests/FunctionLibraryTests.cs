@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added date/time and fn:node-name tests                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -521,7 +522,15 @@ public class FunctionLibraryTests
         var doc = System.Xml.Linq.XDocument.Parse("<ns:root xmlns:ns='http://example.com'><ns:child/></ns:root>");
         var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
         var result = XPath31Expression.Compile("fn:name(ns:child)").Evaluate(node);
-        // Prefix resolution is not yet implemented in XDocumentNode; returns local-name only
+        Assert.Equal("ns:child", result.ToString());
+    }
+
+    [Fact]
+    public void Name_DefaultNamespace()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root xmlns='http://default.com'><child/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:name(child)").Evaluate(node);
         Assert.Equal("child", result.ToString());
     }
 
@@ -605,5 +614,65 @@ public class FunctionLibraryTests
         var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
         var result = XPath31Expression.Compile("fn:node-name(child::text())").Evaluate(node);
         Assert.True(result.IsUndefined);
+    }
+
+    // ------------------------------------------------------------------
+    // Namespace axis
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void NamespaceAxis_InScopePrefixes()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse(
+            "<ns:root xmlns:ns='http://example.com' xmlns:other='http://other.com'><ns:child/></ns:root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("namespace::node()").Evaluate(node);
+        var uris = new List<string>();
+        var prefixes = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+        {
+            uris.Add(item.ToString());
+            prefixes.Add(item.NodeValue.LocalName);
+        }
+        Assert.Contains("http://example.com", uris);
+        Assert.Contains("http://other.com", uris);
+        Assert.Contains("http://www.w3.org/XML/1998/namespace", uris);
+        Assert.Contains("ns", prefixes);
+        Assert.Contains("other", prefixes);
+        Assert.Contains("xml", prefixes);
+    }
+
+    [Fact]
+    public void NamespaceAxis_DefaultNamespace()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse(
+            "<root xmlns='http://default.com'><child/></root>");
+        var child = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!.Element(XName.Get("child", "http://default.com"))!);
+        var result = XPath31Expression.Compile("namespace::node()").Evaluate(child);
+        var uris = new List<string>();
+        var prefixes = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+        {
+            uris.Add(item.ToString());
+            prefixes.Add(item.NodeValue.LocalName);
+        }
+        // Default namespace has empty prefix; namespace node string-value is the URI
+        Assert.Contains("http://default.com", uris);
+        Assert.Contains("", prefixes); // default prefix
+    }
+
+    [Fact]
+    public void NamespaceAxis_Inherited()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse(
+            "<ns:root xmlns:ns='http://example.com'><ns:child xmlns:ns='http://override.com'/></ns:root>");
+        var child = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!.Element(XName.Get("child", "http://override.com"))!);
+        var result = XPath31Expression.Compile("namespace::node()").Evaluate(child);
+        var uris = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            uris.Add(item.ToString());
+        // Inner declaration overrides outer one
+        Assert.Contains("http://override.com", uris);
+        Assert.DoesNotContain("http://example.com", uris);
     }
 }
