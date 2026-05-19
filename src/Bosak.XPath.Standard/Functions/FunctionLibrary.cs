@@ -1168,6 +1168,52 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.QName,
                 Implementation = ResolveQName
             },
+            // ----- fn:for-each, fn:filter, fn:fold-left, fn:fold-right, fn:for-each-pair -----
+            [(Namespaces.Fn, "for-each", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "for-each",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = ForEach_2
+            },
+            [(Namespaces.Fn, "filter", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "filter",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Filter_2
+            },
+            [(Namespaces.Fn, "fold-left", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "fold-left",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = FoldLeft_3
+            },
+            [(Namespaces.Fn, "fold-right", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "fold-right",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = FoldRight_3
+            },
+            [(Namespaces.Fn, "for-each-pair", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "for-each-pair",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = ForEachPair_3
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -1268,6 +1314,101 @@ public static class FunctionLibrary
             list.Add(item);
         }
         return XdmValue.FromSequence(Bosak.XPath.Core.Xdm.MaterializedSequence.FromList(list));
+    }
+
+    // ------------------------------------------------------------------
+    // Higher-order functions
+    // ------------------------------------------------------------------
+
+    private static IEnumerable<XdmValue> AsSequence(XdmValue value)
+    {
+        if (value.IsUndefined)
+            yield break;
+        if (value.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                yield return item;
+        }
+        else
+        {
+            yield return value;
+        }
+    }
+
+    private static void AppendResult(XdmValue result, List<XdmValue> target)
+    {
+        if (result.IsUndefined)
+            return;
+        if (result.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+                target.Add(item);
+        }
+        else
+        {
+            target.Add(result);
+        }
+    }
+
+    private static XdmValue ForEach_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var func = (FunctionItem)args[1].FunctionValue;
+        var result = new List<XdmValue>();
+        foreach (var item in AsSequence(args[0]))
+        {
+            AppendResult(VmEngine.InvokeFunctionItem(func, ctx, new[] { item }), result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue Filter_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var func = (FunctionItem)args[1].FunctionValue;
+        var result = new List<XdmValue>();
+        foreach (var item in AsSequence(args[0]))
+        {
+            var pred = VmEngine.InvokeFunctionItem(func, ctx, new[] { item });
+            if (pred.EffectiveBooleanValue())
+                result.Add(item);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue FoldLeft_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var func = (FunctionItem)args[2].FunctionValue;
+        var accumulator = args[1];
+        foreach (var item in AsSequence(args[0]))
+        {
+            accumulator = VmEngine.InvokeFunctionItem(func, ctx, new[] { accumulator, item });
+        }
+        return accumulator;
+    }
+
+    private static XdmValue FoldRight_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var func = (FunctionItem)args[2].FunctionValue;
+        var items = AsSequence(args[0]).ToList();
+        var accumulator = args[1];
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            accumulator = VmEngine.InvokeFunctionItem(func, ctx, new[] { items[i], accumulator });
+        }
+        return accumulator;
+    }
+
+    private static XdmValue ForEachPair_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var func = (FunctionItem)args[2].FunctionValue;
+        var seq1 = AsSequence(args[0]).ToList();
+        var seq2 = AsSequence(args[1]).ToList();
+        var result = new List<XdmValue>();
+        int minLen = Math.Min(seq1.Count, seq2.Count);
+        for (int i = 0; i < minLen; i++)
+        {
+            AppendResult(VmEngine.InvokeFunctionItem(func, ctx, new[] { seq1[i], seq2[i] }), result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     private static XdmValue Not(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

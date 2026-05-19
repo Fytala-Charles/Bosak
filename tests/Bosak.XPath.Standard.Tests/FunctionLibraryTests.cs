@@ -1011,4 +1011,70 @@ public class FunctionLibraryTests
         Assert.Equal("child", qn.LocalName);
         Assert.Equal("http://default.com", qn.NamespaceUri);
     }
+
+    // ------------------------------------------------------------------
+    // Higher-order functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ForEach_Double()
+    {
+        var result = EvalSequence("for-each((1, 2, 3), function($x) { $x * 2 })");
+        Assert.Equal(3, result.Length);
+        Assert.Equal("2", result[0]);
+        Assert.Equal("4", result[1]);
+        Assert.Equal("6", result[2]);
+    }
+
+    [Fact]
+    public void ForEach_NamedFunction()
+    {
+        var result = EvalSequence("for-each((-1, -2, -3), abs#1)");
+        Assert.Equal(3, result.Length);
+        Assert.Equal("1", result[0]);
+        Assert.Equal("2", result[1]);
+        Assert.Equal("3", result[2]);
+    }
+
+    [Fact]
+    public void Filter_GreaterThanTwo()
+    {
+        var result = EvalSequence("filter((1, 2, 3, 4), function($x) { $x > 2 })");
+        Assert.Equal(2, result.Length);
+        Assert.Equal("3", result[0]);
+        Assert.Equal("4", result[1]);
+    }
+
+    [Fact]
+    public void FoldLeft_Sum()
+    {
+        var result = Evaluate("fold-left((1, 2, 3, 4), 0, function($a, $b) { $a + $b })");
+        Assert.Equal(10, result.IntegerValue);
+    }
+
+    [Fact]
+    public void FoldRight_StringConcat()
+    {
+        var result = EvalStr("fold-right((1, 2, 3), '', function($a, $b) { concat($a, '-', $b) })");
+        Assert.Equal("1-2-3-", result);
+    }
+
+    [Fact]
+    public void ForEachPair_SumPairs()
+    {
+        var result = EvalSequence("for-each-pair((1, 2, 3), (10, 20, 30), function($a, $b) { $a + $b })");
+        Assert.Equal(3, result.Length);
+        Assert.Equal("11", result[0]);
+        Assert.Equal("22", result[1]);
+        Assert.Equal("33", result[2]);
+    }
+
+    [Fact]
+    public void ForEachPair_DifferentLengths()
+    {
+        var result = EvalSequence("for-each-pair((1, 2, 3), (10, 20), function($a, $b) { $a + $b })");
+        Assert.Equal(2, result.Length);
+        Assert.Equal("11", result[0]);
+        Assert.Equal("22", result[1]);
+    }
 }

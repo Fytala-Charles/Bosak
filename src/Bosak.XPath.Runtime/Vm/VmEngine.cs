@@ -1432,7 +1432,7 @@ public static class VmEngine
         return new NamedFunctionItem(nsUri, localName, tuple.Item2);
     }
 
-    private static XdmValue InvokeFunctionItem(FunctionItem func, EvaluationContext context, ReadOnlySpan<XdmValue> args)
+    public static XdmValue InvokeFunctionItem(FunctionItem func, EvaluationContext context, ReadOnlySpan<XdmValue> args)
     {
         switch (func)
         {
