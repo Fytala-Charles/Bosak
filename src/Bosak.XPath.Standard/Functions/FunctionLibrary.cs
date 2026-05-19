@@ -73,6 +73,26 @@ public static class FunctionLibrary
                 Implementation = Count
             },
 
+            // ----- fn:position / fn:last --------------------------------------
+            [(Namespaces.Fn, "position", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "position",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = Position
+            },
+            [(Namespaces.Fn, "last", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "last",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = Last
+            },
+
             // ----- fn:exists --------------------------------------------------
             [(Namespaces.Fn, "exists", 1)] = new()
             {
@@ -182,7 +202,17 @@ public static class FunctionLibrary
     }
 
     private static XdmValue String_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(args[0].ToString());
+    {
+        var arg = args[0];
+        if (arg.IsSequence)
+        {
+            // fn:string on a sequence takes the first item
+            foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
+                return XdmValue.FromString(item.ToString());
+            return XdmValue.FromString(string.Empty);
+        }
+        return XdmValue.FromString(arg.ToString());
+    }
 
     private static XdmValue Concat(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(args[0].ToString() + args[1].ToString());
@@ -241,6 +271,12 @@ public static class FunctionLibrary
 
     private static XdmValue Not(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromBoolean(!args[0].EffectiveBooleanValue());
+
+    private static XdmValue Position(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromInteger(ctx.ContextPosition);
+
+    private static XdmValue Last(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromInteger(ctx.ContextSize);
 }
 
 file static class Namespaces

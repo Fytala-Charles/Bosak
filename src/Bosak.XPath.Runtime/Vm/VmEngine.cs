@@ -258,9 +258,9 @@ public static class VmEngine
                 case IrOpCode.PrecedingSibling:
                 case IrOpCode.Namespace:
                     {
-                        var node = registers[instr.RegisterB].NodeValue;
+                        var input = registers[instr.RegisterB];
                         var axis = ToXdmAxis(instr.OpCode);
-                        registers[instr.RegisterA] = XdmValue.FromSequence(node.Axis(axis));
+                        registers[instr.RegisterA] = ApplyAxis(input, axis);
                         ip++;
                         break;
                     }
@@ -708,6 +708,61 @@ public static class VmEngine
         _ => throw new ArgumentOutOfRangeException(nameof(opcode), opcode, null)
     };
 
+    private static XdmValue ApplyAxis(XdmValue input, XdmAxis axis)
+    {
+        if (input.IsUndefined)
+            return XdmValue.Undefined;
+
+        if (input.IsNode)
+            return XdmValue.FromSequence(input.NodeValue.Axis(axis));
+
+        if (input.IsSequence)
+        {
+            var items = MaterializeSequence(input);
+            var result = new List<XdmValue>();
+            foreach (var item in items)
+            {
+                if (item.IsNode)
+                {
+                    var seq = item.NodeValue.Axis(axis);
+                    foreach (var node in seq)
+                        result.Add(node);
+                }
+            }
+            return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+        }
+
+        throw new InvalidOperationException(
+            $"Axis {axis} requires a node or sequence of nodes, but got {input.Kind}.");
+    }
+
+    /// <summary>
+    /// Atomizes an XDM value for comparison: nodes become their string value,
+    /// singleton sequences are unpacked, and other values pass through.
+    /// </summary>
+    private static XdmValue Atomize(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+
+        if (value.IsNode)
+            return XdmValue.FromString(value.NodeValue.StringValue);
+
+        if (value.IsSequence)
+        {
+            var items = MaterializeSequence(value);
+            if (items.Length == 1)
+                return Atomize(items[0]);
+            if (items.Length == 0)
+                return XdmValue.Undefined;
+            // For value comparisons with multiple items, take the first
+            // (strictly this is an error in XPath, but we are lenient).
+            return Atomize(items[0]);
+        }
+
+        return value;
+    }
+
     private static XdmValue FilterNodes(XdmValue input, Func<IXdmNode, bool> predicate)
     {
         var items = MaterializeSequence(input);
@@ -809,6 +864,9 @@ public static class VmEngine
 
     private static bool Compare(IrOpCode op, XdmValue left, XdmValue right)
     {
+        left = Atomize(left);
+        right = Atomize(right);
+
         if (IsDouble(left) || IsDouble(right))
         {
             double l = ToDouble(left);
@@ -857,9 +915,25 @@ public static class VmEngine
             };
         }
 
-        // String comparison fallback
+        // Atomized nodes become strings; try numeric parsing for untyped values
         string lStr = left.ToString();
         string rStr = right.ToString();
+
+        if (double.TryParse(lStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double lDbl) &&
+            double.TryParse(rStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double rDbl))
+        {
+            return op switch
+            {
+                IrOpCode.Equal or IrOpCode.ValueEqual => lDbl == rDbl,
+                IrOpCode.NotEqual or IrOpCode.ValueNotEqual => lDbl != rDbl,
+                IrOpCode.LessThan or IrOpCode.ValueLessThan => lDbl < rDbl,
+                IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => lDbl <= rDbl,
+                IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => lDbl > rDbl,
+                IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => lDbl >= rDbl,
+                _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+            };
+        }
+
         int cmp = string.CompareOrdinal(lStr, rStr);
         return op switch
         {

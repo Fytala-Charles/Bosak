@@ -207,6 +207,6 @@ public readonly struct XdmValue
         };
     }
 
-    private static void ThrowInvalidAccess(string propertyName)
-        => throw new InvalidOperationException($"Cannot access {propertyName} on XDM value of kind '{propertyName}'");
+    private void ThrowInvalidAccess(string propertyName)
+        => throw new InvalidOperationException($"Cannot access {propertyName} on XDM value of kind '{_kind}'");
 }
