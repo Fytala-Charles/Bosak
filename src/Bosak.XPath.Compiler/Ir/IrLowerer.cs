@@ -734,32 +734,51 @@ public sealed class IrLowerer
     {
         // $x => fn()  desugars to  fn($x)
         int sourceReg = LowerNode(node.Source);
-        var target = node.Target;
-
-        // Prepend source as first argument
-        var args = new List<XPathAstNode>(target.Arguments.Count + 1);
-        args.Add(new ContextItemNode { Span = node.Span }); // placeholder - we'll push sourceReg instead
-
-        // Actually, we can't easily modify the AST here. Instead, we'll emit the call manually.
         int resultReg = targetReg ?? AllocRegister();
-        string qname = string.IsNullOrEmpty(target.Prefix)
-            ? target.LocalName
-            : $"{target.Prefix}:{target.LocalName}";
-        int funcPoolIdx = AddToLiteralPool(qname);
 
-        int argCount = target.Arguments.Count + 1;
-
-        // Evaluate remaining arguments (may allocate scratch registers internally)
-        var argRegs = new int[argCount];
-        argRegs[0] = sourceReg;
-        for (int i = 0; i < target.Arguments.Count; i++)
+        switch (node.Target)
         {
-            argRegs[i + 1] = LowerNode(target.Arguments[i]);
-        }
+            case FunctionCallNode staticCall:
+                {
+                    string qname = string.IsNullOrEmpty(staticCall.Prefix)
+                        ? staticCall.LocalName
+                        : $"{staticCall.Prefix}:{staticCall.LocalName}";
+                    int funcPoolIdx = AddToLiteralPool(qname);
 
-        // Check whether the argument result registers are already consecutive
+                    int argCount = staticCall.Arguments.Count + 1;
+                    var argRegs = new int[argCount];
+                    argRegs[0] = sourceReg;
+                    for (int i = 0; i < staticCall.Arguments.Count; i++)
+                        argRegs[i + 1] = LowerNode(staticCall.Arguments[i]);
+
+                    int firstArgReg = PackArgumentsConsecutive(argRegs);
+                    Emit(IrOpCode.Call, (byte)resultReg, (byte)firstArgReg, (byte)argCount, funcPoolIdx);
+                    return resultReg;
+                }
+
+            case DynamicFunctionCallNode dynamicCall:
+                {
+                    int funcReg = LowerNode(dynamicCall.Function);
+                    int argCount = dynamicCall.Arguments.Count + 1;
+                    var argRegs = new int[argCount];
+                    argRegs[0] = sourceReg;
+                    for (int i = 0; i < dynamicCall.Arguments.Count; i++)
+                        argRegs[i + 1] = LowerNode(dynamicCall.Arguments[i]);
+
+                    int firstArgReg = PackArgumentsConsecutive(argRegs);
+                    Emit(IrOpCode.Apply, (byte)resultReg, (byte)funcReg, (byte)argCount, firstArgReg);
+                    return resultReg;
+                }
+
+            default:
+                throw new NotSupportedException($"Arrow target type {node.Target.GetType().Name} is not supported.");
+        }
+    }
+
+    private int PackArgumentsConsecutive(int[] argRegs)
+    {
         bool consecutive = true;
-        for (int i = 1; i < argCount; i++)
+        for (int i = 1; i < argRegs.Length; i++)
         {
             if (argRegs[i] != argRegs[0] + i)
             {
@@ -768,25 +787,17 @@ public sealed class IrLowerer
             }
         }
 
-        int firstArgReg;
         if (consecutive)
-        {
-            firstArgReg = argRegs[0];
-        }
-        else
-        {
-            // Repack arguments into a consecutive register block for the VM Call opcode
-            firstArgReg = AllocRegister();
-            Emit(IrOpCode.Move, (byte)firstArgReg, (byte)argRegs[0]);
-            for (int i = 1; i < argCount; i++)
-            {
-                int packedReg = AllocRegister();
-                Emit(IrOpCode.Move, (byte)packedReg, (byte)argRegs[i]);
-            }
-        }
+            return argRegs[0];
 
-        Emit(IrOpCode.Call, (byte)resultReg, (byte)firstArgReg, (byte)argCount, funcPoolIdx);
-        return resultReg;
+        int firstArgReg = AllocRegister();
+        Emit(IrOpCode.Move, (byte)firstArgReg, (byte)argRegs[0]);
+        for (int i = 1; i < argRegs.Length; i++)
+        {
+            int packedReg = AllocRegister();
+            Emit(IrOpCode.Move, (byte)packedReg, (byte)argRegs[i]);
+        }
+        return firstArgReg;
     }
 
     private int LowerLookup(LookupNode node, int? targetReg)

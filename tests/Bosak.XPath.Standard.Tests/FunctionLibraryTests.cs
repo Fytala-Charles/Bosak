@@ -1013,6 +1013,46 @@ public class FunctionLibraryTests
     }
 
     // ------------------------------------------------------------------
+    // Arrow operator
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Arrow_Single()
+    {
+        Assert.Equal("HELLO", EvalStr("'hello' => upper-case()"));
+    }
+
+    [Fact]
+    public void Arrow_Chained()
+    {
+        Assert.Equal("HELLO WORLD", EvalStr("'  hello world  ' => normalize-space() => upper-case()"));
+    }
+
+    [Fact]
+    public void Arrow_WithExistingArgument()
+    {
+        Assert.Equal("HELLO", EvalStr("'hello' => concat(' world') => substring(1, 5) => upper-case()"));
+    }
+
+    [Fact]
+    public void Arrow_NumericFunction()
+    {
+        Assert.Equal("3", EvalStr("-3 => abs() => string()"));
+    }
+
+    [Fact]
+    public void Arrow_VariableTarget()
+    {
+        Assert.Equal("HELLO", EvalStr("let $f := upper-case#1 return 'hello' => $f()"));
+    }
+
+    [Fact]
+    public void Arrow_ParenthesizedTarget()
+    {
+        Assert.Equal("HELLO", EvalStr("let $f := upper-case#1 return 'hello' => ($f)()"));
+    }
+
+    // ------------------------------------------------------------------
     // Higher-order functions
     // ------------------------------------------------------------------
 

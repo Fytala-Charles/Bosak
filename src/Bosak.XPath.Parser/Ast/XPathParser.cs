@@ -464,7 +464,7 @@ public sealed class XPathParser
         return left;
     }
 
-    private FunctionCallNode ParseArrowTarget()
+    private XPathAstNode ParseArrowTarget()
     {
         int start = Current.Start;
         if (Current.Kind == TokenKind.Name)
@@ -475,12 +475,30 @@ public sealed class XPathParser
             var args = ParseArgumentList();
             return WithSpan(new FunctionCallNode(local, args, prefix), start, End);
         }
+        if (Current.Kind == TokenKind.Dollar)
+        {
+            // Variable reference as function: $x => $f()
+            Advance();
+            var nameTok = Expect(TokenKind.Name);
+            var (prefix, local) = SplitQName(GetString(nameTok));
+            var args = ParseArgumentList();
+            return WithSpan(new DynamicFunctionCallNode(new VariableReferenceNode(local, prefix), args), start, End);
+        }
+        if (Current.Kind == TokenKind.LParen)
+        {
+            // Parenthesized expression as function: $x => ($f)()
+            Advance();
+            var expr = ParseExpr();
+            Expect(TokenKind.RParen);
+            var args = ParseArgumentList();
+            return WithSpan(new DynamicFunctionCallNode(expr, args), start, End);
+        }
         if (Current.Kind == TokenKind.KeywordFunction)
         {
             // Inline function as arrow target: not common, skip for now
             throw new ParseException("Inline function as arrow target not yet supported", Current.Start);
         }
-        throw new ParseException("Expected function name after =>", Current.Start);
+        throw new ParseException("Expected function name, variable reference, or parenthesized expression after =>", Current.Start);
     }
 
     // UnaryExpr ::= ("+" | "-")* ValueExpr

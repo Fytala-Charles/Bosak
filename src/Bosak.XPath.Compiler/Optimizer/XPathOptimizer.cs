@@ -417,7 +417,7 @@ public sealed class XPathOptimizer
     private XPathAstNode OptimizeArrow(ArrowExprNode node, ref bool changed)
     {
         var source = OptimizeNode(node.Source, ref changed);
-        var target = (FunctionCallNode)OptimizeNode(node.Target, ref changed);
+        var target = OptimizeNode(node.Target, ref changed);
 
         if (source != node.Source || target != node.Target)
         {
