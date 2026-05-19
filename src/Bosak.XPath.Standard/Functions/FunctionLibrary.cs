@@ -11,9 +11,14 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added string, sequence, and aggregate standard functions                                 |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added map:* and array:* standard functions                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
@@ -167,6 +172,524 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Boolean,
                 Implementation = (_, _) => XdmValue.False
             },
+
+            // ----- fn:concat (variable arity 2+) -----------------------------
+            [(Namespaces.Fn, "concat", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "concat",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "concat",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "concat",
+                Arity = 4,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 5)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "concat",
+                Arity = 5,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = ConcatN
+            },
+
+            // ----- fn:string-length -------------------------------------------
+            [(Namespaces.Fn, "string-length", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "string-length",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = StringLength_0
+            },
+            [(Namespaces.Fn, "string-length", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "string-length",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = StringLength_1
+            },
+
+            // ----- fn:substring -----------------------------------------------
+            [(Namespaces.Fn, "substring", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "substring",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Double],
+                ReturnType = XdmValueKind.String,
+                Implementation = Substring_2
+            },
+            [(Namespaces.Fn, "substring", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "substring",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Double, XdmValueKind.Double],
+                ReturnType = XdmValueKind.String,
+                Implementation = Substring_3
+            },
+
+            // ----- fn:contains ------------------------------------------------
+            [(Namespaces.Fn, "contains", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "contains",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Contains
+            },
+
+            // ----- fn:starts-with ---------------------------------------------
+            [(Namespaces.Fn, "starts-with", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "starts-with",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = StartsWith
+            },
+
+            // ----- fn:ends-with -----------------------------------------------
+            [(Namespaces.Fn, "ends-with", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "ends-with",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = EndsWith
+            },
+
+            // ----- fn:normalize-space -----------------------------------------
+            [(Namespaces.Fn, "normalize-space", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "normalize-space",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = NormalizeSpace_0
+            },
+            [(Namespaces.Fn, "normalize-space", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "normalize-space",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.String,
+                Implementation = NormalizeSpace_1
+            },
+
+            // ----- fn:translate -----------------------------------------------
+            [(Namespaces.Fn, "translate", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "translate",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = Translate
+            },
+
+            // ----- fn:upper-case ----------------------------------------------
+            [(Namespaces.Fn, "upper-case", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "upper-case",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = UpperCase
+            },
+
+            // ----- fn:lower-case ----------------------------------------------
+            [(Namespaces.Fn, "lower-case", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "lower-case",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = LowerCase
+            },
+
+            // ----- fn:matches -------------------------------------------------
+            [(Namespaces.Fn, "matches", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "matches",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Matches_2
+            },
+            [(Namespaces.Fn, "matches", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "matches",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Matches_3
+            },
+
+            // ----- fn:replace -------------------------------------------------
+            [(Namespaces.Fn, "replace", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "replace",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = Replace_3
+            },
+            [(Namespaces.Fn, "replace", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "replace",
+                Arity = 4,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = Replace_4
+            },
+
+            // ----- fn:tokenize ------------------------------------------------
+            [(Namespaces.Fn, "tokenize", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "tokenize",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Tokenize_2
+            },
+            [(Namespaces.Fn, "tokenize", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "tokenize",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Tokenize_3
+            },
+
+            // ----- fn:insert-before -------------------------------------------
+            [(Namespaces.Fn, "insert-before", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "insert-before",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Integer, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = InsertBefore
+            },
+
+            // ----- fn:remove --------------------------------------------------
+            [(Namespaces.Fn, "remove", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "remove",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Remove
+            },
+
+            // ----- fn:reverse -------------------------------------------------
+            [(Namespaces.Fn, "reverse", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "reverse",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Reverse
+            },
+
+            // ----- fn:subsequence ---------------------------------------------
+            [(Namespaces.Fn, "subsequence", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "subsequence",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Double],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Subsequence_2
+            },
+            [(Namespaces.Fn, "subsequence", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "subsequence",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Double, XdmValueKind.Double],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Subsequence_3
+            },
+
+            // ----- fn:distinct-values -----------------------------------------
+            [(Namespaces.Fn, "distinct-values", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "distinct-values",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = DistinctValues_1
+            },
+            [(Namespaces.Fn, "distinct-values", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "distinct-values",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = DistinctValues_2
+            },
+
+            // ----- fn:index-of ------------------------------------------------
+            [(Namespaces.Fn, "index-of", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "index-of",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = IndexOf_2
+            },
+            [(Namespaces.Fn, "index-of", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "index-of",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined, XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = IndexOf_3
+            },
+
+            // ----- fn:sum -----------------------------------------------------
+            [(Namespaces.Fn, "sum", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "sum",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Sum_1
+            },
+            [(Namespaces.Fn, "sum", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "sum",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Sum_2
+            },
+
+            // ----- fn:avg -----------------------------------------------------
+            [(Namespaces.Fn, "avg", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "avg",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Avg
+            },
+
+            // ----- fn:min -----------------------------------------------------
+            [(Namespaces.Fn, "min", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "min",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Min_1
+            },
+            [(Namespaces.Fn, "min", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "min",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.String],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Min_2
+            },
+
+            // ----- fn:max -----------------------------------------------------
+            [(Namespaces.Fn, "max", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "max",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Max_1
+            },
+            [(Namespaces.Fn, "max", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "max",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.String],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Max_2
+            },
+
+            // ----- fn:string-join ---------------------------------------------
+            [(Namespaces.Fn, "string-join", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "string-join",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.String,
+                Implementation = StringJoin_1
+            },
+            [(Namespaces.Fn, "string-join", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "string-join",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = StringJoin_2
+            },
+
+            // ----- map:get ----------------------------------------------------
+            [(Namespaces.Map, "get", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map,
+                LocalName = "get",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.String],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = MapGet
+            },
+
+            // ----- map:size ---------------------------------------------------
+            [(Namespaces.Map, "size", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Map,
+                LocalName = "size",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Map],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = MapSize
+            },
+
+            // ----- map:contains -----------------------------------------------
+            [(Namespaces.Map, "contains", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map,
+                LocalName = "contains",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = MapContains
+            },
+
+            // ----- map:keys ---------------------------------------------------
+            [(Namespaces.Map, "keys", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Map,
+                LocalName = "keys",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Map],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = MapKeys
+            },
+
+            // ----- map:merge --------------------------------------------------
+            [(Namespaces.Map, "merge", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Map,
+                LocalName = "merge",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Map,
+                Implementation = MapMerge
+            },
+
+            // ----- array:size -------------------------------------------------
+            [(Namespaces.Array, "size", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array,
+                LocalName = "size",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Array],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = ArraySize
+            },
+
+            // ----- array:get --------------------------------------------------
+            [(Namespaces.Array, "get", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array,
+                LocalName = "get",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = ArrayGet
+            },
+
+            // ----- array:contains ---------------------------------------------
+            [(Namespaces.Array, "contains", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array,
+                LocalName = "contains",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = ArrayContains
+            },
+
+            // ----- array:head -------------------------------------------------
+            [(Namespaces.Array, "head", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array,
+                LocalName = "head",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Array],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = ArrayHead
+            },
+
+            // ----- array:tail -------------------------------------------------
+            [(Namespaces.Array, "tail", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array,
+                LocalName = "tail",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Array],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayTail
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -277,6 +800,551 @@ public static class FunctionLibrary
 
     private static XdmValue Last(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromInteger(ctx.ContextSize);
+
+    // ------------------------------------------------------------------
+    // String functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue StringLength_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("fn:string-length() called with no context item.");
+        return XdmValue.FromInteger(AtomizedString(item).Length);
+    }
+
+    private static XdmValue StringLength_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromInteger(AtomizedString(args[0]).Length);
+
+    private static XdmValue Substring_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        double startD = ToDoubleValue(args[1]);
+        if (double.IsNaN(startD)) return XdmValue.FromString(string.Empty);
+        int start = (int)Math.Round(startD);
+        if (start <= 0) start = 1;
+        if (start > s.Length) return XdmValue.FromString(string.Empty);
+        return XdmValue.FromString(s[(start - 1)..]);
+    }
+
+    private static XdmValue Substring_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        double startD = ToDoubleValue(args[1]);
+        double lenD = ToDoubleValue(args[2]);
+        if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.FromString(string.Empty);
+        int start = (int)Math.Round(startD);
+        if (start <= 0) start = 1;
+        if (start > s.Length) return XdmValue.FromString(string.Empty);
+        int len = (int)Math.Round(lenD);
+        if (len <= 0) return XdmValue.FromString(string.Empty);
+        int end = Math.Min(start - 1 + len, s.Length);
+        return XdmValue.FromString(s[(start - 1)..end]);
+    }
+
+    private static XdmValue Contains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromBoolean(AtomizedString(args[0]).Contains(AtomizedString(args[1])));
+
+    private static XdmValue StartsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromBoolean(AtomizedString(args[0]).StartsWith(AtomizedString(args[1])));
+
+    private static XdmValue EndsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromBoolean(AtomizedString(args[0]).EndsWith(AtomizedString(args[1])));
+
+    private static XdmValue NormalizeSpace_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("fn:normalize-space() called with no context item.");
+        return XdmValue.FromString(NormalizeSpaceString(AtomizedString(item)));
+    }
+
+    private static XdmValue NormalizeSpace_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(NormalizeSpaceString(AtomizedString(args[0])));
+
+    private static string NormalizeSpaceString(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return string.Empty;
+        var parts = s.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        return string.Join(' ', parts);
+    }
+
+    private static XdmValue Translate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string arg = AtomizedString(args[0]);
+        string map = AtomizedString(args[1]);
+        string trans = AtomizedString(args[2]);
+        var sb = new StringBuilder(arg.Length);
+        foreach (char c in arg)
+        {
+            int idx = map.IndexOf(c);
+            if (idx >= 0)
+            {
+                if (idx < trans.Length)
+                    sb.Append(trans[idx]);
+            }
+            else
+            {
+                sb.Append(c);
+            }
+        }
+        return XdmValue.FromString(sb.ToString());
+    }
+
+    private static XdmValue UpperCase(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]).ToUpperInvariant());
+
+    private static XdmValue LowerCase(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]).ToLowerInvariant());
+
+    private static XdmValue Matches_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromBoolean(Regex.IsMatch(AtomizedString(args[0]), AtomizedString(args[1])));
+
+    private static XdmValue Matches_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string input = AtomizedString(args[0]);
+        string pattern = AtomizedString(args[1]);
+        var options = ParseRegexFlags(AtomizedString(args[2]));
+        return XdmValue.FromBoolean(Regex.IsMatch(input, pattern, options));
+    }
+
+    private static XdmValue Replace_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string input = AtomizedString(args[0]);
+        string pattern = AtomizedString(args[1]);
+        string replacement = AtomizedString(args[2]);
+        return XdmValue.FromString(Regex.Replace(input, pattern, replacement));
+    }
+
+    private static XdmValue Replace_4(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string input = AtomizedString(args[0]);
+        string pattern = AtomizedString(args[1]);
+        string replacement = AtomizedString(args[2]);
+        var options = ParseRegexFlags(AtomizedString(args[3]));
+        return XdmValue.FromString(Regex.Replace(input, pattern, replacement, options));
+    }
+
+    private static XdmValue Tokenize_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string input = AtomizedString(args[0]);
+        string pattern = AtomizedString(args[1]);
+        var tokens = Regex.Split(input, pattern)
+            .Where(t => !string.IsNullOrEmpty(t))
+            .Select(XdmValue.FromString)
+            .ToList();
+        return XdmValue.FromSequence(MaterializedSequence.FromList(tokens));
+    }
+
+    private static XdmValue Tokenize_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string input = AtomizedString(args[0]);
+        string pattern = AtomizedString(args[1]);
+        var options = ParseRegexFlags(AtomizedString(args[2]));
+        var tokens = Regex.Split(input, pattern, options)
+            .Where(t => !string.IsNullOrEmpty(t))
+            .Select(XdmValue.FromString)
+            .ToList();
+        return XdmValue.FromSequence(MaterializedSequence.FromList(tokens));
+    }
+
+    private static RegexOptions ParseRegexFlags(string flags)
+    {
+        var options = RegexOptions.None;
+        foreach (char c in flags)
+        {
+            switch (c)
+            {
+                case 'i': options |= RegexOptions.IgnoreCase; break;
+                case 'm': options |= RegexOptions.Multiline; break;
+                case 's': options |= RegexOptions.Singleline; break;
+                case 'x': options |= RegexOptions.IgnorePatternWhitespace; break;
+            }
+        }
+        return options;
+    }
+
+    // ------------------------------------------------------------------
+    // Sequence functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue InsertBefore(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var target = Materialize(args[0]);
+        long pos = args[1].IntegerValue;
+        var inserts = Materialize(args[2]);
+        if (pos < 1) pos = 1;
+        if (pos > target.Count + 1) pos = target.Count + 1;
+        target.InsertRange((int)pos - 1, inserts);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(target));
+    }
+
+    private static XdmValue Remove(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var target = Materialize(args[0]);
+        long pos = args[1].IntegerValue;
+        if (pos >= 1 && pos <= target.Count)
+            target.RemoveAt((int)pos - 1);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(target));
+    }
+
+    private static XdmValue Reverse(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        items.Reverse();
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    private static XdmValue Subsequence_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        double startD = ToDoubleValue(args[1]);
+        if (double.IsNaN(startD)) return XdmValue.Undefined;
+        int start = (int)Math.Round(startD);
+        if (start < 1) start = 1;
+        if (start > items.Count) return XdmValue.Undefined;
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items.Skip(start - 1).ToList()));
+    }
+
+    private static XdmValue Subsequence_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        double startD = ToDoubleValue(args[1]);
+        double lenD = ToDoubleValue(args[2]);
+        if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.Undefined;
+        int start = (int)Math.Round(startD);
+        int len = (int)Math.Round(lenD);
+        if (start < 1) start = 1;
+        if (start > items.Count || len <= 0) return XdmValue.Undefined;
+        int count = Math.Min(len, items.Count - start + 1);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items.Skip(start - 1).Take(count).ToList()));
+    }
+
+    private static XdmValue DistinctValues_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        var seen = new HashSet<string>();
+        var result = new List<XdmValue>();
+        foreach (var item in items)
+        {
+            string key = AtomizedString(item);
+            if (seen.Add(key))
+                result.Add(item);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue DistinctValues_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => DistinctValues_1(ctx, args);
+
+    private static XdmValue IndexOf_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var seq = Materialize(args[0]);
+        string search = AtomizedString(args[1]);
+        var result = new List<XdmValue>();
+        for (int i = 0; i < seq.Count; i++)
+        {
+            if (AtomizedString(seq[i]) == search)
+                result.Add(XdmValue.FromInteger(i + 1));
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue IndexOf_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => IndexOf_2(ctx, args);
+
+    // ------------------------------------------------------------------
+    // Aggregate functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue Sum_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        if (items.Count == 0) return XdmValue.FromInteger(0);
+        return Sum(items);
+    }
+
+    private static XdmValue Sum_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        if (items.Count == 0) return args[1];
+        return Sum(items);
+    }
+
+    private static XdmValue Avg(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        if (items.Count == 0) return XdmValue.Undefined;
+        var total = Sum(items);
+        if (total.Kind == XdmValueKind.Decimal)
+            return XdmValue.FromDecimal(total.DecimalValue / items.Count);
+        return XdmValue.FromDouble(ToDoubleValue(total) / items.Count);
+    }
+
+    private static XdmValue Min_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        if (items.Count == 0) return XdmValue.Undefined;
+        return MinMax(items, true);
+    }
+
+    private static XdmValue Min_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Min_1(ctx, args);
+
+    private static XdmValue Max_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        if (items.Count == 0) return XdmValue.Undefined;
+        return MinMax(items, false);
+    }
+
+    private static XdmValue Max_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Max_1(ctx, args);
+
+    private static XdmValue StringJoin_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => StringJoin(ctx, new[] { args[0], XdmValue.FromString("") }.AsSpan());
+
+    private static XdmValue StringJoin_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => StringJoin(ctx, args);
+
+    private static XdmValue StringJoin(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        string sep = AtomizedString(args[1]);
+        var strings = new List<string>(items.Count);
+        foreach (var item in items)
+            strings.Add(AtomizedString(item));
+        return XdmValue.FromString(string.Join(sep, strings));
+    }
+
+    private static XdmValue ConcatN(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var sb = new StringBuilder();
+        foreach (var arg in args)
+            sb.Append(AtomizedString(arg));
+        return XdmValue.FromString(sb.ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // Map functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue MapGet(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var map = args[0].MapValue;
+        string key = AtomizedString(args[1]);
+        if (map.TryGetValue(key, out var value))
+            return value;
+        return XdmValue.Undefined;
+    }
+
+    private static XdmValue MapSize(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromInteger(args[0].MapValue.Count);
+
+    private static XdmValue MapContains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromBoolean(args[0].MapValue.ContainsKey(AtomizedString(args[1])));
+
+    private static XdmValue MapKeys(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var keys = args[0].MapValue.Keys.Select(XdmValue.FromString).ToList();
+        return XdmValue.FromSequence(MaterializedSequence.FromList(keys));
+    }
+
+    private static XdmValue MapMerge(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var result = new XdmMap();
+        var maps = Materialize(args[0]);
+        foreach (var mapVal in maps)
+        {
+            if (mapVal.IsMap)
+            {
+                foreach (var kvp in mapVal.MapValue.Values.Select((v, i) => new { v, i }))
+                {
+                    // We need key-value pairs, but Values doesn't give us keys
+                }
+            }
+        }
+        // Re-implement using Keys
+        foreach (var mapVal in maps)
+        {
+            if (mapVal.IsMap)
+            {
+                var m = mapVal.MapValue;
+                foreach (var key in m.Keys)
+                    result.Add(key, m.TryGetValue(key, out var v) ? v : XdmValue.Undefined);
+            }
+        }
+        return XdmValue.FromMap(result);
+    }
+
+    // ------------------------------------------------------------------
+    // Array functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue ArraySize(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromInteger(args[0].ArrayValue.Count);
+
+    private static XdmValue ArrayGet(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        int idx = (int)args[1].IntegerValue;
+        return arr.Get(idx);
+    }
+
+    private static XdmValue ArrayContains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromBoolean(args[0].ArrayValue.Contains(args[1]));
+
+    private static XdmValue ArrayHead(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0].ArrayValue.Get(1);
+
+    private static XdmValue ArrayTail(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        var items = new List<XdmValue>();
+        bool first = true;
+        foreach (var item in arr.Values)
+        {
+            if (first) { first = false; continue; }
+            items.Add(item);
+        }
+        return XdmValue.FromArray(new XdmArray(items));
+    }
+
+    // ------------------------------------------------------------------
+    // Helpers
+    // ------------------------------------------------------------------
+
+    private static string AtomizedString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        if (value.IsNode)
+            return value.NodeValue.StringValue;
+
+        if (value.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                return AtomizedString(item);
+            return string.Empty;
+        }
+
+        return value.ToString();
+    }
+
+    private static XdmValue AtomizeValue(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+
+        if (value.IsNode)
+            return XdmValue.FromString(value.NodeValue.StringValue);
+
+        if (value.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                return AtomizeValue(item);
+            return XdmValue.Undefined;
+        }
+
+        return value;
+    }
+
+    private static List<XdmValue> Materialize(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return new List<XdmValue>();
+
+        if (!value.IsSequence)
+            return new List<XdmValue> { value };
+
+        var list = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            list.Add(item);
+        return list;
+    }
+
+    private static double ToDoubleValue(XdmValue value)
+    {
+        value = AtomizeValue(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (double)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
+            _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : double.NaN
+        };
+    }
+
+    private static decimal ToDecimalValue(XdmValue value)
+    {
+        value = AtomizeValue(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => (decimal)value.DoubleValue,
+            _ => decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : 0m
+        };
+    }
+
+    private static XdmValue Sum(List<XdmValue> items)
+    {
+        bool allIntegerOrDecimal = true;
+        foreach (var item in items)
+        {
+            var a = AtomizeValue(item);
+            if (a.Kind != XdmValueKind.Integer && a.Kind != XdmValueKind.Decimal)
+            {
+                allIntegerOrDecimal = false;
+                break;
+            }
+        }
+        if (allIntegerOrDecimal)
+        {
+            decimal sum = 0m;
+            foreach (var item in items)
+                sum += ToDecimalValue(item);
+            return XdmValue.FromDecimal(sum);
+        }
+        double sumD = 0.0;
+        foreach (var item in items)
+            sumD += ToDoubleValue(item);
+        return XdmValue.FromDouble(sumD);
+    }
+
+    private static XdmValue MinMax(List<XdmValue> items, bool min)
+    {
+        bool allIntegerOrDecimal = true;
+        foreach (var item in items)
+        {
+            var a = AtomizeValue(item);
+            if (a.Kind != XdmValueKind.Integer && a.Kind != XdmValueKind.Decimal)
+            {
+                allIntegerOrDecimal = false;
+                break;
+            }
+        }
+        if (allIntegerOrDecimal)
+        {
+            decimal result = ToDecimalValue(items[0]);
+            for (int i = 1; i < items.Count; i++)
+            {
+                decimal v = ToDecimalValue(items[i]);
+                if (min ? v < result : v > result)
+                    result = v;
+            }
+            return XdmValue.FromDecimal(result);
+        }
+        double resultD = ToDoubleValue(items[0]);
+        for (int i = 1; i < items.Count; i++)
+        {
+            double v = ToDoubleValue(items[i]);
+            if (min ? v < resultD : v > resultD)
+                resultD = v;
+        }
+        return XdmValue.FromDouble(resultD);
+    }
 }
 
 file static class Namespaces

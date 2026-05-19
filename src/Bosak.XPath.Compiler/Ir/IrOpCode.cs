@@ -11,6 +11,8 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added Intersect, Except, and SimpleMap opcodes                                         |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added MapAdd and ArrayAdd opcodes                                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -58,6 +60,9 @@ public enum IrOpCode : byte
     Singleton,
     Range,
     Concatenate,
+    Intersect,
+    Except,
+    SimpleMap,
     
     // ---- Nodes / Axes ------------------------------------------------
     Axis,
@@ -167,7 +172,9 @@ public enum IrOpCode : byte
     
     // ---- Higher-order (XPath 3.1) ------------------------------------
     Map,
+    MapAdd,
     Array,
+    ArrayAdd,
     Lookup,
     LookupWildcard,
     Curry,              // Partial function application

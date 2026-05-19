@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added Map and Array value support                                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
@@ -69,6 +70,12 @@ public readonly struct XdmValue
         => new(XdmValueKind.Sequence, reference: sequence.Source);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromMap(XdmMap map) => new(XdmValueKind.Map, reference: map);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromArray(XdmArray array) => new(XdmValueKind.Array, reference: array);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromFunction(object functionItem)
         => new(XdmValueKind.Function, reference: functionItem);
 
@@ -87,6 +94,8 @@ public readonly struct XdmValue
     public bool IsNode => _kind == XdmValueKind.Node;
     public bool IsSequence => _kind == XdmValueKind.Sequence;
     public bool IsFunction => _kind == XdmValueKind.Function;
+    public bool IsMap => _kind == XdmValueKind.Map;
+    public bool IsArray => _kind == XdmValueKind.Array;
 
     public bool BooleanValue
     {
@@ -165,6 +174,26 @@ public readonly struct XdmValue
             if (_kind != XdmValueKind.External)
                 ThrowInvalidAccess(nameof(ExternalValue));
             return _reference;
+        }
+    }
+
+    public XdmMap MapValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Map)
+                ThrowInvalidAccess(nameof(MapValue));
+            return (XdmMap)_reference!;
+        }
+    }
+
+    public XdmArray ArrayValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Array)
+                ThrowInvalidAccess(nameof(ArrayValue));
+            return (XdmArray)_reference!;
         }
     }
 

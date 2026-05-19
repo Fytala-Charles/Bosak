@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added LookupWildcardNode                                                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -118,6 +119,9 @@ public sealed record ArrowExprNode(XPathAstNode Source, FunctionCallNode Target)
 
 /// <summary>Lookup (postfix): <c>$map?key</c> or <c>$array?1</c></summary>
 public sealed record LookupNode(XPathAstNode Expression, XPathAstNode Key) : XPathAstNode;
+
+/// <summary>Lookup wildcard (postfix): <c>$map?*</c> or <c>$array?*</c></summary>
+public sealed record LookupWildcardNode(XPathAstNode Expression) : XPathAstNode;
 
 /// <summary>Inline function: <c>function($x as xs:int) as xs:int { $x + 1 }</c></summary>
 public sealed record InlineFunctionNode(IReadOnlyList<ParamNode> Parameters, XPathAstNode Body, string? ReturnType = null) : XPathAstNode;

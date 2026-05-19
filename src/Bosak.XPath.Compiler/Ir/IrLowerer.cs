@@ -11,6 +11,9 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Fixed function call argument packing into consecutive registers                        |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added Intersect, Except, and SimpleMap lowering                                        |
+//                      | Charles Korthout | 0.4   | 19-05-2026     | Added Map/Array constructor and LookupWildcard lowering                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -75,6 +78,7 @@ public sealed class IrLowerer
             MapConstructorNode n => LowerMapConstructor(n, targetReg),
             ArrayConstructorNode n => LowerArrayConstructor(n, targetReg),
             LookupNode n => LowerLookup(n, targetReg),
+            LookupWildcardNode n => LowerLookupWildcard(n, targetReg),
             ForExpressionNode n => LowerForExpression(n, targetReg),
             QuantifiedExpressionNode n => LowerQuantifiedExpression(n, targetReg),
             PredicateNode n => LowerNode(n.Expression, targetReg),
@@ -159,6 +163,8 @@ public sealed class IrLowerer
             return LowerAnd(node, targetReg);
         if (node.Operator == BinaryOperator.Or)
             return LowerOr(node, targetReg);
+        if (node.Operator == BinaryOperator.SimpleMap)
+            return LowerSimpleMap(node, targetReg);
 
         int leftReg = LowerNode(node.Left);
         int rightReg = LowerNode(node.Right);
@@ -190,9 +196,8 @@ public sealed class IrLowerer
             BinaryOperator.Follows => IrOpCode.FollowsNode,
             BinaryOperator.To => IrOpCode.Range,
             BinaryOperator.Union => IrOpCode.Concatenate,
-            BinaryOperator.Intersect => throw new NotSupportedException("Intersect is not yet supported in IR lowering."),
-            BinaryOperator.Except => throw new NotSupportedException("Except is not yet supported in IR lowering."),
-            BinaryOperator.SimpleMap => throw new NotSupportedException("Simple map (!) is not yet supported in IR lowering."),
+            BinaryOperator.Intersect => IrOpCode.Intersect,
+            BinaryOperator.Except => IrOpCode.Except,
             _ => throw new NotSupportedException($"Binary operator {node.Operator} is not supported by the IR lowerer.")
         };
 
@@ -242,6 +247,34 @@ public sealed class IrLowerer
 
         // Patch jump to end
         PatchJump(jumpToEnd, CurrentInstructionIndex);
+
+        return resultReg;
+    }
+
+    private int LowerSimpleMap(BinaryExpressionNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+        int leftReg = LowerNode(node.Left);
+
+        // Emit SimpleMap instruction with placeholder for RHS entry point
+        int simpleMapInstrIdx = _instructions.Count;
+        Emit(IrOpCode.SimpleMap, (byte)resultReg, (byte)leftReg, 0, 0); // placeholder
+
+        // Jump over RHS code (so it doesn't execute during fall-through)
+        int jumpInstrIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
+
+        // RHS entry point
+        int rhsEntry = _instructions.Count;
+
+        // The SimpleMap instruction sets the context item before jumping here.
+        int rhsReg = LowerNode(node.Right);
+        Emit(IrOpCode.Return, (byte)rhsReg);
+
+        // Patch instructions
+        int afterRhs = _instructions.Count;
+        PatchInstruction(simpleMapInstrIdx, IrOpCode.SimpleMap, (byte)resultReg, (byte)leftReg, 0, rhsEntry);
+        PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
 
         return resultReg;
     }
@@ -326,10 +359,39 @@ public sealed class IrLowerer
 
         if (argCount > 0)
         {
-            firstArgReg = LowerNode(node.Arguments[0]);
+            // Evaluate each argument (may allocate scratch registers internally)
+            var argRegs = new int[argCount];
+            argRegs[0] = LowerNode(node.Arguments[0]);
             for (int i = 1; i < argCount; i++)
             {
-                LowerNode(node.Arguments[i]);
+                argRegs[i] = LowerNode(node.Arguments[i]);
+            }
+
+            // Check whether the argument result registers are already consecutive
+            bool consecutive = true;
+            for (int i = 1; i < argCount; i++)
+            {
+                if (argRegs[i] != argRegs[0] + i)
+                {
+                    consecutive = false;
+                    break;
+                }
+            }
+
+            if (consecutive)
+            {
+                firstArgReg = argRegs[0];
+            }
+            else
+            {
+                // Repack arguments into a consecutive register block for the VM Call opcode
+                firstArgReg = AllocRegister();
+                Emit(IrOpCode.Move, (byte)firstArgReg, (byte)argRegs[0]);
+                for (int i = 1; i < argCount; i++)
+                {
+                    int packedReg = AllocRegister();
+                    Emit(IrOpCode.Move, (byte)packedReg, (byte)argRegs[i]);
+                }
             }
         }
 
@@ -637,12 +699,41 @@ public sealed class IrLowerer
         int funcPoolIdx = AddToLiteralPool(qname);
 
         int argCount = target.Arguments.Count + 1;
-        int firstArgReg = sourceReg;
 
-        // Evaluate remaining arguments after sourceReg
+        // Evaluate remaining arguments (may allocate scratch registers internally)
+        var argRegs = new int[argCount];
+        argRegs[0] = sourceReg;
         for (int i = 0; i < target.Arguments.Count; i++)
         {
-            LowerNode(target.Arguments[i]);
+            argRegs[i + 1] = LowerNode(target.Arguments[i]);
+        }
+
+        // Check whether the argument result registers are already consecutive
+        bool consecutive = true;
+        for (int i = 1; i < argCount; i++)
+        {
+            if (argRegs[i] != argRegs[0] + i)
+            {
+                consecutive = false;
+                break;
+            }
+        }
+
+        int firstArgReg;
+        if (consecutive)
+        {
+            firstArgReg = argRegs[0];
+        }
+        else
+        {
+            // Repack arguments into a consecutive register block for the VM Call opcode
+            firstArgReg = AllocRegister();
+            Emit(IrOpCode.Move, (byte)firstArgReg, (byte)argRegs[0]);
+            for (int i = 1; i < argCount; i++)
+            {
+                int packedReg = AllocRegister();
+                Emit(IrOpCode.Move, (byte)packedReg, (byte)argRegs[i]);
+            }
         }
 
         Emit(IrOpCode.Call, (byte)resultReg, (byte)firstArgReg, (byte)argCount, funcPoolIdx);
@@ -658,6 +749,14 @@ public sealed class IrLowerer
         return resultReg;
     }
 
+    private int LowerLookupWildcard(LookupWildcardNode node, int? targetReg)
+    {
+        int exprReg = LowerNode(node.Expression);
+        int resultReg = targetReg ?? AllocRegister();
+        Emit(IrOpCode.LookupWildcard, (byte)resultReg, (byte)exprReg);
+        return resultReg;
+    }
+
     private int LowerMapConstructor(MapConstructorNode node, int? targetReg)
     {
         int resultReg = targetReg ?? AllocRegister();
@@ -667,14 +766,7 @@ public sealed class IrLowerer
         {
             int keyReg = LowerNode(entry.Key);
             int valueReg = LowerNode(entry.Value);
-            // We need a way to add key-value pairs to a map.
-            // For now, emit as a special call or use the operand.
-            // Since we don't have a dedicated MapAdd opcode, we'll emit a Call
-            // to an internal helper or rely on the VM to handle this.
-            // As a workaround, store the pair in the literal pool and use a special operand.
-            // Actually, let's just use the Call opcode with a special function name.
-            int pairPoolIdx = AddToLiteralPool(("__map_add", 0));
-            Emit(IrOpCode.Call, (byte)resultReg, (byte)keyReg, 2, pairPoolIdx);
+            Emit(IrOpCode.MapAdd, (byte)resultReg, (byte)keyReg, (byte)valueReg);
         }
 
         return resultReg;
@@ -688,8 +780,7 @@ public sealed class IrLowerer
         foreach (var item in node.Items)
         {
             int itemReg = LowerNode(item);
-            int addPoolIdx = AddToLiteralPool(("__array_add", 0));
-            Emit(IrOpCode.Call, (byte)resultReg, (byte)itemReg, 1, addPoolIdx);
+            Emit(IrOpCode.ArrayAdd, (byte)resultReg, (byte)itemReg);
         }
 
         return resultReg;

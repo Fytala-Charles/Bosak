@@ -11,6 +11,8 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added SimpleMap (!) expression parsing                                                 |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added string literal lookup keys and LookupWildcardNode                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -466,10 +468,23 @@ public sealed class XPathParser
             else if (Match(TokenKind.Minus)) ops.Add(UnaryOperator.Minus);
             else break;
         }
-        var expr = ParsePathExpr();
+        var expr = ParseSimpleMapExpr();
         for (int i = ops.Count - 1; i >= 0; i--)
             expr = WithSpan(new UnaryExpressionNode(ops[i], expr), start, End);
         return expr;
+    }
+
+    // SimpleMapExpr ::= PathExpr ("!" PathExpr)*
+    private XPathAstNode ParseSimpleMapExpr()
+    {
+        int start = Current.Start;
+        var left = ParsePathExpr();
+        while (Match(TokenKind.Bang))
+        {
+            var right = ParsePathExpr();
+            left = WithSpan(new BinaryExpressionNode(left, BinaryOperator.SimpleMap, right), start, End);
+        }
+        return left;
     }
 
     // ------------------------------------------------------------------
@@ -713,8 +728,15 @@ public sealed class XPathParser
             else if (Current.Kind == TokenKind.Question)
             {
                 Advance();
-                var key = ParseLookupKey();
-                expr = WithSpan(new LookupNode(expr, key), start, End);
+                if (Match(TokenKind.Star))
+                {
+                    expr = WithSpan(new LookupWildcardNode(expr), start, End);
+                }
+                else
+                {
+                    var key = ParseLookupKey();
+                    expr = WithSpan(new LookupNode(expr, key), start, End);
+                }
             }
             else break;
         }
@@ -737,6 +759,12 @@ public sealed class XPathParser
             var name = GetString(Current);
             Advance();
             return WithSpan(new StringLiteralNode(name), start, End);
+        }
+        if (Current.Kind == TokenKind.StringLiteral)
+        {
+            var str = Unquote(GetString(Current));
+            Advance();
+            return WithSpan(new StringLiteralNode(str), start, End);
         }
         if (Current.Kind == TokenKind.LParen)
         {

@@ -11,6 +11,9 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added end-to-end tests for string, sequence, and aggregate functions                   |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added tests for Intersect, Except, and SimpleMap operators                             |
+//                      | Charles Korthout | 0.4   | 19-05-2026     | Added tests for Map, Array, and Lookup                                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -429,5 +432,384 @@ public class EndToEndTests
         Assert.Equal(2, result.Length);
         Assert.Equal("The Great Gatsby", result[0]);
         Assert.Equal("Dune", result[1]);
+    }
+
+    // ------------------------------------------------------------------
+    // String functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void FunctionCall_ConcatVarargs()
+    {
+        var result = Evaluate("concat('a', 'b', 'c')", LoadDocument());
+        Assert.Equal("abc", result.StringValue);
+    }
+
+    [Fact]
+    public void FunctionCall_StringLength()
+    {
+        var result = Evaluate("string-length('hello')", LoadDocument());
+        Assert.Equal(5, result.IntegerValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Substring2()
+    {
+        var result = Evaluate("substring('hello', 2)", LoadDocument());
+        Assert.Equal("ello", result.StringValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Substring3()
+    {
+        var result = Evaluate("substring('hello', 2, 2)", LoadDocument());
+        Assert.Equal("el", result.StringValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Contains()
+    {
+        var result = Evaluate("contains('hello', 'ell')", LoadDocument());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void FunctionCall_StartsWith()
+    {
+        var result = Evaluate("starts-with('hello', 'he')", LoadDocument());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void FunctionCall_EndsWith()
+    {
+        var result = Evaluate("ends-with('hello', 'lo')", LoadDocument());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void FunctionCall_NormalizeSpace()
+    {
+        var result = Evaluate("normalize-space('  hello   world  ')", LoadDocument());
+        Assert.Equal("hello world", result.StringValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Translate()
+    {
+        var result = Evaluate("translate('hello', 'el', 'xy')", LoadDocument());
+        Assert.Equal("hxyyo", result.StringValue);
+    }
+
+    [Fact]
+    public void FunctionCall_UpperCase()
+    {
+        var result = Evaluate("upper-case('hello')", LoadDocument());
+        Assert.Equal("HELLO", result.StringValue);
+    }
+
+    [Fact]
+    public void FunctionCall_LowerCase()
+    {
+        var result = Evaluate("lower-case('HELLO')", LoadDocument());
+        Assert.Equal("hello", result.StringValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Matches()
+    {
+        var result = Evaluate("matches('hello', 'h.*o')", LoadDocument());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void FunctionCall_MatchesWithFlags()
+    {
+        var result = Evaluate("matches('HELLO', 'hello', 'i')", LoadDocument());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Replace()
+    {
+        var result = Evaluate("replace('hello world', 'world', 'xpath')", LoadDocument());
+        Assert.Equal("hello xpath", result.StringValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Tokenize()
+    {
+        var result = EvaluateStrings("tokenize('a,b,c', ',')", LoadDocument());
+        Assert.Equal(3, result.Length);
+        Assert.Equal("a", result[0]);
+        Assert.Equal("b", result[1]);
+        Assert.Equal("c", result[2]);
+    }
+
+    // ------------------------------------------------------------------
+    // Sequence functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void FunctionCall_InsertBefore()
+    {
+        var result = EvaluateStrings("insert-before(('a', 'b', 'c'), 2, 'x')", LoadDocument());
+        Assert.Equal(4, result.Length);
+        Assert.Equal("a", result[0]);
+        Assert.Equal("x", result[1]);
+        Assert.Equal("b", result[2]);
+        Assert.Equal("c", result[3]);
+    }
+
+    [Fact]
+    public void FunctionCall_Remove()
+    {
+        var result = EvaluateStrings("remove(('a', 'b', 'c'), 2)", LoadDocument());
+        Assert.Equal(2, result.Length);
+        Assert.Equal("a", result[0]);
+        Assert.Equal("c", result[1]);
+    }
+
+    [Fact]
+    public void FunctionCall_Reverse()
+    {
+        var result = EvaluateStrings("reverse(('a', 'b', 'c'))", LoadDocument());
+        Assert.Equal(3, result.Length);
+        Assert.Equal("c", result[0]);
+        Assert.Equal("b", result[1]);
+        Assert.Equal("a", result[2]);
+    }
+
+    [Fact]
+    public void FunctionCall_Subsequence2()
+    {
+        var result = EvaluateStrings("subsequence(('a', 'b', 'c', 'd'), 2)", LoadDocument());
+        Assert.Equal(3, result.Length);
+        Assert.Equal("b", result[0]);
+        Assert.Equal("c", result[1]);
+        Assert.Equal("d", result[2]);
+    }
+
+    [Fact]
+    public void FunctionCall_Subsequence3()
+    {
+        var result = EvaluateStrings("subsequence(('a', 'b', 'c', 'd'), 2, 2)", LoadDocument());
+        Assert.Equal(2, result.Length);
+        Assert.Equal("b", result[0]);
+        Assert.Equal("c", result[1]);
+    }
+
+    [Fact]
+    public void FunctionCall_DistinctValues()
+    {
+        var result = EvaluateStrings("distinct-values(('a', 'b', 'a', 'c'))", LoadDocument());
+        Assert.Equal(3, result.Length);
+    }
+
+    [Fact]
+    public void FunctionCall_IndexOf()
+    {
+        var result = EvaluateIntegers("index-of(('a', 'b', 'a', 'c'), 'a')", LoadDocument());
+        Assert.Equal(2, result.Length);
+        Assert.Equal(1, result[0]);
+        Assert.Equal(3, result[1]);
+    }
+
+    // ------------------------------------------------------------------
+    // Aggregate functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void FunctionCall_Sum()
+    {
+        var result = Evaluate("sum((1, 2, 3))", LoadDocument());
+        Assert.Equal(6m, result.DecimalValue);
+    }
+
+    [Fact]
+    public void FunctionCall_SumEmpty()
+    {
+        var result = Evaluate("sum(())", LoadDocument());
+        Assert.Equal(0, result.IntegerValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Avg()
+    {
+        var result = Evaluate("avg((1, 2, 3))", LoadDocument());
+        Assert.Equal(2m, result.DecimalValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Min()
+    {
+        var result = Evaluate("min((3, 1, 2))", LoadDocument());
+        Assert.Equal(1m, result.DecimalValue);
+    }
+
+    [Fact]
+    public void FunctionCall_Max()
+    {
+        var result = Evaluate("max((3, 1, 2))", LoadDocument());
+        Assert.Equal(3m, result.DecimalValue);
+    }
+
+    [Fact]
+    public void FunctionCall_StringJoin()
+    {
+        var result = Evaluate("string-join(('a', 'b', 'c'), '-')", LoadDocument());
+        Assert.Equal("a-b-c", result.StringValue);
+    }
+
+    // ------------------------------------------------------------------
+    // Set operators
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Intersect_SameNodes()
+    {
+        var result = EvaluateStrings("//book intersect //book", LoadDocument());
+        Assert.Equal(3, result.Length);
+    }
+
+    [Fact]
+    public void Intersect_Subset()
+    {
+        var result = EvaluateStrings("//book intersect //book[@genre='fiction']", LoadDocument());
+        Assert.Equal(2, result.Length);
+    }
+
+    [Fact]
+    public void Except_RemovesNodes()
+    {
+        var result = EvaluateStrings("//book except //book[@genre='sci-fi']", LoadDocument());
+        Assert.Equal(2, result.Length);
+    }
+
+    [Fact]
+    public void SimpleMap_PathToString()
+    {
+        var result = EvaluateStrings("//book/title ! string(.)", LoadDocument());
+        Assert.Equal(3, result.Length);
+        Assert.Equal("The Great Gatsby", result[0]);
+        Assert.Equal("Dune", result[1]);
+        Assert.Equal("1984", result[2]);
+    }
+
+    [Fact]
+    public void SimpleMap_SequenceToString()
+    {
+        var result = EvaluateStrings("(1, 2, 3) ! string(.)", LoadDocument());
+        Assert.Equal(3, result.Length);
+        Assert.Equal("1", result[0]);
+        Assert.Equal("2", result[1]);
+        Assert.Equal("3", result[2]);
+    }
+
+    // ------------------------------------------------------------------
+    // Maps and Arrays
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void MapConstructor_Lookup()
+    {
+        var result = Evaluate("map { 'a': 1, 'b': 2 }?'a'", LoadDocument());
+        Assert.Equal(1, result.IntegerValue);
+    }
+
+    [Fact]
+    public void MapConstructor_LookupMissing()
+    {
+        var result = Evaluate("map { 'a': 1 }?'z'", LoadDocument());
+        Assert.True(result.IsUndefined);
+    }
+
+    [Fact]
+    public void MapLookupWildcard()
+    {
+        var result = EvaluateStrings("map { 'a': 1, 'b': 2 }?*", LoadDocument());
+        Assert.Equal(2, result.Length);
+    }
+
+    [Fact]
+    public void MapFunction_Size()
+    {
+        var result = Evaluate("map:size(map { 'a': 1, 'b': 2 })", LoadDocument());
+        Assert.Equal(2, result.IntegerValue);
+    }
+
+    [Fact]
+    public void MapFunction_Contains()
+    {
+        var result = Evaluate("map:contains(map { 'a': 1 }, 'a')", LoadDocument());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void MapFunction_Keys()
+    {
+        var result = EvaluateStrings("map:keys(map { 'a': 1, 'b': 2 })", LoadDocument());
+        Assert.Equal(2, result.Length);
+    }
+
+    [Fact]
+    public void MapFunction_Merge()
+    {
+        var result = Evaluate("map:size(map:merge((map { 'a': 1 }, map { 'b': 2 })))", LoadDocument());
+        Assert.Equal(2, result.IntegerValue);
+    }
+
+    [Fact]
+    public void ArrayConstructor_Lookup()
+    {
+        var result = Evaluate("[10, 20, 30]?2", LoadDocument());
+        Assert.Equal(20, result.IntegerValue);
+    }
+
+    [Fact]
+    public void ArrayConstructor_LookupWildcard()
+    {
+        var result = EvaluateIntegers("[10, 20, 30]?*", LoadDocument());
+        Assert.Equal(3, result.Length);
+        Assert.Equal(10, result[0]);
+        Assert.Equal(20, result[1]);
+        Assert.Equal(30, result[2]);
+    }
+
+    [Fact]
+    public void ArrayFunction_Size()
+    {
+        var result = Evaluate("array:size([1, 2, 3])", LoadDocument());
+        Assert.Equal(3, result.IntegerValue);
+    }
+
+    [Fact]
+    public void ArrayFunction_Get()
+    {
+        var result = Evaluate("array:get([1, 2, 3], 2)", LoadDocument());
+        Assert.Equal(2, result.IntegerValue);
+    }
+
+    [Fact]
+    public void ArrayFunction_Contains()
+    {
+        var result = Evaluate("array:contains([1, 2, 3], 2)", LoadDocument());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void ArrayFunction_Head()
+    {
+        var result = Evaluate("array:head([1, 2, 3])", LoadDocument());
+        Assert.Equal(1, result.IntegerValue);
+    }
+
+    [Fact]
+    public void ArrayFunction_Tail()
+    {
+        var result = EvaluateIntegers("array:tail([1, 2, 3])?*", LoadDocument());
+        Assert.Equal(2, result.Length);
+        Assert.Equal(2, result[0]);
+        Assert.Equal(3, result[1]);
     }
 }

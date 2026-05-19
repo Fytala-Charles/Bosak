@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added OptimizeLookupWildcard                                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -54,6 +55,7 @@ public sealed class XPathOptimizer
             QuantifiedExpressionNode quant => OptimizeQuantified(quant, ref changed),
             ArrowExprNode arrow => OptimizeArrow(arrow, ref changed),
             LookupNode lookup => OptimizeLookup(lookup, ref changed),
+            LookupWildcardNode lookup => OptimizeLookupWildcard(lookup, ref changed),
             CastNode cast => OptimizeCast(cast, ref changed),
             CastableNode castable => OptimizeCastable(castable, ref changed),
             InstanceOfNode inst => OptimizeInstanceOf(inst, ref changed),
@@ -433,6 +435,19 @@ public sealed class XPathOptimizer
         {
             changed = true;
             return node with { Expression = expr, Key = key };
+        }
+
+        return node;
+    }
+
+    private XPathAstNode OptimizeLookupWildcard(LookupWildcardNode node, ref bool changed)
+    {
+        var expr = OptimizeNode(node.Expression, ref changed);
+
+        if (expr != node.Expression)
+        {
+            changed = true;
+            return node with { Expression = expr };
         }
 
         return node;

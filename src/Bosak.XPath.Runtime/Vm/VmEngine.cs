@@ -11,9 +11,15 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Implemented string, sequence, and aggregate VM opcodes                                 |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added Intersect, Except, and SimpleMap VM handlers                                     |
+//                      | Charles Korthout | 0.4   | 19-05-2026     | Added Map, Array, and Lookup VM handlers                                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
 
@@ -238,6 +244,103 @@ public static class VmEngine
                         combined.AddRange(right);
                         registers[instr.RegisterA] = NormalizeSequence(
                             XdmValue.FromSequence(MaterializedSequence.FromList(combined)));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.Intersect:
+                    {
+                        var left = MaterializeSequence(registers[instr.RegisterB]);
+                        var right = MaterializeSequence(registers[instr.RegisterC]);
+                        var rightNodes = new List<IXdmNode>();
+                        foreach (var item in right)
+                            if (item.IsNode)
+                                rightNodes.Add(item.NodeValue);
+
+                        var result = new List<XdmValue>();
+                        foreach (var item in left)
+                        {
+                            if (!item.IsNode) continue;
+                            foreach (var rn in rightNodes)
+                            {
+                                if (rn.IsSameNode(item.NodeValue))
+                                {
+                                    result.Add(item);
+                                    break;
+                                }
+                            }
+                        }
+                        registers[instr.RegisterA] = NormalizeSequence(
+                            XdmValue.FromSequence(MaterializedSequence.FromList(result)));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.Except:
+                    {
+                        var left = MaterializeSequence(registers[instr.RegisterB]);
+                        var right = MaterializeSequence(registers[instr.RegisterC]);
+                        var rightNodes = new List<IXdmNode>();
+                        foreach (var item in right)
+                            if (item.IsNode)
+                                rightNodes.Add(item.NodeValue);
+
+                        var result = new List<XdmValue>();
+                        foreach (var item in left)
+                        {
+                            if (!item.IsNode) continue;
+                            bool inRight = false;
+                            foreach (var rn in rightNodes)
+                            {
+                                if (rn.IsSameNode(item.NodeValue))
+                                {
+                                    inRight = true;
+                                    break;
+                                }
+                            }
+                            if (!inRight)
+                                result.Add(item);
+                        }
+                        registers[instr.RegisterA] = NormalizeSequence(
+                            XdmValue.FromSequence(MaterializedSequence.FromList(result)));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.SimpleMap:
+                    {
+                        var sequence = registers[instr.RegisterB];
+                        int rhsEntry = instr.Operand;
+
+                        var items = MaterializeSequence(sequence);
+                        var results = new List<XdmValue>();
+
+                        // Save context
+                        var savedItem = context.ContextItem;
+                        var savedPos = context.ContextPosition;
+                        var savedSize = context.ContextSize;
+
+                        for (int i = 0; i < items.Length; i++)
+                        {
+                            context.WithFocus(items[i], i + 1, items.Length);
+                            var (rhsResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
+
+                            if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
+                            {
+                                foreach (var r in XdmSequence.FromSource(rhsResult.SequenceValue))
+                                    results.Add(r);
+                            }
+                            else if (!rhsResult.IsUndefined)
+                            {
+                                results.Add(rhsResult);
+                            }
+                        }
+
+                        // Restore context
+                        context.WithFocus(savedItem, savedPos, savedSize);
+
+                        registers[instr.RegisterA] = XdmValue.FromSequence(
+                            MaterializedSequence.FromList(results));
                         ip++;
                         break;
                     }
@@ -502,18 +605,150 @@ public static class VmEngine
                     break;
 
                 case IrOpCode.StringLength:
+                    {
+                        string s = AtomizedString(registers[instr.RegisterB]);
+                        registers[instr.RegisterA] = XdmValue.FromInteger(s.Length);
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Substring:
+                    {
+                        string s = AtomizedString(registers[instr.RegisterB]);
+                        double startD = ToDouble(Atomize(registers[instr.RegisterC]));
+                        if (double.IsNaN(startD))
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromString(string.Empty);
+                        }
+                        else
+                        {
+                            int start = (int)Math.Round(startD);
+                            if (start <= 0) start = 1;
+                            if (start > s.Length)
+                                registers[instr.RegisterA] = XdmValue.FromString(string.Empty);
+                            else if (instr.Operand != 0)
+                            {
+                                double lenD = ToDouble(Atomize(registers[instr.Operand]));
+                                if (double.IsNaN(lenD) || lenD <= 0)
+                                    registers[instr.RegisterA] = XdmValue.FromString(string.Empty);
+                                else
+                                {
+                                    int len = (int)Math.Round(lenD);
+                                    int end = Math.Min(start - 1 + len, s.Length);
+                                    registers[instr.RegisterA] = XdmValue.FromString(s[(start - 1)..end]);
+                                }
+                            }
+                            else
+                            {
+                                registers[instr.RegisterA] = XdmValue.FromString(s[(start - 1)..]);
+                            }
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Contains:
+                    registers[instr.RegisterA] = XdmValue.FromBoolean(
+                        AtomizedString(registers[instr.RegisterB]).Contains(AtomizedString(registers[instr.RegisterC])));
+                    ip++;
+                    break;
+
                 case IrOpCode.StartsWith:
+                    registers[instr.RegisterA] = XdmValue.FromBoolean(
+                        AtomizedString(registers[instr.RegisterB]).StartsWith(AtomizedString(registers[instr.RegisterC])));
+                    ip++;
+                    break;
+
                 case IrOpCode.EndsWith:
+                    registers[instr.RegisterA] = XdmValue.FromBoolean(
+                        AtomizedString(registers[instr.RegisterB]).EndsWith(AtomizedString(registers[instr.RegisterC])));
+                    ip++;
+                    break;
+
                 case IrOpCode.NormalizeSpace:
+                    {
+                        string s = AtomizedString(registers[instr.RegisterB]);
+                        registers[instr.RegisterA] = XdmValue.FromString(NormalizeSpaceString(s));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Translate:
+                    {
+                        string arg = AtomizedString(registers[instr.RegisterB]);
+                        string map = AtomizedString(registers[instr.RegisterC]);
+                        string trans = AtomizedString(registers[instr.RegisterB + 1]);
+                        var sb = new System.Text.StringBuilder(arg.Length);
+                        foreach (char c in arg)
+                        {
+                            int idx = map.IndexOf(c);
+                            if (idx >= 0)
+                            {
+                                if (idx < trans.Length)
+                                    sb.Append(trans[idx]);
+                            }
+                            else
+                            {
+                                sb.Append(c);
+                            }
+                        }
+                        registers[instr.RegisterA] = XdmValue.FromString(sb.ToString());
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.UpperCase:
+                    registers[instr.RegisterA] = XdmValue.FromString(AtomizedString(registers[instr.RegisterB]).ToUpperInvariant());
+                    ip++;
+                    break;
+
                 case IrOpCode.LowerCase:
+                    registers[instr.RegisterA] = XdmValue.FromString(AtomizedString(registers[instr.RegisterB]).ToLowerInvariant());
+                    ip++;
+                    break;
+
                 case IrOpCode.MatchesRegex:
+                    {
+                        string input = AtomizedString(registers[instr.RegisterB]);
+                        string pattern = AtomizedString(registers[instr.RegisterC]);
+                        var options = instr.Operand != 0
+                            ? ParseRegexFlags(AtomizedString(registers[instr.Operand]))
+                            : System.Text.RegularExpressions.RegexOptions.None;
+                        registers[instr.RegisterA] = XdmValue.FromBoolean(
+                            System.Text.RegularExpressions.Regex.IsMatch(input, pattern, options));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.ReplaceRegex:
+                    {
+                        string input = AtomizedString(registers[instr.RegisterB]);
+                        string pattern = AtomizedString(registers[instr.RegisterC]);
+                        string replacement = AtomizedString(registers[instr.RegisterB + 1]);
+                        var options = instr.Operand != 0
+                            ? ParseRegexFlags(AtomizedString(registers[instr.Operand]))
+                            : System.Text.RegularExpressions.RegexOptions.None;
+                        registers[instr.RegisterA] = XdmValue.FromString(
+                            System.Text.RegularExpressions.Regex.Replace(input, pattern, replacement, options));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.TokenizeRegex:
-                    throw new NotImplementedException($"{instr.OpCode} is not yet implemented.");
+                    {
+                        string input = AtomizedString(registers[instr.RegisterB]);
+                        string pattern = AtomizedString(registers[instr.RegisterC]);
+                        var options = instr.Operand != 0
+                            ? ParseRegexFlags(AtomizedString(registers[instr.Operand]))
+                            : System.Text.RegularExpressions.RegexOptions.None;
+                        var tokens = System.Text.RegularExpressions.Regex.Split(input, pattern, options)
+                            .Where(t => !string.IsNullOrEmpty(t))
+                            .Select(XdmValue.FromString)
+                            .ToList();
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(tokens));
+                        ip++;
+                        break;
+                    }
 
                 // ------------------------------------------------------------------
                 // Type operations
@@ -554,35 +789,328 @@ public static class VmEngine
                 // Sequence functions
                 // ------------------------------------------------------------------
                 case IrOpCode.Count:
+                    {
+                        var seq = registers[instr.RegisterB];
+                        if (!seq.IsSequence)
+                            registers[instr.RegisterA] = XdmValue.FromInteger(1);
+                        else if (seq.SequenceValue!.TryGetLength(out var len))
+                            registers[instr.RegisterA] = XdmValue.FromInteger(len);
+                        else
+                        {
+                            long count = 0;
+                            foreach (var _ in XdmSequence.FromSource(seq.SequenceValue!))
+                                count++;
+                            registers[instr.RegisterA] = XdmValue.FromInteger(count);
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Exists:
+                    {
+                        var seq = registers[instr.RegisterB];
+                        registers[instr.RegisterA] = XdmValue.FromBoolean(
+                            !seq.IsUndefined && seq.EffectiveBooleanValue());
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Empty:
+                    {
+                        var seq = registers[instr.RegisterB];
+                        registers[instr.RegisterA] = XdmValue.FromBoolean(
+                            seq.IsUndefined || !seq.EffectiveBooleanValue());
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Head:
+                    {
+                        var seq = registers[instr.RegisterB];
+                        if (!seq.IsSequence)
+                            registers[instr.RegisterA] = seq;
+                        else
+                        {
+                            XdmValue? first = null;
+                            foreach (var item in XdmSequence.FromSource(seq.SequenceValue!))
+                            {
+                                first = item;
+                                break;
+                            }
+                            registers[instr.RegisterA] = first ?? XdmValue.Undefined;
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Tail:
+                    {
+                        var seq = registers[instr.RegisterB];
+                        if (!seq.IsSequence)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
+                        }
+                        else
+                        {
+                            var list = new List<XdmValue>();
+                            bool first = true;
+                            foreach (var item in XdmSequence.FromSource(seq.SequenceValue!))
+                            {
+                                if (first) { first = false; continue; }
+                                list.Add(item);
+                            }
+                            registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(list));
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.InsertBefore:
+                    {
+                        var target = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        long pos = ToInteger(Atomize(registers[instr.RegisterC]));
+                        var inserts = MaterializeSequence(registers[instr.RegisterB + 1]).ToList();
+                        if (pos < 1) pos = 1;
+                        if (pos > target.Count + 1) pos = target.Count + 1;
+                        target.InsertRange((int)pos - 1, inserts);
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(target));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Remove:
+                    {
+                        var target = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        long pos = ToInteger(Atomize(registers[instr.RegisterC]));
+                        if (pos >= 1 && pos <= target.Count)
+                            target.RemoveAt((int)pos - 1);
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(target));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Reverse:
+                    {
+                        var items = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        items.Reverse();
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(items));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Subsequence:
+                    {
+                        var items = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        double startD = ToDouble(Atomize(registers[instr.RegisterC]));
+                        if (double.IsNaN(startD))
+                        {
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
+                        else
+                        {
+                            int start = (int)Math.Round(startD);
+                            if (start < 1) start = 1;
+                            if (start > items.Count)
+                            {
+                                registers[instr.RegisterA] = XdmValue.Undefined;
+                            }
+                            else if (instr.Operand != 0)
+                            {
+                                double lenD = ToDouble(Atomize(registers[instr.Operand]));
+                                if (double.IsNaN(lenD) || lenD <= 0)
+                                    registers[instr.RegisterA] = XdmValue.Undefined;
+                                else
+                                {
+                                    int len = (int)Math.Round(lenD);
+                                    int count = Math.Min(len, items.Count - start + 1);
+                                    registers[instr.RegisterA] = XdmValue.FromSequence(
+                                        MaterializedSequence.FromList(items.Skip(start - 1).Take(count).ToList()));
+                                }
+                            }
+                            else
+                            {
+                                registers[instr.RegisterA] = XdmValue.FromSequence(
+                                    MaterializedSequence.FromList(items.Skip(start - 1).ToList()));
+                            }
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.DistinctValues:
+                    {
+                        var items = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        var seen = new HashSet<string>();
+                        var result = new List<XdmValue>();
+                        foreach (var item in items)
+                        {
+                            string key = AtomizedString(item);
+                            if (seen.Add(key))
+                                result.Add(item);
+                        }
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(result));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.IndexOf:
-                    throw new NotImplementedException($"{instr.OpCode} is not yet implemented.");
+                    {
+                        var seq = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        string search = AtomizedString(registers[instr.RegisterC]);
+                        var result = new List<XdmValue>();
+                        for (int i = 0; i < seq.Count; i++)
+                        {
+                            if (AtomizedString(seq[i]) == search)
+                                result.Add(XdmValue.FromInteger(i + 1));
+                        }
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(result));
+                        ip++;
+                        break;
+                    }
 
                 // ------------------------------------------------------------------
                 // Aggregation
                 // ------------------------------------------------------------------
                 case IrOpCode.Sum:
+                    {
+                        var items = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        if (items.Count == 0)
+                            registers[instr.RegisterA] = instr.Operand != 0 ? registers[instr.Operand] : XdmValue.FromInteger(0);
+                        else
+                            registers[instr.RegisterA] = Sum(items);
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Avg:
+                    {
+                        var items = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        if (items.Count == 0)
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        else
+                        {
+                            var total = Sum(items);
+                            if (total.Kind == XdmValueKind.Decimal)
+                                registers[instr.RegisterA] = XdmValue.FromDecimal(total.DecimalValue / items.Count);
+                            else
+                                registers[instr.RegisterA] = XdmValue.FromDouble(ToDouble(total) / items.Count);
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Min:
+                    {
+                        var items = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        if (items.Count == 0)
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        else
+                            registers[instr.RegisterA] = MinMax(items, true);
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Max:
+                    {
+                        var items = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        if (items.Count == 0)
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        else
+                            registers[instr.RegisterA] = MinMax(items, false);
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.StringJoin:
-                    throw new NotImplementedException($"{instr.OpCode} is not yet implemented.");
+                    {
+                        var items = MaterializeSequence(registers[instr.RegisterB]).ToList();
+                        string sep = instr.Operand != 0 ? AtomizedString(registers[instr.Operand]) : string.Empty;
+                        var strings = new List<string>(items.Count);
+                        foreach (var item in items)
+                            strings.Add(AtomizedString(item));
+                        registers[instr.RegisterA] = XdmValue.FromString(string.Join(sep, strings));
+                        ip++;
+                        break;
+                    }
 
                 // ------------------------------------------------------------------
                 // Higher-order (XPath 3.1)
                 // ------------------------------------------------------------------
                 case IrOpCode.Map:
+                    registers[instr.RegisterA] = XdmValue.FromMap(new XdmMap());
+                    ip++;
+                    break;
+
+                case IrOpCode.MapAdd:
+                    {
+                        var map = registers[instr.RegisterA].MapValue;
+                        string key = AtomizedString(registers[instr.RegisterB]);
+                        map.Add(key, registers[instr.RegisterC]);
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Array:
+                    registers[instr.RegisterA] = XdmValue.FromArray(new XdmArray());
+                    ip++;
+                    break;
+
+                case IrOpCode.ArrayAdd:
+                    {
+                        var arr = registers[instr.RegisterA].ArrayValue;
+                        arr.Add(registers[instr.RegisterB]);
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Lookup:
+                    {
+                        var container = registers[instr.RegisterB];
+                        var key = registers[instr.RegisterC];
+
+                        if (container.Kind == XdmValueKind.Map)
+                        {
+                            string skey = AtomizedString(key);
+                            if (container.MapValue.TryGetValue(skey, out var value))
+                                registers[instr.RegisterA] = value;
+                            else
+                                registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
+                        else if (container.Kind == XdmValueKind.Array)
+                        {
+                            int idx = (int)ToInteger(key);
+                            registers[instr.RegisterA] = container.ArrayValue.Get(idx);
+                        }
+                        else
+                        {
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.LookupWildcard:
+                    {
+                        var container = registers[instr.RegisterB];
+                        var result = new List<XdmValue>();
+
+                        if (container.Kind == XdmValueKind.Map)
+                        {
+                            foreach (var v in container.MapValue.Values)
+                                result.Add(v);
+                        }
+                        else if (container.Kind == XdmValueKind.Array)
+                        {
+                            foreach (var v in container.ArrayValue.Values)
+                                result.Add(v);
+                        }
+
+                        registers[instr.RegisterA] = XdmValue.FromSequence(
+                            MaterializedSequence.FromList(result));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Curry:
                 case IrOpCode.Apply:
                     throw new NotImplementedException($"{instr.OpCode} is not yet implemented.");
@@ -1159,4 +1687,107 @@ public static class VmEngine
         XdmValueKind.Double or XdmValueKind.Float => (long)value.DoubleValue,
         _ => long.TryParse(value.ToString(), out var l) ? l : throw new InvalidOperationException($"Cannot convert {value.Kind} to integer")
     };
+
+    // ------------------------------------------------------------------
+    // Opcode helpers
+    // ------------------------------------------------------------------
+
+    private static string AtomizedString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        if (value.IsNode)
+            return value.NodeValue.StringValue;
+
+        if (value.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                return AtomizedString(item);
+            return string.Empty;
+        }
+
+        return value.ToString();
+    }
+
+    private static string NormalizeSpaceString(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return string.Empty;
+        var parts = s.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        return string.Join(' ', parts);
+    }
+
+    private static RegexOptions ParseRegexFlags(string flags)
+    {
+        var options = RegexOptions.None;
+        foreach (char c in flags)
+        {
+            switch (c)
+            {
+                case 'i': options |= RegexOptions.IgnoreCase; break;
+                case 'm': options |= RegexOptions.Multiline; break;
+                case 's': options |= RegexOptions.Singleline; break;
+                case 'x': options |= RegexOptions.IgnorePatternWhitespace; break;
+            }
+        }
+        return options;
+    }
+
+    private static XdmValue Sum(System.Collections.Generic.List<XdmValue> items)
+    {
+        bool allIntegerOrDecimal = true;
+        foreach (var item in items)
+        {
+            var a = Atomize(item);
+            if (a.Kind != XdmValueKind.Integer && a.Kind != XdmValueKind.Decimal)
+            {
+                allIntegerOrDecimal = false;
+                break;
+            }
+        }
+        if (allIntegerOrDecimal)
+        {
+            decimal sum = 0m;
+            foreach (var item in items)
+                sum += ToDecimal(Atomize(item));
+            return XdmValue.FromDecimal(sum);
+        }
+        double sumD = 0.0;
+        foreach (var item in items)
+            sumD += ToDouble(Atomize(item));
+        return XdmValue.FromDouble(sumD);
+    }
+
+    private static XdmValue MinMax(System.Collections.Generic.List<XdmValue> items, bool min)
+    {
+        bool allIntegerOrDecimal = true;
+        foreach (var item in items)
+        {
+            var a = Atomize(item);
+            if (a.Kind != XdmValueKind.Integer && a.Kind != XdmValueKind.Decimal)
+            {
+                allIntegerOrDecimal = false;
+                break;
+            }
+        }
+        if (allIntegerOrDecimal)
+        {
+            decimal result = ToDecimal(Atomize(items[0]));
+            for (int i = 1; i < items.Count; i++)
+            {
+                decimal v = ToDecimal(Atomize(items[i]));
+                if (min ? v < result : v > result)
+                    result = v;
+            }
+            return XdmValue.FromDecimal(result);
+        }
+        double resultD = ToDouble(Atomize(items[0]));
+        for (int i = 1; i < items.Count; i++)
+        {
+            double v = ToDouble(Atomize(items[i]));
+            if (min ? v < resultD : v > resultD)
+                resultD = v;
+        }
+        return XdmValue.FromDouble(resultD);
+    }
 }
