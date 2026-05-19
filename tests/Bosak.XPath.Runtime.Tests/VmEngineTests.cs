@@ -23,7 +23,7 @@ using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Xunit;
 
-namespace Bosak.XPath.Core.Tests;
+namespace Bosak.XPath.Runtime.Tests;
 
 public class VmEngineTests
 {

@@ -18,7 +18,7 @@ using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 using Xunit;
 
-namespace Bosak.XPath.Core.Tests;
+namespace Bosak.XPath.Compiler.Tests;
 
 public class OptimizerTests
 {
