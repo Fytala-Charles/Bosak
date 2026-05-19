@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Added fn:number, fn:data, fn:root                                                      |
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Added date/time component extractors                                                   |
 //                      | Charles Korthout | 0.9   | 19-05-2026     | Added fn:deep-equal, fn:generate-id, fn:compare                                        |
+//                      | Charles Korthout | 1.0   | 19-05-2026     | Added URI encoders and QName functions                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -1117,6 +1118,55 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = Compare_3
+            },
+
+            // ----- fn:encode-for-uri / fn:iri-to-uri / fn:escape-html-uri -----
+            [(Namespaces.Fn, "encode-for-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "encode-for-uri",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = EncodeForUri
+            },
+            [(Namespaces.Fn, "iri-to-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "iri-to-uri",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = IriToUri
+            },
+            [(Namespaces.Fn, "escape-html-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "escape-html-uri",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = EscapeHtmlUri
+            },
+
+            // ----- fn:QName / fn:resolve-QName --------------------------------
+            [(Namespaces.Fn, "QName", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "QName",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.QName,
+                Implementation = Qname
+            },
+            [(Namespaces.Fn, "resolve-QName", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "resolve-QName",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node],
+                ReturnType = XdmValueKind.QName,
+                Implementation = ResolveQName
             },
         };
 
@@ -2323,6 +2373,110 @@ public static class FunctionLibrary
         var s2 = AtomizedString(b);
         int cmp = string.CompareOrdinal(s1, s2);
         return XdmValue.FromInteger(cmp < 0 ? -1 : cmp > 0 ? 1 : 0);
+    }
+
+    // ------------------------------------------------------------------
+    // URI encoding functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue EncodeForUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var s = AtomizedString(args[0]);
+        return XdmValue.FromString(Uri.EscapeDataString(s));
+    }
+
+    private static XdmValue IriToUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var s = AtomizedString(args[0]);
+        var sb = new StringBuilder();
+        foreach (char c in s)
+        {
+            if (IsUriChar(c))
+                sb.Append(c);
+            else
+                AppendPercentEncoded(sb, c);
+        }
+        return XdmValue.FromString(sb.ToString());
+    }
+
+    private static XdmValue EscapeHtmlUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var s = AtomizedString(args[0]);
+        var sb = new StringBuilder();
+        foreach (char c in s)
+        {
+            if (c >= 0x20 && c <= 0x7E)
+                sb.Append(c);
+            else
+                AppendPercentEncoded(sb, c);
+        }
+        return XdmValue.FromString(sb.ToString());
+    }
+
+    private static bool IsUriChar(char c)
+    {
+        // unreserved + reserved + '%'
+        return c is (>= 'A' and <= 'Z') or (>= 'a' and <= 'z') or (>= '0' and <= '9')
+            or '-' or '.' or '_' or '~'
+            or ':' or '/' or '?' or '#' or '[' or ']' or '@' or '!' or '$' or '&' or '\'' or '(' or ')' or '*' or '+' or ',' or ';' or '='
+            or '%';
+    }
+
+    private static void AppendPercentEncoded(StringBuilder sb, char c)
+    {
+        foreach (byte b in Encoding.UTF8.GetBytes(c.ToString()))
+            sb.Append($"%{b:X2}");
+    }
+
+    // ------------------------------------------------------------------
+    // QName functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue Qname(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var ns = AtomizedString(args[0]);
+        var lexical = AtomizedString(args[1]);
+        var local = lexical.Contains(':') ? lexical[(lexical.IndexOf(':') + 1)..] : lexical;
+        return XdmValue.FromQName(new XsQName(local, ns));
+    }
+
+    private static XdmValue ResolveQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var lexical = AtomizedString(args[0]);
+        var node = args[1].NodeValue;
+
+        if (string.IsNullOrEmpty(lexical))
+            return XdmValue.Undefined;
+
+        string prefix;
+        string local;
+        if (lexical.Contains(':'))
+        {
+            var idx = lexical.IndexOf(':');
+            prefix = lexical[..idx];
+            local = lexical[(idx + 1)..];
+        }
+        else
+        {
+            prefix = string.Empty;
+            local = lexical;
+        }
+
+        var nsUri = ResolvePrefix(node, prefix);
+        return XdmValue.FromQName(new XsQName(local, nsUri));
+    }
+
+    private static string ResolvePrefix(IXdmNode node, string prefix)
+    {
+        // Try to find the namespace URI by walking the namespace axis
+        var seq = node.Axis(XdmAxis.Namespace);
+        foreach (var item in seq)
+        {
+            var nsNode = item.NodeValue;
+            if (nsNode.LocalName == prefix)
+                return nsNode.StringValue;
+        }
+        return string.Empty;
     }
 }
 

@@ -950,4 +950,65 @@ public class FunctionLibraryTests
 
     [Fact]
     public void Compare_Greater() => Assert.Equal("1", EvalStr("fn:compare('b','a')"));
+
+    // ------------------------------------------------------------------
+    // URI encoding functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void EncodeForUri() => Assert.Equal("hello%20world%2F%C3%A9", EvalStr("fn:encode-for-uri('hello world/é')"));
+
+    [Fact]
+    public void IriToUri() => Assert.Equal("hello%20world/%C3%A9?x=1", EvalStr("fn:iri-to-uri('hello world/é?x=1')"));
+
+    [Fact]
+    public void EscapeHtmlUri() => Assert.Equal("hello world/%C3%A9?x=1", EvalStr("fn:escape-html-uri('hello world/é?x=1')"));
+
+    // ------------------------------------------------------------------
+    // fn:QName / fn:resolve-QName
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Qname()
+    {
+        var result = Evaluate("fn:QName('http://example.com','ns:local')");
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        var qn = result.QNameValue;
+        Assert.Equal("local", qn.LocalName);
+        Assert.Equal("http://example.com", qn.NamespaceUri);
+    }
+
+    [Fact]
+    public void Qname_NoPrefix()
+    {
+        var result = Evaluate("fn:QName('http://example.com','local')");
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        var qn = result.QNameValue;
+        Assert.Equal("local", qn.LocalName);
+        Assert.Equal("http://example.com", qn.NamespaceUri);
+    }
+
+    [Fact]
+    public void ResolveQName()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<ns:root xmlns:ns='http://example.com'><ns:child/></ns:root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:resolve-QName('ns:child', .)").Evaluate(root);
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        var qn = result.QNameValue;
+        Assert.Equal("child", qn.LocalName);
+        Assert.Equal("http://example.com", qn.NamespaceUri);
+    }
+
+    [Fact]
+    public void ResolveQName_NoPrefix()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root xmlns='http://default.com'><child/></root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:resolve-QName('child', .)").Evaluate(root);
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        var qn = result.QNameValue;
+        Assert.Equal("child", qn.LocalName);
+        Assert.Equal("http://default.com", qn.NamespaceUri);
+    }
 }
