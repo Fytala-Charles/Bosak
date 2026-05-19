@@ -14,6 +14,7 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 
@@ -26,12 +27,17 @@ namespace Bosak.XPath.Providers.Xml;
 /// </summary>
 public sealed class XDocumentNode : IXdmNode
 {
+    private static readonly ConditionalWeakTable<System.Xml.Linq.XDocument, Dictionary<XObject, long>> OrderMaps = new();
+
     private readonly XObject _node;
 
     public XDocumentNode(XObject node)
     {
         _node = node ?? throw new ArgumentNullException(nameof(node));
     }
+
+    internal static void RegisterOrderMap(System.Xml.Linq.XDocument doc, Dictionary<XObject, long> map)
+        => OrderMaps.AddOrUpdate(doc, map);
 
     // ------------------------------------------------------------------
     // Node metadata
@@ -68,6 +74,20 @@ public sealed class XDocumentNode : IXdmNode
     };
 
     public XdmValue TypedValue => XdmValue.FromString(StringValue);
+
+    public bool IsSameNode(IXdmNode other)
+        => other is XDocumentNode xn && ReferenceEquals(_node, xn._node);
+
+    public long DocumentOrder
+    {
+        get
+        {
+            var doc = _node.Document;
+            if (doc is null || !OrderMaps.TryGetValue(doc, out var map))
+                return 0;
+            return map.TryGetValue(_node, out var idx) ? idx : 0;
+        }
+    }
 
     // ------------------------------------------------------------------
     // Tree navigation

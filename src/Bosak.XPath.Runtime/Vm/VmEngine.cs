@@ -32,7 +32,7 @@ public static class VmEngine
         // The lowerer uses monotonic register allocation; 256 is generous for most expressions.
         var registers = new XdmValue[256];
         var (result, _) = ExecuteBlock(module, context, registers, 0);
-        return result;
+        return NormalizeSequence(result);
     }
 
     private static (XdmValue Result, int NextIp) ExecuteBlock(
@@ -236,7 +236,8 @@ public static class VmEngine
                         var combined = new List<XdmValue>(left.Length + right.Length);
                         combined.AddRange(left);
                         combined.AddRange(right);
-                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(combined));
+                        registers[instr.RegisterA] = NormalizeSequence(
+                            XdmValue.FromSequence(MaterializedSequence.FromList(combined)));
                         ip++;
                         break;
                     }
@@ -761,6 +762,63 @@ public static class VmEngine
         }
 
         return value;
+    }
+
+    /// <summary>
+    /// Removes duplicate nodes and sorts the remaining nodes into document order.
+    /// Non-node items are preserved in their original relative order after all nodes.
+    /// </summary>
+    private static XdmValue NormalizeSequence(XdmValue value)
+    {
+        if (value.IsUndefined || !value.IsSequence)
+            return value;
+
+        var items = MaterializeSequence(value);
+        if (items.Length <= 1)
+            return value;
+
+        // Remove duplicate nodes (keep first occurrence)
+        var unique = new List<XdmValue>(items.Length);
+        foreach (var item in items)
+        {
+            if (!item.IsNode)
+            {
+                unique.Add(item);
+                continue;
+            }
+
+            bool isDup = false;
+            foreach (var existing in unique)
+            {
+                if (existing.IsNode && item.NodeValue.IsSameNode(existing.NodeValue))
+                {
+                    isDup = true;
+                    break;
+                }
+            }
+
+            if (!isDup)
+                unique.Add(item);
+        }
+
+        if (unique.Count <= 1)
+            return XdmValue.FromSequence(MaterializedSequence.FromList(unique));
+
+        // Sort nodes by document order; keep non-nodes at the end in original order
+        unique.Sort((a, b) =>
+        {
+            bool aNode = a.IsNode;
+            bool bNode = b.IsNode;
+
+            if (aNode && bNode)
+                return a.NodeValue.DocumentOrder.CompareTo(b.NodeValue.DocumentOrder);
+
+            if (aNode) return -1;
+            if (bNode) return 1;
+            return 0;
+        });
+
+        return XdmValue.FromSequence(MaterializedSequence.FromList(unique));
     }
 
     private static XdmValue FilterNodes(XdmValue input, Func<IXdmNode, bool> predicate)

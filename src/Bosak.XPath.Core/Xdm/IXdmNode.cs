@@ -54,4 +54,10 @@ public interface IXdmNode
 
     /// <summary>Returns a lazy sequence along the specified axis.</summary>
     XdmSequence Axis(XdmAxis axis);
+
+    /// <summary>Returns true if this node and <paramref name="other"/> are the same node.</summary>
+    bool IsSameNode(IXdmNode other);
+
+    /// <summary>Gets the document order index of this node, or 0 if unknown.</summary>
+    long DocumentOrder { get; }
 }

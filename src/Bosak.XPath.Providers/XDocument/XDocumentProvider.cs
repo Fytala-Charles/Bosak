@@ -31,6 +31,8 @@ public static class XDocumentProvider
     public static IXdmNode ToXdmNode(this System.Xml.Linq.XDocument document)
     {
         ArgumentNullException.ThrowIfNull(document);
+        var map = ComputeDocumentOrder(document);
+        XDocumentNode.RegisterOrderMap(document, map);
         return new XDocumentNode(document);
     }
 
@@ -40,6 +42,12 @@ public static class XDocumentProvider
     public static IXdmNode ToXdmNode(this XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
+        var doc = element.Document;
+        if (doc is not null)
+        {
+            var map = ComputeDocumentOrder(doc);
+            XDocumentNode.RegisterOrderMap(doc, map);
+        }
         return new XDocumentNode(element);
     }
 
@@ -49,6 +57,39 @@ public static class XDocumentProvider
     public static IXdmNode ParseXml(string xml)
     {
         var document = System.Xml.Linq.XDocument.Parse(xml);
+        var map = ComputeDocumentOrder(document);
+        XDocumentNode.RegisterOrderMap(document, map);
         return new XDocumentNode(document);
+    }
+
+    // ------------------------------------------------------------------
+    // Document order indexing
+    // ------------------------------------------------------------------
+
+    private static Dictionary<XObject, long> ComputeDocumentOrder(System.Xml.Linq.XDocument doc)
+    {
+        var map = new Dictionary<XObject, long>();
+        long index = 0;
+
+        map[doc] = index++;
+        Traverse(doc, ref index, map);
+
+        return map;
+    }
+
+    private static void Traverse(XContainer container, ref long index, Dictionary<XObject, long> map)
+    {
+        foreach (var node in container.Nodes())
+        {
+            map[node] = index++;
+
+            if (node is XElement el)
+            {
+                foreach (var attr in el.Attributes())
+                    map[attr] = index++;
+
+                Traverse(el, ref index, map);
+            }
+        }
     }
 }

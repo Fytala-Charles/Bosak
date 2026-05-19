@@ -316,8 +316,9 @@ public class EndToEndTests
     {
         var result = EvaluateStrings("//book[3]/preceding-sibling::book/title", LoadDocument());
         Assert.Equal(2, result.Length);
-        Assert.Equal("Dune", result[0]);
-        Assert.Equal("The Great Gatsby", result[1]);
+        // Path expression result is always in document order.
+        Assert.Equal("The Great Gatsby", result[0]);
+        Assert.Equal("Dune", result[1]);
     }
 
     // ------------------------------------------------------------------
@@ -338,8 +339,9 @@ public class EndToEndTests
     {
         var result = EvaluateStrings("//book[3]/title/preceding::title", LoadDocument());
         Assert.Equal(2, result.Length);
-        Assert.Equal("Dune", result[0]);
-        Assert.Equal("The Great Gatsby", result[1]);
+        // Path expression result is always in document order.
+        Assert.Equal("The Great Gatsby", result[0]);
+        Assert.Equal("Dune", result[1]);
     }
 
     // ------------------------------------------------------------------
@@ -350,19 +352,17 @@ public class EndToEndTests
     public void AncestorAxis()
     {
         var result = EvaluateStrings("//title/ancestor::*", LoadDocument());
-        Assert.Equal(6, result.Length); // library + book (×3 titles = 3 books + library for each?)
-        // Actually: for each title, ancestors are book and library
-        // title[1]: book[1], library
-        // title[2]: book[2], library
-        // title[3]: book[3], library
-        // Total: 6
+        // Ancestor axis on each title produces (book, library).
+        // After deduplication and document-order sorting: 3 unique books + 1 library = 4.
+        Assert.Equal(4, result.Length);
     }
 
     [Fact]
     public void AncestorOrSelfAxis()
     {
         var result = EvaluateStrings("//title/ancestor-or-self::*", LoadDocument());
-        Assert.Equal(9, result.Length); // 6 ancestors + 3 self
+        // 3 titles + 3 books + 1 library (deduplicated) = 7.
+        Assert.Equal(7, result.Length);
     }
 
     // ------------------------------------------------------------------
@@ -391,5 +391,43 @@ public class EndToEndTests
         var result = EvaluateStrings("/library/*[2]/*[1]", LoadDocument());
         Assert.Single(result);
         Assert.Equal("Dune", result[0]);
+    }
+
+    // ------------------------------------------------------------------
+    // Document order & deduplication
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Dedup_AncestorAxis()
+    {
+        // library is the ancestor of all 3 titles; should appear once after dedup.
+        var result = EvaluateStrings("//title/ancestor::*", LoadDocument());
+        Assert.Equal(4, result.Length); // 3 books + 1 library
+    }
+
+    [Fact]
+    public void Dedup_AncestorOrSelfAxis()
+    {
+        var result = EvaluateStrings("//title/ancestor-or-self::*", LoadDocument());
+        Assert.Equal(7, result.Length); // 3 titles + 3 books + 1 library
+    }
+
+    [Fact]
+    public void Dedup_Union()
+    {
+        var result = EvaluateStrings("//book[1]/title | //book[3]/title", LoadDocument());
+        Assert.Equal(2, result.Length);
+        Assert.Equal("The Great Gatsby", result[0]);
+        Assert.Equal("1984", result[1]);
+    }
+
+    [Fact]
+    public void DocumentOrder_ReverseAxisNormalized()
+    {
+        // preceding-sibling is reverse axis, but path result is document order.
+        var result = EvaluateStrings("//book[3]/preceding-sibling::book/title", LoadDocument());
+        Assert.Equal(2, result.Length);
+        Assert.Equal("The Great Gatsby", result[0]);
+        Assert.Equal("Dune", result[1]);
     }
 }
