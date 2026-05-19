@@ -1,0 +1,660 @@
+/* ===============================
+   FYTALA Markdown Theme
+   Brand-aligned palette + Mermaid + Logo
+   =============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* ---------- Brand Color Variables ---------- */
+:root {
+  /* Core palette (from fytala-brand.css) */
+  --color-dark-1: #556B2F;
+  --color-light-1: #F0FFF0;
+  --color-dark-2: #2F4F4F;
+  --color-light-2: #E8F4EE;
+
+  --accent-1: #293F5F;
+  --accent-2: #50639C;
+  --accent-3: #5178A8;
+  --accent-4: #518D8F;
+  --accent-5: #98D481;
+  --accent-6: #FDF2CF;
+
+  --link: #008080;
+  --link-visited: #483D8B;
+
+  --background: #E8F4EE;
+  --text: #2F4F4F;
+  --text-alt: #556B2F;
+
+  --header-bg: #2F4F4F;
+  --header-fg: #F0FFF0;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 10px rgba(0,0,0,.06);
+  --border: 1px solid rgba(0,0,0,.08);
+
+  /* Markdown-specific tokens */
+  --text-color: var(--text);
+  --background-color: var(--background);
+  --link-color: var(--link);
+  --link-hover: var(--accent-4);
+  --code-bg: var(--color-light-1);
+  --blockquote-bg: var(--accent-6);
+  --table-border: var(--color-light-2);
+}
+
+/* ---------- Global Layout ---------- */
+body {
+  font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* Selection highlight */
+::selection {
+  background: var(--accent-5);
+  color: #0f0f0f;
+}
+
+/* ---------- Headings ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-alt);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+  border-bottom: 4px solid var(--accent-4);
+  padding-bottom: 0.5rem;
+  color: var(--color-dark-2);
+}
+
+h2 {
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
+  border-left: 6px solid var(--accent-4);
+  padding-left: 0.5rem;
+  color: var(--color-dark-2);
+}
+
+h3 {
+  font-size: clamp(1.3rem, 1.8vw, 1.5rem);
+  font-weight: 600;
+  color: var(--color-dark-2);
+}
+
+h4, h5, h6 {
+  color: var(--color-dark-2);
+}
+
+p {
+  margin: 0.6em 0 1em;
+}
+
+/* ---------- Links ---------- */
+a {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+a:visited {
+  color: var(--link-visited);
+}
+
+a:hover {
+  opacity: 0.9;
+  text-decoration-thickness: 0.12em;
+}
+
+/* ---------- Code ---------- */
+code {
+  background: var(--code-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+pre {
+  background: var(--code-bg);
+  padding: 1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+pre code {
+  display: block;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+/* ---------- Blockquotes ---------- */
+blockquote {
+  background-color: var(--blockquote-bg);
+  border-left: 4px solid var(--accent-4);
+  padding: 0.75rem 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--text);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ---------- Tables ---------- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  background: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+th, td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  text-align: left;
+}
+
+th {
+  background-color: var(--accent-1);
+  color: #fff;
+  font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(0,0,0,0.02);
+}
+
+/* ---------- Lists ---------- */
+ul, ol {
+  padding-left: 1.2rem;
+}
+
+li {
+  margin: 0.25rem 0;
+}
+
+/* ---------- Horizontal Rule ---------- */
+hr {
+  border: 0;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  margin: 2rem 0;
+}
+
+/* ---------- Images ---------- */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* =====================================================
+   MERMAID DIAGRAM STYLING
+   Overrides generated SVG colors with brand palette.
+   Works when Mermaid renders inline SVG.
+   ===================================================== */
+
+/* Container */
+.mermaid {
+  background: var(--color-light-1);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+/* ---- Flowchart / Graph ---- */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+  fill: var(--color-light-1) !important;
+  stroke: var(--accent-4) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .node .label,
+.mermaid .nodeLabel,
+.mermaid .node text {
+  fill: var(--text) !important;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.mermaid .edgePath .path {
+  stroke: var(--accent-3) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .edgeLabel rect,
+.mermaid .edgeLabel {
+  fill: var(--accent-6) !important;
+  background-color: var(--accent-6) !important;
+}
+
+.mermaid .edgeLabel .label {
+  fill: var(--text) !important;
+}
+
+.mermaid .arrowheadPath {
+  fill: var(--accent-3) !important;
+  stroke: var(--accent-3) !important;
+}
+
+/* Clusters / subgraphs */
+.mermaid .cluster rect {
+  fill: var(--color-light-2) !important;
+  stroke: var(--accent-4) !important;
+  stroke-width: 1px !important;
+  rx: 8px !important;
+}
+
+.mermaid .cluster .label {
+  fill: var(--text-alt) !important;
+  font-weight: 600 !important;
+}
+
+/* ---- Sequence Diagram ---- */
+.mermaid .actor {
+  fill: var(--color-light-1) !important;
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid text.actor {
+  fill: var(--text) !important;
+}
+
+.mermaid .actor-line {
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .messageLine0,
+.mermaid .messageLine1 {
+  stroke: var(--accent-3) !important;
+}
+
+.mermaid .messageText {
+  fill: var(--text) !important;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.mermaid .activation0,
+.mermaid .activation1,
+.mermaid .activation2 {
+  fill: var(--accent-6) !important;
+  stroke: var(--accent-4) !important;
+}
+
+/* ---- Class / State Diagrams ---- */
+.mermaid .classBox .label {
+  fill: var(--text) !important;
+}
+
+.mermaid .classBox .classTitle {
+  fill: var(--text-alt) !important;
+  font-weight: 700 !important;
+}
+
+.mermaid .divider {
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .stateGroup {
+  fill: var(--color-light-1) !important;
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .stateGroup .title {
+  fill: var(--text-alt) !important;
+  font-weight: 700 !important;
+}
+
+/* ---- Gantt / Pie / Journey ---- */
+.mermaid .section0, .mermaid .section1, .mermaid .section2,
+.mermaid .section3, .mermaid .section4, .mermaid .section5,
+.mermaid .section6, .mermaid .section7 {
+  fill: var(--accent-5) !important;
+  opacity: 0.35;
+}
+
+.mermaid .section-title {
+  fill: var(--text) !important;
+}
+
+.mermaid .grid .tick {
+  stroke: rgba(0,0,0,0.08) !important;
+}
+
+.mermaid .today {
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .task0, .mermaid .task1, .mermaid .task2,
+.mermaid .task3, .mermaid .task4, .mermaid .task5,
+.mermaid .task6, .mermaid .task7 {
+  fill: var(--accent-4) !important;
+  stroke: var(--accent-1) !important;
+}
+
+.mermaid .taskText0, .mermaid .taskText1,
+.mermaid .taskText2, .mermaid .taskText3 {
+  fill: var(--text) !important;
+}
+
+.mermaid .active0, .mermaid .active1, .mermaid .active2,
+.mermaid .active3, .mermaid .active4, .mermaid .active5 {
+  fill: var(--accent-5) !important;
+  stroke: var(--color-dark-1) !important;
+}
+
+.mermaid .done0, .mermaid .done1, .mermaid .done2,
+.mermaid .done3, .mermaid .done4, .mermaid .done5 {
+  fill: var(--color-light-2) !important;
+  stroke: var(--color-dark-1) !important;
+}
+
+.mermaid .crit0, .mermaid .crit1, .mermaid .crit2,
+.mermaid .crit3, .mermaid .crit4, .mermaid .crit5 {
+  fill: var(--accent-6) !important;
+  stroke: var(--color-dark-1) !important;
+}
+
+/* ---- Entity Relationship ---- */
+.mermaid .entityBox {
+  fill: var(--color-light-1) !important;
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .entityLabel {
+  fill: var(--text) !important;
+}
+
+.mermaid .relationshipLine {
+  stroke: var(--accent-3) !important;
+}
+
+/* ---- User Journey ---- */
+.mermaid .journey-section {
+  fill: var(--color-light-2) !important;
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .journey-section-title {
+  fill: var(--text-alt) !important;
+}
+
+/* ---- Git Graph ---- */
+.mermaid .commit {
+  fill: var(--accent-4) !important;
+  stroke: var(--accent-1) !important;
+}
+
+.mermaid .commit-label {
+  fill: var(--text) !important;
+}
+
+.mermaid .branch-label {
+  fill: var(--text-alt) !important;
+  font-weight: 600 !important;
+}
+
+.mermaid .git-raph-line {
+  stroke: var(--accent-3) !important;
+}
+
+/* ---- Mindmap ---- */
+.mermaid .mindmap-node rect,
+.mermaid .mindmap-node circle,
+.mermaid .mindmap-node ellipse {
+  fill: var(--color-light-1) !important;
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .mindmap-node text {
+  fill: var(--text) !important;
+}
+
+.mermaid .mindmap-link {
+  stroke: var(--accent-3) !important;
+}
+
+/* ---- Timeline ---- */
+.mermaid .timeline-section {
+  fill: var(--color-light-2) !important;
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .timeline-section-title {
+  fill: var(--text-alt) !important;
+}
+
+.mermaid .timeline-event {
+  fill: var(--color-light-1) !important;
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .timeline-event-text {
+  fill: var(--text) !important;
+}
+
+/* ---- Pie Chart ---- */
+.mermaid .pieTitleText {
+  fill: var(--text-alt) !important;
+  font-weight: 700 !important;
+}
+
+.mermaid .pieOuterCircle {
+  stroke: var(--accent-4) !important;
+}
+
+.mermaid .slice {
+  stroke: #fff !important;
+  stroke-width: 2px !important;
+}
+
+/* =====================================================
+   ADMONITIONS / CALLOUTS
+   ===================================================== */
+.admonition {
+  border-left: 6px solid var(--accent-1);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background: var(--color-light-1);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.admonition.note {
+  border-color: var(--accent-3);
+  background: var(--color-light-1);
+}
+
+.admonition.tip {
+  border-color: var(--accent-5);
+  background: rgba(152, 212, 129, 0.12);
+}
+
+.admonition.warn,
+.admonition.warning {
+  border-color: #d4a017;
+  background: rgba(253, 242, 207, 0.5);
+}
+
+.admonition.danger {
+  border-color: #c0392b;
+  background: rgba(192, 57, 43, 0.08);
+}
+
+.admonition.info {
+  border-color: var(--accent-4);
+  background: rgba(81, 141, 143, 0.08);
+}
+
+/* =====================================================
+   LOGO STYLES
+   ===================================================== */
+.logo {
+  width: 200px;
+  height: auto;
+}
+
+.logo-small {
+  width: 50px;
+  height: auto;
+}
+
+.logo-very-small {
+  width: 25px;
+  height: auto;
+}
+
+.logo-medium {
+  width: 120px;
+  height: auto;
+}
+
+.logo-large {
+  width: 320px;
+  height: auto;
+}
+
+/* Header bar with logo */
+.markdown-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.markdown-header .logo,
+.markdown-header .logo-small,
+.markdown-header .logo-medium {
+  flex-shrink: 0;
+}
+
+.markdown-header h1,
+.markdown-header h2,
+.markdown-header h3 {
+  color: var(--header-fg);
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+/* Footer bar */
+.markdown-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow);
+}
+
+.markdown-footer a {
+  color: var(--header-fg);
+  text-decoration: none;
+}
+
+.markdown-footer a:hover {
+  text-decoration: underline;
+}
+
+/* =====================================================
+   CARDS / UTILITY
+   ===================================================== */
+.card {
+  background: #ffffff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  border: var(--border);
+  margin: 1rem 0;
+}
+
+/* Accent background utilities */
+.bg-accent-1 { background: var(--accent-1) !important; color: #fff !important; }
+.bg-accent-2 { background: var(--accent-2) !important; color: #fff !important; }
+.bg-accent-3 { background: var(--accent-3) !important; color: #fff !important; }
+.bg-accent-4 { background: var(--accent-4) !important; color: #fff !important; }
+.bg-accent-5 { background: var(--accent-5) !important; color: #0f0f0f !important; }
+.bg-accent-6 { background: var(--accent-6) !important; color: #0f0f0f !important; }
+
+.text-accent-1 { color: var(--accent-1) !important; }
+.text-accent-2 { color: var(--accent-2) !important; }
+.text-accent-3 { color: var(--accent-3) !important; }
+.text-accent-4 { color: var(--accent-4) !important; }
+.text-accent-5 { color: var(--accent-5) !important; }
+.text-accent-6 { color: var(--accent-6) !important; }
+
+/* =====================================================
+   PRINT STYLES
+   ===================================================== */
+@media print {
+  body {
+    max-width: 100%;
+    padding: 0;
+    background: #fff;
+    color: #000;
+  }
+
+  a {
+    text-decoration: underline;
+    color: #000;
+  }
+
+  h1, h2 {
+    page-break-after: avoid;
+    color: #000;
+    border-color: #333;
+  }
+
+  pre, blockquote {
+    page-break-inside: avoid;
+  }
+
+  .mermaid {
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: none;
+  }
+
+  .markdown-header,
+  .markdown-footer {
+    background: #333;
+    color: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* =====================================================
+   WIDE-SCREEN LAYOUT
+   ===================================================== */
+@media (min-width: 1200px) {
+  body {
+    max-width: 1100px;
+  }
+}

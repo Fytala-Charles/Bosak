@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360">
+  <rect width="1200" height="360" fill="#05161a"/>
+  
+  <defs>
+    <marker id="arrow2" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0,0 10,4 0,8" fill="#6da5c0"/>
+    </marker>
+  </defs>
+  <rect x="70" y="60" width="1060" height="220" rx="16" fill="#072e33" stroke="#0f989c" stroke-width="2"/>
+  <text x="90" y="90" fill="#ffffff" font-size="18" font-family="Inter,Segoe UI,Arial">Kurzweil: Law of Accelerating Returns</text>
+  <line x1="120" y1="250" x2="1120" y2="250" stroke="#6da5c0" stroke-width="3"/>
+  <line x1="120" y1="250" x2="120" y2="120" stroke="#6da5c0" stroke-width="3"/>
+  <path d="M 120 245 C 300 240, 500 220, 700 180 S 1020 120, 1120 90" stroke="#0f989c" stroke-width="6" fill="none"/>
+  <circle cx="520" cy="215" r="6" fill="#6da5c0"/><text x="500" y="235" fill="#ffffff" font-size="13">2024</text>
+  <circle cx="760" cy="170" r="6" fill="#6da5c0"/><text x="740" y="190" fill="#ffffff" font-size="13">2029 (AGI?)</text>
+  <circle cx="1040" cy="110" r="6" fill="#6da5c0"/><text x="1010" y="130" fill="#ffffff" font-size="13">2045 (Singularity?)</text>
+  <text x="980" y="80" fill="#ffffff" font-size="12">Illustrative only</text>
+
+</svg>

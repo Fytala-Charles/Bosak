@@ -1,4 +1,15 @@
-# Bosak XPath Architecture
+<div align="center">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala">
+  <br><br>
+  <h1 style="color:#2F4F4F; font-family:Poppins,Segoe UI,sans-serif; margin:0;">Bosak XPath Architecture</h1>
+  <p style="color:#556B2F; font-family:Poppins,Segoe UI,sans-serif; font-size:1rem; margin:0.5rem 0 0;">
+    Technical design document — XPath 3.1 register-VM engine
+  </p>
+</div>
+
+<br>
+
+---
 
 ## Overview
 
@@ -17,41 +28,60 @@ A high-performance .NET implementation of **XPath 3.1** (with forward-compatibil
 
 ## High-Level Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Public API                            │
-│   XPath31Expression  │  XPathCompiler  │  EvaluationContext  │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                     Standard Library                         │
-│   (fn:*, math:*, map:*, array:*, xs:* constructors)        │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                    Runtime / VM                              │
-│   Register VM  │  Function Dispatch  │  Sequence Operators   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                    Compiler / IR                             │
-│   AST Optimizer  │  IR Lowerer  │  IL JIT (optional)       │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                     Parser                                   │
-│   Lexer (Span-based)  │  Recursive-Descent Parser  │  AST   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                     XDM Core                                 │
-│   XdmValue  │  IXdmNode  │  XdmSequence  │  XdmAtomicValue  │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                   Node Providers                             │
-│   XDocument  │  XmlDocument  │  Streaming  │  Custom        │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph API["📢 Public API"]
+        EXP["XPath31Expression"]
+        COMP["XPathCompiler"]
+        ECTX["EvaluationContext"]
+    end
+
+    subgraph STD["📚 Standard Library"]
+        FN["fn:*"]
+        MATH["math:*"]
+        MAP["map:*"]
+        ARR["array:*"]
+        XS["xs:* constructors"]
+    end
+
+    subgraph RT["⚡ Runtime / VM"]
+        VM["Register VM"]
+        FD["Function Dispatch"]
+        SO["Sequence Operators"]
+    end
+
+    subgraph CP["🔧 Compiler / IR"]
+        ASTO["AST Optimizer"]
+        IRL["IR Lowerer"]
+        JIT["IL JIT (optional)"]
+    end
+
+    subgraph PR["📝 Parser"]
+        LEX["Lexer (Span-based)"]
+        PAR["Recursive-Descent Parser"]
+        AST["AST"]
+    end
+
+    subgraph XC["🧱 XDM Core"]
+        XV["XdmValue"]
+        XN["IXdmNode"]
+        XSQ["XdmSequence"]
+        XAV["XdmAtomicValue"]
+    end
+
+    subgraph NP["🌐 Node Providers"]
+        XD["XDocument"]
+        XMLD["XmlDocument"]
+        STR["Streaming"]
+        CUST["Custom"]
+    end
+
+    API --> STD
+    STD --> RT
+    RT --> CP
+    CP --> PR
+    PR --> XC
+    XC --> NP
 ```
 
 ---
@@ -159,6 +189,13 @@ Transforms the AST into an executable form.
 #### Phase 2: IR Lowerer
 Lowers the AST to a **register-based intermediate representation** (`IrInstruction`). This is similar to LLVM IR but domain-specific for XPath.
 
+```mermaid
+flowchart LR
+    AST_IN["Optimized AST"]
+    IR["IR Instructions<br/>+ Literal Pool"]
+    AST_IN -->|LowerNode| IR
+```
+
 Example IR for `//book[price > 10]`:
 ```
 LOAD_CONTEXT     r0
@@ -184,6 +221,21 @@ For expressions executed frequently (>N times), the IR can be compiled to a `Dyn
 ### 4. Runtime / VM (`Bosak.XPath.Runtime`)
 
 A lightweight, register-based virtual machine.
+
+```mermaid
+flowchart TD
+    IR["IR Module<br/>(Instructions + Literal Pool)"]
+    REG["Register File<br/>XdmValue[256]"]
+    IP["Instruction Pointer"]
+    CTX["EvaluationContext<br/>Focus + Variables + Functions"]
+    OUT["XdmValue Result"]
+
+    IR --> VM["VmEngine.Execute"]
+    REG --> VM
+    CTX --> VM
+    VM --> IP
+    VM --> OUT
+```
 
 **Design**:
 - Small stack of `XdmValue` registers (typically 16-64, expandable).
@@ -289,3 +341,11 @@ tests/
 ```
 
 The published NuGet package will likely be a single `Bosak.XPath` assembly (produced via ILMerge or source consolidation) to simplify deployment, while development maintains the layered project separation.
+
+---
+
+<div align="center" style="background:#2F4F4F; color:#F0FFF0; padding:1rem; border-radius:12px; margin-top:2rem;">
+  <p style="margin:0; font-family:Poppins,Segoe UI,sans-serif;">
+    <strong>© Fytala</strong> — Bosak XPath Engine Architecture
+  </p>
+</div>

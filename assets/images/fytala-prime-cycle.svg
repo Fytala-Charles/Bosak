@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="400" viewBox="0 0 1600 400">
+  <defs>
+    <linearGradient id="bgp" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#072e33"/>
+      <stop offset="100%" stop-color="#294d61"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bgp)"/>
+  <g font-family="Inter,Segoe UI,Arial" font-weight="700" fill="#ffffff" font-size="54">
+    <text x="70" y="90">🔁 The FYTALA Process: PRIME </text>
+  </g>
+  <!-- Steps -->
+  <g>
+    <rect x="70" y="140" width="260" height="120" rx="16" fill="#0c7075" stroke="#6da5c0" stroke-width="6"/>
+    <text x="100" y="200" font-family="Inter,Segoe UI,Arial" font-size="30" fill="#fff">💡 P • Prompt</text>
+  </g>
+  <g>
+    <rect x="380" y="140" width="260" height="120" rx="16" fill="#0c7075" stroke="#6da5c0" stroke-width="6"/>
+    <text x="410" y="200" font-family="Inter,Segoe UI,Arial" font-size="30" fill="#fff">✏️ R • Refine</text>
+  </g>
+  <g>
+    <rect x="690" y="140" width="260" height="120" rx="16" fill="#0c7075" stroke="#6da5c0" stroke-width="6"/>
+    <text x="720" y="200" font-family="Inter,Segoe UI,Arial" font-size="30" fill="#fff">🔍 I • Inspect</text>
+  </g>
+  <g>
+    <rect x="1000" y="140" width="260" height="120" rx="16" fill="#0c7075" stroke="#6da5c0" stroke-width="6"/>
+    <text x="1030" y="200" font-family="Inter,Segoe UI,Arial" font-size="30" fill="#fff">🛠️ M • Modify</text>
+  </g>
+  <g>
+    <rect x="1310" y="140" width="260" height="120" rx="16" fill="#0c7075" stroke="#6da5c0" stroke-width="6"/>
+    <text x="1340" y="200" font-family="Inter,Segoe UI,Arial" font-size="30" fill="#fff">📦 E • Embed</text>
+  </g>
+  <!-- Arrows -->
+  <g stroke="#6da5c0" stroke-width="8" fill="none" stroke-linecap="round">
+    <path d="M330 200 L370 200"/>
+    <path d="M640 200 L680 200"/>
+    <path d="M950 200 L990 200"/>
+    <path d="M1260 200 L1300 200"/>
+  </g>
+</svg>

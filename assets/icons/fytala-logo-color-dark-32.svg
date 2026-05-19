@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- ========================= -->
+<!-- Variant: FYTALA Dark 32     -->
+<!-- File: fytala-logo-color-dark-32.svg -->
+<!--
+  brand-font: 'Poppins', 'Aptos', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+  bg:#E8F4EE;
+  text:#2F4F4F;
+  text-alt:#556B2F;
+  light-1:#F0FFF0;
+  light-2:#E8F4EE;
+  stroke-color:#E8F4EE;
+  stroke-dark:#2F4F4F;
+  fill-light:#E8F4EE;
+  fill-dark:#2F4F4F;
+  accent-1:#293F5F;
+  accent-2:#50639C;
+  accent-3:#5178A8;
+  accent-4:#518D8F;
+  accent-5:#98D481;
+  accent-6:#FDF2CF;
+  link:#008080;
+  visited:#483D8B;
+  header-bg:#2F4F4F;
+  header-fg:#F0FFF0;
+  radius:12px;
+  radius-sm:8px;
+  shadow:0 2px 10px rgba(0,0,0,.06);
+  border:1px solid rgba(0,0,0,.08);
+-->
+<svg xmlns="http://www.w3.org/2000/svg" 
+	width="32" 
+	height="32" 
+	viewBox="0 0 32 32"
+	style="--fill-color:#2F4F4F; --stroke-color:#E8F4EE;">		
+		<g transform="translate(4.5000,4.500000) scale(0.270000)">
+		<rect width="88" height="95" x="2" y="2" rx="25" ry="25" stroke="var(--stroke-color)" stroke-width="1" fill="var(--fill-color)" />
+		<path d="M 6 71 q 13 -15 77 0" stroke="var(--stroke-color)" stroke-width="0.8" fill="var(--fill-color)" stroke-linecap="round" />
+		<path d="M 6 73 q 10 -10 80 0" stroke="var(--stroke-color)" stroke-width="3" fill="var(--fill-color)" stroke-linecap="round" />
+		<rect width="12" height="15" x="20" y="62" fill="var(--fill-color)" />
+		<line x1="23" y1="20" x2="23" y2="65" stroke="var(--stroke-color)" stroke-width="0.8" />
+		<line x1="23" y1="65" x2="21" y2="86" stroke="var(--stroke-color)" stroke-width="0.8" />
+		<line x1="27" y1="19" x2="27" y2="72" stroke="var(--stroke-color)" stroke-width="1.6" stroke-linecap="round" />
+		<line x1="27" y1="72" x2="27" y2="86" stroke="var(--stroke-color)" stroke-width="1.6" />
+		<line x1="27" y1="18" x2="29" y2="20" stroke="var(--stroke-color)" stroke-width="0.8" stroke-linecap="round" />
+		<line x1="23" y1="20" x2="27" y2="18" stroke="var(--stroke-color)" stroke-width="1" stroke-linecap="round" />
+		<line x1="29" y1="20" x2="29" y2="86" stroke="var(--stroke-color)" stroke-width="0.4" />
+		<line x1="35" y1="20" x2="35" y2="23" stroke="var(--stroke-color)" stroke-width="0.6" />
+		<line x1="35" y1="20" x2="38" y2="18" stroke="var(--stroke-color)" stroke-width="0.6" />
+		<line x1="35" y1="28" x2="35" y2="62" stroke="var(--stroke-color)" stroke-width="0.6" />
+		<line x1="35" y1="72" x2="34" y2="86" stroke="var(--stroke-color)" stroke-width="0.8" />
+		<line x1="38" y1="19" x2="38" y2="61" stroke="var(--stroke-color)" stroke-width="1.6" stroke-linecap="round" />
+		<line x1="38" y1="18" x2="40" y2="20" stroke="var(--stroke-color)" stroke-width="0.6" />
+		<line x1="40" y1="20" x2="40" y2="22" stroke="var(--stroke-color)" stroke-width="0.6" />
+		<line x1="38" y1="72" x2="38" y2="86" stroke="var(--stroke-color)" stroke-width="1.6" />
+		<line x1="40" y1="25" x2="40" y2="27" stroke="var(--stroke-color)" stroke-width="0.2" />
+		<line x1="40" y1="31" x2="40" y2="33" stroke="var(--stroke-color)" stroke-width="0.2" />
+		<line x1="40" y1="37" x2="40" y2="62" stroke="var(--stroke-color)" stroke-width="0.2" />
+		<line x1="40" y1="72" x2="40" y2="86" stroke="var(--stroke-color)" stroke-width="0.2" />
+		<path d="M31 25 L36 25Z" stroke="var(--stroke-color)" stroke-width="0.8" />
+		<path d="M31 28 L36 28Z" stroke="var(--stroke-color)" stroke-width="0.8" />
+		<path d="M36 25 L36 28Z" stroke="var(--stroke-color)" stroke-width="0.6" />
+		<line x1="21" y1="28" x2="10" y2="66" stroke="var(--stroke-color)" stroke-width="0.1" />
+		<line x1="21" y1="33" x2="15" y2="64" stroke="var(--stroke-color)" stroke-width="0.1" />
+		<line x1="40" y1="23" x2="75" y2="67" stroke="var(--stroke-color)" stroke-width="0.1" />
+		<line x1="40" y1="28" x2="60" y2="65" stroke="var(--stroke-color)" stroke-width="0.1" />
+		<line x1="40" y1="34" x2="50" y2="63" stroke="var(--stroke-color)" stroke-width="0.1" />
+		<path d="M 12 89 q 10 -3 60 0" stroke="var(--stroke-color)" stroke-width="0.6" fill="var(--fill-color)" stroke-linecap="round" />
+	</g>
+</svg>

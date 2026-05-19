@@ -1,0 +1,270 @@
+
+/* =====================================================
+   FYTALA / Presentation-Aligned CSS (WordPress + Markdown)
+   Author: ChatGPT
+   How to use (WordPress):
+     - Prefer: Appearance → Customize → Additional CSS (classic themes)
+     - If missing (FSE/block themes): install a "Custom CSS" plugin and paste this.
+   How to use (Markdown):
+     - Wrap your content in <div class="markdown-body"> ... </div>
+       OR include this file globally in your site template.
+   Notes:
+     - Aptos is a licensed font and won’t load on visitors’ devices unless installed.
+       Poppins is included via Google Fonts below.
+===================================================== */
+
+/* Load Poppins as the web font (keep if you don't enqueue via theme) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root{
+  /* Brand tokens */
+  --brand-font: 'Poppins', 'Aptos', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+
+  --color-dark-1: #556B2F; /* Alt text / strong */
+  --color-light-1:#F0FFF0;
+  --color-dark-2: #2F4F4F; /* Default text */
+  --color-light-2:#E8F4EE; /* Background */
+
+  --accent-1:#293F5F;
+  --accent-2:#50639C;
+  --accent-3:#5178A8;
+  --accent-4:#518D8F;
+  --accent-5:#98D481;
+  --accent-6:#FDF2CF;
+
+  --link:#008080;
+  --link-visited:#483D8B;
+
+  --background:#E8F4EE;
+  --text:#2F4F4F;
+  --text-alt:#556B2F;
+
+  --header-bg:#2F4F4F;
+  --header-fg:#F0FFF0;
+
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow:0 2px 10px rgba(0,0,0,.06);
+  --border:1px solid rgba(0,0,0,.08);
+}
+
+/* ===== Base (global + Markdown wrapper) ===== */
+body, .markdown-body{
+  background:var(--background);
+  color:var(--text);
+  font-family:var(--brand-font);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+.markdown-body{
+  max-width: 75ch;
+  margin-inline:auto;
+  padding: 1.2rem;
+}
+
+/* Selection highlight */
+::selection{ background: var(--accent-5); color: #0f0f0f; }
+
+/* Headings */
+h1,h2,h3,h4,h5,h6,
+.markdown-body h1,.markdown-body h2,.markdown-body h3,
+.markdown-body h4,.markdown-body h5,.markdown-body h6{
+  color:var(--text-alt);
+  line-height:1.2;
+  margin:1.2em 0 .4em;
+  font-weight:700;
+}
+h1,.markdown-body h1{ font-size: clamp(1.8rem, 2.8vw, 2.4rem); }
+h2,.markdown-body h2{ font-size: clamp(1.6rem, 2.2vw, 2rem); }
+h3,.markdown-body h3{ font-size: clamp(1.3rem, 1.8vw, 1.5rem); font-weight:600; }
+
+p, .markdown-body p{ margin: .6em 0 1em; }
+
+/* Links */
+a, .markdown-body a{
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: .15em;
+}
+a:visited, .markdown-body a:visited{ color: var(--link-visited); }
+a:hover, .markdown-body a:hover{ opacity:.9; text-decoration-thickness: .12em; }
+
+/* Buttons (WordPress + generic) */
+.wp-element-button,
+.wp-block-button__link,
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"]{
+  background: var(--accent-1);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: .7rem 1.1rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+.wp-element-button:hover,
+.wp-block-button__link:hover,
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover{
+  background: var(--accent-2);
+  color:#fff;
+}
+/* Outline button style */
+.is-style-outline .wp-block-button__link{
+  background: transparent;
+  color: var(--accent-1);
+  border: 2px solid var(--accent-1);
+}
+.is-style-outline .wp-block-button__link:hover{
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}
+
+/* Forms */
+input[type="text"], input[type="email"], input[type="url"], input[type="password"],
+textarea, select{
+  background: var(--color-light-1);
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: var(--radius-sm);
+  padding: .6rem .75rem;
+  color: var(--text);
+  width: 100%;
+}
+
+/* Cards / Groups (WP common blocks) */
+.wp-block-group, .wp-block-columns, .wp-block-media-text, .wp-block-cover,
+.markdown-body .card{
+  background: #ffffff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  border: var(--border);
+}
+.wp-block-columns{ gap: 1rem; }
+
+/* Blockquote */
+blockquote, .markdown-body blockquote{
+  border-left: 4px solid var(--accent-4);
+  background: var(--accent-6);
+  padding: .75rem 1rem;
+  margin: 1rem 0;
+  color: var(--text);
+}
+
+/* Code */
+code, kbd, samp, pre,
+.markdown-body code, .markdown-body pre{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+}
+code, .markdown-body code{
+  background: var(--color-light-1);
+  padding: .15em .35em;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,.08);
+}
+pre, .markdown-body pre{
+  background: var(--color-light-1);
+  padding: 1rem;
+  border-radius: var(--radius);
+  overflow:auto;
+  border: 1px solid rgba(0,0,0,.1);
+}
+
+/* Tables */
+table, .markdown-body table{
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+th, td{
+  padding: .6rem .75rem;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+thead th{
+  background: var(--accent-1);
+  color: #fff;
+  text-align: left;
+}
+tbody tr:nth-child(even){ background: rgba(0,0,0,.02); }
+
+/* Lists */
+ul, ol{ padding-left: 1.2rem; }
+li{ margin: .25rem 0; }
+
+/* Horizontal rule */
+hr{ border: 0; border-top: 1px solid rgba(0,0,0,.12); margin: 2rem 0; }
+
+/* Images */
+img{ max-width:100%; height:auto; border-radius: 8px; }
+
+/* Header/Footer bars (front-end) */
+header.site-header,
+.wp-site-blocks > header,
+footer.site-footer,
+.wp-site-blocks > footer{
+  background: var(--header-bg);
+  color: var(--header-fg);
+}
+/* Header/Footer links inherit light text */
+header.site-header a, .wp-site-blocks > header a,
+footer.site-footer a, .wp-site-blocks > footer a{
+  color: var(--header-fg);
+  text-decoration: none;
+}
+header.site-header a:hover, .wp-site-blocks > header a:hover,
+footer.site-footer a:hover, .wp-site-blocks > footer a:hover{
+  text-decoration: underline;
+}
+
+/* Utility classes to use in Gutenberg block "Additional CSS class(es)" */
+.bg-accent-1{ background:var(--accent-1)!important; color:#fff!important; }
+.bg-accent-2{ background:var(--accent-2)!important; color:#fff!important; }
+.bg-accent-3{ background:var(--accent-3)!important; color:#fff!important; }
+.bg-accent-4{ background:var(--accent-4)!important; color:#fff!important; }
+.bg-accent-5{ background:var(--accent-5)!important; color:#0f0f0f!important; }
+.bg-accent-6{ background:var(--accent-6)!important; color:#0f0f0f!important; }
+
+.text-accent-1{ color:var(--accent-1)!important; }
+.text-accent-2{ color:var(--accent-2)!important; }
+.text-accent-3{ color:var(--accent-3)!important; }
+.text-accent-4{ color:var(--accent-4)!important; }
+.text-accent-5{ color:var(--accent-5)!important; }
+.text-accent-6{ color:var(--accent-6)!important; }
+
+.border-accent-1{ border-color:var(--accent-1)!important; }
+.border-accent-2{ border-color:var(--accent-2)!important; }
+.border-accent-3{ border-color:var(--accent-3)!important; }
+.border-accent-4{ border-color:var(--accent-4)!important; }
+.border-accent-5{ border-color:var(--accent-5)!important; }
+.border-accent-6{ border-color:var(--accent-6)!important; }
+
+.rounded{ border-radius: var(--radius); }
+.rounded-sm{ border-radius: var(--radius-sm); }
+.shadow{ box-shadow: var(--shadow); }
+.px{ padding-inline: 1rem; }
+.py{ padding-block: 1rem; }
+.mx-auto{ margin-inline:auto; }
+
+/* WordPress notices (optional) */
+.wp-block-post-date,
+.wp-block-post-terms,
+.wp-block-categories .cat-item a{ color: var(--text); }
+
+/* Footer small print */
+.site-footer, .wp-site-blocks > footer{
+  font-size: .95rem;
+}
+
+/* Optional: narrow content width on very wide screens */
+@media (min-width: 1200px){
+  .wp-site-blocks main, .markdown-body{ max-width: 1100px; }
+}

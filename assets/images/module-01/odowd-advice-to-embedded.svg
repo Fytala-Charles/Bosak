@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360">
+  <rect width="1200" height="360" fill="#05161a"/>
+  
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c7075" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0f989c" stop-opacity="0.8"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0,0 12,5 0,10" fill="#6da5c0"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1200" height="360" fill="url(#bg1)" opacity="0.25"/>
+  <rect x="80" y="100" width="360" height="160" rx="16" fill="#072e33" stroke="#0f989c" stroke-width="3"/>
+  <text x="110" y="140" fill="#ffffff" font-family="Inter,Segoe UI,Arial" font-size="22" font-weight="700">Advisor Model</text>
+  <text x="110" y="172" fill="#ffffff" font-size="14" opacity="0.9">Roadmaps, workshops, decks</text>
+  <text x="110" y="196" fill="#ffffff" font-size="14" opacity="0.9">Low stickiness</text>
+  <rect x="760" y="100" width="360" height="160" rx="16" fill="#072e33" stroke="#0f989c" stroke-width="3"/>
+  <text x="790" y="140" fill="#ffffff" font-family="Inter,Segoe UI,Arial" font-size="22" font-weight="700">Embedded Intelligence</text>
+  <text x="790" y="172" fill="#ffffff" font-size="14" opacity="0.9">Code in workflows, copilots, automations</text>
+  <text x="790" y="196" fill="#ffffff" font-size="14" opacity="0.9">High dependency / lasting value</text>
+  <line x1="460" y1="180" x2="760" y2="180" stroke="#6da5c0" stroke-width="6" marker-end="url(#arrow)"/>
+  <text x="560" y="166" fill="#ffffff" font-size="14" font-family="Inter,Segoe UI,Arial">AI-native shift</text>
+
+</svg>
