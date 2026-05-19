@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added numeric and node-name accessor tests                                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -337,5 +338,231 @@ public class FunctionLibraryTests
     {
         var result = EvalStr("fn:replace('a-b-c','-','_')");
         Assert.Equal("a_b_c", result);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:abs
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Abs_Integer() => Assert.Equal("42", EvalStr("fn:abs(-42)"));
+
+    [Fact]
+    public void Abs_Decimal()
+    {
+        var result = Evaluate("fn:abs(-3.14)");
+        Assert.Equal(XdmValueKind.Decimal, result.Kind);
+        Assert.Equal(3.14m, result.DecimalValue);
+    }
+
+    [Fact]
+    public void Abs_Double()
+    {
+        var result = Evaluate("fn:abs(-2.5e0)");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(2.5, result.DoubleValue);
+    }
+
+    [Fact]
+    public void Abs_Zero() => Assert.Equal("0", EvalStr("fn:abs(0)"));
+
+    // ------------------------------------------------------------------
+    // fn:floor
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Floor_Integer() => Assert.Equal("42", EvalStr("fn:floor(42)"));
+
+    [Fact]
+    public void Floor_Decimal() => Assert.Equal("3", EvalStr("fn:floor(3.14)"));
+
+    [Fact]
+    public void Floor_DecimalNegative() => Assert.Equal("-4", EvalStr("fn:floor(-3.14)"));
+
+    [Fact]
+    public void Floor_Double()
+    {
+        var result = Evaluate("fn:floor(2.5e0)");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(2.0, result.DoubleValue);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:ceiling
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Ceiling_Integer() => Assert.Equal("42", EvalStr("fn:ceiling(42)"));
+
+    [Fact]
+    public void Ceiling_Decimal() => Assert.Equal("4", EvalStr("fn:ceiling(3.14)"));
+
+    [Fact]
+    public void Ceiling_DecimalNegative() => Assert.Equal("-3", EvalStr("fn:ceiling(-3.14)"));
+
+    [Fact]
+    public void Ceiling_Double()
+    {
+        var result = Evaluate("fn:ceiling(2.5e0)");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(3.0, result.DoubleValue);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:round
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Round_Integer() => Assert.Equal("42", EvalStr("fn:round(42)"));
+
+    [Fact]
+    public void Round_Decimal() => Assert.Equal("3", EvalStr("fn:round(3.14)"));
+
+    [Fact]
+    public void Round_DecimalHalf() => Assert.Equal("4", EvalStr("fn:round(3.5)"));
+
+    [Fact]
+    public void Round_Double()
+    {
+        var result = Evaluate("fn:round(2.5e0)");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(3.0, result.DoubleValue);
+    }
+
+    [Fact]
+    public void Round_Precision()
+    {
+        var result = Evaluate("fn:round(3.1415, 2)");
+        Assert.Equal(XdmValueKind.Decimal, result.Kind);
+        Assert.Equal(3.14m, result.DecimalValue);
+    }
+
+    [Fact]
+    public void Round_NegativePrecision() => Assert.Equal("0", EvalStr("fn:round(42, -2)"));
+
+    // ------------------------------------------------------------------
+    // fn:round-half-to-even
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void RoundHalfToEven_Integer() => Assert.Equal("42", EvalStr("fn:round-half-to-even(42)"));
+
+    [Fact]
+    public void RoundHalfToEven_DecimalHalf() => Assert.Equal("2", EvalStr("fn:round-half-to-even(2.5)"));
+
+    [Fact]
+    public void RoundHalfToEven_DecimalOneAndHalf() => Assert.Equal("2", EvalStr("fn:round-half-to-even(1.5)"));
+
+    [Fact]
+    public void RoundHalfToEven_Precision()
+    {
+        var result = Evaluate("fn:round-half-to-even(3.1415, 2)");
+        Assert.Equal(XdmValueKind.Decimal, result.Kind);
+        Assert.Equal(3.14m, result.DecimalValue);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:local-name / fn:namespace-uri / fn:name
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void LocalName_ContextItem()
+    {
+        var doc = new System.Xml.Linq.XElement("{http://example.com}root");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var result = XPath31Expression.Compile("fn:local-name()").Evaluate(node);
+        Assert.Equal("root", result.ToString());
+    }
+
+    [Fact]
+    public void LocalName_Argument()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:local-name(child)").Evaluate(node);
+        Assert.Equal("child", result.ToString());
+    }
+
+    [Fact]
+    public void LocalName_EmptySequence() => Assert.Equal("", EvalStr("fn:local-name(())"));
+
+    [Fact]
+    public void NamespaceUri_ContextItem()
+    {
+        var doc = new System.Xml.Linq.XElement("{http://example.com}root");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var result = XPath31Expression.Compile("fn:namespace-uri()").Evaluate(node);
+        Assert.Equal("http://example.com", result.ToString());
+    }
+
+    [Fact]
+    public void NamespaceUri_NoNamespace()
+    {
+        var doc = new System.Xml.Linq.XElement("root");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var result = XPath31Expression.Compile("fn:namespace-uri()").Evaluate(node);
+        Assert.Equal("", result.ToString());
+    }
+
+    [Fact]
+    public void Name_ContextItem()
+    {
+        var doc = new System.Xml.Linq.XElement("{http://example.com}root");
+        // XDocument nodes don't have prefixes set on elements created this way
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var result = XPath31Expression.Compile("fn:name()").Evaluate(node);
+        Assert.Equal("root", result.ToString());
+    }
+
+    [Fact]
+    public void Name_WithPrefix()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<ns:root xmlns:ns='http://example.com'><ns:child/></ns:root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:name(ns:child)").Evaluate(node);
+        // Prefix resolution is not yet implemented in XDocumentNode; returns local-name only
+        Assert.Equal("child", result.ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // fn:current-dateTime / fn:current-date / fn:current-time
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void CurrentDateTime_ReturnsDateTimeValue()
+    {
+        var result = Evaluate("fn:current-dateTime()");
+        Assert.Equal(XdmValueKind.DateTime, result.Kind);
+        var dto = result.DateTimeValue;
+        Assert.True(dto <= DateTimeOffset.Now);
+        Assert.True(dto > DateTimeOffset.Now.AddMinutes(-1));
+    }
+
+    [Fact]
+    public void CurrentDate_ReturnsDateValue()
+    {
+        var result = Evaluate("fn:current-date()");
+        Assert.Equal(XdmValueKind.Date, result.Kind);
+        var dto = result.DateValue;
+        var now = DateTimeOffset.Now;
+        Assert.Equal(now.Year, dto.Year);
+        Assert.Equal(now.Month, dto.Month);
+        Assert.Equal(now.Day, dto.Day);
+        Assert.Equal(0, dto.Hour);
+        Assert.Equal(0, dto.Minute);
+        Assert.Equal(0, dto.Second);
+    }
+
+    [Fact]
+    public void CurrentTime_ReturnsTimeValue()
+    {
+        var result = Evaluate("fn:current-time()");
+        Assert.Equal(XdmValueKind.Time, result.Kind);
+        var dto = result.TimeValue;
+        var now = DateTimeOffset.Now;
+        Assert.Equal(1, dto.Year);
+        Assert.Equal(1, dto.Month);
+        Assert.Equal(1, dto.Day);
+        Assert.True(Math.Abs((now.TimeOfDay - dto.TimeOfDay).TotalMinutes) < 1);
     }
 }

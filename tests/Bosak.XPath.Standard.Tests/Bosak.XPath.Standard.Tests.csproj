@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
   </ItemGroup>
 
 </Project>

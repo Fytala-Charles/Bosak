@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added Map and Array value support                                                      |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added DateTime, Date, and Time value factories and accessors                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
@@ -82,6 +83,18 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromExternal(object externalObject)
         => new(XdmValueKind.External, reference: externalObject);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDateTime(DateTimeOffset value)
+        => new(XdmValueKind.DateTime, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDate(DateTimeOffset value)
+        => new(XdmValueKind.Date, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromTime(DateTimeOffset value)
+        => new(XdmValueKind.Time, reference: value);
 
     // ------------------------------------------------------------------
     // Accessors
@@ -197,6 +210,36 @@ public readonly struct XdmValue
         }
     }
 
+    public DateTimeOffset DateTimeValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.DateTime)
+                ThrowInvalidAccess(nameof(DateTimeValue));
+            return (DateTimeOffset)_reference!;
+        }
+    }
+
+    public DateTimeOffset DateValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Date)
+                ThrowInvalidAccess(nameof(DateValue));
+            return (DateTimeOffset)_reference!;
+        }
+    }
+
+    public DateTimeOffset TimeValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Time)
+                ThrowInvalidAccess(nameof(TimeValue));
+            return (DateTimeOffset)_reference!;
+        }
+    }
+
     /// <summary>
     /// Returns the effective boolean value per XPath/XQuery semantics.
     /// </summary>
@@ -231,6 +274,9 @@ public readonly struct XdmValue
             XdmValueKind.Function => "(function)",
             XdmValueKind.Map => "(map)",
             XdmValueKind.Array => "(array)",
+            XdmValueKind.DateTime => ((DateTimeOffset)_reference!).ToString("yyyy-MM-ddTHH:mm:sszzz", System.Globalization.CultureInfo.InvariantCulture),
+            XdmValueKind.Date => ((DateTimeOffset)_reference!).ToString("yyyy-MM-ddzzz", System.Globalization.CultureInfo.InvariantCulture),
+            XdmValueKind.Time => ((DateTimeOffset)_reference!).ToString("HH:mm:sszzz", System.Globalization.CultureInfo.InvariantCulture),
             XdmValueKind.External => $"(external: {_reference?.GetType().Name})",
             _ => $"(kind: {_kind})"
         };

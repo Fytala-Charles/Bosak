@@ -13,6 +13,8 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added string, sequence, and aggregate standard functions                                 |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added map:* and array:* standard functions                                             |
+//                      | Charles Korthout | 0.4   | 19-05-2026     | Added numeric and node-name accessor functions                                         |
+//                      | Charles Korthout | 0.5   | 19-05-2026     | Added current-dateTime, current-date, current-time functions                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -690,6 +692,172 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Array,
                 Implementation = ArrayTail
             },
+
+            // ----- fn:abs -----------------------------------------------------
+            [(Namespaces.Fn, "abs", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "abs",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Abs
+            },
+
+            // ----- fn:floor ---------------------------------------------------
+            [(Namespaces.Fn, "floor", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "floor",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Floor
+            },
+
+            // ----- fn:ceiling -------------------------------------------------
+            [(Namespaces.Fn, "ceiling", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "ceiling",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Ceiling
+            },
+
+            // ----- fn:round ---------------------------------------------------
+            [(Namespaces.Fn, "round", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "round",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Round_1
+            },
+            [(Namespaces.Fn, "round", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "round",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Round_2
+            },
+
+            // ----- fn:round-half-to-even --------------------------------------
+            [(Namespaces.Fn, "round-half-to-even", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "round-half-to-even",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = RoundHalfToEven_1
+            },
+            [(Namespaces.Fn, "round-half-to-even", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "round-half-to-even",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = RoundHalfToEven_2
+            },
+
+            // ----- fn:local-name ----------------------------------------------
+            [(Namespaces.Fn, "local-name", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "local-name",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = LocalName_0
+            },
+            [(Namespaces.Fn, "local-name", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "local-name",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.String,
+                Implementation = LocalName_1
+            },
+
+            // ----- fn:namespace-uri -------------------------------------------
+            [(Namespaces.Fn, "namespace-uri", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "namespace-uri",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = NamespaceUri_0
+            },
+            [(Namespaces.Fn, "namespace-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "namespace-uri",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.String,
+                Implementation = NamespaceUri_1
+            },
+
+            // ----- fn:name ----------------------------------------------------
+            [(Namespaces.Fn, "name", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "name",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = Name_0
+            },
+            [(Namespaces.Fn, "name", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "name",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.String,
+                Implementation = Name_1
+            },
+
+            // ----- fn:current-dateTime ----------------------------------------
+            [(Namespaces.Fn, "current-dateTime", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "current-dateTime",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.DateTime,
+                Implementation = CurrentDateTime
+            },
+
+            // ----- fn:current-date --------------------------------------------
+            [(Namespaces.Fn, "current-date", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "current-date",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Date,
+                Implementation = CurrentDate
+            },
+
+            // ----- fn:current-time --------------------------------------------
+            [(Namespaces.Fn, "current-time", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "current-time",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Time,
+                Implementation = CurrentTime
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -1344,6 +1512,221 @@ public static class FunctionLibrary
                 resultD = v;
         }
         return XdmValue.FromDouble(resultD);
+    }
+
+    // ------------------------------------------------------------------
+    // Numeric functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue Abs(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        XdmValue arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.FromInteger(0);
+
+        return arg.Kind switch
+        {
+            XdmValueKind.Integer => XdmValue.FromInteger(Math.Abs(arg.IntegerValue)),
+            XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Abs(arg.DecimalValue)),
+            XdmValueKind.Double => XdmValue.FromDouble(Math.Abs(arg.DoubleValue)),
+            _ => XdmValue.FromDouble(Math.Abs(ToDoubleValue(arg)))
+        };
+    }
+
+    private static XdmValue Floor(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        XdmValue arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.FromInteger(0);
+
+        return arg.Kind switch
+        {
+            XdmValueKind.Integer => arg,
+            XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Floor(arg.DecimalValue)),
+            XdmValueKind.Double => XdmValue.FromDouble(Math.Floor(arg.DoubleValue)),
+            _ => XdmValue.FromDouble(Math.Floor(ToDoubleValue(arg)))
+        };
+    }
+
+    private static XdmValue Ceiling(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        XdmValue arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.FromInteger(0);
+
+        return arg.Kind switch
+        {
+            XdmValueKind.Integer => arg,
+            XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Ceiling(arg.DecimalValue)),
+            XdmValueKind.Double => XdmValue.FromDouble(Math.Ceiling(arg.DoubleValue)),
+            _ => XdmValue.FromDouble(Math.Ceiling(ToDoubleValue(arg)))
+        };
+    }
+
+    private static XdmValue Round_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Round(ctx, args[0], 0);
+
+    private static XdmValue Round_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Round(ctx, args[0], args[1].IntegerValue);
+
+    private static XdmValue Round(EvaluationContext ctx, XdmValue arg, long precision)
+    {
+        if (arg.IsUndefined)
+            return XdmValue.FromInteger(0);
+
+        if (precision >= 0)
+        {
+            double factor = Math.Pow(10.0, precision);
+            return arg.Kind switch
+            {
+                XdmValueKind.Integer => arg,
+                XdmValueKind.Decimal =>
+                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.AwayFromZero) / factor)),
+                XdmValueKind.Double =>
+                    XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor),
+                _ => XdmValue.FromDouble(Math.Round(ToDoubleValue(arg) * factor, MidpointRounding.AwayFromZero) / factor)
+            };
+        }
+        else
+        {
+            double factor = Math.Pow(10.0, -precision);
+            return arg.Kind switch
+            {
+                XdmValueKind.Integer =>
+                    XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                XdmValueKind.Decimal =>
+                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                XdmValueKind.Double =>
+                    XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor),
+                _ => XdmValue.FromDouble(Math.Round(ToDoubleValue(arg) / factor, MidpointRounding.AwayFromZero) * factor)
+            };
+        }
+    }
+
+    private static XdmValue RoundHalfToEven_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => RoundHalfToEven(ctx, args[0], 0);
+
+    private static XdmValue RoundHalfToEven_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => RoundHalfToEven(ctx, args[0], args[1].IntegerValue);
+
+    private static XdmValue RoundHalfToEven(EvaluationContext ctx, XdmValue arg, long precision)
+    {
+        if (arg.IsUndefined)
+            return XdmValue.FromInteger(0);
+
+        if (precision >= 0)
+        {
+            double factor = Math.Pow(10.0, precision);
+            return arg.Kind switch
+            {
+                XdmValueKind.Integer => arg,
+                XdmValueKind.Decimal =>
+                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.ToEven) / factor)),
+                XdmValueKind.Double =>
+                    XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor),
+                _ => XdmValue.FromDouble(Math.Round(ToDoubleValue(arg) * factor, MidpointRounding.ToEven) / factor)
+            };
+        }
+        else
+        {
+            double factor = Math.Pow(10.0, -precision);
+            return arg.Kind switch
+            {
+                XdmValueKind.Integer =>
+                    XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.ToEven) * factor)),
+                XdmValueKind.Decimal =>
+                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.ToEven) * factor)),
+                XdmValueKind.Double =>
+                    XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor),
+                _ => XdmValue.FromDouble(Math.Round(ToDoubleValue(arg) / factor, MidpointRounding.ToEven) * factor)
+            };
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Node-name accessors
+    // ------------------------------------------------------------------
+
+    private static IXdmNode? GetNodeFromValue(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return null;
+        if (value.IsNode)
+            return value.NodeValue;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (item.IsNode)
+                    return item.NodeValue;
+                break; // first item only
+            }
+        }
+        return null;
+    }
+
+    private static XdmValue LocalName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
+        return XdmValue.FromString(node?.LocalName ?? string.Empty);
+    }
+
+    private static XdmValue LocalName_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = GetNodeFromValue(args[0]);
+        return XdmValue.FromString(node?.LocalName ?? string.Empty);
+    }
+
+    private static XdmValue NamespaceUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
+        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty);
+    }
+
+    private static XdmValue NamespaceUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = GetNodeFromValue(args[0]);
+        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty);
+    }
+
+    private static XdmValue Name_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
+        return XdmValue.FromString(GetQualifiedName(node));
+    }
+
+    private static XdmValue Name_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = GetNodeFromValue(args[0]);
+        return XdmValue.FromString(GetQualifiedName(node));
+    }
+
+    private static string GetQualifiedName(IXdmNode? node)
+    {
+        if (node is null)
+            return string.Empty;
+        string prefix = node.Prefix;
+        string local = node.LocalName;
+        return string.IsNullOrEmpty(prefix) ? local : prefix + ":" + local;
+    }
+
+    // ------------------------------------------------------------------
+    // Date / Time functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue CurrentDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDateTime(DateTimeOffset.Now);
+
+    private static XdmValue CurrentDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var now = DateTimeOffset.Now;
+        return XdmValue.FromDate(new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, now.Offset));
+    }
+
+    private static XdmValue CurrentTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var now = DateTimeOffset.Now;
+        return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Offset));
     }
 }
 
