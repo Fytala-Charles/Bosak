@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added numeric and node-name accessor functions                                         |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added current-dateTime, current-date, current-time functions                           |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Added fn:node-name                                                                     |
+//                      | Charles Korthout | 0.7   | 19-05-2026     | Added fn:number, fn:data, fn:root                                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -878,6 +879,66 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.QName,
                 Implementation = NodeName_1
+            },
+
+            // ----- fn:number --------------------------------------------------
+            [(Namespaces.Fn, "number", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "number",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Double,
+                Implementation = Number_0
+            },
+            [(Namespaces.Fn, "number", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "number",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = Number_1
+            },
+
+            // ----- fn:data ----------------------------------------------------
+            [(Namespaces.Fn, "data", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "data",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Data_0
+            },
+            [(Namespaces.Fn, "data", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "data",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Data_1
+            },
+
+            // ----- fn:root ----------------------------------------------------
+            [(Namespaces.Fn, "root", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "root",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Node,
+                Implementation = Root_0
+            },
+            [(Namespaces.Fn, "root", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "root",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Node,
+                Implementation = Root_1
             },
         };
 
@@ -1770,6 +1831,81 @@ public static class FunctionLibrary
         if (kind is not XdmNodeKind.Element and not XdmNodeKind.Attribute and not XdmNodeKind.Namespace and not XdmNodeKind.ProcessingInstruction)
             return XdmValue.Undefined;
         return XdmValue.FromQName(new XsQName(node.LocalName, node.NamespaceUri));
+    }
+
+    // ------------------------------------------------------------------
+    // fn:number / fn:data / fn:root
+    // ------------------------------------------------------------------
+
+    private static XdmValue Number_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Number(ctx.ContextItem);
+
+    private static XdmValue Number_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Number(args[0]);
+
+    private static XdmValue Number(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.FromDouble(double.NaN);
+        return XdmValue.FromDouble(ToDoubleValue(value));
+    }
+
+    private static XdmValue Data_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Data(ctx.ContextItem);
+
+    private static XdmValue Data_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Data(args[0]);
+
+    private static XdmValue Data(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+
+        if (value.IsNode)
+            return XdmValue.FromString(value.NodeValue.StringValue);
+
+        if (!value.IsSequence)
+            return value;
+
+        var seq = value.SequenceValue;
+        if (seq is null)
+            return XdmValue.Undefined;
+
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(seq))
+        {
+            var atomized = Data(item);
+            if (!atomized.IsUndefined)
+                items.Add(atomized);
+        }
+
+        if (items.Count == 0)
+            return XdmValue.Undefined;
+        if (items.Count == 1)
+            return items[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    private static XdmValue Root_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (!item.IsNode)
+            return XdmValue.Undefined;
+        return Root(item.NodeValue);
+    }
+
+    private static XdmValue Root_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = GetNodeFromValue(args[0]);
+        return node is null ? XdmValue.Undefined : Root(node);
+    }
+
+    private static XdmValue Root(IXdmNode node)
+    {
+        var current = node;
+        while (current.Parent is not null)
+            current = current.Parent;
+        return XdmValue.FromNode(current);
     }
 }
 

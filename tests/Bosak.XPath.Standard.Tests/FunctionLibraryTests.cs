@@ -675,4 +675,94 @@ public class FunctionLibraryTests
         Assert.Contains("http://override.com", uris);
         Assert.DoesNotContain("http://example.com", uris);
     }
+
+    // ------------------------------------------------------------------
+    // fn:number
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Number_Integer() => Assert.Equal("42", EvalStr("fn:number(42)"));
+
+    [Fact]
+    public void Number_String()
+    {
+        var result = Evaluate("fn:number('3.14')");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(3.14, result.DoubleValue);
+    }
+
+    [Fact]
+    public void Number_InvalidString()
+    {
+        var result = Evaluate("fn:number('hello')");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.True(double.IsNaN(result.DoubleValue));
+    }
+
+    [Fact]
+    public void Number_EmptySequence()
+    {
+        var result = Evaluate("fn:number(())");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.True(double.IsNaN(result.DoubleValue));
+    }
+
+    // ------------------------------------------------------------------
+    // fn:data
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Data_AtomicPassthrough() => Assert.Equal("42", EvalStr("fn:data(42)"));
+
+    [Fact]
+    public void Data_Node()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root>hello</root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:data(.)").Evaluate(node);
+        Assert.Equal("hello", result.ToString());
+    }
+
+    [Fact]
+    public void Data_Sequence()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><a>1</a><b>2</b></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:data(child::*)").Evaluate(node);
+        Assert.True(result.IsSequence);
+        var items = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item.ToString());
+        Assert.Equal(new[] { "1", "2" }, items);
+    }
+
+    [Fact]
+    public void Data_EmptySequence() => Assert.True(Evaluate("fn:data(())").IsUndefined);
+
+    // ------------------------------------------------------------------
+    // fn:root
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Root_ContextItem()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
+        var child = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!.Element("child")!);
+        var result = XPath31Expression.Compile("fn:root()").Evaluate(child);
+        Assert.Equal(XdmValueKind.Node, result.Kind);
+        Assert.Equal("root", result.NodeValue.LocalName);
+    }
+
+    [Fact]
+    public void Root_Argument()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:root(child)").Evaluate(root);
+        Assert.Equal(XdmValueKind.Node, result.Kind);
+        Assert.Equal("root", result.NodeValue.LocalName);
+    }
+
+    [Fact]
+    public void Root_EmptySequence() => Assert.True(Evaluate("fn:root(())").IsUndefined);
 }
