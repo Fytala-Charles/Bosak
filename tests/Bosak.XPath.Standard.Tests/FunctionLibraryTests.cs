@@ -865,4 +865,89 @@ public class FunctionLibraryTests
         Assert.Equal(XdmValueKind.Decimal, result.Kind);
         Assert.True(result.DecimalValue is >= 0m and < 60m);
     }
+
+    // ------------------------------------------------------------------
+    // fn:deep-equal
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void DeepEqual_Integers() => Assert.Equal("true", EvalStr("fn:deep-equal(42,42)"));
+
+    [Fact]
+    public void DeepEqual_IntegersDifferent() => Assert.Equal("false", EvalStr("fn:deep-equal(42,99)"));
+
+    [Fact]
+    public void DeepEqual_Strings() => Assert.Equal("true", EvalStr("fn:deep-equal('hello','hello')"));
+
+    [Fact]
+    public void DeepEqual_Sequences()
+    {
+        Assert.Equal("true", EvalStr("fn:deep-equal((1,2,3),(1,2,3))"));
+        Assert.Equal("false", EvalStr("fn:deep-equal((1,2,3),(1,2))"));
+    }
+
+    [Fact]
+    public void DeepEqual_Nodes()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        Assert.Equal("true", EvalStr("fn:deep-equal(root,root)"));
+    }
+
+    [Fact]
+    public void DeepEqual_Maps()
+    {
+        Assert.Equal("true", EvalStr("fn:deep-equal(map{'a':1},map{'a':1})"));
+        Assert.Equal("false", EvalStr("fn:deep-equal(map{'a':1},map{'a':2})"));
+    }
+
+    [Fact]
+    public void DeepEqual_Arrays()
+    {
+        Assert.Equal("true", EvalStr("fn:deep-equal([1,2],[1,2])"));
+        Assert.Equal("false", EvalStr("fn:deep-equal([1,2],[1,3])"));
+    }
+
+    // ------------------------------------------------------------------
+    // fn:generate-id
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void GenerateId_ContextItem()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
+        var child = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!.Element("child")!);
+        var result = XPath31Expression.Compile("fn:generate-id()").Evaluate(child);
+        Assert.False(string.IsNullOrEmpty(result.ToString()));
+        Assert.StartsWith("id", result.ToString());
+    }
+
+    [Fact]
+    public void GenerateId_Argument()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:generate-id(child)").Evaluate(root);
+        Assert.False(string.IsNullOrEmpty(result.ToString()));
+        Assert.StartsWith("id", result.ToString());
+    }
+
+    [Fact]
+    public void GenerateId_EmptySequence()
+    {
+        Assert.Equal("", EvalStr("fn:generate-id(())"));
+    }
+
+    // ------------------------------------------------------------------
+    // fn:compare
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compare_Less() => Assert.Equal("-1", EvalStr("fn:compare('a','b')"));
+
+    [Fact]
+    public void Compare_Equal() => Assert.Equal("0", EvalStr("fn:compare('a','a')"));
+
+    [Fact]
+    public void Compare_Greater() => Assert.Equal("1", EvalStr("fn:compare('b','a')"));
 }

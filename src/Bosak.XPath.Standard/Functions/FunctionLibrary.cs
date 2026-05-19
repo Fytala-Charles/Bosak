@@ -18,12 +18,15 @@
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Added fn:node-name                                                                     |
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Added fn:number, fn:data, fn:root                                                      |
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Added date/time component extractors                                                   |
+//                      | Charles Korthout | 0.9   | 19-05-2026     | Added fn:deep-equal, fn:generate-id, fn:compare                                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
@@ -1055,6 +1058,66 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Decimal,
                 Implementation = SecondsFromTime
             },
+
+            // ----- fn:deep-equal ----------------------------------------------
+            [(Namespaces.Fn, "deep-equal", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "deep-equal",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = DeepEqual_2
+            },
+            [(Namespaces.Fn, "deep-equal", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "deep-equal",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = DeepEqual_3
+            },
+
+            // ----- fn:generate-id ---------------------------------------------
+            [(Namespaces.Fn, "generate-id", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "generate-id",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = GenerateId_0
+            },
+            [(Namespaces.Fn, "generate-id", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "generate-id",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.String,
+                Implementation = GenerateId_1
+            },
+
+            // ----- fn:compare -------------------------------------------------
+            [(Namespaces.Fn, "compare", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "compare",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = Compare_2
+            },
+            [(Namespaces.Fn, "compare", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "compare",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Integer,
+                Implementation = Compare_3
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -2069,6 +2132,197 @@ public static class FunctionLibrary
         if (args[0].IsUndefined) return XdmValue.Undefined;
         var dto = args[0].TimeValue;
         return XdmValue.FromDecimal(dto.Second + dto.Millisecond / 1000.0m + dto.Microsecond / 1_000_000.0m + dto.Nanosecond / 1_000_000_000.0m);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:deep-equal / fn:generate-id / fn:compare
+    // ------------------------------------------------------------------
+
+    private static XdmValue DeepEqual_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => DeepEqual(args[0], args[1]);
+
+    private static XdmValue DeepEqual_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => DeepEqual(args[0], args[1]);
+
+    private static XdmValue DeepEqual(XdmValue a, XdmValue b)
+    {
+        var itemsA = ToItemList(a);
+        var itemsB = ToItemList(b);
+        if (itemsA.Count != itemsB.Count)
+            return XdmValue.False;
+        for (int i = 0; i < itemsA.Count; i++)
+        {
+            if (!DeepEqualItem(itemsA[i], itemsB[i]))
+                return XdmValue.False;
+        }
+        return XdmValue.True;
+    }
+
+    private static List<XdmValue> ToItemList(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return new List<XdmValue>();
+        if (!value.IsSequence)
+            return new List<XdmValue> { value };
+        var list = new List<XdmValue>();
+        if (value.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                list.Add(item);
+        }
+        return list;
+    }
+
+    private static bool DeepEqualItem(XdmValue a, XdmValue b)
+    {
+        if (a.Kind != b.Kind)
+            return false;
+        return a.Kind switch
+        {
+            XdmValueKind.Undefined => true,
+            XdmValueKind.Boolean => a.BooleanValue == b.BooleanValue,
+            XdmValueKind.Integer => a.IntegerValue == b.IntegerValue,
+            XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => a.DoubleValue == b.DoubleValue,
+            XdmValueKind.String => a.StringValue == b.StringValue,
+            XdmValueKind.DateTime => a.DateTimeValue == b.DateTimeValue,
+            XdmValueKind.Date => a.DateValue == b.DateValue,
+            XdmValueKind.Time => a.TimeValue == b.TimeValue,
+            XdmValueKind.QName => a.QNameValue.Equals(b.QNameValue),
+            XdmValueKind.Node => DeepEqualNode(a.NodeValue, b.NodeValue),
+            XdmValueKind.Map => DeepEqualMap(a.MapValue, b.MapValue),
+            XdmValueKind.Array => DeepEqualArray(a.ArrayValue, b.ArrayValue),
+            _ => false
+        };
+    }
+
+    private static bool DeepEqualNode(IXdmNode a, IXdmNode b)
+    {
+        if (a.NodeKind != b.NodeKind)
+            return false;
+        if (a.LocalName != b.LocalName)
+            return false;
+        if (a.NamespaceUri != b.NamespaceUri)
+            return false;
+        if (a.StringValue != b.StringValue)
+            return false;
+
+        if (a.NodeKind == XdmNodeKind.Element)
+        {
+            var attrsA = SortNodes(a.Attributes());
+            var attrsB = SortNodes(b.Attributes());
+            if (attrsA.Count != attrsB.Count)
+                return false;
+            for (int i = 0; i < attrsA.Count; i++)
+            {
+                if (!DeepEqualNode(attrsA[i].NodeValue, attrsB[i].NodeValue))
+                    return false;
+            }
+
+            var childrenA = ToNodeList(a.Children());
+            var childrenB = ToNodeList(b.Children());
+            if (childrenA.Count != childrenB.Count)
+                return false;
+            for (int i = 0; i < childrenA.Count; i++)
+            {
+                if (!DeepEqualNode(childrenA[i], childrenB[i]))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private static List<XdmValue> SortNodes(XdmSequence sequence)
+    {
+        var list = new List<XdmValue>();
+        foreach (var item in sequence)
+            list.Add(item);
+        list.Sort((x, y) =>
+        {
+            var nx = x.NodeValue;
+            var ny = y.NodeValue;
+            int cmp = string.CompareOrdinal(nx.NamespaceUri, ny.NamespaceUri);
+            return cmp != 0 ? cmp : string.CompareOrdinal(nx.LocalName, ny.LocalName);
+        });
+        return list;
+    }
+
+    private static List<IXdmNode> ToNodeList(XdmSequence sequence)
+    {
+        var list = new List<IXdmNode>();
+        foreach (var item in sequence)
+            list.Add(item.NodeValue);
+        return list;
+    }
+
+    private static bool DeepEqualMap(XdmMap a, XdmMap b)
+    {
+        if (a.Count != b.Count)
+            return false;
+        foreach (var key in a.Keys)
+        {
+            if (!a.TryGetValue(key, out var av))
+                return false;
+            if (!b.TryGetValue(key, out var bv))
+                return false;
+            if (!DeepEqualItem(av, bv))
+                return false;
+        }
+        return true;
+    }
+
+    private static bool DeepEqualArray(XdmArray a, XdmArray b)
+    {
+        if (a.Count != b.Count)
+            return false;
+        var av = a.Values.ToList();
+        var bv = b.Values.ToList();
+        for (int i = 0; i < av.Count; i++)
+        {
+            if (!DeepEqualItem(av[i], bv[i]))
+                return false;
+        }
+        return true;
+    }
+
+    private static long _generateIdCounter;
+    private static readonly ConditionalWeakTable<IXdmNode, string> _generateIdMap = new();
+
+    private static XdmValue GenerateId_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (!item.IsNode)
+            return XdmValue.FromString(string.Empty);
+        return XdmValue.FromString(GetNodeId(item.NodeValue));
+    }
+
+    private static XdmValue GenerateId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = GetNodeFromValue(args[0]);
+        return XdmValue.FromString(node is null ? string.Empty : GetNodeId(node));
+    }
+
+    private static string GetNodeId(IXdmNode node)
+    {
+        if (_generateIdMap.TryGetValue(node, out var id))
+            return id;
+        id = "id" + Interlocked.Increment(ref _generateIdCounter);
+        _generateIdMap.AddOrUpdate(node, id);
+        return id;
+    }
+
+    private static XdmValue Compare_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Compare(args[0], args[1]);
+
+    private static XdmValue Compare_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Compare(args[0], args[1]);
+
+    private static XdmValue Compare(XdmValue a, XdmValue b)
+    {
+        var s1 = AtomizedString(a);
+        var s2 = AtomizedString(b);
+        int cmp = string.CompareOrdinal(s1, s2);
+        return XdmValue.FromInteger(cmp < 0 ? -1 : cmp > 0 ? 1 : 0);
     }
 }
 
