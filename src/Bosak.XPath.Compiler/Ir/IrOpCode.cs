@@ -180,6 +180,7 @@ public enum IrOpCode : byte
     ArrayAdd,
     Lookup,
     LookupWildcard,
+    LoadFunction,       // Load a function item from the literal pool
     Curry,              // Partial function application
     Apply,
     

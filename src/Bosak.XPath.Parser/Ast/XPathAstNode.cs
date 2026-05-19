@@ -90,6 +90,7 @@ public sealed record RangeExpressionNode(XPathAstNode From, XPathAstNode To) : X
 
 public sealed record IfExpressionNode(XPathAstNode Condition, XPathAstNode ThenBranch, XPathAstNode ElseBranch) : XPathAstNode;
 public sealed record ForExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode ReturnExpression) : XPathAstNode;
+public sealed record LetExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode Body) : XPathAstNode;
 public sealed record QuantifiedExpressionNode(QuantifierKind Quantifier, IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode SatisfiesExpression) : XPathAstNode;
 
 public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression);
@@ -177,6 +178,7 @@ public enum NameTestKind
 }
 
 public sealed record PostfixPredicateNode(XPathAstNode Expression, XPathAstNode Predicate) : XPathAstNode;
+public sealed record DynamicFunctionCallNode(XPathAstNode Function, IReadOnlyList<XPathAstNode> Arguments) : XPathAstNode;
 public sealed record ArgumentPlaceholderNode : XPathAstNode;
 
 public enum QuantifierKind

@@ -377,6 +377,11 @@ public ref struct XPathLexer
                     _position++;
                     return new Token(TokenKind.DoubleColon, start, 2);
                 }
+                if (_position < _source.Length && _source[_position] == '=')
+                {
+                    _position++;
+                    return new Token(TokenKind.Assign, start, 2);
+                }
                 return new Token(TokenKind.Colon, start, 1);
 
             case '=':
@@ -463,6 +468,7 @@ public ref struct XPathLexer
         if (SeqEqual(text, "and")) return TokenKind.KeywordAnd;
         if (SeqEqual(text, "div")) return TokenKind.KeywordDiv;
         if (SeqEqual(text, "for")) return TokenKind.KeywordFor;
+        if (SeqEqual(text, "let")) return TokenKind.KeywordLet;
         if (SeqEqual(text, "map")) return TokenKind.KeywordMap;
         if (SeqEqual(text, "mod")) return TokenKind.KeywordMod;
         if (SeqEqual(text, "not")) return TokenKind.Name; // not is a function, not a keyword

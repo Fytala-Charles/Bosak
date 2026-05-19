@@ -64,6 +64,8 @@ public sealed class XPathOptimizer
             ArrayConstructorNode arr => OptimizeArray(arr, ref changed),
             InlineFunctionNode inline => OptimizeInline(inline, ref changed),
             FunctionCallNode call => OptimizeFunctionCall(call, ref changed),
+            LetExpressionNode let => OptimizeLet(let, ref changed),
+            DynamicFunctionCallNode dyn => OptimizeDynamicFunctionCall(dyn, ref changed),
             _ => node
         };
     }
@@ -547,6 +549,44 @@ public sealed class XPathOptimizer
         {
             changed = true;
             return node with { Body = body };
+        }
+        return node;
+    }
+
+    private XPathAstNode OptimizeLet(LetExpressionNode node, ref bool changed)
+    {
+        bool bindingsChanged = false;
+        var newBindings = new List<QuantifiedBinding>(node.Bindings.Count);
+        foreach (var binding in node.Bindings)
+        {
+            var optExpr = OptimizeNode(binding.Expression, ref changed);
+            newBindings.Add(new QuantifiedBinding(binding.VariableName, optExpr));
+            if (optExpr != binding.Expression) bindingsChanged = true;
+        }
+        var body = OptimizeNode(node.Body, ref changed);
+        if (bindingsChanged || body != node.Body)
+        {
+            changed = true;
+            return node with { Bindings = newBindings, Body = body };
+        }
+        return node;
+    }
+
+    private XPathAstNode OptimizeDynamicFunctionCall(DynamicFunctionCallNode node, ref bool changed)
+    {
+        var func = OptimizeNode(node.Function, ref changed);
+        bool argsChanged = false;
+        var newArgs = new List<XPathAstNode>(node.Arguments.Count);
+        foreach (var arg in node.Arguments)
+        {
+            var optimized = OptimizeNode(arg, ref changed);
+            newArgs.Add(optimized);
+            if (optimized != arg) argsChanged = true;
+        }
+        if (func != node.Function || argsChanged)
+        {
+            changed = true;
+            return node with { Function = func, Arguments = newArgs };
         }
         return node;
     }

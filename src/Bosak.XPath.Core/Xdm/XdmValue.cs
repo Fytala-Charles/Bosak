@@ -195,6 +195,16 @@ public readonly struct XdmValue
         }
     }
 
+    public object FunctionValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Function)
+                ThrowInvalidAccess(nameof(FunctionValue));
+            return _reference!;
+        }
+    }
+
     public XdmMap MapValue
     {
         get

@@ -812,4 +812,56 @@ public class EndToEndTests
         Assert.Equal(2, result[0]);
         Assert.Equal(3, result[1]);
     }
+
+    // ------------------------------------------------------------------
+    // Higher-order functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void LetExpression_SingleBinding()
+    {
+        var result = EvaluateStrings("let $x := 'hello' return $x", LoadDocument());
+        Assert.Single(result);
+        Assert.Equal("hello", result[0]);
+    }
+
+    [Fact]
+    public void LetExpression_MultipleBindings()
+    {
+        var result = EvaluateIntegers("let $a := 1, $b := 2 return $a + $b", LoadDocument());
+        Assert.Single(result);
+        Assert.Equal(3, result[0]);
+    }
+
+    [Fact]
+    public void InlineFunction_CallDirectly()
+    {
+        var result = EvaluateIntegers("function($a) { $a + 1 }(5)", LoadDocument());
+        Assert.Single(result);
+        Assert.Equal(6, result[0]);
+    }
+
+    [Fact]
+    public void NamedFunctionRef_DynamicCall()
+    {
+        var result = EvaluateIntegers("let $f := abs#1 return $f(-7)", LoadDocument());
+        Assert.Single(result);
+        Assert.Equal(7, result[0]);
+    }
+
+    [Fact]
+    public void DynamicFunctionCall_Variable()
+    {
+        var result = EvaluateIntegers("let $g := function($x) { $x * 2 } return $g(4)", LoadDocument());
+        Assert.Single(result);
+        Assert.Equal(8, result[0]);
+    }
+
+    [Fact]
+    public void PartialApplication_Curry()
+    {
+        var result = EvaluateStrings("let $c := concat(?, ' world') return $c('hello')", LoadDocument());
+        Assert.Single(result);
+        Assert.Equal("hello world", result[0]);
+    }
 }

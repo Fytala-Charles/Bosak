@@ -86,6 +86,9 @@ public sealed class EvaluationContext
     public bool TryGetVariable(string localName, out XdmValue value, string namespaceUri = "")
         => _variables.TryGetValue((localName, namespaceUri), out value);
 
+    public bool RemoveVariable(string localName, string namespaceUri = "")
+        => _variables.Remove((localName, namespaceUri));
+
     // ------------------------------------------------------------------
     // Namespaces
     // ------------------------------------------------------------------

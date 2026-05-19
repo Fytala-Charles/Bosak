@@ -22,6 +22,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Functions;
 
 namespace Bosak.XPath.Runtime.Vm;
 
@@ -153,7 +154,13 @@ public static class VmEngine
                     }
 
                 case IrOpCode.StoreVariable:
-                    throw new NotImplementedException("StoreVariable is not yet implemented.");
+                    {
+                        string varName = (string)literalPool[instr.Operand]!;
+                        var (localName, nsUri) = ResolveVariableName(varName, context);
+                        context.WithVariable(localName, registers[instr.RegisterB], nsUri);
+                        ip++;
+                        break;
+                    }
 
                 // ------------------------------------------------------------------
                 // Literals
@@ -1221,9 +1228,49 @@ public static class VmEngine
                         break;
                     }
 
+                case IrOpCode.LoadFunction:
+                    {
+                        var raw = literalPool[instr.Operand]!;
+                        FunctionItem funcItem = raw switch
+                        {
+                            NamedFunctionItem named => named,
+                            CurriedFunctionItem curried => curried,
+                            InlineFunctionItem inline => inline,
+                            CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body),
+                            ValueTuple<string, int> namedTuple => ResolveNamedFunctionTuple(namedTuple),
+                            _ => throw new InvalidOperationException($"Unknown function item type: {raw.GetType().Name}")
+                        };
+                        registers[instr.RegisterA] = XdmValue.FromFunction(funcItem);
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Curry:
+                    {
+                        var baseFunc = (FunctionItem)registers[instr.RegisterB].FunctionValue;
+                        var descriptor = (int[])literalPool[instr.Operand]!;
+                        var fixedArgs = new XdmValue?[descriptor.Length];
+                        for (int i = 0; i < descriptor.Length; i++)
+                        {
+                            fixedArgs[i] = descriptor[i] >= 0 ? registers[descriptor[i]] : null;
+                        }
+                        registers[instr.RegisterA] = XdmValue.FromFunction(new CurriedFunctionItem(baseFunc, fixedArgs));
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Apply:
-                    throw new NotImplementedException($"{instr.OpCode} is not yet implemented.");
+                    {
+                        var func = (FunctionItem)registers[instr.RegisterB].FunctionValue;
+                        int argCount = instr.RegisterC;
+                        int firstArgReg = instr.Operand;
+                        XdmValue[] args = new XdmValue[argCount];
+                        for (int i = 0; i < argCount; i++)
+                            args[i] = registers[firstArgReg + i];
+                        registers[instr.RegisterA] = InvokeFunctionItem(func, context, args);
+                        ip++;
+                        break;
+                    }
 
                 // ------------------------------------------------------------------
                 // Constructors
@@ -1282,7 +1329,7 @@ public static class VmEngine
         return seq.TryGetLength(out length);
     }
 
-    private static (string LocalName, string NamespaceUri) ResolveFunctionName(string funcName, EvaluationContext context)
+    private static (string LocalName, string NamespaceUri) ResolveFunctionName(string funcName, EvaluationContext? context)
     {
         string localName = funcName;
         string? prefix = null;
@@ -1296,7 +1343,7 @@ public static class VmEngine
         string nsUri;
         if (prefix is not null)
         {
-            if (!context.TryResolveNamespace(prefix, out nsUri))
+            if (context is null || !context.TryResolveNamespace(prefix, out nsUri))
                 throw new InvalidOperationException($"Unknown namespace prefix: {prefix}");
         }
         else
@@ -1379,6 +1426,66 @@ public static class VmEngine
     /// Atomizes an XDM value for comparison: nodes become their string value,
     /// singleton sequences are unpacked, and other values pass through.
     /// </summary>
+    private static FunctionItem ResolveNamedFunctionTuple(ValueTuple<string, int> tuple)
+    {
+        var (localName, nsUri) = ResolveFunctionName(tuple.Item1, null);
+        return new NamedFunctionItem(nsUri, localName, tuple.Item2);
+    }
+
+    private static XdmValue InvokeFunctionItem(FunctionItem func, EvaluationContext context, ReadOnlySpan<XdmValue> args)
+    {
+        switch (func)
+        {
+            case NamedFunctionItem named:
+                if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out var sig))
+                    throw new InvalidOperationException($"Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
+                return sig.Implementation(context, args);
+
+            case InlineFunctionItem inline:
+                {
+                    var saved = new (string Name, bool Had, XdmValue Value)[inline.Parameters.Count];
+                    for (int i = 0; i < inline.Parameters.Count; i++)
+                    {
+                        saved[i].Name = inline.Parameters[i];
+                        saved[i].Had = context.TryGetVariable(inline.Parameters[i], out var oldVal);
+                        saved[i].Value = oldVal;
+                        context.WithVariable(inline.Parameters[i], i < args.Length ? args[i] : XdmValue.Undefined);
+                    }
+                    try
+                    {
+                        return Execute(inline.Body, context);
+                    }
+                    finally
+                    {
+                        for (int i = 0; i < inline.Parameters.Count; i++)
+                        {
+                            if (saved[i].Had)
+                                context.WithVariable(saved[i].Name, saved[i].Value);
+                            else
+                                context.RemoveVariable(saved[i].Name);
+                        }
+                    }
+                }
+
+            case CurriedFunctionItem curried:
+                {
+                    var merged = new XdmValue[curried.FixedArgs.Length];
+                    int argIdx = 0;
+                    for (int i = 0; i < curried.FixedArgs.Length; i++)
+                    {
+                        if (curried.FixedArgs[i] is { } boundArg)
+                            merged[i] = boundArg;
+                        else
+                            merged[i] = argIdx < args.Length ? args[argIdx++] : XdmValue.Undefined;
+                    }
+                    return InvokeFunctionItem(curried.BaseFunction, context, merged);
+                }
+
+            default:
+                throw new InvalidOperationException($"Unknown function item type: {func.GetType().Name}");
+        }
+    }
+
     private static XdmValue Atomize(XdmValue value)
     {
         if (value.IsUndefined)

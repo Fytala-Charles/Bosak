@@ -86,6 +86,9 @@ public sealed class IrLowerer
             LookupWildcardNode n => LowerLookupWildcard(n, targetReg),
             ForExpressionNode n => LowerForExpression(n, targetReg),
             QuantifiedExpressionNode n => LowerQuantifiedExpression(n, targetReg),
+            LetExpressionNode n => LowerLetExpression(n, targetReg),
+            InlineFunctionNode n => LowerInlineFunction(n, targetReg),
+            DynamicFunctionCallNode n => LowerDynamicFunctionCall(n, targetReg),
             PredicateNode n => LowerNode(n.Expression, targetReg),
             PostfixPredicateNode n => LowerPostfixPredicate(n, targetReg),
             _ => throw new NotSupportedException($"AST node type {node.GetType().Name} is not supported by the IR lowerer.")
@@ -360,6 +363,50 @@ public sealed class IrLowerer
         int funcPoolIdx = AddToLiteralPool(qname);
 
         int argCount = node.Arguments.Count;
+
+        // Check for argument placeholders (partial application)
+        bool hasPlaceholders = false;
+        foreach (var arg in node.Arguments)
+        {
+            if (arg is ArgumentPlaceholderNode)
+            {
+                hasPlaceholders = true;
+                break;
+            }
+        }
+
+        if (hasPlaceholders)
+        {
+            // Load the named function as a function item
+            int funcReg = AllocRegister();
+            var namedFunc = new NamedFunctionItem(
+                string.IsNullOrEmpty(node.Prefix) ? "http://www.w3.org/2005/xpath-functions" : "",
+                node.LocalName,
+                argCount);
+            int funcItemPoolIdx = AddToLiteralPool(namedFunc);
+            Emit(IrOpCode.LoadFunction, (byte)funcReg, operand: funcItemPoolIdx);
+
+            // Evaluate non-placeholder arguments and build descriptor
+            var argRegs = new int[argCount];
+            var descriptor = new int[argCount];
+            for (int i = 0; i < argCount; i++)
+            {
+                if (node.Arguments[i] is ArgumentPlaceholderNode)
+                {
+                    descriptor[i] = -1;
+                }
+                else
+                {
+                    argRegs[i] = LowerNode(node.Arguments[i]);
+                    descriptor[i] = argRegs[i];
+                }
+            }
+
+            int descPoolIdx = AddToLiteralPool(descriptor);
+            Emit(IrOpCode.Curry, (byte)resultReg, (byte)funcReg, operand: descPoolIdx);
+            return resultReg;
+        }
+
         int firstArgReg = 0;
 
         if (argCount > 0)
@@ -406,14 +453,11 @@ public sealed class IrLowerer
 
     private int LowerNamedFunctionRef(NamedFunctionRefNode node, int? targetReg)
     {
-        // Named function reference like fn:abs#1 - we treat it as loading a function value
         int resultReg = targetReg ?? AllocRegister();
-        string qname = string.IsNullOrEmpty(node.Prefix)
-            ? node.LocalName
-            : $"{node.Prefix}:{node.LocalName}";
-        // Store as a tuple in the literal pool for now
-        int poolIdx = AddToLiteralPool((qname, node.Arity));
-        Emit(IrOpCode.LoadVariable, (byte)resultReg, operand: poolIdx);
+        string nsUri = string.IsNullOrEmpty(node.Prefix) ? "http://www.w3.org/2005/xpath-functions" : "";
+        var funcItem = new NamedFunctionItem(nsUri, node.LocalName, node.Arity);
+        int poolIdx = AddToLiteralPool(funcItem);
+        Emit(IrOpCode.LoadFunction, (byte)resultReg, operand: poolIdx);
         return resultReg;
     }
 
@@ -862,6 +906,99 @@ public sealed class IrLowerer
         {
             throw new NotSupportedException("Multi-binding quantified expressions are not yet supported.");
         }
+    }
+
+    // ------------------------------------------------------------------
+    // Let expressions
+    // ------------------------------------------------------------------
+
+    private int LowerLetExpression(LetExpressionNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+
+        foreach (var binding in node.Bindings)
+        {
+            int exprReg = LowerNode(binding.Expression);
+            int varPoolIdx = AddToLiteralPool(binding.VariableName);
+            Emit(IrOpCode.StoreVariable, 0, (byte)exprReg, 0, varPoolIdx);
+        }
+
+        int bodyReg = LowerNode(node.Body, resultReg);
+        if (bodyReg != resultReg)
+            Emit(IrOpCode.Move, (byte)resultReg, (byte)bodyReg);
+
+        return resultReg;
+    }
+
+    // ------------------------------------------------------------------
+    // Inline functions
+    // ------------------------------------------------------------------
+
+    private int LowerInlineFunction(InlineFunctionNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+
+        var subLowerer = new IrLowerer();
+        int bodyReg = subLowerer.LowerNode(node.Body);
+        subLowerer.Emit(IrOpCode.Return, (byte)bodyReg);
+        var module = subLowerer.Lower(node.Body);
+
+        var paramNames = node.Parameters.Select(p => p.Name).ToList();
+        var funcItem = new CompilerInlineFunction(paramNames, module);
+        int poolIdx = AddToLiteralPool(funcItem);
+        Emit(IrOpCode.LoadFunction, (byte)resultReg, operand: poolIdx);
+        return resultReg;
+    }
+
+    // ------------------------------------------------------------------
+    // Dynamic function calls
+    // ------------------------------------------------------------------
+
+    private int LowerDynamicFunctionCall(DynamicFunctionCallNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+        int funcReg = LowerNode(node.Function);
+
+        int argCount = node.Arguments.Count;
+        int firstArgReg = 0;
+
+        if (argCount > 0)
+        {
+            var argRegs = new int[argCount];
+            argRegs[0] = LowerNode(node.Arguments[0]);
+            for (int i = 1; i < argCount; i++)
+            {
+                argRegs[i] = LowerNode(node.Arguments[i]);
+            }
+
+            bool consecutive = true;
+            for (int i = 1; i < argCount; i++)
+            {
+                if (argRegs[i] != argRegs[0] + i)
+                {
+                    consecutive = false;
+                    break;
+                }
+            }
+
+            if (consecutive)
+            {
+                firstArgReg = argRegs[0];
+            }
+            else
+            {
+                firstArgReg = AllocRegister();
+                Emit(IrOpCode.Move, (byte)firstArgReg, (byte)argRegs[0]);
+                for (int i = 1; i < argCount; i++)
+                {
+                    int packedReg = AllocRegister();
+                    Emit(IrOpCode.Move, (byte)packedReg, (byte)argRegs[i]);
+                }
+            }
+        }
+
+        Emit(IrOpCode.Apply, (byte)resultReg, (byte)funcReg, (byte)argCount, firstArgReg);
+        return resultReg;
     }
 
     // ------------------------------------------------------------------

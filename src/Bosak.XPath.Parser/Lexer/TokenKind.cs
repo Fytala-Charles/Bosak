@@ -73,9 +73,10 @@ public enum TokenKind : short
     GreaterThan,     // >
     GreaterThanOrEqual, // >=
 
-    // ---- Node comparisons --------------------------------------------
+    // ---- Node comparisons / Assignment -----------------------------
     NodeBefore,      // <<
     NodeAfter,       // >>
+    Assign,          // :=
 
     // ---- Value comparisons -------------------------------------------
     ValueEq,         // eq
@@ -116,6 +117,7 @@ public enum TokenKind : short
 
     // ---- FLWOR / Quantified ------------------------------------------
     KeywordFor,      // for
+    KeywordLet,      // let
     KeywordIn,       // in
     KeywordReturn,   // return
     KeywordSome,     // some

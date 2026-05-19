@@ -129,6 +129,7 @@ public sealed class XPathParser
         return Current.Kind switch
         {
             TokenKind.KeywordFor => ParseForExpr(),
+            TokenKind.KeywordLet => ParseLetExpr(),
             TokenKind.KeywordSome or TokenKind.KeywordEvery => ParseQuantifiedExpr(),
             TokenKind.KeywordIf => ParseIfExpr(),
             _ => ParseOrExpr()
@@ -156,6 +157,31 @@ public sealed class XPathParser
         var nameTok = Expect(TokenKind.Name);
         var (prefix, local) = SplitQName(GetString(nameTok));
         Expect(TokenKind.KeywordIn);
+        var expr = ParseExprSingle();
+        return new QuantifiedBinding(local, expr);
+    }
+
+    // LetExpr ::= SimpleLetClause "return" ExprSingle
+    private XPathAstNode ParseLetExpr()
+    {
+        int start = Current.Start;
+        Expect(TokenKind.KeywordLet);
+        var bindings = new List<QuantifiedBinding>();
+        do
+        {
+            bindings.Add(ParseSimpleLetBinding());
+        } while (Match(TokenKind.Comma));
+        Expect(TokenKind.KeywordReturn);
+        var body = ParseExprSingle();
+        return WithSpan(new LetExpressionNode(bindings, body), start, End);
+    }
+
+    private QuantifiedBinding ParseSimpleLetBinding()
+    {
+        Expect(TokenKind.Dollar);
+        var nameTok = Expect(TokenKind.Name);
+        var (prefix, local) = SplitQName(GetString(nameTok));
+        Expect(TokenKind.Assign);  // := 
         var expr = ParseExprSingle();
         return new QuantifiedBinding(local, expr);
     }
@@ -718,12 +744,11 @@ public sealed class XPathParser
                 var pred = ParsePredicate();
                 expr = WithSpan(new PostfixPredicateNode(expr, pred), start, End);
             }
-            else if (Current.Kind == TokenKind.LParen && expr is FunctionCallNode)
+            else if (Current.Kind == TokenKind.LParen && expr is not FunctionCallNode)
             {
-                // Function item call after a function call is unusual;
-                // normally handled by lookup or argument list on a primary expr.
-                // For now, stop to avoid ambiguity.
-                break;
+                // Dynamic function call: $f(1,2) or (fn:abs#1)(3)
+                var args = ParseArgumentList();
+                expr = WithSpan(new DynamicFunctionCallNode(expr, args), start, End);
             }
             else if (Current.Kind == TokenKind.Question)
             {
@@ -912,14 +937,16 @@ public sealed class XPathParser
             Expect(TokenKind.RParen);
         }
         // TODO: parse "as" SequenceType
-        var body = ParsePrimaryExpr(); // function body is enclosed in braces in XQuery; in XPath 3.1 it's also braces
-        // Actually inline function body is enclosed in { Expr }
-        // For now, if we see LBrace, parse it as a block
+        XPathAstNode body;
         if (Current.Kind == TokenKind.LBrace)
         {
             Advance();
             body = ParseExpr();
             Expect(TokenKind.RBrace);
+        }
+        else
+        {
+            body = ParsePrimaryExpr();
         }
         return WithSpan(new InlineFunctionNode(parameters, body), start, End);
     }
