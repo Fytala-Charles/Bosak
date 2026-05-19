@@ -82,6 +82,7 @@ public sealed class XPath31Expression
     public XdmValue Evaluate(EvaluationContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
+        FunctionLibrary.Populate(context);
         return VmEngine.Execute(_module, context);
     }
 

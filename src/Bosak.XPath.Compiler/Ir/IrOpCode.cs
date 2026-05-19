@@ -32,6 +32,9 @@ public enum IrOpCode : byte
     JumpIfEmpty,
     Call,
     TailCall,
+    For,
+    Some,
+    Every,
     
     // ---- Context -----------------------------------------------------
     LoadContext,

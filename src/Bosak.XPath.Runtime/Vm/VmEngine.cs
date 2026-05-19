@@ -346,6 +346,116 @@ public static class VmEngine
                     }
 
                 // ------------------------------------------------------------------
+                // FLWOR / Quantified
+                // ------------------------------------------------------------------
+                case IrOpCode.For:
+                    {
+                        var info = (QuantifiedLoopInfo)literalPool[instr.Operand]!;
+                        var sequence = registers[instr.RegisterB];
+                        var items = MaterializeSequence(sequence);
+                        var results = new List<XdmValue>();
+
+                        var savedItem = context.ContextItem;
+                        var savedPos = context.ContextPosition;
+                        var savedSize = context.ContextSize;
+                        bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
+
+                        foreach (var item in items)
+                        {
+                            context.WithFocus(item, 1, 1);
+                            context.WithVariable(info.VariableName, item);
+                            var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
+
+                            if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
+                            {
+                                foreach (var r in XdmSequence.FromSource(rhsResult.SequenceValue))
+                                    results.Add(r);
+                            }
+                            else if (!rhsResult.IsUndefined)
+                            {
+                                results.Add(rhsResult);
+                            }
+                        }
+
+                        context.WithFocus(savedItem, savedPos, savedSize);
+                        if (hadVariable)
+                            context.WithVariable(info.VariableName, savedVar);
+
+                        registers[instr.RegisterA] = XdmValue.FromSequence(
+                            MaterializedSequence.FromList(results));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.Some:
+                    {
+                        var info = (QuantifiedLoopInfo)literalPool[instr.Operand]!;
+                        var sequence = registers[instr.RegisterB];
+                        var items = MaterializeSequence(sequence);
+
+                        var savedItem = context.ContextItem;
+                        var savedPos = context.ContextPosition;
+                        var savedSize = context.ContextSize;
+                        bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
+
+                        bool result = false;
+                        foreach (var item in items)
+                        {
+                            context.WithFocus(item, 1, 1);
+                            context.WithVariable(info.VariableName, item);
+                            var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
+
+                            if (rhsResult.EffectiveBooleanValue())
+                            {
+                                result = true;
+                                break;
+                            }
+                        }
+
+                        context.WithFocus(savedItem, savedPos, savedSize);
+                        if (hadVariable)
+                            context.WithVariable(info.VariableName, savedVar);
+
+                        registers[instr.RegisterA] = XdmValue.FromBoolean(result);
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.Every:
+                    {
+                        var info = (QuantifiedLoopInfo)literalPool[instr.Operand]!;
+                        var sequence = registers[instr.RegisterB];
+                        var items = MaterializeSequence(sequence);
+
+                        var savedItem = context.ContextItem;
+                        var savedPos = context.ContextPosition;
+                        var savedSize = context.ContextSize;
+                        bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
+
+                        bool result = true;
+                        foreach (var item in items)
+                        {
+                            context.WithFocus(item, 1, 1);
+                            context.WithVariable(info.VariableName, item);
+                            var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
+
+                            if (!rhsResult.EffectiveBooleanValue())
+                            {
+                                result = false;
+                                break;
+                            }
+                        }
+
+                        context.WithFocus(savedItem, savedPos, savedSize);
+                        if (hadVariable)
+                            context.WithVariable(info.VariableName, savedVar);
+
+                        registers[instr.RegisterA] = XdmValue.FromBoolean(result);
+                        ip++;
+                        break;
+                    }
+
+                // ------------------------------------------------------------------
                 // Axes
                 // ------------------------------------------------------------------
                 case IrOpCode.Child:

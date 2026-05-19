@@ -23,6 +23,11 @@ using Bosak.XPath.Parser.Ast;
 namespace Bosak.XPath.Compiler.Ir;
 
 /// <summary>
+/// Loop information stored in the literal pool for For/Some/Every opcodes.
+/// </summary>
+public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint);
+
+/// <summary>
 /// Lowers an optimized XPath AST into register-based IR instructions.
 /// Uses a simple stack-like register allocation model with a literal pool
 /// for constants that don't fit in the instruction operand.
@@ -792,32 +797,36 @@ public sealed class IrLowerer
 
     private int LowerForExpression(ForExpressionNode node, int? targetReg)
     {
-        // For now, lower as a sequence construction loop
-        // This is a simplified implementation
         int resultReg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.SequenceStart, (byte)resultReg);
 
         if (node.Bindings.Count == 1)
         {
             var binding = node.Bindings[0];
             int seqReg = LowerNode(binding.Expression);
 
-            // Emit a loop: for each item in seqReg, bind to variable, evaluate return
-            // This requires loop opcodes we don't have yet.
-            // For now, emit a placeholder Call.
-            int bindingPoolIdx = AddToLiteralPool(("__for", binding.VariableName));
-            Emit(IrOpCode.Call, (byte)resultReg, (byte)seqReg, 1, bindingPoolIdx);
+            int forIdx = _instructions.Count;
+            Emit(IrOpCode.For, (byte)resultReg, (byte)seqReg, 0, 0);
+
+            int jumpIdx = _instructions.Count;
+            Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+            int rhsEntry = _instructions.Count;
+            int rhsReg = LowerNode(node.ReturnExpression);
+            Emit(IrOpCode.Return, (byte)rhsReg);
+
+            int afterRhs = _instructions.Count;
+            var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
+            int poolIdx = AddToLiteralPool(info);
+            PatchInstruction(forIdx, IrOpCode.For, (byte)resultReg, (byte)seqReg, 0, poolIdx);
+            PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
+
+            return resultReg;
         }
         else
         {
-            // Multiple bindings - cartesian product
-            // Emit placeholder
-            int poolIdx = AddToLiteralPool("__for_multi");
-            Emit(IrOpCode.Call, (byte)resultReg, 0, 0, poolIdx);
+            // Multiple bindings - cartesian product not yet implemented
+            throw new NotSupportedException("Multi-binding for expressions are not yet supported.");
         }
-
-        Emit(IrOpCode.SequenceEnd, (byte)resultReg);
-        return resultReg;
     }
 
     private int LowerQuantifiedExpression(QuantifiedExpressionNode node, int? targetReg)
@@ -829,18 +838,30 @@ public sealed class IrLowerer
             var binding = node.Bindings[0];
             int seqReg = LowerNode(binding.Expression);
 
-            string opName = node.Quantifier == QuantifierKind.Some ? "__some" : "__every";
-            int poolIdx = AddToLiteralPool((opName, binding.VariableName));
-            Emit(IrOpCode.Call, (byte)resultReg, (byte)seqReg, 1, poolIdx);
+            IrOpCode opCode = node.Quantifier == QuantifierKind.Some ? IrOpCode.Some : IrOpCode.Every;
+
+            int quantIdx = _instructions.Count;
+            Emit(opCode, (byte)resultReg, (byte)seqReg, 0, 0);
+
+            int jumpIdx = _instructions.Count;
+            Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+            int rhsEntry = _instructions.Count;
+            int rhsReg = LowerNode(node.SatisfiesExpression);
+            Emit(IrOpCode.Return, (byte)rhsReg);
+
+            int afterRhs = _instructions.Count;
+            var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
+            int poolIdx = AddToLiteralPool(info);
+            PatchInstruction(quantIdx, opCode, (byte)resultReg, (byte)seqReg, 0, poolIdx);
+            PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
+
+            return resultReg;
         }
         else
         {
-            string opName = node.Quantifier == QuantifierKind.Some ? "__some_multi" : "__every_multi";
-            int poolIdx = AddToLiteralPool(opName);
-            Emit(IrOpCode.Call, (byte)resultReg, 0, 0, poolIdx);
+            throw new NotSupportedException("Multi-binding quantified expressions are not yet supported.");
         }
-
-        return resultReg;
     }
 
     // ------------------------------------------------------------------

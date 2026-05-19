@@ -181,6 +181,34 @@ public class ApiTests
     }
 
     [Fact]
+    public void EvaluateValue_ForExpression()
+    {
+        var items = EvalSequence("for $x in (1,2,3) return $x * 2");
+        Assert.Equal(new[] { "2", "4", "6" }, items);
+    }
+
+    [Fact]
+    public void EvaluateValue_QuantifiedSome()
+    {
+        var result = Eval("some $x in (1,2,3) satisfies $x > 2");
+        Assert.Equal("true", result.ToString());
+    }
+
+    [Fact]
+    public void EvaluateValue_QuantifiedEvery()
+    {
+        var result = Eval("every $x in (1,2,3) satisfies $x > 0");
+        Assert.Equal("true", result.ToString());
+    }
+
+    [Fact]
+    public void EvaluateValue_SimpleMap()
+    {
+        var items = EvalSequence("(1, 2, 3) ! (. + 10)");
+        Assert.Equal(new[] { "11", "12", "13" }, items);
+    }
+
+    [Fact]
     public void EvaluateValue_InstanceOf()
     {
         var result = Eval("1 instance of xs:integer");
