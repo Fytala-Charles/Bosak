@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added Intersect, Except, and SimpleMap VM handlers                                     |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added Map, Array, and Lookup VM handlers                                               |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added occurrence indicator support for InstanceOf, Cast, Castable, TreatAs             |
+//                      | Charles Korthout | 0.6   | 19-05-2026     | Optimized Subscript, First, Last VM handlers to avoid full sequence materialization    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -584,13 +585,38 @@ public static class VmEngine
                     {
                         var sequence = registers[instr.RegisterB];
                         int index = instr.Operand; // 1-based
-                        var items = MaterializeSequence(sequence);
 
-                        if (index >= 1 && index <= items.Length)
-                            registers[instr.RegisterA] = items[index - 1];
-                        else
+                        if (sequence.IsUndefined)
+                        {
                             registers[instr.RegisterA] = XdmValue.Undefined;
-
+                        }
+                        else if (!sequence.IsSequence)
+                        {
+                            registers[instr.RegisterA] = index == 1 ? sequence : XdmValue.Undefined;
+                        }
+                        else
+                        {
+                            var seq = sequence.SequenceValue;
+                            if (seq is null)
+                            {
+                                registers[instr.RegisterA] = XdmValue.Undefined;
+                            }
+                            else
+                            {
+                                var en = XdmSequence.FromSource(seq).GetEnumerator();
+                                XdmValue? result = null;
+                                for (int i = 0; i < index; i++)
+                                {
+                                    if (!en.MoveNext())
+                                    {
+                                        result = null;
+                                        break;
+                                    }
+                                    result = en.Current;
+                                }
+                                registers[instr.RegisterA] = result ?? XdmValue.Undefined;
+                            }
+                        }
                         ip++;
                         break;
                     }
@@ -598,8 +624,25 @@ public static class VmEngine
                 case IrOpCode.First:
                     {
                         var sequence = registers[instr.RegisterB];
-                        var items = MaterializeSequence(sequence);
-                        registers[instr.RegisterA] = items.Length > 0 ? items[0] : XdmValue.Undefined;
+                        if (sequence.IsUndefined)
+                        {
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
+                        else if (!sequence.IsSequence)
+                        {
+                            registers[instr.RegisterA] = sequence;
+                        }
+                        else
+                        {
+                            var seq = sequence.SequenceValue;
+                            if (seq is null)
+                                registers[instr.RegisterA] = XdmValue.Undefined;
+                            else
+                            {
+                                var en = XdmSequence.FromSource(seq).GetEnumerator();
+                                registers[instr.RegisterA] = en.MoveNext() ? en.Current : XdmValue.Undefined;
+                            }
+                        }
                         ip++;
                         break;
                     }
@@ -607,8 +650,28 @@ public static class VmEngine
                 case IrOpCode.Last:
                     {
                         var sequence = registers[instr.RegisterB];
-                        var items = MaterializeSequence(sequence);
-                        registers[instr.RegisterA] = items.Length > 0 ? items[^1] : XdmValue.Undefined;
+                        if (sequence.IsUndefined)
+                        {
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
+                        else if (!sequence.IsSequence)
+                        {
+                            registers[instr.RegisterA] = sequence;
+                        }
+                        else
+                        {
+                            var seq = sequence.SequenceValue;
+                            if (seq is null)
+                                registers[instr.RegisterA] = XdmValue.Undefined;
+                            else
+                            {
+                                var en = XdmSequence.FromSource(seq).GetEnumerator();
+                                XdmValue last = XdmValue.Undefined;
+                                while (en.MoveNext())
+                                    last = en.Current;
+                                registers[instr.RegisterA] = last;
+                            }
+                        }
                         ip++;
                         break;
                     }

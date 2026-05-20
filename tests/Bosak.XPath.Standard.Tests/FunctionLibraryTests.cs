@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added arrow inline-function and multi-binding FLWOR tests                                |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added fn:doc and fn:collection tests                                                     |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Added substring-before, substring-after, codepoints, parse-xml tests                     |
+//                      | Charles Korthout | 0.7   | 19-05-2026     | Added predicate indexing optimization tests                                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1541,6 +1542,41 @@ public class FunctionLibraryTests
         Assert.Equal(2, result.Length);
         Assert.Equal("11", result[0]);
         Assert.Equal("22", result[1]);
+    }
+
+    // ------------------------------------------------------------------
+    // Predicate indexing optimization correctness
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void PredicateIndexing_Subscript()
+    {
+        Assert.Equal("10", EvalSequence("(10, 20, 30)[1]")[0]);
+        Assert.Equal("20", EvalSequence("(10, 20, 30)[2]")[0]);
+        Assert.Equal("30", EvalSequence("(10, 20, 30)[3]")[0]);
+        Assert.Empty(EvalSequence("(10, 20, 30)[4]"));
+        Assert.Empty(EvalSequence("(10, 20, 30)[0]"));
+    }
+
+    [Fact]
+    public void PredicateIndexing_OnAtomic()
+    {
+        Assert.Equal("42", EvalSequence("42[1]")[0]);
+        Assert.Empty(EvalSequence("42[2]"));
+    }
+
+    [Fact]
+    public void PredicateIndexing_EmptySequence()
+    {
+        Assert.Empty(EvalSequence("()[1]"));
+        Assert.Empty(EvalSequence("()[last()]"));
+    }
+
+    [Fact]
+    public void PredicateIndexing_Last()
+    {
+        Assert.Equal("30", EvalSequence("(10, 20, 30)[last()]")[0]);
+        Assert.Equal("10", EvalSequence("(10)[last()]")[0]);
     }
 
     // ------------------------------------------------------------------
