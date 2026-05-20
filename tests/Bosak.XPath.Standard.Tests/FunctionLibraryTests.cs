@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Added predicate indexing optimization tests                                              |
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Fixed predicate indexing tests for single-item results                                   |
 //                      | Charles Korthout | 0.9   | 19-05-2026     | Added fn:analyze-string tests                                                          |
+//                      | Charles Korthout | 1.0   | 19-05-2026     | Added document-node path traversal tests                                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1656,6 +1657,35 @@ public class FunctionLibraryTests
         Assert.Equal("match", children[0]);
         Assert.Equal("non-match", children[1]);
         Assert.Equal("match", children[2]);
+    }
+
+    // ------------------------------------------------------------------
+    // Document node path traversal (parse-xml as proxy for doc())
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void DocumentNode_ChildPath()
+    {
+        Assert.Equal("hello", EvalSequence("parse-xml('<root><item>hello</item></root>')/root/item")[0]);
+    }
+
+    [Fact]
+    public void DocumentNode_DescendantPath()
+    {
+        Assert.Equal("hello", EvalSequence("parse-xml('<root><item>hello</item></root>')//item")[0]);
+    }
+
+    [Fact]
+    public void DocumentNode_PredicateSubscript()
+    {
+        Assert.Equal("b", MaterializeResult("parse-xml('<root><a>a</a><a>b</a></root>')/root/a[2]")[0]);
+    }
+
+    [Fact]
+    public void DocumentNode_ChainedPath()
+    {
+        var xml = "<library><book><title>Dune</title></book></library>";
+        Assert.Equal("Dune", EvalSequence($"parse-xml('{xml}')/library/book/title")[0]);
     }
 
     // ------------------------------------------------------------------

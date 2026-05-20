@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Lower occurrence indicators in type expressions to RegisterC                           |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Nested lowering for multi-binding for/some/every expressions                           |
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Unwrap PredicateNode in LowerPostfixPredicate for Subscript/Last compilation           |
+//                      | Charles Korthout | 0.8   | 19-05-2026     | Support filter expressions as path steps (e.g. parse-xml(...)/root/item)               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -497,7 +498,15 @@ public sealed class IrLowerer
         int currentReg = contextReg;
         foreach (var step in node.Steps)
         {
-            currentReg = LowerStep((StepNode)step, currentReg);
+            if (step is StepNode stepNode)
+            {
+                currentReg = LowerStep(stepNode, currentReg);
+            }
+            else
+            {
+                // Filter expression as a path step (e.g., parse-xml(...)/root/item)
+                currentReg = LowerNode(step, currentReg);
+            }
         }
 
         if (targetReg.HasValue && targetReg.Value != currentReg)
