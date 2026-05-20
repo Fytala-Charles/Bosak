@@ -1053,6 +1053,77 @@ public class FunctionLibraryTests
     }
 
     // ------------------------------------------------------------------
+    // Quantified expressions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Some_True()
+    {
+        Assert.Equal("true", EvalStr("some $x in (1, 2, 3) satisfies $x > 2"));
+    }
+
+    [Fact]
+    public void Some_False()
+    {
+        Assert.Equal("false", EvalStr("some $x in (1, 2, 3) satisfies $x > 10"));
+    }
+
+    [Fact]
+    public void Some_Empty()
+    {
+        Assert.Equal("false", EvalStr("some $x in () satisfies $x > 2"));
+    }
+
+    [Fact]
+    public void Every_True()
+    {
+        Assert.Equal("true", EvalStr("every $x in (1, 2, 3) satisfies $x > 0"));
+    }
+
+    [Fact]
+    public void Every_False()
+    {
+        Assert.Equal("false", EvalStr("every $x in (1, 2, 3) satisfies $x > 2"));
+    }
+
+    [Fact]
+    public void Every_Empty()
+    {
+        Assert.Equal("true", EvalStr("every $x in () satisfies $x > 2"));
+    }
+
+    [Fact]
+    public void ForExpression_Double()
+    {
+        var result = EvalSequence("for $x in (1, 2, 3) return $x * 2");
+        Assert.Equal(3, result.Length);
+        Assert.Equal("2", result[0]);
+        Assert.Equal("4", result[1]);
+        Assert.Equal("6", result[2]);
+    }
+
+    [Fact]
+    public void ForExpression_Empty()
+    {
+        var result = EvalSequence("for $x in () return $x * 2");
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void For_VariableDoesNotLeak()
+    {
+        // $x should not be visible after the for expression
+        Assert.Throws<InvalidOperationException>(() => Evaluate("(for $x in (1, 2) return $x), $x"));
+    }
+
+    [Fact]
+    public void Some_VariableDoesNotLeak()
+    {
+        // $x should not be visible after the some expression
+        Assert.Throws<InvalidOperationException>(() => Evaluate("(some $x in (1, 2) satisfies $x > 0), $x"));
+    }
+
+    // ------------------------------------------------------------------
     // Higher-order functions
     // ------------------------------------------------------------------
 

@@ -387,6 +387,8 @@ public static class VmEngine
                         context.WithFocus(savedItem, savedPos, savedSize);
                         if (hadVariable)
                             context.WithVariable(info.VariableName, savedVar);
+                        else
+                            context.RemoveVariable(info.VariableName);
 
                         registers[instr.RegisterA] = XdmValue.FromSequence(
                             MaterializedSequence.FromList(results));
@@ -422,6 +424,8 @@ public static class VmEngine
                         context.WithFocus(savedItem, savedPos, savedSize);
                         if (hadVariable)
                             context.WithVariable(info.VariableName, savedVar);
+                        else
+                            context.RemoveVariable(info.VariableName);
 
                         registers[instr.RegisterA] = XdmValue.FromBoolean(result);
                         ip++;
@@ -456,6 +460,8 @@ public static class VmEngine
                         context.WithFocus(savedItem, savedPos, savedSize);
                         if (hadVariable)
                             context.WithVariable(info.VariableName, savedVar);
+                        else
+                            context.RemoveVariable(info.VariableName);
 
                         registers[instr.RegisterA] = XdmValue.FromBoolean(result);
                         ip++;
