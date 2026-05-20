@@ -52,7 +52,8 @@ public sealed class EvaluationContext
             ["fn"] = "http://www.w3.org/2005/xpath-functions",
             ["math"] = "http://www.w3.org/2005/xpath-functions/math",
             ["map"] = "http://www.w3.org/2005/xpath-functions/map",
-            ["array"] = "http://www.w3.org/2005/xpath-functions/array"
+            ["array"] = "http://www.w3.org/2005/xpath-functions/array",
+            ["err"] = "http://www.w3.org/2005/xqt-errors"
         };
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
     }

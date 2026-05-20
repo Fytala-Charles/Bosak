@@ -1351,6 +1351,44 @@ public class FunctionLibraryTests
     }
 
     // ------------------------------------------------------------------
+    // Try/Catch
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void TryCatch_Success()
+    {
+        Assert.Equal("42", EvalStr("try { 42 } catch * { 0 }"));
+    }
+
+    [Fact]
+    public void TryCatch_CatchesError()
+    {
+        Assert.Equal("fallback", EvalStr("try { 'hello' cast as xs:integer } catch * { 'fallback' }"));
+    }
+
+    [Fact]
+    public void TryCatch_AccessErrorCode()
+    {
+        var result = EvalStr("try { 'x' cast as xs:integer } catch * { $err:code }");
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
+    }
+
+    [Fact]
+    public void TryCatch_AccessErrorDescription()
+    {
+        var result = EvalStr("try { 'x' cast as xs:integer } catch * { $err:description }");
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
+    }
+
+    [Fact]
+    public void TryCatch_Nested()
+    {
+        Assert.Equal("outer", EvalStr("try { try { 'x' cast as xs:integer } catch * { 1 div 0 } } catch * { 'outer' }"));
+    }
+
+    // ------------------------------------------------------------------
     // Higher-order functions
     // ------------------------------------------------------------------
 

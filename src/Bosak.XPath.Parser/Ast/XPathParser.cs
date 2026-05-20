@@ -132,6 +132,7 @@ public sealed class XPathParser
             TokenKind.KeywordLet => ParseLetExpr(),
             TokenKind.KeywordSome or TokenKind.KeywordEvery => ParseQuantifiedExpr(),
             TokenKind.KeywordIf => ParseIfExpr(),
+            TokenKind.KeywordTry => ParseTryExpr(),
             _ => ParseOrExpr()
         };
     }
@@ -215,6 +216,28 @@ public sealed class XPathParser
         Expect(TokenKind.KeywordElse);
         var elseBranch = ParseExprSingle();
         return WithSpan(new IfExpressionNode(cond, thenBranch, elseBranch), start, End);
+    }
+
+    // TryExpr ::= TryClause CatchClause+
+    // TryClause ::= "try" "{" Expr "}"
+    // CatchClause ::= "catch" CatchErrorList "{" Expr "}"
+    // For now: only "catch *" is supported
+    private XPathAstNode ParseTryExpr()
+    {
+        int start = Current.Start;
+        Expect(TokenKind.KeywordTry);
+        Expect(TokenKind.LBrace);
+        var tryBody = ParseExpr();
+        Expect(TokenKind.RBrace);
+        Expect(TokenKind.KeywordCatch);
+        if (Match(TokenKind.Star))
+        {
+            Expect(TokenKind.LBrace);
+            var catchBody = ParseExpr();
+            Expect(TokenKind.RBrace);
+            return WithSpan(new TryCatchNode(tryBody, catchBody), start, End);
+        }
+        throw new ParseException("Only catch * is currently supported", Current.Start);
     }
 
     // OrExpr ::= AndExpr ("or" AndExpr)*

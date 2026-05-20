@@ -35,6 +35,7 @@ public enum IrOpCode : byte
     For,
     Some,
     Every,
+    TryCatch,
     
     // ---- Context -----------------------------------------------------
     LoadContext,

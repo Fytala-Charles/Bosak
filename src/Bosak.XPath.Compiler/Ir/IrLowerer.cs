@@ -28,6 +28,11 @@ namespace Bosak.XPath.Compiler.Ir;
 public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint);
 
 /// <summary>
+/// Try/catch information stored in the literal pool for the TryCatch opcode.
+/// </summary>
+public readonly record struct TryCatchInfo(int TryEntryPoint, int CatchEntryPoint);
+
+/// <summary>
 /// Lowers an optimized XPath AST into register-based IR instructions.
 /// Uses a simple stack-like register allocation model with a literal pool
 /// for constants that don't fit in the instruction operand.
@@ -86,6 +91,7 @@ public sealed class IrLowerer
             LookupWildcardNode n => LowerLookupWildcard(n, targetReg),
             ForExpressionNode n => LowerForExpression(n, targetReg),
             QuantifiedExpressionNode n => LowerQuantifiedExpression(n, targetReg),
+            TryCatchNode n => LowerTryCatch(n, targetReg),
             LetExpressionNode n => LowerLetExpression(n, targetReg),
             InlineFunctionNode n => LowerInlineFunction(n, targetReg),
             DynamicFunctionCallNode n => LowerDynamicFunctionCall(n, targetReg),
@@ -882,6 +888,33 @@ public sealed class IrLowerer
             // Multiple bindings - cartesian product not yet implemented
             throw new NotSupportedException("Multi-binding for expressions are not yet supported.");
         }
+    }
+
+    private int LowerTryCatch(TryCatchNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+
+        int tryCatchIdx = _instructions.Count;
+        Emit(IrOpCode.TryCatch, (byte)resultReg, 0, 0, 0);
+
+        int jumpIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+        int tryEntry = _instructions.Count;
+        int tryReg = LowerNode(node.TryExpression);
+        Emit(IrOpCode.Return, (byte)tryReg);
+
+        int catchEntry = _instructions.Count;
+        int catchReg = LowerNode(node.CatchExpression);
+        Emit(IrOpCode.Return, (byte)catchReg);
+
+        int afterCatch = _instructions.Count;
+        var info = new TryCatchInfo(tryEntry, catchEntry);
+        int poolIdx = AddToLiteralPool(info);
+        PatchInstruction(tryCatchIdx, IrOpCode.TryCatch, (byte)resultReg, 0, 0, poolIdx);
+        PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterCatch);
+
+        return resultReg;
     }
 
     private int LowerQuantifiedExpression(QuantifiedExpressionNode node, int? targetReg)

@@ -468,6 +468,26 @@ public static class VmEngine
                         break;
                     }
 
+                case IrOpCode.TryCatch:
+                    {
+                        var info = (TryCatchInfo)literalPool[instr.Operand]!;
+                        try
+                        {
+                            var (result, _) = ExecuteBlock(module, context, registers, info.TryEntryPoint);
+                            registers[instr.RegisterA] = result;
+                        }
+                        catch (Exception ex)
+                        {
+                            const string ErrNs = "http://www.w3.org/2005/xqt-errors";
+                            context.WithVariable("code", XdmValue.FromString(ex.GetType().Name), ErrNs);
+                            context.WithVariable("description", XdmValue.FromString(ex.Message), ErrNs);
+                            var (catchResult, _) = ExecuteBlock(module, context, registers, info.CatchEntryPoint);
+                            registers[instr.RegisterA] = catchResult;
+                        }
+                        ip++;
+                        break;
+                    }
+
                 // ------------------------------------------------------------------
                 // Axes
                 // ------------------------------------------------------------------

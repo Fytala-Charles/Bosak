@@ -128,4 +128,8 @@ public enum TokenKind : short
     KeywordFunction, // function
     KeywordMap,      // map
     KeywordArray,    // array
+
+    // ---- Try/Catch ---------------------------------------------------
+    KeywordTry,      // try
+    KeywordCatch,    // catch
 }

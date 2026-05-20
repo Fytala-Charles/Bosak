@@ -118,6 +118,9 @@ public sealed record TreatNode(XPathAstNode Expression, string TypeName, string?
 /// <summary>Arrow expression: <c>$x => upper-case()</c></summary>
 public sealed record ArrowExprNode(XPathAstNode Source, XPathAstNode Target) : XPathAstNode;
 
+/// <summary>Try/catch expression: <c>try { A } catch * { B }</c></summary>
+public sealed record TryCatchNode(XPathAstNode TryExpression, XPathAstNode CatchExpression) : XPathAstNode;
+
 /// <summary>Lookup (postfix): <c>$map?key</c> or <c>$array?1</c></summary>
 public sealed record LookupNode(XPathAstNode Expression, XPathAstNode Key) : XPathAstNode;
 

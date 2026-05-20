@@ -472,6 +472,7 @@ public ref struct XPathLexer
         if (SeqEqual(text, "map")) return TokenKind.KeywordMap;
         if (SeqEqual(text, "mod")) return TokenKind.KeywordMod;
         if (SeqEqual(text, "not")) return TokenKind.Name; // not is a function, not a keyword
+        if (SeqEqual(text, "try")) return TokenKind.KeywordTry;
         return TokenKind.Name;
     }
 
@@ -488,6 +489,7 @@ public ref struct XPathLexer
     private static TokenKind ResolveKeyword5(ReadOnlySpan<char> text)
     {
         if (SeqEqual(text, "array")) return TokenKind.KeywordArray;
+        if (SeqEqual(text, "catch")) return TokenKind.KeywordCatch;
         if (SeqEqual(text, "every")) return TokenKind.KeywordEvery;
         if (SeqEqual(text, "idiv")) return TokenKind.KeywordIdiv;
         if (SeqEqual(text, "treat")) return TokenKind.KeywordTreat;
