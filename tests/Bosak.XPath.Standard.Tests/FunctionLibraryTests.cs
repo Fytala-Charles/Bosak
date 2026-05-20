@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Fixed predicate indexing tests for single-item results                                   |
 //                      | Charles Korthout | 0.9   | 19-05-2026     | Added fn:analyze-string tests                                                          |
 //                      | Charles Korthout | 1.0   | 19-05-2026     | Added document-node path traversal tests                                               |
+//                      | Charles Korthout | 1.1   | 19-05-2026     | Added fn:serialize tests                                                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1657,6 +1658,37 @@ public class FunctionLibraryTests
         Assert.Equal("match", children[0]);
         Assert.Equal("non-match", children[1]);
         Assert.Equal("match", children[2]);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:serialize
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Serialize_Element()
+    {
+        var result = EvalStr("serialize(parse-xml('<root><item>hello</item></root>')/root)");
+        Assert.Equal("<root><item>hello</item></root>", result);
+    }
+
+    [Fact]
+    public void Serialize_Document()
+    {
+        var result = EvalStr("serialize(parse-xml('<root><item>hello</item></root>'))");
+        Assert.Equal("<root><item>hello</item></root>", result);
+    }
+
+    [Fact]
+    public void Serialize_Atomic()
+    {
+        Assert.Equal("42", EvalStr("serialize(42)"));
+        Assert.Equal("hello", EvalStr("serialize('hello')"));
+    }
+
+    [Fact]
+    public void Serialize_EmptySequence()
+    {
+        Assert.Equal("", EvalStr("serialize(())"));
     }
 
     // ------------------------------------------------------------------

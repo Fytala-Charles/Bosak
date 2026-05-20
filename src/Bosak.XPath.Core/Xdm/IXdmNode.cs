@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added ToXmlString for fn:serialize                                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -60,4 +61,7 @@ public interface IXdmNode
 
     /// <summary>Gets the document order index of this node, or 0 if unknown.</summary>
     long DocumentOrder { get; }
+
+    /// <summary>Returns the XML serialization of this node.</summary>
+    string ToXmlString();
 }

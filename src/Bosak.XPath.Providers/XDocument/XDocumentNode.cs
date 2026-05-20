@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Fixed Prefix resolution and implemented namespace axis                                 |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Implemented ToXmlString for fn:serialize                                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -467,5 +468,22 @@ public sealed class XDocumentNode : IXdmNode
             items.Add(XdmValue.FromNode(new XDocumentNode(child)));
             AddDescendants(child, items);
         }
+    }
+
+    public string ToXmlString()
+    {
+        if (_isNamespaceNode)
+            return string.Empty;
+
+        return _node switch
+        {
+            System.Xml.Linq.XDocument doc => doc.ToString(SaveOptions.DisableFormatting),
+            XElement el => el.ToString(SaveOptions.DisableFormatting),
+            XText t => System.Security.SecurityElement.Escape(t.Value) ?? t.Value,
+            XComment c => $"<!--{c.Value}-->",
+            XProcessingInstruction pi => $"<?{pi.Target} {pi.Data}?>",
+            XAttribute a => a.Value,
+            _ => _node.ToString() ?? string.Empty
+        };
     }
 }

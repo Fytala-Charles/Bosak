@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 19-05-2026     | Added fn:doc and fn:collection with document identity caching                          |
 //                      | Charles Korthout | 1.2   | 19-05-2026     | Added substring-before, substring-after, string-to-codepoints, codepoints-to-string, parse-xml |
 //                      | Charles Korthout | 1.3   | 19-05-2026     | Added fn:analyze-string with regex group extraction                                    |
+//                      | Charles Korthout | 1.4   | 19-05-2026     | Added fn:serialize                                                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -322,6 +323,15 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String],
                 ReturnType = XdmValueKind.Node,
                 Implementation = ParseXml_1
+            },
+
+            // ----- fn:serialize -----------------------------------------------
+            [(Namespaces.Fn, "serialize", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "serialize", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.String,
+                Implementation = Serialize_1
             },
 
             // ----- fn:analyze-string ------------------------------------------
@@ -1765,6 +1775,28 @@ public static class FunctionLibrary
             throw new InvalidOperationException("fn:parse-xml argument must not be empty.");
         var doc = XDocument.Parse(xml);
         return XdmValue.FromNode(doc.ToXdmNode());
+    }
+
+    private static XdmValue Serialize_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = args[0];
+        if (value.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+
+        if (!value.IsSequence)
+            return XdmValue.FromString(SerializeItem(value));
+
+        var sb = new StringBuilder();
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            sb.Append(SerializeItem(item));
+        return XdmValue.FromString(sb.ToString());
+    }
+
+    private static string SerializeItem(XdmValue value)
+    {
+        if (value.IsNode)
+            return value.NodeValue.ToXmlString();
+        return value.ToString();
     }
 
     private static XdmValue AnalyzeString_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
