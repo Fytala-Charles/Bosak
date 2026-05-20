@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added date/time and fn:node-name tests                                                   |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added arrow inline-function and multi-binding FLWOR tests                                |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added fn:doc and fn:collection tests                                                     |
+//                      | Charles Korthout | 0.6   | 19-05-2026     | Added substring-before, substring-after, codepoints, parse-xml tests                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1540,6 +1541,63 @@ public class FunctionLibraryTests
         Assert.Equal(2, result.Length);
         Assert.Equal("11", result[0]);
         Assert.Equal("22", result[1]);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:substring-before / fn:substring-after
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void SubstringBefore_Found()
+    {
+        Assert.Equal("abc", EvalStr("substring-before('abcdef', 'def')"));
+    }
+
+    [Fact]
+    public void SubstringBefore_NotFound()
+    {
+        Assert.Equal("", EvalStr("substring-before('abcdef', 'xyz')"));
+    }
+
+    [Fact]
+    public void SubstringAfter_Found()
+    {
+        Assert.Equal("def", EvalStr("substring-after('abcdef', 'abc')"));
+    }
+
+    [Fact]
+    public void SubstringAfter_NotFound()
+    {
+        Assert.Equal("", EvalStr("substring-after('abcdef', 'xyz')"));
+    }
+
+    // ------------------------------------------------------------------
+    // fn:string-to-codepoints / fn:codepoints-to-string
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void StringToCodepoints()
+    {
+        var result = EvalSequence("string-to-codepoints('abc')");
+        Assert.Equal(new[] { "97", "98", "99" }, result);
+    }
+
+    [Fact]
+    public void CodepointsToString()
+    {
+        Assert.Equal("abc", EvalStr("codepoints-to-string((97, 98, 99))"));
+    }
+
+    // ------------------------------------------------------------------
+    // fn:parse-xml
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ParseXml()
+    {
+        var result = Evaluate("parse-xml('<root><item>hello</item></root>')");
+        Assert.True(result.IsNode);
+        Assert.Equal(XdmNodeKind.Document, result.NodeValue.NodeKind);
     }
 
     // ------------------------------------------------------------------

@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 19-05-2026     | Added fn:deep-equal, fn:generate-id, fn:compare                                        |
 //                      | Charles Korthout | 1.0   | 19-05-2026     | Added URI encoders and QName functions                                                   |
 //                      | Charles Korthout | 1.1   | 19-05-2026     | Added fn:doc and fn:collection with document identity caching                          |
+//                      | Charles Korthout | 1.2   | 19-05-2026     | Added substring-before, substring-after, string-to-codepoints, codepoints-to-string, parse-xml |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -261,6 +262,65 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String, XdmValueKind.Double, XdmValueKind.Double],
                 ReturnType = XdmValueKind.String,
                 Implementation = Substring_3
+            },
+
+            // ----- fn:substring-before ----------------------------------------
+            [(Namespaces.Fn, "substring-before", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "substring-before", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = SubstringBefore_2
+            },
+            [(Namespaces.Fn, "substring-before", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "substring-before", Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = SubstringBefore_3
+            },
+
+            // ----- fn:substring-after -----------------------------------------
+            [(Namespaces.Fn, "substring-after", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "substring-after", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = SubstringAfter_2
+            },
+            [(Namespaces.Fn, "substring-after", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "substring-after", Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = SubstringAfter_3
+            },
+
+            // ----- fn:string-to-codepoints ------------------------------------
+            [(Namespaces.Fn, "string-to-codepoints", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "string-to-codepoints", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = StringToCodepoints
+            },
+
+            // ----- fn:codepoints-to-string ------------------------------------
+            [(Namespaces.Fn, "codepoints-to-string", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "codepoints-to-string", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.String,
+                Implementation = CodepointsToString
+            },
+
+            // ----- fn:parse-xml -----------------------------------------------
+            [(Namespaces.Fn, "parse-xml", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-xml", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Node,
+                Implementation = ParseXml_1
             },
 
             // ----- fn:contains ------------------------------------------------
@@ -1625,6 +1685,69 @@ public static class FunctionLibrary
         if (len <= 0) return XdmValue.FromString(string.Empty);
         int end = Math.Min(start - 1 + len, s.Length);
         return XdmValue.FromString(s[(start - 1)..end]);
+    }
+
+    private static XdmValue SubstringBefore_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        string search = AtomizedString(args[1]);
+        int idx = s.IndexOf(search, StringComparison.Ordinal);
+        return XdmValue.FromString(idx >= 0 ? s[..idx] : string.Empty);
+    }
+
+    private static XdmValue SubstringBefore_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        string search = AtomizedString(args[1]);
+        // Collation argument ignored for now — default to ordinal
+        int idx = s.IndexOf(search, StringComparison.Ordinal);
+        return XdmValue.FromString(idx >= 0 ? s[..idx] : string.Empty);
+    }
+
+    private static XdmValue SubstringAfter_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        string search = AtomizedString(args[1]);
+        int idx = s.IndexOf(search, StringComparison.Ordinal);
+        return XdmValue.FromString(idx >= 0 ? s[(idx + search.Length)..] : string.Empty);
+    }
+
+    private static XdmValue SubstringAfter_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        string search = AtomizedString(args[1]);
+        int idx = s.IndexOf(search, StringComparison.Ordinal);
+        return XdmValue.FromString(idx >= 0 ? s[(idx + search.Length)..] : string.Empty);
+    }
+
+    private static XdmValue StringToCodepoints(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        var values = new List<XdmValue>(s.Length);
+        foreach (Rune rune in s.EnumerateRunes())
+            values.Add(XdmValue.FromInteger(rune.Value));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(values));
+    }
+
+    private static XdmValue CodepointsToString(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = Materialize(args[0]);
+        var sb = new StringBuilder(items.Count);
+        foreach (var item in items)
+        {
+            int cp = (int)item.IntegerValue;
+            sb.Append(char.ConvertFromUtf32(cp));
+        }
+        return XdmValue.FromString(sb.ToString());
+    }
+
+    private static XdmValue ParseXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string xml = AtomizedString(args[0]);
+        if (string.IsNullOrEmpty(xml))
+            throw new InvalidOperationException("fn:parse-xml argument must not be empty.");
+        var doc = XDocument.Parse(xml);
+        return XdmValue.FromNode(doc.ToXdmNode());
     }
 
     private static XdmValue Contains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
