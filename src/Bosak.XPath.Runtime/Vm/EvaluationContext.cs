@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added document cache and loader for fn:doc / fn:collection                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -39,6 +40,9 @@ public sealed class EvaluationContext
     // Function libraries, indexed by (namespace, localName, arity)
     private readonly Dictionary<(string, string, int), FunctionSignature> _functions;
 
+    // Document cache for fn:doc / fn:collection identity
+    private readonly Dictionary<string, IXdmNode> _documentCache;
+
     public EvaluationContext()
     {
         _contextItem = XdmValue.Undefined;
@@ -56,6 +60,38 @@ public sealed class EvaluationContext
             ["err"] = "http://www.w3.org/2005/xqt-errors"
         };
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
+        _documentCache = new Dictionary<string, IXdmNode>();
+    }
+
+    /// <summary>
+    /// Optional base URI used to resolve relative document URIs.
+    /// </summary>
+    public string? BaseUri { get; set; }
+
+    /// <summary>
+    /// Custom document loader. If null, fn:doc will throw unless the API layer provides one.
+    /// </summary>
+    public Func<string, IXdmNode>? DocumentLoader { get; set; }
+
+    /// <summary>
+    /// Loads a document by URI, using the cache and <see cref="DocumentLoader"/>.
+    /// </summary>
+    public IXdmNode LoadDocument(string uri)
+    {
+        if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(BaseUri))
+        {
+            uri = new Uri(new Uri(BaseUri), uri).AbsoluteUri;
+        }
+
+        if (_documentCache.TryGetValue(uri, out var cached))
+            return cached;
+
+        if (DocumentLoader is null)
+            throw new InvalidOperationException($"No document loader configured. Cannot load document: {uri}");
+
+        var node = DocumentLoader(uri);
+        _documentCache[uri] = node;
+        return node;
     }
 
     // ------------------------------------------------------------------

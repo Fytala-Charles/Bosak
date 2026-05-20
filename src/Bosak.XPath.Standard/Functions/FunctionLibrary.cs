@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Added date/time component extractors                                                   |
 //                      | Charles Korthout | 0.9   | 19-05-2026     | Added fn:deep-equal, fn:generate-id, fn:compare                                        |
 //                      | Charles Korthout | 1.0   | 19-05-2026     | Added URI encoders and QName functions                                                   |
+//                      | Charles Korthout | 1.1   | 19-05-2026     | Added fn:doc and fn:collection with document identity caching                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -28,7 +29,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 
@@ -1325,6 +1328,24 @@ public static class FunctionLibrary
                 Implementation = FunctionLookup
             },
             // ----- fn:error ---------------------------------------------------
+            [(Namespaces.Fn, "doc", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "doc", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Node,
+                Implementation = Doc_1
+            },
+            [(Namespaces.Fn, "collection", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "collection", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.Sequence,
+                Implementation = Collection_0
+            },
+            [(Namespaces.Fn, "collection", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "collection", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                Implementation = Collection_1
+            },
             [(Namespaces.Fn, "error", 0)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 0,
@@ -1362,6 +1383,16 @@ public static class FunctionLibrary
         foreach (var sig in StandardFunctions.Values)
         {
             context.RegisterFunction(sig);
+        }
+
+        // Set up default document loader if not already configured
+        if (context.DocumentLoader is null)
+        {
+            context.DocumentLoader = uri =>
+            {
+                var doc = XDocument.Load(uri);
+                return doc.ToXdmNode();
+            };
         }
     }
 
@@ -1801,6 +1832,38 @@ public static class FunctionLibrary
     // ------------------------------------------------------------------
     // fn:error
     // ------------------------------------------------------------------
+
+    private static XdmValue Doc_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var uri = args[0].ToString();
+        if (string.IsNullOrEmpty(uri))
+            return XdmValue.Undefined;
+        var node = ctx.LoadDocument(uri);
+        return XdmValue.FromNode(node);
+    }
+
+    private static XdmValue Collection_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.Undefined;
+
+    private static XdmValue Collection_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var uri = args[0].ToString();
+        if (string.IsNullOrEmpty(uri))
+            return XdmValue.Undefined;
+
+        if (System.IO.Directory.Exists(uri))
+        {
+            var files = System.IO.Directory.GetFiles(uri, "*.xml");
+            var nodes = new List<XdmValue>(files.Length);
+            foreach (var file in files)
+            {
+                nodes.Add(XdmValue.FromNode(ctx.LoadDocument(file)));
+            }
+            return XdmValue.FromSequence(MaterializedSequence.FromList(nodes));
+        }
+
+        return XdmValue.Undefined;
+    }
 
     private static XdmValue Error_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => throw new InvalidOperationException("fn:error() called");

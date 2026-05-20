@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
     <ProjectReference Include="..\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj" />
   </ItemGroup>
 

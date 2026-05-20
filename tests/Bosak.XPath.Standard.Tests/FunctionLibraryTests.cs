@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added numeric and node-name accessor tests                                               |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added date/time and fn:node-name tests                                                   |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added arrow inline-function and multi-binding FLWOR tests                                |
+//                      | Charles Korthout | 0.5   | 19-05-2026     | Added fn:doc and fn:collection tests                                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1539,5 +1540,84 @@ public class FunctionLibraryTests
         Assert.Equal(2, result.Length);
         Assert.Equal("11", result[0]);
         Assert.Equal("22", result[1]);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:doc / fn:collection
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Doc_LoadsDocument()
+    {
+        var tempFile = System.IO.Path.GetTempFileName() + ".xml";
+        System.IO.File.WriteAllText(tempFile, "<root><item>hello</item></root>");
+        try
+        {
+            var result = Evaluate($"doc('{tempFile.Replace("\\", "/")}')");
+            Assert.True(result.IsNode);
+            Assert.Equal(XdmNodeKind.Document, result.NodeValue.NodeKind);
+        }
+        finally
+        {
+            System.IO.File.Delete(tempFile);
+        }
+    }
+
+    [Fact]
+    public void Doc_SameUriSameIdentity()
+    {
+        var tempFile = System.IO.Path.GetTempFileName() + ".xml";
+        System.IO.File.WriteAllText(tempFile, "<root/>");
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            var expr = XPath31Expression.Compile($"doc('{tempFile.Replace("\\", "/")}') is doc('{tempFile.Replace("\\", "/")}')");
+            var result = expr.Evaluate(ctx);
+            Assert.Equal("true", result.ToString());
+        }
+        finally
+        {
+            System.IO.File.Delete(tempFile);
+        }
+    }
+
+    [Fact]
+    public void Doc_EmptyStringReturnsEmpty()
+    {
+        var result = EvalStr("doc('')");
+        Assert.Equal("()", result);
+    }
+
+    [Fact]
+    public void Collection_EmptyArg()
+    {
+        var result = EvalStr("collection()");
+        Assert.Equal("()", result);
+    }
+
+    [Fact]
+    public void Collection_LoadsDirectory()
+    {
+        var tempDir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.Guid.NewGuid().ToString());
+        System.IO.Directory.CreateDirectory(tempDir);
+        System.IO.File.WriteAllText(System.IO.Path.Combine(tempDir, "a.xml"), "<a/>");
+        System.IO.File.WriteAllText(System.IO.Path.Combine(tempDir, "b.xml"), "<b/>");
+        try
+        {
+            var result = Evaluate($"collection('{tempDir.Replace("\\", "/")}')");
+            Assert.True(result.IsSequence);
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            {
+                Assert.True(item.IsNode);
+                count++;
+            }
+            Assert.Equal(2, count);
+        }
+        finally
+        {
+            System.IO.Directory.Delete(tempDir, true);
+        }
     }
 }
