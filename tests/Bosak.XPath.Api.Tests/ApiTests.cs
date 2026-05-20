@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 19-05-2026     | Added occurrence indicator tests for type expressions                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -234,6 +235,60 @@ public class ApiTests
     {
         var result = Eval("1 treat as xs:integer");
         Assert.Equal("1", result.ToString());
+    }
+
+    [Theory]
+    [InlineData("() instance of xs:integer?", "true")]
+    [InlineData("1 instance of xs:integer?", "true")]
+    [InlineData("(1, 2) instance of xs:integer?", "false")]
+    [InlineData("() instance of xs:integer*", "true")]
+    [InlineData("(1, 2) instance of xs:integer*", "true")]
+    [InlineData("() instance of xs:integer+", "false")]
+    [InlineData("(1, 2) instance of xs:integer+", "true")]
+    [InlineData("(1, 'a') instance of xs:integer*", "false")]
+    [InlineData("'hello' instance of xs:string*", "true")]
+    public void EvaluateValue_InstanceOf_Occurrence(string xpath, string expected)
+    {
+        var result = Eval(xpath);
+        Assert.Equal(expected, result.ToString());
+    }
+
+    [Theory]
+    [InlineData("() cast as xs:integer?", "()")]
+    [InlineData("1 castable as xs:integer?", "true")]
+    [InlineData("() castable as xs:integer?", "true")]
+    public void EvaluateValue_Cast_Occurrence(string xpath, string expected)
+    {
+        var result = Eval(xpath);
+        Assert.Equal(expected, result.ToString());
+    }
+
+    [Theory]
+    [InlineData("1 treat as xs:integer?", "1")]
+    public void EvaluateValue_Treat_Occurrence(string xpath, string expected)
+    {
+        var result = Eval(xpath);
+        Assert.Equal(expected, result.ToString());
+    }
+
+    [Fact]
+    public void EvaluateValue_Treat_Occurrence_EmptySequence()
+    {
+        var result = Eval("() treat as xs:integer?");
+        Assert.True(result.IsSequence || result.IsUndefined);
+        if (result.IsSequence)
+        {
+            int len = 0;
+            foreach (var _ in XdmSequence.FromSource(result.SequenceValue!))
+                len++;
+            Assert.Equal(0, len);
+        }
+    }
+
+    [Fact]
+    public void EvaluateValue_Treat_Occurrence_Fails()
+    {
+        Assert.Throws<InvalidOperationException>(() => Eval("() treat as xs:integer+"));
     }
 
     // ------------------------------------------------------------------

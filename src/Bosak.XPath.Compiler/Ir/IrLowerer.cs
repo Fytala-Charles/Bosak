@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Fixed function call argument packing into consecutive registers                        |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added Intersect, Except, and SimpleMap lowering                                        |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added Map/Array constructor and LookupWildcard lowering                                |
+//                      | Charles Korthout | 0.5   | 19-05-2026     | Lower occurrence indicators in type expressions to RegisterC                           |
+//                      | Charles Korthout | 0.6   | 19-05-2026     | Nested lowering for multi-binding for/some/every expressions                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -698,7 +700,7 @@ public sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         int poolIdx = AddToLiteralPool(typeName);
-        Emit(IrOpCode.Cast, (byte)resultReg, (byte)exprReg, operand: poolIdx);
+        Emit(IrOpCode.Cast, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
         return resultReg;
     }
 
@@ -708,7 +710,7 @@ public sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         int poolIdx = AddToLiteralPool(typeName);
-        Emit(IrOpCode.Castable, (byte)resultReg, (byte)exprReg, operand: poolIdx);
+        Emit(IrOpCode.Castable, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
         return resultReg;
     }
 
@@ -718,7 +720,7 @@ public sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         int poolIdx = AddToLiteralPool(typeName);
-        Emit(IrOpCode.InstanceOf, (byte)resultReg, (byte)exprReg, operand: poolIdx);
+        Emit(IrOpCode.InstanceOf, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
         return resultReg;
     }
 
@@ -728,7 +730,7 @@ public sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         int poolIdx = AddToLiteralPool(typeName);
-        Emit(IrOpCode.TreatAs, (byte)resultReg, (byte)exprReg, operand: poolIdx);
+        Emit(IrOpCode.TreatAs, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
         return resultReg;
     }
 
@@ -859,35 +861,38 @@ public sealed class IrLowerer
     private int LowerForExpression(ForExpressionNode node, int? targetReg)
     {
         int resultReg = targetReg ?? AllocRegister();
+        LowerForBindings(node.Bindings, 0, node.ReturnExpression, resultReg);
+        return resultReg;
+    }
 
-        if (node.Bindings.Count == 1)
+    private void LowerForBindings(IReadOnlyList<QuantifiedBinding> bindings, int index, XPathAstNode returnExpr, int resultReg)
+    {
+        var binding = bindings[index];
+        int seqReg = LowerNode(binding.Expression);
+
+        int forIdx = _instructions.Count;
+        Emit(IrOpCode.For, (byte)resultReg, (byte)seqReg, 0, 0);
+
+        int jumpIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+        int rhsEntry = _instructions.Count;
+        if (index == bindings.Count - 1)
         {
-            var binding = node.Bindings[0];
-            int seqReg = LowerNode(binding.Expression);
-
-            int forIdx = _instructions.Count;
-            Emit(IrOpCode.For, (byte)resultReg, (byte)seqReg, 0, 0);
-
-            int jumpIdx = _instructions.Count;
-            Emit(IrOpCode.Jump, 0, 0, 0, 0);
-
-            int rhsEntry = _instructions.Count;
-            int rhsReg = LowerNode(node.ReturnExpression);
+            int rhsReg = LowerNode(returnExpr);
             Emit(IrOpCode.Return, (byte)rhsReg);
-
-            int afterRhs = _instructions.Count;
-            var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
-            int poolIdx = AddToLiteralPool(info);
-            PatchInstruction(forIdx, IrOpCode.For, (byte)resultReg, (byte)seqReg, 0, poolIdx);
-            PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
-
-            return resultReg;
         }
         else
         {
-            // Multiple bindings - cartesian product not yet implemented
-            throw new NotSupportedException("Multi-binding for expressions are not yet supported.");
+            LowerForBindings(bindings, index + 1, returnExpr, resultReg);
+            Emit(IrOpCode.Return, (byte)resultReg);
         }
+
+        int afterRhs = _instructions.Count;
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
+        int poolIdx = AddToLiteralPool(info);
+        PatchInstruction(forIdx, IrOpCode.For, (byte)resultReg, (byte)seqReg, 0, poolIdx);
+        PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
     }
 
     private int LowerTryCatch(TryCatchNode node, int? targetReg)
@@ -920,36 +925,40 @@ public sealed class IrLowerer
     private int LowerQuantifiedExpression(QuantifiedExpressionNode node, int? targetReg)
     {
         int resultReg = targetReg ?? AllocRegister();
+        LowerQuantifiedBindings(node.Quantifier, node.Bindings, 0, node.SatisfiesExpression, resultReg);
+        return resultReg;
+    }
 
-        if (node.Bindings.Count == 1)
+    private void LowerQuantifiedBindings(QuantifierKind quantifier, IReadOnlyList<QuantifiedBinding> bindings, int index, XPathAstNode satisfiesExpr, int resultReg)
+    {
+        var binding = bindings[index];
+        int seqReg = LowerNode(binding.Expression);
+
+        IrOpCode opCode = quantifier == QuantifierKind.Some ? IrOpCode.Some : IrOpCode.Every;
+
+        int quantIdx = _instructions.Count;
+        Emit(opCode, (byte)resultReg, (byte)seqReg, 0, 0);
+
+        int jumpIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+        int rhsEntry = _instructions.Count;
+        if (index == bindings.Count - 1)
         {
-            var binding = node.Bindings[0];
-            int seqReg = LowerNode(binding.Expression);
-
-            IrOpCode opCode = node.Quantifier == QuantifierKind.Some ? IrOpCode.Some : IrOpCode.Every;
-
-            int quantIdx = _instructions.Count;
-            Emit(opCode, (byte)resultReg, (byte)seqReg, 0, 0);
-
-            int jumpIdx = _instructions.Count;
-            Emit(IrOpCode.Jump, 0, 0, 0, 0);
-
-            int rhsEntry = _instructions.Count;
-            int rhsReg = LowerNode(node.SatisfiesExpression);
+            int rhsReg = LowerNode(satisfiesExpr);
             Emit(IrOpCode.Return, (byte)rhsReg);
-
-            int afterRhs = _instructions.Count;
-            var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
-            int poolIdx = AddToLiteralPool(info);
-            PatchInstruction(quantIdx, opCode, (byte)resultReg, (byte)seqReg, 0, poolIdx);
-            PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
-
-            return resultReg;
         }
         else
         {
-            throw new NotSupportedException("Multi-binding quantified expressions are not yet supported.");
+            LowerQuantifiedBindings(quantifier, bindings, index + 1, satisfiesExpr, resultReg);
+            Emit(IrOpCode.Return, (byte)resultReg);
         }
+
+        int afterRhs = _instructions.Count;
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
+        int poolIdx = AddToLiteralPool(info);
+        PatchInstruction(quantIdx, opCode, (byte)resultReg, (byte)seqReg, 0, poolIdx);
+        PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
     }
 
     // ------------------------------------------------------------------

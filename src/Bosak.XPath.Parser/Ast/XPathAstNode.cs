@@ -12,8 +12,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added LookupWildcardNode                                                               |
+//                      | Charles Korthout | 0.3   | 19-05-2026     | Added OccurrenceIndicator to type expression nodes                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 
 namespace Bosak.XPath.Parser.Ast;
@@ -106,10 +108,10 @@ public sealed record UnaryExpressionNode(UnaryOperator Operator, XPathAstNode Op
 // Type expressions
 // ------------------------------------------------------------------
 
-public sealed record CastNode(XPathAstNode Expression, string TypeName, string? Prefix = null) : XPathAstNode;
-public sealed record CastableNode(XPathAstNode Expression, string TypeName, string? Prefix = null) : XPathAstNode;
-public sealed record InstanceOfNode(XPathAstNode Expression, string TypeName, string? Prefix = null) : XPathAstNode;
-public sealed record TreatNode(XPathAstNode Expression, string TypeName, string? Prefix = null) : XPathAstNode;
+public sealed record CastNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
+public sealed record CastableNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
+public sealed record InstanceOfNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
+public sealed record TreatNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // XPath 3.1 additions

@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Implemented string, sequence, and aggregate VM opcodes                                 |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added Intersect, Except, and SimpleMap VM handlers                                     |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added Map, Array, and Lookup VM handlers                                               |
+//                      | Charles Korthout | 0.5   | 19-05-2026     | Added occurrence indicator support for InstanceOf, Cast, Castable, TreatAs             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -21,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Bosak.XPath.Compiler.Ir;
+using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 
@@ -899,7 +901,21 @@ public static class VmEngine
                 case IrOpCode.Cast:
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
-                        registers[instr.RegisterA] = Cast(registers[instr.RegisterB], typeName);
+                        var occurrence = (OccurrenceIndicator)instr.RegisterC;
+                        var value = registers[instr.RegisterB];
+                        bool isEmpty = value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
+                        if (occurrence == OccurrenceIndicator.ZeroOrOne && isEmpty)
+                        {
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
+                        else if (occurrence is OccurrenceIndicator.ZeroOrMore or OccurrenceIndicator.OneOrMore)
+                        {
+                            throw new InvalidOperationException("Cannot cast to a sequence type with * or + occurrence indicator.");
+                        }
+                        else
+                        {
+                            registers[instr.RegisterA] = Cast(value, typeName);
+                        }
                         ip++;
                         break;
                     }
@@ -907,7 +923,22 @@ public static class VmEngine
                 case IrOpCode.Castable:
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
-                        bool castable = TryCast(registers[instr.RegisterB], typeName, out _);
+                        var occurrence = (OccurrenceIndicator)instr.RegisterC;
+                        var value = registers[instr.RegisterB];
+                        bool isEmpty = value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
+                        bool castable;
+                        if (occurrence == OccurrenceIndicator.ZeroOrOne && isEmpty)
+                        {
+                            castable = true;
+                        }
+                        else if (occurrence is OccurrenceIndicator.ZeroOrMore or OccurrenceIndicator.OneOrMore)
+                        {
+                            castable = false;
+                        }
+                        else
+                        {
+                            castable = TryCast(value, typeName, out _);
+                        }
                         registers[instr.RegisterA] = XdmValue.FromBoolean(castable);
                         ip++;
                         break;
@@ -916,17 +947,24 @@ public static class VmEngine
                 case IrOpCode.InstanceOf:
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
-                        bool instance = InstanceOf(registers[instr.RegisterB], typeName);
+                        var occurrence = (OccurrenceIndicator)instr.RegisterC;
+                        bool instance = InstanceOf(registers[instr.RegisterB], typeName, occurrence);
                         registers[instr.RegisterA] = XdmValue.FromBoolean(instance);
                         ip++;
                         break;
                     }
 
                 case IrOpCode.TreatAs:
-                    // TreatAs is a runtime assertion; for now, just pass through.
-                    registers[instr.RegisterA] = registers[instr.RegisterB];
-                    ip++;
-                    break;
+                    {
+                        string typeName = (string)literalPool[instr.Operand]!;
+                        var occurrence = (OccurrenceIndicator)instr.RegisterC;
+                        var value = registers[instr.RegisterB];
+                        if (!InstanceOf(value, typeName, occurrence))
+                            throw new InvalidOperationException($"Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
+                        registers[instr.RegisterA] = value;
+                        ip++;
+                        break;
+                    }
 
                 // ------------------------------------------------------------------
                 // Sequence functions
@@ -1918,10 +1956,56 @@ public static class VmEngine
         }
     }
 
-    private static bool InstanceOf(XdmValue value, string typeName)
+    private static bool InstanceOf(XdmValue value, string typeName, OccurrenceIndicator occurrence)
     {
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
 
+        if (normalized == "empty-sequence")
+            return value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
+
+        // Check cardinality
+        int count;
+        if (value.IsUndefined)
+            count = 0;
+        else if (!value.IsSequence)
+            count = 1;
+        else if (!TryGetSequenceLength(value.SequenceValue, out count))
+        {
+            // Materialize to count
+            count = 0;
+            foreach (var _ in XdmSequence.FromSource(value.SequenceValue!))
+                count++;
+        }
+
+        bool cardinalityOk = occurrence switch
+        {
+            OccurrenceIndicator.One => count == 1,
+            OccurrenceIndicator.ZeroOrOne => count <= 1,
+            OccurrenceIndicator.ZeroOrMore => true,
+            OccurrenceIndicator.OneOrMore => count >= 1,
+            _ => count == 1
+        };
+
+        if (!cardinalityOk)
+            return false;
+
+        if (count == 0)
+            return true;
+
+        // Check each item's type
+        if (!value.IsSequence)
+            return ItemInstanceOf(value, normalized);
+
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+        {
+            if (!ItemInstanceOf(item, normalized))
+                return false;
+        }
+        return true;
+    }
+
+    private static bool ItemInstanceOf(XdmValue value, string normalized)
+    {
         return normalized switch
         {
             "string" => value.Kind == XdmValueKind.String,
@@ -1935,7 +2019,6 @@ public static class VmEngine
             "time" => value.Kind == XdmValueKind.Time,
             "node" => value.IsNode,
             "item" => !value.IsUndefined,
-            "empty-sequence" => value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0),
             _ => false
         };
     }

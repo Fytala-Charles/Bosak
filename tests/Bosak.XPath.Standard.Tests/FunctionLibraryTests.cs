@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added numeric and node-name accessor tests                                               |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added date/time and fn:node-name tests                                                   |
+//                      | Charles Korthout | 0.4   | 19-05-2026     | Added arrow inline-function and multi-binding FLWOR tests                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1052,6 +1053,18 @@ public class FunctionLibraryTests
         Assert.Equal("HELLO", EvalStr("let $f := upper-case#1 return 'hello' => ($f)()"));
     }
 
+    [Fact]
+    public void Arrow_InlineFunctionTarget()
+    {
+        Assert.Equal("6", EvalStr("5 => function($x) { $x + 1 }()"));
+    }
+
+    [Fact]
+    public void Arrow_InlineFunctionTarget_WithArg()
+    {
+        Assert.Equal("15", EvalStr("10 => function($x, $y) { $x + $y }(5)"));
+    }
+
     // ------------------------------------------------------------------
     // Quantified expressions
     // ------------------------------------------------------------------
@@ -1121,6 +1134,67 @@ public class FunctionLibraryTests
     {
         // $x should not be visible after the some expression
         Assert.Throws<InvalidOperationException>(() => Evaluate("(some $x in (1, 2) satisfies $x > 0), $x"));
+    }
+
+    // ------------------------------------------------------------------
+    // Multi-binding FLWOR
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ForExpression_MultiBinding_Cartesian()
+    {
+        var result = EvalSequence("for $x in (1, 2), $y in (3, 4) return $x + $y");
+        Assert.Equal(new[] { "4", "5", "5", "6" }, result);
+    }
+
+    [Fact]
+    public void ForExpression_MultiBinding_EmptySequence()
+    {
+        var result = EvalSequence("for $x in (1, 2), $y in () return $x + $y");
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void ForExpression_MultiBinding_ThreeBindings()
+    {
+        var result = EvalSequence("for $x in (1), $y in (2), $z in (3) return $x + $y + $z");
+        Assert.Equal(new[] { "6" }, result);
+    }
+
+    [Fact]
+    public void Some_MultiBinding_True()
+    {
+        Assert.Equal("true", EvalStr("some $x in (1, 2), $y in (3, 4) satisfies $x < $y"));
+    }
+
+    [Fact]
+    public void Some_MultiBinding_False()
+    {
+        Assert.Equal("false", EvalStr("some $x in (5, 6), $y in (1, 2) satisfies $x < $y"));
+    }
+
+    [Fact]
+    public void Every_MultiBinding_True()
+    {
+        Assert.Equal("true", EvalStr("every $x in (1, 2), $y in (3, 4) satisfies $x < $y"));
+    }
+
+    [Fact]
+    public void Every_MultiBinding_False()
+    {
+        Assert.Equal("false", EvalStr("every $x in (1, 5), $y in (3, 4) satisfies $x < $y"));
+    }
+
+    [Fact]
+    public void For_MultiBinding_VariableDoesNotLeak()
+    {
+        Assert.Throws<InvalidOperationException>(() => Evaluate("(for $x in (1), $y in (2) return $x + $y), $x"));
+    }
+
+    [Fact]
+    public void For_MultiBinding_VariableDoesNotLeak_Y()
+    {
+        Assert.Throws<InvalidOperationException>(() => Evaluate("(for $x in (1), $y in (2) return $x + $y), $y"));
     }
 
     // ------------------------------------------------------------------
@@ -1386,6 +1460,19 @@ public class FunctionLibraryTests
     public void TryCatch_Nested()
     {
         Assert.Equal("outer", EvalStr("try { try { 'x' cast as xs:integer } catch * { 1 div 0 } } catch * { 'outer' }"));
+    }
+
+    [Fact]
+    public void Error_Caught()
+    {
+        Assert.Equal("caught", EvalStr("try { fn:error() } catch * { 'caught' }"));
+    }
+
+    [Fact]
+    public void Error_WithDescription()
+    {
+        var result = EvalStr("try { fn:error(QName('http://www.w3.org/2005/xqt-errors', 'FOER0000'), 'boom') } catch * { $err:description }");
+        Assert.Contains("boom", result);
     }
 
     // ------------------------------------------------------------------

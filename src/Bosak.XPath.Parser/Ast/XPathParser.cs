@@ -13,10 +13,13 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added SimpleMap (!) expression parsing                                                 |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added string literal lookup keys and LookupWildcardNode                                |
+//                      | Charles Korthout | 0.4   | 19-05-2026     | Parse sequence type occurrence indicators (*, +, ?)                                    |
+//                      | Charles Korthout | 0.5   | 19-05-2026     | Support inline functions as arrow expression targets                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Lexer;
 
@@ -426,8 +429,8 @@ public sealed class XPathParser
         if (Match(TokenKind.KeywordInstance))
         {
             Expect(TokenKind.KeywordOf);
-            var (typePrefix, typeLocal) = ParseTypeName();
-            return WithSpan(new InstanceOfNode(left, typeLocal, typePrefix), start, End);
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            return WithSpan(new InstanceOfNode(left, typeLocal, typePrefix, occurrence), start, End);
         }
         return left;
     }
@@ -440,8 +443,8 @@ public sealed class XPathParser
         if (Match(TokenKind.KeywordTreat))
         {
             Expect(TokenKind.KeywordAs);
-            var (typePrefix, typeLocal) = ParseTypeName();
-            return WithSpan(new TreatNode(left, typeLocal, typePrefix), start, End);
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            return WithSpan(new TreatNode(left, typeLocal, typePrefix, occurrence), start, End);
         }
         return left;
     }
@@ -454,8 +457,8 @@ public sealed class XPathParser
         if (Match(TokenKind.KeywordCastable))
         {
             Expect(TokenKind.KeywordAs);
-            var (typePrefix, typeLocal) = ParseTypeName();
-            return WithSpan(new CastableNode(left, typeLocal, typePrefix), start, End);
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            return WithSpan(new CastableNode(left, typeLocal, typePrefix, occurrence), start, End);
         }
         return left;
     }
@@ -468,8 +471,8 @@ public sealed class XPathParser
         if (Match(TokenKind.KeywordCast))
         {
             Expect(TokenKind.KeywordAs);
-            var (typePrefix, typeLocal) = ParseTypeName();
-            return WithSpan(new CastNode(left, typeLocal, typePrefix), start, End);
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            return WithSpan(new CastNode(left, typeLocal, typePrefix, occurrence), start, End);
         }
         return left;
     }
@@ -518,8 +521,9 @@ public sealed class XPathParser
         }
         if (Current.Kind == TokenKind.KeywordFunction)
         {
-            // Inline function as arrow target: not common, skip for now
-            throw new ParseException("Inline function as arrow target not yet supported", Current.Start);
+            var inlineFunc = ParseInlineFunction(start);
+            var args = ParseArgumentList();
+            return WithSpan(new DynamicFunctionCallNode(inlineFunc, args), start, End);
         }
         throw new ParseException("Expected function name, variable reference, or parenthesized expression after =>", Current.Start);
     }
@@ -1082,11 +1086,19 @@ public sealed class XPathParser
 
 
 
-    private (string? Prefix, string Local) ParseTypeName()
+    private (string? Prefix, string Local, OccurrenceIndicator Occurrence) ParseSequenceType()
     {
         var tok = Expect(TokenKind.Name);
         var name = GetString(tok);
-        return SplitQName(name);
+        var (prefix, local) = SplitQName(name);
+        OccurrenceIndicator occurrence = OccurrenceIndicator.One;
+        if (Match(TokenKind.Question))
+            occurrence = OccurrenceIndicator.ZeroOrOne;
+        else if (Match(TokenKind.Star))
+            occurrence = OccurrenceIndicator.ZeroOrMore;
+        else if (Match(TokenKind.Plus))
+            occurrence = OccurrenceIndicator.OneOrMore;
+        return (prefix, local, occurrence);
     }
 }
 

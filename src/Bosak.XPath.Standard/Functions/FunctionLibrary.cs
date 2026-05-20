@@ -1324,6 +1324,31 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.QName, XdmValueKind.Integer], ReturnType = XdmValueKind.Function,
                 Implementation = FunctionLookup
             },
+            // ----- fn:error ---------------------------------------------------
+            [(Namespaces.Fn, "error", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.Undefined,
+                Implementation = Error_0
+            },
+            [(Namespaces.Fn, "error", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 1,
+                ParameterTypes = [XdmValueKind.QName], ReturnType = XdmValueKind.Undefined,
+                Implementation = Error_1
+            },
+            [(Namespaces.Fn, "error", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 2,
+                ParameterTypes = [XdmValueKind.QName, XdmValueKind.String], ReturnType = XdmValueKind.Undefined,
+                Implementation = Error_2
+            },
+            [(Namespaces.Fn, "error", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 3,
+                ParameterTypes = [XdmValueKind.QName, XdmValueKind.String, XdmValueKind.Undefined], ReturnType = XdmValueKind.Undefined,
+                Implementation = Error_3
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -1772,6 +1797,22 @@ public static class FunctionLibrary
             return XdmValue.FromFunction(new NamedFunctionItem(sig.NamespaceUri, sig.LocalName, sig.Arity));
         return XdmValue.Undefined;
     }
+
+    // ------------------------------------------------------------------
+    // fn:error
+    // ------------------------------------------------------------------
+
+    private static XdmValue Error_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => throw new InvalidOperationException("fn:error() called");
+
+    private static XdmValue Error_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => throw new InvalidOperationException($"fn:error({args[0].QNameValue}) called");
+
+    private static XdmValue Error_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => throw new InvalidOperationException($"fn:error({args[0].QNameValue}): {args[1]}");
+
+    private static XdmValue Error_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => throw new InvalidOperationException($"fn:error({args[0].QNameValue}): {args[1]}");
 
     private static RegexOptions ParseRegexFlags(string flags, out bool isQuoteMode)
     {
