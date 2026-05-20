@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Added substring-before, substring-after, codepoints, parse-xml tests                     |
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Added predicate indexing optimization tests                                              |
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Fixed predicate indexing tests for single-item results                                   |
+//                      | Charles Korthout | 0.9   | 19-05-2026     | Added fn:analyze-string tests                                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1591,6 +1592,70 @@ public class FunctionLibraryTests
     {
         Assert.Equal("30", MaterializeResult("(10, 20, 30)[last()]")[0]);
         Assert.Equal("10", MaterializeResult("(10)[last()]")[0]);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:analyze-string
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void AnalyzeString_BasicMatch()
+    {
+        var result = Evaluate("analyze-string('The cat sat on the mat', 'c.t')");
+        Assert.True(result.IsNode);
+        var node = result.NodeValue;
+        Assert.Equal("analyze-string-result", node.LocalName);
+        Assert.Equal("http://www.w3.org/2005/xpath-functions", node.NamespaceUri);
+    }
+
+    [Fact]
+    public void AnalyzeString_NoMatch()
+    {
+        var result = Evaluate("analyze-string('hello world', 'xyz')");
+        Assert.True(result.IsNode);
+        var children = new List<string>();
+        foreach (var child in result.NodeValue.Children())
+            children.Add(child.NodeValue.LocalName);
+        Assert.Single(children);
+        Assert.Equal("non-match", children[0]);
+    }
+
+    [Fact]
+    public void AnalyzeString_EmptyInput()
+    {
+        var result = Evaluate("analyze-string('', 'test')");
+        Assert.True(result.IsNode);
+        var children = new List<string>();
+        foreach (var child in result.NodeValue.Children())
+            children.Add(child.NodeValue.LocalName);
+        Assert.Empty(children);
+    }
+
+    [Fact]
+    public void AnalyzeString_WithGroups()
+    {
+        var result = Evaluate("analyze-string('abc123def', '([a-z]+)([0-9]+)')");
+        Assert.True(result.IsNode);
+        var children = new List<string>();
+        foreach (var child in result.NodeValue.Children())
+            children.Add(child.NodeValue.LocalName);
+        Assert.Equal(2, children.Count); // match (abc123) + non-match (def)
+        Assert.Equal("match", children[0]);
+        Assert.Equal("non-match", children[1]);
+    }
+
+    [Fact]
+    public void AnalyzeString_WithFlags()
+    {
+        var result = Evaluate("analyze-string('HELLO hello', 'hello', 'i')");
+        Assert.True(result.IsNode);
+        var children = new List<string>();
+        foreach (var child in result.NodeValue.Children())
+            children.Add(child.NodeValue.LocalName);
+        Assert.Equal(3, children.Count); // match (HELLO) + non-match ( ) + match (hello)
+        Assert.Equal("match", children[0]);
+        Assert.Equal("non-match", children[1]);
+        Assert.Equal("match", children[2]);
     }
 
     // ------------------------------------------------------------------

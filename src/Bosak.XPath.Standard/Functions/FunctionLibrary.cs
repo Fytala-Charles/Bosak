@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 19-05-2026     | Added URI encoders and QName functions                                                   |
 //                      | Charles Korthout | 1.1   | 19-05-2026     | Added fn:doc and fn:collection with document identity caching                          |
 //                      | Charles Korthout | 1.2   | 19-05-2026     | Added substring-before, substring-after, string-to-codepoints, codepoints-to-string, parse-xml |
+//                      | Charles Korthout | 1.3   | 19-05-2026     | Added fn:analyze-string with regex group extraction                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -321,6 +322,22 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String],
                 ReturnType = XdmValueKind.Node,
                 Implementation = ParseXml_1
+            },
+
+            // ----- fn:analyze-string ------------------------------------------
+            [(Namespaces.Fn, "analyze-string", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "analyze-string", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Node,
+                Implementation = AnalyzeString_2
+            },
+            [(Namespaces.Fn, "analyze-string", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "analyze-string", Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Node,
+                Implementation = AnalyzeString_3
             },
 
             // ----- fn:contains ------------------------------------------------
@@ -1748,6 +1765,52 @@ public static class FunctionLibrary
             throw new InvalidOperationException("fn:parse-xml argument must not be empty.");
         var doc = XDocument.Parse(xml);
         return XdmValue.FromNode(doc.ToXdmNode());
+    }
+
+    private static XdmValue AnalyzeString_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => AnalyzeString(AtomizedString(args[0]), AtomizedString(args[1]), string.Empty);
+
+    private static XdmValue AnalyzeString_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => AnalyzeString(AtomizedString(args[0]), AtomizedString(args[1]), AtomizedString(args[2]));
+
+    private static XdmValue AnalyzeString(string value, string pattern, string flags)
+    {
+        XNamespace fn = "http://www.w3.org/2005/xpath-functions";
+        var result = new XElement(fn + "analyze-string-result");
+
+        if (string.IsNullOrEmpty(value))
+            return XdmValue.FromNode(new XDocumentNode(result));
+
+        var options = ParseRegexFlags(flags, out bool isQuoteMode);
+        if (isQuoteMode) pattern = Regex.Escape(pattern);
+
+        var matches = Regex.Matches(value, pattern, options);
+        int pos = 0;
+
+        foreach (Match match in matches)
+        {
+            if (match.Index > pos)
+                result.Add(new XElement(fn + "non-match", value[pos..match.Index]));
+
+            var matchEl = new XElement(fn + "match", match.Value);
+            for (int g = 1; g < match.Groups.Count; g++)
+            {
+                var group = match.Groups[g];
+                if (group.Success)
+                {
+                    var groupEl = new XElement(fn + "group", group.Value);
+                    groupEl.SetAttributeValue("nr", g);
+                    matchEl.Add(groupEl);
+                }
+            }
+            result.Add(matchEl);
+            pos = match.Index + match.Length;
+        }
+
+        if (pos < value.Length)
+            result.Add(new XElement(fn + "non-match", value[pos..]));
+
+        return XdmValue.FromNode(new XDocumentNode(result));
     }
 
     private static XdmValue Contains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
