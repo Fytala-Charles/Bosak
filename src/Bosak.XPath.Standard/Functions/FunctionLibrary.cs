@@ -1517,13 +1517,18 @@ public static class FunctionLibrary
         => XdmValue.FromString(AtomizedString(args[0]).ToLowerInvariant());
 
     private static XdmValue Matches_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(Regex.IsMatch(AtomizedString(args[0]), AtomizedString(args[1])));
+    {
+        string input = AtomizedString(args[0]);
+        string pattern = AtomizedString(args[1]);
+        return XdmValue.FromBoolean(Regex.IsMatch(input, pattern));
+    }
 
     private static XdmValue Matches_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
         string pattern = AtomizedString(args[1]);
-        var options = ParseRegexFlags(AtomizedString(args[2]));
+        var options = ParseRegexFlags(AtomizedString(args[2]), out bool isQuoteMode);
+        if (isQuoteMode) pattern = Regex.Escape(pattern);
         return XdmValue.FromBoolean(Regex.IsMatch(input, pattern, options));
     }
 
@@ -1540,7 +1545,8 @@ public static class FunctionLibrary
         string input = AtomizedString(args[0]);
         string pattern = AtomizedString(args[1]);
         string replacement = AtomizedString(args[2]);
-        var options = ParseRegexFlags(AtomizedString(args[3]));
+        var options = ParseRegexFlags(AtomizedString(args[3]), out bool isQuoteMode);
+        if (isQuoteMode) pattern = Regex.Escape(pattern);
         return XdmValue.FromString(Regex.Replace(input, pattern, replacement, options));
     }
 
@@ -1548,28 +1554,51 @@ public static class FunctionLibrary
     {
         string input = AtomizedString(args[0]);
         string pattern = AtomizedString(args[1]);
-        var tokens = Regex.Split(input, pattern)
-            .Where(t => !string.IsNullOrEmpty(t))
-            .Select(XdmValue.FromString)
-            .ToList();
-        return XdmValue.FromSequence(MaterializedSequence.FromList(tokens));
+        return DoTokenize(input, pattern, string.Empty);
     }
 
     private static XdmValue Tokenize_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
         string pattern = AtomizedString(args[1]);
-        var options = ParseRegexFlags(AtomizedString(args[2]));
-        var tokens = Regex.Split(input, pattern, options)
-            .Where(t => !string.IsNullOrEmpty(t))
-            .Select(XdmValue.FromString)
-            .ToList();
-        return XdmValue.FromSequence(MaterializedSequence.FromList(tokens));
+        string flags = AtomizedString(args[2]);
+        return DoTokenize(input, pattern, flags);
     }
 
-    private static RegexOptions ParseRegexFlags(string flags)
+    private static XdmValue DoTokenize(string input, string pattern, string flags)
+    {
+        if (string.IsNullOrEmpty(input))
+            return XdmValue.FromSequence(XdmSequence.Empty);
+
+        var options = ParseRegexFlags(flags, out bool isQuoteMode);
+        if (isQuoteMode) pattern = Regex.Escape(pattern);
+
+        if (Regex.IsMatch(string.Empty, pattern, options))
+            throw new InvalidOperationException("fn:tokenize: pattern must not match the empty string");
+
+        var parts = Regex.Split(input, pattern, options);
+        var result = new List<XdmValue>();
+
+        // Strip leading empty strings
+        int start = 0;
+        while (start < parts.Length && parts[start].Length == 0)
+            start++;
+
+        // Strip trailing empty strings
+        int end = parts.Length;
+        while (end > start && parts[end - 1].Length == 0)
+            end--;
+
+        for (int i = start; i < end; i++)
+            result.Add(XdmValue.FromString(parts[i]));
+
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static RegexOptions ParseRegexFlags(string flags, out bool isQuoteMode)
     {
         var options = RegexOptions.None;
+        isQuoteMode = false;
         foreach (char c in flags)
         {
             switch (c)
@@ -1578,6 +1607,8 @@ public static class FunctionLibrary
                 case 'm': options |= RegexOptions.Multiline; break;
                 case 's': options |= RegexOptions.Singleline; break;
                 case 'x': options |= RegexOptions.IgnorePatternWhitespace; break;
+                case 'q': isQuoteMode = true; break;
+                default: throw new InvalidOperationException($"Unknown regex flag: '{c}'");
             }
         }
         return options;

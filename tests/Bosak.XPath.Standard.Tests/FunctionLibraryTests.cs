@@ -1124,6 +1124,83 @@ public class FunctionLibraryTests
     }
 
     // ------------------------------------------------------------------
+    // Regex functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Matches_BasicTrue() => Assert.Equal("true", EvalStr("matches('hello', 'e')"));
+
+    [Fact]
+    public void Matches_BasicFalse() => Assert.Equal("false", EvalStr("matches('hello', 'z')"));
+
+    [Fact]
+    public void Matches_Anchor() => Assert.Equal("false", EvalStr("matches('hello', '^e$')"));
+
+    [Fact]
+    public void Matches_FlagsCaseInsensitive() => Assert.Equal("true", EvalStr("matches('HELLO', 'hello', 'i')"));
+
+    [Fact]
+    public void Matches_FlagsDotAll() => Assert.Equal("true", EvalStr("matches('a\nb', 'a.b', 's')"));
+
+    [Fact]
+    public void Matches_FlagsQuoteMode() => Assert.Equal("true", EvalStr("matches('a.b', 'a.b', 'q')"));
+
+    [Fact]
+    public void Replace_Basic() => Assert.Equal("aXc", EvalStr("replace('abc', 'b', 'X')"));
+
+    [Fact]
+    public void Replace_CaptureGroup() => Assert.Equal("b-a", EvalStr("replace('a-b', '(.+)-(.+)', '$2-$1')"));
+
+    [Fact]
+    public void Replace_FlagsQuoteMode() => Assert.Equal("aXb", EvalStr("replace('a.b', '.', 'X', 'q')"));
+
+    [Fact]
+    public void Tokenize_Basic()
+    {
+        var result = EvalSequence("tokenize('a,b,c', ',')");
+        Assert.Equal(3, result.Length);
+        Assert.Equal("a", result[0]);
+        Assert.Equal("b", result[1]);
+        Assert.Equal("c", result[2]);
+    }
+
+    [Fact]
+    public void Tokenize_EmptyInput()
+    {
+        var result = EvalSequence("tokenize('', ',')");
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void Tokenize_LeadingTrailingSeparators()
+    {
+        var result = EvalSequence("tokenize(',a,b,c,', ',')");
+        Assert.Equal(3, result.Length);
+        Assert.Equal("a", result[0]);
+        Assert.Equal("b", result[1]);
+        Assert.Equal("c", result[2]);
+    }
+
+    [Fact]
+    public void Tokenize_DoubleSeparators()
+    {
+        var result = EvalSequence("tokenize('a,,b', ',')");
+        Assert.Equal(3, result.Length);
+        Assert.Equal("a", result[0]);
+        Assert.Equal("", result[1]);
+        Assert.Equal("b", result[2]);
+    }
+
+    [Fact]
+    public void Tokenize_Whitespace()
+    {
+        var result = EvalSequence("tokenize('  a  b  ', '\\s+')");
+        Assert.Equal(2, result.Length);
+        Assert.Equal("a", result[0]);
+        Assert.Equal("b", result[1]);
+    }
+
+    // ------------------------------------------------------------------
     // Higher-order functions
     // ------------------------------------------------------------------
 
