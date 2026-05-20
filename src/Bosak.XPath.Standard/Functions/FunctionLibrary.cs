@@ -1214,6 +1214,116 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = ForEachPair_3
             },
+            // ----- xs:* constructor functions ---------------------------------
+            [(Namespaces.Xs, "string", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "string", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsString
+            },
+            [(Namespaces.Xs, "integer", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "integer", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsInteger
+            },
+            [(Namespaces.Xs, "decimal", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "decimal", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Decimal,
+                Implementation = XsDecimal
+            },
+            [(Namespaces.Xs, "double", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "double", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Double,
+                Implementation = XsDouble
+            },
+            [(Namespaces.Xs, "float", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "float", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Float,
+                Implementation = XsFloat
+            },
+            [(Namespaces.Xs, "boolean", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "boolean", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Boolean,
+                Implementation = XsBoolean
+            },
+            [(Namespaces.Xs, "dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "dateTime", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.DateTime,
+                Implementation = XsDateTime
+            },
+            [(Namespaces.Xs, "date", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "date", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Date,
+                Implementation = XsDate
+            },
+            [(Namespaces.Xs, "time", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "time", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Time,
+                Implementation = XsTime
+            },
+            // ----- math:* functions -------------------------------------------
+            [(Namespaces.Math, "pi", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "pi", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.Double,
+                Implementation = MathPi
+            },
+            [(Namespaces.Math, "sin", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "sin", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathSin
+            },
+            [(Namespaces.Math, "cos", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "cos", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathCos
+            },
+            [(Namespaces.Math, "tan", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "tan", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathTan
+            },
+            [(Namespaces.Math, "pow", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "pow", Arity = 2,
+                ParameterTypes = [XdmValueKind.Double, XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathPow
+            },
+            [(Namespaces.Math, "sqrt", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "sqrt", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathSqrt
+            },
+            [(Namespaces.Math, "exp", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "exp", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathExp
+            },
+            [(Namespaces.Math, "log", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "log", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathLog
+            },
+            [(Namespaces.Fn, "function-lookup", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "function-lookup", Arity = 2,
+                ParameterTypes = [XdmValueKind.QName, XdmValueKind.Integer], ReturnType = XdmValueKind.Function,
+                Implementation = FunctionLookup
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -1593,6 +1703,74 @@ public static class FunctionLibrary
             result.Add(XdmValue.FromString(parts[i]));
 
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    // ------------------------------------------------------------------
+    // xs:* constructor functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue XsString(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "string");
+
+    private static XdmValue XsInteger(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "integer");
+
+    private static XdmValue XsDecimal(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "decimal");
+
+    private static XdmValue XsDouble(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "double");
+
+    private static XdmValue XsFloat(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "float");
+
+    private static XdmValue XsBoolean(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "boolean");
+
+    private static XdmValue XsDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "dateTime");
+
+    private static XdmValue XsDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "date");
+
+    private static XdmValue XsTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "time");
+
+    // ------------------------------------------------------------------
+    // math:* functions
+    // ------------------------------------------------------------------
+
+    private static XdmValue MathPi(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDouble(Math.PI);
+
+    private static XdmValue MathSin(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDouble(Math.Sin(ToDoubleValue(args[0])));
+
+    private static XdmValue MathCos(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDouble(Math.Cos(ToDoubleValue(args[0])));
+
+    private static XdmValue MathTan(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDouble(Math.Tan(ToDoubleValue(args[0])));
+
+    private static XdmValue MathPow(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDouble(Math.Pow(ToDoubleValue(args[0]), ToDoubleValue(args[1])));
+
+    private static XdmValue MathSqrt(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDouble(Math.Sqrt(ToDoubleValue(args[0])));
+
+    private static XdmValue MathExp(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDouble(Math.Exp(ToDoubleValue(args[0])));
+
+    private static XdmValue MathLog(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromDouble(Math.Log(ToDoubleValue(args[0])));
+
+    private static XdmValue FunctionLookup(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var qname = args[0].QNameValue;
+        int arity = (int)args[1].IntegerValue;
+        if (ctx.TryResolveFunction(qname.NamespaceUri, qname.LocalName, arity, out var sig))
+            return XdmValue.FromFunction(new NamedFunctionItem(sig.NamespaceUri, sig.LocalName, sig.Arity));
+        return XdmValue.Undefined;
     }
 
     private static RegexOptions ParseRegexFlags(string flags, out bool isQuoteMode)
@@ -2658,6 +2836,7 @@ file static class Namespaces
     public const string Math = "http://www.w3.org/2005/xpath-functions/math";
     public const string Map = "http://www.w3.org/2005/xpath-functions/map";
     public const string Array = "http://www.w3.org/2005/xpath-functions/array";
+    public const string Xs = "http://www.w3.org/2001/XMLSchema";
 }
 
 

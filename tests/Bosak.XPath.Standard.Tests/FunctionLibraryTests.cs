@@ -1201,6 +1201,156 @@ public class FunctionLibraryTests
     }
 
     // ------------------------------------------------------------------
+    // Casting and type system
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void CastAs_String() => Assert.Equal("42", EvalStr("42 cast as xs:string"));
+
+    [Fact]
+    public void CastAs_Integer() => Assert.Equal("42", EvalStr("'42' cast as xs:integer"));
+
+    [Fact]
+    public void CastAs_Decimal()
+    {
+        var result = Evaluate("'3.14' cast as xs:decimal");
+        Assert.Equal(XdmValueKind.Decimal, result.Kind);
+        Assert.Equal(3.14m, result.DecimalValue);
+    }
+
+    [Fact]
+    public void CastAs_Double()
+    {
+        var result = Evaluate("'3.14' cast as xs:double");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(3.14, result.DoubleValue, precision: 2);
+    }
+
+    [Fact]
+    public void CastAs_Boolean() => Assert.Equal("true", EvalStr("1 cast as xs:boolean"));
+
+    [Fact]
+    public void CastAs_DateTime()
+    {
+        var result = Evaluate("'2024-01-15T10:30:00' cast as xs:dateTime");
+        Assert.Equal(XdmValueKind.DateTime, result.Kind);
+        var dt = result.DateTimeValue;
+        Assert.Equal(2024, dt.Year);
+        Assert.Equal(1, dt.Month);
+        Assert.Equal(15, dt.Day);
+        Assert.Equal(10, dt.Hour);
+        Assert.Equal(30, dt.Minute);
+    }
+
+    [Fact]
+    public void CastAs_Date()
+    {
+        var result = Evaluate("'2024-01-15' cast as xs:date");
+        Assert.Equal(XdmValueKind.Date, result.Kind);
+        Assert.Equal(new DateTimeOffset(2024, 1, 15, 0, 0, 0, TimeSpan.Zero).Date, result.DateValue.Date);
+    }
+
+    [Fact]
+    public void CastAs_Time()
+    {
+        var result = Evaluate("'10:30:00' cast as xs:time");
+        Assert.Equal(XdmValueKind.Time, result.Kind);
+        var dt = result.TimeValue;
+        Assert.Equal(10, dt.Hour);
+        Assert.Equal(30, dt.Minute);
+        Assert.Equal(0, dt.Second);
+    }
+
+    [Fact]
+    public void CastAs_DateTimeToDate()
+    {
+        var result = Evaluate("'2024-01-15T10:30:00' cast as xs:date");
+        Assert.Equal(XdmValueKind.Date, result.Kind);
+        Assert.Equal(new DateTimeOffset(2024, 1, 15, 0, 0, 0, TimeSpan.Zero).Date, result.DateValue.Date);
+    }
+
+    [Fact]
+    public void CastableAs_True() => Assert.Equal("true", EvalStr("'42' castable as xs:integer"));
+
+    [Fact]
+    public void CastableAs_False() => Assert.Equal("false", EvalStr("'hello' castable as xs:integer"));
+
+    [Fact]
+    public void InstanceOf_Integer() => Assert.Equal("true", EvalStr("42 instance of xs:integer"));
+
+    [Fact]
+    public void InstanceOf_String() => Assert.Equal("true", EvalStr("'hello' instance of xs:string"));
+
+    [Fact]
+    public void InstanceOf_Boolean() => Assert.Equal("true", EvalStr("true() instance of xs:boolean"));
+
+    [Fact]
+    public void Constructor_XsInteger() => Assert.Equal("42", EvalStr("xs:integer('42')"));
+
+    [Fact]
+    public void Constructor_XsString() => Assert.Equal("42", EvalStr("xs:string(42)"));
+
+    [Fact]
+    public void Constructor_XsBoolean() => Assert.Equal("true", EvalStr("xs:boolean(1)"));
+
+    [Fact]
+    public void Constructor_XsDate()
+    {
+        var result = Evaluate("xs:date('2024-06-01')");
+        Assert.Equal(XdmValueKind.Date, result.Kind);
+        Assert.Equal(new DateTimeOffset(2024, 6, 1, 0, 0, 0, TimeSpan.Zero).Date, result.DateValue.Date);
+    }
+
+    // ------------------------------------------------------------------
+    // Math functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Math_Pi()
+    {
+        var result = Evaluate("math:pi()");
+        Assert.Equal(Math.PI, result.DoubleValue, precision: 10);
+    }
+
+    [Fact]
+    public void Math_Sin() => Assert.Equal("0", EvalStr("math:sin(0)"));
+
+    [Fact]
+    public void Math_Cos() => Assert.Equal("1", EvalStr("math:cos(0)"));
+
+    [Fact]
+    public void Math_Tan() => Assert.Equal("0", EvalStr("math:tan(0)"));
+
+    [Fact]
+    public void Math_Pow() => Assert.Equal("8", EvalStr("math:pow(2, 3)"));
+
+    [Fact]
+    public void Math_Sqrt() => Assert.Equal("3", EvalStr("math:sqrt(9)"));
+
+    [Fact]
+    public void Math_Exp() => Assert.Equal("1", EvalStr("math:exp(0)"));
+
+    [Fact]
+    public void Math_Log() => Assert.Equal("0", EvalStr("math:log(1)"));
+
+    // ------------------------------------------------------------------
+    // function-lookup
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void FunctionLookup_Found()
+    {
+        Assert.Equal("7", EvalStr("let $f := function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'abs'), 1) return $f(-7)"));
+    }
+
+    [Fact]
+    public void FunctionLookup_NotFound()
+    {
+        var result = Evaluate("function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'nonexistent'), 1)");
+        Assert.True(result.IsUndefined);
+    }
+
+    // ------------------------------------------------------------------
     // Higher-order functions
     // ------------------------------------------------------------------
 

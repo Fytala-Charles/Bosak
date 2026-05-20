@@ -1790,14 +1790,14 @@ public static class VmEngine
     // Type operations
     // ------------------------------------------------------------------
 
-    private static XdmValue Cast(XdmValue value, string typeName)
+    public static XdmValue Cast(XdmValue value, string typeName)
     {
         if (!TryCast(value, typeName, out var result))
             throw new InvalidOperationException($"Cannot cast '{value}' to {typeName}.");
         return result;
     }
 
-    private static bool TryCast(XdmValue value, string typeName, out XdmValue result)
+    public static bool TryCast(XdmValue value, string typeName, out XdmValue result)
     {
         result = value;
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
@@ -1852,6 +1852,47 @@ public static class VmEngine
                 result = XdmValue.FromBoolean(value.EffectiveBooleanValue());
                 return true;
 
+            case "datetime":
+                if (value.Kind == XdmValueKind.DateTime)
+                    return true;
+                if (DateTimeOffset.TryParse(value.ToString(), out var dtoDt))
+                {
+                    result = XdmValue.FromDateTime(dtoDt);
+                    return true;
+                }
+                return false;
+
+            case "date":
+                if (value.Kind == XdmValueKind.Date)
+                    return true;
+                if (value.Kind == XdmValueKind.DateTime)
+                {
+                    result = XdmValue.FromDate(value.DateTimeValue.Date);
+                    return true;
+                }
+                if (DateTimeOffset.TryParse(value.ToString(), out var dtoD))
+                {
+                    result = XdmValue.FromDate(dtoD.Date);
+                    return true;
+                }
+                return false;
+
+            case "time":
+                if (value.Kind == XdmValueKind.Time)
+                    return true;
+                if (value.Kind == XdmValueKind.DateTime)
+                {
+                    var dt = value.DateTimeValue;
+                    result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Offset));
+                    return true;
+                }
+                if (DateTimeOffset.TryParse(value.ToString(), out var dtoT))
+                {
+                    result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dtoT.Hour, dtoT.Minute, dtoT.Second, dtoT.Millisecond, dtoT.Offset));
+                    return true;
+                }
+                return false;
+
             default:
                 return false;
         }
@@ -1869,6 +1910,9 @@ public static class VmEngine
             "double" => value.Kind == XdmValueKind.Double,
             "float" => value.Kind == XdmValueKind.Float,
             "boolean" => value.Kind == XdmValueKind.Boolean,
+            "datetime" => value.Kind == XdmValueKind.DateTime,
+            "date" => value.Kind == XdmValueKind.Date,
+            "time" => value.Kind == XdmValueKind.Time,
             "node" => value.IsNode,
             "item" => !value.IsUndefined,
             "empty-sequence" => value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0),
