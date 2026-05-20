@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 19-05-2026     | Added substring-before, substring-after, string-to-codepoints, codepoints-to-string, parse-xml |
 //                      | Charles Korthout | 1.3   | 19-05-2026     | Added fn:analyze-string with regex group extraction                                    |
 //                      | Charles Korthout | 1.4   | 19-05-2026     | Added fn:serialize                                                                     |
+//                      | Charles Korthout | 1.5   | 19-05-2026     | Added fn:trace, fn:boolean, fn:zero-or-one, fn:one-or-more, fn:exactly-one, fn:base-uri, fn:document-uri |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -1433,6 +1434,79 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
                 Implementation = Collection_1
             },
+            // ----- fn:trace ---------------------------------------------------
+            [(Namespaces.Fn, "trace", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "trace", Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.String],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Trace_2
+            },
+
+            // ----- fn:boolean -------------------------------------------------
+            [(Namespaces.Fn, "boolean", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "boolean", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Boolean_1
+            },
+
+            // ----- fn:zero-or-one / fn:one-or-more / fn:exactly-one -----------
+            [(Namespaces.Fn, "zero-or-one", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "zero-or-one", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = ZeroOrOne_1
+            },
+            [(Namespaces.Fn, "one-or-more", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "one-or-more", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = OneOrMore_1
+            },
+            [(Namespaces.Fn, "exactly-one", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "exactly-one", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = ExactlyOne_1
+            },
+
+            // ----- fn:base-uri ------------------------------------------------
+            [(Namespaces.Fn, "base-uri", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "base-uri", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = BaseUri_0
+            },
+            [(Namespaces.Fn, "base-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "base-uri", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.String,
+                Implementation = BaseUri_1
+            },
+
+            // ----- fn:document-uri --------------------------------------------
+            [(Namespaces.Fn, "document-uri", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "document-uri", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = DocumentUri_0
+            },
+            [(Namespaces.Fn, "document-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "document-uri", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.String,
+                Implementation = DocumentUri_1
+            },
+
             [(Namespaces.Fn, "error", 0)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 0,
@@ -2094,6 +2168,128 @@ public static class FunctionLibrary
 
     private static XdmValue Error_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => throw new InvalidOperationException($"fn:error({args[0].QNameValue}): {args[1]}");
+
+    private static XdmValue Trace_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = args[0];
+        var label = args[1].ToString();
+        System.Diagnostics.Trace.WriteLine($"[{label}] {value}");
+        return value;
+    }
+
+    private static XdmValue Boolean_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromBoolean(args[0].EffectiveBooleanValue());
+
+    private static bool IsEmptySequence(XdmValue value)
+    {
+        if (value.IsUndefined) return true;
+        if (!value.IsSequence) return false;
+        foreach (var _ in XdmSequence.FromSource(value.SequenceValue!))
+            return false;
+        return true;
+    }
+
+    private static int SequenceLength(XdmValue value)
+    {
+        if (value.IsUndefined) return 0;
+        if (!value.IsSequence) return 1;
+        int count = 0;
+        foreach (var _ in XdmSequence.FromSource(value.SequenceValue!))
+        {
+            count++;
+            if (count > 2) return count; // Don't need exact count past 2
+        }
+        return count;
+    }
+
+    private static XdmValue ZeroOrOne_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            return XdmValue.Undefined;
+        if (!arg.IsSequence)
+            return arg;
+        if (SequenceLength(arg) > 1)
+            throw new InvalidOperationException("fn:zero-or-one called with a sequence containing more than one item.");
+        return XdmValue.Undefined;
+    }
+
+    private static XdmValue OneOrMore_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            throw new InvalidOperationException("fn:one-or-more called with an empty sequence.");
+        if (!arg.IsSequence)
+            return arg;
+        return arg;
+    }
+
+    private static XdmValue ExactlyOne_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            throw new InvalidOperationException("fn:exactly-one called with an empty sequence.");
+        if (!arg.IsSequence)
+            return arg;
+        XdmValue first = default;
+        int count = 0;
+        foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
+        {
+            first = item;
+            count++;
+            if (count > 1)
+                throw new InvalidOperationException("fn:exactly-one called with a sequence containing more than one item.");
+        }
+        if (count == 0)
+            throw new InvalidOperationException("fn:exactly-one called with an empty sequence.");
+        return first;
+    }
+
+    private static XdmValue BaseUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined || !item.IsNode)
+            throw new InvalidOperationException("fn:base-uri() called with no context item or context item is not a node.");
+        var uri = item.NodeValue!.BaseUri;
+        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+    }
+
+    private static XdmValue BaseUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.Undefined;
+        if (!arg.IsNode)
+            throw new InvalidOperationException("fn:base-uri() argument is not a node.");
+        var uri = arg.NodeValue!.BaseUri;
+        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+    }
+
+    private static XdmValue DocumentUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined || !item.IsNode)
+            throw new InvalidOperationException("fn:document-uri() called with no context item or context item is not a node.");
+        var node = item.NodeValue!;
+        if (node.NodeKind != XdmNodeKind.Document)
+            return XdmValue.Undefined;
+        var uri = node.BaseUri;
+        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+    }
+
+    private static XdmValue DocumentUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.Undefined;
+        if (!arg.IsNode)
+            throw new InvalidOperationException("fn:document-uri() argument is not a node.");
+        var node = arg.NodeValue!;
+        if (node.NodeKind != XdmNodeKind.Document)
+            return XdmValue.Undefined;
+        var uri = node.BaseUri;
+        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+    }
 
     private static RegexOptions ParseRegexFlags(string flags, out bool isQuoteMode)
     {

@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 19-05-2026     | Added fn:analyze-string tests                                                          |
 //                      | Charles Korthout | 1.0   | 19-05-2026     | Added document-node path traversal tests                                               |
 //                      | Charles Korthout | 1.1   | 19-05-2026     | Added fn:serialize tests                                                               |
+//                      | Charles Korthout | 1.2   | 19-05-2026     | Added fn:trace, fn:boolean, cardinality, fn:base-uri, fn:document-uri tests            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1854,5 +1855,106 @@ public class FunctionLibraryTests
         {
             System.IO.Directory.Delete(tempDir, true);
         }
+    }
+
+    // ------------------------------------------------------------------
+    // fn:trace
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Trace_ReturnsValue()
+    {
+        Assert.Equal("42", EvalStr("trace(42, 'label')"));
+    }
+
+    [Fact]
+    public void Trace_Sequence()
+    {
+        var result = Evaluate("trace((1,2,3), 'seq')");
+        Assert.True(result.IsSequence);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:boolean
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Boolean_True()
+    {
+        Assert.Equal("true", EvalStr("boolean(1)"));
+        Assert.Equal("true", EvalStr("boolean('hello')"));
+        Assert.Equal("true", EvalStr("boolean((1,2))"));
+    }
+
+    [Fact]
+    public void Boolean_False()
+    {
+        Assert.Equal("false", EvalStr("boolean(0)"));
+        Assert.Equal("false", EvalStr("boolean('')"));
+        Assert.Equal("false", EvalStr("boolean(())"));
+    }
+
+    // ------------------------------------------------------------------
+    // fn:zero-or-one / fn:one-or-more / fn:exactly-one
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ZeroOrOne_Empty() => Assert.True(Evaluate("zero-or-one(())").IsUndefined);
+
+    [Fact]
+    public void ZeroOrOne_Singleton() => Assert.Equal("42", EvalStr("zero-or-one(42)"));
+
+    [Fact]
+    public void ZeroOrOne_Multi() => Assert.Throws<InvalidOperationException>(() => Evaluate("zero-or-one((1,2))"));
+
+    [Fact]
+    public void OneOrMore_Empty() => Assert.Throws<InvalidOperationException>(() => Evaluate("one-or-more(())"));
+
+    [Fact]
+    public void OneOrMore_Singleton() => Assert.Equal("42", EvalStr("one-or-more(42)"));
+
+    [Fact]
+    public void OneOrMore_Multi()
+    {
+        var result = Evaluate("one-or-more((1,2))");
+        Assert.True(result.IsSequence);
+    }
+
+    [Fact]
+    public void ExactlyOne_Empty() => Assert.Throws<InvalidOperationException>(() => Evaluate("exactly-one(())"));
+
+    [Fact]
+    public void ExactlyOne_Singleton() => Assert.Equal("42", EvalStr("exactly-one(42)"));
+
+    [Fact]
+    public void ExactlyOne_Multi() => Assert.Throws<InvalidOperationException>(() => Evaluate("exactly-one((1,2))"));
+
+    // ------------------------------------------------------------------
+    // fn:base-uri / fn:document-uri
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void BaseUri_ParseXmlDocument()
+    {
+        // parse-xml creates a dynamic document with no known base URI
+        Assert.True(Evaluate("base-uri(parse-xml('<a/>'))").IsUndefined);
+    }
+
+    [Fact]
+    public void BaseUri_ParseXmlElement()
+    {
+        Assert.True(Evaluate("base-uri(parse-xml('<a/>')/a[1])").IsUndefined);
+    }
+
+    [Fact]
+    public void DocumentUri_ParseXmlDocument()
+    {
+        Assert.True(Evaluate("document-uri(parse-xml('<a/>'))").IsUndefined);
+    }
+
+    [Fact]
+    public void DocumentUri_ElementReturnsUndefined()
+    {
+        Assert.True(Evaluate("document-uri(parse-xml('<a/>')/a[1])").IsUndefined);
     }
 }

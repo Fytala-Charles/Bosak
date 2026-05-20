@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Fixed Prefix resolution and implemented namespace axis                                 |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Implemented ToXmlString for fn:serialize                                               |
+//                      | Charles Korthout | 0.4   | 19-05-2026     | Implemented BaseUri property for fn:base-uri and fn:document-uri                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -131,6 +132,8 @@ public sealed class XDocumentNode : IXdmNode
             return map.TryGetValue(_node, out var idx) ? idx : 0;
         }
     }
+
+    public string BaseUri => _node.BaseUri ?? string.Empty;
 
     // ------------------------------------------------------------------
     // Tree navigation
