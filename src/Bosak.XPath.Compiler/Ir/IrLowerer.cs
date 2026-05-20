@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added Map/Array constructor and LookupWildcard lowering                                |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Lower occurrence indicators in type expressions to RegisterC                           |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Nested lowering for multi-binding for/some/every expressions                           |
+//                      | Charles Korthout | 0.7   | 19-05-2026     | Unwrap PredicateNode in LowerPostfixPredicate for Subscript/Last compilation           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -563,7 +564,8 @@ public sealed class IrLowerer
     private int LowerPostfixPredicate(PostfixPredicateNode node, int? targetReg)
     {
         int baseReg = LowerNode(node.Expression);
-        int resultReg = EmitPredicateFilter(baseReg, node.Predicate);
+        var predExpr = node.Predicate is PredicateNode pn ? pn.Expression : node.Predicate;
+        int resultReg = EmitPredicateFilter(baseReg, predExpr);
 
         if (targetReg.HasValue && targetReg.Value != resultReg)
         {
