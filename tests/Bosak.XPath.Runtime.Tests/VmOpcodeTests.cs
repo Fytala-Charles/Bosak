@@ -150,7 +150,7 @@ public class VmOpcodeTests
                 new IrInstruction(IrOpCode.Return, 0)
             },
             new object?[] { 10L, 2L });
-        Assert.Equal(5, result.IntegerValue);
+        Assert.Equal(5.0m, result.DecimalValue);
     }
 
     // ------------------------------------------------------------------

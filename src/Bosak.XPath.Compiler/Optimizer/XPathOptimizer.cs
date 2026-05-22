@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added OptimizeLookupWildcard                                                           |
+//                      | Charles Korthout | 0.3   | 21-05-2026     | Integer div constant fold produces DecimalLiteralNode (XPath div semantics)            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -93,7 +94,7 @@ public sealed class XPathOptimizer
                 BinaryOperator.Plus => new IntegerLiteralNode(li.Value + ri.Value),
                 BinaryOperator.Minus => new IntegerLiteralNode(li.Value - ri.Value),
                 BinaryOperator.Multiply => new IntegerLiteralNode(li.Value * ri.Value),
-                BinaryOperator.Divide => new IntegerLiteralNode(li.Value / ri.Value),
+                BinaryOperator.Divide => new DecimalLiteralNode((decimal)li.Value / (decimal)ri.Value),
                 BinaryOperator.Idiv => new IntegerLiteralNode(li.Value / ri.Value),
                 BinaryOperator.Mod => new IntegerLiteralNode(li.Value % ri.Value),
                 BinaryOperator.Eq => new BooleanLiteralNode(li.Value == ri.Value),

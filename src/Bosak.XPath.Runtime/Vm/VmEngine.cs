@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added Map, Array, and Lookup VM handlers                                               |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added occurrence indicator support for InstanceOf, Cast, Castable, TreatAs             |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Optimized Subscript, First, Last VM handlers to avoid full sequence materialization    |
+//                      | Charles Korthout | 0.7   | 21-05-2026     | Divide opcode returns decimal for integer operands (XPath div semantics)               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1864,9 +1865,8 @@ public static class VmEngine
     {
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
-        if (IsDecimal(left) || IsDecimal(right))
-            return XdmValue.FromDecimal(ToDecimal(left) / ToDecimal(right));
-        return XdmValue.FromInteger(ToInteger(left) / ToInteger(right));
+        // XPath div always returns decimal (or double), never integer
+        return XdmValue.FromDecimal(ToDecimal(left) / ToDecimal(right));
     }
 
     private static XdmValue IntegerDivide(XdmValue left, XdmValue right)

@@ -163,7 +163,7 @@ public class VmEngineTests
     public void Eval_Division()
     {
         var result = Evaluate("20 div 4");
-        Assert.Equal(5, result.IntegerValue);
+        Assert.Equal(5.0m, result.DecimalValue);
     }
 
     [Fact]

@@ -64,8 +64,8 @@ public class OptimizerTests
     [Fact]
     public void FoldInteger_Division()
     {
-        var node = AssertOptimized<IntegerLiteralNode>("20 div 4");
-        Assert.Equal(5, node.Value);
+        var node = AssertOptimized<DecimalLiteralNode>("20 div 4");
+        Assert.Equal(5.0m, node.Value);
     }
 
     [Fact]
@@ -327,8 +327,8 @@ public class OptimizerTests
     [Fact]
     public void Complex_FoldAllConstants()
     {
-        // (2 + 3) * (10 div 2) = 5 * 5 = 25
-        var node = AssertOptimized<IntegerLiteralNode>("(2 + 3) * (10 div 2)");
+        // (2 + 3) * (4 + 1) = 5 * 5 = 25
+        var node = AssertOptimized<IntegerLiteralNode>("(2 + 3) * (4 + 1)");
         Assert.Equal(25, node.Value);
     }
 }
