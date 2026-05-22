@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 22-05-2026     | Added decimal-format parsing from QT3 test environments                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -18,6 +19,7 @@ using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
+using DecimalFormat = Bosak.XPath.Runtime.Vm.DecimalFormat;
 
 namespace Bosak.XPath.Conformance;
 
@@ -26,6 +28,7 @@ internal sealed class TestEnvironment
     public List<SourceDocument> Sources { get; } = new();
     public List<NamespaceBinding> Namespaces { get; } = new();
     public List<ExternalParameter> Parameters { get; } = new();
+    public List<DecimalFormatEntry> DecimalFormats { get; } = new();
     public string? BaseUri { get; set; }
 
     public static TestEnvironment FromElement(XElement element, string suitePath, string baseDir)
@@ -75,6 +78,75 @@ internal sealed class TestEnvironment
             env.BaseUri = (string?)staticBaseUri.Attribute("uri");
         }
 
+        foreach (var dfElem in element.Elements(ns + "decimal-format"))
+        {
+            var format = new DecimalFormat();
+
+            string? decSep = (string?)dfElem.Attribute("decimal-separator");
+            if (!string.IsNullOrEmpty(decSep)) format.DecimalSeparator = decSep;
+
+            string? grpSep = (string?)dfElem.Attribute("grouping-separator");
+            if (!string.IsNullOrEmpty(grpSep)) format.GroupingSeparator = grpSep;
+
+            string? digit = (string?)dfElem.Attribute("digit");
+            if (!string.IsNullOrEmpty(digit)) format.Digit = digit;
+
+            string? zeroDigit = (string?)dfElem.Attribute("zero-digit");
+            if (!string.IsNullOrEmpty(zeroDigit)) format.ZeroDigit = zeroDigit;
+
+            string? patSep = (string?)dfElem.Attribute("pattern-separator");
+            if (!string.IsNullOrEmpty(patSep)) format.PatternSeparator = patSep;
+
+            string? minus = (string?)dfElem.Attribute("minus-sign");
+            if (!string.IsNullOrEmpty(minus)) format.MinusSign = minus;
+
+            string? pct = (string?)dfElem.Attribute("percent");
+            if (!string.IsNullOrEmpty(pct)) format.Percent = pct;
+
+            string? permille = (string?)dfElem.Attribute("per-mille");
+            if (!string.IsNullOrEmpty(permille)) format.PerMille = permille;
+
+            string? infinity = (string?)dfElem.Attribute("infinity");
+            if (!string.IsNullOrEmpty(infinity)) format.Infinity = infinity;
+
+            string? nan = (string?)dfElem.Attribute("NaN");
+            if (!string.IsNullOrEmpty(nan)) format.NaN = nan;
+
+            string? expSep = (string?)dfElem.Attribute("exponent-separator");
+            if (!string.IsNullOrEmpty(expSep)) format.ExponentSeparator = expSep;
+
+            string? name = (string?)dfElem.Attribute("name");
+            string? resolvedLocalName = name;
+            string? resolvedNamespace = "";
+
+            if (!string.IsNullOrEmpty(name) && name.Contains(':'))
+            {
+                int colon = name.IndexOf(':');
+                string prefix = name.Substring(0, colon);
+                string local = name.Substring(colon + 1);
+                var nsAttr = dfElem.Attributes()
+                    .FirstOrDefault(a => a.Name.NamespaceName == "http://www.w3.org/2000/xmlns/" && a.Name.LocalName == prefix);
+                if (nsAttr is not null)
+                {
+                    resolvedNamespace = nsAttr.Value;
+                    resolvedLocalName = local;
+                }
+                else
+                {
+                    // Try inherited namespace from environment
+                    var inheritedNs = element.Attributes()
+                        .FirstOrDefault(a => a.Name.NamespaceName == "http://www.w3.org/2000/xmlns/" && a.Name.LocalName == prefix);
+                    if (inheritedNs is not null)
+                    {
+                        resolvedNamespace = inheritedNs.Value;
+                        resolvedLocalName = local;
+                    }
+                }
+            }
+
+            env.DecimalFormats.Add(new DecimalFormatEntry(resolvedLocalName ?? "", resolvedNamespace ?? "", format));
+        }
+
         return env;
     }
 
@@ -107,6 +179,18 @@ internal sealed class TestEnvironment
             ctx.BaseUri = BaseUri;
         }
 
+        foreach (var df in DecimalFormats)
+        {
+            if (string.IsNullOrEmpty(df.Name))
+            {
+                ctx.DefaultDecimalFormat = df.Format;
+            }
+            else
+            {
+                ctx.WithDecimalFormat(df.Name, df.NamespaceUri, df.Format);
+            }
+        }
+
         // Note: External parameters are not yet supported; they require evaluating the select expression
         return ctx;
     }
@@ -115,3 +199,4 @@ internal sealed class TestEnvironment
 internal sealed record SourceDocument(string Role, string FilePath, string? Uri);
 internal sealed record NamespaceBinding(string Prefix, string Uri);
 internal sealed record ExternalParameter(string Name, string SelectExpression);
+internal sealed record DecimalFormatEntry(string Name, string NamespaceUri, DecimalFormat Format);

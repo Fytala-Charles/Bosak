@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.6   | 21-05-2026     | Fixed fn:deep-equal numeric cross-type, NaN, sequence, map key comparison              |
 //                      | Charles Korthout | 1.7   | 21-05-2026     | Fixed fn:distinct-values to use deep-equal semantics; fixed xs:boolean string cast     |
 //                      | Charles Korthout | 1.8   | 22-05-2026     | Fixed fn:base-uri/fn:document-uri empty sequence, type errors, fn:id atomization        |
+//                      | Charles Korthout | 1.9   | 22-05-2026     | Added fn:format-number#2/#3 with grammar-based picture parser                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -1313,6 +1314,22 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Integer, XdmValueKind.String, XdmValueKind.String],
                 ReturnType = XdmValueKind.String,
                 Implementation = FormatInteger_3
+            },
+
+            // ----- fn:format-number -------------------------------------------
+            [(Namespaces.Fn, "format-number", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-number", Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = FormatNumber_2
+            },
+            [(Namespaces.Fn, "format-number", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-number", Arity = 3,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = FormatNumber_3
             },
 
             // ----- fn:adjust-date-to-timezone ---------------------------------
@@ -4936,6 +4953,56 @@ public static class FunctionLibrary
 
     private static XdmValue FormatInteger_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatInteger(ctx, args[0], AtomizedString(args[1]), AtomizedString(args[2]));
+
+    private static XdmValue FormatNumber_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (args[1].Kind != XdmValueKind.String)
+            throw new InvalidOperationException("XPTY0004");
+        return FormatNumber(ctx, args[0], AtomizedString(args[1]), null);
+    }
+
+    private static XdmValue FormatNumber_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (args[1].Kind != XdmValueKind.String)
+            throw new InvalidOperationException("XPTY0004");
+        if (!args[2].IsUndefined && !args[2].IsSequence && args[2].Kind != XdmValueKind.String)
+            throw new InvalidOperationException("XPTY0004");
+        return FormatNumber(ctx, args[0], AtomizedString(args[1]), AtomizedString(args[2]));
+    }
+
+    private static XdmValue FormatNumber(EvaluationContext ctx, XdmValue value, string picture, string? formatName)
+    {
+        value = AtomizeValue(value);
+
+        var format = string.IsNullOrEmpty(formatName)
+            ? ctx.DefaultDecimalFormat
+            : ResolveDecimalFormat(ctx, formatName);
+
+        if (format == null)
+            throw new InvalidOperationException("FODF1280");
+
+        string result = FormatNumberEngine.Format(value, picture, format);
+        return XdmValue.FromString(result);
+    }
+
+    private static DecimalFormat? ResolveDecimalFormat(EvaluationContext ctx, string name)
+    {
+        name = name.Trim();
+
+        // EQName syntax
+        if (name.StartsWith("Q{"))
+        {
+            int end = name.IndexOf('}');
+            if (end > 2)
+            {
+                string ns = name.Substring(2, end - 2);
+                string local = name.Substring(end + 1);
+                return ctx.GetDecimalFormat(local) ?? ctx.GetDecimalFormat(local, ns);
+            }
+        }
+
+        return ctx.GetDecimalFormat(name);
+    }
 
     private static XdmValue FormatInteger(EvaluationContext ctx, XdmValue value, string picture, string? language)
     {

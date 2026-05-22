@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added document cache and loader for fn:doc / fn:collection                             |
 //                      | Charles Korthout | 0.3   | 22-05-2026     | Added stable current-dateTime/date/time snapshot                                       |
+//                      | Charles Korthout | 0.4   | 22-05-2026     | Added decimal-format support for fn:format-number                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -47,6 +48,10 @@ public sealed class EvaluationContext
     // Stable snapshot for current-dateTime / current-date / current-time
     private DateTimeOffset? _currentDateTimeSnapshot;
 
+    // Decimal formats for fn:format-number
+    private DecimalFormat _defaultDecimalFormat = new();
+    private readonly Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> _namedDecimalFormats;
+
     public EvaluationContext()
     {
         _contextItem = XdmValue.Undefined;
@@ -65,6 +70,7 @@ public sealed class EvaluationContext
         };
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
         _documentCache = new Dictionary<string, IXdmNode>();
+        _namedDecimalFormats = new Dictionary<(string, string), DecimalFormat>();
     }
 
     /// <summary>
@@ -156,6 +162,64 @@ public sealed class EvaluationContext
 
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
         => _functions.TryGetValue((namespaceUri, localName, arity), out signature!);
+
+    // ------------------------------------------------------------------
+    // Decimal Formats
+    // ------------------------------------------------------------------
+
+    public DecimalFormat DefaultDecimalFormat
+    {
+        get => _defaultDecimalFormat;
+        set => _defaultDecimalFormat = value;
+    }
+
+    public EvaluationContext WithDecimalFormat(string? name, DecimalFormat format)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            _defaultDecimalFormat = format;
+        }
+        else
+        {
+            _namedDecimalFormats[(name, "")] = format;
+        }
+        return this;
+    }
+
+    public EvaluationContext WithDecimalFormat(string localName, string namespaceUri, DecimalFormat format)
+    {
+        _namedDecimalFormats[(localName, namespaceUri)] = format;
+        return this;
+    }
+
+    public DecimalFormat? GetDecimalFormat(string name)
+    {
+        // Try empty namespace first (local name)
+        if (_namedDecimalFormats.TryGetValue((name, ""), out var fmt))
+            return fmt;
+
+        // Try as prefixed name: resolve prefix using namespaces
+        if (name.Contains(':'))
+        {
+            int colon = name.IndexOf(':');
+            string prefix = name.Substring(0, colon);
+            string local = name.Substring(colon + 1);
+            if (TryResolveNamespace(prefix, out var ns))
+            {
+                if (_namedDecimalFormats.TryGetValue((local, ns), out fmt))
+                    return fmt;
+            }
+        }
+
+        return null;
+    }
+
+    public DecimalFormat? GetDecimalFormat(string localName, string namespaceUri)
+    {
+        if (_namedDecimalFormats.TryGetValue((localName, namespaceUri), out var fmt))
+            return fmt;
+        return null;
+    }
 
     /// <summary>
     /// Returns a stable snapshot of the current date/time for the lifetime of this context.
