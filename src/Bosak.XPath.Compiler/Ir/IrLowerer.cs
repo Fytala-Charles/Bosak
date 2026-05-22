@@ -1084,7 +1084,8 @@ public sealed class IrLowerer
         var module = subLowerer.Lower(node.Body);
 
         var paramNames = node.Parameters.Select(p => p.Name).ToList();
-        var funcItem = new CompilerInlineFunction(paramNames, module);
+        var paramTypes = node.Parameters.Select(p => p.TypeName).ToList();
+        var funcItem = new CompilerInlineFunction(paramNames, module, paramTypes, node.ReturnType);
         int poolIdx = AddToLiteralPool(funcItem);
         Emit(IrOpCode.LoadFunction, (byte)resultReg, operand: poolIdx);
         return resultReg;

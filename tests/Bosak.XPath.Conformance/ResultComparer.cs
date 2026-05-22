@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 21-05-2026     | assert-true/assert-false unwrap singleton sequences                                    |
+//                      | Charles Korthout | 0.3   | 22-05-2026     | Fixed ValuesEqual cross-type numeric comparison (Integer vs Double/Float)            |
+//                      | Charles Korthout | 0.4   | 22-05-2026     | Added Duration serialization and type matching for dayTimeDuration/yearMonthDuration  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -89,7 +91,7 @@ internal static class ResultComparer
             "assert-empty" => CompareAssertEmpty(actual, caughtException),
             "error" => CompareError((string?)assertion.Attribute("code") ?? "", caughtException),
             "assert-type" => CompareAssertType(assertion.Value, actual, caughtException),
-            "assert-xml" => new TestOutcome(TestOutcomeKind.Skipped, "assert-xml not yet implemented"),
+            "assert-xml" => CompareAssertXml(assertion, actual, caughtException),
             "assert-deep-eq" => CompareAssertDeepEq(assertion, actual, caughtException),
             "all-of" => CompareAllOf(assertion.Elements(), actual, caughtException),
             "any-of" => CompareAnyOf(assertion.Elements(), actual, caughtException),
@@ -220,13 +222,30 @@ internal static class ResultComparer
             return true;
 
         // Numeric value comparison: decimals may differ in trailing zeros (13 vs 13.0)
-        if (a.Kind == XdmValueKind.Decimal && b.Kind == XdmValueKind.Decimal)
-            return a.DecimalValue == b.DecimalValue;
-        if ((a.Kind == XdmValueKind.Double || a.Kind == XdmValueKind.Float) &&
-            (b.Kind == XdmValueKind.Double || b.Kind == XdmValueKind.Float))
-            return a.DoubleValue == b.DoubleValue;
-        if (a.Kind == XdmValueKind.Integer && b.Kind == XdmValueKind.Integer)
-            return a.IntegerValue == b.IntegerValue;
+        bool aIsNumeric = a.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+        bool bIsNumeric = b.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+        if (aIsNumeric && bIsNumeric)
+        {
+            bool aIsNaN = a.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(a.DoubleValue);
+            bool bIsNaN = b.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(b.DoubleValue);
+            if (aIsNaN && bIsNaN) return true;
+            if (aIsNaN || bIsNaN) return false;
+
+            if (a.Kind == XdmValueKind.Decimal || b.Kind == XdmValueKind.Decimal)
+            {
+                decimal da = a.Kind == XdmValueKind.Decimal ? a.DecimalValue
+                           : a.Kind == XdmValueKind.Integer ? a.IntegerValue
+                           : (decimal)a.DoubleValue;
+                decimal db = b.Kind == XdmValueKind.Decimal ? b.DecimalValue
+                           : b.Kind == XdmValueKind.Integer ? b.IntegerValue
+                           : (decimal)b.DoubleValue;
+                return da == db;
+            }
+
+            double dva = a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.DoubleValue;
+            double dvb = b.Kind == XdmValueKind.Integer ? b.IntegerValue : b.DoubleValue;
+            return dva == dvb;
+        }
 
         return false;
     }
@@ -299,6 +318,8 @@ internal static class ResultComparer
                 return value.HasTimezone
                     ? FormatUtcOffset(value.TimeValue.ToString("HH:mm:ss.FFFFFFFzzz", System.Globalization.CultureInfo.InvariantCulture))
                     : value.TimeValue.ToString("HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture);
+            if (value.Kind == XdmValueKind.Duration)
+                return value.DurationValue;
             return value.ToString();
         }
         return value.ToString();
@@ -383,7 +404,7 @@ internal static class ResultComparer
             "datetime" => item.Kind == XdmValueKind.DateTime,
             "date" => item.Kind == XdmValueKind.Date,
             "time" => item.Kind == XdmValueKind.Time,
-            "duration" => item.Kind == XdmValueKind.Duration,
+            "duration" or "daytimeduration" or "yearmonthduration" => item.Kind == XdmValueKind.Duration,
             "qname" => item.Kind == XdmValueKind.QName,
             "node" => item.IsNode,
             "anyatomictype" => item.IsAtomic,
@@ -485,6 +506,87 @@ internal static class ResultComparer
             result.Add(value);
         }
         return result;
+    }
+
+    private static TestOutcome CompareAssertXml(XElement assertion, XdmValue actual, Exception? caughtException)
+    {
+        if (caughtException is not null)
+            return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
+
+        string expectedXml = assertion.Value;
+        string actualXml = SerializeToXml(actual);
+
+        bool ignorePrefixes = (string?)assertion.Attribute("ignore-prefixes") == "true";
+
+        string expectedNorm = NormalizeXml(expectedXml, ignorePrefixes);
+        string actualNorm = NormalizeXml(actualXml, ignorePrefixes);
+
+        if (expectedNorm == actualNorm)
+            return new TestOutcome(TestOutcomeKind.Passed, null);
+
+        return new TestOutcome(TestOutcomeKind.Failed,
+            $"assert-xml failed. Expected: {expectedNorm}, Got: {actualNorm}");
+    }
+
+    private static string SerializeToXml(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return "";
+
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var parts = new List<string>();
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                parts.Add(SerializeSingleToXml(item));
+            return string.Join("", parts);
+        }
+
+        return SerializeSingleToXml(value);
+    }
+
+    private static string SerializeSingleToXml(XdmValue value)
+    {
+        if (value.IsNode)
+            return value.NodeValue?.ToXmlString() ?? "";
+        return SerializeSingle(value);
+    }
+
+    private static string NormalizeXml(string xml, bool ignorePrefixes)
+    {
+        if (string.IsNullOrWhiteSpace(xml))
+            return "";
+
+        try
+        {
+            var doc = XDocument.Parse(xml);
+            if (ignorePrefixes)
+                StripNamespaceDeclarations(doc.Root!);
+            return doc.ToString(SaveOptions.DisableFormatting);
+        }
+        catch
+        {
+            // If not a valid document (e.g., fragment), try as element
+            try
+            {
+                var el = XElement.Parse(xml);
+                if (ignorePrefixes)
+                    StripNamespaceDeclarations(el);
+                return el.ToString(SaveOptions.DisableFormatting);
+            }
+            catch
+            {
+                return xml;
+            }
+        }
+    }
+
+    private static void StripNamespaceDeclarations(XElement element)
+    {
+        var nsAttrs = element.Attributes().Where(a => a.IsNamespaceDeclaration).ToList();
+        foreach (var attr in nsAttrs)
+            attr.Remove();
+        foreach (var child in element.Elements())
+            StripNamespaceDeclarations(child);
     }
 
     private static bool DeepEqual(XdmValue a, XdmValue b)

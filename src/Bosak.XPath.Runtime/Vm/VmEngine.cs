@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Optimized Subscript, First, Last VM handlers to avoid full sequence materialization    |
 //                      | Charles Korthout | 0.7   | 21-05-2026     | Divide opcode returns decimal for integer operands (XPath div semantics)               |
 //                      | Charles Korthout | 0.8   | 21-05-2026     | MapAdd uses XdmValue keys with numeric promotion; fixed xs:boolean string cast         |
+//                      | Charles Korthout | 0.9   | 22-05-2026     | ItemInstanceOf recognizes duration, dayTimeDuration, yearMonthDuration                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1442,7 +1443,7 @@ public static class VmEngine
                             NamedFunctionItem named => named,
                             CurriedFunctionItem curried => curried,
                             InlineFunctionItem inline => inline,
-                            CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body),
+                            CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body, cif.ParameterTypes, cif.ReturnType),
                             ValueTuple<string, int> namedTuple => ResolveNamedFunctionTuple(namedTuple, context),
                             _ => throw new InvalidOperationException($"Unknown function item type: {raw.GetType().Name}")
                         };
@@ -1651,6 +1652,34 @@ public static class VmEngine
 
             case InlineFunctionItem inline:
                 {
+                    // Validate parameter types
+                    for (int i = 0; i < inline.Parameters.Count; i++)
+                    {
+                        var expectedType = i < inline.ParameterTypes.Count ? inline.ParameterTypes[i] : null;
+                        if (!string.IsNullOrEmpty(expectedType))
+                        {
+                            var arg = i < args.Length ? args[i] : XdmValue.Undefined;
+                            if (!arg.IsUndefined)
+                            {
+                                if (arg.IsSequence)
+                                {
+                                    int count = 0;
+                                    XdmValue first = default;
+                                    foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
+                                    {
+                                        count++;
+                                        if (count == 1) first = item;
+                                    }
+                                    if (count > 1)
+                                        throw new InvalidOperationException("XPTY0004");
+                                    arg = count == 1 ? first : XdmValue.Undefined;
+                                }
+                                if (!arg.IsUndefined && !ValueMatchesType(arg, expectedType))
+                                    throw new InvalidOperationException("XPTY0004");
+                            }
+                        }
+                    }
+
                     var saved = new (string Name, bool Had, XdmValue Value)[inline.Parameters.Count];
                     for (int i = 0; i < inline.Parameters.Count; i++)
                     {
@@ -1661,7 +1690,42 @@ public static class VmEngine
                     }
                     try
                     {
-                        return Execute(inline.Body, context);
+                        var result = Execute(inline.Body, context);
+                        // Validate return type
+                        if (!string.IsNullOrEmpty(inline.ReturnType))
+                        {
+                            bool matches;
+                            if (result.IsUndefined)
+                            {
+                                matches = inline.ReturnType.Trim().EndsWith('?') || inline.ReturnType.Trim().EndsWith('*');
+                            }
+                            else if (result.IsSequence)
+                            {
+                                int count = 0;
+                                matches = true;
+                                foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+                                {
+                                    count++;
+                                    if (!ValueMatchesType(item, inline.ReturnType))
+                                    {
+                                        matches = false;
+                                        break;
+                                    }
+                                }
+                                if (matches && count > 1 &&
+                                    !(inline.ReturnType.Trim().EndsWith('*') || inline.ReturnType.Trim().EndsWith('+')))
+                                {
+                                    matches = false;
+                                }
+                            }
+                            else
+                            {
+                                matches = ValueMatchesType(result, inline.ReturnType);
+                            }
+                            if (!matches)
+                                throw new InvalidOperationException("XPTY0004");
+                        }
+                        return result;
                     }
                     finally
                     {
@@ -1839,10 +1903,14 @@ public static class VmEngine
     private static XdmValue Add(XdmValue left, XdmValue right)
     {
         // Date/Time + Duration
-        if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && right.Kind == XdmValueKind.String)
+        if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
             return AddDuration(left, right.ToString());
-        if (right.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && left.Kind == XdmValueKind.String)
+        if (right.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (left.Kind == XdmValueKind.String || left.Kind == XdmValueKind.Duration))
             return AddDuration(right, left.ToString());
+
+        // Duration + Duration
+        if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
+            return AddDurations(left, right);
 
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
@@ -1897,13 +1965,18 @@ public static class VmEngine
     private static XdmValue Subtract(XdmValue left, XdmValue right)
     {
         if (left.Kind == XdmValueKind.Date && right.Kind == XdmValueKind.Date)
-            return XdmValue.FromString(FormatDuration(left.DateValue - right.DateValue));
+            return XdmValue.FromDuration(FormatDuration(left.DateValue - right.DateValue));
         if (left.Kind == XdmValueKind.DateTime && right.Kind == XdmValueKind.DateTime)
-            return XdmValue.FromString(FormatDuration(left.DateTimeValue - right.DateTimeValue));
+            return XdmValue.FromDuration(FormatDuration(left.DateTimeValue - right.DateTimeValue));
         if (left.Kind == XdmValueKind.Time && right.Kind == XdmValueKind.Time)
-            return XdmValue.FromString(FormatDuration(left.TimeValue - right.TimeValue));
-        if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && right.Kind == XdmValueKind.String)
+            return XdmValue.FromDuration(FormatDuration(left.TimeValue - right.TimeValue));
+        if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
             return SubtractDuration(left, right.ToString());
+
+        // Duration - Duration
+        if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
+            return SubtractDurations(left, right);
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
         if (IsDecimal(left) || IsDecimal(right))
@@ -2046,8 +2119,142 @@ public static class VmEngine
         return s.StartsWith('P') && (s.Contains('D') || s.Contains('T'));
     }
 
+    private static XdmValue AddDurations(XdmValue left, XdmValue right)
+    {
+        var l = left.DurationValue;
+        var r = right.DurationValue;
+        if (IsYearMonthDurationString(l) && IsYearMonthDurationString(r))
+        {
+            var (y1, m1, _, _, _, _) = ParseDuration(l);
+            var (y2, m2, _, _, _, _) = ParseDuration(r);
+            long totalMonths = y1 * 12 + m1 + y2 * 12 + m2;
+            return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths));
+        }
+        if (IsDayTimeDurationString(l) && IsDayTimeDurationString(r))
+        {
+            var (_, _, d1, h1, min1, s1) = ParseDuration(l);
+            var (_, _, d2, h2, min2, s2) = ParseDuration(r);
+            long totalTicks = (d1 + d2) * TimeSpan.TicksPerDay
+                + (h1 + h2) * TimeSpan.TicksPerHour
+                + (min1 + min2) * TimeSpan.TicksPerMinute
+                + (long)((s1 + s2) * TimeSpan.TicksPerSecond);
+            return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+        }
+        throw new InvalidOperationException("XPTY0004");
+    }
+
+    private static XdmValue SubtractDurations(XdmValue left, XdmValue right)
+    {
+        var l = left.DurationValue;
+        var r = right.DurationValue;
+        if (IsYearMonthDurationString(l) && IsYearMonthDurationString(r))
+        {
+            var (y1, m1, _, _, _, _) = ParseDuration(l);
+            var (y2, m2, _, _, _, _) = ParseDuration(r);
+            long totalMonths = y1 * 12 + m1 - (y2 * 12 + m2);
+            return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths));
+        }
+        if (IsDayTimeDurationString(l) && IsDayTimeDurationString(r))
+        {
+            var (_, _, d1, h1, min1, s1) = ParseDuration(l);
+            var (_, _, d2, h2, min2, s2) = ParseDuration(r);
+            long totalTicks = (d1 - d2) * TimeSpan.TicksPerDay
+                + (h1 - h2) * TimeSpan.TicksPerHour
+                + (min1 - min2) * TimeSpan.TicksPerMinute
+                + (long)((s1 - s2) * TimeSpan.TicksPerSecond);
+            return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+        }
+        throw new InvalidOperationException("XPTY0004");
+    }
+
+    private static XdmValue MultiplyDuration(XdmValue duration, XdmValue factor)
+    {
+        var d = duration.DurationValue;
+        double f = ToDouble(factor);
+        if (IsYearMonthDurationString(d))
+        {
+            var (y, m, _, _, _, _) = ParseDuration(d);
+            long totalMonths = (long)Math.Round((y * 12 + m) * f);
+            return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths));
+        }
+        if (IsDayTimeDurationString(d))
+        {
+            var (_, _, days, hours, minutes, seconds) = ParseDuration(d);
+            decimal totalSeconds = (days * 86400m + hours * 3600m + minutes * 60m + seconds) * (decimal)f;
+            long totalTicks = (long)(totalSeconds * TimeSpan.TicksPerSecond);
+            return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+        }
+        throw new InvalidOperationException("XPTY0004");
+    }
+
+    private static XdmValue DivideDuration(XdmValue duration, XdmValue divisor)
+    {
+        var d = duration.DurationValue;
+        double div = ToDouble(divisor);
+        if (IsYearMonthDurationString(d))
+        {
+            var (y, m, _, _, _, _) = ParseDuration(d);
+            long totalMonths = (long)Math.Round((y * 12 + m) / div);
+            return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths));
+        }
+        if (IsDayTimeDurationString(d))
+        {
+            var (_, _, days, hours, minutes, seconds) = ParseDuration(d);
+            decimal totalSeconds = (days * 86400m + hours * 3600m + minutes * 60m + seconds) / (decimal)div;
+            long totalTicks = (long)(totalSeconds * TimeSpan.TicksPerSecond);
+            return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+        }
+        throw new InvalidOperationException("XPTY0004");
+    }
+
+    private static string FormatYearMonthDuration(long totalMonths)
+    {
+        bool negative = totalMonths < 0;
+        totalMonths = Math.Abs(totalMonths);
+        long years = totalMonths / 12;
+        long months = totalMonths % 12;
+        var sb = new System.Text.StringBuilder();
+        if (negative) sb.Append('-');
+        sb.Append('P');
+        if (years > 0) sb.Append($"{years}Y");
+        if (months > 0) sb.Append($"{months}M");
+        if (years == 0 && months == 0) sb.Append("0M");
+        return sb.ToString();
+    }
+
+    private static XdmValue DivideDurationByDuration(XdmValue left, XdmValue right)
+    {
+        var l = left.DurationValue;
+        var r = right.DurationValue;
+        if (IsYearMonthDurationString(l) && IsYearMonthDurationString(r))
+        {
+            var (y1, m1, _, _, _, _) = ParseDuration(l);
+            var (y2, m2, _, _, _, _) = ParseDuration(r);
+            decimal totalMonths1 = y1 * 12m + m1;
+            decimal totalMonths2 = y2 * 12m + m2;
+            if (totalMonths2 == 0) throw new InvalidOperationException("FODT0002");
+            return XdmValue.FromDecimal(totalMonths1 / totalMonths2);
+        }
+        if (IsDayTimeDurationString(l) && IsDayTimeDurationString(r))
+        {
+            var (_, _, d1, h1, min1, s1) = ParseDuration(l);
+            var (_, _, d2, h2, min2, s2) = ParseDuration(r);
+            decimal totalSeconds1 = d1 * 86400m + h1 * 3600m + min1 * 60m + s1;
+            decimal totalSeconds2 = d2 * 86400m + h2 * 3600m + min2 * 60m + s2;
+            if (totalSeconds2 == 0) throw new InvalidOperationException("FODT0002");
+            return XdmValue.FromDecimal(totalSeconds1 / totalSeconds2);
+        }
+        throw new InvalidOperationException("XPTY0004");
+    }
+
     private static XdmValue Multiply(XdmValue left, XdmValue right)
     {
+        // Duration * number or number * Duration
+        if (left.Kind == XdmValueKind.Duration)
+            return MultiplyDuration(left, right);
+        if (right.Kind == XdmValueKind.Duration)
+            return MultiplyDuration(right, left);
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) * ToDouble(right));
         if (IsDecimal(left) || IsDecimal(right))
@@ -2057,6 +2264,14 @@ public static class VmEngine
 
     private static XdmValue Divide(XdmValue left, XdmValue right)
     {
+        // Duration div number
+        if (left.Kind == XdmValueKind.Duration && !IsDuration(right))
+            return DivideDuration(left, right);
+
+        // Duration div Duration
+        if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
+            return DivideDurationByDuration(left, right);
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
         // XPath div always returns decimal (or double), never integer
@@ -2083,6 +2298,13 @@ public static class VmEngine
 
     private static XdmValue Negate(XdmValue value)
     {
+        if (value.Kind == XdmValueKind.Duration)
+        {
+            var s = value.DurationValue;
+            if (s.StartsWith('-'))
+                return XdmValue.FromDuration(s[1..]);
+            return XdmValue.FromDuration("-" + s);
+        }
         if (IsDouble(value))
             return XdmValue.FromDouble(-ToDouble(value));
         if (IsDecimal(value))
@@ -2310,10 +2532,16 @@ public static class VmEngine
                     result = XdmValue.FromDecimal((decimal)d);
                     return true;
                 }
-                if (decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var dec))
                 {
-                    result = XdmValue.FromDecimal(dec);
-                    return true;
+                    string sDec = value.ToString();
+                    // xs:decimal does not allow exponent notation
+                    if (sDec.Contains('e', StringComparison.OrdinalIgnoreCase))
+                        return false;
+                    if (decimal.TryParse(sDec, NumberStyles.Any, CultureInfo.InvariantCulture, out var dec))
+                    {
+                        result = XdmValue.FromDecimal(dec);
+                        return true;
+                    }
                 }
                 return false;
 
@@ -2529,6 +2757,7 @@ public static class VmEngine
             "datetime" => value.Kind == XdmValueKind.DateTime,
             "date" => value.Kind == XdmValueKind.Date,
             "time" => value.Kind == XdmValueKind.Time,
+            "duration" or "daytimeduration" or "yearmonthduration" => value.Kind == XdmValueKind.Duration,
             "node" => value.IsNode,
             "item" => !value.IsUndefined,
             _ => false
@@ -2551,6 +2780,60 @@ public static class VmEngine
             "negativeinteger" => value < 0,
             "nonpositiveinteger" => value <= 0,
             "nonnegativeinteger" => value >= 0,
+            _ => true
+        };
+    }
+
+    /// <summary>
+    /// Checks whether an XDM value matches a declared type name (e.g. "xs:string", "element(foo)").
+    /// </summary>
+    private static bool ValueMatchesType(XdmValue value, string typeName)
+    {
+        if (string.IsNullOrEmpty(typeName)) return true;
+
+        string normalized = typeName.Trim().ToLowerInvariant();
+
+        // Strip occurrence indicator
+        if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
+            normalized = normalized[..^1].TrimEnd();
+
+        // Strip xs: prefix
+        if (normalized.StartsWith("xs:"))
+            normalized = normalized[3..];
+
+        if (normalized == "item()")
+            return !value.IsUndefined;
+
+        if (normalized == "empty-sequence()")
+            return value.IsUndefined;
+
+        if (normalized.StartsWith("element(") && normalized.EndsWith(')'))
+            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Element;
+
+        if (normalized.StartsWith("attribute(") && normalized.EndsWith(')'))
+            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Attribute;
+
+        return ItemInstanceOf(value, normalized);
+    }
+
+    /// <summary>
+    /// Checks whether an XDM value matches a simple <see cref="XdmValueKind"/>.
+    /// </summary>
+    private static bool ValueMatchesXdmKind(XdmValue value, XdmValueKind kind)
+    {
+        return kind switch
+        {
+            XdmValueKind.String => value.Kind == XdmValueKind.String,
+            XdmValueKind.Integer => value.Kind == XdmValueKind.Integer,
+            XdmValueKind.Decimal => value.Kind == XdmValueKind.Decimal,
+            XdmValueKind.Double => value.Kind == XdmValueKind.Double,
+            XdmValueKind.Float => value.Kind == XdmValueKind.Float,
+            XdmValueKind.Boolean => value.Kind == XdmValueKind.Boolean,
+            XdmValueKind.DateTime => value.Kind == XdmValueKind.DateTime,
+            XdmValueKind.Date => value.Kind == XdmValueKind.Date,
+            XdmValueKind.Time => value.Kind == XdmValueKind.Time,
+            XdmValueKind.Duration => value.Kind == XdmValueKind.Duration,
+            XdmValueKind.Node => value.IsNode,
             _ => true
         };
     }
@@ -2606,6 +2889,9 @@ public static class VmEngine
 
     private static bool IsDouble(XdmValue value) =>
         value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float;
+
+    private static bool IsDuration(XdmValue value) =>
+        value.Kind == XdmValueKind.Duration;
 
     private static bool IsEmptySeq(XdmValue value)
     {

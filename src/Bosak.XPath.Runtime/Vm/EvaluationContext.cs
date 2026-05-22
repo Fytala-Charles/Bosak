@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added document cache and loader for fn:doc / fn:collection                             |
+//                      | Charles Korthout | 0.3   | 22-05-2026     | Added stable current-dateTime/date/time snapshot                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -42,6 +43,9 @@ public sealed class EvaluationContext
 
     // Document cache for fn:doc / fn:collection identity
     private readonly Dictionary<string, IXdmNode> _documentCache;
+
+    // Stable snapshot for current-dateTime / current-date / current-time
+    private DateTimeOffset? _currentDateTimeSnapshot;
 
     public EvaluationContext()
     {
@@ -152,4 +156,10 @@ public sealed class EvaluationContext
 
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
         => _functions.TryGetValue((namespaceUri, localName, arity), out signature!);
+
+    /// <summary>
+    /// Returns a stable snapshot of the current date/time for the lifetime of this context.
+    /// Used by fn:current-dateTime, fn:current-date, and fn:current-time.
+    /// </summary>
+    public DateTimeOffset CurrentDateTimeSnapshot => _currentDateTimeSnapshot ??= System.DateTimeOffset.Now;
 }

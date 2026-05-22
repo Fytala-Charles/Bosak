@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 1.5   | 19-05-2026     | Added fn:trace, fn:boolean, fn:zero-or-one, fn:one-or-more, fn:exactly-one, fn:base-uri, fn:document-uri |
 //                      | Charles Korthout | 1.6   | 21-05-2026     | Fixed fn:deep-equal numeric cross-type, NaN, sequence, map key comparison              |
 //                      | Charles Korthout | 1.7   | 21-05-2026     | Fixed fn:distinct-values to use deep-equal semantics; fixed xs:boolean string cast     |
+//                      | Charles Korthout | 1.8   | 22-05-2026     | Fixed fn:base-uri/fn:document-uri empty sequence, type errors, fn:id atomization        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -649,6 +650,15 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = Tokenize_3
             },
+            [(Namespaces.Fn, "tokenize", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "tokenize",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Tokenize_1
+            },
 
             // ----- fn:insert-before -------------------------------------------
             [(Namespaces.Fn, "insert-before", 3)] = new()
@@ -902,6 +912,20 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Map,
                 Implementation = MapRemove
             },
+            [(Namespaces.Map, "entry", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "entry", Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Map,
+                Implementation = MapEntry
+            },
+            [(Namespaces.Map, "for-each", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "for-each", Arity = 2,
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = MapForEach
+            },
 
             // ----- array:size -------------------------------------------------
             [(Namespaces.Array, "size", 1)] = new()
@@ -970,6 +994,104 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Array, XdmValueKind.Sequence],
                 ReturnType = XdmValueKind.Array,
                 Implementation = ArrayRemove
+            },
+            [(Namespaces.Array, "append", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "append", Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayAppend
+            },
+            [(Namespaces.Array, "subarray", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "subarray", Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArraySubarray_2
+            },
+            [(Namespaces.Array, "subarray", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "subarray", Arity = 3,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArraySubarray_3
+            },
+            [(Namespaces.Array, "reverse", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "reverse", Arity = 1,
+                ParameterTypes = [XdmValueKind.Array],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayReverse
+            },
+            [(Namespaces.Array, "join", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "join", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayJoin
+            },
+            [(Namespaces.Array, "filter", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "filter", Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayFilter
+            },
+            [(Namespaces.Array, "fold-left", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "fold-left", Arity = 3,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = ArrayFoldLeft
+            },
+            [(Namespaces.Array, "fold-right", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "fold-right", Arity = 3,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = ArrayFoldRight
+            },
+            [(Namespaces.Array, "for-each", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "for-each", Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayForEach
+            },
+            [(Namespaces.Array, "for-each-pair", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "for-each-pair", Arity = 3,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Array, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayForEachPair
+            },
+            [(Namespaces.Array, "sort", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "sort", Arity = 1,
+                ParameterTypes = [XdmValueKind.Array],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArraySort_1
+            },
+            [(Namespaces.Array, "sort", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "sort", Arity = 3,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArraySort_3
+            },
+            [(Namespaces.Array, "flatten", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "flatten", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = ArrayFlatten
+            },
+            [(Namespaces.Array, "insert-before", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "insert-before", Arity = 3,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayInsertBefore
             },
 
             // ----- fn:abs -----------------------------------------------------
@@ -1105,6 +1227,21 @@ public static class FunctionLibrary
                 Implementation = Name_1
             },
 
+            [(Namespaces.Fn, "lang", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "lang", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Lang_1
+            },
+            [(Namespaces.Fn, "lang", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "lang", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Lang_2
+            },
+
             // ----- fn:dateTime ------------------------------------------------
             [(Namespaces.Fn, "dateTime", 2)] = new()
             {
@@ -1155,6 +1292,27 @@ public static class FunctionLibrary
                 ParameterTypes = [],
                 ReturnType = XdmValueKind.Time,
                 Implementation = CurrentTime
+            },
+            [(Namespaces.Fn, "parse-ietf-date", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-ietf-date", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.DateTime,
+                Implementation = ParseIetfDate
+            },
+            [(Namespaces.Fn, "format-integer", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-integer", Arity = 2,
+                ParameterTypes = [XdmValueKind.Integer, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = FormatInteger_2
+            },
+            [(Namespaces.Fn, "format-integer", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-integer", Arity = 3,
+                ParameterTypes = [XdmValueKind.Integer, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = FormatInteger_3
             },
 
             // ----- fn:adjust-date-to-timezone ---------------------------------
@@ -1348,7 +1506,7 @@ public static class FunctionLibrary
                 LocalName = "timezone-from-dateTime",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.DateTime],
-                ReturnType = XdmValueKind.String,
+                ReturnType = XdmValueKind.Duration,
                 Implementation = TimezoneFromDateTime
             },
 
@@ -1386,7 +1544,7 @@ public static class FunctionLibrary
                 LocalName = "timezone-from-date",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Date],
-                ReturnType = XdmValueKind.String,
+                ReturnType = XdmValueKind.Duration,
                 Implementation = TimezoneFromDate
             },
 
@@ -1424,7 +1582,7 @@ public static class FunctionLibrary
                 LocalName = "timezone-from-time",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Time],
-                ReturnType = XdmValueKind.String,
+                ReturnType = XdmValueKind.Duration,
                 Implementation = TimezoneFromTime
             },
 
@@ -1599,6 +1757,12 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Function], ReturnType = XdmValueKind.QName,
                 Implementation = FunctionName
             },
+            [(Namespaces.Fn, "function-arity", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "function-arity", Arity = 1,
+                ParameterTypes = [XdmValueKind.Function], ReturnType = XdmValueKind.Integer,
+                Implementation = FunctionArity
+            },
             [(Namespaces.Fn, "for-each", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn,
@@ -1643,6 +1807,55 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence, XdmValueKind.Function],
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = ForEachPair_3
+            },
+            [(Namespaces.Fn, "sort", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "sort", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Sort_1
+            },
+            [(Namespaces.Fn, "sort", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "sort", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Sort_2
+            },
+            [(Namespaces.Fn, "sort", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "sort", Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Sort_3
+            },
+            [(Namespaces.Fn, "innermost", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "innermost", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Innermost
+            },
+            [(Namespaces.Fn, "outermost", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "outermost", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Outermost
+            },
+            [(Namespaces.Fn, "resolve-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "resolve-uri", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Uri,
+                Implementation = ResolveUri_1
+            },
+            [(Namespaces.Fn, "resolve-uri", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "resolve-uri", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Uri,
+                Implementation = ResolveUri_2
             },
             // ----- xs:* constructor functions ---------------------------------
             [(Namespaces.Xs, "string", 1)] = new()
@@ -1824,6 +2037,24 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Xs, LocalName = "gMonth", Arity = 1,
                 ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
                 Implementation = XsGMonth
+            },
+            [(Namespaces.Xs, "gYear", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "gYear", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsGYear
+            },
+            [(Namespaces.Xs, "gYearMonth", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "gYearMonth", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsGYearMonth
+            },
+            [(Namespaces.Xs, "gMonthDay", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "gMonthDay", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsGMonthDay
             },
             [(Namespaces.Xs, "NCName", 1)] = new()
             {
@@ -2196,6 +2427,26 @@ public static class FunctionLibrary
         return XdmValue.Undefined;
     }
 
+    private static XdmValue FunctionArity(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var funcValue = args[0].FunctionValue;
+        if (funcValue is NamedFunctionItem named)
+            return XdmValue.FromInteger(named.ArityValue);
+        if (funcValue is InlineFunctionItem inline)
+            return XdmValue.FromInteger(inline.Parameters.Count);
+        if (funcValue is CurriedFunctionItem curried)
+        {
+            FunctionItem baseFunc = curried.BaseFunction;
+            while (baseFunc is CurriedFunctionItem cf)
+                baseFunc = cf.BaseFunction;
+            if (baseFunc is NamedFunctionItem nm)
+                return XdmValue.FromInteger(nm.ArityValue);
+            if (baseFunc is InlineFunctionItem il)
+                return XdmValue.FromInteger(il.Parameters.Count);
+        }
+        return XdmValue.Undefined;
+    }
+
     private static XdmValue ForEach_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[1];
@@ -2255,6 +2506,127 @@ public static class FunctionLibrary
             AppendResult(VmEngine.InvokeFunctionItem(func, ctx, new[] { seq1[i], seq2[i] }), result);
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue Sort_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Sort(ctx, args[0], null, null);
+
+    private static XdmValue Sort_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Sort(ctx, args[0], args[1], null);
+
+    private static XdmValue Sort_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Sort(ctx, args[0], args[1], args[2]);
+
+    private static XdmValue Sort(EvaluationContext ctx, XdmValue input, XdmValue? collation, XdmValue? keyFunc)
+    {
+        var items = AsSequence(input).ToList();
+
+        if (keyFunc is not null && !keyFunc.Value.IsUndefined)
+        {
+            var keyed = new List<(XdmValue Key, XdmValue Item)>();
+            foreach (var item in items)
+            {
+                var key = VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item });
+                keyed.Add((key, item));
+            }
+            keyed.Sort((a, b) => CompareSortKeys(a.Key, b.Key));
+            items = keyed.Select(k => k.Item).ToList();
+        }
+        else
+        {
+            items.Sort((a, b) => CompareSortKeys(a, b));
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    private static int CompareSortKeys(XdmValue a, XdmValue b)
+    {
+        // Numeric comparison first
+        bool aIsNumeric = a.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+        bool bIsNumeric = b.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+        if (aIsNumeric && bIsNumeric)
+        {
+            double da = a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.DoubleValue;
+            double db = b.Kind == XdmValueKind.Integer ? b.IntegerValue : b.DoubleValue;
+            return da.CompareTo(db);
+        }
+        // String fallback
+        return string.Compare(AtomizedString(a), AtomizedString(b), StringComparison.Ordinal);
+    }
+
+    private static XdmValue Innermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var result = new List<XdmValue>();
+        foreach (var node in nodes)
+        {
+            bool hasAncestorInSet = false;
+            var current = node.Parent;
+            while (current is not null)
+            {
+                if (nodes.Any(n => n == current))
+                {
+                    hasAncestorInSet = true;
+                    break;
+                }
+                current = current.Parent;
+            }
+            if (!hasAncestorInSet)
+                result.Add(XdmValue.FromNode(node));
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue Outermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var result = new List<XdmValue>();
+        foreach (var node in nodes)
+        {
+            bool hasDescendantInSet = false;
+            foreach (var other in nodes)
+            {
+                if (other == node) continue;
+                if (IsDescendant(other, node))
+                {
+                    hasDescendantInSet = true;
+                    break;
+                }
+            }
+            if (!hasDescendantInSet)
+                result.Add(XdmValue.FromNode(node));
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static bool IsDescendant(IXdmNode? descendant, IXdmNode ancestor)
+    {
+        var current = descendant?.Parent;
+        while (current is not null)
+        {
+            if (current == ancestor)
+                return true;
+            current = current.Parent;
+        }
+        return false;
+    }
+
+    private static XdmValue ResolveUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ResolveUri(ctx, AtomizedString(args[0]), ctx.BaseUri);
+
+    private static XdmValue ResolveUri_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ResolveUri(ctx, AtomizedString(args[0]), AtomizedString(args[1]));
+
+    private static XdmValue ResolveUri(EvaluationContext ctx, string relative, string? baseUri)
+    {
+        if (string.IsNullOrEmpty(relative))
+            return XdmValue.Undefined;
+        if (Uri.IsWellFormedUriString(relative, UriKind.Absolute))
+            return XdmValue.FromString(relative);
+        if (string.IsNullOrEmpty(baseUri))
+            throw new InvalidOperationException("FODC0005: No base URI available");
+        var resolved = new Uri(new Uri(baseUri), relative).AbsoluteUri;
+        return XdmValue.FromString(resolved);
     }
 
     private static XdmValue Not(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -2384,7 +2756,14 @@ public static class FunctionLibrary
 
     private static XdmValue EnvironmentVariable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var name = AtomizedString(args[0]);
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            throw new InvalidOperationException("XPTY0004");
+        if (arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
+            throw new InvalidOperationException("XPTY0004");
+        if (arg.Kind == XdmValueKind.Boolean)
+            throw new InvalidOperationException("XPTY0004");
+        var name = AtomizedString(arg);
         var value = System.Environment.GetEnvironmentVariable(name);
         return value is not null ? XdmValue.FromString(value) : XdmValue.Undefined;
     }
@@ -2589,6 +2968,13 @@ public static class FunctionLibrary
             return XdmValue.Undefined;
         if (args[1].IsUndefined || IsEmptySequence(args[1]))
             return XdmValue.Undefined;
+
+        var a1 = AtomizeValue(args[0]);
+        var a2 = AtomizeValue(args[1]);
+        if (a1.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
+            throw new InvalidOperationException("XPTY0004");
+        if (a2.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
+            throw new InvalidOperationException("XPTY0004");
 
         string s1 = AtomizedString(args[0]);
         string s2 = AtomizedString(args[1]);
@@ -2881,6 +3267,9 @@ public static class FunctionLibrary
         return XdmValue.FromString(Regex.Replace(input, pattern, replacement, options));
     }
 
+    private static XdmValue Tokenize_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => DoTokenize(AtomizedString(args[0]), @"\s+", string.Empty);
+
     private static XdmValue Tokenize_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
@@ -2994,22 +3383,52 @@ public static class FunctionLibrary
         => VmEngine.Cast(args[0], "nonNegativeInteger");
 
     private static XdmValue XsDayTimeDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => XdmValue.FromDuration(AtomizedString(args[0]));
 
     private static XdmValue XsYearMonthDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => XdmValue.FromDuration(AtomizedString(args[0]));
 
     private static XdmValue XsUntypedAtomic(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(AtomizedString(args[0]));
 
     private static XdmValue XsAnyUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+    {
+        string s = AtomizedString(args[0]);
+        if (!Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute))
+            throw new InvalidOperationException("FORG0001");
+        return XdmValue.FromString(s);
+    }
 
     private static XdmValue XsHexBinary(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(AtomizedString(args[0]));
 
     private static XdmValue XsBase64Binary(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+    {
+        string s = AtomizedString(args[0]);
+        if (!IsValidBase64(s))
+            throw new InvalidOperationException("FORG0001");
+        return XdmValue.FromString(s);
+    }
+
+    private static bool IsValidBase64(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return true;
+        s = s.Replace(" ", "").Replace("\t", "").Replace("\n", "").Replace("\r", "");
+        if (s.Length % 4 != 0) return false;
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        foreach (char c in s)
+            if (!chars.Contains(c))
+                return false;
+        // Check padding
+        int eq = s.IndexOf('=');
+        if (eq >= 0)
+        {
+            for (int i = eq; i < s.Length; i++)
+                if (s[i] != '=')
+                    return false;
+        }
+        return true;
+    }
 
     private static XdmValue XsGDay(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(AtomizedString(args[0]));
@@ -3017,11 +3436,20 @@ public static class FunctionLibrary
     private static XdmValue XsGMonth(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(AtomizedString(args[0]));
 
+    private static XdmValue XsGYear(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsGYearMonth(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsGMonthDay(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
     private static XdmValue XsNCName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(AtomizedString(args[0]));
 
     private static XdmValue XsDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => XdmValue.FromDuration(AtomizedString(args[0]));
 
     // ------------------------------------------------------------------
     // math:* functions
@@ -3075,9 +3503,12 @@ public static class FunctionLibrary
 
     private static XdmValue DocAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[0].IsUndefined)
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            return XdmValue.FromBoolean(false);
+        if (arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
             throw new InvalidOperationException("XPTY0004");
-        var uri = args[0].ToString();
+        var uri = arg.ToString();
         if (string.IsNullOrEmpty(uri))
             return XdmValue.FromBoolean(false);
         try
@@ -3114,7 +3545,7 @@ public static class FunctionLibrary
         {
             foreach (var attr in node.Attributes("id", ""))
             {
-                if (ids.Contains(attr.StringValue))
+                if (ids.Contains(AtomizedString(attr)))
                 {
                     result.Add(XdmValue.FromNode(node));
                     break;
@@ -3267,8 +3698,10 @@ public static class FunctionLibrary
     private static XdmValue BaseUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
-        if (item.IsUndefined || !item.IsNode)
-            throw new InvalidOperationException("fn:base-uri() called with no context item or context item is not a node.");
+        if (item.IsUndefined || IsEmptySequence(item))
+            throw new InvalidOperationException("XPDY0002: fn:base-uri() called with no context item.");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004: fn:base-uri() context item is not a node.");
         var uri = item.NodeValue!.BaseUri;
         return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
     }
@@ -3276,10 +3709,24 @@ public static class FunctionLibrary
     private static XdmValue BaseUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
-        if (arg.IsUndefined)
+        if (IsEmptySequence(arg))
             return XdmValue.Undefined;
+        if (arg.IsSequence)
+        {
+            XdmValue? first = null;
+            int count = 0;
+            foreach (var x in XdmSequence.FromSource(arg.SequenceValue!))
+            {
+                first = x;
+                count++;
+                if (count > 1) break;
+            }
+            if (count == 0) return XdmValue.Undefined;
+            if (count > 1) throw new InvalidOperationException("XPTY0004");
+            arg = first.Value;
+        }
         if (!arg.IsNode)
-            throw new InvalidOperationException("fn:base-uri() argument is not a node.");
+            throw new InvalidOperationException("XPTY0004: fn:base-uri() argument is not a node.");
         var uri = arg.NodeValue!.BaseUri;
         return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
     }
@@ -3287,8 +3734,10 @@ public static class FunctionLibrary
     private static XdmValue DocumentUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
-        if (item.IsUndefined || !item.IsNode)
-            throw new InvalidOperationException("fn:document-uri() called with no context item or context item is not a node.");
+        if (item.IsUndefined || IsEmptySequence(item))
+            throw new InvalidOperationException("XPDY0002: fn:document-uri() called with no context item.");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004: fn:document-uri() context item is not a node.");
         var node = item.NodeValue!;
         if (node.NodeKind != XdmNodeKind.Document)
             return XdmValue.Undefined;
@@ -3299,10 +3748,24 @@ public static class FunctionLibrary
     private static XdmValue DocumentUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
-        if (arg.IsUndefined)
+        if (IsEmptySequence(arg))
             return XdmValue.Undefined;
+        if (arg.IsSequence)
+        {
+            XdmValue? first = null;
+            int count = 0;
+            foreach (var x in XdmSequence.FromSource(arg.SequenceValue!))
+            {
+                first = x;
+                count++;
+                if (count > 1) break;
+            }
+            if (count == 0) return XdmValue.Undefined;
+            if (count > 1) throw new InvalidOperationException("XPTY0004");
+            arg = first.Value;
+        }
         if (!arg.IsNode)
-            throw new InvalidOperationException("fn:document-uri() argument is not a node.");
+            throw new InvalidOperationException("XPTY0004: fn:document-uri() argument is not a node.");
         var node = arg.NodeValue!;
         if (node.NodeKind != XdmNodeKind.Document)
             return XdmValue.Undefined;
@@ -3355,7 +3818,7 @@ public static class FunctionLibrary
 
     private static XdmValue Reverse(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var items = Materialize(args[0]);
+        var items = AsSequence(args[0]).ToList();
         items.Reverse();
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
@@ -3452,33 +3915,66 @@ public static class FunctionLibrary
     {
         var items = Materialize(args[0]);
         if (items.Count == 0) return XdmValue.Undefined;
+
+        bool hasNumeric = false;
+        bool hasYearMonth = false;
+        bool hasDayTime = false;
+        bool hasGenericDuration = false;
+
         foreach (var item in items)
         {
             var a = AtomizeValue(item);
             if (a.Kind == XdmValueKind.Integer || a.Kind == XdmValueKind.Decimal
                 || a.Kind == XdmValueKind.Double || a.Kind == XdmValueKind.Float)
-                continue;
-            if (a.Kind == XdmValueKind.String && (IsDurationString(a.ToString()) || double.TryParse(a.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _)))
-                continue;
-            throw new InvalidOperationException("FORG0006");
+            {
+                hasNumeric = true;
+            }
+            else if (a.Kind == XdmValueKind.Duration)
+            {
+                var s = a.DurationValue;
+                if (IsGenericDurationString(s))
+                    hasGenericDuration = true;
+                else if (IsYearMonthDurationString(s))
+                    hasYearMonth = true;
+                else if (IsDayTimeDurationString(s))
+                    hasDayTime = true;
+                else
+                    throw new InvalidOperationException("FORG0006");
+            }
+            else if (a.Kind == XdmValueKind.String && double.TryParse(a.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+            {
+                hasNumeric = true;
+            }
+            else
+            {
+                throw new InvalidOperationException("FORG0006");
+            }
         }
+
+        int categories = (hasNumeric ? 1 : 0) + (hasYearMonth ? 1 : 0) + (hasDayTime ? 1 : 0) + (hasGenericDuration ? 1 : 0);
+        if (categories != 1)
+            throw new InvalidOperationException("FORG0006");
+
+        if (hasGenericDuration)
+            throw new InvalidOperationException("FORG0006");
+
         var total = Sum(items);
-        if (total.Kind == XdmValueKind.String && IsDurationString(total.ToString()))
+        if (total.Kind == XdmValueKind.Duration)
         {
-            var s = total.ToString();
+            var s = total.DurationValue;
             if (IsYearMonthDurationString(s))
             {
                 var (years, months, _, _, _, _) = ParseDuration(s);
                 long totalMonths = years * 12 + months;
-                long avgMonths = totalMonths / items.Count;
-                return XdmValue.FromString(FormatYearMonthDuration(avgMonths));
+                return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths / items.Count));
             }
             if (IsDayTimeDurationString(s))
             {
                 var (_, _, days, hours, minutes, seconds) = ParseDuration(s);
                 decimal totalSec = days * 86400m + hours * 3600m + minutes * 60m + seconds;
-                return XdmValue.FromString(FormatDayTimeDurationFromSeconds(totalSec / items.Count));
+                return XdmValue.FromDuration(FormatDayTimeDurationFromSeconds(totalSec / items.Count));
             }
+            throw new InvalidOperationException("FORG0006");
         }
         return total.Kind switch
         {
@@ -3656,6 +4152,229 @@ public static class FunctionLibrary
         return XdmValue.FromArray(new XdmArray(items));
     }
 
+    private static XdmValue MapEntry(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var map = new XdmMap();
+        map.Add(AtomizeMapKey(args[0]), args[1]);
+        return XdmValue.FromMap(map);
+    }
+
+    private static XdmValue MapForEach(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var map = args[0].MapValue;
+        var func = args[1];
+        var result = new List<XdmValue>();
+        foreach (var kvp in map.Entries)
+        {
+            var r = VmEngine.InvokeFunctionItem(func, ctx, new[] { kvp.Key, kvp.Value });
+            AppendResult(r, result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue ArrayAppend(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        var items = new List<XdmValue>();
+        foreach (var item in arr.Values)
+            items.Add(item);
+        items.Add(args[1]);
+        return XdmValue.FromArray(new XdmArray(items));
+    }
+
+    private static XdmValue ArraySubarray_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ArraySubarray(ctx, args[0].ArrayValue, (int)args[1].IntegerValue, int.MaxValue);
+
+    private static XdmValue ArraySubarray_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ArraySubarray(ctx, args[0].ArrayValue, (int)args[1].IntegerValue, (int)args[2].IntegerValue);
+
+    private static XdmValue ArraySubarray(EvaluationContext ctx, XdmArray arr, int start, int length)
+    {
+        var items = new List<XdmValue>();
+        int i = 1;
+        foreach (var item in arr.Values)
+        {
+            if (i >= start)
+            {
+                if (length-- <= 0) break;
+                items.Add(item);
+            }
+            i++;
+        }
+        return XdmValue.FromArray(new XdmArray(items));
+    }
+
+    private static XdmValue ArrayReverse(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        var items = new List<XdmValue>();
+        foreach (var item in arr.Values)
+            items.Add(item);
+        items.Reverse();
+        return XdmValue.FromArray(new XdmArray(items));
+    }
+
+    private static XdmValue ArrayJoin(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var result = new List<XdmValue>();
+        foreach (var item in AsSequence(args[0]))
+        {
+            if (item.IsArray)
+            {
+                foreach (var arrItem in item.ArrayValue.Values)
+                    result.Add(arrItem);
+            }
+        }
+        return XdmValue.FromArray(new XdmArray(result));
+    }
+
+    private static XdmValue ArrayFilter(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        var func = args[1];
+        var result = new List<XdmValue>();
+        foreach (var item in arr.Values)
+        {
+            var pred = VmEngine.InvokeFunctionItem(func, ctx, new[] { item });
+            if (pred.EffectiveBooleanValue())
+                result.Add(item);
+        }
+        return XdmValue.FromArray(new XdmArray(result));
+    }
+
+    private static XdmValue ArrayFoldLeft(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        var accumulator = args[1];
+        var func = args[2];
+        foreach (var item in arr.Values)
+        {
+            accumulator = VmEngine.InvokeFunctionItem(func, ctx, new[] { accumulator, item });
+        }
+        return accumulator;
+    }
+
+    private static XdmValue ArrayFoldRight(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        var items = new List<XdmValue>();
+        foreach (var item in arr.Values)
+            items.Add(item);
+        var accumulator = args[1];
+        var func = args[2];
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            accumulator = VmEngine.InvokeFunctionItem(func, ctx, new[] { items[i], accumulator });
+        }
+        return accumulator;
+    }
+
+    private static XdmValue ArrayForEach(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        var func = args[1];
+        var result = new List<XdmValue>();
+        foreach (var item in arr.Values)
+        {
+            var r = VmEngine.InvokeFunctionItem(func, ctx, new[] { item });
+            result.Add(r);
+        }
+        return XdmValue.FromArray(new XdmArray(result));
+    }
+
+    private static XdmValue ArrayForEachPair(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr1 = args[0].ArrayValue;
+        var arr2 = args[1].ArrayValue;
+        var func = args[2];
+        var result = new List<XdmValue>();
+        var items1 = new List<XdmValue>();
+        var items2 = new List<XdmValue>();
+        foreach (var item in arr1.Values) items1.Add(item);
+        foreach (var item in arr2.Values) items2.Add(item);
+        int minLen = Math.Min(items1.Count, items2.Count);
+        for (int i = 0; i < minLen; i++)
+        {
+            var r = VmEngine.InvokeFunctionItem(func, ctx, new[] { items1[i], items2[i] });
+            result.Add(r);
+        }
+        return XdmValue.FromArray(new XdmArray(result));
+    }
+
+    private static XdmValue ArraySort_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ArraySort(ctx, args[0].ArrayValue, null);
+
+    private static XdmValue ArraySort_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ArraySort(ctx, args[0].ArrayValue, args[2]);
+
+    private static XdmValue ArraySort(EvaluationContext ctx, XdmArray arr, XdmValue? keyFunc)
+    {
+        var items = new List<XdmValue>();
+        foreach (var item in arr.Values)
+            items.Add(item);
+
+        if (keyFunc is not null && !keyFunc.Value.IsUndefined)
+        {
+            var keyed = new List<(XdmValue Key, XdmValue Item)>();
+            foreach (var item in items)
+            {
+                var key = VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item });
+                keyed.Add((key, item));
+            }
+            keyed.Sort((a, b) => string.Compare(AtomizedString(a.Key), AtomizedString(b.Key), StringComparison.Ordinal));
+            items = keyed.Select(k => k.Item).ToList();
+        }
+        else
+        {
+            items.Sort((a, b) => string.Compare(AtomizedString(a), AtomizedString(b), StringComparison.Ordinal));
+        }
+        return XdmValue.FromArray(new XdmArray(items));
+    }
+
+    private static XdmValue ArrayInsertBefore(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        int pos = (int)args[1].IntegerValue;
+        var value = args[2];
+        var items = new List<XdmValue>();
+        int i = 1;
+        foreach (var item in arr.Values)
+        {
+            if (i == pos)
+                items.Add(value);
+            items.Add(item);
+            i++;
+        }
+        if (pos > arr.Count)
+            items.Add(value);
+        return XdmValue.FromArray(new XdmArray(items));
+    }
+
+    private static XdmValue ArrayFlatten(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var result = new List<XdmValue>();
+        FlattenValue(args[0], result);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static void FlattenValue(XdmValue value, List<XdmValue> result)
+    {
+        if (value.IsArray)
+        {
+            foreach (var item in value.ArrayValue.Values)
+                FlattenValue(item, result);
+        }
+        else if (value.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                FlattenValue(item, result);
+        }
+        else if (!value.IsUndefined)
+        {
+            result.Add(value);
+        }
+    }
+
     // ------------------------------------------------------------------
     // Helpers
     // ------------------------------------------------------------------
@@ -3711,13 +4430,22 @@ public static class FunctionLibrary
         if (value.IsUndefined)
             return new List<XdmValue>();
 
+        if (value.IsArray)
+        {
+            var list = new List<XdmValue>();
+            var arr = value.ArrayValue;
+            for (int i = 1; i <= arr.Count; i++)
+                list.Add(arr.Get(i));
+            return list;
+        }
+
         if (!value.IsSequence)
             return new List<XdmValue> { value };
 
-        var list = new List<XdmValue>();
+        var seqList = new List<XdmValue>();
         foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
-            list.Add(item);
-        return list;
+            seqList.Add(item);
+        return seqList;
     }
 
     private static double ToDoubleValue(XdmValue value)
@@ -3760,7 +4488,9 @@ public static class FunctionLibrary
                 anyUntyped = true;
             if (a.Kind != XdmValueKind.Integer && a.Kind != XdmValueKind.Decimal)
                 allIntegerOrDecimal = false;
-            var str = a.Kind == XdmValueKind.String ? a.ToString() : "";
+            var str = a.Kind == XdmValueKind.Duration ? a.DurationValue
+                  : a.Kind == XdmValueKind.String ? a.ToString()
+                  : "";
             bool isYmd = IsYearMonthDurationString(str);
             bool isDtd = IsDayTimeDurationString(str);
             if (!isYmd) allYearMonthDuration = false;
@@ -3772,10 +4502,12 @@ public static class FunctionLibrary
             long totalMonths = 0;
             foreach (var item in items)
             {
-                var (years, months, _, _, _, _) = ParseDuration(AtomizeValue(item).ToString());
+                var a = AtomizeValue(item);
+                var s = a.Kind == XdmValueKind.Duration ? a.DurationValue : a.ToString();
+                var (years, months, _, _, _, _) = ParseDuration(s);
                 totalMonths += years * 12 + months;
             }
-            return XdmValue.FromString(FormatYearMonthDuration(totalMonths));
+            return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths));
         }
 
         if (allDayTimeDuration)
@@ -3783,10 +4515,12 @@ public static class FunctionLibrary
             decimal totalSeconds = 0m;
             foreach (var item in items)
             {
-                var (_, _, days, hours, minutes, seconds) = ParseDuration(AtomizeValue(item).ToString());
+                var a = AtomizeValue(item);
+                var s = a.Kind == XdmValueKind.Duration ? a.DurationValue : a.ToString();
+                var (_, _, days, hours, minutes, seconds) = ParseDuration(s);
                 totalSeconds += days * 86400m + hours * 3600m + minutes * 60m + seconds;
             }
-            return XdmValue.FromString(FormatDayTimeDurationFromSeconds(totalSeconds));
+            return XdmValue.FromDuration(FormatDayTimeDurationFromSeconds(totalSeconds));
         }
 
         if (allIntegerOrDecimal)
@@ -3811,11 +4545,45 @@ public static class FunctionLibrary
 
     private static XdmValue MinMax(List<XdmValue> items, bool min)
     {
+        var atomized = items.Select(AtomizeValue).ToList();
+
+        // All date/time
+        bool allDateTime = atomized.All(a => a.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.Duration);
+        if (allDateTime)
+        {
+            var first = atomized[0];
+            var result = first;
+            for (int i = 1; i < atomized.Count; i++)
+            {
+                var cmp = CompareDateTimeValues(atomized[i], result);
+                if (min ? cmp < 0 : cmp > 0)
+                    result = atomized[i];
+            }
+            return result;
+        }
+
+        // All string
+        bool allString = atomized.All(a => a.Kind == XdmValueKind.String);
+        if (allString)
+        {
+            var result = atomized[0].StringValue;
+            var resultVal = atomized[0];
+            for (int i = 1; i < atomized.Count; i++)
+            {
+                var s = atomized[i].StringValue;
+                if (min ? string.Compare(s, result, StringComparison.Ordinal) < 0 : string.Compare(s, result, StringComparison.Ordinal) > 0)
+                {
+                    result = s;
+                    resultVal = atomized[i];
+                }
+            }
+            return resultVal;
+        }
+
         bool allIntegerOrDecimal = true;
         bool anyDouble = false;
-        foreach (var item in items)
+        foreach (var a in atomized)
         {
-            var a = AtomizeValue(item);
             if (a.Kind == XdmValueKind.Double)
                 anyDouble = true;
             if (a.Kind != XdmValueKind.Integer && a.Kind != XdmValueKind.Decimal)
@@ -3851,6 +4619,19 @@ public static class FunctionLibrary
                 resultD = v;
         }
         return XdmValue.FromDouble(resultD);
+    }
+
+    private static int CompareDateTimeValues(XdmValue a, XdmValue b)
+    {
+        if (a.Kind == XdmValueKind.DateTime && b.Kind == XdmValueKind.DateTime)
+            return a.DateTimeValue.CompareTo(b.DateTimeValue);
+        if (a.Kind == XdmValueKind.Date && b.Kind == XdmValueKind.Date)
+            return a.DateValue.CompareTo(b.DateValue);
+        if (a.Kind == XdmValueKind.Time && b.Kind == XdmValueKind.Time)
+            return a.TimeValue.CompareTo(b.TimeValue);
+        if (a.Kind == XdmValueKind.Duration && b.Kind == XdmValueKind.Duration)
+            return string.Compare(a.DurationValue, b.DurationValue, StringComparison.Ordinal);
+        return string.Compare(a.ToString(), b.ToString(), StringComparison.Ordinal);
     }
 
     // ------------------------------------------------------------------
@@ -4060,9 +4841,208 @@ public static class FunctionLibrary
         return string.IsNullOrEmpty(prefix) ? local : prefix + ":" + local;
     }
 
+    private static XdmValue Lang_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
+        return Lang(AtomizedString(args[0]), node);
+    }
+
+    private static XdmValue Lang_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = GetNodeFromValue(args[1]);
+        return Lang(AtomizedString(args[0]), node);
+    }
+
+    private static XdmValue Lang(string testLang, IXdmNode? node)
+    {
+        if (string.IsNullOrEmpty(testLang) || node is null)
+            return XdmValue.False;
+        var current = node;
+        while (current is not null)
+        {
+            string? langAttr = null;
+            foreach (var attr in current.Attributes("lang", "http://www.w3.org/XML/1998/namespace"))
+            {
+                langAttr = attr.StringValue;
+                break;
+            }
+            if (langAttr is not null)
+            {
+                bool matches = LangMatches(testLang, langAttr);
+                return XdmValue.FromBoolean(matches);
+            }
+            current = current.Parent;
+        }
+        return XdmValue.False;
+    }
+
+    private static bool LangMatches(string testLang, string nodeLang)
+    {
+        // Case-insensitive prefix match: "en" matches "en", "en-US", "EN-us"
+        var test = testLang.ToLowerInvariant();
+        var node = nodeLang.ToLowerInvariant();
+        if (test == node) return true;
+        if (node.StartsWith(test + "-", StringComparison.Ordinal)) return true;
+        return false;
+    }
+
     // ------------------------------------------------------------------
     // Date / Time functions
     // ------------------------------------------------------------------
+
+    private static XdmValue ParseIetfDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string input = AtomizedString(args[0]);
+        if (string.IsNullOrWhiteSpace(input))
+            return XdmValue.Undefined;
+
+        // Try common IETF / RFC 822 / RFC 1123 formats
+        string[] formats =
+        [
+            "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+            "ddd, dd MMM yyyy HH:mm:ss zzz",
+            "ddd, dd MMM yyyy HH:mm:ss",
+            "dd MMM yyyy HH:mm:ss 'GMT'",
+            "dd MMM yyyy HH:mm:ss zzz",
+            "dd MMM yyyy HH:mm:ss",
+            "yyyy-MM-ddTHH:mm:sszzz",
+            "yyyy-MM-ddTHH:mm:ssZ",
+            "yyyy-MM-ddTHH:mm:ss",
+        ];
+
+        foreach (var fmt in formats)
+        {
+            if (DateTimeOffset.TryParseExact(input, fmt, System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.AllowWhiteSpaces | System.Globalization.DateTimeStyles.AssumeUniversal,
+                out var dto))
+            {
+                return XdmValue.FromDateTime(dto);
+            }
+        }
+
+        // Fallback to general parsing
+        if (DateTimeOffset.TryParse(input, System.Globalization.CultureInfo.InvariantCulture,
+            System.Globalization.DateTimeStyles.AllowWhiteSpaces | System.Globalization.DateTimeStyles.AssumeUniversal,
+            out var dto2))
+        {
+            return XdmValue.FromDateTime(dto2);
+        }
+
+        throw new InvalidOperationException("FORG0010: Invalid IETF date");
+    }
+
+    private static XdmValue FormatInteger_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatInteger(ctx, args[0], AtomizedString(args[1]), null);
+
+    private static XdmValue FormatInteger_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatInteger(ctx, args[0], AtomizedString(args[1]), AtomizedString(args[2]));
+
+    private static XdmValue FormatInteger(EvaluationContext ctx, XdmValue value, string picture, string? language)
+    {
+        if (value.IsUndefined)
+            return XdmValue.FromString("");
+        long n = value.IntegerValue;
+        string result = picture switch
+        {
+            "a" => ToAlphabetic(n, false),
+            "A" => ToAlphabetic(n, true),
+            "i" => ToRoman(n, false),
+            "I" => ToRoman(n, true),
+            "w" => ToWords(n, false),
+            "W" => ToWords(n, true),
+            "Ww" => ToWordsTitle(n),
+            _ => ToDecimalPicture(n, picture)
+        };
+        return XdmValue.FromString(result);
+    }
+
+    private static string ToAlphabetic(long n, bool upper)
+    {
+        if (n <= 0) return "";
+        var sb = new StringBuilder();
+        while (n > 0)
+        {
+            n--;
+            char c = upper ? (char)('A' + (n % 26)) : (char)('a' + (n % 26));
+            sb.Insert(0, c);
+            n /= 26;
+        }
+        return sb.ToString();
+    }
+
+    private static string ToRoman(long n, bool upper)
+    {
+        if (n <= 0 || n > 3999) return "";
+        var values = new[] { (1000, "M"), (900, "CM"), (500, "D"), (400, "CD"), (100, "C"), (90, "XC"), (50, "L"), (40, "XL"), (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I") };
+        var sb = new StringBuilder();
+        foreach (var (val, sym) in values)
+        {
+            while (n >= val)
+            {
+                sb.Append(sym);
+                n -= val;
+            }
+        }
+        return upper ? sb.ToString() : sb.ToString().ToLowerInvariant();
+    }
+
+    private static string ToWords(long n, bool upper)
+    {
+        string s = NumberToWords(n);
+        return upper ? s.ToUpperInvariant() : s.ToLowerInvariant();
+    }
+
+    private static string ToWordsTitle(long n)
+    {
+        string s = NumberToWords(n);
+        return System.Globalization.CultureInfo.InvariantCulture.TextInfo.ToTitleCase(s.ToLowerInvariant());
+    }
+
+    private static string NumberToWords(long n)
+    {
+        if (n == 0) return "zero";
+        if (n < 0) return "minus " + NumberToWords(-n);
+        if (n <= 19) return new[] { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" }[n - 1];
+        if (n < 100)
+        {
+            var tens = new[] { "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+            string r = tens[n / 10 - 2];
+            if (n % 10 > 0) r += "-" + NumberToWords(n % 10);
+            return r;
+        }
+        if (n < 1000)
+        {
+            string r = NumberToWords(n / 100) + " hundred";
+            if (n % 100 > 0) r += " and " + NumberToWords(n % 100);
+            return r;
+        }
+        if (n < 1000000)
+        {
+            string r = NumberToWords(n / 1000) + " thousand";
+            if (n % 1000 > 0) r += " " + NumberToWords(n % 1000);
+            return r;
+        }
+        if (n < 1000000000)
+        {
+            string r = NumberToWords(n / 1000000) + " million";
+            if (n % 1000000 > 0) r += " " + NumberToWords(n % 1000000);
+            return r;
+        }
+        string rr = NumberToWords(n / 1000000000) + " billion";
+        if (n % 1000000000 > 0) rr += " " + NumberToWords(n % 1000000000);
+        return rr;
+    }
+
+    private static string ToDecimalPicture(long n, string picture)
+    {
+        // Count leading zeros in picture
+        int zeros = 0;
+        foreach (char c in picture)
+            if (c == '0') zeros++;
+        if (zeros == 0) return n.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        string fmt = new string('0', zeros);
+        return n.ToString(fmt, System.Globalization.CultureInfo.InvariantCulture);
+    }
 
     private static XdmValue DateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -4105,17 +5085,17 @@ public static class FunctionLibrary
     }
 
     private static XdmValue CurrentDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDateTime(DateTimeOffset.Now, hasTimezone: true);
+        => XdmValue.FromDateTime(ctx.CurrentDateTimeSnapshot, hasTimezone: true);
 
     private static XdmValue CurrentDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var now = DateTimeOffset.Now;
+        var now = ctx.CurrentDateTimeSnapshot;
         return XdmValue.FromDate(new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, now.Offset), hasTimezone: true);
     }
 
     private static XdmValue CurrentTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var now = DateTimeOffset.Now;
+        var now = ctx.CurrentDateTimeSnapshot;
         return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Offset), hasTimezone: true);
     }
 
@@ -4470,7 +5450,7 @@ public static class FunctionLibrary
         if (value.IsUndefined) return XdmValue.Undefined;
         if (!value.HasTimezone) return XdmValue.Undefined;
         var offset = getDto(value).Offset;
-        return XdmValue.FromString(FormatDayTimeDuration(offset));
+        return XdmValue.FromDuration(FormatDayTimeDuration(offset));
     }
 
     private static XdmValue YearsFromDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -4619,7 +5599,14 @@ public static class FunctionLibrary
     {
         if (string.IsNullOrEmpty(s)) return false;
         if (s.StartsWith('-')) s = s[1..];
-        return s.StartsWith('P') && (s.Contains('D') || s.Contains('T'));
+        return s.StartsWith('P') && (s.Contains('D') || s.Contains('T')) && !s.Contains('Y') && !s.Contains('M');
+    }
+
+    private static bool IsGenericDurationString(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (s.StartsWith('-')) s = s[1..];
+        return s.StartsWith('P') && (s.Contains('Y') || s.Contains('M')) && (s.Contains('D') || s.Contains('T'));
     }
 
     private static string FormatYearMonthDuration(long totalMonths)
@@ -4946,7 +5933,12 @@ public static class FunctionLibrary
 
     private static XdmValue EncodeForUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var s = AtomizedString(args[0]);
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            return XdmValue.FromString("");
+        if (arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
+            throw new InvalidOperationException("XPTY0004");
+        var s = AtomizedString(arg);
         return XdmValue.FromString(Uri.EscapeDataString(s));
     }
 
@@ -4966,7 +5958,12 @@ public static class FunctionLibrary
 
     private static XdmValue EscapeHtmlUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var s = AtomizedString(args[0]);
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            return XdmValue.FromString("");
+        if (arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
+            throw new InvalidOperationException("XPTY0004");
+        var s = AtomizedString(arg);
         var sb = new StringBuilder();
         foreach (char c in s)
         {

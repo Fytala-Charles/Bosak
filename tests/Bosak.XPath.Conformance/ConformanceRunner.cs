@@ -59,8 +59,6 @@ internal sealed class ConformanceRunner
             RunTestSet(testSetPath, sharedEnvironments, report);
             processedSets++;
 
-            if (processedSets >= 50) break;
-
             if (processedSets % 50 == 0)
             {
                 Console.WriteLine($"  ... processed {processedSets}/{testSetRefs.Count} sets ({report.Total} tests)");

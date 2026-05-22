@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added Map and Array value support                                                      |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added DateTime, Date, and Time value factories and accessors                           |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added QName value factory and accessor                                                   |
+//                      | Charles Korthout | 0.5   | 22-05-2026     | Added Duration value factory, accessor, and ToString support                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
@@ -66,6 +67,9 @@ public readonly struct XdmValue
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromString(string value) => new(XdmValueKind.String, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDuration(string value) => new(XdmValueKind.Duration, reference: value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromNode(IXdmNode node) => new(XdmValueKind.Node, reference: node);
@@ -176,6 +180,16 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.String)
                 ThrowInvalidAccess(nameof(StringValue));
+            return (string)_reference!;
+        }
+    }
+
+    public string DurationValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Duration)
+                ThrowInvalidAccess(nameof(DurationValue));
             return (string)_reference!;
         }
     }
@@ -334,6 +348,7 @@ public readonly struct XdmValue
                 ? FormatDateTimeOffset(TimeValue, "HH:mm:ss")
                 : TimeValue.ToString("HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture),
             XdmValueKind.QName => ((XsQName)_reference!).ToString(),
+            XdmValueKind.Duration => (string?)_reference ?? string.Empty,
             XdmValueKind.External => $"(external: {_reference?.GetType().Name})",
             _ => $"(kind: {_kind})"
         };

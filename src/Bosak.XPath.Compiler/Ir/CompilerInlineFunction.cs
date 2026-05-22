@@ -19,4 +19,4 @@ namespace Bosak.XPath.Compiler.Ir;
 /// Compile-time representation of an inline function, stored in the IR literal pool.
 /// The VM converts this to <see cref="Bosak.XPath.Runtime.Functions.InlineFunctionItem"/>.
 /// </summary>
-public sealed record CompilerInlineFunction(IReadOnlyList<string> Parameters, IrModule Body);
+public sealed record CompilerInlineFunction(IReadOnlyList<string> Parameters, IrModule Body, IReadOnlyList<string?> ParameterTypes, string? ReturnType);
