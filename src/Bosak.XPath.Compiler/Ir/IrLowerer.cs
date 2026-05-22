@@ -155,10 +155,18 @@ public sealed class IrLowerer
     private int LowerVariable(VariableReferenceNode node, int? targetReg)
     {
         int reg = targetReg ?? AllocRegister();
-        string qname = string.IsNullOrEmpty(node.Prefix)
-            ? node.LocalName
-            : $"{node.Prefix}:{node.LocalName}";
-        int poolIdx = AddToLiteralPool(qname);
+        int poolIdx;
+        if (!string.IsNullOrEmpty(node.NamespaceUri))
+        {
+            poolIdx = AddToLiteralPool((node.LocalName, node.NamespaceUri));
+        }
+        else
+        {
+            string qname = string.IsNullOrEmpty(node.Prefix)
+                ? node.LocalName
+                : $"{node.Prefix}:{node.LocalName}";
+            poolIdx = AddToLiteralPool(qname);
+        }
         Emit(IrOpCode.LoadVariable, (byte)reg, operand: poolIdx);
         return reg;
     }
@@ -391,10 +399,18 @@ public sealed class IrLowerer
     {
         int resultReg = targetReg ?? AllocRegister();
 
-        string qname = string.IsNullOrEmpty(node.Prefix)
-            ? node.LocalName
-            : $"{node.Prefix}:{node.LocalName}";
-        int funcPoolIdx = AddToLiteralPool(qname);
+        int funcPoolIdx;
+        if (!string.IsNullOrEmpty(node.NamespaceUri))
+        {
+            funcPoolIdx = AddToLiteralPool((node.LocalName, node.NamespaceUri));
+        }
+        else
+        {
+            string qname = string.IsNullOrEmpty(node.Prefix)
+                ? node.LocalName
+                : $"{node.Prefix}:{node.LocalName}";
+            funcPoolIdx = AddToLiteralPool(qname);
+        }
 
         int argCount = node.Arguments.Count;
 
@@ -413,8 +429,18 @@ public sealed class IrLowerer
         {
             // Load the named function as a function item
             int funcReg = AllocRegister();
-            var funcTuple = (qname, argCount);
-            int funcItemPoolIdx = AddToLiteralPool(funcTuple);
+            int funcItemPoolIdx;
+            if (!string.IsNullOrEmpty(node.NamespaceUri))
+            {
+                funcItemPoolIdx = AddToLiteralPool(new NamedFunctionItem(node.NamespaceUri, node.LocalName, argCount));
+            }
+            else
+            {
+                string qname = string.IsNullOrEmpty(node.Prefix)
+                    ? node.LocalName
+                    : $"{node.Prefix}:{node.LocalName}";
+                funcItemPoolIdx = AddToLiteralPool((qname, argCount));
+            }
             Emit(IrOpCode.LoadFunction, (byte)funcReg, operand: funcItemPoolIdx);
 
             // Evaluate non-placeholder arguments and build descriptor
@@ -485,6 +511,12 @@ public sealed class IrLowerer
     private int LowerNamedFunctionRef(NamedFunctionRefNode node, int? targetReg)
     {
         int resultReg = targetReg ?? AllocRegister();
+        if (!string.IsNullOrEmpty(node.NamespaceUri))
+        {
+            int nsPoolIdx = AddToLiteralPool(new NamedFunctionItem(node.NamespaceUri, node.LocalName, node.Arity));
+            Emit(IrOpCode.LoadFunction, (byte)resultReg, operand: nsPoolIdx);
+            return resultReg;
+        }
         string qname = string.IsNullOrEmpty(node.Prefix)
             ? node.LocalName
             : $"{node.Prefix}:{node.LocalName}";
@@ -782,10 +814,18 @@ public sealed class IrLowerer
         {
             case FunctionCallNode staticCall:
                 {
-                    string qname = string.IsNullOrEmpty(staticCall.Prefix)
-                        ? staticCall.LocalName
-                        : $"{staticCall.Prefix}:{staticCall.LocalName}";
-                    int funcPoolIdx = AddToLiteralPool(qname);
+                    int funcPoolIdx;
+                    if (!string.IsNullOrEmpty(staticCall.NamespaceUri))
+                    {
+                        funcPoolIdx = AddToLiteralPool((staticCall.LocalName, staticCall.NamespaceUri));
+                    }
+                    else
+                    {
+                        string qname = string.IsNullOrEmpty(staticCall.Prefix)
+                            ? staticCall.LocalName
+                            : $"{staticCall.Prefix}:{staticCall.LocalName}";
+                        funcPoolIdx = AddToLiteralPool(qname);
+                    }
 
                     int argCount = staticCall.Arguments.Count + 1;
                     var argRegs = new int[argCount];

@@ -96,15 +96,26 @@ public static class VmEngine
 
                 case IrOpCode.Call:
                     {
-                        string funcName = (string)literalPool[instr.Operand]!;
                         int argCount = instr.RegisterC;
                         int firstArgReg = instr.RegisterB;
 
-                        var (localName, nsUri) = ResolveFunctionName(funcName, context);
+                        string localName;
+                        string nsUri;
+                        var funcLiteral = literalPool[instr.Operand]!;
+                        if (funcLiteral is ValueTuple<string, string> resolved)
+                        {
+                            localName = resolved.Item1;
+                            nsUri = resolved.Item2;
+                        }
+                        else
+                        {
+                            string funcName = (string)funcLiteral;
+                            (localName, nsUri) = ResolveFunctionName(funcName, context);
+                        }
 
                         if (!context.TryResolveFunction(nsUri, localName, argCount, out var sig))
                             throw new InvalidOperationException(
-                                $"Function {funcName}#{argCount} not found in namespace '{nsUri}'.");
+                                $"Function {{{nsUri}}}{localName}#{argCount} not found.");
 
                         // Build argument span
                         XdmValue[] args = new XdmValue[argCount];
@@ -146,11 +157,22 @@ public static class VmEngine
                 // ------------------------------------------------------------------
                 case IrOpCode.LoadVariable:
                     {
-                        string varName = (string)literalPool[instr.Operand]!;
-                        var (localName, nsUri) = ResolveVariableName(varName, context);
+                        string localName;
+                        string nsUri;
+                        var varLiteral = literalPool[instr.Operand]!;
+                        if (varLiteral is ValueTuple<string, string> resolvedVar)
+                        {
+                            localName = resolvedVar.Item1;
+                            nsUri = resolvedVar.Item2;
+                        }
+                        else
+                        {
+                            string varName = (string)varLiteral;
+                            (localName, nsUri) = ResolveVariableName(varName, context);
+                        }
 
                         if (!context.TryGetVariable(localName, out var value, nsUri))
-                            throw new InvalidOperationException($"Variable ${varName} is not defined.");
+                            throw new InvalidOperationException($"Variable ${localName} is not defined.");
 
                         registers[instr.RegisterA] = value;
                         ip++;
@@ -159,8 +181,19 @@ public static class VmEngine
 
                 case IrOpCode.StoreVariable:
                     {
-                        string varName = (string)literalPool[instr.Operand]!;
-                        var (localName, nsUri) = ResolveVariableName(varName, context);
+                        string localName;
+                        string nsUri;
+                        var varLiteral = literalPool[instr.Operand]!;
+                        if (varLiteral is ValueTuple<string, string> resolvedVar)
+                        {
+                            localName = resolvedVar.Item1;
+                            nsUri = resolvedVar.Item2;
+                        }
+                        else
+                        {
+                            string varName = (string)varLiteral;
+                            (localName, nsUri) = ResolveVariableName(varName, context);
+                        }
                         context.WithVariable(localName, registers[instr.RegisterB], nsUri);
                         ip++;
                         break;
@@ -752,8 +785,7 @@ public static class VmEngine
                     {
                         bool result = registers[instr.RegisterB].IsNode &&
                                       registers[instr.RegisterC].IsNode &&
-                                      ReferenceEquals(
-                                          registers[instr.RegisterB].NodeValue,
+                                      registers[instr.RegisterB].NodeValue.IsSameNode(
                                           registers[instr.RegisterC].NodeValue);
                         registers[instr.RegisterA] = XdmValue.FromBoolean(result);
                         ip++;
@@ -1806,11 +1838,60 @@ public static class VmEngine
 
     private static XdmValue Add(XdmValue left, XdmValue right)
     {
+        // Date/Time + Duration
+        if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && right.Kind == XdmValueKind.String)
+            return AddDuration(left, right.ToString());
+        if (right.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && left.Kind == XdmValueKind.String)
+            return AddDuration(right, left.ToString());
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) + ToDecimal(right));
         return XdmValue.FromInteger(ToInteger(left) + ToInteger(right));
+    }
+
+    private static XdmValue AddDuration(XdmValue dateTimeValue, string duration)
+    {
+        var dto = dateTimeValue.Kind switch
+        {
+            XdmValueKind.DateTime => dateTimeValue.DateTimeValue,
+            XdmValueKind.Date => dateTimeValue.DateValue,
+            XdmValueKind.Time => dateTimeValue.TimeValue,
+            _ => throw new InvalidOperationException("Expected date/time value")
+        };
+
+        if (IsYearMonthDurationString(duration))
+        {
+            var (years, months, _, _, _, _) = ParseDuration(duration);
+            var dt = dto.DateTime;
+            int newMonth = dt.Month + (int)months;
+            int newYear = dt.Year + (int)years + (newMonth - 1) / 12;
+            newMonth = ((newMonth - 1) % 12) + 1;
+            if (newMonth <= 0) { newYear -= 1; newMonth += 12; }
+            int newDay = Math.Min(dt.Day, DateTime.DaysInMonth(newYear, newMonth));
+            var newDt = new DateTime(newYear, newMonth, newDay, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Kind);
+            dto = new DateTimeOffset(newDt, dto.Offset);
+        }
+        else if (IsDayTimeDurationString(duration))
+        {
+            var (_, _, days, hours, minutes, seconds) = ParseDuration(duration);
+            long ticks = (long)(seconds * TimeSpan.TicksPerSecond);
+            var ts = TimeSpan.FromDays(days) + TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes) + TimeSpan.FromTicks(ticks);
+            dto = dto + ts;
+        }
+        else
+        {
+            throw new InvalidOperationException("Invalid duration format");
+        }
+
+        return dateTimeValue.Kind switch
+        {
+            XdmValueKind.DateTime => XdmValue.FromDateTime(dto),
+            XdmValueKind.Date => XdmValue.FromDate(dto),
+            XdmValueKind.Time => XdmValue.FromTime(dto),
+            _ => throw new InvalidOperationException("Unexpected kind")
+        };
     }
 
     private static XdmValue Subtract(XdmValue left, XdmValue right)
@@ -1821,11 +1902,56 @@ public static class VmEngine
             return XdmValue.FromString(FormatDuration(left.DateTimeValue - right.DateTimeValue));
         if (left.Kind == XdmValueKind.Time && right.Kind == XdmValueKind.Time)
             return XdmValue.FromString(FormatDuration(left.TimeValue - right.TimeValue));
+        if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && right.Kind == XdmValueKind.String)
+            return SubtractDuration(left, right.ToString());
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) - ToDecimal(right));
         return XdmValue.FromInteger(ToInteger(left) - ToInteger(right));
+    }
+
+    private static XdmValue SubtractDuration(XdmValue dateTimeValue, string duration)
+    {
+        var dto = dateTimeValue.Kind switch
+        {
+            XdmValueKind.DateTime => dateTimeValue.DateTimeValue,
+            XdmValueKind.Date => dateTimeValue.DateValue,
+            XdmValueKind.Time => dateTimeValue.TimeValue,
+            _ => throw new InvalidOperationException("Expected date/time value")
+        };
+
+        if (IsYearMonthDurationString(duration))
+        {
+            var (years, months, _, _, _, _) = ParseDuration(duration);
+            var dt = dto.DateTime;
+            int newMonth = dt.Month - (int)months;
+            int newYear = dt.Year - (int)years + (newMonth - 1) / 12;
+            newMonth = ((newMonth - 1) % 12) + 1;
+            if (newMonth <= 0) { newYear -= 1; newMonth += 12; }
+            int newDay = Math.Min(dt.Day, DateTime.DaysInMonth(newYear, newMonth));
+            var newDt = new DateTime(newYear, newMonth, newDay, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Kind);
+            dto = new DateTimeOffset(newDt, dto.Offset);
+        }
+        else if (IsDayTimeDurationString(duration))
+        {
+            var (_, _, days, hours, minutes, seconds) = ParseDuration(duration);
+            long ticks = (long)(seconds * TimeSpan.TicksPerSecond);
+            var ts = TimeSpan.FromDays(days) + TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes) + TimeSpan.FromTicks(ticks);
+            dto = dto - ts;
+        }
+        else
+        {
+            throw new InvalidOperationException("Invalid duration format");
+        }
+
+        return dateTimeValue.Kind switch
+        {
+            XdmValueKind.DateTime => XdmValue.FromDateTime(dto),
+            XdmValueKind.Date => XdmValue.FromDate(dto),
+            XdmValueKind.Time => XdmValue.FromTime(dto),
+            _ => throw new InvalidOperationException("Unexpected kind")
+        };
     }
 
     private static string FormatDuration(TimeSpan ts)
@@ -1851,6 +1977,73 @@ public static class VmEngine
         }
         if (sb.Length == (negative ? 2 : 1)) sb.Append("T0S");
         return sb.ToString();
+    }
+
+    private static (long Years, long Months, long Days, long Hours, long Minutes, decimal Seconds) ParseDuration(string s)
+    {
+        bool negative = s.StartsWith('-');
+        s = negative ? s[1..] : s;
+        if (!s.StartsWith('P')) return (0, 0, 0, 0, 0, 0m);
+        s = s[1..];
+
+        long years = 0, months = 0, days = 0, hours = 0, minutes = 0;
+        decimal seconds = 0m;
+
+        int tIndex = s.IndexOf('T');
+        string datePart = tIndex >= 0 ? s[..tIndex] : s;
+        string timePart = tIndex >= 0 ? s[(tIndex + 1)..] : string.Empty;
+
+        years = ParseDurationNumber(ref datePart, 'Y');
+        months = ParseDurationNumber(ref datePart, 'M');
+        days = ParseDurationNumber(ref datePart, 'D');
+
+        hours = ParseDurationNumber(ref timePart, 'H');
+        minutes = ParseDurationNumber(ref timePart, 'M');
+        seconds = ParseDurationDecimal(ref timePart, 'S');
+
+        if (negative)
+        {
+            years = -years;
+            months = -months;
+            days = -days;
+            hours = -hours;
+            minutes = -minutes;
+            seconds = -seconds;
+        }
+
+        return (years, months, days, hours, minutes, seconds);
+    }
+
+    private static long ParseDurationNumber(ref string s, char suffix)
+    {
+        int idx = s.IndexOf(suffix);
+        if (idx < 0) return 0;
+        var numStr = s[..idx];
+        s = s[(idx + 1)..];
+        return long.TryParse(numStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v) ? v : 0;
+    }
+
+    private static decimal ParseDurationDecimal(ref string s, char suffix)
+    {
+        int idx = s.IndexOf(suffix);
+        if (idx < 0) return 0m;
+        var numStr = s[..idx];
+        s = s[(idx + 1)..];
+        return decimal.TryParse(numStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v) ? v : 0m;
+    }
+
+    private static bool IsYearMonthDurationString(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (s.StartsWith('-')) s = s[1..];
+        return s.StartsWith('P') && !s.Contains('D') && !s.Contains('T');
+    }
+
+    private static bool IsDayTimeDurationString(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (s.StartsWith('-')) s = s[1..];
+        return s.StartsWith('P') && (s.Contains('D') || s.Contains('T'));
     }
 
     private static XdmValue Multiply(XdmValue left, XdmValue right)

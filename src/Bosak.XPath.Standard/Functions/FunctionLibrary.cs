@@ -964,6 +964,13 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Array,
                 Implementation = ArrayPut
             },
+            [(Namespaces.Array, "remove", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "remove", Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayRemove
+            },
 
             // ----- fn:abs -----------------------------------------------------
             [(Namespaces.Fn, "abs", 1)] = new()
@@ -1567,6 +1574,24 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.QName,
                 Implementation = ResolveQName
             },
+            [(Namespaces.Fn, "local-name-from-QName", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "local-name-from-QName", Arity = 1,
+                ParameterTypes = [XdmValueKind.QName], ReturnType = XdmValueKind.String,
+                Implementation = LocalNameFromQName
+            },
+            [(Namespaces.Fn, "namespace-uri-from-QName", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "namespace-uri-from-QName", Arity = 1,
+                ParameterTypes = [XdmValueKind.QName], ReturnType = XdmValueKind.String,
+                Implementation = NamespaceUriFromQName
+            },
+            [(Namespaces.Fn, "prefix-from-QName", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "prefix-from-QName", Arity = 1,
+                ParameterTypes = [XdmValueKind.QName], ReturnType = XdmValueKind.String,
+                Implementation = PrefixFromQName
+            },
             // ----- fn:for-each, fn:filter, fn:fold-left, fn:fold-right, fn:for-each-pair -----
             [(Namespaces.Fn, "function-name", 1)] = new()
             {
@@ -1775,6 +1800,42 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Xs, LocalName = "anyURI", Arity = 1,
                 ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
                 Implementation = XsAnyUri
+            },
+            [(Namespaces.Xs, "hexBinary", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "hexBinary", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsHexBinary
+            },
+            [(Namespaces.Xs, "base64Binary", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "base64Binary", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsBase64Binary
+            },
+            [(Namespaces.Xs, "gDay", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "gDay", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsGDay
+            },
+            [(Namespaces.Xs, "gMonth", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "gMonth", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsGMonth
+            },
+            [(Namespaces.Xs, "NCName", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "NCName", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsNCName
+            },
+            [(Namespaces.Xs, "duration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "duration", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsDuration
             },
             // ----- math:* functions -------------------------------------------
             [(Namespaces.Math, "pi", 0)] = new()
@@ -2944,6 +3005,24 @@ public static class FunctionLibrary
     private static XdmValue XsAnyUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(AtomizedString(args[0]));
 
+    private static XdmValue XsHexBinary(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsBase64Binary(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsGDay(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsGMonth(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsNCName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
     // ------------------------------------------------------------------
     // math:* functions
     // ------------------------------------------------------------------
@@ -3552,6 +3631,27 @@ public static class FunctionLibrary
         {
             if (first) { first = false; continue; }
             items.Add(item);
+        }
+        return XdmValue.FromArray(new XdmArray(items));
+    }
+
+    private static XdmValue ArrayRemove(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        var removePositions = new HashSet<int>();
+        foreach (var posVal in AsSequence(args[1]))
+        {
+            int pos = (int)posVal.IntegerValue;
+            if (pos >= 1 && pos <= arr.Count)
+                removePositions.Add(pos);
+        }
+        var items = new List<XdmValue>();
+        int idx = 1;
+        foreach (var item in arr.Values)
+        {
+            if (!removePositions.Contains(idx))
+                items.Add(item);
+            idx++;
         }
         return XdmValue.FromArray(new XdmArray(items));
     }
@@ -4267,58 +4367,103 @@ public static class FunctionLibrary
     // Date / Time component extractors
     // ------------------------------------------------------------------
 
+    private static XdmValue UnwrapSequenceOrUndefined(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                return item;
+            return XdmValue.Undefined;
+        }
+        return value;
+    }
+
     private static XdmValue YearFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Year);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeValue.Year);
+    }
 
     private static XdmValue MonthFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Month);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeValue.Month);
+    }
 
     private static XdmValue DayFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Day);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeValue.Day);
+    }
 
     private static XdmValue HoursFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Hour);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeValue.Hour);
+    }
 
     private static XdmValue MinutesFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateTimeValue.Minute);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeValue.Minute);
+    }
 
     private static XdmValue SecondsFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[0].IsUndefined) return XdmValue.Undefined;
-        var dto = args[0].DateTimeValue;
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        if (v.IsUndefined) return XdmValue.Undefined;
+        var dto = v.DateTimeValue;
         return XdmValue.FromDecimal(dto.Second + dto.Millisecond / 1000.0m + dto.Microsecond / 1_000_000.0m + dto.Nanosecond / 1_000_000_000.0m);
     }
 
     private static XdmValue YearFromDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateValue.Year);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateValue.Year);
+    }
 
     private static XdmValue MonthFromDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateValue.Month);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateValue.Month);
+    }
 
     private static XdmValue DayFromDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].DateValue.Day);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateValue.Day);
+    }
 
     private static XdmValue HoursFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].TimeValue.Hour);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.TimeValue.Hour);
+    }
 
     private static XdmValue MinutesFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(args[0].TimeValue.Minute);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.TimeValue.Minute);
+    }
 
     private static XdmValue SecondsFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[0].IsUndefined) return XdmValue.Undefined;
-        var dto = args[0].TimeValue;
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        if (v.IsUndefined) return XdmValue.Undefined;
+        var dto = v.TimeValue;
         return XdmValue.FromDecimal(dto.Second + dto.Millisecond / 1000.0m + dto.Microsecond / 1_000_000.0m + dto.Nanosecond / 1_000_000_000.0m);
     }
 
     private static XdmValue TimezoneFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => TimezoneFromValue(args[0], v => v.DateTimeValue);
+        => TimezoneFromValue(UnwrapSequenceOrUndefined(args[0]), v => v.DateTimeValue);
 
     private static XdmValue TimezoneFromDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => TimezoneFromValue(args[0], v => v.DateValue);
+        => TimezoneFromValue(UnwrapSequenceOrUndefined(args[0]), v => v.DateValue);
 
     private static XdmValue TimezoneFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => TimezoneFromValue(args[0], v => v.TimeValue);
+        => TimezoneFromValue(UnwrapSequenceOrUndefined(args[0]), v => v.TimeValue);
 
     private static XdmValue TimezoneFromValue(XdmValue value, Func<XdmValue, DateTimeOffset> getDto)
     {
@@ -4897,6 +5042,24 @@ public static class FunctionLibrary
                 return nsNode.StringValue;
         }
         return string.Empty;
+    }
+
+    private static XdmValue LocalNameFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var qn = args[0].QNameValue;
+        return XdmValue.FromString(qn.LocalName);
+    }
+
+    private static XdmValue NamespaceUriFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var qn = args[0].QNameValue;
+        return XdmValue.FromString(qn.NamespaceUri);
+    }
+
+    private static XdmValue PrefixFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        // XsQName does not store prefix; return empty string as per spec for QNames created without prefix
+        return XdmValue.FromString(string.Empty);
     }
 }
 

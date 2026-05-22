@@ -262,6 +262,39 @@ public ref struct XPathLexer
         while (_position < _source.Length && IsNameChar(_source[_position]) && _source[_position] != ':')
             _position++;
 
+        // Braced URI literal: Q{uri}localname
+        if (_position - start == 1 && _source[start] == 'Q' &&
+            _position < _source.Length && _source[_position] == '{')
+        {
+            _position++; // consume '{'
+            while (_position < _source.Length && _source[_position] != '}')
+                _position++;
+            if (_position < _source.Length)
+                _position++; // consume '}'
+
+            // Read local name or prefix:local
+            if (_position < _source.Length && IsNameStartChar(_source[_position]))
+            {
+                while (_position < _source.Length && IsNameChar(_source[_position]))
+                    _position++;
+
+                // Handle prefix:local
+                if (_position < _source.Length && _source[_position] == ':')
+                {
+                    int colonPos = _position;
+                    _position++;
+                    if (_position < _source.Length && IsNameStartChar(_source[_position]))
+                    {
+                        while (_position < _source.Length && IsNameChar(_source[_position]))
+                            _position++;
+                        return new Token(TokenKind.Name, start, _position - start);
+                    }
+                    _position = colonPos; // rollback
+                }
+            }
+            return new Token(TokenKind.Name, start, _position - start);
+        }
+
         // Check for colon (QName)
         if (_position < _source.Length && _source[_position] == ':')
         {

@@ -550,6 +550,30 @@ internal static class ResultComparer
             return a.NodeValue?.StringValue == b.NodeValue?.StringValue;
 
         // Atomic values
+        if (a.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float &&
+            b.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
+        {
+            bool aIsNaN = a.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(a.DoubleValue);
+            bool bIsNaN = b.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(b.DoubleValue);
+            if (aIsNaN && bIsNaN) return true;
+
+            if (a.Kind == XdmValueKind.Float || b.Kind == XdmValueKind.Float)
+            {
+                float fa = a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.Kind == XdmValueKind.Decimal ? (float)a.DecimalValue : (float)a.DoubleValue;
+                float fb = b.Kind == XdmValueKind.Integer ? b.IntegerValue : b.Kind == XdmValueKind.Decimal ? (float)b.DecimalValue : (float)b.DoubleValue;
+                return fa == fb;
+            }
+            if (a.Kind == XdmValueKind.Double || b.Kind == XdmValueKind.Double)
+            {
+                double da = a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.Kind == XdmValueKind.Decimal ? (double)a.DecimalValue : a.DoubleValue;
+                double db = b.Kind == XdmValueKind.Integer ? b.IntegerValue : b.Kind == XdmValueKind.Decimal ? (double)b.DecimalValue : b.DoubleValue;
+                return da == db;
+            }
+            decimal ma = a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.DecimalValue;
+            decimal mb = b.Kind == XdmValueKind.Integer ? b.IntegerValue : b.DecimalValue;
+            return ma == mb;
+        }
+
         if (a.Kind != b.Kind)
             return false;
 

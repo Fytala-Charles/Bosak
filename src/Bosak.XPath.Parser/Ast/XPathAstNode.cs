@@ -77,7 +77,7 @@ public sealed record PredicateNode(XPathAstNode Expression) : XPathAstNode;
 public sealed record FunctionCallNode(string LocalName, IReadOnlyList<XPathAstNode> Arguments, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
 
 /// <summary>Named function reference: <c>fn:abs#1</c></summary>
-public sealed record NamedFunctionRefNode(string LocalName, int Arity, string? Prefix = null) : XPathAstNode;
+public sealed record NamedFunctionRefNode(string LocalName, int Arity, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // Sequence / Range

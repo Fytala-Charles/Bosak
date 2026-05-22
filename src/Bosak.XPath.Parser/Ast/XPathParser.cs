@@ -161,7 +161,7 @@ public sealed class XPathParser
     {
         Expect(TokenKind.Dollar);
         var nameTok = Expect(TokenKind.Name);
-        var (prefix, local) = SplitQName(GetString(nameTok));
+        var (prefix, local, _) = SplitQName(GetString(nameTok));
         Expect(TokenKind.KeywordIn);
         var expr = ParseExprSingle();
         return new QuantifiedBinding(local, expr);
@@ -186,7 +186,7 @@ public sealed class XPathParser
     {
         Expect(TokenKind.Dollar);
         var nameTok = Expect(TokenKind.Name);
-        var (prefix, local) = SplitQName(GetString(nameTok));
+        var (prefix, local, _) = SplitQName(GetString(nameTok));
         Expect(TokenKind.Assign);  // := 
         var expr = ParseExprSingle();
         return new QuantifiedBinding(local, expr);
@@ -498,7 +498,7 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.Name)
         {
             var name = GetString(Current);
-            var (prefix, local) = SplitQName(name);
+            var (prefix, local, _) = SplitQName(name);
             Advance();
             var args = ParseArgumentList();
             return WithSpan(new FunctionCallNode(local, args, prefix), start, End);
@@ -508,7 +508,7 @@ public sealed class XPathParser
             // Variable reference as function: $x => $f()
             Advance();
             var nameTok = Expect(TokenKind.Name);
-            var (prefix, local) = SplitQName(GetString(nameTok));
+            var (prefix, local, _) = SplitQName(GetString(nameTok));
             var args = ParseArgumentList();
             return WithSpan(new DynamicFunctionCallNode(new VariableReferenceNode(local, prefix), args), start, End);
         }
@@ -639,7 +639,7 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.Name)
         {
             var name = GetString(Current);
-            var (_, local) = SplitQName(name);
+            var (_, local, _) = SplitQName(name);
             if (IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
             {
                 return ParseAxisStep(start);
@@ -713,7 +713,7 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.Name)
         {
             var name = GetString(Current);
-            var (prefix, local) = SplitQName(name);
+            var (prefix, local, _) = SplitQName(name);
 
             // Kind test: node(), text(), etc.
             if (IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
@@ -880,8 +880,8 @@ public sealed class XPathParser
             case TokenKind.Dollar:
                 Advance();
                 var varTok = Expect(TokenKind.Name);
-                var (vp, vl) = SplitQName(GetString(varTok));
-                return WithSpan(new VariableReferenceNode(vl, vp), start, End);
+                var (vp, vl, vns) = SplitQName(GetString(varTok));
+                return WithSpan(new VariableReferenceNode(vl, vp, vns), start, End);
 
             case TokenKind.LParen:
                 Advance();
@@ -897,7 +897,7 @@ public sealed class XPathParser
 
             case TokenKind.Name:
                 var name = GetString(Current);
-                var (prefix, local) = SplitQName(name);
+                var (prefix, local, _) = SplitQName(name);
                 if (Peek(1).Kind == TokenKind.LParen)
                     return ParseFunctionCall(start);
                 if (Peek(1).Kind == TokenKind.Hash)
@@ -924,21 +924,21 @@ public sealed class XPathParser
     private FunctionCallNode ParseFunctionCall(int start)
     {
         var name = GetString(Current);
-        var (prefix, local) = SplitQName(name);
+        var (prefix, local, nsUri) = SplitQName(name);
         Advance();
         var args = ParseArgumentList();
-        return WithSpan(new FunctionCallNode(local, args, prefix), start, End);
+        return WithSpan(new FunctionCallNode(local, args, prefix, nsUri), start, End);
     }
 
     private NamedFunctionRefNode ParseNamedFunctionRef(int start)
     {
         var name = GetString(Current);
-        var (prefix, local) = SplitQName(name);
+        var (prefix, local, nsUri) = SplitQName(name);
         Advance(); // name
         Advance(); // #
         var arityTok = Expect(TokenKind.IntegerLiteral);
         var arity = int.Parse(GetString(arityTok), CultureInfo.InvariantCulture);
-        return WithSpan(new NamedFunctionRefNode(local, arity, prefix), start, End);
+        return WithSpan(new NamedFunctionRefNode(local, arity, prefix, nsUri), start, End);
     }
 
     private List<XPathAstNode> ParseArgumentList()
@@ -1062,10 +1062,23 @@ public sealed class XPathParser
     // Utilities
     // ------------------------------------------------------------------
 
-    private static (string? Prefix, string Local) SplitQName(string qname)
+    private static (string? Prefix, string Local, string? NamespaceUri) SplitQName(string qname)
     {
+        // Braced URI literal: Q{uri}localname or Q{uri}prefix:local
+        if (qname.Length > 2 && qname[0] == 'Q' && qname[1] == '{')
+        {
+            int closeBrace = qname.IndexOf('}');
+            if (closeBrace > 2)
+            {
+                string nsUri = qname[2..closeBrace];
+                string rest = qname[(closeBrace + 1)..];
+                int restColon = rest.IndexOf(':');
+                return restColon < 0 ? (null, rest, nsUri) : (rest[..restColon], rest[(restColon + 1)..], nsUri);
+            }
+        }
+
         int colon = qname.IndexOf(':');
-        return colon < 0 ? (null, qname) : (qname[..colon], qname[(colon + 1)..]);
+        return colon < 0 ? (null, qname, null) : (qname[..colon], qname[(colon + 1)..], null);
     }
 
     private static bool IsKindTestName(string localName) => localName switch
@@ -1193,7 +1206,7 @@ public sealed class XPathParser
             throw new ParseException($"Expected sequence type but found {Current.Kind}", Current.Start);
         }
 
-        var (prefix, local) = SplitQName(name);
+        var (prefix, local, _) = SplitQName(name);
 
         // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), etc.
         if (Current.Kind == TokenKind.LParen)
