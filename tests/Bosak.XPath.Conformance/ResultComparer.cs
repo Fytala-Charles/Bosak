@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-05-2026     | assert-true/assert-false unwrap singleton sequences                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -120,12 +121,28 @@ internal static class ResultComparer
         }
     }
 
+    /// <summary>
+    /// If the value is a singleton sequence, returns its single item; otherwise returns the value as-is.
+    /// Used by assert-true and assert-false to handle functions that return a singleton sequence.
+    /// </summary>
+    private static XdmValue UnwrapSingleton(XdmValue value)
+    {
+        if (value.Kind == XdmValueKind.Sequence && value.SequenceValue is not null &&
+            value.SequenceValue.TryGetLength(out var len) && len == 1)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                return item;
+        }
+        return value;
+    }
+
     private static TestOutcome CompareAssertTrue(XdmValue actual, Exception? caughtException)
     {
         if (caughtException is not null)
             return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
 
-        if (!actual.IsUndefined && actual.Kind == XdmValueKind.Boolean && actual.BooleanValue)
+        var value = UnwrapSingleton(actual);
+        if (!value.IsUndefined && value.Kind == XdmValueKind.Boolean && value.BooleanValue)
             return new TestOutcome(TestOutcomeKind.Passed, null);
 
         return new TestOutcome(TestOutcomeKind.Failed, $"assert-true failed. Got: {SerializeValue(actual)}");
@@ -136,7 +153,8 @@ internal static class ResultComparer
         if (caughtException is not null)
             return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
 
-        if (!actual.IsUndefined && actual.Kind == XdmValueKind.Boolean && !actual.BooleanValue)
+        var value = UnwrapSingleton(actual);
+        if (!value.IsUndefined && value.Kind == XdmValueKind.Boolean && !value.BooleanValue)
             return new TestOutcome(TestOutcomeKind.Passed, null);
 
         return new TestOutcome(TestOutcomeKind.Failed, $"assert-false failed. Got: {SerializeValue(actual)}");

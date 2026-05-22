@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 1.4   | 19-05-2026     | Added fn:serialize                                                                     |
 //                      | Charles Korthout | 1.5   | 19-05-2026     | Added fn:trace, fn:boolean, fn:zero-or-one, fn:one-or-more, fn:exactly-one, fn:base-uri, fn:document-uri |
 //                      | Charles Korthout | 1.6   | 21-05-2026     | Fixed fn:deep-equal numeric cross-type, NaN, sequence, map key comparison              |
+//                      | Charles Korthout | 1.7   | 21-05-2026     | Fixed fn:distinct-values to use deep-equal semantics; fixed xs:boolean string cast     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3308,13 +3309,25 @@ public static class FunctionLibrary
     private static XdmValue DistinctValues_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var items = Materialize(args[0]);
-        var seen = new HashSet<string>();
+        var seen = new List<XdmValue>();
         var result = new List<XdmValue>();
         foreach (var item in items)
         {
-            string key = AtomizedString(item);
-            if (seen.Add(key))
+            var atomized = AtomizeValue(item);
+            bool isDistinct = true;
+            foreach (var s in seen)
+            {
+                if (DeepEqualItem(atomized, s))
+                {
+                    isDistinct = false;
+                    break;
+                }
+            }
+            if (isDistinct)
+            {
+                seen.Add(atomized);
                 result.Add(item);
+            }
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
