@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added occurrence indicator support for InstanceOf, Cast, Castable, TreatAs             |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Optimized Subscript, First, Last VM handlers to avoid full sequence materialization    |
 //                      | Charles Korthout | 0.7   | 21-05-2026     | Divide opcode returns decimal for integer operands (XPath div semantics)               |
+//                      | Charles Korthout | 0.8   | 21-05-2026     | MapAdd uses XdmValue keys with numeric promotion; fixed xs:boolean string cast         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1317,7 +1318,7 @@ public static class VmEngine
                 case IrOpCode.MapAdd:
                     {
                         var map = registers[instr.RegisterA].MapValue;
-                        string key = AtomizedString(registers[instr.RegisterB]);
+                        var key = AtomizeMapKey(registers[instr.RegisterB]);
                         map.Add(key, registers[instr.RegisterC]);
                         ip++;
                         break;
@@ -1360,8 +1361,8 @@ public static class VmEngine
 
                         if (container.Kind == XdmValueKind.Map)
                         {
-                            string skey = AtomizedString(key);
-                            if (container.MapValue.TryGetValue(skey, out var value))
+                            var vkey = AtomizeMapKey(key);
+                            if (container.MapValue.TryGetValue(vkey, out var value))
                                 registers[instr.RegisterA] = value;
                             else
                                 registers[instr.RegisterA] = XdmValue.Undefined;
@@ -1670,7 +1671,7 @@ public static class VmEngine
         {
             if (args.Length != 1)
                 throw new InvalidOperationException("XPTY0004");
-            var key = AtomizedString(args[0]);
+            var key = AtomizeMapKey(args[0]);
             var map = funcValue.MapValue;
             if (map.TryGetValue(key, out var value))
                 return value;
@@ -2174,6 +2175,39 @@ public static class VmEngine
                 return false;
 
             case "boolean":
+                if (value.Kind == XdmValueKind.Boolean)
+                    return true;
+                if (value.Kind == XdmValueKind.String)
+                {
+                    var s = value.StringValue.Trim().ToLowerInvariant();
+                    if (s == "true" || s == "1")
+                    {
+                        result = XdmValue.True;
+                        return true;
+                    }
+                    if (s == "false" || s == "0")
+                    {
+                        result = XdmValue.False;
+                        return true;
+                    }
+                    return false;
+                }
+                if (value.Kind == XdmValueKind.Integer)
+                {
+                    result = XdmValue.FromBoolean(value.IntegerValue != 0);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Decimal)
+                {
+                    result = XdmValue.FromBoolean(value.DecimalValue != 0m);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float)
+                {
+                    double d = value.DoubleValue;
+                    result = XdmValue.FromBoolean(d != 0.0 && !double.IsNaN(d));
+                    return true;
+                }
                 result = XdmValue.FromBoolean(value.EffectiveBooleanValue());
                 return true;
 
@@ -2421,6 +2455,13 @@ public static class VmEngine
     // Opcode helpers
     // ------------------------------------------------------------------
 
+    private static XdmValue AtomizeMapKey(XdmValue value)
+    {
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            throw new InvalidOperationException("FOTY0013");
+        return Atomize(value);
+    }
+
     private static string AtomizedString(XdmValue value)
     {
         if (value.IsUndefined)
@@ -2428,6 +2469,9 @@ public static class VmEngine
 
         if (value.IsNode)
             return value.NodeValue.StringValue;
+
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            throw new InvalidOperationException("FOTY0013");
 
         if (value.IsSequence)
         {

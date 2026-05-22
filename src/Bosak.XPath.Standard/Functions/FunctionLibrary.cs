@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.3   | 19-05-2026     | Added fn:analyze-string with regex group extraction                                    |
 //                      | Charles Korthout | 1.4   | 19-05-2026     | Added fn:serialize                                                                     |
 //                      | Charles Korthout | 1.5   | 19-05-2026     | Added fn:trace, fn:boolean, fn:zero-or-one, fn:one-or-more, fn:exactly-one, fn:base-uri, fn:document-uri |
+//                      | Charles Korthout | 1.6   | 21-05-2026     | Fixed fn:deep-equal numeric cross-type, NaN, sequence, map key comparison              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3446,7 +3447,7 @@ public static class FunctionLibrary
     private static XdmValue MapGet(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var map = args[0].MapValue;
-        string key = AtomizedString(args[1]);
+        var key = AtomizeMapKey(args[1]);
         if (map.TryGetValue(key, out var value))
             return value;
         return XdmValue.Undefined;
@@ -3456,11 +3457,11 @@ public static class FunctionLibrary
         => XdmValue.FromInteger(args[0].MapValue.Count);
 
     private static XdmValue MapContains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(args[0].MapValue.ContainsKey(AtomizedString(args[1])));
+        => XdmValue.FromBoolean(args[0].MapValue.ContainsKey(AtomizeMapKey(args[1])));
 
     private static XdmValue MapKeys(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var keys = args[0].MapValue.Keys.Select(XdmValue.FromString).ToList();
+        var keys = args[0].MapValue.Keys.ToList();
         return XdmValue.FromSequence(MaterializedSequence.FromList(keys));
     }
 
@@ -3472,20 +3473,8 @@ public static class FunctionLibrary
         {
             if (mapVal.IsMap)
             {
-                foreach (var kvp in mapVal.MapValue.Values.Select((v, i) => new { v, i }))
-                {
-                    // We need key-value pairs, but Values doesn't give us keys
-                }
-            }
-        }
-        // Re-implement using Keys
-        foreach (var mapVal in maps)
-        {
-            if (mapVal.IsMap)
-            {
-                var m = mapVal.MapValue;
-                foreach (var key in m.Keys)
-                    result.Add(key, m.TryGetValue(key, out var v) ? v : XdmValue.Undefined);
+                foreach (var kvp in mapVal.MapValue.Entries)
+                    result.Add(kvp.Key, kvp.Value);
             }
         }
         return XdmValue.FromMap(result);
@@ -3494,12 +3483,12 @@ public static class FunctionLibrary
     private static XdmValue MapRemove(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var map = args[0].MapValue;
-        var key = args[1].ToString();
+        var key = AtomizeMapKey(args[1]);
         var result = new XdmMap();
-        foreach (var k in map.Keys)
+        foreach (var kvp in map.Entries)
         {
-            if (k != key)
-                result.Add(k, map.TryGetValue(k, out var v) ? v : XdmValue.Undefined);
+            if (!XdmValueEqualityComparer.Instance.Equals(kvp.Key, key))
+                result.Add(kvp.Key, kvp.Value);
         }
         return XdmValue.FromMap(result);
     }
@@ -3595,6 +3584,13 @@ public static class FunctionLibrary
         }
 
         return value;
+    }
+
+    private static XdmValue AtomizeMapKey(XdmValue value)
+    {
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            throw new InvalidOperationException("FOTY0013");
+        return AtomizeValue(value);
     }
 
     private static List<XdmValue> Materialize(XdmValue value)
@@ -4577,8 +4573,46 @@ public static class FunctionLibrary
 
     private static bool DeepEqualItem(XdmValue a, XdmValue b)
     {
+        // Numeric cross-type comparison: integer, decimal, float, double are all comparable
+        if (IsNumeric(a) && IsNumeric(b))
+        {
+            // deep-equal treats NaN as equal to NaN (unlike eq)
+            bool aIsNaN = a.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(a.DoubleValue);
+            bool bIsNaN = b.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(b.DoubleValue);
+            if (aIsNaN && bIsNaN)
+                return true;
+
+            // If either is double, promote both to double
+            if (a.Kind == XdmValueKind.Double || b.Kind == XdmValueKind.Double)
+            {
+                double da = a.Kind == XdmValueKind.Integer ? a.IntegerValue :
+                            a.Kind == XdmValueKind.Decimal ? (double)a.DecimalValue :
+                            a.Kind == XdmValueKind.Float ? a.DoubleValue : a.DoubleValue;
+                double db = b.Kind == XdmValueKind.Integer ? b.IntegerValue :
+                            b.Kind == XdmValueKind.Decimal ? (double)b.DecimalValue :
+                            b.Kind == XdmValueKind.Float ? b.DoubleValue : b.DoubleValue;
+                return da == db;
+            }
+
+            // If either is float, promote both to float
+            if (a.Kind == XdmValueKind.Float || b.Kind == XdmValueKind.Float)
+            {
+                float fa = a.Kind == XdmValueKind.Integer ? a.IntegerValue :
+                           a.Kind == XdmValueKind.Decimal ? (float)a.DecimalValue : (float)a.DoubleValue;
+                float fb = b.Kind == XdmValueKind.Integer ? b.IntegerValue :
+                           b.Kind == XdmValueKind.Decimal ? (float)b.DecimalValue : (float)b.DoubleValue;
+                return fa == fb;
+            }
+
+            // Both are integer or decimal
+            decimal ma = a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.DecimalValue;
+            decimal mb = b.Kind == XdmValueKind.Integer ? b.IntegerValue : b.DecimalValue;
+            return ma == mb;
+        }
+
         if (a.Kind != b.Kind)
             return false;
+
         return a.Kind switch
         {
             XdmValueKind.Undefined => true,
@@ -4592,11 +4626,15 @@ public static class FunctionLibrary
             XdmValueKind.Time => a.TimeValue == b.TimeValue,
             XdmValueKind.QName => a.QNameValue.Equals(b.QNameValue),
             XdmValueKind.Node => DeepEqualNode(a.NodeValue, b.NodeValue),
+            XdmValueKind.Sequence => DeepEqual(a, b).BooleanValue,
             XdmValueKind.Map => DeepEqualMap(a.MapValue, b.MapValue),
             XdmValueKind.Array => DeepEqualArray(a.ArrayValue, b.ArrayValue),
             _ => false
         };
     }
+
+    private static bool IsNumeric(XdmValue value)
+        => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double;
 
     private static bool DeepEqualNode(IXdmNode a, IXdmNode b)
     {
@@ -4661,13 +4699,20 @@ public static class FunctionLibrary
     {
         if (a.Count != b.Count)
             return false;
-        foreach (var key in a.Keys)
+        var entriesA = a.Entries.ToList();
+        var entriesB = b.Entries.ToList();
+        foreach (var (keyA, valA) in entriesA)
         {
-            if (!a.TryGetValue(key, out var av))
-                return false;
-            if (!b.TryGetValue(key, out var bv))
-                return false;
-            if (!DeepEqualItem(av, bv))
+            bool found = false;
+            foreach (var (keyB, valB) in entriesB)
+            {
+                if (DeepEqualItem(keyA, keyB) && DeepEqualItem(valA, valB))
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
                 return false;
         }
         return true;
