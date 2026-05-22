@@ -5006,20 +5006,14 @@ public static class FunctionLibrary
 
     private static XdmValue FormatInteger(EvaluationContext ctx, XdmValue value, string picture, string? language)
     {
+        // Handle empty sequence and undefined
         if (value.IsUndefined)
             return XdmValue.FromString("");
+        if (value.IsSequence && value.SequenceValue is not null && value.SequenceValue.TryGetLength(out var len) && len == 0)
+            return XdmValue.FromString("");
+
         long n = value.IntegerValue;
-        string result = picture switch
-        {
-            "a" => ToAlphabetic(n, false),
-            "A" => ToAlphabetic(n, true),
-            "i" => ToRoman(n, false),
-            "I" => ToRoman(n, true),
-            "w" => ToWords(n, false),
-            "W" => ToWords(n, true),
-            "Ww" => ToWordsTitle(n),
-            _ => ToDecimalPicture(n, picture)
-        };
+        string result = FormatIntegerEngine.Format(ctx, n, picture, language);
         return XdmValue.FromString(result);
     }
 
@@ -5098,17 +5092,6 @@ public static class FunctionLibrary
         string rr = NumberToWords(n / 1000000000) + " billion";
         if (n % 1000000000 > 0) rr += " " + NumberToWords(n % 1000000000);
         return rr;
-    }
-
-    private static string ToDecimalPicture(long n, string picture)
-    {
-        // Count leading zeros in picture
-        int zeros = 0;
-        foreach (char c in picture)
-            if (c == '0') zeros++;
-        if (zeros == 0) return n.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        string fmt = new string('0', zeros);
-        return n.ToString(fmt, System.Globalization.CultureInfo.InvariantCulture);
     }
 
     private static XdmValue DateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
