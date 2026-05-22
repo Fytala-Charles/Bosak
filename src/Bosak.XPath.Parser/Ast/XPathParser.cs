@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added string literal lookup keys and LookupWildcardNode                                |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Parse sequence type occurrence indicators (*, +, ?)                                    |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Support inline functions as arrow expression targets                                   |
+//                      | Charles Korthout | 0.6   | 21-05-2026     | Fixed SkipSequenceType RParen consumption; ParseSequenceType handles item()/function(*)/empty-sequence() |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -96,6 +97,7 @@ public sealed class XPathParser
 
     private ReadOnlySpan<char> GetText(Token token) => token.Text(_source.AsSpan());
     private string GetString(Token token) => token.Text(_source.AsSpan()).ToString();
+    private string GetSpanText(int start, int end) => _source[start..end];
 
     // ------------------------------------------------------------------
     // Entry point
@@ -977,11 +979,22 @@ public sealed class XPathParser
             {
                 Expect(TokenKind.Dollar);
                 var nameTok = Expect(TokenKind.Name);
-                parameters.Add(new ParamNode(GetString(nameTok)));
+                string? typeName = null;
+                if (Current.Kind == TokenKind.KeywordAs)
+                {
+                    Advance(); // as
+                    typeName = SkipSequenceType();
+                }
+                parameters.Add(new ParamNode(GetString(nameTok), typeName));
             } while (Match(TokenKind.Comma));
             Expect(TokenKind.RParen);
         }
-        // TODO: parse "as" SequenceType
+        string? returnType = null;
+        if (Current.Kind == TokenKind.KeywordAs)
+        {
+            Advance(); // as
+            returnType = SkipSequenceType();
+        }
         XPathAstNode body;
         if (Current.Kind == TokenKind.LBrace)
         {
@@ -993,7 +1006,7 @@ public sealed class XPathParser
         {
             body = ParsePrimaryExpr();
         }
-        return WithSpan(new InlineFunctionNode(parameters, body), start, End);
+        return WithSpan(new InlineFunctionNode(parameters, body, returnType), start, End);
     }
 
     private MapConstructorNode ParseMapConstructor(int start)
@@ -1086,11 +1099,125 @@ public sealed class XPathParser
 
 
 
+    /// <summary>
+    /// Skips over a SequenceType and returns a string representation.
+    /// Handles simple types, item(), element(name), function(...) as type, etc.
+    /// </summary>
+    private string SkipSequenceType()
+    {
+        int start = _position;
+        int parenDepth = 0;
+        while (true)
+        {
+            if (Current.Kind == TokenKind.Eof)
+                break;
+
+            if (Current.Kind == TokenKind.LParen)
+            {
+                parenDepth++;
+                Advance();
+                continue;
+            }
+
+            if (Current.Kind == TokenKind.RParen)
+            {
+                if (parenDepth == 0)
+                    break; // RParen belongs to the caller, not the sequence type
+
+                parenDepth--;
+                Advance();
+                // Occurrence indicator after closing paren
+                if (Current.Kind == TokenKind.Question ||
+                    Current.Kind == TokenKind.Star ||
+                    Current.Kind == TokenKind.Plus)
+                {
+                    Advance();
+                }
+                // Function return type: function(...) as ReturnType
+                if (Current.Kind == TokenKind.KeywordAs)
+                {
+                    Advance(); // as
+                    continue;
+                }
+                if (parenDepth <= 0)
+                    break;
+                continue;
+            }
+
+            if (parenDepth == 0)
+            {
+                if (Current.Kind == TokenKind.Comma ||
+                    Current.Kind == TokenKind.RParen ||
+                    Current.Kind == TokenKind.LBrace)
+                {
+                    break;
+                }
+                // 'as' at top level is part of function return type
+                if (Current.Kind == TokenKind.KeywordAs)
+                {
+                    Advance();
+                    continue;
+                }
+            }
+
+            Advance();
+        }
+        return GetSpanText(start, _position);
+    }
+
     private (string? Prefix, string Local, OccurrenceIndicator Occurrence) ParseSequenceType()
     {
-        var tok = Expect(TokenKind.Name);
-        var name = GetString(tok);
+        string name;
+        if (Current.Kind == TokenKind.Name)
+        {
+            name = GetString(Current);
+            Advance();
+        }
+        else if (Current.Kind == TokenKind.KeywordFunction)
+        {
+            name = "function";
+            Advance();
+        }
+        else if (Current.Kind == TokenKind.KeywordMap)
+        {
+            name = "map";
+            Advance();
+        }
+        else if (Current.Kind == TokenKind.KeywordArray)
+        {
+            name = "array";
+            Advance();
+        }
+        else
+        {
+            throw new ParseException($"Expected sequence type but found {Current.Kind}", Current.Start);
+        }
+
         var (prefix, local) = SplitQName(name);
+
+        // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), etc.
+        if (Current.Kind == TokenKind.LParen)
+        {
+            int parenDepth = 0;
+            do
+            {
+                if (Current.Kind == TokenKind.LParen)
+                {
+                    parenDepth++;
+                    Advance();
+                }
+                else if (Current.Kind == TokenKind.RParen)
+                {
+                    parenDepth--;
+                    Advance();
+                }
+                else
+                {
+                    Advance();
+                }
+            } while (parenDepth > 0 && Current.Kind != TokenKind.Eof);
+        }
+
         OccurrenceIndicator occurrence = OccurrenceIndicator.One;
         if (Match(TokenKind.Question))
             occurrence = OccurrenceIndicator.ZeroOrOne;

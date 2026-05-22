@@ -232,15 +232,27 @@ public sealed class IrLowerer
         if (leftReg != resultReg)
             Emit(IrOpCode.Move, (byte)resultReg, (byte)leftReg);
 
-        // If left is false, skip right and return false
-        int jumpToEnd = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (byte)resultReg);
+        // If left is false, result is false
+        int jumpToFalse = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (byte)resultReg);
 
         // Evaluate right
         int rightReg = LowerNode(node.Right, resultReg);
         if (rightReg != resultReg)
             Emit(IrOpCode.Move, (byte)resultReg, (byte)rightReg);
 
-        // Patch jump to end
+        // If right is false, result is false
+        int jumpToFalse2 = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (byte)resultReg);
+
+        // Both true: result = true
+        Emit(IrOpCode.LoadBoolean, (byte)resultReg, operand: 1);
+        int jumpToEnd = EmitJumpPlaceholder(IrOpCode.Jump);
+
+        // False path
+        PatchJump(jumpToFalse, CurrentInstructionIndex);
+        PatchJump(jumpToFalse2, CurrentInstructionIndex);
+        Emit(IrOpCode.LoadBoolean, (byte)resultReg, operand: 0);
+
+        // End
         PatchJump(jumpToEnd, CurrentInstructionIndex);
 
         return resultReg;
@@ -255,15 +267,27 @@ public sealed class IrLowerer
         if (leftReg != resultReg)
             Emit(IrOpCode.Move, (byte)resultReg, (byte)leftReg);
 
-        // If left is true, skip right and return true
-        int jumpToEnd = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (byte)resultReg);
+        // If left is true, result is true
+        int jumpToTrue = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (byte)resultReg);
 
         // Evaluate right
         int rightReg = LowerNode(node.Right, resultReg);
         if (rightReg != resultReg)
             Emit(IrOpCode.Move, (byte)resultReg, (byte)rightReg);
 
-        // Patch jump to end
+        // If right is true, result is true
+        int jumpToTrue2 = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (byte)resultReg);
+
+        // Both false: result = false
+        Emit(IrOpCode.LoadBoolean, (byte)resultReg, operand: 0);
+        int jumpToEnd = EmitJumpPlaceholder(IrOpCode.Jump);
+
+        // True path
+        PatchJump(jumpToTrue, CurrentInstructionIndex);
+        PatchJump(jumpToTrue2, CurrentInstructionIndex);
+        Emit(IrOpCode.LoadBoolean, (byte)resultReg, operand: 1);
+
+        // End
         PatchJump(jumpToEnd, CurrentInstructionIndex);
 
         return resultReg;
@@ -389,11 +413,8 @@ public sealed class IrLowerer
         {
             // Load the named function as a function item
             int funcReg = AllocRegister();
-            var namedFunc = new NamedFunctionItem(
-                string.IsNullOrEmpty(node.Prefix) ? "http://www.w3.org/2005/xpath-functions" : "",
-                node.LocalName,
-                argCount);
-            int funcItemPoolIdx = AddToLiteralPool(namedFunc);
+            var funcTuple = (qname, argCount);
+            int funcItemPoolIdx = AddToLiteralPool(funcTuple);
             Emit(IrOpCode.LoadFunction, (byte)funcReg, operand: funcItemPoolIdx);
 
             // Evaluate non-placeholder arguments and build descriptor
@@ -464,9 +485,11 @@ public sealed class IrLowerer
     private int LowerNamedFunctionRef(NamedFunctionRefNode node, int? targetReg)
     {
         int resultReg = targetReg ?? AllocRegister();
-        string nsUri = string.IsNullOrEmpty(node.Prefix) ? "http://www.w3.org/2005/xpath-functions" : "";
-        var funcItem = new NamedFunctionItem(nsUri, node.LocalName, node.Arity);
-        int poolIdx = AddToLiteralPool(funcItem);
+        string qname = string.IsNullOrEmpty(node.Prefix)
+            ? node.LocalName
+            : $"{node.Prefix}:{node.LocalName}";
+        var funcTuple = (qname, node.Arity);
+        int poolIdx = AddToLiteralPool(funcTuple);
         Emit(IrOpCode.LoadFunction, (byte)resultReg, operand: poolIdx);
         return resultReg;
     }
@@ -856,10 +879,23 @@ public sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
         Emit(IrOpCode.Array, (byte)resultReg);
 
-        foreach (var item in node.Items)
+        if (node.IsSquare)
         {
-            int itemReg = LowerNode(item);
-            Emit(IrOpCode.ArrayAdd, (byte)resultReg, (byte)itemReg);
+            foreach (var item in node.Items)
+            {
+                int itemReg = LowerNode(item);
+                Emit(IrOpCode.ArrayAdd, (byte)resultReg, (byte)itemReg);
+            }
+        }
+        else
+        {
+            // Curly array constructor: array { expr } — each item in the
+            // sequence becomes a separate array member.
+            foreach (var item in node.Items)
+            {
+                int itemReg = LowerNode(item);
+                Emit(IrOpCode.ArrayAddAll, (byte)resultReg, (byte)itemReg);
+            }
         }
 
         return resultReg;

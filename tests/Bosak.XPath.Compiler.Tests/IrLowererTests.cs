@@ -482,13 +482,21 @@ public class IrLowererTests
     {
         var instrs = Instructions("$x and $y");
         // LoadVariable $x
-        // JumpIfFalse -> end
+        // JumpIfFalse -> falsePath
         // LoadVariable $y
+        // JumpIfFalse -> falsePath
+        // LoadBoolean true
+        // Jump -> end
+        // falsePath: LoadBoolean false
         // Return
-        Assert.Equal(4, instrs.Length);
+        Assert.Equal(8, instrs.Length);
         Assert.Equal(IrOpCode.LoadVariable, instrs[0].OpCode);
         Assert.Equal(IrOpCode.JumpIfFalse, instrs[1].OpCode);
         Assert.Equal(IrOpCode.LoadVariable, instrs[2].OpCode);
-        Assert.Equal(IrOpCode.Return, instrs[3].OpCode);
+        Assert.Equal(IrOpCode.JumpIfFalse, instrs[3].OpCode);
+        Assert.Equal(IrOpCode.LoadBoolean, instrs[4].OpCode);
+        Assert.Equal(IrOpCode.Jump, instrs[5].OpCode);
+        Assert.Equal(IrOpCode.LoadBoolean, instrs[6].OpCode);
+        Assert.Equal(IrOpCode.Return, instrs[7].OpCode);
     }
 }

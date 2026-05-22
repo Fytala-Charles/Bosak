@@ -33,6 +33,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -70,17 +71,6 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String,
                 Implementation = String_1
-            },
-
-            // ----- fn:concat --------------------------------------------------
-            [(Namespaces.Fn, "concat", 2)] = new()
-            {
-                NamespaceUri = Namespaces.Fn,
-                LocalName = "concat",
-                Arity = 2,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
-                ReturnType = XdmValueKind.String,
-                Implementation = Concat
             },
 
             // ----- fn:count ---------------------------------------------------
@@ -226,6 +216,54 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.String,
                 Implementation = ConcatN
             },
+            [(Namespaces.Fn, "concat", 6)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 6,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String, Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 7)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 7,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String, Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 8)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 8,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String, Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 9)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 9,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String, Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 10)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 10,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String, Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 11)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 11,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String, Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 12)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 12,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String, Implementation = ConcatN
+            },
+            [(Namespaces.Fn, "concat", 13)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 13,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String, Implementation = ConcatN
+            },
 
             // ----- fn:string-length -------------------------------------------
             [(Namespaces.Fn, "string-length", 0)] = new()
@@ -351,6 +389,29 @@ public static class FunctionLibrary
                 Implementation = AnalyzeString_3
             },
 
+            // ----- fn:apply ---------------------------------------------------
+            [(Namespaces.Fn, "apply", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "apply", Arity = 2,
+                ParameterTypes = [XdmValueKind.Function, XdmValueKind.Array],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Apply
+            },
+
+            // ----- fn:available-environment-variables -------------------------
+            [(Namespaces.Fn, "available-environment-variables", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "available-environment-variables", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.Sequence,
+                Implementation = AvailableEnvironmentVariables
+            },
+            [(Namespaces.Fn, "environment-variable", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "environment-variable", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = EnvironmentVariable
+            },
+
             // ----- fn:contains ------------------------------------------------
             [(Namespaces.Fn, "contains", 2)] = new()
             {
@@ -360,6 +421,15 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
                 ReturnType = XdmValueKind.Boolean,
                 Implementation = Contains
+            },
+            [(Namespaces.Fn, "contains", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "contains",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Contains_3
             },
 
             // ----- fn:starts-with ---------------------------------------------
@@ -372,6 +442,15 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Boolean,
                 Implementation = StartsWith
             },
+            [(Namespaces.Fn, "starts-with", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "starts-with",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = StartsWith_3
+            },
 
             // ----- fn:ends-with -----------------------------------------------
             [(Namespaces.Fn, "ends-with", 2)] = new()
@@ -382,6 +461,66 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
                 ReturnType = XdmValueKind.Boolean,
                 Implementation = EndsWith
+            },
+            [(Namespaces.Fn, "ends-with", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "ends-with",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = EndsWith_3
+            },
+
+            // ----- fn:contains-token ------------------------------------------
+            [(Namespaces.Fn, "contains-token", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "contains-token",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = ContainsToken_2
+            },
+            [(Namespaces.Fn, "contains-token", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "contains-token",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = ContainsToken_3
+            },
+
+            // ----- fn:codepoint-equal -----------------------------------------
+            [(Namespaces.Fn, "codepoint-equal", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "codepoint-equal",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = CodepointEqual
+            },
+
+            // ----- fn:collation-key -------------------------------------------
+            [(Namespaces.Fn, "collation-key", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "collation-key",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = CollationKey_1
+            },
+            [(Namespaces.Fn, "collation-key", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "collation-key",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = CollationKey_2
             },
 
             // ----- fn:normalize-space -----------------------------------------
@@ -402,6 +541,18 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String,
                 Implementation = NormalizeSpace_1
+            },
+            [(Namespaces.Fn, "normalize-unicode", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "normalize-unicode", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = NormalizeUnicode_1
+            },
+            [(Namespaces.Fn, "normalize-unicode", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "normalize-unicode", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = NormalizeUnicode_2
             },
 
             // ----- fn:translate -----------------------------------------------
@@ -735,6 +886,20 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Map,
                 Implementation = MapMerge
             },
+            [(Namespaces.Map, "merge", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "merge", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Map,
+                Implementation = MapMerge
+            },
+            [(Namespaces.Map, "remove", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "remove", Arity = 2,
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.String],
+                ReturnType = XdmValueKind.Map,
+                Implementation = MapRemove
+            },
 
             // ----- array:size -------------------------------------------------
             [(Namespaces.Array, "size", 1)] = new()
@@ -789,6 +954,13 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Array],
                 ReturnType = XdmValueKind.Array,
                 Implementation = ArrayTail
+            },
+            [(Namespaces.Array, "put", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "put", Arity = 3,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArrayPut
             },
 
             // ----- fn:abs -----------------------------------------------------
@@ -924,6 +1096,17 @@ public static class FunctionLibrary
                 Implementation = Name_1
             },
 
+            // ----- fn:dateTime ------------------------------------------------
+            [(Namespaces.Fn, "dateTime", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "dateTime",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.Time],
+                ReturnType = XdmValueKind.DateTime,
+                Implementation = DateTime_2
+            },
+
             // ----- fn:current-dateTime ----------------------------------------
             [(Namespaces.Fn, "current-dateTime", 0)] = new()
             {
@@ -933,6 +1116,14 @@ public static class FunctionLibrary
                 ParameterTypes = [],
                 ReturnType = XdmValueKind.DateTime,
                 Implementation = CurrentDateTime
+            },
+
+            // ----- fn:default-collation ---------------------------------------
+            [(Namespaces.Fn, "default-collation", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "default-collation", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.String,
+                Implementation = DefaultCollation
             },
 
             // ----- fn:current-date --------------------------------------------
@@ -955,6 +1146,56 @@ public static class FunctionLibrary
                 ParameterTypes = [],
                 ReturnType = XdmValueKind.Time,
                 Implementation = CurrentTime
+            },
+
+            // ----- fn:adjust-date-to-timezone ---------------------------------
+            [(Namespaces.Fn, "adjust-date-to-timezone", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "adjust-date-to-timezone", Arity = 1,
+                ParameterTypes = [XdmValueKind.Date], ReturnType = XdmValueKind.Date,
+                Implementation = AdjustDateToTimezone_1
+            },
+            [(Namespaces.Fn, "adjust-date-to-timezone", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "adjust-date-to-timezone", Arity = 2,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String], ReturnType = XdmValueKind.Date,
+                Implementation = AdjustDateToTimezone_2
+            },
+
+            // ----- fn:adjust-time-to-timezone ---------------------------------
+            [(Namespaces.Fn, "adjust-time-to-timezone", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "adjust-time-to-timezone", Arity = 1,
+                ParameterTypes = [XdmValueKind.Time], ReturnType = XdmValueKind.Time,
+                Implementation = AdjustTimeToTimezone_1
+            },
+            [(Namespaces.Fn, "adjust-time-to-timezone", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "adjust-time-to-timezone", Arity = 2,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String], ReturnType = XdmValueKind.Time,
+                Implementation = AdjustTimeToTimezone_2
+            },
+
+            // ----- fn:adjust-dateTime-to-timezone -----------------------------
+            [(Namespaces.Fn, "adjust-dateTime-to-timezone", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "adjust-dateTime-to-timezone", Arity = 1,
+                ParameterTypes = [XdmValueKind.DateTime], ReturnType = XdmValueKind.DateTime,
+                Implementation = AdjustDateTimeToTimezone_1
+            },
+            [(Namespaces.Fn, "adjust-dateTime-to-timezone", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "adjust-dateTime-to-timezone", Arity = 2,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String], ReturnType = XdmValueKind.DateTime,
+                Implementation = AdjustDateTimeToTimezone_2
+            },
+
+            // ----- fn:implicit-timezone ---------------------------------------
+            [(Namespaces.Fn, "implicit-timezone", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "implicit-timezone", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.String,
+                Implementation = ImplicitTimezone
             },
 
             // ----- fn:node-name -----------------------------------------------
@@ -1092,6 +1333,15 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Decimal,
                 Implementation = SecondsFromDateTime
             },
+            [(Namespaces.Fn, "timezone-from-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "timezone-from-dateTime",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.DateTime],
+                ReturnType = XdmValueKind.String,
+                Implementation = TimezoneFromDateTime
+            },
 
             // ----- fn:*-from-date ---------------------------------------------
             [(Namespaces.Fn, "year-from-date", 1)] = new()
@@ -1121,6 +1371,15 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Integer,
                 Implementation = DayFromDate
             },
+            [(Namespaces.Fn, "timezone-from-date", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "timezone-from-date",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Date],
+                ReturnType = XdmValueKind.String,
+                Implementation = TimezoneFromDate
+            },
 
             // ----- fn:*-from-time ---------------------------------------------
             [(Namespaces.Fn, "hours-from-time", 1)] = new()
@@ -1149,6 +1408,53 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Time],
                 ReturnType = XdmValueKind.Decimal,
                 Implementation = SecondsFromTime
+            },
+            [(Namespaces.Fn, "timezone-from-time", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "timezone-from-time",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Time],
+                ReturnType = XdmValueKind.String,
+                Implementation = TimezoneFromTime
+            },
+
+            // ----- fn:*-from-duration -----------------------------------------
+            [(Namespaces.Fn, "years-from-duration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "years-from-duration", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                Implementation = YearsFromDuration
+            },
+            [(Namespaces.Fn, "months-from-duration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "months-from-duration", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                Implementation = MonthsFromDuration
+            },
+            [(Namespaces.Fn, "days-from-duration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "days-from-duration", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                Implementation = DaysFromDuration
+            },
+            [(Namespaces.Fn, "hours-from-duration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "hours-from-duration", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                Implementation = HoursFromDuration
+            },
+            [(Namespaces.Fn, "minutes-from-duration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "minutes-from-duration", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                Implementation = MinutesFromDuration
+            },
+            [(Namespaces.Fn, "seconds-from-duration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "seconds-from-duration", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Decimal,
+                Implementation = SecondsFromDuration
             },
 
             // ----- fn:deep-equal ----------------------------------------------
@@ -1260,6 +1566,12 @@ public static class FunctionLibrary
                 Implementation = ResolveQName
             },
             // ----- fn:for-each, fn:filter, fn:fold-left, fn:fold-right, fn:for-each-pair -----
+            [(Namespaces.Fn, "function-name", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "function-name", Arity = 1,
+                ParameterTypes = [XdmValueKind.Function], ReturnType = XdmValueKind.QName,
+                Implementation = FunctionName
+            },
             [(Namespaces.Fn, "for-each", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn,
@@ -1360,6 +1672,108 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Time,
                 Implementation = XsTime
             },
+            [(Namespaces.Xs, "QName", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "QName", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.QName,
+                Implementation = XsQNameConstructor
+            },
+            [(Namespaces.Xs, "byte", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "byte", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsByte
+            },
+            [(Namespaces.Xs, "short", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "short", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsShort
+            },
+            [(Namespaces.Xs, "int", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "int", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsInt
+            },
+            [(Namespaces.Xs, "long", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "long", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsLong
+            },
+            [(Namespaces.Xs, "unsignedByte", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "unsignedByte", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsUnsignedByte
+            },
+            [(Namespaces.Xs, "unsignedShort", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "unsignedShort", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsUnsignedShort
+            },
+            [(Namespaces.Xs, "unsignedInt", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "unsignedInt", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsUnsignedInt
+            },
+            [(Namespaces.Xs, "unsignedLong", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "unsignedLong", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsUnsignedLong
+            },
+            [(Namespaces.Xs, "positiveInteger", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "positiveInteger", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsPositiveInteger
+            },
+            [(Namespaces.Xs, "negativeInteger", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "negativeInteger", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsNegativeInteger
+            },
+            [(Namespaces.Xs, "nonPositiveInteger", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "nonPositiveInteger", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsNonPositiveInteger
+            },
+            [(Namespaces.Xs, "nonNegativeInteger", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "nonNegativeInteger", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Integer,
+                Implementation = XsNonNegativeInteger
+            },
+            [(Namespaces.Xs, "dayTimeDuration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "dayTimeDuration", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsDayTimeDuration
+            },
+            [(Namespaces.Xs, "yearMonthDuration", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "yearMonthDuration", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsYearMonthDuration
+            },
+            [(Namespaces.Xs, "untypedAtomic", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "untypedAtomic", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsUntypedAtomic
+            },
+            [(Namespaces.Xs, "anyURI", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "anyURI", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsAnyUri
+            },
             // ----- math:* functions -------------------------------------------
             [(Namespaces.Math, "pi", 0)] = new()
             {
@@ -1421,6 +1835,18 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn, LocalName = "doc", Arity = 1,
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Node,
                 Implementation = Doc_1
+            },
+            [(Namespaces.Fn, "doc-available", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "doc-available", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Boolean,
+                Implementation = DocAvailable_1
+            },
+            [(Namespaces.Fn, "id", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "id", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                Implementation = Id_1
             },
             [(Namespaces.Fn, "collection", 0)] = new()
             {
@@ -1588,12 +2014,11 @@ public static class FunctionLibrary
         return XdmValue.FromString(arg.ToString());
     }
 
-    private static XdmValue Concat(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(args[0].ToString() + args[1].ToString());
-
     private static XdmValue Count(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var seq = args[0];
+        if (seq.IsUndefined)
+            return XdmValue.FromInteger(0);
         if (!seq.IsSequence)
             return XdmValue.FromInteger(1);
 
@@ -1608,10 +2033,24 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Exists(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(!args[0].IsUndefined && args[0].EffectiveBooleanValue());
+    {
+        var arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.FromBoolean(false);
+        if (arg.IsSequence && arg.SequenceValue is not null && arg.SequenceValue.TryGetLength(out var len))
+            return XdmValue.FromBoolean(len > 0);
+        return XdmValue.FromBoolean(true);
+    }
 
     private static XdmValue Empty(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(args[0].IsUndefined || !args[0].EffectiveBooleanValue());
+    {
+        var arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.FromBoolean(true);
+        if (arg.IsSequence && arg.SequenceValue is not null && arg.SequenceValue.TryGetLength(out var len))
+            return XdmValue.FromBoolean(len == 0);
+        return XdmValue.FromBoolean(false);
+    }
 
     private static XdmValue Head(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -1677,9 +2116,26 @@ public static class FunctionLibrary
         }
     }
 
+    private static XdmValue FunctionName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var funcValue = args[0].FunctionValue;
+        if (funcValue is NamedFunctionItem named)
+            return XdmValue.FromQName(new XsQName(named.LocalName, named.NamespaceUri));
+        if (funcValue is CurriedFunctionItem curried)
+        {
+            // Walk to the base named function
+            FunctionItem baseFunc = curried.BaseFunction;
+            while (baseFunc is CurriedFunctionItem cf)
+                baseFunc = cf.BaseFunction;
+            if (baseFunc is NamedFunctionItem nm)
+                return XdmValue.FromQName(new XsQName(nm.LocalName, nm.NamespaceUri));
+        }
+        return XdmValue.Undefined;
+    }
+
     private static XdmValue ForEach_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var func = (FunctionItem)args[1].FunctionValue;
+        var func = args[1];
         var result = new List<XdmValue>();
         foreach (var item in AsSequence(args[0]))
         {
@@ -1690,7 +2146,7 @@ public static class FunctionLibrary
 
     private static XdmValue Filter_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var func = (FunctionItem)args[1].FunctionValue;
+        var func = args[1];
         var result = new List<XdmValue>();
         foreach (var item in AsSequence(args[0]))
         {
@@ -1703,7 +2159,7 @@ public static class FunctionLibrary
 
     private static XdmValue FoldLeft_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var func = (FunctionItem)args[2].FunctionValue;
+        var func = args[2];
         var accumulator = args[1];
         foreach (var item in AsSequence(args[0]))
         {
@@ -1714,7 +2170,7 @@ public static class FunctionLibrary
 
     private static XdmValue FoldRight_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var func = (FunctionItem)args[2].FunctionValue;
+        var func = args[2];
         var items = AsSequence(args[0]).ToList();
         var accumulator = args[1];
         for (int i = items.Count - 1; i >= 0; i--)
@@ -1726,7 +2182,7 @@ public static class FunctionLibrary
 
     private static XdmValue ForEachPair_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var func = (FunctionItem)args[2].FunctionValue;
+        var func = args[2];
         var seq1 = AsSequence(args[0]).ToList();
         var seq2 = AsSequence(args[1]).ToList();
         var result = new List<XdmValue>();
@@ -1800,8 +2256,9 @@ public static class FunctionLibrary
     {
         string s = AtomizedString(args[0]);
         string search = AtomizedString(args[1]);
-        // Collation argument ignored for now — default to ordinal
-        int idx = s.IndexOf(search, StringComparison.Ordinal);
+        string collation = AtomizedString(args[2]);
+        ValidateCollation(collation);
+        int idx = StringIndexOf(s, search, collation);
         return XdmValue.FromString(idx >= 0 ? s[..idx] : string.Empty);
     }
 
@@ -1817,7 +2274,9 @@ public static class FunctionLibrary
     {
         string s = AtomizedString(args[0]);
         string search = AtomizedString(args[1]);
-        int idx = s.IndexOf(search, StringComparison.Ordinal);
+        string collation = AtomizedString(args[2]);
+        ValidateCollation(collation);
+        int idx = StringIndexOf(s, search, collation);
         return XdmValue.FromString(idx >= 0 ? s[(idx + search.Length)..] : string.Empty);
     }
 
@@ -1837,9 +2296,74 @@ public static class FunctionLibrary
         foreach (var item in items)
         {
             int cp = (int)item.IntegerValue;
+            if (cp < 0 || cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF) ||
+                (cp < 0x20 && cp != 0x09 && cp != 0x0A && cp != 0x0D) ||
+                cp == 0xFFFE || cp == 0xFFFF || (cp >= 0xFDD0 && cp <= 0xFDEF) ||
+                (cp & 0xFFFE) == 0xFFFE && cp > 0xFFFF)
+                throw new InvalidOperationException("FOCH0001");
             sb.Append(char.ConvertFromUtf32(cp));
         }
         return XdmValue.FromString(sb.ToString());
+    }
+
+    private static XdmValue Apply(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var func = args[0];
+        var array = args[1].ArrayValue;
+        var callArgs = new XdmValue[array.Count];
+        for (int i = 0; i < array.Count; i++)
+            callArgs[i] = array.Get(i + 1);
+        return VmEngine.InvokeFunctionItem(func, ctx, callArgs);
+    }
+
+    private static XdmValue AvailableEnvironmentVariables(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromSequence(XdmSequence.Empty);
+
+    private static XdmValue EnvironmentVariable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var name = AtomizedString(args[0]);
+        var value = System.Environment.GetEnvironmentVariable(name);
+        return value is not null ? XdmValue.FromString(value) : XdmValue.Undefined;
+    }
+
+    private static XdmValue DefaultCollation(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(CodepointCollation);
+
+    private static XdmValue ImplicitTimezone(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
+        bool negative = offset.TotalMinutes < 0;
+        int hours = Math.Abs(offset.Hours);
+        int minutes = Math.Abs(offset.Minutes);
+        if (minutes == 0)
+            return XdmValue.FromString(negative ? $"PT-{hours}H" : $"PT{hours}H");
+        return XdmValue.FromString(negative ? $"PT-{hours}H{minutes}M" : $"PT{hours}H{minutes}M");
+    }
+
+    private static XdmValue XsQNameConstructor(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string lexical = AtomizedString(args[0]);
+        if (string.IsNullOrEmpty(lexical))
+            throw new InvalidOperationException("FOCA0002");
+
+        string prefix, local;
+        int colon = lexical.IndexOf(':');
+        if (colon >= 0)
+        {
+            prefix = lexical[..colon];
+            local = lexical[(colon + 1)..];
+            if (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(local))
+                throw new InvalidOperationException("FOCA0002");
+        }
+        else
+        {
+            prefix = string.Empty;
+            local = lexical;
+        }
+
+        if (!ctx.TryResolveNamespace(prefix, out string nsUri))
+            nsUri = string.Empty;
+        return XdmValue.FromQName(new XsQName(local, nsUri));
     }
 
     private static XdmValue ParseXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -1890,6 +2414,9 @@ public static class FunctionLibrary
         var options = ParseRegexFlags(flags, out bool isQuoteMode);
         if (isQuoteMode) pattern = Regex.Escape(pattern);
 
+        if (Regex.IsMatch(string.Empty, pattern, options))
+            throw new InvalidOperationException("FORX0003");
+
         var matches = Regex.Matches(value, pattern, options);
         int pos = 0;
 
@@ -1898,17 +2425,23 @@ public static class FunctionLibrary
             if (match.Index > pos)
                 result.Add(new XElement(fn + "non-match", value[pos..match.Index]));
 
-            var matchEl = new XElement(fn + "match", match.Value);
+            var matchEl = new XElement(fn + "match");
+            int matchPos = match.Index;
             for (int g = 1; g < match.Groups.Count; g++)
             {
                 var group = match.Groups[g];
                 if (group.Success)
                 {
+                    if (group.Index > matchPos)
+                        matchEl.Add(new XText(value[matchPos..group.Index]));
                     var groupEl = new XElement(fn + "group", group.Value);
                     groupEl.SetAttributeValue("nr", g);
                     matchEl.Add(groupEl);
+                    matchPos = group.Index + group.Length;
                 }
             }
+            if (matchPos < match.Index + match.Length)
+                matchEl.Add(new XText(value[matchPos..(match.Index + match.Length)]));
             result.Add(matchEl);
             pos = match.Index + match.Length;
         }
@@ -1922,11 +2455,268 @@ public static class FunctionLibrary
     private static XdmValue Contains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromBoolean(AtomizedString(args[0]).Contains(AtomizedString(args[1])));
 
+    private static XdmValue Contains_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        string search = AtomizedString(args[1]);
+        string collation = AtomizedString(args[2]);
+        ValidateCollation(collation);
+        return XdmValue.FromBoolean(StringContains(s, search, collation));
+    }
+
     private static XdmValue StartsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromBoolean(AtomizedString(args[0]).StartsWith(AtomizedString(args[1])));
 
+    private static XdmValue StartsWith_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        string search = AtomizedString(args[1]);
+        string collation = AtomizedString(args[2]);
+        ValidateCollation(collation);
+        return XdmValue.FromBoolean(StringStartsWith(s, search, collation));
+    }
+
     private static XdmValue EndsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromBoolean(AtomizedString(args[0]).EndsWith(AtomizedString(args[1])));
+
+    private static XdmValue EndsWith_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string s = AtomizedString(args[0]);
+        string search = AtomizedString(args[1]);
+        string collation = AtomizedString(args[2]);
+        ValidateCollation(collation);
+        return XdmValue.FromBoolean(StringEndsWith(s, search, collation));
+    }
+
+    private static XdmValue ContainsToken_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ContainsToken(args[0], AtomizedString(args[1]), string.Empty);
+
+    private static XdmValue ContainsToken_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ContainsToken(args[0], AtomizedString(args[1]), AtomizedString(args[2]));
+
+    private static XdmValue ContainsToken(XdmValue input, string token, string collation)
+    {
+        ValidateCollation(collation);
+        var comparer = GetCollationEqualityComparer(collation);
+
+        if (string.IsNullOrEmpty(token))
+            return XdmValue.FromBoolean(false);
+
+        var strings = Materialize(input);
+        foreach (var item in strings)
+        {
+            string s = AtomizedString(item);
+            if (string.IsNullOrWhiteSpace(s))
+                continue;
+
+            var parts = s.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var part in parts)
+            {
+                if (comparer.Equals(part, token))
+                    return XdmValue.FromBoolean(true);
+            }
+        }
+        return XdmValue.FromBoolean(false);
+    }
+
+    private static XdmValue CodepointEqual(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        // fn:codepoint-equal returns empty sequence if either argument is empty sequence
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        if (args[1].IsUndefined || IsEmptySequence(args[1]))
+            return XdmValue.Undefined;
+
+        string s1 = AtomizedString(args[0]);
+        string s2 = AtomizedString(args[1]);
+        return XdmValue.FromBoolean(s1.Equals(s2, StringComparison.Ordinal));
+    }
+
+    private static XdmValue CollationKey_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => CollationKey(AtomizedString(args[0]), string.Empty);
+
+    private static XdmValue CollationKey_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => CollationKey(AtomizedString(args[0]), AtomizedString(args[1]));
+
+    private static XdmValue CollationKey(string value, string collation)
+    {
+        ValidateCollation(collation);
+        if (collation == CodepointCollation)
+            return XdmValue.FromString(value);
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return XdmValue.FromString(ToAsciiLower(value));
+        if (TryParseUca(collation, out var uca))
+        {
+            var sortKey = uca.CompareInfo.GetSortKey(value, uca.Options);
+            return XdmValue.FromString(Convert.ToHexString(sortKey.KeyData));
+        }
+        return XdmValue.FromString(value);
+    }
+
+    private static string ToAsciiLower(string value)
+    {
+        var sb = new System.Text.StringBuilder(value.Length);
+        foreach (char c in value)
+        {
+            if (c >= 'A' && c <= 'Z')
+                sb.Append((char)(c + 32));
+            else
+                sb.Append(c);
+        }
+        return sb.ToString();
+    }
+
+    private const string CodepointCollation = "http://www.w3.org/2005/xpath-functions/collation/codepoint";
+    private const string HtmlAsciiCaseInsensitiveCollation = "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive";
+    private const string UcaCollationPrefix = "http://www.w3.org/2013/collation/UCA";
+
+    private static void ValidateCollation(string collation)
+    {
+        if (string.IsNullOrEmpty(collation))
+            return;
+        if (collation == CodepointCollation)
+            return;
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return;
+        if (TryParseUca(collation, out _))
+            return;
+        throw new InvalidOperationException("FOCH0002");
+    }
+
+    private static StringComparison GetStringComparison(string collation)
+    {
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return StringComparison.OrdinalIgnoreCase;
+        return StringComparison.Ordinal;
+    }
+
+    private static IEqualityComparer<string> GetStringComparer(string collation)
+    {
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return StringComparer.OrdinalIgnoreCase;
+        return StringComparer.Ordinal;
+    }
+
+    private static int CompareStrings(string s1, string s2, string collation)
+    {
+        if (TryParseUca(collation, out var uca))
+            return uca.CompareInfo.Compare(s1, s2, uca.Options);
+        var comparison = GetStringComparison(collation);
+        if (comparison == StringComparison.Ordinal)
+            return CompareCodepoints(s1, s2);
+        return string.Compare(s1, s2, comparison);
+    }
+
+    private static int CompareCodepoints(string s1, string s2)
+    {
+        int i1 = 0, i2 = 0;
+        while (i1 < s1.Length && i2 < s2.Length)
+        {
+            int cp1 = char.ConvertToUtf32(s1, i1);
+            int cp2 = char.ConvertToUtf32(s2, i2);
+            if (cp1 != cp2)
+                return cp1 < cp2 ? -1 : 1;
+            i1 += char.IsHighSurrogate(s1[i1]) ? 2 : 1;
+            i2 += char.IsHighSurrogate(s2[i2]) ? 2 : 1;
+        }
+        if (i1 < s1.Length) return 1;
+        if (i2 < s2.Length) return -1;
+        return 0;
+    }
+
+    private static bool StringContains(string s, string search, string collation)
+    {
+        if (TryParseUca(collation, out var uca))
+            return uca.CompareInfo.IndexOf(s, search, uca.Options) >= 0;
+        return s.Contains(search, GetStringComparison(collation));
+    }
+
+    private static bool StringStartsWith(string s, string search, string collation)
+    {
+        if (TryParseUca(collation, out var uca))
+            return uca.CompareInfo.IsPrefix(s, search, uca.Options);
+        return s.StartsWith(search, GetStringComparison(collation));
+    }
+
+    private static bool StringEndsWith(string s, string search, string collation)
+    {
+        if (TryParseUca(collation, out var uca))
+            return uca.CompareInfo.IsSuffix(s, search, uca.Options);
+        return s.EndsWith(search, GetStringComparison(collation));
+    }
+
+    private static int StringIndexOf(string s, string search, string collation)
+    {
+        if (TryParseUca(collation, out var uca))
+            return uca.CompareInfo.IndexOf(s, search, uca.Options);
+        return s.IndexOf(search, GetStringComparison(collation));
+    }
+
+    private static IEqualityComparer<string> GetCollationEqualityComparer(string collation)
+    {
+        if (TryParseUca(collation, out var uca))
+            return new UcaStringComparer(uca.CompareInfo, uca.Options);
+        return GetStringComparer(collation);
+    }
+
+    private static bool TryParseUca(string uri, out UcaCollationInfo info)
+    {
+        info = default;
+        if (!uri.StartsWith(UcaCollationPrefix, StringComparison.Ordinal))
+            return false;
+
+        string query = uri.Length > UcaCollationPrefix.Length && uri[UcaCollationPrefix.Length] == '?'
+            ? uri[(UcaCollationPrefix.Length + 1)..]
+            : string.Empty;
+
+        string lang = "en";
+        string strength = "tertiary";
+        foreach (var param in query.Split(';', StringSplitOptions.RemoveEmptyEntries))
+        {
+            int eq = param.IndexOf('=');
+            if (eq < 0) continue;
+            string key = param[..eq].Trim();
+            string val = param[(eq + 1)..].Trim();
+            if (key == "lang")
+                lang = val;
+            else if (key == "strength")
+                strength = val;
+        }
+
+        var culture = CultureInfo.GetCultureInfo(lang);
+        var options = strength.ToLowerInvariant() switch
+        {
+            "primary" => CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace,
+            "secondary" => CompareOptions.IgnoreNonSpace,
+            "tertiary" => CompareOptions.None,
+            "quaternary" => CompareOptions.None,
+            "identical" => CompareOptions.Ordinal,
+            _ => CompareOptions.None,
+        };
+
+        info = new UcaCollationInfo(lang, strength, options, culture.CompareInfo);
+        return true;
+    }
+
+    private readonly record struct UcaCollationInfo(string Lang, string Strength, CompareOptions Options, CompareInfo CompareInfo);
+
+    private sealed class UcaStringComparer : IEqualityComparer<string>
+    {
+        private readonly CompareInfo _compareInfo;
+        private readonly CompareOptions _options;
+
+        public UcaStringComparer(CompareInfo compareInfo, CompareOptions options)
+        {
+            _compareInfo = compareInfo;
+            _options = options;
+        }
+
+        public bool Equals(string? x, string? y)
+            => _compareInfo.Compare(x, y, _options) == 0;
+
+        public int GetHashCode(string obj)
+            => _compareInfo.GetSortKey(obj, _options).GetHashCode();
+    }
 
     private static XdmValue NormalizeSpace_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -1944,6 +2734,26 @@ public static class FunctionLibrary
         if (string.IsNullOrWhiteSpace(s)) return string.Empty;
         var parts = s.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
         return string.Join(' ', parts);
+    }
+
+    private static XdmValue NormalizeUnicode_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => NormalizeUnicode(AtomizedString(args[0]), "NFC");
+
+    private static XdmValue NormalizeUnicode_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => NormalizeUnicode(AtomizedString(args[0]), AtomizedString(args[1]));
+
+    private static XdmValue NormalizeUnicode(string input, string form)
+    {
+        var nf = form switch
+        {
+            "NFC" => System.Text.NormalizationForm.FormC,
+            "NFD" => System.Text.NormalizationForm.FormD,
+            "NFKC" => System.Text.NormalizationForm.FormKC,
+            "NFKD" => System.Text.NormalizationForm.FormKD,
+            "FULLY-NORMALIZED" => throw new InvalidOperationException("FOCH0003"),
+            _ => throw new InvalidOperationException("FOCH0003")
+        };
+        return XdmValue.FromString(input.Normalize(nf));
     }
 
     private static XdmValue Translate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -2084,6 +2894,54 @@ public static class FunctionLibrary
     private static XdmValue XsTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "time");
 
+    private static XdmValue XsByte(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "byte");
+
+    private static XdmValue XsShort(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "short");
+
+    private static XdmValue XsInt(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "int");
+
+    private static XdmValue XsLong(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "long");
+
+    private static XdmValue XsUnsignedByte(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "unsignedByte");
+
+    private static XdmValue XsUnsignedShort(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "unsignedShort");
+
+    private static XdmValue XsUnsignedInt(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "unsignedInt");
+
+    private static XdmValue XsUnsignedLong(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "unsignedLong");
+
+    private static XdmValue XsPositiveInteger(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "positiveInteger");
+
+    private static XdmValue XsNegativeInteger(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "negativeInteger");
+
+    private static XdmValue XsNonPositiveInteger(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "nonPositiveInteger");
+
+    private static XdmValue XsNonNegativeInteger(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "nonNegativeInteger");
+
+    private static XdmValue XsDayTimeDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsYearMonthDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsUntypedAtomic(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsAnyUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
     // ------------------------------------------------------------------
     // math:* functions
     // ------------------------------------------------------------------
@@ -2134,6 +2992,61 @@ public static class FunctionLibrary
         return XdmValue.FromNode(node);
     }
 
+    private static XdmValue DocAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (args[0].IsUndefined)
+            throw new InvalidOperationException("XPTY0004");
+        var uri = args[0].ToString();
+        if (string.IsNullOrEmpty(uri))
+            return XdmValue.FromBoolean(false);
+        try
+        {
+            ctx.LoadDocument(uri);
+            return XdmValue.FromBoolean(true);
+        }
+        catch
+        {
+            return XdmValue.FromBoolean(false);
+        }
+    }
+
+    private static XdmValue Id_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var ids = new HashSet<string>(args[0].ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        if (ids.Count == 0)
+            return XdmValue.Undefined;
+
+        var result = new List<XdmValue>();
+        var focus = ctx.ContextItem;
+        if (focus.IsNode)
+        {
+            var doc = focus.NodeValue.Document ?? focus.NodeValue;
+            if (doc is not null)
+                CollectIdElements(doc, ids, result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static void CollectIdElements(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
+    {
+        if (node.NodeKind == XdmNodeKind.Element)
+        {
+            foreach (var attr in node.Attributes("id", ""))
+            {
+                if (ids.Contains(attr.StringValue))
+                {
+                    result.Add(XdmValue.FromNode(node));
+                    break;
+                }
+            }
+        }
+        foreach (var child in node.Children(XdmNodeKind.Element))
+        {
+            if (child.IsNode)
+                CollectIdElements(child.NodeValue!, ids, result);
+        }
+    }
+
     private static XdmValue Collection_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.Undefined;
 
@@ -2178,7 +3091,32 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Boolean_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(args[0].EffectiveBooleanValue());
+    {
+        var arg = args[0];
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.FromBoolean(false);
+
+        if (arg.IsSequence)
+        {
+            var items = Materialize(arg);
+            if (items.Count == 0)
+                return XdmValue.FromBoolean(false);
+            if (items[0].IsNode)
+                return XdmValue.FromBoolean(true);
+            if (items.Count > 1)
+                throw new InvalidOperationException("FORG0006");
+            arg = items[0];
+        }
+
+        return arg.Kind switch
+        {
+            XdmValueKind.Boolean or XdmValueKind.String or XdmValueKind.Integer
+                or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float
+                or XdmValueKind.Node
+                => XdmValue.FromBoolean(arg.EffectiveBooleanValue()),
+            _ => throw new InvalidOperationException("FORG0006")
+        };
+    }
 
     private static bool IsEmptySequence(XdmValue value)
     {
@@ -2421,10 +3359,40 @@ public static class FunctionLibrary
     {
         var items = Materialize(args[0]);
         if (items.Count == 0) return XdmValue.Undefined;
+        foreach (var item in items)
+        {
+            var a = AtomizeValue(item);
+            if (a.Kind == XdmValueKind.Integer || a.Kind == XdmValueKind.Decimal
+                || a.Kind == XdmValueKind.Double || a.Kind == XdmValueKind.Float)
+                continue;
+            if (a.Kind == XdmValueKind.String && (IsDurationString(a.ToString()) || double.TryParse(a.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _)))
+                continue;
+            throw new InvalidOperationException("FORG0006");
+        }
         var total = Sum(items);
-        if (total.Kind == XdmValueKind.Decimal)
-            return XdmValue.FromDecimal(total.DecimalValue / items.Count);
-        return XdmValue.FromDouble(ToDoubleValue(total) / items.Count);
+        if (total.Kind == XdmValueKind.String && IsDurationString(total.ToString()))
+        {
+            var s = total.ToString();
+            if (IsYearMonthDurationString(s))
+            {
+                var (years, months, _, _, _, _) = ParseDuration(s);
+                long totalMonths = years * 12 + months;
+                long avgMonths = totalMonths / items.Count;
+                return XdmValue.FromString(FormatYearMonthDuration(avgMonths));
+            }
+            if (IsDayTimeDurationString(s))
+            {
+                var (_, _, days, hours, minutes, seconds) = ParseDuration(s);
+                decimal totalSec = days * 86400m + hours * 3600m + minutes * 60m + seconds;
+                return XdmValue.FromString(FormatDayTimeDurationFromSeconds(totalSec / items.Count));
+            }
+        }
+        return total.Kind switch
+        {
+            XdmValueKind.Decimal => XdmValue.FromDecimal(total.DecimalValue / items.Count),
+            XdmValueKind.Float => XdmValue.FromFloat((float)total.DoubleValue / items.Count),
+            _ => XdmValue.FromDouble(total.DoubleValue / items.Count)
+        };
     }
 
     private static XdmValue Min_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -2523,6 +3491,19 @@ public static class FunctionLibrary
         return XdmValue.FromMap(result);
     }
 
+    private static XdmValue MapRemove(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var map = args[0].MapValue;
+        var key = args[1].ToString();
+        var result = new XdmMap();
+        foreach (var k in map.Keys)
+        {
+            if (k != key)
+                result.Add(k, map.TryGetValue(k, out var v) ? v : XdmValue.Undefined);
+        }
+        return XdmValue.FromMap(result);
+    }
+
     // ------------------------------------------------------------------
     // Array functions
     // ------------------------------------------------------------------
@@ -2542,6 +3523,23 @@ public static class FunctionLibrary
 
     private static XdmValue ArrayHead(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => args[0].ArrayValue.Get(1);
+
+    private static XdmValue ArrayPut(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arr = args[0].ArrayValue;
+        int idx = (int)args[1].IntegerValue;
+        var value = args[2];
+        var items = new List<XdmValue>();
+        foreach (var item in arr.Values)
+            items.Add(item);
+        // XPath arrays are 1-based
+        int pos = idx - 1;
+        if (pos >= 0 && pos < items.Count)
+            items[pos] = value;
+        else if (pos == items.Count)
+            items.Add(value);
+        return XdmValue.FromArray(new XdmArray(items));
+    }
 
     private static XdmValue ArrayTail(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -2567,6 +3565,9 @@ public static class FunctionLibrary
 
         if (value.IsNode)
             return value.NodeValue.StringValue;
+
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            throw new InvalidOperationException("FOTY0013");
 
         if (value.IsSequence)
         {
@@ -2637,21 +3638,61 @@ public static class FunctionLibrary
     private static XdmValue Sum(List<XdmValue> items)
     {
         bool allIntegerOrDecimal = true;
+        bool anyDouble = false;
+        bool anyUntyped = false;
+        bool allYearMonthDuration = true;
+        bool allDayTimeDuration = true;
         foreach (var item in items)
         {
             var a = AtomizeValue(item);
+            if (a.Kind == XdmValueKind.Double)
+                anyDouble = true;
+            if (a.Kind == XdmValueKind.String && double.TryParse(a.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+                anyUntyped = true;
             if (a.Kind != XdmValueKind.Integer && a.Kind != XdmValueKind.Decimal)
-            {
                 allIntegerOrDecimal = false;
-                break;
-            }
+            var str = a.Kind == XdmValueKind.String ? a.ToString() : "";
+            bool isYmd = IsYearMonthDurationString(str);
+            bool isDtd = IsDayTimeDurationString(str);
+            if (!isYmd) allYearMonthDuration = false;
+            if (!isDtd) allDayTimeDuration = false;
         }
+
+        if (allYearMonthDuration)
+        {
+            long totalMonths = 0;
+            foreach (var item in items)
+            {
+                var (years, months, _, _, _, _) = ParseDuration(AtomizeValue(item).ToString());
+                totalMonths += years * 12 + months;
+            }
+            return XdmValue.FromString(FormatYearMonthDuration(totalMonths));
+        }
+
+        if (allDayTimeDuration)
+        {
+            decimal totalSeconds = 0m;
+            foreach (var item in items)
+            {
+                var (_, _, days, hours, minutes, seconds) = ParseDuration(AtomizeValue(item).ToString());
+                totalSeconds += days * 86400m + hours * 3600m + minutes * 60m + seconds;
+            }
+            return XdmValue.FromString(FormatDayTimeDurationFromSeconds(totalSeconds));
+        }
+
         if (allIntegerOrDecimal)
         {
             decimal sum = 0m;
             foreach (var item in items)
                 sum += ToDecimalValue(item);
             return XdmValue.FromDecimal(sum);
+        }
+        if (!anyDouble && !anyUntyped)
+        {
+            float sumF = 0.0f;
+            foreach (var item in items)
+                sumF += (float)ToDoubleValue(item);
+            return XdmValue.FromFloat(sumF);
         }
         double sumD = 0.0;
         foreach (var item in items)
@@ -2662,14 +3703,14 @@ public static class FunctionLibrary
     private static XdmValue MinMax(List<XdmValue> items, bool min)
     {
         bool allIntegerOrDecimal = true;
+        bool anyDouble = false;
         foreach (var item in items)
         {
             var a = AtomizeValue(item);
+            if (a.Kind == XdmValueKind.Double)
+                anyDouble = true;
             if (a.Kind != XdmValueKind.Integer && a.Kind != XdmValueKind.Decimal)
-            {
                 allIntegerOrDecimal = false;
-                break;
-            }
         }
         if (allIntegerOrDecimal)
         {
@@ -2681,6 +3722,17 @@ public static class FunctionLibrary
                     result = v;
             }
             return XdmValue.FromDecimal(result);
+        }
+        if (!anyDouble)
+        {
+            float resultF = (float)ToDoubleValue(items[0]);
+            for (int i = 1; i < items.Count; i++)
+            {
+                float v = (float)ToDoubleValue(items[i]);
+                if (min ? v < resultF : v > resultF)
+                    resultF = v;
+            }
+            return XdmValue.FromFloat(resultF);
         }
         double resultD = ToDoubleValue(items[0]);
         for (int i = 1; i < items.Count; i++)
@@ -2699,45 +3751,48 @@ public static class FunctionLibrary
     private static XdmValue Abs(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         XdmValue arg = args[0];
-        if (arg.IsUndefined)
-            return XdmValue.FromInteger(0);
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
 
         return arg.Kind switch
         {
             XdmValueKind.Integer => XdmValue.FromInteger(Math.Abs(arg.IntegerValue)),
             XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Abs(arg.DecimalValue)),
             XdmValueKind.Double => XdmValue.FromDouble(Math.Abs(arg.DoubleValue)),
-            _ => XdmValue.FromDouble(Math.Abs(ToDoubleValue(arg)))
+            XdmValueKind.Float => XdmValue.FromFloat(Math.Abs((float)arg.DoubleValue)),
+            _ => throw new InvalidOperationException("XPTY0004")
         };
     }
 
     private static XdmValue Floor(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         XdmValue arg = args[0];
-        if (arg.IsUndefined)
-            return XdmValue.FromInteger(0);
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
 
         return arg.Kind switch
         {
             XdmValueKind.Integer => arg,
             XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Floor(arg.DecimalValue)),
             XdmValueKind.Double => XdmValue.FromDouble(Math.Floor(arg.DoubleValue)),
-            _ => XdmValue.FromDouble(Math.Floor(ToDoubleValue(arg)))
+            XdmValueKind.Float => XdmValue.FromFloat((float)Math.Floor(arg.DoubleValue)),
+            _ => throw new InvalidOperationException("XPTY0004")
         };
     }
 
     private static XdmValue Ceiling(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         XdmValue arg = args[0];
-        if (arg.IsUndefined)
-            return XdmValue.FromInteger(0);
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
 
         return arg.Kind switch
         {
             XdmValueKind.Integer => arg,
             XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Ceiling(arg.DecimalValue)),
             XdmValueKind.Double => XdmValue.FromDouble(Math.Ceiling(arg.DoubleValue)),
-            _ => XdmValue.FromDouble(Math.Ceiling(ToDoubleValue(arg)))
+            XdmValueKind.Float => XdmValue.FromFloat((float)Math.Ceiling(arg.DoubleValue)),
+            _ => throw new InvalidOperationException("XPTY0004")
         };
     }
 
@@ -2749,8 +3804,8 @@ public static class FunctionLibrary
 
     private static XdmValue Round(EvaluationContext ctx, XdmValue arg, long precision)
     {
-        if (arg.IsUndefined)
-            return XdmValue.FromInteger(0);
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
 
         if (precision >= 0)
         {
@@ -2762,7 +3817,9 @@ public static class FunctionLibrary
                     XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.AwayFromZero) / factor)),
                 XdmValueKind.Double =>
                     XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor),
-                _ => XdmValue.FromDouble(Math.Round(ToDoubleValue(arg) * factor, MidpointRounding.AwayFromZero) / factor)
+                XdmValueKind.Float =>
+                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor)),
+                _ => throw new InvalidOperationException("XPTY0004")
             };
         }
         else
@@ -2776,7 +3833,9 @@ public static class FunctionLibrary
                     XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.AwayFromZero) * factor)),
                 XdmValueKind.Double =>
                     XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor),
-                _ => XdmValue.FromDouble(Math.Round(ToDoubleValue(arg) / factor, MidpointRounding.AwayFromZero) * factor)
+                XdmValueKind.Float =>
+                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                _ => throw new InvalidOperationException("XPTY0004")
             };
         }
     }
@@ -2789,8 +3848,8 @@ public static class FunctionLibrary
 
     private static XdmValue RoundHalfToEven(EvaluationContext ctx, XdmValue arg, long precision)
     {
-        if (arg.IsUndefined)
-            return XdmValue.FromInteger(0);
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
 
         if (precision >= 0)
         {
@@ -2802,7 +3861,9 @@ public static class FunctionLibrary
                     XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.ToEven) / factor)),
                 XdmValueKind.Double =>
                     XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor),
-                _ => XdmValue.FromDouble(Math.Round(ToDoubleValue(arg) * factor, MidpointRounding.ToEven) / factor)
+                XdmValueKind.Float =>
+                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor)),
+                _ => throw new InvalidOperationException("XPTY0004")
             };
         }
         else
@@ -2816,7 +3877,9 @@ public static class FunctionLibrary
                     XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.ToEven) * factor)),
                 XdmValueKind.Double =>
                     XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor),
-                _ => XdmValue.FromDouble(Math.Round(ToDoubleValue(arg) / factor, MidpointRounding.ToEven) * factor)
+                XdmValueKind.Float =>
+                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor)),
+                _ => throw new InvalidOperationException("XPTY0004")
             };
         }
     }
@@ -2892,19 +3955,170 @@ public static class FunctionLibrary
     // Date / Time functions
     // ------------------------------------------------------------------
 
+    private static XdmValue DateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (args[0].IsUndefined || args[0].IsSequence || args[1].IsUndefined || args[1].IsSequence)
+            return XdmValue.Undefined;
+
+        var date = args[0].DateValue;
+        var time = args[1].TimeValue;
+        bool dateHasTz = args[0].HasTimezone;
+        bool timeHasTz = args[1].HasTimezone;
+
+        TimeSpan offset;
+        bool hasTimezone;
+
+        if (dateHasTz && timeHasTz)
+        {
+            if (date.Offset != time.Offset)
+                throw new InvalidOperationException("FORG0008");
+            offset = date.Offset;
+            hasTimezone = true;
+        }
+        else if (dateHasTz)
+        {
+            offset = date.Offset;
+            hasTimezone = true;
+        }
+        else if (timeHasTz)
+        {
+            offset = time.Offset;
+            hasTimezone = true;
+        }
+        else
+        {
+            offset = TimeSpan.Zero;
+            hasTimezone = false;
+        }
+
+        var combined = new DateTimeOffset(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second, time.Millisecond, offset);
+        return XdmValue.FromDateTime(combined, hasTimezone);
+    }
+
     private static XdmValue CurrentDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDateTime(DateTimeOffset.Now);
+        => XdmValue.FromDateTime(DateTimeOffset.Now, hasTimezone: true);
 
     private static XdmValue CurrentDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var now = DateTimeOffset.Now;
-        return XdmValue.FromDate(new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, now.Offset));
+        return XdmValue.FromDate(new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, now.Offset), hasTimezone: true);
     }
 
     private static XdmValue CurrentTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var now = DateTimeOffset.Now;
-        return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Offset));
+        return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Offset), hasTimezone: true);
+    }
+
+    private static XdmValue AdjustDateToTimezone_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
+        var dto = arg.DateValue;
+        bool hasTz = arg.HasTimezone;
+        TimeSpan implicitTz = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
+        if (!hasTz)
+            return XdmValue.FromDate(new DateTimeOffset(dto.Year, dto.Month, dto.Day, 0, 0, 0, implicitTz), hasTimezone: true);
+        DateTime utc = dto.DateTime - dto.Offset;
+        DateTime newLocal = utc + implicitTz;
+        return XdmValue.FromDate(new DateTimeOffset(newLocal.Year, newLocal.Month, newLocal.Day, 0, 0, 0, implicitTz), hasTimezone: true);
+    }
+
+    private static XdmValue AdjustDateToTimezone_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        var tzArg = args[1];
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
+
+        var dto = arg.DateValue;
+        bool hasTz = arg.HasTimezone;
+
+        if (tzArg.IsUndefined || IsEmptySequence(tzArg))
+            return XdmValue.FromDate(new DateTimeOffset(dto.Year, dto.Month, dto.Day, 0, 0, 0, dto.Offset), hasTimezone: false);
+
+        TimeSpan targetOffset = XmlConvert.ToTimeSpan(AtomizedString(tzArg));
+        if (!hasTz)
+            return XdmValue.FromDate(new DateTimeOffset(dto.Year, dto.Month, dto.Day, 0, 0, 0, targetOffset), hasTimezone: true);
+
+        DateTime utc = dto.DateTime - dto.Offset;
+        DateTime newLocal = utc + targetOffset;
+        return XdmValue.FromDate(new DateTimeOffset(newLocal.Year, newLocal.Month, newLocal.Day, 0, 0, 0, targetOffset), hasTimezone: true);
+    }
+
+    private static XdmValue AdjustTimeToTimezone_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
+        var dto = arg.TimeValue;
+        bool hasTz = arg.HasTimezone;
+        TimeSpan implicitTz = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
+        if (!hasTz)
+            return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, implicitTz), hasTimezone: true);
+        DateTime utc = dto.DateTime - dto.Offset;
+        DateTime newLocal = utc + implicitTz;
+        return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, newLocal.Hour, newLocal.Minute, newLocal.Second, newLocal.Millisecond, implicitTz), hasTimezone: true);
+    }
+
+    private static XdmValue AdjustTimeToTimezone_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        var tzArg = args[1];
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
+
+        var dto = arg.TimeValue;
+        bool hasTz = arg.HasTimezone;
+
+        if (tzArg.IsUndefined || IsEmptySequence(tzArg))
+            return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, dto.Offset), hasTimezone: false);
+
+        TimeSpan targetOffset = XmlConvert.ToTimeSpan(AtomizedString(tzArg));
+        if (!hasTz)
+            return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, targetOffset), hasTimezone: true);
+
+        DateTime utc = dto.DateTime - dto.Offset;
+        DateTime newLocal = utc + targetOffset;
+        return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, newLocal.Hour, newLocal.Minute, newLocal.Second, newLocal.Millisecond, targetOffset), hasTimezone: true);
+    }
+
+    private static XdmValue AdjustDateTimeToTimezone_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
+        var dto = arg.DateTimeValue;
+        bool hasTz = arg.HasTimezone;
+        TimeSpan implicitTz = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
+        if (!hasTz)
+            return XdmValue.FromDateTime(new DateTimeOffset(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, implicitTz), hasTimezone: true);
+        DateTime utc = dto.DateTime - dto.Offset;
+        DateTime newLocal = utc + implicitTz;
+        return XdmValue.FromDateTime(new DateTimeOffset(newLocal.Year, newLocal.Month, newLocal.Day, newLocal.Hour, newLocal.Minute, newLocal.Second, newLocal.Millisecond, implicitTz), hasTimezone: true);
+    }
+
+    private static XdmValue AdjustDateTimeToTimezone_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        var tzArg = args[1];
+        if (arg.IsUndefined || IsEmptySequence(arg))
+            return XdmValue.Undefined;
+
+        var dto = arg.DateTimeValue;
+        bool hasTz = arg.HasTimezone;
+
+        if (tzArg.IsUndefined || IsEmptySequence(tzArg))
+            return XdmValue.FromDateTime(new DateTimeOffset(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, dto.Offset), hasTimezone: false);
+
+        TimeSpan targetOffset = XmlConvert.ToTimeSpan(AtomizedString(tzArg));
+        if (!hasTz)
+            return XdmValue.FromDateTime(new DateTimeOffset(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, targetOffset), hasTimezone: true);
+
+        DateTime utc = dto.DateTime - dto.Offset;
+        DateTime newLocal = utc + targetOffset;
+        return XdmValue.FromDateTime(new DateTimeOffset(newLocal.Year, newLocal.Month, newLocal.Day, newLocal.Hour, newLocal.Minute, newLocal.Second, newLocal.Millisecond, targetOffset), hasTimezone: true);
     }
 
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -2960,6 +4174,28 @@ public static class FunctionLibrary
         if (value.IsNode)
             return XdmValue.FromString(value.NodeValue.StringValue);
 
+        if (value.IsArray)
+        {
+            var arr = value.ArrayValue;
+            var items = new List<XdmValue>();
+            for (int i = 1; i <= arr.Count; i++)
+            {
+                var atomized = Data(arr.Get(i));
+                AppendAtomized(atomized, items);
+            }
+            if (items.Count == 0)
+                return XdmValue.Undefined;
+            if (items.Count == 1)
+                return items[0];
+            return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+        }
+
+        if (value.IsMap)
+        {
+            // fn:data on a map raises FOTY0013 (type error)
+            throw new InvalidOperationException("FOTY0013");
+        }
+
         if (!value.IsSequence)
             return value;
 
@@ -2967,19 +4203,33 @@ public static class FunctionLibrary
         if (seq is null)
             return XdmValue.Undefined;
 
-        var items = new List<XdmValue>();
+        var seqItems = new List<XdmValue>();
         foreach (var item in XdmSequence.FromSource(seq))
         {
             var atomized = Data(item);
-            if (!atomized.IsUndefined)
-                items.Add(atomized);
+            AppendAtomized(atomized, seqItems);
         }
 
-        if (items.Count == 0)
+        if (seqItems.Count == 0)
             return XdmValue.Undefined;
-        if (items.Count == 1)
-            return items[0];
-        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+        if (seqItems.Count == 1)
+            return seqItems[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(seqItems));
+    }
+
+    private static void AppendAtomized(XdmValue atomized, List<XdmValue> items)
+    {
+        if (atomized.IsUndefined)
+            return;
+        if (atomized.IsSequence && atomized.SequenceValue is not null)
+        {
+            foreach (var sub in atomized.SequenceValue)
+                items.Add(sub);
+        }
+        else
+        {
+            items.Add(atomized);
+        }
     }
 
     private static XdmValue Root_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3050,6 +4300,240 @@ public static class FunctionLibrary
         if (args[0].IsUndefined) return XdmValue.Undefined;
         var dto = args[0].TimeValue;
         return XdmValue.FromDecimal(dto.Second + dto.Millisecond / 1000.0m + dto.Microsecond / 1_000_000.0m + dto.Nanosecond / 1_000_000_000.0m);
+    }
+
+    private static XdmValue TimezoneFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => TimezoneFromValue(args[0], v => v.DateTimeValue);
+
+    private static XdmValue TimezoneFromDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => TimezoneFromValue(args[0], v => v.DateValue);
+
+    private static XdmValue TimezoneFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => TimezoneFromValue(args[0], v => v.TimeValue);
+
+    private static XdmValue TimezoneFromValue(XdmValue value, Func<XdmValue, DateTimeOffset> getDto)
+    {
+        if (value.IsUndefined) return XdmValue.Undefined;
+        if (!value.HasTimezone) return XdmValue.Undefined;
+        var offset = getDto(value).Offset;
+        return XdmValue.FromString(FormatDayTimeDuration(offset));
+    }
+
+    private static XdmValue YearsFromDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ExtractDurationComponent(args[0], DurationPart.Years);
+
+    private static XdmValue MonthsFromDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ExtractDurationComponent(args[0], DurationPart.Months);
+
+    private static XdmValue DaysFromDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ExtractDurationComponent(args[0], DurationPart.Days);
+
+    private static XdmValue HoursFromDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ExtractDurationComponent(args[0], DurationPart.Hours);
+
+    private static XdmValue MinutesFromDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ExtractDurationComponent(args[0], DurationPart.Minutes);
+
+    private static XdmValue SecondsFromDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ExtractDurationComponent(args[0], DurationPart.Seconds);
+
+    private enum DurationPart { Years, Months, Days, Hours, Minutes, Seconds }
+
+    private static XdmValue ExtractDurationComponent(XdmValue value, DurationPart part)
+    {
+        if (value.IsUndefined || value.IsSequence) return XdmValue.Undefined;
+        var s = value.ToString();
+        if (string.IsNullOrEmpty(s)) return XdmValue.Undefined;
+
+        var (years, months, days, hours, minutes, seconds) = ParseDuration(s);
+
+        if (IsYearMonthDurationString(s))
+        {
+            long totalMonths = years * 12 + months;
+            long normYears = totalMonths / 12;
+            long normMonths = totalMonths % 12;
+            return part switch
+            {
+                DurationPart.Years => XdmValue.FromInteger(normYears),
+                DurationPart.Months => XdmValue.FromInteger(normMonths),
+                DurationPart.Days => XdmValue.FromInteger(0),
+                DurationPart.Hours => XdmValue.FromInteger(0),
+                DurationPart.Minutes => XdmValue.FromInteger(0),
+                DurationPart.Seconds => XdmValue.FromDecimal(0m),
+                _ => XdmValue.Undefined
+            };
+        }
+        else
+        {
+            decimal totalSeconds = days * 86400m + hours * 3600m + minutes * 60m + seconds;
+            bool negative = totalSeconds < 0;
+            totalSeconds = negative ? -totalSeconds : totalSeconds;
+            long normDays = (long)(totalSeconds / 86400m);
+            totalSeconds -= normDays * 86400m;
+            long normHours = (long)(totalSeconds / 3600m);
+            totalSeconds -= normHours * 3600m;
+            long normMinutes = (long)(totalSeconds / 60m);
+            decimal normSeconds = totalSeconds - normMinutes * 60m;
+            if (negative)
+            {
+                normDays = -normDays;
+                normHours = -normHours;
+                normMinutes = -normMinutes;
+                normSeconds = -normSeconds;
+            }
+            return part switch
+            {
+                DurationPart.Years => XdmValue.FromInteger(0),
+                DurationPart.Months => XdmValue.FromInteger(0),
+                DurationPart.Days => XdmValue.FromInteger(normDays),
+                DurationPart.Hours => XdmValue.FromInteger(normHours),
+                DurationPart.Minutes => XdmValue.FromInteger(normMinutes),
+                DurationPart.Seconds => XdmValue.FromDecimal(normSeconds),
+                _ => XdmValue.Undefined
+            };
+        }
+    }
+
+    private static (long Years, long Months, long Days, long Hours, long Minutes, decimal Seconds) ParseDuration(string s)
+    {
+        bool negative = s.StartsWith('-');
+        s = negative ? s[1..] : s;
+        if (!s.StartsWith('P')) return (0, 0, 0, 0, 0, 0m);
+        s = s[1..];
+
+        long years = 0, months = 0, days = 0, hours = 0, minutes = 0;
+        decimal seconds = 0m;
+
+        int tIndex = s.IndexOf('T');
+        string datePart = tIndex >= 0 ? s[..tIndex] : s;
+        string timePart = tIndex >= 0 ? s[(tIndex + 1)..] : "";
+
+        years = ParseDurationNumber(ref datePart, 'Y');
+        months = ParseDurationNumber(ref datePart, 'M');
+        days = ParseDurationNumber(ref datePart, 'D');
+
+        hours = ParseDurationNumber(ref timePart, 'H');
+        minutes = ParseDurationNumber(ref timePart, 'M');
+        seconds = ParseDurationDecimal(ref timePart, 'S');
+
+        if (negative)
+        {
+            years = -years;
+            months = -months;
+            days = -days;
+            hours = -hours;
+            minutes = -minutes;
+            seconds = -seconds;
+        }
+
+        return (years, months, days, hours, minutes, seconds);
+    }
+
+    private static long ParseDurationNumber(ref string s, char suffix)
+    {
+        int idx = s.IndexOf(suffix);
+        if (idx < 0) return 0;
+        var numStr = s[..idx];
+        s = s[(idx + 1)..];
+        return long.TryParse(numStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v) ? v : 0;
+    }
+
+    private static decimal ParseDurationDecimal(ref string s, char suffix)
+    {
+        int idx = s.IndexOf(suffix);
+        if (idx < 0) return 0m;
+        var numStr = s[..idx];
+        s = s[(idx + 1)..];
+        return decimal.TryParse(numStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v) ? v : 0m;
+    }
+
+    private static bool IsDurationString(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (s.StartsWith('-')) s = s[1..];
+        return s.StartsWith('P');
+    }
+
+    private static bool IsYearMonthDurationString(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (s.StartsWith('-')) s = s[1..];
+        return s.StartsWith('P') && !s.Contains('D') && !s.Contains('T');
+    }
+
+    private static bool IsDayTimeDurationString(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (s.StartsWith('-')) s = s[1..];
+        return s.StartsWith('P') && (s.Contains('D') || s.Contains('T'));
+    }
+
+    private static string FormatYearMonthDuration(long totalMonths)
+    {
+        bool negative = totalMonths < 0;
+        totalMonths = negative ? -totalMonths : totalMonths;
+        long years = totalMonths / 12;
+        long months = totalMonths % 12;
+        var sb = new System.Text.StringBuilder();
+        if (negative) sb.Append('-');
+        sb.Append('P');
+        if (years > 0) sb.Append($"{years}Y");
+        if (months > 0 || (years == 0 && months == 0)) sb.Append($"{months}M");
+        return sb.ToString();
+    }
+
+    private static string FormatDayTimeDurationFromSeconds(decimal totalSeconds)
+    {
+        bool negative = totalSeconds < 0;
+        totalSeconds = negative ? -totalSeconds : totalSeconds;
+        long days = (long)(totalSeconds / 86400m);
+        totalSeconds -= days * 86400m;
+        long hours = (long)(totalSeconds / 3600m);
+        totalSeconds -= hours * 3600m;
+        long minutes = (long)(totalSeconds / 60m);
+        decimal seconds = totalSeconds - minutes * 60m;
+        var sb = new System.Text.StringBuilder();
+        if (negative) sb.Append('-');
+        sb.Append('P');
+        if (days > 0) sb.Append($"{days}D");
+        if (hours > 0 || minutes > 0 || seconds > 0)
+        {
+            sb.Append('T');
+            if (hours > 0) sb.Append($"{hours}H");
+            if (minutes > 0) sb.Append($"{minutes}M");
+            if (seconds > 0 || (hours == 0 && minutes == 0))
+            {
+                sb.Append(seconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                sb.Append('S');
+            }
+        }
+        if (sb.Length == (negative ? 2 : 1)) sb.Append("T0S");
+        return sb.ToString();
+    }
+
+    private static string FormatDayTimeDuration(TimeSpan ts)
+    {
+        bool negative = ts.TotalMilliseconds < 0;
+        ts = negative ? ts.Negate() : ts;
+        var sb = new System.Text.StringBuilder();
+        if (negative) sb.Append('-');
+        sb.Append('P');
+        if (ts.Days > 0) sb.Append($"{ts.Days}D");
+        if (ts.Hours > 0 || ts.Minutes > 0 || ts.Seconds > 0 || ts.Milliseconds > 0)
+        {
+            sb.Append('T');
+            if (ts.Hours > 0) sb.Append($"{ts.Hours}H");
+            if (ts.Minutes > 0) sb.Append($"{ts.Minutes}M");
+            if (ts.Seconds > 0 || ts.Milliseconds > 0)
+            {
+                sb.Append($"{ts.Seconds}");
+                if (ts.Milliseconds > 0)
+                    sb.Append($".{ts.Milliseconds:000}");
+                sb.Append('S');
+            }
+        }
+        if (sb.Length == (negative ? 2 : 1)) sb.Append("T0S");
+        return sb.ToString();
     }
 
     // ------------------------------------------------------------------
@@ -3230,16 +4714,26 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Compare_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => Compare(args[0], args[1]);
+    {
+        if (IsEmptySequence(args[0]) || IsEmptySequence(args[1]))
+            return XdmValue.Undefined;
+        return Compare(args[0], args[1]);
+    }
 
     private static XdmValue Compare_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => Compare(args[0], args[1]);
+    {
+        if (IsEmptySequence(args[0]) || IsEmptySequence(args[1]))
+            return XdmValue.Undefined;
+        string collation = AtomizedString(args[2]);
+        ValidateCollation(collation);
+        return Compare(args[0], args[1], collation);
+    }
 
-    private static XdmValue Compare(XdmValue a, XdmValue b)
+    private static XdmValue Compare(XdmValue a, XdmValue b, string collation = "")
     {
         var s1 = AtomizedString(a);
         var s2 = AtomizedString(b);
-        int cmp = string.CompareOrdinal(s1, s2);
+        int cmp = CompareStrings(s1, s2, collation);
         return XdmValue.FromInteger(cmp < 0 ? -1 : cmp > 0 ? 1 : 0);
     }
 

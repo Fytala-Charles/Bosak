@@ -1883,7 +1883,7 @@ public class FunctionLibraryTests
     {
         Assert.Equal("true", EvalStr("boolean(1)"));
         Assert.Equal("true", EvalStr("boolean('hello')"));
-        Assert.Equal("true", EvalStr("boolean((1,2))"));
+        Assert.Throws<InvalidOperationException>(() => EvalStr("boolean((1,2))"));
     }
 
     [Fact]

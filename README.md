@@ -152,6 +152,52 @@ Target framework: **.NET 9**.
 
 ---
 
+## Conformance Testing
+
+Bosak includes a W3C QT3 test suite harness for measuring XPath 3.1 standards compliance.
+
+### Running the Harness
+
+```bash
+# Build the conformance runner
+dotnet build tests/Bosak.XPath.Conformance/Bosak.XPath.Conformance.csproj
+
+# Run against the full QT3 suite (~32,000 tests across 428 test sets)
+dotnet run --project tests/Bosak.XPath.Conformance/Bosak.XPath.Conformance.csproj
+```
+
+The harness:
+1. Discovers all test sets from `tests/qt3tests/catalog.xml`
+2. Filters out unsupported features (schema-aware, XQuery-only, serialization, static typing)
+3. Skips XQuery syntax (`declare`, `import`, semicolons)
+4. Executes each test via the public `XPath31Expression.Compile(expr).Evaluate(ctx)` API
+5. Compares results against QT3 assertions (`assert-eq`, `assert-true`, `assert-xml`, etc.)
+
+### Current Results
+
+| Metric | Value |
+|--------|-------|
+| Test Sets | 428 |
+| Total Tests | ~32,000 |
+| Pass Rate (first 50 sets sample) | **68.37%** |
+| Unsupported Features | Schema awareness, XQuery-only, XML 1.1 |
+
+### Known Limitations
+
+| Assertion | Status | Impact |
+|-----------|--------|--------|
+| `assert-eq` | ✅ Implemented | Core value comparison |
+| `assert-count` | ✅ Implemented | Sequence cardinality |
+| `assert-deep-eq` | ✅ Implemented | Recursive XDM comparison |
+| `assert-xml` | ❌ Not implemented | ~1,840 tests skipped |
+| `assert-permutation` | ❌ Not implemented | ~92 tests skipped |
+
+### Adding New Tests
+
+The harness is intentionally thin — it validates the **public API surface** end-to-end rather than calling internal layers directly. This ensures that parser, compiler, VM, and standard-library fixes are all exercised together.
+
+---
+
 <div align="center" style="background:#2F4F4F; color:#F0FFF0; padding:1rem; border-radius:12px; margin-top:2rem;">
   <p style="margin:0; font-family:Poppins,Segoe UI,sans-serif;">
     <strong>© Fytala</strong> — Bosak XPath Engine

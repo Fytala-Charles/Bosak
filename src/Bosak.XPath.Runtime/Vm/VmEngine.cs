@@ -54,7 +54,6 @@ public static class VmEngine
         var instructions = module.Instructions;
         var literalPool = module.LiteralPool;
         int ip = startIp;
-
         while (ip < instructions.Length)
         {
             var instr = instructions[ip];
@@ -215,7 +214,28 @@ public static class VmEngine
                 case IrOpCode.SequenceAdd:
                     {
                         var list = (List<XdmValue>)registers[instr.RegisterA].ExternalValue!;
-                        list.Add(registers[instr.RegisterB]);
+                        var item = registers[instr.RegisterB];
+                        // Flatten empty sequences (e.g., () in (a, (), b))
+                        if (item.IsUndefined)
+                        {
+                            ip++;
+                            break;
+                        }
+                        if (item.IsSequence && item.SequenceValue is not null)
+                        {
+                            if (item.SequenceValue.TryGetLength(out var len) && len == 0)
+                            {
+                                ip++;
+                                break;
+                            }
+                            // Sequences are always flat in XPath; flatten nested sequences
+                            foreach (var seqItem in item.SequenceValue)
+                                list.Add(seqItem);
+                        }
+                        else
+                        {
+                            list.Add(item);
+                        }
                         ip++;
                         break;
                     }
@@ -235,8 +255,16 @@ public static class VmEngine
 
                 case IrOpCode.Range:
                     {
-                        long from = ToInteger(registers[instr.RegisterB]);
-                        long to = ToInteger(registers[instr.RegisterC]);
+                        var left = registers[instr.RegisterB];
+                        var right = registers[instr.RegisterC];
+                        if (left.IsUndefined || IsEmptySeq(left) || right.IsUndefined || IsEmptySeq(right))
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
+                            ip++;
+                            break;
+                        }
+                        long from = ToInteger(left);
+                        long to = ToInteger(right);
                         var items = new List<XdmValue>();
                         for (long v = from; v <= to; v++)
                             items.Add(XdmValue.FromInteger(v));
@@ -1307,6 +1335,23 @@ public static class VmEngine
                         break;
                     }
 
+                case IrOpCode.ArrayAddAll:
+                    {
+                        var arr = registers[instr.RegisterA].ArrayValue;
+                        var seq = registers[instr.RegisterB];
+                        if (seq.IsSequence && seq.SequenceValue is not null)
+                        {
+                            foreach (var item in seq.SequenceValue)
+                                arr.Add(item);
+                        }
+                        else if (!seq.IsUndefined)
+                        {
+                            arr.Add(seq);
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Lookup:
                     {
                         var container = registers[instr.RegisterB];
@@ -1364,7 +1409,7 @@ public static class VmEngine
                             CurriedFunctionItem curried => curried,
                             InlineFunctionItem inline => inline,
                             CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body),
-                            ValueTuple<string, int> namedTuple => ResolveNamedFunctionTuple(namedTuple),
+                            ValueTuple<string, int> namedTuple => ResolveNamedFunctionTuple(namedTuple, context),
                             _ => throw new InvalidOperationException($"Unknown function item type: {raw.GetType().Name}")
                         };
                         registers[instr.RegisterA] = XdmValue.FromFunction(funcItem);
@@ -1553,9 +1598,11 @@ public static class VmEngine
     /// Atomizes an XDM value for comparison: nodes become their string value,
     /// singleton sequences are unpacked, and other values pass through.
     /// </summary>
-    private static FunctionItem ResolveNamedFunctionTuple(ValueTuple<string, int> tuple)
+    private static FunctionItem ResolveNamedFunctionTuple(ValueTuple<string, int> tuple, EvaluationContext context)
     {
-        var (localName, nsUri) = ResolveFunctionName(tuple.Item1, null);
+        var (localName, nsUri) = ResolveFunctionName(tuple.Item1, context);
+        if (!context.TryResolveFunction(nsUri, localName, tuple.Item2, out _))
+            throw new InvalidOperationException($"XPST0017: Function {{{nsUri}}}{localName}#{tuple.Item2} not found.");
         return new NamedFunctionItem(nsUri, localName, tuple.Item2);
     }
 
@@ -1611,6 +1658,36 @@ public static class VmEngine
             default:
                 throw new InvalidOperationException($"Unknown function item type: {func.GetType().Name}");
         }
+    }
+
+    public static XdmValue InvokeFunctionItem(XdmValue funcValue, EvaluationContext context, ReadOnlySpan<XdmValue> args)
+    {
+        if (funcValue.IsFunction)
+            return InvokeFunctionItem((FunctionItem)funcValue.FunctionValue, context, args);
+
+        if (funcValue.IsMap)
+        {
+            if (args.Length != 1)
+                throw new InvalidOperationException("XPTY0004");
+            var key = AtomizedString(args[0]);
+            var map = funcValue.MapValue;
+            if (map.TryGetValue(key, out var value))
+                return value;
+            return XdmValue.Undefined;
+        }
+
+        if (funcValue.IsArray)
+        {
+            if (args.Length != 1)
+                throw new InvalidOperationException("XPTY0004");
+            var index = (int)ToInteger(args[0]);
+            var arr = funcValue.ArrayValue;
+            if (index >= 1 && index <= arr.Count)
+                return arr.Get(index);
+            return XdmValue.Undefined;
+        }
+
+        throw new InvalidOperationException("XPTY0004");
     }
 
     private static XdmValue Atomize(XdmValue value)
@@ -1736,11 +1813,42 @@ public static class VmEngine
 
     private static XdmValue Subtract(XdmValue left, XdmValue right)
     {
+        if (left.Kind == XdmValueKind.Date && right.Kind == XdmValueKind.Date)
+            return XdmValue.FromString(FormatDuration(left.DateValue - right.DateValue));
+        if (left.Kind == XdmValueKind.DateTime && right.Kind == XdmValueKind.DateTime)
+            return XdmValue.FromString(FormatDuration(left.DateTimeValue - right.DateTimeValue));
+        if (left.Kind == XdmValueKind.Time && right.Kind == XdmValueKind.Time)
+            return XdmValue.FromString(FormatDuration(left.TimeValue - right.TimeValue));
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) - ToDecimal(right));
         return XdmValue.FromInteger(ToInteger(left) - ToInteger(right));
+    }
+
+    private static string FormatDuration(TimeSpan ts)
+    {
+        bool negative = ts.TotalMilliseconds < 0;
+        ts = negative ? ts.Negate() : ts;
+        var sb = new System.Text.StringBuilder();
+        if (negative) sb.Append('-');
+        sb.Append('P');
+        if (ts.Days > 0) sb.Append($"{ts.Days}D");
+        if (ts.Hours > 0 || ts.Minutes > 0 || ts.Seconds > 0 || ts.Milliseconds > 0)
+        {
+            sb.Append('T');
+            if (ts.Hours > 0) sb.Append($"{ts.Hours}H");
+            if (ts.Minutes > 0) sb.Append($"{ts.Minutes}M");
+            if (ts.Seconds > 0 || ts.Milliseconds > 0)
+            {
+                sb.Append($"{ts.Seconds}");
+                if (ts.Milliseconds > 0)
+                    sb.Append($".{ts.Milliseconds:000}");
+                sb.Append('S');
+            }
+        }
+        if (sb.Length == (negative ? 2 : 1)) sb.Append("T0S");
+        return sb.ToString();
     }
 
     private static XdmValue Multiply(XdmValue left, XdmValue right)
@@ -1849,6 +1957,22 @@ public static class VmEngine
         string lStr = left.ToString();
         string rStr = right.ToString();
 
+        // If both are explicitly strings, compare as strings (don't parse as numbers)
+        if (left.Kind == XdmValueKind.String && right.Kind == XdmValueKind.String)
+        {
+            int cmp = string.CompareOrdinal(lStr, rStr);
+            return op switch
+            {
+                IrOpCode.Equal or IrOpCode.ValueEqual => cmp == 0,
+                IrOpCode.NotEqual or IrOpCode.ValueNotEqual => cmp != 0,
+                IrOpCode.LessThan or IrOpCode.ValueLessThan => cmp < 0,
+                IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => cmp <= 0,
+                IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => cmp > 0,
+                IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => cmp >= 0,
+                _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+            };
+        }
+
         if (double.TryParse(lStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double lDbl) &&
             double.TryParse(rStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double rDbl))
         {
@@ -1864,15 +1988,15 @@ public static class VmEngine
             };
         }
 
-        int cmp = string.CompareOrdinal(lStr, rStr);
+        int cmp2 = string.CompareOrdinal(lStr, rStr);
         return op switch
         {
-            IrOpCode.Equal or IrOpCode.ValueEqual => cmp == 0,
-            IrOpCode.NotEqual or IrOpCode.ValueNotEqual => cmp != 0,
-            IrOpCode.LessThan or IrOpCode.ValueLessThan => cmp < 0,
-            IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => cmp <= 0,
-            IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => cmp > 0,
-            IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => cmp >= 0,
+            IrOpCode.Equal or IrOpCode.ValueEqual => cmp2 == 0,
+            IrOpCode.NotEqual or IrOpCode.ValueNotEqual => cmp2 != 0,
+            IrOpCode.LessThan or IrOpCode.ValueLessThan => cmp2 < 0,
+            IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => cmp2 <= 0,
+            IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => cmp2 > 0,
+            IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => cmp2 >= 0,
             _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
         };
     }
@@ -1934,15 +2058,43 @@ public static class VmEngine
             case "long":
             case "short":
             case "byte":
+            case "unsignedshort":
+            case "unsignedint":
+            case "unsignedlong":
+            case "unsignedbyte":
+            case "positiveinteger":
+            case "negativeinteger":
+            case "nonpositiveinteger":
+            case "nonnegativeinteger":
                 if (value.Kind == XdmValueKind.Integer)
-                    return true;
-                if (value.Kind == XdmValueKind.Decimal && decimal.TryParse(value.ToString(), out var dInt))
                 {
-                    result = XdmValue.FromInteger((long)dInt);
+                    if (!IsIntegerInRange(value.IntegerValue, normalized))
+                        return false;
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Decimal)
+                {
+                    long lVal = (long)value.DecimalValue;
+                    if (!IsIntegerInRange(lVal, normalized))
+                        return false;
+                    result = XdmValue.FromInteger(lVal);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float)
+                {
+                    double d = value.DoubleValue;
+                    if (double.IsNaN(d) || double.IsInfinity(d))
+                        return false;
+                    long lDbl = (long)d;
+                    if (!IsIntegerInRange(lDbl, normalized))
+                        return false;
+                    result = XdmValue.FromInteger(lDbl);
                     return true;
                 }
                 if (long.TryParse(value.ToString(), out var lInt))
                 {
+                    if (!IsIntegerInRange(lInt, normalized))
+                        return false;
                     result = XdmValue.FromInteger(lInt);
                     return true;
                 }
@@ -1951,6 +2103,19 @@ public static class VmEngine
             case "decimal":
                 if (value.Kind == XdmValueKind.Decimal)
                     return true;
+                if (value.Kind == XdmValueKind.Integer)
+                {
+                    result = XdmValue.FromDecimal(value.IntegerValue);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float)
+                {
+                    double d = value.DoubleValue;
+                    if (double.IsNaN(d) || double.IsInfinity(d))
+                        return false;
+                    result = XdmValue.FromDecimal((decimal)d);
+                    return true;
+                }
                 if (decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var dec))
                 {
                     result = XdmValue.FromDecimal(dec);
@@ -1959,12 +2124,51 @@ public static class VmEngine
                 return false;
 
             case "double":
-            case "float":
-                if (IsDouble(value))
+                if (value.Kind == XdmValueKind.Double)
                     return true;
-                if (double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var dbl))
+                if (value.Kind == XdmValueKind.Float)
+                {
+                    result = XdmValue.FromDouble(value.DoubleValue);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Integer)
+                {
+                    result = XdmValue.FromDouble(value.IntegerValue);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Decimal)
+                {
+                    result = XdmValue.FromDouble((double)value.DecimalValue);
+                    return true;
+                }
+                if (TryParseDouble(value.ToString(), out var dbl))
                 {
                     result = XdmValue.FromDouble(dbl);
+                    return true;
+                }
+                return false;
+
+            case "float":
+                if (value.Kind == XdmValueKind.Float)
+                    return true;
+                if (value.Kind == XdmValueKind.Double)
+                {
+                    result = XdmValue.FromFloat((float)value.DoubleValue);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Integer)
+                {
+                    result = XdmValue.FromFloat(value.IntegerValue);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Decimal)
+                {
+                    result = XdmValue.FromFloat((float)value.DecimalValue);
+                    return true;
+                }
+                if (TryParseDouble(value.ToString(), out var flt))
+                {
+                    result = XdmValue.FromFloat((float)flt);
                     return true;
                 }
                 return false;
@@ -1976,10 +2180,14 @@ public static class VmEngine
             case "datetime":
                 if (value.Kind == XdmValueKind.DateTime)
                     return true;
-                if (DateTimeOffset.TryParse(value.ToString(), out var dtoDt))
                 {
-                    result = XdmValue.FromDateTime(dtoDt);
-                    return true;
+                    string sDt = NormalizeDateTimeString(value.ToString());
+                    if (DateTimeOffset.TryParse(sDt, out var dtoDt))
+                    {
+                        bool hasTz = HasTimezoneSuffix(sDt);
+                        result = XdmValue.FromDateTime(dtoDt, hasTz);
+                        return true;
+                    }
                 }
                 return false;
 
@@ -1988,13 +2196,19 @@ public static class VmEngine
                     return true;
                 if (value.Kind == XdmValueKind.DateTime)
                 {
-                    result = XdmValue.FromDate(value.DateTimeValue.Date);
+                    bool hasTz = value.HasTimezone;
+                    var dtoDt = value.DateTimeValue;
+                    result = XdmValue.FromDate(new DateTimeOffset(dtoDt.Year, dtoDt.Month, dtoDt.Day, 0, 0, 0, dtoDt.Offset), hasTz);
                     return true;
                 }
-                if (DateTimeOffset.TryParse(value.ToString(), out var dtoD))
                 {
-                    result = XdmValue.FromDate(dtoD.Date);
-                    return true;
+                    string sD = NormalizeDateTimeString(value.ToString());
+                    if (DateTimeOffset.TryParse(sD, out var dtoD))
+                    {
+                        bool hasTz = HasTimezoneSuffix(sD);
+                        result = XdmValue.FromDate(new DateTimeOffset(dtoD.Year, dtoD.Month, dtoD.Day, 0, 0, 0, dtoD.Offset), hasTz);
+                        return true;
+                    }
                 }
                 return false;
 
@@ -2004,13 +2218,18 @@ public static class VmEngine
                 if (value.Kind == XdmValueKind.DateTime)
                 {
                     var dt = value.DateTimeValue;
-                    result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Offset));
+                    bool hasTz = value.HasTimezone;
+                    result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Offset), hasTz);
                     return true;
                 }
-                if (DateTimeOffset.TryParse(value.ToString(), out var dtoT))
                 {
-                    result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dtoT.Hour, dtoT.Minute, dtoT.Second, dtoT.Millisecond, dtoT.Offset));
-                    return true;
+                    string sT = NormalizeDateTimeString(value.ToString());
+                    if (DateTimeOffset.TryParse(sT, out var dtoT))
+                    {
+                        bool hasTz = HasTimezoneSuffix(sT);
+                        result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dtoT.Hour, dtoT.Minute, dtoT.Second, dtoT.Millisecond, dtoT.Offset), hasTz);
+                        return true;
+                    }
                 }
                 return false;
 
@@ -2072,7 +2291,10 @@ public static class VmEngine
         return normalized switch
         {
             "string" => value.Kind == XdmValueKind.String,
-            "integer" or "int" or "long" or "short" or "byte" => value.Kind == XdmValueKind.Integer,
+            "integer" or "int" or "long" or "short" or "byte"
+                or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
+                or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
+                => value.Kind == XdmValueKind.Integer,
             "decimal" => value.Kind == XdmValueKind.Decimal,
             "double" => value.Kind == XdmValueKind.Double,
             "float" => value.Kind == XdmValueKind.Float,
@@ -2086,12 +2308,86 @@ public static class VmEngine
         };
     }
 
+    private static bool IsIntegerInRange(long value, string typeName)
+    {
+        return typeName switch
+        {
+            "byte" => value >= sbyte.MinValue && value <= sbyte.MaxValue,
+            "short" => value >= short.MinValue && value <= short.MaxValue,
+            "int" => value >= int.MinValue && value <= int.MaxValue,
+            "long" or "integer" => true,
+            "unsignedbyte" => value >= byte.MinValue && value <= byte.MaxValue,
+            "unsignedshort" => value >= ushort.MinValue && value <= ushort.MaxValue,
+            "unsignedint" => value >= uint.MinValue && value <= uint.MaxValue,
+            "unsignedlong" => value >= 0,
+            "positiveinteger" => value > 0,
+            "negativeinteger" => value < 0,
+            "nonpositiveinteger" => value <= 0,
+            "nonnegativeinteger" => value >= 0,
+            _ => true
+        };
+    }
+
     // ------------------------------------------------------------------
     // Type promotion helpers
     // ------------------------------------------------------------------
 
+    private static bool HasTimezoneSuffix(string s)
+    {
+        string t = s.Trim();
+        return t.EndsWith('Z') || t.EndsWith('z') || System.Text.RegularExpressions.Regex.IsMatch(t, @"[Tt]\d{2}:\d{2}:\d{2}[Zz]|[Tt]\d{2}:\d{2}:\d{2}[+\-]\d{2}:\d{2}$|[+\-]\d{2}:\d{2}$");
+    }
+
+    private static string NormalizeDateTimeString(string s)
+    {
+        // XML Schema allows T24:00:00 to represent midnight of the next day.
+        // .NET's DateTimeOffset.TryParse does not handle this, so normalize it.
+        if (s.Contains("T24:00:00"))
+        {
+            s = s.Replace("T24:00:00", "T00:00:00");
+            if (DateTimeOffset.TryParse(s, out var dto))
+            {
+                dto = dto.AddDays(1);
+                // Preserve timezone suffix in the string for HasTimezoneSuffix
+                if (s.EndsWith('Z'))
+                    return dto.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture);
+                return dto.ToString("yyyy-MM-ddTHH:mm:sszzz", System.Globalization.CultureInfo.InvariantCulture);
+            }
+        }
+        return s;
+    }
+
+    private static bool TryParseDouble(string s, out double result)
+    {
+        if (s.Equals("INF", StringComparison.OrdinalIgnoreCase))
+        {
+            result = double.PositiveInfinity;
+            return true;
+        }
+        if (s.Equals("-INF", StringComparison.OrdinalIgnoreCase))
+        {
+            result = double.NegativeInfinity;
+            return true;
+        }
+        if (s.Equals("NaN", StringComparison.OrdinalIgnoreCase))
+        {
+            result = double.NaN;
+            return true;
+        }
+        return double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+    }
+
     private static bool IsDouble(XdmValue value) =>
         value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float;
+
+    private static bool IsEmptySeq(XdmValue value)
+    {
+        if (!value.IsSequence || value.SequenceValue is null)
+            return false;
+        foreach (var _ in XdmSequence.FromSource(value.SequenceValue))
+            return false;
+        return true;
+    }
 
     private static bool IsDecimal(XdmValue value) =>
         value.Kind == XdmValueKind.Decimal;

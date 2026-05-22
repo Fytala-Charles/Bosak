@@ -179,6 +179,7 @@ public enum IrOpCode : byte
     MapAdd,
     Array,
     ArrayAdd,
+    ArrayAddAll,        // Add all items from a sequence to an array (curly constructor)
     Lookup,
     LookupWildcard,
     LoadFunction,       // Load a function item from the literal pool

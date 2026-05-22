@@ -59,6 +59,9 @@ public readonly struct XdmValue
     public static XdmValue FromDouble(double value) => new(XdmValueKind.Double, @double: value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromFloat(float value) => new(XdmValueKind.Float, @double: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDecimal(decimal value) => new(XdmValueKind.Decimal, reference: value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -90,12 +93,24 @@ public readonly struct XdmValue
         => new(XdmValueKind.DateTime, reference: value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDateTime(DateTimeOffset value, bool hasTimezone)
+        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value, hasTimezone));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDate(DateTimeOffset value)
         => new(XdmValueKind.Date, reference: value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDate(DateTimeOffset value, bool hasTimezone)
+        => new(XdmValueKind.Date, reference: new DateTimeWrapper(value, hasTimezone));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value)
         => new(XdmValueKind.Time, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromTime(DateTimeOffset value, bool hasTimezone)
+        => new(XdmValueKind.Time, reference: new DateTimeWrapper(value, hasTimezone));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromQName(XsQName value)
@@ -231,7 +246,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.DateTime)
                 ThrowInvalidAccess(nameof(DateTimeValue));
-            return (DateTimeOffset)_reference!;
+            return _reference is DateTimeWrapper w ? w.Value : (DateTimeOffset)_reference!;
         }
     }
 
@@ -241,7 +256,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Date)
                 ThrowInvalidAccess(nameof(DateValue));
-            return (DateTimeOffset)_reference!;
+            return _reference is DateTimeWrapper w ? w.Value : (DateTimeOffset)_reference!;
         }
     }
 
@@ -251,7 +266,17 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Time)
                 ThrowInvalidAccess(nameof(TimeValue));
-            return (DateTimeOffset)_reference!;
+            return _reference is DateTimeWrapper w ? w.Value : (DateTimeOffset)_reference!;
+        }
+    }
+
+    public bool HasTimezone
+    {
+        get
+        {
+            if (_kind is not (XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time))
+                return false;
+            return _reference is not DateTimeWrapper w || w.HasTimezone;
         }
     }
 
@@ -291,17 +316,23 @@ public readonly struct XdmValue
             XdmValueKind.Boolean => _integer != 0 ? "true" : "false",
             XdmValueKind.Integer => _integer.ToString(),
             XdmValueKind.Decimal => ((decimal)_reference!).ToString(),
-            XdmValueKind.Double => _double.ToString(),
-            XdmValueKind.Float => _double.ToString(),
+            XdmValueKind.Double => FormatExponent(_double.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+            XdmValueKind.Float => FormatExponent(((float)_double).ToString(System.Globalization.CultureInfo.InvariantCulture)),
             XdmValueKind.String => (string?)_reference ?? string.Empty,
             XdmValueKind.Node => ((IXdmNode?)_reference)?.StringValue ?? string.Empty,
             XdmValueKind.Sequence => "(sequence)",
             XdmValueKind.Function => "(function)",
             XdmValueKind.Map => "(map)",
             XdmValueKind.Array => "(array)",
-            XdmValueKind.DateTime => ((DateTimeOffset)_reference!).ToString("yyyy-MM-ddTHH:mm:sszzz", System.Globalization.CultureInfo.InvariantCulture),
-            XdmValueKind.Date => ((DateTimeOffset)_reference!).ToString("yyyy-MM-ddzzz", System.Globalization.CultureInfo.InvariantCulture),
-            XdmValueKind.Time => ((DateTimeOffset)_reference!).ToString("HH:mm:sszzz", System.Globalization.CultureInfo.InvariantCulture),
+            XdmValueKind.DateTime => HasTimezone
+                ? FormatDateTimeOffset(DateTimeValue, "yyyy-MM-ddTHH:mm:ss")
+                : DateTimeValue.ToString("yyyy-MM-ddTHH:mm:ss", System.Globalization.CultureInfo.InvariantCulture),
+            XdmValueKind.Date => HasTimezone
+                ? FormatDateTimeOffset(DateValue, "yyyy-MM-dd")
+                : DateValue.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
+            XdmValueKind.Time => HasTimezone
+                ? FormatDateTimeOffset(TimeValue, "HH:mm:ss")
+                : TimeValue.ToString("HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture),
             XdmValueKind.QName => ((XsQName)_reference!).ToString(),
             XdmValueKind.External => $"(external: {_reference?.GetType().Name})",
             _ => $"(kind: {_kind})"
@@ -310,4 +341,28 @@ public readonly struct XdmValue
 
     private void ThrowInvalidAccess(string propertyName)
         => throw new InvalidOperationException($"Cannot access {propertyName} on XDM value of kind '{_kind}'");
+
+    private static string FormatExponent(string s)
+        => s.Replace("E+", "E");
+
+    private static string FormatDateTimeOffset(DateTimeOffset dto, string format)
+    {
+        string result = dto.ToString(format + "zzz", System.Globalization.CultureInfo.InvariantCulture);
+        return result.Replace("+00:00", "Z");
+    }
+}
+
+/// <summary>
+/// Wraps a DateTimeOffset together with a flag indicating whether the original
+/// XPath literal included an explicit timezone. Used by xs:date, xs:time, and xs:dateTime.
+/// </summary>
+internal sealed class DateTimeWrapper
+{
+    public DateTimeOffset Value { get; }
+    public bool HasTimezone { get; }
+    public DateTimeWrapper(DateTimeOffset value, bool hasTimezone)
+    {
+        Value = value;
+        HasTimezone = hasTimezone;
+    }
 }
