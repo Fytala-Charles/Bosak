@@ -31,6 +31,8 @@
 //                      | Charles Korthout | 1.8   | 22-05-2026     | Fixed fn:base-uri/fn:document-uri empty sequence, type errors, fn:id atomization        |
 //                      | Charles Korthout | 1.9   | 22-05-2026     | Added fn:format-number#2/#3 with grammar-based picture parser                           |
 //                      | Charles Korthout | 2.0   | 23-05-2026     | Registered missing xs: constructors; duration normalization in xs: constructors         |
+//                      | Charles Korthout | 2.1   | 23-05-2026     | Added math:log10, math:exp10, math:asin, math:acos, math:atan, math:atan2             |
+//                      | Charles Korthout | 2.2   | 23-05-2026     | Added fn:parse-xml-fragment, fn:has-children, fn:path, fn:unordered, map:put           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -368,6 +370,41 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String],
                 ReturnType = XdmValueKind.Node,
                 Implementation = ParseXml_1
+            },
+            [(Namespaces.Fn, "parse-xml-fragment", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-xml-fragment", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Node,
+                Implementation = ParseXmlFragment_1
+            },
+            [(Namespaces.Fn, "has-children", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "has-children", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = HasChildren_0
+            },
+            [(Namespaces.Fn, "has-children", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "has-children", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = HasChildren_1
+            },
+            [(Namespaces.Fn, "path", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "path", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.String,
+                Implementation = Path_1
+            },
+            [(Namespaces.Fn, "unordered", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unordered", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Unordered_1
             },
 
             // ----- fn:serialize -----------------------------------------------
@@ -914,6 +951,13 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Map, XdmValueKind.String],
                 ReturnType = XdmValueKind.Map,
                 Implementation = MapRemove
+            },
+            [(Namespaces.Map, "put", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "put", Arity = 3,
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.Undefined, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Map,
+                Implementation = MapPut
             },
             [(Namespaces.Map, "entry", 2)] = new()
             {
@@ -2135,6 +2179,24 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
                 Implementation = XsENTITY
             },
+            [(Namespaces.Xs, "IDREFS", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "IDREFS", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Sequence,
+                Implementation = XsIDREFS
+            },
+            [(Namespaces.Xs, "NMTOKENS", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "NMTOKENS", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Sequence,
+                Implementation = XsNMTOKENS
+            },
+            [(Namespaces.Xs, "ENTITIES", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "ENTITIES", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Sequence,
+                Implementation = XsENTITIES
+            },
             // ----- math:* functions -------------------------------------------
             [(Namespaces.Math, "pi", 0)] = new()
             {
@@ -2184,6 +2246,42 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
                 Implementation = MathLog
             },
+            [(Namespaces.Math, "log10", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "log10", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathLog10
+            },
+            [(Namespaces.Math, "exp10", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "exp10", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathExp10
+            },
+            [(Namespaces.Math, "asin", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "asin", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathAsin
+            },
+            [(Namespaces.Math, "acos", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "acos", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathAcos
+            },
+            [(Namespaces.Math, "atan", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "atan", Arity = 1,
+                ParameterTypes = [XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathAtan
+            },
+            [(Namespaces.Math, "atan2", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Math, LocalName = "atan2", Arity = 2,
+                ParameterTypes = [XdmValueKind.Double, XdmValueKind.Double], ReturnType = XdmValueKind.Double,
+                Implementation = MathAtan2
+            },
             [(Namespaces.Fn, "function-lookup", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "function-lookup", Arity = 2,
@@ -2220,6 +2318,60 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn, LocalName = "collection", Arity = 1,
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
                 Implementation = Collection_1
+            },
+            [(Namespaces.Fn, "unparsed-text", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unparsed-text", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = UnparsedText_1
+            },
+            [(Namespaces.Fn, "unparsed-text", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unparsed-text", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = UnparsedText_2
+            },
+            [(Namespaces.Fn, "unparsed-text-available", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unparsed-text-available", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Boolean,
+                Implementation = UnparsedTextAvailable_1
+            },
+            [(Namespaces.Fn, "unparsed-text-available", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unparsed-text-available", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.Boolean,
+                Implementation = UnparsedTextAvailable_2
+            },
+            [(Namespaces.Fn, "unparsed-text-lines", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unparsed-text-lines", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                Implementation = UnparsedTextLines_1
+            },
+            [(Namespaces.Fn, "unparsed-text-lines", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unparsed-text-lines", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                Implementation = UnparsedTextLines_2
+            },
+            [(Namespaces.Fn, "random-number-generator", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "random-number-generator", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.Map,
+                Implementation = RandomNumberGenerator_0
+            },
+            [(Namespaces.Fn, "random-number-generator", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "random-number-generator", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Map,
+                Implementation = RandomNumberGenerator_1
+            },
+            [(Namespaces.Fn, "serialize", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "serialize", Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Map], ReturnType = XdmValueKind.String,
+                Implementation = Serialize_2
             },
             // ----- fn:trace ---------------------------------------------------
             [(Namespaces.Fn, "trace", 2)] = new()
@@ -2872,7 +3024,7 @@ public static class FunctionLibrary
 
         if (!ctx.TryResolveNamespace(prefix, out string nsUri))
             nsUri = string.Empty;
-        return XdmValue.FromQName(new XsQName(local, nsUri));
+        return XdmValue.FromQName(new XsQName(local, nsUri, prefix));
     }
 
     private static XdmValue ParseXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -2905,6 +3057,100 @@ public static class FunctionLibrary
             return value.NodeValue.ToXmlString();
         return value.ToString();
     }
+
+    private static XdmValue ParseXmlFragment_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string xml = AtomizedString(args[0]);
+        if (string.IsNullOrEmpty(xml))
+            return XdmValue.Undefined;
+        var wrapper = $"<wrapper xmlns=\"http://www.w3.org/2005/xpath-functions\">{xml}</wrapper>";
+        var doc = XDocument.Parse(wrapper);
+        var wrapperEl = doc.Root;
+        if (wrapperEl is null || !wrapperEl.HasElements)
+            return XdmValue.Undefined;
+        var firstChild = wrapperEl.Elements().First();
+        return XdmValue.FromNode(new XDocumentNode(firstChild));
+    }
+
+    private static XdmValue HasChildren_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => HasChildren(ctx.ContextItem);
+
+    private static XdmValue HasChildren_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => HasChildren(args[0]);
+
+    private static XdmValue HasChildren(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.False;
+        if (!value.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        var node = value.NodeValue;
+        if (node.NodeKind is not XdmNodeKind.Element and not XdmNodeKind.Document)
+            return XdmValue.False;
+        foreach (var _ in node.Axis(XdmAxis.Child))
+            return XdmValue.True;
+        return XdmValue.False;
+    }
+
+    private static XdmValue Path_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = args[0];
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+        if (!value.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(GetPath(value.NodeValue));
+    }
+
+    private static string GetPath(IXdmNode node)
+    {
+        if (node.NodeKind == XdmNodeKind.Document)
+            return "/";
+
+        var segments = new List<string>();
+        var current = node;
+        while (current.NodeKind != XdmNodeKind.Document)
+        {
+            string seg = current.NodeKind switch
+            {
+                XdmNodeKind.Element => $"Q{{{current.NamespaceUri}}}{current.LocalName}[{GetSiblingIndex(current)}]",
+                XdmNodeKind.Attribute => $"@{current.LocalName}",
+                XdmNodeKind.Text => "text()[1]",
+                XdmNodeKind.Comment => "comment()[1]",
+                XdmNodeKind.ProcessingInstruction => $"processing-instruction({current.LocalName})[1]",
+                XdmNodeKind.Namespace => $"namespace::{current.LocalName}",
+                _ => $"node()[{GetSiblingIndex(current)}]"
+            };
+            segments.Add(seg);
+            var parentSeq = current.Axis(XdmAxis.Parent);
+            var enumerator = parentSeq.GetEnumerator();
+            if (!enumerator.MoveNext())
+                break;
+            current = enumerator.Current.NodeValue;
+        }
+        segments.Reverse();
+        return "/" + string.Join("/", segments);
+    }
+
+    private static int GetSiblingIndex(IXdmNode node)
+    {
+        int index = 1;
+        var parentSeq = node.Axis(XdmAxis.Parent);
+        var penum = parentSeq.GetEnumerator();
+        if (!penum.MoveNext()) return index;
+        var parent = penum.Current.NodeValue;
+        foreach (var sibling in parent.Axis(XdmAxis.Child))
+        {
+            if (sibling.NodeValue == node)
+                return index;
+            if (sibling.NodeValue.NodeKind == node.NodeKind)
+                index++;
+        }
+        return index;
+    }
+
+    private static XdmValue Unordered_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0];
 
     private static XdmValue AnalyzeString_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => AnalyzeString(AtomizedString(args[0]), AtomizedString(args[1]), string.Empty);
@@ -3512,6 +3758,15 @@ public static class FunctionLibrary
     private static XdmValue XsENTITY(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "ENTITY");
 
+    private static XdmValue XsIDREFS(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "IDREFS");
+
+    private static XdmValue XsNMTOKENS(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "NMTOKENS");
+
+    private static XdmValue XsENTITIES(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "ENTITIES");
+
     // ------------------------------------------------------------------
     // math:* functions
     // ------------------------------------------------------------------
@@ -3520,25 +3775,60 @@ public static class FunctionLibrary
         => XdmValue.FromDouble(Math.PI);
 
     private static XdmValue MathSin(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDouble(Math.Sin(ToDoubleValue(args[0])));
+        => ApplyMath(args[0], d => Math.Sin(d));
 
     private static XdmValue MathCos(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDouble(Math.Cos(ToDoubleValue(args[0])));
+        => ApplyMath(args[0], d => Math.Cos(d));
 
     private static XdmValue MathTan(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDouble(Math.Tan(ToDoubleValue(args[0])));
+        => ApplyMath(args[0], d => Math.Tan(d));
 
     private static XdmValue MathPow(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDouble(Math.Pow(ToDoubleValue(args[0]), ToDoubleValue(args[1])));
+    {
+        var a = AtomizeValue(args[0]);
+        var b = AtomizeValue(args[1]);
+        if (a.IsUndefined || b.IsUndefined) return XdmValue.Undefined;
+        return XdmValue.FromDouble(Math.Pow(ToDoubleValue(a), ToDoubleValue(b)));
+    }
 
     private static XdmValue MathSqrt(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDouble(Math.Sqrt(ToDoubleValue(args[0])));
+        => ApplyMath(args[0], d => Math.Sqrt(d));
 
     private static XdmValue MathExp(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDouble(Math.Exp(ToDoubleValue(args[0])));
+        => ApplyMath(args[0], d => Math.Exp(d));
 
     private static XdmValue MathLog(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDouble(Math.Log(ToDoubleValue(args[0])));
+        => ApplyMath(args[0], d => Math.Log(d));
+
+    private static XdmValue MathLog10(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], d => Math.Log10(d));
+
+    private static XdmValue MathExp10(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], d => Math.Pow(10.0, d));
+
+    private static XdmValue MathAsin(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], d => Math.Asin(d));
+
+    private static XdmValue MathAcos(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], d => Math.Acos(d));
+
+    private static XdmValue MathAtan(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], d => Math.Atan(d));
+
+    private static XdmValue MathAtan2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var a = AtomizeValue(args[0]);
+        var b = AtomizeValue(args[1]);
+        if (a.IsUndefined || b.IsUndefined) return XdmValue.Undefined;
+        return XdmValue.FromDouble(Math.Atan2(ToDoubleValue(a), ToDoubleValue(b)));
+    }
+
+    private static XdmValue ApplyMath(XdmValue value, Func<double, double> fn)
+    {
+        value = AtomizeValue(value);
+        if (value.IsUndefined) return XdmValue.Undefined;
+        return XdmValue.FromDouble(fn(ToDoubleValue(value)));
+    }
 
     private static XdmValue FunctionLookup(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -3641,6 +3931,198 @@ public static class FunctionLibrary
         }
 
         return XdmValue.Undefined;
+    }
+
+    private static XdmValue UnparsedText_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedText(args[0].ToString(), null);
+
+    private static XdmValue UnparsedText_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedText(args[0].ToString(), args[1].ToString());
+
+    private static XdmValue UnparsedText(string href, string? encoding)
+    {
+        if (string.IsNullOrEmpty(href))
+            throw new InvalidOperationException("FOUT1170");
+        try
+        {
+            var path = ResolveUri(href);
+            if (!File.Exists(path))
+                throw new InvalidOperationException("FOUT1170");
+            encoding ??= "UTF-8";
+            var enc = System.Text.Encoding.GetEncoding(encoding);
+            var content = File.ReadAllText(path, enc);
+            return XdmValue.FromString(content);
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"FOUT1170: {ex.Message}");
+        }
+    }
+
+    private static XdmValue UnparsedTextAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedTextAvailable(args[0].ToString(), null);
+
+    private static XdmValue UnparsedTextAvailable_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedTextAvailable(args[0].ToString(), args[1].ToString());
+
+    private static XdmValue UnparsedTextAvailable(string href, string? encoding)
+    {
+        if (string.IsNullOrEmpty(href))
+            return XdmValue.False;
+        try
+        {
+            var path = ResolveUri(href);
+            if (!File.Exists(path))
+                return XdmValue.False;
+            if (encoding is not null)
+                _ = System.Text.Encoding.GetEncoding(encoding);
+            return XdmValue.True;
+        }
+        catch
+        {
+            return XdmValue.False;
+        }
+    }
+
+    private static XdmValue UnparsedTextLines_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedTextLines(args[0].ToString(), null);
+
+    private static XdmValue UnparsedTextLines_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedTextLines(args[0].ToString(), args[1].ToString());
+
+    private static XdmValue UnparsedTextLines(string href, string? encoding)
+    {
+        var textValue = UnparsedText(href, encoding);
+        var text = textValue.StringValue;
+        if (string.IsNullOrEmpty(text))
+            return XdmValue.Undefined;
+        var lines = text.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
+        var items = new List<XdmValue>(lines.Length);
+        foreach (var line in lines)
+            items.Add(XdmValue.FromString(line));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    private static string ResolveUri(string href)
+    {
+        if (Path.IsPathRooted(href) || href.Contains(':'))
+            return href;
+        return Path.GetFullPath(href);
+    }
+
+    private static XdmValue RandomNumberGenerator_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => CreateRandomGenerator(123);
+
+    private static XdmValue RandomNumberGenerator_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var seedValue = AtomizeValue(args[0]);
+        if (seedValue.IsUndefined)
+            return CreateRandomGenerator(123);
+        long seed = seedValue.Kind switch
+        {
+            XdmValueKind.Integer => seedValue.IntegerValue,
+            XdmValueKind.Decimal => (long)seedValue.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => (long)seedValue.DoubleValue,
+            _ => long.TryParse(seedValue.ToString(), out var s) ? s : 0
+        };
+        return CreateRandomGenerator(seed);
+    }
+
+    private static XdmValue CreateRandomGenerator(long seed)
+    {
+        var rng = new SplitMix64(seed);
+        double number = rng.NextDouble();
+        long nextSeed = rng.State;
+
+        // next: a function that returns the next generator
+        var nextFunc = new DelegateFunctionItem(0, (_, _) => CreateRandomGenerator(nextSeed));
+
+        // permute: a function that takes a sequence and returns it in random order
+        var permuteFunc = new DelegateFunctionItem(1, (ctx, a) => PermuteSequence(a[0], new SplitMix64(nextSeed)));
+
+        var map = new XdmMap();
+        map.Add(XdmValue.FromString("number"), XdmValue.FromDouble(number));
+        map.Add(XdmValue.FromString("next"), XdmValue.FromFunction(nextFunc));
+        map.Add(XdmValue.FromString("permute"), XdmValue.FromFunction(permuteFunc));
+        return XdmValue.FromMap(map);
+    }
+
+    private static XdmValue PermuteSequence(XdmValue value, SplitMix64 rng)
+    {
+        var items = Materialize(value);
+        if (items.Count <= 1)
+            return value;
+        // Fisher-Yates shuffle
+        for (int i = items.Count - 1; i > 0; i--)
+        {
+            int j = (int)(rng.NextDouble() * (i + 1));
+            (items[i], items[j]) = (items[j], items[i]);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    private sealed class SplitMix64
+    {
+        public long State { get; private set; }
+        public SplitMix64(long seed) => State = seed;
+        public ulong Next()
+        {
+            ulong z = (ulong)(State += unchecked((long)0x9e3779b97f4a7c15));
+            z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
+            z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+            return z ^ (z >> 31);
+        }
+        public double NextDouble()
+        {
+            // Generate a double in [0, 1) using 53 bits of precision
+            return (Next() >> 11) * (1.0 / (1ul << 53));
+        }
+    }
+
+    private static XdmValue Serialize_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = args[0];
+        var options = args[1].MapValue;
+        bool indent = false;
+        string method = "xml";
+        if (options.TryGetValue(XdmValue.FromString("indent"), out var indentVal))
+            indent = indentVal.BooleanValue;
+        if (options.TryGetValue(XdmValue.FromString("method"), out var methodVal))
+            method = methodVal.ToString().ToLowerInvariant();
+
+        if (value.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+
+        if (!value.IsSequence)
+            return XdmValue.FromString(SerializeItem(value, indent, method));
+
+        var sb = new StringBuilder();
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            sb.Append(SerializeItem(item, indent, method));
+        return XdmValue.FromString(sb.ToString());
+    }
+
+    private static string SerializeItem(XdmValue value, bool indent, string method)
+    {
+        if (value.IsNode)
+        {
+            if (method == "json" && value.NodeValue.NodeKind == XdmNodeKind.Document)
+            {
+                // For JSON method on document, serialize the root element's content
+                var doc = value.NodeValue;
+                foreach (var child in doc.Axis(XdmAxis.Child))
+                {
+                    if (child.NodeValue.NodeKind == XdmNodeKind.Element)
+                        return child.NodeValue.ToXmlString();
+                }
+            }
+            return value.NodeValue.ToXmlString();
+        }
+        return value.ToString();
     }
 
     private static XdmValue Error_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -4152,6 +4634,21 @@ public static class FunctionLibrary
             if (!XdmValueEqualityComparer.Instance.Equals(kvp.Key, key))
                 result.Add(kvp.Key, kvp.Value);
         }
+        return XdmValue.FromMap(result);
+    }
+
+    private static XdmValue MapPut(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var map = args[0].MapValue;
+        var key = AtomizeMapKey(args[1]);
+        var value = args[2];
+        var result = new XdmMap();
+        foreach (var kvp in map.Entries)
+        {
+            if (!XdmValueEqualityComparer.Instance.Equals(kvp.Key, key))
+                result.Add(kvp.Key, kvp.Value);
+        }
+        result.Add(key, value);
         return XdmValue.FromMap(result);
     }
 
@@ -5336,7 +5833,7 @@ public static class FunctionLibrary
         var kind = node.NodeKind;
         if (kind is not XdmNodeKind.Element and not XdmNodeKind.Attribute and not XdmNodeKind.Namespace and not XdmNodeKind.ProcessingInstruction)
             return XdmValue.Undefined;
-        return XdmValue.FromQName(new XsQName(node.LocalName, node.NamespaceUri));
+        return XdmValue.FromQName(new XsQName(node.LocalName, node.NamespaceUri, node.Prefix));
     }
 
     // ------------------------------------------------------------------
@@ -6106,7 +6603,8 @@ public static class FunctionLibrary
         var ns = AtomizedString(args[0]);
         var lexical = AtomizedString(args[1]);
         var local = lexical.Contains(':') ? lexical[(lexical.IndexOf(':') + 1)..] : lexical;
-        return XdmValue.FromQName(new XsQName(local, ns));
+        var prefix = lexical.Contains(':') ? lexical[..lexical.IndexOf(':')] : string.Empty;
+        return XdmValue.FromQName(new XsQName(local, ns, prefix));
     }
 
     private static XdmValue ResolveQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -6132,7 +6630,7 @@ public static class FunctionLibrary
         }
 
         var nsUri = ResolvePrefix(node, prefix);
-        return XdmValue.FromQName(new XsQName(local, nsUri));
+        return XdmValue.FromQName(new XsQName(local, nsUri, prefix));
     }
 
     private static string ResolvePrefix(IXdmNode node, string prefix)
@@ -6162,8 +6660,8 @@ public static class FunctionLibrary
 
     private static XdmValue PrefixFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        // XsQName does not store prefix; return empty string as per spec for QNames created without prefix
-        return XdmValue.FromString(string.Empty);
+        var qn = args[0].QNameValue;
+        return XdmValue.FromString(qn.Prefix);
     }
 }
 

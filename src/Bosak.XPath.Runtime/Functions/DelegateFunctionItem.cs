@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
-// CREATE DATE          : 19 mei 2026
-// PURPOSE              : Represents an xs:QName value in the XQuery Data Model.
+// CREATE DATE          : 23 mei 2026
+// PURPOSE              : Runtime wrapper for a C# delegate as an XPath function item.
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
@@ -10,26 +10,19 @@
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
-//                      | Charles Korthout | 0.2   | 22-05-2026     | Added Prefix field for lexical QName serialization                                       |
+//                      | Charles Korthout | 0.1   | 23-05-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
-namespace Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+
+namespace Bosak.XPath.Runtime.Functions;
 
 /// <summary>
-/// Represents an <c>xs:QName</c> value: a tuple of namespace URI, local name, and optional prefix.
+/// A function item that wraps a C# delegate, used for dynamically created functions
+/// such as the <c>next</c> and <c>permute</c> entries in <c>fn:random-number-generator</c>.
 /// </summary>
-public readonly record struct XsQName(string LocalName, string NamespaceUri, string Prefix = "")
+public sealed record DelegateFunctionItem(int ArityValue, XPathFunction Implementation) : FunctionItem
 {
-    /// <summary>
-    /// Returns the lexical representation used by <see cref="XdmValue.ToString"/>.
-    /// Prefixed QNames render as <c>prefix:local</c>; no-namespace QNames as the local name;
-    /// namespaced QNames without prefix as <c>Q{uri}local</c>.
-    /// </summary>
-    public override string ToString()
-    {
-        if (!string.IsNullOrEmpty(Prefix))
-            return $"{Prefix}:{LocalName}";
-        return LocalName;
-    }
+    public override int Arity => ArityValue;
 }

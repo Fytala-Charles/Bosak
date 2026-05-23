@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 22-05-2026     | Skip XSD 1.0 tests (Bosak implements XSD 1.1 per XPath 3.1)                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -94,8 +95,10 @@ internal sealed class DependencyFilter
 
             if (dep.Type == "xsd-version")
             {
-                // Skip tests requiring specific XSD versions for now
-                if (dep.Value != "1.0" && dep.Value != "1.1")
+                // Bosak implements XSD 1.1 (required by XPath 3.1); skip XSD 1.0-only tests
+                if (dep.Value == "1.0")
+                    return false;
+                if (dep.Value != "1.1")
                     return false;
             }
         }

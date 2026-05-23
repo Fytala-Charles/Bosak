@@ -1659,6 +1659,9 @@ public static class VmEngine
                     throw new InvalidOperationException($"Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
                 return sig.Implementation(context, args);
 
+            case DelegateFunctionItem del:
+                return del.Implementation(context, args);
+
             case InlineFunctionItem inline:
                 {
                     // Validate parameter types
@@ -1923,6 +1926,8 @@ public static class VmEngine
 
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
+        if (IsFloat(left) || IsFloat(right))
+            return XdmValue.FromFloat(ToFloat(left) + ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) + ToDecimal(right));
         return XdmValue.FromInteger(ToInteger(left) + ToInteger(right));
@@ -1988,6 +1993,8 @@ public static class VmEngine
 
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
+        if (IsFloat(left) || IsFloat(right))
+            return XdmValue.FromFloat(ToFloat(left) - ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) - ToDecimal(right));
         return XdmValue.FromInteger(ToInteger(left) - ToInteger(right));
@@ -2266,6 +2273,8 @@ public static class VmEngine
 
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) * ToDouble(right));
+        if (IsFloat(left) || IsFloat(right))
+            return XdmValue.FromFloat(ToFloat(left) * ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) * ToDecimal(right));
         return XdmValue.FromInteger(ToInteger(left) * ToInteger(right));
@@ -2283,6 +2292,8 @@ public static class VmEngine
 
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
+        if (IsFloat(left) || IsFloat(right))
+            return XdmValue.FromFloat(ToFloat(left) / ToFloat(right));
         // XPath div always returns decimal (or double), never integer
         return XdmValue.FromDecimal(ToDecimal(left) / ToDecimal(right));
     }
@@ -2291,6 +2302,8 @@ public static class VmEngine
     {
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromInteger((long)(ToDouble(left) / ToDouble(right)));
+        if (IsFloat(left) || IsFloat(right))
+            return XdmValue.FromInteger((long)(ToFloat(left) / ToFloat(right)));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromInteger((long)(ToDecimal(left) / ToDecimal(right)));
         return XdmValue.FromInteger(ToInteger(left) / ToInteger(right));
@@ -2300,6 +2313,8 @@ public static class VmEngine
     {
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) % ToDouble(right));
+        if (IsFloat(left) || IsFloat(right))
+            return XdmValue.FromFloat(ToFloat(left) % ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) % ToDecimal(right));
         return XdmValue.FromInteger(ToInteger(left) % ToInteger(right));
@@ -2316,6 +2331,8 @@ public static class VmEngine
         }
         if (IsDouble(value))
             return XdmValue.FromDouble(-ToDouble(value));
+        if (IsFloat(value))
+            return XdmValue.FromFloat(-ToFloat(value));
         if (IsDecimal(value))
             return XdmValue.FromDecimal(-ToDecimal(value));
         return XdmValue.FromInteger(-ToInteger(value));
@@ -2334,6 +2351,22 @@ public static class VmEngine
         {
             double l = ToDouble(left);
             double r = ToDouble(right);
+            return op switch
+            {
+                IrOpCode.Equal or IrOpCode.ValueEqual => l == r,
+                IrOpCode.NotEqual or IrOpCode.ValueNotEqual => l != r,
+                IrOpCode.LessThan or IrOpCode.ValueLessThan => l < r,
+                IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => l <= r,
+                IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => l > r,
+                IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => l >= r,
+                _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+            };
+        }
+
+        if (IsFloat(left) || IsFloat(right))
+        {
+            float l = ToFloat(left);
+            float r = ToFloat(right);
             return op switch
             {
                 IrOpCode.Equal or IrOpCode.ValueEqual => l == r,
@@ -3181,6 +3214,57 @@ public static class VmEngine
                 return true;
             }
 
+            case "idrefs":
+            {
+                string s = CollapseWhitespace(value.ToString());
+                if (string.IsNullOrEmpty(s))
+                    return false;
+                var idrefTokens = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                var idrefItems = new XdmValue[idrefTokens.Length];
+                for (int i = 0; i < idrefTokens.Length; i++)
+                {
+                    if (!Regex.IsMatch(idrefTokens[i], @"^[\p{L}_][\w.\-]*$"))
+                        return false;
+                    idrefItems[i] = XdmValue.FromString(idrefTokens[i], "IDREF");
+                }
+                result = XdmValue.FromSequence(MaterializedSequence.FromArray(idrefItems));
+                return true;
+            }
+
+            case "nmtokens":
+            {
+                string s = CollapseWhitespace(value.ToString());
+                if (string.IsNullOrEmpty(s))
+                    return false;
+                var nmtokens = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                var nmtokenItems = new XdmValue[nmtokens.Length];
+                for (int i = 0; i < nmtokens.Length; i++)
+                {
+                    if (!Regex.IsMatch(nmtokens[i], @"^[\w.:\-]+$"))
+                        return false;
+                    nmtokenItems[i] = XdmValue.FromString(nmtokens[i], "NMTOKEN");
+                }
+                result = XdmValue.FromSequence(MaterializedSequence.FromArray(nmtokenItems));
+                return true;
+            }
+
+            case "entities":
+            {
+                string s = CollapseWhitespace(value.ToString());
+                if (string.IsNullOrEmpty(s))
+                    return false;
+                var entityTokens = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                var entityItems = new XdmValue[entityTokens.Length];
+                for (int i = 0; i < entityTokens.Length; i++)
+                {
+                    if (!Regex.IsMatch(entityTokens[i], @"^[\p{L}_][\w.\-]*$"))
+                        return false;
+                    entityItems[i] = XdmValue.FromString(entityTokens[i], "ENTITY");
+                }
+                result = XdmValue.FromSequence(MaterializedSequence.FromArray(entityItems));
+                return true;
+            }
+
             case "qname":
                 if (value.Kind == XdmValueKind.QName)
                     return true;
@@ -3932,7 +4016,10 @@ public static class VmEngine
     }
 
     private static bool IsDouble(XdmValue value) =>
-        value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float;
+        value.Kind == XdmValueKind.Double;
+
+    private static bool IsFloat(XdmValue value) =>
+        value.Kind == XdmValueKind.Float;
 
     private static bool IsDuration(XdmValue value) =>
         value.Kind == XdmValueKind.Duration;
@@ -3972,6 +4059,15 @@ public static class VmEngine
         XdmValueKind.Decimal => (long)value.DecimalValue,
         XdmValueKind.Double or XdmValueKind.Float => (long)value.DoubleValue,
         _ => long.TryParse(value.ToString(), out var l) ? l : throw new InvalidOperationException($"Cannot convert {value.Kind} to integer")
+    };
+
+    private static float ToFloat(XdmValue value) => value.Kind switch
+    {
+        XdmValueKind.Integer => value.IntegerValue,
+        XdmValueKind.Decimal => (float)value.DecimalValue,
+        XdmValueKind.Double or XdmValueKind.Float => (float)value.DoubleValue,
+        XdmValueKind.Boolean => value.BooleanValue ? 1.0f : 0.0f,
+        _ => float.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var f) ? f : throw new InvalidOperationException($"Cannot convert {value.Kind} to float")
     };
 
     // ------------------------------------------------------------------

@@ -232,6 +232,32 @@ internal static class ResultComparer
             if (aIsNaN && bIsNaN) return true;
             if (aIsNaN || bIsNaN) return false;
 
+            if (a.Kind == XdmValueKind.Double || b.Kind == XdmValueKind.Double)
+            {
+                double da = a.Kind == XdmValueKind.Double ? a.DoubleValue
+                          : a.Kind == XdmValueKind.Integer ? a.IntegerValue
+                          : a.Kind == XdmValueKind.Decimal ? (double)a.DecimalValue
+                          : a.DoubleValue;
+                double db = b.Kind == XdmValueKind.Double ? b.DoubleValue
+                          : b.Kind == XdmValueKind.Integer ? b.IntegerValue
+                          : b.Kind == XdmValueKind.Decimal ? (double)b.DecimalValue
+                          : b.DoubleValue;
+                return da == db;
+            }
+
+            if (a.Kind == XdmValueKind.Float || b.Kind == XdmValueKind.Float)
+            {
+                float fa = a.Kind == XdmValueKind.Float ? (float)a.DoubleValue
+                         : a.Kind == XdmValueKind.Integer ? a.IntegerValue
+                         : a.Kind == XdmValueKind.Decimal ? (float)a.DecimalValue
+                         : (float)a.DoubleValue;
+                float fb = b.Kind == XdmValueKind.Float ? (float)b.DoubleValue
+                         : b.Kind == XdmValueKind.Integer ? b.IntegerValue
+                         : b.Kind == XdmValueKind.Decimal ? (float)b.DecimalValue
+                         : (float)b.DoubleValue;
+                return fa == fb;
+            }
+
             if (a.Kind == XdmValueKind.Decimal || b.Kind == XdmValueKind.Decimal)
             {
                 decimal da = a.Kind == XdmValueKind.Decimal ? a.DecimalValue

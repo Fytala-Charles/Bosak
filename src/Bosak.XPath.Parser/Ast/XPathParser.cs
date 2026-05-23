@@ -822,9 +822,14 @@ public sealed class XPathParser
             return WithSpan(new StringLiteralNode("*"), start, End);
         if (Current.Kind == TokenKind.IntegerLiteral)
         {
-            var val = long.Parse(GetString(Current));
+            var str = GetString(Current);
+            XPathAstNode node;
+            if (long.TryParse(str, out var val))
+                node = new IntegerLiteralNode(val);
+            else
+                node = new DecimalLiteralNode(decimal.Parse(str, CultureInfo.InvariantCulture));
             Advance();
-            return WithSpan(new IntegerLiteralNode(val), start, End);
+            return WithSpan(node, start, End);
         }
         if (Current.Kind == TokenKind.Name)
         {
@@ -863,9 +868,14 @@ public sealed class XPathParser
                 return WithSpan(new StringLiteralNode(s), start, End);
 
             case TokenKind.IntegerLiteral:
-                var i = long.Parse(GetString(Current), CultureInfo.InvariantCulture);
+                var strI = GetString(Current);
+                XPathAstNode nodeI;
+                if (long.TryParse(strI, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i))
+                    nodeI = new IntegerLiteralNode(i);
+                else
+                    nodeI = new DecimalLiteralNode(decimal.Parse(strI, CultureInfo.InvariantCulture));
                 Advance();
-                return WithSpan(new IntegerLiteralNode(i), start, End);
+                return WithSpan(nodeI, start, End);
 
             case TokenKind.DecimalLiteral:
                 var d = decimal.Parse(GetString(Current), CultureInfo.InvariantCulture);
