@@ -1346,7 +1346,7 @@ public class FunctionLibraryTests
     [Fact]
     public void CastAs_DateTimeToDate()
     {
-        var result = Evaluate("'2024-01-15T10:30:00' cast as xs:date");
+        var result = Evaluate("xs:dateTime('2024-01-15T10:30:00') cast as xs:date");
         Assert.Equal(XdmValueKind.Date, result.Kind);
         Assert.Equal(new DateTimeOffset(2024, 1, 15, 0, 0, 0, TimeSpan.Zero).Date, result.DateValue.Date);
     }

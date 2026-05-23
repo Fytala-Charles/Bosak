@@ -459,7 +459,7 @@ public sealed class XPathParser
         if (Match(TokenKind.KeywordCastable))
         {
             Expect(TokenKind.KeywordAs);
-            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            var (typePrefix, typeLocal, occurrence) = ParseSingleType();
             return WithSpan(new CastableNode(left, typeLocal, typePrefix, occurrence), start, End);
         }
         return left;
@@ -473,7 +473,7 @@ public sealed class XPathParser
         if (Match(TokenKind.KeywordCast))
         {
             Expect(TokenKind.KeywordAs);
-            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            var (typePrefix, typeLocal, occurrence) = ParseSingleType();
             return WithSpan(new CastNode(left, typeLocal, typePrefix, occurrence), start, End);
         }
         return left;
@@ -1180,6 +1180,33 @@ public sealed class XPathParser
 
     private (string? Prefix, string Local, OccurrenceIndicator Occurrence) ParseSequenceType()
     {
+        var (prefix, local, _) = ParseTypeNameAndParens();
+
+        OccurrenceIndicator occurrence = OccurrenceIndicator.One;
+        if (Match(TokenKind.Question))
+            occurrence = OccurrenceIndicator.ZeroOrOne;
+        else if (Match(TokenKind.Star))
+            occurrence = OccurrenceIndicator.ZeroOrMore;
+        else if (Match(TokenKind.Plus))
+            occurrence = OccurrenceIndicator.OneOrMore;
+        return (prefix, local, occurrence);
+    }
+
+    private (string? Prefix, string Local, OccurrenceIndicator Occurrence) ParseSingleType()
+    {
+        var (prefix, local, hasParens) = ParseTypeNameAndParens();
+        if (hasParens)
+            throw new ParseException("XPST0003: Type tests with parentheses are not allowed in 'cast' or 'castable as' expressions.", Current.Start);
+
+        if (Match(TokenKind.Question))
+            return (prefix, local, OccurrenceIndicator.ZeroOrOne);
+        if (Current.Kind is TokenKind.Star or TokenKind.Plus)
+            throw new ParseException("XPST0003: '*' and '+' are not allowed as occurrence indicators in 'cast' or 'castable as' expressions.", Current.Start);
+        return (prefix, local, OccurrenceIndicator.One);
+    }
+
+    private (string? Prefix, string Local, bool HasParens) ParseTypeNameAndParens()
+    {
         string name;
         if (Current.Kind == TokenKind.Name)
         {
@@ -1209,8 +1236,10 @@ public sealed class XPathParser
         var (prefix, local, _) = SplitQName(name);
 
         // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), etc.
+        bool hasParens = false;
         if (Current.Kind == TokenKind.LParen)
         {
+            hasParens = true;
             int parenDepth = 0;
             do
             {
@@ -1231,14 +1260,7 @@ public sealed class XPathParser
             } while (parenDepth > 0 && Current.Kind != TokenKind.Eof);
         }
 
-        OccurrenceIndicator occurrence = OccurrenceIndicator.One;
-        if (Match(TokenKind.Question))
-            occurrence = OccurrenceIndicator.ZeroOrOne;
-        else if (Match(TokenKind.Star))
-            occurrence = OccurrenceIndicator.ZeroOrMore;
-        else if (Match(TokenKind.Plus))
-            occurrence = OccurrenceIndicator.OneOrMore;
-        return (prefix, local, occurrence);
+        return (prefix, local, hasParens);
     }
 }
 

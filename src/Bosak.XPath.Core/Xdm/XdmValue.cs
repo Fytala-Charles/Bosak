@@ -474,8 +474,13 @@ public readonly struct XdmValue
             return s;
         }
 
-        // For non-scientific range, use G9 (round-trip precision) then trim
-        string fixedStr = value.ToString("G9", CultureInfo.InvariantCulture);
+        // For non-scientific range, round decimal to enough places for 7 significant digits,
+        // then trim trailing zeros. This handles values like 0.00001f which G9 formats as
+        // scientific notation due to the inexact binary representation.
+        int decimalPlaces = Math.Max(0, (int)Math.Ceiling(-Math.Log10(abs)) + 7 - 1);
+        decimal d = (decimal)value;
+        d = Math.Round(d, decimalPlaces, MidpointRounding.AwayFromZero);
+        string fixedStr = d.ToString(CultureInfo.InvariantCulture);
         if (fixedStr.Contains('.'))
         {
             fixedStr = fixedStr.TrimEnd('0').TrimEnd('.');
@@ -487,7 +492,7 @@ public readonly struct XdmValue
     {
         string result = xdt.FormatYear();
         if (includeTime)
-            result += $"-{xdt.Month:00}-{xdt.Day:00}T{xdt.Hour:00}:{xdt.Minute:00}:{xdt.Second:00}";
+            result += $"-{xdt.Month:00}-{xdt.Day:00}T{xdt.Hour:00}:{xdt.Minute:00}:{FormatXPathSeconds(xdt.Second, xdt.Millisecond)}";
         else
             result += $"-{xdt.Month:00}-{xdt.Day:00}";
         if (xdt.HasTimezone)
@@ -497,10 +502,19 @@ public readonly struct XdmValue
 
     private static string FormatXPathTime(XPathDateTime xdt)
     {
-        string result = $"{xdt.Hour:00}:{xdt.Minute:00}:{xdt.Second:00}";
+        int hour = xdt.Hour;
+        if (hour == 24) hour = 0;
+        string result = $"{hour:00}:{xdt.Minute:00}:{FormatXPathSeconds(xdt.Second, xdt.Millisecond)}";
         if (xdt.HasTimezone)
             result += xdt.FormatTimezone();
         return result;
+    }
+
+    private static string FormatXPathSeconds(int second, int millisecond)
+    {
+        if (millisecond == 0) return $"{second:00}";
+        string frac = millisecond.ToString("000").TrimEnd('0');
+        return $"{second:00}.{frac}";
     }
 
     private static string FormatDateTimeOffset(DateTimeOffset dto, string format)

@@ -2750,12 +2750,7 @@ public static class VmEngine
                         return true;
                     }
                     // Fallback for backward compatibility with dateTime-shaped strings cast to date
-                    if (DateTimeOffset.TryParse(sD, out var dtoDFb))
-                    {
-                        bool hasTzFb = HasTimezoneSuffix(sD);
-                        result = XdmValue.FromDate(dtoDFb, hasTzFb);
-                        return true;
-                    }
+                    // (removed - DateTimeOffset.TryParse is too lenient and accepts invalid formats)
                 }
                 return false;
 
@@ -2786,12 +2781,7 @@ public static class VmEngine
                         return true;
                     }
                     // Fallback for backward compatibility with dateTime-shaped strings cast to time
-                    if (DateTimeOffset.TryParse(sT, out var dtoTFb))
-                    {
-                        bool hasTzFb = HasTimezoneSuffix(sT);
-                        result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dtoTFb.Hour, dtoTFb.Minute, dtoTFb.Second, dtoTFb.Millisecond, dtoTFb.Offset), hasTzFb);
-                        return true;
-                    }
+                    // (removed - DateTimeOffset.TryParse is too lenient and accepts invalid formats)
                 }
                 return false;
 
@@ -2838,9 +2828,10 @@ public static class VmEngine
                             return false;
                         }
                     }
-                    if (!IsValidBase64(sB64))
+                    string normalizedB64 = sB64.Replace(" ", "").Replace("\t", "").Replace("\r", "").Replace("\n", "");
+                    if (!IsValidBase64(normalizedB64))
                         return false;
-                    result = XdmValue.FromString(sB64, "base64Binary");
+                    result = XdmValue.FromString(normalizedB64, "base64Binary");
                     return true;
                 }
 
@@ -2881,7 +2872,7 @@ public static class VmEngine
                     string sDur = value.ToString().Trim();
                     if (IsValidDuration(sDur))
                     {
-                        result = XdmValue.FromDuration(sDur);
+                        result = XdmValue.FromDuration(CanonicalizeDuration(sDur));
                         return true;
                     }
                 }
@@ -2939,6 +2930,26 @@ public static class VmEngine
                         string sign = m.Groups[1].Value;
                         string yearStr = m.Groups[2].Value;
                         string tz = m.Groups[3].Value;
+                        // Reject leading zeros for years longer than 4 digits
+                        if (yearStr.Length > 4 && yearStr[0] == '0')
+                            return false;
+                        // Validate and normalize timezone
+                        if (!string.IsNullOrEmpty(tz))
+                        {
+                            if (tz.Equals("Z", StringComparison.OrdinalIgnoreCase))
+                            {
+                                tz = "Z";
+                            }
+                            else
+                            {
+                                int tzHour = int.Parse(tz[1..3], CultureInfo.InvariantCulture);
+                                int tzMin = int.Parse(tz[4..6], CultureInfo.InvariantCulture);
+                                if (tzHour > 14 || (tzHour == 14 && tzMin > 0) || tzMin > 59)
+                                    return false;
+                                if (tzHour == 0 && tzMin == 0)
+                                    tz = "Z";
+                            }
+                        }
                         // Reject years too large to fit in long (overflow)
                         if (yearStr.Length > 18)
                             return false;
@@ -2968,12 +2979,36 @@ public static class VmEngine
                 }
                 {
                     string s = value.ToString().Trim();
-                    var m = Regex.Match(s, @"^([-+]?)(\d{4,})-\d{2}((?:[Zz]|[+\-]\d{2}:\d{2})?)$");
+                    var m = Regex.Match(s, @"^(-?)(\d{4,})-(\d{2})((?:[Zz]|[+\-]\d{2}:\d{2})?)$");
                     if (m.Success)
                     {
                         string sign = m.Groups[1].Value;
                         string yearStr = m.Groups[2].Value;
-                        string rest = s[(sign.Length + yearStr.Length)..];
+                        string monthStr = m.Groups[3].Value;
+                        if (!int.TryParse(monthStr, out int monthVal) || monthVal < 1 || monthVal > 12)
+                            return false;
+                        string rest = $"-{monthStr}{m.Groups[4].Value}";
+                        // Reject leading zeros for years longer than 4 digits
+                        if (yearStr.Length > 4 && yearStr[0] == '0')
+                            return false;
+                        // Validate and normalize timezone
+                        string tz = rest[3..]; // after -MM
+                        if (!string.IsNullOrEmpty(tz))
+                        {
+                            if (tz.Equals("Z", StringComparison.OrdinalIgnoreCase))
+                            {
+                                rest = rest[..3] + "Z";
+                            }
+                            else
+                            {
+                                int tzHour = int.Parse(tz[1..3], CultureInfo.InvariantCulture);
+                                int tzMin = int.Parse(tz[4..6], CultureInfo.InvariantCulture);
+                                if (tzHour > 14 || (tzHour == 14 && tzMin > 0) || tzMin > 59)
+                                    return false;
+                                if (tzHour == 0 && tzMin == 0)
+                                    rest = rest[..3] + "Z";
+                            }
+                        }
                         // Reject years too large to fit in long (overflow)
                         if (yearStr.Length > 18)
                             return false;
@@ -3010,7 +3045,13 @@ public static class VmEngine
                             return false;
                         if (!int.TryParse(m.Groups[2].Value, out int day) || day < 1 || day > 31)
                             return false;
-                        result = XdmValue.FromString(s, "gMonthDay");
+                        // Validate days per month (Feb max 29, Apr/Jun/Sep/Nov max 30)
+                        int maxDay = month == 2 ? 29 : (month is 4 or 6 or 9 or 11 ? 30 : 31);
+                        if (day > maxDay) return false;
+                        string tz = m.Groups[3].Value;
+                        string? normalizedTz = NormalizeTimezone(tz);
+                        if (normalizedTz is null) return false;
+                        result = XdmValue.FromString($"--{m.Groups[1].Value}-{m.Groups[2].Value}{normalizedTz}", "gMonthDay");
                         return true;
                     }
                 }
@@ -3035,7 +3076,10 @@ public static class VmEngine
                     {
                         if (!int.TryParse(m.Groups[1].Value, out int day) || day < 1 || day > 31)
                             return false;
-                        result = XdmValue.FromString(s, "gDay");
+                        string tz = m.Groups[2].Value;
+                        string? normalizedTz = NormalizeTimezone(tz);
+                        if (normalizedTz is null) return false;
+                        result = XdmValue.FromString($"---{m.Groups[1].Value}{normalizedTz}", "gDay");
                         return true;
                     }
                 }
@@ -3060,7 +3104,10 @@ public static class VmEngine
                     {
                         if (!int.TryParse(m.Groups[1].Value, out int month) || month < 1 || month > 12)
                             return false;
-                        result = XdmValue.FromString(s, "gMonth");
+                        string tz = m.Groups[2].Value;
+                        string? normalizedTz = NormalizeTimezone(tz);
+                        if (normalizedTz is null) return false;
+                        result = XdmValue.FromString($"--{m.Groups[1].Value}{normalizedTz}", "gMonth");
                         return true;
                     }
                 }
@@ -3213,6 +3260,64 @@ public static class VmEngine
         return hasYm && hasDt;
     }
 
+    private static string? NormalizeTimezone(string tz)
+    {
+        if (string.IsNullOrEmpty(tz)) return "";
+        if (tz.Equals("Z", StringComparison.OrdinalIgnoreCase)) return "Z";
+        int tzHour = int.Parse(tz[1..3], CultureInfo.InvariantCulture);
+        int tzMin = int.Parse(tz[4..6], CultureInfo.InvariantCulture);
+        if (tzHour > 14 || (tzHour == 14 && tzMin > 0) || tzMin > 59)
+            return null;
+        if (tzHour == 0 && tzMin == 0)
+            return "Z";
+        return tz;
+    }
+
+    private static string CanonicalizeDuration(string s)
+    {
+        var m = DurationPartsRegex.Match(s);
+        if (!m.Success) return s;
+        string sign = m.Groups["sign"].Value;
+        int years = 0, months = 0, days = 0, hours = 0, minutes = 0;
+        double seconds = 0;
+        if (m.Groups["Y"].Success) years = int.Parse(m.Groups["Y"].Value.TrimEnd('Y'), CultureInfo.InvariantCulture);
+        if (m.Groups["M"].Success) months = int.Parse(m.Groups["M"].Value.TrimEnd('M'), CultureInfo.InvariantCulture);
+        if (m.Groups["D"].Success) days = int.Parse(m.Groups["D"].Value.TrimEnd('D'), CultureInfo.InvariantCulture);
+        if (m.Groups["H"].Success) hours = int.Parse(m.Groups["H"].Value.TrimEnd('H'), CultureInfo.InvariantCulture);
+        if (m.Groups["Tm"].Success) minutes = int.Parse(m.Groups["Tm"].Value.TrimEnd('M'), CultureInfo.InvariantCulture);
+        if (m.Groups["S"].Success) seconds = double.Parse(m.Groups["S"].Value.TrimEnd('S'), CultureInfo.InvariantCulture);
+
+        years += months / 12;
+        months %= 12;
+
+        minutes += (int)(seconds / 60);
+        seconds = seconds % 60;
+        hours += minutes / 60;
+        minutes %= 60;
+        days += hours / 24;
+        hours %= 24;
+
+        if (years == 0 && months == 0 && days == 0 && hours == 0 && minutes == 0 && seconds == 0)
+            sign = "";
+
+        var sb = new System.Text.StringBuilder();
+        if (!string.IsNullOrEmpty(sign)) sb.Append('-');
+        sb.Append('P');
+        if (years > 0) sb.Append(years).Append('Y');
+        if (months > 0) sb.Append(months).Append('M');
+        if (days > 0) sb.Append(days).Append('D');
+        bool hasTime = hours > 0 || minutes > 0 || seconds > 0;
+        if (hasTime || (years == 0 && months == 0 && days == 0))
+        {
+            sb.Append('T');
+            if (hours > 0) sb.Append(hours).Append('H');
+            if (minutes > 0) sb.Append(minutes).Append('M');
+            if (seconds > 0 || (hours == 0 && minutes == 0))
+                sb.Append(FormatDurationSeconds(seconds)).Append('S');
+        }
+        return sb.ToString();
+    }
+
     public static string ExtractYearMonthDuration(string s)
     {
         var m = DurationPartsRegex.Match(s);
@@ -3223,6 +3328,7 @@ public static class VmEngine
         if (m.Groups["M"].Success) months = int.Parse(m.Groups["M"].Value.TrimEnd('M'), CultureInfo.InvariantCulture);
         years += months / 12;
         months %= 12;
+        if (years == 0 && months == 0) sign = "";
         string result = sign + "P";
         if (years > 0) result += years + "Y";
         if (months > 0 || years == 0) result += months + "M";
@@ -3247,6 +3353,8 @@ public static class VmEngine
         minutes %= 60;
         days += hours / 24;
         hours %= 24;
+
+        if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) sign = "";
 
         string result = sign + "P";
         if (days > 0) result += days + "D";
@@ -3578,21 +3686,35 @@ public static class VmEngine
         var m = XPathDateTimeRegex.Match(s);
         if (!m.Success) return false;
 
-        long year = long.Parse(m.Groups["year"].Value, CultureInfo.InvariantCulture);
+        string yearStr = m.Groups["year"].Value;
+        long year = long.Parse(yearStr, CultureInfo.InvariantCulture);
         if (Math.Abs(year) > 999999999999L) return false;
+        // Reject + sign and leading zeros for years longer than 4 digits
+        if (yearStr.StartsWith('+')) return false;
+        if (yearStr.Length > 4 && yearStr[0] == '0') return false;
+
         int month = int.Parse(m.Groups["month"].Value, CultureInfo.InvariantCulture);
         int day = int.Parse(m.Groups["day"].Value, CultureInfo.InvariantCulture);
+        if (month < 1 || month > 12) return false;
+        if (day < 1 || day > 31) return false;
+        if (day > DaysInMonth(year, month)) return false;
+
         int hour = int.Parse(m.Groups["hour"].Value, CultureInfo.InvariantCulture);
         int minute = int.Parse(m.Groups["minute"].Value, CultureInfo.InvariantCulture);
         int second = int.Parse(m.Groups["second"].Value, CultureInfo.InvariantCulture);
         int millisecond = 0;
-        if (m.Groups["frac"].Success)
+        bool hasFrac = m.Groups["frac"].Success;
+        if (hasFrac)
         {
             string frac = m.Groups["frac"].Value;
             // Take up to 3 digits for milliseconds
             if (frac.Length > 3) frac = frac[..3];
             millisecond = int.Parse(frac.PadRight(3, '0'), CultureInfo.InvariantCulture);
         }
+
+        // Validate time components
+        if (hour > 24 || minute > 59 || second > 59) return false;
+        if (hour == 24 && (minute != 0 || second != 0 || hasFrac)) return false;
 
         int tzMinutes = 0;
         hasTz = m.Groups["tz"].Success;
@@ -3605,6 +3727,7 @@ public static class VmEngine
             }
             else
             {
+                if (!IsValidTimezone(tz)) return false;
                 tzMinutes = ParseTimezoneOffset(tz);
             }
         }
@@ -3620,10 +3743,18 @@ public static class VmEngine
         var m = XPathDateRegex.Match(s);
         if (!m.Success) return false;
 
-        long year = long.Parse(m.Groups["year"].Value, CultureInfo.InvariantCulture);
+        string yearStr = m.Groups["year"].Value;
+        long year = long.Parse(yearStr, CultureInfo.InvariantCulture);
         if (Math.Abs(year) > 999999999999L) return false;
+        // Reject + sign and leading zeros for years longer than 4 digits
+        if (yearStr.StartsWith('+')) return false;
+        if (yearStr.Length > 4 && yearStr[0] == '0') return false;
+
         int month = int.Parse(m.Groups["month"].Value, CultureInfo.InvariantCulture);
         int day = int.Parse(m.Groups["day"].Value, CultureInfo.InvariantCulture);
+        if (month < 1 || month > 12) return false;
+        if (day < 1 || day > 31) return false;
+        if (day > DaysInMonth(year, month)) return false;
 
         int tzMinutes = 0;
         hasTz = m.Groups["tz"].Success;
@@ -3633,7 +3764,10 @@ public static class VmEngine
             if (tz == "Z" || tz == "z")
                 tzMinutes = 0;
             else
+            {
+                if (!IsValidTimezone(tz)) return false;
                 tzMinutes = ParseTimezoneOffset(tz);
+            }
         }
 
         xdt = new XPathDateTime(year, month, day, 0, 0, 0, 0, tzMinutes, hasTz);
@@ -3651,12 +3785,17 @@ public static class VmEngine
         int minute = int.Parse(m.Groups["minute"].Value, CultureInfo.InvariantCulture);
         int second = int.Parse(m.Groups["second"].Value, CultureInfo.InvariantCulture);
         int millisecond = 0;
-        if (m.Groups["frac"].Success)
+        bool hasFrac = m.Groups["frac"].Success;
+        if (hasFrac)
         {
             string frac = m.Groups["frac"].Value;
             if (frac.Length > 3) frac = frac[..3];
             millisecond = int.Parse(frac.PadRight(3, '0'), CultureInfo.InvariantCulture);
         }
+
+        // Validate time components
+        if (hour > 24 || minute > 59 || second > 59) return false;
+        if (hour == 24 && (minute != 0 || second != 0 || hasFrac)) return false;
 
         int tzMinutes = 0;
         hasTz = m.Groups["tz"].Success;
@@ -3666,11 +3805,40 @@ public static class VmEngine
             if (tz == "Z" || tz == "z")
                 tzMinutes = 0;
             else
+            {
+                if (!IsValidTimezone(tz)) return false;
                 tzMinutes = ParseTimezoneOffset(tz);
+            }
         }
 
         xdt = new XPathDateTime(1, 1, 1, hour, minute, second, millisecond, tzMinutes, hasTz);
         return true;
+    }
+
+    private static int DaysInMonth(long year, int month)
+    {
+        return month switch
+        {
+            1 or 3 or 5 or 7 or 8 or 10 or 12 => 31,
+            4 or 6 or 9 or 11 => 30,
+            2 => IsLeapYear(year) ? 29 : 28,
+            _ => 0
+        };
+    }
+
+    private static bool IsLeapYear(long year)
+    {
+        if (year == 0) return true; // Year 0 is a leap year in XML Schema (proleptic Gregorian)
+        if (year < 0) year = -year + 1; // Adjust for year -1 = 2 BCE, etc.
+        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    }
+
+    private static bool IsValidTimezone(string tz)
+    {
+        // tz is like "+14:00" or "-05:00"
+        int hours = int.Parse(tz[1..3], CultureInfo.InvariantCulture);
+        int minutes = int.Parse(tz[4..6], CultureInfo.InvariantCulture);
+        return hours <= 14 && !(hours == 14 && minutes > 0) && minutes <= 59;
     }
 
     private static int ParseTimezoneOffset(string tz)
@@ -3688,16 +3856,21 @@ public static class VmEngine
     {
         // XML Schema allows T24:00:00 to represent midnight of the next day.
         // .NET's DateTimeOffset.TryParse does not handle this, so normalize it.
-        if (s.Contains("T24:00:00"))
+        int idx = s.IndexOf("T24:00:00");
+        if (idx >= 0)
         {
-            s = s.Replace("T24:00:00", "T00:00:00");
-            if (DateTimeOffset.TryParse(s, out var dto))
+            int after = idx + "T24:00:00".Length;
+            // Do not normalize if followed by fractional seconds (e.g., T24:00:00.001)
+            if (after >= s.Length || s[after] != '.')
             {
-                dto = dto.AddDays(1);
-                // Preserve timezone suffix in the string for HasTimezoneSuffix
-                if (s.EndsWith('Z'))
-                    return dto.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture);
-                return dto.ToString("yyyy-MM-ddTHH:mm:sszzz", System.Globalization.CultureInfo.InvariantCulture);
+                string datePart = s[..idx];
+                string rest = s[after..];
+                if (DateTimeOffset.TryParse(datePart, out var dto))
+                {
+                    dto = dto.AddDays(1);
+                    string newDate = dto.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                    return newDate + "T00:00:00" + rest;
+                }
             }
         }
         return s;
@@ -3706,20 +3879,27 @@ public static class VmEngine
     private static bool TryParseDouble(string s, out double result)
     {
         s = s.Trim();
-        if (s.Equals("INF", StringComparison.OrdinalIgnoreCase) || s.Equals("+INF", StringComparison.OrdinalIgnoreCase))
+        if (s == "INF" || s == "+INF")
         {
             result = double.PositiveInfinity;
             return true;
         }
-        if (s.Equals("-INF", StringComparison.OrdinalIgnoreCase))
+        if (s == "-INF")
         {
             result = double.NegativeInfinity;
             return true;
         }
-        if (s.Equals("NaN", StringComparison.OrdinalIgnoreCase))
+        if (s == "NaN")
         {
             result = double.NaN;
             return true;
+        }
+        // Explicitly reject case variants that .NET's double.TryParse would accept
+        string upper = s.ToUpperInvariant();
+        if (upper is "NAN" or "INF" or "+INF" or "-INF" or "INFINITY" or "+INFINITY" or "-INFINITY")
+        {
+            result = 0;
+            return false;
         }
         return double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
     }

@@ -765,6 +765,7 @@ public sealed class IrLowerer
         int exprReg = LowerNode(node.Expression);
         int resultReg = targetReg ?? AllocRegister();
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
+        ValidateCastTarget(typeName);
         int poolIdx = AddToLiteralPool(typeName);
         Emit(IrOpCode.Cast, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
         return resultReg;
@@ -775,9 +776,17 @@ public sealed class IrLowerer
         int exprReg = LowerNode(node.Expression);
         int resultReg = targetReg ?? AllocRegister();
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
+        ValidateCastTarget(typeName);
         int poolIdx = AddToLiteralPool(typeName);
         Emit(IrOpCode.Castable, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
         return resultReg;
+    }
+
+    private static void ValidateCastTarget(string typeName)
+    {
+        string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
+        if (normalized is "anyatomictype" or "notation")
+            throw new InvalidOperationException($"XPST0080: '{typeName}' is an abstract type and cannot be used in 'cast' or 'castable as' expressions.");
     }
 
     private int LowerInstanceOf(InstanceOfNode node, int? targetReg)
