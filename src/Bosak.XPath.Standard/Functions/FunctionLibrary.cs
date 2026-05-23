@@ -3465,45 +3465,7 @@ public static class FunctionLibrary
         => VmEngine.Cast(args[0], "hexBinary");
 
     private static XdmValue XsBase64Binary(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-    {
-        string s = AtomizedString(args[0]);
-        if (!IsValidBase64(s))
-            throw new InvalidOperationException("FORG0001");
-        return XdmValue.FromString(s);
-    }
-
-    private static bool IsValidBase64(string s)
-    {
-        if (string.IsNullOrEmpty(s)) return true;
-        s = s.Replace(" ", "").Replace("\t", "").Replace("\n", "").Replace("\r", "");
-        if (s.Length % 4 != 0) return false;
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        foreach (char c in s)
-            if (!chars.Contains(c) && c != '=')
-                return false;
-        // Check padding
-        int eq = s.IndexOf('=');
-        if (eq >= 0)
-        {
-            // All chars after first '=' must be '='
-            for (int i = eq; i < s.Length; i++)
-                if (s[i] != '=')
-                    return false;
-            // At most 2 padding characters
-            if (s.Length - eq > 2)
-                return false;
-            // If length is 4, last group must have at least 2 data chars (1 padding max for 4-char group)
-            // Actually: 4-char group with 1 padding = 3 data chars (18 bits = 2 bytes + 2 bits, valid)
-            //           4-char group with 2 padding = 2 data chars (12 bits = 1 byte + 4 bits, valid)
-            // A single 4-char group cannot have 3 padding chars (only 6 bits, not a whole byte)
-            if (s.Length == 4 && s.Length - eq == 2)
-            {
-                // 2 padding chars in a single group: first 2 chars form one byte
-                // This is valid
-            }
-        }
-        return true;
-    }
+        => VmEngine.Cast(args[0], "base64Binary");
 
     private static XdmValue XsGDay(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "gDay");

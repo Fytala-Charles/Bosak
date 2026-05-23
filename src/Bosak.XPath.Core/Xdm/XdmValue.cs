@@ -36,17 +36,19 @@ public readonly struct XdmValue
     private readonly long _integer;
     private readonly double _double;
     private readonly object? _reference;
+    private readonly string? _schemaTypeName;
 
     // ------------------------------------------------------------------
     // Constructors
     // ------------------------------------------------------------------
 
-    private XdmValue(XdmValueKind kind, long integer = 0, double @double = 0, object? reference = null)
+    private XdmValue(XdmValueKind kind, long integer = 0, double @double = 0, object? reference = null, string? schemaTypeName = null)
     {
         _kind = kind;
         _integer = integer;
         _double = @double;
         _reference = reference;
+        _schemaTypeName = schemaTypeName;
     }
 
     public static XdmValue Undefined => new(XdmValueKind.Undefined);
@@ -70,6 +72,9 @@ public readonly struct XdmValue
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromString(string value) => new(XdmValueKind.String, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromString(string value, string schemaTypeName) => new(XdmValueKind.String, reference: value, schemaTypeName: schemaTypeName);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDuration(string value) => new(XdmValueKind.Duration, reference: value);
@@ -140,6 +145,7 @@ public readonly struct XdmValue
     // ------------------------------------------------------------------
 
     public XdmValueKind Kind => _kind;
+    public string? SchemaTypeName => _schemaTypeName;
 
     public bool IsUndefined => _kind == XdmValueKind.Undefined;
     public bool IsAtomic => _kind is >= XdmValueKind.String and <= XdmValueKind.Uri;
@@ -447,46 +453,34 @@ public readonly struct XdmValue
         if (float.IsNaN(value)) return "NaN";
         if (value == 0.0f) return float.IsNegative(value) ? "-0" : "0";
 
-        string s = value.ToString("G7", CultureInfo.InvariantCulture);
-        s = s.Replace("E+", "E");
-        int eIdx = s.IndexOf('E');
-        if (eIdx < 0) eIdx = s.IndexOf('e');
-        if (eIdx < 0)
+        float abs = Math.Abs(value);
+        // XPath canonical float uses scientific notation when abs >= 1e6 or abs < 1e-6
+        if (abs >= 1e6f || abs < 1e-6f)
         {
-            // Already in fixed-point form
-            if (s.Contains('.'))
+            // E7 gives 7 digits after decimal = 8 significant digits, round-trip for float
+            string s = value.ToString("E7", CultureInfo.InvariantCulture);
+            s = s.Replace("E+", "E");
+            int eIdx = s.IndexOf('E');
+            if (eIdx > 0)
             {
-                s = s.TrimEnd('0').TrimEnd('.');
+                string mantissa = s[..eIdx];
+                string exp = s[(eIdx + 1)..];
+                mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+                if (!mantissa.Contains('.')) mantissa += ".0";
+                exp = exp.TrimStart('+').TrimStart('0');
+                if (string.IsNullOrEmpty(exp)) exp = "0";
+                return mantissa + "E" + exp;
             }
-            if (s == "-0") s = "0";
             return s;
         }
 
-        string mantissa = s[..eIdx];
-        string expStr = s[(eIdx + 1)..];
-        expStr = expStr.TrimStart('+').TrimStart('0');
-        if (string.IsNullOrEmpty(expStr)) expStr = "0";
-
-        if (int.TryParse(expStr, out int exp))
+        // For non-scientific range, use G9 (round-trip precision) then trim
+        string fixedStr = value.ToString("G9", CultureInfo.InvariantCulture);
+        if (fixedStr.Contains('.'))
         {
-            // XPath canonical: fixed-point when 1e-6 <= abs < 1e6
-            if (exp >= -6 && exp < 6)
-            {
-                if (decimal.TryParse(mantissa, NumberStyles.Any, CultureInfo.InvariantCulture, out var dec))
-                {
-                    decimal scaled = dec * (decimal)Math.Pow(10, exp);
-                    string fixedStr = scaled.ToString(CultureInfo.InvariantCulture);
-                    fixedStr = fixedStr.TrimEnd('0').TrimEnd('.');
-                    if (fixedStr == "-0") fixedStr = "0";
-                    if (!fixedStr.Contains('.')) fixedStr += ".0";
-                    return fixedStr;
-                }
-            }
+            fixedStr = fixedStr.TrimEnd('0').TrimEnd('.');
         }
-
-        mantissa = mantissa.TrimEnd('0').TrimEnd('.');
-        if (!mantissa.Contains('.')) mantissa += ".0";
-        return mantissa + "E" + expStr;
+        return fixedStr == "-0" ? "0" : fixedStr;
     }
 
     private static string FormatXPathDateTime(XPathDateTime xdt, bool includeTime)
