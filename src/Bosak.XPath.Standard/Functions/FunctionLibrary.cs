@@ -29,6 +29,7 @@
 //                      | Charles Korthout | 1.7   | 21-05-2026     | Fixed fn:distinct-values to use deep-equal semantics; fixed xs:boolean string cast     |
 //                      | Charles Korthout | 1.8   | 22-05-2026     | Fixed fn:base-uri/fn:document-uri empty sequence, type errors, fn:id atomization        |
 //                      | Charles Korthout | 1.9   | 22-05-2026     | Added fn:format-number#2/#3 with grammar-based picture parser                           |
+//                      | Charles Korthout | 2.0   | 23-05-2026     | Registered missing xs: constructors; duration normalization in xs: constructors         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2085,6 +2086,54 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
                 Implementation = XsDuration
             },
+            [(Namespaces.Xs, "language", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "language", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsLanguage
+            },
+            [(Namespaces.Xs, "Name", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "Name", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsName
+            },
+            [(Namespaces.Xs, "normalizedString", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "normalizedString", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsNormalizedString
+            },
+            [(Namespaces.Xs, "token", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "token", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsToken
+            },
+            [(Namespaces.Xs, "ID", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "ID", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsID
+            },
+            [(Namespaces.Xs, "IDREF", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "IDREF", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsIDREF
+            },
+            [(Namespaces.Xs, "NMTOKEN", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "NMTOKEN", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsNMTOKEN
+            },
+            [(Namespaces.Xs, "ENTITY", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "ENTITY", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.String,
+                Implementation = XsENTITY
+            },
             // ----- math:* functions -------------------------------------------
             [(Namespaces.Math, "pi", 0)] = new()
             {
@@ -3400,10 +3449,10 @@ public static class FunctionLibrary
         => VmEngine.Cast(args[0], "nonNegativeInteger");
 
     private static XdmValue XsDayTimeDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDuration(AtomizedString(args[0]));
+        => XdmValue.FromDuration(VmEngine.ExtractDayTimeDuration(AtomizedString(args[0])));
 
     private static XdmValue XsYearMonthDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDuration(AtomizedString(args[0]));
+        => XdmValue.FromDuration(VmEngine.ExtractYearMonthDuration(AtomizedString(args[0])));
 
     private static XdmValue XsUntypedAtomic(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(AtomizedString(args[0]));
@@ -3467,6 +3516,30 @@ public static class FunctionLibrary
 
     private static XdmValue XsDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromDuration(AtomizedString(args[0]));
+
+    private static XdmValue XsLanguage(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsNormalizedString(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsToken(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsID(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsIDREF(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsNMTOKEN(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
+
+    private static XdmValue XsENTITY(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString(AtomizedString(args[0]));
 
     // ------------------------------------------------------------------
     // math:* functions

@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 21-05-2026     | Divide opcode returns decimal for integer operands (XPath div semantics)               |
 //                      | Charles Korthout | 0.8   | 21-05-2026     | MapAdd uses XdmValue keys with numeric promotion; fixed xs:boolean string cast         |
 //                      | Charles Korthout | 0.9   | 22-05-2026     | ItemInstanceOf recognizes duration, dayTimeDuration, yearMonthDuration                 |
+//                      | Charles Korthout | 1.0   | 23-05-2026     | Added TryCast support for many xs: types, duration normalization, boolean→numeric       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2507,6 +2508,17 @@ public static class VmEngine
                     result = XdmValue.FromInteger(lDbl);
                     return true;
                 }
+                if (value.Kind == XdmValueKind.Boolean)
+                {
+                    long lBool = value.BooleanValue ? 1 : 0;
+                    if (!IsIntegerInRange(lBool, normalized))
+                        return false;
+                    result = XdmValue.FromInteger(lBool);
+                    return true;
+                }
+                if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
+                    or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 if (long.TryParse(value.ToString(), out var lInt))
                 {
                     if (!IsIntegerInRange(lInt, normalized))
@@ -2532,6 +2544,14 @@ public static class VmEngine
                     result = XdmValue.FromDecimal((decimal)d);
                     return true;
                 }
+                if (value.Kind == XdmValueKind.Boolean)
+                {
+                    result = XdmValue.FromDecimal(value.BooleanValue ? 1m : 0m);
+                    return true;
+                }
+                if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
+                    or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 {
                     string sDec = value.ToString();
                     // xs:decimal does not allow exponent notation
@@ -2563,6 +2583,14 @@ public static class VmEngine
                     result = XdmValue.FromDouble((double)value.DecimalValue);
                     return true;
                 }
+                if (value.Kind == XdmValueKind.Boolean)
+                {
+                    result = XdmValue.FromDouble(value.BooleanValue ? 1.0 : 0.0);
+                    return true;
+                }
+                if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
+                    or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 if (TryParseDouble(value.ToString(), out var dbl))
                 {
                     result = XdmValue.FromDouble(dbl);
@@ -2588,6 +2616,14 @@ public static class VmEngine
                     result = XdmValue.FromFloat((float)value.DecimalValue);
                     return true;
                 }
+                if (value.Kind == XdmValueKind.Boolean)
+                {
+                    result = XdmValue.FromFloat(value.BooleanValue ? 1.0f : 0.0f);
+                    return true;
+                }
+                if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
+                    or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 if (TryParseDouble(value.ToString(), out var flt))
                 {
                     result = XdmValue.FromFloat((float)flt);
@@ -2629,8 +2665,7 @@ public static class VmEngine
                     result = XdmValue.FromBoolean(d != 0.0 && !double.IsNaN(d));
                     return true;
                 }
-                result = XdmValue.FromBoolean(value.EffectiveBooleanValue());
-                return true;
+                return false;
 
             case "datetime":
                 if (value.Kind == XdmValueKind.DateTime)
@@ -2688,9 +2723,346 @@ public static class VmEngine
                 }
                 return false;
 
+            case "untypedatomic":
+                result = XdmValue.FromString(value.ToString());
+                return true;
+
+            case "anyuri":
+            {
+                string sUri = value.ToString();
+                if (!Uri.IsWellFormedUriString(sUri, UriKind.RelativeOrAbsolute))
+                    return false;
+                result = XdmValue.FromString(sUri);
+                return true;
+            }
+
+            case "base64binary":
+                if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
+                    or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Integer
+                    or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float
+                    or XdmValueKind.Boolean or XdmValueKind.Node)
+                    return false;
+                {
+                    string sB64 = value.ToString();
+                    if (!IsValidBase64(sB64))
+                        return false;
+                    result = XdmValue.FromString(sB64);
+                    return true;
+                }
+
+            case "hexbinary":
+                if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
+                    or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Integer
+                    or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float
+                    or XdmValueKind.Boolean or XdmValueKind.Node)
+                    return false;
+                {
+                    string sHex = value.ToString();
+                    if (!Regex.IsMatch(sHex, @"^[0-9a-fA-F]*$"))
+                        return false;
+                    result = XdmValue.FromString(sHex.ToUpperInvariant());
+                    return true;
+                }
+
+            case "duration":
+                if (value.Kind == XdmValueKind.Duration)
+                    return true;
+                {
+                    string sDur = value.ToString();
+                    if (IsValidDuration(sDur))
+                    {
+                        result = XdmValue.FromDuration(sDur);
+                        return true;
+                    }
+                }
+                return false;
+
+            case "yearmonthduration":
+                if (value.Kind == XdmValueKind.Duration)
+                {
+                    string sYm = ExtractYearMonthDuration(value.DurationValue);
+                    result = XdmValue.FromDuration(sYm);
+                    return true;
+                }
+                {
+                    string sYm = value.ToString();
+                    if (IsValidDuration(sYm))
+                    {
+                        result = XdmValue.FromDuration(ExtractYearMonthDuration(sYm));
+                        return true;
+                    }
+                }
+                return false;
+
+            case "daytimeduration":
+                if (value.Kind == XdmValueKind.Duration)
+                {
+                    string sDt = ExtractDayTimeDuration(value.DurationValue);
+                    result = XdmValue.FromDuration(sDt);
+                    return true;
+                }
+                {
+                    string sDt = value.ToString();
+                    if (IsValidDuration(sDt))
+                    {
+                        result = XdmValue.FromDuration(ExtractDayTimeDuration(sDt));
+                        return true;
+                    }
+                }
+                return false;
+
+            case "gyear":
+                if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
+                {
+                    var dtoY = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
+                    string tz = FormatXPathTimezone(dtoY, value.HasTimezone);
+                    result = XdmValue.FromString($"{dtoY.Year:0000}{tz}");
+                    return true;
+                }
+                {
+                    string s = value.ToString();
+                    if (Regex.IsMatch(s, @"^[-+]?\d{4,}([Zz]|[+\-]\d{2}:\d{2})?$"))
+                    {
+                        result = XdmValue.FromString(s);
+                        return true;
+                    }
+                }
+                return false;
+
+            case "gyearmonth":
+                if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
+                {
+                    var dtoYm = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
+                    string tz = FormatXPathTimezone(dtoYm, value.HasTimezone);
+                    result = XdmValue.FromString($"{dtoYm.Year:0000}-{dtoYm.Month:00}{tz}");
+                    return true;
+                }
+                {
+                    string s = value.ToString();
+                    if (Regex.IsMatch(s, @"^[-+]?\d{4,}-\d{2}([Zz]|[+\-]\d{2}:\d{2})?$"))
+                    {
+                        result = XdmValue.FromString(s);
+                        return true;
+                    }
+                }
+                return false;
+
+            case "gmonthday":
+                if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
+                {
+                    var dtoMd = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
+                    string tz = FormatXPathTimezone(dtoMd, value.HasTimezone);
+                    result = XdmValue.FromString($"--{dtoMd.Month:00}-{dtoMd.Day:00}{tz}");
+                    return true;
+                }
+                {
+                    string s = value.ToString();
+                    if (Regex.IsMatch(s, @"^--\d{2}-\d{2}([Zz]|[+\-]\d{2}:\d{2})?$"))
+                    {
+                        result = XdmValue.FromString(s);
+                        return true;
+                    }
+                }
+                return false;
+
+            case "gday":
+                if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
+                {
+                    var dtoD = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
+                    string tz = FormatXPathTimezone(dtoD, value.HasTimezone);
+                    result = XdmValue.FromString($"---{dtoD.Day:00}{tz}");
+                    return true;
+                }
+                {
+                    string s = value.ToString();
+                    if (Regex.IsMatch(s, @"^---\d{2}([Zz]|[+\-]\d{2}:\d{2})?$"))
+                    {
+                        result = XdmValue.FromString(s);
+                        return true;
+                    }
+                }
+                return false;
+
+            case "gmonth":
+                if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
+                {
+                    var dtoM = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
+                    string tz = FormatXPathTimezone(dtoM, value.HasTimezone);
+                    result = XdmValue.FromString($"--{dtoM.Month:00}{tz}");
+                    return true;
+                }
+                {
+                    string s = value.ToString();
+                    if (Regex.IsMatch(s, @"^--\d{2}([Zz]|[+\-]\d{2}:\d{2})?$"))
+                    {
+                        result = XdmValue.FromString(s);
+                        return true;
+                    }
+                }
+                return false;
+
+            case "ncname":
+            case "id":
+            case "idref":
+            case "entity":
+            {
+                string s = value.ToString();
+                if (Regex.IsMatch(s, @"^[A-Za-z_][\w.\-]*$"))
+                {
+                    result = XdmValue.FromString(s);
+                    return true;
+                }
+                return false;
+            }
+
+            case "name":
+            {
+                string s = value.ToString();
+                if (Regex.IsMatch(s, @"^[A-Za-z_:][\w.:\-]*$"))
+                {
+                    result = XdmValue.FromString(s);
+                    return true;
+                }
+                return false;
+            }
+
+            case "nmtoken":
+            {
+                string s = value.ToString();
+                if (Regex.IsMatch(s, @"^[\w.:\-]+$"))
+                {
+                    result = XdmValue.FromString(s);
+                    return true;
+                }
+                return false;
+            }
+
+            case "language":
+            {
+                string s = value.ToString();
+                if (Regex.IsMatch(s, @"^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$"))
+                {
+                    result = XdmValue.FromString(s);
+                    return true;
+                }
+                return false;
+            }
+
+            case "normalizedstring":
+            case "token":
+                result = XdmValue.FromString(value.ToString());
+                return true;
+
             default:
                 return false;
         }
+    }
+
+    private static readonly Regex DurationPartsRegex = new(
+        @"^(?<sign>[-+]?)(?<P>P)(?<Y>\d+Y)?(?<M>\d+M)?(?<D>\d+D)?(?<T>T(?<H>\d+H)?(?<Tm>\d+M)?(?<S>\d+(?:\.\d+)?S)?)?$",
+        RegexOptions.Compiled);
+
+    public static string ExtractYearMonthDuration(string s)
+    {
+        var m = DurationPartsRegex.Match(s);
+        if (!m.Success) return s;
+        string sign = m.Groups["sign"].Value;
+        int years = 0, months = 0;
+        if (m.Groups["Y"].Success) years = int.Parse(m.Groups["Y"].Value.TrimEnd('Y'), CultureInfo.InvariantCulture);
+        if (m.Groups["M"].Success) months = int.Parse(m.Groups["M"].Value.TrimEnd('M'), CultureInfo.InvariantCulture);
+        years += months / 12;
+        months %= 12;
+        string result = sign + "P";
+        if (years > 0) result += years + "Y";
+        if (months > 0 || years == 0) result += months + "M";
+        return result;
+    }
+
+    public static string ExtractDayTimeDuration(string s)
+    {
+        var m = DurationPartsRegex.Match(s);
+        if (!m.Success) return s;
+        string sign = m.Groups["sign"].Value;
+        int days = 0, hours = 0, minutes = 0;
+        double seconds = 0;
+        if (m.Groups["D"].Success) days = int.Parse(m.Groups["D"].Value.TrimEnd('D'), CultureInfo.InvariantCulture);
+        if (m.Groups["H"].Success) hours = int.Parse(m.Groups["H"].Value.TrimEnd('H'), CultureInfo.InvariantCulture);
+        if (m.Groups["Tm"].Success) minutes = int.Parse(m.Groups["Tm"].Value.TrimEnd('M'), CultureInfo.InvariantCulture);
+        if (m.Groups["S"].Success) seconds = double.Parse(m.Groups["S"].Value.TrimEnd('S'), CultureInfo.InvariantCulture);
+
+        minutes += (int)(seconds / 60);
+        seconds = seconds % 60;
+        hours += minutes / 60;
+        minutes %= 60;
+        days += hours / 24;
+        hours %= 24;
+
+        string result = sign + "P";
+        if (days > 0) result += days + "D";
+        bool hasTime = hours > 0 || minutes > 0 || seconds > 0 || days == 0;
+        if (hasTime)
+        {
+            result += "T";
+            if (hours > 0) result += hours + "H";
+            if (minutes > 0) result += minutes + "M";
+            if (seconds > 0 || (hours == 0 && minutes == 0)) result += FormatDurationSeconds(seconds) + "S";
+        }
+        return result;
+    }
+
+    private static string FormatDurationSeconds(double seconds)
+    {
+        string s = seconds.ToString("0.0#########", CultureInfo.InvariantCulture);
+        s = s.TrimEnd('0').TrimEnd('.');
+        if (s == "0" || s == "-0") s = "0";
+        return s;
+    }
+
+    private static bool IsValidDuration(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (!Regex.IsMatch(s, @"^[-+]?P(\d+Y)?(\d+M)?(\d+D)?(T(\d+H)?(\d+M)?(\d+(\.\d+)?S)?)?$"))
+            return false;
+        return s != "P" && s != "-P" && s != "+P";
+    }
+
+    private static bool IsValidYearMonthDuration(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (!Regex.IsMatch(s, @"^[-+]?P(\d+Y)?(\d+M)?$"))
+            return false;
+        return s.Contains('Y') || s.Contains('M');
+    }
+
+    private static bool IsValidDayTimeDuration(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        if (!Regex.IsMatch(s, @"^[-+]?P(\d+D)?(T(\d+H)?(\d+M)?(\d+(\.\d+)?S)?)?$"))
+            return false;
+        if (s.Contains('Y') || s.Contains('M')) return false;
+        if (s.Contains('D')) return true;
+        if (!s.Contains('T')) return false;
+        int tIdx = s.IndexOf('T');
+        return s.IndexOf('H', tIdx) >= 0 || s.IndexOf('M', tIdx) >= 0 || s.IndexOf('S', tIdx) >= 0;
+    }
+
+    private static bool IsValidBase64(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return true;
+        s = s.Replace(" ", "").Replace("\t", "").Replace("\n", "").Replace("\r", "");
+        if (s.Length % 4 != 0) return false;
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        foreach (char c in s)
+            if (!chars.Contains(c))
+                return false;
+        int eq = s.IndexOf('=');
+        if (eq >= 0)
+        {
+            for (int i = eq; i < s.Length; i++)
+                if (s[i] != '=')
+                    return false;
+        }
+        return true;
     }
 
     private static bool InstanceOf(XdmValue value, string typeName, OccurrenceIndicator occurrence)
@@ -2848,6 +3220,13 @@ public static class VmEngine
         return t.EndsWith('Z') || t.EndsWith('z') || System.Text.RegularExpressions.Regex.IsMatch(t, @"[Tt]\d{2}:\d{2}:\d{2}[Zz]|[Tt]\d{2}:\d{2}:\d{2}[+\-]\d{2}:\d{2}$|[+\-]\d{2}:\d{2}$");
     }
 
+    private static string FormatXPathTimezone(DateTimeOffset dto, bool hasTz)
+    {
+        if (!hasTz) return "";
+        string tz = dto.ToString("zzz", System.Globalization.CultureInfo.InvariantCulture);
+        return tz == "+00:00" ? "Z" : tz;
+    }
+
     private static string NormalizeDateTimeString(string s)
     {
         // XML Schema allows T24:00:00 to represent midnight of the next day.
@@ -2869,7 +3248,8 @@ public static class VmEngine
 
     private static bool TryParseDouble(string s, out double result)
     {
-        if (s.Equals("INF", StringComparison.OrdinalIgnoreCase))
+        s = s.Trim();
+        if (s.Equals("INF", StringComparison.OrdinalIgnoreCase) || s.Equals("+INF", StringComparison.OrdinalIgnoreCase))
         {
             result = double.PositiveInfinity;
             return true;

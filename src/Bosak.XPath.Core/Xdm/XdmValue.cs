@@ -15,8 +15,10 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added DateTime, Date, and Time value factories and accessors                           |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added QName value factory and accessor                                                   |
 //                      | Charles Korthout | 0.5   | 22-05-2026     | Added Duration value factory, accessor, and ToString support                             |
+//                      | Charles Korthout | 0.6   | 23-05-2026     | Fixed decimal ToString invariant culture; added XPath canonical double formatting        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace Bosak.XPath.Core.Xdm;
@@ -329,9 +331,9 @@ public readonly struct XdmValue
             XdmValueKind.Undefined => "()",
             XdmValueKind.Boolean => _integer != 0 ? "true" : "false",
             XdmValueKind.Integer => _integer.ToString(),
-            XdmValueKind.Decimal => ((decimal)_reference!).ToString(),
-            XdmValueKind.Double => FormatExponent(_double.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-            XdmValueKind.Float => FormatExponent(((float)_double).ToString(System.Globalization.CultureInfo.InvariantCulture)),
+            XdmValueKind.Decimal => ((decimal)_reference!).ToString(CultureInfo.InvariantCulture),
+            XdmValueKind.Double => FormatXPathDouble(_double),
+            XdmValueKind.Float => FormatXPathDouble((float)_double),
             XdmValueKind.String => (string?)_reference ?? string.Empty,
             XdmValueKind.Node => ((IXdmNode?)_reference)?.StringValue ?? string.Empty,
             XdmValueKind.Sequence => "(sequence)",
@@ -359,6 +361,41 @@ public readonly struct XdmValue
 
     private static string FormatExponent(string s)
         => s.Replace("E+", "E");
+
+    private static string FormatXPathDouble(double value)
+    {
+        if (double.IsPositiveInfinity(value)) return "INF";
+        if (double.IsNegativeInfinity(value)) return "-INF";
+        if (double.IsNaN(value)) return "NaN";
+        if (value == 0.0) return "0";
+
+        double abs = Math.Abs(value);
+        // XPath canonical double uses scientific notation when abs >= 1e6 or abs < 1e-6
+        if (abs >= 1e6 || abs < 1e-6)
+        {
+            string s = value.ToString("E15", CultureInfo.InvariantCulture);
+            // Normalize: remove trailing zeros in mantissa, ensure exactly one digit before decimal
+            s = s.Replace("E+", "E");
+            int eIdx = s.IndexOf('E');
+            if (eIdx < 0) eIdx = s.IndexOf('e');
+            if (eIdx > 0)
+            {
+                string mantissa = s[..eIdx];
+                string exp = s[(eIdx + 1)..];
+                mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+                if (!mantissa.Contains('.')) mantissa += ".0";
+                // Remove leading + from exponent
+                exp = exp.TrimStart('+');
+                s = mantissa + "E" + exp;
+            }
+            return s;
+        }
+        // For non-scientific range, use fixed-point with minimal digits
+        string fixedStr = value.ToString("0.0##############", CultureInfo.InvariantCulture);
+        fixedStr = fixedStr.TrimEnd('0').TrimEnd('.');
+        if (fixedStr == "-0") fixedStr = "0";
+        return fixedStr;
+    }
 
     private static string FormatDateTimeOffset(DateTimeOffset dto, string format)
     {
