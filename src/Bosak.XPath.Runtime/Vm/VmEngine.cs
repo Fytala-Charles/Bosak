@@ -2786,7 +2786,7 @@ public static class VmEngine
                 return false;
 
             case "untypedatomic":
-                result = XdmValue.FromString(value.ToString());
+                result = XdmValue.FromString(value.ToString(), "untypedAtomic");
                 return true;
 
             case "anyuri":
@@ -3121,7 +3121,7 @@ public static class VmEngine
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[\p{L}_][\w.\-]*$"))
                 {
-                    result = XdmValue.FromString(s);
+                    result = XdmValue.FromString(s, normalized);
                     return true;
                 }
                 return false;
@@ -3132,7 +3132,7 @@ public static class VmEngine
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[\p{L}_:][\w.:\-]*$"))
                 {
-                    result = XdmValue.FromString(s);
+                    result = XdmValue.FromString(s, "Name");
                     return true;
                 }
                 return false;
@@ -3143,7 +3143,7 @@ public static class VmEngine
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[\w.:\-]+$"))
                 {
-                    result = XdmValue.FromString(s);
+                    result = XdmValue.FromString(s, "NMTOKEN");
                     return true;
                 }
                 return false;
@@ -3154,7 +3154,7 @@ public static class VmEngine
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$"))
                 {
-                    result = XdmValue.FromString(s);
+                    result = XdmValue.FromString(s, "language");
                     return true;
                 }
                 return false;
@@ -3165,7 +3165,7 @@ public static class VmEngine
                 string s = value.ToString();
                 // XML Schema whiteSpace="replace": replace tab, CR, LF with space
                 s = s.Replace('\r', ' ').Replace('\n', ' ').Replace('\t', ' ');
-                result = XdmValue.FromString(s);
+                result = XdmValue.FromString(s, "normalizedString");
                 return true;
             }
             case "token":
@@ -3177,7 +3177,7 @@ public static class VmEngine
                 s = s.Trim(' ');
                 while (s.Contains("  "))
                     s = s.Replace("  ", " ");
-                result = XdmValue.FromString(s);
+                result = XdmValue.FromString(s, "token");
                 return true;
             }
 
@@ -3527,12 +3527,12 @@ public static class VmEngine
     {
         return normalized switch
         {
-            "string" => value.Kind == XdmValueKind.String,
+            "string" => value.Kind == XdmValueKind.String && IsStringSubtype(value.SchemaTypeName),
             "integer" or "int" or "long" or "short" or "byte"
                 or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
                 or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
                 => value.Kind == XdmValueKind.Integer,
-            "decimal" => value.Kind == XdmValueKind.Decimal,
+            "decimal" => value.Kind is XdmValueKind.Decimal or XdmValueKind.Integer,
             "double" => value.Kind == XdmValueKind.Double,
             "float" => value.Kind == XdmValueKind.Float,
             "boolean" => value.Kind == XdmValueKind.Boolean,
@@ -3540,10 +3540,37 @@ public static class VmEngine
             "date" => value.Kind == XdmValueKind.Date,
             "time" => value.Kind == XdmValueKind.Time,
             "duration" or "daytimeduration" or "yearmonthduration" => value.Kind == XdmValueKind.Duration,
+            "qname" => value.Kind == XdmValueKind.QName,
+            "gyear" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gYear", StringComparison.OrdinalIgnoreCase) == true,
+            "gyearmonth" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gYearMonth", StringComparison.OrdinalIgnoreCase) == true,
+            "gmonthday" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gMonthDay", StringComparison.OrdinalIgnoreCase) == true,
+            "gday" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gDay", StringComparison.OrdinalIgnoreCase) == true,
+            "gmonth" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gMonth", StringComparison.OrdinalIgnoreCase) == true,
+            "hexbinary" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("hexBinary", StringComparison.OrdinalIgnoreCase) == true,
+            "base64binary" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("base64Binary", StringComparison.OrdinalIgnoreCase) == true,
+            "anyuri" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("anyURI", StringComparison.OrdinalIgnoreCase) == true,
+            "untypedatomic" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("untypedAtomic", StringComparison.OrdinalIgnoreCase) == true,
+            "normalizedstring" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("normalizedString", StringComparison.OrdinalIgnoreCase) == true,
+            "token" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("token", StringComparison.OrdinalIgnoreCase) == true,
+            "language" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("language", StringComparison.OrdinalIgnoreCase) == true,
+            "nmtoken" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("NMTOKEN", StringComparison.OrdinalIgnoreCase) == true,
+            "name" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("Name", StringComparison.OrdinalIgnoreCase) == true,
+            "ncname" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("NCName", StringComparison.OrdinalIgnoreCase) == true,
+            "id" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("ID", StringComparison.OrdinalIgnoreCase) == true,
+            "idref" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("IDREF", StringComparison.OrdinalIgnoreCase) == true,
+            "entity" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("ENTITY", StringComparison.OrdinalIgnoreCase) == true,
             "node" => value.IsNode,
             "item" => !value.IsUndefined,
             _ => false
         };
+    }
+
+    private static bool IsStringSubtype(string? schemaTypeName)
+    {
+        if (schemaTypeName is null) return true;
+        return schemaTypeName.ToLowerInvariant() is
+            "normalizedstring" or "token" or "language" or "nmtoken" or "name"
+            or "ncname" or "id" or "idref" or "entity" or "untypedatomic";
     }
 
     private static bool IsCastAllowed(string? sourceSchemaType, string targetType)

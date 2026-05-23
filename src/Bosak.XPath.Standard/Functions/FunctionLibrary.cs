@@ -3456,7 +3456,7 @@ public static class FunctionLibrary
         => VmEngine.Cast(args[0], "yearMonthDuration");
 
     private static XdmValue XsUntypedAtomic(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "untypedAtomic");
 
     private static XdmValue XsAnyUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "anyURI");
@@ -3681,12 +3681,25 @@ public static class FunctionLibrary
             arg = items[0];
         }
 
+        if (arg.Kind == XdmValueKind.String)
+        {
+            string? schemaType = arg.SchemaTypeName?.ToLowerInvariant();
+            if (schemaType is "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth"
+                or "hexbinary" or "base64binary")
+                throw new InvalidOperationException("FORG0006");
+            return XdmValue.FromBoolean(arg.EffectiveBooleanValue());
+        }
+
         return arg.Kind switch
         {
-            XdmValueKind.Boolean or XdmValueKind.String or XdmValueKind.Integer
+            XdmValueKind.Boolean or XdmValueKind.Integer
                 or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float
                 or XdmValueKind.Node
                 => XdmValue.FromBoolean(arg.EffectiveBooleanValue()),
+            XdmValueKind.QName => throw new InvalidOperationException("FORG0006"),
+            XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time
+                or XdmValueKind.Duration
+                => throw new InvalidOperationException("FORG0006"),
             _ => throw new InvalidOperationException("FORG0006")
         };
     }
