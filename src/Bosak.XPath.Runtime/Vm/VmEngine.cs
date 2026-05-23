@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added Intersect, Except, and SimpleMap VM handlers                                     |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added Map, Array, and Lookup VM handlers                                               |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added occurrence indicator support for InstanceOf, Cast, Castable, TreatAs             |
+//                      | Charles Korthout | 0.6   | 22-05-2026     | Expanded TryCast with validation for xs: types, whitespace, Unicode, extended years      |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Optimized Subscript, First, Last VM handlers to avoid full sequence materialization    |
 //                      | Charles Korthout | 0.7   | 21-05-2026     | Divide opcode returns decimal for integer operands (XPath div semantics)               |
 //                      | Charles Korthout | 0.8   | 21-05-2026     | MapAdd uses XdmValue keys with numeric promotion; fixed xs:boolean string cast         |
@@ -2464,6 +2465,16 @@ public static class VmEngine
         result = value;
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
 
+        // If value is a sequence, only allow single-item sequences for atomic casts
+        if (value.IsSequence)
+        {
+            if (!TryGetSequenceLength(value.SequenceValue, out var seqLen) || seqLen != 1)
+                return false;
+            var enumerator = XdmSequence.FromSource(value.SequenceValue!).GetEnumerator();
+            enumerator.MoveNext();
+            value = enumerator.Current;
+        }
+
         switch (normalized)
         {
             case "string":
@@ -2670,12 +2681,26 @@ public static class VmEngine
             case "datetime":
                 if (value.Kind == XdmValueKind.DateTime)
                     return true;
+                if (value.Kind == XdmValueKind.Date)
                 {
-                    string sDt = NormalizeDateTimeString(value.ToString());
-                    if (DateTimeOffset.TryParse(sDt, out var dtoDt))
+                    var xdtSrc = value.DateXPathValue;
+                    result = XdmValue.FromDateTime(new XPathDateTime(xdtSrc.Year, xdtSrc.Month, xdtSrc.Day, 0, 0, 0, 0, xdtSrc.TimezoneOffsetMinutes, value.HasTimezone), value.HasTimezone);
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Time)
+                    return false;
+                {
+                    string sDt = NormalizeDateTimeString(value.ToString().Trim());
+                    if (TryParseXPathDateTime(sDt, out var xdtDt, out var hasTzDt))
                     {
-                        bool hasTz = HasTimezoneSuffix(sDt);
-                        result = XdmValue.FromDateTime(dtoDt, hasTz);
+                        if (xdtDt.IsRepresentableAsDateTimeOffset && DateTimeOffset.TryParse(sDt, out var dtoDt))
+                        {
+                            result = XdmValue.FromDateTime(dtoDt, hasTzDt);
+                        }
+                        else
+                        {
+                            result = XdmValue.FromDateTime(xdtDt, hasTzDt);
+                        }
                         return true;
                     }
                 }
@@ -2687,16 +2712,31 @@ public static class VmEngine
                 if (value.Kind == XdmValueKind.DateTime)
                 {
                     bool hasTz = value.HasTimezone;
-                    var dtoDt = value.DateTimeValue;
-                    result = XdmValue.FromDate(new DateTimeOffset(dtoDt.Year, dtoDt.Month, dtoDt.Day, 0, 0, 0, dtoDt.Offset), hasTz);
+                    var xdtDt = value.DateTimeXPathValue;
+                    result = XdmValue.FromDate(new XPathDateTime(xdtDt.Year, xdtDt.Month, xdtDt.Day, 0, 0, 0, 0, xdtDt.TimezoneOffsetMinutes, hasTz), hasTz);
                     return true;
                 }
+                if (value.Kind == XdmValueKind.Time)
+                    return false;
                 {
-                    string sD = NormalizeDateTimeString(value.ToString());
-                    if (DateTimeOffset.TryParse(sD, out var dtoD))
+                    string sD = NormalizeDateTimeString(value.ToString().Trim());
+                    if (TryParseXPathDate(sD, out var xdtD, out var hasTzD))
                     {
-                        bool hasTz = HasTimezoneSuffix(sD);
-                        result = XdmValue.FromDate(new DateTimeOffset(dtoD.Year, dtoD.Month, dtoD.Day, 0, 0, 0, dtoD.Offset), hasTz);
+                        if (xdtD.IsRepresentableAsDateTimeOffset && DateTimeOffset.TryParse(sD, out var dtoD))
+                        {
+                            result = XdmValue.FromDate(dtoD, hasTzD);
+                        }
+                        else
+                        {
+                            result = XdmValue.FromDate(xdtD, hasTzD);
+                        }
+                        return true;
+                    }
+                    // Fallback for backward compatibility with dateTime-shaped strings cast to date
+                    if (DateTimeOffset.TryParse(sD, out var dtoDFb))
+                    {
+                        bool hasTzFb = HasTimezoneSuffix(sD);
+                        result = XdmValue.FromDate(dtoDFb, hasTzFb);
                         return true;
                     }
                 }
@@ -2707,17 +2747,32 @@ public static class VmEngine
                     return true;
                 if (value.Kind == XdmValueKind.DateTime)
                 {
-                    var dt = value.DateTimeValue;
+                    var xdtDt = value.DateTimeXPathValue;
                     bool hasTz = value.HasTimezone;
-                    result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Offset), hasTz);
+                    result = XdmValue.FromTime(new XPathDateTime(1, 1, 1, xdtDt.Hour, xdtDt.Minute, xdtDt.Second, xdtDt.Millisecond, xdtDt.TimezoneOffsetMinutes, hasTz), hasTz);
                     return true;
                 }
+                if (value.Kind == XdmValueKind.Date)
+                    return false;
                 {
-                    string sT = NormalizeDateTimeString(value.ToString());
-                    if (DateTimeOffset.TryParse(sT, out var dtoT))
+                    string sT = NormalizeDateTimeString(value.ToString().Trim());
+                    if (TryParseXPathTime(sT, out var xdtT, out var hasTzT))
                     {
-                        bool hasTz = HasTimezoneSuffix(sT);
-                        result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dtoT.Hour, dtoT.Minute, dtoT.Second, dtoT.Millisecond, dtoT.Offset), hasTz);
+                        if (xdtT.IsRepresentableAsDateTimeOffset && DateTimeOffset.TryParse(sT, out var dtoT))
+                        {
+                            result = XdmValue.FromTime(dtoT, hasTzT);
+                        }
+                        else
+                        {
+                            result = XdmValue.FromTime(xdtT, hasTzT);
+                        }
+                        return true;
+                    }
+                    // Fallback for backward compatibility with dateTime-shaped strings cast to time
+                    if (DateTimeOffset.TryParse(sT, out var dtoTFb))
+                    {
+                        bool hasTzFb = HasTimezoneSuffix(sT);
+                        result = XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dtoTFb.Hour, dtoTFb.Minute, dtoTFb.Second, dtoTFb.Millisecond, dtoTFb.Offset), hasTzFb);
                         return true;
                     }
                 }
@@ -2728,13 +2783,20 @@ public static class VmEngine
                 return true;
 
             case "anyuri":
-            {
-                string sUri = value.ToString();
-                if (!Uri.IsWellFormedUriString(sUri, UriKind.RelativeOrAbsolute))
+                if (value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                    or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.Date
+                    or XdmValueKind.Time or XdmValueKind.DateTime or XdmValueKind.Duration
+                    or XdmValueKind.QName or XdmValueKind.Node)
                     return false;
-                result = XdmValue.FromString(sUri);
-                return true;
-            }
+                {
+                    // XML Schema anyURI has whiteSpace="collapse"
+                    string sUri = CollapseWhitespace(value.ToString());
+                    // Reject invalid percent-encoding sequences
+                    if (!IsValidAnyUri(sUri))
+                        return false;
+                    result = XdmValue.FromString(sUri);
+                    return true;
+                }
 
             case "base64binary":
                 if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
@@ -2757,8 +2819,10 @@ public static class VmEngine
                     or XdmValueKind.Boolean or XdmValueKind.Node)
                     return false;
                 {
-                    string sHex = value.ToString();
+                    string sHex = value.ToString().Replace(" ", "").Replace("\t", "").Replace("\r", "").Replace("\n", "");
                     if (!Regex.IsMatch(sHex, @"^[0-9a-fA-F]*$"))
+                        return false;
+                    if (sHex.Length % 2 != 0)
                         return false;
                     result = XdmValue.FromString(sHex.ToUpperInvariant());
                     return true;
@@ -2768,7 +2832,7 @@ public static class VmEngine
                 if (value.Kind == XdmValueKind.Duration)
                     return true;
                 {
-                    string sDur = value.ToString();
+                    string sDur = value.ToString().Trim();
                     if (IsValidDuration(sDur))
                     {
                         result = XdmValue.FromDuration(sDur);
@@ -2780,13 +2844,12 @@ public static class VmEngine
             case "yearmonthduration":
                 if (value.Kind == XdmValueKind.Duration)
                 {
-                    string sYm = ExtractYearMonthDuration(value.DurationValue);
-                    result = XdmValue.FromDuration(sYm);
+                    result = XdmValue.FromDuration(ExtractYearMonthDuration(value.DurationValue));
                     return true;
                 }
                 {
-                    string sYm = value.ToString();
-                    if (IsValidDuration(sYm))
+                    string sYm = value.ToString().Trim();
+                    if (IsValidDuration(sYm) && !IsMixedDuration(sYm))
                     {
                         result = XdmValue.FromDuration(ExtractYearMonthDuration(sYm));
                         return true;
@@ -2797,13 +2860,12 @@ public static class VmEngine
             case "daytimeduration":
                 if (value.Kind == XdmValueKind.Duration)
                 {
-                    string sDt = ExtractDayTimeDuration(value.DurationValue);
-                    result = XdmValue.FromDuration(sDt);
+                    result = XdmValue.FromDuration(ExtractDayTimeDuration(value.DurationValue));
                     return true;
                 }
                 {
-                    string sDt = value.ToString();
-                    if (IsValidDuration(sDt))
+                    string sDt = value.ToString().Trim();
+                    if (IsValidDuration(sDt) && !IsMixedDuration(sDt))
                     {
                         result = XdmValue.FromDuration(ExtractDayTimeDuration(sDt));
                         return true;
@@ -2812,15 +2874,19 @@ public static class VmEngine
                 return false;
 
             case "gyear":
+                if (value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                    or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.Duration
+                    or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
                 {
-                    var dtoY = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
-                    string tz = FormatXPathTimezone(dtoY, value.HasTimezone);
-                    result = XdmValue.FromString($"{dtoY.Year:0000}{tz}");
+                    var xdtY = value.Kind == XdmValueKind.DateTime ? value.DateTimeXPathValue : value.DateXPathValue;
+                    string tz = xdtY.FormatTimezone();
+                    result = XdmValue.FromString($"{xdtY.FormatYear()}{tz}");
                     return true;
                 }
                 {
-                    string s = value.ToString();
+                    string s = value.ToString().Trim();
                     if (Regex.IsMatch(s, @"^[-+]?\d{4,}([Zz]|[+\-]\d{2}:\d{2})?$"))
                     {
                         result = XdmValue.FromString(s);
@@ -2830,15 +2896,19 @@ public static class VmEngine
                 return false;
 
             case "gyearmonth":
+                if (value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                    or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.Duration
+                    or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
                 {
-                    var dtoYm = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
-                    string tz = FormatXPathTimezone(dtoYm, value.HasTimezone);
-                    result = XdmValue.FromString($"{dtoYm.Year:0000}-{dtoYm.Month:00}{tz}");
+                    var xdtYm = value.Kind == XdmValueKind.DateTime ? value.DateTimeXPathValue : value.DateXPathValue;
+                    string tz = xdtYm.FormatTimezone();
+                    result = XdmValue.FromString($"{xdtYm.FormatYear()}-{xdtYm.Month:00}{tz}");
                     return true;
                 }
                 {
-                    string s = value.ToString();
+                    string s = value.ToString().Trim();
                     if (Regex.IsMatch(s, @"^[-+]?\d{4,}-\d{2}([Zz]|[+\-]\d{2}:\d{2})?$"))
                     {
                         result = XdmValue.FromString(s);
@@ -2848,15 +2918,19 @@ public static class VmEngine
                 return false;
 
             case "gmonthday":
+                if (value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                    or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.Duration
+                    or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
                 {
-                    var dtoMd = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
-                    string tz = FormatXPathTimezone(dtoMd, value.HasTimezone);
-                    result = XdmValue.FromString($"--{dtoMd.Month:00}-{dtoMd.Day:00}{tz}");
+                    var xdtMd = value.Kind == XdmValueKind.DateTime ? value.DateTimeXPathValue : value.DateXPathValue;
+                    string tz = xdtMd.FormatTimezone();
+                    result = XdmValue.FromString($"--{xdtMd.Month:00}-{xdtMd.Day:00}{tz}");
                     return true;
                 }
                 {
-                    string s = value.ToString();
+                    string s = value.ToString().Trim();
                     if (Regex.IsMatch(s, @"^--\d{2}-\d{2}([Zz]|[+\-]\d{2}:\d{2})?$"))
                     {
                         result = XdmValue.FromString(s);
@@ -2866,15 +2940,19 @@ public static class VmEngine
                 return false;
 
             case "gday":
+                if (value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                    or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.Duration
+                    or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
                 {
-                    var dtoD = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
-                    string tz = FormatXPathTimezone(dtoD, value.HasTimezone);
-                    result = XdmValue.FromString($"---{dtoD.Day:00}{tz}");
+                    var xdtD = value.Kind == XdmValueKind.DateTime ? value.DateTimeXPathValue : value.DateXPathValue;
+                    string tz = xdtD.FormatTimezone();
+                    result = XdmValue.FromString($"---{xdtD.Day:00}{tz}");
                     return true;
                 }
                 {
-                    string s = value.ToString();
+                    string s = value.ToString().Trim();
                     if (Regex.IsMatch(s, @"^---\d{2}([Zz]|[+\-]\d{2}:\d{2})?$"))
                     {
                         result = XdmValue.FromString(s);
@@ -2884,15 +2962,19 @@ public static class VmEngine
                 return false;
 
             case "gmonth":
+                if (value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                    or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.Duration
+                    or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
                 if (value.Kind == XdmValueKind.DateTime || value.Kind == XdmValueKind.Date)
                 {
-                    var dtoM = value.Kind == XdmValueKind.DateTime ? value.DateTimeValue : value.DateValue;
-                    string tz = FormatXPathTimezone(dtoM, value.HasTimezone);
-                    result = XdmValue.FromString($"--{dtoM.Month:00}{tz}");
+                    var xdtM = value.Kind == XdmValueKind.DateTime ? value.DateTimeXPathValue : value.DateXPathValue;
+                    string tz = xdtM.FormatTimezone();
+                    result = XdmValue.FromString($"--{xdtM.Month:00}{tz}");
                     return true;
                 }
                 {
-                    string s = value.ToString();
+                    string s = value.ToString().Trim();
                     if (Regex.IsMatch(s, @"^--\d{2}([Zz]|[+\-]\d{2}:\d{2})?$"))
                     {
                         result = XdmValue.FromString(s);
@@ -2906,8 +2988,8 @@ public static class VmEngine
             case "idref":
             case "entity":
             {
-                string s = value.ToString();
-                if (Regex.IsMatch(s, @"^[A-Za-z_][\w.\-]*$"))
+                string s = CollapseWhitespace(value.ToString());
+                if (Regex.IsMatch(s, @"^[\p{L}_][\w.\-]*$"))
                 {
                     result = XdmValue.FromString(s);
                     return true;
@@ -2917,8 +2999,8 @@ public static class VmEngine
 
             case "name":
             {
-                string s = value.ToString();
-                if (Regex.IsMatch(s, @"^[A-Za-z_:][\w.:\-]*$"))
+                string s = CollapseWhitespace(value.ToString());
+                if (Regex.IsMatch(s, @"^[\p{L}_:][\w.:\-]*$"))
                 {
                     result = XdmValue.FromString(s);
                     return true;
@@ -2928,7 +3010,7 @@ public static class VmEngine
 
             case "nmtoken":
             {
-                string s = value.ToString();
+                string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[\w.:\-]+$"))
                 {
                     result = XdmValue.FromString(s);
@@ -2939,7 +3021,7 @@ public static class VmEngine
 
             case "language":
             {
-                string s = value.ToString();
+                string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$"))
                 {
                     result = XdmValue.FromString(s);
@@ -2949,9 +3031,59 @@ public static class VmEngine
             }
 
             case "normalizedstring":
-            case "token":
-                result = XdmValue.FromString(value.ToString());
+            {
+                string s = value.ToString();
+                // XML Schema whiteSpace="replace": replace tab, CR, LF with space
+                s = s.Replace('\r', ' ').Replace('\n', ' ').Replace('\t', ' ');
+                result = XdmValue.FromString(s);
                 return true;
+            }
+            case "token":
+            {
+                string s = value.ToString();
+                // XML Schema whiteSpace="collapse": replace tab/CR/LF with space,
+                // trim leading/trailing spaces, collapse internal runs of spaces
+                s = s.Replace('\r', ' ').Replace('\n', ' ').Replace('\t', ' ');
+                s = s.Trim(' ');
+                while (s.Contains("  "))
+                    s = s.Replace("  ", " ");
+                result = XdmValue.FromString(s);
+                return true;
+            }
+
+            case "qname":
+                if (value.Kind == XdmValueKind.QName)
+                    return true;
+                if (value.Kind == XdmValueKind.String)
+                {
+                    string sQName = value.StringValue.Trim();
+                    if (string.IsNullOrEmpty(sQName))
+                        return false;
+                    // Validate lexical QName: prefix:local or local (no prefix)
+                    int colon = sQName.IndexOf(':');
+                    if (colon >= 0)
+                    {
+                        string prefix = sQName[..colon];
+                        string local = sQName[(colon + 1)..];
+                        if (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(local))
+                            return false;
+                        // Prefix must be valid NCName
+                        if (!Regex.IsMatch(prefix, @"^[\p{L}_][\w.\-]*$"))
+                            return false;
+                        // Local must be valid NCName
+                        if (!Regex.IsMatch(local, @"^[\p{L}_][\w.\-]*$"))
+                            return false;
+                    }
+                    else
+                    {
+                        // No prefix - just local name
+                        if (!Regex.IsMatch(sQName, @"^[A-Za-z_][\w.\-]*$"))
+                            return false;
+                    }
+                    result = XdmValue.FromString(sQName);
+                    return true;
+                }
+                return false;
 
             default:
                 return false;
@@ -2961,6 +3093,42 @@ public static class VmEngine
     private static readonly Regex DurationPartsRegex = new(
         @"^(?<sign>[-+]?)(?<P>P)(?<Y>\d+Y)?(?<M>\d+M)?(?<D>\d+D)?(?<T>T(?<H>\d+H)?(?<Tm>\d+M)?(?<S>\d+(?:\.\d+)?S)?)?$",
         RegexOptions.Compiled);
+
+    private static bool IsValidAnyUri(string s)
+    {
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (s[i] == '%')
+            {
+                if (i + 2 >= s.Length)
+                    return false;
+                if (!IsHexDigit(s[i + 1]) || !IsHexDigit(s[i + 2]))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private static bool IsHexDigit(char c)
+        => (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+
+    private static string CollapseWhitespace(string s)
+    {
+        s = s.Replace('\r', ' ').Replace('\n', ' ').Replace('\t', ' ');
+        s = s.Trim(' ');
+        while (s.Contains("  "))
+            s = s.Replace("  ", " ");
+        return s;
+    }
+
+    private static bool IsMixedDuration(string s)
+    {
+        var m = DurationPartsRegex.Match(s);
+        if (!m.Success) return false;
+        bool hasYm = m.Groups["Y"].Success || m.Groups["M"].Success;
+        bool hasDt = m.Groups["D"].Success || m.Groups["T"].Success;
+        return hasYm && hasDt;
+    }
 
     public static string ExtractYearMonthDuration(string s)
     {
@@ -3018,12 +3186,21 @@ public static class VmEngine
         return s;
     }
 
+    private static readonly Regex DurationComponentRegex = new(@"(\d+)([YMDHST])", RegexOptions.Compiled);
+
     private static bool IsValidDuration(string s)
     {
         if (string.IsNullOrEmpty(s)) return false;
         if (!Regex.IsMatch(s, @"^[-+]?P(\d+Y)?(\d+M)?(\d+D)?(T(\d+H)?(\d+M)?(\d+(\.\d+)?S)?)?$"))
             return false;
-        return s != "P" && s != "-P" && s != "+P";
+        if (s == "P" || s == "-P" || s == "+P") return false;
+        // Reject absurdly large components
+        foreach (Match m in DurationComponentRegex.Matches(s))
+        {
+            if (long.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture) > 999999999999L)
+                return false;
+        }
+        return true;
     }
 
     private static bool IsValidYearMonthDuration(string s)
@@ -3051,9 +3228,9 @@ public static class VmEngine
         if (string.IsNullOrEmpty(s)) return true;
         s = s.Replace(" ", "").Replace("\t", "").Replace("\n", "").Replace("\r", "");
         if (s.Length % 4 != 0) return false;
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
         foreach (char c in s)
-            if (!chars.Contains(c))
+            if (!chars.Contains(c) && c != '=')
                 return false;
         int eq = s.IndexOf('=');
         if (eq >= 0)
@@ -3061,6 +3238,8 @@ public static class VmEngine
             for (int i = eq; i < s.Length; i++)
                 if (s[i] != '=')
                     return false;
+            if (s.Length - eq > 2)
+                return false;
         }
         return true;
     }
@@ -3225,6 +3404,131 @@ public static class VmEngine
         if (!hasTz) return "";
         string tz = dto.ToString("zzz", System.Globalization.CultureInfo.InvariantCulture);
         return tz == "+00:00" ? "Z" : tz;
+    }
+
+    private static readonly Regex XPathDateTimeRegex = new(
+        @"^(?<year>[+-]?\d{4,})-(?<month>\d{2})-(?<day>\d{2})T(?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2})(?:\.(?<frac>\d+))?(?<tz>Z|[+-]\d{2}:\d{2})?$",
+        RegexOptions.Compiled);
+
+    private static readonly Regex XPathDateRegex = new(
+        @"^(?<year>[+-]?\d{4,})-(?<month>\d{2})-(?<day>\d{2})(?<tz>Z|[+-]\d{2}:\d{2})?$",
+        RegexOptions.Compiled);
+
+    private static readonly Regex XPathTimeRegex = new(
+        @"^(?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2})(?:\.(?<frac>\d+))?(?<tz>Z|[+-]\d{2}:\d{2})?$",
+        RegexOptions.Compiled);
+
+    private static bool TryParseXPathDateTime(string s, out XPathDateTime xdt, out bool hasTz)
+    {
+        xdt = default;
+        hasTz = false;
+        var m = XPathDateTimeRegex.Match(s);
+        if (!m.Success) return false;
+
+        long year = long.Parse(m.Groups["year"].Value, CultureInfo.InvariantCulture);
+        if (Math.Abs(year) > 999999999999L) return false;
+        int month = int.Parse(m.Groups["month"].Value, CultureInfo.InvariantCulture);
+        int day = int.Parse(m.Groups["day"].Value, CultureInfo.InvariantCulture);
+        int hour = int.Parse(m.Groups["hour"].Value, CultureInfo.InvariantCulture);
+        int minute = int.Parse(m.Groups["minute"].Value, CultureInfo.InvariantCulture);
+        int second = int.Parse(m.Groups["second"].Value, CultureInfo.InvariantCulture);
+        int millisecond = 0;
+        if (m.Groups["frac"].Success)
+        {
+            string frac = m.Groups["frac"].Value;
+            // Take up to 3 digits for milliseconds
+            if (frac.Length > 3) frac = frac[..3];
+            millisecond = int.Parse(frac.PadRight(3, '0'), CultureInfo.InvariantCulture);
+        }
+
+        int tzMinutes = 0;
+        hasTz = m.Groups["tz"].Success;
+        if (hasTz)
+        {
+            string tz = m.Groups["tz"].Value;
+            if (tz == "Z" || tz == "z")
+            {
+                tzMinutes = 0;
+            }
+            else
+            {
+                tzMinutes = ParseTimezoneOffset(tz);
+            }
+        }
+
+        xdt = new XPathDateTime(year, month, day, hour, minute, second, millisecond, tzMinutes, hasTz);
+        return true;
+    }
+
+    private static bool TryParseXPathDate(string s, out XPathDateTime xdt, out bool hasTz)
+    {
+        xdt = default;
+        hasTz = false;
+        var m = XPathDateRegex.Match(s);
+        if (!m.Success) return false;
+
+        long year = long.Parse(m.Groups["year"].Value, CultureInfo.InvariantCulture);
+        if (Math.Abs(year) > 999999999999L) return false;
+        int month = int.Parse(m.Groups["month"].Value, CultureInfo.InvariantCulture);
+        int day = int.Parse(m.Groups["day"].Value, CultureInfo.InvariantCulture);
+
+        int tzMinutes = 0;
+        hasTz = m.Groups["tz"].Success;
+        if (hasTz)
+        {
+            string tz = m.Groups["tz"].Value;
+            if (tz == "Z" || tz == "z")
+                tzMinutes = 0;
+            else
+                tzMinutes = ParseTimezoneOffset(tz);
+        }
+
+        xdt = new XPathDateTime(year, month, day, 0, 0, 0, 0, tzMinutes, hasTz);
+        return true;
+    }
+
+    private static bool TryParseXPathTime(string s, out XPathDateTime xdt, out bool hasTz)
+    {
+        xdt = default;
+        hasTz = false;
+        var m = XPathTimeRegex.Match(s);
+        if (!m.Success) return false;
+
+        int hour = int.Parse(m.Groups["hour"].Value, CultureInfo.InvariantCulture);
+        int minute = int.Parse(m.Groups["minute"].Value, CultureInfo.InvariantCulture);
+        int second = int.Parse(m.Groups["second"].Value, CultureInfo.InvariantCulture);
+        int millisecond = 0;
+        if (m.Groups["frac"].Success)
+        {
+            string frac = m.Groups["frac"].Value;
+            if (frac.Length > 3) frac = frac[..3];
+            millisecond = int.Parse(frac.PadRight(3, '0'), CultureInfo.InvariantCulture);
+        }
+
+        int tzMinutes = 0;
+        hasTz = m.Groups["tz"].Success;
+        if (hasTz)
+        {
+            string tz = m.Groups["tz"].Value;
+            if (tz == "Z" || tz == "z")
+                tzMinutes = 0;
+            else
+                tzMinutes = ParseTimezoneOffset(tz);
+        }
+
+        xdt = new XPathDateTime(1, 1, 1, hour, minute, second, millisecond, tzMinutes, hasTz);
+        return true;
+    }
+
+    private static int ParseTimezoneOffset(string tz)
+    {
+        // tz is like "+14:00" or "-05:00"
+        bool negative = tz[0] == '-';
+        var parts = tz[1..].Split(':');
+        int hours = int.Parse(parts[0], CultureInfo.InvariantCulture);
+        int minutes = int.Parse(parts[1], CultureInfo.InvariantCulture);
+        int total = hours * 60 + minutes;
+        return negative ? -total : total;
     }
 
     private static string NormalizeDateTimeString(string s)

@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 21-05-2026     | assert-true/assert-false unwrap singleton sequences                                    |
 //                      | Charles Korthout | 0.3   | 22-05-2026     | Fixed ValuesEqual cross-type numeric comparison (Integer vs Double/Float)            |
 //                      | Charles Korthout | 0.4   | 22-05-2026     | Added Duration serialization and type matching for dayTimeDuration/yearMonthDuration  |
+//                      | Charles Korthout | 0.5   | 22-05-2026     | Fixed Double/Float serialization to use XdmValue.ToString for canonical formatting       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -278,27 +279,9 @@ internal static class ResultComparer
         {
             if (value.Kind == XdmValueKind.Boolean)
                 return value.BooleanValue ? "true" : "false";
-            if (value.Kind == XdmValueKind.Double)
+            if (value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float)
             {
-                double d = value.DoubleValue;
-                if (double.IsNaN(d))
-                    return "NaN";
-                if (double.IsPositiveInfinity(d))
-                    return "INF";
-                if (double.IsNegativeInfinity(d))
-                    return "-INF";
-                return FormatDoubleString(d.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            }
-            if (value.Kind == XdmValueKind.Float)
-            {
-                double f = value.DoubleValue;
-                if (float.IsNaN((float)f))
-                    return "NaN";
-                if (float.IsPositiveInfinity((float)f))
-                    return "INF";
-                if (float.IsNegativeInfinity((float)f))
-                    return "-INF";
-                return FormatDoubleString(((float)f).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                return value.ToString();
             }
             if (value.Kind == XdmValueKind.Integer)
                 return value.IntegerValue.ToString(System.Globalization.CultureInfo.InvariantCulture);

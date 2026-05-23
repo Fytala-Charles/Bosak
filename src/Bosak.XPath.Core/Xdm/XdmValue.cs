@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added DateTime, Date, and Time value factories and accessors                           |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added QName value factory and accessor                                                   |
 //                      | Charles Korthout | 0.5   | 22-05-2026     | Added Duration value factory, accessor, and ToString support                             |
+//                      | Charles Korthout | 0.6   | 22-05-2026     | Added FormatXPathFloat, fixed FormatXPathDouble exponent and negative zero               |
 //                      | Charles Korthout | 0.6   | 23-05-2026     | Fixed decimal ToString invariant culture; added XPath canonical double formatting        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -96,26 +97,38 @@ public readonly struct XdmValue
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(DateTimeOffset value)
-        => new(XdmValueKind.DateTime, reference: value);
+        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone: true), hasTimezone: true));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(DateTimeOffset value, bool hasTimezone)
+        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDateTime(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value, hasTimezone));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDate(DateTimeOffset value)
-        => new(XdmValueKind.Date, reference: value);
+        => new(XdmValueKind.Date, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone: true), hasTimezone: true));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDate(DateTimeOffset value, bool hasTimezone)
+        => new(XdmValueKind.Date, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDate(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.Date, reference: new DateTimeWrapper(value, hasTimezone));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value)
-        => new(XdmValueKind.Time, reference: value);
+        => new(XdmValueKind.Time, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone: true), hasTimezone: true));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value, bool hasTimezone)
+        => new(XdmValueKind.Time, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromTime(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.Time, reference: new DateTimeWrapper(value, hasTimezone));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -262,7 +275,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.DateTime)
                 ThrowInvalidAccess(nameof(DateTimeValue));
-            return _reference is DateTimeWrapper w ? w.Value : (DateTimeOffset)_reference!;
+            return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
         }
     }
 
@@ -272,7 +285,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Date)
                 ThrowInvalidAccess(nameof(DateValue));
-            return _reference is DateTimeWrapper w ? w.Value : (DateTimeOffset)_reference!;
+            return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
         }
     }
 
@@ -282,7 +295,41 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Time)
                 ThrowInvalidAccess(nameof(TimeValue));
-            return _reference is DateTimeWrapper w ? w.Value : (DateTimeOffset)_reference!;
+            return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
+        }
+    }
+
+    /// <summary>
+    /// Returns the underlying <see cref="XPathDateTime"/> for dateTime values,
+    /// including support for extended years that cannot be represented by <see cref="DateTimeOffset"/>.
+    /// </summary>
+    public XPathDateTime DateTimeXPathValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.DateTime)
+                ThrowInvalidAccess(nameof(DateTimeXPathValue));
+            return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);
+        }
+    }
+
+    public XPathDateTime DateXPathValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Date)
+                ThrowInvalidAccess(nameof(DateXPathValue));
+            return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);
+        }
+    }
+
+    public XPathDateTime TimeXPathValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Time)
+                ThrowInvalidAccess(nameof(TimeXPathValue));
+            return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);
         }
     }
 
@@ -333,22 +380,16 @@ public readonly struct XdmValue
             XdmValueKind.Integer => _integer.ToString(),
             XdmValueKind.Decimal => ((decimal)_reference!).ToString(CultureInfo.InvariantCulture),
             XdmValueKind.Double => FormatXPathDouble(_double),
-            XdmValueKind.Float => FormatXPathDouble((float)_double),
+            XdmValueKind.Float => FormatXPathFloat((float)_double),
             XdmValueKind.String => (string?)_reference ?? string.Empty,
             XdmValueKind.Node => ((IXdmNode?)_reference)?.StringValue ?? string.Empty,
             XdmValueKind.Sequence => "(sequence)",
             XdmValueKind.Function => "(function)",
             XdmValueKind.Map => "(map)",
             XdmValueKind.Array => "(array)",
-            XdmValueKind.DateTime => HasTimezone
-                ? FormatDateTimeOffset(DateTimeValue, "yyyy-MM-ddTHH:mm:ss")
-                : DateTimeValue.ToString("yyyy-MM-ddTHH:mm:ss", System.Globalization.CultureInfo.InvariantCulture),
-            XdmValueKind.Date => HasTimezone
-                ? FormatDateTimeOffset(DateValue, "yyyy-MM-dd")
-                : DateValue.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
-            XdmValueKind.Time => HasTimezone
-                ? FormatDateTimeOffset(TimeValue, "HH:mm:ss")
-                : TimeValue.ToString("HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture),
+            XdmValueKind.DateTime => FormatXPathDateTime(DateTimeXPathValue, true),
+            XdmValueKind.Date => FormatXPathDateTime(DateXPathValue, false),
+            XdmValueKind.Time => FormatXPathTime(TimeXPathValue),
             XdmValueKind.QName => ((XsQName)_reference!).ToString(),
             XdmValueKind.Duration => (string?)_reference ?? string.Empty,
             XdmValueKind.External => $"(external: {_reference?.GetType().Name})",
@@ -367,7 +408,8 @@ public readonly struct XdmValue
         if (double.IsPositiveInfinity(value)) return "INF";
         if (double.IsNegativeInfinity(value)) return "-INF";
         if (double.IsNaN(value)) return "NaN";
-        if (value == 0.0) return "0";
+        // Preserve negative zero
+        if (value == 0.0) return double.IsNegative(value) ? "-0" : "0";
 
         double abs = Math.Abs(value);
         // XPath canonical double uses scientific notation when abs >= 1e6 or abs < 1e-6
@@ -384,8 +426,9 @@ public readonly struct XdmValue
                 string exp = s[(eIdx + 1)..];
                 mantissa = mantissa.TrimEnd('0').TrimEnd('.');
                 if (!mantissa.Contains('.')) mantissa += ".0";
-                // Remove leading + from exponent
-                exp = exp.TrimStart('+');
+                // Remove leading + and leading zeros from exponent
+                exp = exp.TrimStart('+').TrimStart('0');
+                if (string.IsNullOrEmpty(exp)) exp = "0";
                 s = mantissa + "E" + exp;
             }
             return s;
@@ -397,6 +440,75 @@ public readonly struct XdmValue
         return fixedStr;
     }
 
+    private static string FormatXPathFloat(float value)
+    {
+        if (float.IsPositiveInfinity(value)) return "INF";
+        if (float.IsNegativeInfinity(value)) return "-INF";
+        if (float.IsNaN(value)) return "NaN";
+        if (value == 0.0f) return float.IsNegative(value) ? "-0" : "0";
+
+        string s = value.ToString("G7", CultureInfo.InvariantCulture);
+        s = s.Replace("E+", "E");
+        int eIdx = s.IndexOf('E');
+        if (eIdx < 0) eIdx = s.IndexOf('e');
+        if (eIdx < 0)
+        {
+            // Already in fixed-point form
+            if (s.Contains('.'))
+            {
+                s = s.TrimEnd('0').TrimEnd('.');
+            }
+            if (s == "-0") s = "0";
+            return s;
+        }
+
+        string mantissa = s[..eIdx];
+        string expStr = s[(eIdx + 1)..];
+        expStr = expStr.TrimStart('+').TrimStart('0');
+        if (string.IsNullOrEmpty(expStr)) expStr = "0";
+
+        if (int.TryParse(expStr, out int exp))
+        {
+            // XPath canonical: fixed-point when 1e-6 <= abs < 1e6
+            if (exp >= -6 && exp < 6)
+            {
+                if (decimal.TryParse(mantissa, NumberStyles.Any, CultureInfo.InvariantCulture, out var dec))
+                {
+                    decimal scaled = dec * (decimal)Math.Pow(10, exp);
+                    string fixedStr = scaled.ToString(CultureInfo.InvariantCulture);
+                    fixedStr = fixedStr.TrimEnd('0').TrimEnd('.');
+                    if (fixedStr == "-0") fixedStr = "0";
+                    if (!fixedStr.Contains('.')) fixedStr += ".0";
+                    return fixedStr;
+                }
+            }
+        }
+
+        mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+        if (!mantissa.Contains('.')) mantissa += ".0";
+        return mantissa + "E" + expStr;
+    }
+
+    private static string FormatXPathDateTime(XPathDateTime xdt, bool includeTime)
+    {
+        string result = xdt.FormatYear();
+        if (includeTime)
+            result += $"-{xdt.Month:00}-{xdt.Day:00}T{xdt.Hour:00}:{xdt.Minute:00}:{xdt.Second:00}";
+        else
+            result += $"-{xdt.Month:00}-{xdt.Day:00}";
+        if (xdt.HasTimezone)
+            result += xdt.FormatTimezone();
+        return result;
+    }
+
+    private static string FormatXPathTime(XPathDateTime xdt)
+    {
+        string result = $"{xdt.Hour:00}:{xdt.Minute:00}:{xdt.Second:00}";
+        if (xdt.HasTimezone)
+            result += xdt.FormatTimezone();
+        return result;
+    }
+
     private static string FormatDateTimeOffset(DateTimeOffset dto, string format)
     {
         string result = dto.ToString(format + "zzz", System.Globalization.CultureInfo.InvariantCulture);
@@ -405,14 +517,14 @@ public readonly struct XdmValue
 }
 
 /// <summary>
-/// Wraps a DateTimeOffset together with a flag indicating whether the original
+/// Wraps an <see cref="XPathDateTime"/> together with a flag indicating whether the original
 /// XPath literal included an explicit timezone. Used by xs:date, xs:time, and xs:dateTime.
 /// </summary>
 internal sealed class DateTimeWrapper
 {
-    public DateTimeOffset Value { get; }
+    public XPathDateTime Value { get; }
     public bool HasTimezone { get; }
-    public DateTimeWrapper(DateTimeOffset value, bool hasTimezone)
+    public DateTimeWrapper(XPathDateTime value, bool hasTimezone)
     {
         Value = value;
         HasTimezone = hasTimezone;

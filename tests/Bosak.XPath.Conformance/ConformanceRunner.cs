@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 22-05-2026     | Added optional test-set name filter for targeted conformance runs                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -21,13 +22,15 @@ namespace Bosak.XPath.Conformance;
 internal sealed class ConformanceRunner
 {
     private readonly string _suitePath;
+    private readonly string? _filter;
     private readonly XNamespace _ns = "http://www.w3.org/2010/09/qt-fots-catalog";
     private readonly DependencyFilter _dependencyFilter = new();
     private readonly TestExecutor _executor = new();
 
-    public ConformanceRunner(string suitePath)
+    public ConformanceRunner(string suitePath, string? filter = null)
     {
         _suitePath = suitePath;
+        _filter = filter;
     }
 
     public TestReport Run()
@@ -45,8 +48,12 @@ internal sealed class ConformanceRunner
         int processedSets = 0;
         foreach (var testSetRef in testSetRefs)
         {
+            string? setName = (string?)testSetRef.Attribute("name");
             string? fileName = (string?)testSetRef.Attribute("file");
             if (string.IsNullOrEmpty(fileName))
+                continue;
+
+            if (_filter is not null && setName is not null && !setName.Contains(_filter, StringComparison.OrdinalIgnoreCase))
                 continue;
 
             string testSetPath = Path.Combine(_suitePath, fileName);

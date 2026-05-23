@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added map:* and array:* standard functions                                             |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added numeric and node-name accessor functions                                         |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Added current-dateTime, current-date, current-time functions                           |
+//                      | Charles Korthout | 0.6   | 22-05-2026     | Fixed xs: constructor functions to use VmEngine.Cast for validation                      |
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Added fn:node-name                                                                     |
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Added fn:number, fn:data, fn:root                                                      |
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Added date/time component extractors                                                   |
@@ -3449,24 +3450,19 @@ public static class FunctionLibrary
         => VmEngine.Cast(args[0], "nonNegativeInteger");
 
     private static XdmValue XsDayTimeDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDuration(VmEngine.ExtractDayTimeDuration(AtomizedString(args[0])));
+        => VmEngine.Cast(args[0], "dayTimeDuration");
 
     private static XdmValue XsYearMonthDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDuration(VmEngine.ExtractYearMonthDuration(AtomizedString(args[0])));
+        => VmEngine.Cast(args[0], "yearMonthDuration");
 
     private static XdmValue XsUntypedAtomic(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(AtomizedString(args[0]));
 
     private static XdmValue XsAnyUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-    {
-        string s = AtomizedString(args[0]);
-        if (!Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute))
-            throw new InvalidOperationException("FORG0001");
-        return XdmValue.FromString(s);
-    }
+        => VmEngine.Cast(args[0], "anyURI");
 
     private static XdmValue XsHexBinary(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "hexBinary");
 
     private static XdmValue XsBase64Binary(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -3481,65 +3477,78 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(s)) return true;
         s = s.Replace(" ", "").Replace("\t", "").Replace("\n", "").Replace("\r", "");
         if (s.Length % 4 != 0) return false;
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
         foreach (char c in s)
-            if (!chars.Contains(c))
+            if (!chars.Contains(c) && c != '=')
                 return false;
         // Check padding
         int eq = s.IndexOf('=');
         if (eq >= 0)
         {
+            // All chars after first '=' must be '='
             for (int i = eq; i < s.Length; i++)
                 if (s[i] != '=')
                     return false;
+            // At most 2 padding characters
+            if (s.Length - eq > 2)
+                return false;
+            // If length is 4, last group must have at least 2 data chars (1 padding max for 4-char group)
+            // Actually: 4-char group with 1 padding = 3 data chars (18 bits = 2 bytes + 2 bits, valid)
+            //           4-char group with 2 padding = 2 data chars (12 bits = 1 byte + 4 bits, valid)
+            // A single 4-char group cannot have 3 padding chars (only 6 bits, not a whole byte)
+            if (s.Length == 4 && s.Length - eq == 2)
+            {
+                // 2 padding chars in a single group: first 2 chars form one byte
+                // This is valid
+            }
         }
         return true;
     }
 
     private static XdmValue XsGDay(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "gDay");
 
     private static XdmValue XsGMonth(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "gMonth");
 
     private static XdmValue XsGYear(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "gYear");
 
     private static XdmValue XsGYearMonth(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "gYearMonth");
 
     private static XdmValue XsGMonthDay(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "gMonthDay");
 
     private static XdmValue XsNCName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "NCName");
 
     private static XdmValue XsDuration(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDuration(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "duration");
 
     private static XdmValue XsLanguage(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "language");
 
     private static XdmValue XsName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "Name");
 
     private static XdmValue XsNormalizedString(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "normalizedString");
 
     private static XdmValue XsToken(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "token");
 
     private static XdmValue XsID(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "ID");
 
     private static XdmValue XsIDREF(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "IDREF");
 
     private static XdmValue XsNMTOKEN(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "NMTOKEN");
 
     private static XdmValue XsENTITY(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]));
+        => VmEngine.Cast(args[0], "ENTITY");
 
     // ------------------------------------------------------------------
     // math:* functions
