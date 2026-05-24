@@ -41,6 +41,9 @@ public sealed class XDocumentNode : IXdmNode
         _node = node ?? throw new ArgumentNullException(nameof(node));
     }
 
+    /// <summary>Gets the underlying LINQ to XML node.</summary>
+    public XObject UnderlyingObject => _node;
+
     private XDocumentNode(XAttribute declaration, XElement owner)
     {
         _node = declaration;

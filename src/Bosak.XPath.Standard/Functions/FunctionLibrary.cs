@@ -2546,7 +2546,7 @@ public static class FunctionLibrary
     {
         var item = ctx.ContextItem;
         if (item.IsUndefined)
-            throw new InvalidOperationException("fn:string() called with no context item.");
+            throw new InvalidOperationException("XPDY0002");
         return XdmValue.FromString(item.ToString());
     }
 
@@ -2705,6 +2705,8 @@ public static class FunctionLibrary
     private static XdmValue ForEach_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[1];
+        if (!func.IsFunction && !func.IsUndefined)
+            throw new InvalidOperationException("XPTY0004");
         var result = new List<XdmValue>();
         foreach (var item in AsSequence(args[0]))
         {
@@ -2716,6 +2718,8 @@ public static class FunctionLibrary
     private static XdmValue Filter_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[1];
+        if (!func.IsFunction && !func.IsUndefined)
+            throw new InvalidOperationException("XPTY0004");
         var result = new List<XdmValue>();
         foreach (var item in AsSequence(args[0]))
         {
@@ -2752,6 +2756,8 @@ public static class FunctionLibrary
     private static XdmValue ForEachPair_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[2];
+        if (!func.IsFunction && !func.IsUndefined)
+            throw new InvalidOperationException("XPTY0004");
         var seq1 = AsSequence(args[0]).ToList();
         var seq2 = AsSequence(args[1]).ToList();
         var result = new List<XdmValue>();
@@ -2811,7 +2817,12 @@ public static class FunctionLibrary
 
     private static XdmValue Innermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var nodes = AsSequence(args[0]).Select(v =>
+        {
+            if (!v.IsNode && !v.IsUndefined)
+                throw new InvalidOperationException("XPTY0004");
+            return v;
+        }).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
         var result = new List<XdmValue>();
         foreach (var node in nodes)
         {
@@ -2834,7 +2845,12 @@ public static class FunctionLibrary
 
     private static XdmValue Outermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var nodes = AsSequence(args[0]).Select(v =>
+        {
+            if (!v.IsNode && !v.IsUndefined)
+                throw new InvalidOperationException("XPTY0004");
+            return v;
+        }).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
         var result = new List<XdmValue>();
         foreach (var node in nodes)
         {
@@ -2999,6 +3015,8 @@ public static class FunctionLibrary
     private static XdmValue Apply(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[0];
+        if (!func.IsFunction && !func.IsUndefined)
+            throw new InvalidOperationException("XPTY0004");
         var array = args[1].ArrayValue;
         var callArgs = new XdmValue[array.Count];
         for (int i = 0; i < array.Count; i++)
@@ -3109,7 +3127,12 @@ public static class FunctionLibrary
     }
 
     private static XdmValue HasChildren_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => HasChildren(ctx.ContextItem);
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        return HasChildren(item);
+    }
 
     private static XdmValue HasChildren_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => HasChildren(args[0]);
@@ -5403,40 +5426,87 @@ public static class FunctionLibrary
         return null;
     }
 
+    /// <summary>
+    /// Extracts a single item from a sequence argument, validating cardinality for function parameters.
+    /// Returns Undefined for an empty sequence. Throws XPTY0004 for sequences with more than one item.
+    /// </summary>
+    private static XdmValue ExtractSingleItem(XdmValue arg)
+    {
+        if (arg.IsSequence)
+        {
+            XdmValue? first = null;
+            int count = 0;
+            foreach (var x in XdmSequence.FromSource(arg.SequenceValue!))
+            {
+                first = x;
+                count++;
+                if (count > 1) break;
+            }
+            if (count == 0) return XdmValue.Undefined;
+            if (count > 1) throw new InvalidOperationException("XPTY0004");
+            return first!.Value;
+        }
+        return arg;
+    }
+
     private static XdmValue LocalName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
-        return XdmValue.FromString(node?.LocalName ?? string.Empty);
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(item.NodeValue.LocalName);
     }
 
     private static XdmValue LocalName_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
-        return XdmValue.FromString(node?.LocalName ?? string.Empty);
+        var arg = ExtractSingleItem(args[0]);
+        if (arg.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+        if (!arg.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(arg.NodeValue.LocalName);
     }
 
     private static XdmValue NamespaceUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
-        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty);
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(item.NodeValue.NamespaceUri);
     }
 
     private static XdmValue NamespaceUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
-        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty);
+        var arg = ExtractSingleItem(args[0]);
+        if (arg.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+        if (!arg.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(arg.NodeValue.NamespaceUri);
     }
 
     private static XdmValue Name_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
-        return XdmValue.FromString(GetQualifiedName(node));
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(GetQualifiedName(item.NodeValue));
     }
 
     private static XdmValue Name_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
-        return XdmValue.FromString(GetQualifiedName(node));
+        var arg = ExtractSingleItem(args[0]);
+        if (arg.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+        if (!arg.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(GetQualifiedName(arg.NodeValue));
     }
 
     private static string GetQualifiedName(IXdmNode? node)
@@ -5888,15 +5958,21 @@ public static class FunctionLibrary
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
-            return XdmValue.Undefined;
+            throw new InvalidOperationException("XPTY0004");
         return NodeToQName(item.NodeValue);
     }
 
     private static XdmValue NodeName_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
-        return node is null ? XdmValue.Undefined : NodeToQName(node);
+        var arg = ExtractSingleItem(args[0]);
+        if (arg.IsUndefined)
+            return XdmValue.Undefined;
+        if (!arg.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return NodeToQName(arg.NodeValue);
     }
 
     private static XdmValue NodeToQName(IXdmNode node)
@@ -6558,15 +6634,21 @@ public static class FunctionLibrary
     private static XdmValue GenerateId_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
-            return XdmValue.FromString(string.Empty);
+            throw new InvalidOperationException("XPTY0004");
         return XdmValue.FromString(GetNodeId(item.NodeValue));
     }
 
     private static XdmValue GenerateId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
-        return XdmValue.FromString(node is null ? string.Empty : GetNodeId(node));
+        var arg = ExtractSingleItem(args[0]);
+        if (arg.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+        if (!arg.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(GetNodeId(arg.NodeValue));
     }
 
     private static string GetNodeId(IXdmNode node)
