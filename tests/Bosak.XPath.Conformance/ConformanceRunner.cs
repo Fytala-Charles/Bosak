@@ -41,6 +41,7 @@ internal sealed class ConformanceRunner
         var testSetRefs = catalog.Descendants(_ns + "test-set").ToList();
 
         Console.WriteLine($"Discovered {testSetRefs.Count} test sets.");
+        Console.Out.Flush();
 
         // Pre-load shared environments from catalog
         var sharedEnvironments = LoadSharedEnvironments(catalog);
@@ -63,12 +64,17 @@ internal sealed class ConformanceRunner
                 continue;
             }
 
+            Console.WriteLine($"  Starting: {setName} ...");
+            Console.Out.Flush();
             RunTestSet(testSetPath, sharedEnvironments, report);
             processedSets++;
+            Console.WriteLine($"  Done: {setName} ({report.Total} tests total)");
+            Console.Out.Flush();
 
             if (processedSets % 50 == 0)
             {
                 Console.WriteLine($"  ... processed {processedSets}/{testSetRefs.Count} sets ({report.Total} tests)");
+                Console.Out.Flush();
             }
         }
 
