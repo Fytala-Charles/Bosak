@@ -171,9 +171,6 @@ internal static class ResultComparer
 
         string actualStr = SerializeValue(actual);
         string normalizedExpected = expected.Replace("\r\n", "\n").Replace("\n", " ").Trim();
-        // Collapse multiple spaces into single space
-        while (normalizedExpected.Contains("  "))
-            normalizedExpected = normalizedExpected.Replace("  ", " ");
 
         if (actualStr == normalizedExpected)
             return new TestOutcome(TestOutcomeKind.Passed, null);

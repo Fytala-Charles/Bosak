@@ -2705,7 +2705,7 @@ public static class FunctionLibrary
     private static XdmValue ForEach_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[1];
-        if (!func.IsFunction && !func.IsUndefined)
+        if (!func.IsFunction && !func.IsMap && !func.IsArray && !func.IsUndefined)
             throw new InvalidOperationException("XPTY0004");
         var result = new List<XdmValue>();
         foreach (var item in AsSequence(args[0]))
@@ -2718,7 +2718,7 @@ public static class FunctionLibrary
     private static XdmValue Filter_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[1];
-        if (!func.IsFunction && !func.IsUndefined)
+        if (!func.IsFunction && !func.IsMap && !func.IsArray && !func.IsUndefined)
             throw new InvalidOperationException("XPTY0004");
         var result = new List<XdmValue>();
         foreach (var item in AsSequence(args[0]))
@@ -2756,7 +2756,7 @@ public static class FunctionLibrary
     private static XdmValue ForEachPair_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[2];
-        if (!func.IsFunction && !func.IsUndefined)
+        if (!func.IsFunction && !func.IsMap && !func.IsArray && !func.IsUndefined)
             throw new InvalidOperationException("XPTY0004");
         var seq1 = AsSequence(args[0]).ToList();
         var seq2 = AsSequence(args[1]).ToList();
@@ -2929,7 +2929,7 @@ public static class FunctionLibrary
         string s = AtomizedString(args[0]);
         double startD = ToDoubleValue(args[1]);
         if (double.IsNaN(startD)) return XdmValue.FromString(string.Empty);
-        int start = (int)Math.Round(startD);
+        int start = (int)Math.Floor(startD + 0.5);
         if (start <= 0) start = 1;
         if (start > s.Length) return XdmValue.FromString(string.Empty);
         return XdmValue.FromString(s[(start - 1)..]);
@@ -2941,10 +2941,10 @@ public static class FunctionLibrary
         double startD = ToDoubleValue(args[1]);
         double lenD = ToDoubleValue(args[2]);
         if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.FromString(string.Empty);
-        int start = (int)Math.Round(startD);
+        int start = (int)Math.Floor(startD + 0.5);
         if (start <= 0) start = 1;
         if (start > s.Length) return XdmValue.FromString(string.Empty);
-        int len = (int)Math.Round(lenD);
+        int len = (int)Math.Floor(lenD + 0.5);
         if (len <= 0) return XdmValue.FromString(string.Empty);
         int end = Math.Min(start - 1 + len, s.Length);
         return XdmValue.FromString(s[(start - 1)..end]);
@@ -3015,7 +3015,7 @@ public static class FunctionLibrary
     private static XdmValue Apply(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[0];
-        if (!func.IsFunction && !func.IsUndefined)
+        if (!func.IsFunction && !func.IsMap && !func.IsArray && !func.IsUndefined)
             throw new InvalidOperationException("XPTY0004");
         var array = args[1].ArrayValue;
         var callArgs = new XdmValue[array.Count];
@@ -5334,11 +5334,11 @@ public static class FunctionLibrary
             {
                 XdmValueKind.Integer => arg,
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.AwayFromZero) / factor)),
+                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.ToEven) / factor)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor),
+                    XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor)),
+                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
         }
@@ -5348,13 +5348,13 @@ public static class FunctionLibrary
             return arg.Kind switch
             {
                 XdmValueKind.Integer =>
-                    XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                    XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.ToEven) * factor)),
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.ToEven) * factor)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor),
+                    XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
         }
@@ -6635,7 +6635,7 @@ public static class FunctionLibrary
     {
         var item = ctx.ContextItem;
         if (item.IsUndefined)
-            throw new InvalidOperationException("XPDY0002");
+            return XdmValue.FromString(string.Empty);
         if (!item.IsNode)
             throw new InvalidOperationException("XPTY0004");
         return XdmValue.FromString(GetNodeId(item.NodeValue));

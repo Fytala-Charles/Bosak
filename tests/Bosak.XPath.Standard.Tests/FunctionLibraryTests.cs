@@ -437,7 +437,7 @@ public class FunctionLibraryTests
     {
         var result = Evaluate("fn:round(2.5e0)");
         Assert.Equal(XdmValueKind.Double, result.Kind);
-        Assert.Equal(3.0, result.DoubleValue);
+        Assert.Equal(2.0, result.DoubleValue); // round half to even
     }
 
     [Fact]
