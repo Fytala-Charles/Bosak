@@ -98,6 +98,7 @@ internal static class ResultComparer
             "any-of" => CompareAnyOf(assertion.Elements(), actual, caughtException),
             "assert-count" => CompareAssertCount((string?)assertion.Attribute("count") ?? "", actual, caughtException),
             "assert-permutation" => new TestOutcome(TestOutcomeKind.Skipped, "assert-permutation not yet implemented"),
+            "assert" => CompareAssert(assertion.Value, actual, caughtException),
             _ => new TestOutcome(TestOutcomeKind.Skipped, $"Unknown assertion: {name}"),
         };
     }
@@ -169,10 +170,15 @@ internal static class ResultComparer
             return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
 
         string actualStr = SerializeValue(actual);
-        if (actualStr == expected)
+        string normalizedExpected = expected.Replace("\r\n", "\n").Replace("\n", " ").Trim();
+        // Collapse multiple spaces into single space
+        while (normalizedExpected.Contains("  "))
+            normalizedExpected = normalizedExpected.Replace("  ", " ");
+
+        if (actualStr == normalizedExpected)
             return new TestOutcome(TestOutcomeKind.Passed, null);
 
-        return new TestOutcome(TestOutcomeKind.Failed, $"assert-string-value failed. Expected: '{expected}', Got: '{actualStr}'");
+        return new TestOutcome(TestOutcomeKind.Failed, $"assert-string-value failed. Expected: '{normalizedExpected}', Got: '{actualStr}'");
     }
 
     private static TestOutcome CompareAssertEmpty(XdmValue actual, Exception? caughtException)
@@ -312,7 +318,7 @@ internal static class ResultComparer
             if (value.Kind == XdmValueKind.Integer)
                 return value.IntegerValue.ToString(System.Globalization.CultureInfo.InvariantCulture);
             if (value.Kind == XdmValueKind.Decimal)
-                return value.DecimalValue.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                return FormatCanonicalDecimal(value.DecimalValue);
             if (value.Kind == XdmValueKind.String)
                 return value.StringValue;
             if (value.Kind == XdmValueKind.DateTime)
@@ -432,6 +438,37 @@ internal static class ResultComparer
     {
         // XPath uses Z for UTC, not +00:00
         return s.Replace("+00:00", "Z");
+    }
+
+    private static string FormatCanonicalDecimal(decimal value)
+    {
+        string s = value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        if (s.Contains('.'))
+        {
+            s = s.TrimEnd('0').TrimEnd('.');
+        }
+        return string.IsNullOrEmpty(s) ? "0" : s;
+    }
+
+    private static TestOutcome CompareAssert(string assertExpr, XdmValue actual, Exception? caughtException)
+    {
+        if (caughtException is not null)
+            return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
+
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx = ctx.WithVariable("result", actual);
+            var result = XPath31Expression.Compile(assertExpr).Evaluate(ctx);
+            if (result.Kind == XdmValueKind.Boolean && result.BooleanValue)
+                return new TestOutcome(TestOutcomeKind.Passed, null);
+            return new TestOutcome(TestOutcomeKind.Failed, $"assert failed. Expression: {assertExpr}, Got: {SerializeValue(result)}");
+        }
+        catch (Exception ex)
+        {
+            return new TestOutcome(TestOutcomeKind.Failed, $"assert evaluation failed: {ex.Message}");
+        }
     }
 
     private static TestOutcome CompareAssertCount(string expectedCountStr, XdmValue actual, Exception? caughtException)

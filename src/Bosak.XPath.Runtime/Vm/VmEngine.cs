@@ -1838,6 +1838,7 @@ public static class VmEngine
 
         // Remove duplicate nodes (keep first occurrence)
         var unique = new List<XdmValue>(items.Length);
+        bool hasNodes = false;
         foreach (var item in items)
         {
             if (!item.IsNode)
@@ -1846,6 +1847,7 @@ public static class VmEngine
                 continue;
             }
 
+            hasNodes = true;
             bool isDup = false;
             foreach (var existing in unique)
             {
@@ -1860,7 +1862,7 @@ public static class VmEngine
                 unique.Add(item);
         }
 
-        if (unique.Count <= 1)
+        if (unique.Count <= 1 || !hasNodes)
             return XdmValue.FromSequence(MaterializedSequence.FromList(unique));
 
         // Sort nodes by document order; keep non-nodes at the end in original order
@@ -2513,6 +2515,12 @@ public static class VmEngine
             var enumerator = XdmSequence.FromSource(value.SequenceValue!).GetEnumerator();
             enumerator.MoveNext();
             value = enumerator.Current;
+        }
+
+        // Atomize nodes before casting
+        if (value.IsNode)
+        {
+            value = XdmValue.FromString(value.NodeValue.StringValue);
         }
 
         // Schema type cast restrictions: some typed values can only cast to specific types

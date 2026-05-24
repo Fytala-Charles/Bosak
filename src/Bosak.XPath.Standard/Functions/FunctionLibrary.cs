@@ -1377,6 +1377,42 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.String,
                 Implementation = FormatNumber_3
             },
+            [(Namespaces.Fn, "format-date", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 2,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = FormatDate_2
+            },
+            [(Namespaces.Fn, "format-date", 5)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 5,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = FormatDate_5
+            },
+            [(Namespaces.Fn, "format-time", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 2,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = FormatTime_2
+            },
+            [(Namespaces.Fn, "format-time", 5)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 5,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = FormatTime_5
+            },
+            [(Namespaces.Fn, "format-dateTime", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 2,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = FormatDateTime_2
+            },
+            [(Namespaces.Fn, "format-dateTime", 5)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 5,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                Implementation = FormatDateTime_5
+            },
 
             // ----- fn:adjust-date-to-timezone ---------------------------------
             [(Namespaces.Fn, "adjust-date-to-timezone", 1)] = new()
@@ -4279,7 +4315,7 @@ public static class FunctionLibrary
             }
             if (count == 0) return XdmValue.Undefined;
             if (count > 1) throw new InvalidOperationException("XPTY0004");
-            arg = first.Value;
+            arg = first!.Value;
         }
         if (!arg.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:base-uri() argument is not a node.");
@@ -4318,7 +4354,7 @@ public static class FunctionLibrary
             }
             if (count == 0) return XdmValue.Undefined;
             if (count > 1) throw new InvalidOperationException("XPTY0004");
-            arg = first.Value;
+            arg = first!.Value;
         }
         if (!arg.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:document-uri() argument is not a node.");
@@ -5536,6 +5572,41 @@ public static class FunctionLibrary
             throw new InvalidOperationException("FODF1280");
 
         string result = FormatNumberEngine.Format(value, picture, format);
+        return XdmValue.FromString(result);
+    }
+
+    private static XdmValue FormatDate_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Date);
+
+    private static XdmValue FormatDate_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.Date);
+
+    private static XdmValue FormatTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Time);
+
+    private static XdmValue FormatTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.Time);
+
+    private static XdmValue FormatDateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.DateTime);
+
+    private static XdmValue FormatDateTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.DateTime);
+
+    private static XdmValue FormatDateTime(XdmValue value, string picture, string? language, string? calendar, string? place, DateTimeComponents components)
+    {
+        if (value.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+
+        XPathDateTime xdt = value.Kind switch
+        {
+            XdmValueKind.DateTime => value.DateTimeXPathValue,
+            XdmValueKind.Date => value.DateXPathValue,
+            XdmValueKind.Time => value.TimeXPathValue,
+            _ => throw new InvalidOperationException("XPTY0004")
+        };
+
+        string result = FormatDateTimeEngine.Format(xdt, picture, language, calendar, place, components);
         return XdmValue.FromString(result);
     }
 

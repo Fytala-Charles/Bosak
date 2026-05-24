@@ -384,7 +384,7 @@ public readonly struct XdmValue
             XdmValueKind.Undefined => "()",
             XdmValueKind.Boolean => _integer != 0 ? "true" : "false",
             XdmValueKind.Integer => _integer.ToString(),
-            XdmValueKind.Decimal => ((decimal)_reference!).ToString(CultureInfo.InvariantCulture),
+            XdmValueKind.Decimal => FormatCanonicalDecimal((decimal)_reference!),
             XdmValueKind.Double => FormatXPathDouble(_double),
             XdmValueKind.Float => FormatXPathFloat((float)_double),
             XdmValueKind.String => (string?)_reference ?? string.Empty,
@@ -408,6 +408,16 @@ public readonly struct XdmValue
 
     private static string FormatExponent(string s)
         => s.Replace("E+", "E");
+
+    private static string FormatCanonicalDecimal(decimal value)
+    {
+        string s = value.ToString(CultureInfo.InvariantCulture);
+        if (s.Contains('.'))
+        {
+            s = s.TrimEnd('0').TrimEnd('.');
+        }
+        return string.IsNullOrEmpty(s) ? "0" : s;
+    }
 
     private static string FormatXPathDouble(double value)
     {

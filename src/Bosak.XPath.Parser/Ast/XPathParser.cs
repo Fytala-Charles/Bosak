@@ -791,9 +791,9 @@ public sealed class XPathParser
                 var pred = ParsePredicate();
                 expr = WithSpan(new PostfixPredicateNode(expr, pred), start, End);
             }
-            else if (Current.Kind == TokenKind.LParen && expr is not FunctionCallNode)
+            else if (Current.Kind == TokenKind.LParen)
             {
-                // Dynamic function call: $f(1,2) or (fn:abs#1)(3)
+                // Dynamic function call: $f(1,2) or (fn:abs#1)(3) or function-lookup(...)(...)
                 var args = ParseArgumentList();
                 expr = WithSpan(new DynamicFunctionCallNode(expr, args), start, End);
             }

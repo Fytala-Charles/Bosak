@@ -32,6 +32,7 @@ internal sealed class DependencyFilter
         "moduleImport",
         "xpath-1.0-compatibility",
         "advanced-uca-fallback",
+        "olson-timezone",
     };
 
     // Spec tokens that Bosak supports (XPath versions)
