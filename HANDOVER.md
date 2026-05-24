@@ -1,7 +1,7 @@
 # Handover — W3C QT3 Conformance Test Work
 
-**Date:** 2026-05-22  
-**Commit:** `TBD` on `main` (pushed to origin)  
+**Date:** 2026-05-24  
+**Commit:** `6ba74f5` on `main` (pushed to origin)  
 **Baseline before this session:** `62ebb16` (50.57% pass rate)
 
 ---
@@ -11,10 +11,10 @@
 | Metric | Before Session | After Session | Delta |
 |--------|---------------|---------------|-------|
 | **Total tests** | 31,821 | 31,821 | — |
-| **Passed** | 16,093 | **TBD** | **+TBD** |
-| **Failed** | 5,660 | **TBD** | **-TBD** |
-| **Skipped** | 10,068 | 10,068 | — |
-| **Pass rate** | 50.57% | **TBD** | **+TBD pp** |
+| **Passed** | 16,093 | **18,233** | **+2,140** |
+| **Failed** | 5,660 | **3,780** | **−1,880** |
+| **Skipped** | 10,068 | **9,808** | **−260** |
+| **Pass rate** | 50.57% | **57.30%** | **+6.73 pp** |
 
 **All 651 unit tests pass.** ✅
 
@@ -24,50 +24,67 @@
 
 ## What Was Done in This Session
 
-### Cast Conformance Fixes
+### 1. fn:format-dateTime / format-date / format-time
+- Added `FormatDateTimeEngine.cs` — full picture-string parser with digit families, grouping separators, fractional seconds, AM/PM, timezone, roman numerals, ISO week/day-of-year calculations.
+- Registered arity-2 and arity-5 variants in `FunctionLibrary`.
+- Targeted conformance: `format-date` 44/44 passed (0 failed, 180 skipped); `format-time` 50/50 passed (0 failed, 41 skipped); `format-dateTime` 6/6 passed (0 failed, 86 skipped).
 
-#### 1. Date → DateTime Cast
+### 2. Conformance Infrastructure
+- Added `<assert>` assertion evaluation in `ResultComparer` (compiles assert expression as XPath and checks boolean result).
+- Added canonical `xs:decimal` serialization (trims trailing zeros) in both `XdmValue` and `ResultComparer`.
+- Added `assert-string-value` whitespace normalization.
+- Added `Console.Out.Flush()` to `ConformanceRunner` to fix stdout buffering when redirecting to files.
+
+### 3. Runtime & Parser Fixes
+- `VmEngine`: atomize nodes before casting (fixes typed-value casts from element nodes).
+- `VmEngine`: `innermost`/`outermost` no longer attempt document-order sort when no nodes are present.
+- `XPathParser`: dynamic function calls now work after function calls (e.g. `function-lookup(...)(...)`).
+- `DependencyFilter`: added `olson-timezone` to unsupported features.
+
+### 4. Cast Conformance Fixes (continued from previous session)
+
+#### 5. Date → DateTime Cast
 - `xs:date` cast as `xs:dateTime` now works (sets `T00:00:00`)
 - `xs:time` to `xs:date`/`xs:dateTime` properly rejected
 
-#### 2. Mixed-Duration Rejection
+#### 6. Mixed-Duration Rejection
 - `yearMonthDuration`/`dayTimeDuration` `TryCast` now rejects mixed strings (e.g. `-P1Y1M1DT1H1M1.123S`) via `IsMixedDuration`
 - Cast from existing `Duration` values still allowed (extracts appropriate component)
 
-#### 3. HexBinary Validation
+#### 7. HexBinary Validation
 - Added even-length check, whitespace stripping, uppercase output
 - Fixed constructors to validate instead of passthrough
 
-#### 4. Base64Binary Validation
+#### 8. Base64Binary Validation
 - Fixed padding check (rejects `F===`)
 - Strips whitespace before validation
 
-#### 5. Float Negative Zero
+#### 9. Float Negative Zero
 - `FormatXPathDouble` preserves `-0`
 - `xs:float("-0.0E0")` cast to `xs:string` now yields `-0`
 
-#### 6. Double/Float Canonical Formatting
+#### 10. Double/Float Canonical Formatting
 - `FormatXPathDouble` normalizes scientific notation (strips leading zeros in exponent, ensures `E` not `E+`)
 - `ResultComparer.SerializeSingle` now uses canonical XPath formatting via `value.ToString()`
 
-#### 7. Extended-Year g* Extraction
+#### 11. Extended-Year g* Extraction
 - Added `XPathDateTime` struct to replace `DateTimeOffset` for XPath date/time values
 - Supports XML Schema extended years (negative, year 0000, >9999)
 - `gYear`/`gYearMonth`/`gMonthDay`/`gDay`/`gMonth` extraction from `DateTime`/`Date` now uses `XPathDateTime` directly
 
-#### 8. anyURI Validation
+#### 12. anyURI Validation
 - Replaced strict `Uri.IsWellFormedUriString` with `IsValidAnyUri`
 - Collapses whitespace, rejects invalid percent-encoding
 
-#### 9. Derived String Types
+#### 13. Derived String Types
 - `normalizedString` replaces CR/LF/tab with space
 - `token` collapses whitespace (trim + collapse runs)
 - `NCName`/`Name`/`NMTOKEN`/`language` use Unicode-aware regex and collapse whitespace
 
-#### 10. Constructor Functions
+#### 14. Constructor Functions
 - Updated `XsGDay`, `XsGMonth`, `XsGYear`, `XsGYearMonth`, `XsGMonthDay`, `XsNCName`, `XsName`, `XsLanguage`, `XsNormalizedString`, `XsToken`, `XsID`, `XsIDREF`, `XsNMTOKEN`, `XsENTITY`, `XsDuration`, `XsHexBinary`, `XsAnyUri`, `XsDayTimeDuration`, `XsYearMonthDuration` to use `VmEngine.Cast` for shared validation logic
 
-#### 11. Whitespace Handling
+#### 15. Whitespace Handling
 - `TryParseXPathDateTime`/`Date`/`Time` and duration parsers now strip surrounding whitespace before validation
 
 ---
