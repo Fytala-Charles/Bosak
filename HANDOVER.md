@@ -1,157 +1,140 @@
-# Handover — W3C QT3 Conformance Test Work
+# Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-05-24  
-**Commit:** `6ba74f5` on `main` (pushed to origin)  
-**Baseline before this session:** `62ebb16` (50.57% pass rate)
+**Commit:** `9882130` on `main` (pushed to origin)  
+**Current focus:** XSLT Phase 2 implementation (REQ-001 through REQ-012)
 
 ---
 
-## Current Status
+## Project Status Overview
 
-| Metric | Before Session | After Session | Delta |
-|--------|---------------|---------------|-------|
-| **Total tests** | 31,821 | 31,821 | — |
-| **Passed** | 16,093 | **18,233** | **+2,140** |
-| **Failed** | 5,660 | **3,780** | **−1,880** |
-| **Skipped** | 10,068 | **9,808** | **−260** |
-| **Pass rate** | 50.57% | **57.30%** | **+6.73 pp** |
+### XSLT Feature Requests (REQ-001 — REQ-012)
 
-**All 651 unit tests pass.** ✅
+| REQ | Feature | Status | Tests Added |
+|-----|---------|--------|-------------|
+| REQ-001 | `xsl:import` / `xsl:include` URI resolution | ✅ Implemented | 6 |
+| REQ-002 | Named XSLT modes (`#all`, `#current`, `#default`) | ✅ Implemented | 6 |
+| REQ-003 | `xsl:sort` + `fn:sort` comparator | ✅ Implemented | 4+ |
+| REQ-004 | `xsl:number` (single/any/multiple, format, value) | ✅ Implemented | 5 |
+| REQ-005 | `xsl:key` + `key()` function | ✅ Implemented | 5 |
+| REQ-006 | `xsl:output` serialization | ✅ Implemented | 4 |
+| REQ-007 | `fn:sort` mixed-type comparator fix | ✅ Implemented | 2 |
+| REQ-008 | `fn:function-lookup` double-to-string precision | ⏳ Pending | — |
+| REQ-009 | date/time ordering | ⏳ Pending | — |
+| REQ-010 | JSON/XML functions | ⏳ Pending | — |
+| REQ-011 | `fn:transform()` | ⏳ Pending | — |
+| REQ-012 | tunnel parameters | ⏳ Pending | — |
 
-**Cast/CastableExpr subset:** 3322/4026 passed (82.51%), up from 3047/3896 (78.21%).
+**Phase 2 (sort, key, number) is COMPLETE.** Next recommended: REQ-012 (tunnel parameters) or REQ-011 (`fn:transform()`) to begin Phase 3.
 
----
+### Unit Test Status
 
-## What Was Done in This Session
+- **693 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: **38 tests** in `Bosak.XPath.Xslt.Tests`
 
-### 1. fn:format-dateTime / format-date / format-time
-- Added `FormatDateTimeEngine.cs` — full picture-string parser with digit families, grouping separators, fractional seconds, AM/PM, timezone, roman numerals, ISO week/day-of-year calculations.
-- Registered arity-2 and arity-5 variants in `FunctionLibrary`.
-- Targeted conformance: `format-date` 44/44 passed (0 failed, 180 skipped); `format-time` 50/50 passed (0 failed, 41 skipped); `format-dateTime` 6/6 passed (0 failed, 86 skipped).
+### QT3 Conformance Baseline
 
-### 2. Conformance Infrastructure
-- Added `<assert>` assertion evaluation in `ResultComparer` (compiles assert expression as XPath and checks boolean result).
-- Added canonical `xs:decimal` serialization (trims trailing zeros) in both `XdmValue` and `ResultComparer`.
-- Added `assert-string-value` whitespace normalization.
-- Added `Console.Out.Flush()` to `ConformanceRunner` to fix stdout buffering when redirecting to files.
-
-### 3. Runtime & Parser Fixes
-- `VmEngine`: atomize nodes before casting (fixes typed-value casts from element nodes).
-- `VmEngine`: `innermost`/`outermost` no longer attempt document-order sort when no nodes are present.
-- `XPathParser`: dynamic function calls now work after function calls (e.g. `function-lookup(...)(...)`).
-- `DependencyFilter`: added `olson-timezone` to unsupported features.
-
-### 4. Cast Conformance Fixes (continued from previous session)
-
-#### 5. Date → DateTime Cast
-- `xs:date` cast as `xs:dateTime` now works (sets `T00:00:00`)
-- `xs:time` to `xs:date`/`xs:dateTime` properly rejected
-
-#### 6. Mixed-Duration Rejection
-- `yearMonthDuration`/`dayTimeDuration` `TryCast` now rejects mixed strings (e.g. `-P1Y1M1DT1H1M1.123S`) via `IsMixedDuration`
-- Cast from existing `Duration` values still allowed (extracts appropriate component)
-
-#### 7. HexBinary Validation
-- Added even-length check, whitespace stripping, uppercase output
-- Fixed constructors to validate instead of passthrough
-
-#### 8. Base64Binary Validation
-- Fixed padding check (rejects `F===`)
-- Strips whitespace before validation
-
-#### 9. Float Negative Zero
-- `FormatXPathDouble` preserves `-0`
-- `xs:float("-0.0E0")` cast to `xs:string` now yields `-0`
-
-#### 10. Double/Float Canonical Formatting
-- `FormatXPathDouble` normalizes scientific notation (strips leading zeros in exponent, ensures `E` not `E+`)
-- `ResultComparer.SerializeSingle` now uses canonical XPath formatting via `value.ToString()`
-
-#### 11. Extended-Year g* Extraction
-- Added `XPathDateTime` struct to replace `DateTimeOffset` for XPath date/time values
-- Supports XML Schema extended years (negative, year 0000, >9999)
-- `gYear`/`gYearMonth`/`gMonthDay`/`gDay`/`gMonth` extraction from `DateTime`/`Date` now uses `XPathDateTime` directly
-
-#### 12. anyURI Validation
-- Replaced strict `Uri.IsWellFormedUriString` with `IsValidAnyUri`
-- Collapses whitespace, rejects invalid percent-encoding
-
-#### 13. Derived String Types
-- `normalizedString` replaces CR/LF/tab with space
-- `token` collapses whitespace (trim + collapse runs)
-- `NCName`/`Name`/`NMTOKEN`/`language` use Unicode-aware regex and collapse whitespace
-
-#### 14. Constructor Functions
-- Updated `XsGDay`, `XsGMonth`, `XsGYear`, `XsGYearMonth`, `XsGMonthDay`, `XsNCName`, `XsName`, `XsLanguage`, `XsNormalizedString`, `XsToken`, `XsID`, `XsIDREF`, `XsNMTOKEN`, `XsENTITY`, `XsDuration`, `XsHexBinary`, `XsAnyUri`, `XsDayTimeDuration`, `XsYearMonthDuration` to use `VmEngine.Cast` for shared validation logic
-
-#### 15. Whitespace Handling
-- `TryParseXPathDateTime`/`Date`/`Time` and duration parsers now strip surrounding whitespace before validation
+- **Passed:** 18,518 / **Failed:** 3,501 / **Skipped:** 9,802 (31,821 total)
+- Pass rate: ~58.2%
+- Note: Conformance runner is an `Exe` project, not a test project. Run with `dotnet run --project tests/Bosak.XPath.Conformance`.
 
 ---
 
-## Remaining Top Failure Patterns (Next Steps)
+## Architecture Reminder
 
-| Pattern | Count | Recommendation |
-|---------|-------|----------------|
-| Lexical validations (`FORG0001` expect/succeed mismatches) | ~200+ | Scattered numeric/string/duration edge-case regex/parsing rules |
-| Schema type tracking | ~40 | `gYear`/`gYearMonth` stored as `String` kind; casts to `anyURI`/`base64Binary`/`hexBinary` cannot be rejected without tracking original schema type |
-| Parser errors (`XPST0080`/`XPST0003`) | ~40 | Invalid/unknown type names in cast expressions |
-| Hex/B64 cross-casting | ~6 | `base64Binary`→`hexBinary` requires actual decode/re-encode |
-| Date overflow | ~3 | Very large year values exceed `DateTimeOffset` range via legacy paths |
-| Year 0000 vs -0000 | ~2 | Negative zero representation mismatch |
-| Float formatting edge case | ~1 | `12678968f` serializes with wrong precision |
-| QName formatting | ~2 | Expanded `Q{uri}local` vs prefixed serialization |
-| List types | ~4 | `IDREFS`, `NMTOKENS`, `ENTITIES` constructors not implemented |
+### XSLT Execution Pipeline
+```
+XDocument source → Stylesheet.Load() → TransformEngine.Transform()
+  └── Template match compilation (PatternCompiler)
+  └── Key index building (KeyIndex.Build) if xsl:key present
+  └── key() function registration on EvaluationContext
+  └── ApplyTemplates / ExecuteTemplate loop
+      └── ExecuteXsltInstruction handles: element, attribute, value-of,
+          text, apply-templates, for-each, if, choose, variable, param,
+          call-template, copy-of, number, sort
+```
 
-### Most Impactful Next Targets
+### Key Files for XSLT Work
 
-1. **Lexical validations (~200+ failures)** — Many small regex/parsing fixes across numeric, string, and duration types. High volume, likely many easy wins.
-2. **Schema type tracking (~40 failures)** — Requires storing original schema type in `XdmValue`. Medium architectural change.
-3. **Parser gaps (~40 failures)** — Invalid type name errors in cast expressions.
+| File | Responsibility |
+|------|---------------|
+| `src/Bosak.XPath.Xslt/Runtime/TransformEngine.cs` | Main execution engine; add new instruction handlers here |
+| `src/Bosak.XPath.Xslt/Stylesheet/Stylesheet.cs` | Parses xsl:stylesheet, resolves imports/includes, collects templates/keys/output |
+| `src/Bosak.XPath.Xslt/Stylesheet/TemplateRule.cs` | Single template rule with match pattern, modes, priority, import precedence |
+| `src/Bosak.XPath.Xslt/Stylesheet/KeyDefinition.cs` | Parsed xsl:key declaration |
+| `src/Bosak.XPath.Xslt/Runtime/KeyIndex.cs` | Per-document index for key() lookups; builds via document tree walk |
+| `src/Bosak.XPath.Xslt/Patterns/PatternCompiler.cs` | Compiles match patterns (`item`, `@id`, `*`, `node()`, predicates) |
+| `src/Bosak.XPath.Xslt/Runtime/ResultTreeSerializer.cs` | Serializes result tree with xsl:output properties |
+| `tests/Bosak.XPath.Xslt.Tests/StylesheetTests.cs` | All XSLT unit tests |
+
+### Standard Library Files (Often Touched)
+
+| File | Responsibility |
+|------|---------------|
+| `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` | Standard `fn:*`, `map:*`, `array:*`, `math:*` functions |
+| `src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs` | `fn:format-integer` (now `public`, reused by `xsl:number`) |
+| `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` | VM execution, casting, opcode dispatch |
+| `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` | Context item, variables, functions, namespaces |
+| `src/Bosak.XPath.Core/Xdm/XdmValue.cs` | XDM value representation, formatting, accessors |
+| `src/Bosak.XPath.Core/Xdm/XdmValueComparer.cs` | Spec-compliant sort comparator (atomization, type promotion) |
 
 ---
 
-## How to Run the Conformance Suite
+## Recent Changes (This Session)
+
+### REQ-005 — `xsl:key` + `key()`
+- `KeyIndex.Build()` walks source document, evaluates `use` expressions, populates index
+- `TransformEngine.Transform()` builds index and registers `key()` in `fn` namespace
+- `key()` supports sequence second argument with deduplication via `HashSet<IXdmNode>`
+
+### REQ-004 — `xsl:number`
+- Added `"number"` case to `ExecuteXsltInstruction` with full `ExecuteXsltNumber` helper
+- Supports `level="single"` (default), `"any"`, `"multiple"`
+- Supports `count`/`from` patterns, `value` XPath expression, `format` attribute
+- Format tokenization: prefix/tokens/separators/suffix parsed and passed to `FormatIntegerEngine.Format`
+- Document-order tree walk (`WalkDocumentTree`) for `level="any"`
+
+---
+
+## How to Build & Test
 
 ```bash
-# Build
+# Build entire solution
 dotnet build Bosak.sln
 
 # Run all unit tests
 dotnet test Bosak.sln
 
-# Run full W3C QT3 suite (~12-13 min in Release)
+# Run only XSLT tests
+dotnet test tests/Bosak.XPath.Xslt.Tests/Bosak.XPath.Xslt.Tests.csproj
+
+# Run QT3 conformance suite (~12-13 min, Exe project)
 cd tests/Bosak.XPath.Conformance
 dotnet run --configuration Release -- "D:/Development/Bosak/tests/qt3tests"
-
-# Run only Cast/CastableExpr tests (~2-3 min)
-cd tests/Bosak.XPath.Conformance
-dotnet run --configuration Release -- "D:/Development/Bosak/tests/qt3tests" "Cast"
 ```
-
-### Files You Will Touch Most
-
-| File | What to change |
-|------|---------------|
-| `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` | Add/modify `fn:*`, `map:*`, `array:*`, `xs:*` functions |
-| `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` | Casting (`TryCast`), arithmetic, type checking, opcodes |
-| `src/Bosak.XPath.Core/Xdm/XdmValue.cs` | Value representation, formatting, accessors |
-| `tests/Bosak.XPath.Conformance/ResultComparer.cs` | Add new assertion types |
-| `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` | Runner behavior (filtering, limits, reporting) |
 
 ---
 
 ## Known Issues / Gotchas
 
-1. **Stdout buffering** — When redirecting conformance output to a file, .NET buffers heavily. Use `Console.Error` for real-time progress, or just wait the full 12-13 minutes.
-2. **File locks** — If a previous conformance run is still running (check `tasklist | grep -i conformance`), builds will fail with "process cannot access the file". Kill lingering processes before building.
-3. **Date/time edge cases** — `XPathDateTime` now handles extended years, but legacy `DateTimeOffset` accessors (`DateTimeValue`, `DateValue`, `TimeValue`) still throw for out-of-range years.
-4. **`array:sort`** deep-equal — `fo-test-array-sort-002/003` fail with "Expected: (array), Got: (array)". This is a deep-equal comparison issue for nested arrays, not a sort correctness issue.
-5. **Negative zero** — `double.IsNegative(value)` is used to detect `-0`; `value == 0.0` alone is not sufficient.
+1. **Conformance runner locks DLLs** — If a previous conformance run is still running, builds will fail. Kill with `taskkill /F /IM Bosak.XPath.Conformance.exe` before building.
+2. **Empty element serialization** — `XmlWriter` outputs `<done />` (with space), not `<done/>`. Tests should use flexible assertions.
+3. **`key()` namespace** — Registered under `http://www.w3.org/2005/xpath-functions` (not XSLT namespace) because the XPath compiler resolves unprefixed function names to the `fn` namespace.
+4. **PatternCompiler limitations** — Predicates create a new `EvaluationContext` per evaluation; prefix resolution in QNames is limited (returns empty namespace for `prefix:local`).
+5. **`from` pattern edge cases** — `level="any"` resets count at each `from` match during document-order walk. Nested `from` boundaries may differ from strict spec behavior.
+6. **Negative zero** — `double.IsNegative(value)` is used to detect `-0`; `value == 0.0` alone is not sufficient.
+
+---
+
+## Recommended Next Steps
+
+1. **REQ-012 — Tunnel parameters** (`tunnel="yes"`): Extend `ExecuteTemplate` to propagate tunnel params through `apply-templates` and `call-template` call stacks. Relatively confined change.
+2. **REQ-011 — `fn:transform()`**: XSLT 3.0 function that invokes a transformation from within XPath. Needs API surface changes, nested transform isolation, result document handling. Larger scope.
+3. **REQ-008 — `fn:function-lookup` precision**: Numeric serialization precision mismatches in QT3 tests. Narrow, isolated fix in `FunctionLibrary` or `XdmValue`.
 
 ---
 
 ## Branches
 
 - `main` — all work is on `main`, pushed to `origin/main`
-- No feature branches created in this session
+- No feature branches
