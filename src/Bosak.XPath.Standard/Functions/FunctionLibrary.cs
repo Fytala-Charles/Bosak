@@ -33,6 +33,10 @@
 //                      | Charles Korthout | 2.0   | 23-05-2026     | Registered missing xs: constructors; duration normalization in xs: constructors         |
 //                      | Charles Korthout | 2.1   | 23-05-2026     | Added math:log10, math:exp10, math:asin, math:acos, math:atan, math:atan2             |
 //                      | Charles Korthout | 2.2   | 23-05-2026     | Added fn:parse-xml-fragment, fn:has-children, fn:path, fn:unordered, map:put           |
+//                      | Charles Korthout | 2.3   | 24-05-2026     | Fixed fn:substring rounding, fn:round-half-to-even decimal, fn:subsequence lazy ranges  |
+//                      | Charles Korthout | 2.4   | 24-05-2026     | Implemented RFC-822/1123 parser for fn:parse-ietf-date with full timezone support        |
+//                      | Charles Korthout | 2.5   | 24-05-2026     | Fixed fn:subsequence edge cases: negative start, INF/NaN bounds, XPTY0004 for strings    |
+//                      | Charles Korthout | 2.6   | 24-05-2026     | Fixed fn:path sibling index, namespace parent axis, path#0; date/time cross-type checks |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -391,6 +395,13 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Node],
                 ReturnType = XdmValueKind.Boolean,
                 Implementation = HasChildren_1
+            },
+            [(Namespaces.Fn, "path", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "path", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = Path_0
             },
             [(Namespaces.Fn, "path", 1)] = new()
             {
@@ -2546,7 +2557,7 @@ public static class FunctionLibrary
     {
         var item = ctx.ContextItem;
         if (item.IsUndefined)
-            throw new InvalidOperationException("XPDY0002");
+            throw new InvalidOperationException("fn:string() called with no context item.");
         return XdmValue.FromString(item.ToString());
     }
 
@@ -2570,6 +2581,9 @@ public static class FunctionLibrary
             return XdmValue.FromInteger(0);
         if (!seq.IsSequence)
             return XdmValue.FromInteger(1);
+
+        if (seq.SequenceValue is IntegerRangeSequence range)
+            return XdmValue.FromInteger(range.To - range.From + 1);
 
         if (seq.SequenceValue!.TryGetLength(out var len))
             return XdmValue.FromInteger(len);
@@ -2705,8 +2719,6 @@ public static class FunctionLibrary
     private static XdmValue ForEach_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[1];
-        if (!func.IsFunction && !func.IsMap && !func.IsArray && !func.IsUndefined)
-            throw new InvalidOperationException("XPTY0004");
         var result = new List<XdmValue>();
         foreach (var item in AsSequence(args[0]))
         {
@@ -2718,8 +2730,6 @@ public static class FunctionLibrary
     private static XdmValue Filter_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[1];
-        if (!func.IsFunction && !func.IsMap && !func.IsArray && !func.IsUndefined)
-            throw new InvalidOperationException("XPTY0004");
         var result = new List<XdmValue>();
         foreach (var item in AsSequence(args[0]))
         {
@@ -2756,8 +2766,6 @@ public static class FunctionLibrary
     private static XdmValue ForEachPair_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[2];
-        if (!func.IsFunction && !func.IsMap && !func.IsArray && !func.IsUndefined)
-            throw new InvalidOperationException("XPTY0004");
         var seq1 = AsSequence(args[0]).ToList();
         var seq2 = AsSequence(args[1]).ToList();
         var result = new List<XdmValue>();
@@ -2801,28 +2809,11 @@ public static class FunctionLibrary
     }
 
     private static int CompareSortKeys(XdmValue a, XdmValue b)
-    {
-        // Numeric comparison first
-        bool aIsNumeric = a.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
-        bool bIsNumeric = b.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
-        if (aIsNumeric && bIsNumeric)
-        {
-            double da = a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.DoubleValue;
-            double db = b.Kind == XdmValueKind.Integer ? b.IntegerValue : b.DoubleValue;
-            return da.CompareTo(db);
-        }
-        // String fallback
-        return string.Compare(AtomizedString(a), AtomizedString(b), StringComparison.Ordinal);
-    }
+        => XdmValueComparer.Instance.Compare(a, b);
 
     private static XdmValue Innermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var nodes = AsSequence(args[0]).Select(v =>
-        {
-            if (!v.IsNode && !v.IsUndefined)
-                throw new InvalidOperationException("XPTY0004");
-            return v;
-        }).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
         var result = new List<XdmValue>();
         foreach (var node in nodes)
         {
@@ -2845,12 +2836,7 @@ public static class FunctionLibrary
 
     private static XdmValue Outermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var nodes = AsSequence(args[0]).Select(v =>
-        {
-            if (!v.IsNode && !v.IsUndefined)
-                throw new InvalidOperationException("XPTY0004");
-            return v;
-        }).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
         var result = new List<XdmValue>();
         foreach (var node in nodes)
         {
@@ -3015,8 +3001,6 @@ public static class FunctionLibrary
     private static XdmValue Apply(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[0];
-        if (!func.IsFunction && !func.IsMap && !func.IsArray && !func.IsUndefined)
-            throw new InvalidOperationException("XPTY0004");
         var array = args[1].ArrayValue;
         var callArgs = new XdmValue[array.Count];
         for (int i = 0; i < array.Count; i++)
@@ -3127,12 +3111,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue HasChildren_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-    {
-        var item = ctx.ContextItem;
-        if (item.IsUndefined)
-            throw new InvalidOperationException("XPDY0002");
-        return HasChildren(item);
-    }
+        => HasChildren(ctx.ContextItem);
 
     private static XdmValue HasChildren_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => HasChildren(args[0]);
@@ -3151,11 +3130,37 @@ public static class FunctionLibrary
         return XdmValue.False;
     }
 
+    private static XdmValue Path_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        return Path_1(ctx, new[] { item });
+    }
+
     private static XdmValue Path_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var value = args[0];
-        if (value.IsUndefined)
+        if (value.IsUndefined || IsEmptySequence(value))
             return XdmValue.Undefined;
+
+        // Unwrap singleton sequences
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            if (value.SequenceValue.TryGetLength(out var len))
+            {
+                if (len == 0)
+                    return XdmValue.Undefined;
+                if (len > 1)
+                    throw new InvalidOperationException("XPTY0004");
+            }
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                value = item;
+                break;
+            }
+        }
+
         if (!value.IsNode)
             throw new InvalidOperationException("XPTY0004");
         return XdmValue.FromString(GetPath(value.NodeValue));
@@ -3173,11 +3178,15 @@ public static class FunctionLibrary
             string seg = current.NodeKind switch
             {
                 XdmNodeKind.Element => $"Q{{{current.NamespaceUri}}}{current.LocalName}[{GetSiblingIndex(current)}]",
-                XdmNodeKind.Attribute => $"@{current.LocalName}",
+                XdmNodeKind.Attribute => string.IsNullOrEmpty(current.NamespaceUri)
+                ? $"@{current.LocalName}"
+                : $"@Q{{{current.NamespaceUri}}}{current.LocalName}",
                 XdmNodeKind.Text => "text()[1]",
                 XdmNodeKind.Comment => "comment()[1]",
                 XdmNodeKind.ProcessingInstruction => $"processing-instruction({current.LocalName})[1]",
-                XdmNodeKind.Namespace => $"namespace::{current.LocalName}",
+                XdmNodeKind.Namespace => string.IsNullOrEmpty(current.LocalName)
+                ? "namespace::*[Q{http://www.w3.org/2005/xpath-functions}local-name()=\"\"]"
+                : $"namespace::{current.LocalName}",
                 _ => $"node()[{GetSiblingIndex(current)}]"
             };
             segments.Add(seg);
@@ -3200,10 +3209,21 @@ public static class FunctionLibrary
         var parent = penum.Current.NodeValue;
         foreach (var sibling in parent.Axis(XdmAxis.Child))
         {
-            if (sibling.NodeValue == node)
+            if (sibling.NodeValue.IsSameNode(node))
                 return index;
             if (sibling.NodeValue.NodeKind == node.NodeKind)
-                index++;
+            {
+                if (node.NodeKind == XdmNodeKind.Element)
+                {
+                    if (sibling.NodeValue.NamespaceUri == node.NamespaceUri &&
+                        sibling.NodeValue.LocalName == node.LocalName)
+                        index++;
+                }
+                else
+                {
+                    index++;
+                }
+            }
         }
         return index;
     }
@@ -4440,27 +4460,113 @@ public static class FunctionLibrary
 
     private static XdmValue Subsequence_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var items = Materialize(args[0]);
-        double startD = ToDoubleValue(args[1]);
+        double startD = ToDoubleValueStrict(args[1]);
         if (double.IsNaN(startD)) return XdmValue.Undefined;
-        int start = (int)Math.Round(startD);
-        if (start < 1) start = 1;
-        if (start > items.Count) return XdmValue.Undefined;
-        return XdmValue.FromSequence(MaterializedSequence.FromList(items.Skip(start - 1).ToList()));
+        double startRounded = Math.Floor(startD + 0.5);
+        if (double.IsPositiveInfinity(startRounded)) return XdmValue.Undefined;
+
+        // Fast path for lazy integer ranges
+        if (args[0].IsSequence && args[0].SequenceValue is IntegerRangeSequence range)
+        {
+            long newFrom;
+            if (double.IsNegativeInfinity(startRounded) || startRounded <= 1.0)
+            {
+                newFrom = range.From;
+            }
+            else
+            {
+                double offset = startRounded - 1.0;
+                if (offset >= (double)long.MaxValue)
+                    return XdmValue.Undefined;
+                long offsetL = (long)offset;
+                if (offsetL > 0 && range.From > long.MaxValue - offsetL)
+                    return XdmValue.Undefined;
+                newFrom = range.From + offsetL;
+                if (newFrom > range.To)
+                    return XdmValue.Undefined;
+            }
+            return XdmValue.FromSequence(XdmSequence.FromSource(new IntegerRangeSequence(newFrom, range.To)));
+        }
+
+        var seq = AsSequence(args[0]);
+        var result = new List<XdmValue>();
+        long pos = 1;
+        foreach (var item in seq)
+        {
+            if (pos >= startRounded)
+                result.Add(item);
+            pos++;
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     private static XdmValue Subsequence_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var items = Materialize(args[0]);
-        double startD = ToDoubleValue(args[1]);
-        double lenD = ToDoubleValue(args[2]);
+        double startD = ToDoubleValueStrict(args[1]);
+        double lenD = ToDoubleValueStrict(args[2]);
         if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.Undefined;
-        int start = (int)Math.Round(startD);
-        int len = (int)Math.Round(lenD);
-        if (start < 1) start = 1;
-        if (start > items.Count || len <= 0) return XdmValue.Undefined;
-        int count = Math.Min(len, items.Count - start + 1);
-        return XdmValue.FromSequence(MaterializedSequence.FromList(items.Skip(start - 1).Take(count).ToList()));
+        double startRounded = Math.Floor(startD + 0.5);
+        double lenRounded = Math.Floor(lenD + 0.5);
+        double end = startRounded + lenRounded;
+        if (double.IsNaN(end)) return XdmValue.Undefined;
+        if (double.IsPositiveInfinity(startRounded)) return XdmValue.Undefined;
+        if (!double.IsPositiveInfinity(end) && end <= 1.0) return XdmValue.Undefined;
+
+        // Fast path for lazy integer ranges
+        if (args[0].IsSequence && args[0].SequenceValue is IntegerRangeSequence range)
+        {
+            long newFrom;
+            if (double.IsNegativeInfinity(startRounded) || startRounded <= 1.0)
+            {
+                newFrom = range.From;
+            }
+            else
+            {
+                double offset = startRounded - 1.0;
+                if (offset >= (double)long.MaxValue)
+                    return XdmValue.Undefined;
+                long offsetL = (long)offset;
+                if (offsetL > 0 && range.From > long.MaxValue - offsetL)
+                    return XdmValue.Undefined;
+                newFrom = range.From + offsetL;
+            }
+
+            long newTo;
+            if (double.IsPositiveInfinity(end))
+            {
+                newTo = range.To;
+            }
+            else
+            {
+                // end is finite and > 1 (guarded above)
+                double newToD = (double)range.From + end - 2.0;
+                if (newToD >= (double)long.MaxValue)
+                {
+                    newTo = range.To;
+                }
+                else
+                {
+                    newTo = (long)newToD;
+                    if (newTo > range.To)
+                        newTo = range.To;
+                }
+            }
+
+            if (newFrom > newTo)
+                return XdmValue.Undefined;
+            return XdmValue.FromSequence(XdmSequence.FromSource(new IntegerRangeSequence(newFrom, newTo)));
+        }
+
+        var seq = AsSequence(args[0]);
+        var result = new List<XdmValue>();
+        long pos = 1;
+        foreach (var item in seq)
+        {
+            if (pos >= startRounded && pos < end)
+                result.Add(item);
+            pos++;
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     private static XdmValue DistinctValues_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5090,6 +5196,22 @@ public static class FunctionLibrary
         };
     }
 
+    private static double ToDoubleValueStrict(XdmValue value)
+    {
+        value = AtomizeValue(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (double)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
+            XdmValueKind.String when value.SchemaTypeName?.Equals("untypedAtomic", StringComparison.OrdinalIgnoreCase) == true =>
+                double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d)
+                    ? d
+                    : throw new InvalidOperationException("FORG0001"),
+            _ => throw new InvalidOperationException("XPTY0004")
+        };
+    }
+
     private static decimal ToDecimalValue(XdmValue value)
     {
         value = AtomizeValue(value);
@@ -5334,11 +5456,11 @@ public static class FunctionLibrary
             {
                 XdmValueKind.Integer => arg,
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.ToEven) / factor)),
+                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.AwayFromZero) / factor)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor),
+                    XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor)),
+                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
         }
@@ -5348,13 +5470,13 @@ public static class FunctionLibrary
             return arg.Kind switch
             {
                 XdmValueKind.Integer =>
-                    XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.ToEven) * factor)),
+                    XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.AwayFromZero) * factor)),
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.ToEven) * factor)),
+                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.AwayFromZero) * factor)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor),
+                    XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor)),
+                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
         }
@@ -5378,7 +5500,7 @@ public static class FunctionLibrary
             {
                 XdmValueKind.Integer => arg,
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.ToEven) / factor)),
+                    XdmValue.FromDecimal(Math.Round(arg.DecimalValue * (decimal)factor, MidpointRounding.ToEven) / (decimal)factor),
                 XdmValueKind.Double =>
                     XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor),
                 XdmValueKind.Float =>
@@ -5394,7 +5516,7 @@ public static class FunctionLibrary
                 XdmValueKind.Integer =>
                     XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.ToEven) * factor)),
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.ToEven) * factor)),
+                    XdmValue.FromDecimal(Math.Round(arg.DecimalValue / (decimal)factor, MidpointRounding.ToEven) * (decimal)factor),
                 XdmValueKind.Double =>
                     XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor),
                 XdmValueKind.Float =>
@@ -5426,87 +5548,40 @@ public static class FunctionLibrary
         return null;
     }
 
-    /// <summary>
-    /// Extracts a single item from a sequence argument, validating cardinality for function parameters.
-    /// Returns Undefined for an empty sequence. Throws XPTY0004 for sequences with more than one item.
-    /// </summary>
-    private static XdmValue ExtractSingleItem(XdmValue arg)
-    {
-        if (arg.IsSequence)
-        {
-            XdmValue? first = null;
-            int count = 0;
-            foreach (var x in XdmSequence.FromSource(arg.SequenceValue!))
-            {
-                first = x;
-                count++;
-                if (count > 1) break;
-            }
-            if (count == 0) return XdmValue.Undefined;
-            if (count > 1) throw new InvalidOperationException("XPTY0004");
-            return first!.Value;
-        }
-        return arg;
-    }
-
     private static XdmValue LocalName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
-        if (item.IsUndefined)
-            throw new InvalidOperationException("XPDY0002");
-        if (!item.IsNode)
-            throw new InvalidOperationException("XPTY0004");
-        return XdmValue.FromString(item.NodeValue.LocalName);
+        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
+        return XdmValue.FromString(node?.LocalName ?? string.Empty);
     }
 
     private static XdmValue LocalName_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var arg = ExtractSingleItem(args[0]);
-        if (arg.IsUndefined)
-            return XdmValue.FromString(string.Empty);
-        if (!arg.IsNode)
-            throw new InvalidOperationException("XPTY0004");
-        return XdmValue.FromString(arg.NodeValue.LocalName);
+        var node = GetNodeFromValue(args[0]);
+        return XdmValue.FromString(node?.LocalName ?? string.Empty);
     }
 
     private static XdmValue NamespaceUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
-        if (item.IsUndefined)
-            throw new InvalidOperationException("XPDY0002");
-        if (!item.IsNode)
-            throw new InvalidOperationException("XPTY0004");
-        return XdmValue.FromString(item.NodeValue.NamespaceUri);
+        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
+        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty);
     }
 
     private static XdmValue NamespaceUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var arg = ExtractSingleItem(args[0]);
-        if (arg.IsUndefined)
-            return XdmValue.FromString(string.Empty);
-        if (!arg.IsNode)
-            throw new InvalidOperationException("XPTY0004");
-        return XdmValue.FromString(arg.NodeValue.NamespaceUri);
+        var node = GetNodeFromValue(args[0]);
+        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty);
     }
 
     private static XdmValue Name_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
-        if (item.IsUndefined)
-            throw new InvalidOperationException("XPDY0002");
-        if (!item.IsNode)
-            throw new InvalidOperationException("XPTY0004");
-        return XdmValue.FromString(GetQualifiedName(item.NodeValue));
+        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
+        return XdmValue.FromString(GetQualifiedName(node));
     }
 
     private static XdmValue Name_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var arg = ExtractSingleItem(args[0]);
-        if (arg.IsUndefined)
-            return XdmValue.FromString(string.Empty);
-        if (!arg.IsNode)
-            throw new InvalidOperationException("XPTY0004");
-        return XdmValue.FromString(GetQualifiedName(arg.NodeValue));
+        var node = GetNodeFromValue(args[0]);
+        return XdmValue.FromString(GetQualifiedName(node));
     }
 
     private static string GetQualifiedName(IXdmNode? node)
@@ -5540,7 +5615,7 @@ public static class FunctionLibrary
             string? langAttr = null;
             foreach (var attr in current.Attributes("lang", "http://www.w3.org/XML/1998/namespace"))
             {
-                langAttr = attr.StringValue;
+                langAttr = attr.ToString();
                 break;
             }
             if (langAttr is not null)
@@ -5569,43 +5644,336 @@ public static class FunctionLibrary
 
     private static XdmValue ParseIetfDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string input = AtomizedString(args[0]);
-        if (string.IsNullOrWhiteSpace(input))
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
             return XdmValue.Undefined;
 
-        // Try common IETF / RFC 822 / RFC 1123 formats
-        string[] formats =
-        [
-            "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
-            "ddd, dd MMM yyyy HH:mm:ss zzz",
-            "ddd, dd MMM yyyy HH:mm:ss",
-            "dd MMM yyyy HH:mm:ss 'GMT'",
-            "dd MMM yyyy HH:mm:ss zzz",
-            "dd MMM yyyy HH:mm:ss",
-            "yyyy-MM-ddTHH:mm:sszzz",
-            "yyyy-MM-ddTHH:mm:ssZ",
-            "yyyy-MM-ddTHH:mm:ss",
-        ];
+        string input = AtomizedString(args[0]);
+        if (string.IsNullOrEmpty(input))
+            throw new InvalidOperationException("FORG0010: Invalid IETF date");
 
-        foreach (var fmt in formats)
+        if (TryParseIetfDateCore(input.Trim(), out var result))
+            return XdmValue.FromDateTime(result);
+
+        throw new InvalidOperationException("FORG0010: Invalid IETF date");
+    }
+
+    private static bool TryParseIetfDateCore(string input, out DateTimeOffset result)
+    {
+        result = default;
+        if (input.Length == 0) return false;
+
+        // Reject ISO 8601 format (starts with yyyy-MM-ddT)
+        if (input.Length >= 10 && input[4] == '-' && input[7] == '-' && input[10] == 'T')
+            return false;
+
+        int pos = 0;
+
+        // Optional day name: Mon, Monday, Tue, Tuesday, etc.
+        var dayNameMatch = Regex.Match(input, @"^(?:Mon(?:day)?|Tue(?:sday)?|Wed(?:nesday)?|Thu(?:rsday)?|Fri(?:day)?|Sat(?:urday)?|Sun(?:day)?)(?:\s+|,\s+)", RegexOptions.IgnoreCase);
+        if (dayNameMatch.Success)
         {
-            if (DateTimeOffset.TryParseExact(input, fmt, System.Globalization.CultureInfo.InvariantCulture,
-                System.Globalization.DateTimeStyles.AllowWhiteSpaces | System.Globalization.DateTimeStyles.AssumeUniversal,
-                out var dto))
+            pos = dayNameMatch.Length;
+        }
+
+        string rest = input.Substring(pos);
+
+        // Find time pattern: H+:MM with optional :SS and .fraction
+        var timeMatch = Regex.Match(rest, @"(\d{1,2}):(\d{2})(?::(\d{2})(?:\.(\d+))?)?");
+        if (!timeMatch.Success) return false;
+
+        string beforeTime = rest.Substring(0, timeMatch.Index).TrimEnd();
+        string afterTime = rest.Substring(timeMatch.Index + timeMatch.Length).TrimStart();
+
+        int hour = int.Parse(timeMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+        int minute = int.Parse(timeMatch.Groups[2].Value, CultureInfo.InvariantCulture);
+        int second = timeMatch.Groups[3].Success ? int.Parse(timeMatch.Groups[3].Value, CultureInfo.InvariantCulture) : 0;
+        int ms = 0;
+        if (timeMatch.Groups[4].Success)
+        {
+            string frac = timeMatch.Groups[4].Value;
+            if (frac.Length > 3) frac = frac.Substring(0, 3);
+            else if (frac.Length < 3) frac = frac.PadRight(3, '0');
+            ms = int.Parse(frac, CultureInfo.InvariantCulture);
+        }
+
+        // Parse date from beforeTime
+        int day = 0, month = 0, year = 0;
+        bool needYearFromAfter = false;
+
+        if (!TryParseDatePart(beforeTime, out day, out month, out year, out needYearFromAfter))
+            return false;
+
+        // Parse timezone and year from afterTime
+        TimeSpan offset = TimeSpan.Zero;
+        bool hasTz = false;
+
+        // Timezone name in parentheses must come immediately after offset
+        if (!string.IsNullOrEmpty(afterTime))
+        {
+            if (TryParseTimezone(ref afterTime, out offset, out string? parenName))
             {
-                return XdmValue.FromDateTime(dto);
+                hasTz = true;
+                if (parenName is not null && !IsValidTzName(parenName))
+                    return false;
+            }
+            else if (afterTime.TrimStart().StartsWith("("))
+            {
+                // Parenthesized name without preceding offset is an error
+                return false;
             }
         }
 
-        // Fallback to general parsing
-        if (DateTimeOffset.TryParse(input, System.Globalization.CultureInfo.InvariantCulture,
-            System.Globalization.DateTimeStyles.AllowWhiteSpaces | System.Globalization.DateTimeStyles.AssumeUniversal,
-            out var dto2))
+        // Extract year from remaining afterTime if needed
+        if (!string.IsNullOrWhiteSpace(afterTime))
         {
-            return XdmValue.FromDateTime(dto2);
+            var yearMatch = Regex.Match(afterTime, @"^\s*(\d{2,4})\s*$");
+            if (yearMatch.Success)
+            {
+                string yStr = yearMatch.Groups[1].Value;
+                if (yStr.Length == 1 || yStr.Length == 3)
+                    return false; // year must be 2 or 4 digits
+                int y = int.Parse(yStr, CultureInfo.InvariantCulture);
+                if (needYearFromAfter)
+                {
+                    year = y;
+                    needYearFromAfter = false;
+                }
+                else if (y != year)
+                {
+                    return false; // conflicting year
+                }
+            }
+            else
+            {
+                return false; // unexpected trailing content
+            }
         }
 
-        throw new InvalidOperationException("FORG0010: Invalid IETF date");
+        if (needYearFromAfter) return false;
+
+        // Two-digit year → 19xx
+        if (year < 100) year += 1900;
+
+        // Handle 24:00
+        if (hour == 24 && minute == 0 && second == 0 && ms == 0)
+        {
+            hour = 0;
+            try
+            {
+                var dt24 = new DateTime(year, month, day, 0, 0, 0);
+                dt24 = dt24.AddDays(1);
+                year = dt24.Year;
+                month = dt24.Month;
+                day = dt24.Day;
+            }
+            catch { return false; }
+        }
+
+        try
+        {
+            var dt = new DateTime(year, month, day, hour, minute, second, ms);
+            result = new DateTimeOffset(dt, hasTz ? offset : TimeSpan.Zero);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static bool TryParseDatePart(string dateStr, out int day, out int month, out int year, out bool needYearFromAfter)
+    {
+        day = month = year = 0;
+        needYearFromAfter = false;
+        if (string.IsNullOrWhiteSpace(dateStr)) return false;
+
+        var tokens = Regex.Split(dateStr, @"[\s-]+").Where(s => !string.IsNullOrEmpty(s)).ToList();
+        if (tokens.Count == 0) return false;
+
+        // Handle 3-token date: dd MMM yyyy, MMM dd yyyy, dd MMM yy, MMM dd yy, etc.
+        if (tokens.Count == 3)
+        {
+            if (int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int d)
+                && TryParseMonth(tokens[1], out int m)
+                && int.TryParse(tokens[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out int y))
+            {
+                if (tokens[0].Length > 2) return false;
+                if (tokens[2].Length == 1 || tokens[2].Length == 3) return false;
+                day = d; month = m; year = y; return true;
+            }
+            if (TryParseMonth(tokens[0], out m)
+                && int.TryParse(tokens[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out d)
+                && int.TryParse(tokens[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out y))
+            {
+                if (tokens[1].Length > 2) return false;
+                if (tokens[2].Length == 1 || tokens[2].Length == 3) return false;
+                day = d; month = m; year = y; return true;
+            }
+            return false;
+        }
+
+        // Handle 2-token date: dd MMM or MMM dd (year comes after time)
+        if (tokens.Count == 2)
+        {
+            if (int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int d)
+                && TryParseMonth(tokens[1], out int m))
+            {
+                day = d; month = m; needYearFromAfter = true; return true;
+            }
+            if (TryParseMonth(tokens[0], out m)
+                && int.TryParse(tokens[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out d))
+            {
+                day = d; month = m; needYearFromAfter = true; return true;
+            }
+            return false;
+        }
+
+        return false;
+    }
+
+    private static bool TryParseMonth(string token, out int month)
+    {
+        month = token switch
+        {
+            _ when token.Equals("Jan", StringComparison.OrdinalIgnoreCase) => 1,
+            _ when token.Equals("Feb", StringComparison.OrdinalIgnoreCase) => 2,
+            _ when token.Equals("Mar", StringComparison.OrdinalIgnoreCase) => 3,
+            _ when token.Equals("Apr", StringComparison.OrdinalIgnoreCase) => 4,
+            _ when token.Equals("May", StringComparison.OrdinalIgnoreCase) => 5,
+            _ when token.Equals("Jun", StringComparison.OrdinalIgnoreCase) => 6,
+            _ when token.Equals("Jul", StringComparison.OrdinalIgnoreCase) => 7,
+            _ when token.Equals("Aug", StringComparison.OrdinalIgnoreCase) => 8,
+            _ when token.Equals("Sep", StringComparison.OrdinalIgnoreCase) => 9,
+            _ when token.Equals("Oct", StringComparison.OrdinalIgnoreCase) => 10,
+            _ when token.Equals("Nov", StringComparison.OrdinalIgnoreCase) => 11,
+            _ when token.Equals("Dec", StringComparison.OrdinalIgnoreCase) => 12,
+            _ => 0,
+        };
+        return month != 0;
+    }
+
+    private static bool TryParseTimezone(ref string str, out TimeSpan offset, out string? parenName)
+    {
+        offset = TimeSpan.Zero;
+        parenName = null;
+        str = str.TrimStart();
+        if (string.IsNullOrEmpty(str)) return false;
+
+        // Named timezone: must not be followed by a word character
+        var namedMatch = Regex.Match(str, @"^(UT|UTC|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT)(?!\w)", RegexOptions.IgnoreCase);
+        if (namedMatch.Success)
+        {
+            string name = namedMatch.Groups[1].Value.ToUpperInvariant();
+            offset = name switch
+            {
+                "UT" or "UTC" or "GMT" => TimeSpan.Zero,
+                "EST" => TimeSpan.FromHours(-5),
+                "EDT" => TimeSpan.FromHours(-4),
+                "CST" => TimeSpan.FromHours(-6),
+                "CDT" => TimeSpan.FromHours(-5),
+                "MST" => TimeSpan.FromHours(-7),
+                "MDT" => TimeSpan.FromHours(-6),
+                "PST" => TimeSpan.FromHours(-8),
+                "PDT" => TimeSpan.FromHours(-7),
+                _ => TimeSpan.Zero,
+            };
+            str = str.Substring(namedMatch.Length);
+        }
+        else if (TryParseOffsetWithColon(str, out offset, out int colonLen))
+        {
+            str = str.Substring(colonLen);
+        }
+        else if (TryParseOffsetNoColon(str, out offset, out int noColonLen))
+        {
+            str = str.Substring(noColonLen);
+        }
+        else
+        {
+            return false;
+        }
+
+        // Check for optional timezone name in parentheses after offset
+        str = str.TrimStart();
+        if (str.StartsWith("("))
+        {
+            int closeIdx = str.IndexOf(')');
+            if (closeIdx < 0) { offset = TimeSpan.Zero; return false; }
+            parenName = str.Substring(1, closeIdx - 1).Trim();
+            if (string.IsNullOrEmpty(parenName)) { offset = TimeSpan.Zero; return false; }
+            str = str.Substring(closeIdx + 1);
+        }
+
+        return true;
+    }
+
+    private static bool TryParseOffsetWithColon(string str, out TimeSpan offset, out int length)
+    {
+        offset = TimeSpan.Zero;
+        length = 0;
+        var match = Regex.Match(str, @"^([+-]\d{1,2}:\d{0,2})(?!\d)");
+        if (!match.Success) return false;
+
+        string tz = match.Groups[1].Value;
+        var parts = tz.Split(':');
+        if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int h))
+            return false;
+
+        int m = 0;
+        if (parts.Length > 1 && !string.IsNullOrEmpty(parts[1]))
+        {
+            if (parts[1].Length != 2) return false; // minutes must be 2 digits
+            if (!int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out m))
+                return false;
+        }
+
+        if (Math.Abs(h) > 14 || Math.Abs(m) >= 60) return false;
+        offset = new TimeSpan(h, m, 0);
+        length = match.Length;
+        return true;
+    }
+
+    private static bool TryParseOffsetNoColon(string str, out TimeSpan offset, out int length)
+    {
+        offset = TimeSpan.Zero;
+        length = 0;
+        var match = Regex.Match(str, @"^([+-]\d{1,4})\b");
+        if (!match.Success) return false;
+
+        string tz = match.Groups[1].Value;
+        int sign = tz[0] == '-' ? -1 : 1;
+        string num = tz.Substring(1);
+        int h, m;
+
+        switch (num.Length)
+        {
+            case 1: h = num[0] - '0'; m = 0; break;
+            case 2: h = int.Parse(num, CultureInfo.InvariantCulture); m = 0; break;
+            case 3: h = num[0] - '0'; m = int.Parse(num.Substring(1), CultureInfo.InvariantCulture); break;
+            case 4: h = int.Parse(num.Substring(0, 2), CultureInfo.InvariantCulture); m = int.Parse(num.Substring(2), CultureInfo.InvariantCulture); break;
+            default: return false;
+        }
+
+        h = sign * h;
+        m = sign * m;
+        if (Math.Abs(h) > 14 || Math.Abs(m) >= 60) return false;
+        offset = new TimeSpan(h, m, 0);
+        length = match.Length;
+        return true;
+    }
+
+    private static bool IsValidTzName(string name)
+    {
+        return name.Equals("UT", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("UTC", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("GMT", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("EST", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("EDT", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("CST", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("CDT", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("MST", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("MDT", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("PST", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("PDT", StringComparison.OrdinalIgnoreCase);
     }
 
     private static XdmValue FormatInteger_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5958,21 +6326,15 @@ public static class FunctionLibrary
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
-        if (item.IsUndefined)
-            throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
-            throw new InvalidOperationException("XPTY0004");
+            return XdmValue.Undefined;
         return NodeToQName(item.NodeValue);
     }
 
     private static XdmValue NodeName_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var arg = ExtractSingleItem(args[0]);
-        if (arg.IsUndefined)
-            return XdmValue.Undefined;
-        if (!arg.IsNode)
-            throw new InvalidOperationException("XPTY0004");
-        return NodeToQName(arg.NodeValue);
+        var node = GetNodeFromValue(args[0]);
+        return node is null ? XdmValue.Undefined : NodeToQName(node);
     }
 
     private static XdmValue NodeToQName(IXdmNode node)
@@ -6509,6 +6871,18 @@ public static class FunctionLibrary
         if (a.Kind != b.Kind)
             return false;
 
+        // Duration equality: normalize to total months and total seconds
+        if (a.Kind == XdmValueKind.Duration)
+        {
+            var (aYears, aMonths, aDays, aHours, aMinutes, aSeconds) = ParseDuration(a.DurationValue);
+            var (bYears, bMonths, bDays, bHours, bMinutes, bSeconds) = ParseDuration(b.DurationValue);
+            long aTotalMonths = aYears * 12 + aMonths;
+            long bTotalMonths = bYears * 12 + bMonths;
+            decimal aTotalSeconds = aDays * 86400m + aHours * 3600m + aMinutes * 60m + aSeconds;
+            decimal bTotalSeconds = bDays * 86400m + bHours * 3600m + bMinutes * 60m + bSeconds;
+            return aTotalMonths == bTotalMonths && aTotalSeconds == bTotalSeconds;
+        }
+
         return a.Kind switch
         {
             XdmValueKind.Undefined => true,
@@ -6634,21 +7008,15 @@ public static class FunctionLibrary
     private static XdmValue GenerateId_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
-        if (item.IsUndefined)
-            return XdmValue.FromString(string.Empty);
         if (!item.IsNode)
-            throw new InvalidOperationException("XPTY0004");
+            return XdmValue.FromString(string.Empty);
         return XdmValue.FromString(GetNodeId(item.NodeValue));
     }
 
     private static XdmValue GenerateId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var arg = ExtractSingleItem(args[0]);
-        if (arg.IsUndefined)
-            return XdmValue.FromString(string.Empty);
-        if (!arg.IsNode)
-            throw new InvalidOperationException("XPTY0004");
-        return XdmValue.FromString(GetNodeId(arg.NodeValue));
+        var node = GetNodeFromValue(args[0]);
+        return XdmValue.FromString(node is null ? string.Empty : GetNodeId(node));
     }
 
     private static string GetNodeId(IXdmNode node)

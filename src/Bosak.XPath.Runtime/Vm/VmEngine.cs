@@ -21,6 +21,8 @@
 //                      | Charles Korthout | 0.8   | 21-05-2026     | MapAdd uses XdmValue keys with numeric promotion; fixed xs:boolean string cast         |
 //                      | Charles Korthout | 0.9   | 22-05-2026     | ItemInstanceOf recognizes duration, dayTimeDuration, yearMonthDuration                 |
 //                      | Charles Korthout | 1.0   | 23-05-2026     | Added TryCast support for many xs: types, duration normalization, boolean→numeric       |
+//                      | Charles Korthout | 1.1   | 24-05-2026     | Range opcode uses lazy IntegerRangeSequence to avoid OOM on huge ranges                 |
+//                      | Charles Korthout | 1.2   | 24-05-2026     | Added date/time value comparison type checking (XPTY0004 for cross-subtype)            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -303,10 +305,14 @@ public static class VmEngine
                         }
                         long from = ToInteger(left);
                         long to = ToInteger(right);
-                        var items = new List<XdmValue>();
-                        for (long v = from; v <= to; v++)
-                            items.Add(XdmValue.FromInteger(v));
-                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(items));
+                        if (from > to)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
+                            ip++;
+                            break;
+                        }
+                        registers[instr.RegisterA] = XdmValue.FromSequence(
+                            XdmSequence.FromSource(new IntegerRangeSequence(from, to)));
                         ip++;
                         break;
                     }
@@ -1824,6 +1830,25 @@ public static class VmEngine
     }
 
     /// <summary>
+    /// Returns true if the value is a node or a singleton sequence containing a node.
+    /// Used to determine whether atomization produces an untyped atomic value.
+    /// </summary>
+    private static bool IsNodeOrigin(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return false;
+        if (value.IsNode)
+            return true;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var items = MaterializeSequence(value);
+            if (items.Length == 1)
+                return IsNodeOrigin(items[0]);
+        }
+        return false;
+    }
+
+    /// <summary>
     /// Removes duplicate nodes and sorts the remaining nodes into document order.
     /// Non-node items are preserved in their original relative order after all nodes.
     /// </summary>
@@ -2137,6 +2162,64 @@ public static class VmEngine
         return s.StartsWith('P') && (s.Contains('D') || s.Contains('T'));
     }
 
+    private enum DurationSubtype { YearMonthDuration, DayTimeDuration, Duration }
+
+    private static DurationSubtype GetDurationSubtype(string s)
+    {
+        var m = DurationPartsRegex.Match(s);
+        if (!m.Success) return DurationSubtype.Duration;
+        bool hasYm = m.Groups["Y"].Success || m.Groups["M"].Success;
+        bool hasDt = m.Groups["D"].Success || m.Groups["T"].Success;
+        if (hasYm && !hasDt) return DurationSubtype.YearMonthDuration;
+        if (!hasYm && hasDt) return DurationSubtype.DayTimeDuration;
+        return DurationSubtype.Duration;
+    }
+
+    private static string? GetDateTimeSubtype(XdmValue value)
+    {
+        return value.Kind switch
+        {
+            XdmValueKind.DateTime => "dateTime",
+            XdmValueKind.Date => "date",
+            XdmValueKind.Time => "time",
+            XdmValueKind.String => value.SchemaTypeName?.ToLowerInvariant() switch
+            {
+                "gyear" => "gYear",
+                "gyearmonth" => "gYearMonth",
+                "gmonth" => "gMonth",
+                "gmonthday" => "gMonthDay",
+                "gday" => "gDay",
+                _ => null
+            },
+            _ => null
+        };
+    }
+
+    private static (long TotalMonths, decimal TotalSeconds) NormalizeDuration(string s)
+    {
+        var m = DurationPartsRegex.Match(s);
+        if (!m.Success) return (0, 0);
+        bool negative = m.Groups["sign"].Value == "-";
+
+        long years = m.Groups["Y"].Success ? long.Parse(m.Groups["Y"].Value.TrimEnd('Y'), CultureInfo.InvariantCulture) : 0;
+        long months = m.Groups["M"].Success ? long.Parse(m.Groups["M"].Value.TrimEnd('M'), CultureInfo.InvariantCulture) : 0;
+        long days = m.Groups["D"].Success ? long.Parse(m.Groups["D"].Value.TrimEnd('D'), CultureInfo.InvariantCulture) : 0;
+        long hours = m.Groups["H"].Success ? long.Parse(m.Groups["H"].Value.TrimEnd('H'), CultureInfo.InvariantCulture) : 0;
+        long minutes = m.Groups["Tm"].Success ? long.Parse(m.Groups["Tm"].Value.TrimEnd('M'), CultureInfo.InvariantCulture) : 0;
+        decimal seconds = m.Groups["S"].Success ? decimal.Parse(m.Groups["S"].Value.TrimEnd('S'), CultureInfo.InvariantCulture) : 0;
+
+        long totalMonths = years * 12 + months;
+        decimal totalSeconds = days * 86400m + hours * 3600m + minutes * 60m + seconds;
+
+        if (negative)
+        {
+            totalMonths = -totalMonths;
+            totalSeconds = -totalSeconds;
+        }
+
+        return (totalMonths, totalSeconds);
+    }
+
     private static XdmValue AddDurations(XdmValue left, XdmValue right)
     {
         var l = left.DurationValue;
@@ -2344,8 +2427,11 @@ public static class VmEngine
     // Comparisons
     // ------------------------------------------------------------------
 
-    private static bool Compare(IrOpCode op, XdmValue left, XdmValue right)
+    private static bool Compare(IrOpCode op, XdmValue left, XdmValue right, bool strict = true)
     {
+        bool leftFromNode = IsNodeOrigin(left);
+        bool rightFromNode = IsNodeOrigin(right);
+
         left = Atomize(left);
         right = Atomize(right);
 
@@ -2413,6 +2499,82 @@ public static class VmEngine
             };
         }
 
+        if (left.Kind == XdmValueKind.Boolean && right.Kind == XdmValueKind.Boolean)
+        {
+            bool l = left.BooleanValue;
+            bool r = right.BooleanValue;
+            return op switch
+            {
+                IrOpCode.Equal or IrOpCode.ValueEqual => l == r,
+                IrOpCode.NotEqual or IrOpCode.ValueNotEqual => l != r,
+                IrOpCode.LessThan or IrOpCode.ValueLessThan => !l && r,
+                IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => !l || r,
+                IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => l && !r,
+                IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => l || !r,
+                _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+            };
+        }
+
+        // Duration comparison: normalize to total months and total seconds
+        if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
+        {
+            var (lMonths, lSeconds) = NormalizeDuration(left.DurationValue);
+            var (rMonths, rSeconds) = NormalizeDuration(right.DurationValue);
+            var lSub = GetDurationSubtype(left.DurationValue);
+            var rSub = GetDurationSubtype(right.DurationValue);
+
+            bool isEquality = op is IrOpCode.Equal or IrOpCode.ValueEqual
+                              or IrOpCode.NotEqual or IrOpCode.ValueNotEqual;
+            if (isEquality)
+            {
+                bool eq = lMonths == rMonths && lSeconds == rSeconds;
+                return op switch
+                {
+                    IrOpCode.Equal or IrOpCode.ValueEqual => eq,
+                    IrOpCode.NotEqual or IrOpCode.ValueNotEqual => !eq,
+                    _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+                };
+            }
+
+            // Ordering is only defined when both operands are the same subtype
+            if (lSub == DurationSubtype.YearMonthDuration && rSub == DurationSubtype.YearMonthDuration)
+            {
+                int cmp = lMonths.CompareTo(rMonths);
+                return op switch
+                {
+                    IrOpCode.LessThan or IrOpCode.ValueLessThan => cmp < 0,
+                    IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => cmp <= 0,
+                    IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => cmp > 0,
+                    IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => cmp >= 0,
+                    _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+                };
+            }
+            if (lSub == DurationSubtype.DayTimeDuration && rSub == DurationSubtype.DayTimeDuration)
+            {
+                int cmp = lSeconds.CompareTo(rSeconds);
+                return op switch
+                {
+                    IrOpCode.LessThan or IrOpCode.ValueLessThan => cmp < 0,
+                    IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => cmp <= 0,
+                    IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => cmp > 0,
+                    IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => cmp >= 0,
+                    _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+                };
+            }
+
+            throw new InvalidOperationException("XPTY0004");
+        }
+
+        // Date/time comparison: only defined between operands of the same subtype
+        string? leftDateSub = GetDateTimeSubtype(left);
+        string? rightDateSub = GetDateTimeSubtype(right);
+        if (leftDateSub is not null || rightDateSub is not null)
+        {
+            if (leftDateSub is null || rightDateSub is null || leftDateSub != rightDateSub)
+                throw new InvalidOperationException("XPTY0004");
+            // Same subtype: fall through to string comparison below (sufficient for exact matches)
+        }
+
         // Atomized nodes become strings; try numeric parsing for untyped values
         string lStr = left.ToString();
         string rStr = right.ToString();
@@ -2433,6 +2595,23 @@ public static class VmEngine
             };
         }
 
+        // In strict mode, a string may only be compared with a numeric if it originated
+        // from a node (untyped atomic) or is explicitly typed as xs:untypedAtomic.
+        // Typed string literals are not comparable with numbers.
+        bool leftIsString = left.Kind == XdmValueKind.String;
+        bool rightIsString = right.Kind == XdmValueKind.String;
+        bool leftIsNumeric = IsDouble(left) || IsFloat(left) || IsDecimal(left) || left.Kind == XdmValueKind.Integer;
+        bool rightIsNumeric = IsDouble(right) || IsFloat(right) || IsDecimal(right) || right.Kind == XdmValueKind.Integer;
+
+        bool numericMismatch = (leftIsString && rightIsNumeric) || (leftIsNumeric && rightIsString);
+        if (strict && numericMismatch)
+        {
+            bool stringIsCastable = (leftIsString && (leftFromNode || left.SchemaTypeName?.Equals("untypedAtomic", StringComparison.OrdinalIgnoreCase) == true))
+                                 || (rightIsString && (rightFromNode || right.SchemaTypeName?.Equals("untypedAtomic", StringComparison.OrdinalIgnoreCase) == true));
+            if (!stringIsCastable)
+                throw new InvalidOperationException("XPTY0004");
+        }
+
         if (double.TryParse(lStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double lDbl) &&
             double.TryParse(rStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double rDbl))
         {
@@ -2446,6 +2625,12 @@ public static class VmEngine
                 IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => lDbl >= rDbl,
                 _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
             };
+        }
+
+        if (strict && numericMismatch)
+        {
+            // String came from a node but didn't parse as a number
+            throw new InvalidOperationException("XPTY0004");
         }
 
         int cmp2 = string.CompareOrdinal(lStr, rStr);
@@ -2474,12 +2659,12 @@ public static class VmEngine
             {
                 bool match = op switch
                 {
-                    IrOpCode.GeneralEqual => Compare(IrOpCode.Equal, l, r),
-                    IrOpCode.GeneralNotEqual => Compare(IrOpCode.NotEqual, l, r),
-                    IrOpCode.GeneralLessThan => Compare(IrOpCode.LessThan, l, r),
-                    IrOpCode.GeneralLessThanOrEqual => Compare(IrOpCode.LessThanOrEqual, l, r),
-                    IrOpCode.GeneralGreaterThan => Compare(IrOpCode.GreaterThan, l, r),
-                    IrOpCode.GeneralGreaterThanOrEqual => Compare(IrOpCode.GreaterThanOrEqual, l, r),
+                    IrOpCode.GeneralEqual => Compare(IrOpCode.Equal, l, r, strict: false),
+                    IrOpCode.GeneralNotEqual => Compare(IrOpCode.NotEqual, l, r, strict: false),
+                    IrOpCode.GeneralLessThan => Compare(IrOpCode.LessThan, l, r, strict: false),
+                    IrOpCode.GeneralLessThanOrEqual => Compare(IrOpCode.LessThanOrEqual, l, r, strict: false),
+                    IrOpCode.GeneralGreaterThan => Compare(IrOpCode.GreaterThan, l, r, strict: false),
+                    IrOpCode.GeneralGreaterThanOrEqual => Compare(IrOpCode.GreaterThanOrEqual, l, r, strict: false),
                     _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
                 };
 

@@ -312,11 +312,121 @@ var result2 = expr.Evaluate(document, ctx);
 
 | Phase | Deliverable | Notes |
 |-------|-------------|-------|
-| 1 | XPath 3.1 Core | Expression compiler + standard functions |
-| 2 | XQuery 3.1 | FLWOR expressions, query prolog. Reuses XPath engine entirely. |
-| 3 | XSLT 3.0 | Template matching, sequence constructor. XPath engine drives match patterns. |
+| 1 | XPath 3.1 Core | Expression compiler + standard functions ✅ |
+| 2 | XSLT 2.0 / 3.0 | Template matching, sequence constructors, `fn:transform()`. See detailed roadmap below. |
+| 3 | XQuery 3.1 | FLWOR expressions, query prolog. Reuses XPath engine entirely. |
 | 4 | Streaming | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
 | 5 | Database backends | `IXdmNode` implementations over XML databases. |
+
+---
+
+## XSLT Architecture & Roadmap
+
+XSLT is implemented as a **thin compiler/runtime layer** on top of the existing XPath stack. The XPath engine (parser, compiler, VM, XDM) handles all expression evaluation; XSLT adds stylesheet parsing, pattern compilation, template dispatch, and result-tree construction.
+
+```mermaid
+flowchart TB
+    subgraph XSLT_API["📢 XSLT Public API"]
+        XC["XsltCompiler"]
+        XE["XsltExecutable"]
+        XT["fn:transform()"]
+    end
+
+    subgraph XSLT_RT["⚡ XSLT Runtime"]
+        TE["TransformEngine"]
+        TT["TemplateTable"]
+        BRT["ResultTreeBuilder"]
+    end
+
+    subgraph XSLT_CP["🔧 XSLT Compiler"]
+        SL["StylesheetLoader<br/>(xsl:import / xsl:include)"]
+        PC["PatternCompiler"]
+        IC["InstructionCompiler"]
+    end
+
+    subgraph XPATH["Existing Bosak XPath Stack"]
+        P["Parser"]
+        C["Compiler / IR"]
+        V["VM Engine"]
+        X["XDM Core"]
+    end
+
+    XSLT_API --> XSLT_RT
+    XSLT_RT --> XSLT_CP
+    XSLT_CP --> P
+    XSLT_CP --> C
+    XSLT_RT --> V
+    XSLT_RT --> X
+```
+
+### XSLT Project Structure
+
+```
+src/
+  Bosak.XPath.Xslt/
+    Stylesheet/          Stylesheet DOM, template rule table, import/include resolution
+    Patterns/            Pattern AST, pattern compiler, match predicate generation
+    Instructions/        XSLT instruction compiler (apply-templates, for-each, value-of, etc.)
+    Runtime/             Transform engine, result-tree builder, built-in template rules
+    Api/                 XsltCompiler, XsltExecutable, public surface
+```
+
+### XSLT Implementation Phases
+
+#### Phase 1 — EDI Conversion Core (XSLT 2.0 subset)
+**Goal:** Unblock Customer A EDI transforms (Canonical XML ↔ BOD).
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| `xsl:stylesheet` / `xsl:transform` | 🎯 Phase 1 | Root element parsing |
+| `xsl:template` with `match` | 🎯 Phase 1 | Pattern compilation for element names, wildcards, predicates, union |
+| `xsl:template` with `name` | 🎯 Phase 1 | Named template invocation |
+| `xsl:apply-templates` | 🎯 Phase 1 | Default mode, `select` attribute |
+| `xsl:call-template` | 🎯 Phase 1 | Named template calls with `xsl:with-param` |
+| `xsl:value-of` | 🎯 Phase 1 | Text node construction |
+| `xsl:copy-of` | 🎯 Phase 1 | Deep copy to result tree |
+| `xsl:for-each` | 🎯 Phase 1 | Iteration over sequence |
+| `xsl:if` / `xsl:choose` | 🎯 Phase 1 | Conditional logic |
+| `xsl:variable` / `xsl:param` | 🎯 Phase 1 | Scoped variables and parameters |
+| `xsl:element` / `xsl:attribute` | 🎯 Phase 1 | Dynamic element/attribute construction |
+| `xsl:text` | 🎯 Phase 1 | Literal text output |
+| Built-in template rules | 🎯 Phase 1 | Default handling for text, attributes, elements |
+| `xsl:import` / `xsl:include` | 🎯 Phase 1 | **Required for Customer A:** modular stylesheets, shared function libraries |
+| `xsl:output` | 🎯 Phase 1 | Serialization method, encoding, indentation |
+| `xsl:sort` | 🔮 Phase 2 | Sorting within `xsl:apply-templates` / `xsl:for-each` |
+| `xsl:number` | 🔮 Phase 2 | Number formatting |
+| `xsl:key` / `key()` | 🔮 Phase 2 | Indexed lookup |
+| Modes (named) | 🔮 Phase 2 | `mode="foo"`, `xsl:apply-templates mode` |
+| `xsl:function` | 🔮 Phase 2 | User-defined XPath functions in XSLT |
+| `fn:transform()` | 🔮 Phase 3 | XPath function invoking XSLT from expressions |
+| XSLT 3.0 packages | 🔮 Phase 3 | `xsl:package`, `xsl:use-package` |
+| Streaming | 🔮 Phase 3 | `streamable="yes"` ( skeletal support only) |
+
+#### Pattern Compilation Strategy
+
+XSLT **patterns** (`match` attributes) are *not* XPath expressions. They use a restricted syntax:
+- `foo` → matches element `foo` (child axis implied)
+- `*` → matches any element
+- `@*` → matches any attribute
+- `foo[bar]` → matches `foo` with a `bar` child
+- `a | b` → union of two patterns
+
+The PatternCompiler transforms patterns into **XPath predicates** evaluated against the current node. For example:
+- `match="foo"` → compile to `self::foo` predicate
+- `match="foo[bar]"` → compile to `self::foo[child::bar]` predicate
+- Union patterns compile to a disjunction of predicates
+
+This lets us reuse the existing XPath compiler and VM for pattern matching.
+
+#### Instruction Compilation Strategy
+
+XSLT instructions compile to a **higher-level IR** that the Transform Engine interprets:
+- `xsl:apply-templates` → `ApplyTemplates(select, mode)` instruction
+- `xsl:for-each` → `ForEach(select, body)` instruction
+- `xsl:value-of` → `ValueOf(select)` instruction
+- `xsl:element` → `Element(name, namespace, body)` instruction
+
+The Transform Engine walks this instruction tree, evaluating XPath expressions via the VM and building the result tree via `ResultTreeBuilder`.
 
 ---
 
@@ -331,6 +441,7 @@ src/
   Bosak.XPath.Api/          Public API, expression compilation, navigator
   Bosak.XPath.Standard/     Standard function library (fn, math, map, array, xs)
   Bosak.XPath.Providers/    XDocument, XmlDocument, streaming adapters
+  Bosak.XPath.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
 
 tests/
   Bosak.XPath.Core.Tests/
@@ -338,6 +449,7 @@ tests/
   Bosak.XPath.Runtime.Tests/
   Bosak.XPath.Api.Tests/
   Bosak.XPath.Standard.Tests/
+  Bosak.XPath.Xslt.Tests/   XSLT transform and pattern-matching tests
 ```
 
 The published NuGet package will likely be a single `Bosak.XPath` assembly (produced via ILMerge or source consolidation) to simplify deployment, while development maintains the layered project separation.

@@ -1,0 +1,1254 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 25 mei 2026
+// PURPOSE              : Executes a compiled XSLT stylesheet against a source document.
+// SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : License.txt
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
+//                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
+//                      | Charles Korthout | 0.4   | 24-05-2026     | Added mode stack (#current, #default), XdmValueToString for value-of sequences          |
+//                      | Charles Korthout | 0.5   | 24-05-2026     | Added xsl:key / key() index building and lookup support                                 |
+//                      | Charles Korthout | 0.6   | 24-05-2026     | Added xsl:number support (single, any, multiple levels) with format-integer reuse       |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Functions;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Standard.Functions;
+
+namespace Bosak.XPath.Xslt.Runtime;
+
+/// <summary>
+/// The XSLT transform engine. Evaluates a compiled stylesheet against a source document.
+/// </summary>
+public sealed class TransformEngine
+{
+    private readonly Stylesheet.Stylesheet _stylesheet;
+    private readonly EvaluationContext _context;
+    private readonly XDocument _resultDocument;
+    private XContainer _currentContainer;
+
+    // Flattened template rules and named templates from the entire stylesheet tree
+    private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
+    private readonly Dictionary<string, Stylesheet.TemplateRule> _allNamedTemplates;
+
+    // Variable scope stack for proper lexical scoping across call-template
+    private readonly Stack<Dictionary<(string LocalName, string NamespaceUri), XdmValue?>> _varScopes = new();
+
+    // Mode stack for #current resolution
+    private readonly Stack<string> _modeStack = new();
+
+    // Key index for key() function lookups
+    private KeyIndex? _keyIndex;
+
+    /// <summary>The parsed xsl:output serialization properties.</summary>
+    public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
+
+    public TransformEngine(Stylesheet.Stylesheet stylesheet, EvaluationContext? context = null)
+    {
+        _stylesheet = stylesheet;
+        _context = context ?? new EvaluationContext();
+        FunctionLibrary.Populate(_context);
+
+        _resultDocument = new XDocument();
+        _currentContainer = _resultDocument;
+
+        _allTemplateRules = _stylesheet.GetAllTemplateRules().ToList();
+        _allNamedTemplates = _stylesheet.GetAllNamedTemplates();
+    }
+
+    /// <summary>
+    /// Executes the stylesheet transformation.
+    /// </summary>
+    public XdmValue Transform(IXdmNode source)
+    {
+        // Compile all template match patterns before execution
+        var patternCompiler = new Patterns.PatternCompiler();
+        foreach (var rule in _allTemplateRules)
+        {
+            rule.CompileMatch(patternCompiler);
+        }
+
+        // Build key index if the stylesheet defines xsl:key
+        var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
+        if (allKeyDefs.Count > 0)
+        {
+            _keyIndex = KeyIndex.Build(source, allKeyDefs, _context);
+            RegisterKeyFunction();
+        }
+
+        // Look for a template matching "/" (document root)
+        var rootTemplate = FindRootTemplate();
+        if (rootTemplate != null)
+        {
+            ExecuteTemplate(rootTemplate, source);
+        }
+        else
+        {
+            // Apply templates to the source node in default mode
+            ApplyTemplates(source, mode: "", select: null);
+        }
+
+        // Return the result document
+        return XdmValue.FromNode(new Providers.Xml.XDocumentNode(_resultDocument));
+    }
+
+    /// <summary>
+    /// Finds a template with match="/" (document root pattern).
+    /// </summary>
+    private Stylesheet.TemplateRule? FindRootTemplate()
+    {
+        foreach (var rule in _allTemplateRules)
+        {
+            if (rule.Match != null && rule.Match.Trim() == "/")
+                return rule;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Implements xsl:apply-templates: selects nodes and processes each with the best-matching template.
+    /// </summary>
+    public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null)
+    {
+        // Resolve mode aliases
+        var resolvedMode = ResolveMode(mode);
+
+        _modeStack.Push(resolvedMode);
+        try
+        {
+            // Determine the sequence to process
+            List<IXdmNode> nodes;
+            if (string.IsNullOrEmpty(select))
+            {
+                // Default: child nodes
+                nodes = EnumerateNodes(contextNode.Axis(XdmAxis.Child)).ToList();
+            }
+            else
+            {
+                // Evaluate select expression
+                var compiled = XPath31Expression.Compile(select);
+                var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
+                nodes = EnumerateNodes(result).ToList();
+            }
+
+            // Apply xsl:sort if present
+            if (sortKeys != null && sortKeys.Count > 0)
+            {
+                nodes = SortNodes(nodes, sortKeys);
+            }
+
+            foreach (var node in nodes)
+            {
+                var rule = FindBestTemplate(node, resolvedMode);
+                if (rule != null)
+                {
+                    ExecuteTemplate(rule, node);
+                }
+                else
+                {
+                    ApplyBuiltInRules(node, resolvedMode);
+                }
+            }
+        }
+        finally
+        {
+            _modeStack.Pop();
+        }
+    }
+
+    /// <summary>
+    /// Resolves mode aliases (#current, #default) to actual mode names.
+    /// </summary>
+    private string ResolveMode(string mode)
+    {
+        if (mode == "#current")
+        {
+            return _modeStack.Count > 0 ? _modeStack.Peek() : "";
+        }
+        if (mode == "#default")
+        {
+            return "";
+        }
+        return mode;
+    }
+
+    /// <summary>
+    /// Executes the body of a template rule against the current node.
+    /// </summary>
+    public void ExecuteTemplate(Stylesheet.TemplateRule rule, IXdmNode currentNode, Dictionary<string, XdmValue>? callParams = null)
+    {
+        // Update context to current node
+        _context.WithFocus(XdmValue.FromNode(currentNode), 1, 1);
+
+        // Snapshot current variables for lexical scoping
+        var snapshot = _context.SnapshotVariables();
+
+        try
+        {
+            // Process xsl:param declarations first (must be first children per spec)
+            foreach (var child in rule.Element.Elements())
+            {
+                if (child.Name.LocalName == "param" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                {
+                    var paramName = child.Attribute("name")?.Value;
+                    if (string.IsNullOrEmpty(paramName))
+                        continue;
+
+                    XdmValue paramValue;
+                    if (callParams != null && callParams.TryGetValue(paramName, out var provided))
+                    {
+                        paramValue = provided;
+                    }
+                    else
+                    {
+                        var paramSelect = child.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(paramSelect))
+                        {
+                            var compiled = XPath31Expression.Compile(paramSelect);
+                            paramValue = compiled.Evaluate(_context);
+                        }
+                        else
+                        {
+                            // Check for content (sequence constructor as default value)
+                            var contentElements = child.Elements().ToList();
+                            if (contentElements.Count > 0)
+                            {
+                                // TODO: Build RTF from sequence constructor
+                                paramValue = XdmValue.Undefined;
+                            }
+                            else
+                            {
+                                paramValue = XdmValue.Undefined;
+                            }
+                        }
+                    }
+                    _context.WithVariable(paramName, paramValue);
+                }
+                else
+                {
+                    break; // xsl:param must be first; stop once we hit non-param
+                }
+            }
+
+            // Process the sequence constructor (child elements of xsl:template)
+            foreach (var child in rule.Element.Elements())
+            {
+                if (child.Name.LocalName == "param" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                    continue; // Already processed above
+
+                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                {
+                    ExecuteXsltInstruction(child, currentNode);
+                }
+                else
+                {
+                    // Literal result element: copy to output
+                    CopyLiteralElement(child);
+                }
+            }
+        }
+        finally
+        {
+            _context.RestoreVariables(snapshot);
+        }
+    }
+
+    /// <summary>
+    /// Implements xsl:call-template: invokes a named template by name.
+    /// </summary>
+    public void CallTemplate(string name, IXdmNode currentNode, Dictionary<string, XdmValue>? withParams = null)
+    {
+        if (!_allNamedTemplates.TryGetValue(name, out var rule))
+            throw new InvalidOperationException($"Named template '{name}' not found.");
+
+        ExecuteTemplate(rule, currentNode, withParams);
+    }
+
+    /// <summary>
+    /// Executes a single XSLT instruction element.
+    /// </summary>
+    private void ExecuteXsltInstruction(XElement instruction, IXdmNode currentNode)
+    {
+        var name = instruction.Name.LocalName;
+        switch (name)
+        {
+            case "element":
+                {
+                    var elemName = instruction.Attribute("name")?.Value ?? "unnamed";
+                    var elemNs = instruction.Attribute("namespace")?.Value ?? "";
+                    var elem = new XElement(XName.Get(elemName, elemNs));
+                    _currentContainer.Add(elem);
+                    var prev = _currentContainer;
+                    _currentContainer = elem;
+                    foreach (var child in instruction.Elements())
+                    {
+                        if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                            ExecuteXsltInstruction(child, currentNode);
+                        else
+                            CopyLiteralElement(child);
+                    }
+                    _currentContainer = prev;
+                    break;
+                }
+
+            case "attribute":
+                {
+                    var attrName = instruction.Attribute("name")?.Value ?? "unnamed";
+                    var attrNs = instruction.Attribute("namespace")?.Value ?? "";
+                    var select = instruction.Attribute("select")?.Value;
+                    string value;
+                    if (!string.IsNullOrEmpty(select))
+                    {
+                        var compiled = XPath31Expression.Compile(select);
+                        var result = compiled.Evaluate(_context);
+                        value = result.ToString();
+                    }
+                    else
+                    {
+                        value = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                    }
+                    if (_currentContainer is XElement targetElem)
+                    {
+                        targetElem.SetAttributeValue(XName.Get(attrName, attrNs), value);
+                    }
+                    break;
+                }
+
+            case "value-of":
+                {
+                    var select = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(select))
+                    {
+                        var compiled = XPath31Expression.Compile(select);
+                        var result = compiled.Evaluate(_context);
+                        var textValue = XdmValueToString(result);
+                        _currentContainer.Add(new XText(textValue));
+                    }
+                    break;
+                }
+
+            case "text":
+                {
+                    var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                    _currentContainer.Add(new XText(text));
+                    break;
+                }
+
+            case "apply-templates":
+                {
+                    var select = instruction.Attribute("select")?.Value;
+                    var mode = instruction.Attribute("mode")?.Value ?? "";
+                    var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                    ApplyTemplates(currentNode, mode, select, sortElements.Count > 0 ? sortElements : null);
+                    break;
+                }
+
+            case "for-each":
+                {
+                    var select = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(select))
+                    {
+                        var compiled = XPath31Expression.Compile(select);
+                        var result = compiled.Evaluate(_context);
+                        var items = EnumerateNodes(result).ToList();
+
+                        var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                        if (sortElements.Count > 0)
+                        {
+                            items = SortNodes(items, sortElements);
+                        }
+
+                        int pos = 1;
+                        foreach (var item in items)
+                        {
+                            _context.WithFocus(XdmValue.FromNode(item), pos, items.Count);
+                            foreach (var child in instruction.Elements())
+                            {
+                                if (child.Name.LocalName == "sort")
+                                    continue;
+                                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                    ExecuteXsltInstruction(child, item);
+                                else
+                                    CopyLiteralElement(child);
+                            }
+                            pos++;
+                        }
+                        _context.WithFocus(XdmValue.FromNode(currentNode), 1, 1);
+                    }
+                    break;
+                }
+
+            case "if":
+                {
+                    var test = instruction.Attribute("test")?.Value;
+                    if (!string.IsNullOrEmpty(test))
+                    {
+                        var compiled = XPath31Expression.Compile(test);
+                        var result = compiled.Evaluate(_context);
+                        if (result.EffectiveBooleanValue())
+                        {
+                            foreach (var child in instruction.Elements())
+                            {
+                                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                    ExecuteXsltInstruction(child, currentNode);
+                                else
+                                    CopyLiteralElement(child);
+                            }
+                        }
+                    }
+                    break;
+                }
+
+            case "choose":
+                {
+                    bool matched = false;
+                    foreach (var when in instruction.Elements(XName.Get("when", Stylesheet.Stylesheet.XslNamespace)))
+                    {
+                        var test = when.Attribute("test")?.Value;
+                        if (!string.IsNullOrEmpty(test))
+                        {
+                            var compiled = XPath31Expression.Compile(test);
+                            var result = compiled.Evaluate(_context);
+                            if (result.EffectiveBooleanValue())
+                            {
+                                matched = true;
+                                foreach (var child in when.Elements())
+                                {
+                                    if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                        ExecuteXsltInstruction(child, currentNode);
+                                    else
+                                        CopyLiteralElement(child);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if (!matched)
+                    {
+                        var otherwise = instruction.Element(XName.Get("otherwise", Stylesheet.Stylesheet.XslNamespace));
+                        if (otherwise != null)
+                        {
+                            foreach (var child in otherwise.Elements())
+                            {
+                                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                    ExecuteXsltInstruction(child, currentNode);
+                                else
+                                    CopyLiteralElement(child);
+                            }
+                        }
+                    }
+                    break;
+                }
+
+            case "variable":
+                {
+                    var varName = instruction.Attribute("name")?.Value;
+                    var varSelect = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(varName))
+                    {
+                        XdmValue varValue;
+                        if (!string.IsNullOrEmpty(varSelect))
+                        {
+                            var compiled = XPath31Expression.Compile(varSelect);
+                            varValue = compiled.Evaluate(_context);
+                        }
+                        else
+                        {
+                            // Build value from sequence constructor (text nodes + XSLT instructions)
+                            varValue = EvaluateSequenceConstructor(instruction, currentNode);
+                        }
+                        _context.WithVariable(varName, varValue);
+                    }
+                    break;
+                }
+
+            case "param":
+                // xsl:param inside a template body is processed by ExecuteTemplate before body execution.
+                // When encountered inline (e.g. inside a for-each), it behaves like a local variable.
+                {
+                    var varName = instruction.Attribute("name")?.Value;
+                    var varSelect = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(varName))
+                    {
+                        XdmValue varValue;
+                        if (!string.IsNullOrEmpty(varSelect))
+                        {
+                            var compiled = XPath31Expression.Compile(varSelect);
+                            varValue = compiled.Evaluate(_context);
+                        }
+                        else
+                        {
+                            varValue = EvaluateSequenceConstructor(instruction, currentNode);
+                        }
+                        _context.WithVariable(varName, varValue);
+                    }
+                    break;
+                }
+
+            case "call-template":
+                {
+                    var calledName = instruction.Attribute("name")?.Value;
+                    if (!string.IsNullOrEmpty(calledName))
+                    {
+                        var withParams = new Dictionary<string, XdmValue>();
+                        foreach (var wp in instruction.Elements(XName.Get("with-param", Stylesheet.Stylesheet.XslNamespace)))
+                        {
+                            var wpName = wp.Attribute("name")?.Value;
+                            var wpSelect = wp.Attribute("select")?.Value;
+                            if (!string.IsNullOrEmpty(wpName))
+                            {
+                                XdmValue wpValue;
+                                if (!string.IsNullOrEmpty(wpSelect))
+                                {
+                                    var compiled = XPath31Expression.Compile(wpSelect);
+                                    wpValue = compiled.Evaluate(_context);
+                                }
+                                else
+                                {
+                                    wpValue = EvaluateSequenceConstructor(wp, currentNode);
+                                }
+                                withParams[wpName] = wpValue;
+                            }
+                        }
+                        CallTemplate(calledName, currentNode, withParams);
+                    }
+                    break;
+                }
+
+            case "copy-of":
+                {
+                    var select = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(select))
+                    {
+                        var compiled = XPath31Expression.Compile(select);
+                        var result = compiled.Evaluate(_context);
+                        CopyToResult(result);
+                    }
+                    break;
+                }
+
+            case "number":
+                {
+                    ExecuteXsltNumber(instruction, currentNode);
+                    break;
+                }
+
+            default:
+                // Unknown instruction: ignore for now
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Copies a literal result element to the output.
+    /// </summary>
+    private void CopyLiteralElement(XElement source)
+    {
+        var copy = new XElement(
+            XName.Get(source.Name.LocalName, source.Name.NamespaceName),
+            source.Attributes().Select(a => new XAttribute(
+                XName.Get(a.Name.LocalName, a.Name.NamespaceName),
+                a.Value)));
+
+        _currentContainer.Add(copy);
+
+        var prev = _currentContainer;
+        _currentContainer = copy;
+
+        foreach (var child in source.Nodes())
+        {
+            switch (child)
+            {
+                case XElement childElem:
+                    if (childElem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                    {
+                        // This shouldn't happen in literal elements, but handle anyway
+                        ExecuteXsltInstruction(childElem, _context.ContextItem.NodeValue!);
+                    }
+                    else
+                    {
+                        CopyLiteralElement(childElem);
+                    }
+                    break;
+                case XText text:
+                    _currentContainer.Add(new XText(text.Value));
+                    break;
+                case XComment comment:
+                    _currentContainer.Add(new XComment(comment.Value));
+                    break;
+                case XProcessingInstruction pi:
+                    _currentContainer.Add(new XProcessingInstruction(pi.Target, pi.Data));
+                    break;
+            }
+        }
+
+        _currentContainer = prev;
+    }
+
+    /// <summary>
+    /// Copies an XDM value (node or sequence) into the result tree.
+    /// </summary>
+    private void CopyToResult(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return;
+
+        if (value.IsNode && value.NodeValue != null)
+        {
+            CopyNodeToResult(value.NodeValue);
+        }
+        else if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                CopyToResult(item);
+            }
+        }
+        else
+        {
+            _currentContainer.Add(new XText(value.ToString()));
+        }
+    }
+
+    private void CopyNodeToResult(IXdmNode node)
+    {
+        if (node.NodeKind == XdmNodeKind.Element)
+        {
+            var copy = new XElement(
+                XName.Get(node.LocalName, node.NamespaceUri));
+            foreach (var attr in node.Attributes())
+            {
+                copy.SetAttributeValue(
+                    XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
+                    attr.NodeValue!.StringValue);
+            }
+            _currentContainer.Add(copy);
+            var prev = _currentContainer;
+            _currentContainer = copy;
+            foreach (var child in node.Axis(XdmAxis.Child))
+            {
+                CopyNodeToResult(child.NodeValue!);
+            }
+            _currentContainer = prev;
+        }
+        else if (node.NodeKind == XdmNodeKind.Text)
+        {
+            _currentContainer.Add(new XText(node.StringValue));
+        }
+        else if (node.NodeKind == XdmNodeKind.Comment)
+        {
+            _currentContainer.Add(new XComment(node.StringValue));
+        }
+        else if (node.NodeKind == XdmNodeKind.ProcessingInstruction)
+        {
+            _currentContainer.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
+        }
+    }
+
+    /// <summary>
+    /// Applies built-in template rules when no explicit template matches.
+    /// </summary>
+    public void ApplyBuiltInRules(IXdmNode node, string mode)
+    {
+        switch (node.NodeKind)
+        {
+            case XdmNodeKind.Element:
+                // Built-in: shallow-copy element, then apply-templates to children
+                var copy = new XElement(
+                    XName.Get(node.LocalName, node.NamespaceUri));
+                foreach (var attr in node.Attributes())
+                {
+                    copy.SetAttributeValue(
+                        XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
+                        attr.NodeValue!.StringValue);
+                }
+                _currentContainer.Add(copy);
+
+                var previousContainer = _currentContainer;
+                _currentContainer = copy;
+                ApplyTemplates(node, mode, select: null);
+                _currentContainer = previousContainer;
+                break;
+
+            case XdmNodeKind.Text:
+                // Built-in: copy text value (only if we have an element container)
+                if (_currentContainer is XElement)
+                {
+                    _currentContainer.Add(new XText(node.StringValue));
+                }
+                break;
+
+            case XdmNodeKind.Attribute:
+                // Built-in: copy attribute to current element
+                if (_currentContainer is XElement elem)
+                {
+                    elem.SetAttributeValue(
+                        XName.Get(node.LocalName, node.NamespaceUri),
+                        node.StringValue);
+                }
+                break;
+
+            // Comments and PIs are ignored by default
+        }
+    }
+
+    /// <summary>
+    /// Registers the XSLT <c>key()</c> function on the evaluation context.
+    /// </summary>
+    private void RegisterKeyFunction()
+    {
+        var signature = new Bosak.XPath.Runtime.Functions.FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "key",
+            Arity = 2,
+            ParameterTypes = [XdmValueKind.String, XdmValueKind.Undefined],
+            ReturnType = XdmValueKind.Sequence,
+            Implementation = KeyFunctionImpl
+        };
+        _context.RegisterFunction(signature);
+    }
+
+    private XdmValue KeyFunctionImpl(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (_keyIndex == null)
+            return XdmValue.Undefined;
+
+        var keyName = args[0].ToString();
+        var keyValueArg = args[1];
+
+        var seen = new HashSet<IXdmNode>();
+        var result = new List<XdmValue>();
+
+        if (keyValueArg.IsSequence && keyValueArg.SequenceValue != null)
+        {
+            foreach (var val in XdmSequence.FromSource(keyValueArg.SequenceValue))
+            {
+                var keyValue = val.ToString();
+                foreach (var node in _keyIndex.Lookup(keyName, keyValue))
+                {
+                    if (seen.Add(node))
+                        result.Add(XdmValue.FromNode(node));
+                }
+            }
+        }
+        else
+        {
+            var keyValue = keyValueArg.ToString();
+            foreach (var node in _keyIndex.Lookup(keyName, keyValue))
+            {
+                if (seen.Add(node))
+                    result.Add(XdmValue.FromNode(node));
+            }
+        }
+
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// Finds the highest-priority template rule that matches the given node in the given mode.
+    /// </summary>
+    private Stylesheet.TemplateRule? FindBestTemplate(IXdmNode node, string mode)
+    {
+        Stylesheet.TemplateRule? best = null;
+        double bestPriority = double.NegativeInfinity;
+        int bestImportPrecedence = -1;
+
+        foreach (var rule in _allTemplateRules)
+        {
+            if (!MatchesMode(rule, mode))
+                continue;
+            if (rule.CompiledMatch == null)
+                continue;
+            if (rule.CompiledMatch(node))
+            {
+                if (rule.Priority > bestPriority)
+                {
+                    best = rule;
+                    bestPriority = rule.Priority;
+                    bestImportPrecedence = rule.ImportPrecedence;
+                }
+                else if (rule.Priority == bestPriority && rule.ImportPrecedence < bestImportPrecedence)
+                {
+                    best = rule;
+                    bestImportPrecedence = rule.ImportPrecedence;
+                }
+            }
+        }
+
+        return best;
+    }
+
+    private static bool MatchesMode(Stylesheet.TemplateRule rule, string mode)
+    {
+        if (rule.MatchesAllModes)
+            return true;
+        foreach (var m in rule.Modes)
+        {
+            if (m == mode)
+                return true;
+        }
+        return false;
+    }
+
+    private static IEnumerable<IXdmNode> EnumerateNodes(XdmSequence sequence)
+    {
+        foreach (var item in sequence)
+        {
+            if (item.IsNode && item.NodeValue != null)
+                yield return item.NodeValue;
+        }
+    }
+
+    private static IEnumerable<IXdmNode> EnumerateNodes(XdmValue value)
+    {
+        if (value.IsNode && value.NodeValue != null)
+        {
+            yield return value.NodeValue;
+        }
+        else if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (item.IsNode && item.NodeValue != null)
+                    yield return item.NodeValue;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Converts an XDM value to its string representation, concatenating sequence items.
+    /// </summary>
+    private static string XdmValueToString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            var sb = new System.Text.StringBuilder();
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!item.IsUndefined)
+                    sb.Append(item.ToString());
+            }
+            return sb.ToString();
+        }
+
+        return value.ToString();
+    }
+
+    /// <summary>
+    /// Sorts a list of nodes according to xsl:sort specifications.
+    /// Supports a single sort key (primary only).
+    /// </summary>
+    private List<IXdmNode> SortNodes(List<IXdmNode> nodes, List<XElement> sortSpecs)
+    {
+        // For now, support only the first sort key
+        var sort = sortSpecs[0];
+        var select = sort.Attribute("select")?.Value ?? ".";
+        var dataType = sort.Attribute("data-type")?.Value ?? "text";
+        var order = sort.Attribute("order")?.Value ?? "ascending";
+        var descending = order.Trim().ToLowerInvariant() == "descending";
+
+        var keyed = new List<(XdmValue Key, IXdmNode Node)>();
+        foreach (var node in nodes)
+        {
+            _context.WithFocus(XdmValue.FromNode(node), 1, 1);
+            var compiled = XPath31Expression.Compile(select);
+            var key = compiled.Evaluate(_context);
+            keyed.Add((key, node));
+        }
+
+        if (dataType.Trim().ToLowerInvariant() == "number")
+        {
+            keyed.Sort((a, b) =>
+            {
+                var cmp = CompareNumericSortKey(a.Key, b.Key);
+                return descending ? -cmp : cmp;
+            });
+        }
+        else
+        {
+            keyed.Sort((a, b) =>
+            {
+                var cmp = XdmValueComparer.Instance.Compare(a.Key, b.Key);
+                return descending ? -cmp : cmp;
+            });
+        }
+
+        return keyed.Select(k => k.Node).ToList();
+    }
+
+    private static int CompareNumericSortKey(XdmValue a, XdmValue b)
+    {
+        var sa = XdmValueToString(a);
+        var sb = XdmValueToString(b);
+        bool aOk = double.TryParse(sa, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double da);
+        bool bOk = double.TryParse(sb, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double db);
+        if (!aOk && !bOk) return 0;
+        if (!aOk) return 1;
+        if (!bOk) return -1;
+        return da.CompareTo(db);
+    }
+
+    /// <summary>
+    /// Evaluates a sequence constructor (child nodes of an xsl:variable, xsl:param, etc.)
+    /// and returns the resulting XDM value.
+    /// </summary>
+    private XdmValue EvaluateSequenceConstructor(XElement parent, IXdmNode currentNode)
+    {
+        var items = new List<XdmValue>();
+        foreach (var node in parent.Nodes())
+        {
+            switch (node)
+            {
+                case XText text:
+                    items.Add(XdmValue.FromString(text.Value));
+                    break;
+                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                    // XSLT instructions in a sequence constructor contribute to the result.
+                    // For now, we handle value-of by evaluating and adding its result.
+                    if (elem.Name.LocalName == "value-of")
+                    {
+                        var select = elem.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(select))
+                        {
+                            var compiled = XPath31Expression.Compile(select);
+                            var result = compiled.Evaluate(_context);
+                            items.Add(XdmValue.FromString(result.ToString()));
+                        }
+                    }
+                    break;
+            }
+        }
+
+        if (items.Count == 0)
+            return XdmValue.Undefined;
+        if (items.Count == 1)
+            return items[0];
+
+        // Multiple items: concatenate strings for text value
+        return XdmValue.FromString(string.Concat(items.Select(i => i.ToString())));
+    }
+
+    // ------------------------------------------------------------------
+    // xsl:number support
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Executes an <c>xsl:number</c> instruction.
+    /// </summary>
+    private void ExecuteXsltNumber(XElement instruction, IXdmNode currentNode)
+    {
+        var level = instruction.Attribute("level")?.Value ?? "single";
+        var countPattern = instruction.Attribute("count")?.Value;
+        var fromPattern = instruction.Attribute("from")?.Value;
+        var format = instruction.Attribute("format")?.Value ?? "1";
+        var valueAttr = instruction.Attribute("value")?.Value;
+
+        if (!string.IsNullOrEmpty(valueAttr))
+        {
+            var compiled = XPath31Expression.Compile(valueAttr);
+            var result = compiled.Evaluate(_context);
+            var number = XdmValueToLong(result);
+            if (number.HasValue)
+            {
+                var formatted = FormatNumberSequence(new[] { (int)number.Value }, format);
+                _currentContainer.Add(new XText(formatted));
+            }
+        }
+        else
+        {
+            var countMatcher = string.IsNullOrEmpty(countPattern)
+                ? CreateDefaultCountMatcher(currentNode)
+                : new Patterns.PatternCompiler().Compile(countPattern);
+
+            var fromMatcher = string.IsNullOrEmpty(fromPattern)
+                ? null
+                : new Patterns.PatternCompiler().Compile(fromPattern);
+
+            int[]? numbers = level switch
+            {
+                "single" => ComputeNumberSingle(currentNode, countMatcher, fromMatcher),
+                "any" => ComputeNumberAny(currentNode, countMatcher, fromMatcher),
+                "multiple" => ComputeNumberMultiple(currentNode, countMatcher, fromMatcher),
+                _ => null
+            };
+
+            if (numbers != null && numbers.Length > 0)
+            {
+                var formatted = FormatNumberSequence(numbers, format);
+                _currentContainer.Add(new XText(formatted));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Creates a default count matcher based on the current node's kind and name.
+    /// </summary>
+    private static Func<IXdmNode, bool> CreateDefaultCountMatcher(IXdmNode node)
+    {
+        var compiler = new Patterns.PatternCompiler();
+        return node.NodeKind switch
+        {
+            XdmNodeKind.Element => compiler.Compile(node.LocalName),
+            XdmNodeKind.Attribute => compiler.Compile("@" + node.LocalName),
+            _ => n => n.NodeKind == node.NodeKind
+        };
+    }
+
+    /// <summary>
+    /// Computes the number for <c>level="single"</c>.
+    /// </summary>
+    private static int[]? ComputeNumberSingle(IXdmNode currentNode, Func<IXdmNode, bool> countMatcher, Func<IXdmNode, bool>? fromMatcher)
+    {
+        // Find nearest ancestor-or-self matching count
+        IXdmNode? target = null;
+        if (countMatcher(currentNode))
+        {
+            target = currentNode;
+        }
+        else
+        {
+            foreach (var item in currentNode.Axis(XdmAxis.Ancestor))
+            {
+                if (item.IsNode && item.NodeValue is IXdmNode ancestor)
+                {
+                    if (countMatcher(ancestor))
+                    {
+                        target = ancestor;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (target == null)
+            return null;
+
+        // If from is specified, target must have a from-matching ancestor
+        if (fromMatcher != null)
+        {
+            bool hasFromAncestor = false;
+            foreach (var item in target.Axis(XdmAxis.Ancestor))
+            {
+                if (item.IsNode && item.NodeValue is IXdmNode ancestor)
+                {
+                    if (fromMatcher(ancestor))
+                    {
+                        hasFromAncestor = true;
+                        break;
+                    }
+                }
+            }
+            if (!hasFromAncestor)
+                return null;
+        }
+
+        int count = 0;
+        foreach (var item in target.Axis(XdmAxis.PrecedingSibling))
+        {
+            if (item.IsNode && item.NodeValue is IXdmNode sibling)
+            {
+                if (countMatcher(sibling))
+                    count++;
+            }
+        }
+
+        return new[] { count + 1 };
+    }
+
+    /// <summary>
+    /// Computes the number for <c>level="any"</c>.
+    /// </summary>
+    private static int[]? ComputeNumberAny(IXdmNode currentNode, Func<IXdmNode, bool> countMatcher, Func<IXdmNode, bool>? fromMatcher)
+    {
+        var doc = currentNode.Document;
+        if (doc == null)
+            return null;
+
+        int count = 0;
+        bool foundCurrent = false;
+
+        WalkDocumentTree(doc, node =>
+        {
+            if (node.IsSameNode(currentNode))
+                foundCurrent = true;
+
+            if (fromMatcher != null && fromMatcher(node))
+                count = 0;
+
+            if (countMatcher(node))
+                count++;
+
+            return !foundCurrent;
+        });
+
+        return count > 0 ? new[] { count } : null;
+    }
+
+    /// <summary>
+    /// Computes the number sequence for <c>level="multiple"</c>.
+    /// </summary>
+    private static int[]? ComputeNumberMultiple(IXdmNode currentNode, Func<IXdmNode, bool> countMatcher, Func<IXdmNode, bool>? fromMatcher)
+    {
+        var numbers = new List<int>();
+        var ancestors = new List<IXdmNode>();
+
+        foreach (var item in currentNode.Axis(XdmAxis.Ancestor))
+        {
+            if (item.IsNode && item.NodeValue is IXdmNode ancestor)
+                ancestors.Add(ancestor);
+        }
+        ancestors.Reverse(); // outermost first
+        ancestors.Add(currentNode);
+
+        foreach (var ancestor in ancestors)
+        {
+            if (fromMatcher != null && fromMatcher(ancestor))
+                break;
+
+            if (countMatcher(ancestor))
+            {
+                int count = 0;
+                foreach (var item in ancestor.Axis(XdmAxis.PrecedingSibling))
+                {
+                    if (item.IsNode && item.NodeValue is IXdmNode sibling)
+                    {
+                        if (countMatcher(sibling))
+                            count++;
+                    }
+                }
+                numbers.Add(count + 1);
+            }
+        }
+
+        return numbers.Count > 0 ? numbers.ToArray() : null;
+    }
+
+    /// <summary>
+    /// Recursively walks a document tree in document order, calling <paramref name="visitor"/>
+    /// for each node. Returns <c>false</c> if the visitor requested stopping.
+    /// </summary>
+    private static bool WalkDocumentTree(IXdmNode node, Func<IXdmNode, bool> visitor)
+    {
+        if (!visitor(node))
+            return false;
+
+        foreach (var item in node.Axis(XdmAxis.Child))
+        {
+            if (item.IsNode && item.NodeValue is IXdmNode child)
+            {
+                if (!WalkDocumentTree(child, visitor))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Formats a sequence of integers according to an <c>xsl:number</c> format string.
+    /// </summary>
+    private string FormatNumberSequence(int[] numbers, string format)
+    {
+        if (numbers.Length == 0)
+            return string.Empty;
+
+        var (prefix, tokens, separators, suffix) = ParseXslNumberFormat(format);
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append(prefix);
+
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            var token = tokens.Count > 0
+                ? (i < tokens.Count ? tokens[i] : tokens[^1])
+                : "1";
+            sb.Append(FormatIntegerEngine.Format(_context, numbers[i], token, null));
+
+            if (i < numbers.Length - 1)
+            {
+                var sep = separators.Count > 0
+                    ? (i < separators.Count ? separators[i] : separators[^1])
+                    : ".";
+                sb.Append(sep);
+            }
+        }
+
+        sb.Append(suffix);
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Parses an <c>xsl:number</c> format string into prefix, tokens, separators, and suffix.
+    /// </summary>
+    private static (string prefix, List<string> tokens, List<string> separators, string suffix) ParseXslNumberFormat(string format)
+    {
+        var tokens = new List<string>();
+        var separators = new List<string>();
+
+        int i = 0;
+        while (i < format.Length && !char.IsLetterOrDigit(format[i]))
+            i++;
+        var prefix = format.Substring(0, i);
+
+        while (i < format.Length)
+        {
+            int tokenStart = i;
+            while (i < format.Length && char.IsLetterOrDigit(format[i]))
+                i++;
+            tokens.Add(format.Substring(tokenStart, i - tokenStart));
+
+            int sepStart = i;
+            while (i < format.Length && !char.IsLetterOrDigit(format[i]))
+                i++;
+            separators.Add(format.Substring(sepStart, i - sepStart));
+        }
+
+        string suffix = string.Empty;
+        if (separators.Count > 0)
+        {
+            suffix = separators[^1];
+            separators.RemoveAt(separators.Count - 1);
+        }
+
+        return (prefix, tokens, separators, suffix);
+    }
+
+    /// <summary>
+    /// Converts an <see cref="XdmValue"/> to a <see cref="long"/> if it represents a number.
+    /// </summary>
+    private static long? XdmValueToLong(XdmValue value)
+    {
+        // If it's a singleton sequence, extract the first item
+        if (value.Kind == XdmValueKind.Sequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                return XdmValueToLong(item);
+            return null;
+        }
+
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (long)value.DecimalValue,
+            XdmValueKind.Double => (long)value.DoubleValue,
+            XdmValueKind.Float => (long)value.DoubleValue,
+            XdmValueKind.Node => long.TryParse(value.NodeValue?.StringValue ?? "", out var n) ? n : null,
+            _ => long.TryParse(value.ToString(), out var n) ? n : null
+        };
+    }
+}

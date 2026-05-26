@@ -437,7 +437,7 @@ public class FunctionLibraryTests
     {
         var result = Evaluate("fn:round(2.5e0)");
         Assert.Equal(XdmValueKind.Double, result.Kind);
-        Assert.Equal(2.0, result.DoubleValue); // round half to even
+        Assert.Equal(3.0, result.DoubleValue); // round half away from zero
     }
 
     [Fact]
@@ -1956,5 +1956,54 @@ public class FunctionLibraryTests
     public void DocumentUri_ElementReturnsUndefined()
     {
         Assert.True(Evaluate("document-uri(parse-xml('<a/>')/a[1])").IsUndefined);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:sort tests
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Sort_Mixed_Integer_Decimal()
+    {
+        var result = Evaluate("sort((3, 1.5, 2))");
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item);
+        Assert.Equal(3, items.Count);
+        Assert.Equal(1.5m, items[0].DecimalValue);
+        Assert.Equal(2, items[1].IntegerValue);
+        Assert.Equal(3, items[2].IntegerValue);
+    }
+
+    [Fact]
+    public void Sort_Strings()
+    {
+        var result = Evaluate("sort(('c', 'a', 'b'))");
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item);
+        Assert.Equal(3, items.Count);
+        Assert.Equal("a", items[0].StringValue);
+        Assert.Equal("b", items[1].StringValue);
+        Assert.Equal("c", items[2].StringValue);
+    }
+
+    [Fact]
+    public void Sort_Mixed_Types_Throws()
+    {
+        Assert.Throws<InvalidOperationException>(() => Evaluate("sort((1, 'a'))"));
+    }
+
+    [Fact]
+    public void Sort_Booleans()
+    {
+        var result = Evaluate("sort((true(), false(), true()))");
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item);
+        Assert.Equal(3, items.Count);
+        Assert.False(items[0].BooleanValue);
+        Assert.True(items[1].BooleanValue);
+        Assert.True(items[2].BooleanValue);
     }
 }

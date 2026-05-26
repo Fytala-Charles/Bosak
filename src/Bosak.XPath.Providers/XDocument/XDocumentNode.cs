@@ -266,6 +266,8 @@ public sealed class XDocumentNode : IXdmNode
     private XdmSequence GetParentAxis()
     {
         var parent = _node.Parent;
+        if (parent is null && _isNamespaceNode && _namespaceOwner is not null)
+            parent = _namespaceOwner;
         return parent is not null
             ? XdmSequence.Singleton(XdmValue.FromNode(new XDocumentNode(parent)))
             : XdmSequence.Empty;

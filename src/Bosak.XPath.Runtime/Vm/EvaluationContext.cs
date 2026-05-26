@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added document cache and loader for fn:doc / fn:collection                             |
 //                      | Charles Korthout | 0.3   | 22-05-2026     | Added stable current-dateTime/date/time snapshot                                       |
 //                      | Charles Korthout | 0.4   | 22-05-2026     | Added decimal-format support for fn:format-number                                      |
+//                      | Charles Korthout | 0.5   | 24-05-2026     | Added SnapshotVariables / RestoreVariables for lexical scoping                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -135,6 +136,22 @@ public sealed class EvaluationContext
 
     public bool RemoveVariable(string localName, string namespaceUri = "")
         => _variables.Remove((localName, namespaceUri));
+
+    /// <summary>
+    /// Creates a snapshot of all current variable bindings.
+    /// </summary>
+    public Dictionary<(string LocalName, string NamespaceUri), XdmValue> SnapshotVariables()
+        => new Dictionary<(string, string), XdmValue>(_variables);
+
+    /// <summary>
+    /// Restores variable bindings from a snapshot, removing any variables added since.
+    /// </summary>
+    public void RestoreVariables(Dictionary<(string LocalName, string NamespaceUri), XdmValue> snapshot)
+    {
+        _variables.Clear();
+        foreach (var (key, value) in snapshot)
+            _variables[key] = value;
+    }
 
     // ------------------------------------------------------------------
     // Namespaces

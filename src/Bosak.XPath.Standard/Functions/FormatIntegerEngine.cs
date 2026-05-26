@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 24-05-2026     | Made public for reuse by xsl:number formatting                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -23,7 +24,7 @@ namespace Bosak.XPath.Standard.Functions;
 /// <summary>
 /// Implements fn:format-integer per XPath and XQuery Functions and Operators 3.1 §4.6.
 /// </summary>
-internal static class FormatIntegerEngine
+public static class FormatIntegerEngine
 {
     public static string Format(EvaluationContext ctx, long value, string picture, string? language)
     {

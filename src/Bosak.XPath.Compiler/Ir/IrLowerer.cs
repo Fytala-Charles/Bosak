@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 19-05-2026     | Nested lowering for multi-binding for/some/every expressions                           |
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Unwrap PredicateNode in LowerPostfixPredicate for Subscript/Last compilation           |
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Support filter expressions as path steps (e.g. parse-xml(...)/root/item)               |
+//                      | Charles Korthout | 0.9   | 24-05-2026     | Fix * name test to filter by principal node kind (element/attribute/namespace)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -606,6 +607,20 @@ public sealed class IrLowerer
             {
                 Emit(IrOpCode.NameTest, (byte)afterTestReg, (byte)axisReg, operand: namePoolIdx);
             }
+        }
+        else
+        {
+            // * is a name test that matches any name of the principal node kind for the axis.
+            // Filter by principal node kind since the axis returns all node kinds.
+            afterTestReg = AllocRegister();
+            string principalKind = node.Axis switch
+            {
+                XdmAxis.Attribute => "attribute",
+                XdmAxis.Namespace => "namespace",
+                _ => "element"
+            };
+            int kindPoolIdx = AddToLiteralPool(principalKind);
+            Emit(IrOpCode.KindTest, (byte)afterTestReg, (byte)axisReg, operand: kindPoolIdx);
         }
 
         // Emit predicates

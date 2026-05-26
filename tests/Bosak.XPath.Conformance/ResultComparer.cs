@@ -225,6 +225,14 @@ internal static class ResultComparer
         if (sa == sb)
             return true;
 
+        // DateTime/Date/Time value comparison: compare instants (timezone-independent)
+        if (a.Kind == XdmValueKind.DateTime && b.Kind == XdmValueKind.DateTime)
+            return a.DateTimeValue == b.DateTimeValue;
+        if (a.Kind == XdmValueKind.Date && b.Kind == XdmValueKind.Date)
+            return a.DateValue == b.DateValue;
+        if (a.Kind == XdmValueKind.Time && b.Kind == XdmValueKind.Time)
+            return a.TimeValue == b.TimeValue;
+
         // Numeric value comparison: decimals may differ in trailing zeros (13 vs 13.0)
         bool aIsNumeric = a.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
         bool bIsNumeric = b.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
