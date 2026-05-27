@@ -685,8 +685,9 @@ public sealed class TransformEngine
             case "element":
                 {
                     var elemName = instruction.Attribute("name")?.Value ?? "unnamed";
-                    var elemNs = instruction.Attribute("namespace")?.Value ?? "";
-                    var elem = new XElement(XName.Get(elemName, elemNs));
+                    var elemNs = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
+                    var elemLocalName = GetLocalName(elemName, elemNs);
+                    var elem = new XElement(XName.Get(elemLocalName, elemNs ?? ""));
                     _currentContainer.Add(elem);
                     var prev = _currentContainer;
                     _currentContainer = elem;
@@ -704,7 +705,8 @@ public sealed class TransformEngine
             case "attribute":
                 {
                     var attrName = instruction.Attribute("name")?.Value ?? "unnamed";
-                    var attrNs = instruction.Attribute("namespace")?.Value ?? "";
+                    var attrNs = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
+                    var attrLocalName = GetLocalName(attrName, attrNs);
                     var select = instruction.Attribute("select")?.Value;
                     string value;
                     if (!string.IsNullOrEmpty(select))
@@ -719,7 +721,7 @@ public sealed class TransformEngine
                     }
                     if (_currentContainer is XElement targetElem)
                     {
-                        targetElem.SetAttributeValue(XName.Get(attrName, attrNs), value);
+                        targetElem.SetAttributeValue(XName.Get(attrLocalName, attrNs ?? ""), value);
                     }
                     break;
                 }
@@ -2243,5 +2245,21 @@ public sealed class TransformEngine
                 result.Add((int)n.Value);
         }
         return result.ToArray();
+    }
+
+    /// <summary>
+    /// Extracts the local name from a QName string, handling the case where
+    /// namespace="" forces the null namespace (prefix must be stripped).
+    /// </summary>
+    private static string GetLocalName(string name, string? namespaceUri)
+    {
+        // If namespace is explicitly empty, strip any prefix from the name
+        if (namespaceUri == "")
+        {
+            int colon = name.IndexOf(':');
+            if (colon >= 0)
+                return name[(colon + 1)..];
+        }
+        return name;
     }
 }
