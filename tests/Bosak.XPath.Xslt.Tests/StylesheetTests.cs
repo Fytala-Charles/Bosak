@@ -1395,4 +1395,170 @@ public class StylesheetTests
         Assert.Contains("<x>2</x>", result);
         Assert.Contains("<x>3</x>", result);
     }
+
+    // ------------------------------------------------------------------
+    // REQ-015: xsl:function tests
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void XslFunction_Basic_Call()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function name='my:greet'>
+                <xsl:sequence select='""hello""'/>
+            </xsl:function>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='my:greet()'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("hello", result);
+    }
+
+    [Fact]
+    public void XslFunction_With_Parameters()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function name='my:concat'>
+                <xsl:param name='a'/>
+                <xsl:param name='b'/>
+                <xsl:sequence select='concat($a, $b)'/>
+            </xsl:function>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='my:concat(""x"", ""y"")'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("xy", result);
+    }
+
+    [Fact]
+    public void XslFunction_Uses_Context_From_First_Arg()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function name='my:upper'>
+                <xsl:param name='input'/>
+                <xsl:sequence select='upper-case($input)'/>
+            </xsl:function>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='my:upper(/root/text)'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root", new XElement("text", "hello")));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("HELLO", result);
+    }
+
+    [Fact]
+    public void XslFunction_From_Import_Is_Callable()
+    {
+        var resolver = new InMemoryResolver();
+        resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:import href='lib.xsl'/>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='my:double(3)'/></output>
+            </xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///lib.xsl", @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function name='my:double'>
+                <xsl:param name='n'/>
+                <xsl:sequence select='$n * 2'/>
+            </xsl:function>
+        </xsl:stylesheet>");
+
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("6", result);
+    }
+
+    [Fact]
+    public void XslFunction_Recursive_Factorial()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function name='my:factorial'>
+                <xsl:param name='n'/>
+                <xsl:sequence select='if ($n le 1) then 1 else $n * my:factorial($n - 1)'/>
+            </xsl:function>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='my:factorial(5)'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("120", result);
+    }
+
+    [Fact]
+    public void XslFunction_With_Local_Variable()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function name='my:sumsq'>
+                <xsl:param name='a'/>
+                <xsl:param name='b'/>
+                <xsl:variable name='a2' select='$a * $a'/>
+                <xsl:variable name='b2' select='$b * $b'/>
+                <xsl:sequence select='$a2 + $b2'/>
+            </xsl:function>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='my:sumsq(3, 4)'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("25", result);
+    }
+
+    [Fact]
+    public void XslFunction_Returns_Sequence()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function name='my:range'>
+                <xsl:param name='n'/>
+                <xsl:sequence select='1 to $n'/>
+            </xsl:function>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:for-each select='my:range(3)'>
+                        <x><xsl:value-of select='.'/></x>
+                    </xsl:for-each>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("<x>1</x>", result);
+        Assert.Contains("<x>2</x>", result);
+        Assert.Contains("<x>3</x>", result);
+    }
 }

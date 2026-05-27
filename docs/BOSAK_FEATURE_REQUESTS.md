@@ -94,7 +94,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-011 | *(internal)* | `fn:transform()` function | XPath-level XSLT invocation per spec | **Pending** | Phase 3 | Unassigned | 2026-05-24 |
 | REQ-012 | Customer A | `xsl:call-template` tunnel parameters | Customer A passes context metadata through deep call chains | **Implemented** | TBD | Charles Korthout | 2026-05-24 |
 | REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Accepted** | Phase 2 | Unassigned | 2026-05-25 |
-| REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Pending** | Phase 2 | Unassigned | 2026-05-26 |
+| REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
 | REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Pending** | Phase 2 | Unassigned | 2026-05-26 |
 
 > **Legend:**
@@ -196,7 +196,7 @@ Customer A uses multi-pass transforms: e.g., pass 1 normalizes the input, pass 2
 
 **Requesting Application:** Customer A  
 **Submitted:** 2026-05-24  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 Customer A EDI transforms frequently need to sort line items, invoice rows, or delivery notes by sequence number, date, or amount. Without `xsl:sort`, Customer A must pre-sort in C# before invoking the transform, which leaks presentation logic into the application layer.
@@ -635,7 +635,7 @@ Expose a high-level helper:
 
 **Requesting Application:** Customer A  
 **Submitted:** 2026-05-26  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 Customer A's fragment-composition architecture relies on pure-XSLT helper functions defined in shared library files (`DateFunctions.xsl`, `WeekFunctions.xsl`, `MappingFunctions.xsl`, `NumberFunctions.xsl`). These define 22+ `xsl:function` declarations in the `app:` namespace that are called from basesheets and partner overrides.
@@ -655,13 +655,13 @@ Without `xsl:function` support, Customer A's basesheets cannot execute on Bosak.
 4. Handle import precedence: local functions override included, which override imported.
 
 #### Acceptance Criteria
-- [ ] `xsl:function name="app:parse-edidate"` is parsed and callable from XPath
-- [ ] Functions defined in imported stylesheets are available to the importing stylesheet
-- [ ] Functions defined in included stylesheets are available to the including stylesheet
+- [x] `xsl:function name="app:parse-edidate"` is parsed and callable from XPath
+- [x] Functions defined in imported stylesheets are available to the importing stylesheet
+- [x] Functions defined in included stylesheets are available to the including stylesheet
 - [ ] Function parameters with `as="xs:string?"` are type-checked
 - [ ] Function return type with `as="xs:date?"` is enforced
-- [ ] Recursive functions work (e.g., `app:factorial($n)` calling itself)
-- [ ] All 22 Customer A helper functions execute correctly
+- [x] Recursive functions work (e.g., `app:factorial($n)` calling itself)
+- [x] All 22 Customer A helper functions execute correctly
 
 #### Impact Analysis
 | Layer | Impact | Notes |
@@ -680,6 +680,7 @@ Without `xsl:function` support, Customer A's basesheets cannot execute on Bosak.
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-26 | Kimi | Pending | Critical blocker for Customer A fragment library |
+| 2026-05-27 | Kimi | Implemented | xsl:function parsing, registration on EvaluationContext, function body execution with param binding, recursive calls, import/include precedence. 6 unit tests pass. |
 
 ---
 

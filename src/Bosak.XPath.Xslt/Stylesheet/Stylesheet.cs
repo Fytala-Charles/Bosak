@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added import/include resolution, import precedence, flattened rule collection            |
 //                      | Charles Korthout | 0.4   | 26-05-2026     | Added global variable and parameter collection with import/include precedence            |
 //                      | Charles Korthout | 0.5   | 26-05-2026     | Added xsl:strip-space and xsl:preserve-space parsing with SpaceHandlingRule              |
+//                      | Charles Korthout | 0.6   | 27-05-2026     | Added xsl:function parsing and GetAllFunctionDefinitions / GetAllNamespaces              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -43,6 +44,7 @@ public sealed class Stylesheet
     private readonly List<SpaceHandlingRule> _stripSpaceRules = new();
     private readonly List<SpaceHandlingRule> _preserveSpaceRules = new();
     private readonly Dictionary<string, ModeDefinition> _modeDefinitions = new();
+    private readonly List<XsltFunctionDefinition> _functionDefinitions = new();
     private OutputProperties? _outputProperties;
 
     public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null)
@@ -222,6 +224,14 @@ public sealed class Stylesheet
                     _namedTemplates[rule.Name] = rule;
             }
         }
+
+        // Parse xsl:function declarations
+        foreach (var func in root.Elements(XName.Get("function", XslNamespace)))
+        {
+            var def = XsltFunctionDefinition.FromElement(func, this);
+            if (def != null)
+                _functionDefinitions.Add(def);
+        }
     }
 
     private void ResolveImport(string href)
@@ -368,6 +378,38 @@ public sealed class Stylesheet
         return result;
     }
 
+    /// <summary>Function definitions declared in this stylesheet.</summary>
+    public IReadOnlyList<XsltFunctionDefinition> FunctionDefinitions => _functionDefinitions;
+
+    /// <summary>
+    /// Recursively collects all function definitions from this stylesheet, its includes, and its imports.
+    /// Later definitions override earlier ones (local &gt; included &gt; imported).
+    /// The key is a tuple of (namespaceUri, localName, arity).
+    /// </summary>
+    public Dictionary<(string ns, string name, int arity), XsltFunctionDefinition> GetAllFunctionDefinitions()
+    {
+        var result = new Dictionary<(string, string, int), XsltFunctionDefinition>();
+
+        foreach (var imported in _imports)
+        {
+            foreach (var (key, def) in imported.GetAllFunctionDefinitions())
+                result[key] = def;
+        }
+
+        foreach (var included in _includes)
+        {
+            foreach (var (key, def) in included.GetAllFunctionDefinitions())
+                result[key] = def;
+        }
+
+        foreach (var def in _functionDefinitions)
+        {
+            result[(def.NamespaceUri, def.LocalName, def.Arity)] = def;
+        }
+
+        return result;
+    }
+
     /// <summary>
     /// Recursively collects all whitespace handling rules from this stylesheet, its includes, and its imports.
     /// Rules are returned in precedence order (local highest, then included, then imported).
@@ -414,6 +456,41 @@ public sealed class Stylesheet
         }
 
         return null;
+    }
+
+    /// <summary>The root element of the parsed stylesheet document.</summary>
+    public XElement RootElement => _document.Root!;
+
+    /// <summary>
+    /// Collects all namespace prefix declarations from this stylesheet and its imports/includes.
+    /// </summary>
+    public Dictionary<string, string> GetAllNamespaces()
+    {
+        var result = new Dictionary<string, string>();
+        foreach (var imported in _imports)
+        {
+            foreach (var (prefix, ns) in imported.GetAllNamespaces())
+                result[prefix] = ns;
+        }
+        foreach (var included in _includes)
+        {
+            foreach (var (prefix, ns) in included.GetAllNamespaces())
+                result[prefix] = ns;
+        }
+        if (_document.Root != null)
+        {
+            foreach (var attr in _document.Root.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration)
+                {
+                    var prefix = attr.Name.LocalName;
+                    if (prefix == "xmlns")
+                        prefix = string.Empty;
+                    result[prefix] = attr.Value;
+                }
+            }
+        }
+        return result;
     }
 
     /// <summary>The XSLT namespace URI.</summary>

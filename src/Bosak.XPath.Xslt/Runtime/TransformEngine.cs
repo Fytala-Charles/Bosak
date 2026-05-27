@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added xsl:key / key() index building and lookup support                                 |
 //                      | Charles Korthout | 0.6   | 24-05-2026     | Added xsl:number support (single, any, multiple levels) with format-integer reuse       |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
+//                      | Charles Korthout | 1.1   | 27-05-2026     | Added xsl:function registration, ExecuteXsltFunction, EvaluateFunctionBody, xsl:sequence |
 //                      | Charles Korthout | 0.8   | 26-05-2026     | Added xsl:copy, fixed for-each variable scoping, AVT evaluation in literal elements      |
 //                      | Charles Korthout | 0.9   | 26-05-2026     | Added initial-template support, fixed xsl:copy to copy attributes                       |
 //                      | Charles Korthout | 1.0   | 26-05-2026     | Added xsl:mode on-no-match support; atomic for-each (EnumerateItems); keyword var names  |
@@ -74,6 +75,15 @@ public sealed class TransformEngine
 
         _allTemplateRules = _stylesheet.GetAllTemplateRules().ToList();
         _allNamedTemplates = _stylesheet.GetAllNamedTemplates();
+
+        // Register namespace prefixes declared on the stylesheet root(s)
+        foreach (var (prefix, nsUri) in _stylesheet.GetAllNamespaces())
+        {
+            _context.WithNamespace(prefix, nsUri);
+        }
+
+        // Register xsl:function declarations as callable XPath functions
+        RegisterXsltFunctions();
     }
 
     /// <summary>
@@ -81,6 +91,8 @@ public sealed class TransformEngine
     /// </summary>
     public XdmValue Transform(IXdmNode source, string? initialTemplate = null)
     {
+        // Ensure xsl:function registrations are present (re-entrant transforms)
+        RegisterXsltFunctions();
         // Compile all template match patterns before execution
         var patternCompiler = new Patterns.PatternCompiler();
         foreach (var rule in _allTemplateRules)
@@ -124,6 +136,292 @@ public sealed class TransformEngine
 
         // Return the result document
         return XdmValue.FromNode(new Providers.Xml.XDocumentNode(_resultDocument));
+    }
+
+    /// <summary>
+    /// Registers all xsl:function declarations from the stylesheet tree as callable
+    /// functions on the EvaluationContext.
+    /// </summary>
+    private void RegisterXsltFunctions()
+    {
+        var allFuncs = _stylesheet.GetAllFunctionDefinitions();
+        foreach (var (key, def) in allFuncs)
+        {
+            var sig = new FunctionSignature
+            {
+                NamespaceUri = def.NamespaceUri,
+                LocalName = def.LocalName,
+                Arity = def.Arity,
+                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
+            };
+            _context.RegisterFunction(sig);
+        }
+    }
+
+    /// <summary>
+    /// Executes the body of an xsl:function declaration, binding parameters and
+    /// returning the sequence produced by the function body.
+    /// </summary>
+    private XdmValue ExecuteXsltFunction(Stylesheet.XsltFunctionDefinition def, ReadOnlySpan<XdmValue> args)
+    {
+        var snapshot = _context.SnapshotVariables();
+        try
+        {
+            // Bind parameters
+            for (int i = 0; i < def.ParameterNames.Count && i < args.Length; i++)
+            {
+                _context.WithVariable(def.ParameterNames[i], args[i]);
+            }
+
+            // Set focus to the first argument if present, otherwise empty sequence
+            var focus = args.Length > 0 ? args[0] : XdmValue.FromSequence(XdmSequence.Empty);
+            _context.WithFocus(focus, 1, 1);
+
+            // Evaluate the function body (sequence constructor)
+            return EvaluateFunctionBody(def.Element, focus);
+        }
+        finally
+        {
+            _context.RestoreVariables(snapshot);
+        }
+    }
+
+    /// <summary>
+    /// Evaluates the body of an xsl:function and returns the resulting XDM value.
+    /// Skips xsl:param children (already bound) and collects items from all other
+    /// sequence-constructor children.
+    /// </summary>
+    private XdmValue EvaluateFunctionBody(XElement functionElement, XdmValue contextItem)
+    {
+        var items = new List<XdmValue>();
+        foreach (var child in functionElement.Elements())
+        {
+            if (child.Name.LocalName == "param" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                continue;
+
+            EvaluateFunctionBodyInstruction(child, items, contextItem);
+        }
+
+        if (items.Count == 0)
+            return XdmValue.FromSequence(XdmSequence.Empty);
+        if (items.Count == 1)
+            return items[0];
+
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    /// <summary>
+    /// Evaluates a single instruction inside an xsl:function body and appends
+    /// the produced items to <paramref name="results"/>.
+    /// </summary>
+    private void EvaluateFunctionBodyInstruction(XElement instruction, List<XdmValue> results, XdmValue contextItem)
+    {
+        if (instruction.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+        {
+            switch (instruction.Name.LocalName)
+            {
+                case "sequence":
+                    {
+                        var select = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(select))
+                        {
+                            var compiled = XPath31Expression.Compile(select);
+                            var result = compiled.Evaluate(_context);
+                            FlattenToList(result, results);
+                        }
+                        else
+                        {
+                            foreach (var child in instruction.Elements())
+                            {
+                                EvaluateFunctionBodyInstruction(child, results, contextItem);
+                            }
+                        }
+                        break;
+                    }
+                case "value-of":
+                    {
+                        var select = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(select))
+                        {
+                            var compiled = XPath31Expression.Compile(select);
+                            var result = compiled.Evaluate(_context);
+                            results.Add(XdmValue.FromString(XdmValueToString(result)));
+                        }
+                        break;
+                    }
+                case "variable":
+                    {
+                        var varName = instruction.Attribute("name")?.Value;
+                        var varSelect = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(varName))
+                        {
+                            XdmValue varValue;
+                            if (!string.IsNullOrEmpty(varSelect))
+                            {
+                                var compiled = XPath31Expression.Compile(varSelect);
+                                varValue = compiled.Evaluate(_context);
+                            }
+                            else
+                            {
+                                varValue = EvaluateSequenceConstructor(instruction, contextItem);
+                            }
+                            _context.WithVariable(varName, varValue);
+                        }
+                        break;
+                    }
+                case "if":
+                    {
+                        var test = instruction.Attribute("test")?.Value;
+                        if (!string.IsNullOrEmpty(test))
+                        {
+                            var compiled = XPath31Expression.Compile(test);
+                            if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                            {
+                                foreach (var child in instruction.Elements())
+                                    EvaluateFunctionBodyInstruction(child, results, contextItem);
+                            }
+                        }
+                        break;
+                    }
+                case "choose":
+                    {
+                        foreach (var when in instruction.Elements(XName.Get("when", Stylesheet.Stylesheet.XslNamespace)))
+                        {
+                            var whenTest = when.Attribute("test")?.Value;
+                            if (!string.IsNullOrEmpty(whenTest))
+                            {
+                                var compiled = XPath31Expression.Compile(whenTest);
+                                if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                                {
+                                    foreach (var child in when.Elements())
+                                        EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                    return;
+                                }
+                            }
+                        }
+                        var otherwise = instruction.Element(XName.Get("otherwise", Stylesheet.Stylesheet.XslNamespace));
+                        if (otherwise != null)
+                        {
+                            foreach (var child in otherwise.Elements())
+                                EvaluateFunctionBodyInstruction(child, results, contextItem);
+                        }
+                        break;
+                    }
+                case "for-each":
+                    {
+                        var select = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(select))
+                        {
+                            var compiled = XPath31Expression.Compile(select);
+                            var feResult = compiled.Evaluate(_context);
+                            var feItems = EnumerateItems(feResult).ToList();
+                            int pos = 1;
+                            foreach (var item in feItems)
+                            {
+                                _context.WithFocus(item, pos, feItems.Count);
+                                var feSnapshot = _context.SnapshotVariables();
+                                try
+                                {
+                                    foreach (var child in instruction.Elements())
+                                    {
+                                        if (child.Name.LocalName == "sort")
+                                            continue;
+                                        EvaluateFunctionBodyInstruction(child, results, item);
+                                    }
+                                }
+                                finally
+                                {
+                                    _context.RestoreVariables(feSnapshot);
+                                }
+                                pos++;
+                            }
+                        }
+                        break;
+                    }
+                case "call-template":
+                    {
+                        var calledName = instruction.Attribute("name")?.Value;
+                        if (!string.IsNullOrEmpty(calledName))
+                        {
+                            var withParams = new Dictionary<string, XdmValue>();
+                            var tunnelParams = new Dictionary<string, XdmValue>();
+                            foreach (var wp in instruction.Elements(XName.Get("with-param", Stylesheet.Stylesheet.XslNamespace)))
+                            {
+                                var wpName = wp.Attribute("name")?.Value;
+                                var wpSelect = wp.Attribute("select")?.Value;
+                                var wpTunnel = wp.Attribute("tunnel")?.Value == "yes";
+                                if (!string.IsNullOrEmpty(wpName))
+                                {
+                                    XdmValue wpValue;
+                                    if (!string.IsNullOrEmpty(wpSelect))
+                                    {
+                                        var compiled = XPath31Expression.Compile(wpSelect);
+                                        wpValue = compiled.Evaluate(_context);
+                                    }
+                                    else
+                                    {
+                                        wpValue = EvaluateSequenceConstructor(wp, contextItem);
+                                    }
+                                    if (wpTunnel)
+                                        tunnelParams[wpName] = wpValue;
+                                    else
+                                        withParams[wpName] = wpValue;
+                                }
+                            }
+                            // CallTemplate produces a result tree fragment, not a sequence.
+                            // For function bodies, we ignore call-template output.
+                            CallTemplate(calledName, contextItem, withParams, tunnelParams);
+                        }
+                        break;
+                    }
+                default:
+                    // Unknown XSLT instruction in function body: ignore
+                    break;
+            }
+        }
+        else
+        {
+            // Literal result element in function body: create a shallow copy as a node
+            var copy = new XElement(instruction.Name);
+            foreach (var attr in instruction.Attributes())
+                copy.SetAttributeValue(attr.Name, attr.Value);
+            foreach (var child in instruction.Nodes())
+            {
+                if (child is XText text)
+                    copy.Add(new XText(text.Value));
+                else if (child is XElement childElem)
+                {
+                    var childCopy = new XElement(childElem.Name);
+                    foreach (var attr in childElem.Attributes())
+                        childCopy.SetAttributeValue(attr.Name, attr.Value);
+                    copy.Add(childCopy);
+                }
+            }
+            results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(copy)));
+        }
+    }
+
+    /// <summary>
+    /// Flattens an XDM value into a list, expanding sequences into their items.
+    /// </summary>
+    private static void FlattenToList(XdmValue value, List<XdmValue> results)
+    {
+        if (value.IsSequence)
+        {
+            var seq = value.SequenceValue;
+            if (seq != null)
+            {
+                var enumerator = seq.GetEnumerator();
+                while (enumerator.MoveNext())
+                    results.Add(enumerator.Current);
+            }
+        }
+        else
+        {
+            results.Add(value);
+        }
     }
 
     /// <summary>
@@ -691,6 +989,29 @@ public sealed class TransformEngine
                             }
                         }
                         CallTemplate(calledName, contextItem, withParams, tunnelParams);
+                    }
+                    break;
+                }
+
+            case "sequence":
+                {
+                    var select = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(select))
+                    {
+                        var compiled = XPath31Expression.Compile(select);
+                        var result = compiled.Evaluate(_context);
+                        CopyToResult(result);
+                    }
+                    else
+                    {
+                        // Sequence constructor children
+                        foreach (var child in instruction.Elements())
+                        {
+                            if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                ExecuteXsltInstruction(child, contextItem);
+                            else
+                                CopyLiteralElement(child);
+                        }
                     }
                     break;
                 }
