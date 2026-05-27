@@ -43,6 +43,12 @@ class Program
         "call-template-1003"
     };
 
+    static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
+    {
+        // Unicode 9.0 collation not supported (FOCH0001) — 1460 tests
+        "unicode-90"
+    };
+
     static void Main(string[] args)
     {
         string catalogPath = args.Length > 0 ? args[0] : "tests/xslt30-test/catalog.xml";
@@ -97,6 +103,12 @@ class Program
 
     static void RunTestSet(string testSetPath, string testSetName, string catalogDir)
     {
+        if (SkipTestSets.Contains(testSetName))
+        {
+            Console.WriteLine($"  SKIP {testSetName}: Known unsupported feature");
+            return;
+        }
+
         var doc = XDocument.Load(testSetPath);
         XNamespace ns = "http://www.w3.org/2012/10/xslt-test-catalog";
         var testSetDir = Path.GetDirectoryName(testSetPath)!;

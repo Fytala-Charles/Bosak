@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 26-05-2026     | Added global variable and parameter collection with import/include precedence            |
 //                      | Charles Korthout | 0.5   | 26-05-2026     | Added xsl:strip-space and xsl:preserve-space parsing with SpaceHandlingRule              |
 //                      | Charles Korthout | 0.6   | 27-05-2026     | Added xsl:function parsing and GetAllFunctionDefinitions / GetAllNamespaces              |
+//                      | Charles Korthout | 0.7   | 27-05-2026     | Added required version attribute validation (XTSE0010)                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -138,6 +139,11 @@ public sealed class Stylesheet
 
         if (rootName.LocalName != "stylesheet" && rootName.LocalName != "transform")
             throw new InvalidOperationException($"Expected xsl:stylesheet or xsl:transform, got {rootName}.");
+
+        // Required version attribute (XTSE0010)
+        var versionAttr = root.Attribute("version");
+        if (versionAttr == null || string.IsNullOrWhiteSpace(versionAttr.Value))
+            throw new InvalidOperationException("XTSE0010: The version attribute is required on xsl:stylesheet or xsl:transform.");
 
         // Process xsl:import elements (must come first per spec)
         foreach (var import in root.Elements(XName.Get("import", XslNamespace)))
