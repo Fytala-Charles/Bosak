@@ -431,29 +431,38 @@ public readonly struct XdmValue
         // XPath canonical double uses scientific notation when abs >= 1e6 or abs < 1e-6
         if (abs >= 1e6 || abs < 1e-6)
         {
-            string s = value.ToString("E15", CultureInfo.InvariantCulture);
-            // Normalize: remove trailing zeros in mantissa, ensure exactly one digit before decimal
-            s = s.Replace("E+", "E");
-            int eIdx = s.IndexOf('E');
-            if (eIdx < 0) eIdx = s.IndexOf('e');
-            if (eIdx > 0)
-            {
-                string mantissa = s[..eIdx];
-                string exp = s[(eIdx + 1)..];
-                mantissa = mantissa.TrimEnd('0').TrimEnd('.');
-                if (!mantissa.Contains('.')) mantissa += ".0";
-                // Remove leading + and leading zeros from exponent
-                exp = exp.TrimStart('+').TrimStart('0');
-                if (string.IsNullOrEmpty(exp)) exp = "0";
-                s = mantissa + "E" + exp;
-            }
-            return s;
+            // E16 gives 16 digits after decimal = 17 significant digits, round-trip for double
+            string s = value.ToString("E16", CultureInfo.InvariantCulture);
+            return NormalizeScientific(s);
         }
-        // For non-scientific range, use fixed-point with minimal digits
-        string fixedStr = value.ToString("0.0##############", CultureInfo.InvariantCulture);
-        fixedStr = fixedStr.TrimEnd('0').TrimEnd('.');
-        if (fixedStr == "-0") fixedStr = "0";
-        return fixedStr;
+        // For non-scientific range, use round-trip format and trim trailing zeros
+        string r = value.ToString("R", CultureInfo.InvariantCulture);
+        if (r.Contains('E') || r.Contains('e'))
+            return NormalizeScientific(r);
+        r = r.TrimEnd('0').TrimEnd('.');
+        if (r == "-0") r = "0";
+        return r;
+    }
+
+    private static string NormalizeScientific(string s)
+    {
+        s = s.Replace("E+", "E");
+        int eIdx = s.IndexOf('E');
+        if (eIdx < 0) eIdx = s.IndexOf('e');
+        if (eIdx > 0)
+        {
+            string mantissa = s[..eIdx];
+            string exp = s[(eIdx + 1)..];
+            mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+            if (!mantissa.Contains('.')) mantissa += ".0";
+            bool neg = exp.StartsWith('-');
+            if (neg) exp = exp[1..];
+            exp = exp.TrimStart('+').TrimStart('0');
+            if (string.IsNullOrEmpty(exp)) exp = "0";
+            if (neg) exp = "-" + exp;
+            s = mantissa + "E" + exp;
+        }
+        return s;
     }
 
     private static string FormatXPathFloat(float value)
@@ -469,33 +478,15 @@ public readonly struct XdmValue
         {
             // E7 gives 7 digits after decimal = 8 significant digits, round-trip for float
             string s = value.ToString("E7", CultureInfo.InvariantCulture);
-            s = s.Replace("E+", "E");
-            int eIdx = s.IndexOf('E');
-            if (eIdx > 0)
-            {
-                string mantissa = s[..eIdx];
-                string exp = s[(eIdx + 1)..];
-                mantissa = mantissa.TrimEnd('0').TrimEnd('.');
-                if (!mantissa.Contains('.')) mantissa += ".0";
-                exp = exp.TrimStart('+').TrimStart('0');
-                if (string.IsNullOrEmpty(exp)) exp = "0";
-                return mantissa + "E" + exp;
-            }
-            return s;
+            return NormalizeScientific(s);
         }
-
-        // For non-scientific range, round decimal to enough places for 7 significant digits,
-        // then trim trailing zeros. This handles values like 0.00001f which G9 formats as
-        // scientific notation due to the inexact binary representation.
-        int decimalPlaces = Math.Max(0, (int)Math.Ceiling(-Math.Log10(abs)) + 7 - 1);
-        decimal d = (decimal)value;
-        d = Math.Round(d, decimalPlaces, MidpointRounding.AwayFromZero);
-        string fixedStr = d.ToString(CultureInfo.InvariantCulture);
-        if (fixedStr.Contains('.'))
-        {
-            fixedStr = fixedStr.TrimEnd('0').TrimEnd('.');
-        }
-        return fixedStr == "-0" ? "0" : fixedStr;
+        // For non-scientific range, use round-trip format and trim trailing zeros
+        string r = value.ToString("R", CultureInfo.InvariantCulture);
+        if (r.Contains('E') || r.Contains('e'))
+            return NormalizeScientific(r);
+        r = r.TrimEnd('0').TrimEnd('.');
+        if (r == "-0") r = "0";
+        return r;
     }
 
     private static string FormatXPathDateTime(XPathDateTime xdt, bool includeTime)
