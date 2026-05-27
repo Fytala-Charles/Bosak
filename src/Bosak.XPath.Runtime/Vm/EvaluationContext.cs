@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 22-05-2026     | Added stable current-dateTime/date/time snapshot                                       |
 //                      | Charles Korthout | 0.4   | 22-05-2026     | Added decimal-format support for fn:format-number                                      |
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added SnapshotVariables / RestoreVariables for lexical scoping                         |
+                      | Charles Korthout | 0.6   | 27-05-2026     | Added DefaultCollation property and WithDefaultCollation helper                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -236,6 +237,18 @@ public sealed class EvaluationContext
         if (_namedDecimalFormats.TryGetValue((localName, namespaceUri), out var fmt))
             return fmt;
         return null;
+    }
+
+    // ------------------------------------------------------------------
+    // Default Collation
+    // ------------------------------------------------------------------
+
+    public string DefaultCollation { get; set; } = string.Empty;
+
+    public EvaluationContext WithDefaultCollation(string collation)
+    {
+        DefaultCollation = collation;
+        return this;
     }
 
     /// <summary>

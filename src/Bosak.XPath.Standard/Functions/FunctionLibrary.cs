@@ -40,6 +40,10 @@
 //                      | Charles Korthout | 2.7   | 26-05-2026     | Fixed fn:substring rounding to round-half-to-even; fixed fn:replace replacement string    |
 //                      | Charles Korthout | 2.8   | 26-05-2026     | Added fn:document#1/#2 for XSLT compatibility                                            |
 //                      | Charles Korthout | 2.9   | 27-05-2026     | Added fn:parse-json, fn:json-to-xml, fn:xml-to-json, fn:json-doc with options support   |
+//                      | Charles Korthout | 3.0   | 27-05-2026     | Fixed fn:sum nested arrays, fn:function-arity curried, fn:round half-up, JSON escape/fallback |
+//                      | Charles Korthout | 3.1   | 27-05-2026     | Fixed fn:tokenize one-arg normalize-space, fn:string/fn:data FOTY0013/FOTY0014/XPTY0004 |
+//                      | Charles Korthout | 3.2   | 27-05-2026     | Fixed array:sort numeric/sequence comparison; fn:contains-token token trimming          |
+                      | Charles Korthout | 3.3   | 27-05-2026     | Added default collation support; fixed UCA starts-with/ends-with alternate=blanked     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2638,18 +2642,28 @@ public static class FunctionLibrary
         var item = ctx.ContextItem;
         if (item.IsUndefined)
             throw new InvalidOperationException("fn:string() called with no context item.");
+        if (item.IsFunction || item.IsArray || item.IsMap)
+            throw new InvalidOperationException("FOTY0014");
         return XdmValue.FromString(item.ToString());
     }
 
     private static XdmValue String_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+        if (arg.IsFunction || arg.IsArray || arg.IsMap)
+            throw new InvalidOperationException("FOTY0014");
         if (arg.IsSequence)
         {
-            // fn:string on a sequence takes the first item
+            var items = new List<XdmValue>();
             foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
-                return XdmValue.FromString(item.ToString());
-            return XdmValue.FromString(string.Empty);
+                items.Add(item);
+            if (items.Count == 0)
+                return XdmValue.FromString(string.Empty);
+            if (items.Count > 1)
+                throw new InvalidOperationException("XPTY0004");
+            return XdmValue.FromString(items[0].ToString());
         }
         return XdmValue.FromString(arg.ToString());
     }
@@ -2784,15 +2798,7 @@ public static class FunctionLibrary
         if (funcValue is InlineFunctionItem inline)
             return XdmValue.FromInteger(inline.Parameters.Count);
         if (funcValue is CurriedFunctionItem curried)
-        {
-            FunctionItem baseFunc = curried.BaseFunction;
-            while (baseFunc is CurriedFunctionItem cf)
-                baseFunc = cf.BaseFunction;
-            if (baseFunc is NamedFunctionItem nm)
-                return XdmValue.FromInteger(nm.ArityValue);
-            if (baseFunc is InlineFunctionItem il)
-                return XdmValue.FromInteger(il.Parameters.Count);
-        }
+            return XdmValue.FromInteger(curried.Arity);
         return XdmValue.Undefined;
     }
 
@@ -3030,7 +3036,7 @@ public static class FunctionLibrary
     {
         string s = AtomizedString(args[0]);
         string search = AtomizedString(args[1]);
-        int idx = s.IndexOf(search, StringComparison.Ordinal);
+        int idx = StringIndexOf(s, search, ctx.DefaultCollation);
         return XdmValue.FromString(idx >= 0 ? s[..idx] : string.Empty);
     }
 
@@ -3048,8 +3054,28 @@ public static class FunctionLibrary
     {
         string s = AtomizedString(args[0]);
         string search = AtomizedString(args[1]);
-        int idx = s.IndexOf(search, StringComparison.Ordinal);
-        return XdmValue.FromString(idx >= 0 ? s[(idx + search.Length)..] : string.Empty);
+        string collation = ctx.DefaultCollation;
+        if (TryParseUca(collation, out var uca))
+        {
+            int idx = uca.CompareInfo.IndexOf(s, search, uca.Options);
+            if (idx < 0)
+                return XdmValue.FromString(string.Empty);
+            if (uca.CompareInfo.Compare(search, string.Empty, uca.Options) == 0)
+                return XdmValue.FromString(s[idx..]);
+            string suffix = s[idx..];
+            int matchLen = -1;
+            for (int len = 1; len <= suffix.Length; len++)
+            {
+                if (uca.CompareInfo.IsPrefix(suffix[..len], search, uca.Options))
+                {
+                    matchLen = len;
+                    break;
+                }
+            }
+            return XdmValue.FromString(matchLen > 0 ? s[(idx + matchLen)..] : string.Empty);
+        }
+        int plainIdx = s.IndexOf(search, GetStringComparison(collation));
+        return XdmValue.FromString(plainIdx >= 0 ? s[(plainIdx + search.Length)..] : string.Empty);
     }
 
     private static XdmValue SubstringAfter_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3058,8 +3084,33 @@ public static class FunctionLibrary
         string search = AtomizedString(args[1]);
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
-        int idx = StringIndexOf(s, search, collation);
-        return XdmValue.FromString(idx >= 0 ? s[(idx + search.Length)..] : string.Empty);
+
+        if (TryParseUca(collation, out var uca))
+        {
+            int idx = uca.CompareInfo.IndexOf(s, search, uca.Options);
+            if (idx < 0)
+                return XdmValue.FromString(string.Empty);
+
+            // If search consists entirely of ignorable characters, match length is zero
+            if (uca.CompareInfo.Compare(search, string.Empty, uca.Options) == 0)
+                return XdmValue.FromString(s[idx..]);
+
+            // Find the minimum prefix length that matches the search pattern
+            string suffix = s[idx..];
+            int matchLen = -1;
+            for (int len = 1; len <= suffix.Length; len++)
+            {
+                if (uca.CompareInfo.IsPrefix(suffix[..len], search, uca.Options))
+                {
+                    matchLen = len;
+                    break;
+                }
+            }
+            return XdmValue.FromString(matchLen > 0 ? s[(idx + matchLen)..] : string.Empty);
+        }
+
+        int plainIdx = s.IndexOf(search, GetStringComparison(collation));
+        return XdmValue.FromString(plainIdx >= 0 ? s[(plainIdx + search.Length)..] : string.Empty);
     }
 
     private static XdmValue StringToCodepoints(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3377,7 +3428,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Contains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(AtomizedString(args[0]).Contains(AtomizedString(args[1])));
+        => XdmValue.FromBoolean(StringContains(AtomizedString(args[0]), AtomizedString(args[1]), ctx.DefaultCollation));
 
     private static XdmValue Contains_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -3389,7 +3440,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue StartsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(AtomizedString(args[0]).StartsWith(AtomizedString(args[1])));
+        => XdmValue.FromBoolean(StringStartsWith(AtomizedString(args[0]), AtomizedString(args[1]), ctx.DefaultCollation));
 
     private static XdmValue StartsWith_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -3401,7 +3452,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue EndsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(AtomizedString(args[0]).EndsWith(AtomizedString(args[1])));
+        => XdmValue.FromBoolean(StringEndsWith(AtomizedString(args[0]), AtomizedString(args[1]), ctx.DefaultCollation));
 
     private static XdmValue EndsWith_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -3423,6 +3474,7 @@ public static class FunctionLibrary
         ValidateCollation(collation);
         var comparer = GetCollationEqualityComparer(collation);
 
+        token = token.Trim();
         if (string.IsNullOrEmpty(token))
             return XdmValue.FromBoolean(false);
 
@@ -3565,14 +3617,47 @@ public static class FunctionLibrary
     private static bool StringStartsWith(string s, string search, string collation)
     {
         if (TryParseUca(collation, out var uca))
-            return uca.CompareInfo.IsPrefix(s, search, uca.Options);
+        {
+            // IsPrefix is unreliable with IgnoreSymbols when both strings start with the same symbol.
+            // Use IndexOf and verify the match is at or before the first non-ignorable character.
+            int firstNonIgnorable = 0;
+            while (firstNonIgnorable < s.Length &&
+                   uca.CompareInfo.Compare(s[firstNonIgnorable].ToString(), string.Empty, uca.Options) == 0)
+                firstNonIgnorable++;
+
+            int matchPos = uca.CompareInfo.IndexOf(s, search, uca.Options);
+            return matchPos >= 0 && matchPos <= firstNonIgnorable;
+        }
         return s.StartsWith(search, GetStringComparison(collation));
     }
 
     private static bool StringEndsWith(string s, string search, string collation)
     {
         if (TryParseUca(collation, out var uca))
-            return uca.CompareInfo.IsSuffix(s, search, uca.Options);
+        {
+            // IsSuffix is unreliable with IgnoreSymbols for empty source or trailing-symbol edge cases.
+            // Use LastIndexOf and verify the match extends to cover the last non-ignorable character.
+            int lastMatchPos = uca.CompareInfo.LastIndexOf(s, search, uca.Options);
+            if (lastMatchPos < 0)
+                return false;
+
+            int matchLen = 0;
+            for (int len = 1; len <= s.Length - lastMatchPos; len++)
+            {
+                if (uca.CompareInfo.IsPrefix(s.AsSpan(lastMatchPos, len), search, uca.Options))
+                {
+                    matchLen = len;
+                    break;
+                }
+            }
+
+            int lastNonIgnorablePos = s.Length - 1;
+            while (lastNonIgnorablePos >= 0 &&
+                   uca.CompareInfo.Compare(s[lastNonIgnorablePos].ToString(), string.Empty, uca.Options) == 0)
+                lastNonIgnorablePos--;
+
+            return lastMatchPos + matchLen > lastNonIgnorablePos;
+        }
         return s.EndsWith(search, GetStringComparison(collation));
     }
 
@@ -3602,6 +3687,7 @@ public static class FunctionLibrary
 
         string lang = "en";
         string strength = "tertiary";
+        bool alternateBlanked = false;
         foreach (var param in query.Split(';', StringSplitOptions.RemoveEmptyEntries))
         {
             int eq = param.IndexOf('=');
@@ -3612,6 +3698,8 @@ public static class FunctionLibrary
                 lang = val;
             else if (key == "strength")
                 strength = val;
+            else if (key == "alternate" && val == "blanked")
+                alternateBlanked = true;
         }
 
         var culture = CultureInfo.GetCultureInfo(lang);
@@ -3624,6 +3712,9 @@ public static class FunctionLibrary
             "identical" => CompareOptions.Ordinal,
             _ => CompareOptions.None,
         };
+
+        if (alternateBlanked)
+            options |= CompareOptions.IgnoreSymbols;
 
         info = new UcaCollationInfo(lang, strength, options, culture.CompareInfo);
         return true;
@@ -3824,7 +3915,11 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Tokenize_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => DoTokenize(AtomizedString(args[0]), @"\s+", string.Empty);
+    {
+        // One-argument form is equivalent to tokenize(normalize-space($input), ' ')
+        var input = NormalizeSpaceString(AtomizedString(args[0]));
+        return DoTokenize(input, " ", string.Empty);
+    }
 
     private static XdmValue Tokenize_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -3855,18 +3950,8 @@ public static class FunctionLibrary
         var parts = Regex.Split(input, pattern, options);
         var result = new List<XdmValue>();
 
-        // Strip leading empty strings
-        int start = 0;
-        while (start < parts.Length && parts[start].Length == 0)
-            start++;
-
-        // Strip trailing empty strings
-        int end = parts.Length;
-        while (end > start && parts[end - 1].Length == 0)
-            end--;
-
-        for (int i = start; i < end; i++)
-            result.Add(XdmValue.FromString(parts[i]));
+        foreach (var part in parts)
+            result.Add(XdmValue.FromString(part));
 
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
@@ -5231,14 +5316,43 @@ public static class FunctionLibrary
                 var key = VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item });
                 keyed.Add((key, item));
             }
-            keyed.Sort((a, b) => string.Compare(AtomizedString(a.Key), AtomizedString(b.Key), StringComparison.Ordinal));
+            keyed.Sort((a, b) => CompareSortKeys(a.Key, b.Key));
             items = keyed.Select(k => k.Item).ToList();
         }
         else
         {
-            items.Sort((a, b) => string.Compare(AtomizedString(a), AtomizedString(b), StringComparison.Ordinal));
+            items.Sort((a, b) => CompareArraySortItems(a, b));
         }
         return XdmValue.FromArray(new XdmArray(items));
+    }
+
+    private static int CompareArraySortItems(XdmValue a, XdmValue b)
+    {
+        // If both are sequences, compare lexicographically
+        if (a.IsSequence && b.IsSequence)
+        {
+            var itemsA = Materialize(a);
+            var itemsB = Materialize(b);
+            int minLen = Math.Min(itemsA.Count, itemsB.Count);
+            for (int i = 0; i < minLen; i++)
+            {
+                int cmp = CompareSortKeys(itemsA[i], itemsB[i]);
+                if (cmp != 0) return cmp;
+            }
+            return itemsA.Count.CompareTo(itemsB.Count);
+        }
+        // If one is a sequence and the other is not, unwrap single-item sequences
+        if (a.IsSequence)
+        {
+            var itemsA = Materialize(a);
+            if (itemsA.Count == 1) return CompareSortKeys(itemsA[0], b);
+        }
+        if (b.IsSequence)
+        {
+            var itemsB = Materialize(b);
+            if (itemsB.Count == 1) return CompareSortKeys(a, itemsB[0]);
+        }
+        return CompareSortKeys(a, b);
     }
 
     private static XdmValue ArrayInsertBefore(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5345,7 +5459,15 @@ public static class FunctionLibrary
             var list = new List<XdmValue>();
             var arr = value.ArrayValue;
             for (int i = 1; i <= arr.Count; i++)
-                list.Add(arr.Get(i));
+            {
+                var member = arr.Get(i);
+                if (member.IsArray)
+                    list.AddRange(Materialize(member));
+                else if (member.IsSequence)
+                    list.AddRange(Materialize(member));
+                else
+                    list.Add(member);
+            }
             return list;
         }
 
@@ -5625,16 +5747,16 @@ public static class FunctionLibrary
 
         if (precision >= 0)
         {
-            double factor = Math.Pow(10.0, precision);
+            int p = (int)precision;
             return arg.Kind switch
             {
                 XdmValueKind.Integer => arg,
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue * factor, MidpointRounding.AwayFromZero) / factor)),
+                    XdmValue.FromDecimal(RoundDecimal(arg.DecimalValue, p)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor),
+                    XdmValue.FromDouble(RoundDouble(arg.DoubleValue, p)),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue * factor, MidpointRounding.AwayFromZero) / factor)),
+                    XdmValue.FromFloat((float)RoundDouble(arg.DoubleValue, p)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
         }
@@ -5644,16 +5766,45 @@ public static class FunctionLibrary
             return arg.Kind switch
             {
                 XdmValueKind.Integer =>
-                    XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                    XdmValue.FromInteger((long)(RoundDouble(arg.IntegerValue / factor, 0) * factor)),
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(Math.Round((double)arg.DecimalValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                    XdmValue.FromDecimal((decimal)(RoundDouble((double)arg.DecimalValue / factor, 0) * factor)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor),
+                    XdmValue.FromDouble(RoundDouble(arg.DoubleValue / factor, 0) * factor),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue / factor, MidpointRounding.AwayFromZero) * factor)),
+                    XdmValue.FromFloat((float)(RoundDouble(arg.DoubleValue / factor, 0) * factor)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
         }
+    }
+
+    private static double RoundDouble(double value, int precision)
+    {
+        if (double.IsNaN(value) || double.IsInfinity(value))
+            return value;
+        double factor = Math.Pow(10.0, precision);
+        double scaled = value * factor;
+        double floor = Math.Floor(scaled);
+        double ceil = Math.Ceiling(scaled);
+        double diffFloor = scaled - floor;
+        double diffCeil = ceil - scaled;
+        if (diffFloor < diffCeil) return floor / factor;
+        if (diffCeil < diffFloor) return ceil / factor;
+        // Exactly halfway: round toward positive infinity
+        return ceil / factor;
+    }
+
+    private static decimal RoundDecimal(decimal value, int precision)
+    {
+        decimal factor = (decimal)Math.Pow(10.0, precision);
+        decimal scaled = value * factor;
+        decimal floor = Math.Floor(scaled);
+        decimal ceil = Math.Ceiling(scaled);
+        decimal diffFloor = scaled - floor;
+        decimal diffCeil = ceil - scaled;
+        if (diffFloor < diffCeil) return floor / factor;
+        if (diffCeil < diffFloor) return ceil / factor;
+        return ceil / factor;
     }
 
     private static XdmValue RoundHalfToEven_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -6547,6 +6698,9 @@ public static class FunctionLibrary
         if (value.IsUndefined)
             return XdmValue.Undefined;
 
+        if (value.IsFunction)
+            throw new InvalidOperationException("FOTY0013");
+
         if (value.IsNode)
             return XdmValue.FromString(value.NodeValue.StringValue);
 
@@ -7206,7 +7360,7 @@ public static class FunctionLibrary
     {
         if (IsEmptySequence(args[0]) || IsEmptySequence(args[1]))
             return XdmValue.Undefined;
-        return Compare(args[0], args[1]);
+        return Compare(args[0], args[1], ctx.DefaultCollation);
     }
 
     private static XdmValue Compare_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7365,9 +7519,9 @@ public static class FunctionLibrary
 
     private static readonly string JsonXmlNs = "http://www.w3.org/2005/xpath-functions";
 
-    private readonly record struct JsonOptions(bool Liberal, string Duplicates, bool Escape, bool Indent)
+    private readonly record struct JsonOptions(bool Liberal, string Duplicates, bool Escape, bool Indent, XdmValue? Fallback = null)
     {
-        public static JsonOptions Default => new(false, "use-first", true, false);
+        public static JsonOptions Default => new(false, "use-first", false, false, null);
     }
 
     private static JsonOptions ParseJsonOptions(XdmValue? options)
@@ -7388,17 +7542,19 @@ public static class FunctionLibrary
             result = result with { Escape = escape.BooleanValue };
         if (map.TryGetValue(XdmValue.FromString("indent"), out var indent))
             result = result with { Indent = indent.BooleanValue };
+        if (map.TryGetValue(XdmValue.FromString("fallback"), out var fallback))
+            result = result with { Fallback = fallback };
 
         return result;
     }
 
     private static XdmValue ParseJson_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ParseJson(AtomizedString(args[0]), JsonOptions.Default);
+        => ParseJson(ctx, AtomizedString(args[0]), JsonOptions.Default);
 
     private static XdmValue ParseJson_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ParseJson(AtomizedString(args[0]), ParseJsonOptions(args[1]));
+        => ParseJson(ctx, AtomizedString(args[0]), ParseJsonOptions(args[1]));
 
-    private static XdmValue ParseJson(string json, JsonOptions options)
+    private static XdmValue ParseJson(EvaluationContext ctx, string json, JsonOptions options)
     {
         if (string.IsNullOrEmpty(json))
             throw new InvalidOperationException("FOJS0001: Empty string is not valid JSON");
@@ -7409,10 +7565,10 @@ public static class FunctionLibrary
         };
 
         using var document = JsonDocument.Parse(json, docOptions);
-        return JsonElementToXdmValue(document.RootElement, options);
+        return JsonElementToXdmValue(ctx, document.RootElement, options);
     }
 
-    private static XdmValue JsonElementToXdmValue(JsonElement element, JsonOptions options)
+    private static XdmValue JsonElementToXdmValue(EvaluationContext ctx, JsonElement element, JsonOptions options)
     {
         switch (element.ValueKind)
         {
@@ -7422,7 +7578,7 @@ public static class FunctionLibrary
                     foreach (var property in element.EnumerateObject())
                     {
                         var key = XdmValue.FromString(options.Escape ? JsonEscapeString(property.Name) : property.Name);
-                        var value = JsonElementToXdmValue(property.Value, options);
+                        var value = JsonElementToXdmValue(ctx, property.Value, options);
                         if (map.ContainsKey(key))
                         {
                             if (options.Duplicates == "reject")
@@ -7438,11 +7594,11 @@ public static class FunctionLibrary
                 {
                     var array = new XdmArray();
                     foreach (var item in element.EnumerateArray())
-                        array.Add(JsonElementToXdmValue(item, options));
+                        array.Add(JsonElementToXdmValue(ctx, item, options));
                     return XdmValue.FromArray(array);
                 }
             case JsonValueKind.String:
-                return XdmValue.FromString(options.Escape ? JsonEscapeString(element.GetString()!) : element.GetString()!);
+                return XdmValue.FromString(ProcessJsonString(element.GetString()!, options, ctx));
             case JsonValueKind.Number:
                 return XdmValue.FromDouble(element.GetDouble());
             case JsonValueKind.True:
@@ -7481,13 +7637,46 @@ public static class FunctionLibrary
         return sb.ToString();
     }
 
+    private static string ProcessJsonString(string s, JsonOptions options, EvaluationContext ctx)
+    {
+        if (!s.Any(c => c < 0x20))
+            return options.Escape ? JsonEscapeString(s) : s;
+
+        // If escape=true, JSON-escape control characters directly
+        if (options.Escape)
+            return JsonEscapeString(s);
+
+        var sb = new StringBuilder();
+        foreach (char c in s)
+        {
+            if (c < 0x20)
+            {
+                if (options.Fallback is not null && !options.Fallback.Value.IsUndefined)
+                {
+                    var fallbackArg = XdmValue.FromString($"\\u{(int)c:X4}");
+                    var fallbackResult = VmEngine.InvokeFunctionItem(options.Fallback.Value, ctx, new[] { fallbackArg });
+                    sb.Append(AtomizedString(fallbackResult));
+                }
+                else
+                {
+                    sb.Append('\uFFFD');
+                }
+            }
+            else
+            {
+                sb.Append(c);
+            }
+        }
+        return sb.ToString();
+    }
+
     private static XdmValue JsonToXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => JsonToXml(AtomizedString(args[0]), JsonOptions.Default);
+        => JsonToXml(ctx, AtomizedString(args[0]), JsonOptions.Default);
 
     private static XdmValue JsonToXml_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => JsonToXml(AtomizedString(args[0]), ParseJsonOptions(args[1]));
+        => JsonToXml(ctx, AtomizedString(args[0]), ParseJsonOptions(args[1]));
 
-    private static XdmValue JsonToXml(string json, JsonOptions options)
+    private static XdmValue JsonToXml(EvaluationContext ctx, string json, JsonOptions options)
     {
         if (string.IsNullOrEmpty(json))
             throw new InvalidOperationException("FOJS0001: Empty string is not valid JSON");
@@ -7498,12 +7687,12 @@ public static class FunctionLibrary
         };
 
         using var document = JsonDocument.Parse(json, docOptions);
-        var rootElement = JsonElementToXml(document.RootElement, options);
+        var rootElement = JsonElementToXml(ctx, document.RootElement, options);
         var xdoc = new XDocument(rootElement);
         return XdmValue.FromNode(new XDocumentNode(xdoc));
     }
 
-    private static XElement JsonElementToXml(JsonElement element, JsonOptions options)
+    private static XElement JsonElementToXml(EvaluationContext ctx, JsonElement element, JsonOptions options)
     {
         switch (element.ValueKind)
         {
@@ -7513,7 +7702,7 @@ public static class FunctionLibrary
                     foreach (var property in element.EnumerateObject())
                     {
                         var key = options.Escape ? JsonEscapeString(property.Name) : property.Name;
-                        var child = JsonElementToXml(property.Value, options);
+                        var child = JsonElementToXml(ctx, property.Value, options);
                         child.SetAttributeValue(XName.Get("key"), key);
                         mapEl.Add(child);
                     }
@@ -7523,11 +7712,17 @@ public static class FunctionLibrary
                 {
                     var arrEl = new XElement(XName.Get("array", JsonXmlNs));
                     foreach (var item in element.EnumerateArray())
-                        arrEl.Add(JsonElementToXml(item, options));
+                        arrEl.Add(JsonElementToXml(ctx, item, options));
                     return arrEl;
                 }
             case JsonValueKind.String:
-                return new XElement(XName.Get("string", JsonXmlNs), options.Escape ? JsonEscapeString(element.GetString()!) : element.GetString()!);
+                {
+                    var processed = ProcessJsonString(element.GetString()!, options, ctx);
+                    var strEl = new XElement(XName.Get("string", JsonXmlNs), processed);
+                    if (options.Escape && processed != element.GetString()!)
+                        strEl.SetAttributeValue(XName.Get("escaped"), "true");
+                    return strEl;
+                }
             case JsonValueKind.Number:
                 return new XElement(XName.Get("number", JsonXmlNs), element.GetRawText());
             case JsonValueKind.True:
@@ -7699,7 +7894,7 @@ public static class FunctionLibrary
             }
         }
 
-        return ParseJson(json, options);
+        return ParseJson(ctx, json, options);
     }
 }
 

@@ -65,6 +65,22 @@ The execution pipeline is:
 Source XPath → Lexer → Parser → AST → Optimizer → IR Lowerer → VmEngine.Execute → XdmValue
 ```
 
+## Collation Support
+
+The implementation supports three collation URIs:
+- **Codepoint**: `http://www.w3.org/2005/xpath-functions/collation/codepoint` (default)
+- **HTML ASCII Case-Insensitive**: `http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive`
+- **UCA**: `http://www.w3.org/2013/collation/UCA?lang=XX;strength=Y;alternate=blanked`
+
+`EvaluationContext.DefaultCollation` is used by 2-argument forms of `fn:compare`, `fn:contains`, `fn:starts-with`, `fn:ends-with`, `fn:substring-before`, and `fn:substring-after`.
+
+UCA `alternate=blanked` maps to `CompareOptions.IgnoreSymbols`. Due to .NET `IsPrefix`/`IsSuffix` bugs with this flag, `StringStartsWith` and `StringEndsWith` use custom `IndexOf` / `LastIndexOf` + match-length verification.
+
+## Known Limitations
+
+- **DateTime year < 1**: `DateTimeOffset` minimum year is 1. Tests using year `-2` cannot pass without switching to a custom date representation.
+- **Timezone adjustment**: `adjust-time-to-timezone` produces incorrect offsets in some cases.
+
 ## Coding Style
 
 - Use `file`-scoped namespaces when possible.

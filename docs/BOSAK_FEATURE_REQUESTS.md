@@ -96,6 +96,8 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
 | REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
+| REQ-017 | *(internal)* | Fix CS0219 unused variable in `FormatNumberEngine` | Compiler warning `CS0219` on unused `hasDecimal` flag in `FormatNumberEngine.cs` | **Pending** | TBD | Unassigned | 2026-05-27 |
+| REQ-018 | *(internal)* | Fix CS8602 null dereference in `FormatNumberEngine` | Compiler warning `CS8602` on potential null dereference `sub.Suffix` in `FormatNumberEngine.cs` | **Pending** | TBD | Unassigned | 2026-05-27 |
 
 > **Legend:**
 > - `Pending` — Under review, no decision yet.
@@ -732,6 +734,73 @@ Extend the sorting logic in `TransformEngine` to evaluate all `xsl:sort` childre
 |------|-------|----------|-----------|
 | 2026-05-26 | Kimi | Pending | Required for D99A JAMA basesheet correctness |
 | 2026-05-27 | Kimi | Implemented | Composite SortKey/SortEntry with per-key data-type and order; stable sort via original index tiebreaker; 4 unit tests pass |
+
+---
+
+### REQ-017: Fix CS0219 Unused Variable in `FormatNumberEngine`
+
+**Requesting Application:** *(internal — code quality)*  
+**Submitted:** 2026-05-27  
+**Status:** Pending
+
+#### Problem Statement
+`FormatNumberEngine.cs` (Bosak.XPath.Formatting) triggers compiler warning **CS0219**: *"The variable 'hasDecimal' is assigned but its value is never used."* This clutters the build output and masks more serious warnings.
+
+#### Proposed Solution
+Remove the unused `bool hasDecimal = false;` declaration and any assignments to it, or use the variable if it was intended to drive formatting logic.
+
+#### Acceptance Criteria
+- [ ] `dotnet build` on Bosak.XPath.Formatting produces zero CS0219 warnings
+- [ ] `FormatNumberEngine` behavior is unchanged (no functional regression)
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | None | |
+| Standard | None | |
+| XSLT | None | |
+| API | None | |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-05-27 | Kimi | Pending | Low-priority code cleanup; does not block Customer A |
+
+---
+
+### REQ-018: Fix CS8602 Null Dereference in `FormatNumberEngine`
+
+**Requesting Application:** *(internal — code quality)*  
+**Submitted:** 2026-05-27  
+**Status:** Pending
+
+#### Problem Statement
+`FormatNumberEngine.cs` triggers compiler warning **CS8602**: *"Dereference of a possibly null reference"* on `sub.Suffix` where `sub` may be null. This is a potential `NullReferenceException` at runtime if the formatting path reaches this line with a null `sub` value.
+
+#### Proposed Solution
+Add a null-conditional guard (`sub?.Suffix` or an explicit null check) before accessing `sub.Suffix`, ensuring safe behavior.
+
+#### Acceptance Criteria
+- [ ] `dotnet build` on Bosak.XPath.Formatting produces zero CS8602 warnings for this line
+- [ ] No `NullReferenceException` can occur on the `sub.Suffix` access path
+- [ ] Existing number-formatting unit tests continue to pass
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | Modified | Safer null handling in number formatting |
+| Standard | None | |
+| XSLT | None | |
+| API | None | |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-05-27 | Kimi | Pending | Low-priority bug fix; does not block Customer A |
 
 ---
 

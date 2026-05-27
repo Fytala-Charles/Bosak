@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added decimal-format parsing from QT3 test environments                                |
+                      | Charles Korthout | 0.3   | 27-05-2026     | Added default collation parsing from QT3 test environments                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -29,6 +30,7 @@ internal sealed class TestEnvironment
     public List<NamespaceBinding> Namespaces { get; } = new();
     public List<ExternalParameter> Parameters { get; } = new();
     public List<DecimalFormatEntry> DecimalFormats { get; } = new();
+    public string? DefaultCollation { get; set; }
     public string? BaseUri { get; set; }
 
     public static TestEnvironment FromElement(XElement element, string suitePath, string baseDir)
@@ -76,6 +78,16 @@ internal sealed class TestEnvironment
         if (staticBaseUri is not null)
         {
             env.BaseUri = (string?)staticBaseUri.Attribute("uri");
+        }
+
+        foreach (var colElem in element.Elements(ns + "collation"))
+        {
+            string? uri = (string?)colElem.Attribute("uri");
+            bool isDefault = (string?)colElem.Attribute("default") == "true";
+            if (uri is not null && isDefault)
+            {
+                env.DefaultCollation = uri;
+            }
         }
 
         foreach (var dfElem in element.Elements(ns + "decimal-format"))
@@ -189,6 +201,11 @@ internal sealed class TestEnvironment
             {
                 ctx.WithDecimalFormat(df.Name, df.NamespaceUri, df.Format);
             }
+        }
+
+        if (!string.IsNullOrEmpty(DefaultCollation))
+        {
+            ctx.WithDefaultCollation(DefaultCollation);
         }
 
         // Note: External parameters are not yet supported; they require evaluating the select expression

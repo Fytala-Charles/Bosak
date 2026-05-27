@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 19-05-2026     | Added fn:serialize tests                                                               |
 //                      | Charles Korthout | 1.2   | 19-05-2026     | Added fn:trace, fn:boolean, cardinality, fn:base-uri, fn:document-uri tests            |
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added JSON function tests (parse-json, json-to-xml, xml-to-json, round-trip)            |
+//                      | Charles Korthout | 1.4   | 27-05-2026     | Updated tokenize tests for spec-correct leading/trailing empty string preservation       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1258,10 +1259,12 @@ public class FunctionLibraryTests
     public void Tokenize_LeadingTrailingSeparators()
     {
         var result = EvalSequence("tokenize(',a,b,c,', ',')");
-        Assert.Equal(3, result.Length);
-        Assert.Equal("a", result[0]);
-        Assert.Equal("b", result[1]);
-        Assert.Equal("c", result[2]);
+        Assert.Equal(5, result.Length);
+        Assert.Equal("", result[0]);
+        Assert.Equal("a", result[1]);
+        Assert.Equal("b", result[2]);
+        Assert.Equal("c", result[3]);
+        Assert.Equal("", result[4]);
     }
 
     [Fact]
@@ -1278,9 +1281,11 @@ public class FunctionLibraryTests
     public void Tokenize_Whitespace()
     {
         var result = EvalSequence("tokenize('  a  b  ', '\\s+')");
-        Assert.Equal(2, result.Length);
-        Assert.Equal("a", result[0]);
-        Assert.Equal("b", result[1]);
+        Assert.Equal(4, result.Length);
+        Assert.Equal("", result[0]);
+        Assert.Equal("a", result[1]);
+        Assert.Equal("b", result[2]);
+        Assert.Equal("", result[3]);
     }
 
     // ------------------------------------------------------------------

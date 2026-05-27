@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 22-05-2026     | Fixed ValuesEqual cross-type numeric comparison (Integer vs Double/Float)            |
 //                      | Charles Korthout | 0.4   | 22-05-2026     | Added Duration serialization and type matching for dayTimeDuration/yearMonthDuration  |
 //                      | Charles Korthout | 0.5   | 22-05-2026     | Fixed Double/Float serialization to use XdmValue.ToString for canonical formatting       |
+//                      | Charles Korthout | 0.6   | 27-05-2026     | DeepEqual: single-item sequence is equivalent to bare item (XDM semantics)               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -659,8 +660,20 @@ internal static class ResultComparer
                     return false;
             return true;
         }
-        if (a.IsSequence || b.IsSequence)
+        if (a.IsSequence)
+        {
+            var itemsA = MaterializeValue(a);
+            if (itemsA.Count == 1)
+                return DeepEqual(itemsA[0], b);
             return false;
+        }
+        if (b.IsSequence)
+        {
+            var itemsB = MaterializeValue(b);
+            if (itemsB.Count == 1)
+                return DeepEqual(a, itemsB[0]);
+            return false;
+        }
 
         // Maps
         if (a.Kind == XdmValueKind.Map && b.Kind == XdmValueKind.Map)
