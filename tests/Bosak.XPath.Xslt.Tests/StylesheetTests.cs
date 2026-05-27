@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added import/include and precedence tests                                                |
 //                      | Charles Korthout | 0.4   | 24-05-2026     | Added xsl:key / key() tests                                                              |
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added xsl:number tests (single, any, multiple, value attribute, format tokens)         |
+//                      | Charles Korthout | 0.6   | 26-05-2026     | Added global variable and parameter tests for main/include/import scopes                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -707,6 +708,224 @@ public class StylesheetTests
         Assert.Contains("<found>b</found>", result);
     }
 
+    [Fact]
+    public void Global_Variable_In_Main_Stylesheet_Is_Accessible()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='greeting' select='""hello""'/>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='$greeting'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("hello", result);
+    }
+
+    [Fact]
+    public void Variable_From_Include_Is_Accessible()
+    {
+        var resolver = new InMemoryResolver();
+        resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:include href='helper.xsl'/>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='$greeting'/></output>
+            </xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///helper.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='greeting' select='""hello from include""' />
+        </xsl:stylesheet>");
+
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("hello from include", result);
+    }
+
+    [Fact]
+    public void Global_Parameter_In_Main_Stylesheet_Is_Accessible()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:param name='greeting' select='""hello param""'/>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='$greeting'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("hello param", result);
+    }
+
+    [Fact]
+    public void Variable_From_Import_Is_Accessible()
+    {
+        var resolver = new InMemoryResolver();
+        resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:import href='base.xsl'/>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='$greeting'/></output>
+            </xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///base.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='greeting' select='""hello from import""' />
+        </xsl:stylesheet>");
+
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("hello from import", result);
+    }
+
+    [Fact]
+    public void Local_Global_Variable_Overrides_Imported()
+    {
+        var resolver = new InMemoryResolver();
+        resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:import href='base.xsl'/>
+            <xsl:variable name='greeting' select='""local override""' />
+            <xsl:template match='/'>
+                <output><xsl:value-of select='$greeting'/></output>
+            </xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///base.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='greeting' select='""from import""' />
+        </xsl:stylesheet>");
+
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("local override", result);
+        Assert.DoesNotContain("from import", result);
+    }
+
+    [Fact]
+    public void Global_Variable_References_Another_Global()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='first' select='""hello""'/>
+            <xsl:variable name='second' select='concat($first, "" world"")'/>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='$second'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("hello world", result);
+    }
+
+    [Fact]
+    public void Tunnel_Param_Via_Apply_Templates()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:apply-templates select='root/item'>
+                        <xsl:with-param name='label' tunnel='yes' select='""tunneled""'/>
+                    </xsl:apply-templates>
+                </output>
+            </xsl:template>
+            <xsl:template match='item'>
+                <xsl:param name='label' tunnel='yes'/>
+                <item><xsl:value-of select='$label'/></item>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root", new XElement("item")));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<item>tunneled</item>", result);
+    }
+
+    [Fact]
+    public void Tunnel_Param_Via_Call_Template()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:call-template name='format'>
+                        <xsl:with-param name='label' tunnel='yes' select='""tunneled""'/>
+                    </xsl:call-template>
+                </output>
+            </xsl:template>
+            <xsl:template name='format'>
+                <xsl:param name='label' tunnel='yes'/>
+                <item><xsl:value-of select='$label'/></item>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("<item>tunneled</item>", result);
+    }
+
+    [Fact]
+    public void Tunnel_Param_Passes_Through_Intermediate_Template()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:call-template name='middle'>
+                        <xsl:with-param name='label' tunnel='yes' select='""deep""'/>
+                    </xsl:call-template>
+                </output>
+            </xsl:template>
+            <xsl:template name='middle'>
+                <!-- does not declare label, but passes it through to inner -->
+                <xsl:call-template name='inner'/>
+            </xsl:template>
+            <xsl:template name='inner'>
+                <xsl:param name='label' tunnel='yes'/>
+                <item><xsl:value-of select='$label'/></item>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("<item>deep</item>", result);
+    }
+
+    [Fact]
+    public void Non_Tunnel_Param_Still_Works()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:call-template name='format'>
+                        <xsl:with-param name='label' select='""normal""'/>
+                    </xsl:call-template>
+                </output>
+            </xsl:template>
+            <xsl:template name='format'>
+                <xsl:param name='label'/>
+                <item><xsl:value-of select='$label'/></item>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("<item>normal</item>", result);
+    }
+
     // ------------------------------------------------------------------
     // xsl:number tests
     // ------------------------------------------------------------------
@@ -1021,5 +1240,159 @@ public class StylesheetTests
         var idxM = result.IndexOf("<item>m</item>");
         var idxZ = result.IndexOf("<item>z</item>");
         Assert.True(idxA < idxM && idxM < idxZ, $"Expected a < m < z. Got: {result}");
+    }
+
+    // ------------------------------------------------------------------
+    // xsl:mode on-no-match tests
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Mode_OnNoMatch_ShallowCopy_Default()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:mode on-no-match='shallow-copy'/>
+            <xsl:template match='/'>
+                <output><xsl:apply-templates select='root'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root", new XAttribute("id", "x"), new XText("text")));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<root id=\"x\"", result);
+        Assert.Contains("text", result);
+    }
+
+    [Fact]
+    public void Mode_OnNoMatch_ShallowSkip()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:mode on-no-match='shallow-skip'/>
+            <xsl:template match='/'>
+                <output><xsl:apply-templates select='root'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root", new XElement("child", "text")));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        // Element wrapper should be skipped, only text remains
+        Assert.Contains("text", result);
+        Assert.DoesNotContain("<root", result);
+        Assert.DoesNotContain("<child", result);
+    }
+
+    [Fact]
+    public void Mode_OnNoMatch_TextOnlyCopy()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:mode on-no-match='text-only-copy'/>
+            <xsl:template match='/'>
+                <output><xsl:apply-templates select='root'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root", new XElement("child", "text")));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        // Only text should be copied, elements ignored
+        Assert.Contains("text", result);
+        Assert.DoesNotContain("<root", result);
+        Assert.DoesNotContain("<child", result);
+    }
+
+    [Fact]
+    public void Mode_OnNoMatch_DeepCopy()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:mode on-no-match='deep-copy'/>
+            <xsl:template match='/'>
+                <output><xsl:apply-templates select='root'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root", new XElement("child", new XElement("grandchild", "text"))));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        // Full subtree should be deep-copied
+        Assert.Contains("<root>", result);
+        Assert.Contains("<child>", result);
+        Assert.Contains("<grandchild>text</grandchild>", result);
+    }
+
+    [Fact]
+    public void Mode_OnNoMatch_Fail_Throws()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:mode on-no-match='fail'/>
+            <xsl:template match='/'>
+                <output><xsl:apply-templates select='root'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+
+        Assert.Throws<InvalidOperationException>(() =>
+            executable.TransformToString(new Providers.Xml.XDocumentNode(source)));
+    }
+
+    [Fact]
+    public void ForEach_Over_Atomic_Sequence()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:for-each select='1 to 3'>
+                        <x><xsl:value-of select='.'/></x>
+                    </xsl:for-each>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("dummy"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<x>1</x>", result);
+        Assert.Contains("<x>2</x>", result);
+        Assert.Contains("<x>3</x>", result);
+    }
+
+    [Fact]
+    public void ForEach_Over_Atomic_Sequence_With_CallTemplate()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:for-each select='1 to 3'>
+                        <xsl:call-template name='emit'/>
+                    </xsl:for-each>
+                </output>
+            </xsl:template>
+            <xsl:template name='emit'>
+                <x><xsl:value-of select='.'/></x>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("dummy"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<x>1</x>", result);
+        Assert.Contains("<x>2</x>", result);
+        Assert.Contains("<x>3</x>", result);
     }
 }

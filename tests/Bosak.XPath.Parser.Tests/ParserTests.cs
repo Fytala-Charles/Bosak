@@ -88,6 +88,48 @@ public class ParserTests
         Assert.Equal("ns", node.Prefix);
     }
 
+    [Theory]
+    [InlineData("mod")]
+    [InlineData("div")]
+    [InlineData("and")]
+    [InlineData("or")]
+    [InlineData("union")]
+    [InlineData("intersect")]
+    [InlineData("except")]
+    [InlineData("to")]
+    [InlineData("instance")]
+    [InlineData("treat")]
+    [InlineData("castable")]
+    [InlineData("cast")]
+    [InlineData("if")]
+    [InlineData("then")]
+    [InlineData("else")]
+    [InlineData("for")]
+    [InlineData("let")]
+    [InlineData("in")]
+    [InlineData("return")]
+    [InlineData("some")]
+    [InlineData("every")]
+    [InlineData("satisfies")]
+    [InlineData("function")]
+    [InlineData("map")]
+    [InlineData("array")]
+    [InlineData("try")]
+    [InlineData("catch")]
+    [InlineData("eq")]
+    [InlineData("ne")]
+    [InlineData("lt")]
+    [InlineData("le")]
+    [InlineData("gt")]
+    [InlineData("ge")]
+    [InlineData("is")]
+    public void VariableReference_KeywordName(string keyword)
+    {
+        var node = AssertParse<VariableReferenceNode>($"${keyword}");
+        Assert.Equal(keyword, node.LocalName);
+        Assert.Null(node.Prefix);
+    }
+
     [Fact]
     public void ContextItem()
     {

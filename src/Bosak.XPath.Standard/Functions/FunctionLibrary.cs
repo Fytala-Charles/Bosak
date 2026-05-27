@@ -37,6 +37,8 @@
 //                      | Charles Korthout | 2.4   | 24-05-2026     | Implemented RFC-822/1123 parser for fn:parse-ietf-date with full timezone support        |
 //                      | Charles Korthout | 2.5   | 24-05-2026     | Fixed fn:subsequence edge cases: negative start, INF/NaN bounds, XPTY0004 for strings    |
 //                      | Charles Korthout | 2.6   | 24-05-2026     | Fixed fn:path sibling index, namespace parent axis, path#0; date/time cross-type checks |
+//                      | Charles Korthout | 2.7   | 26-05-2026     | Fixed fn:substring rounding to round-half-to-even; fixed fn:replace replacement string    |
+//                      | Charles Korthout | 2.8   | 26-05-2026     | Added fn:document#1/#2 for XSLT compatibility                                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2342,6 +2344,18 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Node,
                 Implementation = Doc_1
             },
+            [(Namespaces.Fn, "document", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "document", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Node,
+                Implementation = Doc_1
+            },
+            [(Namespaces.Fn, "document", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "document", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node], ReturnType = XdmValueKind.Node,
+                Implementation = Document_2
+            },
             [(Namespaces.Fn, "doc-available", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "doc-available", Arity = 1,
@@ -2910,15 +2924,23 @@ public static class FunctionLibrary
     private static XdmValue StringLength_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromInteger(AtomizedString(args[0]).Length);
 
+    private static int RoundHalfToEvenDouble(double value)
+    {
+        if (double.IsNaN(value)) return 0;
+        if (double.IsPositiveInfinity(value)) return int.MaxValue;
+        if (double.IsNegativeInfinity(value)) return int.MinValue;
+        return (int)Math.Round(value, MidpointRounding.ToEven);
+    }
+
     private static XdmValue Substring_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string s = AtomizedString(args[0]);
         double startD = ToDoubleValue(args[1]);
         if (double.IsNaN(startD)) return XdmValue.FromString(string.Empty);
-        int start = (int)Math.Floor(startD + 0.5);
-        if (start <= 0) start = 1;
-        if (start > s.Length) return XdmValue.FromString(string.Empty);
-        return XdmValue.FromString(s[(start - 1)..]);
+        int start = RoundHalfToEvenDouble(startD);
+        int effectiveStart = Math.Max(start, 1);
+        if (effectiveStart > s.Length) return XdmValue.FromString(string.Empty);
+        return XdmValue.FromString(s[(effectiveStart - 1)..]);
     }
 
     private static XdmValue Substring_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -2927,13 +2949,15 @@ public static class FunctionLibrary
         double startD = ToDoubleValue(args[1]);
         double lenD = ToDoubleValue(args[2]);
         if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.FromString(string.Empty);
-        int start = (int)Math.Floor(startD + 0.5);
-        if (start <= 0) start = 1;
-        if (start > s.Length) return XdmValue.FromString(string.Empty);
-        int len = (int)Math.Floor(lenD + 0.5);
+        int start = RoundHalfToEvenDouble(startD);
+        int len = RoundHalfToEvenDouble(lenD);
         if (len <= 0) return XdmValue.FromString(string.Empty);
-        int end = Math.Min(start - 1 + len, s.Length);
-        return XdmValue.FromString(s[(start - 1)..end]);
+        int effectiveStart = Math.Max(start, 1);
+        int effectiveEnd = start + len;
+        if (effectiveEnd <= effectiveStart) return XdmValue.FromString(string.Empty);
+        int count = effectiveEnd - effectiveStart;
+        int maxCount = s.Length - effectiveStart + 1;
+        return XdmValue.FromString(s.Substring(effectiveStart - 1, Math.Min(count, maxCount)));
     }
 
     private static XdmValue SubstringBefore_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3641,12 +3665,84 @@ public static class FunctionLibrary
         return XdmValue.FromBoolean(Regex.IsMatch(input, pattern, options));
     }
 
+    private static string ValidateAndTranslateReplacement(string replacement)
+    {
+        var sb = new System.Text.StringBuilder(replacement.Length);
+        for (int i = 0; i < replacement.Length; i++)
+        {
+            char c = replacement[i];
+            if (c == '$')
+            {
+                if (i + 1 < replacement.Length)
+                {
+                    char next = replacement[i + 1];
+                    if (next == '$')
+                    {
+                        sb.Append("$$");
+                        i++;
+                    }
+                    else if (char.IsDigit(next))
+                    {
+                        sb.Append('$').Append(next);
+                        i++;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("FORX0004");
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException("FORX0004");
+                }
+            }
+            else if (c == '\\')
+            {
+                if (i + 1 < replacement.Length)
+                {
+                    char next = replacement[i + 1];
+                    if (next == '\\')
+                    {
+                        sb.Append('\\');
+                        i++;
+                    }
+                    else if (next == '$')
+                    {
+                        sb.Append("$$");
+                        i++;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("FORX0004");
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException("FORX0004");
+                }
+            }
+            else
+            {
+                sb.Append(c);
+            }
+        }
+        return sb.ToString();
+    }
+
+    private static void CheckZeroLengthMatch(string pattern, RegexOptions options)
+    {
+        if (Regex.IsMatch(string.Empty, pattern, options))
+            throw new InvalidOperationException("FORX0003");
+    }
+
     private static XdmValue Replace_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
         string pattern = AtomizedString(args[1]);
         string replacement = AtomizedString(args[2]);
-        return XdmValue.FromString(Regex.Replace(input, pattern, replacement));
+        CheckZeroLengthMatch(pattern, RegexOptions.None);
+        string netReplacement = ValidateAndTranslateReplacement(replacement);
+        return XdmValue.FromString(Regex.Replace(input, pattern, netReplacement));
     }
 
     private static XdmValue Replace_4(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3656,7 +3752,9 @@ public static class FunctionLibrary
         string replacement = AtomizedString(args[2]);
         var options = ParseRegexFlags(AtomizedString(args[3]), out bool isQuoteMode);
         if (isQuoteMode) pattern = Regex.Escape(pattern);
-        return XdmValue.FromString(Regex.Replace(input, pattern, replacement, options));
+        CheckZeroLengthMatch(pattern, options);
+        string netReplacement = ValidateAndTranslateReplacement(replacement);
+        return XdmValue.FromString(Regex.Replace(input, pattern, netReplacement, options));
     }
 
     private static XdmValue Tokenize_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3927,6 +4025,16 @@ public static class FunctionLibrary
         var uri = args[0].ToString();
         if (string.IsNullOrEmpty(uri))
             return XdmValue.Undefined;
+        var node = ctx.LoadDocument(uri);
+        return XdmValue.FromNode(node);
+    }
+
+    private static XdmValue Document_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var uri = args[0].ToString();
+        if (string.IsNullOrEmpty(uri))
+            return XdmValue.Undefined;
+        // Second arg is a node used for base URI resolution; for now, just use the URI directly
         var node = ctx.LoadDocument(uri);
         return XdmValue.FromNode(node);
     }

@@ -37,10 +37,10 @@ public sealed class XsltExecutable
     /// <param name="source">The source document or node to transform.</param>
     /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
     /// <returns>The result of the transformation as an XDM value.</returns>
-    public XdmValue Transform(IXdmNode source, EvaluationContext? context = null)
+    public XdmValue Transform(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null)
     {
         var engine = new Runtime.TransformEngine(_stylesheet, context);
-        return engine.Transform(source);
+        return engine.Transform(source, initialTemplate);
     }
 
     /// <summary>
@@ -49,9 +49,9 @@ public sealed class XsltExecutable
     /// <param name="source">The source document or node to transform.</param>
     /// <param name="context">Optional evaluation context.</param>
     /// <returns>The serialized result of the transformation.</returns>
-    public string TransformToString(IXdmNode source, EvaluationContext? context = null)
+    public string TransformToString(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null)
     {
-        var result = Transform(source, context);
+        var result = Transform(source, context, initialTemplate);
         return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);
     }
 }

@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Parse sequence type occurrence indicators (*, +, ?)                                    |
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Support inline functions as arrow expression targets                                   |
 //                      | Charles Korthout | 0.6   | 21-05-2026     | Fixed SkipSequenceType RParen consumption; ParseSequenceType handles item()/function(*)/empty-sequence() |
+//                      | Charles Korthout | 0.7   | 26-05-2026     | Added ExpectName() to allow XPath keywords as variable names ($mod, $div, etc.)                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -91,6 +92,39 @@ public sealed class XPathParser
         throw new ParseException($"Expected {kind} but found {Current.Kind}", Current.Start);
     }
 
+    /// <summary>
+    /// Expects a name token, allowing XPath keywords to be used as names
+    /// (e.g., variable names like $mod, $div, $and).
+    /// </summary>
+    private Token ExpectName()
+    {
+        if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
+        {
+            var t = Current;
+            _position++;
+            return t;
+        }
+        throw new ParseException($"Expected name but found {Current.Kind}", Current.Start);
+    }
+
+    private static bool IsKeywordName(TokenKind kind) => kind switch
+    {
+        TokenKind.KeywordAnd or TokenKind.KeywordOr or TokenKind.KeywordDiv
+        or TokenKind.KeywordIdiv or TokenKind.KeywordMod or TokenKind.KeywordUnion
+        or TokenKind.KeywordIntersect or TokenKind.KeywordExcept or TokenKind.KeywordTo
+        or TokenKind.KeywordInstance or TokenKind.KeywordOf or TokenKind.KeywordTreat
+        or TokenKind.KeywordAs or TokenKind.KeywordCastable or TokenKind.KeywordCast
+        or TokenKind.KeywordIf or TokenKind.KeywordThen or TokenKind.KeywordElse
+        or TokenKind.KeywordFor or TokenKind.KeywordLet or TokenKind.KeywordIn
+        or TokenKind.KeywordReturn or TokenKind.KeywordSome or TokenKind.KeywordEvery
+        or TokenKind.KeywordSatisfies or TokenKind.KeywordFunction or TokenKind.KeywordMap
+        or TokenKind.KeywordArray or TokenKind.KeywordTry or TokenKind.KeywordCatch
+        or TokenKind.ValueEq or TokenKind.ValueNe or TokenKind.ValueLt
+        or TokenKind.ValueLe or TokenKind.ValueGt or TokenKind.ValueGe
+        or TokenKind.ValueIs => true,
+        _ => false
+    };
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static T WithSpan<T>(T node, int start, int end) where T : XPathAstNode
         => node with { Span = new TextSpan(start, end - start) };
@@ -160,7 +194,7 @@ public sealed class XPathParser
     private QuantifiedBinding ParseSimpleForBinding()
     {
         Expect(TokenKind.Dollar);
-        var nameTok = Expect(TokenKind.Name);
+        var nameTok = ExpectName();
         var (prefix, local, _) = SplitQName(GetString(nameTok));
         Expect(TokenKind.KeywordIn);
         var expr = ParseExprSingle();
@@ -185,7 +219,7 @@ public sealed class XPathParser
     private QuantifiedBinding ParseSimpleLetBinding()
     {
         Expect(TokenKind.Dollar);
-        var nameTok = Expect(TokenKind.Name);
+        var nameTok = ExpectName();
         var (prefix, local, _) = SplitQName(GetString(nameTok));
         Expect(TokenKind.Assign);  // := 
         var expr = ParseExprSingle();
@@ -507,7 +541,7 @@ public sealed class XPathParser
         {
             // Variable reference as function: $x => $f()
             Advance();
-            var nameTok = Expect(TokenKind.Name);
+            var nameTok = ExpectName();
             var (prefix, local, _) = SplitQName(GetString(nameTok));
             var args = ParseArgumentList();
             return WithSpan(new DynamicFunctionCallNode(new VariableReferenceNode(local, prefix), args), start, End);
@@ -889,7 +923,7 @@ public sealed class XPathParser
 
             case TokenKind.Dollar:
                 Advance();
-                var varTok = Expect(TokenKind.Name);
+                var varTok = ExpectName();
                 var (vp, vl, vns) = SplitQName(GetString(varTok));
                 return WithSpan(new VariableReferenceNode(vl, vp, vns), start, End);
 
@@ -988,7 +1022,7 @@ public sealed class XPathParser
             do
             {
                 Expect(TokenKind.Dollar);
-                var nameTok = Expect(TokenKind.Name);
+                var nameTok = ExpectName();
                 string? typeName = null;
                 if (Current.Kind == TokenKind.KeywordAs)
                 {

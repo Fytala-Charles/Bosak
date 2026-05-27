@@ -94,7 +94,8 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-011 | *(internal)* | `fn:transform()` function | XPath-level XSLT invocation per spec | **Pending** | Phase 3 | Unassigned | 2026-05-24 |
 | REQ-012 | Customer A | `xsl:call-template` tunnel parameters | Customer A passes context metadata through deep call chains | **Pending** | TBD | Unassigned | 2026-05-24 |
 | REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Accepted** | Phase 2 | Unassigned | 2026-05-25 |
-| REQ-013 | *(placeholder)* | *(your request here)* | | Pending | TBD | Unassigned | |
+| REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Pending** | Phase 2 | Unassigned | 2026-05-26 |
+| REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Pending** | Phase 2 | Unassigned | 2026-05-26 |
 
 > **Legend:**
 > - `Pending` — Under review, no decision yet.
@@ -626,6 +627,109 @@ Expose a high-level helper:
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-25 | Kimi | Accepted | Bosak is the XML-stack owner; XSD validation belongs here. Customer B will consume the API rather than duplicating schema logic. |
+
+---
+
+### REQ-015: `xsl:function` Support
+
+**Requesting Application:** Customer A  
+**Submitted:** 2026-05-26  
+**Status:** Pending
+
+#### Problem Statement
+Customer A's fragment-composition architecture relies on pure-XSLT helper functions defined in shared library files (`DateFunctions.xsl`, `WeekFunctions.xsl`, `MappingFunctions.xsl`, `NumberFunctions.xsl`). These define 22+ `xsl:function` declarations in the `app:` namespace that are called from basesheets and partner overrides.
+
+Today Bosak does not parse, compile, or execute `xsl:function` declarations at all. The `Stylesheet` class parses `xsl:template`, `xsl:variable`, `xsl:param`, `xsl:key`, `xsl:mode`, `xsl:output`, `xsl:strip-space`, and `xsl:preserve-space` — but there is no collection for `xsl:function` and no dispatch mechanism for function calls in XPath expressions.
+
+Without `xsl:function` support, Customer A's basesheets cannot execute on Bosak. The only workaround is to inline all logic into named templates, which defeats the purpose of the fragment library.
+
+#### Proposed Solution
+1. Parse `xsl:function` declarations at stylesheet load time (including imported/included stylesheets).
+2. Store functions in a dictionary keyed by `{namespace, local-name, arity}`.
+3. Implement function dispatch in the XPath compiler/runtime:
+   - When the compiler encounters a function call with an unknown prefix, resolve it against the `xsl:function` registry.
+   - Compile the function body as a callable delegate.
+   - Support function parameters with `as` type declarations.
+   - Support function return type with `as` declaration.
+4. Handle import precedence: local functions override included, which override imported.
+
+#### Acceptance Criteria
+- [ ] `xsl:function name="app:parse-edidate"` is parsed and callable from XPath
+- [ ] Functions defined in imported stylesheets are available to the importing stylesheet
+- [ ] Functions defined in included stylesheets are available to the including stylesheet
+- [ ] Function parameters with `as="xs:string?"` are type-checked
+- [ ] Function return type with `as="xs:date?"` is enforced
+- [ ] Recursive functions work (e.g., `app:factorial($n)` calling itself)
+- [ ] All 22 Customer A helper functions execute correctly
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Parse `xsl:function` declarations |
+| Compiler | Modified | Add function-call resolution against XSLT-defined functions |
+| Runtime | Modified | Function body execution (sequence constructor + return) |
+| Standard | None | `xsl:function` is XSLT-specific |
+| XSLT | New instruction | `xsl:function` + function-call dispatch |
+| API | None | No surface change |
+
+#### Related Requests
+- REQ-001 (`xsl:import`/`xsl:include`) — functions must respect import/include precedence
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-05-26 | Kimi | Pending | Critical blocker for Customer A fragment library |
+
+---
+
+### REQ-016: Multi-Key `xsl:sort`
+
+**Requesting Application:** Customer A  
+**Submitted:** 2026-05-26  
+**Status:** Pending
+
+#### Problem Statement
+Customer A's DELFOR D99A JAMA basesheet sorts line items by two keys:
+```xsl
+<xsl:for-each select="SG6/SG12">
+    <xsl:sort select="LIN/C212/D7140"/>
+    <xsl:sort select="LOC[D3227='54']/C517/D3225"/>
+    ...
+</xsl:for-each>
+```
+
+REQ-003 implemented single-key `xsl:sort` support, but the acceptance criterion for multiple sort keys remains unmet. The current `SortItems` implementation only evaluates the first `xsl:sort` element and ignores any additional keys.
+
+#### Proposed Solution
+Extend the sorting logic in `TransformEngine` to evaluate all `xsl:sort` children in document order:
+1. Collect all sort specifications.
+2. For each item, evaluate every sort key in order.
+3. Use a composite comparator: compare primary keys; if equal, compare secondary keys; if equal, compare tertiary keys, etc.
+4. Reuse existing `data-type` and `order` logic for each key.
+
+#### Acceptance Criteria
+- [ ] Two `xsl:sort` elements produce correctly ordered output (primary then secondary)
+- [ ] Three or more `xsl:sort` elements work correctly
+- [ ] Each key respects its own `data-type` and `order` attributes
+- [ ] Stable sort: items with equal keys retain their original relative order
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | Already parses `xsl:sort` |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine.SortItems` → composite comparator |
+| Standard | None | |
+| XSLT | Modified | `xsl:sort` multi-key support |
+| API | None | |
+
+#### Related Requests
+- REQ-003 (`xsl:sort`) — builds on single-key foundation
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-05-26 | Kimi | Pending | Required for D99A JAMA basesheet correctness |
 
 ---
 

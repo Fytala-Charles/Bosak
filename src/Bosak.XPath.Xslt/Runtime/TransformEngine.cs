@@ -16,6 +16,11 @@
 //                      | Charles Korthout | 0.4   | 24-05-2026     | Added mode stack (#current, #default), XdmValueToString for value-of sequences          |
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added xsl:key / key() index building and lookup support                                 |
 //                      | Charles Korthout | 0.6   | 24-05-2026     | Added xsl:number support (single, any, multiple levels) with format-integer reuse       |
+//                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
+//                      | Charles Korthout | 0.8   | 26-05-2026     | Added xsl:copy, fixed for-each variable scoping, AVT evaluation in literal elements      |
+//                      | Charles Korthout | 0.9   | 26-05-2026     | Added initial-template support, fixed xsl:copy to copy attributes                       |
+//                      | Charles Korthout | 1.0   | 26-05-2026     | Added xsl:mode on-no-match support; atomic for-each (EnumerateItems); keyword var names  |
+//                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -25,6 +30,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
+using Bosak.XPath.Xslt.Stylesheet;
 
 namespace Bosak.XPath.Xslt.Runtime;
 
@@ -48,6 +54,9 @@ public sealed class TransformEngine
     // Mode stack for #current resolution
     private readonly Stack<string> _modeStack = new();
 
+    // Tunnel parameter stack: each frame is the tunnel params visible at that call depth
+    private readonly Stack<Dictionary<string, XdmValue>> _tunnelParamStack = new();
+
     // Key index for key() function lookups
     private KeyIndex? _keyIndex;
 
@@ -70,7 +79,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the stylesheet transformation.
     /// </summary>
-    public XdmValue Transform(IXdmNode source)
+    public XdmValue Transform(IXdmNode source, string? initialTemplate = null)
     {
         // Compile all template match patterns before execution
         var patternCompiler = new Patterns.PatternCompiler();
@@ -87,16 +96,30 @@ public sealed class TransformEngine
             RegisterKeyFunction();
         }
 
-        // Look for a template matching "/" (document root)
-        var rootTemplate = FindRootTemplate();
-        if (rootTemplate != null)
+        // Apply whitespace stripping from xsl:strip-space / xsl:preserve-space
+        ApplyWhitespaceStripping(source);
+
+        // Initialize global parameters and variables before template execution
+        InitializeGlobalParametersAndVariables(source);
+
+        if (!string.IsNullOrEmpty(initialTemplate))
         {
-            ExecuteTemplate(rootTemplate, source);
+            // Start from a named template (xsl:initial-template or test harness)
+            CallTemplate(initialTemplate, source);
         }
         else
         {
-            // Apply templates to the source node in default mode
-            ApplyTemplates(source, mode: "", select: null);
+            // Look for a template matching "/" (document root)
+            var rootTemplate = FindRootTemplate();
+            if (rootTemplate != null)
+            {
+                ExecuteTemplate(rootTemplate, source);
+            }
+            else
+            {
+                // Apply templates to the source node in default mode
+                ApplyTemplates(source, mode: "", select: null);
+            }
         }
 
         // Return the result document
@@ -119,7 +142,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Implements xsl:apply-templates: selects nodes and processes each with the best-matching template.
     /// </summary>
-    public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null)
+    public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
         // Resolve mode aliases
         var resolvedMode = ResolveMode(mode);
@@ -153,11 +176,11 @@ public sealed class TransformEngine
                 var rule = FindBestTemplate(node, resolvedMode);
                 if (rule != null)
                 {
-                    ExecuteTemplate(rule, node);
+                    ExecuteTemplate(rule, node, callParams: null, incomingTunnelParams);
                 }
                 else
                 {
-                    ApplyBuiltInRules(node, resolvedMode);
+                    ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams);
                 }
             }
         }
@@ -186,13 +209,30 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the body of a template rule against the current node.
     /// </summary>
-    public void ExecuteTemplate(Stylesheet.TemplateRule rule, IXdmNode currentNode, Dictionary<string, XdmValue>? callParams = null)
+    public void ExecuteTemplate(Stylesheet.TemplateRule rule, IXdmNode currentNode, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
+        => ExecuteTemplate(rule, XdmValue.FromNode(currentNode), callParams, incomingTunnelParams);
+
+    public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
-        // Update context to current node
-        _context.WithFocus(XdmValue.FromNode(currentNode), 1, 1);
+        // Update context to current item
+        _context.WithFocus(contextItem, 1, 1);
 
         // Snapshot current variables for lexical scoping
         var snapshot = _context.SnapshotVariables();
+
+        // Push tunnel parameters for this template invocation
+        var tunnelFrame = new Dictionary<string, XdmValue>();
+        if (_tunnelParamStack.Count > 0)
+        {
+            foreach (var (k, v) in _tunnelParamStack.Peek())
+                tunnelFrame[k] = v;
+        }
+        if (incomingTunnelParams != null)
+        {
+            foreach (var (k, v) in incomingTunnelParams)
+                tunnelFrame[k] = v;
+        }
+        _tunnelParamStack.Push(tunnelFrame);
 
         try
         {
@@ -205,10 +245,16 @@ public sealed class TransformEngine
                     if (string.IsNullOrEmpty(paramName))
                         continue;
 
+                    var isTunnel = child.Attribute("tunnel")?.Value == "yes";
+
                     XdmValue paramValue;
                     if (callParams != null && callParams.TryGetValue(paramName, out var provided))
                     {
                         paramValue = provided;
+                    }
+                    else if (isTunnel && _tunnelParamStack.Count > 0 && _tunnelParamStack.Peek().TryGetValue(paramName, out var tunnelValue))
+                    {
+                        paramValue = tunnelValue;
                     }
                     else
                     {
@@ -224,12 +270,11 @@ public sealed class TransformEngine
                             var contentElements = child.Elements().ToList();
                             if (contentElements.Count > 0)
                             {
-                                // TODO: Build RTF from sequence constructor
-                                paramValue = XdmValue.Undefined;
+                                paramValue = EvaluateSequenceConstructor(child, contextItem);
                             }
                             else
                             {
-                                paramValue = XdmValue.Undefined;
+                                paramValue = XdmValue.FromSequence(XdmSequence.Empty);
                             }
                         }
                     }
@@ -249,7 +294,7 @@ public sealed class TransformEngine
 
                 if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                 {
-                    ExecuteXsltInstruction(child, currentNode);
+                    ExecuteXsltInstruction(child, contextItem);
                 }
                 else
                 {
@@ -261,25 +306,33 @@ public sealed class TransformEngine
         finally
         {
             _context.RestoreVariables(snapshot);
+            _tunnelParamStack.Pop();
         }
     }
 
     /// <summary>
     /// Implements xsl:call-template: invokes a named template by name.
     /// </summary>
-    public void CallTemplate(string name, IXdmNode currentNode, Dictionary<string, XdmValue>? withParams = null)
+    public void CallTemplate(string name, IXdmNode currentNode, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
+        => CallTemplate(name, XdmValue.FromNode(currentNode), withParams, incomingTunnelParams);
+
+    public void CallTemplate(string name, XdmValue contextItem, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
         if (!_allNamedTemplates.TryGetValue(name, out var rule))
             throw new InvalidOperationException($"Named template '{name}' not found.");
 
-        ExecuteTemplate(rule, currentNode, withParams);
+        ExecuteTemplate(rule, contextItem, withParams, incomingTunnelParams);
     }
 
     /// <summary>
     /// Executes a single XSLT instruction element.
     /// </summary>
     private void ExecuteXsltInstruction(XElement instruction, IXdmNode currentNode)
+        => ExecuteXsltInstruction(instruction, XdmValue.FromNode(currentNode));
+
+    private void ExecuteXsltInstruction(XElement instruction, XdmValue contextItem)
     {
+        var node = contextItem.IsNode ? contextItem.NodeValue : null;
         var name = instruction.Name.LocalName;
         switch (name)
         {
@@ -294,7 +347,7 @@ public sealed class TransformEngine
                     foreach (var child in instruction.Elements())
                     {
                         if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                            ExecuteXsltInstruction(child, currentNode);
+                            ExecuteXsltInstruction(child, contextItem);
                         else
                             CopyLiteralElement(child);
                     }
@@ -341,16 +394,118 @@ public sealed class TransformEngine
             case "text":
                 {
                     var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                    // xsl:text with only whitespace and no siblings is often significant;
+                    // for now, preserve all text content
                     _currentContainer.Add(new XText(text));
+                    break;
+                }
+
+            case "copy":
+                {
+                    if (node == null) break;
+                    // XSLT 3.0: optional select attribute; default is context item
+                    IXdmNode nodeToCopy = node;
+                    var copySelect = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(copySelect))
+                    {
+                        var compiled = XPath31Expression.Compile(copySelect);
+                        var result = compiled.Evaluate(_context);
+                        if (result.IsNode && result.NodeValue != null)
+                            nodeToCopy = result.NodeValue;
+                    }
+
+                    switch (nodeToCopy.NodeKind)
+                    {
+                        case XdmNodeKind.Element:
+                            {
+                                var copy = new XElement(
+                                    XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
+                                // Shallow copy includes attributes for element nodes
+                                foreach (var attr in nodeToCopy.Attributes())
+                                {
+                                    copy.SetAttributeValue(
+                                        XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
+                                        attr.NodeValue!.StringValue);
+                                }
+                                _currentContainer.Add(copy);
+                                var prev = _currentContainer;
+                                _currentContainer = copy;
+                                foreach (var child in instruction.Elements())
+                                {
+                                    if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                        ExecuteXsltInstruction(child, nodeToCopy);
+                                    else
+                                        CopyLiteralElement(child);
+                                }
+                                _currentContainer = prev;
+                                break;
+                            }
+                        case XdmNodeKind.Text:
+                            _currentContainer.Add(new XText(nodeToCopy.StringValue));
+                            break;
+                        case XdmNodeKind.Attribute:
+                            if (_currentContainer is XElement target)
+                            {
+                                target.SetAttributeValue(
+                                    XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri),
+                                    nodeToCopy.StringValue);
+                            }
+                            break;
+                        case XdmNodeKind.Comment:
+                            _currentContainer.Add(new XComment(nodeToCopy.StringValue));
+                            break;
+                        case XdmNodeKind.ProcessingInstruction:
+                            _currentContainer.Add(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
+                            break;
+                        default:
+                            // Document and other kinds: just process children
+                            foreach (var child in instruction.Elements())
+                            {
+                                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                    ExecuteXsltInstruction(child, nodeToCopy);
+                                else
+                                    CopyLiteralElement(child);
+                            }
+                            break;
+                    }
                     break;
                 }
 
             case "apply-templates":
                 {
+                    if (node == null) break;
                     var select = instruction.Attribute("select")?.Value;
                     var mode = instruction.Attribute("mode")?.Value ?? "";
                     var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
-                    ApplyTemplates(currentNode, mode, select, sortElements.Count > 0 ? sortElements : null);
+
+                    // Collect xsl:with-param elements (tunnel and non-tunnel)
+                    var withParams = new Dictionary<string, XdmValue>();
+                    var tunnelParams = new Dictionary<string, XdmValue>();
+                    foreach (var wp in instruction.Elements(XName.Get("with-param", Stylesheet.Stylesheet.XslNamespace)))
+                    {
+                        var wpName = wp.Attribute("name")?.Value;
+                        var wpSelect = wp.Attribute("select")?.Value;
+                        var wpTunnel = wp.Attribute("tunnel")?.Value == "yes";
+                        if (!string.IsNullOrEmpty(wpName))
+                        {
+                            XdmValue wpValue;
+                            if (!string.IsNullOrEmpty(wpSelect))
+                            {
+                                var compiled = XPath31Expression.Compile(wpSelect);
+                                wpValue = compiled.Evaluate(_context);
+                            }
+                            else
+                            {
+                                wpValue = EvaluateSequenceConstructor(wp, contextItem);
+                            }
+                            if (wpTunnel)
+                                tunnelParams[wpName] = wpValue;
+                            else
+                                withParams[wpName] = wpValue;
+                        }
+                    }
+
+                    ApplyTemplates(node, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams);
                     break;
                 }
 
@@ -361,30 +516,39 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(select);
                         var result = compiled.Evaluate(_context);
-                        var items = EnumerateNodes(result).ToList();
+                        var items = EnumerateItems(result).ToList();
 
                         var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
                         if (sortElements.Count > 0)
                         {
-                            items = SortNodes(items, sortElements);
+                            items = SortItems(items, sortElements);
                         }
 
+                        var savedFocus = _context.ContextItem;
                         int pos = 1;
                         foreach (var item in items)
                         {
-                            _context.WithFocus(XdmValue.FromNode(item), pos, items.Count);
-                            foreach (var child in instruction.Elements())
+                            _context.WithFocus(item, pos, items.Count);
+                            var feSnapshot = _context.SnapshotVariables();
+                            try
                             {
-                                if (child.Name.LocalName == "sort")
-                                    continue;
-                                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                    ExecuteXsltInstruction(child, item);
-                                else
-                                    CopyLiteralElement(child);
+                                foreach (var child in instruction.Elements())
+                                {
+                                    if (child.Name.LocalName == "sort")
+                                        continue;
+                                    if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                        ExecuteXsltInstruction(child, item);
+                                    else
+                                        CopyLiteralElement(child);
+                                }
+                            }
+                            finally
+                            {
+                                _context.RestoreVariables(feSnapshot);
                             }
                             pos++;
                         }
-                        _context.WithFocus(XdmValue.FromNode(currentNode), 1, 1);
+                        _context.WithFocus(savedFocus, 1, 1);
                     }
                     break;
                 }
@@ -401,7 +565,7 @@ public sealed class TransformEngine
                             foreach (var child in instruction.Elements())
                             {
                                 if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                    ExecuteXsltInstruction(child, currentNode);
+                                    ExecuteXsltInstruction(child, contextItem);
                                 else
                                     CopyLiteralElement(child);
                             }
@@ -426,7 +590,7 @@ public sealed class TransformEngine
                                 foreach (var child in when.Elements())
                                 {
                                     if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                        ExecuteXsltInstruction(child, currentNode);
+                                        ExecuteXsltInstruction(child, contextItem);
                                     else
                                         CopyLiteralElement(child);
                                 }
@@ -442,7 +606,7 @@ public sealed class TransformEngine
                             foreach (var child in otherwise.Elements())
                             {
                                 if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                    ExecuteXsltInstruction(child, currentNode);
+                                    ExecuteXsltInstruction(child, contextItem);
                                 else
                                     CopyLiteralElement(child);
                             }
@@ -466,7 +630,7 @@ public sealed class TransformEngine
                         else
                         {
                             // Build value from sequence constructor (text nodes + XSLT instructions)
-                            varValue = EvaluateSequenceConstructor(instruction, currentNode);
+                            varValue = EvaluateSequenceConstructor(instruction, contextItem);
                         }
                         _context.WithVariable(varName, varValue);
                     }
@@ -489,7 +653,7 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            varValue = EvaluateSequenceConstructor(instruction, currentNode);
+                            varValue = EvaluateSequenceConstructor(instruction, contextItem);
                         }
                         _context.WithVariable(varName, varValue);
                     }
@@ -502,10 +666,12 @@ public sealed class TransformEngine
                     if (!string.IsNullOrEmpty(calledName))
                     {
                         var withParams = new Dictionary<string, XdmValue>();
+                        var tunnelParams = new Dictionary<string, XdmValue>();
                         foreach (var wp in instruction.Elements(XName.Get("with-param", Stylesheet.Stylesheet.XslNamespace)))
                         {
                             var wpName = wp.Attribute("name")?.Value;
                             var wpSelect = wp.Attribute("select")?.Value;
+                            var wpTunnel = wp.Attribute("tunnel")?.Value == "yes";
                             if (!string.IsNullOrEmpty(wpName))
                             {
                                 XdmValue wpValue;
@@ -516,12 +682,15 @@ public sealed class TransformEngine
                                 }
                                 else
                                 {
-                                    wpValue = EvaluateSequenceConstructor(wp, currentNode);
+                                    wpValue = EvaluateSequenceConstructor(wp, contextItem);
                                 }
-                                withParams[wpName] = wpValue;
+                                if (wpTunnel)
+                                    tunnelParams[wpName] = wpValue;
+                                else
+                                    withParams[wpName] = wpValue;
                             }
                         }
-                        CallTemplate(calledName, currentNode, withParams);
+                        CallTemplate(calledName, contextItem, withParams, tunnelParams);
                     }
                     break;
                 }
@@ -540,7 +709,8 @@ public sealed class TransformEngine
 
             case "number":
                 {
-                    ExecuteXsltNumber(instruction, currentNode);
+                    if (node != null)
+                        ExecuteXsltNumber(instruction, node);
                     break;
                 }
 
@@ -556,10 +726,17 @@ public sealed class TransformEngine
     private void CopyLiteralElement(XElement source)
     {
         var copy = new XElement(
-            XName.Get(source.Name.LocalName, source.Name.NamespaceName),
-            source.Attributes().Select(a => new XAttribute(
-                XName.Get(a.Name.LocalName, a.Name.NamespaceName),
-                a.Value)));
+            XName.Get(source.Name.LocalName, source.Name.NamespaceName));
+
+        foreach (var attr in source.Attributes())
+        {
+            var attrName = XName.Get(attr.Name.LocalName, attr.Name.NamespaceName);
+            // AVTs are not evaluated in XSLT-namespace attributes
+            var attrValue = attr.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                ? attr.Value
+                : EvaluateAvt(attr.Value);
+            copy.SetAttributeValue(attrName, attrValue);
+        }
 
         _currentContainer.Add(copy);
 
@@ -574,7 +751,7 @@ public sealed class TransformEngine
                     if (childElem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                     {
                         // This shouldn't happen in literal elements, but handle anyway
-                        ExecuteXsltInstruction(childElem, _context.ContextItem.NodeValue!);
+                        ExecuteXsltInstruction(childElem, _context.ContextItem);
                     }
                     else
                     {
@@ -582,7 +759,8 @@ public sealed class TransformEngine
                     }
                     break;
                 case XText text:
-                    _currentContainer.Add(new XText(text.Value));
+                    if (!IsWhitespaceOnly(text.Value))
+                        _currentContainer.Add(new XText(text.Value));
                     break;
                 case XComment comment:
                     _currentContainer.Add(new XComment(comment.Value));
@@ -594,6 +772,63 @@ public sealed class TransformEngine
         }
 
         _currentContainer = prev;
+    }
+
+    /// <summary>
+    /// Evaluates Attribute Value Templates (AVTs): {expr} is evaluated, {{ and }} are escaped.
+    /// </summary>
+    private string EvaluateAvt(string value)
+    {
+        if (string.IsNullOrEmpty(value) || !value.Contains('{'))
+            return value;
+
+        var sb = new System.Text.StringBuilder();
+        int i = 0;
+        while (i < value.Length)
+        {
+            if (i + 1 < value.Length && value[i] == '{' && value[i + 1] == '{')
+            {
+                sb.Append('{');
+                i += 2;
+            }
+            else if (i + 1 < value.Length && value[i] == '}' && value[i + 1] == '}')
+            {
+                sb.Append('}');
+                i += 2;
+            }
+            else if (value[i] == '{')
+            {
+                int end = value.IndexOf('}', i + 1);
+                if (end < 0)
+                {
+                    sb.Append(value[i]);
+                    i++;
+                }
+                else
+                {
+                    var expr = value.Substring(i + 1, end - i - 1);
+                    if (!string.IsNullOrEmpty(expr))
+                    {
+                        var compiled = XPath31Expression.Compile(expr);
+                        var result = compiled.Evaluate(_context);
+                        sb.Append(result.ToString());
+                    }
+                    i = end + 1;
+                }
+            }
+            else if (value[i] == '}')
+            {
+                // Lone } is an error per spec, but treat as literal for robustness
+                sb.Append('}');
+                i++;
+            }
+            else
+            {
+                sb.Append(value[i]);
+                i++;
+            }
+        }
+        return sb.ToString();
     }
 
     /// <summary>
@@ -658,32 +893,22 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Applies built-in template rules when no explicit template matches.
+    /// Respects xsl:mode on-no-match declarations.
     /// </summary>
-    public void ApplyBuiltInRules(IXdmNode node, string mode)
+    public void ApplyBuiltInRules(IXdmNode node, string mode, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
+        var modeDef = _stylesheet.GetModeDefinition(mode);
+        var behavior = modeDef?.OnNoMatch ?? Stylesheet.OnNoMatch.ShallowCopy;
+
         switch (node.NodeKind)
         {
             case XdmNodeKind.Element:
-                // Built-in: shallow-copy element, then apply-templates to children
-                var copy = new XElement(
-                    XName.Get(node.LocalName, node.NamespaceUri));
-                foreach (var attr in node.Attributes())
-                {
-                    copy.SetAttributeValue(
-                        XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
-                        attr.NodeValue!.StringValue);
-                }
-                _currentContainer.Add(copy);
-
-                var previousContainer = _currentContainer;
-                _currentContainer = copy;
-                ApplyTemplates(node, mode, select: null);
-                _currentContainer = previousContainer;
+                ApplyBuiltInRulesForElement(node, mode, behavior, incomingTunnelParams);
                 break;
 
             case XdmNodeKind.Text:
                 // Built-in: copy text value (only if we have an element container)
-                if (_currentContainer is XElement)
+                if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail)
                 {
                     _currentContainer.Add(new XText(node.StringValue));
                 }
@@ -691,7 +916,7 @@ public sealed class TransformEngine
 
             case XdmNodeKind.Attribute:
                 // Built-in: copy attribute to current element
-                if (_currentContainer is XElement elem)
+                if (_currentContainer is XElement elem && behavior != Stylesheet.OnNoMatch.Fail)
                 {
                     elem.SetAttributeValue(
                         XName.Get(node.LocalName, node.NamespaceUri),
@@ -700,6 +925,49 @@ public sealed class TransformEngine
                 break;
 
             // Comments and PIs are ignored by default
+        }
+    }
+
+    private void ApplyBuiltInRulesForElement(IXdmNode node, string mode, Stylesheet.OnNoMatch behavior, Dictionary<string, XdmValue>? incomingTunnelParams)
+    {
+        switch (behavior)
+        {
+            case Stylesheet.OnNoMatch.ShallowCopy:
+                {
+                    var copy = new XElement(
+                        XName.Get(node.LocalName, node.NamespaceUri));
+                    foreach (var attr in node.Attributes())
+                    {
+                        copy.SetAttributeValue(
+                            XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
+                            attr.NodeValue!.StringValue);
+                    }
+                    _currentContainer.Add(copy);
+
+                    var previousContainer = _currentContainer;
+                    _currentContainer = copy;
+                    ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams);
+                    _currentContainer = previousContainer;
+                }
+                break;
+
+            case Stylesheet.OnNoMatch.ShallowSkip:
+                // Skip element node, only apply-templates to children
+                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams);
+                break;
+
+            case Stylesheet.OnNoMatch.TextOnlyCopy:
+                // Recurse to children without copying the element wrapper
+                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams);
+                break;
+
+            case Stylesheet.OnNoMatch.DeepCopy:
+                CopyNodeToResult(node);
+                break;
+
+            case Stylesheet.OnNoMatch.Fail:
+                throw new InvalidOperationException(
+                    $"No matching template found for node '{node.LocalName}' in mode '{mode}'.");
         }
     }
 
@@ -754,6 +1022,51 @@ public sealed class TransformEngine
         }
 
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// Evaluates top-level xsl:param and xsl:variable declarations and binds them into the context.
+    /// Order: imported first, then included, then local. Parameters are evaluated before variables.
+    /// </summary>
+    private void InitializeGlobalParametersAndVariables(IXdmNode source)
+    {
+        var focus = XdmValue.FromNode(source);
+
+        // Evaluate global parameters first
+        var allParams = _stylesheet.GetAllGlobalParameters();
+        foreach (var (name, paramElem) in allParams)
+        {
+            var select = paramElem.Attribute("select")?.Value;
+            XdmValue value;
+            if (!string.IsNullOrEmpty(select))
+            {
+                var compiled = XPath31Expression.Compile(select);
+                value = compiled.Evaluate(_context.WithFocus(focus, 1, 1));
+            }
+            else
+            {
+                value = EvaluateSequenceConstructor(paramElem, focus);
+            }
+            _context.WithVariable(name, value);
+        }
+
+        // Then evaluate global variables
+        var allVars = _stylesheet.GetAllGlobalVariables();
+        foreach (var (name, varElem) in allVars)
+        {
+            var select = varElem.Attribute("select")?.Value;
+            XdmValue value;
+            if (!string.IsNullOrEmpty(select))
+            {
+                var compiled = XPath31Expression.Compile(select);
+                value = compiled.Evaluate(_context.WithFocus(focus, 1, 1));
+            }
+            else
+            {
+                value = EvaluateSequenceConstructor(varElem, focus);
+            }
+            _context.WithVariable(name, value);
+        }
     }
 
     /// <summary>
@@ -828,6 +1141,30 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Enumerates all items in an XDM value, including atomic values and nodes.
+    /// </summary>
+    private static IEnumerable<XdmValue> EnumerateItems(XdmValue value)
+    {
+        if (value.IsUndefined)
+            yield break;
+
+        if (!value.IsSequence)
+        {
+            yield return value;
+            yield break;
+        }
+
+        if (value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!item.IsUndefined)
+                    yield return item;
+            }
+        }
+    }
+
+    /// <summary>
     /// Converts an XDM value to its string representation, concatenating sequence items.
     /// </summary>
     private static string XdmValueToString(XdmValue value)
@@ -855,6 +1192,13 @@ public sealed class TransformEngine
     /// </summary>
     private List<IXdmNode> SortNodes(List<IXdmNode> nodes, List<XElement> sortSpecs)
     {
+        var items = nodes.Select(n => XdmValue.FromNode(n)).ToList();
+        var sorted = SortItems(items, sortSpecs);
+        return sorted.Select(v => v.NodeValue!).ToList();
+    }
+
+    private List<XdmValue> SortItems(List<XdmValue> items, List<XElement> sortSpecs)
+    {
         // For now, support only the first sort key
         var sort = sortSpecs[0];
         var select = sort.Attribute("select")?.Value ?? ".";
@@ -862,13 +1206,13 @@ public sealed class TransformEngine
         var order = sort.Attribute("order")?.Value ?? "ascending";
         var descending = order.Trim().ToLowerInvariant() == "descending";
 
-        var keyed = new List<(XdmValue Key, IXdmNode Node)>();
-        foreach (var node in nodes)
+        var keyed = new List<(XdmValue Key, XdmValue Item)>();
+        foreach (var item in items)
         {
-            _context.WithFocus(XdmValue.FromNode(node), 1, 1);
+            _context.WithFocus(item, 1, 1);
             var compiled = XPath31Expression.Compile(select);
             var key = compiled.Evaluate(_context);
-            keyed.Add((key, node));
+            keyed.Add((key, item));
         }
 
         if (dataType.Trim().ToLowerInvariant() == "number")
@@ -888,7 +1232,7 @@ public sealed class TransformEngine
             });
         }
 
-        return keyed.Select(k => k.Node).ToList();
+        return keyed.Select(k => k.Item).ToList();
     }
 
     private static int CompareNumericSortKey(XdmValue a, XdmValue b)
@@ -907,7 +1251,7 @@ public sealed class TransformEngine
     /// Evaluates a sequence constructor (child nodes of an xsl:variable, xsl:param, etc.)
     /// and returns the resulting XDM value.
     /// </summary>
-    private XdmValue EvaluateSequenceConstructor(XElement parent, IXdmNode currentNode)
+    private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem)
     {
         var items = new List<XdmValue>();
         foreach (var node in parent.Nodes())
@@ -935,12 +1279,120 @@ public sealed class TransformEngine
         }
 
         if (items.Count == 0)
-            return XdmValue.Undefined;
+            return XdmValue.FromSequence(XdmSequence.Empty);
         if (items.Count == 1)
             return items[0];
 
         // Multiple items: concatenate strings for text value
         return XdmValue.FromString(string.Concat(items.Select(i => i.ToString())));
+    }
+
+    // ------------------------------------------------------------------
+    // Whitespace stripping (xsl:strip-space / xsl:preserve-space)
+    // ------------------------------------------------------------------
+
+    private void ApplyWhitespaceStripping(IXdmNode source)
+    {
+        var rules = _stylesheet.GetAllSpaceHandlingRules();
+        if (rules.Count == 0)
+            return;
+
+        // Only strip whitespace in XDocument-backed nodes for now
+        if (source is Providers.Xml.XDocumentNode xdocNode)
+        {
+            if (xdocNode.UnderlyingObject is XDocument doc)
+            {
+                StripWhitespaceInElement(doc.Root, rules);
+            }
+            else if (xdocNode.UnderlyingObject is XElement elem)
+            {
+                StripWhitespaceInElement(elem, rules);
+            }
+        }
+    }
+
+    private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules)
+    {
+        if (element == null)
+            return;
+
+        foreach (var child in element.Elements().ToList())
+        {
+            StripWhitespaceInElement(child, rules);
+        }
+
+        if (ShouldStripWhitespace(element, rules))
+        {
+            foreach (var textNode in element.Nodes().OfType<XText>().ToList())
+            {
+                if (IsWhitespaceOnly(textNode.Value))
+                {
+                    textNode.Remove();
+                }
+            }
+        }
+    }
+
+    private static bool IsWhitespaceOnly(string text)
+    {
+        foreach (var c in text)
+        {
+            if (c != ' ' && c != '\t' && c != '\n' && c != '\r')
+                return false;
+        }
+        return text.Length > 0;
+    }
+
+    private static bool ShouldStripWhitespace(XElement element, List<SpaceHandlingRule> rules)
+    {
+        SpaceHandlingRule? bestStrip = null;
+        SpaceHandlingRule? bestPreserve = null;
+
+        foreach (var rule in rules)
+        {
+            if (MatchesNameTest(rule.NameTest, element))
+            {
+                if (rule.IsStrip && (bestStrip == null || rule.Precedence > bestStrip.Value.Precedence))
+                    bestStrip = rule;
+                if (!rule.IsStrip && (bestPreserve == null || rule.Precedence > bestPreserve.Value.Precedence))
+                    bestPreserve = rule;
+            }
+        }
+
+        if (bestPreserve == null && bestStrip == null)
+            return false;
+
+        if (bestPreserve == null)
+            return bestStrip != null;
+
+        if (bestStrip == null)
+            return false;
+
+        // Preserve wins at same or higher precedence; strip wins only at strictly higher precedence
+        return bestStrip.Value.Precedence > bestPreserve.Value.Precedence;
+    }
+
+    private static bool MatchesNameTest(string nameTest, XElement element)
+    {
+        if (nameTest == "*")
+            return true;
+
+        if (nameTest.EndsWith(":*"))
+        {
+            // prefix:* - would need prefix resolution; for now, match any element
+            // A proper implementation would resolve the prefix to a namespace URI
+            return true;
+        }
+
+        if (nameTest.Contains(':'))
+        {
+            // QName with prefix - would need prefix resolution
+            // For now, try matching local name only as a fallback
+            var localName = nameTest.Contains(':') ? nameTest.Split(':')[1] : nameTest;
+            return element.Name.LocalName == localName;
+        }
+
+        return element.Name.LocalName == nameTest;
     }
 
     // ------------------------------------------------------------------
