@@ -160,7 +160,55 @@ public sealed class PatternCompiler
 
         var basePredicate = CompileSinglePattern(basePattern);
 
-        // Compile the predicate as an XPath expression evaluated against the node
+        // For simple element/attribute patterns with predicates, evaluate from the parent
+        // so that position() and last() reflect the node's position among its siblings.
+        bool isSimpleElement = !basePattern.Contains('/') && !basePattern.Contains('|') && !basePattern.StartsWith('@');
+        bool isSimpleAttribute = !basePattern.Contains('/') && !basePattern.Contains('|') && basePattern.StartsWith('@');
+
+        if (isSimpleElement || isSimpleAttribute)
+        {
+            var axisStep = isSimpleAttribute ? $"attribute::{basePattern[1..]}[{predicateExpr}]" : $"child::{basePattern}[{predicateExpr}]";
+            var compiledStep = XPath31Expression.Compile(axisStep);
+
+            return node =>
+            {
+                if (!basePredicate(node))
+                    return false;
+
+                var parent = node.Parent;
+                if (parent == null)
+                    return false;
+
+                try
+                {
+                    var ctx = new EvaluationContext();
+                    FunctionLibrary.Populate(ctx);
+                    ctx.WithFocus(XdmValue.FromNode(parent), 1, 1);
+                    var result = compiledStep.Evaluate(ctx);
+
+                    // Check if the candidate node is in the result
+                    if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
+                    {
+                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        {
+                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                return true;
+                        }
+                    }
+                    else if (result.IsNode && result.NodeValue is IXdmNode n && n.IsSameNode(node))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            };
+        }
+
+        // Fallback: compile as self:: pattern (position()/last() will be 1/1)
         var compiledPredicate = XPath31Expression.Compile($"self::{basePattern}[{predicateExpr}]");
 
         return node =>

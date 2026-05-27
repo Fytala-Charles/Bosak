@@ -360,7 +360,7 @@ class Program
         {
             var cdata = content.Nodes().OfType<XCData>().FirstOrDefault();
             var xmlText = cdata?.Value ?? content.Value;
-            var doc = XDocument.Parse(xmlText);
+            var doc = XDocument.Parse(xmlText, LoadOptions.PreserveWhitespace);
             return new XDocumentNode(doc);
         }
 
@@ -371,7 +371,7 @@ class Program
             if (!File.Exists(path)) path = Path.Combine(catalogDir, file);
             if (File.Exists(path))
             {
-                var doc = XDocument.Load(path);
+                var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
                 return new XDocumentNode(doc);
             }
         }
