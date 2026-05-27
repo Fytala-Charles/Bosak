@@ -35,6 +35,9 @@ public sealed class EvaluationContext
     private int _contextPosition;
     private int _contextSize;
 
+    // Current item for fn:current() (XSLT current node)
+    private XdmValue _currentItem = XdmValue.Undefined;
+
     // Variable bindings: QName key -> XdmValue
     private readonly Dictionary<(string LocalName, string NamespaceUri), XdmValue> _variables;
 
@@ -114,11 +117,23 @@ public sealed class EvaluationContext
     public int ContextPosition => _contextPosition;
     public int ContextSize => _contextSize;
 
+    /// <summary>
+    /// The current item for fn:current(). In XSLT this is the node matched by the
+    /// current template rule or selected by xsl:for-each / xsl:apply-templates.
+    /// </summary>
+    public XdmValue CurrentItem => _currentItem;
+
     public EvaluationContext WithFocus(XdmValue item, int position, int size)
     {
         _contextItem = item;
         _contextPosition = position;
         _contextSize = size;
+        return this;
+    }
+
+    public EvaluationContext WithCurrentItem(XdmValue item)
+    {
+        _currentItem = item;
         return this;
     }
 

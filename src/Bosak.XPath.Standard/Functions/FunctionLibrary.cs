@@ -123,6 +123,15 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Integer,
                 Implementation = Last
             },
+            [(Namespaces.Fn, "current", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "current",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = Current
+            },
 
             // ----- fn:exists --------------------------------------------------
             [(Namespaces.Fn, "exists", 1)] = new()
@@ -2980,6 +2989,9 @@ public static class FunctionLibrary
 
     private static XdmValue Last(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromInteger(ctx.ContextSize);
+
+    private static XdmValue Current(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ctx.CurrentItem;
 
     // ------------------------------------------------------------------
     // String functions

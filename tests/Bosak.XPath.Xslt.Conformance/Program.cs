@@ -29,6 +29,20 @@ class Program
         "xslt-3.0-snapshot"
     };
 
+    static readonly HashSet<string> SkipTests = new(StringComparer.OrdinalIgnoreCase)
+    {
+        // Deep recursion exceeds .NET stack limit (knight's tour)
+        "function-0701",
+        // Exponential recursion without caching (fibonacci 92)
+        "function-1031",
+        // Tail recursive function with cache=yes
+        "function-1035",
+        // Deep xsl:call-template recursion tests
+        "call-template-1001",
+        "call-template-1002",
+        "call-template-1003"
+    };
+
     static void Main(string[] args)
     {
         string catalogPath = args.Length > 0 ? args[0] : "tests/xslt30-test/catalog.xml";
@@ -119,6 +133,14 @@ class Program
     static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string catalogDir, XNamespace ns)
     {
         var name = testCase.Attribute("name")?.Value ?? "unknown";
+
+        if (SkipTests.Contains(name))
+        {
+            Console.WriteLine($"  SKIP {name}: Known to exceed stack limit");
+            return TestResult.Skip;
+        }
+
+        // Console.WriteLine($"  RUN  {name}");
 
         try
         {

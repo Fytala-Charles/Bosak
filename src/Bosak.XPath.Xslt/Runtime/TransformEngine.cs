@@ -64,6 +64,10 @@ public sealed class TransformEngine
     // Key index for key() function lookups
     private KeyIndex? _keyIndex;
 
+    // Recursion depth guard for xsl:function and xsl:call-template calls
+    private int _xsltFunctionCallDepth;
+    private int _callTemplateDepth;
+
     /// <summary>The parsed xsl:output serialization properties.</summary>
     public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
 
@@ -168,9 +172,21 @@ public sealed class TransformEngine
     /// Executes the body of an xsl:function declaration, binding parameters and
     /// returning the sequence produced by the function body.
     /// </summary>
+    private const int MaxXsltFunctionCallDepth = 64;
+
     private XdmValue ExecuteXsltFunction(Stylesheet.XsltFunctionDefinition def, ReadOnlySpan<XdmValue> args)
     {
+        if (++_xsltFunctionCallDepth > MaxXsltFunctionCallDepth)
+        {
+            _xsltFunctionCallDepth--;
+            throw new InvalidOperationException("XSLT function recursion depth exceeded maximum allowed depth.");
+        }
+
         var snapshot = _context.SnapshotVariables();
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        var savedCurrent = _context.CurrentItem;
         try
         {
             // Bind parameters
@@ -182,13 +198,17 @@ public sealed class TransformEngine
             // Set focus to the first argument if present, otherwise empty sequence
             var focus = args.Length > 0 ? args[0] : XdmValue.FromSequence(XdmSequence.Empty);
             _context.WithFocus(focus, 1, 1);
+            _context.WithCurrentItem(focus);
 
             // Evaluate the function body (sequence constructor)
             return EvaluateFunctionBody(def.Element, focus);
         }
         finally
         {
+            _xsltFunctionCallDepth--;
             _context.RestoreVariables(snapshot);
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+            _context.WithCurrentItem(savedCurrent);
         }
     }
 
@@ -321,10 +341,13 @@ public sealed class TransformEngine
                             var compiled = XPath31Expression.Compile(select);
                             var feResult = compiled.Evaluate(_context);
                             var feItems = EnumerateItems(feResult).ToList();
+                            var savedFocus = _context.ContextItem;
+                            var savedCurrent = _context.CurrentItem;
                             int pos = 1;
                             foreach (var item in feItems)
                             {
                                 _context.WithFocus(item, pos, feItems.Count);
+                                _context.WithCurrentItem(item);
                                 var feSnapshot = _context.SnapshotVariables();
                                 try
                                 {
@@ -341,6 +364,8 @@ public sealed class TransformEngine
                                 }
                                 pos++;
                             }
+                            _context.WithFocus(savedFocus, 1, 1);
+                            _context.WithCurrentItem(savedCurrent);
                         }
                         break;
                     }
@@ -517,7 +542,9 @@ public sealed class TransformEngine
     public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
         // Update context to current item
+        var savedCurrent = _context.CurrentItem;
         _context.WithFocus(contextItem, 1, 1);
+        _context.WithCurrentItem(contextItem);
 
         // Snapshot current variables for lexical scoping
         var snapshot = _context.SnapshotVariables();
@@ -608,6 +635,7 @@ public sealed class TransformEngine
         finally
         {
             _context.RestoreVariables(snapshot);
+            _context.WithCurrentItem(savedCurrent);
             _tunnelParamStack.Pop();
         }
     }
@@ -618,12 +646,27 @@ public sealed class TransformEngine
     public void CallTemplate(string name, IXdmNode currentNode, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
         => CallTemplate(name, XdmValue.FromNode(currentNode), withParams, incomingTunnelParams);
 
+    private const int MaxCallTemplateDepth = 128;
+
     public void CallTemplate(string name, XdmValue contextItem, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
-        if (!_allNamedTemplates.TryGetValue(name, out var rule))
-            throw new InvalidOperationException($"Named template '{name}' not found.");
+        if (++_callTemplateDepth > MaxCallTemplateDepth)
+        {
+            _callTemplateDepth--;
+            throw new InvalidOperationException("xsl:call-template recursion depth exceeded maximum allowed depth.");
+        }
 
-        ExecuteTemplate(rule, contextItem, withParams, incomingTunnelParams);
+        try
+        {
+            if (!_allNamedTemplates.TryGetValue(name, out var rule))
+                throw new InvalidOperationException($"Named template '{name}' not found.");
+
+            ExecuteTemplate(rule, contextItem, withParams, incomingTunnelParams);
+        }
+        finally
+        {
+            _callTemplateDepth--;
+        }
     }
 
     /// <summary>
@@ -827,10 +870,12 @@ public sealed class TransformEngine
                         }
 
                         var savedFocus = _context.ContextItem;
+                        var savedCurrent = _context.CurrentItem;
                         int pos = 1;
                         foreach (var item in items)
                         {
                             _context.WithFocus(item, pos, items.Count);
+                            _context.WithCurrentItem(item);
                             var feSnapshot = _context.SnapshotVariables();
                             try
                             {
@@ -851,6 +896,7 @@ public sealed class TransformEngine
                             pos++;
                         }
                         _context.WithFocus(savedFocus, 1, 1);
+                        _context.WithCurrentItem(savedCurrent);
                     }
                     break;
                 }
@@ -1229,11 +1275,15 @@ public sealed class TransformEngine
     /// </summary>
     public void ApplyBuiltInRules(IXdmNode node, string mode, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
-        var modeDef = _stylesheet.GetModeDefinition(mode);
-        var behavior = modeDef?.OnNoMatch ?? Stylesheet.OnNoMatch.ShallowCopy;
-
-        switch (node.NodeKind)
+        var savedCurrent = _context.CurrentItem;
+        _context.WithCurrentItem(XdmValue.FromNode(node));
+        try
         {
+            var modeDef = _stylesheet.GetModeDefinition(mode);
+            var behavior = modeDef?.OnNoMatch ?? Stylesheet.OnNoMatch.ShallowCopy;
+
+            switch (node.NodeKind)
+            {
             case XdmNodeKind.Element:
                 ApplyBuiltInRulesForElement(node, mode, behavior, incomingTunnelParams);
                 break;
@@ -1257,6 +1307,11 @@ public sealed class TransformEngine
                 break;
 
             // Comments and PIs are ignored by default
+            }
+        }
+        finally
+        {
+            _context.WithCurrentItem(savedCurrent);
         }
     }
 

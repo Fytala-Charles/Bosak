@@ -142,6 +142,7 @@ internal static class FormatNumberEngine
             sub.Prefix = picture;
             sub.IntegerDigits = "";
             sub.FractionalDigits = "";
+            sub.Suffix = "";
             sub.HasDecimalSeparator = false;
         }
         else
@@ -161,10 +162,8 @@ internal static class FormatNumberEngine
             }
 
             // Optional decimal separator + fractional part
-            bool hasDecimal = false;
             if (pos < picture.Length && MatchesAt(picture, pos, format.DecimalSeparator))
             {
-                hasDecimal = true;
                 pos += format.DecimalSeparator.Length;
                 while (pos < picture.Length)
                 {
