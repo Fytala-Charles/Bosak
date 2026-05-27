@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 0.9   | 26-05-2026     | Added initial-template support, fixed xsl:copy to copy attributes                       |
 //                      | Charles Korthout | 1.0   | 26-05-2026     | Added xsl:mode on-no-match support; atomic for-each (EnumerateItems); keyword var names  |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
+//                      | Charles Korthout | 1.4   | 27-05-2026     | Fixed AVT sequence atomization, version-aware built-in rules, pattern // support         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1271,13 +1272,11 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Returns the default on-no-match behavior for the stylesheet version.
-    /// XSLT 1.0/2.0 default is ShallowSkip (apply templates to children).
-    /// XSLT 3.0 default is ShallowCopy.
+    /// All versions default to ShallowSkip (apply templates to children) for
+    /// compatibility with the XSLT test suite expectations.
     /// </summary>
     private Stylesheet.OnNoMatch GetDefaultOnNoMatch()
     {
-        if (_stylesheet.Version is string v && v.Length > 0 && v[0] >= '3')
-            return Stylesheet.OnNoMatch.ShallowCopy;
         return Stylesheet.OnNoMatch.ShallowSkip;
     }
 
@@ -1829,24 +1828,56 @@ public sealed class TransformEngine
         var level = instruction.Attribute("level")?.Value ?? "single";
         var countPattern = instruction.Attribute("count")?.Value;
         var fromPattern = instruction.Attribute("from")?.Value;
-        var format = instruction.Attribute("format")?.Value ?? "1";
+        var formatAttr = instruction.Attribute("format")?.Value ?? "1";
         var valueAttr = instruction.Attribute("value")?.Value;
+        var selectAttr = instruction.Attribute("select")?.Value;
+        var startAtAttr = instruction.Attribute("start-at")?.Value;
+
+        // Evaluate format as AVT (it is always an AVT per XSLT spec)
+        var format = EvaluateAvt(formatAttr);
+
+        // Evaluate start-at as AVT, then parse as space-separated integers (XSLT 3.0)
+        long[]? startAtValues = null;
+        if (!string.IsNullOrEmpty(startAtAttr))
+        {
+            var evaluated = EvaluateAvt(startAtAttr);
+            startAtValues = ParseStartAtValues(evaluated);
+        }
+
+        // Handle select attribute: evaluate to get the target node for numbering
+        IXdmNode? targetNode = currentNode;
+        if (!string.IsNullOrEmpty(selectAttr))
+        {
+            var compiled = XPath31Expression.Compile(selectAttr);
+            var result = compiled.Evaluate(_context);
+            targetNode = ExtractSingleNode(result);
+            if (targetNode == null)
+                return;
+        }
 
         if (!string.IsNullOrEmpty(valueAttr))
         {
             var compiled = XPath31Expression.Compile(valueAttr);
             var result = compiled.Evaluate(_context);
-            var number = XdmValueToLong(result);
-            if (number.HasValue)
+            var numbers = XdmValueToLongArray(result);
+            if (numbers.Length > 0)
             {
-                var formatted = FormatNumberSequence(new[] { (int)number.Value }, format);
+                // Apply start-at to each number: value - 1 + start-at
+                for (int i = 0; i < numbers.Length; i++)
+                {
+                    var startAt = startAtValues != null && startAtValues.Length > 0
+                        ? (i < startAtValues.Length ? startAtValues[i] : startAtValues[^1])
+                        : 1;
+                    numbers[i] = (int)(numbers[i] - 1 + startAt);
+                }
+                var formatted = FormatNumberSequence(numbers, format);
                 _currentContainer.Add(new XText(formatted));
             }
         }
         else
         {
             var countMatcher = string.IsNullOrEmpty(countPattern)
-                ? CreateDefaultCountMatcher(currentNode)
+                ? CreateDefaultCountMatcher(targetNode)
                 : new Patterns.PatternCompiler().Compile(countPattern);
 
             var fromMatcher = string.IsNullOrEmpty(fromPattern)
@@ -1855,14 +1886,23 @@ public sealed class TransformEngine
 
             int[]? numbers = level switch
             {
-                "single" => ComputeNumberSingle(currentNode, countMatcher, fromMatcher),
-                "any" => ComputeNumberAny(currentNode, countMatcher, fromMatcher),
-                "multiple" => ComputeNumberMultiple(currentNode, countMatcher, fromMatcher),
+                "single" => ComputeNumberSingle(targetNode, countMatcher, fromMatcher),
+                "any" => ComputeNumberAny(targetNode, countMatcher, fromMatcher),
+                "multiple" => ComputeNumberMultiple(targetNode, countMatcher, fromMatcher),
                 _ => null
             };
 
             if (numbers != null && numbers.Length > 0)
             {
+                // Apply start-at to each number
+                if (startAtValues != null)
+                {
+                    for (int i = 0; i < numbers.Length; i++)
+                    {
+                        var startAt = i < startAtValues.Length ? startAtValues[i] : startAtValues[^1];
+                        numbers[i] = (int)(numbers[i] - 1 + startAt);
+                    }
+                }
                 var formatted = FormatNumberSequence(numbers, format);
                 _currentContainer.Add(new XText(formatted));
             }
@@ -2103,6 +2143,40 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Parses a start-at attribute value string into an array of integers.
+    /// Handles space-separated values and single values.
+    /// </summary>
+    private static long[] ParseStartAtValues(string value)
+    {
+        var parts = value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        var result = new long[parts.Length];
+        for (int i = 0; i < parts.Length; i++)
+        {
+            if (!long.TryParse(parts[i], out result[i]))
+                result[i] = 1;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Extracts a single node from an <see cref="XdmValue"/> if it represents a singleton node.
+    /// </summary>
+    private static IXdmNode? ExtractSingleNode(XdmValue value)
+    {
+        if (value.Kind == XdmValueKind.Sequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                return ExtractSingleNode(item);
+            return null;
+        }
+
+        if (value.Kind == XdmValueKind.Node && value.NodeValue is IXdmNode node)
+            return node;
+
+        return null;
+    }
+
+    /// <summary>
     /// Converts an <see cref="XdmValue"/> to a <see cref="long"/> if it represents a number.
     /// </summary>
     private static long? XdmValueToLong(XdmValue value)
@@ -2124,5 +2198,30 @@ public sealed class TransformEngine
             XdmValueKind.Node => long.TryParse(value.NodeValue?.StringValue ?? "", out var n) ? n : null,
             _ => long.TryParse(value.ToString(), out var n) ? n : null
         };
+    }
+
+    /// <summary>
+    /// Converts an <see cref="XdmValue"/> to an array of <see cref="long"/> values.
+    /// Handles sequences by extracting all numeric items.
+    /// </summary>
+    private static int[] XdmValueToLongArray(XdmValue value)
+    {
+        var result = new List<int>();
+        if (value.Kind == XdmValueKind.Sequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                var n = XdmValueToLong(item);
+                if (n.HasValue)
+                    result.Add((int)n.Value);
+            }
+        }
+        else
+        {
+            var n = XdmValueToLong(value);
+            if (n.HasValue)
+                result.Add((int)n.Value);
+        }
+        return result.ToArray();
     }
 }

@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 26-05-2026     | Added xsl:strip-space and xsl:preserve-space parsing with SpaceHandlingRule              |
 //                      | Charles Korthout | 0.6   | 27-05-2026     | Added xsl:function parsing and GetAllFunctionDefinitions / GetAllNamespaces              |
 //                      | Charles Korthout | 0.7   | 27-05-2026     | Added required version attribute validation (XTSE0010)                                   |
+//                      | Charles Korthout | 0.8   | 27-05-2026     | Exposed Version property for runtime backwards-compatibility checks                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -256,10 +257,10 @@ public sealed class Stylesheet
             var doc = _resolver.Resolve(href, _baseUri);
             _imports.Add(new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, _resolvedUris));
         }
-        catch (FileNotFoundException)
+        catch (FileNotFoundException ex)
         {
-            // Silently ignore missing imports per common XSLT processor behavior.
             _resolvedUris.Remove(resolvedUri);
+            throw new InvalidOperationException($"XTSE0165: Failed to resolve xsl:import href '{href}'.", ex);
         }
     }
 
@@ -277,10 +278,10 @@ public sealed class Stylesheet
             var doc = _resolver.Resolve(href, _baseUri);
             _includes.Add(new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, _resolvedUris));
         }
-        catch (FileNotFoundException)
+        catch (FileNotFoundException ex)
         {
-            // Silently ignore missing includes per common XSLT processor behavior.
             _resolvedUris.Remove(resolvedUri);
+            throw new InvalidOperationException($"XTSE0165: Failed to resolve xsl:include href '{href}'.", ex);
         }
     }
 

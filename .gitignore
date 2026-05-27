@@ -60,3 +60,12 @@ nunit-*.xml
 conformance*.log
 conformance_output.txt
 publish/
+
+# XSLT conformance test logs
+*_run.log
+xslt_conformance*.log
+xslt_function*.log
+
+# XSLT test suite (embedded git repo)
+tests/xslt30-test/
+

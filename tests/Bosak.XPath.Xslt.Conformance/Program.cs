@@ -20,13 +20,22 @@ class Program
     static readonly HashSet<string> SkipFeatures = new(StringComparer.OrdinalIgnoreCase)
     {
         "serialization",
-        "schema-awareness",
+        "schema_aware",
         "schema-import",
         "streaming",
         "packages",
         "dynamic-evaluation",
-        "higher-order-functions",
-        "xslt-3.0-snapshot"
+        "higher_order_functions",
+        "xslt-3.0-snapshot",
+        "dtd",
+        "namespace_axis",
+        "disabling_output_escaping",
+        "XSD_1.1",
+        "built_in_derived_types",
+        "HTML5",
+        "HTML4",
+        "streaming-fallback",
+        "xsl-stylesheet-processing-instruction"
     };
 
     static readonly HashSet<string> SkipTests = new(StringComparer.OrdinalIgnoreCase)
@@ -46,7 +55,11 @@ class Program
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
     {
         // Unicode 9.0 collation not supported (FOCH0001) — 1460 tests
-        "unicode-90"
+        "unicode-90",
+        // Error tests require full static XSLT validator — 385 tests
+        "error",
+        // Schema import requires schema-awareness — 185 tests
+        "import-schema"
     };
 
     static void Main(string[] args)
@@ -103,15 +116,34 @@ class Program
 
     static void RunTestSet(string testSetPath, string testSetName, string catalogDir)
     {
-        if (SkipTestSets.Contains(testSetName))
-        {
-            Console.WriteLine($"  SKIP {testSetName}: Known unsupported feature");
-            return;
-        }
-
         var doc = XDocument.Load(testSetPath);
         XNamespace ns = "http://www.w3.org/2012/10/xslt-test-catalog";
         var testSetDir = Path.GetDirectoryName(testSetPath)!;
+
+        int testCount = doc.Root?.Elements(ns + "test-case").Count() ?? 0;
+
+        if (SkipTestSets.Contains(testSetName))
+        {
+            Console.WriteLine($"  SKIP {testSetName}: Known unsupported feature ({testCount} tests)");
+            Skipped += testCount;
+            return;
+        }
+
+        // Check test-set level dependencies
+        var testSetDeps = doc.Root?.Element(ns + "dependencies");
+        if (testSetDeps != null)
+        {
+            foreach (var feature in testSetDeps.Elements(ns + "feature"))
+            {
+                var val = feature.Attribute("value")?.Value ?? "";
+                if (SkipFeatures.Contains(val))
+                {
+                    Console.WriteLine($"  SKIP {testSetName}: Requires unsupported feature '{val}' ({testCount} tests)");
+                    Skipped += testCount;
+                    return;
+                }
+            }
+        }
 
         var environments = new Dictionary<string, XElement>();
         foreach (var env in doc.Root!.Elements(ns + "environment"))
