@@ -1561,4 +1561,150 @@ public class StylesheetTests
         Assert.Contains("<x>2</x>", result);
         Assert.Contains("<x>3</x>", result);
     }
+
+    // ------------------------------------------------------------------
+    // REQ-016: multi-key xsl:sort tests
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void MultiKey_Sort_Two_Keys()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:for-each select='root/item'>
+                        <xsl:sort select='@category'/>
+                        <xsl:sort select='@value' data-type='number'/>
+                        <x><xsl:value-of select='@name'/></x>
+                    </xsl:for-each>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XElement("item", new XAttribute("category", "B"), new XAttribute("value", "2"), new XAttribute("name", "b2")),
+                new XElement("item", new XAttribute("category", "A"), new XAttribute("value", "3"), new XAttribute("name", "a3")),
+                new XElement("item", new XAttribute("category", "A"), new XAttribute("value", "1"), new XAttribute("name", "a1")),
+                new XElement("item", new XAttribute("category", "B"), new XAttribute("value", "1"), new XAttribute("name", "b1"))
+            ));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        // Expected order: a1, a3, b1, b2
+        var a1Pos = result.IndexOf("<x>a1</x>");
+        var a3Pos = result.IndexOf("<x>a3</x>");
+        var b1Pos = result.IndexOf("<x>b1</x>");
+        var b2Pos = result.IndexOf("<x>b2</x>");
+
+        Assert.True(a1Pos < a3Pos, "a1 should come before a3");
+        Assert.True(a3Pos < b1Pos, "a3 should come before b1");
+        Assert.True(b1Pos < b2Pos, "b1 should come before b2");
+    }
+
+    [Fact]
+    public void MultiKey_Sort_Descending_Secondary()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:for-each select='root/item'>
+                        <xsl:sort select='@category'/>
+                        <xsl:sort select='@value' data-type='number' order='descending'/>
+                        <x><xsl:value-of select='@name'/></x>
+                    </xsl:for-each>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XElement("item", new XAttribute("category", "A"), new XAttribute("value", "1"), new XAttribute("name", "a1")),
+                new XElement("item", new XAttribute("category", "A"), new XAttribute("value", "3"), new XAttribute("name", "a3")),
+                new XElement("item", new XAttribute("category", "B"), new XAttribute("value", "2"), new XAttribute("name", "b2"))
+            ));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        // Expected order: a3, a1, b2
+        var a3Pos = result.IndexOf("<x>a3</x>");
+        var a1Pos = result.IndexOf("<x>a1</x>");
+        var b2Pos = result.IndexOf("<x>b2</x>");
+
+        Assert.True(a3Pos < a1Pos, "a3 should come before a1");
+        Assert.True(a1Pos < b2Pos, "a1 should come before b2");
+    }
+
+    [Fact]
+    public void MultiKey_Sort_Stable_When_Keys_Equal()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:for-each select='root/item'>
+                        <xsl:sort select='@category'/>
+                        <xsl:sort select='@value' data-type='number'/>
+                        <x><xsl:value-of select='@name'/></x>
+                    </xsl:for-each>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XElement("item", new XAttribute("category", "A"), new XAttribute("value", "1"), new XAttribute("name", "first")),
+                new XElement("item", new XAttribute("category", "A"), new XAttribute("value", "1"), new XAttribute("name", "second"))
+            ));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        // Stable sort: original order should be preserved for equal keys
+        var firstPos = result.IndexOf("<x>first</x>");
+        var secondPos = result.IndexOf("<x>second</x>");
+
+        Assert.True(firstPos < secondPos, "first should come before second (stable sort)");
+    }
+
+    [Fact]
+    public void MultiKey_Sort_In_ApplyTemplates()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:apply-templates select='root/item'>
+                        <xsl:sort select='@category'/>
+                        <xsl:sort select='@value' data-type='number'/>
+                    </xsl:apply-templates>
+                </output>
+            </xsl:template>
+            <xsl:template match='item'>
+                <x><xsl:value-of select='@name'/></x>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XElement("item", new XAttribute("category", "B"), new XAttribute("value", "2"), new XAttribute("name", "b2")),
+                new XElement("item", new XAttribute("category", "A"), new XAttribute("value", "3"), new XAttribute("name", "a3")),
+                new XElement("item", new XAttribute("category", "A"), new XAttribute("value", "1"), new XAttribute("name", "a1"))
+            ));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        // Expected order: a1, a3, b2
+        var a1Pos = result.IndexOf("<x>a1</x>");
+        var a3Pos = result.IndexOf("<x>a3</x>");
+        var b2Pos = result.IndexOf("<x>b2</x>");
+
+        Assert.True(a1Pos < a3Pos, "a1 should come before a3");
+        Assert.True(a3Pos < b2Pos, "a3 should come before b2");
+    }
 }

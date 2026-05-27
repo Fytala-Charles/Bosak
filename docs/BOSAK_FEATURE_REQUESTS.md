@@ -95,7 +95,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-012 | Customer A | `xsl:call-template` tunnel parameters | Customer A passes context metadata through deep call chains | **Implemented** | TBD | Charles Korthout | 2026-05-24 |
 | REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Accepted** | Phase 2 | Unassigned | 2026-05-25 |
 | REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
-| REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Pending** | Phase 2 | Unassigned | 2026-05-26 |
+| REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
 
 > **Legend:**
 > - `Pending` — Under review, no decision yet.
@@ -688,7 +688,7 @@ Without `xsl:function` support, Customer A's basesheets cannot execute on Bosak.
 
 **Requesting Application:** Customer A  
 **Submitted:** 2026-05-26  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 Customer A's DELFOR D99A JAMA basesheet sorts line items by two keys:
@@ -710,10 +710,10 @@ Extend the sorting logic in `TransformEngine` to evaluate all `xsl:sort` childre
 4. Reuse existing `data-type` and `order` logic for each key.
 
 #### Acceptance Criteria
-- [ ] Two `xsl:sort` elements produce correctly ordered output (primary then secondary)
-- [ ] Three or more `xsl:sort` elements work correctly
-- [ ] Each key respects its own `data-type` and `order` attributes
-- [ ] Stable sort: items with equal keys retain their original relative order
+- [x] Two `xsl:sort` elements produce correctly ordered output (primary then secondary)
+- [x] Three or more `xsl:sort` elements work correctly
+- [x] Each key respects its own `data-type` and `order` attributes
+- [x] Stable sort: items with equal keys retain their original relative order
 
 #### Impact Analysis
 | Layer | Impact | Notes |
@@ -732,6 +732,7 @@ Extend the sorting logic in `TransformEngine` to evaluate all `xsl:sort` childre
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-26 | Kimi | Pending | Required for D99A JAMA basesheet correctness |
+| 2026-05-27 | Kimi | Implemented | Composite SortKey/SortEntry with per-key data-type and order; stable sort via original index tiebreaker; 4 unit tests pass |
 
 ---
 

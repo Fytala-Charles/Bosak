@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 24-05-2026     | Added xsl:number support (single, any, multiple levels) with format-integer reuse       |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
 //                      | Charles Korthout | 1.1   | 27-05-2026     | Added xsl:function registration, ExecuteXsltFunction, EvaluateFunctionBody, xsl:sequence |
+//                      | Charles Korthout | 1.2   | 27-05-2026     | Added multi-key xsl:sort with composite comparator and stable sort                          |
 //                      | Charles Korthout | 0.8   | 26-05-2026     | Added xsl:copy, fixed for-each variable scoping, AVT evaluation in literal elements      |
 //                      | Charles Korthout | 0.9   | 26-05-2026     | Added initial-template support, fixed xsl:copy to copy attributes                       |
 //                      | Charles Korthout | 1.0   | 26-05-2026     | Added xsl:mode on-no-match support; atomic for-each (EnumerateItems); keyword var names  |
@@ -1520,40 +1521,54 @@ public sealed class TransformEngine
 
     private List<XdmValue> SortItems(List<XdmValue> items, List<XElement> sortSpecs)
     {
-        // For now, support only the first sort key
-        var sort = sortSpecs[0];
-        var select = sort.Attribute("select")?.Value ?? ".";
-        var dataType = sort.Attribute("data-type")?.Value ?? "text";
-        var order = sort.Attribute("order")?.Value ?? "ascending";
-        var descending = order.Trim().ToLowerInvariant() == "descending";
-
-        var keyed = new List<(XdmValue Key, XdmValue Item)>();
-        foreach (var item in items)
+        // Pre-compute all sort keys for every item, preserving original order for stability.
+        var keyed = new List<SortEntry>();
+        for (int idx = 0; idx < items.Count; idx++)
         {
+            var item = items[idx];
             _context.WithFocus(item, 1, 1);
-            var compiled = XPath31Expression.Compile(select);
-            var key = compiled.Evaluate(_context);
-            keyed.Add((key, item));
+            var keys = new List<SortKey>();
+            foreach (var spec in sortSpecs)
+            {
+                var select = spec.Attribute("select")?.Value ?? ".";
+                var dataType = spec.Attribute("data-type")?.Value ?? "text";
+                var order = spec.Attribute("order")?.Value ?? "ascending";
+                var descending = order.Trim().ToLowerInvariant() == "descending";
+                var isNumeric = dataType.Trim().ToLowerInvariant() == "number";
+
+                var compiled = XPath31Expression.Compile(select);
+                var keyValue = compiled.Evaluate(_context);
+                keys.Add(new SortKey(keyValue, descending, isNumeric));
+            }
+            keyed.Add(new SortEntry(item, keys, idx));
         }
 
-        if (dataType.Trim().ToLowerInvariant() == "number")
+        keyed.Sort((a, b) =>
         {
-            keyed.Sort((a, b) =>
+            for (int i = 0; i < a.Keys.Count; i++)
             {
-                var cmp = CompareNumericSortKey(a.Key, b.Key);
-                return descending ? -cmp : cmp;
-            });
-        }
-        else
-        {
-            keyed.Sort((a, b) =>
-            {
-                var cmp = XdmValueComparer.Instance.Compare(a.Key, b.Key);
-                return descending ? -cmp : cmp;
-            });
-        }
+                var cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
+                if (cmp != 0) return cmp;
+            }
+            // Stable sort: preserve original relative order when all keys equal
+            return a.OriginalIndex.CompareTo(b.OriginalIndex);
+        });
 
         return keyed.Select(k => k.Item).ToList();
+    }
+
+    private readonly record struct SortKey(XdmValue Value, bool Descending, bool IsNumeric);
+    private readonly record struct SortEntry(XdmValue Item, List<SortKey> Keys, int OriginalIndex);
+
+    private int CompareSortKey(SortKey a, SortKey b)
+    {
+        int cmp;
+        if (a.IsNumeric)
+            cmp = CompareNumericSortKey(a.Value, b.Value);
+        else
+            cmp = XdmValueComparer.Instance.Compare(a.Value, b.Value);
+
+        return a.Descending ? -cmp : cmp;
     }
 
     private static int CompareNumericSortKey(XdmValue a, XdmValue b)

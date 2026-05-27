@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-05-26  
-**Commit:** `<latest>` on `main` (uncommitted changes)  
-**Current focus:** XSLT engine fixes (keyword names, xsl:mode, atomic for-each)
+**Date:** 2026-05-27  
+**Commit:** `48f1077` on `main` (pushed to origin)  
+**Current focus:** REQ-015 xsl:function and REQ-016 multi-key xsl:sort completed
 
 ---
 
@@ -24,22 +24,26 @@
 | REQ-010 | JSON/XML functions | ⏳ Pending | — |
 | REQ-011 | `fn:transform()` | ⏳ Pending | — |
 | REQ-012 | tunnel parameters | ✅ Implemented | 4 |
+| REQ-015 | `xsl:function` support | ✅ Implemented | 6 |
+| REQ-016 | multi-key `xsl:sort` | ✅ Implemented | 4 |
 
-**Phase 2 (sort, key, number) is COMPLETE.**  
-**Phase 3 started:** REQ-012 (tunnel parameters) implemented.  
+**Phase 2 (sort, key, number, function) is COMPLETE.**  
+**Phase 3 started:** REQ-012 (tunnel parameters) implemented. REQ-015 (xsl:function) and REQ-016 (multi-key xsl:sort) implemented.  
 **Customer A blocker resolved:** Global `xsl:variable` / `xsl:param` now collected from main/import/include stylesheets.  
 **QT3 fixes:** `fn:substring` rounding fixed (+~10 passes), `fn:replace` replacement string validation fixed (+~5 passes).  
 **XSLT conformance runner:** Now supports `<assert>`, `<all-of>`, `<any-of>`, `<assert-eq>` XPath assertion evaluation; loads `assert-xml` from `file` attribute. Full catalog: **7.3% pass rate** (776 / 10,696 non-skipped).  
 **Engine fixes:** `xsl:copy` now copies attributes per spec; `xsl:strip-space` / `xsl:preserve-space` parsing and application added; `initial-template` support added to `XsltExecutable`/`TransformEngine`.  
-**Keyword variable names:** Parser now accepts `mod`, `div`, `and`, `or` etc. as variable/parameter names (e.g. `$mod`).  
+**Keyword variable names:** Parser now accepts `mod`, `div`, `and`, `or` etc. as variable/parameter names (e.g. `$mod`).
+**`xsl:function` support:** XSLT-defined functions are parsed, registered on EvaluationContext, and callable from XPath. Supports parameters, local variables, recursion, import/include precedence.
+**Multi-key `xsl:sort`:** Composite comparator evaluates all sort keys in document order, respecting per-key `data-type` and `order`. Stable sort preserves original order for equal keys.  
 **`xsl:mode` support:** `on-no-match` attribute parsed (`shallow-copy`, `shallow-skip`, `text-only-copy`, `deep-copy`, `fail`); built-in template rules are now mode-aware.  
 **Atomic for-each:** `xsl:for-each select="1 to 4"` now iterates over atomic values; `ExecuteXsltInstruction` signature changed to accept `XdmValue` context item.  
 **AVT fix:** Attribute Value Templates (`{expr}`) in literal result elements are now evaluated.
 
 ### Unit Test Status
 
-- **744 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: **55 tests** in `Bosak.XPath.Xslt.Tests`
+- **791 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: **66 tests** in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
