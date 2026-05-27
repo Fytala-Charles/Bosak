@@ -39,12 +39,14 @@
 //                      | Charles Korthout | 2.6   | 24-05-2026     | Fixed fn:path sibling index, namespace parent axis, path#0; date/time cross-type checks |
 //                      | Charles Korthout | 2.7   | 26-05-2026     | Fixed fn:substring rounding to round-half-to-even; fixed fn:replace replacement string    |
 //                      | Charles Korthout | 2.8   | 26-05-2026     | Added fn:document#1/#2 for XSLT compatibility                                            |
+//                      | Charles Korthout | 2.9   | 27-05-2026     | Added fn:parse-json, fn:json-to-xml, fn:xml-to-json, fn:json-doc with options support   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
@@ -2530,6 +2532,70 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 3,
                 ParameterTypes = [XdmValueKind.QName, XdmValueKind.String, XdmValueKind.Undefined], ReturnType = XdmValueKind.Undefined,
                 Implementation = Error_3
+            },
+
+            // ----- fn:parse-json ----------------------------------------------
+            [(Namespaces.Fn, "parse-json", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-json", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = ParseJson_1
+            },
+            [(Namespaces.Fn, "parse-json", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-json", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = ParseJson_2
+            },
+
+            // ----- fn:json-to-xml ---------------------------------------------
+            [(Namespaces.Fn, "json-to-xml", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "json-to-xml", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Node,
+                Implementation = JsonToXml_1
+            },
+            [(Namespaces.Fn, "json-to-xml", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "json-to-xml", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Node,
+                Implementation = JsonToXml_2
+            },
+
+            // ----- fn:xml-to-json ---------------------------------------------
+            [(Namespaces.Fn, "xml-to-json", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "xml-to-json", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.String,
+                Implementation = XmlToJson_1
+            },
+            [(Namespaces.Fn, "xml-to-json", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "xml-to-json", Arity = 2,
+                ParameterTypes = [XdmValueKind.Node, XdmValueKind.Map],
+                ReturnType = XdmValueKind.String,
+                Implementation = XmlToJson_2
+            },
+
+            // ----- fn:json-doc ------------------------------------------------
+            [(Namespaces.Fn, "json-doc", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "json-doc", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = JsonDoc_1
+            },
+            [(Namespaces.Fn, "json-doc", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "json-doc", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = JsonDoc_2
             },
         };
 
@@ -7291,6 +7357,349 @@ public static class FunctionLibrary
     {
         var qn = args[0].QNameValue;
         return XdmValue.FromString(qn.Prefix);
+    }
+
+    // ------------------------------------------------------------------
+    // JSON functions (parse-json, json-to-xml, xml-to-json, json-doc)
+    // ------------------------------------------------------------------
+
+    private static readonly string JsonXmlNs = "http://www.w3.org/2005/xpath-functions";
+
+    private readonly record struct JsonOptions(bool Liberal, string Duplicates, bool Escape, bool Indent)
+    {
+        public static JsonOptions Default => new(false, "use-first", true, false);
+    }
+
+    private static JsonOptions ParseJsonOptions(XdmValue? options)
+    {
+        if (options is null || options.Value.IsUndefined)
+            return JsonOptions.Default;
+        if (!options.Value.IsMap)
+            return JsonOptions.Default;
+
+        var map = options.Value.MapValue;
+        var result = JsonOptions.Default;
+
+        if (map.TryGetValue(XdmValue.FromString("liberal"), out var liberal))
+            result = result with { Liberal = liberal.BooleanValue };
+        if (map.TryGetValue(XdmValue.FromString("duplicates"), out var dup))
+            result = result with { Duplicates = AtomizedString(dup) };
+        if (map.TryGetValue(XdmValue.FromString("escape"), out var escape))
+            result = result with { Escape = escape.BooleanValue };
+        if (map.TryGetValue(XdmValue.FromString("indent"), out var indent))
+            result = result with { Indent = indent.BooleanValue };
+
+        return result;
+    }
+
+    private static XdmValue ParseJson_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ParseJson(AtomizedString(args[0]), JsonOptions.Default);
+
+    private static XdmValue ParseJson_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ParseJson(AtomizedString(args[0]), ParseJsonOptions(args[1]));
+
+    private static XdmValue ParseJson(string json, JsonOptions options)
+    {
+        if (string.IsNullOrEmpty(json))
+            throw new InvalidOperationException("FOJS0001: Empty string is not valid JSON");
+
+        var docOptions = new JsonDocumentOptions
+        {
+            AllowTrailingCommas = options.Liberal
+        };
+
+        using var document = JsonDocument.Parse(json, docOptions);
+        return JsonElementToXdmValue(document.RootElement, options);
+    }
+
+    private static XdmValue JsonElementToXdmValue(JsonElement element, JsonOptions options)
+    {
+        switch (element.ValueKind)
+        {
+            case JsonValueKind.Object:
+                {
+                    var map = new XdmMap();
+                    foreach (var property in element.EnumerateObject())
+                    {
+                        var key = XdmValue.FromString(options.Escape ? JsonEscapeString(property.Name) : property.Name);
+                        var value = JsonElementToXdmValue(property.Value, options);
+                        if (map.ContainsKey(key))
+                        {
+                            if (options.Duplicates == "reject")
+                                throw new InvalidOperationException("FOJS0003: Duplicate key in JSON object");
+                            if (options.Duplicates == "use-first")
+                                continue;
+                        }
+                        map.Add(key, value);
+                    }
+                    return XdmValue.FromMap(map);
+                }
+            case JsonValueKind.Array:
+                {
+                    var array = new XdmArray();
+                    foreach (var item in element.EnumerateArray())
+                        array.Add(JsonElementToXdmValue(item, options));
+                    return XdmValue.FromArray(array);
+                }
+            case JsonValueKind.String:
+                return XdmValue.FromString(options.Escape ? JsonEscapeString(element.GetString()!) : element.GetString()!);
+            case JsonValueKind.Number:
+                return XdmValue.FromDouble(element.GetDouble());
+            case JsonValueKind.True:
+                return XdmValue.True;
+            case JsonValueKind.False:
+                return XdmValue.False;
+            case JsonValueKind.Null:
+                return XdmValue.Undefined;
+            default:
+                return XdmValue.Undefined;
+        }
+    }
+
+    private static string JsonEscapeString(string s)
+    {
+        var sb = new StringBuilder();
+        foreach (char c in s)
+        {
+            switch (c)
+            {
+                case '"': sb.Append("\\\""); break;
+                case '\\': sb.Append("\\\\"); break;
+                case '\b': sb.Append("\\b"); break;
+                case '\f': sb.Append("\\f"); break;
+                case '\n': sb.Append("\\n"); break;
+                case '\r': sb.Append("\\r"); break;
+                case '\t': sb.Append("\\t"); break;
+                default:
+                    if (c < 0x20)
+                        sb.Append($"\\u{(int)c:X4}");
+                    else
+                        sb.Append(c);
+                    break;
+            }
+        }
+        return sb.ToString();
+    }
+
+    private static XdmValue JsonToXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => JsonToXml(AtomizedString(args[0]), JsonOptions.Default);
+
+    private static XdmValue JsonToXml_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => JsonToXml(AtomizedString(args[0]), ParseJsonOptions(args[1]));
+
+    private static XdmValue JsonToXml(string json, JsonOptions options)
+    {
+        if (string.IsNullOrEmpty(json))
+            throw new InvalidOperationException("FOJS0001: Empty string is not valid JSON");
+
+        var docOptions = new JsonDocumentOptions
+        {
+            AllowTrailingCommas = options.Liberal
+        };
+
+        using var document = JsonDocument.Parse(json, docOptions);
+        var rootElement = JsonElementToXml(document.RootElement, options);
+        var xdoc = new XDocument(rootElement);
+        return XdmValue.FromNode(new XDocumentNode(xdoc));
+    }
+
+    private static XElement JsonElementToXml(JsonElement element, JsonOptions options)
+    {
+        switch (element.ValueKind)
+        {
+            case JsonValueKind.Object:
+                {
+                    var mapEl = new XElement(XName.Get("map", JsonXmlNs));
+                    foreach (var property in element.EnumerateObject())
+                    {
+                        var key = options.Escape ? JsonEscapeString(property.Name) : property.Name;
+                        var child = JsonElementToXml(property.Value, options);
+                        child.SetAttributeValue(XName.Get("key"), key);
+                        mapEl.Add(child);
+                    }
+                    return mapEl;
+                }
+            case JsonValueKind.Array:
+                {
+                    var arrEl = new XElement(XName.Get("array", JsonXmlNs));
+                    foreach (var item in element.EnumerateArray())
+                        arrEl.Add(JsonElementToXml(item, options));
+                    return arrEl;
+                }
+            case JsonValueKind.String:
+                return new XElement(XName.Get("string", JsonXmlNs), options.Escape ? JsonEscapeString(element.GetString()!) : element.GetString()!);
+            case JsonValueKind.Number:
+                return new XElement(XName.Get("number", JsonXmlNs), element.GetRawText());
+            case JsonValueKind.True:
+                return new XElement(XName.Get("boolean", JsonXmlNs), "true");
+            case JsonValueKind.False:
+                return new XElement(XName.Get("boolean", JsonXmlNs), "false");
+            case JsonValueKind.Null:
+                return new XElement(XName.Get("null", JsonXmlNs));
+            default:
+                return new XElement(XName.Get("null", JsonXmlNs));
+        }
+    }
+
+    private static XdmValue XmlToJson_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XmlToJson(args[0], JsonOptions.Default);
+
+    private static XdmValue XmlToJson_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XmlToJson(args[0], ParseJsonOptions(args[1]));
+
+    private static XdmValue XmlToJson(XdmValue nodeValue, JsonOptions options)
+    {
+        if (!nodeValue.IsNode)
+            throw new InvalidOperationException("XPTY0004: xml-to-json requires a node");
+
+        var node = nodeValue.NodeValue;
+        IXdmNode? root = null;
+        if (node.NodeKind == XdmNodeKind.Document)
+        {
+            foreach (var child in node.Axis(XdmAxis.Child))
+            {
+                var childNode = child.NodeValue!;
+                if (childNode.NodeKind == XdmNodeKind.Element)
+                {
+                    root = childNode;
+                    break;
+                }
+            }
+            if (root is null)
+                throw new InvalidOperationException("FOJS0006: Document node has no element child");
+        }
+        else if (node.NodeKind == XdmNodeKind.Element)
+        {
+            root = node;
+        }
+        else
+        {
+            throw new InvalidOperationException("XPTY0004: xml-to-json requires an element or document node");
+        }
+
+        var sb = new StringBuilder();
+        XmlNodeToJsonString(root, sb, options);
+        return XdmValue.FromString(sb.ToString());
+    }
+
+    private static void XmlNodeToJsonString(IXdmNode node, StringBuilder sb, JsonOptions options)
+    {
+        var localName = node.LocalName;
+        switch (localName)
+        {
+            case "map":
+                sb.Append('{');
+                var first = true;
+                foreach (var child in node.Axis(XdmAxis.Child))
+                {
+                    var childNode = child.NodeValue!;
+                    if (childNode.NodeKind != XdmNodeKind.Element)
+                        continue;
+                    if (!first) sb.Append(',');
+                    first = false;
+                    string? key = null;
+                    foreach (var attr in childNode.Attributes("key"))
+                    {
+                        key = attr.NodeValue?.StringValue;
+                        break;
+                    }
+                    if (key is null)
+                        throw new InvalidOperationException("FOJS0006: Missing key attribute in map entry");
+                    sb.Append('"');
+                    sb.Append(JsonEscapeKey(key));
+                    sb.Append("\":");
+                    XmlNodeToJsonString(childNode, sb, options);
+                }
+                sb.Append('}');
+                break;
+            case "array":
+                sb.Append('[');
+                first = true;
+                foreach (var child in node.Axis(XdmAxis.Child))
+                {
+                    var childNode = child.NodeValue!;
+                    if (childNode.NodeKind != XdmNodeKind.Element)
+                        continue;
+                    if (!first) sb.Append(',');
+                    first = false;
+                    XmlNodeToJsonString(childNode, sb, options);
+                }
+                sb.Append(']');
+                break;
+            case "string":
+                sb.Append('"');
+                sb.Append(JsonEscapeString(node.StringValue));
+                sb.Append('"');
+                break;
+            case "number":
+                sb.Append(node.StringValue);
+                break;
+            case "boolean":
+                sb.Append(node.StringValue);
+                break;
+            case "null":
+                sb.Append("null");
+                break;
+            default:
+                throw new InvalidOperationException($"FOJS0006: Unexpected element {localName} in JSON XML representation");
+        }
+    }
+
+    private static string JsonEscapeKey(string s)
+    {
+        var sb = new StringBuilder();
+        foreach (char c in s)
+        {
+            switch (c)
+            {
+                case '"': sb.Append("\\\""); break;
+                case '\\': sb.Append("\\\\"); break;
+                case '\b': sb.Append("\\b"); break;
+                case '\f': sb.Append("\\f"); break;
+                case '\n': sb.Append("\\n"); break;
+                case '\r': sb.Append("\\r"); break;
+                case '\t': sb.Append("\\t"); break;
+                default:
+                    if (c < 0x20)
+                        sb.Append($"\\u{(int)c:X4}");
+                    else
+                        sb.Append(c);
+                    break;
+            }
+        }
+        return sb.ToString();
+    }
+
+    private static XdmValue JsonDoc_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => JsonDoc(ctx, AtomizedString(args[0]), JsonOptions.Default);
+
+    private static XdmValue JsonDoc_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => JsonDoc(ctx, AtomizedString(args[0]), ParseJsonOptions(args[1]));
+
+    private static XdmValue JsonDoc(EvaluationContext ctx, string uri, JsonOptions options)
+    {
+        if (string.IsNullOrEmpty(uri))
+            throw new InvalidOperationException("FOUT1170: Invalid URI");
+
+        string json;
+        if (ctx.DocumentLoader is not null)
+        {
+            var node = ctx.DocumentLoader(uri);
+            json = node.StringValue;
+        }
+        else
+        {
+            try
+            {
+                json = File.ReadAllText(uri);
+            }
+            catch
+            {
+                throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+            }
+        }
+
+        return ParseJson(json, options);
     }
 }
 

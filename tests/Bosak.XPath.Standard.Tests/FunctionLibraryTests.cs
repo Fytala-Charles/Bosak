@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 19-05-2026     | Added document-node path traversal tests                                               |
 //                      | Charles Korthout | 1.1   | 19-05-2026     | Added fn:serialize tests                                                               |
 //                      | Charles Korthout | 1.2   | 19-05-2026     | Added fn:trace, fn:boolean, cardinality, fn:base-uri, fn:document-uri tests            |
+//                      | Charles Korthout | 1.3   | 27-05-2026     | Added JSON function tests (parse-json, json-to-xml, xml-to-json, round-trip)            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -2005,5 +2006,205 @@ public class FunctionLibraryTests
         Assert.False(items[0].BooleanValue);
         Assert.True(items[1].BooleanValue);
         Assert.True(items[2].BooleanValue);
+    }
+
+    // ------------------------------------------------------------------
+    // JSON functions
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ParseJson_EmptyObject()
+    {
+        var result = Evaluate("parse-json('{}')");
+        Assert.True(result.IsMap);
+        Assert.Equal(0, result.MapValue.Count);
+    }
+
+    [Fact]
+    public void ParseJson_ObjectWithString()
+    {
+        var result = Evaluate("parse-json('{\"name\":\"hello\"}')");
+        Assert.True(result.IsMap);
+        Assert.Equal(1, result.MapValue.Count);
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("name"), out var value));
+        Assert.Equal("hello", value.StringValue);
+    }
+
+    [Fact]
+    public void ParseJson_ObjectWithNumber()
+    {
+        var result = Evaluate("parse-json('{\"count\":42}')");
+        Assert.True(result.IsMap);
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("count"), out var value));
+        Assert.Equal(XdmValueKind.Double, value.Kind);
+        Assert.Equal(42.0, value.DoubleValue);
+    }
+
+    [Fact]
+    public void ParseJson_ObjectWithBoolean()
+    {
+        var result = Evaluate("parse-json('{\"active\":true}')");
+        Assert.True(result.IsMap);
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("active"), out var value));
+        Assert.True(value.BooleanValue);
+    }
+
+    [Fact]
+    public void ParseJson_ObjectWithNull()
+    {
+        var result = Evaluate("parse-json('{\"value\":null}')");
+        Assert.True(result.IsMap);
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("value"), out var value));
+        Assert.True(value.IsUndefined);
+    }
+
+    [Fact]
+    public void ParseJson_EmptyArray()
+    {
+        var result = Evaluate("parse-json('[]')");
+        Assert.True(result.IsArray);
+        Assert.Equal(0, result.ArrayValue.Count);
+    }
+
+    [Fact]
+    public void ParseJson_ArrayWithMixedValues()
+    {
+        var result = Evaluate("parse-json('[1,\"two\",true,null]')");
+        Assert.True(result.IsArray);
+        Assert.Equal(4, result.ArrayValue.Count);
+        Assert.Equal(1.0, result.ArrayValue.Get(1).DoubleValue);
+        Assert.Equal("two", result.ArrayValue.Get(2).StringValue);
+        Assert.True(result.ArrayValue.Get(3).BooleanValue);
+        Assert.True(result.ArrayValue.Get(4).IsUndefined);
+    }
+
+    [Fact]
+    public void ParseJson_NestedObject()
+    {
+        var result = Evaluate("parse-json('{\"a\":{\"b\":1}}')");
+        Assert.True(result.IsMap);
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("a"), out var inner));
+        Assert.True(inner.IsMap);
+        Assert.True(inner.MapValue.TryGetValue(XdmValue.FromString("b"), out var b));
+        Assert.Equal(1.0, b.DoubleValue);
+    }
+
+    [Fact]
+    public void JsonToXml_EmptyObject()
+    {
+        var result = Evaluate("json-to-xml('{}')");
+        Assert.True(result.IsNode);
+        var doc = result.NodeValue;
+        Assert.Equal(XdmNodeKind.Document, doc.NodeKind);
+        IXdmNode? root = null;
+        foreach (var child in doc.Axis(XdmAxis.Child))
+        {
+            root = child.NodeValue!;
+            break;
+        }
+        Assert.NotNull(root);
+        Assert.Equal("map", root!.LocalName);
+        Assert.Equal("http://www.w3.org/2005/xpath-functions", root.NamespaceUri);
+    }
+
+    [Fact]
+    public void JsonToXml_ObjectWithString()
+    {
+        var result = Evaluate("json-to-xml('{\"name\":\"hello\"}')");
+        Assert.True(result.IsNode);
+        IXdmNode? root = null;
+        foreach (var child in result.NodeValue.Axis(XdmAxis.Child))
+        {
+            root = child.NodeValue!;
+            break;
+        }
+        Assert.NotNull(root);
+        Assert.Equal("map", root!.LocalName);
+        IXdmNode? childNode = null;
+        foreach (var child in root.Axis(XdmAxis.Child))
+        {
+            childNode = child.NodeValue!;
+            break;
+        }
+        Assert.NotNull(childNode);
+        Assert.Equal("string", childNode!.LocalName);
+        Assert.Equal("hello", childNode.StringValue);
+        IXdmNode? keyAttr = null;
+        foreach (var attr in childNode.Attributes("key"))
+        {
+            keyAttr = attr.NodeValue!;
+            break;
+        }
+        Assert.NotNull(keyAttr);
+        Assert.Equal("name", keyAttr!.StringValue);
+    }
+
+    [Fact]
+    public void JsonToXml_ArrayWithNumber()
+    {
+        var result = Evaluate("json-to-xml('[42]')");
+        Assert.True(result.IsNode);
+        IXdmNode? root = null;
+        foreach (var child in result.NodeValue.Axis(XdmAxis.Child))
+        {
+            root = child.NodeValue!;
+            break;
+        }
+        Assert.NotNull(root);
+        Assert.Equal("array", root!.LocalName);
+        IXdmNode? childNode = null;
+        foreach (var child in root.Axis(XdmAxis.Child))
+        {
+            childNode = child.NodeValue!;
+            break;
+        }
+        Assert.NotNull(childNode);
+        Assert.Equal("number", childNode!.LocalName);
+        Assert.Equal("42", childNode.StringValue);
+    }
+
+    [Fact]
+    public void JsonToXml_Null()
+    {
+        var result = Evaluate("json-to-xml('[null]')");
+        Assert.True(result.IsNode);
+        IXdmNode? root = null;
+        foreach (var child in result.NodeValue.Axis(XdmAxis.Child))
+        {
+            root = child.NodeValue!;
+            break;
+        }
+        Assert.NotNull(root);
+        IXdmNode? childNode = null;
+        foreach (var child in root.Axis(XdmAxis.Child))
+        {
+            childNode = child.NodeValue!;
+            break;
+        }
+        Assert.NotNull(childNode);
+        Assert.Equal("null", childNode!.LocalName);
+    }
+
+    [Fact]
+    public void XmlToJson_RoundTrip_Object()
+    {
+        var json = Evaluate("xml-to-json(json-to-xml('{\"a\":1,\"b\":\"two\"}'))");
+        Assert.Equal(XdmValueKind.String, json.Kind);
+        var parsed = Evaluate($"parse-json('{json.StringValue.Replace("\\", "\\\\").Replace("'", "\\'")}')");
+        Assert.True(parsed.IsMap);
+        Assert.True(parsed.MapValue.TryGetValue(XdmValue.FromString("a"), out var a));
+        Assert.Equal(1.0, a.DoubleValue);
+        Assert.True(parsed.MapValue.TryGetValue(XdmValue.FromString("b"), out var b));
+        Assert.Equal("two", b.StringValue);
+    }
+
+    [Fact]
+    public void XmlToJson_RoundTrip_Array()
+    {
+        var json = Evaluate("xml-to-json(json-to-xml('[1,\"two\",true,null]'))");
+        Assert.Equal(XdmValueKind.String, json.Kind);
+        var parsed = Evaluate($"parse-json('{json.StringValue.Replace("\\", "\\\\").Replace("'", "\\'")}')");
+        Assert.True(parsed.IsArray);
+        Assert.Equal(4, parsed.ArrayValue.Count);
     }
 }
