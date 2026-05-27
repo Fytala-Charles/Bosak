@@ -1674,38 +1674,58 @@ public sealed class TransformEngine
     /// </summary>
     private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem)
     {
-        var items = new List<XdmValue>();
-        foreach (var node in parent.Nodes())
+        // Create a temporary container to capture the sequence constructor output
+        var tempContainer = new XElement("__temp__");
+        var savedContainer = _currentContainer;
+        _currentContainer = tempContainer;
+        try
         {
-            switch (node)
+            foreach (var node in parent.Nodes())
             {
-                case XText text:
-                    items.Add(XdmValue.FromString(text.Value));
+                switch (node)
+                {
+                    case XText text:
+                        _currentContainer.Add(new XText(text.Value));
+                        break;
+                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                        // Execute XSLT instruction; output goes into tempContainer
+                        var currentNode = contextItem.IsNode ? contextItem.NodeValue : null;
+                        ExecuteXsltInstruction(elem, currentNode!);
+                        break;
+                    case XElement elem:
+                        // Literal result element in sequence constructor
+                        CopyLiteralElement(elem);
+                        break;
+                }
+            }
+        }
+        finally
+        {
+            _currentContainer = savedContainer;
+        }
+
+        // Collect results from tempContainer
+        var results = new List<XdmValue>();
+        foreach (var child in tempContainer.Nodes())
+        {
+            switch (child)
+            {
+                case XElement e:
+                    results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(e)));
                     break;
-                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                    // XSLT instructions in a sequence constructor contribute to the result.
-                    // For now, we handle value-of by evaluating and adding its result.
-                    if (elem.Name.LocalName == "value-of")
-                    {
-                        var select = elem.Attribute("select")?.Value;
-                        if (!string.IsNullOrEmpty(select))
-                        {
-                            var compiled = XPath31Expression.Compile(select);
-                            var result = compiled.Evaluate(_context);
-                            items.Add(XdmValue.FromString(result.ToString()));
-                        }
-                    }
+                case XText t:
+                    results.Add(XdmValue.FromString(t.Value));
                     break;
             }
         }
 
-        if (items.Count == 0)
+        if (results.Count == 0)
             return XdmValue.FromSequence(XdmSequence.Empty);
-        if (items.Count == 1)
-            return items[0];
+        if (results.Count == 1)
+            return results[0];
 
-        // Multiple items: concatenate strings for text value
-        return XdmValue.FromString(string.Concat(items.Select(i => i.ToString())));
+        // Return as a document-fragment-like sequence
+        return XdmValue.FromSequence(MaterializedSequence.FromList(results));
     }
 
     // ------------------------------------------------------------------
