@@ -23,6 +23,7 @@
 
 using System.IO;
 using System.Xml.Linq;
+using Bosak.XPath.Api;
 using Bosak.XPath.Xslt.Api;
 
 namespace Bosak.XPath.Xslt.Stylesheet;
@@ -148,9 +149,30 @@ public sealed class Stylesheet
 
         Version = versionAttr.Value;
 
+        // Helper to evaluate use-when on top-level elements
+        bool UseWhen(XElement elem)
+        {
+            var useWhen = elem.Attribute("use-when")?.Value;
+            if (string.IsNullOrEmpty(useWhen))
+                return true;
+            try
+            {
+                var compiled = XPath31Expression.Compile(useWhen);
+                var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext();
+                Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
+                var result = compiled.Evaluate(ctx);
+                return result.EffectiveBooleanValue();
+            }
+            catch
+            {
+                return true; // If evaluation fails, include the element (fail-safe)
+            }
+        }
+
         // Process xsl:import elements (must come first per spec)
         foreach (var import in root.Elements(XName.Get("import", XslNamespace)))
         {
+            if (!UseWhen(import)) continue;
             var href = import.Attribute("href")?.Value;
             if (!string.IsNullOrEmpty(href))
                 ResolveImport(href);
@@ -159,6 +181,7 @@ public sealed class Stylesheet
         // Process xsl:include elements
         foreach (var include in root.Elements(XName.Get("include", XslNamespace)))
         {
+            if (!UseWhen(include)) continue;
             var href = include.Attribute("href")?.Value;
             if (!string.IsNullOrEmpty(href))
                 ResolveInclude(href);
@@ -167,18 +190,21 @@ public sealed class Stylesheet
         // Parse top-level xsl:param declarations
         foreach (var param in root.Elements(XName.Get("param", XslNamespace)))
         {
+            if (!UseWhen(param)) continue;
             _globalParameters.Add(param);
         }
 
         // Parse top-level xsl:variable declarations
         foreach (var variable in root.Elements(XName.Get("variable", XslNamespace)))
         {
+            if (!UseWhen(variable)) continue;
             _globalVariables.Add(variable);
         }
 
         // Parse xsl:key declarations
         foreach (var key in root.Elements(XName.Get("key", XslNamespace)))
         {
+            if (!UseWhen(key)) continue;
             var def = KeyDefinition.FromElement(key, this);
             if (def != null)
                 _keyDefinitions.Add(def);
@@ -187,6 +213,7 @@ public sealed class Stylesheet
         // Parse xsl:strip-space and xsl:preserve-space declarations
         foreach (var strip in root.Elements(XName.Get("strip-space", XslNamespace)))
         {
+            if (!UseWhen(strip)) continue;
             var elements = strip.Attribute("elements")?.Value;
             if (!string.IsNullOrEmpty(elements))
             {
@@ -198,6 +225,7 @@ public sealed class Stylesheet
         }
         foreach (var preserve in root.Elements(XName.Get("preserve-space", XslNamespace)))
         {
+            if (!UseWhen(preserve)) continue;
             var elements = preserve.Attribute("elements")?.Value;
             if (!string.IsNullOrEmpty(elements))
             {
@@ -211,19 +239,21 @@ public sealed class Stylesheet
         // Parse xsl:mode declarations
         foreach (var mode in root.Elements(XName.Get("mode", XslNamespace)))
         {
+            if (!UseWhen(mode)) continue;
             var def = ModeDefinition.FromElement(mode);
             if (def != null)
                 _modeDefinitions[def.Name] = def;
         }
 
         // Parse xsl:output (first one wins per spec)
-        var outputElem = root.Element(XName.Get("output", XslNamespace));
+        var outputElem = root.Elements(XName.Get("output", XslNamespace)).FirstOrDefault(UseWhen);
         if (outputElem != null)
             _outputProperties = OutputProperties.FromElement(outputElem);
 
         // Collect template rules from this stylesheet
         foreach (var template in root.Elements(XName.Get("template", XslNamespace)))
         {
+            if (!UseWhen(template)) continue;
             var rule = TemplateRule.FromElement(template, this);
             if (rule != null)
             {
@@ -237,6 +267,7 @@ public sealed class Stylesheet
         // Parse xsl:function declarations
         foreach (var func in root.Elements(XName.Get("function", XslNamespace)))
         {
+            if (!UseWhen(func)) continue;
             var def = XsltFunctionDefinition.FromElement(func, this);
             if (def != null)
                 _functionDefinitions.Add(def);
