@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 19-05-2026     | Unwrap PredicateNode in LowerPostfixPredicate for Subscript/Last compilation           |
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Support filter expressions as path steps (e.g. parse-xml(...)/root/item)               |
 //                      | Charles Korthout | 0.9   | 24-05-2026     | Fix * name test to filter by principal node kind (element/attribute/namespace)         |
+//                      | Charles Korthout | 1.0   | 27-05-2026     | Emit DocumentRoot for absolute path expressions                                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -552,6 +553,13 @@ public sealed class IrLowerer
         Emit(IrOpCode.LoadContextItem, (byte)contextReg);
 
         int currentReg = contextReg;
+        if (node.IsAbsolute)
+        {
+            int rootReg = AllocRegister();
+            Emit(IrOpCode.DocumentRoot, (byte)rootReg, (byte)currentReg);
+            currentReg = rootReg;
+        }
+
         foreach (var step in node.Steps)
         {
             if (step is StepNode stepNode)

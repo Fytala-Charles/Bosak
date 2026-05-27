@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Fixed Prefix resolution and implemented namespace axis                                 |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Implemented ToXmlString for fn:serialize                                               |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Implemented BaseUri property for fn:base-uri and fn:document-uri                       |
+//                      | Charles Korthout | 0.5   | 27-05-2026     | Lazy document order computation for proper node sorting                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -130,9 +131,36 @@ public sealed class XDocumentNode : IXdmNode
         get
         {
             var doc = _node.Document;
-            if (doc is null || !OrderMaps.TryGetValue(doc, out var map))
-                return 0;
+            if (doc is null) return 0;
+            if (!OrderMaps.TryGetValue(doc, out var map))
+            {
+                map = ComputeDocumentOrder(doc);
+                OrderMaps.AddOrUpdate(doc, map);
+            }
             return map.TryGetValue(_node, out var idx) ? idx : 0;
+        }
+    }
+
+    private static Dictionary<XObject, long> ComputeDocumentOrder(System.Xml.Linq.XDocument doc)
+    {
+        var map = new Dictionary<XObject, long>();
+        long index = 0;
+        map[doc] = index++;
+        Traverse(doc, ref index, map);
+        return map;
+    }
+
+    private static void Traverse(XContainer container, ref long index, Dictionary<XObject, long> map)
+    {
+        foreach (var node in container.Nodes())
+        {
+            map[node] = index++;
+            if (node is XElement elem)
+            {
+                foreach (var attr in elem.Attributes())
+                    map[attr] = index++;
+                Traverse(elem, ref index, map);
+            }
         }
     }
 

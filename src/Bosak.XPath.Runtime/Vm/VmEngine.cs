@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.0   | 23-05-2026     | Added TryCast support for many xs: types, duration normalization, boolean→numeric       |
 //                      | Charles Korthout | 1.1   | 24-05-2026     | Range opcode uses lazy IntegerRangeSequence to avoid OOM on huge ranges                 |
 //                      | Charles Korthout | 1.2   | 24-05-2026     | Added date/time value comparison type checking (XPTY0004 for cross-subtype)            |
+//                      | Charles Korthout | 1.3   | 27-05-2026     | Added DocumentRoot VM handler for absolute XPath paths                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -583,6 +584,24 @@ public static class VmEngine
                         var input = registers[instr.RegisterB];
                         var axis = ToXdmAxis(instr.OpCode);
                         registers[instr.RegisterA] = ApplyAxis(input, axis);
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.DocumentRoot:
+                    {
+                        var input = registers[instr.RegisterB];
+                        if (input.IsNode && input.NodeValue != null)
+                        {
+                            var doc = input.NodeValue.Document;
+                            registers[instr.RegisterA] = doc != null
+                                ? XdmValue.FromNode(doc)
+                                : XdmValue.FromNode(input.NodeValue);
+                        }
+                        else
+                        {
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
                         ip++;
                         break;
                     }

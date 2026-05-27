@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.0   | 26-05-2026     | Added xsl:mode on-no-match support; atomic for-each (EnumerateItems); keyword var names  |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
 //                      | Charles Korthout | 1.4   | 27-05-2026     | Fixed AVT sequence atomization, version-aware built-in rules, pattern // support         |
+//                      | Charles Korthout | 1.5   | 27-05-2026     | Process text nodes in sequence constructors; strip document-level whitespace            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -616,20 +617,23 @@ public sealed class TransformEngine
                 }
             }
 
-            // Process the sequence constructor (child elements of xsl:template)
-            foreach (var child in rule.Element.Elements())
+            // Process the sequence constructor (child nodes of xsl:template)
+            foreach (var childNode in rule.Element.Nodes())
             {
-                if (child.Name.LocalName == "param" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                    continue; // Already processed above
-
-                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                switch (childNode)
                 {
-                    ExecuteXsltInstruction(child, contextItem);
-                }
-                else
-                {
-                    // Literal result element: copy to output
-                    CopyLiteralElement(child);
+                    case XText text:
+                        if (!IsWhitespaceOnly(text.Value))
+                            _currentContainer.Add(new XText(text.Value));
+                        break;
+                    case XElement elem when elem.Name.LocalName == "param" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                        continue; // Already processed above
+                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                        ExecuteXsltInstruction(elem, contextItem);
+                        break;
+                    case XElement elem:
+                        CopyLiteralElement(elem);
+                        break;
                 }
             }
         }
@@ -691,12 +695,21 @@ public sealed class TransformEngine
                     _currentContainer.Add(elem);
                     var prev = _currentContainer;
                     _currentContainer = elem;
-                    foreach (var child in instruction.Elements())
+                    foreach (var childNode in instruction.Nodes())
                     {
-                        if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                            ExecuteXsltInstruction(child, contextItem);
-                        else
-                            CopyLiteralElement(child);
+                        switch (childNode)
+                        {
+                            case XText text:
+                                if (!IsWhitespaceOnly(text.Value))
+                                    _currentContainer.Add(new XText(text.Value));
+                                break;
+                            case XElement elemChild when elemChild.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                ExecuteXsltInstruction(elemChild, contextItem);
+                                break;
+                            case XElement elemChild:
+                                CopyLiteralElement(elemChild);
+                                break;
+                        }
                     }
                     _currentContainer = prev;
                     break;
@@ -778,12 +791,21 @@ public sealed class TransformEngine
                                 _currentContainer.Add(copy);
                                 var prev = _currentContainer;
                                 _currentContainer = copy;
-                                foreach (var child in instruction.Elements())
+                                foreach (var childNode in instruction.Nodes())
                                 {
-                                    if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                        ExecuteXsltInstruction(child, nodeToCopy);
-                                    else
-                                        CopyLiteralElement(child);
+                                    switch (childNode)
+                                    {
+                                        case XText text:
+                                            if (!IsWhitespaceOnly(text.Value))
+                                                _currentContainer.Add(new XText(text.Value));
+                                            break;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, nodeToCopy);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
+                                    }
                                 }
                                 _currentContainer = prev;
                                 break;
@@ -807,12 +829,21 @@ public sealed class TransformEngine
                             break;
                         default:
                             // Document and other kinds: just process children
-                            foreach (var child in instruction.Elements())
+                            foreach (var childNode in instruction.Nodes())
                             {
-                                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                    ExecuteXsltInstruction(child, nodeToCopy);
-                                else
-                                    CopyLiteralElement(child);
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        if (!IsWhitespaceOnly(text.Value))
+                                            _currentContainer.Add(new XText(text.Value));
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, nodeToCopy);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
                             }
                             break;
                     }
@@ -882,14 +913,23 @@ public sealed class TransformEngine
                             var feSnapshot = _context.SnapshotVariables();
                             try
                             {
-                                foreach (var child in instruction.Elements())
+                                foreach (var childNode in instruction.Nodes())
                                 {
-                                    if (child.Name.LocalName == "sort")
-                                        continue;
-                                    if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                        ExecuteXsltInstruction(child, item);
-                                    else
-                                        CopyLiteralElement(child);
+                                    switch (childNode)
+                                    {
+                                        case XText text:
+                                            if (!IsWhitespaceOnly(text.Value))
+                                                _currentContainer.Add(new XText(text.Value));
+                                            break;
+                                        case XElement elem when elem.Name.LocalName == "sort" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            continue;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, item);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
+                                    }
                                 }
                             }
                             finally
@@ -913,12 +953,21 @@ public sealed class TransformEngine
                         var result = compiled.Evaluate(_context);
                         if (result.EffectiveBooleanValue())
                         {
-                            foreach (var child in instruction.Elements())
+                            foreach (var childNode in instruction.Nodes())
                             {
-                                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                    ExecuteXsltInstruction(child, contextItem);
-                                else
-                                    CopyLiteralElement(child);
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        if (!IsWhitespaceOnly(text.Value))
+                                            _currentContainer.Add(new XText(text.Value));
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, contextItem);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
                             }
                         }
                     }
@@ -938,12 +987,21 @@ public sealed class TransformEngine
                             if (result.EffectiveBooleanValue())
                             {
                                 matched = true;
-                                foreach (var child in when.Elements())
+                                foreach (var childNode in when.Nodes())
                                 {
-                                    if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                        ExecuteXsltInstruction(child, contextItem);
-                                    else
-                                        CopyLiteralElement(child);
+                                    switch (childNode)
+                                    {
+                                        case XText text:
+                                            if (!IsWhitespaceOnly(text.Value))
+                                                _currentContainer.Add(new XText(text.Value));
+                                            break;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, contextItem);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
+                                    }
                                 }
                                 break;
                             }
@@ -954,12 +1012,21 @@ public sealed class TransformEngine
                         var otherwise = instruction.Element(XName.Get("otherwise", Stylesheet.Stylesheet.XslNamespace));
                         if (otherwise != null)
                         {
-                            foreach (var child in otherwise.Elements())
+                            foreach (var childNode in otherwise.Nodes())
                             {
-                                if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                    ExecuteXsltInstruction(child, contextItem);
-                                else
-                                    CopyLiteralElement(child);
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        if (!IsWhitespaceOnly(text.Value))
+                                            _currentContainer.Add(new XText(text.Value));
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, contextItem);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
                             }
                         }
                     }
@@ -1058,12 +1125,21 @@ public sealed class TransformEngine
                     else
                     {
                         // Sequence constructor children
-                        foreach (var child in instruction.Elements())
+                        foreach (var childNode in instruction.Nodes())
                         {
-                            if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                ExecuteXsltInstruction(child, contextItem);
-                            else
-                                CopyLiteralElement(child);
+                            switch (childNode)
+                            {
+                                case XText text:
+                                    if (!IsWhitespaceOnly(text.Value))
+                                        _currentContainer.Add(new XText(text.Value));
+                                    break;
+                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elem, contextItem);
+                                    break;
+                                case XElement elem:
+                                    CopyLiteralElement(elem);
+                                    break;
+                            }
                         }
                     }
                     break;
@@ -1678,33 +1754,7 @@ public sealed class TransformEngine
     {
         // Create a temporary container to capture the sequence constructor output
         var tempContainer = new XElement("__temp__");
-        var savedContainer = _currentContainer;
-        _currentContainer = tempContainer;
-        try
-        {
-            foreach (var node in parent.Nodes())
-            {
-                switch (node)
-                {
-                    case XText text:
-                        _currentContainer.Add(new XText(text.Value));
-                        break;
-                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                        // Execute XSLT instruction; output goes into tempContainer
-                        var currentNode = contextItem.IsNode ? contextItem.NodeValue : null;
-                        ExecuteXsltInstruction(elem, currentNode!);
-                        break;
-                    case XElement elem:
-                        // Literal result element in sequence constructor
-                        CopyLiteralElement(elem);
-                        break;
-                }
-            }
-        }
-        finally
-        {
-            _currentContainer = savedContainer;
-        }
+        ExecuteSequenceConstructorDirect(parent, contextItem, tempContainer);
 
         // Collect results from tempContainer
         var results = new List<XdmValue>();
@@ -1730,6 +1780,40 @@ public sealed class TransformEngine
         return XdmValue.FromSequence(MaterializedSequence.FromList(results));
     }
 
+    /// <summary>
+    /// Executes a sequence constructor directly into the specified container,
+    /// handling text nodes, XSLT instructions, and literal result elements.
+    /// </summary>
+    private void ExecuteSequenceConstructorDirect(XElement parent, XdmValue contextItem, XContainer outputContainer)
+    {
+        var savedContainer = _currentContainer;
+        _currentContainer = outputContainer;
+        try
+        {
+            foreach (var node in parent.Nodes())
+            {
+                switch (node)
+                {
+                    case XText text:
+                        if (!IsWhitespaceOnly(text.Value))
+                            _currentContainer.Add(new XText(text.Value));
+                        break;
+                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                        var currentNode = contextItem.IsNode ? contextItem.NodeValue : null;
+                        ExecuteXsltInstruction(elem, currentNode!);
+                        break;
+                    case XElement elem:
+                        CopyLiteralElement(elem);
+                        break;
+                }
+            }
+        }
+        finally
+        {
+            _currentContainer = savedContainer;
+        }
+    }
+
     // ------------------------------------------------------------------
     // Whitespace stripping (xsl:strip-space / xsl:preserve-space)
     // ------------------------------------------------------------------
@@ -1737,19 +1821,25 @@ public sealed class TransformEngine
     private void ApplyWhitespaceStripping(IXdmNode source)
     {
         var rules = _stylesheet.GetAllSpaceHandlingRules();
-        if (rules.Count == 0)
-            return;
 
         // Only strip whitespace in XDocument-backed nodes for now
         if (source is Providers.Xml.XDocumentNode xdocNode)
         {
             if (xdocNode.UnderlyingObject is XDocument doc)
             {
-                StripWhitespaceInElement(doc.Root, rules);
+                // Strip whitespace text nodes that are direct children of the document
+                foreach (var textNode in doc.Nodes().OfType<XText>().ToList())
+                {
+                    if (IsWhitespaceOnly(textNode.Value))
+                        textNode.Remove();
+                }
+                if (rules.Count > 0)
+                    StripWhitespaceInElement(doc.Root, rules);
             }
             else if (xdocNode.UnderlyingObject is XElement elem)
             {
-                StripWhitespaceInElement(elem, rules);
+                if (rules.Count > 0)
+                    StripWhitespaceInElement(elem, rules);
             }
         }
     }
@@ -1788,6 +1878,11 @@ public sealed class TransformEngine
 
     private static bool ShouldStripWhitespace(XElement element, List<SpaceHandlingRule> rules)
     {
+        // xml:space="preserve" always preserves whitespace
+        var xmlSpace = element.Attribute(System.Xml.Linq.XNamespace.Xml + "space")?.Value;
+        if (xmlSpace == "preserve")
+            return false;
+
         SpaceHandlingRule? bestStrip = null;
         SpaceHandlingRule? bestPreserve = null;
 

@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added Intersect, Except, and SimpleMap opcodes                                         |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added MapAdd and ArrayAdd opcodes                                                      |
+//                      | Charles Korthout | 0.4   | 27-05-2026     | Added DocumentRoot opcode for absolute XPath paths                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -83,6 +84,7 @@ public enum IrOpCode : byte
     Preceding,
     PrecedingSibling,
     Namespace,
+    DocumentRoot,
     
     // ---- Node tests --------------------------------------------------
     NameTest,
