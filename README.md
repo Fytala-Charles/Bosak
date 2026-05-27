@@ -177,10 +177,11 @@ The harness:
 
 | Metric | Value |
 |--------|-------|
-| Test Sets | 428 |
-| Total Tests | ~32,000 |
-| Pass Rate (approximate) | **~57%** (18,272 passed / 3,747 failed / 9,802 skipped) |
-| Unsupported Features | Schema awareness, XQuery-only, XML 1.1 |
+| **XPath (QT3)** | 428 test sets, ~32,000 tests |
+| Pass Rate (XPath) | **~57%** (18,272 passed / 3,747 failed / 9,802 skipped) |
+| **XSLT 3.0** | 234 test sets, ~14,600 tests |
+| Pass Rate (XSLT) | **~27%** (1,481 passed / 3,986 failed / 9,133 skipped) |
+| Unsupported Features | Schema awareness, XQuery-only, XML 1.1, serialization, streaming, higher-order functions |
 
 ### Known Limitations
 
