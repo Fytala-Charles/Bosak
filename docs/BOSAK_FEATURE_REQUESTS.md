@@ -91,7 +91,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-008 | *(internal)* | `fn:function-lookup` double-to-string precision | Precision mismatches in numeric serialization | **Pending** | TBD | Unassigned | 2026-05-24 |
 | REQ-009 | *(internal)* | Date/time ordering (`lt`, `gt`, `le`, `ge`) | 9 remaining QT3 failures; only equality works today | **Pending** | TBD | Unassigned | 2026-05-24 |
 | REQ-010 | *(internal)* | `json-to-xml`, `parse-json`, `xml-to-json` | Standard XPath 3.1 JSON functions missing | **Pending** | TBD | Unassigned | 2026-05-24 |
-| REQ-011 | *(internal)* | `fn:transform()` function | XPath-level XSLT invocation per spec | **Pending** | Phase 3 | Unassigned | 2026-05-24 |
+| REQ-011 | *(internal)* | `fn:transform()` function | XPath-level XSLT invocation per spec | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-012 | Customer A | `xsl:call-template` tunnel parameters | Customer A passes context metadata through deep call chains | **Implemented** | TBD | Charles Korthout | 2026-05-24 |
 | REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Accepted** | Phase 2 | Unassigned | 2026-05-25 |
 | REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
@@ -505,22 +505,22 @@ Implement the functions per the W3C spec:
 
 **Requesting Application:** *(internal — completeness)*  
 **Submitted:** 2026-05-24  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
-`fn:transform($options)` is an XPath 3.1 function that invokes XSLT from within an XPath expression. This is useful for composing transforms but is entirely unimplemented.
+`fn:transform($options)` is an XPath 3.1 function that invokes XSLT from within an XPath expression. This is useful for composing transforms but was entirely unimplemented.
 
 #### Proposed Solution
-Implement `fn:transform` as a delegate that:
-1. Accepts a map of options (`stylesheet-location`, `source-node`, `initial-template`, etc.).
-2. Compiles or reuses the referenced stylesheet.
-3. Runs the transform via `TransformEngine`.
-4. Returns the result as an XDM value.
+Implemented `fn:transform` in `XsltFunctionLibrary` (Bosak.XPath.Xslt project) as a delegate that:
+1. Accepts a map of options (`stylesheet-location`, `source-node`, `initial-template`, `stylesheet-params`, etc.).
+2. Loads and compiles the referenced stylesheet via `XsltCompiler`.
+3. Runs the transform via `XsltExecutable.Transform` with an isolated `EvaluationContext`.
+4. Returns the result as a map with an `"output"` key containing the result document.
 
 #### Acceptance Criteria
-- [ ] `fn:transform(map{"stylesheet-location":"foo.xsl","source-node":.})` executes
-- [ ] `initial-template` option works for named-template entry points
-- [ ] Parameters can be passed via `stylesheet-params`
+- [x] `fn:transform(map{"stylesheet-location":"foo.xsl","source-node":.})` executes
+- [x] `initial-template` option works for named-template entry points
+- [x] Parameters can be passed via `stylesheet-params`
 
 #### Impact Analysis
 | Layer | Impact | Notes |

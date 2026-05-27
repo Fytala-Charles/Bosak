@@ -16,10 +16,13 @@
 //                      | Charles Korthout | 0.4   | 24-05-2026     | Added xsl:key / key() tests                                                              |
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added xsl:number tests (single, any, multiple, value attribute, format tokens)         |
 //                      | Charles Korthout | 0.6   | 26-05-2026     | Added global variable and parameter tests for main/include/import scopes                 |
+//                      | Charles Korthout | 0.7   | 27-05-2026     | Added fn:transform tests (basic, stylesheet-params, initial-template) and map key lookup  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
 using Xunit;
 
 namespace Bosak.XPath.Xslt.Tests;
@@ -1669,6 +1672,143 @@ public class StylesheetTests
         var secondPos = result.IndexOf("<x>second</x>");
 
         Assert.True(firstPos < secondPos, "first should come before second (stable sort)");
+    }
+
+    private static string WriteTempXsl(string content)
+    {
+        var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"bosak_test_{Guid.NewGuid()}.xsl");
+        System.IO.File.WriteAllText(path, content);
+        return path;
+    }
+
+    [Fact]
+    public void FnTransform_Basic_Transform()
+    {
+        var xslMain = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='/root/text'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var mainPath = WriteTempXsl(xslMain);
+        var mainUri = new Uri(mainPath).AbsoluteUri;
+
+        var xslCaller = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:map='http://www.w3.org/2005/xpath-functions/map'>
+            <xsl:template match='/'>
+                <result>
+                    <xsl:variable name='result' select='transform(map{{""stylesheet-location"": ""{mainUri}"", ""source-node"": .}})'/>
+                    <xsl:copy-of select='map:get($result, ""output"")'/>
+                </result>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root", new XElement("text", "hello")));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xslCaller);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        System.IO.File.Delete(mainPath);
+        Assert.Contains("<output>hello</output>", result);
+    }
+
+    [Fact]
+    public void FnTransform_With_Stylesheet_Params()
+    {
+        var xslMain = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:param name='greeting' select='""default""'/>
+            <xsl:template match='/'>
+                <output><xsl:value-of select='$greeting'/></output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var mainPath = WriteTempXsl(xslMain);
+        var mainUri = new Uri(mainPath).AbsoluteUri;
+
+        var xslCaller = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:map='http://www.w3.org/2005/xpath-functions/map'>
+            <xsl:template match='/'>
+                <result>
+                    <xsl:variable name='result' select='transform(map{{""stylesheet-location"": ""{mainUri}"",
+                        ""source-node"": .,
+                        ""stylesheet-params"": map{{""greeting"": ""world""}}}})'/>
+                    <xsl:copy-of select='map:get($result, ""output"")'/>
+                </result>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xslCaller);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        System.IO.File.Delete(mainPath);
+        Assert.Contains("<output>world</output>", result);
+    }
+
+    [Fact]
+    public void FnTransform_With_Initial_Template()
+    {
+        var xslMain = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:template name='start'>
+                <output>from-template</output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var mainPath = WriteTempXsl(xslMain);
+        var mainUri = new Uri(mainPath).AbsoluteUri;
+
+        var xslCaller = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:map='http://www.w3.org/2005/xpath-functions/map'>
+            <xsl:template match='/'>
+                <result>
+                    <xsl:variable name='result' select='transform(map{{""stylesheet-location"": ""{mainUri}"",
+                        ""initial-template"": ""start""
+                    }})'/>
+                    <xsl:copy-of select='map:get($result, ""output"")'/>
+                </result>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xslCaller);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        System.IO.File.Delete(mainPath);
+        Assert.Contains("<output>from-template</output>", result);
+    }
+
+    [Fact]
+    public void MapKey_Lookup_CSharp_vs_XPath()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:map='http://www.w3.org/2005/xpath-functions/map'>
+            <xsl:template match='/'>
+                <result>
+                    <size><xsl:value-of select='map:size($m)'/></size>
+                    <get><xsl:value-of select='map:get($m, ""k"")'/></get>
+                </result>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var map = new XdmMap();
+        map.Add(XdmValue.FromString("k"), XdmValue.FromString("v"));
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ctx = new EvaluationContext();
+        ctx.WithVariable("m", XdmValue.FromMap(map));
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source), ctx);
+
+        Assert.Contains("<size>1</size>", result);
+        Assert.Contains("<get>v</get>", result);
     }
 
     [Fact]

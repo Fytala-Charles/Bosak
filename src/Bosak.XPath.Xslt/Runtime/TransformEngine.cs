@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added xsl:key / key() index building and lookup support                                 |
 //                      | Charles Korthout | 0.6   | 24-05-2026     | Added xsl:number support (single, any, multiple levels) with format-integer reuse       |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
+//                      | Charles Korthout | 1.3   | 27-05-2026     | Added CopyNodeToResult for Document nodes; skip default params if already in context     |
 //                      | Charles Korthout | 1.1   | 27-05-2026     | Added xsl:function registration, ExecuteXsltFunction, EvaluateFunctionBody, xsl:sequence |
 //                      | Charles Korthout | 1.2   | 27-05-2026     | Added multi-key xsl:sort with composite comparator and stable sort                          |
 //                      | Charles Korthout | 0.8   | 26-05-2026     | Added xsl:copy, fixed for-each variable scoping, AVT evaluation in literal elements      |
@@ -32,6 +33,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
+using Bosak.XPath.Xslt.Api;
 using Bosak.XPath.Xslt.Stylesheet;
 
 namespace Bosak.XPath.Xslt.Runtime;
@@ -70,6 +72,7 @@ public sealed class TransformEngine
         _stylesheet = stylesheet;
         _context = context ?? new EvaluationContext();
         FunctionLibrary.Populate(_context);
+        XsltFunctionLibrary.Populate(_context);
 
         _resultDocument = new XDocument();
         _currentContainer = _resultDocument;
@@ -1180,7 +1183,14 @@ public sealed class TransformEngine
 
     private void CopyNodeToResult(IXdmNode node)
     {
-        if (node.NodeKind == XdmNodeKind.Element)
+        if (node.NodeKind == XdmNodeKind.Document)
+        {
+            foreach (var child in node.Axis(XdmAxis.Child))
+            {
+                CopyNodeToResult(child.NodeValue!);
+            }
+        }
+        else if (node.NodeKind == XdmNodeKind.Element)
         {
             var copy = new XElement(
                 XName.Get(node.LocalName, node.NamespaceUri));
@@ -1358,6 +1368,10 @@ public sealed class TransformEngine
         var allParams = _stylesheet.GetAllGlobalParameters();
         foreach (var (name, paramElem) in allParams)
         {
+            // If already supplied by caller (e.g. fn:transform), keep the supplied value
+            if (_context.TryGetVariable(name, out _))
+                continue;
+
             var select = paramElem.Attribute("select")?.Value;
             XdmValue value;
             if (!string.IsNullOrEmpty(select))
