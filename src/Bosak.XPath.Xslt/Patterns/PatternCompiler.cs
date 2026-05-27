@@ -49,6 +49,12 @@ public sealed class PatternCompiler
     {
         var trimmed = pattern.Trim();
 
+        // Handle // prefix (e.g. //foo, //foo[bar]) — matches any descendant
+        if (trimmed.StartsWith("//"))
+        {
+            trimmed = trimmed[2..].Trim();
+        }
+
         // Attribute pattern: @name or @*
         if (trimmed.StartsWith('@'))
         {

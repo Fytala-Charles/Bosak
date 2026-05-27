@@ -495,8 +495,8 @@ public class StylesheetTests
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
 
-        // Built-in rules shallow-copy the element
-        Assert.Contains("<root id=\"x\"", result);
+        // XSLT 2.0 built-in rules apply templates to children, not shallow-copy
+        Assert.Equal("<output />", result.Trim());
     }
 
     [Fact]

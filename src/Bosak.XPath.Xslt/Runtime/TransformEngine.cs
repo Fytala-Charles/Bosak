@@ -1182,7 +1182,7 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(expr);
                         var result = compiled.Evaluate(_context);
-                        sb.Append(result.ToString());
+                        sb.Append(XdmValueToString(result));
                     }
                     i = end + 1;
                 }
@@ -1270,6 +1270,18 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Returns the default on-no-match behavior for the stylesheet version.
+    /// XSLT 1.0/2.0 default is ShallowSkip (apply templates to children).
+    /// XSLT 3.0 default is ShallowCopy.
+    /// </summary>
+    private Stylesheet.OnNoMatch GetDefaultOnNoMatch()
+    {
+        if (_stylesheet.Version is string v && v.Length > 0 && v[0] >= '3')
+            return Stylesheet.OnNoMatch.ShallowCopy;
+        return Stylesheet.OnNoMatch.ShallowSkip;
+    }
+
+    /// <summary>
     /// Applies built-in template rules when no explicit template matches.
     /// Respects xsl:mode on-no-match declarations.
     /// </summary>
@@ -1280,7 +1292,7 @@ public sealed class TransformEngine
         try
         {
             var modeDef = _stylesheet.GetModeDefinition(mode);
-            var behavior = modeDef?.OnNoMatch ?? Stylesheet.OnNoMatch.ShallowCopy;
+            var behavior = modeDef?.OnNoMatch ?? GetDefaultOnNoMatch();
 
             switch (node.NodeKind)
             {
@@ -1566,10 +1578,15 @@ public sealed class TransformEngine
         if (value.IsSequence && value.SequenceValue != null)
         {
             var sb = new System.Text.StringBuilder();
+            bool first = true;
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
             {
-                if (!item.IsUndefined)
-                    sb.Append(item.ToString());
+                if (item.IsUndefined)
+                    continue;
+                if (!first)
+                    sb.Append(' ');
+                sb.Append(item.ToString());
+                first = false;
             }
             return sb.ToString();
         }

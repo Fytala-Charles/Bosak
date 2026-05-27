@@ -145,6 +145,8 @@ public sealed class Stylesheet
         if (versionAttr == null || string.IsNullOrWhiteSpace(versionAttr.Value))
             throw new InvalidOperationException("XTSE0010: The version attribute is required on xsl:stylesheet or xsl:transform.");
 
+        Version = versionAttr.Value;
+
         // Process xsl:import elements (must come first per spec)
         foreach (var import in root.Elements(XName.Get("import", XslNamespace)))
         {
@@ -501,6 +503,9 @@ public sealed class Stylesheet
 
     /// <summary>The XSLT namespace URI.</summary>
     public const string XslNamespace = "http://www.w3.org/1999/XSL/Transform";
+
+    /// <summary>The version attribute of the stylesheet root element.</summary>
+    public string? Version { get; private set; }
 }
 
 /// <summary>
