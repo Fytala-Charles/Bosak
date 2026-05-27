@@ -55,9 +55,10 @@ This is a layered XPath 3.1 implementation:
 | Parser | `Bosak.XPath.Parser` | `XPathLexer`, `XPathParser`, AST nodes |
 | Compiler | `Bosak.XPath.Compiler` | `XPathOptimizer`, `IrLowerer`, opcodes |
 | Runtime | `Bosak.XPath.Runtime` | `VmEngine`, `EvaluationContext`, function dispatch |
-| Standard | `Bosak.XPath.Standard` | `FunctionLibrary` — `fn:*`, `math:*`, `map:*`, `array:*` |
+| Standard | `Bosak.XPath.Standard` | `FunctionLibrary` — `fn:*`, `math:*`, `map:*`, `array:*`, JSON functions |
 | API | `Bosak.XPath.Api` | `XPath31Expression` — public compile/evaluate surface |
-| Providers | `Bosak.XPath.Providers` | `IXdmNode` adapters (currently empty) |
+| XSLT | `Bosak.XPath.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
+| Providers | `Bosak.XPath.Providers` | `IXdmNode` adapters (`XDocumentNode`) |
 
 The execution pipeline is:
 ```

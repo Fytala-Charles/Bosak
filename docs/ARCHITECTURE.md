@@ -310,13 +310,13 @@ var result2 = expr.Evaluate(document, ctx);
 
 ## Extensibility Roadmap
 
-| Phase | Deliverable | Notes |
-|-------|-------------|-------|
+| Phase | Deliverable | Status |
+|-------|-------------|--------|
 | 1 | XPath 3.1 Core | Expression compiler + standard functions ✅ |
-| 2 | XSLT 2.0 / 3.0 | Template matching, sequence constructors, `fn:transform()`. See detailed roadmap below. |
-| 3 | XQuery 3.1 | FLWOR expressions, query prolog. Reuses XPath engine entirely. |
-| 4 | Streaming | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
-| 5 | Database backends | `IXdmNode` implementations over XML databases. |
+| 2 | XSLT 2.0 / 3.0 | Template matching, sequence constructors, `fn:transform()` ✅ |
+| 3 | XQuery 3.1 | FLWOR expressions, query prolog. Reuses XPath engine entirely. 📋 Planned |
+| 4 | Streaming | `IXdmNode` backed by `XmlReader` with look-ahead constraints. 📋 Planned |
+| 5 | Database backends | `IXdmNode` implementations over XML databases. 📋 Planned |
 
 ---
 
@@ -393,14 +393,16 @@ src/
 | Built-in template rules | 🎯 Phase 1 | Default handling for text, attributes, elements |
 | `xsl:import` / `xsl:include` | 🎯 Phase 1 | **Required for Customer A:** modular stylesheets, shared function libraries |
 | `xsl:output` | 🎯 Phase 1 | Serialization method, encoding, indentation |
-| `xsl:sort` | 🔮 Phase 2 | Sorting within `xsl:apply-templates` / `xsl:for-each` |
-| `xsl:number` | 🔮 Phase 2 | Number formatting |
-| `xsl:key` / `key()` | 🔮 Phase 2 | Indexed lookup |
-| Modes (named) | 🔮 Phase 2 | `mode="foo"`, `xsl:apply-templates mode` |
-| `xsl:function` | 🔮 Phase 2 | User-defined XPath functions in XSLT |
-| `fn:transform()` | 🔮 Phase 3 | XPath function invoking XSLT from expressions |
+| `xsl:sort` | ✅ Implemented | Sorting within `xsl:apply-templates` / `xsl:for-each` |
+| `xsl:number` | ✅ Implemented | Number formatting |
+| `xsl:key` / `key()` | ✅ Implemented | Indexed lookup |
+| Modes (named) | ✅ Implemented | `mode="foo"`, `xsl:apply-templates mode` |
+| `xsl:function` | ✅ Implemented | User-defined XPath functions in XSLT |
+| `fn:transform()` | ✅ Implemented | XPath function invoking XSLT from expressions |
+| Tunnel parameters | ✅ Implemented | `tunnel="yes"` propagation |
+| `xsl:mode` | ✅ Implemented | `on-no-match` declarations |
 | XSLT 3.0 packages | 🔮 Phase 3 | `xsl:package`, `xsl:use-package` |
-| Streaming | 🔮 Phase 3 | `streamable="yes"` ( skeletal support only) |
+| Streaming | 🔮 Phase 3 | `streamable="yes"` (skeletal support only) |
 
 #### Pattern Compilation Strategy
 
@@ -439,8 +441,8 @@ src/
   Bosak.XPath.Compiler/     Optimizer, IR, bytecode emitter
   Bosak.XPath.Runtime/      Register VM, execution context, function dispatch
   Bosak.XPath.Api/          Public API, expression compilation, navigator
-  Bosak.XPath.Standard/     Standard function library (fn, math, map, array, xs)
-  Bosak.XPath.Providers/    XDocument, XmlDocument, streaming adapters
+  Bosak.XPath.Standard/     Standard function library (fn, math, map, array, xs, JSON)
+  Bosak.XPath.Providers/    XDocument adapter (XDocumentNode); XmlDocument and streaming adapters planned
   Bosak.XPath.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
 
 tests/

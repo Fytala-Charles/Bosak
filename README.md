@@ -31,7 +31,7 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 - **Compile Once, Execute Many** — Parse → Optimize → Lower to IR → VM execution
 - **Zero-Allocation Sequences** — Lazy struct enumerators avoid `IEnumerable<T>` boxing on hot paths
 - **Pluggable Backends** — Works with `XDocument`, `XmlDocument`, streaming readers, or custom `IXdmNode` providers
-- **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), and FLWOR
+- **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), FLWOR, JSON functions
 
 ---
 
@@ -133,9 +133,9 @@ flowchart TB
 
 | Phase | Deliverable | Status |
 |-------|-------------|--------|
-| 1 | XPath 3.1 Core — compiler + VM + standard functions | 🚧 In Progress |
-| 2 | XQuery 3.1 — FLWOR prolog, query context | 📋 Planned |
-| 3 | XSLT 3.0 — template matching, sequence constructors | 📋 Planned |
+| 1 | XPath 3.1 Core — compiler + VM + standard functions | ✅ Complete |
+| 2 | XSLT 2.0/3.0 — template matching, sequence constructors, `fn:transform()` | ✅ Complete |
+| 3 | XQuery 3.1 — FLWOR prolog, query context | 📋 Planned |
 | 4 | Streaming — `XmlReader`-backed `IXdmNode` | 📋 Planned |
 | 5 | Database backends — XML database adapters | 📋 Planned |
 
@@ -179,7 +179,7 @@ The harness:
 |--------|-------|
 | Test Sets | 428 |
 | Total Tests | ~32,000 |
-| Pass Rate (first 50 sets sample) | **68.37%** |
+| Pass Rate (approximate) | **~57%** (18,272 passed / 3,747 failed / 9,802 skipped) |
 | Unsupported Features | Schema awareness, XQuery-only, XML 1.1 |
 
 ### Known Limitations
@@ -189,8 +189,9 @@ The harness:
 | `assert-eq` | ✅ Implemented | Core value comparison |
 | `assert-count` | ✅ Implemented | Sequence cardinality |
 | `assert-deep-eq` | ✅ Implemented | Recursive XDM comparison |
-| `assert-xml` | ❌ Not implemented | ~1,840 tests skipped |
+| `assert-xml` | ⚠️ Partial | ~1,840 tests skipped |
 | `assert-permutation` | ❌ Not implemented | ~92 tests skipped |
+| Schema-aware | ❌ Not supported | ~5,000+ tests skipped |
 
 ### Adding New Tests
 
