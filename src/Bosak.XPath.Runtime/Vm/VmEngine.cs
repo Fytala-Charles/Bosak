@@ -2195,6 +2195,140 @@ public static class VmEngine
         };
     }
 
+    /// <summary>
+    /// Compares two date/time values of the same subtype.
+    /// Returns null if the comparison is indeterminate (one operand lacks a timezone
+    /// and the two possible positions straddle the other operand).
+    /// </summary>
+    private static int? CompareDateTimeValues(XdmValue left, XdmValue right, string subtype)
+    {
+        var leftXdt = GetXPathDateTime(left, subtype);
+        var rightXdt = GetXPathDateTime(right, subtype);
+
+        bool leftHasTz = left.HasTimezone;
+        bool rightHasTz = right.HasTimezone;
+
+        // Both have timezones: normalize to UTC and compare
+        if (leftHasTz && rightHasTz)
+        {
+            var leftUtc = NormalizeToUtc(leftXdt, subtype);
+            var rightUtc = NormalizeToUtc(rightXdt, subtype);
+            return CompareNormalizedDateTime(leftUtc, rightUtc);
+        }
+
+        // Neither has timezone: compare components directly
+        if (!leftHasTz && !rightHasTz)
+        {
+            return CompareNormalizedDateTime(leftXdt, rightXdt);
+        }
+
+        // Exactly one has timezone: test with ±14:00 implicit timezone bounds
+        // zoned = operand with timezone, unzoned = operand without timezone
+        var zonedXdt = leftHasTz ? leftXdt : rightXdt;
+        var unzonedXdt = leftHasTz ? rightXdt : leftXdt;
+        var zonedUtc = NormalizeToUtc(zonedXdt, subtype);
+
+        // Test with unzoned implicit timezone = +14:00
+        var unzonedPlus14 = NormalizeToUtc(
+            new XPathDateTime(unzonedXdt.Year, unzonedXdt.Month, unzonedXdt.Day,
+                unzonedXdt.Hour, unzonedXdt.Minute, unzonedXdt.Second, unzonedXdt.Millisecond,
+                14 * 60, true), subtype);
+        int cmpPlus14 = leftHasTz
+            ? CompareNormalizedDateTime(zonedUtc, unzonedPlus14)
+            : CompareNormalizedDateTime(unzonedPlus14, zonedUtc);
+
+        // Test with unzoned implicit timezone = -14:00
+        var unzonedMinus14 = NormalizeToUtc(
+            new XPathDateTime(unzonedXdt.Year, unzonedXdt.Month, unzonedXdt.Day,
+                unzonedXdt.Hour, unzonedXdt.Minute, unzonedXdt.Second, unzonedXdt.Millisecond,
+                -14 * 60, true), subtype);
+        int cmpMinus14 = leftHasTz
+            ? CompareNormalizedDateTime(zonedUtc, unzonedMinus14)
+            : CompareNormalizedDateTime(unzonedMinus14, zonedUtc);
+
+        // If both evaluations agree, return that result; otherwise indeterminate
+        if (cmpPlus14 == cmpMinus14)
+            return cmpPlus14;
+        return null;
+    }
+
+    private static XPathDateTime GetXPathDateTime(XdmValue value, string subtype)
+    {
+        return subtype switch
+        {
+            "dateTime" => value.DateTimeXPathValue,
+            "date" => value.DateXPathValue,
+            "time" => value.TimeXPathValue,
+            _ => throw new InvalidOperationException($"Unsupported date/time subtype: {subtype}")
+        };
+    }
+
+    /// <summary>
+    /// Normalizes a date/time value to UTC by applying its timezone offset.
+    /// For xs:time, uses 1972-12-31 as the reference date.
+    /// </summary>
+    private static XPathDateTime NormalizeToUtc(XPathDateTime xdt, string subtype)
+    {
+        // For xs:time, use a reference date (1972-12-31 per spec)
+        long year = xdt.Year;
+        int month = xdt.Month;
+        int day = xdt.Day;
+        if (subtype == "time")
+        {
+            year = 1972;
+            month = 12;
+            day = 31;
+        }
+
+        if (!xdt.HasTimezone)
+        {
+            // No timezone: return as-is (used for comparing two no-timezone values)
+            return new XPathDateTime(year, month, day, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, 0, false);
+        }
+
+        var offset = TimeSpan.FromMinutes(xdt.TimezoneOffsetMinutes);
+        if (year is >= 1 and <= 9999)
+        {
+            // Use DateTimeOffset for values in the supported range
+            var dto = new DateTimeOffset((int)year, month, day, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, offset);
+            var utc = dto.UtcDateTime;
+            return new XPathDateTime(utc.Year, utc.Month, utc.Day, utc.Hour, utc.Minute, utc.Second, utc.Millisecond, 0, true);
+        }
+        else
+        {
+            // Extended years: normalize manually
+            var totalMinutes = xdt.Hour * 60L + xdt.Minute - xdt.TimezoneOffsetMinutes;
+            var totalSeconds = totalMinutes * 60 + xdt.Second;
+            var totalMs = totalSeconds * 1000 + xdt.Millisecond;
+            // Normalize day boundary crossings manually (simplified)
+            var newDay = day + (int)(totalMs / 86400000);
+            totalMs %= 86400000;
+            if (totalMs < 0) { totalMs += 86400000; newDay--; }
+            var newHour = (int)(totalMs / 3600000);
+            totalMs %= 3600000;
+            var newMinute = (int)(totalMs / 60000);
+            totalMs %= 60000;
+            var newSecond = (int)(totalMs / 1000);
+            var newMs = (int)(totalMs % 1000);
+            return new XPathDateTime(year, month, newDay, newHour, newMinute, newSecond, newMs, 0, true);
+        }
+    }
+
+    /// <summary>
+    /// Compares two normalized XPathDateTime values (both in UTC or both without timezone).
+    /// </summary>
+    private static int CompareNormalizedDateTime(XPathDateTime a, XPathDateTime b)
+    {
+        if (a.Year != b.Year) return a.Year < b.Year ? -1 : 1;
+        if (a.Month != b.Month) return a.Month < b.Month ? -1 : 1;
+        if (a.Day != b.Day) return a.Day < b.Day ? -1 : 1;
+        if (a.Hour != b.Hour) return a.Hour < b.Hour ? -1 : 1;
+        if (a.Minute != b.Minute) return a.Minute < b.Minute ? -1 : 1;
+        if (a.Second != b.Second) return a.Second < b.Second ? -1 : 1;
+        if (a.Millisecond != b.Millisecond) return a.Millisecond < b.Millisecond ? -1 : 1;
+        return 0;
+    }
+
     private static (long TotalMonths, decimal TotalSeconds) NormalizeDuration(string s)
     {
         var m = DurationPartsRegex.Match(s);
@@ -2572,7 +2706,24 @@ public static class VmEngine
         {
             if (leftDateSub is null || rightDateSub is null || leftDateSub != rightDateSub)
                 throw new InvalidOperationException("XPTY0004");
-            // Same subtype: fall through to string comparison below (sufficient for exact matches)
+            var cmp = CompareDateTimeValues(left, right, leftDateSub);
+            if (cmp.HasValue)
+            {
+                return op switch
+                {
+                    IrOpCode.Equal or IrOpCode.ValueEqual => cmp.Value == 0,
+                    IrOpCode.NotEqual or IrOpCode.ValueNotEqual => cmp.Value != 0,
+                    IrOpCode.LessThan or IrOpCode.ValueLessThan => cmp.Value < 0,
+                    IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => cmp.Value <= 0,
+                    IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => cmp.Value > 0,
+                    IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => cmp.Value >= 0,
+                    _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+                };
+            }
+            // Indeterminate comparison: lt/gt/le/ge return false; eq/ne use string fallback
+            return op is IrOpCode.Equal or IrOpCode.ValueEqual or IrOpCode.NotEqual or IrOpCode.ValueNotEqual
+                ? string.CompareOrdinal(left.ToString(), right.ToString()) == (op is IrOpCode.Equal or IrOpCode.ValueEqual ? 0 : 1)
+                : false;
         }
 
         // Atomized nodes become strings; try numeric parsing for untyped values

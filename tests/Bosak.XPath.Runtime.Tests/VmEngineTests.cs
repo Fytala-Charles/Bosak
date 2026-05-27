@@ -526,6 +526,32 @@ public class VmEngineTests
     }
 
     // ------------------------------------------------------------------
+    // REQ-009: Date/time ordering tests
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("xs:date('2004-12-25Z') lt xs:date('2004-12-25-05:00')", true)]
+    [InlineData("xs:date('2008-01-31') lt xs:date('2008-01-31+09:00')", false)]   // indeterminate
+    [InlineData("xs:date('2008-01-31+09:00') lt xs:date('2008-01-31')", false)]   // indeterminate
+    [InlineData("xs:date('2008-01-31') le xs:date('2008-01-31+09:00')", false)]   // indeterminate
+    [InlineData("xs:date('2008-01-31+09:00') le xs:date('2008-01-31')", false)]   // indeterminate
+    [InlineData("xs:dateTime('2008-01-31T00:01:00') lt xs:dateTime('2008-01-31T00:01:00+09:00')", false)] // indeterminate
+    [InlineData("xs:dateTime('2008-01-31T00:01:00+09:00') lt xs:dateTime('2008-01-31T00:01:00')", false)] // indeterminate
+    [InlineData("xs:dateTime('2008-01-31T00:01:00') le xs:dateTime('2008-01-31T00:01:00+09:00')", false)] // indeterminate
+    [InlineData("xs:dateTime('2008-01-31T00:01:00+09:00') le xs:dateTime('2008-01-31T00:01:00')", false)] // indeterminate
+    [InlineData("xs:time('12:00:00-05:00') lt xs:time('23:00:00+06:00')", false)] // equal in UTC
+    [InlineData("xs:time('12:00:00-05:00') eq xs:time('23:00:00+06:00')", true)]  // equal in UTC
+    [InlineData("xs:date('2004-12-25Z') eq xs:date('2004-12-25-05:00')", false)]  // different in UTC
+    public void DateTime_Ordering_Comparisons(string xpath, bool expected)
+    {
+        var expr = XPath31Expression.Compile(xpath);
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        var result = expr.Evaluate(ctx);
+        Assert.Equal(expected, result.BooleanValue);
+    }
+
+    // ------------------------------------------------------------------
     // Helpers
     // ------------------------------------------------------------------
 
