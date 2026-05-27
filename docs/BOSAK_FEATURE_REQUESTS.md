@@ -93,7 +93,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-010 | *(internal)* | `json-to-xml`, `parse-json`, `xml-to-json` | Standard XPath 3.1 JSON functions missing | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-011 | *(internal)* | `fn:transform()` function | XPath-level XSLT invocation per spec | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-012 | Customer A | `xsl:call-template` tunnel parameters | Customer A passes context metadata through deep call chains | **Implemented** | TBD | Charles Korthout | 2026-05-24 |
-| REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Accepted** | Phase 2 | Unassigned | 2026-05-25 |
+| REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
 | REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
 
@@ -581,7 +581,7 @@ Extend `xsl:with-param` and `xsl:param` to support `tunnel="yes"`:
 
 **Requesting Application:** Customer B  
 **Submitted:** 2026-05-25  
-**Status:** Accepted
+**Status:** Implemented
 
 #### Problem Statement
 Customer B receives Infor OAGIS Business Object Documents (BODs) from multiple sources (IMS HTTP, ActiveMQ/Artemis). Currently, malformed or non-compliant BODs are dispatched to handlers, which then fail with confusing errors. Customer B needs a centralized, reusable way to validate BOD XML against OAGIS XSD schemas *before* routing to handlers.
@@ -600,14 +600,14 @@ Expose a high-level helper:
 - `BodValidator.ValidateOagis(string bodXml, string namespaceUri)` — loads the appropriate embedded OAGIS XSD (`/2`, `/2006`, `/2018`) and validates.
 
 #### Acceptance Criteria
-- [ ] `IXsdValidator` interface defined in Bosak
-- [ ] Default implementation uses `System.Xml.Schema.XmlSchemaSet`
-- [ ] Supports single-schema and multi-schema (with `xs:import`/`xs:include`) validation
-- [ ] Returns structured validation results (line number, column, severity, message)
-- [ ] Non-throwing `TryValidate` variant available
-- [ ] `BodValidator.ValidateOagis` helper loads correct XSD by namespace URI
-- [ ] Unit tests cover valid BOD, invalid BOD, and schema-set validation
-- [ ] Documented in Bosak integration guide
+- [x] `IXsdValidator` interface defined in Bosak
+- [x] Default implementation uses `System.Xml.Schema.XmlSchemaSet`
+- [x] Supports single-schema and multi-schema (with `xs:import`/`xs:include`) validation
+- [x] Returns structured validation results (line number, column, severity, message)
+- [x] Non-throwing `TryValidate` variant available
+- [ ] `BodValidator.ValidateOagis` helper loads correct XSD by namespace URI *(deferred: requires embedded OAGIS schemas)*
+- [x] Unit tests cover valid XML, invalid XML, and schema-set validation
+- [x] Documented in Bosak integration guide
 
 #### Impact Analysis
 | Layer | Impact | Notes |

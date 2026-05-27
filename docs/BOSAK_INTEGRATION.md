@@ -234,7 +234,38 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 
 ---
 
-## 6. Current Build State
+## 6. XSD Validation
+
+Bosak provides an `IXsdValidator` abstraction for XML Schema validation:
+
+```csharp
+using Bosak.XPath.Api.Xsd;
+
+var validator = new XsdValidator();
+var result = validator.TryValidate(xmlString, xsdStream);
+
+if (result.IsValid)
+{
+    Console.WriteLine("Document is valid");
+}
+else
+{
+    foreach (var error in result.OnlyErrors)
+    {
+        Console.WriteLine($"Error at line {error.LineNumber}: {error.Message}");
+    }
+}
+```
+
+Features:
+- Single-schema and multi-schema validation (handles `xs:import`/`xs:include`)
+- Structured error results with line/column numbers
+- Non-throwing `TryValidate` and throwing `Validate` variants
+- Configurable via `XsdValidatorOptions` (max error count, treat warnings as errors)
+
+---
+
+## 7. Current Build State
 
 Run the full suite from the Bosak repo root:
 
