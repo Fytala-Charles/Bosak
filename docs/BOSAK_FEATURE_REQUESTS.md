@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-05-24  
+> **Living Registry** — Last updated: 2026-05-27  
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -92,7 +92,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-009 | *(internal)* | Date/time ordering (`lt`, `gt`, `le`, `ge`) | 9 remaining QT3 failures; only equality works today | **Pending** | TBD | Unassigned | 2026-05-24 |
 | REQ-010 | *(internal)* | `json-to-xml`, `parse-json`, `xml-to-json` | Standard XPath 3.1 JSON functions missing | **Pending** | TBD | Unassigned | 2026-05-24 |
 | REQ-011 | *(internal)* | `fn:transform()` function | XPath-level XSLT invocation per spec | **Pending** | Phase 3 | Unassigned | 2026-05-24 |
-| REQ-012 | Customer A | `xsl:call-template` tunnel parameters | Customer A passes context metadata through deep call chains | **Pending** | TBD | Unassigned | 2026-05-24 |
+| REQ-012 | Customer A | `xsl:call-template` tunnel parameters | Customer A passes context metadata through deep call chains | **Implemented** | TBD | Charles Korthout | 2026-05-24 |
 | REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Accepted** | Phase 2 | Unassigned | 2026-05-25 |
 | REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Pending** | Phase 2 | Unassigned | 2026-05-26 |
 | REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Pending** | Phase 2 | Unassigned | 2026-05-26 |
@@ -156,7 +156,7 @@ Wire URI resolution into the `StylesheetLoader`:
 
 **Requesting Application:** Customer A  
 **Submitted:** 2026-05-24  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 Customer A uses multi-pass transforms: e.g., pass 1 normalizes the input, pass 2 applies business rules, pass 3 generates output. Each pass targets a different `mode`. Today Bosak only supports the default mode (`""`).
@@ -543,7 +543,7 @@ Implement `fn:transform` as a delegate that:
 
 **Requesting Application:** Customer A  
 **Submitted:** 2026-05-24  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 Customer A passes context metadata (document type, source system, correlation ID) through deep call-template chains. Without tunnel parameters, every intermediate template must explicitly forward the parameter.
@@ -555,10 +555,10 @@ Extend `xsl:with-param` and `xsl:param` to support `tunnel="yes"`:
 3. Tunnel params do not interfere with regular params.
 
 #### Acceptance Criteria
-- [ ] `<xsl:with-param name="corrId" select="..." tunnel="yes"/>` propagates through call-template
-- [ ] Intermediate templates without the tunnel param ignore it
-- [ ] Final template with `<xsl:param name="corrId" tunnel="yes"/>` receives the value
-- [ ] Non-tunnel params are unaffected
+- [x] `<xsl:with-param name="corrId" select="..." tunnel="yes"/>` propagates through call-template
+- [x] Intermediate templates without the tunnel param ignore it
+- [x] Final template with `<xsl:param name="corrId" tunnel="yes"/>` receives the value
+- [x] Non-tunnel params are unaffected
 
 #### Impact Analysis
 | Layer | Impact | Notes |
@@ -574,6 +574,7 @@ Extend `xsl:with-param` and `xsl:param` to support `tunnel="yes"`:
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-24 | Kimi | Pending | Nice-to-have; workaround is explicit forwarding |
+| 2026-05-27 | Kimi | Implemented | Tunnel param stack in TransformEngine; propagates through call-template and apply-templates; 4 unit tests pass |
 
 ---
 
