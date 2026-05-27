@@ -214,7 +214,7 @@ dotnet test Bosak.sln
 
 **Unit tests:** 838 passed, 0 failed, 0 skipped  
 **W3C QT3 conformance (XPath):** ~18,272 passed / ~3,747 failed / ~9,802 skipped  
-**W3C XSLT 3.0 conformance:** 1,540 passed / 3,927 failed / 9,133 skipped (~28.2% pass rate on supported features)  
+**W3C XSLT 3.0 conformance:** 1,566 passed / 3,901 failed / 9,133 skipped (~28.6% pass rate on supported features)  
 **Target framework:** `net9.0`
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
