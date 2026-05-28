@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 24-05-2026     | Added xsl:number support (single, any, multiple levels) with format-integer reuse       |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added CopyNodeToResult for Document nodes; skip default params if already in context     |
+//                      | Charles Korthout | 1.4   | 28-05-2026     | EvaluateSequenceConstructor wraps in document node per XSLT 2.0; respects as attribute   |
 //                      | Charles Korthout | 1.1   | 27-05-2026     | Added xsl:function registration, ExecuteXsltFunction, EvaluateFunctionBody, xsl:sequence |
 //                      | Charles Korthout | 1.2   | 27-05-2026     | Added multi-key xsl:sort with composite comparator and stable sort                          |
 //                      | Charles Korthout | 0.8   | 26-05-2026     | Added xsl:copy, fixed for-each variable scoping, AVT evaluation in literal elements      |
@@ -292,7 +293,7 @@ public sealed class TransformEngine
                             }
                             else
                             {
-                                varValue = EvaluateSequenceConstructor(instruction, contextItem);
+                                varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
                             }
                             _context.WithVariable(varName, varValue);
                         }
@@ -394,7 +395,7 @@ public sealed class TransformEngine
                                     }
                                     else
                                     {
-                                        wpValue = EvaluateSequenceConstructor(wp, contextItem);
+                                        wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                                     }
                                     if (wpTunnel)
                                         tunnelParams[wpName] = wpValue;
@@ -609,7 +610,7 @@ public sealed class TransformEngine
                             var contentElements = child.Elements().ToList();
                             if (contentElements.Count > 0)
                             {
-                                paramValue = EvaluateSequenceConstructor(child, contextItem);
+                                paramValue = EvaluateSequenceConstructor(child, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(child.Attribute("as")?.Value));
                             }
                             else
                             {
@@ -884,7 +885,7 @@ public sealed class TransformEngine
                             }
                             else
                             {
-                                wpValue = EvaluateSequenceConstructor(wp, contextItem);
+                                wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                             }
                             if (wpTunnel)
                                 tunnelParams[wpName] = wpValue;
@@ -1057,7 +1058,7 @@ public sealed class TransformEngine
                         else
                         {
                             // Build value from sequence constructor (text nodes + XSLT instructions)
-                            varValue = EvaluateSequenceConstructor(instruction, contextItem);
+                            varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
                         }
                         _context.WithVariable(varName, varValue);
                     }
@@ -1080,7 +1081,7 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            varValue = EvaluateSequenceConstructor(instruction, contextItem);
+                            varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
                         }
                         _context.WithVariable(varName, varValue);
                     }
@@ -1109,7 +1110,7 @@ public sealed class TransformEngine
                                 }
                                 else
                                 {
-                                    wpValue = EvaluateSequenceConstructor(wp, contextItem);
+                                    wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                                 }
                                 if (wpTunnel)
                                     tunnelParams[wpName] = wpValue;
@@ -1556,7 +1557,7 @@ public sealed class TransformEngine
             }
             else
             {
-                value = EvaluateSequenceConstructor(paramElem, focus);
+                value = EvaluateSequenceConstructor(paramElem, focus, wrapInDocumentNode: string.IsNullOrEmpty(paramElem.Attribute("as")?.Value));
             }
             _context.WithVariable(name, value);
         }
@@ -1574,7 +1575,7 @@ public sealed class TransformEngine
             }
             else
             {
-                value = EvaluateSequenceConstructor(varElem, focus);
+                value = EvaluateSequenceConstructor(varElem, focus, wrapInDocumentNode: string.IsNullOrEmpty(varElem.Attribute("as")?.Value));
             }
             _context.WithVariable(name, value);
         }
@@ -1781,15 +1782,38 @@ public sealed class TransformEngine
     /// Evaluates a sequence constructor (child nodes of an xsl:variable, xsl:param, etc.)
     /// and returns the resulting XDM value.
     /// </summary>
-    private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem)
+    private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, bool wrapInDocumentNode = true)
     {
         // Create a temporary container to capture the sequence constructor output
-        var tempContainer = new XElement("__temp__");
-        ExecuteSequenceConstructorDirect(parent, contextItem, tempContainer);
+        var wrapper = new XElement("__temp__");
+        ExecuteSequenceConstructorDirect(parent, contextItem, wrapper);
 
-        // Collect results from tempContainer
+        var nodes = wrapper.Nodes().ToList();
+
+        // Empty sequence constructor → empty sequence (XSLT 2.0 §11.2)
+        if (nodes.Count == 0)
+            return XdmValue.FromSequence(XdmSequence.Empty);
+
+        if (wrapInDocumentNode)
+        {
+            var elementCount = nodes.OfType<XElement>().Count();
+
+            // XSLT 2.0+: non-empty sequence constructor content produces a document node.
+            // LINQ-to-XML XDocument requires exactly one root element and does not
+            // allow non-whitespace text nodes outside the root, so we can only
+            // create a proper document node for single-element content.
+            if (elementCount == 1)
+            {
+                var tempDoc = new XDocument();
+                foreach (var node in nodes)
+                    tempDoc.Add(node);
+                return XdmValue.FromNode(new Providers.Xml.XDocumentNode(tempDoc));
+            }
+        }
+
+        // Fall back: return the raw sequence
         var results = new List<XdmValue>();
-        foreach (var child in tempContainer.Nodes())
+        foreach (var child in nodes)
         {
             switch (child)
             {
@@ -1801,13 +1825,8 @@ public sealed class TransformEngine
                     break;
             }
         }
-
-        if (results.Count == 0)
-            return XdmValue.FromSequence(XdmSequence.Empty);
         if (results.Count == 1)
             return results[0];
-
-        // Return as a document-fragment-like sequence
         return XdmValue.FromSequence(MaterializedSequence.FromList(results));
     }
 
