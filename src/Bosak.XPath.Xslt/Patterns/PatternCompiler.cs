@@ -50,16 +50,15 @@ public sealed class PatternCompiler
     {
         var trimmed = pattern.Trim();
 
-        // Handle / prefix (e.g. /doc) — matches from the root
-        if (trimmed.StartsWith('/'))
-        {
-            trimmed = trimmed[1..].Trim();
-        }
-
         // Handle // prefix (e.g. //foo, //foo[bar]) — matches any descendant
         if (trimmed.StartsWith("//"))
         {
             trimmed = trimmed[2..].Trim();
+        }
+        // Handle / prefix (e.g. /doc) — matches from the root
+        else if (trimmed.StartsWith('/'))
+        {
+            trimmed = trimmed[1..].Trim();
         }
 
         // Document pattern: doc('uri') or document('uri') — XSLT 3.0
@@ -99,7 +98,7 @@ public sealed class PatternCompiler
             return node => node.NodeKind == XdmNodeKind.Element;
         }
 
-        if (name == "node()")
+        if (name == "node()" || name == ".")
         {
             return node => true; // Any node
         }

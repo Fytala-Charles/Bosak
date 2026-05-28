@@ -2055,7 +2055,7 @@ public sealed class TransformEngine
         }
         else
         {
-            var countMatcher = string.IsNullOrEmpty(countPattern)
+            var countMatcher = string.IsNullOrEmpty(countPattern) || countPattern.Trim() == "."
                 ? CreateDefaultCountMatcher(targetNode)
                 : new Patterns.PatternCompiler().Compile(countPattern);
 
