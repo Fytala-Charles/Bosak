@@ -4,8 +4,8 @@
 # Bosak XPath / XSLT — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT stack.
-> **Last updated:** 27 May 2026
-> **Bosak baseline:** 831 unit tests passed / 0 failed / 821+ total
+> **Last updated:** 28 May 2026
+> **Bosak baseline:** 840 unit tests passed / 0 failed / 0 skipped
 
 ---
 
@@ -196,6 +196,9 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:element` / `xsl:attribute` | ✅ Working | |
 | `xsl:text` | ✅ Working | |
 | `xsl:copy-of` | ✅ Working | Deep copy of nodes; Document nodes supported |
+| `xsl:comment` | ✅ Working | `select` attribute or text content |
+| `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
+| `xsl:decimal-format` | ✅ Working | Parsed and registered for `fn:format-number` |
 | `xsl:variable` | ✅ Working | Lexical scoping; usable in XPath via `$var` |
 | `xsl:param` | ✅ Working | On named templates, global params, default values |
 | Built-in template rules | ✅ Working | Shallow-copy elements, copy text/attributes |
@@ -274,7 +277,7 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-**Unit tests:** 831 passed, 0 failed, 0 skipped  
+**Unit tests:** 840 passed, 0 failed, 0 skipped  
 **Target framework:** `net9.0`
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

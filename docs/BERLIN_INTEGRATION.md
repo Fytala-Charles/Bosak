@@ -4,8 +4,8 @@
 # Bosak XPath / XSLT — Customer A Integration Guide
 
 > **Purpose:** Quick-reference for the Customer A project on how to consume the Bosak XPath 3.1 + XSLT stack.
-> **Last updated:** 27 May 2026
-> **Bosak baseline:** 831 unit tests passed / 0 failed (W3C QT3 conformance: ~18,272 passed / ~3,747 failed)
+> **Last updated:** 28 May 2026
+> **Bosak baseline:** 840 unit tests passed / 0 failed (W3C QT3 conformance: ~18,272 passed / ~3,747 failed)
 
 ---
 
@@ -167,6 +167,9 @@ var result = executable.TransformToString(new XDocumentNode(source));
 | `xsl:element` / `xsl:attribute` | ✅ Working | |
 | `xsl:text` | ✅ Working | |
 | `xsl:copy-of` | ✅ Working | Deep copy of nodes |
+| `xsl:comment` | ✅ Working | `select` attribute or text content |
+| `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
+| `xsl:decimal-format` | ✅ Working | Parsed and registered for `fn:format-number` |
 | `xsl:variable` | ✅ Working | Bound to context; usable in XPath via `$var` |
 | `xsl:param` | ✅ Working | On named templates and inline |
 | Built-in template rules | ✅ Working | Shallow-copy elements, copy text/attributes |
@@ -212,9 +215,9 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-**Unit tests:** 838 passed, 0 failed, 0 skipped  
+**Unit tests:** 840 passed, 0 failed, 0 skipped  
 **W3C QT3 conformance (XPath):** ~18,272 passed / ~3,747 failed / ~9,802 skipped  
-**W3C XSLT 3.0 conformance:** 1,566 passed / 3,901 failed / 9,133 skipped (~28.6% pass rate on supported features)  
+**W3C XSLT 3.0 conformance:** 2,477 passed / 2,990 failed / 9,133 skipped (~45.3% pass rate on supported features)  
 **Target framework:** `net9.0`
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
