@@ -134,16 +134,24 @@ public sealed class TransformEngine
         }
         else
         {
-            // Look for a template matching "/" (document root)
-            var rootTemplate = FindRootTemplate();
-            if (rootTemplate != null)
+            // Check for xsl:initial-template as the implicit entry point
+            if (_allNamedTemplates.TryGetValue("xsl:initial-template", out var initialTemplateRule))
             {
-                ExecuteTemplate(rootTemplate, source);
+                CallTemplate("xsl:initial-template", source);
             }
             else
             {
-                // Apply templates to the source node in default mode
-                ApplyTemplates(source, mode: "", select: null);
+                // Look for a template matching "/" (document root)
+                var rootTemplate = FindRootTemplate();
+                if (rootTemplate != null)
+                {
+                    ExecuteTemplate(rootTemplate, source);
+                }
+                else
+                {
+                    // Apply templates to the source node in default mode
+                    ApplyTemplates(source, mode: "", select: null);
+                }
             }
         }
 
@@ -2055,7 +2063,7 @@ public sealed class TransformEngine
         }
         else
         {
-            var countMatcher = string.IsNullOrEmpty(countPattern) || countPattern.Trim() == "."
+            var countMatcher = string.IsNullOrEmpty(countPattern)
                 ? CreateDefaultCountMatcher(targetNode)
                 : new Patterns.PatternCompiler().Compile(countPattern);
 
@@ -2371,9 +2379,9 @@ public sealed class TransformEngine
         return value.Kind switch
         {
             XdmValueKind.Integer => value.IntegerValue,
-            XdmValueKind.Decimal => (long)value.DecimalValue,
-            XdmValueKind.Double => (long)value.DoubleValue,
-            XdmValueKind.Float => (long)value.DoubleValue,
+            XdmValueKind.Decimal => (long)Math.Round(value.DecimalValue),
+            XdmValueKind.Double => (long)Math.Round(value.DoubleValue),
+            XdmValueKind.Float => (long)Math.Round(value.DoubleValue),
             XdmValueKind.Node => long.TryParse(value.NodeValue?.StringValue ?? "", out var n) ? n : null,
             _ => long.TryParse(value.ToString(), out var n) ? n : null
         };

@@ -205,13 +205,26 @@ public sealed class PatternCompiler
 
     private Func<IXdmNode, bool> CompilePredicatePattern(string pattern)
     {
-        // Extract the base pattern and the predicate expression
+        // Extract the base pattern and the first predicate expression
         // e.g. "foo[bar]" → base="foo", predicate="bar"
+        // e.g. "*[a][b]" → base="*", predicate="a" (second predicate handled via XPath)
         int bracketOpen = pattern.IndexOf('[');
         if (bracketOpen < 0)
             return CompileSinglePattern(pattern);
 
-        int bracketClose = pattern.LastIndexOf(']');
+        // Find matching close bracket (handle nested brackets)
+        int bracketClose = -1;
+        int depth = 0;
+        for (int i = bracketOpen; i < pattern.Length; i++)
+        {
+            if (pattern[i] == '[') depth++;
+            else if (pattern[i] == ']') depth--;
+            if (depth == 0)
+            {
+                bracketClose = i;
+                break;
+            }
+        }
         if (bracketClose < 0 || bracketClose < bracketOpen)
             throw new InvalidOperationException($"Invalid pattern: {pattern}");
 
@@ -227,7 +240,11 @@ public sealed class PatternCompiler
 
         if (isSimpleElement || isSimpleAttribute)
         {
-            var axisStep = isSimpleAttribute ? $"attribute::{basePattern[1..]}[{predicateExpr}]" : $"child::{basePattern}[{predicateExpr}]";
+            // Append any additional predicates that follow the first one
+            string remaining = bracketClose + 1 < pattern.Length ? pattern[(bracketClose + 1)..] : "";
+            var axisStep = isSimpleAttribute
+                ? $"attribute::{basePattern[1..]}[{predicateExpr}]{remaining}"
+                : $"child::{basePattern}[{predicateExpr}]{remaining}";
             var compiledStep = XPath31Expression.Compile(axisStep);
 
             return node =>
