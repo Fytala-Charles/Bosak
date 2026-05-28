@@ -102,7 +102,10 @@ public sealed class TemplateRule
     {
         if (!string.IsNullOrEmpty(Match))
         {
-            CompiledMatch = compiler.Compile(Match);
+            if (Match.Trim() == "/")
+                CompiledMatch = node => node.NodeKind == XdmNodeKind.Document;
+            else
+                CompiledMatch = compiler.Compile(Match);
         }
     }
 
@@ -112,6 +115,12 @@ public sealed class TemplateRule
     private static double ComputeDefaultPriority(string? match)
     {
         if (string.IsNullOrEmpty(match))
+            return 0.5;
+
+        var trimmed = match.Trim();
+
+        // Document patterns (doc(...), document(...)): +0.5
+        if (trimmed.StartsWith("doc(") || trimmed.StartsWith("document("))
             return 0.5;
 
         // QName: +0.0

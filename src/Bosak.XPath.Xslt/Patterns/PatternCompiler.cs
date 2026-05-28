@@ -62,6 +62,16 @@ public sealed class PatternCompiler
             trimmed = trimmed[2..].Trim();
         }
 
+        // Document pattern: doc('uri') or document('uri') — XSLT 3.0
+        if (trimmed.StartsWith("doc(") && trimmed.EndsWith(')'))
+        {
+            return node => node.NodeKind == XdmNodeKind.Document;
+        }
+        if (trimmed.StartsWith("document(") && trimmed.EndsWith(')'))
+        {
+            return node => node.NodeKind == XdmNodeKind.Document;
+        }
+
         // Attribute pattern: @name or @*
         if (trimmed.StartsWith('@'))
         {
