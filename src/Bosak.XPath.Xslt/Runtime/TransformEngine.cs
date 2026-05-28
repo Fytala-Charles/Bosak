@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added CopyNodeToResult for Document nodes; skip default params if already in context     |
 //                      | Charles Korthout | 1.4   | 28-05-2026     | EvaluateSequenceConstructor wraps in document node per XSLT 2.0; respects as attribute   |
 //                      | Charles Korthout | 1.5   | 28-05-2026     | SortItems restores focus after sorting; NaN sorts before numbers per XSLT spec          |
+//                      | Charles Korthout | 1.6   | 28-05-2026     | ResolveElementName for xsl:element/attribute; resolves prefix via in-scope namespaces    |
 //                      | Charles Korthout | 1.1   | 27-05-2026     | Added xsl:function registration, ExecuteXsltFunction, EvaluateFunctionBody, xsl:sequence |
 //                      | Charles Korthout | 1.2   | 27-05-2026     | Added multi-key xsl:sort with composite comparator and stable sort                          |
 //                      | Charles Korthout | 0.8   | 26-05-2026     | Added xsl:copy, fixed for-each variable scoping, AVT evaluation in literal elements      |
@@ -701,8 +702,8 @@ public sealed class TransformEngine
                 {
                     var elemName = instruction.Attribute("name")?.Value ?? "unnamed";
                     var elemNs = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
-                    var elemLocalName = GetLocalName(elemName, elemNs);
-                    var elem = new XElement(XName.Get(elemLocalName, elemNs ?? ""));
+                    var (elemLocalName, elemNsUri) = ResolveElementName(instruction, elemName, elemNs);
+                    var elem = new XElement(XName.Get(elemLocalName, elemNsUri));
                     _currentContainer.Add(elem);
                     var prev = _currentContainer;
                     _currentContainer = elem;
@@ -730,7 +731,7 @@ public sealed class TransformEngine
                 {
                     var attrName = instruction.Attribute("name")?.Value ?? "unnamed";
                     var attrNs = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
-                    var attrLocalName = GetLocalName(attrName, attrNs);
+                    var (attrLocalName, attrNsUri) = ResolveElementName(instruction, attrName, attrNs);
                     var select = instruction.Attribute("select")?.Value;
                     string value;
                     if (!string.IsNullOrEmpty(select))
@@ -745,7 +746,7 @@ public sealed class TransformEngine
                     }
                     if (_currentContainer is XElement targetElem)
                     {
-                        targetElem.SetAttributeValue(XName.Get(attrLocalName, attrNs ?? ""), value);
+                        targetElem.SetAttributeValue(XName.Get(attrLocalName, attrNsUri), value);
                     }
                     break;
                 }
@@ -2417,5 +2418,32 @@ public sealed class TransformEngine
                 return name[(colon + 1)..];
         }
         return name;
+    }
+
+    /// <summary>
+    /// Resolves the local name and namespace URI for xsl:element / xsl:attribute
+    /// name attributes that may contain a prefix. When no explicit namespace is
+    /// given, the prefix is resolved against the in-scope namespaces of the
+    /// instruction element.
+    /// </summary>
+    private static (string LocalName, string NamespaceUri) ResolveElementName(XElement instruction, string name, string? explicitNamespace)
+    {
+        int colon = name.IndexOf(':');
+        if (colon >= 0)
+        {
+            string prefix = name[..colon];
+            string localName = name[(colon + 1)..];
+            if (explicitNamespace != null)
+                return (localName, explicitNamespace);
+            var ns = instruction.GetNamespaceOfPrefix(prefix);
+            return (localName, ns?.NamespaceName ?? "");
+        }
+        else
+        {
+            if (explicitNamespace != null)
+                return (name, explicitNamespace);
+            var ns = instruction.GetDefaultNamespace();
+            return (name, ns?.NamespaceName ?? "");
+        }
     }
 }
