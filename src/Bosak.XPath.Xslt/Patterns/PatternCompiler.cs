@@ -78,6 +78,12 @@ public sealed class PatternCompiler
             return CompileAttributePattern(name);
         }
 
+        // Path pattern: a/b or a/b/c
+        if (trimmed.Contains('/') && !trimmed.StartsWith("processing-instruction"))
+        {
+            return CompilePathPattern(trimmed);
+        }
+
         // Namespace test: Q{uri}local or prefix:local or *:local or prefix:*
         // For now, handle simple cases
         if (trimmed.Contains('['))
@@ -88,6 +94,45 @@ public sealed class PatternCompiler
 
         // Simple element name or wildcard
         return CompileElementPattern(trimmed);
+    }
+
+    /// <summary>
+    /// Compiles a simple path pattern like <c>a/b</c> or <c>a/b/c</c>.
+    /// The last step is the node test; preceding steps are ancestor checks.
+    /// </summary>
+    private Func<IXdmNode, bool> CompilePathPattern(string pattern)
+    {
+        var steps = pattern.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (steps.Length == 0)
+            return _ => false;
+
+        // Compile the last step as the node test
+        var lastStep = CompileElementPattern(steps[^1]);
+
+        // Compile ancestor checks for preceding steps (in reverse order)
+        var ancestorTests = new List<Func<IXdmNode, bool>>();
+        for (int i = steps.Length - 2; i >= 0; i--)
+        {
+            ancestorTests.Add(CompileElementPattern(steps[i]));
+        }
+
+        return node =>
+        {
+            if (!lastStep(node))
+                return false;
+
+            var current = node.Parent;
+            foreach (var test in ancestorTests)
+            {
+                if (current == null)
+                    return false;
+                if (!test(current))
+                    return false;
+                current = current.Parent;
+            }
+
+            return true;
+        };
     }
 
     private Func<IXdmNode, bool> CompileElementPattern(string name)
