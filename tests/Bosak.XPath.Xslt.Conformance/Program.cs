@@ -216,6 +216,15 @@ class Program
             {
                 sourceNode = LoadEnvironment(envElem, testSetDir, catalogDir, ns);
             }
+            else
+            {
+                // Check for inline environment defined directly in the test case
+                var inlineEnv = testCase.Element(ns + "environment");
+                if (inlineEnv != null)
+                {
+                    sourceNode = LoadEnvironment(inlineEnv, testSetDir, catalogDir, ns);
+                }
+            }
 
             // Load test (stylesheet(s))
             var testElem = testCase.Element(ns + "test");

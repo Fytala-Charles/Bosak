@@ -604,6 +604,21 @@ public sealed class IrLowerer
             {
                 namePoolIdx = AddToLiteralPool(node.NodeTest.Name);
             }
+            else if (node.NodeTest.Kind == NameTestKind.NamespaceAny)
+            {
+                // prefix:* — namespace-aware matching not yet fully implemented.
+                // Fall back to matching any name of the principal node kind to avoid crash.
+                afterTestReg = AllocRegister();
+                string principalKind = node.Axis switch
+                {
+                    XdmAxis.Attribute => "attribute",
+                    XdmAxis.Namespace => "namespace",
+                    _ => "element"
+                };
+                int kindPoolIdx = AddToLiteralPool(principalKind);
+                Emit(IrOpCode.KindTest, (byte)afterTestReg, (byte)axisReg, operand: kindPoolIdx);
+                axisReg = afterTestReg;
+            }
             else if (node.NodeTest.Kind == NameTestKind.KindTest)
             {
                 namePoolIdx = AddToLiteralPool(node.NodeTest.Name ?? "node");
@@ -611,7 +626,7 @@ public sealed class IrLowerer
                 axisReg = afterTestReg;
             }
 
-            if (node.NodeTest.Kind != NameTestKind.KindTest)
+            if (node.NodeTest.Kind != NameTestKind.KindTest && node.NodeTest.Kind != NameTestKind.NamespaceAny)
             {
                 Emit(IrOpCode.NameTest, (byte)afterTestReg, (byte)axisReg, operand: namePoolIdx);
             }

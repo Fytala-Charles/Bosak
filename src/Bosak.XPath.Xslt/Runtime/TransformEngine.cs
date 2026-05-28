@@ -210,6 +210,7 @@ public sealed class TransformEngine
             _xsltFunctionCallDepth--;
             _context.RestoreVariables(snapshot);
             _context.WithFocus(savedFocus, savedPosition, savedSize);
+            _context.WithFocus(_context.ContextItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
         }
     }
@@ -471,7 +472,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Implements xsl:apply-templates: selects nodes and processes each with the best-matching template.
     /// </summary>
-    public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
+    public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null)
     {
         // Resolve mode aliases
         var resolvedMode = ResolveMode(mode);
@@ -492,6 +493,8 @@ public sealed class TransformEngine
                 var compiled = XPath31Expression.Compile(select);
                 var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
                 nodes = EnumerateNodes(result).ToList();
+                // XSLT apply-templates processes nodes in document order
+                nodes.Sort((a, b) => a.DocumentOrder.CompareTo(b.DocumentOrder));
             }
 
             // Apply xsl:sort if present
@@ -500,17 +503,20 @@ public sealed class TransformEngine
                 nodes = SortNodes(nodes, sortKeys);
             }
 
+            int pos = 1;
+            int last = nodes.Count;
             foreach (var node in nodes)
             {
                 var rule = FindBestTemplate(node, resolvedMode);
                 if (rule != null)
                 {
-                    ExecuteTemplate(rule, node, callParams: null, incomingTunnelParams);
+                    ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last);
                 }
                 else
                 {
-                    ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams);
+                    ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, position: pos, last: last);
                 }
+                pos++;
             }
         }
         finally
@@ -538,14 +544,16 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the body of a template rule against the current node.
     /// </summary>
-    public void ExecuteTemplate(Stylesheet.TemplateRule rule, IXdmNode currentNode, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
-        => ExecuteTemplate(rule, XdmValue.FromNode(currentNode), callParams, incomingTunnelParams);
+    public void ExecuteTemplate(Stylesheet.TemplateRule rule, IXdmNode currentNode, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1)
+        => ExecuteTemplate(rule, XdmValue.FromNode(currentNode), callParams, incomingTunnelParams, position, last);
 
-    public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
+    public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1)
     {
         // Update context to current item
         var savedCurrent = _context.CurrentItem;
-        _context.WithFocus(contextItem, 1, 1);
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        _context.WithFocus(contextItem, position, last);
         _context.WithCurrentItem(contextItem);
 
         // Snapshot current variables for lexical scoping
@@ -640,6 +648,7 @@ public sealed class TransformEngine
         finally
         {
             _context.RestoreVariables(snapshot);
+            _context.WithFocus(_context.ContextItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
             _tunnelParamStack.Pop();
         }
@@ -666,7 +675,7 @@ public sealed class TransformEngine
             if (!_allNamedTemplates.TryGetValue(name, out var rule))
                 throw new InvalidOperationException($"Named template '{name}' not found.");
 
-            ExecuteTemplate(rule, contextItem, withParams, incomingTunnelParams);
+            ExecuteTemplate(rule, contextItem, withParams, incomingTunnelParams, _context.ContextPosition, _context.ContextSize);
         }
         finally
         {
@@ -884,7 +893,7 @@ public sealed class TransformEngine
                         }
                     }
 
-                    ApplyTemplates(node, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams);
+                    ApplyTemplates(node, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams);
                     break;
                 }
 
@@ -1295,9 +1304,28 @@ public sealed class TransformEngine
         }
         else if (value.IsSequence && value.SequenceValue != null)
         {
+            // XSLT 2.0: consecutive atomic values in complex content are joined
+            // with a single space (#x20) separator before becoming a text node.
+            var atomics = new List<string>();
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
             {
-                CopyToResult(item);
+                if (item.IsNode && item.NodeValue != null)
+                {
+                    if (atomics.Count > 0)
+                    {
+                        _currentContainer.Add(new XText(string.Join(" ", atomics)));
+                        atomics.Clear();
+                    }
+                    CopyToResult(item);
+                }
+                else
+                {
+                    atomics.Add(item.ToString());
+                }
+            }
+            if (atomics.Count > 0)
+            {
+                _currentContainer.Add(new XText(string.Join(" ", atomics)));
             }
         }
         else
@@ -1362,9 +1390,12 @@ public sealed class TransformEngine
     /// Applies built-in template rules when no explicit template matches.
     /// Respects xsl:mode on-no-match declarations.
     /// </summary>
-    public void ApplyBuiltInRules(IXdmNode node, string mode, Dictionary<string, XdmValue>? incomingTunnelParams = null)
+    public void ApplyBuiltInRules(IXdmNode node, string mode, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1)
     {
         var savedCurrent = _context.CurrentItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        _context.WithFocus(XdmValue.FromNode(node), position, last);
         _context.WithCurrentItem(XdmValue.FromNode(node));
         try
         {
@@ -1422,19 +1453,19 @@ public sealed class TransformEngine
 
                     var previousContainer = _currentContainer;
                     _currentContainer = copy;
-                    ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams);
+                    ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
                     _currentContainer = previousContainer;
                 }
                 break;
 
             case Stylesheet.OnNoMatch.ShallowSkip:
                 // Skip element node, only apply-templates to children
-                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams);
+                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
                 break;
 
             case Stylesheet.OnNoMatch.TextOnlyCopy:
                 // Recurse to children without copying the element wrapper
-                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams);
+                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
                 break;
 
             case Stylesheet.OnNoMatch.DeepCopy:

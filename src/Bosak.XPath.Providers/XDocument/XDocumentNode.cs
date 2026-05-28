@@ -291,11 +291,25 @@ public sealed class XDocumentNode : IXdmNode
         return MaterializedSequence.FromList(items);
     }
 
+    /// <summary>
+    /// Returns the XPath parent of this node. In LINQ to XML the root element's
+    /// <see cref="XObject.Parent"/> is <c>null</c>; this helper maps it to the
+    /// owning <see cref="XDocument"/> so ancestor axes include the document node.
+    /// </summary>
+    private XObject? GetXPathParent(XObject node)
+    {
+        var parent = node.Parent;
+        if (parent is not null) return parent;
+        if (node is XElement elem && elem.Document is not null && elem.Document.Root == elem)
+            return elem.Document;
+        if (node == _node && _isNamespaceNode && _namespaceOwner is not null)
+            return _namespaceOwner;
+        return null;
+    }
+
     private XdmSequence GetParentAxis()
     {
-        var parent = _node.Parent;
-        if (parent is null && _isNamespaceNode && _namespaceOwner is not null)
-            parent = _namespaceOwner;
+        var parent = GetXPathParent(_node);
         return parent is not null
             ? XdmSequence.Singleton(XdmValue.FromNode(new XDocumentNode(parent)))
             : XdmSequence.Empty;
@@ -304,11 +318,11 @@ public sealed class XDocumentNode : IXdmNode
     private XdmSequence GetAncestorAxis()
     {
         var items = new List<XdmValue>();
-        var current = _node.Parent;
+        var current = GetXPathParent(_node);
         while (current is not null)
         {
             items.Add(XdmValue.FromNode(new XDocumentNode(current)));
-            current = current.Parent;
+            current = GetXPathParent(current);
         }
         return MaterializedSequence.FromList(items);
     }
@@ -316,11 +330,11 @@ public sealed class XDocumentNode : IXdmNode
     private XdmSequence GetAncestorOrSelfAxis()
     {
         var items = new List<XdmValue> { XdmValue.FromNode(this) };
-        var current = _node.Parent;
+        var current = GetXPathParent(_node);
         while (current is not null)
         {
             items.Add(XdmValue.FromNode(new XDocumentNode(current)));
-            current = current.Parent;
+            current = GetXPathParent(current);
         }
         return MaterializedSequence.FromList(items);
     }

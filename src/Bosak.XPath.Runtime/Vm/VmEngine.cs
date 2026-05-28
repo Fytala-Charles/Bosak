@@ -4399,39 +4399,55 @@ public static class VmEngine
     private static bool IsDecimal(XdmValue value) =>
         value.Kind == XdmValueKind.Decimal;
 
-    private static double ToDouble(XdmValue value) => value.Kind switch
+    private static double ToDouble(XdmValue value)
     {
-        XdmValueKind.Integer => value.IntegerValue,
-        XdmValueKind.Decimal => (double)value.DecimalValue,
-        XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
-        XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
-        _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw new InvalidOperationException($"Cannot convert {value.Kind} to double")
-    };
+        value = Atomize(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (double)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
+            XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
+            _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw new InvalidOperationException($"Cannot convert {value.Kind} to double")
+        };
+    }
 
-    private static decimal ToDecimal(XdmValue value) => value.Kind switch
+    private static decimal ToDecimal(XdmValue value)
     {
-        XdmValueKind.Integer => value.IntegerValue,
-        XdmValueKind.Decimal => value.DecimalValue,
-        XdmValueKind.Double or XdmValueKind.Float => (decimal)value.DoubleValue,
-        _ => decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw new InvalidOperationException($"Cannot convert {value.Kind} to decimal")
-    };
+        value = Atomize(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => (decimal)value.DoubleValue,
+            _ => decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw new InvalidOperationException($"Cannot convert {value.Kind} to decimal")
+        };
+    }
 
-    private static long ToInteger(XdmValue value) => value.Kind switch
+    private static long ToInteger(XdmValue value)
     {
-        XdmValueKind.Integer => value.IntegerValue,
-        XdmValueKind.Decimal => (long)value.DecimalValue,
-        XdmValueKind.Double or XdmValueKind.Float => (long)value.DoubleValue,
-        _ => long.TryParse(value.ToString(), out var l) ? l : throw new InvalidOperationException($"Cannot convert {value.Kind} to integer")
-    };
+        value = Atomize(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (long)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => (long)value.DoubleValue,
+            _ => long.TryParse(value.ToString(), out var l) ? l : throw new InvalidOperationException($"Cannot convert {value.Kind} to integer")
+        };
+    }
 
-    private static float ToFloat(XdmValue value) => value.Kind switch
+    private static float ToFloat(XdmValue value)
     {
-        XdmValueKind.Integer => value.IntegerValue,
-        XdmValueKind.Decimal => (float)value.DecimalValue,
-        XdmValueKind.Double or XdmValueKind.Float => (float)value.DoubleValue,
-        XdmValueKind.Boolean => value.BooleanValue ? 1.0f : 0.0f,
-        _ => float.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var f) ? f : throw new InvalidOperationException($"Cannot convert {value.Kind} to float")
-    };
+        value = Atomize(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (float)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => (float)value.DoubleValue,
+            XdmValueKind.Boolean => value.BooleanValue ? 1.0f : 0.0f,
+            _ => float.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var f) ? f : throw new InvalidOperationException($"Cannot convert {value.Kind} to float")
+        };
+    }
 
     // ------------------------------------------------------------------
     // Opcode helpers
