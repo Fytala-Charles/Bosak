@@ -760,7 +760,7 @@ public sealed class XPathParser
             // prefix:*
             if (Match(TokenKind.Colon) && Match(TokenKind.Star))
             {
-                return new NodeTest(NameTestKind.NamespaceAny, prefix);
+                return new NodeTest(NameTestKind.NamespaceAny, name);
             }
 
             if (prefix is null)

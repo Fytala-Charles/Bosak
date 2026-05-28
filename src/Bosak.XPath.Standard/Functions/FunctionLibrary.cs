@@ -1347,6 +1347,58 @@ public static class FunctionLibrary
                 Implementation = DefaultCollation
             },
 
+            // ----- fn:system-property -----------------------------------------
+            [(Namespaces.Fn, "system-property", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "system-property", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = SystemProperty
+            },
+
+            // ----- fn:available-system-properties -------------------------------
+            [(Namespaces.Fn, "available-system-properties", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "available-system-properties", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = AvailableSystemProperties
+            },
+
+            // ----- fn:function-available ----------------------------------------
+            [(Namespaces.Fn, "function-available", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "function-available", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = FunctionAvailable
+            },
+            [(Namespaces.Fn, "function-available", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "function-available", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = FunctionAvailable
+            },
+
+            // ----- fn:type-available --------------------------------------------
+            [(Namespaces.Fn, "type-available", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "type-available", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = TypeAvailable
+            },
+
+            // ----- fn:static-base-uri -------------------------------------------
+            [(Namespaces.Fn, "static-base-uri", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "static-base-uri", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.String,
+                Implementation = StaticBaseUri
+            },
+
             // ----- fn:current-date --------------------------------------------
             [(Namespaces.Fn, "current-date", 0)] = new()
             {
@@ -2626,6 +2678,22 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Node,
                 Implementation = CopyOf_1
             },
+
+            // ----- fn:in-scope-prefixes / fn:namespace-uri-for-prefix --------
+            [(Namespaces.Fn, "in-scope-prefixes", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "in-scope-prefixes", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = InScopePrefixes
+            },
+            [(Namespaces.Fn, "namespace-uri-for-prefix", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "namespace-uri-for-prefix", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node],
+                ReturnType = XdmValueKind.String,
+                Implementation = NamespaceUriForPrefix
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -3196,6 +3264,127 @@ public static class FunctionLibrary
 
     private static XdmValue DefaultCollation(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString(CodepointCollation);
+
+    private static readonly string[] SystemProperties =
+    [
+        "xsl:version", "xsl:vendor", "xsl:vendor-url",
+        "xsl:product-name", "xsl:product-version",
+        "xsl:is-schema-aware", "xsl:supports-serialization",
+        "xsl:supports-backwards-compatibility", "xsl:supports-namespace-axis"
+    ];
+
+    private static XdmValue SystemProperty(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string name = AtomizedString(args[0]);
+        string value = name switch
+        {
+            "xsl:version" => "3.0",
+            "xsl:vendor" => "Bosak",
+            "xsl:vendor-url" => "https://github.com/poco-irrilevante/Bosak",
+            "xsl:product-name" => "Bosak XPath",
+            "xsl:product-version" => "1.0",
+            "xsl:is-schema-aware" => "no",
+            "xsl:supports-serialization" => "yes",
+            "xsl:supports-backwards-compatibility" => "yes",
+            "xsl:supports-namespace-axis" => "yes",
+            _ => ""
+        };
+        return XdmValue.FromString(value);
+    }
+
+    private static XdmValue AvailableSystemProperties(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = new List<XdmValue>();
+        foreach (var prop in SystemProperties)
+            items.Add(XdmValue.FromString(prop));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    private static XdmValue StaticBaseUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        // Return the static base URI of the containing expression, if known.
+        // For now, return empty sequence since we don't track static base URI.
+        return XdmValue.Undefined;
+    }
+
+    private static XdmValue TypeAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string name = AtomizedString(args[0]);
+        // For now, return true for common built-in schema types that are always available
+        string localName = name;
+        if (name.StartsWith("{"))
+        {
+            int close = name.IndexOf('}');
+            if (close > 0)
+                localName = name.Substring(close + 1);
+        }
+        else
+        {
+            int colon = name.IndexOf(':');
+            if (colon > 0)
+                localName = name.Substring(colon + 1);
+        }
+        localName = localName.ToLowerInvariant();
+        string[] builtInTypes =
+        [
+            "string", "boolean", "integer", "decimal", "float", "double",
+            "date", "time", "datetime", "dateTime", "duration", "yearmonthduration",
+            "yearMonthDuration", "daytimeduration", "dayTimeDuration",
+            "gday", "gmonth", "gyear", "gmonthday", "gyearmonth",
+            "hexbinary", "base64binary", "anyuri", "qname", "notation",
+            "normalizedstring", "token", "language", "nmtoken", "name", "ncname",
+            "id", "idref", "entity", "int", "long", "short", "byte",
+            "nonnegativeinteger", "positiveinteger", "unsignedlong", "unsignedint",
+            "unsignedshort", "unsignedbyte", "nonpositiveinteger", "negativeinteger",
+            "untyped", "anytype", "anysimpletype", "untypedatomic", "anyatomictype"
+        ];
+        return XdmValue.FromBoolean(builtInTypes.Contains(localName));
+    }
+
+    private static XdmValue FunctionAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string name = AtomizedString(args[0]);
+        int arity = args.Length > 1 ? (int)args[1].IntegerValue : -1;
+
+        // Parse the name - may be a Clark name {uri}local or a simple local name
+        string nsUri = Namespaces.Fn;
+        string localName = name;
+        if (name.StartsWith("{"))
+        {
+            int close = name.IndexOf('}');
+            if (close > 0)
+            {
+                nsUri = name.Substring(1, close - 1);
+                localName = name.Substring(close + 1);
+            }
+        }
+        else
+        {
+            int colon = name.IndexOf(':');
+            if (colon > 0)
+            {
+                string prefix = name.Substring(0, colon);
+                localName = name.Substring(colon + 1);
+                if (ctx.TryResolveNamespace(prefix, out var resolvedNs))
+                    nsUri = resolvedNs;
+            }
+        }
+
+        if (arity >= 0)
+        {
+            return XdmValue.FromBoolean(ctx.TryResolveFunction(nsUri, localName, arity, out _));
+        }
+        else
+        {
+            // Check any arity
+            for (int a = 0; a <= 10; a++)
+            {
+                if (ctx.TryResolveFunction(nsUri, localName, a, out _))
+                    return XdmValue.FromBoolean(true);
+            }
+            return XdmValue.FromBoolean(false);
+        }
+    }
 
     private static XdmValue ImplicitTimezone(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -8039,6 +8228,81 @@ public static class FunctionLibrary
             }
         }
         return copy;
+    }
+
+    private static XdmValue InScopePrefixes(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = args[0].IsNode ? args[0].NodeValue : null;
+        if (node == null || node.NodeKind != XdmNodeKind.Element)
+            return XdmValue.Undefined;
+
+        var prefixes = new List<XdmValue>();
+        var seen = new HashSet<string>();
+
+        if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
+        {
+            foreach (var attr in elem.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration)
+                {
+                    var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                    if (seen.Add(prefix))
+                        prefixes.Add(XdmValue.FromString(prefix));
+                }
+            }
+            // Walk up ancestors
+            var current = elem.Parent;
+            while (current != null)
+            {
+                foreach (var attr in current.Attributes())
+                {
+                    if (attr.IsNamespaceDeclaration)
+                    {
+                        var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                        if (seen.Add(prefix))
+                            prefixes.Add(XdmValue.FromString(prefix));
+                    }
+                }
+                current = current.Parent;
+            }
+        }
+
+        // xml prefix is always in scope
+        if (seen.Add("xml"))
+            prefixes.Add(XdmValue.FromString("xml"));
+
+        return XdmValue.FromSequence(MaterializedSequence.FromList(prefixes));
+    }
+
+    private static XdmValue NamespaceUriForPrefix(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var prefix = AtomizedString(args[0]);
+        var node = args[1].IsNode ? args[1].NodeValue : null;
+        if (node == null || node.NodeKind != XdmNodeKind.Element)
+            return XdmValue.Undefined;
+
+        if (prefix == "xml")
+            return XdmValue.FromString("http://www.w3.org/XML/1998/namespace");
+
+        if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
+        {
+            var current = elem;
+            while (current != null)
+            {
+                foreach (var attr in current.Attributes())
+                {
+                    if (attr.IsNamespaceDeclaration)
+                    {
+                        var attrPrefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                        if (attrPrefix == prefix)
+                            return XdmValue.FromString(attr.Value);
+                    }
+                }
+                current = current.Parent;
+            }
+        }
+
+        return XdmValue.Undefined;
     }
 }
 

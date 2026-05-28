@@ -347,6 +347,10 @@ public sealed class XDocumentNode : IXdmNode
         var items = new List<XdmValue>();
         foreach (var attr in element.Attributes())
         {
+            // Namespace declarations are not attributes in the XPath data model;
+            // they belong to the namespace axis.
+            if (attr.IsNamespaceDeclaration)
+                continue;
             items.Add(XdmValue.FromNode(new XDocumentNode(attr)));
         }
         return MaterializedSequence.FromList(items);

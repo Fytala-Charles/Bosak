@@ -89,6 +89,7 @@ public enum IrOpCode : byte
     // ---- Node tests --------------------------------------------------
     NameTest,
     KindTest,
+    NamespaceTest,
     
     // ---- Predicates / Filtering ---------------------------------------
     Filter,

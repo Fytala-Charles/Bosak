@@ -606,8 +606,7 @@ public sealed class IrLowerer
             }
             else if (node.NodeTest.Kind == NameTestKind.NamespaceAny)
             {
-                // prefix:* — namespace-aware matching not yet fully implemented.
-                // Fall back to matching any name of the principal node kind to avoid crash.
+                // prefix:* — emit KindTest for principal node kind, then NamespaceTest.
                 afterTestReg = AllocRegister();
                 string principalKind = node.Axis switch
                 {
@@ -617,6 +616,11 @@ public sealed class IrLowerer
                 };
                 int kindPoolIdx = AddToLiteralPool(principalKind);
                 Emit(IrOpCode.KindTest, (byte)afterTestReg, (byte)axisReg, operand: kindPoolIdx);
+                axisReg = afterTestReg;
+
+                int nsPoolIdx = AddToLiteralPool(node.NodeTest.Name ?? ""); // prefix
+                afterTestReg = AllocRegister();
+                Emit(IrOpCode.NamespaceTest, (byte)afterTestReg, (byte)axisReg, operand: nsPoolIdx);
                 axisReg = afterTestReg;
             }
             else if (node.NodeTest.Kind == NameTestKind.KindTest)

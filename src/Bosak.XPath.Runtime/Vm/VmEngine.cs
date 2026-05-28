@@ -631,6 +631,24 @@ public static class VmEngine
                         break;
                     }
 
+                case IrOpCode.NamespaceTest:
+                    {
+                        string prefix = (string)literalPool[instr.Operand]!;
+                        var input = registers[instr.RegisterB];
+                        XdmValue filtered;
+                        if (context.TryResolveNamespace(prefix, out var nsUri))
+                        {
+                            filtered = FilterNodes(input, n => n.NamespaceUri == nsUri);
+                        }
+                        else
+                        {
+                            filtered = XdmValue.Undefined;
+                        }
+                        registers[instr.RegisterA] = filtered;
+                        ip++;
+                        break;
+                    }
+
                 // ------------------------------------------------------------------
                 // Predicates / Filtering
                 // ------------------------------------------------------------------

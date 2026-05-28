@@ -756,8 +756,10 @@ public sealed class TransformEngine
         {
             case "element":
                 {
-                    var elemName = instruction.Attribute("name")?.Value ?? "unnamed";
-                    var elemNs = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
+                    var elemNameRaw = instruction.Attribute("name")?.Value ?? "unnamed";
+                    var elemName = EvaluateAvt(elemNameRaw);
+                    var elemNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
+                    var elemNs = elemNsRaw != null ? EvaluateAvt(elemNsRaw) : null;
                     var (elemLocalName, elemNsUri) = ResolveElementName(instruction, elemName, elemNs);
                     var elem = new XElement(XName.Get(elemLocalName, elemNsUri));
                     _currentContainer.Add(elem);
@@ -785,8 +787,10 @@ public sealed class TransformEngine
 
             case "attribute":
                 {
-                    var attrName = instruction.Attribute("name")?.Value ?? "unnamed";
-                    var attrNs = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
+                    var attrNameRaw = instruction.Attribute("name")?.Value ?? "unnamed";
+                    var attrName = EvaluateAvt(attrNameRaw);
+                    var attrNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
+                    var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw) : null;
                     var (attrLocalName, attrNsUri) = ResolveElementName(instruction, attrName, attrNs);
                     var select = instruction.Attribute("select")?.Value;
                     string value;
@@ -1553,6 +1557,12 @@ public sealed class TransformEngine
         {
             _currentContainer.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
         }
+        else if (node.NodeKind == XdmNodeKind.Attribute && _currentContainer is XElement parent)
+        {
+            parent.SetAttributeValue(
+                XName.Get(node.LocalName, node.NamespaceUri),
+                node.StringValue);
+        }
     }
 
     /// <summary>
@@ -1679,7 +1689,7 @@ public sealed class TransformEngine
     /// </summary>
     private void RegisterKeyFunction()
     {
-        var signature = new Bosak.XPath.Runtime.Functions.FunctionSignature
+        var signature2 = new Bosak.XPath.Runtime.Functions.FunctionSignature
         {
             NamespaceUri = "http://www.w3.org/2005/xpath-functions",
             LocalName = "key",
@@ -1688,7 +1698,18 @@ public sealed class TransformEngine
             ReturnType = XdmValueKind.Sequence,
             Implementation = KeyFunctionImpl
         };
-        _context.RegisterFunction(signature);
+        _context.RegisterFunction(signature2);
+
+        var signature3 = new Bosak.XPath.Runtime.Functions.FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "key",
+            Arity = 3,
+            ParameterTypes = [XdmValueKind.String, XdmValueKind.Undefined, XdmValueKind.Node],
+            ReturnType = XdmValueKind.Sequence,
+            Implementation = KeyFunctionImpl
+        };
+        _context.RegisterFunction(signature3);
     }
 
     private XdmValue KeyFunctionImpl(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
