@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added CopyNodeToResult for Document nodes; skip default params if already in context     |
 //                      | Charles Korthout | 1.4   | 28-05-2026     | EvaluateSequenceConstructor wraps in document node per XSLT 2.0; respects as attribute   |
+//                      | Charles Korthout | 1.5   | 28-05-2026     | SortItems restores focus after sorting; NaN sorts before numbers per XSLT spec          |
 //                      | Charles Korthout | 1.1   | 27-05-2026     | Added xsl:function registration, ExecuteXsltFunction, EvaluateFunctionBody, xsl:sequence |
 //                      | Charles Korthout | 1.2   | 27-05-2026     | Added multi-key xsl:sort with composite comparator and stable sort                          |
 //                      | Charles Korthout | 0.8   | 26-05-2026     | Added xsl:copy, fixed for-each variable scoping, AVT evaluation in literal elements      |
@@ -1716,40 +1717,50 @@ public sealed class TransformEngine
 
     private List<XdmValue> SortItems(List<XdmValue> items, List<XElement> sortSpecs)
     {
-        // Pre-compute all sort keys for every item, preserving original order for stability.
-        var keyed = new List<SortEntry>();
-        for (int idx = 0; idx < items.Count; idx++)
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        try
         {
-            var item = items[idx];
-            _context.WithFocus(item, 1, 1);
-            var keys = new List<SortKey>();
-            foreach (var spec in sortSpecs)
+            // Pre-compute all sort keys for every item, preserving original order for stability.
+            var keyed = new List<SortEntry>();
+            for (int idx = 0; idx < items.Count; idx++)
             {
-                var select = spec.Attribute("select")?.Value ?? ".";
-                var dataType = spec.Attribute("data-type")?.Value ?? "text";
-                var order = spec.Attribute("order")?.Value ?? "ascending";
-                var descending = order.Trim().ToLowerInvariant() == "descending";
-                var isNumeric = dataType.Trim().ToLowerInvariant() == "number";
+                var item = items[idx];
+                _context.WithFocus(item, 1, 1);
+                var keys = new List<SortKey>();
+                foreach (var spec in sortSpecs)
+                {
+                    var select = spec.Attribute("select")?.Value ?? ".";
+                    var dataType = spec.Attribute("data-type")?.Value ?? "text";
+                    var order = spec.Attribute("order")?.Value ?? "ascending";
+                    var descending = order.Trim().ToLowerInvariant() == "descending";
+                    var isNumeric = dataType.Trim().ToLowerInvariant() == "number";
 
-                var compiled = XPath31Expression.Compile(select);
-                var keyValue = compiled.Evaluate(_context);
-                keys.Add(new SortKey(keyValue, descending, isNumeric));
+                    var compiled = XPath31Expression.Compile(select);
+                    var keyValue = compiled.Evaluate(_context);
+                    keys.Add(new SortKey(keyValue, descending, isNumeric));
+                }
+                keyed.Add(new SortEntry(item, keys, idx));
             }
-            keyed.Add(new SortEntry(item, keys, idx));
+
+            keyed.Sort((a, b) =>
+            {
+                for (int i = 0; i < a.Keys.Count; i++)
+                {
+                    var cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
+                    if (cmp != 0) return cmp;
+                }
+                // Stable sort: preserve original relative order when all keys equal
+                return a.OriginalIndex.CompareTo(b.OriginalIndex);
+            });
+
+            return keyed.Select(k => k.Item).ToList();
         }
-
-        keyed.Sort((a, b) =>
+        finally
         {
-            for (int i = 0; i < a.Keys.Count; i++)
-            {
-                var cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
-                if (cmp != 0) return cmp;
-            }
-            // Stable sort: preserve original relative order when all keys equal
-            return a.OriginalIndex.CompareTo(b.OriginalIndex);
-        });
-
-        return keyed.Select(k => k.Item).ToList();
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+        }
     }
 
     private readonly record struct SortKey(XdmValue Value, bool Descending, bool IsNumeric);
@@ -1773,8 +1784,8 @@ public sealed class TransformEngine
         bool aOk = double.TryParse(sa, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double da);
         bool bOk = double.TryParse(sb, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double db);
         if (!aOk && !bOk) return 0;
-        if (!aOk) return 1;
-        if (!bOk) return -1;
+        if (!aOk) return -1;  // NaN is less than any number (XSLT spec)
+        if (!bOk) return 1;   // any number is greater than NaN
         return da.CompareTo(db);
     }
 
