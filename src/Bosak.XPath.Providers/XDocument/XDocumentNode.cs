@@ -176,7 +176,7 @@ public sealed class XDocumentNode : IXdmNode
         {
             if (_isNamespaceNode)
                 return _namespaceOwner is not null ? new XDocumentNode(_namespaceOwner) : null;
-            var parent = _node.Parent;
+            var parent = GetXPathParent(_node);
             return parent is not null ? new XDocumentNode(parent) : null;
         }
     }

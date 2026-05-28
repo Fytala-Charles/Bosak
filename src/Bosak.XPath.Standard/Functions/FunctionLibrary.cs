@@ -2610,6 +2610,22 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Undefined,
                 Implementation = JsonDoc_2
             },
+
+            // ----- fn:copy-of (XSLT 3.0) ------------------------------------
+            [(Namespaces.Fn, "copy-of", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "copy-of", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Node,
+                Implementation = CopyOf_0
+            },
+            [(Namespaces.Fn, "copy-of", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "copy-of", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Node,
+                Implementation = CopyOf_1
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -7471,9 +7487,24 @@ public static class FunctionLibrary
     private static XdmValue ResolveQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var lexical = AtomizedString(args[0]);
-        var node = args[1].NodeValue;
+        IXdmNode? node = null;
+        if (args[1].IsSequence && args[1].SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(args[1].SequenceValue))
+            {
+                if (item.IsNode)
+                {
+                    node = item.NodeValue;
+                    break;
+                }
+            }
+        }
+        else if (args[1].IsNode)
+        {
+            node = args[1].NodeValue;
+        }
 
-        if (string.IsNullOrEmpty(lexical))
+        if (node == null || string.IsNullOrEmpty(lexical))
             return XdmValue.Undefined;
 
         string prefix;
@@ -7907,6 +7938,107 @@ public static class FunctionLibrary
         }
 
         return ParseJson(ctx, json, options);
+    }
+
+    private static XdmValue CopyOf_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            return XdmValue.Undefined;
+        return CopyOf(item);
+    }
+
+    private static XdmValue CopyOf_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = args[0];
+        if (item.IsUndefined)
+            return XdmValue.Undefined;
+        return CopyOf(item);
+    }
+
+    private static XdmValue CopyOf(XdmValue item)
+    {
+        if (item.IsNode && item.NodeValue != null)
+        {
+            var copied = DeepCopyNode(item.NodeValue);
+            if (copied != null)
+                return XdmValue.FromNode(copied);
+        }
+        // For atomic values, return the value itself (copy-of on atomic is identity)
+        return item;
+    }
+
+    private static IXdmNode? DeepCopyNode(IXdmNode node)
+    {
+        if (node is Providers.Xml.XDocumentNode xdocNode)
+        {
+            var obj = xdocNode.UnderlyingObject;
+            switch (obj)
+            {
+                case XElement elem:
+                    return new Providers.Xml.XDocumentNode(DeepCopyElement(elem));
+                case XDocument doc:
+                    return new Providers.Xml.XDocumentNode(DeepCopyDocument(doc));
+                case XText text:
+                    return new Providers.Xml.XDocumentNode(new XText(text.Value));
+                case XComment comment:
+                    return new Providers.Xml.XDocumentNode(new XComment(comment.Value));
+                case XProcessingInstruction pi:
+                    return new Providers.Xml.XDocumentNode(new XProcessingInstruction(pi.Target, pi.Data));
+                case XAttribute attr:
+                    return new Providers.Xml.XDocumentNode(new XAttribute(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value));
+            }
+        }
+        return null;
+    }
+
+    private static XElement DeepCopyElement(XElement element)
+    {
+        var copy = new XElement(XName.Get(element.Name.LocalName, element.Name.NamespaceName));
+        foreach (var attr in element.Attributes())
+        {
+            copy.SetAttributeValue(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
+        }
+        foreach (var child in element.Nodes())
+        {
+            switch (child)
+            {
+                case XElement childElem:
+                    copy.Add(DeepCopyElement(childElem));
+                    break;
+                case XText text:
+                    copy.Add(new XText(text.Value));
+                    break;
+                case XComment comment:
+                    copy.Add(new XComment(comment.Value));
+                    break;
+                case XProcessingInstruction pi:
+                    copy.Add(new XProcessingInstruction(pi.Target, pi.Data));
+                    break;
+            }
+        }
+        return copy;
+    }
+
+    private static XDocument DeepCopyDocument(XDocument document)
+    {
+        var copy = new XDocument();
+        foreach (var node in document.Nodes())
+        {
+            switch (node)
+            {
+                case XElement elem:
+                    copy.Add(DeepCopyElement(elem));
+                    break;
+                case XComment comment:
+                    copy.Add(new XComment(comment.Value));
+                    break;
+                case XProcessingInstruction pi:
+                    copy.Add(new XProcessingInstruction(pi.Target, pi.Data));
+                    break;
+            }
+        }
+        return copy;
     }
 }
 

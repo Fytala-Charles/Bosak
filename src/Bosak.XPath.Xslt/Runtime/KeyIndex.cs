@@ -83,9 +83,9 @@ public sealed class KeyIndex
         return index;
     }
 
-    private static void IndexNodes(IXdmNode node, string keyName, Func<IXdmNode, bool> match, XPath31Expression useExpr, EvaluationContext context, KeyIndex index)
+    private static void IndexNodes(IXdmNode node, string keyName, Patterns.PatternPredicate match, XPath31Expression useExpr, EvaluationContext context, KeyIndex index)
     {
-        if (match(node))
+        if (match(node, context))
         {
             var keyValues = useExpr.Evaluate(context.WithFocus(XdmValue.FromNode(node), 1, 1));
             foreach (var keyValue in ExtractKeyValues(keyValues))

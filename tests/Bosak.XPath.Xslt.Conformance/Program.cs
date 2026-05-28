@@ -49,7 +49,8 @@ class Program
         // Deep xsl:call-template recursion tests
         "call-template-1001",
         "call-template-1002",
-        "call-template-1003"
+        "call-template-1003",
+        // Temporarily skipping tests to isolate stack overflow - NONE currently
     };
 
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
@@ -185,6 +186,7 @@ class Program
         }
 
         // Console.WriteLine($"  RUN  {name}");
+        File.WriteAllText("last_test.txt", name);
 
         try
         {
@@ -437,7 +439,7 @@ class Program
             // Normalize whitespace for comparison
             var normActual = NormalizeXml(actual);
             var normExpected = NormalizeXml(expected);
-            return normActual == normExpected || actual.Trim() == expected;
+            return normActual == normExpected || actual.Trim() == expected || XmlEquals(actual, expected);
         }
 
         // assert-string-value
@@ -564,6 +566,79 @@ class Program
         catch
         {
             return xml.Trim();
+        }
+    }
+
+    /// <summary>
+    /// Compares two XML strings for semantic equality, ignoring differences in
+    /// namespace declaration placement and attribute order.
+    /// </summary>
+    static bool XmlEquals(string xml1, string xml2)
+    {
+        try
+        {
+            var doc1 = XDocument.Parse(xml1);
+            var doc2 = XDocument.Parse(xml2);
+            return XmlNodesEqual(doc1.Root, doc2.Root);
+        }
+        catch
+        {
+            return xml1.Trim() == xml2.Trim();
+        }
+    }
+
+    static bool XmlNodesEqual(XNode? node1, XNode? node2)
+    {
+        if (node1 == null && node2 == null) return true;
+        if (node1 == null || node2 == null) return false;
+
+        if (node1.NodeType != node2.NodeType) return false;
+
+        switch (node1.NodeType)
+        {
+            case System.Xml.XmlNodeType.Element:
+                {
+                    var e1 = (XElement)node1;
+                    var e2 = (XElement)node2;
+
+                    // Compare names (local + namespace URI)
+                    if (e1.Name.LocalName != e2.Name.LocalName) return false;
+                    if (e1.Name.NamespaceName != e2.Name.NamespaceName) return false;
+
+                    // Compare non-namespace attributes by expanded name + value
+                    var attrs1 = e1.Attributes().Where(a => !a.IsNamespaceDeclaration).OrderBy(a => a.Name.NamespaceName).ThenBy(a => a.Name.LocalName).ToList();
+                    var attrs2 = e2.Attributes().Where(a => !a.IsNamespaceDeclaration).OrderBy(a => a.Name.NamespaceName).ThenBy(a => a.Name.LocalName).ToList();
+                    if (attrs1.Count != attrs2.Count) return false;
+                    for (int i = 0; i < attrs1.Count; i++)
+                    {
+                        if (attrs1[i].Name.LocalName != attrs2[i].Name.LocalName) return false;
+                        if (attrs1[i].Name.NamespaceName != attrs2[i].Name.NamespaceName) return false;
+                        if (attrs1[i].Value != attrs2[i].Value) return false;
+                    }
+
+                    // Compare children recursively
+                    var children1 = e1.Nodes().Where(n => n.NodeType != System.Xml.XmlNodeType.Whitespace).ToList();
+                    var children2 = e2.Nodes().Where(n => n.NodeType != System.Xml.XmlNodeType.Whitespace).ToList();
+                    if (children1.Count != children2.Count) return false;
+                    for (int i = 0; i < children1.Count; i++)
+                    {
+                        if (!XmlNodesEqual(children1[i], children2[i])) return false;
+                    }
+                    return true;
+                }
+            case System.Xml.XmlNodeType.Text:
+            case System.Xml.XmlNodeType.CDATA:
+                return ((XText)node1).Value == ((XText)node2).Value;
+            case System.Xml.XmlNodeType.Comment:
+                return ((XComment)node1).Value == ((XComment)node2).Value;
+            case System.Xml.XmlNodeType.ProcessingInstruction:
+                {
+                    var pi1 = (XProcessingInstruction)node1;
+                    var pi2 = (XProcessingInstruction)node2;
+                    return pi1.Target == pi2.Target && pi1.Data == pi2.Data;
+                }
+            default:
+                return node1.ToString() == node2.ToString();
         }
     }
 

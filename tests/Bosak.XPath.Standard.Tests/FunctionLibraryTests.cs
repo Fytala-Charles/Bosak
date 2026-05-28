@@ -761,7 +761,9 @@ public class FunctionLibraryTests
         var child = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!.Element("child")!);
         var result = XPath31Expression.Compile("fn:root()").Evaluate(child);
         Assert.Equal(XdmValueKind.Node, result.Kind);
-        Assert.Equal("root", result.NodeValue.LocalName);
+        // fn:root() returns the document node, which has empty LocalName
+        Assert.Equal(string.Empty, result.NodeValue.LocalName);
+        Assert.Equal(XdmNodeKind.Document, result.NodeValue.NodeKind);
     }
 
     [Fact]
@@ -771,7 +773,9 @@ public class FunctionLibraryTests
         var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
         var result = XPath31Expression.Compile("fn:root(child)").Evaluate(root);
         Assert.Equal(XdmValueKind.Node, result.Kind);
-        Assert.Equal("root", result.NodeValue.LocalName);
+        // fn:root() returns the document node, which has empty LocalName
+        Assert.Equal(string.Empty, result.NodeValue.LocalName);
+        Assert.Equal(XdmNodeKind.Document, result.NodeValue.NodeKind);
     }
 
     [Fact]

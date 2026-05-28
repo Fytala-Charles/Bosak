@@ -3926,7 +3926,7 @@ public static class VmEngine
     {
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
 
-        if (normalized == "empty-sequence")
+        if (normalized == "empty-sequence" || normalized == "empty-sequence()")
             return value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
 
         // Check cardinality
@@ -3960,11 +3960,11 @@ public static class VmEngine
 
         // Check each item's type
         if (!value.IsSequence)
-            return ItemInstanceOf(value, normalized);
+            return ValueMatchesType(value, normalized);
 
         foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
         {
-            if (!ItemInstanceOf(item, normalized))
+            if (!ValueMatchesType(item, normalized))
                 return false;
         }
         return true;
@@ -4018,6 +4018,23 @@ public static class VmEngine
         return schemaTypeName.ToLowerInvariant() is
             "normalizedstring" or "token" or "language" or "nmtoken" or "name"
             or "ncname" or "id" or "idref" or "entity" or "untypedatomic";
+    }
+
+    private static bool IsElementTypeCompatible(string typeName)
+    {
+        typeName = typeName.ToLowerInvariant().Replace("xs:", "").Replace("*", "").Trim();
+        // In non-schema-aware processing, elements have type xs:anyType / xs:untyped.
+        // xs:anyAtomicType and xs:untypedAtomic are atomic types, not element types.
+        return typeName is "anytype" or "untyped";
+    }
+
+    private static bool IsAttributeTypeCompatible(string typeName)
+    {
+        typeName = typeName.ToLowerInvariant().Replace("xs:", "").Replace("*", "").Trim();
+        // In non-schema-aware processing, attributes have type xs:untypedAtomic.
+        // xs:untypedAtomic is derived from xs:anyAtomicType, so both match.
+        // xs:anyType and xs:untyped are element types, not attribute types.
+        return typeName is "untypedatomic" or "anyatomictype";
     }
 
     private static bool IsCastAllowed(string? sourceSchemaType, string targetType)
@@ -4094,10 +4111,56 @@ public static class VmEngine
             return value.IsUndefined;
 
         if (normalized.StartsWith("element(") && normalized.EndsWith(')'))
-            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Element;
+        {
+            if (!value.IsNode || value.NodeValue.NodeKind != XdmNodeKind.Element)
+                return false;
+            var inner = normalized.Substring(8, normalized.Length - 9).Trim();
+            // element() or element(*) → any element
+            if (string.IsNullOrEmpty(inner) || inner == "*")
+                return true;
+            // element(*, T) → check type compatibility
+            if (inner.StartsWith("*, "))
+            {
+                var typePart = inner.Substring(3).Trim();
+                return IsElementTypeCompatible(typePart);
+            }
+            // element(name) or element(name, T) → check name match (basic, no namespace)
+            var namePart = inner.Split(',')[0].Trim();
+            if (namePart != "*" && value.NodeValue.LocalName != namePart)
+                return false;
+            if (inner.Contains(','))
+            {
+                var typePart = inner.Substring(inner.IndexOf(',') + 1).Trim();
+                return IsElementTypeCompatible(typePart);
+            }
+            return true;
+        }
 
         if (normalized.StartsWith("attribute(") && normalized.EndsWith(')'))
-            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Attribute;
+        {
+            if (!value.IsNode || value.NodeValue.NodeKind != XdmNodeKind.Attribute)
+                return false;
+            var inner = normalized.Substring(10, normalized.Length - 11).Trim();
+            // attribute() or attribute(*) → any attribute
+            if (string.IsNullOrEmpty(inner) || inner == "*")
+                return true;
+            // attribute(*, T) → check type compatibility
+            if (inner.StartsWith("*, "))
+            {
+                var typePart = inner.Substring(3).Trim();
+                return IsAttributeTypeCompatible(typePart);
+            }
+            // attribute(name) or attribute(name, T) → check name match
+            var namePart = inner.Split(',')[0].Trim();
+            if (namePart != "*" && value.NodeValue.LocalName != namePart)
+                return false;
+            if (inner.Contains(','))
+            {
+                var typePart = inner.Substring(inner.IndexOf(',') + 1).Trim();
+                return IsAttributeTypeCompatible(typePart);
+            }
+            return true;
+        }
 
         return ItemInstanceOf(value, normalized);
     }

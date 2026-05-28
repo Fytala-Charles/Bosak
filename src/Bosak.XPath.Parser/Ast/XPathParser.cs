@@ -1279,29 +1279,35 @@ public sealed class XPathParser
 
         var (prefix, local, _) = SplitQName(name);
 
-        // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), etc.
+        // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), element(foo), etc.
         bool hasParens = false;
         if (Current.Kind == TokenKind.LParen)
         {
             hasParens = true;
             int parenDepth = 0;
+            var sb = new System.Text.StringBuilder();
+            sb.Append(local);
             do
             {
                 if (Current.Kind == TokenKind.LParen)
                 {
                     parenDepth++;
+                    sb.Append(GetString(Current));
                     Advance();
                 }
                 else if (Current.Kind == TokenKind.RParen)
                 {
                     parenDepth--;
+                    sb.Append(GetString(Current));
                     Advance();
                 }
                 else
                 {
+                    sb.Append(GetString(Current));
                     Advance();
                 }
             } while (parenDepth > 0 && Current.Kind != TokenKind.Eof);
+            local = sb.ToString();
         }
 
         return (prefix, local, hasParens);

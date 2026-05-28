@@ -29,6 +29,7 @@
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added global variable and parameter initialization from stylesheet/includes/imports      |
 //                      | Charles Korthout | 1.4   | 27-05-2026     | Fixed AVT sequence atomization, version-aware built-in rules, pattern // support         |
 //                      | Charles Korthout | 1.5   | 27-05-2026     | Process text nodes in sequence constructors; strip document-level whitespace            |
+//                      | Charles Korthout | 1.7   | 28-05-2026     | Added xsl:next-match with excluded-rule chain; call-template clears current template rule |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -66,12 +67,22 @@ public sealed class TransformEngine
     // Tunnel parameter stack: each frame is the tunnel params visible at that call depth
     private readonly Stack<Dictionary<string, XdmValue>> _tunnelParamStack = new();
 
+    // Current template rule for xsl:next-match
+    private Stylesheet.TemplateRule? _currentTemplateRule;
+
+    // Accumulated excluded rules for the current xsl:next-match chain
+    private HashSet<Stylesheet.TemplateRule> _nextMatchExcluded = new();
+
     // Key index for key() function lookups
     private KeyIndex? _keyIndex;
 
     // Recursion depth guard for xsl:function and xsl:call-template calls
     private int _xsltFunctionCallDepth;
     private int _callTemplateDepth;
+
+    // Recursion depth guard for xsl:apply-templates
+    private int _applyTemplatesDepth;
+    private const int MaxApplyTemplatesDepth = 256;
 
     /// <summary>The parsed xsl:output serialization properties.</summary>
     public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
@@ -94,6 +105,9 @@ public sealed class TransformEngine
         {
             _context.WithNamespace(prefix, nsUri);
         }
+
+        // Register decimal-format declarations from the stylesheet
+        RegisterDecimalFormats();
 
         // Register xsl:function declarations as callable XPath functions
         RegisterXsltFunctions();
@@ -163,6 +177,22 @@ public sealed class TransformEngine
     /// Registers all xsl:function declarations from the stylesheet tree as callable
     /// functions on the EvaluationContext.
     /// </summary>
+    private void RegisterDecimalFormats()
+    {
+        var allFormats = _stylesheet.GetAllDecimalFormats();
+        foreach (var (key, def) in allFormats)
+        {
+            if (string.IsNullOrEmpty(key.localName))
+            {
+                _context.DefaultDecimalFormat = def.Format;
+            }
+            else
+            {
+                _context.WithDecimalFormat(key.localName, key.nsUri, def.Format);
+            }
+        }
+    }
+
     private void RegisterXsltFunctions()
     {
         var allFuncs = _stylesheet.GetAllFunctionDefinitions();
@@ -285,7 +315,8 @@ public sealed class TransformEngine
                         {
                             var compiled = XPath31Expression.Compile(select);
                             var result = compiled.Evaluate(_context);
-                            results.Add(XdmValue.FromString(XdmValueToString(result)));
+                            var sep = instruction.Attribute("separator")?.Value ?? " ";
+                            results.Add(XdmValue.FromString(XdmValueToString(result, sep)));
                         }
                         break;
                     }
@@ -485,6 +516,16 @@ public sealed class TransformEngine
     /// </summary>
     public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null)
     {
+        if (++_applyTemplatesDepth > MaxApplyTemplatesDepth)
+        {
+            _applyTemplatesDepth--;
+            throw new InvalidOperationException("xsl:apply-templates recursion depth exceeded maximum allowed depth.");
+        }
+
+        // Save and clear next-match exclusions — apply-templates starts a fresh chain
+        var savedExcluded = _nextMatchExcluded;
+        _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
+
         // Resolve mode aliases
         var resolvedMode = ResolveMode(mode);
 
@@ -533,6 +574,8 @@ public sealed class TransformEngine
         finally
         {
             _modeStack.Pop();
+            _nextMatchExcluded = savedExcluded;
+            _applyTemplatesDepth--;
         }
     }
 
@@ -555,11 +598,15 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the body of a template rule against the current node.
     /// </summary>
-    public void ExecuteTemplate(Stylesheet.TemplateRule rule, IXdmNode currentNode, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1)
-        => ExecuteTemplate(rule, XdmValue.FromNode(currentNode), callParams, incomingTunnelParams, position, last);
+    public void ExecuteTemplate(Stylesheet.TemplateRule rule, IXdmNode currentNode, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1, bool setCurrentRule = true)
+        => ExecuteTemplate(rule, XdmValue.FromNode(currentNode), callParams, incomingTunnelParams, position, last, setCurrentRule);
 
-    public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1)
+    public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1, bool setCurrentRule = true)
     {
+        var savedTemplateRule = _currentTemplateRule;
+        if (setCurrentRule)
+            _currentTemplateRule = rule;
+
         // Update context to current item
         var savedCurrent = _context.CurrentItem;
         var savedPosition = _context.ContextPosition;
@@ -662,6 +709,7 @@ public sealed class TransformEngine
             _context.WithFocus(_context.ContextItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
             _tunnelParamStack.Pop();
+            _currentTemplateRule = savedTemplateRule;
         }
     }
 
@@ -686,7 +734,7 @@ public sealed class TransformEngine
             if (!_allNamedTemplates.TryGetValue(name, out var rule))
                 throw new InvalidOperationException($"Named template '{name}' not found.");
 
-            ExecuteTemplate(rule, contextItem, withParams, incomingTunnelParams, _context.ContextPosition, _context.ContextSize);
+            ExecuteTemplate(rule, contextItem, withParams, incomingTunnelParams, _context.ContextPosition, _context.ContextSize, setCurrentRule: false);
         }
         finally
         {
@@ -766,7 +814,8 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(select);
                         var result = compiled.Evaluate(_context);
-                        var textValue = XdmValueToString(result);
+                        var sep = instruction.Attribute("separator")?.Value ?? " ";
+                        var textValue = XdmValueToString(result, sep);
                         _currentContainer.Add(new XText(textValue));
                     }
                     break;
@@ -778,6 +827,24 @@ public sealed class TransformEngine
                     // xsl:text with only whitespace and no siblings is often significant;
                     // for now, preserve all text content
                     _currentContainer.Add(new XText(text));
+                    break;
+                }
+
+            case "comment":
+                {
+                    var commentSelect = instruction.Attribute("select")?.Value;
+                    string commentText;
+                    if (!string.IsNullOrEmpty(commentSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(commentSelect);
+                        var result = compiled.Evaluate(_context);
+                        commentText = XdmValueToString(result);
+                    }
+                    else
+                    {
+                        commentText = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                    }
+                    _currentContainer.Add(new XComment(commentText));
                     break;
                 }
 
@@ -925,6 +992,10 @@ public sealed class TransformEngine
 
                         var savedFocus = _context.ContextItem;
                         var savedCurrent = _context.CurrentItem;
+                        var savedTemplateRule = _currentTemplateRule;
+                        var savedNextMatchExcluded = _nextMatchExcluded;
+                        _currentTemplateRule = null;
+                        _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
                         int pos = 1;
                         foreach (var item in items)
                         {
@@ -960,6 +1031,8 @@ public sealed class TransformEngine
                         }
                         _context.WithFocus(savedFocus, 1, 1);
                         _context.WithCurrentItem(savedCurrent);
+                        _currentTemplateRule = savedTemplateRule;
+                        _nextMatchExcluded = savedNextMatchExcluded;
                     }
                     break;
                 }
@@ -1177,6 +1250,76 @@ public sealed class TransformEngine
                     break;
                 }
 
+            case "next-match":
+                {
+                    if (node == null) break;
+                    if (_currentTemplateRule == null)
+                    {
+                        // xsl:next-match is only valid within a template invoked by apply-templates or next-match
+                        // If called from a named template, for-each, or other context where the current
+                        // template rule is absent, raise XTDE0560.
+                        throw new InvalidOperationException("XTDE0560: xsl:next-match evaluated when the current template rule is absent.");
+                    }
+
+                    var nextMatchMode = _modeStack.Count > 0 ? _modeStack.Peek() : "";
+                    _nextMatchExcluded.Add(_currentTemplateRule);
+                    try
+                    {
+                        var nextRule = FindBestTemplate(node, nextMatchMode, _nextMatchExcluded);
+
+                        // Collect xsl:with-param elements (tunnel and non-tunnel)
+                        var nextMatchParams = new Dictionary<string, XdmValue>();
+                        var nextMatchTunnelParams = new Dictionary<string, XdmValue>();
+                        foreach (var wp in instruction.Elements(XName.Get("with-param", Stylesheet.Stylesheet.XslNamespace)))
+                        {
+                            var wpName = wp.Attribute("name")?.Value;
+                            var wpSelect = wp.Attribute("select")?.Value;
+                            var wpTunnel = wp.Attribute("tunnel")?.Value == "yes";
+                            if (!string.IsNullOrEmpty(wpName))
+                            {
+                                XdmValue wpValue;
+                                if (!string.IsNullOrEmpty(wpSelect))
+                                {
+                                    var compiled = XPath31Expression.Compile(wpSelect);
+                                    wpValue = compiled.Evaluate(_context);
+                                }
+                                else
+                                {
+                                    wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
+                                }
+                                if (wpTunnel)
+                                    nextMatchTunnelParams[wpName] = wpValue;
+                                else
+                                    nextMatchParams[wpName] = wpValue;
+                            }
+                        }
+
+                        // Merge current tunnel params with newly supplied tunnel params
+                        var mergedTunnelParams = new Dictionary<string, XdmValue>();
+                        if (_tunnelParamStack.Count > 0)
+                        {
+                            foreach (var (k, v) in _tunnelParamStack.Peek())
+                                mergedTunnelParams[k] = v;
+                        }
+                        foreach (var (k, v) in nextMatchTunnelParams)
+                            mergedTunnelParams[k] = v;
+
+                        if (nextRule != null)
+                        {
+                            ExecuteTemplate(nextRule, node, callParams: nextMatchParams, incomingTunnelParams: mergedTunnelParams);
+                        }
+                        else
+                        {
+                            ApplyBuiltInRules(node, nextMatchMode, mergedTunnelParams);
+                        }
+                    }
+                    finally
+                    {
+                        _nextMatchExcluded.Remove(_currentTemplateRule);
+                    }
+                    break;
+                }
+
             case "number":
                 {
                     if (node != null)
@@ -1195,11 +1338,36 @@ public sealed class TransformEngine
     /// </summary>
     private void CopyLiteralElement(XElement source)
     {
-        var copy = new XElement(
-            XName.Get(source.Name.LocalName, source.Name.NamespaceName));
+        // Preserve the namespace prefix by using the original XName and adding
+        // an explicit namespace declaration when the element uses a non-empty namespace.
+        var copy = new XElement(source.Name);
+
+        // If the element has a non-empty namespace URI and uses a prefix,
+        // ensure the prefix is declared on the copied element.
+        if (!string.IsNullOrEmpty(source.Name.NamespaceName))
+        {
+            var prefix = source.GetPrefixOfNamespace(source.Name.Namespace);
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                copy.SetAttributeValue(XNamespace.Xmlns + prefix, source.Name.NamespaceName);
+            }
+        }
 
         foreach (var attr in source.Attributes())
         {
+            // Skip namespace declarations that are inherited from ancestors
+            // (only copy namespace declarations explicitly declared on this element).
+            if (attr.IsNamespaceDeclaration)
+            {
+                var declaredPrefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                if (declaredPrefix == source.GetPrefixOfNamespace(source.Name.Namespace))
+                {
+                    continue; // Already handled above
+                }
+                copy.SetAttributeValue(attr.Name, attr.Value);
+                continue;
+            }
+
             var attrName = XName.Get(attr.Name.LocalName, attr.Name.NamespaceName);
             // AVTs are not evaluated in XSLT-namespace attributes
             var attrValue = attr.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
@@ -1415,6 +1583,11 @@ public sealed class TransformEngine
 
             switch (node.NodeKind)
             {
+            case XdmNodeKind.Document:
+                // Built-in: apply templates to children of the document node
+                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
+                break;
+
             case XdmNodeKind.Element:
                 ApplyBuiltInRulesForElement(node, mode, behavior, incomingTunnelParams);
                 break;
@@ -1437,7 +1610,19 @@ public sealed class TransformEngine
                 }
                 break;
 
-            // Comments and PIs are ignored by default
+            case XdmNodeKind.Comment:
+                if (_currentContainer is XElement && behavior == Stylesheet.OnNoMatch.ShallowCopy)
+                {
+                    _currentContainer.Add(new XComment(node.StringValue));
+                }
+                break;
+
+            case XdmNodeKind.ProcessingInstruction:
+                if (_currentContainer is XElement && behavior == Stylesheet.OnNoMatch.ShallowCopy)
+                {
+                    _currentContainer.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
+                }
+                break;
             }
         }
         finally
@@ -1594,7 +1779,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Finds the highest-priority template rule that matches the given node in the given mode.
     /// </summary>
-    private Stylesheet.TemplateRule? FindBestTemplate(IXdmNode node, string mode)
+    private Stylesheet.TemplateRule? FindBestTemplate(IXdmNode node, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null)
     {
         Stylesheet.TemplateRule? best = null;
         double bestPriority = double.NegativeInfinity;
@@ -1602,11 +1787,13 @@ public sealed class TransformEngine
 
         foreach (var rule in _allTemplateRules)
         {
+            if (excludedRules != null && excludedRules.Contains(rule))
+                continue;
             if (!MatchesMode(rule, mode))
                 continue;
             if (rule.CompiledMatch == null)
                 continue;
-            if (rule.CompiledMatch(node))
+            if (rule.CompiledMatch(node, _context))
             {
                 if (rule.Priority > bestPriority)
                 {
@@ -1619,10 +1806,44 @@ public sealed class TransformEngine
                     best = rule;
                     bestImportPrecedence = rule.ImportPrecedence;
                 }
+                else if (rule.Priority == bestPriority && rule.ImportPrecedence == bestImportPrecedence)
+                {
+                    // Tie-breaker: for document nodes, prefer more specific document patterns
+                    // (e.g., doc('uri') over /) to avoid infinite recursion when doc() patterns
+                    // are compiled to match any document node.
+                    if (node.NodeKind == XdmNodeKind.Document && best != null)
+                    {
+                        if (IsMoreSpecificDocumentPattern(rule.Match, best.Match))
+                        {
+                            best = rule;
+                            bestImportPrecedence = rule.ImportPrecedence;
+                        }
+                    }
+                }
             }
         }
 
         return best;
+    }
+
+    /// <summary>
+    /// Determines whether <paramref name="candidate"/> is a more specific document-node
+    /// pattern than <paramref name="current"/>.  Used as a tie-breaker in FindBestTemplate.
+    /// </summary>
+    private static bool IsMoreSpecificDocumentPattern(string? candidate, string? current)
+    {
+        if (string.IsNullOrEmpty(current)) return true;
+        if (string.IsNullOrEmpty(candidate)) return false;
+
+        var c = current.Trim();
+        var cand = candidate.Trim();
+
+        // doc('uri') / document('uri') are more specific than /
+        if (c == "/" && (cand.StartsWith("doc(") || cand.StartsWith("document(")))
+            return true;
+
+        // Prefer the longer / more detailed pattern as a general heuristic
+        return cand.Length > c.Length;
     }
 
     private static bool MatchesMode(Stylesheet.TemplateRule rule, string mode)
@@ -1690,6 +1911,13 @@ public sealed class TransformEngine
     /// Converts an XDM value to its string representation, concatenating sequence items.
     /// </summary>
     private static string XdmValueToString(XdmValue value)
+        => XdmValueToString(value, " ");
+
+    /// <summary>
+    /// Converts an XDM value to its string representation, concatenating sequence items
+    /// with the specified separator.
+    /// </summary>
+    private static string XdmValueToString(XdmValue value, string separator)
     {
         if (value.IsUndefined)
             return string.Empty;
@@ -1703,7 +1931,7 @@ public sealed class TransformEngine
                 if (item.IsUndefined)
                     continue;
                 if (!first)
-                    sb.Append(' ');
+                    sb.Append(separator);
                 sb.Append(item.ToString());
                 first = false;
             }
@@ -1842,6 +2070,12 @@ public sealed class TransformEngine
                     break;
                 case XText t:
                     results.Add(XdmValue.FromString(t.Value));
+                    break;
+                case XComment c:
+                    results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(c)));
+                    break;
+                case XProcessingInstruction pi:
+                    results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(pi)));
                     break;
             }
         }
@@ -2073,9 +2307,9 @@ public sealed class TransformEngine
 
             int[]? numbers = level switch
             {
-                "single" => ComputeNumberSingle(targetNode, countMatcher, fromMatcher),
-                "any" => ComputeNumberAny(targetNode, countMatcher, fromMatcher),
-                "multiple" => ComputeNumberMultiple(targetNode, countMatcher, fromMatcher),
+                "single" => ComputeNumberSingle(targetNode, countMatcher, fromMatcher, _context),
+                "any" => ComputeNumberAny(targetNode, countMatcher, fromMatcher, _context),
+                "multiple" => ComputeNumberMultiple(targetNode, countMatcher, fromMatcher, _context),
                 _ => null
             };
 
@@ -2099,25 +2333,25 @@ public sealed class TransformEngine
     /// <summary>
     /// Creates a default count matcher based on the current node's kind and name.
     /// </summary>
-    private static Func<IXdmNode, bool> CreateDefaultCountMatcher(IXdmNode node)
+    private static Patterns.PatternPredicate CreateDefaultCountMatcher(IXdmNode node)
     {
         var compiler = new Patterns.PatternCompiler();
         return node.NodeKind switch
         {
             XdmNodeKind.Element => compiler.Compile(node.LocalName),
             XdmNodeKind.Attribute => compiler.Compile("@" + node.LocalName),
-            _ => n => n.NodeKind == node.NodeKind
+            _ => (n, ctx) => n.NodeKind == node.NodeKind
         };
     }
 
     /// <summary>
     /// Computes the number for <c>level="single"</c>.
     /// </summary>
-    private static int[]? ComputeNumberSingle(IXdmNode currentNode, Func<IXdmNode, bool> countMatcher, Func<IXdmNode, bool>? fromMatcher)
+    private static int[]? ComputeNumberSingle(IXdmNode currentNode, Patterns.PatternPredicate countMatcher, Patterns.PatternPredicate? fromMatcher, EvaluationContext context)
     {
         // Find nearest ancestor-or-self matching count
         IXdmNode? target = null;
-        if (countMatcher(currentNode))
+        if (countMatcher(currentNode, context))
         {
             target = currentNode;
         }
@@ -2127,7 +2361,7 @@ public sealed class TransformEngine
             {
                 if (item.IsNode && item.NodeValue is IXdmNode ancestor)
                 {
-                    if (countMatcher(ancestor))
+                    if (countMatcher(ancestor, context))
                     {
                         target = ancestor;
                         break;
@@ -2147,7 +2381,7 @@ public sealed class TransformEngine
             {
                 if (item.IsNode && item.NodeValue is IXdmNode ancestor)
                 {
-                    if (fromMatcher(ancestor))
+                    if (fromMatcher(ancestor, context))
                     {
                         hasFromAncestor = true;
                         break;
@@ -2163,7 +2397,7 @@ public sealed class TransformEngine
         {
             if (item.IsNode && item.NodeValue is IXdmNode sibling)
             {
-                if (countMatcher(sibling))
+                if (countMatcher(sibling, context))
                     count++;
             }
         }
@@ -2174,7 +2408,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Computes the number for <c>level="any"</c>.
     /// </summary>
-    private static int[]? ComputeNumberAny(IXdmNode currentNode, Func<IXdmNode, bool> countMatcher, Func<IXdmNode, bool>? fromMatcher)
+    private static int[]? ComputeNumberAny(IXdmNode currentNode, Patterns.PatternPredicate countMatcher, Patterns.PatternPredicate? fromMatcher, EvaluationContext context)
     {
         var doc = currentNode.Document;
         if (doc == null)
@@ -2188,10 +2422,10 @@ public sealed class TransformEngine
             if (node.IsSameNode(currentNode))
                 foundCurrent = true;
 
-            if (fromMatcher != null && fromMatcher(node))
+            if (fromMatcher != null && fromMatcher(node, context))
                 count = 0;
 
-            if (countMatcher(node))
+            if (countMatcher(node, context))
                 count++;
 
             return !foundCurrent;
@@ -2203,7 +2437,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Computes the number sequence for <c>level="multiple"</c>.
     /// </summary>
-    private static int[]? ComputeNumberMultiple(IXdmNode currentNode, Func<IXdmNode, bool> countMatcher, Func<IXdmNode, bool>? fromMatcher)
+    private static int[]? ComputeNumberMultiple(IXdmNode currentNode, Patterns.PatternPredicate countMatcher, Patterns.PatternPredicate? fromMatcher, EvaluationContext context)
     {
         var numbers = new List<int>();
         var ancestors = new List<IXdmNode>();
@@ -2218,17 +2452,17 @@ public sealed class TransformEngine
 
         foreach (var ancestor in ancestors)
         {
-            if (fromMatcher != null && fromMatcher(ancestor))
+            if (fromMatcher != null && fromMatcher(ancestor, context))
                 break;
 
-            if (countMatcher(ancestor))
+            if (countMatcher(ancestor, context))
             {
                 int count = 0;
                 foreach (var item in ancestor.Axis(XdmAxis.PrecedingSibling))
                 {
                     if (item.IsNode && item.NodeValue is IXdmNode sibling)
                     {
-                        if (countMatcher(sibling))
+                        if (countMatcher(sibling, context))
                             count++;
                     }
                 }

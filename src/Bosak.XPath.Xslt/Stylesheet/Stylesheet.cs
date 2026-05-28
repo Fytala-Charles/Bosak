@@ -24,6 +24,7 @@
 using System.IO;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Xslt.Api;
 
 namespace Bosak.XPath.Xslt.Stylesheet;
@@ -48,6 +49,7 @@ public sealed class Stylesheet
     private readonly List<SpaceHandlingRule> _preserveSpaceRules = new();
     private readonly Dictionary<string, ModeDefinition> _modeDefinitions = new();
     private readonly List<XsltFunctionDefinition> _functionDefinitions = new();
+    private readonly List<DecimalFormatDefinition> _decimalFormats = new();
     private OutputProperties? _outputProperties;
 
     public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null)
@@ -272,6 +274,15 @@ public sealed class Stylesheet
             if (def != null)
                 _functionDefinitions.Add(def);
         }
+
+        // Parse xsl:decimal-format declarations
+        foreach (var df in root.Elements(XName.Get("decimal-format", XslNamespace)))
+        {
+            if (!UseWhen(df)) continue;
+            var def = DecimalFormatDefinition.FromElement(df, this);
+            if (def != null)
+                _decimalFormats.Add(def);
+        }
     }
 
     private void ResolveImport(string href)
@@ -421,6 +432,9 @@ public sealed class Stylesheet
     /// <summary>Function definitions declared in this stylesheet.</summary>
     public IReadOnlyList<XsltFunctionDefinition> FunctionDefinitions => _functionDefinitions;
 
+    /// <summary>Decimal format definitions declared in this stylesheet.</summary>
+    public IReadOnlyList<DecimalFormatDefinition> DecimalFormats => _decimalFormats;
+
     /// <summary>
     /// Recursively collects all function definitions from this stylesheet, its includes, and its imports.
     /// Later definitions override earlier ones (local &gt; included &gt; imported).
@@ -533,11 +547,132 @@ public sealed class Stylesheet
         return result;
     }
 
+    /// <summary>
+    /// Recursively collects all decimal format definitions from this stylesheet, its includes, and its imports.
+    /// Later definitions override earlier ones (local &gt; included &gt; imported).
+    /// </summary>
+    public Dictionary<(string localName, string nsUri), DecimalFormatDefinition> GetAllDecimalFormats()
+    {
+        var result = new Dictionary<(string, string), DecimalFormatDefinition>();
+
+        // Imported first (lowest precedence)
+        foreach (var imported in _imports)
+        {
+            foreach (var (key, def) in imported.GetAllDecimalFormats())
+                result[key] = def;
+        }
+
+        // Included next
+        foreach (var included in _includes)
+        {
+            foreach (var (key, def) in included.GetAllDecimalFormats())
+                result[key] = def;
+        }
+
+        // Local last (highest precedence)
+        foreach (var def in _decimalFormats)
+        {
+            result[(def.LocalName, def.NamespaceUri)] = def;
+        }
+
+        return result;
+    }
+
     /// <summary>The XSLT namespace URI.</summary>
     public const string XslNamespace = "http://www.w3.org/1999/XSL/Transform";
 
     /// <summary>The version attribute of the stylesheet root element.</summary>
     public string? Version { get; private set; }
+}
+
+/// <summary>
+/// Represents a parsed xsl:decimal-format declaration.
+/// </summary>
+public sealed class DecimalFormatDefinition
+{
+    public string LocalName { get; init; } = "";
+    public string NamespaceUri { get; init; } = "";
+    public DecimalFormat Format { get; init; } = new();
+
+    public static DecimalFormatDefinition? FromElement(XElement element, Stylesheet stylesheet)
+    {
+        var format = new DecimalFormat();
+        string? localName = null;
+        string? nsUri = null;
+
+        foreach (var attr in element.Attributes())
+        {
+            var name = attr.Name.LocalName;
+            var value = attr.Value;
+
+            switch (name)
+            {
+                case "name":
+                    {
+                        var nameVal = value.Trim();
+                        if (string.IsNullOrEmpty(nameVal)) break;
+                        // Resolve QName
+                        int colon = nameVal.IndexOf(':');
+                        if (colon >= 0)
+                        {
+                            var prefix = nameVal.Substring(0, colon);
+                            localName = nameVal.Substring(colon + 1);
+                            nsUri = stylesheet.ResolveNamespace(prefix);
+                        }
+                        else
+                        {
+                            localName = nameVal;
+                            nsUri = "";
+                        }
+                        break;
+                    }
+                case "decimal-separator": format.DecimalSeparator = value; break;
+                case "grouping-separator": format.GroupingSeparator = value; break;
+                case "infinity": format.Infinity = value; break;
+                case "minus-sign": format.MinusSign = value; break;
+                case "NaN": format.NaN = value; break;
+                case "percent": format.Percent = value; break;
+                case "per-mille": format.PerMille = value; break;
+                case "zero-digit": format.ZeroDigit = value; break;
+                case "digit": format.Digit = value; break;
+                case "pattern-separator": format.PatternSeparator = value; break;
+                case "exponent-separator": format.ExponentSeparator = value; break;
+            }
+        }
+
+        return new DecimalFormatDefinition
+        {
+            LocalName = localName ?? "",
+            NamespaceUri = nsUri ?? "",
+            Format = format
+        };
+    }
+}
+
+/// <summary>
+/// Helper methods for stylesheet parsing.
+/// </summary>
+public static class StylesheetExtensions
+{
+    /// <summary>
+    /// Resolves a namespace prefix in the stylesheet's root element.
+    /// </summary>
+    public static string? ResolveNamespace(this Stylesheet stylesheet, string prefix)
+    {
+        var root = stylesheet.RootElement;
+        foreach (var attr in root.Attributes())
+        {
+            if (attr.IsNamespaceDeclaration)
+            {
+                var attrPrefix = attr.Name.LocalName;
+                if (attrPrefix == "xmlns" && string.IsNullOrEmpty(prefix))
+                    return attr.Value;
+                if (attrPrefix == prefix)
+                    return attr.Value;
+            }
+        }
+        return null;
+    }
 }
 
 /// <summary>

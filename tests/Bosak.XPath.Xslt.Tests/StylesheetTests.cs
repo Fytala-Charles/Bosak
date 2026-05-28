@@ -1847,4 +1847,86 @@ public class StylesheetTests
         Assert.True(a1Pos < a3Pos, "a1 should come before a3");
         Assert.True(a3Pos < b2Pos, "a3 should come before b2");
     }
+
+    [Fact]
+    public void MatchPattern_DivWithRootPrefix_MatchesRootElement()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<div><and/><or/><div/></div>");
+        var sourceNode = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var compiler = new Bosak.XPath.Xslt.Patterns.PatternCompiler();
+        var pattern = compiler.Compile("/div");
+
+        var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext();
+        Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
+
+        // Test the root div element
+        foreach (var item in sourceNode.Axis(Bosak.XPath.Core.Xdm.XdmAxis.Child))
+        {
+            if (item.IsNode && item.NodeValue is Bosak.XPath.Core.Xdm.IXdmNode child)
+            {
+                var parent = child.Parent;
+                Assert.NotNull(parent);
+                Assert.Equal(Bosak.XPath.Core.Xdm.XdmNodeKind.Document, parent.NodeKind);
+                var matches = pattern(child, ctx);
+                Assert.True(matches, $"/div should match root {child.NodeKind} {child.LocalName}");
+            }
+        }
+    }
+
+    [Fact]
+    public void MatchPattern_PathWithParenthesizedUnion_MatchesCorrectly()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<x><a>23</a><b>25</b></x>");
+        var sourceNode = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var compiler = new Bosak.XPath.Xslt.Patterns.PatternCompiler();
+        var pattern = compiler.Compile("x/(a|b)");
+
+        var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext();
+        Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
+
+        // Find the <a> element
+        IXdmNode? xElem = null, aElem = null, bElem = null;
+        foreach (var item in sourceNode.Axis(Bosak.XPath.Core.Xdm.XdmAxis.Child))
+        {
+            if (item.IsNode && item.NodeValue!.LocalName == "x") xElem = item.NodeValue;
+        }
+        Assert.NotNull(xElem);
+        foreach (var item in xElem.Axis(Bosak.XPath.Core.Xdm.XdmAxis.Child))
+        {
+            if (item.IsNode && item.NodeValue!.LocalName == "a") aElem = item.NodeValue;
+            if (item.IsNode && item.NodeValue!.LocalName == "b") bElem = item.NodeValue;
+        }
+        Assert.NotNull(aElem);
+        Assert.NotNull(bElem);
+
+        // Debug: check if the inner union pattern matches
+        var innerPattern = compiler.Compile("a|b");
+        Assert.True(innerPattern(aElem, ctx), "a|b should match <a>");
+        Assert.True(innerPattern(bElem, ctx), "a|b should match <b>");
+
+        // Debug: check if element pattern matches
+        var xPattern = compiler.Compile("x");
+        Assert.True(xPattern(xElem, ctx), "x should match <x>");
+
+        // Debug: check parent relationship
+        Assert.NotNull(aElem.Parent);
+        Assert.Equal("x", aElem.Parent.LocalName);
+        Assert.True(xPattern(aElem.Parent, ctx), "x should match parent of <a>");
+
+        // Test simpler path pattern first
+        var simplePath = compiler.Compile("x/a");
+        Assert.True(simplePath(aElem, ctx), "x/a should match <a>");
+
+        // Test with single paren
+        var parenA = compiler.Compile("(a)");
+        Assert.True(parenA(aElem, ctx), "(a) should match <a>");
+
+        var parenPath = compiler.Compile("x/(a)");
+        Assert.True(parenPath(aElem, ctx), "x/(a) should match <a>");
+
+        // Now test the parenthesized union path pattern
+        var unionPath = compiler.Compile("x/(a|b)");
+        Assert.True(unionPath(aElem, ctx), "x/(a|b) should match <a>");
+        Assert.True(unionPath(bElem, ctx), "x/(a|b) should match <b>");
+    }
 }

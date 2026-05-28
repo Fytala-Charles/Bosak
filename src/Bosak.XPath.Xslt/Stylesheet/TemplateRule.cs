@@ -18,6 +18,7 @@
 
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.XPath.Xslt.Stylesheet;
 
@@ -48,7 +49,7 @@ public sealed class TemplateRule
     public int ImportPrecedence { get; }
 
     /// <summary>The compiled match predicate, or null for named-only templates.</summary>
-    public Func<IXdmNode, bool>? CompiledMatch { get; private set; }
+    public Patterns.PatternPredicate? CompiledMatch { get; private set; }
 
     /// <summary>The parent stylesheet.</summary>
     public Stylesheet Stylesheet { get; }
@@ -103,14 +104,14 @@ public sealed class TemplateRule
         if (!string.IsNullOrEmpty(Match))
         {
             if (Match.Trim() == "/")
-                CompiledMatch = node => node.NodeKind == XdmNodeKind.Document;
+                CompiledMatch = (node, ctx) => node.NodeKind == XdmNodeKind.Document;
             else
                 CompiledMatch = compiler.Compile(Match);
         }
     }
 
     /// <summary>
-    /// Computes the default priority for a match pattern per the XSLT spec.
+    /// Computes the default priority for a match pattern per the XSLT 2.0/3.0 spec.
     /// </summary>
     private static double ComputeDefaultPriority(string? match)
     {
@@ -119,15 +120,44 @@ public sealed class TemplateRule
 
         var trimmed = match.Trim();
 
-        // Document patterns (doc(...), document(...)): +0.5
-        if (trimmed.StartsWith("doc(") || trimmed.StartsWith("document("))
+        // Document patterns and root pattern: +0.5
+        if (trimmed == "/" || trimmed.StartsWith("doc(") || trimmed.StartsWith("document("))
             return 0.5;
 
-        // QName: +0.0
-        // Namespace test (prefix:*): -0.25
-        // Local name test (*:local): -0.25
-        // Wildcard (*, @*, node(), etc.): -0.5
-        // TODO: Implement full default priority computation
+        // Path patterns (contain /): +0.5
+        if (trimmed.Contains('/'))
+            return 0.5;
+
+        // Strip leading @ for attribute tests
+        bool isAttribute = trimmed.StartsWith('@');
+        if (isAttribute)
+            trimmed = trimmed[1..].Trim();
+
+        // Wildcards: * or node() or text() or comment() or processing-instruction() or .
+        if (trimmed == "*" || trimmed == "node()" || trimmed == "text()"
+            || trimmed == "comment()" || trimmed == "processing-instruction()"
+            || trimmed == ".")
+        {
+            return -0.5;
+        }
+
+        // Namespace wildcards: prefix:* or *:local
+        if (trimmed.EndsWith(":*") || trimmed.StartsWith("*:"))
+            return -0.25;
+
+        // Predicate on a simple pattern: use the base pattern's priority
+        if (trimmed.Contains('['))
+        {
+            int bracket = trimmed.IndexOf('[');
+            var basePat = trimmed[..bracket].Trim();
+            return ComputeDefaultPriority(basePat);
+        }
+
+        // QName: no wildcards, no parentheses
+        if (!trimmed.Contains('*') && !trimmed.Contains('(') && !trimmed.Contains(')'))
+            return 0.0;
+
+        // Fallback
         return 0.0;
     }
 }
