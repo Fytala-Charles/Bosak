@@ -419,8 +419,9 @@ class Program
 
     static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir)
     {
-        // assert-xml
-        var assertXml = resultElem.Element(ns + "assert-xml");
+        // When called from all-of/any-of, resultElem itself may be the assertion.
+        // Check both the element itself and its children for backward compatibility.
+        var assertXml = resultElem.Name.LocalName == "assert-xml" ? resultElem : resultElem.Element(ns + "assert-xml");
         if (assertXml != null)
         {
             var expected = assertXml.Value.Trim();
@@ -440,33 +441,33 @@ class Program
         }
 
         // assert-string-value
-        var assertString = resultElem.Element(ns + "assert-string-value");
+        var assertString = resultElem.Name.LocalName == "assert-string-value" ? resultElem : resultElem.Element(ns + "assert-string-value");
         if (assertString != null)
         {
             return actual.Trim() == assertString.Value;
         }
 
         // assert-true
-        if (resultElem.Element(ns + "assert-true") != null)
+        if (resultElem.Name.LocalName == "assert-true" || resultElem.Element(ns + "assert-true") != null)
         {
             return actual.Trim().Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
         // assert-false
-        if (resultElem.Element(ns + "assert-false") != null)
+        if (resultElem.Name.LocalName == "assert-false" || resultElem.Element(ns + "assert-false") != null)
         {
             return actual.Trim().Equals("false", StringComparison.OrdinalIgnoreCase);
         }
 
         // assert: evaluate XPath expression against result document
-        var assertExpr = resultElem.Element(ns + "assert");
+        var assertExpr = resultElem.Name.LocalName == "assert" ? resultElem : resultElem.Element(ns + "assert");
         if (assertExpr != null)
         {
             return EvaluateAssert(actual, assertExpr.Value);
         }
 
         // assert-eq: evaluate XPath and compare atomized value
-        var assertEq = resultElem.Element(ns + "assert-eq");
+        var assertEq = resultElem.Name.LocalName == "assert-eq" ? resultElem : resultElem.Element(ns + "assert-eq");
         if (assertEq != null)
         {
             var expected = assertEq.Attribute("expected")?.Value ?? assertEq.Value;
@@ -475,7 +476,7 @@ class Program
         }
 
         // serialization
-        var assertSer = resultElem.Element(ns + "assert-serialization");
+        var assertSer = resultElem.Name.LocalName == "assert-serialization" ? resultElem : resultElem.Element(ns + "assert-serialization");
         if (assertSer != null)
         {
             var expected = assertSer.Value.Trim();
@@ -483,7 +484,7 @@ class Program
         }
 
         // error expected
-        if (resultElem.Element(ns + "error") != null)
+        if (resultElem.Name.LocalName == "error" || resultElem.Element(ns + "error") != null)
         {
             // If we reach here, no error was thrown - that's handled by the caller
             return false;
