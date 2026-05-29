@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.1   | 24-05-2026     | Range opcode uses lazy IntegerRangeSequence to avoid OOM on huge ranges                 |
 //                      | Charles Korthout | 1.2   | 24-05-2026     | Added date/time value comparison type checking (XPTY0004 for cross-subtype)            |
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added DocumentRoot VM handler for absolute XPath paths                                 |
+//                      | Charles Korthout | 1.4   | 29-05-2026     | Fixed TryCast to return empty sequence for empty input (xs:type(()) semantics)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2880,10 +2881,24 @@ public static class VmEngine
         result = value;
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
 
+        // Empty sequence casts to empty sequence for all types
+        if (value.IsUndefined)
+        {
+            result = XdmValue.Undefined;
+            return true;
+        }
+
         // If value is a sequence, only allow single-item sequences for atomic casts
         if (value.IsSequence)
         {
-            if (!TryGetSequenceLength(value.SequenceValue, out var seqLen) || seqLen != 1)
+            if (!TryGetSequenceLength(value.SequenceValue, out var seqLen))
+                return false;
+            if (seqLen == 0)
+            {
+                result = XdmValue.Undefined;
+                return true;
+            }
+            if (seqLen != 1)
                 return false;
             var enumerator = XdmSequence.FromSource(value.SequenceValue!).GetEnumerator();
             enumerator.MoveNext();

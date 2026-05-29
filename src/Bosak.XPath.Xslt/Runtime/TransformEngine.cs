@@ -30,9 +30,12 @@
 //                      | Charles Korthout | 1.4   | 27-05-2026     | Fixed AVT sequence atomization, version-aware built-in rules, pattern // support         |
 //                      | Charles Korthout | 1.5   | 27-05-2026     | Process text nodes in sequence constructors; strip document-level whitespace            |
 //                      | Charles Korthout | 1.7   | 28-05-2026     | Added xsl:next-match with excluded-rule chain; call-template clears current template rule |
+//                      | Charles Korthout | 1.8   | 29-05-2026     | Reduced MaxXsltFunctionCallDepth to 32 to prevent .NET stack overflow crashes             |
+//                      | Charles Korthout | 1.9   | 29-05-2026     | Added expand-text / Text Value Template support with XPath string literal awareness       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Text;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -53,6 +56,7 @@ public sealed class TransformEngine
     private readonly EvaluationContext _context;
     private readonly XDocument _resultDocument;
     private XContainer _currentContainer;
+    private readonly StringBuilder _documentLevelText = new();
 
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
@@ -169,7 +173,11 @@ public sealed class TransformEngine
             }
         }
 
-        // Return the result document
+        // Return the result document, or document-level text if no root element was produced
+        if (_documentLevelText.Length > 0 && _resultDocument.Root == null)
+        {
+            return XdmValue.FromString(_documentLevelText.ToString());
+        }
         return XdmValue.FromNode(new Providers.Xml.XDocumentNode(_resultDocument));
     }
 
@@ -177,6 +185,23 @@ public sealed class TransformEngine
     /// Registers all xsl:function declarations from the stylesheet tree as callable
     /// functions on the EvaluationContext.
     /// </summary>
+    /// <summary>
+    /// Adds a text node to the current result container.
+    /// Falls back to a document-level text buffer when the container is an XDocument,
+    /// because XDocument does not allow non-whitespace text nodes at the document level.
+    /// </summary>
+    private void AddTextNode(string text)
+    {
+        if (_currentContainer is XDocument)
+        {
+            _documentLevelText.Append(text);
+        }
+        else
+        {
+            _currentContainer.Add(new XText(text));
+        }
+    }
+
     private void RegisterDecimalFormats()
     {
         var allFormats = _stylesheet.GetAllDecimalFormats();
@@ -215,7 +240,7 @@ public sealed class TransformEngine
     /// Executes the body of an xsl:function declaration, binding parameters and
     /// returning the sequence produced by the function body.
     /// </summary>
-    private const int MaxXsltFunctionCallDepth = 64;
+    private const int MaxXsltFunctionCallDepth = 32;
 
     private XdmValue ExecuteXsltFunction(Stylesheet.XsltFunctionDefinition def, ReadOnlySpan<XdmValue> args)
     {
@@ -317,6 +342,12 @@ public sealed class TransformEngine
                             var result = compiled.Evaluate(_context);
                             var sep = instruction.Attribute("separator")?.Value ?? " ";
                             results.Add(XdmValue.FromString(XdmValueToString(result, sep)));
+                        }
+                        else if (GetExpandText(instruction))
+                        {
+                            var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                            var tvtResult = EvaluateTvt(text);
+                            results.Add(XdmValue.FromString(tvtResult));
                         }
                         break;
                     }
@@ -689,8 +720,7 @@ public sealed class TransformEngine
                 switch (childNode)
                 {
                     case XText text:
-                        if (!IsWhitespaceOnly(text.Value))
-                            _currentContainer.Add(new XText(text.Value));
+                        ProcessSequenceText(text, rule.Element);
                         break;
                     case XElement elem when elem.Name.LocalName == "param" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                         continue; // Already processed above
@@ -770,8 +800,7 @@ public sealed class TransformEngine
                         switch (childNode)
                         {
                             case XText text:
-                                if (!IsWhitespaceOnly(text.Value))
-                                    _currentContainer.Add(new XText(text.Value));
+                                ProcessSequenceText(text, instruction);
                                 break;
                             case XElement elemChild when elemChild.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                 ExecuteXsltInstruction(elemChild, contextItem);
@@ -820,7 +849,13 @@ public sealed class TransformEngine
                         var result = compiled.Evaluate(_context);
                         var sep = instruction.Attribute("separator")?.Value ?? " ";
                         var textValue = XdmValueToString(result, sep);
-                        _currentContainer.Add(new XText(textValue));
+                        AddTextNode(textValue);
+                    }
+                    else if (GetExpandText(instruction))
+                    {
+                        var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                        var tvtResult = EvaluateTvt(text);
+                        AddTextNode(tvtResult);
                     }
                     break;
                 }
@@ -828,9 +863,15 @@ public sealed class TransformEngine
             case "text":
                 {
                     var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
-                    // xsl:text with only whitespace and no siblings is often significant;
-                    // for now, preserve all text content
-                    _currentContainer.Add(new XText(text));
+                    if (GetExpandText(instruction))
+                    {
+                        var tvtResult = EvaluateTvt(text);
+                        AddTextNode(tvtResult);
+                    }
+                    else
+                    {
+                        AddTextNode(text);
+                    }
                     break;
                 }
 
@@ -887,8 +928,7 @@ public sealed class TransformEngine
                                     switch (childNode)
                                     {
                                         case XText text:
-                                            if (!IsWhitespaceOnly(text.Value))
-                                                _currentContainer.Add(new XText(text.Value));
+                                            ProcessSequenceText(text, instruction);
                                             break;
                                         case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                             ExecuteXsltInstruction(elem, nodeToCopy);
@@ -902,7 +942,7 @@ public sealed class TransformEngine
                                 break;
                             }
                         case XdmNodeKind.Text:
-                            _currentContainer.Add(new XText(nodeToCopy.StringValue));
+                            AddTextNode(nodeToCopy.StringValue);
                             break;
                         case XdmNodeKind.Attribute:
                             if (_currentContainer is XElement target)
@@ -925,8 +965,7 @@ public sealed class TransformEngine
                                 switch (childNode)
                                 {
                                     case XText text:
-                                        if (!IsWhitespaceOnly(text.Value))
-                                            _currentContainer.Add(new XText(text.Value));
+                                        ProcessSequenceText(text, instruction);
                                         break;
                                     case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                         ExecuteXsltInstruction(elem, nodeToCopy);
@@ -1013,8 +1052,7 @@ public sealed class TransformEngine
                                     switch (childNode)
                                     {
                                         case XText text:
-                                            if (!IsWhitespaceOnly(text.Value))
-                                                _currentContainer.Add(new XText(text.Value));
+                                            ProcessSequenceText(text, instruction);
                                             break;
                                         case XElement elem when elem.Name.LocalName == "sort" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                             continue;
@@ -1055,8 +1093,7 @@ public sealed class TransformEngine
                                 switch (childNode)
                                 {
                                     case XText text:
-                                        if (!IsWhitespaceOnly(text.Value))
-                                            _currentContainer.Add(new XText(text.Value));
+                                        ProcessSequenceText(text, instruction);
                                         break;
                                     case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                         ExecuteXsltInstruction(elem, contextItem);
@@ -1089,8 +1126,7 @@ public sealed class TransformEngine
                                     switch (childNode)
                                     {
                                         case XText text:
-                                            if (!IsWhitespaceOnly(text.Value))
-                                                _currentContainer.Add(new XText(text.Value));
+                                            ProcessSequenceText(text, when);
                                             break;
                                         case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                             ExecuteXsltInstruction(elem, contextItem);
@@ -1114,8 +1150,7 @@ public sealed class TransformEngine
                                 switch (childNode)
                                 {
                                     case XText text:
-                                        if (!IsWhitespaceOnly(text.Value))
-                                            _currentContainer.Add(new XText(text.Value));
+                                        ProcessSequenceText(text, otherwise);
                                         break;
                                     case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                         ExecuteXsltInstruction(elem, contextItem);
@@ -1227,8 +1262,7 @@ public sealed class TransformEngine
                             switch (childNode)
                             {
                                 case XText text:
-                                    if (!IsWhitespaceOnly(text.Value))
-                                        _currentContainer.Add(new XText(text.Value));
+                                    ProcessSequenceText(text, instruction);
                                     break;
                                 case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                     ExecuteXsltInstruction(elem, contextItem);
@@ -1401,8 +1435,7 @@ public sealed class TransformEngine
                     }
                     break;
                 case XText text:
-                    if (!IsWhitespaceOnly(text.Value))
-                        _currentContainer.Add(new XText(text.Value));
+                    ProcessSequenceText(text, source);
                     break;
                 case XComment comment:
                     _currentContainer.Add(new XComment(comment.Value));
@@ -1496,7 +1529,7 @@ public sealed class TransformEngine
                 {
                     if (atomics.Count > 0)
                     {
-                        _currentContainer.Add(new XText(string.Join(" ", atomics)));
+                        AddTextNode(string.Join(" ", atomics));
                         atomics.Clear();
                     }
                     CopyToResult(item);
@@ -1508,12 +1541,12 @@ public sealed class TransformEngine
             }
             if (atomics.Count > 0)
             {
-                _currentContainer.Add(new XText(string.Join(" ", atomics)));
+                AddTextNode(string.Join(" ", atomics));
             }
         }
         else
         {
-            _currentContainer.Add(new XText(value.ToString()));
+            AddTextNode(value.ToString());
         }
     }
 
@@ -1547,7 +1580,7 @@ public sealed class TransformEngine
         }
         else if (node.NodeKind == XdmNodeKind.Text)
         {
-            _currentContainer.Add(new XText(node.StringValue));
+            AddTextNode(node.StringValue);
         }
         else if (node.NodeKind == XdmNodeKind.Comment)
         {
@@ -1606,7 +1639,7 @@ public sealed class TransformEngine
                 // Built-in: copy text value (only if we have an element container)
                 if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail)
                 {
-                    _currentContainer.Add(new XText(node.StringValue));
+                    AddTextNode(node.StringValue);
                 }
                 break;
 
@@ -2071,11 +2104,10 @@ public sealed class TransformEngine
             // LINQ-to-XML XDocument requires exactly one root element and does not
             // allow non-whitespace text nodes outside the root, so we can only
             // create a proper document node for single-element content.
-            if (elementCount == 1)
+            if (elementCount == 1 && nodes.Count == 1)
             {
                 var tempDoc = new XDocument();
-                foreach (var node in nodes)
-                    tempDoc.Add(node);
+                tempDoc.Add(nodes[0]);
                 return XdmValue.FromNode(new Providers.Xml.XDocumentNode(tempDoc));
             }
         }
@@ -2120,8 +2152,7 @@ public sealed class TransformEngine
                 switch (node)
                 {
                     case XText text:
-                        if (!IsWhitespaceOnly(text.Value))
-                            _currentContainer.Add(new XText(text.Value));
+                        ProcessSequenceText(text, parent);
                         break;
                     case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                         var currentNode = contextItem.IsNode ? contextItem.NodeValue : null;
@@ -2259,6 +2290,160 @@ public sealed class TransformEngine
     }
 
     // ------------------------------------------------------------------
+    // Text Value Template (expand-text) support
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Returns the inherited value of the expand-text attribute for the given element.
+    /// Walks up the XML tree until it finds an explicit expand-text attribute;
+    /// defaults to false if none is found.
+    /// </summary>
+    private static bool GetExpandText(XElement element)
+    {
+        XElement? current = element;
+        while (current != null)
+        {
+            var attr = current.Attribute("expand-text");
+            if (attr != null)
+                return attr.Value == "yes";
+            current = current.Parent;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Evaluates a Text Value Template (TVT): parses {expr} and {{ escapes,
+    /// evaluates each XPath expression, and returns the concatenated result.
+    /// Respects XPath string literals when finding matching }.
+    /// </summary>
+    private string EvaluateTvt(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return text;
+
+        var sb = new StringBuilder();
+        int i = 0;
+
+        while (i < text.Length)
+        {
+            // {{ escape → {
+            if (i < text.Length - 1 && text[i] == '{' && text[i + 1] == '{')
+            {
+                sb.Append('{');
+                i += 2;
+                continue;
+            }
+
+            // }} escape → }
+            if (i < text.Length - 1 && text[i] == '}' && text[i + 1] == '}')
+            {
+                sb.Append('}');
+                i += 2;
+                continue;
+            }
+
+            // {expr} — evaluate XPath expression
+            if (text[i] == '{')
+            {
+                int exprStart = i + 1;
+                int j = exprStart;
+                int braceDepth = 1;
+                bool inSingleQuote = false;
+                bool inDoubleQuote = false;
+
+                while (j < text.Length && braceDepth > 0)
+                {
+                    char c = text[j];
+                    if (inSingleQuote)
+                    {
+                        if (c == '\'') inSingleQuote = false;
+                    }
+                    else if (inDoubleQuote)
+                    {
+                        if (c == '"') inDoubleQuote = false;
+                    }
+                    else
+                    {
+                        if (c == '\'') inSingleQuote = true;
+                        else if (c == '"') inDoubleQuote = true;
+                        else if (c == '{') braceDepth++;
+                        else if (c == '}') braceDepth--;
+                    }
+                    j++;
+                }
+
+                if (braceDepth == 0)
+                {
+                    string expr = text.Substring(exprStart, j - exprStart - 1);
+                    if (!string.IsNullOrEmpty(expr))
+                    {
+                        var compiled = XPath31Expression.Compile(expr);
+                        var value = compiled.Evaluate(_context);
+                        sb.Append(XdmValueToString(value, " "));
+                    }
+                    i = j;
+                    continue;
+                }
+                else
+                {
+                    // Unmatched { — treat as literal
+                    sb.Append('{');
+                    i++;
+                    continue;
+                }
+            }
+
+            sb.Append(text[i]);
+            i++;
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// XSLT elements whose whitespace text nodes are preserved (not stripped).
+    /// See XSLT 3.0 spec §3.3.1.1.
+    /// </summary>
+    private static readonly HashSet<string> WhitespacePreserveElements = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "analyze-string", "attribute", "comment", "copy", "document", "element", "eval",
+        "for-each", "for-each-group", "if", "key", "matching-substring", "message",
+        "non-matching-substring", "otherwise", "param", "processing-instruction",
+        "strip-space", "template", "text", "value-of", "variable", "when", "with-param"
+    };
+
+    /// <summary>
+    /// Returns true if whitespace text nodes inside the given XSLT element should be preserved.
+    /// </summary>
+    private static bool IsWhitespacePreserveContext(XElement parent)
+    {
+        if (parent.Name.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
+            return false;
+        return WhitespacePreserveElements.Contains(parent.Name.LocalName);
+    }
+
+    /// <summary>
+    /// Processes a text node encountered in a sequence constructor.
+    /// If the parent element (or an ancestor) has expand-text="yes",
+    /// evaluates the text as a TVT. Otherwise applies normal whitespace
+    /// stripping and adds the text node to the result.
+    /// </summary>
+    private void ProcessSequenceText(XText text, XElement parent)
+    {
+        if (GetExpandText(parent))
+        {
+            var tvtResult = EvaluateTvt(text.Value);
+            if (tvtResult.Length > 0)
+                AddTextNode(tvtResult);
+        }
+        else
+        {
+            if (!IsWhitespaceOnly(text.Value))
+                AddTextNode(text.Value);
+        }
+    }
+
+    // ------------------------------------------------------------------
     // xsl:number support
     // ------------------------------------------------------------------
 
@@ -2313,7 +2498,7 @@ public sealed class TransformEngine
                     numbers[i] = (int)(numbers[i] - 1 + startAt);
                 }
                 var formatted = FormatNumberSequence(numbers, format);
-                _currentContainer.Add(new XText(formatted));
+                AddTextNode(formatted);
             }
         }
         else
@@ -2346,7 +2531,7 @@ public sealed class TransformEngine
                     }
                 }
                 var formatted = FormatNumberSequence(numbers, format);
-                _currentContainer.Add(new XText(formatted));
+                AddTextNode(formatted);
             }
         }
     }
