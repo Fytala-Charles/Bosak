@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-29
 **Commit:** `3e927b7` on `main` (pushed to origin) plus uncommitted changes
-**Current focus:** `expand-text` / Text Value Templates (TVT) implemented; investigating whitespace stripping behavior in sequence constructors
+**Current focus:** Simple content construction (XSLT §5.7.2) and adjacent-atomic spacing in sequence constructors. seqtor cluster improved significantly; 13 seqtor tests remain failed.
 
 ---
 
@@ -10,27 +10,33 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 2547 / **Failed:** 2915 / **Skipped:** 9138 (14,600 total)
-- Pass rate: **46.6%** (run 11, 2026-05-29)
+- **Passed:** 2675 / **Failed:** 2787 / **Skipped:** 9138 (14,600 total)
+- Pass rate: **49.0%** (latest run, 2026-05-29)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
+- Latest: 2675 passed / 2787 failed / 9138 skipped (49.0%) — after seqtor/simple-content fixes
+- Run 11: 2547 passed / 2915 failed / 9138 skipped (46.6%)
 - Run 36: 2545 passed / 2922 failed / 9133 skipped (46.6%)
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
 
-### Recent Fixes (Last Session)
+### Recent Fixes (This Session)
 
-1. **Stack overflow prevention** — `MaxXsltFunctionCallDepth` reduced from `64` → `32`. Each XSLT function call adds 6–8 C# stack frames; depth 61 overflowed the .NET stack before the guard could fire. Now fails gracefully with error message.
-2. **Deep recursion skips** — `seqtor-029` through `033` added to conformance skip list (known to exceed safe stack limit).
-3. **Empty sequence cast fix** — `VmEngine.TryCast` now returns empty sequence for empty input (`xs:type(())` → `()`). Fixed `seqtor-021`, `022`, and 2 other tests.
-4. **Document-level text output** — `AddTextNode()` routes text to `_documentLevelText` buffer when container is `XDocument`, preventing LINQ-to-XML crashes on document-level text nodes.
-5. **System/property functions** — Added `fn:system-property#1`, `fn:available-system-properties#0`, `fn:static-base-uri#0`, `fn:function-available#1/#2`, `fn:type-available#1`.
-6. **`prefix:*` node test** — Parser fixed to use raw token name as prefix; added `NamespaceTest` IR opcode and VM implementation.
-7. **Attribute axis excludes namespace declarations** — `GetAttributeAxis()` skips `IsNamespaceDeclaration` attributes.
-8. **`xsl:copy-of` attribute handling** — `CopyNodeToResult()` now copies attribute nodes to current result element.
-9. **AVT evaluation in `xsl:element`/`xsl:attribute`** — `name` and `namespace` attributes are evaluated as AVTs before `ResolveElementName()`.
+1. **`fn:substring` rounding fix** — `Substring_2`/`Substring_3` now use `RoundDouble` (half-to-ceiling) matching XPath `fn:round` semantics. Fixed `string-021`, `string-090`, `string-093`.
+2. **`xsl:number` fixes** — `ComputeNumberMultiple`/`ComputeNumberSingle` now correctly find nearest-ancestor `from` nodes and verify descendant-or-self relationship. `FormatNumberSequence` emits `prefix+suffix` for empty number arrays. +32 number tests (81→113 passed).
+3. **Sequence constructor text node preservation** — `EvaluateSequenceConstructor` now preserves text nodes as `XdmValue` text nodes (not atomic strings), so `CopyToResult` can merge adjacent text nodes without inserting spaces.
+4. **`CopyToResult` rewrite for §5.7.1** — Properly merges adjacent text nodes, joins consecutive atomic values with single space (#x20), discards zero-length text nodes, and handles sequences correctly.
+5. **`ApplyComplexContentRules`** — New helper that merges adjacent text nodes and removes zero-length text nodes when wrapping sequence constructor output in a document node (for `xsl:variable` without `as`).
+6. **Adjacent-atomic spacing tracking** — Added `_lastAddedWasAtomic` field and `AppendAtomicText()` method so that successive `xsl:sequence` instructions with single atomics are joined with spaces.
+7. **TVT evaluation in `xsl:text`** — `xsl:text` now evaluates TVTs when `expand-text="yes"` is set. Fixes `seqtor-036b/c`, `037b/c`, `039b/c`, `040b/c`, `041`, `042`.
+8. **`ContainsTvtExpression` guard** — `ProcessSequenceText` only evaluates TVTs when the text node actually contains `{...}`. Whitespace-only text nodes inside `expand-text="yes"` elements are now correctly stripped (unless they contain a TVT). Fixes `seqtor-020`, `026`.
+9. **Empty sequence state preservation** — `CopyToResult` no longer resets `_lastAddedWasAtomic` when processing empty sequences. Fixes `seqtor-007`, `010`, `011`.
+10. **`WhitespacePreserveElements` corrected** — Reduced to only `"text"` per XSLT 3.0 §3.3.1.1. Previously incorrectly included `comment`, `attribute`, `element`, `for-each`, etc.
+11. **`xsl:processing-instruction` handler** — Added proper `xsl:processing-instruction` support using `EvaluateSimpleContent`.
+12. **`xsl:namespace` handler** — Added basic `xsl:namespace` support.
+13. **`EvaluateSimpleContent` adoption** — `xsl:attribute`, `xsl:comment`, `xsl:processing-instruction`, `xsl:value-of` (no select), and `xsl:text` now use `EvaluateSimpleContent` instead of naive text concatenation.
 
 ### Unit Test Status
 
@@ -55,14 +61,15 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
   └── ApplyTemplates / ExecuteTemplate loop
       └── ExecuteXsltInstruction handles: element, attribute, value-of,
           text, apply-templates, for-each, if, choose, variable, param,
-          call-template, copy, copy-of, number, sort
+          call-template, copy, copy-of, number, sort, processing-instruction,
+          namespace, sequence, next-match
 ```
 
 ### Key Files for XSLT Work
 
 | File | Responsibility |
 |------|---------------|
-| `src/Bosak.XPath.Xslt/Runtime/TransformEngine.cs` | Main execution engine; add new instruction handlers here |
+| `src/Bosak.XPath.Xslt/Runtime/TransformEngine.cs` | Main execution engine; add new instruction handlers here. **Recently modified for seqtor fixes.** |
 | `src/Bosak.XPath.Xslt/Stylesheet/Stylesheet.cs` | Parses xsl:stylesheet, resolves imports/includes, collects templates/keys/output/strip-space |
 | `src/Bosak.XPath.Xslt/Stylesheet/TemplateRule.cs` | Single template rule with match pattern, modes, priority, import precedence |
 | `src/Bosak.XPath.Xslt/Stylesheet/KeyDefinition.cs` | Parsed xsl:key declaration |
@@ -87,15 +94,30 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 
 ## Recent Changes (This Session)
 
-### Stack Overflow Prevention
-- `TransformEngine.MaxXsltFunctionCallDepth` reduced from 64 → 32
-- `seqtor-029` through `033` added to conformance `SkipTests`
+### Sequence Constructor & Simple Content Construction
+- `CopyToResult` rewritten with proper §5.7.1 complex content rules
+- `AppendAtomicText()` added for cross-instruction atomic joining
+- `_lastAddedWasAtomic` field added to `TransformEngine`
+- `ApplyComplexContentRules()` helper added for document-node wrapping
+- `EvaluateSequenceConstructor` now preserves text nodes as nodes (not strings)
+- `EvaluateSimpleContent` used by `attribute`, `comment`, `processing-instruction`, `value-of`, `text`
 - Change history updated in `TransformEngine.cs`
 
-### Empty Sequence Cast Fix
-- `VmEngine.TryCast` now handles `IsUndefined` and zero-length sequences by returning `XdmValue.Undefined`
-- Fixed `seqtor-021`, `022`, and 2 other tests that use `xs:language(())` etc.
-- Change history updated in `VmEngine.cs`
+### TVT & Whitespace
+- `xsl:text` handler evaluates TVTs when `expand-text="yes"`
+- `ContainsTvtExpression()` helper added
+- `ProcessSequenceText` checks `ContainsTvtExpression` before TVT evaluation
+- `WhitespacePreserveElements` reduced to only `"text"`
+- Change history updated in `TransformEngine.cs`
+
+### New Instruction Handlers
+- `xsl:processing-instruction` added (with `EvaluateSimpleContent`)
+- `xsl:namespace` added (basic support)
+- Change history updated in `TransformEngine.cs`
+
+### `fn:substring` Fix
+- `Substring_2`/`Substring_3` use `RoundDouble(startD, 0)` instead of `(int)startD`
+- Change history updated in `FunctionLibrary.cs`
 
 ---
 
@@ -133,22 +155,44 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 5. **Negative zero** — `double.IsNegative(value)` is used to detect `-0`; `value == 0.0` alone is not sufficient.
 6. **Global variable forward references** — Global variables are evaluated in import/include/local order. Forward references within the same stylesheet are not dependency-sorted.
 7. **Namespace declaration hoisting** — LINQ-to-XML places `xmlns:prefix` on first element using it; Saxon/test suite expects hoisting to outermost element. Root cause of many namespace test failures.
-8. **Whitespace stripping in sequence constructors** — Engine strips ALL whitespace-only text nodes at runtime. XSLT spec preserves whitespace in certain elements (`xsl:for-each`, `xsl:if`, etc.). Causes `seqtor-020` failure.
-9. **`expand-text` not implemented** — Text Value Templates (`{expr}` in text nodes) are not evaluated. Major gap affecting 229+ test files. **Currently being implemented.**
-10. **`xsl:namespace-alias` not implemented** — ~26 namespace tests fail.
-11. **`xsl:number level="multiple"`** — Multi-level ancestor chain formatting is incomplete.
-12. **Decimal overflow in `FormatNumberEngine`** — Uses `decimal` which overflows for very large inputs.
-13. **Match pattern gaps** — `descendant-or-self::x[predicate]`, `except`/`intersect`, `id()`/`key()` patterns missing in `PatternCompiler`.
+8. **Sequence constructor batching** — `ExecuteSequenceConstructorDirect` adds items to `_currentContainer` eagerly (one by one). This means adjacent atomics across `xsl:for-each` iterations or multiple `xsl:sequence` instructions are not batched before complex content construction. `_lastAddedWasAtomic` is a partial workaround but cannot fully emulate true sequence accumulation. Root cause of `seqtor-024`, `025`, `026` and possibly others.
+9. **`xsl:namespace-alias` not implemented** — ~26 namespace tests fail.
+10. **`xsl:number level="multiple"`** — Multi-level ancestor chain formatting is incomplete.
+11. **Decimal overflow in `FormatNumberEngine`** — Uses `decimal` which overflows for very large inputs.
+12. **Match pattern gaps** — `descendant-or-self::x[predicate]`, `except`/`intersect`, `id()`/`key()` patterns missing in `PatternCompiler`.
+13. **DateTime year < 1** — `DateTimeOffset` minimum year is 1. Tests using year `-2` cannot pass without switching to a custom date representation.
+14. **Timezone adjustment** — `adjust-time-to-timezone` produces incorrect offsets in some cases.
 
 ---
 
 ## Recommended Next Steps
 
-1. **`expand-text` / Text Value Templates** — ✅ Implemented. Fixes 18 tests. Remaining seqtor failures (014–019, 024, 036–040) are due to whitespace text nodes inside `xsl:for-each` being stripped at runtime — needs proper XSLT whitespace stripping rules.
-2. **`substring` off-by-one / out-of-bounds** — `string-021`, `090`, `093` fail. `substring` throws when startIndex > length instead of returning empty string.
-3. **Whitespace stripping per XSLT spec** — Preserve whitespace in `xsl:for-each`, `xsl:if`, etc. Fixes `seqtor-020`.
-4. **`exclude-result-prefixes` / `inherit-namespaces`** — Medium complexity; 30+ namespace test failures.
-5. **`xsl:namespace-alias`** — ~26 tests; requires namespace URI substitution during output.
+### Immediate: Quick-win clusters (~few hours, +30–50 tests)
+
+These clusters are >75% passing with only a handful of distinct root causes:
+
+- **`string`** — 12 failures, 0 skipped (91% passing)
+- **`position`** — 21 failures, 3 skipped (90% passing)
+- **`boolean`** — 26 failures, 0 skipped (77% passing)
+
+### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
+
+| Cluster | Failed | Skipped | Notes |
+|---------|--------|---------|-------|
+| **number** | 152 | 1 | Already have context from earlier `xsl:number` fixes. Likely Unicode numbering, `lang`/`letter-value`, grouping, large numbers. |
+| **match** | 106 | 107 | Pattern matching gaps. May overlap with `PatternCompiler` work. |
+| **mode** | 88 | 44 | Template mode dispatch issues. |
+| **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
+| **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
+| **for-each-group** | 62 | 3 | `xsl:for-each-group` implementation gaps. |
+| **key** | 63 | 8 | `key()` / `xsl:key` behavior. |
+| **use-when** | 61 | 0 | Static evaluation of `use-when` expressions. |
+
+### Medium-term: Architectural refactor (~2–3 days, broad impact)
+
+**Sequence constructor batching** — Refactor `ExecuteSequenceConstructorDirect` to accumulate raw `XdmValue` items in a list and apply complex content construction rules (§5.7.1) only when flushing. This would:
+- Fix remaining 13 seqtor failures (`seqtor-024`, `025`, `026`, `036a`, `036d`, `037a`, `037d`, `016`, `017`, `027`, `028`, `034`, `035`)
+- Likely improve many other clusters that depend on correct sequence construction (`sequence`, `copy`, `variable`, etc.)
 
 ---
 
@@ -156,4 +200,4 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 
 - `main` — all work is on `main`, pushed to `origin/main`
 - No feature branches
-- Uncommitted changes: `VmEngine.cs`, `TransformEngine.cs`, `Program.cs`
+- Uncommitted changes: `TransformEngine.cs`, `FunctionLibrary.cs`

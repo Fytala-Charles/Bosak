@@ -3092,12 +3092,12 @@ public static class FunctionLibrary
     private static XdmValue StringLength_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromInteger(AtomizedString(args[0]).Length);
 
-    private static int RoundHalfToEvenDouble(double value)
+    private static int RoundForSubstring(double value)
     {
         if (double.IsNaN(value)) return 0;
         if (double.IsPositiveInfinity(value)) return int.MaxValue;
         if (double.IsNegativeInfinity(value)) return int.MinValue;
-        return (int)Math.Round(value, MidpointRounding.ToEven);
+        return (int)RoundDouble(value, 0);
     }
 
     private static XdmValue Substring_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3105,7 +3105,7 @@ public static class FunctionLibrary
         string s = AtomizedString(args[0]);
         double startD = ToDoubleValue(args[1]);
         if (double.IsNaN(startD)) return XdmValue.FromString(string.Empty);
-        int start = RoundHalfToEvenDouble(startD);
+        int start = RoundForSubstring(startD);
         int effectiveStart = Math.Max(start, 1);
         if (effectiveStart > s.Length) return XdmValue.FromString(string.Empty);
         return XdmValue.FromString(s[(effectiveStart - 1)..]);
@@ -3117,10 +3117,11 @@ public static class FunctionLibrary
         double startD = ToDoubleValue(args[1]);
         double lenD = ToDoubleValue(args[2]);
         if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.FromString(string.Empty);
-        int start = RoundHalfToEvenDouble(startD);
-        int len = RoundHalfToEvenDouble(lenD);
+        int start = RoundForSubstring(startD);
+        int len = RoundForSubstring(lenD);
         if (len <= 0) return XdmValue.FromString(string.Empty);
         int effectiveStart = Math.Max(start, 1);
+        if (effectiveStart > s.Length) return XdmValue.FromString(string.Empty);
         int effectiveEnd = start + len;
         if (effectiveEnd <= effectiveStart) return XdmValue.FromString(string.Empty);
         int count = effectiveEnd - effectiveStart;

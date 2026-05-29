@@ -23,6 +23,8 @@
 //                      | Charles Korthout | 1.6   | 28-05-2026     | ResolveElementName for xsl:element/attribute; resolves prefix via in-scope namespaces    |
 //                      | Charles Korthout | 1.1   | 27-05-2026     | Added xsl:function registration, ExecuteXsltFunction, EvaluateFunctionBody, xsl:sequence |
 //                      | Charles Korthout | 1.2   | 27-05-2026     | Added multi-key xsl:sort with composite comparator and stable sort                          |
+//                      | Charles Korthout | 1.7   | 29-05-2026     | Fixed ComputeNumberMultiple from handling: nearest ancestor, include from-node, fallback    |
+//                      | Charles Korthout | 1.8   | 29-05-2026     | Fixed ComputeNumberSingle from handling; FormatNumberSequence emits prefix+suffix for empty |
 //                      | Charles Korthout | 0.8   | 26-05-2026     | Added xsl:copy, fixed for-each variable scoping, AVT evaluation in literal elements      |
 //                      | Charles Korthout | 0.9   | 26-05-2026     | Added initial-template support, fixed xsl:copy to copy attributes                       |
 //                      | Charles Korthout | 1.0   | 26-05-2026     | Added xsl:mode on-no-match support; atomic for-each (EnumerateItems); keyword var names  |
@@ -57,6 +59,7 @@ public sealed class TransformEngine
     private readonly XDocument _resultDocument;
     private XContainer _currentContainer;
     private readonly StringBuilder _documentLevelText = new();
+    private bool _lastAddedWasAtomic;
 
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
@@ -200,6 +203,37 @@ public sealed class TransformEngine
         {
             _currentContainer.Add(new XText(text));
         }
+    }
+
+    /// <summary>
+    /// Appends a space and the given text to the last text node in the current container,
+    /// or creates a new text node if there is no last text node. Used to join adjacent
+    /// atomic values with a single space in complex content construction.
+    /// </summary>
+    private void AppendAtomicText(string text)
+    {
+        if (_currentContainer is XDocument)
+        {
+            if (_lastAddedWasAtomic)
+                _documentLevelText.Append(' ');
+            _documentLevelText.Append(text);
+        }
+        else
+        {
+            if (_lastAddedWasAtomic)
+            {
+                var lastText = _currentContainer.Nodes().LastOrDefault() as XText;
+                if (lastText != null)
+                {
+                    lastText.Value = lastText.Value + " " + text;
+                    _lastAddedWasAtomic = true;
+                    return;
+                }
+                text = " " + text;
+            }
+            _currentContainer.Add(new XText(text));
+        }
+        _lastAddedWasAtomic = true;
     }
 
     private void RegisterDecimalFormats()
@@ -831,7 +865,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        value = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                        value = EvaluateSimpleContent(instruction, contextItem);
                     }
                     if (_currentContainer is XElement targetElem)
                     {
@@ -849,13 +883,14 @@ public sealed class TransformEngine
                         var result = compiled.Evaluate(_context);
                         var sep = instruction.Attribute("separator")?.Value ?? " ";
                         var textValue = XdmValueToString(result, sep);
+                        _lastAddedWasAtomic = false;
                         AddTextNode(textValue);
                     }
-                    else if (GetExpandText(instruction))
+                    else
                     {
-                        var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
-                        var tvtResult = EvaluateTvt(text);
-                        AddTextNode(tvtResult);
+                        var textValue = EvaluateSimpleContent(instruction, contextItem);
+                        _lastAddedWasAtomic = false;
+                        AddTextNode(textValue);
                     }
                     break;
                 }
@@ -863,15 +898,14 @@ public sealed class TransformEngine
             case "text":
                 {
                     var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                    // XSLT 3.0 §5.6.2: TVTs are expanded in xsl:text when expand-text="yes"
+                    // is set on the xsl:text element or an ancestor.
                     if (GetExpandText(instruction))
                     {
-                        var tvtResult = EvaluateTvt(text);
-                        AddTextNode(tvtResult);
+                        text = EvaluateTvt(text);
                     }
-                    else
-                    {
-                        AddTextNode(text);
-                    }
+                    _lastAddedWasAtomic = false;
+                    AddTextNode(text);
                     break;
                 }
 
@@ -887,9 +921,54 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        commentText = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                        commentText = EvaluateSimpleContent(instruction, contextItem);
                     }
                     _currentContainer.Add(new XComment(commentText));
+                    break;
+                }
+
+            case "processing-instruction":
+                {
+                    var piNameRaw = instruction.Attribute("name")?.Value ?? "";
+                    var piName = EvaluateAvt(piNameRaw);
+                    var piSelect = instruction.Attribute("select")?.Value;
+                    string piData;
+                    if (!string.IsNullOrEmpty(piSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(piSelect);
+                        var result = compiled.Evaluate(_context);
+                        piData = XdmValueToString(result);
+                    }
+                    else
+                    {
+                        piData = EvaluateSimpleContent(instruction, contextItem);
+                    }
+                    // XSLT 3.0 §11.4.4: leading spaces in PI data are removed
+                    piData = piData.TrimStart();
+                    _currentContainer.Add(new XProcessingInstruction(piName, piData));
+                    break;
+                }
+
+            case "namespace":
+                {
+                    var nsNameRaw = instruction.Attribute("name")?.Value ?? "";
+                    var nsName = EvaluateAvt(nsNameRaw);
+                    var nsSelect = instruction.Attribute("select")?.Value;
+                    string nsUri;
+                    if (!string.IsNullOrEmpty(nsSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(nsSelect);
+                        var result = compiled.Evaluate(_context);
+                        nsUri = result.ToString();
+                    }
+                    else
+                    {
+                        nsUri = EvaluateSimpleContent(instruction, contextItem);
+                    }
+                    if (_currentContainer is XElement targetElem)
+                    {
+                        targetElem.SetAttributeValue(XNamespace.Xmlns + nsName, nsUri);
+                    }
                     break;
                 }
 
@@ -942,6 +1021,7 @@ public sealed class TransformEngine
                                 break;
                             }
                         case XdmNodeKind.Text:
+                            _lastAddedWasAtomic = false;
                             AddTextNode(nodeToCopy.StringValue);
                             break;
                         case XdmNodeKind.Attribute:
@@ -1516,37 +1596,78 @@ public sealed class TransformEngine
 
         if (value.IsNode && value.NodeValue != null)
         {
+            _lastAddedWasAtomic = false;
             CopyNodeToResult(value.NodeValue);
         }
         else if (value.IsSequence && value.SequenceValue != null)
         {
-            // XSLT 2.0: consecutive atomic values in complex content are joined
-            // with a single space (#x20) separator before becoming a text node.
-            var atomics = new List<string>();
+            // XSLT 3.0 §5.7.1: process sequence for complex content construction.
+            // - Zero-length text nodes are discarded.
+            // - Adjacent text nodes are merged.
+            // - Consecutive atomic values are joined with a single space (#x20).
+            // - Text nodes and atomics in a contiguous run are merged into one text node.
+            var sb = new StringBuilder();
+            bool prevWasAtomic = false;
+            bool anyItemProcessed = false;
+
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
             {
-                if (item.IsNode && item.NodeValue != null)
+                anyItemProcessed = true;
+
+                // Discard zero-length text nodes
+                if (item.IsNode && item.NodeValue != null &&
+                    item.NodeValue.NodeKind == XdmNodeKind.Text &&
+                    item.NodeValue.StringValue.Length == 0)
                 {
-                    if (atomics.Count > 0)
+                    continue;
+                }
+
+                if (item.IsNode && item.NodeValue != null &&
+                    (item.NodeValue.NodeKind == XdmNodeKind.Element ||
+                     item.NodeValue.NodeKind == XdmNodeKind.Comment ||
+                     item.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction))
+                {
+                    // Non-text node: flush accumulated text, then copy the node
+                    if (sb.Length > 0)
                     {
-                        AddTextNode(string.Join(" ", atomics));
-                        atomics.Clear();
+                        AddTextNode(sb.ToString());
+                        sb.Clear();
                     }
-                    CopyToResult(item);
+                    prevWasAtomic = false;
+                    _lastAddedWasAtomic = false;
+                    CopyNodeToResult(item.NodeValue);
+                }
+                else if (item.IsNode && item.NodeValue != null &&
+                         item.NodeValue.NodeKind == XdmNodeKind.Text)
+                {
+                    // Text node: append without separator
+                    sb.Append(item.NodeValue.StringValue);
+                    prevWasAtomic = false;
                 }
                 else
                 {
-                    atomics.Add(item.ToString());
+                    // Atomic value: insert space only if previous item was also atomic
+                    if (prevWasAtomic)
+                    {
+                        sb.Append(' ');
+                    }
+                    sb.Append(item.ToString());
+                    prevWasAtomic = true;
                 }
             }
-            if (atomics.Count > 0)
+
+            if (sb.Length > 0)
             {
-                AddTextNode(string.Join(" ", atomics));
+                AddTextNode(sb.ToString());
+            }
+            if (anyItemProcessed)
+            {
+                _lastAddedWasAtomic = prevWasAtomic;
             }
         }
         else
         {
-            AddTextNode(value.ToString());
+            AppendAtomicText(value.ToString());
         }
     }
 
@@ -1561,6 +1682,7 @@ public sealed class TransformEngine
         }
         else if (node.NodeKind == XdmNodeKind.Element)
         {
+            _lastAddedWasAtomic = false;
             var copy = new XElement(
                 XName.Get(node.LocalName, node.NamespaceUri));
             foreach (var attr in node.Attributes())
@@ -1580,14 +1702,17 @@ public sealed class TransformEngine
         }
         else if (node.NodeKind == XdmNodeKind.Text)
         {
+            _lastAddedWasAtomic = false;
             AddTextNode(node.StringValue);
         }
         else if (node.NodeKind == XdmNodeKind.Comment)
         {
+            _lastAddedWasAtomic = false;
             _currentContainer.Add(new XComment(node.StringValue));
         }
         else if (node.NodeKind == XdmNodeKind.ProcessingInstruction)
         {
+            _lastAddedWasAtomic = false;
             _currentContainer.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
         }
         else if (node.NodeKind == XdmNodeKind.Attribute && _currentContainer is XElement parent)
@@ -1639,6 +1764,7 @@ public sealed class TransformEngine
                 // Built-in: copy text value (only if we have an element container)
                 if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail)
                 {
+                    _lastAddedWasAtomic = false;
                     AddTextNode(node.StringValue);
                 }
                 break;
@@ -2112,6 +2238,13 @@ public sealed class TransformEngine
             }
         }
 
+        // When wrapping in a document node, apply complex content rules:
+        // remove zero-length text nodes, merge adjacent text nodes.
+        if (wrapInDocumentNode)
+        {
+            nodes = ApplyComplexContentRules(nodes);
+        }
+
         // Fall back: return the raw sequence
         var results = new List<XdmValue>();
         foreach (var child in nodes)
@@ -2122,7 +2255,10 @@ public sealed class TransformEngine
                     results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(e)));
                     break;
                 case XText t:
-                    results.Add(XdmValue.FromString(t.Value));
+                    // Preserve text nodes as text nodes, not atomic strings,
+                    // so that CopyToResult can concatenate adjacent text nodes
+                    // without inserting spaces (XSLT 3.0 §5.7.2).
+                    results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(new XText(t.Value))));
                     break;
                 case XComment c:
                     results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(c)));
@@ -2138,13 +2274,59 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Applies complex content construction rules to a list of nodes:
+    /// removes zero-length text nodes and merges adjacent text nodes.
+    /// </summary>
+    private static List<XNode> ApplyComplexContentRules(List<XNode> nodes)
+    {
+        var result = new List<XNode>();
+        var textBuffer = new StringBuilder();
+
+        foreach (var node in nodes)
+        {
+            if (node is XText t)
+            {
+                if (t.Value.Length == 0)
+                {
+                    // Discard zero-length text nodes, but flush any accumulated text first
+                    if (textBuffer.Length > 0)
+                    {
+                        result.Add(new XText(textBuffer.ToString()));
+                        textBuffer.Clear();
+                    }
+                    continue;
+                }
+                textBuffer.Append(t.Value);
+            }
+            else
+            {
+                if (textBuffer.Length > 0)
+                {
+                    result.Add(new XText(textBuffer.ToString()));
+                    textBuffer.Clear();
+                }
+                result.Add(node);
+            }
+        }
+
+        if (textBuffer.Length > 0)
+        {
+            result.Add(new XText(textBuffer.ToString()));
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Executes a sequence constructor directly into the specified container,
     /// handling text nodes, XSLT instructions, and literal result elements.
     /// </summary>
     private void ExecuteSequenceConstructorDirect(XElement parent, XdmValue contextItem, XContainer outputContainer)
     {
         var savedContainer = _currentContainer;
+        var savedLastAtomic = _lastAddedWasAtomic;
         _currentContainer = outputContainer;
+        _lastAddedWasAtomic = false;
         try
         {
             foreach (var node in parent.Nodes())
@@ -2167,7 +2349,46 @@ public sealed class TransformEngine
         finally
         {
             _currentContainer = savedContainer;
+            _lastAddedWasAtomic = savedLastAtomic;
         }
+    }
+
+    /// <summary>
+    /// Evaluates the sequence constructor within the given element and returns
+    /// the concatenated string value, applying simple content construction rules.
+    /// </summary>
+    private string EvaluateSimpleContent(XElement parent, XdmValue contextItem)
+    {
+        var savedContainer = _currentContainer;
+        var savedLastAtomic = _lastAddedWasAtomic;
+        var temp = new XElement("__temp__");
+        _currentContainer = temp;
+        _lastAddedWasAtomic = false;
+        try
+        {
+            foreach (var node in parent.Nodes())
+            {
+                switch (node)
+                {
+                    case XText text:
+                        ProcessSequenceText(text, parent);
+                        break;
+                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                        var currentNode = contextItem.IsNode ? contextItem.NodeValue : null;
+                        ExecuteXsltInstruction(elem, currentNode!);
+                        break;
+                    case XElement elem:
+                        CopyLiteralElement(elem);
+                        break;
+                }
+            }
+        }
+        finally
+        {
+            _currentContainer = savedContainer;
+            _lastAddedWasAtomic = savedLastAtomic;
+        }
+        return temp.Value;
     }
 
     // ------------------------------------------------------------------
@@ -2404,12 +2625,13 @@ public sealed class TransformEngine
     /// XSLT elements whose whitespace text nodes are preserved (not stripped).
     /// See XSLT 3.0 spec §3.3.1.1.
     /// </summary>
+    /// <summary>
+    /// XSLT 3.0 §3.3.1.1: Whitespace text nodes are preserved only in xsl:text
+    /// and in elements with xml:space="preserve".
+    /// </summary>
     private static readonly HashSet<string> WhitespacePreserveElements = new(StringComparer.OrdinalIgnoreCase)
     {
-        "analyze-string", "attribute", "comment", "copy", "document", "element", "eval",
-        "for-each", "for-each-group", "if", "key", "matching-substring", "message",
-        "non-matching-substring", "otherwise", "param", "processing-instruction",
-        "strip-space", "template", "text", "value-of", "variable", "when", "with-param"
+        "text"
     };
 
     /// <summary>
@@ -2428,18 +2650,52 @@ public sealed class TransformEngine
     /// evaluates the text as a TVT. Otherwise applies normal whitespace
     /// stripping and adds the text node to the result.
     /// </summary>
+    /// <summary>
+    /// Returns true if the text contains an unescaped text value template expression ({...}).
+    /// </summary>
+    private static bool ContainsTvtExpression(string text)
+    {
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (text[i] == '{')
+            {
+                if (i + 1 < text.Length && text[i + 1] == '{')
+                {
+                    i++; // skip escaped {{
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void ProcessSequenceText(XText text, XElement parent)
     {
-        if (GetExpandText(parent))
+        if (GetExpandText(parent) && ContainsTvtExpression(text.Value))
         {
             var tvtResult = EvaluateTvt(text.Value);
             if (tvtResult.Length > 0)
+            {
+                _lastAddedWasAtomic = false;
                 AddTextNode(tvtResult);
+            }
+        }
+        else if (IsWhitespacePreserveContext(parent))
+        {
+            // Preserve whitespace text nodes in xsl:text and xml:space="preserve" contexts
+            _lastAddedWasAtomic = false;
+            AddTextNode(text.Value);
         }
         else
         {
             if (!IsWhitespaceOnly(text.Value))
+            {
+                _lastAddedWasAtomic = false;
                 AddTextNode(text.Value);
+            }
         }
     }
 
@@ -2498,6 +2754,7 @@ public sealed class TransformEngine
                     numbers[i] = (int)(numbers[i] - 1 + startAt);
                 }
                 var formatted = FormatNumberSequence(numbers, format);
+                _lastAddedWasAtomic = false;
                 AddTextNode(formatted);
             }
         }
@@ -2530,9 +2787,14 @@ public sealed class TransformEngine
                         numbers[i] = (int)(numbers[i] - 1 + startAt);
                     }
                 }
-                var formatted = FormatNumberSequence(numbers, format);
-                AddTextNode(formatted);
             }
+
+            // Format even when no numbers match: prefix+suffix is still emitted
+            // (e.g. format="(1)" with no matches produces "()").
+            var numsToFormat = numbers ?? System.Array.Empty<int>();
+            var formatted = FormatNumberSequence(numsToFormat, format);
+            _lastAddedWasAtomic = false;
+            AddTextNode(formatted);
         }
     }
 
@@ -2579,23 +2841,51 @@ public sealed class TransformEngine
         if (target == null)
             return null;
 
-        // If from is specified, target must have a from-matching ancestor
+        // If from is specified, the target must be a descendant-or-self of the
+        // nearest ancestor of the current node that matches the from pattern.
         if (fromMatcher != null)
         {
-            bool hasFromAncestor = false;
-            foreach (var item in target.Axis(XdmAxis.Ancestor))
+            IXdmNode? fromNode = null;
+            foreach (var item in currentNode.Axis(XdmAxis.Ancestor))
             {
                 if (item.IsNode && item.NodeValue is IXdmNode ancestor)
                 {
                     if (fromMatcher(ancestor, context))
                     {
-                        hasFromAncestor = true;
+                        fromNode = ancestor;
                         break;
                     }
                 }
             }
-            if (!hasFromAncestor)
-                return null;
+
+            if (fromNode != null)
+            {
+                bool isDescendantOrSelf = false;
+                IXdmNode? check = target;
+                while (check != null)
+                {
+                    if (check.IsSameNode(fromNode))
+                    {
+                        isDescendantOrSelf = true;
+                        break;
+                    }
+                    IXdmNode? parent = null;
+                    foreach (var parentItem in check.Axis(XdmAxis.Parent))
+                    {
+                        if (parentItem.IsNode && parentItem.NodeValue is IXdmNode p)
+                        {
+                            parent = p;
+                            break;
+                        }
+                    }
+                    if (parent == null)
+                        break;
+                    check = parent;
+                }
+                if (!isDescendantOrSelf)
+                    return null;
+            }
+            // If no from-matching ancestor exists, target is still valid (fallback).
         }
 
         int count = 0;
@@ -2653,18 +2943,42 @@ public sealed class TransformEngine
             if (item.IsNode && item.NodeValue is IXdmNode ancestor)
                 ancestors.Add(ancestor);
         }
-        ancestors.Reverse(); // outermost first
-        ancestors.Add(currentNode);
+        // ancestors is now [parent, grandparent, ...] = innermost to outermost
 
-        foreach (var ancestor in ancestors)
+        // Find the nearest ancestor matching the from pattern.
+        IXdmNode? fromNode = null;
+        if (fromMatcher != null)
         {
-            if (fromMatcher != null && fromMatcher(ancestor, context))
-                break;
+            foreach (var ancestor in ancestors)
+            {
+                if (fromMatcher(ancestor, context))
+                {
+                    fromNode = ancestor;
+                    break;
+                }
+            }
+        }
 
-            if (countMatcher(ancestor, context))
+        // Build the chain from the from-node (or root) down to the current node,
+        // in outermost-to-innermost order.
+        var chain = new List<IXdmNode>();
+        bool started = fromNode == null;
+        for (int i = ancestors.Count - 1; i >= 0; i--)
+        {
+            if (!started && ancestors[i].IsSameNode(fromNode!))
+                started = true;
+
+            if (started)
+                chain.Add(ancestors[i]);
+        }
+        chain.Add(currentNode);
+
+        foreach (var node in chain)
+        {
+            if (countMatcher(node, context))
             {
                 int count = 0;
-                foreach (var item in ancestor.Axis(XdmAxis.PrecedingSibling))
+                foreach (var item in node.Axis(XdmAxis.PrecedingSibling))
                 {
                     if (item.IsNode && item.NodeValue is IXdmNode sibling)
                     {
@@ -2705,9 +3019,6 @@ public sealed class TransformEngine
     /// </summary>
     private string FormatNumberSequence(int[] numbers, string format)
     {
-        if (numbers.Length == 0)
-            return string.Empty;
-
         var (prefix, tokens, separators, suffix) = ParseXslNumberFormat(format);
 
         var sb = new System.Text.StringBuilder();
