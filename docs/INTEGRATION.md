@@ -1,22 +1,22 @@
-<!-- Bosak XPath / XSLT — Customer A Integration Guide -->
+<!-- Bosak XPath / XSLT — General Integration Guide -->
 <!-- Living document: updated with each significant Bosak change. -->
 
-# Bosak XPath / XSLT — Customer A Integration Guide
+# Bosak XPath / XSLT — Integration Guide
 
-> **Purpose:** Quick-reference for the Customer A project on how to consume the Bosak XPath 3.1 + XSLT stack.
+> **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT stack.
 > **Last updated:** 28 May 2026
-> **Bosak baseline:** 840 unit tests passed / 0 failed (W3C QT3 conformance: ~18,272 passed / ~3,747 failed)
+> **Bosak baseline:** 840 unit tests passed / 0 failed / 0 skipped
 
 ---
 
 ## 1. Project References
 
-Add project references from `Customer A.Workbench.Desktop` (or whichever Customer A project needs XPath/XSLT) to the Bosak layer stack:
+Add project references to the Bosak layer stack from your consuming project:
 
 ```xml
 <ItemGroup>
-  <ProjectReference Include="..\..\Bosak\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj" />
-  <ProjectReference Include="..\..\Bosak\src\Bosak.XPath.Xslt\Bosak.XPath.Xslt.csproj" />
+  <ProjectReference Include="..\Bosak\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj" />
+  <ProjectReference Include="..\Bosak\src\Bosak.XPath.Xslt\Bosak.XPath.Xslt.csproj" />
 </ItemGroup>
 ```
 
@@ -54,11 +54,11 @@ using Bosak.XPath.Runtime.Vm;
 
 var ctx = new EvaluationContext
 {
-    BaseUri = "file:///C:/Customer A/Data/",
+    BaseUri = "file:///C:/Data/",
     DocumentLoader = uri => /* your IXdmNode loader */
 };
 
-ctx.WithNamespace("edi", "http://app.example.org/edi")
+ctx.WithNamespace("edi", "http://example.org/edi")
    .WithVariable("docId", XdmValue.FromString("DOC-1234"));
 
 var result = expr.Evaluate(ctx);
@@ -99,7 +99,7 @@ var result = expr.Evaluate(ctx);
 ```csharp
 using Bosak.XPath.Xslt.Api;
 
-var xsl = @"<xsl:stylesheet version='2.0'
+var xsl = @"<xsl:stylesheet version='3.0'
     xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
     <xsl:template match='/'>
         <output><xsl:value-of select='root/@id'/></output>
@@ -124,7 +124,7 @@ var resultXml = executable.TransformToString(new XDocumentNode(source));
 ### 3.3 Named Templates & `call-template`
 
 ```csharp
-var xsl = @"<xsl:stylesheet version='2.0'
+var xsl = @"<xsl:stylesheet version='3.0'
     xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
     <xsl:template match='/'>
         <result>
@@ -144,12 +144,41 @@ var executable = new XsltCompiler().Compile(xsl);
 var result = executable.TransformToString(new XDocumentNode(source));
 ```
 
-### 3.4 Parameters & Variables
+### 3.4 Tunnel Parameters
 
-- `xsl:param` on a named template receives values via `xsl:with-param`.
-- Default values on `xsl:param` work via `select` attribute.
-- `xsl:variable` binds into the current lexical scope and is available to XPath expressions (`$var`).
-- Variable scoping is lexical: a `call-template` cannot leak variables into the caller.
+```csharp
+var xsl = @"<xsl:stylesheet version='3.0'
+    xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+    <xsl:template match='/'>
+        <xsl:apply-templates>
+            <xsl:with-param name='traceId' select='"REQ-123"' tunnel='yes'/>
+        </xsl:apply-templates>
+    </xsl:template>
+
+    <xsl:template match='item'>
+        <!-- $traceId is available here via tunnel -->
+        <item trace='{$traceId}'><xsl:value-of select='.'/></item>
+    </xsl:template>
+</xsl:stylesheet>";
+```
+
+### 3.5 `fn:transform()` — XSLT from XPath
+
+```csharp
+var callerXsl = @"<xsl:stylesheet version='3.0'
+    xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+    xmlns:map='http://www.w3.org/2005/xpath-functions/map'>
+    <xsl:template match='/'>
+        <result>
+            <xsl:copy-of select='transform(map{
+                ""stylesheet-location"": ""file:///C:/styles/main.xsl"",
+                ""source-node"": .,
+                ""stylesheet-params"": map{""greeting"": ""world""}
+            })?output'/>
+        </result>
+    </xsl:template>
+</xsl:stylesheet>";
+```
 
 ---
 
@@ -157,8 +186,8 @@ var result = executable.TransformToString(new XDocumentNode(source));
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| `xsl:template match="…"` | ✅ Working | Pattern compiler supports element names, `*`, `@*`, predicates, union (`\|`) |
-| `xsl:template name="…"` | ✅ Working | Named template dispatch via `call-template` |
+| `xsl:template match="…"` | ✅ Working | Pattern compiler: element names, `*`, `@*`, predicates, union (`\|`) |
+| `xsl:template name="…"` | ✅ Working | Named template dispatch |
 | `xsl:call-template` | ✅ Working | With `xsl:with-param` support |
 | `xsl:apply-templates` | ✅ Working | Default mode; `select` attribute supported |
 | `xsl:value-of` | ✅ Working | |
@@ -166,25 +195,25 @@ var result = executable.TransformToString(new XDocumentNode(source));
 | `xsl:if` / `xsl:choose` | ✅ Working | `when` + `otherwise` |
 | `xsl:element` / `xsl:attribute` | ✅ Working | |
 | `xsl:text` | ✅ Working | |
-| `xsl:copy-of` | ✅ Working | Deep copy of nodes |
+| `xsl:copy-of` | ✅ Working | Deep copy of nodes; Document nodes supported |
 | `xsl:comment` | ✅ Working | `select` attribute or text content |
 | `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
 | `xsl:decimal-format` | ✅ Working | Parsed and registered for `fn:format-number` |
-| `xsl:variable` | ✅ Working | Bound to context; usable in XPath via `$var` |
-| `xsl:param` | ✅ Working | On named templates and inline |
+| `xsl:variable` | ✅ Working | Lexical scoping; usable in XPath via `$var` |
+| `xsl:param` | ✅ Working | On named templates, global params, default values |
 | Built-in template rules | ✅ Working | Shallow-copy elements, copy text/attributes |
-| Literal result elements | ✅ Working | Namespace preservation |
-| `xsl:import` / `xsl:include` | ✅ Working | URI resolution with `IXsltUriResolver`; correct precedence rules |
+| Literal result elements | ✅ Working | Namespace preservation, AVT evaluation |
+| `xsl:import` / `xsl:include` | ✅ Working | URI resolution with correct precedence rules |
 | Modes | ✅ Working | Named modes, `#current`, `#default`, `#all`, multi-mode templates |
-| `xsl:sort` | ✅ Working | `select`, `data-type="number|text"`, `order="ascending|descending"` |
+| `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable` |
 | `xsl:number` | ✅ Working | `single`, `any`, `multiple` levels; format tokens |
 | `xsl:key` / `key()` | ✅ Working | Indexed lookup with `xsl:key` definitions |
-| `xsl:output` | ✅ Working | `method="xml|text"`, `indent`, `omit-xml-declaration`, `encoding`, `standalone` |
-| `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; recursion supported |
-| `xsl:sequence` | ✅ Working | Returns sequences from XSLT functions |
+| `xsl:output` | ✅ Working | `method`, `indent`, `omit-xml-declaration`, `encoding` |
+| `xsl:function` | ✅ Working | User-defined XPath functions in XSLT |
+| `xsl:sequence` | ✅ Working | Returns sequences from functions |
 | `xsl:mode` | ✅ Working | `on-no-match` declarations |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
-| `fn:transform()` | ✅ Working | XPath-level XSLT invocation with `stylesheet-params`, `initial-template` |
+| `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
 
 ---
 
@@ -192,11 +221,13 @@ var result = executable.TransformToString(new XDocumentNode(source));
 
 ### Well-covered areas
 - Sequence construction, filtering, FLWOR expressions
-- All standard `fn:*` functions (string, numeric, date/time, QName, URI)
+- Standard `fn:*` functions (string, numeric, date/time, QName, URI)
 - `map:*` and `array:*` functions
 - Higher-order functions (`fn:for-each`, `fn:filter`, `fn:fold-left`, etc.)
 - `fn:doc`, `fn:collection` with pluggable document loader
 - Decimal formatting (`fn:format-number`)
+- JSON functions: `fn:parse-json`, `fn:json-to-xml`, `fn:xml-to-json`, `fn:json-doc`
+- Date/time ordering (`lt`, `gt`, `le`, `ge`)
 
 ### Known gaps
 - `fn:load-xquery-module` — not implemented
@@ -206,7 +237,38 @@ var result = executable.TransformToString(new XDocumentNode(source));
 
 ---
 
-## 6. Current Build State
+## 6. XSD Validation
+
+Bosak provides an `IXsdValidator` abstraction for XML Schema validation:
+
+```csharp
+using Bosak.XPath.Api.Xsd;
+
+var validator = new XsdValidator();
+var result = validator.TryValidate(xmlString, xsdStream);
+
+if (result.IsValid)
+{
+    Console.WriteLine("Document is valid");
+}
+else
+{
+    foreach (var error in result.OnlyErrors)
+    {
+        Console.WriteLine($"Error at line {error.LineNumber}: {error.Message}");
+    }
+}
+```
+
+Features:
+- Single-schema and multi-schema validation (handles `xs:import`/`xs:include`)
+- Structured error results with line/column numbers
+- Non-throwing `TryValidate` and throwing `Validate` variants
+- Configurable via `XsdValidatorOptions` (max error count, treat warnings as errors)
+
+---
+
+## 7. Current Build State
 
 Run the full suite from the Bosak repo root:
 
@@ -216,8 +278,6 @@ dotnet test Bosak.sln
 ```
 
 **Unit tests:** 840 passed, 0 failed, 0 skipped  
-**W3C QT3 conformance (XPath):** ~18,272 passed / ~3,747 failed / ~9,802 skipped  
-**W3C XSLT 3.0 conformance:** 2,477 passed / 2,990 failed / 9,133 skipped (~45.3% pass rate on supported features)  
 **Target framework:** `net9.0`
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
@@ -227,29 +287,9 @@ dotnet test Bosak.sln
 
 ---
 
-## 7. Typical Customer A Patterns
-
-### EDI → Canonical XML
-```csharp
-var xslt = File.ReadAllText("C:/Customer A/Maps/EDIFACT_to_Canonical.xsl");
-var compiler = new XsltCompiler();
-var executable = compiler.Compile(xslt);
-
-var ediDoc = XDocument.Load("C:/Customer A/In/ORDERS_001.xml");
-var canonicalXml = executable.TransformToString(new XDocumentNode(ediDoc));
-```
-
-### XPath-driven validation
-```csharp
-var expr = XPath31Expression.Compile(
-    "every $item in /order/items/item satisfies $item/quantity castable as xs:integer");
-bool valid = expr.Evaluate(context).EffectiveBooleanValue();
-```
-
----
-
-## 8. Getting Help / Reporting Issues
+## 7. Getting Help / Reporting Issues
 
 - Check `docs/ARCHITECTURE.md` in the Bosak repo for the layer overview and execution pipeline.
+- Check `docs/FEATURE_REQUESTS.md` for the feature request registry.
 - XPath failures: capture the expression, input XML, and expected vs. actual result.
 - XSLT failures: capture the stylesheet fragment, source XML, and expected output.

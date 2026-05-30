@@ -96,8 +96,8 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-014 | Customer B | XML Schema (XSD) validation API | Customer B needs to validate Infor OAGIS BODs against XSDs before dispatching to handlers | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-015 | Customer A | `xsl:function` support | Customer A defines 22+ helper functions (date, week, mapping) in shared fragments; cannot execute without this | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
 | REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
-| REQ-017 | *(internal)* | Fix CS0219 unused variable in `FormatNumberEngine` | Compiler warning `CS0219` on unused `hasDecimal` flag in `FormatNumberEngine.cs` | **Pending** | TBD | Unassigned | 2026-05-27 |
-| REQ-018 | *(internal)* | Fix CS8602 null dereference in `FormatNumberEngine` | Compiler warning `CS8602` on potential null dereference `sub.Suffix` in `FormatNumberEngine.cs` | **Pending** | TBD | Unassigned | 2026-05-27 |
+| REQ-017 | *(internal)* | Fix CS0219 unused variable in `FormatNumberEngine` | Compiler warning `CS0219` on unused `hasDecimal` flag in `FormatNumberEngine.cs` | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
+| REQ-018 | *(internal)* | Fix CS8602 null dereference in `FormatNumberEngine` | Compiler warning `CS8602` on potential null dereference `sub.Suffix` in `FormatNumberEngine.cs` | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 
 > **Legend:**
 > - `Pending` — Under review, no decision yet.
@@ -741,7 +741,7 @@ Extend the sorting logic in `TransformEngine` to evaluate all `xsl:sort` childre
 
 **Requesting Application:** *(internal — code quality)*  
 **Submitted:** 2026-05-27  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 `FormatNumberEngine.cs` (Bosak.XPath.Formatting) triggers compiler warning **CS0219**: *"The variable 'hasDecimal' is assigned but its value is never used."* This clutters the build output and masks more serious warnings.
@@ -774,7 +774,7 @@ Remove the unused `bool hasDecimal = false;` declaration and any assignments to 
 
 **Requesting Application:** *(internal — code quality)*  
 **Submitted:** 2026-05-27  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 `FormatNumberEngine.cs` triggers compiler warning **CS8602**: *"Dereference of a possibly null reference"* on `sub.Suffix` where `sub` may be null. This is a potential `NullReferenceException` at runtime if the formatting path reaches this line with a null `sub` value.
@@ -801,6 +801,7 @@ Add a null-conditional guard (`sub?.Suffix` or an explicit null check) before ac
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-27 | Kimi | Pending | Low-priority bug fix; does not block Customer A |
+| 2026-05-30 | Kimi | Implemented | Warnings no longer reproduced after `FormatNumberEngine` rewrite (2026-05-22); `Subpicture` is now a struct and `Suffix` is non-null; build is clean |
 
 ---
 
@@ -857,6 +858,6 @@ When updating this file via automated tools, preserve the table alignment and se
 
 ## 9. Related Documents
 
-- [`BERLIN_INTEGRATION.md`](./BERLIN_INTEGRATION.md) — How to consume Bosak from Customer A
+- `D:\Development\Customer A\docs\INTEGRATION.md` — How to consume Bosak from Customer A
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — High-level Bosak architecture and roadmap
 - Project root `AGENTS.md` — Coding conventions for Bosak contributors

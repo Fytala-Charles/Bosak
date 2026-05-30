@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 30-05-2026     | Updated boolean simplification tests for type safety (BooleanLiteralNode guard)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Optimizer;
@@ -154,8 +155,10 @@ public class OptimizerTests
     [Fact]
     public void SimplifyTrueAndX()
     {
-        var node = AssertOptimized<VariableReferenceNode>("1 and $x");
-        Assert.Equal("x", node.LocalName);
+        // Non-boolean operand must not be substituted: `and`/`or` must return xs:boolean.
+        // Replacing `1 and $x` with `$x` would change the result type from boolean to the type of $x.
+        var node = AssertOptimized<BinaryExpressionNode>("1 and $x");
+        Assert.Equal(BinaryOperator.And, node.Operator);
     }
 
     [Fact]
@@ -175,8 +178,10 @@ public class OptimizerTests
     [Fact]
     public void SimplifyFalseOrX()
     {
-        var node = AssertOptimized<VariableReferenceNode>("0 or $x");
-        Assert.Equal("x", node.LocalName);
+        // Non-boolean operand must not be substituted: `and`/`or` must return xs:boolean.
+        // Replacing `0 or $x` with `$x` would change the result type from boolean to the type of $x.
+        var node = AssertOptimized<BinaryExpressionNode>("0 or $x");
+        Assert.Equal(BinaryOperator.Or, node.Operator);
     }
 
     // ------------------------------------------------------------------

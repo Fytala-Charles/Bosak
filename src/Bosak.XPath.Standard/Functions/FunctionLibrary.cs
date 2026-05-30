@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 3.1   | 27-05-2026     | Fixed fn:tokenize one-arg normalize-space, fn:string/fn:data FOTY0013/FOTY0014/XPTY0004 |
 //                      | Charles Korthout | 3.2   | 27-05-2026     | Fixed array:sort numeric/sequence comparison; fn:contains-token token trimming          |
 //                      | Charles Korthout | 3.3   | 27-05-2026     | Added default collation support; fixed UCA starts-with/ends-with alternate=blanked     |
+//                      | Charles Korthout | 3.4   | 30-05-2026     | Fixed fn:string-length to count Unicode code points via EnumerateRunes()                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3082,16 +3083,24 @@ public static class FunctionLibrary
     // String functions
     // ------------------------------------------------------------------
 
+    private static int CountCodePoints(string s)
+    {
+        int count = 0;
+        foreach (var _ in s.EnumerateRunes())
+            count++;
+        return count;
+    }
+
     private static XdmValue StringLength_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
         if (item.IsUndefined)
             throw new InvalidOperationException("fn:string-length() called with no context item.");
-        return XdmValue.FromInteger(AtomizedString(item).Length);
+        return XdmValue.FromInteger(CountCodePoints(AtomizedString(item)));
     }
 
     private static XdmValue StringLength_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromInteger(AtomizedString(args[0]).Length);
+        => XdmValue.FromInteger(CountCodePoints(AtomizedString(args[0])));
 
     private static int RoundForSubstring(double value)
     {

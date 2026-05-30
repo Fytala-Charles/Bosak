@@ -81,6 +81,70 @@ UCA `alternate=blanked` maps to `CompareOptions.IgnoreSymbols`. Due to .NET `IsP
 - **DateTime year < 1**: `DateTimeOffset` minimum year is 1. Tests using year `-2` cannot pass without switching to a custom date representation.
 - **Timezone adjustment**: `adjust-time-to-timezone` produces incorrect offsets in some cases.
 
+## XML Documentation
+
+All projects generate documentation files (`<GenerateDocumentationFile>true</GenerateDocumentationFile>`). Public APIs must have triple-slash XML comments.
+
+**Rules:**
+- Every `public` and `protected` type and member must have a `///` comment.
+- Use `<summary>` for the primary description.
+- Use `<param>` for every parameter.
+- Use `<returns>` for methods with non-void return types.
+- Use `<exception>` when a method throws documented exceptions.
+
+---
+
+## Testing Requirements
+
+### Test Organization
+
+| Test Project | Purpose |
+|--------------|---------|
+| `Bosak.XPath.Core.Tests` | XDM foundation types, pure logic |
+| `Bosak.XPath.*.Tests` | One test project per source project |
+
+### Test Patterns
+
+- All tests must pass before a task is considered complete.
+- New functionality needs at least one happy-path and one edge-case test.
+
+---
+
+## Versioning
+
+- Use [Semantic Versioning](https://semver.org/) (`Major.Minor.Patch`).
+- Bump `Minor` for new features; bump `Patch` for bug fixes.
+- Record version bumps in file header change-history tables.
+
+---
+
+## Documentation Sync Checklist (Mandatory)
+
+After **every** successful implementation step, update the following canonical documents before concluding the step or session:
+
+| File | Purpose | When to Update |
+|------|---------|----------------|
+| `README.md` | Human-facing project overview | Structural or CLI changes |
+| `docs/ARCHITECTURE.md` | Layer details, performance strategy, extensibility | New layers, projects, or public APIs |
+| `docs/FEATURE_REQUESTS.md` | Living registry of all REQ items | Any REQ status change |
+| `docs/INTEGRATION.md` | Consumer integration guide | New public APIs, behavioral changes |
+| `docs/AGENT_HANDOVER.md` | Session state and canonical agent context | Major architectural shifts |
+
+**Rule:** If a file was modified during the step, its documentation counterpart must be updated in the same step. No exceptions.
+
+### Pre-Handover Checklist
+
+```markdown
+- [ ] `README.md` — Build/test commands and quick-start are current.
+- [ ] `docs/ARCHITECTURE.md` — Status reflects current reality.
+- [ ] `docs/FEATURE_REQUESTS.md` — Registry table is accurate; "Last updated" date is today.
+- [ ] `docs/INTEGRATION.md` — Feature status matrix is accurate.
+- [ ] `docs/AGENT_HANDOVER.md` — Date and commit hash match latest; "What Was Built" is complete.
+- [ ] `AGENTS.md` — Coding conventions still match reality.
+```
+
+---
+
 ## Coding Style
 
 - Use `file`-scoped namespaces when possible.
