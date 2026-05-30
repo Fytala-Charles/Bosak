@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 2.4   | 24-05-2026     | Implemented RFC-822/1123 parser for fn:parse-ietf-date with full timezone support        |
 //                      | Charles Korthout | 2.5   | 24-05-2026     | Fixed fn:subsequence edge cases: negative start, INF/NaN bounds, XPTY0004 for strings    |
 //                      | Charles Korthout | 2.6   | 24-05-2026     | Fixed fn:path sibling index, namespace parent axis, path#0; date/time cross-type checks |
+//                      | Charles Korthout | 2.7   | 30-05-2026     | Fixed fn:generate-id to use underlying XObject as stable key for node identity         |
 //                      | Charles Korthout | 2.7   | 26-05-2026     | Fixed fn:substring rounding to round-half-to-even; fixed fn:replace replacement string    |
 //                      | Charles Korthout | 2.8   | 26-05-2026     | Added fn:document#1/#2 for XSLT compatibility                                            |
 //                      | Charles Korthout | 2.9   | 27-05-2026     | Added fn:parse-json, fn:json-to-xml, fn:xml-to-json, fn:json-doc with options support   |
@@ -7549,7 +7550,8 @@ public static class FunctionLibrary
     }
 
     private static long _generateIdCounter;
-    private static readonly ConditionalWeakTable<IXdmNode, string> _generateIdMap = new();
+    private static readonly ConditionalWeakTable<object, string> _generateIdMap = new();
+    private static readonly object _generateIdLock = new();
 
     private static XdmValue GenerateId_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -7567,11 +7569,19 @@ public static class FunctionLibrary
 
     private static string GetNodeId(IXdmNode node)
     {
-        if (_generateIdMap.TryGetValue(node, out var id))
+        // Use the underlying XObject as the key so that different XDocumentNode
+        // wrappers around the same LINQ-to-XML node get the same ID.
+        var key = node is Bosak.XPath.Providers.Xml.XDocumentNode xdoc ? (object)xdoc.UnderlyingObject : node;
+        if (_generateIdMap.TryGetValue(key, out var id))
             return id;
-        id = "id" + Interlocked.Increment(ref _generateIdCounter);
-        _generateIdMap.AddOrUpdate(node, id);
-        return id;
+        lock (_generateIdLock)
+        {
+            if (_generateIdMap.TryGetValue(key, out id))
+                return id;
+            id = "id" + Interlocked.Increment(ref _generateIdCounter);
+            _generateIdMap.AddOrUpdate(key, id);
+            return id;
+        }
     }
 
     private static XdmValue Compare_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

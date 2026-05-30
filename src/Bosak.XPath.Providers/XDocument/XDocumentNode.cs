@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Implemented ToXmlString for fn:serialize                                               |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Implemented BaseUri property for fn:base-uri and fn:document-uri                       |
 //                      | Charles Korthout | 0.5   | 27-05-2026     | Lazy document order computation for proper node sorting                                |
+//                      | Charles Korthout | 0.6   | 30-05-2026     | Fixed StringValue for XDocument without root element (uses all text node children)     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -112,7 +113,7 @@ public sealed class XDocumentNode : IXdmNode
                 XText t => t.Value,
                 XComment c => c.Value,
                 XProcessingInstruction pi => pi.Data,
-                System.Xml.Linq.XDocument d => d.Root?.Value ?? string.Empty,
+                System.Xml.Linq.XDocument d => d.Root != null ? d.Root.Value : string.Concat(d.Nodes().OfType<XText>().Select(t => t.Value)),
                 _ => string.Empty
             };
         }

@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 19-05-2026     | Support filter expressions as path steps (e.g. parse-xml(...)/root/item)               |
 //                      | Charles Korthout | 0.9   | 24-05-2026     | Fix * name test to filter by principal node kind (element/attribute/namespace)         |
 //                      | Charles Korthout | 1.0   | 27-05-2026     | Emit DocumentRoot for absolute path expressions                                        |
+//                      | Charles Korthout | 1.1   | 30-05-2026     | Emit NamespaceTest for QName node tests (prefix:localname)                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -603,6 +604,15 @@ public sealed class IrLowerer
             else if (node.NodeTest.Kind == NameTestKind.QName && !string.IsNullOrEmpty(node.NodeTest.Name))
             {
                 namePoolIdx = AddToLiteralPool(node.NodeTest.Name);
+                // If a real prefix is present (not the wildcard "*"), emit NamespaceTest
+                // to filter by resolved URI.
+                if (!string.IsNullOrEmpty(node.NodeTest.NamespaceUri) && node.NodeTest.NamespaceUri != "*")
+                {
+                    int nsPoolIdx = AddToLiteralPool(node.NodeTest.NamespaceUri); // prefix
+                    afterTestReg = AllocRegister();
+                    Emit(IrOpCode.NamespaceTest, (byte)afterTestReg, (byte)axisReg, operand: nsPoolIdx);
+                    axisReg = afterTestReg;
+                }
             }
             else if (node.NodeTest.Kind == NameTestKind.NamespaceAny)
             {

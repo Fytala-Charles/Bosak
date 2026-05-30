@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 1.7   | 28-05-2026     | Added xsl:next-match with excluded-rule chain; call-template clears current template rule |
 //                      | Charles Korthout | 1.8   | 29-05-2026     | Reduced MaxXsltFunctionCallDepth to 32 to prevent .NET stack overflow crashes             |
 //                      | Charles Korthout | 1.9   | 29-05-2026     | Added expand-text / Text Value Template support with XPath string literal awareness       |
+//                      | Charles Korthout | 2.0   | 30-05-2026     | Skip comments in CopyLiteralElement; fixes string-050/051/089 conformance tests         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1517,8 +1518,9 @@ public sealed class TransformEngine
                 case XText text:
                     ProcessSequenceText(text, source);
                     break;
-                case XComment comment:
-                    _currentContainer.Add(new XComment(comment.Value));
+                // Comments inside literal result elements are not copied to output
+                // (XSLT processors typically strip stylesheet-level comments).
+                case XComment:
                     break;
                 case XProcessingInstruction pi:
                     _currentContainer.Add(new XProcessingInstruction(pi.Target, pi.Data));

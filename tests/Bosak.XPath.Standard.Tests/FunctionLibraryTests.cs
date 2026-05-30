@@ -532,7 +532,14 @@ public class FunctionLibraryTests
     {
         var doc = System.Xml.Linq.XDocument.Parse("<ns:root xmlns:ns='http://example.com'><ns:child/></ns:root>");
         var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
-        var result = XPath31Expression.Compile("fn:name(ns:child)").Evaluate(node);
+        var options = new Bosak.XPath.Api.CompileOptions
+        {
+            Namespaces = new Dictionary<string, string> { ["ns"] = "http://example.com" }
+        };
+        var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext()
+            .WithFocus(Bosak.XPath.Core.Xdm.XdmValue.FromNode(node), 1, 1)
+            .WithNamespace("ns", "http://example.com");
+        var result = XPath31Expression.Compile("fn:name(ns:child)", options).Evaluate(ctx);
         Assert.Equal("ns:child", result.ToString());
     }
 
