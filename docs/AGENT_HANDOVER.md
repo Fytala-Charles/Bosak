@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 2756 / **Failed:** 2706 / **Skipped:** 9138 (14,600 total)
-- Pass rate: **50.5%** (latest run, 2026-05-30)
+- **Passed:** 2761 / **Failed:** 2701 / **Skipped:** 9138 (14,600 total)
+- Pass rate: **50.6%** (latest run, 2026-05-30)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 2756 passed / 2706 failed / 9138 skipped (50.5%) — after string-length surrogate fix + optimizer boolean fix
+- Latest: 2761 passed / 2701 failed / 9138 skipped (50.6%) — string cluster 100% complete (135, 094, 095 fixed)
+- Previous: 2756 passed / 2706 failed / 9138 skipped (50.5%) — after string-length surrogate fix + optimizer boolean fix
 - Previous: 2750 passed / 2712 failed / 9138 skipped (50.3%) — after document-node wrapping + global var context fix
 - Previous: 2675 passed / 2787 failed / 9138 skipped (49.0%) — after seqtor/simple-content fixes
 - Run 11: 2547 passed / 2915 failed / 9138 skipped (46.6%)
@@ -39,9 +40,12 @@
 11. **`xsl:processing-instruction` handler** — Added proper `xsl:processing-instruction` support using `EvaluateSimpleContent`.
 12. **`xsl:namespace` handler** — Added basic `xsl:namespace` support.
 13. **`EvaluateSimpleContent` adoption** — `xsl:attribute`, `xsl:comment`, `xsl:processing-instruction`, `xsl:value-of` (no select), and `xsl:text` now use `EvaluateSimpleContent` instead of naive text concatenation.
-14. **`fn:string-length` surrogate pair fix** — `StringLength_0`/`StringLength_1` now use `EnumerateRunes()` to count Unicode code points instead of UTF-16 code units (`.Length`). Fixes `string-132` (character `&#x50000;` is a surrogate pair; XPath expects length 1, not 2).
-15. **XPath optimizer boolean simplification** — `SimplifyBoolean` restricted to only substitute `BooleanLiteralNode` operands. Prevents type mismatch where `true and "00"` was incorrectly simplified to `"00"` (string instead of boolean). Fixes `boolean-023`, `031`, `078`, `079`, `083`.
-16. **XPath optimizer divide-by-zero** — Constant folding for `DecimalLiteralNode / DecimalLiteralNode` skips when divisor is zero. Fixes `boolean-032`, `084`.
+14. **`fn:string-length` surrogate pair fix** — `StringLength_0`/`StringLength_1` now use `EnumerateRunes()` to count Unicode code points instead of UTF-16 code units (`.Length`). Fixes `string-132`.
+15. **`fn:upper-case` / `fn:lower-case` Unicode full case mapping** — Added `ApplyUnicodeCaseMapping` with special handling for one-to-many mappings (e.g., ß → SS, İ → i̇). Fixes `string-135`.
+16. **`fn:substring` code-point-aware** — `Substring_2`/`Substring_3` now operate on Unicode code points via `EnumerateRunes()`, matching XPath spec semantics for surrogate pairs. Fixes `string-094`.
+17. **AVT parser string-literal awareness** — `EvaluateAvt` now uses `FindAvtExprEnd` which skips `}` inside XPath string literals (`'...'` and `"..."`). Fixes `string-095`.
+18. **XPath optimizer boolean simplification** — `SimplifyBoolean` restricted to only substitute `BooleanLiteralNode` operands. Prevents type mismatch where `true and "00"` was incorrectly simplified to `"00"` (string instead of boolean). Fixes `boolean-023`, `031`, `078`, `079`, `083`.
+19. **XPath optimizer divide-by-zero** — Constant folding for `DecimalLiteralNode / DecimalLiteralNode` skips when divisor is zero. Fixes `boolean-032`, `084`.
 
 ### Unit Test Status
 
@@ -188,7 +192,7 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 
 These clusters are >75% passing with only a handful of distinct root causes:
 
-- **`string`** — 3 failures, 0 skipped (98% passing) — `string-094`/`095` (surrogate parsing), `string-135` (upper-case Latin-1 Supplement)
+- **`string`** — **0 failures, 136/136 passed (100%)** ✅
 - **`position`** — 21 failures, 3 skipped (90% passing)
 - **`boolean`** — 10 failures, 0 skipped (91% passing)
 

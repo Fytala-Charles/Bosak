@@ -36,6 +36,7 @@
 //                      | Charles Korthout | 1.9   | 29-05-2026     | Added expand-text / Text Value Template support with XPath string literal awareness       |
 //                      | Charles Korthout | 2.0   | 30-05-2026     | Skip comments in CopyLiteralElement; fixes string-050/051/089 conformance tests         |
 //                      | Charles Korthout | 2.1   | 30-05-2026     | EvaluateSequenceConstructor always wraps in document node via synthetic wrapper         |
+//                      | Charles Korthout | 2.2   | 30-05-2026     | Fixed EvaluateAvt to skip } inside XPath string literals (fixes string-095)             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1556,7 +1557,7 @@ public sealed class TransformEngine
             }
             else if (value[i] == '{')
             {
-                int end = value.IndexOf('}', i + 1);
+                int end = FindAvtExprEnd(value, i + 1);
                 if (end < 0)
                 {
                     sb.Append(value[i]);
@@ -1587,6 +1588,43 @@ public sealed class TransformEngine
             }
         }
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Finds the closing <c>}</c> of an AVT expression, skipping <c>}</c> inside
+    /// XPath string literals (both single- and double-quoted).
+    /// </summary>
+    private static int FindAvtExprEnd(string value, int start)
+    {
+        char inString = '\0';
+        for (int i = start; i < value.Length; i++)
+        {
+            char c = value[i];
+            if (inString != '\0')
+            {
+                if (c == inString)
+                {
+                    // Check for escaped quote (doubled)
+                    if (i + 1 < value.Length && value[i + 1] == inString)
+                    {
+                        i++; // skip the pair
+                    }
+                    else
+                    {
+                        inString = '\0';
+                    }
+                }
+                continue;
+            }
+            if (c == '\'' || c == '"')
+            {
+                inString = c;
+                continue;
+            }
+            if (c == '}')
+                return i;
+        }
+        return -1;
     }
 
     /// <summary>

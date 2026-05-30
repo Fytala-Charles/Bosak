@@ -46,6 +46,7 @@
 //                      | Charles Korthout | 3.2   | 27-05-2026     | Fixed array:sort numeric/sequence comparison; fn:contains-token token trimming          |
 //                      | Charles Korthout | 3.3   | 27-05-2026     | Added default collation support; fixed UCA starts-with/ends-with alternate=blanked     |
 //                      | Charles Korthout | 3.4   | 30-05-2026     | Fixed fn:string-length to count Unicode code points via EnumerateRunes()                |
+//                      | Charles Korthout | 3.5   | 30-05-2026     | Fixed fn:substring to use Unicode code points; Unicode full case mapping for upper/lower-case |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3116,9 +3117,7 @@ public static class FunctionLibrary
         double startD = ToDoubleValue(args[1]);
         if (double.IsNaN(startD)) return XdmValue.FromString(string.Empty);
         int start = RoundForSubstring(startD);
-        int effectiveStart = Math.Max(start, 1);
-        if (effectiveStart > s.Length) return XdmValue.FromString(string.Empty);
-        return XdmValue.FromString(s[(effectiveStart - 1)..]);
+        return XdmValue.FromString(SubstringByCodepoints(s, start, int.MaxValue));
     }
 
     private static XdmValue Substring_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3130,13 +3129,31 @@ public static class FunctionLibrary
         int start = RoundForSubstring(startD);
         int len = RoundForSubstring(lenD);
         if (len <= 0) return XdmValue.FromString(string.Empty);
-        int effectiveStart = Math.Max(start, 1);
-        if (effectiveStart > s.Length) return XdmValue.FromString(string.Empty);
-        int effectiveEnd = start + len;
-        if (effectiveEnd <= effectiveStart) return XdmValue.FromString(string.Empty);
-        int count = effectiveEnd - effectiveStart;
-        int maxCount = s.Length - effectiveStart + 1;
-        return XdmValue.FromString(s.Substring(effectiveStart - 1, Math.Min(count, maxCount)));
+        return XdmValue.FromString(SubstringByCodepoints(s, start, len));
+    }
+
+    /// <summary>
+    /// Extracts a substring by Unicode code points (not UTF-16 code units),
+    /// matching XPath <c>fn:substring</c> semantics.
+    /// </summary>
+    private static string SubstringByCodepoints(string s, int start, int length)
+    {
+        // XPath fn:substring($s, $start, $length) returns characters whose
+        // 1-based position p satisfies: $start <= p < $start + $length
+        if (length <= 0) return string.Empty;
+        var sb = new StringBuilder();
+        int codepointIndex = 1;
+        // Use long to avoid overflow (e.g., int.MinValue + int.MaxValue)
+        long end = (long)start + length;
+        foreach (Rune rune in s.EnumerateRunes())
+        {
+            if (codepointIndex >= end)
+                break;
+            if (codepointIndex >= start)
+                sb.Append(rune.ToString());
+            codepointIndex++;
+        }
+        return sb.ToString();
     }
 
     private static XdmValue SubstringBefore_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -4029,10 +4046,187 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UpperCase(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]).ToUpperInvariant());
+        => XdmValue.FromString(ApplyUnicodeCaseMapping(AtomizedString(args[0]), toUpper: true));
 
     private static XdmValue LowerCase(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(AtomizedString(args[0]).ToLowerInvariant());
+        => XdmValue.FromString(ApplyUnicodeCaseMapping(AtomizedString(args[0]), toUpper: false));
+
+    /// <summary>
+    /// Applies Unicode full case mapping, handling one-to-many mappings
+    /// (e.g., U+00DF 'ß' → "SS") that .NET's ToUpperInvariant omits.
+    /// </summary>
+    private static string ApplyUnicodeCaseMapping(string input, bool toUpper)
+    {
+        var sb = new StringBuilder(input.Length);
+        foreach (Rune rune in input.EnumerateRunes())
+        {
+            if (toUpper)
+            {
+                switch (rune.Value)
+                {
+                    case 0x00DF: sb.Append("SS"); continue; // ß → SS
+                    case 0x0149: sb.Append("\u02BCN"); continue; // ŉ → ʼN
+                    case 0x017F: sb.Append('S'); continue; // ſ → S
+                    case 0x01F0: sb.Append("J\u030C"); continue; // ǰ → J + caron
+                }
+
+                // Greek characters with iota subscript (full mapping strips iota subscript and adds iota)
+                if (rune.Value is >= 0x1F80 and <= 0x1F87)
+                {
+                    // ἀ + iota subscript variants → Α + etc + ι
+                    sb.Append(Rune.ToUpperInvariant(new Rune(rune.Value - 0x1F80 + 0x1F08)));
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value is >= 0x1F90 and <= 0x1F97)
+                {
+                    sb.Append(Rune.ToUpperInvariant(new Rune(rune.Value - 0x1F90 + 0x1F28)));
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value is >= 0x1FA0 and <= 0x1FA7)
+                {
+                    sb.Append(Rune.ToUpperInvariant(new Rune(rune.Value - 0x1FA0 + 0x1F68)));
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value is >= 0x1FB3 and <= 0x1FB4)
+                {
+                    sb.Append('\u0391');
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value == 0x1FB6)
+                {
+                    sb.Append('\u0391');
+                    sb.Append('\u0342');
+                    continue;
+                }
+                if (rune.Value == 0x1FB7)
+                {
+                    sb.Append('\u0391');
+                    sb.Append('\u0342');
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value == 0x1FBE)
+                {
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value is >= 0x1FC3 and <= 0x1FC4)
+                {
+                    sb.Append('\u0397');
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value == 0x1FC6)
+                {
+                    sb.Append('\u0397');
+                    sb.Append('\u0342');
+                    continue;
+                }
+                if (rune.Value == 0x1FC7)
+                {
+                    sb.Append('\u0397');
+                    sb.Append('\u0342');
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value is >= 0x1FF3 and <= 0x1FF4)
+                {
+                    sb.Append('\u03A9');
+                    sb.Append('\u0399');
+                    continue;
+                }
+                if (rune.Value == 0x1FF6)
+                {
+                    sb.Append('\u03A9');
+                    sb.Append('\u0342');
+                    continue;
+                }
+                if (rune.Value == 0x1FF7)
+                {
+                    sb.Append('\u03A9');
+                    sb.Append('\u0342');
+                    sb.Append('\u0399');
+                    continue;
+                }
+
+                sb.Append(Rune.ToUpperInvariant(rune));
+            }
+            else
+            {
+                switch (rune.Value)
+                {
+                    case 0x0130: sb.Append("i\u0307"); continue; // İ → i + combining dot above
+                }
+
+                // Greek upper with iota adscript → lower with iota subscript
+                if (rune.Value is >= 0x1F88 and <= 0x1F8F)
+                {
+                    sb.Append(new Rune(rune.Value - 0x1F88 + 0x1F80));
+                    continue;
+                }
+                if (rune.Value is >= 0x1F98 and <= 0x1F9F)
+                {
+                    sb.Append(new Rune(rune.Value - 0x1F98 + 0x1F90));
+                    continue;
+                }
+                if (rune.Value is >= 0x1FA8 and <= 0x1FAF)
+                {
+                    sb.Append(new Rune(rune.Value - 0x1FA8 + 0x1FA0));
+                    continue;
+                }
+                if (rune.Value is >= 0x1FB8 and <= 0x1FB9)
+                {
+                    sb.Append(new Rune(rune.Value - 0x1FB8 + 0x1FB0));
+                    continue;
+                }
+                if (rune.Value is >= 0x1FBC and <= 0x1FBD)
+                {
+                    sb.Append('\u03B1');
+                    sb.Append('\u03B9');
+                    continue;
+                }
+                if (rune.Value is >= 0x1FC8 and <= 0x1FCB)
+                {
+                    sb.Append(new Rune(rune.Value - 0x1FC8 + 0x1F72));
+                    continue;
+                }
+                if (rune.Value == 0x1FCC)
+                {
+                    sb.Append('\u03B7');
+                    sb.Append('\u03B9');
+                    continue;
+                }
+                if (rune.Value is >= 0x1FD8 and <= 0x1FDB)
+                {
+                    sb.Append(new Rune(rune.Value - 0x1FD8 + 0x1FD0));
+                    continue;
+                }
+                if (rune.Value is >= 0x1FE8 and <= 0x1FEC)
+                {
+                    sb.Append(new Rune(rune.Value - 0x1FE8 + 0x1FE0));
+                    continue;
+                }
+                if (rune.Value is >= 0x1FF8 and <= 0x1FFB)
+                {
+                    sb.Append(new Rune(rune.Value - 0x1FF8 + 0x1F78));
+                    continue;
+                }
+                if (rune.Value == 0x1FFC)
+                {
+                    sb.Append('\u03C9');
+                    sb.Append('\u03B9');
+                    continue;
+                }
+
+                sb.Append(Rune.ToLowerInvariant(rune));
+            }
+        }
+        return sb.ToString();
+    }
 
     private static XdmValue Matches_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
