@@ -187,14 +187,16 @@ public sealed class XPathOptimizer
         if (op == BinaryOperator.And)
         {
             if (leftBool == false || rightBool == false) return FalseLiteral();
-            if (leftBool == true) return right;
-            if (rightBool == true) return left;
+            // and/or always return a boolean; only propagate an operand if it is
+            // already a boolean literal (otherwise we'd change the result type).
+            if (leftBool == true && right is BooleanLiteralNode) return right;
+            if (rightBool == true && left is BooleanLiteralNode) return left;
         }
         else if (op == BinaryOperator.Or)
         {
             if (leftBool == true || rightBool == true) return TrueLiteral();
-            if (leftBool == false) return right;
-            if (rightBool == false) return left;
+            if (leftBool == false && right is BooleanLiteralNode) return right;
+            if (rightBool == false && left is BooleanLiteralNode) return left;
         }
 
         return null;
