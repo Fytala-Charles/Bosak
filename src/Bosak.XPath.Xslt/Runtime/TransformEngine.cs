@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 2.0   | 30-05-2026     | Skip comments in CopyLiteralElement; fixes string-050/051/089 conformance tests         |
 //                      | Charles Korthout | 2.1   | 30-05-2026     | EvaluateSequenceConstructor always wraps in document node via synthetic wrapper         |
 //                      | Charles Korthout | 2.2   | 30-05-2026     | Fixed EvaluateAvt to skip } inside XPath string literals (fixes string-095)             |
+//                      | Charles Korthout | 2.3   | 30-05-2026     | Set EvaluationContext.BackwardsCompatible from stylesheet version (fixes boolean-081/083/096) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -101,6 +102,7 @@ public sealed class TransformEngine
     {
         _stylesheet = stylesheet;
         _context = context ?? new EvaluationContext();
+        _context.BackwardsCompatible = stylesheet.Version is "1.0";
         FunctionLibrary.Populate(_context);
         XsltFunctionLibrary.Populate(_context);
 

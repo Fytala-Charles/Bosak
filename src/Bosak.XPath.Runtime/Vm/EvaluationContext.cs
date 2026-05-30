@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 22-05-2026     | Added decimal-format support for fn:format-number                                      |
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added SnapshotVariables / RestoreVariables for lexical scoping                         |
 //                      | Charles Korthout | 0.6   | 27-05-2026     | Added DefaultCollation property and WithDefaultCollation helper                        |
+//                      | Charles Korthout | 0.7   | 30-05-2026     | Added BackwardsCompatible property for XPath 1.0 general-comparison coercion rules     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -87,6 +88,12 @@ public sealed class EvaluationContext
     /// Custom document loader. If null, fn:doc will throw unless the API layer provides one.
     /// </summary>
     public Func<string, IXdmNode>? DocumentLoader { get; set; }
+
+    /// <summary>
+    /// When true, XPath comparisons use XSLT 1.0 / XPath 1.0 backwards-compatible
+    /// coercion rules (e.g., string-to-boolean, number-to-boolean in general comparisons).
+    /// </summary>
+    public bool BackwardsCompatible { get; set; }
 
     /// <summary>
     /// Loads a document by URI, using the cache and <see cref="DocumentLoader"/>.

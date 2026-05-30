@@ -10,13 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 2761 / **Failed:** 2701 / **Skipped:** 9138 (14,600 total)
-- Pass rate: **50.6%** (latest run, 2026-05-30)
+- **Passed:** 2767 / **Failed:** 2695 / **Skipped:** 9138 (14,600 total)
+- Pass rate: **50.7%** (latest run, 2026-05-30)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 2761 passed / 2701 failed / 9138 skipped (50.6%) — string cluster 100% complete (135, 094, 095 fixed)
-- Previous: 2756 passed / 2706 failed / 9138 skipped (50.5%) — after string-length surrogate fix + optimizer boolean fix
+- Latest: 2767 passed / 2695 failed / 9138 skipped (50.7%) — boolean cluster 98% (8 result mismatches + 2 unimplemented fixed)
+- Previous: 2761 passed / 2701 failed / 9138 skipped (50.6%) — string cluster 100% complete (135, 094, 095 fixed)
 - Previous: 2750 passed / 2712 failed / 9138 skipped (50.3%) — after document-node wrapping + global var context fix
 - Previous: 2675 passed / 2787 failed / 9138 skipped (49.0%) — after seqtor/simple-content fixes
 - Run 11: 2547 passed / 2915 failed / 9138 skipped (46.6%)
@@ -44,8 +44,10 @@
 15. **`fn:upper-case` / `fn:lower-case` Unicode full case mapping** — Added `ApplyUnicodeCaseMapping` with special handling for one-to-many mappings (e.g., ß → SS, İ → i̇). Fixes `string-135`.
 16. **`fn:substring` code-point-aware** — `Substring_2`/`Substring_3` now operate on Unicode code points via `EnumerateRunes()`, matching XPath spec semantics for surrogate pairs. Fixes `string-094`.
 17. **AVT parser string-literal awareness** — `EvaluateAvt` now uses `FindAvtExprEnd` which skips `}` inside XPath string literals (`'...'` and `"..."`). Fixes `string-095`.
-18. **XPath optimizer boolean simplification** — `SimplifyBoolean` restricted to only substitute `BooleanLiteralNode` operands. Prevents type mismatch where `true and "00"` was incorrectly simplified to `"00"` (string instead of boolean). Fixes `boolean-023`, `031`, `078`, `079`, `083`.
-19. **XPath optimizer divide-by-zero** — Constant folding for `DecimalLiteralNode / DecimalLiteralNode` skips when divisor is zero. Fixes `boolean-032`, `084`.
+18. **Empty sequence in comparisons** — `Compare`/`CompareGeneral` now return `XdmValue.Undefined` when either operand is an empty sequence. `IsSameNode` also returns empty sequence for empty operands. Fixes `boolean-071`, `072`, `075`.
+19. **XPath 1.0 backwards-compatible general comparisons** — `EvaluationContext.BackwardsCompatible` flag set from `xsl:stylesheet/@version`. `CompareGeneral` applies XPath 1.0 coercion rules (boolean→numeric→string hierarchy) when active, and strict type checking (XPTY0004) in XPath 2.0+ mode. Fixes `boolean-081`, `083`, `096`, `097`, `098`.
+20. **XPath optimizer boolean simplification** — `SimplifyBoolean` restricted to only substitute `BooleanLiteralNode` operands. Prevents type mismatch where `true and "00"` was incorrectly simplified to `"00"` (string instead of boolean). Fixes `boolean-023`, `031`, `078`, `079`, `083`.
+21. **XPath optimizer divide-by-zero** — Constant folding for `DecimalLiteralNode / DecimalLiteralNode` skips when divisor is zero. Fixes `boolean-032`, `084`.
 
 ### Unit Test Status
 
@@ -194,7 +196,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 - **`string`** — **0 failures, 136/136 passed (100%)** ✅
 - **`position`** — 21 failures, 3 skipped (90% passing)
-- **`boolean`** — 10 failures, 0 skipped (91% passing)
+- **`boolean`** — **2 failures, 0 skipped (98% passing)** — only `boolean-076`/`077` (node ordering `<<`/`>>`, unimplemented)
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
 

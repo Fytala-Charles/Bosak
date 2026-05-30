@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.2   | 24-05-2026     | Added date/time value comparison type checking (XPTY0004 for cross-subtype)            |
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added DocumentRoot VM handler for absolute XPath paths                                 |
 //                      | Charles Korthout | 1.4   | 29-05-2026     | Fixed TryCast to return empty sequence for empty input (xs:type(()) semantics)         |
+//                      | Charles Korthout | 1.5   | 30-05-2026     | Fixed Compare/CompareGeneral to return empty sequence for empty operands; added backwards-compatible coercion |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -807,8 +808,8 @@ public static class VmEngine
                 case IrOpCode.ValueGreaterThan:
                 case IrOpCode.ValueGreaterThanOrEqual:
                     {
-                        bool result = Compare(instr.OpCode, registers[instr.RegisterB], registers[instr.RegisterC]);
-                        registers[instr.RegisterA] = XdmValue.FromBoolean(result);
+                        var cmpResult = Compare(instr.OpCode, registers[instr.RegisterB], registers[instr.RegisterC]);
+                        registers[instr.RegisterA] = cmpResult;
                         ip++;
                         break;
                     }
@@ -820,28 +821,43 @@ public static class VmEngine
                 case IrOpCode.GeneralGreaterThan:
                 case IrOpCode.GeneralGreaterThanOrEqual:
                     // General comparisons have existential semantics over sequences.
-                    // For now, delegate to value comparison (works for singletons).
                     {
-                        bool result = CompareGeneral(instr.OpCode, registers[instr.RegisterB], registers[instr.RegisterC]);
-                        registers[instr.RegisterA] = XdmValue.FromBoolean(result);
+                        var cmpResult = CompareGeneral(instr.OpCode, registers[instr.RegisterB], registers[instr.RegisterC], context.BackwardsCompatible);
+                        registers[instr.RegisterA] = cmpResult;
                         ip++;
                         break;
                     }
 
                 case IrOpCode.IsSameNode:
                     {
-                        bool result = registers[instr.RegisterB].IsNode &&
-                                      registers[instr.RegisterC].IsNode &&
-                                      registers[instr.RegisterB].NodeValue.IsSameNode(
-                                          registers[instr.RegisterC].NodeValue);
-                        registers[instr.RegisterA] = XdmValue.FromBoolean(result);
+                        var left = registers[instr.RegisterB];
+                        var right = registers[instr.RegisterC];
+                        if (left.IsUndefined || right.IsUndefined)
+                        {
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
+                        else
+                        {
+                            bool result = left.IsNode && right.IsNode && left.NodeValue.IsSameNode(right.NodeValue);
+                            registers[instr.RegisterA] = XdmValue.FromBoolean(result);
+                        }
                         ip++;
                         break;
                     }
 
                 case IrOpCode.PrecedesNode:
                 case IrOpCode.FollowsNode:
-                    throw new NotImplementedException("Node ordering comparisons are not yet implemented.");
+                    {
+                        var left = registers[instr.RegisterB];
+                        var right = registers[instr.RegisterC];
+                        if (left.IsUndefined || right.IsUndefined)
+                        {
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                            ip++;
+                            break;
+                        }
+                        throw new NotImplementedException("Node ordering comparisons are not yet implemented.");
+                    }
 
                 // ------------------------------------------------------------------
                 // Arithmetic
@@ -2599,7 +2615,7 @@ public static class VmEngine
     // Comparisons
     // ------------------------------------------------------------------
 
-    private static bool Compare(IrOpCode op, XdmValue left, XdmValue right, bool strict = true)
+    private static XdmValue Compare(IrOpCode op, XdmValue left, XdmValue right, bool strict = true)
     {
         bool leftFromNode = IsNodeOrigin(left);
         bool rightFromNode = IsNodeOrigin(right);
@@ -2607,6 +2623,15 @@ public static class VmEngine
         left = Atomize(left);
         right = Atomize(right);
 
+        // XPath value comparisons with empty sequence operand return empty sequence
+        if (left.IsUndefined || right.IsUndefined)
+            return XdmValue.Undefined;
+
+        return XdmValue.FromBoolean(CompareCore(op, left, right, strict, leftFromNode, rightFromNode));
+    }
+
+    private static bool CompareCore(IrOpCode op, XdmValue left, XdmValue right, bool strict, bool leftFromNode, bool rightFromNode)
+    {
         if (IsDouble(left) || IsDouble(right))
         {
             double l = ToDouble(left);
@@ -2822,6 +2847,11 @@ public static class VmEngine
             throw new InvalidOperationException("XPTY0004");
         }
 
+        // In strict mode, only same-kind atomic values are comparable (cross-kind
+        // mismatches such as boolean vs numeric should have been handled above).
+        if (strict && left.Kind != right.Kind)
+            throw new InvalidOperationException("XPTY0004");
+
         int cmp2 = string.CompareOrdinal(lStr, rStr);
         return op switch
         {
@@ -2835,9 +2865,13 @@ public static class VmEngine
         };
     }
 
-    private static bool CompareGeneral(IrOpCode op, XdmValue left, XdmValue right)
+    private static XdmValue CompareGeneral(IrOpCode op, XdmValue left, XdmValue right, bool backwardsCompatible = false)
     {
         // General comparisons use existential semantics over sequences.
+        // If either operand is an empty sequence, the result is an empty sequence.
+        if (left.IsUndefined || right.IsUndefined)
+            return XdmValue.Undefined;
+
         // For now, materialize both sides and compare pairwise.
         var leftItems = MaterializeSequence(left);
         var rightItems = MaterializeSequence(right);
@@ -2846,24 +2880,71 @@ public static class VmEngine
         {
             foreach (var r in rightItems)
             {
-                bool match = op switch
+                // Atomize and check for empty sequence on each pair
+                var atomizedL = Atomize(l);
+                var atomizedR = Atomize(r);
+                if (atomizedL.IsUndefined || atomizedR.IsUndefined)
+                    continue;
+
+                // XPath 1.0 backwards compatibility coercion rules
+                if (backwardsCompatible)
                 {
-                    IrOpCode.GeneralEqual => Compare(IrOpCode.Equal, l, r, strict: false),
-                    IrOpCode.GeneralNotEqual => Compare(IrOpCode.NotEqual, l, r, strict: false),
-                    IrOpCode.GeneralLessThan => Compare(IrOpCode.LessThan, l, r, strict: false),
-                    IrOpCode.GeneralLessThanOrEqual => Compare(IrOpCode.LessThanOrEqual, l, r, strict: false),
-                    IrOpCode.GeneralGreaterThan => Compare(IrOpCode.GreaterThan, l, r, strict: false),
-                    IrOpCode.GeneralGreaterThanOrEqual => Compare(IrOpCode.GreaterThanOrEqual, l, r, strict: false),
-                    _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
-                };
+                    ApplyBackwardsCompatibleCoercion(ref atomizedL, ref atomizedR);
+                }
+
+                bool match = CompareCore(
+                    op switch
+                    {
+                        IrOpCode.GeneralEqual => IrOpCode.Equal,
+                        IrOpCode.GeneralNotEqual => IrOpCode.NotEqual,
+                        IrOpCode.GeneralLessThan => IrOpCode.LessThan,
+                        IrOpCode.GeneralLessThanOrEqual => IrOpCode.LessThanOrEqual,
+                        IrOpCode.GeneralGreaterThan => IrOpCode.GreaterThan,
+                        IrOpCode.GeneralGreaterThanOrEqual => IrOpCode.GreaterThanOrEqual,
+                        _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+                    },
+                    atomizedL, atomizedR, strict: !backwardsCompatible,
+                    IsNodeOrigin(l), IsNodeOrigin(r));
 
                 if (match)
-                    return true;
+                    return XdmValue.FromBoolean(true);
             }
         }
 
-        return false;
+        return XdmValue.FromBoolean(false);
     }
+
+    /// <summary>
+    /// Applies XPath 1.0 backwards-compatible coercion rules for general comparisons:
+    /// 1. If either operand is boolean, convert the other to boolean.
+    /// 2. If either operand is numeric, convert the other to numeric.
+    /// 3. Otherwise, convert both to strings.
+    /// </summary>
+    private static void ApplyBackwardsCompatibleCoercion(ref XdmValue left, ref XdmValue right)
+    {
+        bool leftIsBool = left.Kind == XdmValueKind.Boolean;
+        bool rightIsBool = right.Kind == XdmValueKind.Boolean;
+        if (leftIsBool || rightIsBool)
+        {
+            if (!leftIsBool) left = XdmValue.FromBoolean(left.EffectiveBooleanValue());
+            if (!rightIsBool) right = XdmValue.FromBoolean(right.EffectiveBooleanValue());
+            return;
+        }
+
+        bool leftIsNum = IsNumeric(left);
+        bool rightIsNum = IsNumeric(right);
+        if (leftIsNum || rightIsNum)
+        {
+            if (!leftIsNum) left = XdmValue.FromDouble(ToDouble(left));
+            if (!rightIsNum) right = XdmValue.FromDouble(ToDouble(right));
+            return;
+        }
+
+        // Otherwise both become strings (they already are after atomization)
+    }
+
+    private static bool IsNumeric(XdmValue value)
+        => IsDouble(value) || IsFloat(value) || IsDecimal(value) || value.Kind == XdmValueKind.Integer;
 
     // ------------------------------------------------------------------
     // Type operations
