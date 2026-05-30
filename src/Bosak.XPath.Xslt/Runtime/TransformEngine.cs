@@ -35,6 +35,7 @@
 //                      | Charles Korthout | 1.8   | 29-05-2026     | Reduced MaxXsltFunctionCallDepth to 32 to prevent .NET stack overflow crashes             |
 //                      | Charles Korthout | 1.9   | 29-05-2026     | Added expand-text / Text Value Template support with XPath string literal awareness       |
 //                      | Charles Korthout | 2.0   | 30-05-2026     | Skip comments in CopyLiteralElement; fixes string-050/051/089 conformance tests         |
+//                      | Charles Korthout | 2.1   | 30-05-2026     | EvaluateSequenceConstructor always wraps in document node via synthetic wrapper         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1917,6 +1918,11 @@ public sealed class TransformEngine
     {
         var focus = XdmValue.FromNode(source);
 
+        // Set the focus once for all global param/var evaluations.
+        // Sequence constructors inside global variables rely on _context.ContextItem
+        // being set when they evaluate XPath expressions (e.g. xsl:value-of/@select).
+        _context.WithFocus(focus, 1, 1);
+
         // Evaluate global parameters first
         var allParams = _stylesheet.GetAllGlobalParameters();
         foreach (var (name, paramElem) in allParams)
@@ -1930,7 +1936,7 @@ public sealed class TransformEngine
             if (!string.IsNullOrEmpty(select))
             {
                 var compiled = XPath31Expression.Compile(select);
-                value = compiled.Evaluate(_context.WithFocus(focus, 1, 1));
+                value = compiled.Evaluate(_context);
             }
             else
             {
@@ -1948,7 +1954,7 @@ public sealed class TransformEngine
             if (!string.IsNullOrEmpty(select))
             {
                 var compiled = XPath31Expression.Compile(select);
-                value = compiled.Evaluate(_context.WithFocus(focus, 1, 1));
+                value = compiled.Evaluate(_context);
             }
             else
             {
@@ -2214,65 +2220,86 @@ public sealed class TransformEngine
     /// </summary>
     private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, bool wrapInDocumentNode = true)
     {
-        // Create a temporary container to capture the sequence constructor output
-        var wrapper = new XElement("__temp__");
-        ExecuteSequenceConstructorDirect(parent, contextItem, wrapper);
-
-        var nodes = wrapper.Nodes().ToList();
-
-        // Empty sequence constructor → empty sequence (XSLT 2.0 §11.2)
-        if (nodes.Count == 0)
-            return XdmValue.FromSequence(XdmSequence.Empty);
-
-        if (wrapInDocumentNode)
+        // Ensure XPath evaluations inside the sequence constructor use the correct context item
+        var savedContextItem = _context.ContextItem;
+        var savedContextPosition = _context.ContextPosition;
+        var savedContextSize = _context.ContextSize;
+        if (contextItem.Kind != XdmValueKind.Undefined)
         {
-            var elementCount = nodes.OfType<XElement>().Count();
+            _context.WithFocus(contextItem, 1, 1);
+        }
 
-            // XSLT 2.0+: non-empty sequence constructor content produces a document node.
-            // LINQ-to-XML XDocument requires exactly one root element and does not
-            // allow non-whitespace text nodes outside the root, so we can only
-            // create a proper document node for single-element content.
-            if (elementCount == 1 && nodes.Count == 1)
+        try
+        {
+            // Create a temporary container to capture the sequence constructor output
+            var wrapper = new XElement("__temp__");
+            ExecuteSequenceConstructorDirect(parent, contextItem, wrapper);
+
+            var nodes = wrapper.Nodes().ToList();
+
+            // Empty sequence constructor → empty sequence (XSLT 2.0 §11.2)
+            if (nodes.Count == 0)
+                return XdmValue.FromSequence(XdmSequence.Empty);
+
+            if (wrapInDocumentNode)
             {
-                var tempDoc = new XDocument();
-                tempDoc.Add(nodes[0]);
-                return XdmValue.FromNode(new Providers.Xml.XDocumentNode(tempDoc));
+                // Apply complex content rules: remove zero-length text nodes,
+                // merge adjacent text nodes.
+                nodes = ApplyComplexContentRules(nodes);
+
+                // XSLT 2.0+: non-empty sequence constructor content produces a document node.
+                // LINQ-to-XML XDocument requires exactly one root element and does not
+                // allow non-whitespace text nodes outside the root, so we use a synthetic
+                // wrapper element that XDocumentNode transparently unwraps.
+                var elementCount = nodes.OfType<XElement>().Count();
+                if (elementCount == 1 && nodes.Count == 1)
+                {
+                    // Single element: use it directly as the document root
+                    var tempDoc = new XDocument();
+                    tempDoc.Add(nodes[0]);
+                    return XdmValue.FromNode(new Providers.Xml.XDocumentNode(tempDoc));
+                }
+                else
+                {
+                    // Mixed content: wrap in synthetic document wrapper
+                    var docWrapper = new XElement("__xdm_doc__");
+                    docWrapper.Add(nodes);
+                    var tempDoc = new XDocument(docWrapper);
+                    return XdmValue.FromNode(new Providers.Xml.XDocumentNode(tempDoc));
+                }
             }
-        }
 
-        // When wrapping in a document node, apply complex content rules:
-        // remove zero-length text nodes, merge adjacent text nodes.
-        if (wrapInDocumentNode)
-        {
-            nodes = ApplyComplexContentRules(nodes);
-        }
-
-        // Fall back: return the raw sequence
-        var results = new List<XdmValue>();
-        foreach (var child in nodes)
-        {
-            switch (child)
+            // wrapInDocumentNode == false: return the raw sequence (used when @as is present)
+            var results = new List<XdmValue>();
+            foreach (var child in nodes)
             {
-                case XElement e:
-                    results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(e)));
-                    break;
-                case XText t:
-                    // Preserve text nodes as text nodes, not atomic strings,
-                    // so that CopyToResult can concatenate adjacent text nodes
-                    // without inserting spaces (XSLT 3.0 §5.7.2).
-                    results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(new XText(t.Value))));
-                    break;
-                case XComment c:
-                    results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(c)));
-                    break;
-                case XProcessingInstruction pi:
-                    results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(pi)));
-                    break;
+                switch (child)
+                {
+                    case XElement e:
+                        results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(e)));
+                        break;
+                    case XText t:
+                        // Preserve text nodes as text nodes, not atomic strings,
+                        // so that CopyToResult can concatenate adjacent text nodes
+                        // without inserting spaces (XSLT 3.0 §5.7.2).
+                        results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(new XText(t.Value))));
+                        break;
+                    case XComment c:
+                        results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(c)));
+                        break;
+                    case XProcessingInstruction pi:
+                        results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(pi)));
+                        break;
+                }
             }
+            if (results.Count == 1)
+                return results[0];
+            return XdmValue.FromSequence(MaterializedSequence.FromList(results));
         }
-        if (results.Count == 1)
-            return results[0];
-        return XdmValue.FromSequence(MaterializedSequence.FromList(results));
+        finally
+        {
+            _context.WithFocus(savedContextItem, savedContextPosition, savedContextSize);
+        }
     }
 
     /// <summary>

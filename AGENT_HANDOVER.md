@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-05-29
-**Commit:** `3e927b7` on `main` (pushed to origin) plus uncommitted changes
-**Current focus:** Simple content construction (XSLT §5.7.2) and adjacent-atomic spacing in sequence constructors. seqtor cluster improved significantly; 13 seqtor tests remain failed.
+**Date:** 2026-05-30
+**Commit:** `main` (pushed to origin)
+**Current focus:** Document node wrapping for sequence constructors and global variable context-item fix.
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 2675 / **Failed:** 2787 / **Skipped:** 9138 (14,600 total)
-- Pass rate: **49.0%** (latest run, 2026-05-29)
+- **Passed:** 2750 / **Failed:** 2712 / **Skipped:** 9138 (14,600 total)
+- Pass rate: **50.3%** (latest run, 2026-05-30)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 2675 passed / 2787 failed / 9138 skipped (49.0%) — after seqtor/simple-content fixes
+- Latest: 2750 passed / 2712 failed / 9138 skipped (50.3%) — after document-node wrapping + global var context fix
+- Previous: 2675 passed / 2787 failed / 9138 skipped (49.0%) — after seqtor/simple-content fixes
 - Run 11: 2547 passed / 2915 failed / 9138 skipped (46.6%)
 - Run 36: 2545 passed / 2922 failed / 9133 skipped (46.6%)
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
@@ -94,6 +95,18 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 
 ## Recent Changes (This Session)
 
+### Document Node Wrapping for Mixed Content
+- `EvaluateSequenceConstructor` now **always** wraps non-empty sequence constructor output in a document node when `wrapInDocumentNode=true`.
+- For mixed content (text, multiple elements, comments, PIs), creates a synthetic `XDocument` with a hidden `__xdm_doc__` wrapper element.
+- `XDocumentNode` transparently unwraps this wrapper: children, descendants, string value, parent navigation, document order, and serialization all skip the wrapper.
+- Fixes `string-041`, `boolean-110`, `boolean-111`, and ~72 other tests across multiple clusters.
+- Change history updated in `TransformEngine.cs` and `XDocumentNode.cs`
+
+### Global Variable Context Item Fix
+- `InitializeGlobalParametersAndVariables` now sets `_context.WithFocus(focus)` **before** evaluating global parameters and variables.
+- `EvaluateSequenceConstructor` now saves/restores `_context.ContextItem` around execution, ensuring XPath expressions inside sequence constructors (e.g. `xsl:value-of/@select`) use the correct context item.
+- This was the root cause of `string-041` and many other global-variable-related failures.
+
 ### Sequence Constructor & Simple Content Construction
 - `CopyToResult` rewritten with proper §5.7.1 complex content rules
 - `AppendAtomicText()` added for cross-instruction atomic joining
@@ -171,9 +184,9 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 
 These clusters are >75% passing with only a handful of distinct root causes:
 
-- **`string`** — 12 failures, 0 skipped (91% passing)
+- **`string`** — 4 failures, 0 skipped (97% passing)
 - **`position`** — 21 failures, 3 skipped (90% passing)
-- **`boolean`** — 26 failures, 0 skipped (77% passing)
+- **`boolean`** — 16 failures, 0 skipped (86% passing)
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
 
@@ -191,7 +204,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 ### Medium-term: Architectural refactor (~2–3 days, broad impact)
 
 **Sequence constructor batching** — Refactor `ExecuteSequenceConstructorDirect` to accumulate raw `XdmValue` items in a list and apply complex content construction rules (§5.7.1) only when flushing. This would:
-- Fix remaining 13 seqtor failures (`seqtor-024`, `025`, `026`, `036a`, `036d`, `037a`, `037d`, `016`, `017`, `027`, `028`, `034`, `035`)
+- Fix remaining 13 seqtor failures (`seqtor-016`, `017`, `024`, `025`, `026`, `027`, `028`, `034`, `035`, `036a`, `036d`, `037a`, `037d`)
 - Likely improve many other clusters that depend on correct sequence construction (`sequence`, `copy`, `variable`, etc.)
 
 ---
@@ -200,4 +213,4 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 - `main` — all work is on `main`, pushed to `origin/main`
 - No feature branches
-- Uncommitted changes: `TransformEngine.cs`, `FunctionLibrary.cs`
+- Uncommitted changes: `TransformEngine.cs`, `XDocumentNode.cs`

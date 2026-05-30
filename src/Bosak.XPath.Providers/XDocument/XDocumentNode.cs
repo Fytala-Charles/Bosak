@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Implemented BaseUri property for fn:base-uri and fn:document-uri                       |
 //                      | Charles Korthout | 0.5   | 27-05-2026     | Lazy document order computation for proper node sorting                                |
 //                      | Charles Korthout | 0.6   | 30-05-2026     | Fixed StringValue for XDocument without root element (uses all text node children)     |
+//                      | Charles Korthout | 0.7   | 30-05-2026     | Added synthetic document wrapper for mixed-content document nodes                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -113,7 +114,9 @@ public sealed class XDocumentNode : IXdmNode
                 XText t => t.Value,
                 XComment c => c.Value,
                 XProcessingInstruction pi => pi.Data,
-                System.Xml.Linq.XDocument d => d.Root != null ? d.Root.Value : string.Concat(d.Nodes().OfType<XText>().Select(t => t.Value)),
+                System.Xml.Linq.XDocument d => GetSyntheticWrapper(d) is { } wrapper
+                    ? string.Concat(wrapper.Nodes().OfType<XText>().Select(t => t.Value))
+                    : (d.Root != null ? d.Root.Value : string.Concat(d.Nodes().OfType<XText>().Select(t => t.Value))),
                 _ => string.Empty
             };
         }
@@ -153,6 +156,10 @@ public sealed class XDocumentNode : IXdmNode
 
     private static void Traverse(XContainer container, ref long index, Dictionary<XObject, long> map)
     {
+        // Unwrap synthetic document wrapper: its children should be indexed, not the wrapper itself
+        if (container is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
+            container = wrapperDoc;
+
         foreach (var node in container.Nodes())
         {
             map[node] = index++;
@@ -199,6 +206,10 @@ public sealed class XDocumentNode : IXdmNode
     {
         if (_node is not XContainer container)
             return XdmSequence.Empty;
+
+        // Unwrap synthetic document wrapper so its children appear as document children
+        if (_node is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
+            container = wrapperDoc;
 
         var items = new List<XdmValue>();
         foreach (var child in container.Nodes())
@@ -264,6 +275,10 @@ public sealed class XDocumentNode : IXdmNode
         if (_node is not XContainer container)
             return XdmSequence.Empty;
 
+        // Unwrap synthetic document wrapper so its children appear as document children
+        if (_node is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
+            container = wrapperDoc;
+
         var items = new List<XdmValue>();
         foreach (var child in container.Nodes())
         {
@@ -300,7 +315,13 @@ public sealed class XDocumentNode : IXdmNode
     private XObject? GetXPathParent(XObject node)
     {
         var parent = node.Parent;
-        if (parent is not null) return parent;
+        if (parent is not null)
+        {
+            // Skip synthetic document wrapper: children of the wrapper see the XDocument as parent
+            if (parent is XElement wrapper && wrapper.Name.LocalName == "__xdm_doc__" && wrapper.Name.NamespaceName == "" && wrapper.Document is not null)
+                return wrapper.Document;
+            return parent;
+        }
         if (node is XElement elem && elem.Document is not null && elem.Document.Root == elem)
             return elem.Document;
         if (node == _node && _isNamespaceNode && _namespaceOwner is not null)
@@ -505,6 +526,10 @@ public sealed class XDocumentNode : IXdmNode
         if (node is not XContainer container)
             yield break;
 
+        // Unwrap synthetic document wrapper so its children appear as document descendants
+        if (node is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
+            container = wrapperDoc;
+
         foreach (var child in container.Nodes())
         {
             yield return child;
@@ -517,6 +542,10 @@ public sealed class XDocumentNode : IXdmNode
     {
         if (node is not XContainer container)
             return;
+
+        // Unwrap synthetic document wrapper so its children appear as document descendants
+        if (node is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
+            container = wrapperDoc;
 
         foreach (var child in container.Nodes())
         {
@@ -532,7 +561,9 @@ public sealed class XDocumentNode : IXdmNode
 
         return _node switch
         {
-            System.Xml.Linq.XDocument doc => doc.ToString(SaveOptions.DisableFormatting),
+            System.Xml.Linq.XDocument doc => GetSyntheticWrapper(doc) is { } wrapperDoc
+                ? string.Concat(wrapperDoc.Nodes().Select(n => n.ToString(SaveOptions.DisableFormatting)))
+                : doc.ToString(SaveOptions.DisableFormatting),
             XElement el => el.ToString(SaveOptions.DisableFormatting),
             XText t => System.Security.SecurityElement.Escape(t.Value) ?? t.Value,
             XComment c => $"<!--{c.Value}-->",
@@ -541,4 +572,18 @@ public sealed class XDocumentNode : IXdmNode
             _ => _node.ToString() ?? string.Empty
         };
     }
+
+    // ------------------------------------------------------------------
+    // Synthetic document wrapper helpers
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Returns the synthetic wrapper element for document nodes that contain
+    /// mixed content (multiple elements, text nodes, etc.). LINQ-to-XML
+    /// XDocument cannot hold arbitrary mixed content directly, so we wrap
+    /// the children in a hidden element that <see cref="XDocumentNode"/>
+    /// transparently unwraps.
+    /// </summary>
+    private static XElement? GetSyntheticWrapper(System.Xml.Linq.XDocument doc)
+        => doc.Root?.Name == XName.Get("__xdm_doc__") ? doc.Root : null;
 }
