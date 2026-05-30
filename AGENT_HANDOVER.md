@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 2750 / **Failed:** 2712 / **Skipped:** 9138 (14,600 total)
-- Pass rate: **50.3%** (latest run, 2026-05-30)
+- **Passed:** 2752 / **Failed:** 2710 / **Skipped:** 9138 (14,600 total)
+- Pass rate: **50.4%** (latest run, 2026-05-30)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 2750 passed / 2712 failed / 9138 skipped (50.3%) — after document-node wrapping + global var context fix
+- Latest: 2752 passed / 2710 failed / 9138 skipped (50.4%) — after optimizer divide-by-zero fix
+- Previous: 2750 passed / 2712 failed / 9138 skipped (50.3%) — after document-node wrapping + global var context fix
 - Previous: 2675 passed / 2787 failed / 9138 skipped (49.0%) — after seqtor/simple-content fixes
 - Run 11: 2547 passed / 2915 failed / 9138 skipped (46.6%)
 - Run 36: 2545 passed / 2922 failed / 9133 skipped (46.6%)
@@ -128,6 +129,12 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 - `xsl:namespace` added (basic support)
 - Change history updated in `TransformEngine.cs`
 
+### XPath Optimizer Constant Folding
+- `XPathOptimizer.OptimizeBinary` now catches `DivideByZeroException` during constant folding for integer and decimal operations (divide, idiv, mod).
+- Prevents compile-time crashes on expressions like `true() or 1 div 0` where short-circuit evaluation should skip the division.
+- Fixes `boolean-032`, `boolean-084`.
+- Change history updated in `XPathOptimizer.cs`
+
 ### `fn:substring` Fix
 - `Substring_2`/`Substring_3` use `RoundDouble(startD, 0)` instead of `(int)startD`
 - Change history updated in `FunctionLibrary.cs`
@@ -186,7 +193,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 - **`string`** — 4 failures, 0 skipped (97% passing)
 - **`position`** — 21 failures, 3 skipped (90% passing)
-- **`boolean`** — 16 failures, 0 skipped (86% passing)
+- **`boolean`** — 14 failures, 0 skipped (88% passing)
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
 

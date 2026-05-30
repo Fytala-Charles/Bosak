@@ -86,58 +86,81 @@ public sealed class XPathOptimizer
             node = node with { Left = left, Right = right };
         }
 
-        // Constant folding
+        // Constant folding (arithmetic operations may throw at compile time,
+        // e.g. division by zero; skip folding in that case and let runtime handle it)
         if (left is IntegerLiteralNode li && right is IntegerLiteralNode ri)
         {
-            XPathAstNode? result = node.Operator switch
+            try
             {
-                BinaryOperator.Plus => new IntegerLiteralNode(li.Value + ri.Value),
-                BinaryOperator.Minus => new IntegerLiteralNode(li.Value - ri.Value),
-                BinaryOperator.Multiply => new IntegerLiteralNode(li.Value * ri.Value),
-                BinaryOperator.Divide => new DecimalLiteralNode((decimal)li.Value / (decimal)ri.Value),
-                BinaryOperator.Idiv => new IntegerLiteralNode(li.Value / ri.Value),
-                BinaryOperator.Mod => new IntegerLiteralNode(li.Value % ri.Value),
-                BinaryOperator.Eq => new BooleanLiteralNode(li.Value == ri.Value),
-                BinaryOperator.Ne => new BooleanLiteralNode(li.Value != ri.Value),
-                BinaryOperator.Lt => new BooleanLiteralNode(li.Value < ri.Value),
-                BinaryOperator.Le => new BooleanLiteralNode(li.Value <= ri.Value),
-                BinaryOperator.Gt => new BooleanLiteralNode(li.Value > ri.Value),
-                BinaryOperator.Ge => new BooleanLiteralNode(li.Value >= ri.Value),
-                BinaryOperator.Equal => new BooleanLiteralNode(li.Value == ri.Value),
-                BinaryOperator.NotEqual => new BooleanLiteralNode(li.Value != ri.Value),
-                BinaryOperator.LessThan => new BooleanLiteralNode(li.Value < ri.Value),
-                BinaryOperator.LessThanOrEqual => new BooleanLiteralNode(li.Value <= ri.Value),
-                BinaryOperator.GreaterThan => new BooleanLiteralNode(li.Value > ri.Value),
-                BinaryOperator.GreaterThanOrEqual => new BooleanLiteralNode(li.Value >= ri.Value),
-                _ => null
-            };
-            if (result is not null) { changed = true; return result; }
+                XPathAstNode? result = node.Operator switch
+                {
+                    BinaryOperator.Plus => new IntegerLiteralNode(li.Value + ri.Value),
+                    BinaryOperator.Minus => new IntegerLiteralNode(li.Value - ri.Value),
+                    BinaryOperator.Multiply => new IntegerLiteralNode(li.Value * ri.Value),
+                    BinaryOperator.Divide => new DecimalLiteralNode((decimal)li.Value / (decimal)ri.Value),
+                    BinaryOperator.Idiv => new IntegerLiteralNode(li.Value / ri.Value),
+                    BinaryOperator.Mod => new IntegerLiteralNode(li.Value % ri.Value),
+                    BinaryOperator.Eq => new BooleanLiteralNode(li.Value == ri.Value),
+                    BinaryOperator.Ne => new BooleanLiteralNode(li.Value != ri.Value),
+                    BinaryOperator.Lt => new BooleanLiteralNode(li.Value < ri.Value),
+                    BinaryOperator.Le => new BooleanLiteralNode(li.Value <= ri.Value),
+                    BinaryOperator.Gt => new BooleanLiteralNode(li.Value > ri.Value),
+                    BinaryOperator.Ge => new BooleanLiteralNode(li.Value >= ri.Value),
+                    BinaryOperator.Equal => new BooleanLiteralNode(li.Value == ri.Value),
+                    BinaryOperator.NotEqual => new BooleanLiteralNode(li.Value != ri.Value),
+                    BinaryOperator.LessThan => new BooleanLiteralNode(li.Value < ri.Value),
+                    BinaryOperator.LessThanOrEqual => new BooleanLiteralNode(li.Value <= ri.Value),
+                    BinaryOperator.GreaterThan => new BooleanLiteralNode(li.Value > ri.Value),
+                    BinaryOperator.GreaterThanOrEqual => new BooleanLiteralNode(li.Value >= ri.Value),
+                    _ => null
+                };
+                if (result is not null) { changed = true; return result; }
+            }
+            catch (DivideByZeroException)
+            {
+                // Skip constant folding; let runtime evaluate and produce the proper XPath error/INF
+            }
         }
 
         if (left is DoubleLiteralNode ld && right is DoubleLiteralNode rd)
         {
-            var result = node.Operator switch
+            try
             {
-                BinaryOperator.Plus => new DoubleLiteralNode(ld.Value + rd.Value),
-                BinaryOperator.Minus => new DoubleLiteralNode(ld.Value - rd.Value),
-                BinaryOperator.Multiply => new DoubleLiteralNode(ld.Value * rd.Value),
-                BinaryOperator.Divide => new DoubleLiteralNode(ld.Value / rd.Value),
-                _ => null
-            };
-            if (result is not null) { changed = true; return result; }
+                var result = node.Operator switch
+                {
+                    BinaryOperator.Plus => new DoubleLiteralNode(ld.Value + rd.Value),
+                    BinaryOperator.Minus => new DoubleLiteralNode(ld.Value - rd.Value),
+                    BinaryOperator.Multiply => new DoubleLiteralNode(ld.Value * rd.Value),
+                    BinaryOperator.Divide => new DoubleLiteralNode(ld.Value / rd.Value),
+                    _ => null
+                };
+                if (result is not null) { changed = true; return result; }
+            }
+            catch (DivideByZeroException)
+            {
+                // Double division by zero produces Infinity/NaN, not an exception,
+                // so this catch is defensive only.
+            }
         }
 
         if (left is DecimalLiteralNode lc && right is DecimalLiteralNode rc)
         {
-            var result = node.Operator switch
+            try
             {
-                BinaryOperator.Plus => new DecimalLiteralNode(lc.Value + rc.Value),
-                BinaryOperator.Minus => new DecimalLiteralNode(lc.Value - rc.Value),
-                BinaryOperator.Multiply => new DecimalLiteralNode(lc.Value * rc.Value),
-                BinaryOperator.Divide => new DecimalLiteralNode(lc.Value / rc.Value),
-                _ => null
-            };
-            if (result is not null) { changed = true; return result; }
+                var result = node.Operator switch
+                {
+                    BinaryOperator.Plus => new DecimalLiteralNode(lc.Value + rc.Value),
+                    BinaryOperator.Minus => new DecimalLiteralNode(lc.Value - rc.Value),
+                    BinaryOperator.Multiply => new DecimalLiteralNode(lc.Value * rc.Value),
+                    BinaryOperator.Divide => new DecimalLiteralNode(lc.Value / rc.Value),
+                    _ => null
+                };
+                if (result is not null) { changed = true; return result; }
+            }
+            catch (DivideByZeroException)
+            {
+                // Skip constant folding; let runtime evaluate and produce the proper XPath error
+            }
         }
 
         if (left is StringLiteralNode ls && right is StringLiteralNode rs && node.Operator == BinaryOperator.StringConcat)
