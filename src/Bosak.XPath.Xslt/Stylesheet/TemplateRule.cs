@@ -106,8 +106,93 @@ public sealed class TemplateRule
             if (Match.Trim() == "/")
                 CompiledMatch = (node, ctx) => node.NodeKind == XdmNodeKind.Document;
             else
-                CompiledMatch = compiler.Compile(Match);
+            {
+                // Resolve namespace prefixes in the pattern to Q{uri}local syntax
+                // so the pattern compiler can match namespaced elements correctly.
+                var resolved = ResolveNamespacePrefixes(Match);
+                CompiledMatch = compiler.Compile(resolved);
+            }
         }
+    }
+
+    /// <summary>
+    /// Replaces prefix:local-name occurrences in a pattern with Q{uri}local-name,
+    /// resolving prefixes using the namespace declarations in scope on the
+    /// xsl:template element.
+    /// </summary>
+    private string ResolveNamespacePrefixes(string pattern)
+    {
+        // Quick exit if no colon present (no prefixes to resolve)
+        if (!pattern.Contains(':'))
+            return pattern;
+
+        var sb = new System.Text.StringBuilder();
+        int i = 0;
+        while (i < pattern.Length)
+        {
+            char c = pattern[i];
+            // Skip string literals
+            if (c == '\'' || c == '\"')
+            {
+                char quote = c;
+                sb.Append(c);
+                i++;
+                while (i < pattern.Length && pattern[i] != quote)
+                {
+                    sb.Append(pattern[i]);
+                    i++;
+                }
+                if (i < pattern.Length)
+                {
+                    sb.Append(pattern[i]);
+                    i++;
+                }
+                continue;
+            }
+            // Check for Q{…} syntax — already resolved, copy through
+            if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{')
+            {
+                sb.Append(c);
+                i++;
+                continue;
+            }
+            // Look for prefix:local-name
+            if (char.IsLetter(c) || c == '_')
+            {
+                int start = i;
+                while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-'))
+                    i++;
+                if (i < pattern.Length && pattern[i] == ':')
+                {
+                    var prefix = pattern[start..i];
+                    i++; // skip ':'
+                    int localStart = i;
+                    while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-' || pattern[i] == '.'))
+                        i++;
+                    var local = pattern[localStart..i];
+                    // Resolve prefix; if not found, keep original (will fail to match, which is correct)
+                    var nsUri = Element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                    if (!string.IsNullOrEmpty(nsUri))
+                    {
+                        sb.Append($"Q{{{nsUri}}}{local}");
+                    }
+                    else
+                    {
+                        sb.Append(prefix);
+                        sb.Append(':');
+                        sb.Append(local);
+                    }
+                }
+                else
+                {
+                    sb.Append(pattern[start..i]);
+                }
+                continue;
+            }
+            sb.Append(c);
+            i++;
+        }
+        return sb.ToString();
     }
 
     /// <summary>

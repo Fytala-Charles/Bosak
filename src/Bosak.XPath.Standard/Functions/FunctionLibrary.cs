@@ -6136,7 +6136,7 @@ public static class FunctionLibrary
             XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Floor(arg.DecimalValue)),
             XdmValueKind.Double => XdmValue.FromDouble(Math.Floor(arg.DoubleValue)),
             XdmValueKind.Float => XdmValue.FromFloat((float)Math.Floor(arg.DoubleValue)),
-            _ => throw new InvalidOperationException("XPTY0004")
+            _ => XdmValue.FromDouble(Math.Floor(ConvertToDouble(arg)))
         };
     }
 
@@ -6152,7 +6152,23 @@ public static class FunctionLibrary
             XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Ceiling(arg.DecimalValue)),
             XdmValueKind.Double => XdmValue.FromDouble(Math.Ceiling(arg.DoubleValue)),
             XdmValueKind.Float => XdmValue.FromFloat((float)Math.Ceiling(arg.DoubleValue)),
-            _ => throw new InvalidOperationException("XPTY0004")
+            _ => XdmValue.FromDouble(Math.Ceiling(ConvertToDouble(arg)))
+        };
+    }
+
+    /// <summary>
+    /// Converts an XDM value to double for numeric functions that accept
+    /// string/untyped-atomic arguments (e.g., floor, ceiling, round).
+    /// </summary>
+    private static double ConvertToDouble(XdmValue value)
+    {
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (double)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
+            XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
+            _ => double.TryParse(value.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var d) ? d : double.NaN
         };
     }
 
@@ -6166,6 +6182,15 @@ public static class FunctionLibrary
     {
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
+
+        // For non-numeric types (string, untypedAtomic, etc.), convert to double first.
+        bool isNumeric = arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+        if (!isNumeric)
+        {
+            double d = ConvertToDouble(arg);
+            if (double.IsNaN(d)) return XdmValue.FromDouble(double.NaN);
+            return XdmValue.FromDouble(RoundDouble(d, (int)precision));
+        }
 
         if (precision >= 0)
         {

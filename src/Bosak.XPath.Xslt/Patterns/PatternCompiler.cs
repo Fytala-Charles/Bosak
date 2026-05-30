@@ -148,7 +148,27 @@ public sealed class PatternCompiler
         }
 
         // Path pattern: a/b or a/b/c (but not axis steps handled above)
-        if (trimmed.Contains('/') && !trimmed.StartsWith("processing-instruction"))
+        // Ignore '/' inside Q{uri} braces.
+        bool hasPathSlash = false;
+        int qDepth = 0;
+        for (int pi = 0; pi < trimmed.Length; pi++)
+        {
+            if (trimmed[pi] == 'Q' && pi + 1 < trimmed.Length && trimmed[pi + 1] == '{')
+            {
+                qDepth++;
+                pi++;
+            }
+            else if (qDepth > 0 && trimmed[pi] == '}')
+            {
+                qDepth--;
+            }
+            else if (qDepth == 0 && trimmed[pi] == '/')
+            {
+                hasPathSlash = true;
+                break;
+            }
+        }
+        if (hasPathSlash && !trimmed.StartsWith("processing-instruction"))
         {
             return CompilePathPattern(trimmed);
         }
@@ -373,9 +393,22 @@ public sealed class PatternCompiler
 
             int start = i;
             int depth = 0;
+            int qBraceDepth = 0;
             while (i < pattern.Length)
             {
                 char c = pattern[i];
+                if (qBraceDepth > 0)
+                {
+                    if (c == '}') qBraceDepth--;
+                    i++;
+                    continue;
+                }
+                if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{')
+                {
+                    qBraceDepth++;
+                    i += 2;
+                    continue;
+                }
                 if (c == '(' || c == '[') depth++;
                 else if (c == ')' || c == ']') depth--;
                 else if (depth == 0 && (pattern[i] == '/' || (i + 1 < pattern.Length && pattern[i] == '/' && pattern[i + 1] == '/')))

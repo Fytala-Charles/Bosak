@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-05-30
-**Commit:** `main` (pushed to origin)
-**Current focus:** Document node wrapping for sequence constructors and global variable context-item fix.
+**Commit:** `main` (pending push)
+**Current focus:** `core-function` cluster complete (100%), `position` cluster at 96.2% (3 fixes applied, 5 remaining).
 
 ---
 
@@ -10,12 +10,14 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 2767 / **Failed:** 2695 / **Skipped:** 9138 (14,600 total)
-- Pass rate: **50.7%** (latest run, 2026-05-30)
+- **Passed:** 2859 / **Failed:** 2603 / **Skipped:** 9138 (14,600 total)
+- Pass rate: **52.3%** (latest run, 2026-05-30)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 2767 passed / 2695 failed / 9138 skipped (50.7%) — boolean cluster 98% (8 result mismatches + 2 unimplemented fixed)
+- Latest: 2859 passed / 2603 failed / 9138 skipped (52.3%) — `core-function` 100%, `position` 96.2% (+3 fixes), namespace prefix resolution in patterns
+- Previous: 2823 passed / 2639 failed / 9138 skipped (51.7%) — `core-function` cluster 100% (round/ceiling/floor string-arg fixes)
+- Previous: 2767 passed / 2695 failed / 9138 skipped (50.7%) — boolean cluster 98% (8 result mismatches + 2 unimplemented fixed)
 - Previous: 2761 passed / 2701 failed / 9138 skipped (50.6%) — string cluster 100% complete (135, 094, 095 fixed)
 - Previous: 2750 passed / 2712 failed / 9138 skipped (50.3%) — after document-node wrapping + global var context fix
 - Previous: 2675 passed / 2787 failed / 9138 skipped (49.0%) — after seqtor/simple-content fixes
@@ -174,7 +176,7 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 1. **Conformance runner locks DLLs** — If a previous conformance run is still running, builds will fail. Kill with `taskkill /F /IM Bosak.XPath.Xslt.Conformance.exe` before building.
 2. **Empty element serialization** — `XmlWriter` outputs `<done />` (with space), not `<done/>`. Tests should use flexible assertions.
 3. **`key()` namespace** — Registered under `http://www.w3.org/2005/xpath-functions` (not XSLT namespace) because the XPath compiler resolves unprefixed function names to the `fn` namespace.
-4. **PatternCompiler limitations** — Predicates create a new `EvaluationContext` per evaluation; prefix resolution in QNames is limited (returns empty namespace for `prefix:local`).
+4. ~~PatternCompiler limitations~~ — **FIXED**: `TemplateRule.CompileMatch` now resolves namespace prefixes to `Q{uri}local` syntax.
 5. **Negative zero** — `double.IsNegative(value)` is used to detect `-0`; `value == 0.0` alone is not sufficient.
 6. **Global variable forward references** — Global variables are evaluated in import/include/local order. Forward references within the same stylesheet are not dependency-sorted.
 7. **Namespace declaration hoisting** — LINQ-to-XML places `xmlns:prefix` on first element using it; Saxon/test suite expects hoisting to outermost element. Root cause of many namespace test failures.
@@ -195,7 +197,8 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 These clusters are >75% passing with only a handful of distinct root causes:
 
 - **`string`** — **0 failures, 136/136 passed (100%)** ✅
-- **`position`** — 21 failures, 3 skipped (90% passing)
+- **`core-function`** — **0 failures, 90/90 passed (100%)** ✅
+- **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)
 - **`boolean`** — **2 failures, 0 skipped (98% passing)** — only `boolean-076`/`077` (node ordering `<<`/`>>`, unimplemented)
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
@@ -221,6 +224,6 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 ## Branches
 
-- `main` — all work is on `main`, pushed to `origin/main`
+- `main` — all work is on `main`
 - No feature branches
-- Uncommitted changes: `TransformEngine.cs`, `XDocumentNode.cs`
+- Pending commit: `Normalize` opcode, FLWOR focus fix, attribute sequence handling, namespace prefix resolution in patterns, `floor`/`ceiling`/`round` string coercion

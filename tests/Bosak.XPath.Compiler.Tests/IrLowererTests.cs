@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 30-05-2026     | Updated path-with-predicate tests for PathStepMap IR generation                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -322,26 +323,38 @@ public class IrLowererTests
         Assert.Equal(IrOpCode.Child, instrs[1].OpCode);
         Assert.Equal(IrOpCode.NameTest, instrs[2].OpCode);
         Assert.Equal("foo", module.LiteralPool[instrs[2].Operand]);
-        Assert.Equal(IrOpCode.Child, instrs[3].OpCode);
-        Assert.Equal(IrOpCode.NameTest, instrs[4].OpCode);
-        Assert.Equal("bar", module.LiteralPool[instrs[4].Operand]);
+        // Each path step result is normalized into document order.
+        Assert.Equal(IrOpCode.Normalize, instrs[3].OpCode);
+        Assert.Equal(IrOpCode.Child, instrs[4].OpCode);
+        Assert.Equal(IrOpCode.NameTest, instrs[5].OpCode);
+        Assert.Equal("bar", module.LiteralPool[instrs[5].Operand]);
     }
 
     [Fact]
     public void Lower_Path_WithPredicate()
     {
         var instrs = Instructions("foo[1]");
+        // Predicated steps are wrapped in PathStepMap.
         // LoadContextItem
+        // PathStepMap (operand = inner block entry)
+        // Jump (skip inner block)
+        // LoadContextItem (inner block)
         // Child axis
         // NameTest foo
         // Subscript [1]
-        // Return
-        Assert.True(instrs.Length >= 5);
+        // Return (inner block)
+        // Return (main)
+        Assert.True(instrs.Length >= 8);
         Assert.Equal(IrOpCode.LoadContextItem, instrs[0].OpCode);
-        Assert.Equal(IrOpCode.Child, instrs[1].OpCode);
-        Assert.Equal(IrOpCode.NameTest, instrs[2].OpCode);
-        Assert.Equal(IrOpCode.Subscript, instrs[3].OpCode);
-        Assert.Equal(1, instrs[3].Operand);
+        Assert.Equal(IrOpCode.PathStepMap, instrs[1].OpCode);
+        Assert.Equal(IrOpCode.Jump, instrs[2].OpCode);
+        int blockEntry = instrs[1].Operand;
+        Assert.True(blockEntry > 2);
+        Assert.Equal(IrOpCode.LoadContextItem, instrs[blockEntry].OpCode);
+        Assert.Equal(IrOpCode.Child, instrs[blockEntry + 1].OpCode);
+        Assert.Equal(IrOpCode.NameTest, instrs[blockEntry + 2].OpCode);
+        Assert.Equal(IrOpCode.Subscript, instrs[blockEntry + 3].OpCode);
+        Assert.Equal(1, instrs[blockEntry + 3].Operand);
         Assert.Equal(IrOpCode.Return, instrs[^1].OpCode);
     }
 
@@ -350,6 +363,9 @@ public class IrLowererTests
     {
         var instrs = Instructions("foo[bar]");
         // LoadContextItem
+        // PathStepMap (operand = inner block entry)
+        // Jump (skip inner block)
+        // LoadContextItem (inner block)
         // Child axis
         // NameTest foo
         // Filter (with predicate code inline)
@@ -359,21 +375,23 @@ public class IrLowererTests
         // Child axis
         // NameTest bar
         // Return (predicate return)
+        // Return (inner block)
         // Return (main)
-        Assert.True(instrs.Length >= 8);
+        Assert.True(instrs.Length >= 11);
         Assert.Equal(IrOpCode.LoadContextItem, instrs[0].OpCode);
-        Assert.Equal(IrOpCode.Child, instrs[1].OpCode);
-        Assert.Equal(IrOpCode.NameTest, instrs[2].OpCode);
-        Assert.Equal(IrOpCode.Filter, instrs[3].OpCode);
-        Assert.Equal(IrOpCode.Jump, instrs[4].OpCode);
-        // Predicate entry point should be after Jump
-        int predicateEntry = instrs[4].Operand;
-        Assert.True(predicateEntry > 4);
-        Assert.Equal(IrOpCode.LoadContextItem, instrs[5].OpCode);
+        Assert.Equal(IrOpCode.PathStepMap, instrs[1].OpCode);
+        Assert.Equal(IrOpCode.Jump, instrs[2].OpCode);
+        int blockEntry = instrs[1].Operand;
+        Assert.True(blockEntry > 2);
+        Assert.Equal(IrOpCode.LoadContextItem, instrs[blockEntry].OpCode);
+        Assert.Equal(IrOpCode.Child, instrs[blockEntry + 1].OpCode);
+        Assert.Equal(IrOpCode.NameTest, instrs[blockEntry + 2].OpCode);
+        Assert.Equal(IrOpCode.Filter, instrs[blockEntry + 3].OpCode);
+        Assert.Equal(IrOpCode.Jump, instrs[blockEntry + 4].OpCode);
+        int predicateEntry = instrs[blockEntry + 3].Operand;
+        Assert.True(predicateEntry > blockEntry + 4);
+        Assert.Equal(IrOpCode.LoadContextItem, instrs[predicateEntry].OpCode);
         Assert.Equal(IrOpCode.Return, instrs[^1].OpCode);
-
-        // Filter should point to predicate entry (which is instruction 5)
-        Assert.Equal(5, instrs[3].Operand);
     }
 
     // ------------------------------------------------------------------

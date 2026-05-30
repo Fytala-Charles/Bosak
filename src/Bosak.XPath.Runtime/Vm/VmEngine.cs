@@ -26,6 +26,9 @@
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added DocumentRoot VM handler for absolute XPath paths                                 |
 //                      | Charles Korthout | 1.4   | 29-05-2026     | Fixed TryCast to return empty sequence for empty input (xs:type(()) semantics)         |
 //                      | Charles Korthout | 1.5   | 30-05-2026     | Fixed Compare/CompareGeneral to return empty sequence for empty operands; added backwards-compatible coercion |
+//                      | Charles Korthout | 1.6   | 30-05-2026     | Added PathStepMap opcode for per-context-item predicate evaluation on path steps        |
+//                      | Charles Korthout | 1.7   | 30-05-2026     | Filter opcode treats double/decimal/float predicates as numeric position (fixes path-007/008) |
+//                      | Charles Korthout | 1.8   | 30-05-2026     | IsSameNode unwraps singleton sequences; returns empty for empty-seq operand (fixes boolean-074/075) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -430,6 +433,54 @@ public static class VmEngine
                         break;
                     }
 
+                case IrOpCode.PathStepMap:
+                    {
+                        var sequence = registers[instr.RegisterB];
+                        int rhsEntry = instr.Operand;
+
+                        var items = MaterializeSequence(sequence);
+                        var results = new List<XdmValue>();
+
+                        // Save context
+                        var savedItem = context.ContextItem;
+                        var savedPos = context.ContextPosition;
+                        var savedSize = context.ContextSize;
+
+                        for (int i = 0; i < items.Length; i++)
+                        {
+                            // Path-step predicates must see position=1, size=1
+                            // for each context item (predicate is relative to the
+                            // step result, not the outer sequence).
+                            context.WithFocus(items[i], 1, 1);
+                            var (rhsResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
+
+                            if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
+                            {
+                                foreach (var r in XdmSequence.FromSource(rhsResult.SequenceValue))
+                                    results.Add(r);
+                            }
+                            else if (!rhsResult.IsUndefined)
+                            {
+                                results.Add(rhsResult);
+                            }
+                        }
+
+                        // Restore context
+                        context.WithFocus(savedItem, savedPos, savedSize);
+
+                        registers[instr.RegisterA] = XdmValue.FromSequence(
+                            MaterializedSequence.FromList(results));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.Normalize:
+                    {
+                        registers[instr.RegisterA] = NormalizeSequence(registers[instr.RegisterB]);
+                        ip++;
+                        break;
+                    }
+
                 // ------------------------------------------------------------------
                 // FLWOR / Quantified
                 // ------------------------------------------------------------------
@@ -440,14 +491,12 @@ public static class VmEngine
                         var items = MaterializeSequence(sequence);
                         var results = new List<XdmValue>();
 
-                        var savedItem = context.ContextItem;
-                        var savedPos = context.ContextPosition;
-                        var savedSize = context.ContextSize;
                         bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
 
                         foreach (var item in items)
                         {
-                            context.WithFocus(item, 1, 1);
+                            // FLWOR for-expression does NOT change the focus;
+                            // it only binds the variable.
                             context.WithVariable(info.VariableName, item);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
 
@@ -462,7 +511,6 @@ public static class VmEngine
                             }
                         }
 
-                        context.WithFocus(savedItem, savedPos, savedSize);
                         if (hadVariable)
                             context.WithVariable(info.VariableName, savedVar);
                         else
@@ -480,15 +528,13 @@ public static class VmEngine
                         var sequence = registers[instr.RegisterB];
                         var items = MaterializeSequence(sequence);
 
-                        var savedItem = context.ContextItem;
-                        var savedPos = context.ContextPosition;
-                        var savedSize = context.ContextSize;
                         bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
 
                         bool result = false;
                         foreach (var item in items)
                         {
-                            context.WithFocus(item, 1, 1);
+                            // Quantified expression does NOT change the focus;
+                            // it only binds the variable.
                             context.WithVariable(info.VariableName, item);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
 
@@ -499,7 +545,6 @@ public static class VmEngine
                             }
                         }
 
-                        context.WithFocus(savedItem, savedPos, savedSize);
                         if (hadVariable)
                             context.WithVariable(info.VariableName, savedVar);
                         else
@@ -516,15 +561,13 @@ public static class VmEngine
                         var sequence = registers[instr.RegisterB];
                         var items = MaterializeSequence(sequence);
 
-                        var savedItem = context.ContextItem;
-                        var savedPos = context.ContextPosition;
-                        var savedSize = context.ContextSize;
                         bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
 
                         bool result = true;
                         foreach (var item in items)
                         {
-                            context.WithFocus(item, 1, 1);
+                            // Quantified expression does NOT change the focus;
+                            // it only binds the variable.
                             context.WithVariable(info.VariableName, item);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
 
@@ -535,7 +578,6 @@ public static class VmEngine
                             }
                         }
 
-                        context.WithFocus(savedItem, savedPos, savedSize);
                         if (hadVariable)
                             context.WithVariable(info.VariableName, savedVar);
                         else
@@ -673,9 +715,10 @@ public static class VmEngine
                             var (predResult, _) = ExecuteBlock(module, context, registers, predicateEntry);
 
                             // Numeric predicate: [n] means position() = n
-                            if (predResult.Kind == XdmValueKind.Integer)
+                            // Any numeric type (integer, decimal, float, double) counts.
+                            if (IsNumeric(predResult))
                             {
-                                if (predResult.IntegerValue == i + 1)
+                                if (Math.Round(ToDouble(predResult)) == i + 1)
                                     kept.Add(items[i]);
                             }
                             else if (predResult.EffectiveBooleanValue())
@@ -830,8 +873,9 @@ public static class VmEngine
 
                 case IrOpCode.IsSameNode:
                     {
-                        var left = registers[instr.RegisterB];
-                        var right = registers[instr.RegisterC];
+                        var left = UnwrapSingleton(registers[instr.RegisterB]);
+                        var right = UnwrapSingleton(registers[instr.RegisterC]);
+                        // Empty sequence operand -> empty sequence result
                         if (left.IsUndefined || right.IsUndefined)
                         {
                             registers[instr.RegisterA] = XdmValue.Undefined;
@@ -1880,6 +1924,23 @@ public static class VmEngine
             return Atomize(items[0]);
         }
 
+        return value;
+    }
+
+    /// <summary>
+    /// Unwraps a singleton sequence to its single item, or returns the value as-is.
+    /// Returns Undefined for an empty sequence.
+    /// </summary>
+    private static XdmValue UnwrapSingleton(XdmValue value)
+    {
+        if (value.IsUndefined || !value.IsSequence)
+            return value;
+
+        var items = MaterializeSequence(value);
+        if (items.Length == 0)
+            return XdmValue.Undefined;
+        if (items.Length == 1)
+            return items[0];
         return value;
     }
 

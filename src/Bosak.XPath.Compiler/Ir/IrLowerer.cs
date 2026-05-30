@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 24-05-2026     | Fix * name test to filter by principal node kind (element/attribute/namespace)         |
 //                      | Charles Korthout | 1.0   | 27-05-2026     | Emit DocumentRoot for absolute path expressions                                        |
 //                      | Charles Korthout | 1.1   | 30-05-2026     | Emit NamespaceTest for QName node tests (prefix:localname)                             |
+//                      | Charles Korthout | 1.2   | 30-05-2026     | Wrap predicated path steps in PathStepMap for per-context-item predicate evaluation   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -571,6 +572,10 @@ public sealed class IrLowerer
             {
                 // Filter expression as a path step (e.g., parse-xml(...)/root/item)
                 currentReg = LowerNode(step, currentReg);
+                // Path expression results must be in document order.
+                int normReg = AllocRegister();
+                Emit(IrOpCode.Normalize, (byte)normReg, (byte)currentReg);
+                currentReg = normReg;
             }
         }
 
@@ -584,6 +589,56 @@ public sealed class IrLowerer
     }
 
     private int LowerStep(StepNode node, int contextReg)
+    {
+        if (node.Predicates.Count > 0)
+        {
+            // Predicates on a path step must be evaluated per context item,
+            // not on the flattened union of all axis results.
+            // Wrap the step in PathStepMap so each input node becomes the
+            // sole context item while the predicates run.
+            int mapResultReg = AllocRegister();
+            int mapInstrIdx = _instructions.Count;
+            Emit(IrOpCode.PathStepMap, (byte)mapResultReg, (byte)contextReg, 0, 0); // placeholder
+
+            int jumpInstrIdx = _instructions.Count;
+            Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
+
+            int blockEntry = _instructions.Count;
+
+            // Inner block: single context item -> axis -> name test -> predicates
+            int innerCtx = AllocRegister();
+            Emit(IrOpCode.LoadContextItem, (byte)innerCtx);
+            int innerResult = LowerStepCore(node, innerCtx);
+
+            foreach (var pred in node.Predicates)
+            {
+                var predExpr = pred is PredicateNode pn ? pn.Expression : pred;
+                innerResult = EmitPredicateFilter(innerResult, predExpr);
+            }
+
+            Emit(IrOpCode.Return, (byte)innerResult);
+
+            int afterBlock = _instructions.Count;
+            PatchInstruction(mapInstrIdx, IrOpCode.PathStepMap, (byte)mapResultReg, (byte)contextReg, 0, blockEntry);
+            PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterBlock);
+
+            // Path expression results must be in document order.
+            int normReg = AllocRegister();
+            Emit(IrOpCode.Normalize, (byte)normReg, (byte)mapResultReg);
+            return normReg;
+        }
+
+        int resultReg = LowerStepCore(node, contextReg);
+        // Path expression results must be in document order.
+        int normReg2 = AllocRegister();
+        Emit(IrOpCode.Normalize, (byte)normReg2, (byte)resultReg);
+        return normReg2;
+    }
+
+    /// <summary>
+    /// Emits axis + name test for a step (no predicates).
+    /// </summary>
+    private int LowerStepCore(StepNode node, int contextReg)
     {
         // Emit axis instruction
         int axisReg = AllocRegister();
@@ -660,21 +715,7 @@ public sealed class IrLowerer
             Emit(IrOpCode.KindTest, (byte)afterTestReg, (byte)axisReg, operand: kindPoolIdx);
         }
 
-        // Emit predicates
-        int resultReg = afterTestReg;
-        foreach (var pred in node.Predicates)
-        {
-            if (pred is PredicateNode pn)
-            {
-                resultReg = EmitPredicateFilter(resultReg, pn.Expression);
-            }
-            else
-            {
-                resultReg = EmitPredicateFilter(resultReg, pred);
-            }
-        }
-
-        return resultReg;
+        return afterTestReg;
     }
 
     private int LowerPostfixPredicate(PostfixPredicateNode node, int? targetReg)

@@ -38,6 +38,9 @@
 //                      | Charles Korthout | 2.1   | 30-05-2026     | EvaluateSequenceConstructor always wraps in document node via synthetic wrapper         |
 //                      | Charles Korthout | 2.2   | 30-05-2026     | Fixed EvaluateAvt to skip } inside XPath string literals (fixes string-095)             |
 //                      | Charles Korthout | 2.3   | 30-05-2026     | Set EvaluationContext.BackwardsCompatible from stylesheet version (fixes boolean-081/083/096) |
+//                      | Charles Korthout | 2.4   | 30-05-2026     | Fixed ExecuteTemplate/ExecuteXsltFunction to restore saved context item (fixes position-4201) |
+//                      | Charles Korthout | 2.5   | 30-05-2026     | xsl:value-of in backwards-compatible mode outputs only first item (fixes predicate-001/002/003) |
+//                      | Charles Korthout | 2.6   | 30-05-2026     | ApplyBuiltInRules saves/restores context focus correctly                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -315,7 +318,6 @@ public sealed class TransformEngine
             _xsltFunctionCallDepth--;
             _context.RestoreVariables(snapshot);
             _context.WithFocus(savedFocus, savedPosition, savedSize);
-            _context.WithFocus(_context.ContextItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
         }
     }
@@ -678,6 +680,7 @@ public sealed class TransformEngine
             _currentTemplateRule = rule;
 
         // Update context to current item
+        var savedItem = _context.ContextItem;
         var savedCurrent = _context.CurrentItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
@@ -775,7 +778,7 @@ public sealed class TransformEngine
         finally
         {
             _context.RestoreVariables(snapshot);
-            _context.WithFocus(_context.ContextItem, savedPosition, savedSize);
+            _context.WithFocus(savedItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
             _tunnelParamStack.Pop();
             _currentTemplateRule = savedTemplateRule;
@@ -886,8 +889,25 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(select);
                         var result = compiled.Evaluate(_context);
-                        var sep = instruction.Attribute("separator")?.Value ?? " ";
-                        var textValue = XdmValueToString(result, sep);
+                        string textValue;
+                        if (_context.BackwardsCompatible)
+                        {
+                            // XSLT 1.0: value-of outputs only the first item (like string())
+                            if (result.IsSequence && result.SequenceValue != null)
+                            {
+                                var en = XdmSequence.FromSource(result.SequenceValue).GetEnumerator();
+                                textValue = en.MoveNext() ? en.Current.ToString() : string.Empty;
+                            }
+                            else
+                            {
+                                textValue = result.ToString();
+                            }
+                        }
+                        else
+                        {
+                            var sep = instruction.Attribute("separator")?.Value ?? " ";
+                            textValue = XdmValueToString(result, sep);
+                        }
                         _lastAddedWasAtomic = false;
                         AddTextNode(textValue);
                     }
@@ -1681,6 +1701,19 @@ public sealed class TransformEngine
                     CopyNodeToResult(item.NodeValue);
                 }
                 else if (item.IsNode && item.NodeValue != null &&
+                         item.NodeValue.NodeKind == XdmNodeKind.Attribute)
+                {
+                    // Attribute node: flush accumulated text, then add attribute
+                    if (sb.Length > 0)
+                    {
+                        AddTextNode(sb.ToString());
+                        sb.Clear();
+                    }
+                    prevWasAtomic = false;
+                    _lastAddedWasAtomic = false;
+                    CopyNodeToResult(item.NodeValue);
+                }
+                else if (item.IsNode && item.NodeValue != null &&
                          item.NodeValue.NodeKind == XdmNodeKind.Text)
                 {
                     // Text node: append without separator
@@ -1782,6 +1815,7 @@ public sealed class TransformEngine
     /// </summary>
     public void ApplyBuiltInRules(IXdmNode node, string mode, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1)
     {
+        var savedItem = _context.ContextItem;
         var savedCurrent = _context.CurrentItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
@@ -1839,6 +1873,7 @@ public sealed class TransformEngine
         }
         finally
         {
+            _context.WithFocus(savedItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
         }
     }

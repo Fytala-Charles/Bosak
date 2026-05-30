@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added Intersect, Except, and SimpleMap opcodes                                         |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added MapAdd and ArrayAdd opcodes                                                      |
 //                      | Charles Korthout | 0.4   | 27-05-2026     | Added DocumentRoot opcode for absolute XPath paths                                     |
+//                      | Charles Korthout | 0.5   | 30-05-2026     | Added PathStepMap opcode for per-context-item predicate evaluation                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -68,6 +69,8 @@ public enum IrOpCode : byte
     Intersect,
     Except,
     SimpleMap,
+    PathStepMap,
+    Normalize,          // Sort nodes into document order, deduplicate
     
     // ---- Nodes / Axes ------------------------------------------------
     Axis,
