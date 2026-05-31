@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 27-05-2026     | Added // prefix support in match patterns                                                |
 //                      | Charles Korthout | 0.3   | 28-05-2026     | Added smart split, axis steps, node tests, set ops, variable patterns                    |
+//                      | Charles Korthout | 0.4   | 31-05-2026     | Fixed bare predicate patterns ([foo]) compiling as self::node()[foo]                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -783,8 +784,8 @@ public sealed class PatternCompiler
         string predicateExpr = pattern[(bracketOpen + 1)..bracketClose].Trim();
         string remaining = bracketClose + 1 < pattern.Length ? pattern[(bracketClose + 1)..] : "";
 
-        // Special case: .[predicate] matches any node where the predicate is true
-        if (basePattern == ".")
+        // Special case: .[predicate] or [predicate] matches any node where the predicate is true
+        if (basePattern == "." || string.IsNullOrEmpty(basePattern))
         {
             var fullPredicate = $"self::node()[{predicateExpr}]{remaining}";
             var dotCompiled = XPath31Expression.Compile(fullPredicate);

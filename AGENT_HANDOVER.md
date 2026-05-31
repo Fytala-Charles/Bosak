@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-05-31
-**Commit:** `740c70d` (pushed to origin)
+**Commit:** `4264898` (pushed to origin)
 **Current focus:** Customer A-driven feature gaps — REQ-020 (`exclude-result-prefixes`) just implemented; REQ-021 (`xsl:message`) remains.
 
 ---
@@ -43,8 +43,8 @@
 
 ### Unit Test Status
 
-- **741 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 86 tests in `Bosak.XPath.Xslt.Tests`
+- **862 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: 94 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
@@ -193,6 +193,13 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 - Supports `bind-group` and `bind-grouping-key` attributes (XSLT 3.0).
 - `GetGroupingKeyString` helper atomizes sequence keys to first item's string value.
 - Change history updated in `TransformEngine.cs`
+
+### PatternCompiler Predicate Fix
+- Bare predicate patterns like `[foo]` or `[@id='x']` now compile correctly as `self::node()[...]`.
+- Previously produced invalid XPath `child::[foo]` causing `ParseException: Expected node test but found LBracket`.
+- Fix in `CompilePredicatePattern`: empty `basePattern` now routes through the same `self::node()` special-case as `.[predicate]`.
+- 8 new unit tests in `PatternCompilerPredicateTests.cs` covering compilation and execution.
+- Change history updated in `PatternCompiler.cs`
 
 ### Customer A XSLT Usage Analysis
 - Analyzed all 71 stylesheets in `D:\Development\Customer A\assets\xslt`.

@@ -2192,7 +2192,7 @@ public class StylesheetTests
         var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
             <xsl:template match='/'>
                 <out>
-                    <xsl:for-each-group select='items/item' group-starting-with='*[@start=""yes""]'>
+                    <xsl:for-each-group select='items/item' group-starting-with='[@start=""yes""]'>
                         <group>
                             <xsl:for-each select='current-group()'>
                                 <v><xsl:value-of select='@name'/></v>
