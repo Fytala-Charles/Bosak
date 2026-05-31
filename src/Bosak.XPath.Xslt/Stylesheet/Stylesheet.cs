@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 27-05-2026     | Added required version attribute validation (XTSE0010)                                   |
 //                      | Charles Korthout | 0.8   | 27-05-2026     | Exposed Version property for runtime backwards-compatibility checks                    |
 //                      | Charles Korthout | 0.9   | 31-05-2026     | Decimal-format merging from imports/includes; descendant namespace collection            |
+//                      | Charles Korthout | 1.0   | 31-05-2026     | Added exclude-result-prefixes parsing and GetAllExcludedResultPrefixes                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -51,6 +52,7 @@ public sealed class Stylesheet
     private readonly Dictionary<string, ModeDefinition> _modeDefinitions = new();
     private readonly List<XsltFunctionDefinition> _functionDefinitions = new();
     private readonly List<DecimalFormatDefinition> _decimalFormats = new();
+    private readonly HashSet<string> _excludedResultPrefixes = new();
     private OutputProperties? _outputProperties;
 
     public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null)
@@ -151,6 +153,16 @@ public sealed class Stylesheet
             throw new InvalidOperationException("XTSE0010: The version attribute is required on xsl:stylesheet or xsl:transform.");
 
         Version = versionAttr.Value;
+
+        // Parse exclude-result-prefixes
+        var excludePrefixesAttr = root.Attribute("exclude-result-prefixes")?.Value;
+        if (!string.IsNullOrWhiteSpace(excludePrefixesAttr))
+        {
+            foreach (var token in excludePrefixesAttr.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                _excludedResultPrefixes.Add(token.Trim());
+            }
+        }
 
         // Helper to evaluate use-when on top-level elements
         bool UseWhen(XElement elem)
@@ -559,6 +571,28 @@ public sealed class Stylesheet
                 }
             }
         }
+        return result;
+    }
+
+    /// <summary>
+    /// Collects all excluded result prefixes from this stylesheet, its imports, and its includes.
+    /// Imported first, then included, then local.
+    /// </summary>
+    public HashSet<string> GetAllExcludedResultPrefixes()
+    {
+        var result = new HashSet<string>();
+        foreach (var imported in _imports)
+        {
+            foreach (var prefix in imported.GetAllExcludedResultPrefixes())
+                result.Add(prefix);
+        }
+        foreach (var included in _includes)
+        {
+            foreach (var prefix in included.GetAllExcludedResultPrefixes())
+                result.Add(prefix);
+        }
+        foreach (var prefix in _excludedResultPrefixes)
+            result.Add(prefix);
         return result;
     }
 

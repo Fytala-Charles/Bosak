@@ -42,6 +42,7 @@
 //                      | Charles Korthout | 2.5   | 30-05-2026     | xsl:value-of in backwards-compatible mode outputs only first item (fixes predicate-001/002/003) |
 //                      | Charles Korthout | 2.6   | 30-05-2026     | ApplyBuiltInRules saves/restores context focus correctly                                |
 //                      | Charles Korthout | 2.7   | 31-05-2026     | Added xsl:try / xsl:catch support in result tree and function bodies                   |
+//                      | Charles Korthout | 2.8   | 31-05-2026     | Added exclude-result-prefixes filtering in CopyLiteralElement                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -72,6 +73,7 @@ public sealed class TransformEngine
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
     private readonly Dictionary<string, Stylesheet.TemplateRule> _allNamedTemplates;
+    private readonly HashSet<string> _excludedResultPrefixes;
 
     // Variable scope stack for proper lexical scoping across call-template
     private readonly Stack<Dictionary<(string LocalName, string NamespaceUri), XdmValue?>> _varScopes = new();
@@ -121,6 +123,9 @@ public sealed class TransformEngine
         {
             _context.WithNamespace(prefix, nsUri);
         }
+
+        // Collect excluded result prefixes for namespace filtering in literal result elements
+        _excludedResultPrefixes = _stylesheet.GetAllExcludedResultPrefixes();
 
         // Register decimal-format declarations from the stylesheet
         RegisterDecimalFormats();
@@ -1577,12 +1582,15 @@ public sealed class TransformEngine
         // an explicit namespace declaration when the element uses a non-empty namespace.
         var copy = new XElement(source.Name);
 
+        // Determine if #all is specified — this excludes every prefix.
+        bool excludeAll = _excludedResultPrefixes.Contains("#all");
+
         // If the element has a non-empty namespace URI and uses a prefix,
-        // ensure the prefix is declared on the copied element.
+        // ensure the prefix is declared on the copied element, unless excluded.
         if (!string.IsNullOrEmpty(source.Name.NamespaceName))
         {
             var prefix = source.GetPrefixOfNamespace(source.Name.Namespace);
-            if (!string.IsNullOrEmpty(prefix))
+            if (!string.IsNullOrEmpty(prefix) && !excludeAll && !_excludedResultPrefixes.Contains(prefix))
             {
                 copy.SetAttributeValue(XNamespace.Xmlns + prefix, source.Name.NamespaceName);
             }
@@ -1599,6 +1607,9 @@ public sealed class TransformEngine
                 {
                     continue; // Already handled above
                 }
+                // Skip excluded prefixes
+                if (excludeAll || _excludedResultPrefixes.Contains(declaredPrefix))
+                    continue;
                 copy.SetAttributeValue(attr.Name, attr.Value);
                 continue;
             }

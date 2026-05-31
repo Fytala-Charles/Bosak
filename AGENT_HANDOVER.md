@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-05-31
-**Commit:** `db8948a` (pushed to origin)
-**Current focus:** Customer A-driven feature gaps — `xsl:try`/`xsl:catch`, `exclude-result-prefixes`, `xsl:message`.
+**Commit:** `bcb8b00` (pushed to origin)
+**Current focus:** Customer A-driven feature gaps — REQ-020 (`exclude-result-prefixes`) just implemented; REQ-021 (`xsl:message`) remains.
 
 ---
 
@@ -43,8 +43,8 @@
 
 ### Unit Test Status
 
-- **731 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 76 tests in `Bosak.XPath.Xslt.Tests`
+- **734 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: 79 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
@@ -169,6 +169,13 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 - Supports `select` attribute on `xsl:catch` as well as sequence-constructor children.
 - Catches any `Exception` broadly (no error-code filtering yet).
 - Change history updated in `TransformEngine.cs`
+
+### `exclude-result-prefixes` Support (REQ-020)
+- `Stylesheet.Load()` parses `exclude-result-prefixes` from the root element.
+- `GetAllExcludedResultPrefixes()` merges excluded prefixes across imports/includes.
+- `TransformEngine.CopyLiteralElement` filters out namespace declarations for excluded prefixes.
+- Supports `#all` shorthand.
+- Change history updated in `Stylesheet.cs` and `TransformEngine.cs`
 
 ### Customer A XSLT Usage Analysis
 - Analyzed all 71 stylesheets in `D:\Development\Customer A\assets\xslt`.

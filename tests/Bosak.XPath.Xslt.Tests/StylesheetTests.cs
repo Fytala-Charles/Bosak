@@ -1976,6 +1976,80 @@ public class StylesheetTests
     }
 
     [Fact]
+    public void ExcludeResultPrefixes_RemovesExcludedNamespacesFromOutput()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:app='http://example.com/app'
+            exclude-result-prefixes='xs app'>
+            <xsl:template match='/'>
+                <root>
+                    <child>hello</child>
+                </root>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<root>", result);
+        Assert.DoesNotContain("xmlns:xs", result);
+        Assert.DoesNotContain("xmlns:app", result);
+    }
+
+    [Fact]
+    public void ExcludeResultPrefixes_All_RemovesAllUnnecessaryNamespaces()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:unused='http://example.com/unused'
+            exclude-result-prefixes='#all'>
+            <xsl:template match='/'>
+                <root>
+                    <child>hello</child>
+                </root>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<root>", result);
+        Assert.DoesNotContain("xmlns:xs", result);
+        Assert.DoesNotContain("xmlns:unused", result);
+    }
+
+    [Fact]
+    public void ExcludeResultPrefixes_PreservesNeededNamespaceForElementName()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:out='http://example.com/output'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            exclude-result-prefixes='xs'>
+            <xsl:template match='/'>
+                <out:root xmlns:out='http://example.com/output'>
+                    <out:child>hello</out:child>
+                </out:root>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("http://example.com/output", result);
+        Assert.DoesNotContain("xmlns:xs", result);
+    }
+
+    [Fact]
     public void MatchPattern_PathWithParenthesizedUnion_MatchesCorrectly()
     {
         var doc = System.Xml.Linq.XDocument.Parse("<x><a>23</a><b>25</b></x>");
