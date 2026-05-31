@@ -543,6 +543,20 @@ public sealed class Stylesheet
                     result[prefix] = attr.Value;
                 }
             }
+            // Also collect namespace declarations from descendant elements
+            foreach (var elem in _document.Root.Descendants())
+            {
+                foreach (var attr in elem.Attributes())
+                {
+                    if (attr.IsNamespaceDeclaration)
+                    {
+                        var prefix = attr.Name.LocalName;
+                        if (prefix == "xmlns")
+                            prefix = string.Empty;
+                        result[prefix] = attr.Value;
+                    }
+                }
+            }
         }
         return result;
     }
@@ -553,29 +567,81 @@ public sealed class Stylesheet
     /// </summary>
     public Dictionary<(string localName, string nsUri), DecimalFormatDefinition> GetAllDecimalFormats()
     {
-        var result = new Dictionary<(string, string), DecimalFormatDefinition>();
+        var result = new Dictionary<(string, string), DecimalFormat>();
 
         // Imported first (lowest precedence)
         foreach (var imported in _imports)
         {
             foreach (var (key, def) in imported.GetAllDecimalFormats())
-                result[key] = def;
+                MergeDecimalFormat(result, key, def);
         }
 
         // Included next
         foreach (var included in _includes)
         {
             foreach (var (key, def) in included.GetAllDecimalFormats())
-                result[key] = def;
+                MergeDecimalFormat(result, key, def);
         }
 
         // Local last (highest precedence)
         foreach (var def in _decimalFormats)
         {
-            result[(def.LocalName, def.NamespaceUri)] = def;
+            MergeDecimalFormat(result, (def.LocalName, def.NamespaceUri), def);
         }
 
-        return result;
+        // Convert back to definitions
+        var defs = new Dictionary<(string, string), DecimalFormatDefinition>();
+        foreach (var (key, format) in result)
+        {
+            defs[key] = new DecimalFormatDefinition
+            {
+                LocalName = key.Item1,
+                NamespaceUri = key.Item2,
+                Format = format
+            };
+        }
+        return defs;
+    }
+
+    private static void MergeDecimalFormat(Dictionary<(string, string), DecimalFormat> result, (string, string) key, DecimalFormatDefinition def)
+    {
+        if (!result.TryGetValue(key, out var existing))
+        {
+            result[key] = new DecimalFormat
+            {
+                DecimalSeparator = def.Format.DecimalSeparator,
+                GroupingSeparator = def.Format.GroupingSeparator,
+                Digit = def.Format.Digit,
+                ZeroDigit = def.Format.ZeroDigit,
+                PatternSeparator = def.Format.PatternSeparator,
+                MinusSign = def.Format.MinusSign,
+                Percent = def.Format.Percent,
+                PerMille = def.Format.PerMille,
+                Infinity = def.Format.Infinity,
+                NaN = def.Format.NaN,
+                ExponentSeparator = def.Format.ExponentSeparator
+            };
+            return;
+        }
+
+        // Merge explicitly-set attributes from the new definition
+        foreach (var attr in def.ExplicitAttributes)
+        {
+            switch (attr)
+            {
+                case "decimal-separator": existing.DecimalSeparator = def.Format.DecimalSeparator; break;
+                case "grouping-separator": existing.GroupingSeparator = def.Format.GroupingSeparator; break;
+                case "infinity": existing.Infinity = def.Format.Infinity; break;
+                case "minus-sign": existing.MinusSign = def.Format.MinusSign; break;
+                case "NaN": existing.NaN = def.Format.NaN; break;
+                case "percent": existing.Percent = def.Format.Percent; break;
+                case "per-mille": existing.PerMille = def.Format.PerMille; break;
+                case "zero-digit": existing.ZeroDigit = def.Format.ZeroDigit; break;
+                case "digit": existing.Digit = def.Format.Digit; break;
+                case "pattern-separator": existing.PatternSeparator = def.Format.PatternSeparator; break;
+                case "exponent-separator": existing.ExponentSeparator = def.Format.ExponentSeparator; break;
+            }
+        }
     }
 
     /// <summary>The XSLT namespace URI.</summary>
@@ -593,10 +659,13 @@ public sealed class DecimalFormatDefinition
     public string LocalName { get; init; } = "";
     public string NamespaceUri { get; init; } = "";
     public DecimalFormat Format { get; init; } = new();
+    /// <summary>Attributes explicitly set on this xsl:decimal-format element.</summary>
+    public HashSet<string> ExplicitAttributes { get; init; } = new();
 
     public static DecimalFormatDefinition? FromElement(XElement element, Stylesheet stylesheet)
     {
         var format = new DecimalFormat();
+        var explicitAttrs = new HashSet<string>();
         string? localName = null;
         string? nsUri = null;
 
@@ -611,13 +680,13 @@ public sealed class DecimalFormatDefinition
                     {
                         var nameVal = value.Trim();
                         if (string.IsNullOrEmpty(nameVal)) break;
-                        // Resolve QName
+                        // Resolve QName using element's in-scope namespaces first
                         int colon = nameVal.IndexOf(':');
                         if (colon >= 0)
                         {
                             var prefix = nameVal.Substring(0, colon);
                             localName = nameVal.Substring(colon + 1);
-                            nsUri = stylesheet.ResolveNamespace(prefix);
+                            nsUri = element.ResolveNamespace(prefix) ?? stylesheet.ResolveNamespace(prefix) ?? "";
                         }
                         else
                         {
@@ -626,25 +695,65 @@ public sealed class DecimalFormatDefinition
                         }
                         break;
                     }
-                case "decimal-separator": format.DecimalSeparator = value; break;
-                case "grouping-separator": format.GroupingSeparator = value; break;
-                case "infinity": format.Infinity = value; break;
-                case "minus-sign": format.MinusSign = value; break;
-                case "NaN": format.NaN = value; break;
-                case "percent": format.Percent = value; break;
-                case "per-mille": format.PerMille = value; break;
-                case "zero-digit": format.ZeroDigit = value; break;
-                case "digit": format.Digit = value; break;
-                case "pattern-separator": format.PatternSeparator = value; break;
-                case "exponent-separator": format.ExponentSeparator = value; break;
+                case "decimal-separator": format.DecimalSeparator = value; explicitAttrs.Add(name); break;
+                case "grouping-separator": format.GroupingSeparator = value; explicitAttrs.Add(name); break;
+                case "infinity": format.Infinity = value; explicitAttrs.Add(name); break;
+                case "minus-sign": format.MinusSign = value; explicitAttrs.Add(name); break;
+                case "NaN": format.NaN = value; explicitAttrs.Add(name); break;
+                case "percent": format.Percent = value; explicitAttrs.Add(name); break;
+                case "per-mille": format.PerMille = value; explicitAttrs.Add(name); break;
+                case "zero-digit": format.ZeroDigit = value; explicitAttrs.Add(name); break;
+                case "digit": format.Digit = value; explicitAttrs.Add(name); break;
+                case "pattern-separator": format.PatternSeparator = value; explicitAttrs.Add(name); break;
+                case "exponent-separator": format.ExponentSeparator = value; explicitAttrs.Add(name); break;
             }
+        }
+
+        // Validate symbol uniqueness (XTSE1300): only check attributes explicitly set on THIS element
+        var explicitSymbols = new Dictionary<string, string>();
+        foreach (var attr in explicitAttrs)
+        {
+            string? sym = attr switch
+            {
+                "decimal-separator" => format.DecimalSeparator,
+                "grouping-separator" => format.GroupingSeparator,
+                "percent" => format.Percent,
+                "per-mille" => format.PerMille,
+                "zero-digit" => format.ZeroDigit,
+                "digit" => format.Digit,
+                "pattern-separator" => format.PatternSeparator,
+                "minus-sign" => format.MinusSign,
+                _ => null
+            };
+            if (!string.IsNullOrEmpty(sym))
+                explicitSymbols[attr] = sym;
+        }
+        foreach (var (r1, v1) in explicitSymbols)
+        {
+            foreach (var (r2, v2) in explicitSymbols)
+            {
+                if (r1 == r2) continue;
+                if (v1 == v2)
+                    throw new InvalidOperationException("XTSE1300");
+            }
+        }
+
+        // Validate zero-digit is actually a digit (XTSE1295)
+        if (explicitAttrs.Contains("zero-digit") && !string.IsNullOrEmpty(format.ZeroDigit))
+        {
+            var category = format.ZeroDigit.Length == 1
+                ? char.GetUnicodeCategory(format.ZeroDigit[0])
+                : char.GetUnicodeCategory(format.ZeroDigit, 0);
+            if (category != System.Globalization.UnicodeCategory.DecimalDigitNumber)
+                throw new InvalidOperationException("XTSE1295");
         }
 
         return new DecimalFormatDefinition
         {
             LocalName = localName ?? "",
             NamespaceUri = nsUri ?? "",
-            Format = format
+            Format = format,
+            ExplicitAttributes = explicitAttrs
         };
     }
 }
@@ -670,6 +779,30 @@ public static class StylesheetExtensions
                 if (attrPrefix == prefix)
                     return attr.Value;
             }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Resolves a namespace prefix using the element's own and ancestor namespace declarations.
+    /// </summary>
+    public static string? ResolveNamespace(this XElement element, string prefix)
+    {
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration)
+                {
+                    var attrPrefix = attr.Name.LocalName;
+                    if (attrPrefix == "xmlns" && string.IsNullOrEmpty(prefix))
+                        return attr.Value;
+                    if (attrPrefix == prefix)
+                        return attr.Value;
+                }
+            }
+            current = current.Parent;
         }
         return null;
     }

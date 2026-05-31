@@ -892,15 +892,25 @@ public static class VmEngine
                 case IrOpCode.PrecedesNode:
                 case IrOpCode.FollowsNode:
                     {
-                        var left = registers[instr.RegisterB];
-                        var right = registers[instr.RegisterC];
+                        var left = UnwrapSingleton(registers[instr.RegisterB]);
+                        var right = UnwrapSingleton(registers[instr.RegisterC]);
                         if (left.IsUndefined || right.IsUndefined)
                         {
                             registers[instr.RegisterA] = XdmValue.Undefined;
-                            ip++;
-                            break;
                         }
-                        throw new NotImplementedException("Node ordering comparisons are not yet implemented.");
+                        else if (!left.IsNode || !right.IsNode)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromBoolean(false);
+                        }
+                        else
+                        {
+                            bool result = instr.OpCode == IrOpCode.PrecedesNode
+                                ? left.NodeValue.DocumentOrder < right.NodeValue.DocumentOrder
+                                : left.NodeValue.DocumentOrder > right.NodeValue.DocumentOrder;
+                            registers[instr.RegisterA] = XdmValue.FromBoolean(result);
+                        }
+                        ip++;
+                        break;
                     }
 
                 // ------------------------------------------------------------------

@@ -30,6 +30,16 @@ internal static class FormatNumberEngine
 
         value = AtomizeForFormatNumber(value);
 
+        // Non-numeric atomic values (e.g., strings) are cast to double.
+        // If the cast yields NaN, return the NaN symbol.
+        if (!IsNumeric(value))
+        {
+            double d = ConvertToDouble(value);
+            if (double.IsNaN(d))
+                return format.NaN;
+            value = XdmValue.FromDouble(d);
+        }
+
         // Parse picture into positive and negative subpictures
         var (positivePicture, negativePicture) = ParsePicture(picture, format);
 
@@ -69,6 +79,23 @@ internal static class FormatNumberEngine
             return XdmValue.Undefined;
         }
         return value;
+    }
+
+    private static bool IsNumeric(XdmValue value)
+    {
+        return value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+    }
+
+    private static double ConvertToDouble(XdmValue value)
+    {
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (double)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
+            XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
+            _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : double.NaN
+        };
     }
 
     private static bool IsNaN(XdmValue value)
@@ -155,8 +182,10 @@ internal static class FormatNumberEngine
             // Integer part: digits and grouping separators
             while (pos < picture.Length)
             {
-                if (IsDigitSign(picture, pos, format, out int len) || MatchesAt(picture, pos, format.GroupingSeparator))
+                if (IsDigitSign(picture, pos, format, out int len))
                     pos += len;
+                else if (MatchesAt(picture, pos, format.GroupingSeparator))
+                    pos += format.GroupingSeparator.Length;
                 else
                     break;
             }
@@ -167,8 +196,10 @@ internal static class FormatNumberEngine
                 pos += format.DecimalSeparator.Length;
                 while (pos < picture.Length)
                 {
-                    if (IsDigitSign(picture, pos, format, out int len) || MatchesAt(picture, pos, format.GroupingSeparator))
+                    if (IsDigitSign(picture, pos, format, out int len))
                         pos += len;
+                    else if (MatchesAt(picture, pos, format.GroupingSeparator))
+                        pos += format.GroupingSeparator.Length;
                     else
                         break;
                 }
@@ -403,7 +434,7 @@ internal static class FormatNumberEngine
             return true;
         }
 
-        if (index < text.Length)
+        if (index < text.Length && !char.IsLowSurrogate(text[index]))
         {
             int codePoint = char.ConvertToUtf32(text, index);
             int zeroCode = char.ConvertToUtf32(format.ZeroDigit, 0);
@@ -523,11 +554,12 @@ internal static class FormatNumberEngine
     private static string FormatSubpicture(XdmValue value, Subpicture sub, DecimalFormat format, bool negative, bool hasNegativeSubpicture)
     {
         decimal num;
+        double? largeDouble = null;
 
         // Apply percent / per-mille scaling.
         // For double/float inputs, perform scaling in double space before converting to decimal
         // so that results match XPath double arithmetic (e.g. cbcl-fn-format-number-035).
-        if ((value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float) && (sub.HasPercent || sub.HasPerMille))
+        if (value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float)
         {
             double d = value.DoubleValue;
             if (sub.HasPercent) d *= 100;
@@ -543,7 +575,15 @@ internal static class FormatNumberEngine
             if (double.IsNaN(d))
                 return format.NaN;
 
-            num = DoubleToDecimal(d);
+            try
+            {
+                num = DoubleToDecimal(d);
+            }
+            catch (OverflowException)
+            {
+                largeDouble = d;
+                num = 0m;
+            }
         }
         else
         {
@@ -566,6 +606,11 @@ internal static class FormatNumberEngine
                 // Single subpicture: prepend minus sign
                 signPrefix = format.MinusSign;
             }
+        }
+
+        if (largeDouble.HasValue)
+        {
+            return signPrefix + FormatLargeDouble(largeDouble.Value, sub, format) + signSuffix;
         }
 
         if (sub.IsScientific)
@@ -782,6 +827,310 @@ internal static class FormatNumberEngine
         return output;
     }
 
+    /// <summary>
+    /// Formats a very large double that cannot be represented as a decimal.
+    /// Expands scientific notation and formats according to the subpicture.
+    /// </summary>
+    private static string FormatLargeDouble(double d, Subpicture sub, DecimalFormat format)
+    {
+        string plain = ExpandScientificNotation(d);
+        // Split into integer and fractional parts
+        int dotIndex = plain.IndexOf('.');
+        string intPart = dotIndex >= 0 ? plain.Substring(0, dotIndex) : plain;
+        string fracPart = dotIndex >= 0 ? plain.Substring(dotIndex + 1) : "";
+
+        // Round to max fractional digits
+        int maxFrac = sub.MaxFractionalDigits;
+        if (maxFrac >= 0 && fracPart.Length > maxFrac)
+        {
+            // Round half to even
+            string rounded = RoundStringHalfToEven(intPart, fracPart, maxFrac);
+            int newDot = rounded.IndexOf('.');
+            intPart = newDot >= 0 ? rounded.Substring(0, newDot) : rounded;
+            fracPart = newDot >= 0 ? rounded.Substring(newDot + 1) : "";
+        }
+        else if (maxFrac >= 0 && fracPart.Length < maxFrac)
+        {
+            fracPart = fracPart.PadRight(maxFrac, '0');
+        }
+
+        // Build integer part according to picture
+        StringBuilder integerBuilder = new();
+        bool hasMandatoryInteger = sub.MinIntegerDigits > 0;
+        if (intPart == "0" && !hasMandatoryInteger && sub.MaxIntegerDigits > 0)
+        {
+            intPart = "";
+        }
+        int targetMinInt = sub.MinIntegerDigits;
+        if (intPart.Length < targetMinInt)
+        {
+            intPart = intPart.PadLeft(targetMinInt, '0');
+        }
+        if (string.IsNullOrEmpty(intPart) && targetMinInt == 0 && sub.MaxFractionalDigits == 0)
+        {
+            intPart = "0";
+        }
+        foreach (char c in intPart)
+            integerBuilder.Append(MapDigit(c, format));
+
+        if (!string.IsNullOrEmpty(intPart) && !string.IsNullOrEmpty(sub.IntegerDigits))
+        {
+            InsertGroupingSeparators(integerBuilder, sub.IntegerDigits, format);
+        }
+
+        // Build fractional part
+        string fractionalOutput = "";
+        if (!string.IsNullOrEmpty(fracPart) || sub.MinFractionalDigits > 0 || (sub.MaxFractionalDigits > 0 && sub.HasDecimalSeparator))
+        {
+            if (!string.IsNullOrEmpty(sub.FractionalDigits))
+            {
+                StringBuilder fracBuilder = new();
+                int digitIndex = 0;
+                for (int i = 0; i < sub.FractionalDigits.Length; )
+                {
+                    if (IsDigitSign(sub.FractionalDigits, i, format, out int len))
+                    {
+                        if (digitIndex < fracPart.Length)
+                        {
+                            fracBuilder.Append(fracPart[digitIndex]);
+                            digitIndex++;
+                        }
+                        i += len;
+                    }
+                    else if (MatchesAt(sub.FractionalDigits, i, format.GroupingSeparator))
+                    {
+                        fracBuilder.Append(format.GroupingSeparator);
+                        i += format.GroupingSeparator.Length;
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+
+                int minToKeep = sub.MinFractionalDigits;
+                if (d == 0 && sub.MaxFractionalDigits > 0 && minToKeep < 1)
+                    minToKeep = 1;
+
+                while (fracBuilder.Length > minToKeep)
+                {
+                    char last = fracBuilder[fracBuilder.Length - 1];
+                    if (last == '0')
+                    {
+                        fracBuilder.Length--;
+                    }
+                    else if (EndsWith(fracBuilder, format.GroupingSeparator))
+                    {
+                        fracBuilder.Length -= format.GroupingSeparator.Length;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                fractionalOutput = fracBuilder.ToString();
+            }
+            else if (!string.IsNullOrEmpty(fracPart))
+            {
+                fractionalOutput = fracPart;
+            }
+        }
+
+        // Assemble
+        StringBuilder result = new();
+        result.Append(sub.Prefix);
+        result.Append(integerBuilder);
+
+        if (!string.IsNullOrEmpty(fractionalOutput))
+        {
+            result.Append(format.DecimalSeparator);
+            foreach (char c in fractionalOutput)
+                result.Append(MapDigit(c, format));
+        }
+        else if (sub.HasDecimalSeparator && sub.MinFractionalDigits == 0 && sub.MaxFractionalDigits == 0)
+        {
+            // Don't output separator
+        }
+        else if (sub.HasDecimalSeparator && sub.MinFractionalDigits > 0)
+        {
+            result.Append(format.DecimalSeparator);
+            AppendRepeated(result, format.ZeroDigit, sub.MinFractionalDigits);
+        }
+
+        result.Append(sub.Suffix);
+
+        string output = result.ToString();
+        if (string.IsNullOrEmpty(output) || output == sub.Prefix + sub.Suffix)
+            output = sub.Prefix + format.ZeroDigit + sub.Suffix;
+        if (output == sub.Prefix + format.DecimalSeparator + sub.Suffix)
+            output = sub.Prefix + format.DecimalSeparator + format.ZeroDigit + sub.Suffix;
+
+        return output;
+    }
+
+    private static string ExpandScientificNotation(double d)
+    {
+        string s = d.ToString("R", CultureInfo.InvariantCulture);
+        int eIndex = s.IndexOf('E');
+        if (eIndex < 0) eIndex = s.IndexOf('e');
+        if (eIndex < 0) return s;
+
+        string mantissa = s.Substring(0, eIndex);
+        int exponent = int.Parse(s.Substring(eIndex + 1), CultureInfo.InvariantCulture);
+
+        int dotIndex = mantissa.IndexOf('.');
+        string intPart = dotIndex >= 0 ? mantissa.Substring(0, dotIndex) : mantissa;
+        string fracPart = dotIndex >= 0 ? mantissa.Substring(dotIndex + 1) : "";
+
+        // Remove leading zeros from integer part (but keep at least one digit)
+        if (intPart.Length > 1 && intPart[0] == '0')
+            intPart = intPart.TrimStart('0');
+        if (string.IsNullOrEmpty(intPart))
+            intPart = "0";
+
+        // Combine integer and fractional parts
+        string digits = intPart + fracPart;
+        int decimalPos = intPart.Length + exponent;
+
+        if (decimalPos <= 0)
+        {
+            // Need leading zeros
+            return "0." + new string('0', -decimalPos) + digits;
+        }
+        else if (decimalPos >= digits.Length)
+        {
+            // Need trailing zeros
+            return digits + new string('0', decimalPos - digits.Length);
+        }
+        else
+        {
+            return digits.Substring(0, decimalPos) + "." + digits.Substring(decimalPos);
+        }
+    }
+
+    private static string RoundStringHalfToEven(string intPart, string fracPart, int targetDigits)
+    {
+        if (fracPart.Length <= targetDigits)
+            return intPart + (string.IsNullOrEmpty(fracPart) ? "" : "." + fracPart);
+
+        // Look at the digit after targetDigits
+        char nextDigit = fracPart[targetDigits];
+        bool roundUp = false;
+
+        if (nextDigit > '5')
+        {
+            roundUp = true;
+        }
+        else if (nextDigit == '5')
+        {
+            // Check if there are non-zero digits after
+            bool hasMore = false;
+            for (int i = targetDigits + 1; i < fracPart.Length; i++)
+            {
+                if (fracPart[i] != '0')
+                {
+                    hasMore = true;
+                    break;
+                }
+            }
+            if (hasMore)
+            {
+                roundUp = true;
+            }
+            else
+            {
+                // Half to even: round up if the last kept digit is odd
+                char lastKept = targetDigits > 0 ? fracPart[targetDigits - 1] : intPart[intPart.Length - 1];
+                roundUp = (lastKept - '0') % 2 == 1;
+            }
+        }
+
+        if (!roundUp)
+        {
+            return intPart + (targetDigits > 0 ? "." + fracPart.Substring(0, targetDigits) : "");
+        }
+
+        // Round up
+        var sb = new StringBuilder();
+        if (targetDigits > 0)
+        {
+            sb.Append(fracPart.Substring(0, targetDigits));
+        }
+        else
+        {
+            // Need to round up the integer part
+            var intSb = new StringBuilder(intPart);
+            for (int i = intSb.Length - 1; i >= 0; i--)
+            {
+                if (intSb[i] == '9')
+                {
+                    intSb[i] = '0';
+                }
+                else
+                {
+                    intSb[i]++;
+                    break;
+                }
+            }
+            // If all were 9s, prepend 1
+            if (intSb[0] == '0' && intPart[0] != '0')
+            {
+                intSb.Insert(0, '1');
+            }
+            return intSb.ToString();
+        }
+
+        // Round up within fractional part
+        for (int i = sb.Length - 1; i >= 0; i--)
+        {
+            if (sb[i] == '9')
+            {
+                sb[i] = '0';
+            }
+            else
+            {
+                sb[i]++;
+                break;
+            }
+        }
+
+        // Check if we overflowed into integer part
+        bool allZero = true;
+        for (int i = 0; i < sb.Length; i++)
+        {
+            if (sb[i] != '0')
+            {
+                allZero = false;
+                break;
+            }
+        }
+
+        if (allZero && sb.Length > 0)
+        {
+            var intSb = new StringBuilder(intPart);
+            for (int i = intSb.Length - 1; i >= 0; i--)
+            {
+                if (intSb[i] == '9')
+                {
+                    intSb[i] = '0';
+                }
+                else
+                {
+                    intSb[i]++;
+                    break;
+                }
+            }
+            if (intSb[0] == '0' && intPart[0] != '0')
+            {
+                intSb.Insert(0, '1');
+            }
+            return intSb.ToString() + (targetDigits > 0 ? "." + sb.ToString() : "");
+        }
+
+        return intPart + "." + sb.ToString();
+    }
+
     private static int CountDigitSigns(string part, DecimalFormat format)
     {
         int count = 0;
@@ -796,16 +1145,21 @@ internal static class FormatNumberEngine
         // Calculate positions of grouping separators
         List<int> positions = new();
         int digitCount = 0;
-        for (int i = integerPicture.Length - 1; i >= 0; i--)
+        for (int i = integerPicture.Length - 1; i >= 0;)
         {
-            char c = integerPicture[i];
-            if (format.GroupingSeparator.Length == 1 && c == format.GroupingSeparator[0])
+            if (MatchesAt(integerPicture, i, format.GroupingSeparator))
             {
                 positions.Add(digitCount);
+                i -= format.GroupingSeparator.Length;
             }
-            else if (IsOptionalDigitSign(c, format) || IsMandatoryDigitSign(c, format))
+            else if (IsDigitSign(integerPicture, i, format, out int len))
             {
                 digitCount++;
+                i -= len;
+            }
+            else
+            {
+                i--;
             }
         }
 
