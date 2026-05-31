@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-05-27  
+> **Living Registry** — Last updated: 2026-05-31  
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -98,6 +98,9 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
 | REQ-017 | *(internal)* | Fix CS0219 unused variable in `FormatNumberEngine` | Compiler warning `CS0219` on unused `hasDecimal` flag in `FormatNumberEngine.cs` | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-018 | *(internal)* | Fix CS8602 null dereference in `FormatNumberEngine` | Compiler warning `CS8602` on potential null dereference `sub.Suffix` in `FormatNumberEngine.cs` | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
+| REQ-019 | Customer A | `xsl:try` / `xsl:catch` support | Customer A's date/number helper functions use try/catch for defensive parsing of dirty EDI data | **Pending** | Phase 2 | Unassigned | 2026-05-31 |
+| REQ-020 | Customer A | `exclude-result-prefixes` support | Customer A's 42 stylesheets declare `exclude-result-prefixes="xs app"`; without it, output XML is polluted with unused namespace declarations | **Pending** | Phase 2 | Unassigned | 2026-05-31 |
+| REQ-021 | Customer A | `xsl:message` support | Customer A partner overrides use `xsl:message` for debugging and audit logging during transform execution | **Pending** | Phase 2 | Unassigned | 2026-05-31 |
 
 > **Legend:**
 > - `Pending` — Under review, no decision yet.
@@ -805,6 +808,129 @@ Add a null-conditional guard (`sub?.Suffix` or an explicit null check) before ac
 
 ---
 
+### REQ-019: `xsl:try` / `xsl:catch` Support
+
+**Requesting Application:** Customer A  
+**Submitted:** 2026-05-31  
+**Status:** `Pending`
+
+#### Problem Statement
+Customer A's pure-XSLT helper functions in `DateFunctions.xsl` and `NumberFunctions.xsl` rely on `xsl:try`/`xsl:catch` for defensive parsing of dirty EDI data:
+
+- `app:try-date` attempts `xs:date(...)` and returns empty sequence on invalid dates
+- `app:to-number` attempts `xs:decimal(...)` and returns a fallback on invalid numbers
+
+Without try/catch, any malformed date or numeric field causes a hard XPath error (e.g. `FORG0001`), aborting the entire transform. EDI data is inherently dirty — missing fields, wrong formats, and unexpected values are common.
+
+#### Proposed Solution
+Implement basic `xsl:try`/`xsl:catch` in `TransformEngine.ExecuteXsltInstruction`:
+1. Parse `xsl:try` children (sequence constructor) and `xsl:catch` children (sequence constructor + optional `select`).
+2. Wrap try-body execution in a .NET `try` block.
+3. On any `XPathException` or `XsltException`, execute the catch body and return its result.
+4. Support `xsl:catch` without attributes first (catch-all). `errors` / `error-code` attributes are stretch goals.
+
+#### Acceptance Criteria
+- [ ] `xsl:try` with a single `xsl:catch` (no attributes) executes catch body on any error
+- [ ] `app:try-date` returns `()` for invalid dates instead of crashing
+- [ ] `app:to-number` returns `$fallback` for non-numeric input instead of crashing
+- [ ] Errors from the try body do not propagate outside the `xsl:try` instruction
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | Already parses `xsl:try` / `xsl:catch` |
+| Compiler | None | No new IR needed |
+| Runtime | Modified | `TransformEngine` new instruction handler |
+| Standard | None | |
+| XSLT | New instruction | `xsl:try`, `xsl:catch` |
+| API | None | |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-05-31 | Kimi | Pending | P0 blocker for Customer A production; dirty EDI data is normal |
+
+---
+
+### REQ-020: `exclude-result-prefixes` Support
+
+**Requesting Application:** Customer A  
+**Submitted:** 2026-05-31  
+**Status:** `Pending`
+
+#### Problem Statement
+All 42 Customer A stylesheets declare `exclude-result-prefixes="xs app"` (and sometimes others). This attribute tells the XSLT processor to omit namespace declarations for prefixes that are only used in the stylesheet logic, not in the result tree.
+
+Bosak currently ignores this attribute. The output XML therefore contains `xmlns:xs="http://www.w3.org/2001/XMLSchema"` and `xmlns:app="http://fytala.com/app/xslt/functions"` on many elements. Downstream Infor OAGIS BOD consumers may reject documents with unexpected namespace declarations, or schema validation may fail.
+
+#### Proposed Solution
+1. Parse `exclude-result-prefixes` on `xsl:stylesheet` / `xsl:transform` at load time.
+2. Store excluded prefixes (and `#all` shorthand) on the `Stylesheet` object.
+3. During result tree serialization (`ResultTreeSerializer` or `CopyToResult`), filter out namespace attributes for excluded prefixes.
+4. Handle `#all` → exclude all prefixes not used in literal result elements.
+
+#### Acceptance Criteria
+- [ ] `exclude-result-prefixes="xs app"` removes `xmlns:xs` and `xmlns:app` from output
+- [ ] `#all` shorthand excludes all non-literal-result prefixes
+- [ ] Literal result elements retain their necessary namespace declarations
+- [ ] Partner overrides with multiple excluded prefixes work correctly
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Parse `exclude-result-prefixes` on `xsl:stylesheet` |
+| Compiler | None | |
+| Runtime | Modified | `ResultTreeSerializer` or `TransformEngine` namespace filtering |
+| Standard | None | |
+| XSLT | Modified | Stylesheet load + serialization path |
+| API | None | |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-05-31 | Kimi | Pending | P1 — output namespace pollution breaks downstream OAGIS validation |
+
+---
+
+### REQ-021: `xsl:message` Support
+
+**Requesting Application:** Customer A  
+**Submitted:** 2026-05-31  
+**Status:** `Pending`
+
+#### Problem Statement
+Customer A partner override stylesheets use `xsl:message` for debugging and audit logging during transform execution (e.g. `GENERIC_EU_DELFOR_D97A_Override.xsl`). Without `xsl:message`, developers have no visibility into transform execution flow, making debugging production issues extremely difficult.
+
+#### Proposed Solution
+1. Add `xsl:message` handler in `TransformEngine.ExecuteXsltInstruction`.
+2. Evaluate the `select` attribute or sequence constructor children.
+3. Convert the result to string (atomization + concatenation with spaces).
+4. Write to a pluggable `IXsltMessageListener` or default to `Console.WriteLine`.
+5. Support `terminate="yes"` as a stretch goal (raises fatal error).
+
+#### Acceptance Criteria
+- [ ] `xsl:message select="'Debug: ' || $value"` outputs the message
+- [ ] `xsl:message` with sequence constructor children outputs concatenated text
+- [ ] Messages do not appear in the result tree
+- [ ] Pluggable listener interface for testability
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | Already parses `xsl:message` |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine` new instruction handler + listener interface |
+| Standard | None | |
+| XSLT | New instruction | `xsl:message` |
+| API | New API | `IXsltMessageListener` optional callback |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-05-31 | Kimi | Pending | P2 — debugging aid; no production blocking impact |
+
+---
+
 ## 6. Request Lifecycle
 
 ```
@@ -816,8 +942,6 @@ Add a null-conditional guard (`sub?.Suffix` or an explicit null check) before ac
 ┌─────────┐    ┌──────────┐    ┌─────────────┐    ┌───────────┐
 │Declined │    │Superseded│    │  Blocked    │    │  Backlog   │
 └─────────┘    └──────────┘    └─────────────┘    └───────────┘
-```
-
 **Transitions:**
 - `Pending` → `Accepted` / `Declined` / `Superseded`
 - `Accepted` → `In Progress` / `Backlog`
@@ -838,7 +962,7 @@ Add a null-conditional guard (`sub?.Suffix` or an explicit null check) before ac
 
 Requests without explicit priority default to **P2**.
 
-**Current P0/P1 requests:** None.
+**Current P0/P1 requests:** REQ-019 (P0), REQ-020 (P1).
 
 ---
 
