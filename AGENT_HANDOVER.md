@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-05-31
-**Commit:** `4166173` (pushed to origin)
-**Current focus:** Number formatting (`fn:format-number`), node ordering comparisons, decimal-format inheritance from imports/includes.
+**Commit:** `db8948a` (pushed to origin)
+**Current focus:** Customer A-driven feature gaps — `xsl:try`/`xsl:catch`, `exclude-result-prefixes`, `xsl:message`.
 
 ---
 
@@ -43,8 +43,8 @@
 
 ### Unit Test Status
 
-- **727 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 72 tests in `Bosak.XPath.Xslt.Tests`
+- **731 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: 76 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
@@ -162,6 +162,19 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 - `Stylesheet.GetAllDecimalFormats` now merges definitions from imported/included stylesheets with correct precedence.
 - Descendant namespace declarations are collected for XPath expression resolution.
 - Change history updated in `Stylesheet.cs`
+
+### `xsl:try` / `xsl:catch` Support (REQ-019)
+- `TransformEngine.ExecuteXsltInstruction` now handles `xsl:try` / `xsl:catch` in result-tree construction.
+- `EvaluateFunctionBodyInstruction` now handles `xsl:try` / `xsl:catch` inside `xsl:function` bodies.
+- Supports `select` attribute on `xsl:catch` as well as sequence-constructor children.
+- Catches any `Exception` broadly (no error-code filtering yet).
+- Change history updated in `TransformEngine.cs`
+
+### Customer A XSLT Usage Analysis
+- Analyzed all 71 stylesheets in `D:\Development\Customer A\assets\xslt`.
+- Identified 3 gaps: `xsl:try`/`xsl:catch` (P0), `exclude-result-prefixes` (P1), `xsl:message` (P2).
+- Added REQ-019, REQ-020, REQ-021 to `docs/FEATURE_REQUESTS.md`.
+- Notable non-usage: `xsl:for-each-group`, `xsl:key`/`key()`, `xsl:merge`, `xsl:apply-imports`, `xsl:result-document` — none used by Customer A.
 
 ---
 

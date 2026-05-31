@@ -41,6 +41,7 @@
 //                      | Charles Korthout | 2.4   | 30-05-2026     | Fixed ExecuteTemplate/ExecuteXsltFunction to restore saved context item (fixes position-4201) |
 //                      | Charles Korthout | 2.5   | 30-05-2026     | xsl:value-of in backwards-compatible mode outputs only first item (fixes predicate-001/002/003) |
 //                      | Charles Korthout | 2.6   | 30-05-2026     | ApplyBuiltInRules saves/restores context focus correctly                                |
+//                      | Charles Korthout | 2.7   | 31-05-2026     | Added xsl:try / xsl:catch support in result tree and function bodies                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -519,6 +520,40 @@ public sealed class TransformEngine
                             // CallTemplate produces a result tree fragment, not a sequence.
                             // For function bodies, we ignore call-template output.
                             CallTemplate(calledName, contextItem, withParams, tunnelParams);
+                        }
+                        break;
+                    }
+                case "try":
+                    {
+                        var catchElem = instruction.Element(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace));
+                        try
+                        {
+                            foreach (var child in instruction.Elements())
+                            {
+                                if (child.Name.LocalName == "catch" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                    continue;
+                                EvaluateFunctionBodyInstruction(child, results, contextItem);
+                            }
+                        }
+                        catch
+                        {
+                            if (catchElem != null)
+                            {
+                                var catchSelect = catchElem.Attribute("select")?.Value;
+                                if (!string.IsNullOrEmpty(catchSelect))
+                                {
+                                    var compiled = XPath31Expression.Compile(catchSelect);
+                                    var catchResult = compiled.Evaluate(_context);
+                                    FlattenToList(catchResult, results);
+                                }
+                                else
+                                {
+                                    foreach (var child in catchElem.Elements())
+                                    {
+                                        EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                    }
+                                }
+                            }
                         }
                         break;
                     }
@@ -1467,6 +1502,63 @@ public sealed class TransformEngine
                 {
                     if (node != null)
                         ExecuteXsltNumber(instruction, node);
+                    break;
+                }
+
+            case "try":
+                {
+                    var catchElem = instruction.Element(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace));
+                    try
+                    {
+                        foreach (var childNode in instruction.Nodes())
+                        {
+                            if (childNode is XElement xe && xe.Name.LocalName == "catch" && xe.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                continue;
+                            switch (childNode)
+                            {
+                                case XText text:
+                                    ProcessSequenceText(text, instruction);
+                                    break;
+                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elem, contextItem);
+                                    break;
+                                case XElement elem:
+                                    CopyLiteralElement(elem);
+                                    break;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        if (catchElem != null)
+                        {
+                            var catchSelect = catchElem.Attribute("select")?.Value;
+                            if (!string.IsNullOrEmpty(catchSelect))
+                            {
+                                var compiled = XPath31Expression.Compile(catchSelect);
+                                var catchResult = compiled.Evaluate(_context);
+                                CopyToResult(catchResult);
+                            }
+                            else
+                            {
+                                foreach (var childNode in catchElem.Nodes())
+                                {
+                                    switch (childNode)
+                                    {
+                                        case XText text:
+                                            ProcessSequenceText(text, catchElem);
+                                            break;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, contextItem);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     break;
                 }
 

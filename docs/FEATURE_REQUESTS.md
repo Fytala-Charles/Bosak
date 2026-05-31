@@ -98,7 +98,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-016 | Customer A | Multi-key `xsl:sort` (primary + secondary) | Customer A D99A JAMA basesheet sorts by item ID then ship-to; current implementation only handles first key | **Implemented** | Phase 2 | Charles Korthout | 2026-05-26 |
 | REQ-017 | *(internal)* | Fix CS0219 unused variable in `FormatNumberEngine` | Compiler warning `CS0219` on unused `hasDecimal` flag in `FormatNumberEngine.cs` | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-018 | *(internal)* | Fix CS8602 null dereference in `FormatNumberEngine` | Compiler warning `CS8602` on potential null dereference `sub.Suffix` in `FormatNumberEngine.cs` | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
-| REQ-019 | Customer A | `xsl:try` / `xsl:catch` support | Customer A's date/number helper functions use try/catch for defensive parsing of dirty EDI data | **Pending** | Phase 2 | Unassigned | 2026-05-31 |
+| REQ-019 | Customer A | `xsl:try` / `xsl:catch` support | Customer A's date/number helper functions use try/catch for defensive parsing of dirty EDI data | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
 | REQ-020 | Customer A | `exclude-result-prefixes` support | Customer A's 42 stylesheets declare `exclude-result-prefixes="xs app"`; without it, output XML is polluted with unused namespace declarations | **Pending** | Phase 2 | Unassigned | 2026-05-31 |
 | REQ-021 | Customer A | `xsl:message` support | Customer A partner overrides use `xsl:message` for debugging and audit logging during transform execution | **Pending** | Phase 2 | Unassigned | 2026-05-31 |
 
@@ -849,6 +849,7 @@ Implement basic `xsl:try`/`xsl:catch` in `TransformEngine.ExecuteXsltInstruction
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-31 | Kimi | Pending | P0 blocker for Customer A production; dirty EDI data is normal |
+| 2026-05-31 | Kimi | Implemented | Basic try/catch in TransformEngine + EvaluateFunctionBodyInstruction; 4 unit tests pass; catches any Exception broadly |
 
 ---
 
@@ -962,7 +963,7 @@ Customer A partner override stylesheets use `xsl:message` for debugging and audi
 
 Requests without explicit priority default to **P2**.
 
-**Current P0/P1 requests:** REQ-019 (P0), REQ-020 (P1).
+**Current P0/P1 requests:** REQ-020 (P1).
 
 ---
 

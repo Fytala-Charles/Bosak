@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added xsl:number tests (single, any, multiple, value attribute, format tokens)         |
 //                      | Charles Korthout | 0.6   | 26-05-2026     | Added global variable and parameter tests for main/include/import scopes                 |
 //                      | Charles Korthout | 0.7   | 27-05-2026     | Added fn:transform tests (basic, stylesheet-params, initial-template) and map key lookup  |
+//                      | Charles Korthout | 0.8   | 31-05-2026     | Added xsl:try / xsl:catch tests (result tree, select attribute, function body)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1871,6 +1872,107 @@ public class StylesheetTests
                 Assert.True(matches, $"/div should match root {child.NodeKind} {child.LocalName}");
             }
         }
+    }
+
+    [Fact]
+    public void TryCatch_InResultTree_CatchExecutesOnError()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:try>
+                        <xsl:sequence select='1 div 0'/>
+                        <xsl:catch>
+                            <error>caught</error>
+                        </xsl:catch>
+                    </xsl:try>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<error>caught</error>", result);
+    }
+
+    [Fact]
+    public void TryCatch_WithSelectAttribute_ReturnsCatchValue()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:try>
+                        <xsl:sequence select='xs:date(""invalid"")'/>
+                        <xsl:catch select='""fallback""'/>
+                    </xsl:try>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("fallback", result);
+    }
+
+    [Fact]
+    public void TryCatch_NoError_TryBodyReturnsNormally()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:try>
+                        <xsl:sequence select='""ok""'/>
+                        <xsl:catch>
+                            <error>should not appear</error>
+                        </xsl:catch>
+                    </xsl:try>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("ok", result);
+        Assert.DoesNotContain("should not appear", result);
+    }
+
+    [Fact]
+    public void TryCatch_InFunctionBody_CatchReturnsFallback()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+                    xmlns:xs='http://www.w3.org/2001/XMLSchema'
+                    xmlns:app='http://example.com/app'>
+            <xsl:function name='app:safe-date' as='xs:string?'>
+                <xsl:param name='raw' as='xs:string'/>
+                <xsl:try>
+                    <xsl:sequence select='xs:date($raw)'/>
+                    <xsl:catch select='()'/>
+                </xsl:try>
+            </xsl:function>
+            <xsl:template match='/'>
+                <output>
+                    <xsl:sequence select='app:safe-date(""invalid"")'/>
+                    <ok>done</ok>
+                </output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<ok>done</ok>", result);
+        Assert.DoesNotContain("invalid", result);
     }
 
     [Fact]
