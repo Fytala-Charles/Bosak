@@ -24,6 +24,7 @@
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Xslt.Api;
 using Xunit;
 
 namespace Bosak.XPath.Xslt.Tests;
@@ -2047,6 +2048,74 @@ public class StylesheetTests
 
         Assert.Contains("http://example.com/output", result);
         Assert.DoesNotContain("xmlns:xs", result);
+    }
+
+    [Fact]
+    public void XslMessage_WithSelectAttribute_EmitsMessage()
+    {
+        var messages = new List<string>();
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:message select=""'hello world'""/>
+                <output>done</output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        compiler.MessageListener = new TestMessageListener(messages);
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("hello world", messages);
+        Assert.Contains("<output>done</output>", result);
+    }
+
+    [Fact]
+    public void XslMessage_WithSequenceConstructor_EmitsMessage()
+    {
+        var messages = new List<string>();
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:message>debug: <xsl:value-of select=""'info'""/></xsl:message>
+                <output>done</output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        compiler.MessageListener = new TestMessageListener(messages);
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("debug: info", messages);
+        Assert.Contains("<output>done</output>", result);
+    }
+
+    [Fact]
+    public void XslMessage_WithoutListener_DoesNotThrow()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:message select=""'silent'""/>
+                <output>done</output>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        // No listener set
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<output>done</output>", result);
+    }
+
+    private sealed class TestMessageListener : IXsltMessageListener
+    {
+        private readonly List<string> _messages;
+        public TestMessageListener(List<string> messages) => _messages = messages;
+        public void OnMessage(string message) => _messages.Add(message);
     }
 
     [Fact]

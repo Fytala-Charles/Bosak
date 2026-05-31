@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added IXsltUriResolver support for xsl:import/xsl:include                              |
+//                      | Charles Korthout | 0.3   | 31-05-2026     | Added IXsltMessageListener support for xsl:message                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -30,6 +31,11 @@ public sealed class XsltCompiler
     /// Optional URI resolver for xsl:import and xsl:include. Defaults to <see cref="FileSystemUriResolver"/>.
     /// </summary>
     public IXsltUriResolver? UriResolver { get; set; }
+
+    /// <summary>
+    /// Optional listener for xsl:message output. Defaults to <see cref="ConsoleMessageListener"/>.
+    /// </summary>
+    public IXsltMessageListener? MessageListener { get; set; }
 
     /// <summary>
     /// Compiles an XSLT stylesheet from an XML string.
@@ -53,7 +59,7 @@ public sealed class XsltCompiler
     {
         var resolver = UriResolver ?? new FileSystemUriResolver();
         var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver);
-        return new XsltExecutable(stylesheet);
+        return new XsltExecutable(stylesheet, MessageListener);
     }
 
     /// <summary>

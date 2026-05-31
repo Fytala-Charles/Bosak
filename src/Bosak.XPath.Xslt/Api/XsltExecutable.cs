@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 31-05-2026     | Added IXsltMessageListener pass-through to TransformEngine                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -25,10 +26,12 @@ namespace Bosak.XPath.Xslt.Api;
 public sealed class XsltExecutable
 {
     private readonly Stylesheet.Stylesheet _stylesheet;
+    private readonly IXsltMessageListener? _messageListener;
 
-    internal XsltExecutable(Stylesheet.Stylesheet stylesheet)
+    internal XsltExecutable(Stylesheet.Stylesheet stylesheet, IXsltMessageListener? messageListener = null)
     {
         _stylesheet = stylesheet;
+        _messageListener = messageListener;
     }
 
     /// <summary>
@@ -39,7 +42,7 @@ public sealed class XsltExecutable
     /// <returns>The result of the transformation as an XDM value.</returns>
     public XdmValue Transform(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null)
     {
-        var engine = new Runtime.TransformEngine(_stylesheet, context);
+        var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener);
         return engine.Transform(source, initialTemplate);
     }
 

@@ -100,7 +100,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-018 | *(internal)* | Fix CS8602 null dereference in `FormatNumberEngine` | Compiler warning `CS8602` on potential null dereference `sub.Suffix` in `FormatNumberEngine.cs` | **Implemented** | TBD | Charles Korthout | 2026-05-27 |
 | REQ-019 | Customer A | `xsl:try` / `xsl:catch` support | Customer A's date/number helper functions use try/catch for defensive parsing of dirty EDI data | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
 | REQ-020 | Customer A | `exclude-result-prefixes` support | Customer A's 42 stylesheets declare `exclude-result-prefixes="xs app"`; without it, output XML is polluted with unused namespace declarations | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
-| REQ-021 | Customer A | `xsl:message` support | Customer A partner overrides use `xsl:message` for debugging and audit logging during transform execution | **Pending** | Phase 2 | Unassigned | 2026-05-31 |
+| REQ-021 | Customer A | `xsl:message` support | Customer A partner overrides use `xsl:message` for debugging and audit logging during transform execution | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
 
 > **Legend:**
 > - `Pending` — Under review, no decision yet.
@@ -930,6 +930,7 @@ Customer A partner override stylesheets use `xsl:message` for debugging and audi
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-31 | Kimi | Pending | P2 — debugging aid; no production blocking impact |
+| 2026-05-31 | Kimi | Implemented | IXsltMessageListener interface, XsltCompiler.MessageListener, TransformEngine handler for select and sequence constructor, 3 unit tests pass |
 
 ---
 

@@ -43,8 +43,8 @@
 
 ### Unit Test Status
 
-- **734 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 79 tests in `Bosak.XPath.Xslt.Tests`
+- **737 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: 82 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
@@ -176,6 +176,14 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 - `TransformEngine.CopyLiteralElement` filters out namespace declarations for excluded prefixes.
 - Supports `#all` shorthand.
 - Change history updated in `Stylesheet.cs` and `TransformEngine.cs`
+
+### `xsl:message` Support (REQ-021)
+- New `IXsltMessageListener` interface in `Bosak.XPath.Xslt.Api`.
+- `XsltCompiler.MessageListener` property wires a listener into the transform.
+- `TransformEngine.ExecuteXsltInstruction` handles `xsl:message` with `select` attribute or sequence-constructor children.
+- Converts message body to string via `XdmValueToString` (atomization + space separation).
+- No `terminate="yes"` support yet (stretch goal).
+- Change history updated in `XsltCompiler.cs`, `XsltExecutable.cs`, `TransformEngine.cs`
 
 ### Customer A XSLT Usage Analysis
 - Analyzed all 71 stylesheets in `D:\Development\Customer A\assets\xslt`.

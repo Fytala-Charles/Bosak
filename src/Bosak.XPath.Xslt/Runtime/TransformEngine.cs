@@ -74,6 +74,7 @@ public sealed class TransformEngine
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
     private readonly Dictionary<string, Stylesheet.TemplateRule> _allNamedTemplates;
     private readonly HashSet<string> _excludedResultPrefixes;
+    private readonly IXsltMessageListener? _messageListener;
 
     // Variable scope stack for proper lexical scoping across call-template
     private readonly Stack<Dictionary<(string LocalName, string NamespaceUri), XdmValue?>> _varScopes = new();
@@ -104,10 +105,11 @@ public sealed class TransformEngine
     /// <summary>The parsed xsl:output serialization properties.</summary>
     public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
 
-    public TransformEngine(Stylesheet.Stylesheet stylesheet, EvaluationContext? context = null)
+    public TransformEngine(Stylesheet.Stylesheet stylesheet, EvaluationContext? context = null, IXsltMessageListener? messageListener = null)
     {
         _stylesheet = stylesheet;
         _context = context ?? new EvaluationContext();
+        _messageListener = messageListener;
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
         FunctionLibrary.Populate(_context);
         XsltFunctionLibrary.Populate(_context);
@@ -1034,6 +1036,24 @@ public sealed class TransformEngine
                     {
                         targetElem.SetAttributeValue(XNamespace.Xmlns + nsName, nsUri);
                     }
+                    break;
+                }
+
+            case "message":
+                {
+                    var msgSelect = instruction.Attribute("select")?.Value;
+                    string msgText;
+                    if (!string.IsNullOrEmpty(msgSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(msgSelect);
+                        var result = compiled.Evaluate(_context);
+                        msgText = XdmValueToString(result, " ");
+                    }
+                    else
+                    {
+                        msgText = EvaluateSimpleContent(instruction, contextItem);
+                    }
+                    _messageListener?.OnMessage(msgText);
                     break;
                 }
 
