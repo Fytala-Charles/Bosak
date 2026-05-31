@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 27-05-2026     | Exposed Version property for runtime backwards-compatibility checks                    |
 //                      | Charles Korthout | 0.9   | 31-05-2026     | Decimal-format merging from imports/includes; descendant namespace collection            |
 //                      | Charles Korthout | 1.0   | 31-05-2026     | Added exclude-result-prefixes parsing and GetAllExcludedResultPrefixes                   |
+//                      | Charles Korthout | 1.1   | 31-05-2026     | Added literal result element stylesheet support (WrapLiteralResultElement)               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -36,7 +37,7 @@ namespace Bosak.XPath.Xslt.Stylesheet;
 /// </summary>
 public sealed class Stylesheet
 {
-    private readonly XDocument _document;
+    private XDocument _document;
     private readonly string? _baseUri;
     private readonly IXsltUriResolver _resolver;
     private readonly HashSet<string> _resolvedUris;
@@ -62,6 +63,19 @@ public sealed class Stylesheet
         _resolver = resolver;
         ImportPrecedence = importPrecedence;
         _resolvedUris = resolvedUris ?? new HashSet<string>();
+
+        // Handle literal result element stylesheets before loading
+        var root = _document.Root;
+        if (root != null && root.Name.NamespaceName != XslNamespace)
+        {
+            var xslVersion = root.Attributes()
+                .FirstOrDefault(a => a.Name.NamespaceName == XslNamespace && a.Name.LocalName == "version");
+            if (xslVersion != null)
+            {
+                _document = WrapLiteralResultElement(root, xslVersion.Value);
+            }
+        }
+
         Load();
     }
 
@@ -141,6 +155,7 @@ public sealed class Stylesheet
             throw new InvalidOperationException("Stylesheet document has no root element.");
 
         var rootName = root.Name;
+
         if (rootName.NamespaceName != XslNamespace)
             throw new InvalidOperationException($"Expected xsl:stylesheet or xsl:transform, got {rootName}.");
 
@@ -298,6 +313,33 @@ public sealed class Stylesheet
         }
     }
 
+    /// <summary>
+    /// Wraps a literal result element stylesheet into an implicit xsl:stylesheet/xsl:template document.
+    /// </summary>
+    private static XDocument WrapLiteralResultElement(XElement literalRoot, string version)
+    {
+        var xsl = XNamespace.Get("http://www.w3.org/1999/XSL/Transform");
+        var wrapper = new XElement(xsl + "stylesheet",
+            new XAttribute("version", version),
+            new XElement(xsl + "template",
+                new XAttribute("match", "/"),
+                literalRoot));
+
+        // Copy all namespace declarations from the literal root to the wrapper
+        foreach (var attr in literalRoot.Attributes())
+        {
+            if (attr.IsNamespaceDeclaration)
+            {
+                if (attr.Name.LocalName == "xmlns")
+                    wrapper.SetAttributeValue("xmlns", attr.Value);
+                else
+                    wrapper.SetAttributeValue(XNamespace.Xmlns + attr.Name.LocalName, attr.Value);
+            }
+        }
+
+        return new XDocument(wrapper);
+    }
+
     private void ResolveImport(string href)
     {
         var resolvedUri = ResolveAbsoluteUri(href, _baseUri);
@@ -323,8 +365,10 @@ public sealed class Stylesheet
     {
         var resolvedUri = ResolveAbsoluteUri(href, _baseUri);
 
+        // XSLT allows the same stylesheet to be included multiple times;
+        // subsequent includes are silently ignored.
         if (_resolvedUris.Contains(resolvedUri))
-            throw new InvalidOperationException($"Circular stylesheet reference detected: {resolvedUri}");
+            return;
 
         _resolvedUris.Add(resolvedUri);
 

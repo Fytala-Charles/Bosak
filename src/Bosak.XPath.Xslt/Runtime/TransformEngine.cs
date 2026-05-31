@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 2.8   | 31-05-2026     | Added exclude-result-prefixes filtering in CopyLiteralElement                           |
 //                      | Charles Korthout | 2.9   | 31-05-2026     | Added xsl:for-each-group with group-by, group-adjacent, group-starting-with, group-ending-with |
 //                      | Charles Korthout | 3.0   | 31-05-2026     | Added current-group() and current-grouping-key() functions; IXsltMessageListener        |
+//                      | Charles Korthout | 3.1   | 31-05-2026     | CopyLiteralElement skips xsl-namespace attrs and xmlns:xsl declarations                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1846,15 +1847,20 @@ public sealed class TransformEngine
                 // Skip excluded prefixes
                 if (excludeAll || _excludedResultPrefixes.Contains(declaredPrefix))
                     continue;
+                // Skip XSLT namespace declaration — it is not copied to the result tree
+                if (attr.Value == Stylesheet.Stylesheet.XslNamespace)
+                    continue;
                 copy.SetAttributeValue(attr.Name, attr.Value);
                 continue;
             }
 
+            // XSLT-namespace attributes on literal result elements are instructions,
+            // not attributes to be copied to the result tree.
+            if (attr.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                continue;
+
             var attrName = XName.Get(attr.Name.LocalName, attr.Name.NamespaceName);
-            // AVTs are not evaluated in XSLT-namespace attributes
-            var attrValue = attr.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
-                ? attr.Value
-                : EvaluateAvt(attr.Value);
+            var attrValue = EvaluateAvt(attr.Value);
             copy.SetAttributeValue(attrName, attrValue);
         }
 

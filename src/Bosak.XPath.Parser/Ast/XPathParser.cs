@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 19-05-2026     | Support inline functions as arrow expression targets                                   |
 //                      | Charles Korthout | 0.6   | 21-05-2026     | Fixed SkipSequenceType RParen consumption; ParseSequenceType handles item()/function(*)/empty-sequence() |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added ExpectName() to allow XPath keywords as variable names ($mod, $div, etc.)                       |
+//                      | Charles Korthout | 0.8   | 31-05-2026     | decimal.TryParse fallback to double for oversized decimal literals                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -860,8 +861,10 @@ public sealed class XPathParser
             XPathAstNode node;
             if (long.TryParse(str, out var val))
                 node = new IntegerLiteralNode(val);
+            else if (decimal.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out var decVal))
+                node = new DecimalLiteralNode(decVal);
             else
-                node = new DecimalLiteralNode(decimal.Parse(str, CultureInfo.InvariantCulture));
+                node = new DoubleLiteralNode(double.Parse(str, CultureInfo.InvariantCulture));
             Advance();
             return WithSpan(node, start, End);
         }
@@ -906,15 +909,22 @@ public sealed class XPathParser
                 XPathAstNode nodeI;
                 if (long.TryParse(strI, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i))
                     nodeI = new IntegerLiteralNode(i);
+                else if (decimal.TryParse(strI, NumberStyles.Float, CultureInfo.InvariantCulture, out var decI))
+                    nodeI = new DecimalLiteralNode(decI);
                 else
-                    nodeI = new DecimalLiteralNode(decimal.Parse(strI, CultureInfo.InvariantCulture));
+                    nodeI = new DoubleLiteralNode(double.Parse(strI, CultureInfo.InvariantCulture));
                 Advance();
                 return WithSpan(nodeI, start, End);
 
             case TokenKind.DecimalLiteral:
-                var d = decimal.Parse(GetString(Current), CultureInfo.InvariantCulture);
+                var strD = GetString(Current);
+                XPathAstNode nodeD;
+                if (decimal.TryParse(strD, NumberStyles.Float, CultureInfo.InvariantCulture, out var d))
+                    nodeD = new DecimalLiteralNode(d);
+                else
+                    nodeD = new DoubleLiteralNode(double.Parse(strD, CultureInfo.InvariantCulture));
                 Advance();
-                return WithSpan(new DecimalLiteralNode(d), start, End);
+                return WithSpan(nodeD, start, End);
 
             case TokenKind.DoubleLiteral:
                 var f = double.Parse(GetString(Current), CultureInfo.InvariantCulture);
