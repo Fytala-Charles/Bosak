@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-05-31
-**Commit:** `bcb8b00` (pushed to origin)
+**Commit:** `740c70d` (pushed to origin)
 **Current focus:** Customer A-driven feature gaps — REQ-020 (`exclude-result-prefixes`) just implemented; REQ-021 (`xsl:message`) remains.
 
 ---
@@ -43,8 +43,8 @@
 
 ### Unit Test Status
 
-- **737 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 82 tests in `Bosak.XPath.Xslt.Tests`
+- **741 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: 86 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
@@ -184,6 +184,15 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 - Converts message body to string via `XdmValueToString` (atomization + space separation).
 - No `terminate="yes"` support yet (stretch goal).
 - Change history updated in `XsltCompiler.cs`, `XsltExecutable.cs`, `TransformEngine.cs`
+
+### `xsl:for-each-group` Support
+- `TransformEngine.ExecuteXsltInstruction` handles `xsl:for-each-group`.
+- Supports `group-by`, `group-adjacent`, `group-starting-with`, `group-ending-with`.
+- `current-group()` and `current-grouping-key()` functions registered on EvaluationContext.
+- Supports `xsl:sort` children to sort groups.
+- Supports `bind-group` and `bind-grouping-key` attributes (XSLT 3.0).
+- `GetGroupingKeyString` helper atomizes sequence keys to first item's string value.
+- Change history updated in `TransformEngine.cs`
 
 ### Customer A XSLT Usage Analysis
 - Analyzed all 71 stylesheets in `D:\Development\Customer A\assets\xslt`.

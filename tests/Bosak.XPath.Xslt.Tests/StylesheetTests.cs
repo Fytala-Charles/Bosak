@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 26-05-2026     | Added global variable and parameter tests for main/include/import scopes                 |
 //                      | Charles Korthout | 0.7   | 27-05-2026     | Added fn:transform tests (basic, stylesheet-params, initial-template) and map key lookup  |
 //                      | Charles Korthout | 0.8   | 31-05-2026     | Added xsl:try / xsl:catch tests (result tree, select attribute, function body)         |
+//                      | Charles Korthout | 0.9   | 31-05-2026     | Added xsl:for-each-group tests (group-by, group-adjacent, group-starting-with, current-grouping-key) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2116,6 +2117,133 @@ public class StylesheetTests
         private readonly List<string> _messages;
         public TestMessageListener(List<string> messages) => _messages = messages;
         public void OnMessage(string message) => _messages.Add(message);
+    }
+
+    [Fact]
+    public void ForEachGroup_GroupBy_GroupsByKey()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each-group select='cities/city' group-by='@country'>
+                        <group country='{@country}'>
+                            <xsl:for-each select='current-group()'>
+                                <city><xsl:value-of select='@name'/></city>
+                            </xsl:for-each>
+                        </group>
+                    </xsl:for-each-group>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("cities",
+                new XElement("city", new XAttribute("name", "Paris"), new XAttribute("country", "FR")),
+                new XElement("city", new XAttribute("name", "Customer A"), new XAttribute("country", "DE")),
+                new XElement("city", new XAttribute("name", "Munich"), new XAttribute("country", "DE")),
+                new XElement("city", new XAttribute("name", "Lyon"), new XAttribute("country", "FR"))
+            ));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("country=\"FR\"", result);
+        Assert.Contains("country=\"DE\"", result);
+        Assert.Contains("<city>Paris</city>", result);
+        Assert.Contains("<city>Customer A</city>", result);
+        Assert.Contains("<city>Munich</city>", result);
+        Assert.Contains("<city>Lyon</city>", result);
+    }
+
+    [Fact]
+    public void ForEachGroup_GroupAdjacent_GroupsContiguousItems()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each-group select='items/item' group-adjacent='@type'>
+                        <group type='{@type}' count='{count(current-group())}'/>
+                    </xsl:for-each-group>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("items",
+                new XElement("item", new XAttribute("type", "A")),
+                new XElement("item", new XAttribute("type", "A")),
+                new XElement("item", new XAttribute("type", "B")),
+                new XElement("item", new XAttribute("type", "B")),
+                new XElement("item", new XAttribute("type", "A"))
+            ));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        // Should produce 3 groups: AA, BB, A
+        Assert.Contains("type=\"A\" count=\"2\"", result);
+        Assert.Contains("type=\"B\" count=\"2\"", result);
+        Assert.Contains("type=\"A\" count=\"1\"", result);
+    }
+
+    [Fact]
+    public void ForEachGroup_GroupStartingWith_StartsNewGroupOnPattern()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each-group select='items/item' group-starting-with='*[@start=""yes""]'>
+                        <group>
+                            <xsl:for-each select='current-group()'>
+                                <v><xsl:value-of select='@name'/></v>
+                            </xsl:for-each>
+                        </group>
+                    </xsl:for-each-group>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("items",
+                new XElement("item", new XAttribute("name", "a1"), new XAttribute("start", "yes")),
+                new XElement("item", new XAttribute("name", "a2")),
+                new XElement("item", new XAttribute("name", "b1"), new XAttribute("start", "yes")),
+                new XElement("item", new XAttribute("name", "b2"))
+            ));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("<v>a1</v>", result);
+        Assert.Contains("<v>a2</v>", result);
+        Assert.Contains("<v>b1</v>", result);
+        Assert.Contains("<v>b2</v>", result);
+    }
+
+    [Fact]
+    public void ForEachGroup_CurrentGroupingKey_ReturnsKeyValue()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each-group select='items/item' group-by='@type'>
+                        <group key='{current-grouping-key()}'/>
+                    </xsl:for-each-group>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("items",
+                new XElement("item", new XAttribute("type", "A")),
+                new XElement("item", new XAttribute("type", "B"))
+            ));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+
+        Assert.Contains("key=\"A\"", result);
+        Assert.Contains("key=\"B\"", result);
     }
 
     [Fact]

@@ -43,6 +43,8 @@
 //                      | Charles Korthout | 2.6   | 30-05-2026     | ApplyBuiltInRules saves/restores context focus correctly                                |
 //                      | Charles Korthout | 2.7   | 31-05-2026     | Added xsl:try / xsl:catch support in result tree and function bodies                   |
 //                      | Charles Korthout | 2.8   | 31-05-2026     | Added exclude-result-prefixes filtering in CopyLiteralElement                           |
+//                      | Charles Korthout | 2.9   | 31-05-2026     | Added xsl:for-each-group with group-by, group-adjacent, group-starting-with, group-ending-with |
+//                      | Charles Korthout | 3.0   | 31-05-2026     | Added current-group() and current-grouping-key() functions; IXsltMessageListener        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -97,6 +99,10 @@ public sealed class TransformEngine
     // Recursion depth guard for xsl:function and xsl:call-template calls
     private int _xsltFunctionCallDepth;
     private int _callTemplateDepth;
+
+    // Current group state for xsl:for-each-group / current-group() / current-grouping-key()
+    private List<XdmValue>? _currentGroup;
+    private XdmValue? _currentGroupingKey;
 
     // Recursion depth guard for xsl:apply-templates
     private int _applyTemplatesDepth;
@@ -157,6 +163,8 @@ public sealed class TransformEngine
             _keyIndex = KeyIndex.Build(source, allKeyDefs, _context);
             RegisterKeyFunction();
         }
+
+        RegisterGroupingFunctions();
 
         // Apply whitespace stripping from xsl:strip-space / xsl:preserve-space
         ApplyWhitespaceStripping(source);
@@ -1244,6 +1252,214 @@ public sealed class TransformEngine
                     break;
                 }
 
+            case "for-each-group":
+                {
+                    var select = instruction.Attribute("select")?.Value;
+                    if (string.IsNullOrEmpty(select)) break;
+
+                    var compiled = XPath31Expression.Compile(select);
+                    var result = compiled.Evaluate(_context);
+                    var items = EnumerateItems(result).ToList();
+                    if (items.Count == 0) break;
+
+                    var groupBy = instruction.Attribute("group-by")?.Value;
+                    var groupAdjacent = instruction.Attribute("group-adjacent")?.Value;
+                    var groupStarting = instruction.Attribute("group-starting-with")?.Value;
+                    var groupEnding = instruction.Attribute("group-ending-with")?.Value;
+                    var bindGroup = instruction.Attribute("bind-group")?.Value;
+                    var bindKey = instruction.Attribute("bind-grouping-key")?.Value;
+
+                    var groups = new List<(XdmValue? Key, List<XdmValue> Items)>();
+
+                    if (!string.IsNullOrEmpty(groupBy))
+                    {
+                        var keyExpr = XPath31Expression.Compile(groupBy);
+                        var dict = new Dictionary<string, List<XdmValue>>();
+                        var keyOrder = new List<string>();
+                        foreach (var item in items)
+                        {
+                            _context.WithFocus(item, 1, 1);
+                            var keyValue = keyExpr.Evaluate(_context);
+                            if (keyValue.IsSequence && keyValue.SequenceValue != null)
+                            {
+                                var seq = XdmSequence.FromSource(keyValue.SequenceValue);
+                                foreach (var kv in seq)
+                                {
+                                    var keyStr = GetGroupingKeyString(kv);
+                                    if (!dict.TryGetValue(keyStr, out var list))
+                                    {
+                                        list = new List<XdmValue>();
+                                        dict[keyStr] = list;
+                                        keyOrder.Add(keyStr);
+                                    }
+                                    if (!list.Contains(item))
+                                        list.Add(item);
+                                }
+                            }
+                            else
+                            {
+                                var keyStr = GetGroupingKeyString(keyValue);
+                                if (!dict.TryGetValue(keyStr, out var list))
+                                {
+                                    list = new List<XdmValue>();
+                                    dict[keyStr] = list;
+                                    keyOrder.Add(keyStr);
+                                }
+                                if (!list.Contains(item))
+                                    list.Add(item);
+                            }
+                        }
+                        var seenKeys = new HashSet<string>();
+                        foreach (var keyStr in keyOrder)
+                        {
+                            if (seenKeys.Add(keyStr))
+                                groups.Add((XdmValue.FromString(keyStr), dict[keyStr]));
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(groupAdjacent))
+                    {
+                        var keyExpr = XPath31Expression.Compile(groupAdjacent);
+                        var currentItems = new List<XdmValue>();
+                        XdmValue? currentKey = null;
+                        string? currentKeyStr = null;
+                        foreach (var item in items)
+                        {
+                            _context.WithFocus(item, 1, 1);
+                            var keyValue = keyExpr.Evaluate(_context);
+                            var keyStr = GetGroupingKeyString(keyValue);
+                            if (currentKeyStr == null)
+                            {
+                                currentKeyStr = keyStr;
+                                currentKey = keyValue;
+                                currentItems.Add(item);
+                            }
+                            else if (currentKeyStr == keyStr)
+                            {
+                                currentItems.Add(item);
+                            }
+                            else
+                            {
+                                groups.Add((currentKey, new List<XdmValue>(currentItems)));
+                                currentKeyStr = keyStr;
+                                currentKey = keyValue;
+                                currentItems.Clear();
+                                currentItems.Add(item);
+                            }
+                        }
+                        if (currentItems.Count > 0)
+                            groups.Add((currentKey, new List<XdmValue>(currentItems)));
+                    }
+                    else if (!string.IsNullOrEmpty(groupStarting))
+                    {
+                        var patternCompiler = new Patterns.PatternCompiler();
+                        var pattern = patternCompiler.Compile(groupStarting);
+                        var currentItems = new List<XdmValue>();
+                        foreach (var item in items)
+                        {
+                            if (item.IsNode && pattern(item.NodeValue!, _context))
+                            {
+                                if (currentItems.Count > 0)
+                                    groups.Add((null, new List<XdmValue>(currentItems)));
+                                currentItems.Clear();
+                                currentItems.Add(item);
+                            }
+                            else
+                            {
+                                currentItems.Add(item);
+                            }
+                        }
+                        if (currentItems.Count > 0)
+                            groups.Add((null, new List<XdmValue>(currentItems)));
+                    }
+                    else if (!string.IsNullOrEmpty(groupEnding))
+                    {
+                        var patternCompiler = new Patterns.PatternCompiler();
+                        var pattern = patternCompiler.Compile(groupEnding);
+                        var currentItems = new List<XdmValue>();
+                        foreach (var item in items)
+                        {
+                            currentItems.Add(item);
+                            if (item.IsNode && pattern(item.NodeValue!, _context))
+                            {
+                                groups.Add((null, new List<XdmValue>(currentItems)));
+                                currentItems.Clear();
+                            }
+                        }
+                        if (currentItems.Count > 0)
+                            groups.Add((null, new List<XdmValue>(currentItems)));
+                    }
+
+                    // Handle xsl:sort children (sort groups by representative)
+                    var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                    if (sortElements.Count > 0 && groups.Count > 0)
+                    {
+                        var reps = groups.Select(g => g.Items[0]).ToList();
+                        var sortedReps = SortItems(reps, sortElements);
+                        var orderMap = new Dictionary<XdmValue, int>();
+                        for (int i = 0; i < sortedReps.Count; i++)
+                            orderMap[sortedReps[i]] = i;
+                        groups = groups.OrderBy(g => orderMap[g.Items[0]]).ToList();
+                    }
+
+                    var savedFocus = _context.ContextItem;
+                    var savedCurrent = _context.CurrentItem;
+                    var savedTemplateRule = _currentTemplateRule;
+                    var savedNextMatchExcluded = _nextMatchExcluded;
+                    var savedGroup = _currentGroup;
+                    var savedKey = _currentGroupingKey;
+                    _currentTemplateRule = null;
+                    _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
+
+                    int pos = 1;
+                    foreach (var (key, groupItems) in groups)
+                    {
+                        _currentGroup = groupItems;
+                        _currentGroupingKey = key;
+                        var rep = groupItems[0];
+                        _context.WithFocus(rep, pos, groups.Count);
+                        _context.WithCurrentItem(rep);
+                        var feSnapshot = _context.SnapshotVariables();
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(bindGroup))
+                                _context.WithVariable(bindGroup, XdmValue.FromSequence(MaterializedSequence.FromList(groupItems)));
+                            if (!string.IsNullOrEmpty(bindKey) && key != null)
+                                _context.WithVariable(bindKey, key.Value);
+
+                            foreach (var childNode in instruction.Nodes())
+                            {
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        ProcessSequenceText(text, instruction);
+                                        break;
+                                    case XElement elem when elem.Name.LocalName == "sort" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        continue;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, rep);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            _context.RestoreVariables(feSnapshot);
+                        }
+                        pos++;
+                    }
+
+                    _context.WithFocus(savedFocus, 1, 1);
+                    _context.WithCurrentItem(savedCurrent);
+                    _currentTemplateRule = savedTemplateRule;
+                    _nextMatchExcluded = savedNextMatchExcluded;
+                    _currentGroup = savedGroup;
+                    _currentGroupingKey = savedKey;
+                    break;
+                }
+
             case "if":
                 {
                     var test = instruction.Attribute("test")?.Value;
@@ -2109,6 +2325,42 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Registers the XSLT <c>current-group()</c> and <c>current-grouping-key()</c> functions.
+    /// </summary>
+    private void RegisterGroupingFunctions()
+    {
+        _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "current-group",
+            Arity = 0,
+            ParameterTypes = [],
+            ReturnType = XdmValueKind.Sequence,
+            Implementation = (ctx, args) =>
+            {
+                if (_currentGroup == null || _currentGroup.Count == 0)
+                    return XdmValue.Undefined;
+                return XdmValue.FromSequence(MaterializedSequence.FromList(_currentGroup));
+            }
+        });
+
+        _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "current-grouping-key",
+            Arity = 0,
+            ParameterTypes = [],
+            ReturnType = XdmValueKind.Undefined,
+            Implementation = (ctx, args) =>
+            {
+                if (_currentGroupingKey == null)
+                    return XdmValue.Undefined;
+                return _currentGroupingKey.Value;
+            }
+        });
+    }
+
+    /// <summary>
     /// Evaluates top-level xsl:param and xsl:variable declarations and binds them into the context.
     /// Order: imported first, then included, then local. Parameters are evaluated before variables.
     /// </summary>
@@ -2298,6 +2550,26 @@ public sealed class TransformEngine
     /// </summary>
     private static string XdmValueToString(XdmValue value)
         => XdmValueToString(value, " ");
+
+    /// <summary>
+    /// Extracts a single string key from an XDM value for grouping purposes.
+    /// Sequences are collapsed to the first item's string value.
+    /// </summary>
+    private static string GetGroupingKeyString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!item.IsUndefined)
+                    return item.ToString();
+            }
+            return string.Empty;
+        }
+        return value.ToString();
+    }
 
     /// <summary>
     /// Converts an XDM value to its string representation, concatenating sequence items
