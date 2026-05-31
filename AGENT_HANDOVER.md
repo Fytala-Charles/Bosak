@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-05-30
-**Commit:** `main` (pushed to origin)
-**Current focus:** Document node wrapping for sequence constructors and global variable context-item fix.
+**Date:** 2026-05-31
+**Commit:** `4166173` (pushed to origin)
+**Current focus:** Number formatting (`fn:format-number`), node ordering comparisons, decimal-format inheritance from imports/includes.
 
 ---
 
@@ -43,7 +43,7 @@
 
 ### Unit Test Status
 
-- **840 unit tests pass** across 7 test projects (0 failures)
+- **727 unit tests pass** across 7 test projects (0 failures)
 - XSLT-specific tests: 72 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
@@ -146,6 +146,23 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 - `Substring_2`/`Substring_3` use `RoundDouble(startD, 0)` instead of `(int)startD`
 - Change history updated in `FunctionLibrary.cs`
 
+### Node Ordering Comparisons (`<<` / `>>`)
+- `VmEngine` implements `PrecedesNode`/`FollowsNode` using `DocumentOrder` property.
+- Previously threw `NotImplementedException`.
+- Change history updated in `VmEngine.cs`
+
+### `fn:format-number` Enhancements
+- `FormatNumberEngine` now casts non-numeric atomic values to `double` before formatting.
+- `IsNumeric`/`ConvertToDouble` helpers added.
+- Grouping-separator parsing fixed in subpicture validation.
+- Zero-digit sign detection fixed for surrogate pairs.
+- Change history updated in `FormatNumberEngine.cs`
+
+### Stylesheet Decimal-Format Inheritance
+- `Stylesheet.GetAllDecimalFormats` now merges definitions from imported/included stylesheets with correct precedence.
+- Descendant namespace declarations are collected for XPath expression resolution.
+- Change history updated in `Stylesheet.cs`
+
 ---
 
 ## How to Build & Test
@@ -227,4 +244,4 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 - `main` — all work is on `main`, pushed to `origin/main`
 - No feature branches
-- Uncommitted changes: `TransformEngine.cs`, `XDocumentNode.cs`
+- Uncommitted changes: none

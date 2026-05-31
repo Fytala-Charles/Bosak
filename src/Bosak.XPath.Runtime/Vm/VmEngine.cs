@@ -29,6 +29,7 @@
 //                      | Charles Korthout | 1.6   | 30-05-2026     | Added PathStepMap opcode for per-context-item predicate evaluation on path steps        |
 //                      | Charles Korthout | 1.7   | 30-05-2026     | Filter opcode treats double/decimal/float predicates as numeric position (fixes path-007/008) |
 //                      | Charles Korthout | 1.8   | 30-05-2026     | IsSameNode unwraps singleton sequences; returns empty for empty-seq operand (fixes boolean-074/075) |
+//                      | Charles Korthout | 1.9   | 31-05-2026     | Implemented PrecedesNode/FollowsNode (<< / >>) using DocumentOrder                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;

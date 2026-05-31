@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 27-05-2026     | Added xsl:function parsing and GetAllFunctionDefinitions / GetAllNamespaces              |
 //                      | Charles Korthout | 0.7   | 27-05-2026     | Added required version attribute validation (XTSE0010)                                   |
 //                      | Charles Korthout | 0.8   | 27-05-2026     | Exposed Version property for runtime backwards-compatibility checks                    |
+//                      | Charles Korthout | 0.9   | 31-05-2026     | Decimal-format merging from imports/includes; descendant namespace collection            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
