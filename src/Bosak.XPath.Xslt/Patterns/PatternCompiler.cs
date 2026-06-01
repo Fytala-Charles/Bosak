@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 27-05-2026     | Added // prefix support in match patterns                                                |
 //                      | Charles Korthout | 0.3   | 28-05-2026     | Added smart split, axis steps, node tests, set ops, variable patterns                    |
 //                      | Charles Korthout | 0.4   | 31-05-2026     | Fixed bare predicate patterns ([foo]) compiling as self::node()[foo]                     |
+//                      | Charles Korthout | 0.5   | 01-06-2026     | Axis-context predicate evaluation in path patterns; descendant:: direct-child fix      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -429,13 +430,46 @@ public sealed class PatternCompiler
         if (steps.Count == 0)
             return (node, ctx) => false;
 
+        // Determine the effective axis of each step so we can handle descendant::
+        // correctly in ancestor checks (a/descendant::b should match deep descendants).
+        var stepAxes = new List<string>();
+        foreach (var step in steps)
+        {
+            if (step.Contains("::"))
+            {
+                int axisEnd = step.IndexOf("::");
+                stepAxes.Add(step[..axisEnd].Trim().ToLowerInvariant());
+            }
+            else
+            {
+                stepAxes.Add("child");
+            }
+        }
 
-        // Compile the last step as the node test (handle predicates and parenthesized patterns)
-        PatternPredicate lastStep;
-        if (steps[^1].Contains('['))
-            lastStep = CompilePredicatePattern(steps[^1]);
+        string lastStepStr = steps[^1];
+        bool lastStepHasPredicate = lastStepStr.Contains('[');
+
+        // Simple element/attribute predicates are handled correctly by CompilePredicatePattern
+        // because it evaluates child::base[pred] from the parent. Axis steps and other
+        // complex patterns need axis-context evaluation for correct position()/last() semantics.
+        bool isSimpleStep = !lastStepStr.Contains("::") && !lastStepStr.StartsWith('$') && !lastStepStr.StartsWith('(');
+        bool lastStepNeedsAxisContext = lastStepHasPredicate && !isSimpleStep;
+
+        XPath31Expression? lastStepAxisExpr = null;
+        PatternPredicate? lastStepPredicate = null;
+
+        if (lastStepNeedsAxisContext && lastStepStr.Contains("::"))
+        {
+            lastStepAxisExpr = XPath31Expression.Compile(lastStepStr);
+        }
+        else if (lastStepHasPredicate)
+        {
+            lastStepPredicate = CompilePredicatePattern(lastStepStr);
+        }
         else
-            lastStep = CompileSinglePattern(steps[^1]);
+        {
+            lastStepPredicate = CompileSinglePattern(lastStepStr);
+        }
 
         // Compile ancestor checks for preceding steps
         var ancestorTests = new List<PatternPredicate>();
@@ -449,19 +483,27 @@ public sealed class PatternCompiler
 
         return (node, ctx) =>
         {
-            if (!lastStep(node, ctx))
+            // For simple or non-predicated last steps, check before ancestor walk
+            if (lastStepPredicate != null && !lastStepPredicate(node, ctx))
                 return false;
 
             var current = node.Parent;
+            IXdmNode? stepContextNode = null;
+
             for (int s = steps.Count - 2; s >= 0; s--)
             {
                 var test = ancestorTests[steps.Count - 2 - s];
-                bool direct = separators[s];
+                // If the next step uses descendant or descendant-or-self axis,
+                // treat a / separator as non-direct so we walk up the tree.
+                bool direct = separators[s]
+                    && stepAxes[s + 1] != "descendant"
+                    && stepAxes[s + 1] != "descendant-or-self";
 
                 if (direct)
                 {
                     if (current == null || !test(current, ctx))
                         return false;
+                    stepContextNode = current;
                     current = current.Parent;
                 }
                 else
@@ -472,6 +514,7 @@ public sealed class PatternCompiler
                         if (test(current, ctx))
                         {
                             found = true;
+                            stepContextNode = current;
                             current = current.Parent;
                             break;
                         }
@@ -479,6 +522,45 @@ public sealed class PatternCompiler
                     }
                     if (!found)
                         return false;
+                }
+            }
+
+            // For axis-step predicates, evaluate the last step XPath from the matching
+            // ancestor context so position() and last() reflect the correct list position.
+            if (lastStepAxisExpr != null)
+            {
+                var savedItem = ctx.ContextItem;
+                var savedPos = ctx.ContextPosition;
+                var savedSize = ctx.ContextSize;
+                try
+                {
+                    var focusNode = stepContextNode ?? node.Parent;
+                    if (focusNode == null)
+                        return false;
+
+                    var result = lastStepAxisExpr.Evaluate(ctx.WithFocus(XdmValue.FromNode(focusNode), 1, 1));
+                    if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
+                    {
+                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        {
+                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                return true;
+                        }
+                        return false;
+                    }
+                    else if (result.IsNode && result.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch
+                {
+                    return false;
+                }
+                finally
+                {
+                    ctx.WithFocus(savedItem, savedPos, savedSize);
                 }
             }
 

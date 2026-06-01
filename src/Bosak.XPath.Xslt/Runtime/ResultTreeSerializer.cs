@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added OutputProperties support for xsl:output (method, indent, omit-declaration)       |
+//                      | Charles Korthout | 0.3   | 01-06-2026     | Encoding-aware serialization; hex-to-decimal entity conversion                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -136,34 +137,107 @@ public static class ResultTreeSerializer
 
     private static string SerializeXElement(XElement element, Stylesheet.OutputProperties props)
     {
-        using var writer = new StringWriter();
-        var settings = CreateXmlWriterSettings(props);
-        using var xmlWriter = XmlWriter.Create(writer, settings);
-        element.WriteTo(xmlWriter);
-        xmlWriter.Flush();
-        return writer.ToString();
+        return SerializeWithEncoding(element, props);
     }
 
     private static string SerializeXDocument(XDocument document, Stylesheet.OutputProperties props)
     {
-        using var writer = new StringWriter();
-        var settings = CreateXmlWriterSettings(props);
-        using var xmlWriter = XmlWriter.Create(writer, settings);
+        return SerializeWithEncoding(document, props);
+    }
 
-        if (!props.OmitXmlDeclaration)
+    private static string SerializeWithEncoding(XNode node, Stylesheet.OutputProperties props)
+    {
+        // Use the specified output encoding so XmlWriter emits numeric character
+        // references for characters that cannot be represented in that encoding.
+        System.Text.Encoding encoding;
+        try
         {
-            xmlWriter.WriteProcessingInstruction("xml",
-                $"version=\"{props.Version}\" encoding=\"{props.Encoding}\"" +
-                (props.Standalone != null ? $" standalone=\"{props.Standalone}\"" : ""));
+            encoding = System.Text.Encoding.GetEncoding(props.Encoding);
+        }
+        catch
+        {
+            encoding = new System.Text.UTF8Encoding(false);
         }
 
-        foreach (var node in document.Nodes())
+        // Ensure we never emit a BOM, which would corrupt string comparisons.
+        if (encoding is System.Text.UTF8Encoding utf8 && utf8.GetPreamble().Length > 0)
+            encoding = new System.Text.UTF8Encoding(false);
+        else if (encoding is System.Text.UnicodeEncoding utf16 && utf16.GetPreamble().Length > 0)
+            encoding = new System.Text.UnicodeEncoding(false, false);
+        else if (encoding is System.Text.UTF32Encoding utf32 && utf32.GetPreamble().Length > 0)
+            encoding = new System.Text.UTF32Encoding(false, false);
+
+        using var stream = new System.IO.MemoryStream();
+        var settings = CreateXmlWriterSettings(props, encoding);
+        using (var xmlWriter = XmlWriter.Create(stream, settings))
         {
-            node.WriteTo(xmlWriter);
+            if (node is XDocument doc)
+            {
+                if (!props.OmitXmlDeclaration)
+                {
+                    xmlWriter.WriteProcessingInstruction("xml",
+                        $"version=\"{props.Version}\" encoding=\"{props.Encoding}\"" +
+                        (props.Standalone != null ? $" standalone=\"{props.Standalone}\"" : ""));
+                }
+
+                foreach (var child in doc.Nodes())
+                    child.WriteTo(xmlWriter);
+            }
+            else
+            {
+                node.WriteTo(xmlWriter);
+            }
+            xmlWriter.Flush();
         }
 
-        xmlWriter.Flush();
-        return writer.ToString();
+        var result = encoding.GetString(stream.ToArray());
+        // XmlWriter emits hexadecimal character references by default;
+        // the XSLT test suite expects decimal references.
+        return ConvertHexEntitiesToDecimal(result);
+    }
+
+    private static string ConvertHexEntitiesToDecimal(string xml)
+    {
+        // Fast path: no hex entities
+        if (xml.IndexOf("&#x", StringComparison.Ordinal) < 0)
+            return xml;
+
+        var sb = new System.Text.StringBuilder(xml.Length);
+        int i = 0;
+        while (i < xml.Length)
+        {
+            int start = xml.IndexOf("&#x", i, StringComparison.Ordinal);
+            if (start < 0)
+            {
+                sb.Append(xml, i, xml.Length - i);
+                break;
+            }
+
+            sb.Append(xml, i, start - i);
+
+            int end = xml.IndexOf(';', start + 3);
+            if (end < 0)
+            {
+                sb.Append(xml, start, xml.Length - start);
+                break;
+            }
+
+            var hexValue = xml.Substring(start + 3, end - start - 3);
+            if (int.TryParse(hexValue, System.Globalization.NumberStyles.HexNumber, null, out int codepoint))
+            {
+                sb.Append("&#");
+                sb.Append(codepoint);
+                sb.Append(';');
+            }
+            else
+            {
+                sb.Append(xml, start, end - start + 1);
+            }
+
+            i = end + 1;
+        }
+
+        return sb.ToString();
     }
 
     private static string SerializeSequence(IXdmSequence sequence, Stylesheet.OutputProperties props)
@@ -189,13 +263,13 @@ public static class ResultTreeSerializer
         return writer.ToString();
     }
 
-    private static XmlWriterSettings CreateXmlWriterSettings(Stylesheet.OutputProperties props)
+    private static XmlWriterSettings CreateXmlWriterSettings(Stylesheet.OutputProperties props, System.Text.Encoding? encoding = null)
     {
         return new XmlWriterSettings
         {
             OmitXmlDeclaration = props.OmitXmlDeclaration,
             Indent = props.Indent,
-            Encoding = System.Text.Encoding.UTF8,
+            Encoding = encoding ?? System.Text.Encoding.UTF8,
             ConformanceLevel = ConformanceLevel.Document
         };
     }

@@ -111,4 +111,59 @@ public class PatternCompilerPredicateTests
         Assert.True(pattern(children[0], _ctx));
         Assert.False(pattern(children[1], _ctx));
     }
+
+    [Fact]
+    public void DescendantAxisWithPositionPredicate_MatchesCorrectPosition()
+    {
+        // Pattern: doc/descendant::*[position() mod 2 = 0]
+        // Should match even-positioned descendants in document order.
+        var evenPattern = _compiler.Compile("doc/descendant::*[position() mod 2 = 0]");
+        var oddPattern = _compiler.Compile("doc/descendant::*[position() mod 2 = 1]");
+
+        var source = new XDocument(new XElement("doc",
+            new XElement("a", new XAttribute("mark", "a1")),
+            new XElement("b", new XElement("bb")),
+            new XElement("c", new XAttribute("mark", "c1")),
+            new XElement("c", new XAttribute("mark", "c2"))));
+
+        var doc = new XDocumentNode(source);
+        var docChildren = GetChildren(doc);
+        Assert.Single(docChildren);
+
+        // Collect all element descendants of doc in document order
+        var descendants = new List<IXdmNode>();
+        CollectElements(docChildren[0], descendants);
+
+        // descendants: doc(root itself is excluded by doc/descendant::), a, b, bb, c, c
+        // Wait, docChildren[0] IS the doc element. We need its descendants.
+        var allDescendants = new List<IXdmNode>();
+        foreach (var child in docChildren[0].Children())
+        {
+            if (child.IsNode && child.NodeValue is IXdmNode n && n.NodeKind == XdmNodeKind.Element)
+            {
+                allDescendants.Add(n);
+                CollectElements(n, allDescendants);
+            }
+        }
+
+        // a(1-odd), b(2-even), bb(3-odd), c1(4-even), c2(5-odd)
+        Assert.Equal(5, allDescendants.Count);
+        Assert.True(oddPattern(allDescendants[0], _ctx));   // a
+        Assert.True(evenPattern(allDescendants[1], _ctx));  // b
+        Assert.True(oddPattern(allDescendants[2], _ctx));   // bb
+        Assert.True(evenPattern(allDescendants[3], _ctx));  // c1
+        Assert.True(oddPattern(allDescendants[4], _ctx));   // c2
+    }
+
+    private static void CollectElements(IXdmNode node, List<IXdmNode> list)
+    {
+        foreach (var child in node.Children())
+        {
+            if (child.IsNode && child.NodeValue is IXdmNode n && n.NodeKind == XdmNodeKind.Element)
+            {
+                list.Add(n);
+                CollectElements(n, list);
+            }
+        }
+    }
 }

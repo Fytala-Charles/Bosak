@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-05-31
-**Commit:** `4264898` (pushed to origin)
-**Current focus:** Customer A-driven feature gaps — REQ-020 (`exclude-result-prefixes`) just implemented; REQ-021 (`xsl:message`) remains.
+**Date:** 2026-06-01
+**Commit:** `HEAD` (working tree)
+**Current focus:** `number` cluster conformance fixes (135→127 failures; +8 tests).
 
 ---
 
@@ -10,14 +10,15 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 2756 / **Failed:** 2706 / **Skipped:** 9138 (14,600 total)
-- Pass rate: **50.5%** (latest run, 2026-05-30)
+- **Passed:** 2985 / **Failed:** 2477 / **Skipped:** 9138 (14,600 total)
+- Pass rate: **54.7%** (latest run, 2026-06-01)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 2756 passed / 2706 failed / 9138 skipped (50.5%) — after optimizer boolean simplification fix
-- Previous: 2752 passed / 2710 failed / 9138 skipped (50.4%) — after optimizer divide-by-zero fix
-- Before that: 2750 passed / 2712 failed / 9138 skipped (50.3%) — after document-node wrapping + global var context fix
+- Latest: 2985 passed / 2477 failed / 9138 skipped (54.7%) — after number cluster fixes + template last-wins
+- Previous: 2952 passed / 2510 failed / 9138 skipped (54.0%) — after PatternCompiler axis-context fix + prior commits
+- Previous: 2756 passed / 2706 failed / 9138 skipped (50.5%) — after optimizer boolean simplification fix
+- Before that: 2752 passed / 2710 failed / 9138 skipped (50.4%) — after optimizer divide-by-zero fix
 - Previous: 2675 passed / 2787 failed / 9138 skipped (49.0%) — after seqtor/simple-content fixes
 - Run 11: 2547 passed / 2915 failed / 9138 skipped (46.6%)
 - Run 36: 2545 passed / 2922 failed / 9133 skipped (46.6%)
@@ -25,15 +26,14 @@
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
 
-### Recent Fixes (This Session)
+### Quick-Win Cluster Results
 
-1. **`fn:substring` rounding fix** — `Substring_2`/`Substring_3` now use `RoundDouble` (half-to-ceiling) matching XPath `fn:round` semantics. Fixed `string-021`, `string-090`, `string-093`.
-2. **`xsl:number` fixes** — `ComputeNumberMultiple`/`ComputeNumberSingle` now correctly find nearest-ancestor `from` nodes and verify descendant-or-self relationship. `FormatNumberSequence` emits `prefix+suffix` for empty number arrays. +32 number tests (81→113 passed).
-3. **Sequence constructor text node preservation** — `EvaluateSequenceConstructor` now preserves text nodes as `XdmValue` text nodes (not atomic strings), so `CopyToResult` can merge adjacent text nodes without inserting spaces.
-4. **`CopyToResult` rewrite for §5.7.1** — Properly merges adjacent text nodes, joins consecutive atomic values with single space (#x20), discards zero-length text nodes, and handles sequences correctly.
-5. **`ApplyComplexContentRules`** — New helper that merges adjacent text nodes and removes zero-length text nodes when wrapping sequence constructor output in a document node (for `xsl:variable` without `as`).
-6. **Adjacent-atomic spacing tracking** — Added `_lastAddedWasAtomic` field and `AppendAtomicText()` method so that successive `xsl:sequence` instructions with single atomics are joined with spaces.
-7. **TVT evaluation in `xsl:text`** — `xsl:text` now evaluates TVTs when `expand-text="yes"` is set. Fixes `seqtor-036b/c`, `037b/c`, `039b/c`, `040b/c`, `041`, `042`.
+| Cluster | Passed | Failed | Skipped | Notes |
+|---------|--------|--------|---------|-------|
+| **string** | 136 | 0 | 0 | 100% passing. |
+| **boolean** | 112 | 0 | 0 | 100% passing. |
+| **position** | 205 | 3 | 3 | 98.6% passing. Remaining 3 failures are unimplemented features (`xsl:merge`, `xsl:result-document`, `xsl:apply-imports`). |
+| **number** | 143 | 127 | 1 | 52.8% passing. Remaining failures: localization (German words), `xsl:iterate` not implemented, `key()` in patterns, `level="any"` with document/attribute counting, `current()` in patterns. |
 8. **`ContainsTvtExpression` guard** — `ProcessSequenceText` only evaluates TVTs when the text node actually contains `{...}`. Whitespace-only text nodes inside `expand-text="yes"` elements are now correctly stripped (unless they contain a TVT). Fixes `seqtor-020`, `026`.
 9. **Empty sequence state preservation** — `CopyToResult` no longer resets `_lastAddedWasAtomic` when processing empty sequences. Fixes `seqtor-007`, `010`, `011`.
 10. **`WhitespacePreserveElements` corrected** — Reduced to only `"text"` per XSLT 3.0 §3.3.1.1. Previously incorrectly included `comment`, `attribute`, `element`, `for-each`, etc.
@@ -43,8 +43,8 @@
 
 ### Unit Test Status
 
-- **862 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 94 tests in `Bosak.XPath.Xslt.Tests`
+- **863 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: 95 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
@@ -141,6 +141,12 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 - `and`/`or` always return `xs:boolean` in XPath; returning a string literal changed the result type and serialization.
 - Fixes `boolean-023`, `boolean-031`, `boolean-078`, `boolean-079`.
 - Change history updated in `XPathOptimizer.cs`
+
+### PatternCompiler Axis-Context Predicate Evaluation
+- `CompilePathPattern` now detects when the last step uses an explicit axis (e.g. `descendant::`) and treats the `/` separator as non-direct, allowing deep descendants to match correctly.
+- For non-simple axis-step predicates (e.g. `descendant::*[position() mod 2 = 0]`), the predicate is now evaluated by compiling the step as an XPath expression and evaluating it from the matching ancestor context. This gives correct `position()` and `last()` semantics.
+- Fixes `position-4104`.
+- Change history updated in `PatternCompiler.cs`
 
 ### `fn:substring` Fix
 - `Substring_2`/`Substring_3` use `RoundDouble(startD, 0)` instead of `(int)startD`
@@ -247,21 +253,13 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 9. **`xsl:namespace-alias` not implemented** — ~26 namespace tests fail.
 10. **`xsl:number level="multiple"`** — Multi-level ancestor chain formatting is incomplete.
 11. **Decimal overflow in `FormatNumberEngine`** — Uses `decimal` which overflows for very large inputs.
-12. **Match pattern gaps** — `descendant-or-self::x[predicate]`, `except`/`intersect`, `id()`/`key()` patterns missing in `PatternCompiler`.
+12. **Match pattern gaps** — `except`/`intersect`, `id()`/`key()` patterns missing in `PatternCompiler`. `descendant-or-self::x[predicate]` now works; `descendant::*[position()]` fixed.
 13. **DateTime year < 1** — `DateTimeOffset` minimum year is 1. Tests using year `-2` cannot pass without switching to a custom date representation.
 14. **Timezone adjustment** — `adjust-time-to-timezone` produces incorrect offsets in some cases.
 
 ---
 
 ## Recommended Next Steps
-
-### Immediate: Quick-win clusters (~few hours, +30–50 tests)
-
-These clusters are >75% passing with only a handful of distinct root causes:
-
-- **`string`** — 4 failures, 0 skipped (97% passing)
-- **`position`** — 21 failures, 3 skipped (90% passing)
-- **`boolean`** — 10 failures, 0 skipped (91% passing)
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
 

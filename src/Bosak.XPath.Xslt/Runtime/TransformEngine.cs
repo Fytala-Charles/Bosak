@@ -46,6 +46,9 @@
 //                      | Charles Korthout | 2.9   | 31-05-2026     | Added xsl:for-each-group with group-by, group-adjacent, group-starting-with, group-ending-with |
 //                      | Charles Korthout | 3.0   | 31-05-2026     | Added current-group() and current-grouping-key() functions; IXsltMessageListener        |
 //                      | Charles Korthout | 3.1   | 31-05-2026     | CopyLiteralElement skips xsl-namespace attrs and xmlns:xsl declarations                 |
+//                      | Charles Korthout | 3.2   | 01-06-2026     | xsl:number: AwayFromZero rounding, empty-seq NaN, ordinal/lang, grouping, negative err |
+//                      | Charles Korthout | 3.3   | 01-06-2026     | xsl:number: XTTE1000 empty select, XTSE0020 bad start-at, attribute context for any    |
+//                      | Charles Korthout | 3.4   | 01-06-2026     | FindBestTemplate: XSLT last-wins rule for same-priority templates                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -570,6 +573,39 @@ public sealed class TransformEngine
                                     }
                                 }
                             }
+                        }
+                        break;
+                    }
+                case "number":
+                    {
+                        var fnHasValueAttr = !string.IsNullOrEmpty(instruction.Attribute("value")?.Value);
+                        var fnHasSelectAttr = !string.IsNullOrEmpty(instruction.Attribute("select")?.Value);
+
+                        if (fnHasValueAttr || fnHasSelectAttr || contextItem.IsNode)
+                        {
+                            var savedContainer = _currentContainer;
+                            var savedLastAtomic = _lastAddedWasAtomic;
+                            var temp = new XElement("__temp__");
+                            _currentContainer = temp;
+                            _lastAddedWasAtomic = false;
+                            try
+                            {
+                                var node = contextItem.IsNode ? contextItem.NodeValue : null;
+                                ExecuteXsltNumber(instruction, node!);
+                            }
+                            finally
+                            {
+                                _currentContainer = savedContainer;
+                                _lastAddedWasAtomic = savedLastAtomic;
+                            }
+
+                            var textValue = string.Concat(temp.Nodes().OfType<XText>().Select(t => t.Value));
+                            if (!string.IsNullOrEmpty(textValue))
+                                results.Add(XdmValue.FromString(textValue));
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("XTTE0990");
                         }
                         break;
                     }
@@ -1742,8 +1778,22 @@ public sealed class TransformEngine
 
             case "number":
                 {
-                    if (node != null)
+                    var hasValueAttr = !string.IsNullOrEmpty(instruction.Attribute("value")?.Value);
+                    var hasSelectAttr = !string.IsNullOrEmpty(instruction.Attribute("select")?.Value);
+
+                    if (hasValueAttr || hasSelectAttr)
+                    {
+                        ExecuteXsltNumber(instruction, node!);
+                    }
+                    else if (node != null)
+                    {
                         ExecuteXsltNumber(instruction, node);
+                    }
+                    else
+                    {
+                        // No value, no select, and no context node
+                        throw new InvalidOperationException("XTTE0990");
+                    }
                     break;
                 }
 
@@ -2452,17 +2502,9 @@ public sealed class TransformEngine
                 }
                 else if (rule.Priority == bestPriority && rule.ImportPrecedence == bestImportPrecedence)
                 {
-                    // Tie-breaker: for document nodes, prefer more specific document patterns
-                    // (e.g., doc('uri') over /) to avoid infinite recursion when doc() patterns
-                    // are compiled to match any document node.
-                    if (node.NodeKind == XdmNodeKind.Document && best != null)
-                    {
-                        if (IsMoreSpecificDocumentPattern(rule.Match, best.Match))
-                        {
-                            best = rule;
-                            bestImportPrecedence = rule.ImportPrecedence;
-                        }
-                    }
+                    // XSLT last-wins rule: when priority and import precedence are equal,
+                    // the template that appears later in the stylesheet wins.
+                    best = rule;
                 }
             }
         }
@@ -3220,9 +3262,30 @@ public sealed class TransformEngine
         var valueAttr = instruction.Attribute("value")?.Value;
         var selectAttr = instruction.Attribute("select")?.Value;
         var startAtAttr = instruction.Attribute("start-at")?.Value;
+        var ordinalAttr = instruction.Attribute("ordinal")?.Value;
+        var langAttr = instruction.Attribute("lang")?.Value;
+        var groupingSepAttr = instruction.Attribute("grouping-separator")?.Value;
+        var groupingSizeAttr = instruction.Attribute("grouping-size")?.Value;
 
         // Evaluate format as AVT (it is always an AVT per XSLT spec)
         var format = EvaluateAvt(formatAttr);
+
+        // Evaluate optional AVT attributes
+        string? lang = string.IsNullOrEmpty(langAttr) ? null : EvaluateAvt(langAttr);
+        string? groupingSeparator = string.IsNullOrEmpty(groupingSepAttr) ? null : EvaluateAvt(groupingSepAttr);
+        int groupingSize = 0;
+        if (!string.IsNullOrEmpty(groupingSizeAttr))
+        {
+            var gsEval = EvaluateAvt(groupingSizeAttr);
+            int.TryParse(gsEval, out groupingSize);
+        }
+
+        bool ordinal = false;
+        if (!string.IsNullOrEmpty(ordinalAttr))
+        {
+            var ordEval = EvaluateAvt(ordinalAttr);
+            ordinal = ordEval.Equals("yes", StringComparison.OrdinalIgnoreCase);
+        }
 
         // Evaluate start-at as AVT, then parse as space-separated integers (XSLT 3.0)
         long[]? startAtValues = null;
@@ -3238,15 +3301,49 @@ public sealed class TransformEngine
         {
             var compiled = XPath31Expression.Compile(selectAttr);
             var result = compiled.Evaluate(_context);
+
+            // XTTE1000: select must return at most one node
+            if (result.IsSequence && result.SequenceValue != null)
+            {
+                int nodeCount = 0;
+                foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                {
+                    if (item.IsNode)
+                    {
+                        nodeCount++;
+                        if (nodeCount > 1)
+                            throw new InvalidOperationException("XTTE1000");
+                    }
+                }
+            }
+
             targetNode = ExtractSingleNode(result);
             if (targetNode == null)
-                return;
+                throw new InvalidOperationException("XTTE1000");
         }
 
         if (!string.IsNullOrEmpty(valueAttr))
         {
             var compiled = XPath31Expression.Compile(valueAttr);
             var result = compiled.Evaluate(_context);
+
+            // Determine whether the raw result is an empty sequence
+            bool isEmptySequence = false;
+            if (result.IsSequence && result.SequenceValue != null)
+            {
+                isEmptySequence = true;
+                foreach (var _ in XdmSequence.FromSource(result.SequenceValue))
+                {
+                    isEmptySequence = false;
+                    break;
+                }
+            }
+
+            // Negative numbers without a pattern separator are an error (check original
+            // XdmValue before int conversion to avoid overflow false positives).
+            if (HasNegativeValue(result) && !format.Contains(';'))
+                throw new InvalidOperationException("XTDE0980");
+
             var numbers = XdmValueToLongArray(result);
             if (numbers.Length > 0)
             {
@@ -3258,9 +3355,28 @@ public sealed class TransformEngine
                         : 1;
                     numbers[i] = (int)(numbers[i] - 1 + startAt);
                 }
-                var formatted = FormatNumberSequence(numbers, format);
+                var formatted = FormatNumberSequence(numbers, format, ordinal, lang, groupingSeparator, groupingSize);
                 _lastAddedWasAtomic = false;
                 AddTextNode(formatted);
+            }
+            else
+            {
+                // No convertible numbers: empty sequence or non-numeric value.
+                // XSLT 1.0 backwards-compatible → NaN; XSLT 2.0+ → prefix+suffix only.
+                if (_context.BackwardsCompatible || !isEmptySequence)
+                {
+                    _lastAddedWasAtomic = false;
+                    AddTextNode("NaN");
+                }
+                else
+                {
+                    var formatted = FormatNumberSequence(System.Array.Empty<int>(), format, ordinal, lang, groupingSeparator, groupingSize);
+                    if (!string.IsNullOrEmpty(formatted))
+                    {
+                        _lastAddedWasAtomic = false;
+                        AddTextNode(formatted);
+                    }
+                }
             }
         }
         else
@@ -3283,6 +3399,10 @@ public sealed class TransformEngine
 
             if (numbers != null && numbers.Length > 0)
             {
+                // Negative numbers without a pattern separator in the format string are an error
+                if (numbers.Any(n => n < 0) && !format.Contains(';'))
+                    throw new InvalidOperationException("XTDE0980");
+
                 // Apply start-at to each number
                 if (startAtValues != null)
                 {
@@ -3297,7 +3417,7 @@ public sealed class TransformEngine
             // Format even when no numbers match: prefix+suffix is still emitted
             // (e.g. format="(1)" with no matches produces "()").
             var numsToFormat = numbers ?? System.Array.Empty<int>();
-            var formatted = FormatNumberSequence(numsToFormat, format);
+            var formatted = FormatNumberSequence(numsToFormat, format, ordinal, lang, groupingSeparator, groupingSize);
             _lastAddedWasAtomic = false;
             AddTextNode(formatted);
         }
@@ -3418,9 +3538,24 @@ public sealed class TransformEngine
         int count = 0;
         bool foundCurrent = false;
 
+        // For attributes, document order places them immediately after the element's start tag,
+        // so we stop the walk when we reach the parent element.
+        IXdmNode? stopNode = null;
+        if (currentNode.NodeKind == XdmNodeKind.Attribute)
+        {
+            foreach (var p in currentNode.Axis(XdmAxis.Parent))
+            {
+                if (p.IsNode && p.NodeValue is IXdmNode parent)
+                {
+                    stopNode = parent;
+                    break;
+                }
+            }
+        }
+
         WalkDocumentTree(doc, node =>
         {
-            if (node.IsSameNode(currentNode))
+            if (node.IsSameNode(currentNode) || (stopNode != null && node.IsSameNode(stopNode)))
                 foundCurrent = true;
 
             if (fromMatcher != null && fromMatcher(node, context))
@@ -3522,7 +3657,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Formats a sequence of integers according to an <c>xsl:number</c> format string.
     /// </summary>
-    private string FormatNumberSequence(int[] numbers, string format)
+    private string FormatNumberSequence(int[] numbers, string format, bool ordinal, string? lang, string? groupingSeparator, int groupingSize)
     {
         var (prefix, tokens, separators, suffix) = ParseXslNumberFormat(format);
 
@@ -3534,7 +3669,18 @@ public sealed class TransformEngine
             var token = tokens.Count > 0
                 ? (i < tokens.Count ? tokens[i] : tokens[^1])
                 : "1";
-            sb.Append(FormatIntegerEngine.Format(_context, numbers[i], token, null));
+
+            // Append ordinal modifier if requested
+            if (ordinal && !token.Contains(';'))
+                token += ";o";
+
+            var formatted = FormatIntegerEngine.Format(_context, numbers[i], token, lang);
+
+            // Apply xsl:number grouping-separator / grouping-size
+            if (!string.IsNullOrEmpty(groupingSeparator) && groupingSize > 0)
+                formatted = ApplyNumberGrouping(formatted, groupingSeparator, groupingSize);
+
+            sb.Append(formatted);
 
             if (i < numbers.Length - 1)
             {
@@ -3547,6 +3693,29 @@ public sealed class TransformEngine
 
         sb.Append(suffix);
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Applies grouping separator and size to a formatted number string.
+    /// Handles optional leading minus sign.
+    /// </summary>
+    private static string ApplyNumberGrouping(string formatted, string groupingSeparator, int groupingSize)
+    {
+        bool negative = formatted.StartsWith("-");
+        string digits = negative ? formatted.Substring(1) : formatted;
+
+        var sb = new System.Text.StringBuilder();
+        int count = 0;
+        for (int i = digits.Length - 1; i >= 0; i--)
+        {
+            if (count > 0 && count % groupingSize == 0)
+                sb.Insert(0, groupingSeparator);
+            sb.Insert(0, digits[i]);
+            count++;
+        }
+
+        string result = sb.ToString();
+        return negative ? "-" + result : result;
     }
 
     /// <summary>
@@ -3582,6 +3751,13 @@ public sealed class TransformEngine
             separators.RemoveAt(separators.Count - 1);
         }
 
+        // Special case: non-empty format string with no alphanumeric characters.
+        // The entire string is used as both prefix and suffix (e.g. "*" → "*1*").
+        if (format.Length > 0 && tokens.Count == 0)
+        {
+            suffix = prefix;
+        }
+
         return (prefix, tokens, separators, suffix);
     }
 
@@ -3592,11 +3768,13 @@ public sealed class TransformEngine
     private static long[] ParseStartAtValues(string value)
     {
         var parts = value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 0)
+            return [1L];
         var result = new long[parts.Length];
         for (int i = 0; i < parts.Length; i++)
         {
             if (!long.TryParse(parts[i], out result[i]))
-                result[i] = 1;
+                throw new InvalidOperationException("XTSE0020");
         }
         return result;
     }
@@ -3620,6 +3798,29 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Returns <c>true</c> if the <see cref="XdmValue"/> represents a negative number.
+    /// Sequences are inspected by looking at the first item.
+    /// </summary>
+    private static bool HasNegativeValue(XdmValue value)
+    {
+        if (value.Kind == XdmValueKind.Sequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                return HasNegativeValue(item);
+            return false;
+        }
+
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue < 0,
+            XdmValueKind.Decimal => value.DecimalValue < 0,
+            XdmValueKind.Double => value.DoubleValue < 0 && !double.IsNaN(value.DoubleValue),
+            XdmValueKind.Float => value.DoubleValue < 0 && !double.IsNaN(value.DoubleValue),
+            _ => false
+        };
+    }
+
+    /// <summary>
     /// Converts an <see cref="XdmValue"/> to a <see cref="long"/> if it represents a number.
     /// </summary>
     private static long? XdmValueToLong(XdmValue value)
@@ -3635,9 +3836,9 @@ public sealed class TransformEngine
         return value.Kind switch
         {
             XdmValueKind.Integer => value.IntegerValue,
-            XdmValueKind.Decimal => (long)Math.Round(value.DecimalValue),
-            XdmValueKind.Double => (long)Math.Round(value.DoubleValue),
-            XdmValueKind.Float => (long)Math.Round(value.DoubleValue),
+            XdmValueKind.Decimal => (long)Math.Round(value.DecimalValue, MidpointRounding.AwayFromZero),
+            XdmValueKind.Double => (long)Math.Round(value.DoubleValue, MidpointRounding.AwayFromZero),
+            XdmValueKind.Float => (long)Math.Round(value.DoubleValue, MidpointRounding.AwayFromZero),
             XdmValueKind.Node => long.TryParse(value.NodeValue?.StringValue ?? "", out var n) ? n : null,
             _ => long.TryParse(value.ToString(), out var n) ? n : null
         };

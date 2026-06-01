@@ -3,6 +3,7 @@ using System.Xml;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.XPath.Xslt.Conformance;
 
@@ -470,7 +471,8 @@ class Program
         var assertExpr = resultElem.Name.LocalName == "assert" ? resultElem : resultElem.Element(ns + "assert");
         if (assertExpr != null)
         {
-            return EvaluateAssert(actual, assertExpr.Value);
+            var nsDecls = ExtractNamespaces(assertExpr);
+            return EvaluateAssert(actual, assertExpr.Value, nsDecls);
         }
 
         // assert-eq: evaluate XPath and compare atomized value
@@ -479,7 +481,8 @@ class Program
         {
             var expected = assertEq.Attribute("expected")?.Value ?? assertEq.Value;
             var expr = assertEq.Attribute("select")?.Value ?? assertEq.Value;
-            return EvaluateAssertEq(actual, expr, expected);
+            var nsDecls = ExtractNamespaces(assertEq);
+            return EvaluateAssertEq(actual, expr, expected, nsDecls);
         }
 
         // serialization
@@ -525,7 +528,26 @@ class Program
         }
     }
 
-    static bool EvaluateAssert(string actual, string xpath)
+    static Dictionary<string, string> ExtractNamespaces(XElement element)
+    {
+        var dict = new Dictionary<string, string>();
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes().Where(a => a.IsNamespaceDeclaration))
+            {
+                var prefix = attr.Name.LocalName;
+                if (prefix == "xmlns")
+                    prefix = "";
+                if (!dict.ContainsKey(prefix))
+                    dict[prefix] = attr.Value;
+            }
+            current = current.Parent;
+        }
+        return dict;
+    }
+
+    static bool EvaluateAssert(string actual, string xpath, Dictionary<string, string>? namespaces = null)
     {
         var contextNode = ParseResultDocument(actual);
         if (contextNode == null)
@@ -534,7 +556,13 @@ class Program
         try
         {
             var compiled = XPath31Expression.Compile(xpath);
-            var result = compiled.Evaluate(contextNode);
+            var ctx = new EvaluationContext().WithFocus(XdmValue.FromNode(contextNode), 1, 1);
+            if (namespaces != null)
+            {
+                foreach (var (prefix, uri) in namespaces)
+                    ctx.WithNamespace(prefix, uri);
+            }
+            var result = compiled.Evaluate(ctx);
             return result.EffectiveBooleanValue();
         }
         catch
@@ -543,7 +571,7 @@ class Program
         }
     }
 
-    static bool EvaluateAssertEq(string actual, string xpath, string expected)
+    static bool EvaluateAssertEq(string actual, string xpath, string expected, Dictionary<string, string>? namespaces = null)
     {
         var contextNode = ParseResultDocument(actual);
         if (contextNode == null)
@@ -552,7 +580,13 @@ class Program
         try
         {
             var compiled = XPath31Expression.Compile(xpath);
-            var result = compiled.Evaluate(contextNode);
+            var ctx = new EvaluationContext().WithFocus(XdmValue.FromNode(contextNode), 1, 1);
+            if (namespaces != null)
+            {
+                foreach (var (prefix, uri) in namespaces)
+                    ctx.WithNamespace(prefix, uri);
+            }
+            var result = compiled.Evaluate(ctx);
             return result.ToString() == expected;
         }
         catch

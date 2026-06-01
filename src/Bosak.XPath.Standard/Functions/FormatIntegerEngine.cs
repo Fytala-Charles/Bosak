@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Made public for reuse by xsl:number formatting                                          |
+//                      | Charles Korthout | 0.3   | 01-06-2026     | Greek alphabetic: include final sigma (U+03C2); base 25 for lowercase                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -252,18 +253,18 @@ public static class FormatIntegerEngine
     private static string ToGreekAlphabetic(long n, bool upper)
     {
         if (n <= 0) return n.ToString(CultureInfo.InvariantCulture);
-        // Greek alphabet has 24 letters
-        // Uppercase: U+0391-U+03A1 (skip U+03A2)
-        // Lowercase: U+03B1-U+03C9 (skip U+03C2)
+        // Uppercase Greek: U+0391-U+03A1 (17 letters), skip U+03A2, then U+03A3-U+03A9 (7 letters) = 24 total.
         int[] upperCodes = { 0x0391, 0x0392, 0x0393, 0x0394, 0x0395, 0x0396, 0x0397, 0x0398, 0x0399, 0x039A, 0x039B, 0x039C, 0x039D, 0x039E, 0x039F, 0x03A0, 0x03A1, 0x03A3, 0x03A4, 0x03A5, 0x03A6, 0x03A7, 0x03A8, 0x03A9 };
-        int[] lowerCodes = { 0x03B1, 0x03B2, 0x03B3, 0x03B4, 0x03B5, 0x03B6, 0x03B7, 0x03B8, 0x03B9, 0x03BA, 0x03BB, 0x03BC, 0x03BD, 0x03BE, 0x03BF, 0x03C0, 0x03C1, 0x03C3, 0x03C4, 0x03C5, 0x03C6, 0x03C7, 0x03C8, 0x03C9 };
+        // Lowercase Greek: U+03B1-U+03C9 inclusive = 25 letters (includes both final sigma U+03C2 and regular sigma U+03C3).
+        int[] lowerCodes = { 0x03B1, 0x03B2, 0x03B3, 0x03B4, 0x03B5, 0x03B6, 0x03B7, 0x03B8, 0x03B9, 0x03BA, 0x03BB, 0x03BC, 0x03BD, 0x03BE, 0x03BF, 0x03C0, 0x03C1, 0x03C2, 0x03C3, 0x03C4, 0x03C5, 0x03C6, 0x03C7, 0x03C8, 0x03C9 };
         var codes = upper ? upperCodes : lowerCodes;
+        int @base = upper ? 24 : 25;
         var sb = new StringBuilder();
         while (n > 0)
         {
             n--;
-            sb.Insert(0, char.ConvertFromUtf32(codes[n % 24]));
-            n /= 24;
+            sb.Insert(0, char.ConvertFromUtf32(codes[n % @base]));
+            n /= @base;
         }
         return sb.ToString();
     }
@@ -611,7 +612,15 @@ public static class FormatIntegerEngine
             "five" => "fifth",
             "eight" => "eighth",
             "nine" => "ninth",
+            "eleven" => "eleventh",
             "twelve" => "twelfth",
+            "thirteen" => "thirteenth",
+            "fourteen" => "fourteenth",
+            "fifteen" => "fifteenth",
+            "sixteen" => "sixteenth",
+            "seventeen" => "seventeenth",
+            "eighteen" => "eighteenth",
+            "nineteen" => "nineteenth",
             "twenty" => "twentieth",
             "thirty" => "thirtieth",
             "forty" => "fortieth",
@@ -620,6 +629,10 @@ public static class FormatIntegerEngine
             "seventy" => "seventieth",
             "eighty" => "eightieth",
             "ninety" => "ninetieth",
+            "hundred" => "hundredth",
+            "thousand" => "thousandth",
+            "million" => "millionth",
+            "billion" => "billionth",
             "zero" => "zeroth",
             _ => null
         };
@@ -634,14 +647,13 @@ public static class FormatIntegerEngine
             return cardinalWord.Substring(0, cardinalWord.Length - 1) + "ieth";
 
         // If it contains compound number words with spaces/hyphens, replace only the last word
-        if ((lower.Contains(' ') || lower.Contains('-')) &&
-            (lower.Contains("hundred") || lower.Contains("thousand") || lower.Contains("million") || lower.Contains("billion")))
+        if (lower.Contains(' ') || lower.Contains('-'))
         {
             return ReplaceLastWordWithOrdinal(cardinalWord, value, language);
         }
 
-        // Default: append "th"
-        return cardinalWord + "th";
+        // Default: append "th" (preserving case of the original)
+        return MatchCase(cardinalWord, cardinalWord.ToLowerInvariant() + "th");
     }
 
     private static string MatchCase(string original, string replacement)
