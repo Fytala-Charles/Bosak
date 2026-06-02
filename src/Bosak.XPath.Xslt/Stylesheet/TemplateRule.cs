@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -211,49 +213,124 @@ public sealed class TemplateRule
 
         var trimmed = match.Trim();
 
-        // Document patterns and root pattern: +0.5
+        // Union patterns: take the maximum priority of all branches
+        var branches = SplitUnionBranches(trimmed);
+        if (branches.Length > 1)
+            return branches.Max(ComputeSinglePatternPriority);
+
+        return ComputeSinglePatternPriority(trimmed);
+    }
+
+    private static double ComputeSinglePatternPriority(string trimmed)
+    {
+        // Document patterns and root pattern
         if (trimmed == "/" || trimmed.StartsWith("doc(") || trimmed.StartsWith("document("))
             return 0.5;
 
-        // Path patterns (contain /): +0.5
+        // Path patterns (contain /)
         if (trimmed.Contains('/'))
             return 0.5;
 
-        // Strip leading @ for attribute tests
-        bool isAttribute = trimmed.StartsWith('@');
-        if (isAttribute)
-            trimmed = trimmed[1..].Trim();
-
-        // Wildcards: * or node() or text() or comment() or processing-instruction() or .
-        if (trimmed == "*" || trimmed == "node()" || trimmed == "text()"
-            || trimmed == "comment()" || trimmed == "processing-instruction()"
-            || trimmed == ".")
-        {
-            return -0.5;
-        }
-
-        // Namespace wildcards: prefix:* or *:local
-        if (trimmed.EndsWith(":*") || trimmed.StartsWith("*:"))
-            return -0.25;
-
-        // PredicatePattern: .[expr] — XSLT 3.0 priority is 1 (or -1 for bare .)
+        // PredicatePattern: .[expr]
         if (trimmed.StartsWith("."))
-        {
             return trimmed.Contains('[') ? 1.0 : -0.5;
-        }
 
-        // Patterns with a predicate that aren't PredicatePatterns or path patterns
-        // fall into the "otherwise" rule and get priority 0.5.
-        if (trimmed.Contains('['))
+        // Explicit axis step
+        if (trimmed.Contains("::"))
         {
+            int colonIdx = trimmed.IndexOf("::");
+            string axis = trimmed[..colonIdx].Trim().ToLowerInvariant();
+            string nodeTest = trimmed[(colonIdx + 2)..].Trim();
+
+            // child::QName → 0.0; attribute::QName → 0.5
+            if ((axis == "child" || axis == "attribute") && IsQNameNodeTest(nodeTest))
+                return axis == "child" ? 0.0 : 0.5;
+
+            // Namespace wildcards: NCName:* or *:NCName → -0.25
+            if (nodeTest.EndsWith(":*") || nodeTest.StartsWith("*:"))
+                return -0.25;
+
+            // KindTest or * → -0.5
+            if (nodeTest == "*" || IsKindTest(nodeTest))
+                return -0.5;
+
+            // Any other axis step → 0.5
             return 0.5;
         }
 
-        // QName: no wildcards, no parentheses
-        if (!trimmed.Contains('*') && !trimmed.Contains('(') && !trimmed.Contains(')'))
+        // @attr is shorthand for attribute::attr → 0.5
+        if (trimmed.StartsWith('@'))
+        {
+            var name = trimmed[1..].Trim();
+            if (name == "*")
+                return -0.5;
+            if (name.EndsWith(":*") || name.StartsWith("*:"))
+                return -0.25;
+            if (!name.Contains('*') && !name.Contains('('))
+                return 0.5;
+            return 0.5;
+        }
+
+        // Wildcards and kind tests without axis
+        if (trimmed == "*" || IsKindTest(trimmed) || trimmed == ".")
+            return -0.5;
+
+        // Namespace wildcards without axis
+        if (trimmed.EndsWith(":*") || trimmed.StartsWith("*:"))
+            return -0.25;
+
+        // Patterns with a predicate
+        if (trimmed.Contains('['))
+            return 0.5;
+
+        // QName without axis (implicit child::)
+        if (IsQNameNodeTest(trimmed))
             return 0.0;
 
-        // Fallback
-        return 0.0;
+        // Fallback: any other pattern
+        return 0.5;
+    }
+
+    private static bool IsQNameNodeTest(string s)
+    {
+        // A QName has no wildcards, no parentheses, no brackets, no operators
+        if (string.IsNullOrEmpty(s)) return false;
+        foreach (char c in s)
+        {
+            if (c == '*' || c == '(' || c == ')' || c == '[' || c == ']' || c == '|' || c == '/')
+                return false;
+        }
+        return true;
+    }
+
+    private static bool IsKindTest(string s)
+    {
+        return s switch
+        {
+            "node()" or "text()" or "comment()" or "processing-instruction()"
+            or "element()" or "attribute()" or "schema-element()" or "schema-attribute()"
+            or "document-node()" => true,
+            _ => false
+        };
+    }
+
+    private static string[] SplitUnionBranches(string pattern)
+    {
+        var parts = new List<string>();
+        int start = 0;
+        int depth = 0;
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+            if (c == '(' || c == '[') depth++;
+            else if (c == ')' || c == ']') depth--;
+            else if (c == '|' && depth == 0)
+            {
+                parts.Add(pattern[start..i].Trim());
+                start = i + 1;
+            }
+        }
+        parts.Add(pattern[start..].Trim());
+        return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
     }
 }

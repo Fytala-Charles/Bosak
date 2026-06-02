@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 01-06-2026     | Axis-context predicate evaluation in path patterns; descendant:: direct-child fix      |
 //                      | Charles Korthout | 0.6   | 01-06-2026     | Wrap compiled patterns with CurrentItem so fn:current() returns candidate node         |
 //                      | Charles Korthout | 0.7   | 01-06-2026     | Propagate static XPath/XSLT errors (XPST/XTSE/XPTY) from pattern predicates            |
+//                      | Charles Korthout | 0.8   | 01-06-2026     | Fix namespace wildcard patterns (prefix:* and Q{uri}*) in node tests                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -110,9 +111,20 @@ public sealed class PatternCompiler
         }
 
         // Handle // prefix (e.g. //foo, //foo[bar]) — matches any descendant
+        // Per XSLT spec, //P only matches nodes in a tree rooted at a document node.
         if (trimmed.StartsWith("//"))
         {
-            trimmed = trimmed[2..].Trim();
+            var innerPattern = CompileSinglePattern(trimmed[2..].Trim());
+            return (node, ctx) =>
+            {
+                // Walk to the root; //P only matches if root is a document node
+                var root = node;
+                while (root.Parent != null)
+                    root = root.Parent;
+                if (root.NodeKind != XdmNodeKind.Document)
+                    return false;
+                return innerPattern(node, ctx);
+            };
         }
         // Handle / prefix (e.g. /doc) — matches from the root
         else if (trimmed.StartsWith('/'))
@@ -191,7 +203,7 @@ public sealed class PatternCompiler
                 // After the parens there might be predicates or path continuations
                 if (after.StartsWith('['))
                 {
-                    return CompileParenthesizedWithPredicates(innerPattern, after);
+                    return CompileParenthesizedWithPredicates(innerPattern, inside, after);
                 }
                 if (after.StartsWith('/'))
                 {
@@ -662,6 +674,12 @@ public sealed class PatternCompiler
             return (node, ctx) => node.NodeKind == XdmNodeKind.Element;
         }
 
+        if (name.StartsWith("*:"))
+        {
+            string local = name[2..];
+            return (node, ctx) => node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
+        }
+
         if (name == "node()" || name == ".")
         {
             return (node, ctx) => true;
@@ -789,6 +807,13 @@ public sealed class PatternCompiler
                 node.LocalName == localName;
         }
 
+        if (localName == "*")
+        {
+            return (node, ctx) =>
+                node.NodeKind == XdmNodeKind.Element &&
+                node.NamespaceUri == nsUri;
+        }
+
         return (node, ctx) =>
             node.NodeKind == XdmNodeKind.Element &&
             node.NamespaceUri == nsUri &&
@@ -855,6 +880,11 @@ public sealed class PatternCompiler
     {
         if (nodeTest == "*")
             return node => node.NodeKind == XdmNodeKind.Element;
+        if (nodeTest.StartsWith("*:"))
+        {
+            string local = nodeTest[2..];
+            return node => node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
+        }
         if (nodeTest == "node()")
             return node => true;
         if (nodeTest == "text()")
@@ -882,6 +912,8 @@ public sealed class PatternCompiler
         var (nsUri, localName) = ParseQName(nodeTest);
         if (string.IsNullOrEmpty(nsUri))
             return node => node.NodeKind == XdmNodeKind.Element && node.LocalName == localName;
+        if (localName == "*")
+            return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == nsUri;
         return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == nsUri && node.LocalName == localName;
     }
 
@@ -889,6 +921,11 @@ public sealed class PatternCompiler
     {
         if (nodeTest == "*")
             return node => node.NodeKind == XdmNodeKind.Attribute;
+        if (nodeTest.StartsWith("*:"))
+        {
+            string local = nodeTest[2..];
+            return node => node.NodeKind == XdmNodeKind.Attribute && node.LocalName == local;
+        }
         if (nodeTest == "node()")
             return node => node.NodeKind == XdmNodeKind.Attribute;
         if (nodeTest == "text()")
@@ -903,6 +940,8 @@ public sealed class PatternCompiler
         var (nsUri, localName) = ParseQName(nodeTest);
         if (string.IsNullOrEmpty(nsUri))
             return node => node.NodeKind == XdmNodeKind.Attribute && node.LocalName == localName;
+        if (localName == "*")
+            return node => node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == nsUri;
         return node => node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == nsUri && node.LocalName == localName;
     }
 
@@ -911,6 +950,12 @@ public sealed class PatternCompiler
         if (name == "*")
         {
             return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute;
+        }
+
+        if (name.StartsWith("*:"))
+        {
+            string localName2 = name[2..];
+            return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute && node.LocalName == localName2;
         }
 
         // namespace::* 
@@ -926,6 +971,13 @@ public sealed class PatternCompiler
             return (node, ctx) =>
                 node.NodeKind == XdmNodeKind.Attribute &&
                 node.LocalName == local;
+        }
+
+        if (local == "*")
+        {
+            return (node, ctx) =>
+                node.NodeKind == XdmNodeKind.Attribute &&
+                node.NamespaceUri == ns;
         }
 
         return (node, ctx) =>
@@ -1037,9 +1089,15 @@ public sealed class PatternCompiler
 
         if (isSimpleElement || isSimpleAttribute)
         {
-            var axisStep = isSimpleAttribute
-                ? $"attribute::{basePattern[1..]}[{predicateExpr}]{remaining}"
-                : $"child::{basePattern}[{predicateExpr}]{remaining}";
+            string axisStep;
+            if (basePattern == "attribute()" || basePattern.StartsWith("attribute("))
+                axisStep = $"attribute::{basePattern}[{predicateExpr}]{remaining}";
+            else if (basePattern == "namespace-node()" || basePattern.StartsWith("namespace-node("))
+                axisStep = $"namespace::{basePattern}[{predicateExpr}]{remaining}";
+            else if (isSimpleAttribute)
+                axisStep = $"attribute::{basePattern[1..]}[{predicateExpr}]{remaining}";
+            else
+                axisStep = $"child::{basePattern}[{predicateExpr}]{remaining}";
             var compiledStep = XPath31Expression.Compile(axisStep);
             var fallbackPred = XPath31Expression.Compile($"self::node()[{predicateExpr}]{remaining}");
 
@@ -1121,7 +1179,7 @@ public sealed class PatternCompiler
         };
     }
 
-    private PatternPredicate CompileParenthesizedWithPredicates(PatternPredicate innerPattern, string after)
+    private PatternPredicate CompileParenthesizedWithPredicates(PatternPredicate innerPattern, string inside, string after)
     {
         // after starts with [predicate...]
         int bracketOpen = after.IndexOf('[');
@@ -1145,6 +1203,43 @@ public sealed class PatternCompiler
 
         string predicateExpr = after[(bracketOpen + 1)..bracketClose].Trim();
         string remaining = bracketClose + 1 < after.Length ? after[(bracketClose + 1)..] : "";
+
+        // If the inner pattern is a path expression (contains /), the predicate applies
+        // to the sequence selected by the path, not to self::node(). For example,
+        // (doc/descendant::foo)[2] must match the 2nd foo descendant of doc.
+        bool isPathExpression = inside.Contains('/');
+        if (isPathExpression)
+        {
+            var compiledPath = XPath31Expression.Compile($"({inside})[{predicateExpr}]{remaining}");
+            return (node, ctx) =>
+            {
+                try
+                {
+                    var root = node;
+                    while (root.Parent != null)
+                        root = root.Parent;
+                    var result = compiledPath.Evaluate(ctx.WithFocus(XdmValue.FromNode(root), 1, 1));
+                    if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
+                    {
+                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        {
+                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                return true;
+                        }
+                    }
+                    else if (result.IsNode && result.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    if (IsStaticError(ex)) throw;
+                    return false;
+                }
+            };
+        }
 
         var compiledPred = XPath31Expression.Compile($"self::node()[{predicateExpr}]{remaining}");
 

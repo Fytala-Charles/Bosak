@@ -52,6 +52,8 @@
 //                      | Charles Korthout | 3.5   | 01-06-2026     | ParseXslNumberFormat: recognize Unicode numbering chars (surrogate pairs, OtherNumber) |
 //                      | Charles Korthout | 3.6   | 01-06-2026     | xsl:number with value: strip leading whitespace from first output; IsFirstSignificantChild helper |
 //                      | Charles Korthout | 3.7   | 01-06-2026     | ComputeNumberAny handles non-document trees; lang validation (XTDE0030); FormatNumberSequence uses long[] |
+//                      | Charles Korthout | 3.8   | 01-06-2026     | EvaluateSequenceConstructor extracts attributes/namespace nodes for raw sequence return    |
+//                      | Charles Korthout | 3.9   | 01-06-2026     | Initial template selection applies templates to children, not document node (XSLT 5.4)   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -202,10 +204,10 @@ public sealed class TransformEngine
                 }
                 else
                 {
-                    // Apply templates to the source node itself in default mode.
-                    // This ensures templates matching document-node() are invoked
-                    // for the initial transformation, matching XSLT spec behavior.
-                    ApplyTemplates(source, mode: "", select: ".");
+                    // XSLT 2.0 §5.4: when there is no template matching "/",
+                    // the built-in template for document nodes applies templates
+                    // to the children of the root node.
+                    ApplyTemplates(source, mode: "", select: null);
                 }
             }
         }
@@ -2261,12 +2263,11 @@ public sealed class TransformEngine
                 break;
 
             case XdmNodeKind.Attribute:
-                // Built-in: copy attribute to current element
-                if (_currentContainer is XElement elem && behavior != Stylesheet.OnNoMatch.Fail)
+                // Built-in: copy attribute's string-value as a text node (XSLT 2.0 §6.4)
+                if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail)
                 {
-                    elem.SetAttributeValue(
-                        XName.Get(node.LocalName, node.NamespaceUri),
-                        node.StringValue);
+                    _lastAddedWasAtomic = false;
+                    AddTextNode(node.StringValue);
                 }
                 break;
 
@@ -2773,9 +2774,10 @@ public sealed class TransformEngine
             ExecuteSequenceConstructorDirect(parent, contextItem, wrapper);
 
             var nodes = wrapper.Nodes().ToList();
+            var attributes = wrapper.Attributes().ToList();
 
             // Empty sequence constructor → empty sequence (XSLT 2.0 §11.2)
-            if (nodes.Count == 0)
+            if (nodes.Count == 0 && attributes.Count == 0)
                 return XdmValue.FromSequence(XdmSequence.Empty);
 
             if (wrapInDocumentNode)
@@ -2828,6 +2830,11 @@ public sealed class TransformEngine
                         results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(pi)));
                         break;
                 }
+            }
+            // Include attributes produced by xsl:attribute / xsl:namespace in the sequence
+            foreach (var attr in attributes)
+            {
+                results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(new XAttribute(attr.Name, attr.Value))));
             }
             if (results.Count == 1)
                 return results[0];

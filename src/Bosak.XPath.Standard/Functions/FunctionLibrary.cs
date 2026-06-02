@@ -47,6 +47,7 @@
 //                      | Charles Korthout | 3.3   | 27-05-2026     | Added default collation support; fixed UCA starts-with/ends-with alternate=blanked     |
 //                      | Charles Korthout | 3.4   | 30-05-2026     | Fixed fn:string-length to count Unicode code points via EnumerateRunes()                |
 //                      | Charles Korthout | 3.5   | 30-05-2026     | Fixed fn:substring to use Unicode code points; Unicode full case mapping for upper/lower-case |
+//                      | Charles Korthout | 3.6   | 01-06-2026     | Fixed fn:doc/fn:document to resolve empty string against base URI instead of returning empty sequence |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2418,7 +2419,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "document", Arity = 1,
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Node,
-                Implementation = Doc_1
+                Implementation = Document_1
             },
             [(Namespaces.Fn, "document", 2)] = new()
             {
@@ -4602,11 +4603,20 @@ public static class FunctionLibrary
         return XdmValue.FromNode(node);
     }
 
+    private static XdmValue Document_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        var uri = args[0].ToString();
+        var node = ctx.LoadDocument(uri);
+        return XdmValue.FromNode(node);
+    }
+
     private static XdmValue Document_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var uri = args[0].ToString();
-        if (string.IsNullOrEmpty(uri))
+        if (IsEmptySequence(args[0]))
             return XdmValue.Undefined;
+        var uri = args[0].ToString();
         // Second arg is a node used for base URI resolution; for now, just use the URI directly
         var node = ctx.LoadDocument(uri);
         return XdmValue.FromNode(node);

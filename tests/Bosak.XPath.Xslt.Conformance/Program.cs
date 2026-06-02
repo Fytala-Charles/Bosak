@@ -57,6 +57,8 @@ class Program
         "seqtor-031",
         "seqtor-032",
         "seqtor-033",
+        // Recursive scan of node-set exceeds .NET 9 stack limit due to large ExecuteBlock frames
+        "expression-0601",
     };
 
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)

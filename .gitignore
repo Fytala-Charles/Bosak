@@ -69,3 +69,4 @@ xslt_function*.log
 # XSLT test suite (embedded git repo)
 tests/xslt30-test/
 
+/last_test.txt

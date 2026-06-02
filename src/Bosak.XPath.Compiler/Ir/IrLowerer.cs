@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 27-05-2026     | Emit DocumentRoot for absolute path expressions                                        |
 //                      | Charles Korthout | 1.1   | 30-05-2026     | Emit NamespaceTest for QName node tests (prefix:localname)                             |
 //                      | Charles Korthout | 1.2   | 30-05-2026     | Wrap predicated path steps in PathStepMap for per-context-item predicate evaluation   |
+//                      | Charles Korthout | 1.3   | 01-06-2026     | Use SimpleMap for non-StepNode steps in path expressions (e.g. /a/b/number())        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -562,6 +563,7 @@ public sealed class IrLowerer
             currentReg = rootReg;
         }
 
+        bool isFirstStep = true;
         foreach (var step in node.Steps)
         {
             if (step is StepNode stepNode)
@@ -570,13 +572,39 @@ public sealed class IrLowerer
             }
             else
             {
-                // Filter expression as a path step (e.g., parse-xml(...)/root/item)
-                currentReg = LowerNode(step, currentReg);
+                if (isFirstStep)
+                {
+                    // First step: evaluate once (e.g., $x, parse-xml(...))
+                    currentReg = LowerNode(step, currentReg);
+                }
+                else
+                {
+                    // Subsequent non-axis step: evaluate per-item using SimpleMap
+                    // semantics (e.g., /a/b/number(), /a/b/(1+2))
+                    int mapResultReg = AllocRegister();
+                    int mapInstrIdx = _instructions.Count;
+                    Emit(IrOpCode.SimpleMap, (byte)mapResultReg, (byte)currentReg, 0, 0); // placeholder
+
+                    int jumpInstrIdx = _instructions.Count;
+                    Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
+
+                    int rhsEntry = _instructions.Count;
+                    int rhsReg = LowerNode(step);
+                    Emit(IrOpCode.Return, (byte)rhsReg);
+
+                    int afterRhs = _instructions.Count;
+                    PatchInstruction(mapInstrIdx, IrOpCode.SimpleMap, (byte)mapResultReg, (byte)currentReg, 0, rhsEntry);
+                    PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
+
+                    currentReg = mapResultReg;
+                }
+
                 // Path expression results must be in document order.
                 int normReg = AllocRegister();
                 Emit(IrOpCode.Normalize, (byte)normReg, (byte)currentReg);
                 currentReg = normReg;
             }
+            isFirstStep = false;
         }
 
         if (targetReg.HasValue && targetReg.Value != currentReg)

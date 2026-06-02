@@ -218,6 +218,44 @@ public class ParserTests
         Assert.Single(step.Predicates);
     }
 
+    [Fact]
+    public void KindTest_Attribute_DefaultAxis()
+    {
+        // XPath 2.0 §3.2.1.1: attribute() defaults to attribute axis
+        var step = AssertParse<StepNode>("attribute()");
+        Assert.Equal(XdmAxis.Attribute, step.Axis);
+        Assert.Equal(NameTestKind.KindTest, step.NodeTest.Kind);
+        Assert.Equal("attribute", step.NodeTest.Name);
+    }
+
+    [Fact]
+    public void KindTest_NamespaceNode_DefaultAxis()
+    {
+        // XPath 2.0 §3.2.1.1: namespace-node() defaults to namespace axis
+        var step = AssertParse<StepNode>("namespace-node()");
+        Assert.Equal(XdmAxis.Namespace, step.Axis);
+        Assert.Equal(NameTestKind.KindTest, step.NodeTest.Kind);
+        Assert.Equal("namespace-node", step.NodeTest.Name);
+    }
+
+    [Fact]
+    public void KindTest_Text_DefaultAxisIsChild()
+    {
+        // text() still defaults to child axis
+        var step = AssertParse<StepNode>("text()");
+        Assert.Equal(XdmAxis.Child, step.Axis);
+        Assert.Equal(NameTestKind.KindTest, step.NodeTest.Kind);
+        Assert.Equal("text", step.NodeTest.Name);
+    }
+
+    [Fact]
+    public void KindTest_Attribute_ExplicitAxis()
+    {
+        // Explicit child::attribute() keeps child axis
+        var step = AssertParse<StepNode>("child::attribute()");
+        Assert.Equal(XdmAxis.Child, step.Axis);
+    }
+
     // ------------------------------------------------------------------
     // Function calls
     // ------------------------------------------------------------------

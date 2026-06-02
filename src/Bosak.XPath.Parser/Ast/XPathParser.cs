@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added ExpectName() to allow XPath keywords as variable names ($mod, $div, etc.)                       |
 //                      | Charles Korthout | 0.8   | 31-05-2026     | decimal.TryParse fallback to double for oversized decimal literals                       |
 //                      | Charles Korthout | 0.9   | 01-06-2026     | Prevent map/array/function keywords from being parsed as name tests in step expr       |
+//                      | Charles Korthout | 1.0   | 01-06-2026     | ParseAxisStep defaults to attribute/namespace axis for attribute()/namespace-node()    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -701,13 +702,27 @@ public sealed class XPathParser
     private StepNode ParseAxisStep(int start)
     {
         XdmAxis axis = XdmAxis.Child;
+        bool axisExplicit = false;
         if ((Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind)) && Peek(1).Kind == TokenKind.DoubleColon)
         {
             axis = ParseAxisName();
             Expect(TokenKind.DoubleColon);
+            axisExplicit = true;
         }
         var test = ParseNodeTest();
         var preds = ParsePredicateList();
+
+        // XPath 2.0 §3.2.1.1: default axis for attribute/namespace kind tests
+        if (!axisExplicit && test.Kind == NameTestKind.KindTest)
+        {
+            axis = test.Name switch
+            {
+                "attribute" or "schema-attribute" => XdmAxis.Attribute,
+                "namespace-node" => XdmAxis.Namespace,
+                _ => axis
+            };
+        }
+
         return WithSpan(new StepNode(axis, test, preds), start, End);
     }
 

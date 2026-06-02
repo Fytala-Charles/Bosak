@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-01
+**Date:** 2026-06-02
 **Commit:** `main` (pending push)
-**Current focus:** `match` cluster (109/214 passing, 78 failures remaining); `next-match` cluster (12/40 passing, 28 failures).
+**Current focus:** `match` cluster (122/186 passing, 64 failures); `next-match` cluster (17/40 passing, 23 failures); `expression` cluster (93/105 passing, 9 failures).
 
 ---
 
@@ -10,13 +10,14 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 2859 / **Failed:** 2603 / **Skipped:** 9138 (14,600 total)
-- Pass rate: **52.3%** (latest run, 2026-05-30)
+- **Passed:** 3231 / **Failed:** 2230 / **Skipped:** 9139 (14,600 total)
+- Pass rate: **59.2%** (latest run, 2026-06-01)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: match cluster 109 passed / 78 failed / 107 skipped (58.3%), next-match 12/28 — map/array keyword disambiguation, static error propagation from patterns, XPST0017 error codes
-- Previous: 2859 passed / 2603 failed / 9138 skipped (52.3%) — `core-function` 100%, `position` 96.2% (+3 fixes), namespace prefix resolution in patterns
+- Latest: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
+- Previous: 3198 passed / 2263 failed / 9139 skipped (58.6%) — `fn:doc`/`fn:document` empty-sequence handling, parentless element pattern fixes
+- Previous: 2859 passed / 2603 failed / 9138 skipped (52.3%) — map/array keyword disambiguation, static error propagation from patterns, XPST0017 error codes
 - Previous: 2823 passed / 2639 failed / 9138 skipped (51.7%) — `core-function` cluster 100% (round/ceiling/floor string-arg fixes)
 - Previous: 2767 passed / 2695 failed / 9138 skipped (50.7%) — boolean cluster 98% (8 result mismatches + 2 unimplemented fixed)
 - Previous: 2761 passed / 2701 failed / 9138 skipped (50.6%) — string cluster 100% complete (135, 094, 095 fixed)
@@ -30,14 +31,11 @@
 
 ### Recent Fixes (This Session)
 
-1. **XPath keyword disambiguation in step expressions** — `ParseStepExpr` now excludes `map`, `array`, and `function` keywords from the name-test path when followed by `{`, `[`, or `(` respectively. Fixes map/array constructor parsing regressions in unit tests.
-2. **Pattern static error propagation** — `PatternCompiler` catch blocks now rethrow exceptions containing `XPST`/`XTSE`/`XPTY` error codes instead of swallowing them as "no match". Allows static errors in pattern predicates to be reported correctly.
-3. **`XPST0017` error code in function-not-found** — `VmEngine` now prefixes "function not found" exceptions with `XPST0017:` per XPath spec.
-4. **Pattern priority fix** — `ComputeDefaultPriority` checks for predicates (`[`) before QName check, so `doc[true()]` gets priority 0.5 instead of 0.0.
-5. **`union` keyword in patterns** — `PatternCompiler.Compile()` normalizes top-level `union` to `|` so `and union or` splits correctly into branches.
-6. **`root()` in patterns** — `ParseQName` returns `(string.Empty, name)` for non-QName strings instead of throwing. `CompileElementPattern` passes `root()` through to XPath compilation.
-7. **Dot in predicate patterns** — `CompilePredicatePattern` trims whitespace/comments from `basePattern` before checking for `.`, so `. (:comment:) [pred]` resolves correctly.
-8. **`doc()` pattern resolution** — `Doc_1` function fixed to properly resolve documents for `doc('uri')/path` pattern matching.
+1. **`attribute()` default axis fix** — `ParseAxisStep` now defaults to `attribute` axis for `attribute()`/`schema-attribute()` kind tests and `namespace` axis for `namespace-node()` (XPath 2.0 §3.2.1.1). Previously parsed as `child::attribute()` which always returned empty. Fixes `match-106` and ~18 other conformance tests.
+2. **Initial template selection fix** — `Transform` now applies templates to children of the document node (XSLT 2.0 §5.4 built-in rule), not the document node itself. Prevents spurious `node()` template matching on document root. Fixes ~14 `next-match` and related conformance tests.
+3. **`fn:doc`/`fn:document` empty-sequence guard** — `Doc_1` and `Document_2` return `XdmValue.Undefined` for empty input instead of throwing. Fixes unit test and prevents `ArgumentException` on `XDocument.Load("")`.
+4. **Parentless element patterns** — `PatternCompiler` now handles `*:local`, `child::*:b`, and implicit child-axis patterns for parentless nodes. Fixes `match-102`, `108`, `109`.
+5. **Template selection last-wins rule** — `FindBestTemplate` uses XSLT "later declaration wins" tie-breaker when priority and import precedence are equal.
 
 ### Previous Session Fixes
 
@@ -48,20 +46,6 @@
 5. **`ApplyComplexContentRules`** — New helper that merges adjacent text nodes and removes zero-length text nodes when wrapping sequence constructor output in a document node (for `xsl:variable` without `as`).
 6. **Adjacent-atomic spacing tracking** — Added `_lastAddedWasAtomic` field and `AppendAtomicText()` method so that successive `xsl:sequence` instructions with single atomics are joined with spaces.
 7. **TVT evaluation in `xsl:text`** — `xsl:text` now evaluates TVTs when `expand-text="yes"` is set. Fixes `seqtor-036b/c`, `037b/c`, `039b/c`, `040b/c`, `041`, `042`.
-8. **`ContainsTvtExpression` guard** — `ProcessSequenceText` only evaluates TVTs when the text node actually contains `{...}`. Whitespace-only text nodes inside `expand-text="yes"` elements are now correctly stripped (unless they contain a TVT). Fixes `seqtor-020`, `026`.
-9. **Empty sequence state preservation** — `CopyToResult` no longer resets `_lastAddedWasAtomic` when processing empty sequences. Fixes `seqtor-007`, `010`, `011`.
-10. **`WhitespacePreserveElements` corrected** — Reduced to only `"text"` per XSLT 3.0 §3.3.1.1. Previously incorrectly included `comment`, `attribute`, `element`, `for-each`, etc.
-11. **`xsl:processing-instruction` handler** — Added proper `xsl:processing-instruction` support using `EvaluateSimpleContent`.
-12. **`xsl:namespace` handler** — Added basic `xsl:namespace` support.
-13. **`EvaluateSimpleContent` adoption** — `xsl:attribute`, `xsl:comment`, `xsl:processing-instruction`, `xsl:value-of` (no select), and `xsl:text` now use `EvaluateSimpleContent` instead of naive text concatenation.
-14. **`fn:string-length` surrogate pair fix** — `StringLength_0`/`StringLength_1` now use `EnumerateRunes()` to count Unicode code points instead of UTF-16 code units (`.Length`). Fixes `string-132`.
-15. **`fn:upper-case` / `fn:lower-case` Unicode full case mapping** — Added `ApplyUnicodeCaseMapping` with special handling for one-to-many mappings (e.g., ß → SS, İ → i̇). Fixes `string-135`.
-16. **`fn:substring` code-point-aware** — `Substring_2`/`Substring_3` now operate on Unicode code points via `EnumerateRunes()`, matching XPath spec semantics for surrogate pairs. Fixes `string-094`.
-17. **AVT parser string-literal awareness** — `EvaluateAvt` now uses `FindAvtExprEnd` which skips `}` inside XPath string literals (`'...'` and `"..."`). Fixes `string-095`.
-18. **Empty sequence in comparisons** — `Compare`/`CompareGeneral` now return `XdmValue.Undefined` when either operand is an empty sequence. `IsSameNode` also returns empty sequence for empty operands. Fixes `boolean-071`, `072`, `075`.
-19. **XPath 1.0 backwards-compatible general comparisons** — `EvaluationContext.BackwardsCompatible` flag set from `xsl:stylesheet/@version`. `CompareGeneral` applies XPath 1.0 coercion rules (boolean→numeric→string hierarchy) when active, and strict type checking (XPTY0004) in XPath 2.0+ mode. Fixes `boolean-081`, `083`, `096`, `097`, `098`.
-20. **XPath optimizer boolean simplification** — `SimplifyBoolean` restricted to only substitute `BooleanLiteralNode` operands. Prevents type mismatch where `true and "00"` was incorrectly simplified to `"00"` (string instead of boolean). Fixes `boolean-023`, `031`, `078`, `079`, `083`.
-21. **XPath optimizer divide-by-zero** — Constant folding for `DecimalLiteralNode / DecimalLiteralNode` skips when divisor is zero. Fixes `boolean-032`, `084`."yes"` is set. Fixes `seqtor-036b/c`, `037b/c`, `039b/c`, `040b/c`, `041`, `042`.
 8. **`ContainsTvtExpression` guard** — `ProcessSequenceText` only evaluates TVTs when the text node actually contains `{...}`. Whitespace-only text nodes inside `expand-text="yes"` elements are now correctly stripped (unless they contain a TVT). Fixes `seqtor-020`, `026`.
 9. **Empty sequence state preservation** — `CopyToResult` no longer resets `_lastAddedWasAtomic` when processing empty sequences. Fixes `seqtor-007`, `010`, `011`.
 10. **`WhitespacePreserveElements` corrected** — Reduced to only `"text"` per XSLT 3.0 §3.3.1.1. Previously incorrectly included `comment`, `attribute`, `element`, `for-each`, etc.
