@@ -3,21 +3,18 @@
 > Session-specific scratchpad. Overwrite at the end of every session.
 
 ## Session Date
+
 2026-06-01
 
 ## What Was Built
 
 | # | Change | Files | Status |
 |---|--------|-------|--------|
-| 1 | Conformance harness: pass namespace declarations to XPath assert evaluation | `Program.cs` | Working tree |
-| 2 | `xsl:number`: XTTE1000 when `select` returns empty sequence | `TransformEngine.cs` | Working tree |
-| 3 | `xsl:number`: XTSE0020 when `start-at` contains invalid integer | `TransformEngine.cs` | Working tree |
-| 4 | Greek lowercase alphabetic: include final sigma (U+03C2), base 25 | `FormatIntegerEngine.cs` | Working tree |
-| 5 | Encoding-aware XML serialization + hex→decimal entity conversion | `ResultTreeSerializer.cs` | Working tree |
-| 6 | `ComputeNumberAny`: handle attribute context nodes (stop at parent) | `TransformEngine.cs` | Working tree |
-| 7 | Template dispatch: XSLT "last wins" rule for same-priority templates | `TransformEngine.cs` | Working tree |
-| 8 | File header updates | Multiple source files | Working tree |
-| 9 | Documentation sync | `AGENT_HANDOVER.md` | Working tree |
+| 1 | XPathParser: prevent `map`, `array`, `function` keywords from being parsed as name tests when followed by `{`, `[`, `(` | `XPathParser.cs` | Committed |
+| 2 | PatternCompiler: propagate static XPath/XSLT errors (`XPST`/`XTSE`/`XPTY`) from pattern predicate evaluation instead of swallowing them | `PatternCompiler.cs` | Committed |
+| 3 | VmEngine: include `XPST0017` error code in function-not-found exceptions | `VmEngine.cs` | Committed |
+| 4 | Map/array constructor parsing regression fix (unit tests) | `XPathParser.cs` | Committed |
+| 5 | File header updates | `XPathParser.cs`, `PatternCompiler.cs`, `VmEngine.cs` | Committed |
 
 ## Current Branch
 
@@ -25,10 +22,17 @@
 
 ## Test Status
 
-- [x] All tests pass (863 unit tests, 0 failures)
-- [x] XSLT conformance: 2985 passed / 2477 failed / 9138 skipped (54.7%)
+- [x] All unit tests pass (498 tests across Standard, Core, XSLT — 0 failures)
+- [x] XSLT match cluster: 109 passed / 78 failed / 107 skipped (up from 108/79)
+- [x] Map/array constructor unit test regressions resolved
 
 ## Next Recommended Work
 
-- Continue `number` cluster: localization (German word numbering), `level="any"` document/attribute traversal, `current()` in patterns
-- `match` cluster (106 failures) or `mode` cluster (88 failures)
+- Continue `match` cluster fixes (78 remaining failures):
+  - `match-039` / `match-040` — static error detection for invalid patterns (requires compile-time function validation)
+  - Set operations with predicates (`match-042`–`045`)
+  - Positional predicates (`match-076`, `077`, `098`)
+  - `key()` / `id()` patterns (`match-239`–`241`)
+  - Variable reference patterns (`match-248`–`255`, `272`)
+- `next-match` cluster (28 failures) — apply-imports / apply-templates dispatch chains
+- `number` cluster (152 failures) — localization, `level="any"`, large numbers

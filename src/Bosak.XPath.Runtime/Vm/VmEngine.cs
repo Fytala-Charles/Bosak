@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 1.7   | 30-05-2026     | Filter opcode treats double/decimal/float predicates as numeric position (fixes path-007/008) |
 //                      | Charles Korthout | 1.8   | 30-05-2026     | IsSameNode unwraps singleton sequences; returns empty for empty-seq operand (fixes boolean-074/075) |
 //                      | Charles Korthout | 1.9   | 31-05-2026     | Implemented PrecedesNode/FollowsNode (<< / >>) using DocumentOrder                          |
+//                      | Charles Korthout | 2.0   | 01-06-2026     | Include XPST0017 error code in function-not-found exceptions                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -127,7 +128,7 @@ public static class VmEngine
 
                         if (!context.TryResolveFunction(nsUri, localName, argCount, out var sig))
                             throw new InvalidOperationException(
-                                $"Function {{{nsUri}}}{localName}#{argCount} not found.");
+                                $"XPST0017: Function {{{nsUri}}}{localName}#{argCount} not found.");
 
                         // Build argument span
                         XdmValue[] args = new XdmValue[argCount];
@@ -1771,7 +1772,7 @@ public static class VmEngine
         {
             case NamedFunctionItem named:
                 if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out var sig))
-                    throw new InvalidOperationException($"Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
+                    throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
                 return sig.Implementation(context, args);
 
             case DelegateFunctionItem del:

@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 21-05-2026     | Fixed SkipSequenceType RParen consumption; ParseSequenceType handles item()/function(*)/empty-sequence() |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added ExpectName() to allow XPath keywords as variable names ($mod, $div, etc.)                       |
 //                      | Charles Korthout | 0.8   | 31-05-2026     | decimal.TryParse fallback to double for oversized decimal literals                       |
+//                      | Charles Korthout | 0.9   | 01-06-2026     | Prevent map/array/function keywords from being parsed as name tests in step expr       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -665,13 +666,13 @@ public sealed class XPathParser
         }
 
         // Explicit axis: axis::NodeTest
-        if (Current.Kind == TokenKind.Name && Peek(1).Kind == TokenKind.DoubleColon)
+        if ((Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind)) && Peek(1).Kind == TokenKind.DoubleColon)
         {
             return ParseAxisStep(start);
         }
 
         // Name that is a kind test: node(), text(), etc.
-        if (Current.Kind == TokenKind.Name)
+        if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
         {
             var name = GetString(Current);
             var (_, local, _) = SplitQName(name);
@@ -684,7 +685,11 @@ public sealed class XPathParser
         // Name test or wildcard in a step context
         // Exclude names followed by LParen (function calls/kind tests already handled)
         // Exclude names followed by Hash (named function refs)
-        if ((Current.Kind == TokenKind.Name && Peek(1).Kind != TokenKind.LParen && Peek(1).Kind != TokenKind.Hash) || Current.Kind == TokenKind.Star)
+        // Exclude keyword primary-expr starters (map {, array {, array [, function () when followed by their opener)
+        bool isPrimaryExprKeyword = (Current.Kind == TokenKind.KeywordMap && Peek(1).Kind == TokenKind.LBrace)
+            || (Current.Kind == TokenKind.KeywordArray && (Peek(1).Kind == TokenKind.LBrace || Peek(1).Kind == TokenKind.LBracket))
+            || (Current.Kind == TokenKind.KeywordFunction && Peek(1).Kind == TokenKind.LParen);
+        if (((Current.Kind == TokenKind.Name || (IsKeywordName(Current.Kind) && !isPrimaryExprKeyword)) && Peek(1).Kind != TokenKind.LParen && Peek(1).Kind != TokenKind.Hash) || Current.Kind == TokenKind.Star)
         {
             return ParseAxisStep(start);
         }
@@ -696,7 +701,7 @@ public sealed class XPathParser
     private StepNode ParseAxisStep(int start)
     {
         XdmAxis axis = XdmAxis.Child;
-        if (Current.Kind == TokenKind.Name && Peek(1).Kind == TokenKind.DoubleColon)
+        if ((Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind)) && Peek(1).Kind == TokenKind.DoubleColon)
         {
             axis = ParseAxisName();
             Expect(TokenKind.DoubleColon);
@@ -739,13 +744,13 @@ public sealed class XPathParser
             // *:local
             if (Match(TokenKind.Colon))
             {
-                var local = Expect(TokenKind.Name);
+                var local = ExpectName();
                 return new NodeTest(NameTestKind.QName, GetString(local), "*");
             }
             return new NodeTest(NameTestKind.AnyName);
         }
 
-        if (Current.Kind == TokenKind.Name)
+        if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
         {
             var name = GetString(Current);
             var (prefix, local, _) = SplitQName(name);

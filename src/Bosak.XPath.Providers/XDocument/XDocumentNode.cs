@@ -320,6 +320,9 @@ public sealed class XDocumentNode : IXdmNode
             // Skip synthetic document wrapper: children of the wrapper see the XDocument as parent
             if (parent is XElement wrapper && wrapper.Name.LocalName == "__xdm_doc__" && wrapper.Name.NamespaceName == "" && wrapper.Document is not null)
                 return wrapper.Document;
+            // Skip temporary sequence constructor wrapper so constructed nodes appear parentless
+            if (parent is XElement wrapper2 && wrapper2.Name.LocalName == "__temp__" && wrapper2.Name.NamespaceName == "")
+                return null;
             return parent;
         }
         if (node is XElement elem && elem.Document is not null && elem.Document.Root == elem)

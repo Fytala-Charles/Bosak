@@ -164,6 +164,12 @@ public sealed class TemplateRule
                     i++;
                 if (i < pattern.Length && pattern[i] == ':')
                 {
+                    // Check if this is :: (axis separator) rather than : (namespace prefix)
+                    if (i + 1 < pattern.Length && pattern[i + 1] == ':')
+                    {
+                        sb.Append(pattern[start..i]);
+                        continue;
+                    }
                     var prefix = pattern[start..i];
                     i++; // skip ':'
                     int localStart = i;
@@ -230,12 +236,17 @@ public sealed class TemplateRule
         if (trimmed.EndsWith(":*") || trimmed.StartsWith("*:"))
             return -0.25;
 
-        // Predicate on a simple pattern: use the base pattern's priority
+        // PredicatePattern: .[expr] — XSLT 3.0 priority is 1 (or -1 for bare .)
+        if (trimmed.StartsWith("."))
+        {
+            return trimmed.Contains('[') ? 1.0 : -0.5;
+        }
+
+        // Patterns with a predicate that aren't PredicatePatterns or path patterns
+        // fall into the "otherwise" rule and get priority 0.5.
         if (trimmed.Contains('['))
         {
-            int bracket = trimmed.IndexOf('[');
-            var basePat = trimmed[..bracket].Trim();
-            return ComputeDefaultPriority(basePat);
+            return 0.5;
         }
 
         // QName: no wildcards, no parentheses

@@ -304,6 +304,19 @@ class Program
                 throw new FileNotFoundException($"Document not found: {uri}");
             };
 
+            // Set test parameters on evaluation context
+            foreach (var param in testElem.Elements(ns + "param"))
+            {
+                var paramName = param.Attribute("name")?.Value;
+                var paramSelect = param.Attribute("select")?.Value;
+                if (!string.IsNullOrEmpty(paramName) && !string.IsNullOrEmpty(paramSelect))
+                {
+                    var paramCompiled = XPath31Expression.Compile(paramSelect);
+                    var paramValue = paramCompiled.Evaluate(evalContext);
+                    evalContext.WithVariable(paramName, paramValue);
+                }
+            }
+
             // Check for initial-template
             string? initialTemplate = null;
             var initialTemplateElem = testElem.Element(ns + "initial-template");
@@ -326,7 +339,7 @@ class Program
 
             if (CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir))
             {
-                // Console.WriteLine($"  PASS {name}");
+                Console.WriteLine($"  PASS {name}");
                 return TestResult.Pass;
             }
 
@@ -452,7 +465,8 @@ class Program
         var assertString = resultElem.Name.LocalName == "assert-string-value" ? resultElem : resultElem.Element(ns + "assert-string-value");
         if (assertString != null)
         {
-            return actual.Trim() == assertString.Value;
+            var stringValue = GetStringValue(actual);
+            return stringValue == assertString.Value;
         }
 
         // assert-true
@@ -501,6 +515,23 @@ class Program
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Returns the string value of the serialized result. If the result is well-formed XML,
+    /// extracts the concatenated text content; otherwise returns the trimmed raw string.
+    /// </summary>
+    static string GetStringValue(string actual)
+    {
+        try
+        {
+            var doc = XDocument.Parse(actual, LoadOptions.PreserveWhitespace);
+            return doc.Root?.Value ?? "";
+        }
+        catch
+        {
+            return actual.Trim();
+        }
     }
 
     static IXdmNode? ParseResultDocument(string actual)

@@ -13,6 +13,9 @@
 //                      | Charles Korthout | 0.1   | 22-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Made public for reuse by xsl:number formatting                                          |
 //                      | Charles Korthout | 0.3   | 01-06-2026     | Greek alphabetic: include final sigma (U+03C2); base 25 for lowercase                  |
+//                      | Charles Korthout | 0.4   | 01-06-2026     | Added circled digit zero (U+24EA); contiguous Unicode digit blocks for format-integer |
+//                      | Charles Korthout | 0.5   | 01-06-2026     | Fixed contiguous block startValue; added multi-range sequences (circled 21-50, dingbat etc); extended block counts to 10 |
+//                      | Charles Korthout | 0.6   | 01-06-2026     | Special zero for full-stop block U+2488; XdmValueToLongArray returns long[] to prevent overflow |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -200,7 +203,7 @@ public static class FormatIntegerEngine
     private static bool TryFormatCustomSequence(long value, string primaryToken, out string result)
     {
         result = string.Empty;
-        if (string.IsNullOrEmpty(primaryToken) || value <= 0)
+        if (string.IsNullOrEmpty(primaryToken))
             return false;
 
         var codepoints = GetCodepoints(primaryToken).ToList();
@@ -209,27 +212,60 @@ public static class FormatIntegerEngine
 
         int cp = codepoints[0];
 
-        // Circled digits: U+2460-U+2473 (1-20)
-        if (cp == 0x2460)
+        // Circled digits: U+24EA (0), U+2460-U+2473 (1-20), U+3251-U+325F (21-35), U+32B1-U+32BF (36-50)
+        if (cp >= 0x2460 && cp <= 0x2473)
         {
-            if (value > 20) return false;
-            result = char.ConvertFromUtf32((int)(0x2460 + value - 1));
-            return true;
+            if (value == 0)
+            {
+                result = "\u24EA";
+                return true;
+            }
+            if (value <= 20) { result = char.ConvertFromUtf32((int)(0x2460 + value - 1)); return true; }
+            if (value <= 35) { result = char.ConvertFromUtf32((int)(0x3251 + value - 21)); return true; }
+            if (value <= 50) { result = char.ConvertFromUtf32((int)(0x32B1 + value - 36)); return true; }
+            return false;
         }
 
-        // Parenthesized digits: U+2474-U+2487 (1-20)
-        if (cp == 0x2474)
+        // Digits with full stop: special zero U+1F100, primary U+2488-U+249B (1-20)
+        if (cp == 0x1F100)
         {
-            if (value > 20) return false;
-            result = char.ConvertFromUtf32((int)(0x2474 + value - 1));
-            return true;
-        }
-
-        // Digits with full stop: U+2488-U+249B (1-20)
-        if (cp == 0x2488)
-        {
+            if (value == 0) { result = "\ud83c\udd00"; return true; }
             if (value > 20) return false;
             result = char.ConvertFromUtf32((int)(0x2488 + value - 1));
+            return true;
+        }
+        if (cp >= 0x2488 && cp <= 0x249B)
+        {
+            if (value == 0) { result = "\ud83c\udd00"; return true; }
+            if (value > 20) return false;
+            result = char.ConvertFromUtf32((int)(0x2488 + value - 1));
+            return true;
+        }
+
+        // Dingbat negative circled: special zero U+24FF, primary U+2776-U+277F (1-10), secondary U+24EB-U+24F3 (11-20)
+        if (cp == 0x2776)
+        {
+            if (value == 0) { result = "\u24FF"; return true; }
+            if (value <= 10) { result = char.ConvertFromUtf32((int)(0x2776 + value - 1)); return true; }
+            if (value <= 20) { result = char.ConvertFromUtf32((int)(0x24EB + value - 11)); return true; }
+            return false;
+        }
+
+        // Dingbat circled sans-serif: special zero U+1F10B, primary U+2780-U+2789 (1-10)
+        if (cp == 0x2780)
+        {
+            if (value == 0) { result = "\ud83c\udd0b"; return true; }
+            if (value > 10) return false;
+            result = char.ConvertFromUtf32((int)(0x2780 + value - 1));
+            return true;
+        }
+
+        // Dingbat negative circled sans-serif: special zero U+1F10C, primary U+278A-U+2793 (1-10)
+        if (cp == 0x278A)
+        {
+            if (value == 0) { result = "\ud83c\udd0c"; return true; }
+            if (value > 10) return false;
+            result = char.ConvertFromUtf32((int)(0x278A + value - 1));
             return true;
         }
 
@@ -247,6 +283,71 @@ public static class FormatIntegerEngine
             return true;
         }
 
+        // Generic contiguous digit blocks (also handles parenthesized, full-stop, etc.)
+        if (TryFormatContiguousBlock(value, cp, out result))
+            return true;
+
+        return false;
+    }
+
+    /// <summary>
+    /// Known contiguous Unicode digit/number blocks used by <c>fn:format-integer</c>.
+    /// Each tuple is (startCodepoint, count, startValue).
+    /// </summary>
+    private static readonly (int Start, int Count, int StartValue)[] ContiguousDigitBlocks = new[]
+    {
+        // Parenthesized digits: U+2474-U+2487 (1-20)
+        (0x2474, 20, 1),
+        // Digits with full stop: U+2488-U+249B (1-20)
+        (0x2488, 20, 1),
+        // Double circled: U+24F5-U+24FE (1-10)
+        (0x24F5, 10, 1),
+        // Dingbat negative circled: U+2776-U+277F (1-10) — handled by TryFormatCustomSequence for multi-range
+        (0x2776, 10, 1),
+        // Dingbat circled sans-serif: U+2780-U+2789 (1-10) — handled by TryFormatCustomSequence for special zero
+        (0x2780, 10, 1),
+        // Dingbat negative circled sans-serif: U+278A-U+2793 (1-10) — handled by TryFormatCustomSequence for special zero
+        (0x278A, 10, 1),
+        // Circled ideograph: U+3280-U+3289 (1-10)
+        (0x3280, 10, 1),
+        // Parenthesized ideograph: U+3220-U+3229 (1-10)
+        (0x3220, 10, 1),
+        // Aegean number: U+10107-U+10110 (1-10)
+        (0x10107, 10, 1),
+        // Rumi digit: U+10E60-U+10E69 (1-10)
+        (0x10E60, 10, 1),
+        // Brahmi number: U+11052-U+1105B (1-10)
+        (0x11052, 10, 1),
+        // Sinhala archaic digit: U+111E1-U+111EA (1-10)
+        (0x111E1, 10, 1),
+        // Coptic epact digit: U+102E1-U+102EA (1-10)
+        (0x102E1, 10, 1),
+        // Mende Kikakui digit: U+1E8C7-U+1E8D0 (1-10)
+        (0x1E8C7, 10, 1),
+        // Counting rod / Tai Xuan Jing: U+1D360-U+1D368 (1-9)
+        (0x1D360, 9, 1),
+        // Adlam digit: U+1E947-U+1E94F (1-9)
+        (0x1E947, 9, 1),
+        // Digit with comma: U+1F101-U+1F10A (0-9)
+        (0x1F101, 10, 0),
+    };
+
+    /// <summary>
+    /// Tries to format <paramref name="value"/> using a known contiguous Unicode digit block.
+    /// Any codepoint within the block identifies the sequence (not just the first codepoint).
+    /// </summary>
+    private static bool TryFormatContiguousBlock(long value, int tokenCp, out string result)
+    {
+        result = string.Empty;
+        foreach (var (blockStart, count, startValue) in ContiguousDigitBlocks)
+        {
+            if (tokenCp >= blockStart && tokenCp < blockStart + count)
+            {
+                if (value < startValue || value >= startValue + count) return false;
+                result = char.ConvertFromUtf32(blockStart + (int)value - startValue);
+                return true;
+            }
+        }
         return false;
     }
 

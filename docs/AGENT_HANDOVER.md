@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-05-30
+**Date:** 2026-06-01
 **Commit:** `main` (pending push)
-**Current focus:** `core-function` cluster complete (100%), `position` cluster at 96.2% (3 fixes applied, 5 remaining).
+**Current focus:** `match` cluster (109/214 passing, 78 failures remaining); `next-match` cluster (12/40 passing, 28 failures).
 
 ---
 
@@ -15,7 +15,8 @@
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 2859 passed / 2603 failed / 9138 skipped (52.3%) — `core-function` 100%, `position` 96.2% (+3 fixes), namespace prefix resolution in patterns
+- Latest: match cluster 109 passed / 78 failed / 107 skipped (58.3%), next-match 12/28 — map/array keyword disambiguation, static error propagation from patterns, XPST0017 error codes
+- Previous: 2859 passed / 2603 failed / 9138 skipped (52.3%) — `core-function` 100%, `position` 96.2% (+3 fixes), namespace prefix resolution in patterns
 - Previous: 2823 passed / 2639 failed / 9138 skipped (51.7%) — `core-function` cluster 100% (round/ceiling/floor string-arg fixes)
 - Previous: 2767 passed / 2695 failed / 9138 skipped (50.7%) — boolean cluster 98% (8 result mismatches + 2 unimplemented fixed)
 - Previous: 2761 passed / 2701 failed / 9138 skipped (50.6%) — string cluster 100% complete (135, 094, 095 fixed)
@@ -28,6 +29,17 @@
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
 
 ### Recent Fixes (This Session)
+
+1. **XPath keyword disambiguation in step expressions** — `ParseStepExpr` now excludes `map`, `array`, and `function` keywords from the name-test path when followed by `{`, `[`, or `(` respectively. Fixes map/array constructor parsing regressions in unit tests.
+2. **Pattern static error propagation** — `PatternCompiler` catch blocks now rethrow exceptions containing `XPST`/`XTSE`/`XPTY` error codes instead of swallowing them as "no match". Allows static errors in pattern predicates to be reported correctly.
+3. **`XPST0017` error code in function-not-found** — `VmEngine` now prefixes "function not found" exceptions with `XPST0017:` per XPath spec.
+4. **Pattern priority fix** — `ComputeDefaultPriority` checks for predicates (`[`) before QName check, so `doc[true()]` gets priority 0.5 instead of 0.0.
+5. **`union` keyword in patterns** — `PatternCompiler.Compile()` normalizes top-level `union` to `|` so `and union or` splits correctly into branches.
+6. **`root()` in patterns** — `ParseQName` returns `(string.Empty, name)` for non-QName strings instead of throwing. `CompileElementPattern` passes `root()` through to XPath compilation.
+7. **Dot in predicate patterns** — `CompilePredicatePattern` trims whitespace/comments from `basePattern` before checking for `.`, so `. (:comment:) [pred]` resolves correctly.
+8. **`doc()` pattern resolution** — `Doc_1` function fixed to properly resolve documents for `doc('uri')/path` pattern matching.
+
+### Previous Session Fixes
 
 1. **`fn:substring` rounding fix** — `Substring_2`/`Substring_3` now use `RoundDouble` (half-to-ceiling) matching XPath `fn:round` semantics. Fixed `string-021`, `string-090`, `string-093`.
 2. **`xsl:number` fixes** — `ComputeNumberMultiple`/`ComputeNumberSingle` now correctly find nearest-ancestor `from` nodes and verify descendant-or-self relationship. `FormatNumberSequence` emits `prefix+suffix` for empty number arrays. +32 number tests (81→113 passed).
@@ -49,12 +61,26 @@
 18. **Empty sequence in comparisons** — `Compare`/`CompareGeneral` now return `XdmValue.Undefined` when either operand is an empty sequence. `IsSameNode` also returns empty sequence for empty operands. Fixes `boolean-071`, `072`, `075`.
 19. **XPath 1.0 backwards-compatible general comparisons** — `EvaluationContext.BackwardsCompatible` flag set from `xsl:stylesheet/@version`. `CompareGeneral` applies XPath 1.0 coercion rules (boolean→numeric→string hierarchy) when active, and strict type checking (XPTY0004) in XPath 2.0+ mode. Fixes `boolean-081`, `083`, `096`, `097`, `098`.
 20. **XPath optimizer boolean simplification** — `SimplifyBoolean` restricted to only substitute `BooleanLiteralNode` operands. Prevents type mismatch where `true and "00"` was incorrectly simplified to `"00"` (string instead of boolean). Fixes `boolean-023`, `031`, `078`, `079`, `083`.
+21. **XPath optimizer divide-by-zero** — Constant folding for `DecimalLiteralNode / DecimalLiteralNode` skips when divisor is zero. Fixes `boolean-032`, `084`."yes"` is set. Fixes `seqtor-036b/c`, `037b/c`, `039b/c`, `040b/c`, `041`, `042`.
+8. **`ContainsTvtExpression` guard** — `ProcessSequenceText` only evaluates TVTs when the text node actually contains `{...}`. Whitespace-only text nodes inside `expand-text="yes"` elements are now correctly stripped (unless they contain a TVT). Fixes `seqtor-020`, `026`.
+9. **Empty sequence state preservation** — `CopyToResult` no longer resets `_lastAddedWasAtomic` when processing empty sequences. Fixes `seqtor-007`, `010`, `011`.
+10. **`WhitespacePreserveElements` corrected** — Reduced to only `"text"` per XSLT 3.0 §3.3.1.1. Previously incorrectly included `comment`, `attribute`, `element`, `for-each`, etc.
+11. **`xsl:processing-instruction` handler** — Added proper `xsl:processing-instruction` support using `EvaluateSimpleContent`.
+12. **`xsl:namespace` handler** — Added basic `xsl:namespace` support.
+13. **`EvaluateSimpleContent` adoption** — `xsl:attribute`, `xsl:comment`, `xsl:processing-instruction`, `xsl:value-of` (no select), and `xsl:text` now use `EvaluateSimpleContent` instead of naive text concatenation.
+14. **`fn:string-length` surrogate pair fix** — `StringLength_0`/`StringLength_1` now use `EnumerateRunes()` to count Unicode code points instead of UTF-16 code units (`.Length`). Fixes `string-132`.
+15. **`fn:upper-case` / `fn:lower-case` Unicode full case mapping** — Added `ApplyUnicodeCaseMapping` with special handling for one-to-many mappings (e.g., ß → SS, İ → i̇). Fixes `string-135`.
+16. **`fn:substring` code-point-aware** — `Substring_2`/`Substring_3` now operate on Unicode code points via `EnumerateRunes()`, matching XPath spec semantics for surrogate pairs. Fixes `string-094`.
+17. **AVT parser string-literal awareness** — `EvaluateAvt` now uses `FindAvtExprEnd` which skips `}` inside XPath string literals (`'...'` and `"..."`). Fixes `string-095`.
+18. **Empty sequence in comparisons** — `Compare`/`CompareGeneral` now return `XdmValue.Undefined` when either operand is an empty sequence. `IsSameNode` also returns empty sequence for empty operands. Fixes `boolean-071`, `072`, `075`.
+19. **XPath 1.0 backwards-compatible general comparisons** — `EvaluationContext.BackwardsCompatible` flag set from `xsl:stylesheet/@version`. `CompareGeneral` applies XPath 1.0 coercion rules (boolean→numeric→string hierarchy) when active, and strict type checking (XPTY0004) in XPath 2.0+ mode. Fixes `boolean-081`, `083`, `096`, `097`, `098`.
+20. **XPath optimizer boolean simplification** — `SimplifyBoolean` restricted to only substitute `BooleanLiteralNode` operands. Prevents type mismatch where `true and "00"` was incorrectly simplified to `"00"` (string instead of boolean). Fixes `boolean-023`, `031`, `078`, `079`, `083`.
 21. **XPath optimizer divide-by-zero** — Constant folding for `DecimalLiteralNode / DecimalLiteralNode` skips when divisor is zero. Fixes `boolean-032`, `084`.
 
 ### Unit Test Status
 
-- **840 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 72 tests in `Bosak.XPath.Xslt.Tests`
+- **863 unit tests pass** across 7 test projects (0 failures)
+- XSLT-specific tests: 95 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
@@ -107,7 +133,26 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 
 ## Recent Changes (This Session)
 
-### Document Node Wrapping for Mixed Content
+### XPath Keyword Disambiguation
+- `ParseStepExpr` now excludes `map`, `array`, and `function` keywords from the name-test path when followed by `{`, `[`, or `(` respectively.
+- Fixes map/array constructor parsing regressions that broke ~10 unit tests.
+- Change history updated in `XPathParser.cs`
+
+### Pattern Static Error Propagation
+- `PatternCompiler` catch blocks now rethrow exceptions containing `XPST`/`XTSE`/`XPTY` error codes instead of swallowing them as "no match".
+- `VmEngine` function-not-found exceptions now include `XPST0017:` prefix.
+- Allows static errors in pattern predicates (e.g. undeclared functions) to be reported correctly.
+- Change history updated in `PatternCompiler.cs` and `VmEngine.cs`
+
+### Match Pattern Fixes
+- **Pattern priority** — `ComputeDefaultPriority` checks for predicates (`[`) before QName check, so `doc[true()]` gets priority 0.5 instead of 0.0.
+- **`union` keyword** — `PatternCompiler.Compile()` normalizes top-level `union` to `|` so `and union or` splits correctly into branches.
+- **`root()` in patterns** — `ParseQName` returns `(string.Empty, name)` for non-QName strings. `CompileElementPattern` passes `root()` through to XPath compilation.
+- **Dot in predicate patterns** — `CompilePredicatePattern` trims whitespace/comments from `basePattern` before checking for `.`.
+- **`doc()` pattern resolution** — `Doc_1` function fixed to properly resolve documents for `doc('uri')/path` pattern matching.
+- Change history updated in `PatternCompiler.cs`, `TemplateRule.cs`, `XPathParser.cs`
+
+### Previous Session — Document Node Wrapping for Mixed Content
 - `EvaluateSequenceConstructor` now **always** wraps non-empty sequence constructor output in a document node when `wrapInDocumentNode=true`.
 - For mixed content (text, multiple elements, comments, PIs), creates a synthetic `XDocument` with a hidden `__xdm_doc__` wrapper element.
 - `XDocumentNode` transparently unwraps this wrapper: children, descendants, string value, parent navigation, document order, and serialization all skip the wrapper.
@@ -206,7 +251,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | Cluster | Failed | Skipped | Notes |
 |---------|--------|---------|-------|
 | **number** | 152 | 1 | Already have context from earlier `xsl:number` fixes. Likely Unicode numbering, `lang`/`letter-value`, grouping, large numbers. |
-| **match** | 106 | 107 | Pattern matching gaps. May overlap with `PatternCompiler` work. |
+| **match** | 78 | 107 | Pattern matching gaps. Improved from 106 failures (priority, union keyword, root(), dot predicates, doc() resolution). |
 | **mode** | 88 | 44 | Template mode dispatch issues. |
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
@@ -226,4 +271,4 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 - `main` — all work is on `main`
 - No feature branches
-- Pending commit: `Normalize` opcode, FLWOR focus fix, attribute sequence handling, namespace prefix resolution in patterns, `floor`/`ceiling`/`round` string coercion
+- Pending commit: map/array keyword disambiguation, pattern static error propagation, XPST0017 error codes, pattern priority fixes, union/root()/dot predicate fixes
