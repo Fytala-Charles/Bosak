@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 1.8   | 30-05-2026     | IsSameNode unwraps singleton sequences; returns empty for empty-seq operand (fixes boolean-074/075) |
 //                      | Charles Korthout | 1.9   | 31-05-2026     | Implemented PrecedesNode/FollowsNode (<< / >>) using DocumentOrder                          |
 //                      | Charles Korthout | 2.0   | 01-06-2026     | Include XPST0017 error code in function-not-found exceptions                             |
+//                      | Charles Korthout | 2.1   | 02-06-2026     | Numeric predicate uses exact equality, not Math.Round (XPath 2.0 §3.2.4)                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -401,6 +402,7 @@ public static class VmEngine
                     {
                         var sequence = registers[instr.RegisterB];
                         int rhsEntry = instr.Operand;
+                        bool enforceNodeResult = instr.RegisterC != 0;
 
                         var items = MaterializeSequence(sequence);
                         var results = new List<XdmValue>();
@@ -428,6 +430,15 @@ public static class VmEngine
 
                         // Restore context
                         context.WithFocus(savedItem, savedPos, savedSize);
+
+                        // XPath 2.0/3.0: path expression result must not contain both nodes and non-nodes
+                        if (enforceNodeResult)
+                        {
+                            bool hasNode = results.Any(r => r.IsNode);
+                            bool hasNonNode = results.Any(r => !r.IsNode);
+                            if (hasNode && hasNonNode)
+                                throw new InvalidOperationException("XPTY0018: result of a path expression step contains both nodes and non-nodes");
+                        }
 
                         registers[instr.RegisterA] = XdmValue.FromSequence(
                             MaterializedSequence.FromList(results));
@@ -717,10 +728,11 @@ public static class VmEngine
                             var (predResult, _) = ExecuteBlock(module, context, registers, predicateEntry);
 
                             // Numeric predicate: [n] means position() = n
+                            // XPath 2.0 §3.2.4: true iff the numeric value is equal to context position.
                             // Any numeric type (integer, decimal, float, double) counts.
                             if (IsNumeric(predResult))
                             {
-                                if (Math.Round(ToDouble(predResult)) == i + 1)
+                                if (ToDouble(predResult) == i + 1)
                                     kept.Add(items[i]);
                             }
                             else if (predResult.EffectiveBooleanValue())
@@ -3008,12 +3020,29 @@ public static class VmEngine
         bool rightIsNum = IsNumeric(right);
         if (leftIsNum || rightIsNum)
         {
-            if (!leftIsNum) left = XdmValue.FromDouble(ToDouble(left));
-            if (!rightIsNum) right = XdmValue.FromDouble(ToDouble(right));
+            if (!leftIsNum) left = XdmValue.FromDouble(ToDoubleOrNaN(left));
+            if (!rightIsNum) right = XdmValue.FromDouble(ToDoubleOrNaN(right));
             return;
         }
 
         // Otherwise both become strings (they already are after atomization)
+    }
+
+    /// <summary>
+    /// Converts a value to double, returning NaN for unparseable strings
+    /// (XPath 1.0 semantics) instead of throwing.
+    /// </summary>
+    private static double ToDoubleOrNaN(XdmValue value)
+    {
+        value = Atomize(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (double)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
+            XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
+            _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : double.NaN
+        };
     }
 
     private static bool IsNumeric(XdmValue value)

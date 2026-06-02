@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-02
 **Commit:** `main` (pending push)
-**Current focus:** `match` cluster (122/186 passing, 64 failures); `next-match` cluster (17/40 passing, 23 failures); `expression` cluster (93/105 passing, 9 failures).
+**Current focus:** `expression` cluster **100% complete** (102/102 non-skipped); `match` cluster (122/186 passing, 64 failures); `next-match` cluster (17/40 passing, 23 failures).
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 3231 / **Failed:** 2230 / **Skipped:** 9139 (14,600 total)
-- Pass rate: **59.2%** (latest run, 2026-06-01)
+- **Passed:** ~3232 / **Failed:** ~2229 / **Skipped:** 9139 (14,600 total)
+- Pass rate: **59.2%** (latest run, 2026-06-02)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
+- Latest: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
+- Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
 - Previous: 3198 passed / 2263 failed / 9139 skipped (58.6%) — `fn:doc`/`fn:document` empty-sequence handling, parentless element pattern fixes
 - Previous: 2859 passed / 2603 failed / 9138 skipped (52.3%) — map/array keyword disambiguation, static error propagation from patterns, XPST0017 error codes
 - Previous: 2823 passed / 2639 failed / 9138 skipped (51.7%) — `core-function` cluster 100% (round/ceiling/floor string-arg fixes)
@@ -63,7 +64,7 @@
 
 ### Unit Test Status
 
-- **863 unit tests pass** across 7 test projects (0 failures)
+- **867 unit tests pass** across 7 test projects (0 failures)
 - XSLT-specific tests: 95 tests in `Bosak.XPath.Xslt.Tests`
 
 ### QT3 Conformance Baseline
@@ -116,6 +117,17 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 ---
 
 ## Recent Changes (This Session)
+
+### Expression Cluster — 100% Pass Rate
+- **Numeric predicate exact equality** — `VmEngine.Filter` now uses `ToDouble(predResult) == i + 1` instead of `Math.Round(...) == i + 1`. XPath 2.0 §3.2.4 predicates must match context position exactly.
+- **`fn:min`/`fn:max` mixed-type comparison** — `FunctionLibrary.MinMax` now atomizes items before comparison and uses ordinal string comparison. Fixes `expression-1201`, `expression-1301`.
+- **`xsl:sequence` context item propagation** — `CopyLiteralElement` passes the `contextItem` parameter into `ExecuteXsltInstruction` instead of `_context.ContextItem`. Fixes `expression-4301`.
+- **Leading-space atomic text fix** — `AppendAtomicText` no longer prepends a space to the first atomic value in a sequence. Fixes `expression-4301`.
+- **Backwards-compatible node→number coercion** — `ApplyBackwardsCompatibleCoercion` converts node items to string then double when the other operand is numeric. Fixes `expression-4302`.
+- **`escape-html-uri` surrogate pair encoding** — `FunctionLibrary.EscapeHtmlUri` now uses `Rune.TryGetRuneAt` + `Encoding.UTF8` for characters outside the BMP. Fixes `expression-1601`.
+- **SimpleMap vs PathStepMap XPTY0018 separation** — `SimpleMap` allows atomic results; `PathStepMap` validates node-only steps. Fixes `expression-0902`, `0903`, `0905`, `0908`, `0932`, `0933`.
+- **Cross-document `key()` lookup** — `TransformEngine` now maintains a `Dictionary<IXdmNode, KeyIndex>` keyed by document root node. The 2-arg `key()` form resolves the document from the context node; 3-arg form from the argument node. Lazy-built indices save/restore context focus to avoid corrupting template execution. Fixes `expression-1101`.
+- Change history updated in `VmEngine.cs`, `FunctionLibrary.cs`, `TransformEngine.cs`, `IrLowerer.cs`
 
 ### XPath Keyword Disambiguation
 - `ParseStepExpr` now excludes `map`, `array`, and `function` keywords from the name-test path when followed by `{`, `[`, or `(` respectively.
@@ -225,6 +237,7 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 
 These clusters are >75% passing with only a handful of distinct root causes:
 
+- **`expression`** — **0 failures, 102/102 passed (100%)** ✅
 - **`string`** — **0 failures, 136/136 passed (100%)** ✅
 - **`core-function`** — **0 failures, 90/90 passed (100%)** ✅
 - **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)

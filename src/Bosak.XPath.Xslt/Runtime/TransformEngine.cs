@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 3.7   | 01-06-2026     | ComputeNumberAny handles non-document trees; lang validation (XTDE0030); FormatNumberSequence uses long[] |
 //                      | Charles Korthout | 3.8   | 01-06-2026     | EvaluateSequenceConstructor extracts attributes/namespace nodes for raw sequence return    |
 //                      | Charles Korthout | 3.9   | 01-06-2026     | Initial template selection applies templates to children, not document node (XSLT 5.4)   |
+//                      | Charles Korthout | 4.0   | 01-06-2026     | Per-document key indices; cross-document key() lookup; save/restore focus on lazy build |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -103,8 +104,11 @@ public sealed class TransformEngine
     // Accumulated excluded rules for the current xsl:next-match chain
     private HashSet<Stylesheet.TemplateRule> _nextMatchExcluded = new();
 
-    // Key index for key() function lookups
-    private KeyIndex? _keyIndex;
+    // Key index for key() function lookups — one per document root node
+    private List<(IXdmNode DocRoot, KeyIndex Index)>? _keyIndices;
+
+    // Documents currently being indexed (prevents re-entrant key() during lazy build)
+    private List<IXdmNode> _buildingKeyIndices = new();
 
     // Recursion depth guard for xsl:function and xsl:call-template calls
     private int _xsltFunctionCallDepth;
@@ -170,7 +174,9 @@ public sealed class TransformEngine
         var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
         if (allKeyDefs.Count > 0)
         {
-            _keyIndex = KeyIndex.Build(source, allKeyDefs, _context);
+            _keyIndices = new List<(IXdmNode, KeyIndex)>();
+            var sourceIndex = KeyIndex.Build(source, allKeyDefs, _context);
+            _keyIndices.Add((source, sourceIndex));
             RegisterKeyFunction();
         }
 
@@ -945,6 +951,7 @@ public sealed class TransformEngine
                     _currentContainer.Add(elem);
                     var prev = _currentContainer;
                     _currentContainer = elem;
+                    _lastAddedWasAtomic = false;
                     foreach (var childNode in instruction.Nodes())
                     {
                         switch (childNode)
@@ -1939,6 +1946,7 @@ public sealed class TransformEngine
 
         var prev = _currentContainer;
         _currentContainer = copy;
+        _lastAddedWasAtomic = false;
 
         foreach (var child in source.Nodes())
         {
@@ -2366,8 +2374,74 @@ public sealed class TransformEngine
 
     private XdmValue KeyFunctionImpl(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (_keyIndex == null)
+        if (_keyIndices == null)
             return XdmValue.Undefined;
+
+        // Determine the document to search:
+        // 2-arg form: document containing the context node
+        // 3-arg form: document containing the node in the 3rd argument
+        IXdmNode? docRoot;
+        if (args.Length == 2)
+        {
+            var contextNode = ctx.ContextItem.NodeValue;
+            docRoot = contextNode?.Document ?? contextNode;
+        }
+        else
+        {
+            IXdmNode? argNode = args[2].IsNode ? args[2].NodeValue : null;
+            if (argNode == null && args[2].IsSequence && args[2].SequenceValue != null)
+            {
+                foreach (var item in XdmSequence.FromSource(args[2].SequenceValue))
+                {
+                    if (item.IsNode && item.NodeValue != null)
+                    {
+                        argNode = item.NodeValue;
+                        break;
+                    }
+                }
+            }
+            docRoot = argNode?.Document ?? argNode;
+        }
+
+        if (docRoot == null)
+            return XdmValue.Undefined;
+
+        // Find existing index using IsSameNode (wrapper instances may differ)
+        KeyIndex? keyIndex = null;
+        foreach (var (existingDoc, existingIndex) in _keyIndices)
+        {
+            if (existingDoc.IsSameNode(docRoot))
+            {
+                keyIndex = existingIndex;
+                break;
+            }
+        }
+
+        if (keyIndex == null)
+        {
+            // Guard against re-entrant key() calls during lazy index building
+            // (e.g. a match pattern or use expression that itself calls key()).
+            if (_buildingKeyIndices.Any(b => b.IsSameNode(docRoot)))
+                return XdmValue.Undefined;
+            _buildingKeyIndices.Add(docRoot);
+
+            var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
+            // KeyIndex.Build mutates the context focus; save and restore to avoid
+            // corrupting the currently executing template's focus.
+            var savedItem = _context.ContextItem;
+            var savedPosition = _context.ContextPosition;
+            var savedSize = _context.ContextSize;
+            try
+            {
+                keyIndex = KeyIndex.Build(docRoot, allKeyDefs, _context);
+                _keyIndices.Add((docRoot, keyIndex));
+            }
+            finally
+            {
+                _context.WithFocus(savedItem, savedPosition, savedSize);
+                _buildingKeyIndices.RemoveAll(b => b.IsSameNode(docRoot));
+            }
+        }
 
         var keyName = args[0].ToString();
         var keyValueArg = args[1];
@@ -2380,7 +2454,7 @@ public sealed class TransformEngine
             foreach (var val in XdmSequence.FromSource(keyValueArg.SequenceValue))
             {
                 var keyValue = val.ToString();
-                foreach (var node in _keyIndex.Lookup(keyName, keyValue))
+                foreach (var node in keyIndex.Lookup(keyName, keyValue))
                 {
                     if (seen.Add(node))
                         result.Add(XdmValue.FromNode(node));
@@ -2390,7 +2464,7 @@ public sealed class TransformEngine
         else
         {
             var keyValue = keyValueArg.ToString();
-            foreach (var node in _keyIndex.Lookup(keyName, keyValue))
+            foreach (var node in keyIndex.Lookup(keyName, keyValue))
             {
                 if (seen.Add(node))
                     result.Add(XdmValue.FromNode(node));

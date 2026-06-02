@@ -48,6 +48,7 @@
 //                      | Charles Korthout | 3.4   | 30-05-2026     | Fixed fn:string-length to count Unicode code points via EnumerateRunes()                |
 //                      | Charles Korthout | 3.5   | 30-05-2026     | Fixed fn:substring to use Unicode code points; Unicode full case mapping for upper/lower-case |
 //                      | Charles Korthout | 3.6   | 01-06-2026     | Fixed fn:doc/fn:document to resolve empty string against base URI instead of returning empty sequence |
+//                      | Charles Korthout | 3.7   | 02-06-2026     | MinMax treats atomized node strings as numeric (untypedAtomic→double semantics)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4608,6 +4609,9 @@ public static class FunctionLibrary
         if (IsEmptySequence(args[0]))
             return XdmValue.Undefined;
         var uri = args[0].ToString();
+        // document('') resolves against the stylesheet's base URI per XSLT spec
+        if (string.IsNullOrEmpty(uri))
+            uri = ctx.BaseUri;
         var node = ctx.LoadDocument(uri);
         return XdmValue.FromNode(node);
     }
@@ -4617,6 +4621,9 @@ public static class FunctionLibrary
         if (IsEmptySequence(args[0]))
             return XdmValue.Undefined;
         var uri = args[0].ToString();
+        // document('') resolves against the stylesheet's base URI per XSLT spec
+        if (string.IsNullOrEmpty(uri))
+            uri = ctx.BaseUri;
         // Second arg is a node used for base URI resolution; for now, just use the URI directly
         var node = ctx.LoadDocument(uri);
         return XdmValue.FromNode(node);
@@ -6046,6 +6053,23 @@ public static class FunctionLibrary
         bool allString = atomized.All(a => a.Kind == XdmValueKind.String);
         if (allString)
         {
+            // XPath spec: untypedAtomic (from node atomization) is cast to xs:double
+            // for min/max. Explicit strings remain strings. Since our XDM doesn't
+            // distinguish untypedAtomic from string, we check if any original item
+            // was a node — if so, the strings came from atomization and are numeric.
+            bool anyOriginalNode = items.Any(i => i.IsNode);
+            if (anyOriginalNode)
+            {
+                double resultNum = ToDoubleValue(atomized[0]);
+                for (int i = 1; i < atomized.Count; i++)
+                {
+                    double v = ToDoubleValue(atomized[i]);
+                    if (min ? v < resultNum : v > resultNum)
+                        resultNum = v;
+                }
+                return XdmValue.FromDouble(resultNum);
+            }
+
             var result = atomized[0].StringValue;
             var resultVal = atomized[0];
             for (int i = 1; i < atomized.Count; i++)
@@ -7865,12 +7889,12 @@ public static class FunctionLibrary
     {
         var s = AtomizedString(args[0]);
         var sb = new StringBuilder();
-        foreach (char c in s)
+        foreach (var rune in s.EnumerateRunes())
         {
-            if (IsUriChar(c))
-                sb.Append(c);
+            if (rune.Value <= 0x7E && IsUriChar((char)rune.Value))
+                sb.Append(rune);
             else
-                AppendPercentEncoded(sb, c);
+                AppendPercentEncoded(sb, rune);
         }
         return XdmValue.FromString(sb.ToString());
     }
@@ -7884,12 +7908,12 @@ public static class FunctionLibrary
             throw new InvalidOperationException("XPTY0004");
         var s = AtomizedString(arg);
         var sb = new StringBuilder();
-        foreach (char c in s)
+        foreach (var rune in s.EnumerateRunes())
         {
-            if (c >= 0x20 && c <= 0x7E)
-                sb.Append(c);
+            if (rune.Value is >= 0x20 and <= 0x7E)
+                sb.Append(rune);
             else
-                AppendPercentEncoded(sb, c);
+                AppendPercentEncoded(sb, rune);
         }
         return XdmValue.FromString(sb.ToString());
     }
@@ -7903,9 +7927,11 @@ public static class FunctionLibrary
             or '%';
     }
 
-    private static void AppendPercentEncoded(StringBuilder sb, char c)
+    private static void AppendPercentEncoded(StringBuilder sb, Rune rune)
     {
-        foreach (byte b in Encoding.UTF8.GetBytes(c.ToString()))
+        Span<byte> utf8 = stackalloc byte[4];
+        int bytesWritten = rune.EncodeToUtf8(utf8);
+        foreach (byte b in utf8[..bytesWritten])
             sb.Append($"%{b:X2}");
     }
 

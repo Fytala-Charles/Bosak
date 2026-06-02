@@ -583,7 +583,7 @@ public sealed class IrLowerer
                     // semantics (e.g., /a/b/number(), /a/b/(1+2))
                     int mapResultReg = AllocRegister();
                     int mapInstrIdx = _instructions.Count;
-                    Emit(IrOpCode.SimpleMap, (byte)mapResultReg, (byte)currentReg, 0, 0); // placeholder
+                    Emit(IrOpCode.SimpleMap, (byte)mapResultReg, (byte)currentReg, 1, 0); // placeholder; RegisterC=1 => enforce XPTY0018
 
                     int jumpInstrIdx = _instructions.Count;
                     Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
@@ -593,7 +593,7 @@ public sealed class IrLowerer
                     Emit(IrOpCode.Return, (byte)rhsReg);
 
                     int afterRhs = _instructions.Count;
-                    PatchInstruction(mapInstrIdx, IrOpCode.SimpleMap, (byte)mapResultReg, (byte)currentReg, 0, rhsEntry);
+                    PatchInstruction(mapInstrIdx, IrOpCode.SimpleMap, (byte)mapResultReg, (byte)currentReg, 1, rhsEntry);
                     PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
 
                     currentReg = mapResultReg;
