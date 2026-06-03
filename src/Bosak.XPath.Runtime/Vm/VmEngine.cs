@@ -697,9 +697,16 @@ public static class VmEngine
                         {
                             filtered = FilterNodes(input, n => n.NamespaceUri == nsUri);
                         }
+                        else if (prefix.Contains('/') || prefix.Contains(':'))
+                        {
+                            // Operand is a URI (e.g. from Q{uri}local syntax) — use directly
+                            filtered = FilterNodes(input, n => n.NamespaceUri == prefix);
+                        }
                         else
                         {
-                            filtered = XdmValue.Undefined;
+                            // Unresolved prefix (including empty prefix for default element namespace):
+                            // match empty namespace
+                            filtered = FilterNodes(input, n => n.NamespaceUri == "");
                         }
                         registers[instr.RegisterA] = filtered;
                         ip++;

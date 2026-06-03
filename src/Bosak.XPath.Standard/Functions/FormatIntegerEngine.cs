@@ -322,8 +322,8 @@ public static class FormatIntegerEngine
         (0x111E1, 10, 1),
         // Coptic epact digit: U+102E1-U+102EA (1-10)
         (0x102E1, 10, 1),
-        // Mende Kikakui digit: U+1E8C7-U+1E8D0 (1-10)
-        (0x1E8C7, 10, 1),
+        // Mende Kikakui digit: U+1E8C7-U+1E8CF (1-9)
+        (0x1E8C7, 9, 1),
         // Counting rod / Tai Xuan Jing: U+1D360-U+1D368 (1-9)
         (0x1D360, 9, 1),
         // Adlam digit: U+1E947-U+1E94F (1-9)

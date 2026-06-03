@@ -683,6 +683,17 @@ public sealed class IrLowerer
             if (node.NodeTest.Kind == NameTestKind.LocalName || node.NodeTest.Kind == NameTestKind.PrefixedName)
             {
                 namePoolIdx = AddToLiteralPool(node.NodeTest.Name);
+                // Unprefixed element names must match the default element namespace.
+                // For element axes, emit NamespaceTest with empty prefix so the runtime
+                // resolves it to the default element namespace (or empty if none declared).
+                // Attribute and namespace axes skip this — unprefixed attribute/namespace
+                // names always match no namespace.
+                if (node.Axis != XdmAxis.Attribute && node.Axis != XdmAxis.Namespace)
+                {
+                    int nsPoolIdx = AddToLiteralPool("");
+                    Emit(IrOpCode.NamespaceTest, (byte)afterTestReg, (byte)axisReg, operand: nsPoolIdx);
+                    axisReg = afterTestReg;
+                }
             }
             else if (node.NodeTest.Kind == NameTestKind.QName && !string.IsNullOrEmpty(node.NodeTest.Name))
             {
@@ -692,7 +703,6 @@ public sealed class IrLowerer
                 if (!string.IsNullOrEmpty(node.NodeTest.NamespaceUri) && node.NodeTest.NamespaceUri != "*")
                 {
                     int nsPoolIdx = AddToLiteralPool(node.NodeTest.NamespaceUri); // prefix
-                    afterTestReg = AllocRegister();
                     Emit(IrOpCode.NamespaceTest, (byte)afterTestReg, (byte)axisReg, operand: nsPoolIdx);
                     axisReg = afterTestReg;
                 }

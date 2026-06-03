@@ -768,7 +768,7 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
         {
             var name = GetString(Current);
-            var (prefix, local, _) = SplitQName(name);
+            var (prefix, local, nsUri) = SplitQName(name);
 
             // Kind test: node(), text(), etc.
             if (IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
@@ -784,6 +784,8 @@ public sealed class XPathParser
                 return new NodeTest(NameTestKind.NamespaceAny, name);
             }
 
+            if (!string.IsNullOrEmpty(nsUri))
+                return new NodeTest(NameTestKind.QName, local, nsUri);
             if (prefix is null)
                 return new NodeTest(NameTestKind.LocalName, local);
 

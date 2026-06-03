@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-02
 **Commit:** `main` (pending push)
-**Current focus:** `expression` cluster **100% complete** (102/102 non-skipped); `match` cluster (122/186 passing, 64 failures); `next-match` cluster (17/40 passing, 23 failures).
+**Current focus:** `number` cluster **260/271 passed** (95.9% pass rate, 10 failures, 1 skipped).
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3232 / **Failed:** ~2229 / **Skipped:** 9139 (14,600 total)
-- Pass rate: **59.2%** (latest run, 2026-06-02)
+- **Passed:** ~3255 / **Failed:** ~2206 / **Skipped:** 9139 (14,600 total)
+- Pass rate: **59.6%** (latest run, 2026-06-02)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
+- Latest: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
+- Previous: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
 - Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
 - Previous: 3198 passed / 2263 failed / 9139 skipped (58.6%) — `fn:doc`/`fn:document` empty-sequence handling, parentless element pattern fixes
 - Previous: 2859 passed / 2603 failed / 9138 skipped (52.3%) — map/array keyword disambiguation, static error propagation from patterns, XPST0017 error codes
@@ -32,11 +33,15 @@
 
 ### Recent Fixes (This Session)
 
-1. **`attribute()` default axis fix** — `ParseAxisStep` now defaults to `attribute` axis for `attribute()`/`schema-attribute()` kind tests and `namespace` axis for `namespace-node()` (XPath 2.0 §3.2.1.1). Previously parsed as `child::attribute()` which always returned empty. Fixes `match-106` and ~18 other conformance tests.
-2. **Initial template selection fix** — `Transform` now applies templates to children of the document node (XSLT 2.0 §5.4 built-in rule), not the document node itself. Prevents spurious `node()` template matching on document root. Fixes ~14 `next-match` and related conformance tests.
-3. **`fn:doc`/`fn:document` empty-sequence guard** — `Doc_1` and `Document_2` return `XdmValue.Undefined` for empty input instead of throwing. Fixes unit test and prevents `ArgumentException` on `XDocument.Load("")`.
-4. **Parentless element patterns** — `PatternCompiler` now handles `*:local`, `child::*:b`, and implicit child-axis patterns for parentless nodes. Fixes `match-102`, `108`, `109`.
-5. **Template selection last-wins rule** — `FindBestTemplate` uses XSLT "later declaration wins" tie-breaker when priority and import precedence are equal.
+1. **XPath unprefixed element namespace handling** — `IrLowerer` now emits `NamespaceTest` for unprefixed element names on element axes, enforcing the default element namespace. `VmEngine.NamespaceTest` resolves empty prefix to default element namespace, falls back to empty namespace, and handles `Q{uri}local` URIs directly. Fixes `number-1502` and many tests where `//book` incorrectly matched namespaced elements.
+2. **`Q{uri}local` parser fix** — `XPathParser.ParseNodeTest` now correctly creates `QName` node tests for braced URI literals (e.g., `Q{http://z.test.com/}note`) instead of treating them as `LocalName`. Previously discarded the `nsUri` from `SplitQName`.
+3. **Namespace prefix resolution in `xsl:number`** — `TransformEngine.ExecuteXsltNumber` now resolves namespace prefixes in `count` and `from` patterns using the `xsl:number` element's in-scope namespace declarations. `KeyIndex.Build` also resolves prefixes in `xsl:key` match patterns. Fixes `number-1101`.
+4. **Conformance harness namespace leak fix** — `ExtractNamespaces` no longer passes the test catalog's default namespace (empty prefix) to XPath assertion evaluation contexts. This was causing assertions like `/out/a = "x"` to incorrectly use the catalog namespace as the default element namespace.
+5. **`attribute()` default axis fix** — `ParseAxisStep` now defaults to `attribute` axis for `attribute()`/`schema-attribute()` kind tests and `namespace` axis for `namespace-node()` (XPath 2.0 §3.2.1.1). Previously parsed as `child::attribute()` which always returned empty. Fixes `match-106` and ~18 other conformance tests.
+6. **Initial template selection fix** — `Transform` now applies templates to children of the document node (XSLT 2.0 §5.4 built-in rule), not the document node itself. Prevents spurious `node()` template matching on document root. Fixes ~14 `next-match` and related conformance tests.
+7. **`fn:doc`/`fn:document` empty-sequence guard** — `Doc_1` and `Document_2` return `XdmValue.Undefined` for empty input instead of throwing. Fixes unit test and prevents `ArgumentException` on `XDocument.Load("")`.
+8. **Parentless element patterns** — `PatternCompiler` now handles `*:local`, `child::*:b`, and implicit child-axis patterns for parentless nodes. Fixes `match-102`, `108`, `109`.
+9. **Template selection last-wins rule** — `FindBestTemplate` uses XSLT "later declaration wins" tie-breaker when priority and import precedence are equal.
 
 ### Previous Session Fixes
 
@@ -218,6 +223,7 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 2. **Empty element serialization** — `XmlWriter` outputs `<done />` (with space), not `<done/>`. Tests should use flexible assertions.
 3. **`key()` namespace** — Registered under `http://www.w3.org/2005/xpath-functions` (not XSLT namespace) because the XPath compiler resolves unprefixed function names to the `fn` namespace.
 4. ~~PatternCompiler limitations~~ — **FIXED**: `TemplateRule.CompileMatch` now resolves namespace prefixes to `Q{uri}local` syntax.
+5. ~~XPath unprefixed element namespace~~ — **FIXED**: `IrLowerer` now emits `NamespaceTest` for unprefixed element names on element axes, and `VmEngine.NamespaceTest` correctly handles default element namespace resolution.
 5. **Negative zero** — `double.IsNegative(value)` is used to detect `-0`; `value == 0.0` alone is not sufficient.
 6. **Global variable forward references** — Global variables are evaluated in import/include/local order. Forward references within the same stylesheet are not dependency-sorted.
 7. **Namespace declaration hoisting** — LINQ-to-XML places `xmlns:prefix` on first element using it; Saxon/test suite expects hoisting to outermost element. Root cause of many namespace test failures.
@@ -240,6 +246,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - **`expression`** — **0 failures, 102/102 passed (100%)** ✅
 - **`string`** — **0 failures, 136/136 passed (100%)** ✅
 - **`core-function`** — **0 failures, 90/90 passed (100%)** ✅
+- **`number`** — **10 failures, 1 skipped (96.0% passing)** — remaining: `number-0111` (large integer overflow), `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting), `number-0807` (double 1e100 formatting), `number-1004` (xsl:iterate not implemented), `number-1501` (whitespace stripping in level="any" count)
 - **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)
 - **`boolean`** — **2 failures, 0 skipped (98% passing)** — only `boolean-076`/`077` (node ordering `<<`/`>>`, unimplemented)
 
@@ -247,7 +254,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 | Cluster | Failed | Skipped | Notes |
 |---------|--------|---------|-------|
-| **number** | 152 | 1 | Already have context from earlier `xsl:number` fixes. Likely Unicode numbering, `lang`/`letter-value`, grouping, large numbers. |
+| **number** | 10 | 1 | 260/271 passing (95.9%). Remaining: large integer overflow, non-English word formatting, double 1e100, xsl:iterate not implemented, whitespace stripping in level="any". |
 | **match** | 78 | 107 | Pattern matching gaps. Improved from 106 failures (priority, union keyword, root(), dot predicates, doc() resolution). |
 | **mode** | 88 | 44 | Template mode dispatch issues. |
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |

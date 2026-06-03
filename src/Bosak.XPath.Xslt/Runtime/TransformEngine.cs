@@ -2375,95 +2375,151 @@ public sealed class TransformEngine
     private XdmValue KeyFunctionImpl(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         if (_keyIndices == null)
-            return XdmValue.Undefined;
-
-        // Determine the document to search:
-        // 2-arg form: document containing the context node
-        // 3-arg form: document containing the node in the 3rd argument
-        IXdmNode? docRoot;
-        if (args.Length == 2)
-        {
-            var contextNode = ctx.ContextItem.NodeValue;
-            docRoot = contextNode?.Document ?? contextNode;
-        }
-        else
-        {
-            IXdmNode? argNode = args[2].IsNode ? args[2].NodeValue : null;
-            if (argNode == null && args[2].IsSequence && args[2].SequenceValue != null)
-            {
-                foreach (var item in XdmSequence.FromSource(args[2].SequenceValue))
-                {
-                    if (item.IsNode && item.NodeValue != null)
-                    {
-                        argNode = item.NodeValue;
-                        break;
-                    }
-                }
-            }
-            docRoot = argNode?.Document ?? argNode;
-        }
-
-        if (docRoot == null)
-            return XdmValue.Undefined;
-
-        // Find existing index using IsSameNode (wrapper instances may differ)
-        KeyIndex? keyIndex = null;
-        foreach (var (existingDoc, existingIndex) in _keyIndices)
-        {
-            if (existingDoc.IsSameNode(docRoot))
-            {
-                keyIndex = existingIndex;
-                break;
-            }
-        }
-
-        if (keyIndex == null)
-        {
-            // Guard against re-entrant key() calls during lazy index building
-            // (e.g. a match pattern or use expression that itself calls key()).
-            if (_buildingKeyIndices.Any(b => b.IsSameNode(docRoot)))
-                return XdmValue.Undefined;
-            _buildingKeyIndices.Add(docRoot);
-
-            var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
-            // KeyIndex.Build mutates the context focus; save and restore to avoid
-            // corrupting the currently executing template's focus.
-            var savedItem = _context.ContextItem;
-            var savedPosition = _context.ContextPosition;
-            var savedSize = _context.ContextSize;
-            try
-            {
-                keyIndex = KeyIndex.Build(docRoot, allKeyDefs, _context);
-                _keyIndices.Add((docRoot, keyIndex));
-            }
-            finally
-            {
-                _context.WithFocus(savedItem, savedPosition, savedSize);
-                _buildingKeyIndices.RemoveAll(b => b.IsSameNode(docRoot));
-            }
-        }
+            _keyIndices = new List<(IXdmNode DocRoot, KeyIndex Index)>();
 
         var keyName = args[0].ToString();
         var keyValueArg = args[1];
 
-        var seen = new HashSet<IXdmNode>();
-        var result = new List<XdmValue>();
-
-        if (keyValueArg.IsSequence && keyValueArg.SequenceValue != null)
+        if (args.Length == 2)
         {
-            foreach (var val in XdmSequence.FromSource(keyValueArg.SequenceValue))
-            {
-                var keyValue = val.ToString();
-                foreach (var node in keyIndex.Lookup(keyName, keyValue))
-                {
-                    if (seen.Add(node))
-                        result.Add(XdmValue.FromNode(node));
-                }
-            }
+            // 2-arg form: search the entire document containing the context node.
+            var contextNode = ctx.ContextItem.NodeValue;
+            var docRoot = contextNode?.Document ?? contextNode;
+            if (docRoot == null)
+                return XdmValue.Undefined;
+
+            var keyIndex = GetOrBuildKeyIndex(docRoot);
+            if (keyIndex == null)
+                return XdmValue.Undefined;
+
+            return LookupKeyValues(keyIndex, keyName, keyValueArg);
         }
         else
         {
-            var keyValue = keyValueArg.ToString();
+            // 3-arg form: search only the nodes supplied in the 3rd argument.
+            var candidates = new List<IXdmNode>();
+            if (args[2].IsNode && args[2].NodeValue != null)
+            {
+                candidates.Add(args[2].NodeValue);
+            }
+            else if (args[2].IsSequence && args[2].SequenceValue != null)
+            {
+                foreach (var item in XdmSequence.FromSource(args[2].SequenceValue))
+                {
+                    if (item.IsNode && item.NodeValue != null)
+                        candidates.Add(item.NodeValue);
+                }
+            }
+
+            if (candidates.Count == 0)
+                return XdmValue.Undefined;
+
+            // Group candidates by document root (using IsSameNode).
+            var docEntries = new List<(IXdmNode DocRoot, KeyIndex Index, List<IXdmNode> Candidates)>();
+            foreach (var candidate in candidates)
+            {
+                var candidateDoc = candidate.Document ?? candidate;
+                bool found = false;
+                foreach (var entry in docEntries)
+                {
+                    if (entry.DocRoot.IsSameNode(candidateDoc))
+                    {
+                        entry.Candidates.Add(candidate);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    var keyIndex = GetOrBuildKeyIndex(candidateDoc);
+                    if (keyIndex != null)
+                    {
+                        docEntries.Add((candidateDoc, keyIndex, new List<IXdmNode> { candidate }));
+                    }
+                }
+            }
+
+            // Look up key values and filter to candidates.
+            var seen = new HashSet<IXdmNode>();
+            var result = new List<XdmValue>();
+            var keyValues = ExtractKeyValueStrings(keyValueArg);
+
+            foreach (var keyValue in keyValues)
+            {
+                foreach (var (_, keyIndex, docCandidates) in docEntries)
+                {
+                    foreach (var node in keyIndex.Lookup(keyName, keyValue))
+                    {
+                        if (!seen.Add(node))
+                            continue;
+
+                        // Check if this node is one of the candidates for this document.
+                        bool isCandidate = false;
+                        foreach (var cand in docCandidates)
+                        {
+                            if (cand.IsSameNode(node))
+                            {
+                                isCandidate = true;
+                                break;
+                            }
+                        }
+                        if (isCandidate)
+                            result.Add(XdmValue.FromNode(node));
+                    }
+                }
+            }
+
+            return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+        }
+    }
+
+    /// <summary>
+    /// Retrieves or lazily builds the <see cref="KeyIndex"/> for the specified document root.
+    /// </summary>
+    private KeyIndex? GetOrBuildKeyIndex(IXdmNode docRoot)
+    {
+        // Find existing index using IsSameNode (wrapper instances may differ).
+        foreach (var (existingDoc, existingIndex) in _keyIndices!)
+        {
+            if (existingDoc.IsSameNode(docRoot))
+                return existingIndex;
+        }
+
+        // Guard against re-entrant key() calls during lazy index building.
+        if (_buildingKeyIndices.Any(b => b.IsSameNode(docRoot)))
+            return null;
+        _buildingKeyIndices.Add(docRoot);
+
+        var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
+        // KeyIndex.Build mutates the context focus; save and restore to avoid
+        // corrupting the currently executing template's focus.
+        var savedItem = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        try
+        {
+            var keyIndex = KeyIndex.Build(docRoot, allKeyDefs, _context);
+            _keyIndices!.Add((docRoot, keyIndex));
+            return keyIndex;
+        }
+        finally
+        {
+            _context.WithFocus(savedItem, savedPosition, savedSize);
+            _buildingKeyIndices.RemoveAll(b => b.IsSameNode(docRoot));
+        }
+    }
+
+    /// <summary>
+    /// Looks up the given key values in a single key index and returns matching nodes.
+    /// </summary>
+    private static XdmValue LookupKeyValues(KeyIndex keyIndex, string keyName, XdmValue keyValueArg)
+    {
+        var seen = new HashSet<IXdmNode>();
+        var result = new List<XdmValue>();
+        var keyValues = ExtractKeyValueStrings(keyValueArg);
+
+        foreach (var keyValue in keyValues)
+        {
             foreach (var node in keyIndex.Lookup(keyName, keyValue))
             {
                 if (seen.Add(node))
@@ -2472,6 +2528,22 @@ public sealed class TransformEngine
         }
 
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// Extracts atomic string values from a key-value argument (either a single value or a sequence).
+    /// </summary>
+    private static IEnumerable<string> ExtractKeyValueStrings(XdmValue keyValueArg)
+    {
+        if (keyValueArg.IsSequence && keyValueArg.SequenceValue != null)
+        {
+            foreach (var val in XdmSequence.FromSource(keyValueArg.SequenceValue))
+                yield return val.ToString();
+        }
+        else
+        {
+            yield return keyValueArg.ToString();
+        }
     }
 
     /// <summary>
@@ -3355,6 +3427,24 @@ public sealed class TransformEngine
     /// </summary>
     private void ExecuteXsltNumber(XElement instruction, IXdmNode currentNode)
     {
+        // Determine effective backwards-compatibility: walk ancestor chain for xsl:version.
+        bool backwardsCompatible = _context.BackwardsCompatible;
+        var xslNs = XNamespace.Get("http://www.w3.org/1999/XSL/Transform");
+        var ancestor = instruction;
+        while (ancestor != null)
+        {
+            var versionAttr = ancestor.Attribute(xslNs + "version");
+            if (versionAttr != null)
+            {
+                if (double.TryParse(versionAttr.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v) && v < 2.0)
+                    backwardsCompatible = true;
+                else
+                    backwardsCompatible = false;
+                break;
+            }
+            ancestor = ancestor.Parent;
+        }
+
         var level = instruction.Attribute("level")?.Value ?? "single";
         var countPattern = instruction.Attribute("count")?.Value;
         var fromPattern = instruction.Attribute("from")?.Value;
@@ -3480,14 +3570,15 @@ public sealed class TransformEngine
             else
             {
                 // No convertible numbers: empty sequence or non-numeric value.
-                // XSLT 1.0 backwards-compatible → NaN; XSLT 2.0+ → prefix+suffix only.
-                if (_context.BackwardsCompatible || !isEmptySequence)
+                if (backwardsCompatible)
                 {
+                    // XSLT 1.0 backwards-compatible → NaN for empty or non-numeric values.
                     _lastAddedWasAtomic = false;
                     AddTextNode("NaN");
                 }
-                else
+                else if (isEmptySequence)
                 {
+                    // Empty sequence → emit prefix+suffix only.
                     var formatted = FormatNumberSequence(System.Array.Empty<long>(), format, ordinal, lang, groupingSeparator, groupingSize);
                     if (!string.IsNullOrEmpty(formatted))
                     {
@@ -3499,17 +3590,22 @@ public sealed class TransformEngine
                         AddTextNode(formatted);
                     }
                 }
+                else
+                {
+                    // Non-empty, non-numeric sequence in XSLT 2.0+ → XTDE0980.
+                    throw new InvalidOperationException("XTDE0980");
+                }
             }
         }
         else
         {
             var countMatcher = string.IsNullOrEmpty(countPattern)
                 ? CreateDefaultCountMatcher(targetNode)
-                : new Patterns.PatternCompiler().Compile(countPattern);
+                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(countPattern, instruction));
 
             var fromMatcher = string.IsNullOrEmpty(fromPattern)
                 ? null
-                : new Patterns.PatternCompiler().Compile(fromPattern);
+                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(fromPattern, instruction));
 
             int[]? numbers = level switch
             {
@@ -3551,12 +3647,94 @@ public sealed class TransformEngine
     private static Patterns.PatternPredicate CreateDefaultCountMatcher(IXdmNode node)
     {
         var compiler = new Patterns.PatternCompiler();
+        string name = string.IsNullOrEmpty(node.NamespaceUri)
+            ? node.LocalName
+            : $"Q{{{node.NamespaceUri}}}{node.LocalName}";
         return node.NodeKind switch
         {
-            XdmNodeKind.Element => compiler.Compile(node.LocalName),
-            XdmNodeKind.Attribute => compiler.Compile("@" + node.LocalName),
+            XdmNodeKind.Element => compiler.Compile(name),
+            XdmNodeKind.Attribute => compiler.Compile("@" + name),
             _ => (n, ctx) => n.NodeKind == node.NodeKind
         };
+    }
+
+    /// <summary>
+    /// Replaces prefix:local-name occurrences in a pattern with Q{uri}local-name,
+    /// resolving prefixes using the namespace declarations in scope on the given element.
+    /// </summary>
+    private static string ResolveNamespacePrefixes(string pattern, XElement contextElement)
+    {
+        if (!pattern.Contains(':'))
+            return pattern;
+
+        var sb = new System.Text.StringBuilder();
+        int i = 0;
+        while (i < pattern.Length)
+        {
+            char c = pattern[i];
+            if (c == '\'' || c == '\"')
+            {
+                char quote = c;
+                sb.Append(c);
+                i++;
+                while (i < pattern.Length && pattern[i] != quote)
+                {
+                    sb.Append(pattern[i]);
+                    i++;
+                }
+                if (i < pattern.Length)
+                {
+                    sb.Append(pattern[i]);
+                    i++;
+                }
+                continue;
+            }
+            if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{')
+            {
+                sb.Append(c);
+                i++;
+                continue;
+            }
+            if (char.IsLetter(c) || c == '_')
+            {
+                int start = i;
+                while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-'))
+                    i++;
+                if (i < pattern.Length && pattern[i] == ':')
+                {
+                    if (i + 1 < pattern.Length && pattern[i + 1] == ':')
+                    {
+                        sb.Append(pattern[start..i]);
+                        continue;
+                    }
+                    var prefix = pattern[start..i];
+                    i++;
+                    int localStart = i;
+                    while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-' || pattern[i] == '.'))
+                        i++;
+                    var local = pattern[localStart..i];
+                    var nsUri = contextElement.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                    if (!string.IsNullOrEmpty(nsUri))
+                    {
+                        sb.Append($"Q{{{nsUri}}}{local}");
+                    }
+                    else
+                    {
+                        sb.Append(prefix);
+                        sb.Append(':');
+                        sb.Append(local);
+                    }
+                }
+                else
+                {
+                    sb.Append(pattern[start..i]);
+                }
+                continue;
+            }
+            sb.Append(c);
+            i++;
+        }
+        return sb.ToString();
     }
 
     /// <summary>
@@ -3665,24 +3843,9 @@ public sealed class TransformEngine
         int count = 0;
         bool foundCurrent = false;
 
-        // For attributes, document order places them immediately after the element's start tag,
-        // so we stop the walk when we reach the parent element.
-        IXdmNode? stopNode = null;
-        if (currentNode.NodeKind == XdmNodeKind.Attribute)
-        {
-            foreach (var p in currentNode.Axis(XdmAxis.Parent))
-            {
-                if (p.IsNode && p.NodeValue is IXdmNode parent)
-                {
-                    stopNode = parent;
-                    break;
-                }
-            }
-        }
-
         WalkDocumentTree(doc, node =>
         {
-            if (node.IsSameNode(currentNode) || (stopNode != null && node.IsSameNode(stopNode)))
+            if (node.IsSameNode(currentNode))
                 foundCurrent = true;
 
             if (fromMatcher != null && fromMatcher(node, context))
@@ -3762,12 +3925,27 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Recursively walks a document tree in document order, calling <paramref name="visitor"/>
-    /// for each node. Returns <c>false</c> if the visitor requested stopping.
+    /// for each node. Attributes are visited immediately after their owner element and before
+    /// its children, per XDM document-order rules. Returns <c>false</c> if the visitor
+    /// requested stopping.
     /// </summary>
     private static bool WalkDocumentTree(IXdmNode node, Func<IXdmNode, bool> visitor)
     {
         if (!visitor(node))
             return false;
+
+        // Attributes are in document order immediately after the element's start tag.
+        if (node.NodeKind == XdmNodeKind.Element)
+        {
+            foreach (var item in node.Axis(XdmAxis.Attribute))
+            {
+                if (item.IsNode && item.NodeValue is IXdmNode attr)
+                {
+                    if (!visitor(attr))
+                        return false;
+                }
+            }
+        }
 
         foreach (var item in node.Axis(XdmAxis.Child))
         {

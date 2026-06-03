@@ -759,16 +759,28 @@ public sealed class PatternCompiler
             return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == ns && node.LocalName == local;
         }
 
-        // id('x', $y) pattern
+        // id('x', $y) pattern — id() may return multiple nodes; check membership.
         if (name.StartsWith("id(") && name.EndsWith(')'))
         {
-            var compiledId = XPath31Expression.Compile($"self::node()[. is {name}]");
+            var compiledId = XPath31Expression.Compile(name);
             return (node, ctx) =>
             {
                 try
                 {
                     var result = compiledId.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
-                    return result.EffectiveBooleanValue();
+                    if (result.IsSequence && result.SequenceValue != null)
+                    {
+                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        {
+                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                return true;
+                        }
+                    }
+                    else if (result.IsNode && result.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
@@ -778,16 +790,28 @@ public sealed class PatternCompiler
             };
         }
 
-        // key('k', 'v') pattern
+        // key('k', 'v') pattern — key() may return multiple nodes; check membership.
         if (name.StartsWith("key(") && name.EndsWith(')'))
         {
-            var compiledKey = XPath31Expression.Compile($"self::node()[. is {name}]");
+            var compiledKey = XPath31Expression.Compile(name);
             return (node, ctx) =>
             {
                 try
                 {
                     var result = compiledKey.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
-                    return result.EffectiveBooleanValue();
+                    if (result.IsSequence && result.SequenceValue != null)
+                    {
+                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        {
+                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                return true;
+                        }
+                    }
+                    else if (result.IsNode && result.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
@@ -804,7 +828,8 @@ public sealed class PatternCompiler
         {
             return (node, ctx) =>
                 node.NodeKind == XdmNodeKind.Element &&
-                node.LocalName == localName;
+                node.LocalName == localName &&
+                node.NamespaceUri == "";
         }
 
         if (localName == "*")
@@ -911,7 +936,7 @@ public sealed class PatternCompiler
 
         var (nsUri, localName) = ParseQName(nodeTest);
         if (string.IsNullOrEmpty(nsUri))
-            return node => node.NodeKind == XdmNodeKind.Element && node.LocalName == localName;
+            return node => node.NodeKind == XdmNodeKind.Element && node.LocalName == localName && node.NamespaceUri == "";
         if (localName == "*")
             return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == nsUri;
         return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == nsUri && node.LocalName == localName;
@@ -939,7 +964,7 @@ public sealed class PatternCompiler
 
         var (nsUri, localName) = ParseQName(nodeTest);
         if (string.IsNullOrEmpty(nsUri))
-            return node => node.NodeKind == XdmNodeKind.Attribute && node.LocalName == localName;
+            return node => node.NodeKind == XdmNodeKind.Attribute && node.LocalName == localName && node.NamespaceUri == "";
         if (localName == "*")
             return node => node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == nsUri;
         return node => node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == nsUri && node.LocalName == localName;
@@ -970,7 +995,8 @@ public sealed class PatternCompiler
         {
             return (node, ctx) =>
                 node.NodeKind == XdmNodeKind.Attribute &&
-                node.LocalName == local;
+                node.LocalName == local &&
+                node.NamespaceUri == "";
         }
 
         if (local == "*")

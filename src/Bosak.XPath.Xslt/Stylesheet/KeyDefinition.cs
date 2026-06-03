@@ -35,12 +35,16 @@ public sealed class KeyDefinition
     /// <summary>The parent stylesheet.</summary>
     public Stylesheet Stylesheet { get; }
 
-    public KeyDefinition(string name, string match, string use, Stylesheet stylesheet)
+    /// <summary>The original xsl:key element (for namespace resolution).</summary>
+    public XElement? Element { get; }
+
+    public KeyDefinition(string name, string match, string use, Stylesheet stylesheet, XElement? element = null)
     {
         Name = name;
         Match = match;
         Use = use;
         Stylesheet = stylesheet;
+        Element = element;
     }
 
     /// <summary>
@@ -55,6 +59,6 @@ public sealed class KeyDefinition
         if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(match) || string.IsNullOrEmpty(use))
             return null;
 
-        return new KeyDefinition(name, match, use, stylesheet);
+        return new KeyDefinition(name, match, use, stylesheet, element);
     }
 }

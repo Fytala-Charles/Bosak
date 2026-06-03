@@ -548,8 +548,11 @@ public class FunctionLibraryTests
     {
         var doc = System.Xml.Linq.XDocument.Parse("<root xmlns='http://default.com'><child/></root>");
         var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        // Without a default element namespace declared in the static context,
+        // unprefixed element names match no namespace. The child element is in
+        // namespace http://default.com, so child::child returns empty sequence.
         var result = XPath31Expression.Compile("fn:name(child)").Evaluate(node);
-        Assert.Equal("child", result.ToString());
+        Assert.Equal("", result.ToString());
     }
 
     // ------------------------------------------------------------------

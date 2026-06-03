@@ -14,6 +14,7 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -73,7 +74,8 @@ public sealed class KeyIndex
 
         foreach (var keyDef in keyDefinitions)
         {
-            var compiledMatch = patternCompiler.Compile(keyDef.Match);
+            var resolvedMatch = ResolveNamespacePrefixes(keyDef.Match, keyDef.Element);
+            var compiledMatch = patternCompiler.Compile(resolvedMatch);
             var useExpr = XPath31Expression.Compile(keyDef.Use);
 
             // Walk the entire document tree to find matching nodes
@@ -118,5 +120,85 @@ public sealed class KeyIndex
         {
             yield return value.ToString();
         }
+    }
+
+    /// <summary>
+    /// Replaces prefix:local-name occurrences in a pattern with Q{uri}local-name,
+    /// resolving prefixes using the namespace declarations in scope on the given element.
+    /// Returns the pattern unchanged if contextElement is null.
+    /// </summary>
+    private static string ResolveNamespacePrefixes(string pattern, XElement? contextElement)
+    {
+        if (contextElement == null || !pattern.Contains(':'))
+            return pattern;
+
+        var sb = new System.Text.StringBuilder();
+        int i = 0;
+        while (i < pattern.Length)
+        {
+            char c = pattern[i];
+            if (c == '\'' || c == '\"')
+            {
+                char quote = c;
+                sb.Append(c);
+                i++;
+                while (i < pattern.Length && pattern[i] != quote)
+                {
+                    sb.Append(pattern[i]);
+                    i++;
+                }
+                if (i < pattern.Length)
+                {
+                    sb.Append(pattern[i]);
+                    i++;
+                }
+                continue;
+            }
+            if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{')
+            {
+                sb.Append(c);
+                i++;
+                continue;
+            }
+            if (char.IsLetter(c) || c == '_')
+            {
+                int start = i;
+                while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-'))
+                    i++;
+                if (i < pattern.Length && pattern[i] == ':')
+                {
+                    if (i + 1 < pattern.Length && pattern[i + 1] == ':')
+                    {
+                        sb.Append(pattern[start..i]);
+                        continue;
+                    }
+                    var prefix = pattern[start..i];
+                    i++;
+                    int localStart = i;
+                    while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-' || pattern[i] == '.'))
+                        i++;
+                    var local = pattern[localStart..i];
+                    var nsUri = contextElement.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                    if (!string.IsNullOrEmpty(nsUri))
+                    {
+                        sb.Append($"Q{{{nsUri}}}{local}");
+                    }
+                    else
+                    {
+                        sb.Append(prefix);
+                        sb.Append(':');
+                        sb.Append(local);
+                    }
+                }
+                else
+                {
+                    sb.Append(pattern[start..i]);
+                }
+                continue;
+            }
+            sb.Append(c);
+            i++;
+        }
+        return sb.ToString();
     }
 }

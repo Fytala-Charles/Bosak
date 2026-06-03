@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-05-31  
+> **Living Registry** — Last updated: 2026-06-02  
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -101,8 +101,9 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-019 | Customer A | `xsl:try` / `xsl:catch` support | Customer A's date/number helper functions use try/catch for defensive parsing of dirty EDI data | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
 | REQ-020 | Customer A | `exclude-result-prefixes` support | Customer A's 42 stylesheets declare `exclude-result-prefixes="xs app"`; without it, output XML is polluted with unused namespace declarations | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
 | REQ-021 | Customer A | `xsl:message` support | Customer A partner overrides use `xsl:message` for debugging and audit logging during transform execution | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
+| REQ-022 | Bosak / Fytala Stack | Migrate to .NET 10 | Bosak targets .NET 9, which reached end-of-life in May 2026. Upgrade to .NET 10 LTS to restore support and unblock Customer B BOD-to-OData integration | **Accepted** | Phase 3 | Charles Korthout | 2026-06-02 |
 
-> **Legend:**
+> **Legend:
 > - `Pending` — Under review, no decision yet.
 > - `Accepted` — Approved for implementation, awaiting scheduling.
 > - `In Progress` — Actively being developed.
@@ -980,6 +981,67 @@ For Kimi agents scanning this file, the following markers are used consistently:
 - **Owner:** GitHub username or `Unassigned`
 
 When updating this file via automated tools, preserve the table alignment and section structure so that regex/grep-based discovery continues to work.
+
+---
+
+### REQ-022: Migrate Bosak to .NET 10
+
+**Requesting Application:** Bosak / Fytala Stack  
+**Submitted:** 2026-06-02  
+**Status:** **Accepted**
+
+#### Problem Statement
+
+Bosak currently targets .NET 9 (`net9.0`). .NET 9 reached end-of-life in **May 2026** — it is already unsupported. This creates two urgent problems:
+
+1. **Security risk** — Running on an EOL runtime means no security patches
+2. **Integration blocker** — Customer B's BOD-to-OData XSLT Bridge (REQ-024) cannot reference Bosak directly because Customer B targets .NET 8 and Bosak targets .NET 9. Even if Customer B upgrades to .NET 10, Bosak must also be on .NET 10 for clean project references.
+
+#### Proposed Solution
+
+Upgrade all Bosak project files from `net9.0` to `net10.0`.
+
+**Projects to migrate:**
+- `Bosak.XPath.Core`
+- `Bosak.XPath.Parser`
+- `Bosak.XPath.Compiler`
+- `Bosak.XPath.Runtime`
+- `Bosak.XPath.Standard`
+- `Bosak.XPath.Api`
+- `Bosak.XPath.Providers`
+- `Bosak.XPath.Xslt`
+- All test and conformance projects
+
+**Alternative considered:** Multi-target `net8.0;net9.0;net10.0` to support consumers on older versions. **Rejected** — adds build complexity and testing matrix for an already-EOL runtime.
+
+#### Acceptance Criteria
+- [ ] All Bosak projects target `net10.0`
+- [ ] Full QT3 conformance suite passes (or matches current pass rates)
+- [ ] XSLT conformance suite passes (or matches current pass rates)
+- [ ] Customer A's `validate-corpus` regression suite passes
+- [ ] Customer B BOD-to-OData spike builds without standalone `net9.0` workaround
+
+#### Impact Analysis
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Core / XDM | Low | Value types and sequences are framework-agnostic |
+| Parser | Low | `ReadOnlySpan<char>` APIs are stable |
+| Compiler / VM | Low | IL generation and register VM unchanged |
+| XSLT | Low | Transform engine uses framework primitives only |
+| Conformance | Low | W3C QT3 harness must run on .NET 10 |
+
+#### Related Requests
+- Customer B REQ-025 (Migrate Customer B to .NET 10)
+- Customer A REQ-019 (Unified migration to .NET 10)
+- Customer D REQ-007 (Migrate Customer D to .NET 10)
+- Diffie REQ-009 (Migrate Diffie to .NET 10)
+
+#### Decision Log
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-02 | Charles Korthout / Kimi | Accepted | .NET 9 is EOL (May 2026); .NET 10 is the correct LTS target |
 
 ---
 

@@ -572,7 +572,9 @@ class Program
                 var prefix = attr.Name.LocalName;
                 if (prefix == "xmlns")
                     prefix = "";
-                if (!dict.ContainsKey(prefix))
+                // Skip default namespace (empty prefix) — XPath assertions in the test
+                // harness should not inherit the test catalog's default namespace.
+                if (!string.IsNullOrEmpty(prefix) && !dict.ContainsKey(prefix))
                     dict[prefix] = attr.Value;
             }
             current = current.Parent;
