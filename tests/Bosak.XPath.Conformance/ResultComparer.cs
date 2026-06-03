@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 22-05-2026     | Added Duration serialization and type matching for dayTimeDuration/yearMonthDuration  |
 //                      | Charles Korthout | 0.5   | 22-05-2026     | Fixed Double/Float serialization to use XdmValue.ToString for canonical formatting       |
 //                      | Charles Korthout | 0.6   | 27-05-2026     | DeepEqual: single-item sequence is equivalent to bare item (XDM semantics)               |
+//                      | Charles Korthout | 0.7   | 01-06-2026     | assert-string-value respects normalize-space="true"; added NormalizeSpace helper        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -89,7 +90,7 @@ internal static class ResultComparer
             "assert-eq" => CompareAssertEq(assertion.Value, actual, caughtException),
             "assert-true" => CompareAssertTrue(actual, caughtException),
             "assert-false" => CompareAssertFalse(actual, caughtException),
-            "assert-string-value" => CompareAssertStringValue(assertion.Value, actual, caughtException),
+            "assert-string-value" => CompareAssertStringValue(assertion, actual, caughtException),
             "assert-empty" => CompareAssertEmpty(actual, caughtException),
             "error" => CompareError((string?)assertion.Attribute("code") ?? "", caughtException),
             "assert-type" => CompareAssertType(assertion.Value, actual, caughtException),
@@ -165,18 +166,55 @@ internal static class ResultComparer
         return new TestOutcome(TestOutcomeKind.Failed, $"assert-false failed. Got: {SerializeValue(actual)}");
     }
 
-    private static TestOutcome CompareAssertStringValue(string expected, XdmValue actual, Exception? caughtException)
+    private static TestOutcome CompareAssertStringValue(XElement assertion, XdmValue actual, Exception? caughtException)
     {
         if (caughtException is not null)
             return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
 
+        string expected = assertion.Value;
         string actualStr = SerializeValue(actual);
-        string normalizedExpected = expected.Replace("\r\n", "\n").Replace("\n", " ").Trim();
+        bool doNormalize = assertion.Attribute("normalize-space")?.Value == "true";
 
-        if (actualStr == normalizedExpected)
+        if (doNormalize)
+        {
+            expected = NormalizeSpace(expected);
+            actualStr = NormalizeSpace(actualStr);
+        }
+        else
+        {
+            // Even without normalize-space, replace newlines in the expected value
+            // because XML formatting may insert them in the assertion text.
+            expected = expected.Replace("\r\n", "\n").Replace("\n", " ");
+        }
+
+        if (actualStr == expected)
             return new TestOutcome(TestOutcomeKind.Passed, null);
 
-        return new TestOutcome(TestOutcomeKind.Failed, $"assert-string-value failed. Expected: '{normalizedExpected}', Got: '{actualStr}'");
+        return new TestOutcome(TestOutcomeKind.Failed, $"assert-string-value failed. Expected: '{expected}', Got: '{actualStr}'");
+    }
+
+    private static string NormalizeSpace(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return string.Empty;
+
+        var sb = new System.Text.StringBuilder(input.Length);
+        bool inWhitespace = true; // skip leading whitespace
+        foreach (char c in input)
+        {
+            if (char.IsWhiteSpace(c))
+            {
+                inWhitespace = true;
+            }
+            else
+            {
+                if (inWhitespace && sb.Length > 0)
+                    sb.Append(' ');
+                sb.Append(c);
+                inWhitespace = false;
+            }
+        }
+        return sb.ToString();
     }
 
     private static TestOutcome CompareAssertEmpty(XdmValue actual, Exception? caughtException)

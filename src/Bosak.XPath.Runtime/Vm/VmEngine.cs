@@ -33,6 +33,7 @@
 //                      | Charles Korthout | 2.0   | 01-06-2026     | Include XPST0017 error code in function-not-found exceptions                             |
 //                      | Charles Korthout | 2.1   | 02-06-2026     | Numeric predicate uses exact equality, not Math.Round (XPath 2.0 §3.2.4)                 |
 //                      | Charles Korthout | 2.2   | 03-06-2026     | MultiplyOrAddInteger: detect overflow, promote to decimal (fixes number-0111)            |
+//                      | Charles Korthout | 2.3   | 01-06-2026     | Use module.MaxRegisterCount instead of hardcoded 256 for register array sizing           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -56,8 +57,8 @@ public static class VmEngine
     /// </summary>
     public static XdmValue Execute(IrModule module, EvaluationContext context)
     {
-        // The lowerer uses monotonic register allocation; 256 is generous for most expressions.
-        var registers = new XdmValue[256];
+        // The lowerer uses monotonic register allocation; size is determined at compile time.
+        var registers = new XdmValue[module.MaxRegisterCount];
         var (result, _) = ExecuteBlock(module, context, registers, 0);
         return NormalizeSequence(result);
     }

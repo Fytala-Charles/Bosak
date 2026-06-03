@@ -24,14 +24,14 @@ public class VmOpcodeTests
 {
     private static XdmValue Run(params IrInstruction[] instructions)
     {
-        var module = new IrModule(instructions, Array.Empty<object?>());
+        var module = new IrModule(instructions, Array.Empty<object?>(), 16);
         var ctx = new EvaluationContext();
         return VmEngine.Execute(module, ctx);
     }
 
     private static XdmValue Run(IrInstruction[] instructions, object?[] literalPool)
     {
-        var module = new IrModule(instructions, literalPool);
+        var module = new IrModule(instructions, literalPool, 16);
         var ctx = new EvaluationContext();
         return VmEngine.Execute(module, ctx);
     }

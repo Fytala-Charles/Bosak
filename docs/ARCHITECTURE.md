@@ -211,7 +211,7 @@ RETURN           r5
 ```
 
 #### Phase 3: Bytecode Emitter
-Emits the IR into a compact bytecode format stored in `ReadOnlyMemory<byte>`.
+Emits the IR into a compact format. `IrInstruction` is an 11-byte struct (`IrOpCode` + 3×`ushort` registers + `int` operand) with `Pack=1`.
 
 #### Phase 4: IL JIT (Optional / Future)
 For expressions executed frequently (>N times), the IR can be compiled to a `DynamicMethod` using `System.Linq.Expressions` or `System.Reflection.Emit` for near-native performance.
@@ -225,7 +225,7 @@ A lightweight, register-based virtual machine.
 ```mermaid
 flowchart TD
     IR["IR Module<br/>(Instructions + Literal Pool)"]
-    REG["Register File<br/>XdmValue[256]"]
+    REG["Register File<br/>XdmValue[module.MaxRegisterCount]"]
     IP["Instruction Pointer"]
     CTX["EvaluationContext<br/>Focus + Variables + Functions"]
     OUT["XdmValue Result"]
@@ -238,7 +238,7 @@ flowchart TD
 ```
 
 **Design**:
-- Small stack of `XdmValue` registers (typically 16-64, expandable).
+- Dynamically-sized `XdmValue` register array sized to the module's max register count (up to 65,536 registers).
 - Instruction pointer walks the bytecode.
 - Axis instructions delegate to the `IXdmNode` provider.
 - Function calls dispatch through a vtable in `EvaluationContext`.

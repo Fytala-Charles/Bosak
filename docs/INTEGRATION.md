@@ -285,7 +285,7 @@ dotnet test Bosak.sln
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
 | XSLT 3.0 (W3C) | 3,257 | 2,204 | 9,139 | 59.6% | Stable; +2 from number-0111/0807 fixes |
-| XPath 3.1 (QT3) | — | — | — | — | Crashes during `prod-LetClause` (register overflow); 350/428 sets completed |
+| XPath 3.1 (QT3) | 18,651 | 3,279 | 9,891 | 58.6% | Completed all 428 sets; register overflow fixed (byte→ushort); normalize-space harness fix |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
 > ```bash

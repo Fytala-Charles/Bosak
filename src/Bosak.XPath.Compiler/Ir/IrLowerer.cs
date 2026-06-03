@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 30-05-2026     | Emit NamespaceTest for QName node tests (prefix:localname)                             |
 //                      | Charles Korthout | 1.2   | 30-05-2026     | Wrap predicated path steps in PathStepMap for per-context-item predicate evaluation   |
 //                      | Charles Korthout | 1.3   | 01-06-2026     | Use SimpleMap for non-StepNode steps in path expressions (e.g. /a/b/number())        |
+//                      | Charles Korthout | 1.4   | 01-06-2026     | Expanded register encoding from byte to ushort; removed 255-register limit             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -51,17 +52,19 @@ public sealed class IrLowerer
     private readonly List<IrInstruction> _instructions = new();
     private readonly List<object?> _literalPool = new();
     private int _nextRegister;
+    private readonly Stack<int> _freeRegisters = new();
 
     public IrModule Lower(XPathAstNode node)
     {
         _instructions.Clear();
         _literalPool.Clear();
+        _freeRegisters.Clear();
         _nextRegister = 0;
 
         int resultReg = LowerNode(node);
-        Emit(IrOpCode.Return, (byte)resultReg);
+        Emit(IrOpCode.Return, (ushort)resultReg);
 
-        return new IrModule(_instructions.ToArray(), _literalPool.ToArray());
+        return new IrModule(_instructions.ToArray(), _literalPool.ToArray(), _nextRegister);
     }
 
     // ------------------------------------------------------------------
@@ -117,7 +120,7 @@ public sealed class IrLowerer
     private int LowerBooleanLiteral(BooleanLiteralNode node, int? targetReg)
     {
         int reg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.LoadBoolean, (byte)reg, operand: node.Value ? 1 : 0);
+        Emit(IrOpCode.LoadBoolean, (ushort)reg, operand: node.Value ? 1 : 0);
         return reg;
     }
 
@@ -125,7 +128,7 @@ public sealed class IrLowerer
     {
         int reg = targetReg ?? AllocRegister();
         int poolIdx = AddToLiteralPool(node.Value);
-        Emit(IrOpCode.LoadInteger, (byte)reg, operand: poolIdx);
+        Emit(IrOpCode.LoadInteger, (ushort)reg, operand: poolIdx);
         return reg;
     }
 
@@ -133,7 +136,7 @@ public sealed class IrLowerer
     {
         int reg = targetReg ?? AllocRegister();
         int poolIdx = AddToLiteralPool(node.Value);
-        Emit(IrOpCode.LoadDecimal, (byte)reg, operand: poolIdx);
+        Emit(IrOpCode.LoadDecimal, (ushort)reg, operand: poolIdx);
         return reg;
     }
 
@@ -141,7 +144,7 @@ public sealed class IrLowerer
     {
         int reg = targetReg ?? AllocRegister();
         int poolIdx = AddToLiteralPool(node.Value);
-        Emit(IrOpCode.LoadDouble, (byte)reg, operand: poolIdx);
+        Emit(IrOpCode.LoadDouble, (ushort)reg, operand: poolIdx);
         return reg;
     }
 
@@ -149,7 +152,7 @@ public sealed class IrLowerer
     {
         int reg = targetReg ?? AllocRegister();
         int poolIdx = AddToLiteralPool(node.Value);
-        Emit(IrOpCode.LoadString, (byte)reg, operand: poolIdx);
+        Emit(IrOpCode.LoadString, (ushort)reg, operand: poolIdx);
         return reg;
     }
 
@@ -172,14 +175,14 @@ public sealed class IrLowerer
                 : $"{node.Prefix}:{node.LocalName}";
             poolIdx = AddToLiteralPool(qname);
         }
-        Emit(IrOpCode.LoadVariable, (byte)reg, operand: poolIdx);
+        Emit(IrOpCode.LoadVariable, (ushort)reg, operand: poolIdx);
         return reg;
     }
 
     private int LowerContextItem(int? targetReg)
     {
         int reg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.LoadContextItem, (byte)reg);
+        Emit(IrOpCode.LoadContextItem, (ushort)reg);
         return reg;
     }
 
@@ -232,7 +235,9 @@ public sealed class IrLowerer
             _ => throw new NotSupportedException($"Binary operator {node.Operator} is not supported by the IR lowerer.")
         };
 
-        Emit(opcode, (byte)resultReg, (byte)leftReg, (byte)rightReg);
+        Emit(opcode, (ushort)resultReg, (ushort)leftReg, (ushort)rightReg);
+        FreeRegister(leftReg);
+        FreeRegister(rightReg);
         return resultReg;
     }
 
@@ -243,27 +248,29 @@ public sealed class IrLowerer
         // Evaluate left
         int leftReg = LowerNode(node.Left, resultReg);
         if (leftReg != resultReg)
-            Emit(IrOpCode.Move, (byte)resultReg, (byte)leftReg);
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)leftReg);
+        FreeRegister(leftReg);
 
         // If left is false, result is false
-        int jumpToFalse = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (byte)resultReg);
+        int jumpToFalse = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)resultReg);
 
         // Evaluate right
         int rightReg = LowerNode(node.Right, resultReg);
         if (rightReg != resultReg)
-            Emit(IrOpCode.Move, (byte)resultReg, (byte)rightReg);
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)rightReg);
+        FreeRegister(rightReg);
 
         // If right is false, result is false
-        int jumpToFalse2 = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (byte)resultReg);
+        int jumpToFalse2 = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)resultReg);
 
         // Both true: result = true
-        Emit(IrOpCode.LoadBoolean, (byte)resultReg, operand: 1);
+        Emit(IrOpCode.LoadBoolean, (ushort)resultReg, operand: 1);
         int jumpToEnd = EmitJumpPlaceholder(IrOpCode.Jump);
 
         // False path
         PatchJump(jumpToFalse, CurrentInstructionIndex);
         PatchJump(jumpToFalse2, CurrentInstructionIndex);
-        Emit(IrOpCode.LoadBoolean, (byte)resultReg, operand: 0);
+        Emit(IrOpCode.LoadBoolean, (ushort)resultReg, operand: 0);
 
         // End
         PatchJump(jumpToEnd, CurrentInstructionIndex);
@@ -278,27 +285,29 @@ public sealed class IrLowerer
         // Evaluate left
         int leftReg = LowerNode(node.Left, resultReg);
         if (leftReg != resultReg)
-            Emit(IrOpCode.Move, (byte)resultReg, (byte)leftReg);
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)leftReg);
+        FreeRegister(leftReg);
 
         // If left is true, result is true
-        int jumpToTrue = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (byte)resultReg);
+        int jumpToTrue = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (ushort)resultReg);
 
         // Evaluate right
         int rightReg = LowerNode(node.Right, resultReg);
         if (rightReg != resultReg)
-            Emit(IrOpCode.Move, (byte)resultReg, (byte)rightReg);
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)rightReg);
+        FreeRegister(rightReg);
 
         // If right is true, result is true
-        int jumpToTrue2 = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (byte)resultReg);
+        int jumpToTrue2 = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (ushort)resultReg);
 
         // Both false: result = false
-        Emit(IrOpCode.LoadBoolean, (byte)resultReg, operand: 0);
+        Emit(IrOpCode.LoadBoolean, (ushort)resultReg, operand: 0);
         int jumpToEnd = EmitJumpPlaceholder(IrOpCode.Jump);
 
         // True path
         PatchJump(jumpToTrue, CurrentInstructionIndex);
         PatchJump(jumpToTrue2, CurrentInstructionIndex);
-        Emit(IrOpCode.LoadBoolean, (byte)resultReg, operand: 1);
+        Emit(IrOpCode.LoadBoolean, (ushort)resultReg, operand: 1);
 
         // End
         PatchJump(jumpToEnd, CurrentInstructionIndex);
@@ -313,7 +322,7 @@ public sealed class IrLowerer
 
         // Emit SimpleMap instruction with placeholder for RHS entry point
         int simpleMapInstrIdx = _instructions.Count;
-        Emit(IrOpCode.SimpleMap, (byte)resultReg, (byte)leftReg, 0, 0); // placeholder
+        Emit(IrOpCode.SimpleMap, (ushort)resultReg, (ushort)leftReg, 0, 0); // placeholder
 
         // Jump over RHS code (so it doesn't execute during fall-through)
         int jumpInstrIdx = _instructions.Count;
@@ -324,11 +333,12 @@ public sealed class IrLowerer
 
         // The SimpleMap instruction sets the context item before jumping here.
         int rhsReg = LowerNode(node.Right);
-        Emit(IrOpCode.Return, (byte)rhsReg);
+        Emit(IrOpCode.Return, (ushort)rhsReg);
+        FreeRegister(rhsReg);
 
         // Patch instructions
         int afterRhs = _instructions.Count;
-        PatchInstruction(simpleMapInstrIdx, IrOpCode.SimpleMap, (byte)resultReg, (byte)leftReg, 0, rhsEntry);
+        PatchInstruction(simpleMapInstrIdx, IrOpCode.SimpleMap, (ushort)resultReg, (ushort)leftReg, 0, rhsEntry);
         PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
 
         return resultReg;
@@ -347,15 +357,16 @@ public sealed class IrLowerer
         {
             case UnaryOperator.Plus:
                 // Unary plus is a no-op; just move the value
-                Emit(IrOpCode.Move, (byte)resultReg, (byte)operandReg);
+                Emit(IrOpCode.Move, (ushort)resultReg, (ushort)operandReg);
                 break;
             case UnaryOperator.Minus:
-                Emit(IrOpCode.UnaryMinus, (byte)resultReg, (byte)operandReg);
+                Emit(IrOpCode.UnaryMinus, (ushort)resultReg, (ushort)operandReg);
                 break;
             default:
                 throw new NotSupportedException($"Unary operator {node.Operator} is not supported.");
         }
 
+        FreeRegister(operandReg);
         return resultReg;
     }
 
@@ -371,12 +382,12 @@ public sealed class IrLowerer
         int condReg = LowerNode(node.Condition);
 
         // Jump to else if false
-        int jumpToElse = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (byte)condReg);
+        int jumpToElse = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)condReg);
 
         // Then branch
         int thenReg = LowerNode(node.ThenBranch, resultReg);
         if (thenReg != resultReg)
-            Emit(IrOpCode.Move, (byte)resultReg, (byte)thenReg);
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)thenReg);
 
         // Jump over else
         int jumpToEnd = EmitJumpPlaceholder(IrOpCode.Jump);
@@ -387,7 +398,7 @@ public sealed class IrLowerer
 
         int elseReg = LowerNode(node.ElseBranch, resultReg);
         if (elseReg != resultReg)
-            Emit(IrOpCode.Move, (byte)resultReg, (byte)elseReg);
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)elseReg);
 
         // End
         int endLabel = CurrentInstructionIndex;
@@ -446,7 +457,7 @@ public sealed class IrLowerer
                     : $"{node.Prefix}:{node.LocalName}";
                 funcItemPoolIdx = AddToLiteralPool((qname, argCount));
             }
-            Emit(IrOpCode.LoadFunction, (byte)funcReg, operand: funcItemPoolIdx);
+            Emit(IrOpCode.LoadFunction, (ushort)funcReg, operand: funcItemPoolIdx);
 
             // Evaluate non-placeholder arguments and build descriptor
             var argRegs = new int[argCount];
@@ -465,27 +476,30 @@ public sealed class IrLowerer
             }
 
             int descPoolIdx = AddToLiteralPool(descriptor);
-            Emit(IrOpCode.Curry, (byte)resultReg, (byte)funcReg, operand: descPoolIdx);
+            Emit(IrOpCode.Curry, (ushort)resultReg, (ushort)funcReg, operand: descPoolIdx);
+            FreeRegister(funcReg);
+            foreach (var r in argRegs) FreeRegister(r);
             return resultReg;
         }
 
         int firstArgReg = 0;
+        int[]? callArgRegs = null;
+        bool consecutive = true;
 
         if (argCount > 0)
         {
             // Evaluate each argument (may allocate scratch registers internally)
-            var argRegs = new int[argCount];
-            argRegs[0] = LowerNode(node.Arguments[0]);
+            callArgRegs = new int[argCount];
+            callArgRegs[0] = LowerNode(node.Arguments[0]);
             for (int i = 1; i < argCount; i++)
             {
-                argRegs[i] = LowerNode(node.Arguments[i]);
+                callArgRegs[i] = LowerNode(node.Arguments[i]);
             }
 
             // Check whether the argument result registers are already consecutive
-            bool consecutive = true;
             for (int i = 1; i < argCount; i++)
             {
-                if (argRegs[i] != argRegs[0] + i)
+                if (callArgRegs[i] != callArgRegs[0] + i)
                 {
                     consecutive = false;
                     break;
@@ -494,22 +508,34 @@ public sealed class IrLowerer
 
             if (consecutive)
             {
-                firstArgReg = argRegs[0];
+                firstArgReg = callArgRegs[0];
             }
             else
             {
                 // Repack arguments into a consecutive register block for the VM Call opcode
-                firstArgReg = AllocRegister();
-                Emit(IrOpCode.Move, (byte)firstArgReg, (byte)argRegs[0]);
-                for (int i = 1; i < argCount; i++)
+                firstArgReg = _nextRegister;
+                for (int i = 0; i < argCount; i++)
                 {
-                    int packedReg = AllocRegister();
-                    Emit(IrOpCode.Move, (byte)packedReg, (byte)argRegs[i]);
+                    Debug.Assert(_nextRegister <= 65535, "Register overflow during argument repacking.");
+                    int packedReg = _nextRegister++;
+                    Emit(IrOpCode.Move, (ushort)packedReg, (ushort)callArgRegs[i]);
                 }
             }
         }
 
-        Emit(IrOpCode.Call, (byte)resultReg, (byte)firstArgReg, (byte)argCount, funcPoolIdx);
+        Emit(IrOpCode.Call, (ushort)resultReg, (ushort)firstArgReg, (ushort)argCount, funcPoolIdx);
+        if (callArgRegs != null)
+        {
+            // Free argument registers after the call
+            for (int i = 0; i < argCount; i++)
+                FreeRegister(callArgRegs[i]);
+            if (!consecutive)
+            {
+                // Also free the repacked block
+                for (int i = 0; i < argCount; i++)
+                    FreeRegister(firstArgReg + i);
+            }
+        }
         return resultReg;
     }
 
@@ -519,7 +545,7 @@ public sealed class IrLowerer
         if (!string.IsNullOrEmpty(node.NamespaceUri))
         {
             int nsPoolIdx = AddToLiteralPool(new NamedFunctionItem(node.NamespaceUri, node.LocalName, node.Arity));
-            Emit(IrOpCode.LoadFunction, (byte)resultReg, operand: nsPoolIdx);
+            Emit(IrOpCode.LoadFunction, (ushort)resultReg, operand: nsPoolIdx);
             return resultReg;
         }
         string qname = string.IsNullOrEmpty(node.Prefix)
@@ -527,7 +553,7 @@ public sealed class IrLowerer
             : $"{node.Prefix}:{node.LocalName}";
         var funcTuple = (qname, node.Arity);
         int poolIdx = AddToLiteralPool(funcTuple);
-        Emit(IrOpCode.LoadFunction, (byte)resultReg, operand: poolIdx);
+        Emit(IrOpCode.LoadFunction, (ushort)resultReg, operand: poolIdx);
         return resultReg;
     }
 
@@ -538,12 +564,12 @@ public sealed class IrLowerer
     private int LowerStepAsPath(StepNode node, int? targetReg)
     {
         int contextReg = AllocRegister();
-        Emit(IrOpCode.LoadContextItem, (byte)contextReg);
+        Emit(IrOpCode.LoadContextItem, (ushort)contextReg);
         int resultReg = LowerStep(node, contextReg);
 
         if (targetReg.HasValue && targetReg.Value != resultReg)
         {
-            Emit(IrOpCode.Move, (byte)targetReg.Value, (byte)resultReg);
+            Emit(IrOpCode.Move, (ushort)targetReg.Value, (ushort)resultReg);
             return targetReg.Value;
         }
 
@@ -553,13 +579,14 @@ public sealed class IrLowerer
     private int LowerPathExpr(PathExprNode node, int? targetReg)
     {
         int contextReg = AllocRegister();
-        Emit(IrOpCode.LoadContextItem, (byte)contextReg);
+        Emit(IrOpCode.LoadContextItem, (ushort)contextReg);
 
         int currentReg = contextReg;
         if (node.IsAbsolute)
         {
             int rootReg = AllocRegister();
-            Emit(IrOpCode.DocumentRoot, (byte)rootReg, (byte)currentReg);
+            Emit(IrOpCode.DocumentRoot, (ushort)rootReg, (ushort)currentReg);
+            FreeRegister(currentReg);
             currentReg = rootReg;
         }
 
@@ -583,25 +610,28 @@ public sealed class IrLowerer
                     // semantics (e.g., /a/b/number(), /a/b/(1+2))
                     int mapResultReg = AllocRegister();
                     int mapInstrIdx = _instructions.Count;
-                    Emit(IrOpCode.SimpleMap, (byte)mapResultReg, (byte)currentReg, 1, 0); // placeholder; RegisterC=1 => enforce XPTY0018
+                    Emit(IrOpCode.SimpleMap, (ushort)mapResultReg, (ushort)currentReg, 1, 0); // placeholder; RegisterC=1 => enforce XPTY0018
 
                     int jumpInstrIdx = _instructions.Count;
                     Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
 
                     int rhsEntry = _instructions.Count;
                     int rhsReg = LowerNode(step);
-                    Emit(IrOpCode.Return, (byte)rhsReg);
+                    Emit(IrOpCode.Return, (ushort)rhsReg);
+                    FreeRegister(rhsReg);
 
                     int afterRhs = _instructions.Count;
-                    PatchInstruction(mapInstrIdx, IrOpCode.SimpleMap, (byte)mapResultReg, (byte)currentReg, 1, rhsEntry);
+                    PatchInstruction(mapInstrIdx, IrOpCode.SimpleMap, (ushort)mapResultReg, (ushort)currentReg, 1, rhsEntry);
                     PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
 
+                    FreeRegister(currentReg);
                     currentReg = mapResultReg;
                 }
 
                 // Path expression results must be in document order.
                 int normReg = AllocRegister();
-                Emit(IrOpCode.Normalize, (byte)normReg, (byte)currentReg);
+                Emit(IrOpCode.Normalize, (ushort)normReg, (ushort)currentReg);
+                FreeRegister(currentReg);
                 currentReg = normReg;
             }
             isFirstStep = false;
@@ -609,7 +639,7 @@ public sealed class IrLowerer
 
         if (targetReg.HasValue && targetReg.Value != currentReg)
         {
-            Emit(IrOpCode.Move, (byte)targetReg.Value, (byte)currentReg);
+            Emit(IrOpCode.Move, (ushort)targetReg.Value, (ushort)currentReg);
             return targetReg.Value;
         }
 
@@ -626,7 +656,7 @@ public sealed class IrLowerer
             // sole context item while the predicates run.
             int mapResultReg = AllocRegister();
             int mapInstrIdx = _instructions.Count;
-            Emit(IrOpCode.PathStepMap, (byte)mapResultReg, (byte)contextReg, 0, 0); // placeholder
+            Emit(IrOpCode.PathStepMap, (ushort)mapResultReg, (ushort)contextReg, 0, 0); // placeholder
 
             int jumpInstrIdx = _instructions.Count;
             Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
@@ -635,7 +665,7 @@ public sealed class IrLowerer
 
             // Inner block: single context item -> axis -> name test -> predicates
             int innerCtx = AllocRegister();
-            Emit(IrOpCode.LoadContextItem, (byte)innerCtx);
+            Emit(IrOpCode.LoadContextItem, (ushort)innerCtx);
             int innerResult = LowerStepCore(node, innerCtx);
 
             foreach (var pred in node.Predicates)
@@ -644,22 +674,26 @@ public sealed class IrLowerer
                 innerResult = EmitPredicateFilter(innerResult, predExpr);
             }
 
-            Emit(IrOpCode.Return, (byte)innerResult);
+            Emit(IrOpCode.Return, (ushort)innerResult);
+            FreeRegister(innerCtx);
+            FreeRegister(innerResult);
 
             int afterBlock = _instructions.Count;
-            PatchInstruction(mapInstrIdx, IrOpCode.PathStepMap, (byte)mapResultReg, (byte)contextReg, 0, blockEntry);
+            PatchInstruction(mapInstrIdx, IrOpCode.PathStepMap, (ushort)mapResultReg, (ushort)contextReg, 0, blockEntry);
             PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterBlock);
 
             // Path expression results must be in document order.
             int normReg = AllocRegister();
-            Emit(IrOpCode.Normalize, (byte)normReg, (byte)mapResultReg);
+            Emit(IrOpCode.Normalize, (ushort)normReg, (ushort)mapResultReg);
+            FreeRegister(mapResultReg);
             return normReg;
         }
 
         int resultReg = LowerStepCore(node, contextReg);
         // Path expression results must be in document order.
         int normReg2 = AllocRegister();
-        Emit(IrOpCode.Normalize, (byte)normReg2, (byte)resultReg);
+        Emit(IrOpCode.Normalize, (ushort)normReg2, (ushort)resultReg);
+        FreeRegister(resultReg);
         return normReg2;
     }
 
@@ -671,7 +705,7 @@ public sealed class IrLowerer
         // Emit axis instruction
         int axisReg = AllocRegister();
         var axisOpcode = GetAxisOpcode(node.Axis);
-        Emit(axisOpcode, (byte)axisReg, (byte)contextReg);
+        Emit(axisOpcode, (ushort)axisReg, (ushort)contextReg);
 
         // Emit name test if present
         int afterTestReg = axisReg;
@@ -691,7 +725,8 @@ public sealed class IrLowerer
                 if (node.Axis != XdmAxis.Attribute && node.Axis != XdmAxis.Namespace)
                 {
                     int nsPoolIdx = AddToLiteralPool("");
-                    Emit(IrOpCode.NamespaceTest, (byte)afterTestReg, (byte)axisReg, operand: nsPoolIdx);
+                    Emit(IrOpCode.NamespaceTest, (ushort)afterTestReg, (ushort)axisReg, operand: nsPoolIdx);
+                    FreeRegister(axisReg);
                     axisReg = afterTestReg;
                 }
             }
@@ -703,7 +738,8 @@ public sealed class IrLowerer
                 if (!string.IsNullOrEmpty(node.NodeTest.NamespaceUri) && node.NodeTest.NamespaceUri != "*")
                 {
                     int nsPoolIdx = AddToLiteralPool(node.NodeTest.NamespaceUri); // prefix
-                    Emit(IrOpCode.NamespaceTest, (byte)afterTestReg, (byte)axisReg, operand: nsPoolIdx);
+                    Emit(IrOpCode.NamespaceTest, (ushort)afterTestReg, (ushort)axisReg, operand: nsPoolIdx);
+                    FreeRegister(axisReg);
                     axisReg = afterTestReg;
                 }
             }
@@ -718,30 +754,36 @@ public sealed class IrLowerer
                     _ => "element"
                 };
                 int kindPoolIdx = AddToLiteralPool(principalKind);
-                Emit(IrOpCode.KindTest, (byte)afterTestReg, (byte)axisReg, operand: kindPoolIdx);
+                Emit(IrOpCode.KindTest, (ushort)afterTestReg, (ushort)axisReg, operand: kindPoolIdx);
+                FreeRegister(axisReg);
                 axisReg = afterTestReg;
 
                 int nsPoolIdx = AddToLiteralPool(node.NodeTest.Name ?? ""); // prefix
                 afterTestReg = AllocRegister();
-                Emit(IrOpCode.NamespaceTest, (byte)afterTestReg, (byte)axisReg, operand: nsPoolIdx);
+                Emit(IrOpCode.NamespaceTest, (ushort)afterTestReg, (ushort)axisReg, operand: nsPoolIdx);
+                FreeRegister(axisReg);
                 axisReg = afterTestReg;
             }
             else if (node.NodeTest.Kind == NameTestKind.KindTest)
             {
                 namePoolIdx = AddToLiteralPool(node.NodeTest.Name ?? "node");
-                Emit(IrOpCode.KindTest, (byte)afterTestReg, (byte)axisReg, operand: namePoolIdx);
+                Emit(IrOpCode.KindTest, (ushort)afterTestReg, (ushort)axisReg, operand: namePoolIdx);
+                FreeRegister(axisReg);
                 axisReg = afterTestReg;
             }
 
             if (node.NodeTest.Kind != NameTestKind.KindTest && node.NodeTest.Kind != NameTestKind.NamespaceAny)
             {
-                Emit(IrOpCode.NameTest, (byte)afterTestReg, (byte)axisReg, operand: namePoolIdx);
+                Emit(IrOpCode.NameTest, (ushort)afterTestReg, (ushort)axisReg, operand: namePoolIdx);
             }
+            if (axisReg != afterTestReg)
+                FreeRegister(axisReg);
         }
         else
         {
             // * is a name test that matches any name of the principal node kind for the axis.
             // Filter by principal node kind since the axis returns all node kinds.
+            int oldAxisReg = axisReg;
             afterTestReg = AllocRegister();
             string principalKind = node.Axis switch
             {
@@ -750,7 +792,8 @@ public sealed class IrLowerer
                 _ => "element"
             };
             int kindPoolIdx = AddToLiteralPool(principalKind);
-            Emit(IrOpCode.KindTest, (byte)afterTestReg, (byte)axisReg, operand: kindPoolIdx);
+            Emit(IrOpCode.KindTest, (ushort)afterTestReg, (ushort)axisReg, operand: kindPoolIdx);
+            FreeRegister(oldAxisReg);
         }
 
         return afterTestReg;
@@ -764,7 +807,7 @@ public sealed class IrLowerer
 
         if (targetReg.HasValue && targetReg.Value != resultReg)
         {
-            Emit(IrOpCode.Move, (byte)targetReg.Value, (byte)resultReg);
+            Emit(IrOpCode.Move, (ushort)targetReg.Value, (ushort)resultReg);
             return targetReg.Value;
         }
 
@@ -778,7 +821,7 @@ public sealed class IrLowerer
         // Check if this is a numeric subscript like [1] or [last()]
         if (predicateExpr is IntegerLiteralNode subscript)
         {
-            Emit(IrOpCode.Subscript, (byte)resultReg, (byte)sequenceReg, operand: (int)subscript.Value);
+            Emit(IrOpCode.Subscript, (ushort)resultReg, (ushort)sequenceReg, operand: (int)subscript.Value);
             return resultReg;
         }
 
@@ -787,7 +830,7 @@ public sealed class IrLowerer
             fc.LocalName == "last" &&
             fc.Arguments.Count == 0)
         {
-            Emit(IrOpCode.Last, (byte)resultReg, (byte)sequenceReg);
+            Emit(IrOpCode.Last, (ushort)resultReg, (ushort)sequenceReg);
             return resultReg;
         }
 
@@ -798,13 +841,13 @@ public sealed class IrLowerer
         {
             // position() as a predicate is always true (non-zero position)
             // This should have been optimized away, but handle it anyway
-            Emit(IrOpCode.Move, (byte)resultReg, (byte)sequenceReg);
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)sequenceReg);
             return resultReg;
         }
 
         // General predicate: emit Filter instruction with inline predicate code
         int filterInstrIdx = _instructions.Count;
-        Emit(IrOpCode.Filter, (byte)resultReg, (byte)sequenceReg, 0, 0); // placeholder
+        Emit(IrOpCode.Filter, (ushort)resultReg, (ushort)sequenceReg, 0, 0); // placeholder
 
         // Jump over predicate code (so it doesn't execute during fall-through)
         int jumpInstrIdx = _instructions.Count;
@@ -816,11 +859,12 @@ public sealed class IrLowerer
         // The Filter instruction sets the context item before jumping here.
         // The predicate expression is evaluated with that context.
         int predicateReg = LowerNode(predicateExpr);
-        Emit(IrOpCode.Return, (byte)predicateReg);
+        Emit(IrOpCode.Return, (ushort)predicateReg);
+        FreeRegister(predicateReg);
 
         // Patch the Filter instruction to point to predicate entry
         int afterPredicate = _instructions.Count;
-        PatchInstruction(filterInstrIdx, IrOpCode.Filter, (byte)resultReg, (byte)sequenceReg, 0, predicateEntry);
+        PatchInstruction(filterInstrIdx, IrOpCode.Filter, (ushort)resultReg, (ushort)sequenceReg, 0, predicateEntry);
         PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterPredicate);
 
         return resultReg;
@@ -856,7 +900,7 @@ public sealed class IrLowerer
         if (node.Expressions.Count == 0)
         {
             int reg = targetReg ?? AllocRegister();
-            Emit(IrOpCode.LoadEmptySequence, (byte)reg);
+            Emit(IrOpCode.LoadEmptySequence, (ushort)reg);
             return reg;
         }
 
@@ -866,15 +910,15 @@ public sealed class IrLowerer
         }
 
         int resultReg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.SequenceStart, (byte)resultReg);
+        Emit(IrOpCode.SequenceStart, (ushort)resultReg);
 
         foreach (var expr in node.Expressions)
         {
             int itemReg = LowerNode(expr);
-            Emit(IrOpCode.SequenceAdd, (byte)resultReg, (byte)itemReg);
+            Emit(IrOpCode.SequenceAdd, (ushort)resultReg, (ushort)itemReg);
         }
 
-        Emit(IrOpCode.SequenceEnd, (byte)resultReg);
+        Emit(IrOpCode.SequenceEnd, (ushort)resultReg);
         return resultReg;
     }
 
@@ -883,7 +927,7 @@ public sealed class IrLowerer
         int fromReg = LowerNode(node.From);
         int toReg = LowerNode(node.To);
         int resultReg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.Range, (byte)resultReg, (byte)fromReg, (byte)toReg);
+        Emit(IrOpCode.Range, (ushort)resultReg, (ushort)fromReg, (ushort)toReg);
         return resultReg;
     }
 
@@ -898,7 +942,7 @@ public sealed class IrLowerer
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         ValidateCastTarget(typeName);
         int poolIdx = AddToLiteralPool(typeName);
-        Emit(IrOpCode.Cast, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
+        Emit(IrOpCode.Cast, (ushort)resultReg, (ushort)exprReg, (ushort)node.Occurrence, poolIdx);
         return resultReg;
     }
 
@@ -909,7 +953,7 @@ public sealed class IrLowerer
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         ValidateCastTarget(typeName);
         int poolIdx = AddToLiteralPool(typeName);
-        Emit(IrOpCode.Castable, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
+        Emit(IrOpCode.Castable, (ushort)resultReg, (ushort)exprReg, (ushort)node.Occurrence, poolIdx);
         return resultReg;
     }
 
@@ -926,7 +970,7 @@ public sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         int poolIdx = AddToLiteralPool(typeName);
-        Emit(IrOpCode.InstanceOf, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
+        Emit(IrOpCode.InstanceOf, (ushort)resultReg, (ushort)exprReg, (ushort)node.Occurrence, poolIdx);
         return resultReg;
     }
 
@@ -936,7 +980,7 @@ public sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         int poolIdx = AddToLiteralPool(typeName);
-        Emit(IrOpCode.TreatAs, (byte)resultReg, (byte)exprReg, (byte)node.Occurrence, poolIdx);
+        Emit(IrOpCode.TreatAs, (ushort)resultReg, (ushort)exprReg, (ushort)node.Occurrence, poolIdx);
         return resultReg;
     }
 
@@ -974,7 +1018,7 @@ public sealed class IrLowerer
                         argRegs[i + 1] = LowerNode(staticCall.Arguments[i]);
 
                     int firstArgReg = PackArgumentsConsecutive(argRegs);
-                    Emit(IrOpCode.Call, (byte)resultReg, (byte)firstArgReg, (byte)argCount, funcPoolIdx);
+                    Emit(IrOpCode.Call, (ushort)resultReg, (ushort)firstArgReg, (ushort)argCount, funcPoolIdx);
                     return resultReg;
                 }
 
@@ -988,7 +1032,7 @@ public sealed class IrLowerer
                         argRegs[i + 1] = LowerNode(dynamicCall.Arguments[i]);
 
                     int firstArgReg = PackArgumentsConsecutive(argRegs);
-                    Emit(IrOpCode.Apply, (byte)resultReg, (byte)funcReg, (byte)argCount, firstArgReg);
+                    Emit(IrOpCode.Apply, (ushort)resultReg, (ushort)funcReg, (ushort)argCount, firstArgReg);
                     return resultReg;
                 }
 
@@ -1012,12 +1056,12 @@ public sealed class IrLowerer
         if (consecutive)
             return argRegs[0];
 
-        int firstArgReg = AllocRegister();
-        Emit(IrOpCode.Move, (byte)firstArgReg, (byte)argRegs[0]);
-        for (int i = 1; i < argRegs.Length; i++)
+        int firstArgReg = _nextRegister;
+        for (int i = 0; i < argRegs.Length; i++)
         {
-            int packedReg = AllocRegister();
-            Emit(IrOpCode.Move, (byte)packedReg, (byte)argRegs[i]);
+            Debug.Assert(_nextRegister <= 65535, "Register overflow during argument repacking.");
+            int packedReg = _nextRegister++;
+            Emit(IrOpCode.Move, (ushort)packedReg, (ushort)argRegs[i]);
         }
         return firstArgReg;
     }
@@ -1027,7 +1071,7 @@ public sealed class IrLowerer
         int exprReg = LowerNode(node.Expression);
         int keyReg = LowerNode(node.Key);
         int resultReg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.Lookup, (byte)resultReg, (byte)exprReg, (byte)keyReg);
+        Emit(IrOpCode.Lookup, (ushort)resultReg, (ushort)exprReg, (ushort)keyReg);
         return resultReg;
     }
 
@@ -1035,20 +1079,20 @@ public sealed class IrLowerer
     {
         int exprReg = LowerNode(node.Expression);
         int resultReg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.LookupWildcard, (byte)resultReg, (byte)exprReg);
+        Emit(IrOpCode.LookupWildcard, (ushort)resultReg, (ushort)exprReg);
         return resultReg;
     }
 
     private int LowerMapConstructor(MapConstructorNode node, int? targetReg)
     {
         int resultReg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.Map, (byte)resultReg);
+        Emit(IrOpCode.Map, (ushort)resultReg);
 
         foreach (var entry in node.Entries)
         {
             int keyReg = LowerNode(entry.Key);
             int valueReg = LowerNode(entry.Value);
-            Emit(IrOpCode.MapAdd, (byte)resultReg, (byte)keyReg, (byte)valueReg);
+            Emit(IrOpCode.MapAdd, (ushort)resultReg, (ushort)keyReg, (ushort)valueReg);
         }
 
         return resultReg;
@@ -1057,14 +1101,14 @@ public sealed class IrLowerer
     private int LowerArrayConstructor(ArrayConstructorNode node, int? targetReg)
     {
         int resultReg = targetReg ?? AllocRegister();
-        Emit(IrOpCode.Array, (byte)resultReg);
+        Emit(IrOpCode.Array, (ushort)resultReg);
 
         if (node.IsSquare)
         {
             foreach (var item in node.Items)
             {
                 int itemReg = LowerNode(item);
-                Emit(IrOpCode.ArrayAdd, (byte)resultReg, (byte)itemReg);
+                Emit(IrOpCode.ArrayAdd, (ushort)resultReg, (ushort)itemReg);
             }
         }
         else
@@ -1074,7 +1118,7 @@ public sealed class IrLowerer
             foreach (var item in node.Items)
             {
                 int itemReg = LowerNode(item);
-                Emit(IrOpCode.ArrayAddAll, (byte)resultReg, (byte)itemReg);
+                Emit(IrOpCode.ArrayAddAll, (ushort)resultReg, (ushort)itemReg);
             }
         }
 
@@ -1098,7 +1142,8 @@ public sealed class IrLowerer
         int seqReg = LowerNode(binding.Expression);
 
         int forIdx = _instructions.Count;
-        Emit(IrOpCode.For, (byte)resultReg, (byte)seqReg, 0, 0);
+        Emit(IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, 0);
+        FreeRegister(seqReg);
 
         int jumpIdx = _instructions.Count;
         Emit(IrOpCode.Jump, 0, 0, 0, 0);
@@ -1107,18 +1152,19 @@ public sealed class IrLowerer
         if (index == bindings.Count - 1)
         {
             int rhsReg = LowerNode(returnExpr);
-            Emit(IrOpCode.Return, (byte)rhsReg);
+            Emit(IrOpCode.Return, (ushort)rhsReg);
+            FreeRegister(rhsReg);
         }
         else
         {
             LowerForBindings(bindings, index + 1, returnExpr, resultReg);
-            Emit(IrOpCode.Return, (byte)resultReg);
+            Emit(IrOpCode.Return, (ushort)resultReg);
         }
 
         int afterRhs = _instructions.Count;
         var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
         int poolIdx = AddToLiteralPool(info);
-        PatchInstruction(forIdx, IrOpCode.For, (byte)resultReg, (byte)seqReg, 0, poolIdx);
+        PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
     }
 
@@ -1127,23 +1173,23 @@ public sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
 
         int tryCatchIdx = _instructions.Count;
-        Emit(IrOpCode.TryCatch, (byte)resultReg, 0, 0, 0);
+        Emit(IrOpCode.TryCatch, (ushort)resultReg, 0, 0, 0);
 
         int jumpIdx = _instructions.Count;
         Emit(IrOpCode.Jump, 0, 0, 0, 0);
 
         int tryEntry = _instructions.Count;
         int tryReg = LowerNode(node.TryExpression);
-        Emit(IrOpCode.Return, (byte)tryReg);
+        Emit(IrOpCode.Return, (ushort)tryReg);
 
         int catchEntry = _instructions.Count;
         int catchReg = LowerNode(node.CatchExpression);
-        Emit(IrOpCode.Return, (byte)catchReg);
+        Emit(IrOpCode.Return, (ushort)catchReg);
 
         int afterCatch = _instructions.Count;
         var info = new TryCatchInfo(tryEntry, catchEntry);
         int poolIdx = AddToLiteralPool(info);
-        PatchInstruction(tryCatchIdx, IrOpCode.TryCatch, (byte)resultReg, 0, 0, poolIdx);
+        PatchInstruction(tryCatchIdx, IrOpCode.TryCatch, (ushort)resultReg, 0, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterCatch);
 
         return resultReg;
@@ -1164,7 +1210,8 @@ public sealed class IrLowerer
         IrOpCode opCode = quantifier == QuantifierKind.Some ? IrOpCode.Some : IrOpCode.Every;
 
         int quantIdx = _instructions.Count;
-        Emit(opCode, (byte)resultReg, (byte)seqReg, 0, 0);
+        Emit(opCode, (ushort)resultReg, (ushort)seqReg, 0, 0);
+        FreeRegister(seqReg);
 
         int jumpIdx = _instructions.Count;
         Emit(IrOpCode.Jump, 0, 0, 0, 0);
@@ -1173,18 +1220,19 @@ public sealed class IrLowerer
         if (index == bindings.Count - 1)
         {
             int rhsReg = LowerNode(satisfiesExpr);
-            Emit(IrOpCode.Return, (byte)rhsReg);
+            Emit(IrOpCode.Return, (ushort)rhsReg);
+            FreeRegister(rhsReg);
         }
         else
         {
             LowerQuantifiedBindings(quantifier, bindings, index + 1, satisfiesExpr, resultReg);
-            Emit(IrOpCode.Return, (byte)resultReg);
+            Emit(IrOpCode.Return, (ushort)resultReg);
         }
 
         int afterRhs = _instructions.Count;
         var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
         int poolIdx = AddToLiteralPool(info);
-        PatchInstruction(quantIdx, opCode, (byte)resultReg, (byte)seqReg, 0, poolIdx);
+        PatchInstruction(quantIdx, opCode, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
     }
 
@@ -1200,12 +1248,13 @@ public sealed class IrLowerer
         {
             int exprReg = LowerNode(binding.Expression);
             int varPoolIdx = AddToLiteralPool(binding.VariableName);
-            Emit(IrOpCode.StoreVariable, 0, (byte)exprReg, 0, varPoolIdx);
+            Emit(IrOpCode.StoreVariable, 0, (ushort)exprReg, 0, varPoolIdx);
+            FreeRegister(exprReg);
         }
 
         int bodyReg = LowerNode(node.Body, resultReg);
         if (bodyReg != resultReg)
-            Emit(IrOpCode.Move, (byte)resultReg, (byte)bodyReg);
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)bodyReg);
 
         return resultReg;
     }
@@ -1220,14 +1269,14 @@ public sealed class IrLowerer
 
         var subLowerer = new IrLowerer();
         int bodyReg = subLowerer.LowerNode(node.Body);
-        subLowerer.Emit(IrOpCode.Return, (byte)bodyReg);
+        subLowerer.Emit(IrOpCode.Return, (ushort)bodyReg);
         var module = subLowerer.Lower(node.Body);
 
         var paramNames = node.Parameters.Select(p => p.Name).ToList();
         var paramTypes = node.Parameters.Select(p => p.TypeName).ToList();
         var funcItem = new CompilerInlineFunction(paramNames, module, paramTypes, node.ReturnType);
         int poolIdx = AddToLiteralPool(funcItem);
-        Emit(IrOpCode.LoadFunction, (byte)resultReg, operand: poolIdx);
+        Emit(IrOpCode.LoadFunction, (ushort)resultReg, operand: poolIdx);
         return resultReg;
     }
 
@@ -1268,17 +1317,17 @@ public sealed class IrLowerer
             }
             else
             {
-                firstArgReg = AllocRegister();
-                Emit(IrOpCode.Move, (byte)firstArgReg, (byte)argRegs[0]);
-                for (int i = 1; i < argCount; i++)
+                firstArgReg = _nextRegister;
+                for (int i = 0; i < argCount; i++)
                 {
-                    int packedReg = AllocRegister();
-                    Emit(IrOpCode.Move, (byte)packedReg, (byte)argRegs[i]);
+                    Debug.Assert(_nextRegister <= 65535, "Register overflow during argument repacking.");
+                    int packedReg = _nextRegister++;
+                    Emit(IrOpCode.Move, (ushort)packedReg, (ushort)argRegs[i]);
                 }
             }
         }
 
-        Emit(IrOpCode.Apply, (byte)resultReg, (byte)funcReg, (byte)argCount, firstArgReg);
+        Emit(IrOpCode.Apply, (ushort)resultReg, (ushort)funcReg, (ushort)argCount, firstArgReg);
         return resultReg;
     }
 
@@ -1288,8 +1337,16 @@ public sealed class IrLowerer
 
     private int AllocRegister()
     {
-        Debug.Assert(_nextRegister <= 255, "Register overflow: more than 255 registers allocated.");
+        if (_freeRegisters.Count > 0)
+            return _freeRegisters.Pop();
+        Debug.Assert(_nextRegister <= 65535, "Register overflow: more than 65535 registers allocated.");
         return _nextRegister++;
+    }
+
+    private void FreeRegister(int reg)
+    {
+        if (reg >= 0 && reg < _nextRegister && !_freeRegisters.Contains(reg))
+            _freeRegisters.Push(reg);
     }
 
     private int AddToLiteralPool(object? value)
@@ -1301,12 +1358,12 @@ public sealed class IrLowerer
 
     private int CurrentInstructionIndex => _instructions.Count;
 
-    private void Emit(IrOpCode op, byte regA = 0, byte regB = 0, byte regC = 0, int operand = 0)
+    private void Emit(IrOpCode op, ushort regA = 0, ushort regB = 0, ushort regC = 0, int operand = 0)
     {
         _instructions.Add(new IrInstruction(op, regA, regB, regC, operand));
     }
 
-    private int EmitJumpPlaceholder(IrOpCode jumpOp, byte regA = 0)
+    private int EmitJumpPlaceholder(IrOpCode jumpOp, ushort regA = 0)
     {
         Debug.Assert(jumpOp is IrOpCode.Jump or IrOpCode.JumpIfTrue or IrOpCode.JumpIfFalse or IrOpCode.JumpIfEmpty);
         int idx = _instructions.Count;
@@ -1320,7 +1377,7 @@ public sealed class IrLowerer
         _instructions[instructionIndex] = new IrInstruction(instr.OpCode, instr.RegisterA, instr.RegisterB, instr.RegisterC, targetIndex);
     }
 
-    private void PatchInstruction(int index, IrOpCode op, byte regA, byte regB = 0, byte regC = 0, int operand = 0)
+    private void PatchInstruction(int index, IrOpCode op, ushort regA, ushort regB = 0, ushort regC = 0, int operand = 0)
     {
         _instructions[index] = new IrInstruction(op, regA, regB, regC, operand);
     }

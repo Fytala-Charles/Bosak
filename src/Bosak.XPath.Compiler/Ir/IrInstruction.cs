@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 01-06-2026     | Expanded register fields from byte to ushort to support >255 registers                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.InteropServices;
@@ -25,12 +26,12 @@ namespace Bosak.XPath.Compiler.Ir;
 public readonly struct IrInstruction
 {
     public readonly IrOpCode OpCode;
-    public readonly byte RegisterA;
-    public readonly byte RegisterB;
-    public readonly byte RegisterC;
+    public readonly ushort RegisterA;
+    public readonly ushort RegisterB;
+    public readonly ushort RegisterC;
     public readonly int Operand;           // Jump offsets, literal pool indices, etc.
 
-    public IrInstruction(IrOpCode opCode, byte regA = 0, byte regB = 0, byte regC = 0, int operand = 0)
+    public IrInstruction(IrOpCode opCode, ushort regA = 0, ushort regB = 0, ushort regC = 0, int operand = 0)
     {
         OpCode = opCode;
         RegisterA = regA;
@@ -52,13 +53,15 @@ public sealed class IrModule
     private readonly IrInstruction[] _instructions;
     private readonly object?[] _literalPool;
 
-    public IrModule(IrInstruction[] instructions, object?[] literalPool)
+    public IrModule(IrInstruction[] instructions, object?[] literalPool, int maxRegisterCount)
     {
         _instructions = instructions;
         _literalPool = literalPool;
+        MaxRegisterCount = maxRegisterCount;
     }
 
     public ReadOnlySpan<IrInstruction> Instructions => _instructions;
     public ReadOnlySpan<object?> LiteralPool => _literalPool;
     public int InstructionCount => _instructions.Length;
+    public int MaxRegisterCount { get; }
 }
