@@ -11,7 +11,7 @@
 
 <div align="center">
 
-[![.NET 9](https://img.shields.io/badge/.NET-9-2F4F4F?logo=dotnet&logoColor=F0FFF0)](https://dotnet.microsoft.com/)
+[![.NET 10](https://img.shields.io/badge/.NET-10-2F4F4F?logo=dotnet&logoColor=F0FFF0)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-Fytala-556B2F)](LICENSE.txt)
 [![Status](https://img.shields.io/badge/Status-Alpha-518D8F)]()
 
@@ -148,7 +148,7 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-Target framework: **.NET 9**.
+Target framework: **.NET 10**.
 
 ---
 

@@ -4,8 +4,8 @@
 # Bosak XPath / XSLT — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT stack.
-> **Last updated:** 28 May 2026
-> **Bosak baseline:** 840 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 03 June 2026
+> **Bosak baseline:** 867 unit tests passed / 0 failed / 0 skipped
 
 ---
 
@@ -22,7 +22,7 @@ Add project references to the Bosak layer stack from your consuming project:
 
 `Bosak.XPath.Api` and `Bosak.XPath.Xslt` pull in the lower layers automatically (Core, Parser, Compiler, Runtime, Standard, Providers).
 
-**Target framework:** `net9.0` (both sides must align).
+**Target framework:** `net10.0` (both sides must align).
 
 ---
 
@@ -277,8 +277,8 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-**Unit tests:** 840 passed, 0 failed, 0 skipped  
-**Target framework:** `net9.0`
+**Unit tests:** 867 passed, 0 failed, 0 skipped  
+**Target framework:** `net10.0`
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
 > ```bash

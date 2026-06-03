@@ -43,7 +43,7 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-Target framework: `net9.0`. All tests must pass before considering a task complete.
+Target framework: `net10.0`. All tests must pass before considering a task complete.
 
 ## Architecture Overview
 
