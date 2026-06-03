@@ -16,10 +16,12 @@
 //                      | Charles Korthout | 0.4   | 01-06-2026     | Added circled digit zero (U+24EA); contiguous Unicode digit blocks for format-integer |
 //                      | Charles Korthout | 0.5   | 01-06-2026     | Fixed contiguous block startValue; added multi-range sequences (circled 21-50, dingbat etc); extended block counts to 10 |
 //                      | Charles Korthout | 0.6   | 01-06-2026     | Special zero for full-stop block U+2488; XdmValueToLongArray returns long[] to prevent overflow |
+//                      | Charles Korthout | 0.7   | 03-06-2026     | Added BigInteger overload for formatting values > long.MaxValue (fixes number-0807)       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
+using System.Numerics;
 using System.Text;
 using Bosak.XPath.Runtime.Vm;
 
@@ -31,6 +33,9 @@ namespace Bosak.XPath.Standard.Functions;
 public static class FormatIntegerEngine
 {
     public static string Format(EvaluationContext ctx, long value, string picture, string? language)
+        => Format(ctx, new BigInteger(value), picture, language);
+
+    public static string Format(EvaluationContext ctx, BigInteger value, string picture, string? language)
     {
         // 1. Split picture into primary format token and format modifier
         ParsePicture(picture, out string primaryToken, out string modifier);
@@ -43,7 +48,7 @@ public static class FormatIntegerEngine
         ParseModifier(modifier, out bool ordinal, out string? ordinalSuffix, out bool titleCase);
 
         // 3. Format based on primary token
-        long absValue = Math.Abs(value);
+        BigInteger absValue = BigInteger.Abs(value);
         string result;
         if (TryFormatNamedToken(absValue, primaryToken, out result))
         {
@@ -184,27 +189,36 @@ public static class FormatIntegerEngine
         throw new InvalidOperationException("FODF1310");
     }
 
-    private static bool TryFormatNamedToken(long value, string primaryToken, out string result)
+    private static bool TryFormatNamedToken(BigInteger value, string primaryToken, out string result)
     {
+        if (value > long.MaxValue || value < 0)
+        {
+            result = null!;
+            return false;
+        }
+        long v = (long)value;
         result = primaryToken switch
         {
-            "a" => ToAlphabetic(value, false),
-            "A" => ToAlphabetic(value, true),
-            "i" => ToRoman(value, false),
-            "I" => ToRoman(value, true),
-            "w" => ToWords(value, false),
-            "W" => ToWords(value, true),
-            "Ww" => ToWordsTitle(value),
+            "a" => ToAlphabetic(v, false),
+            "A" => ToAlphabetic(v, true),
+            "i" => ToRoman(v, false),
+            "I" => ToRoman(v, true),
+            "w" => ToWords(v, false),
+            "W" => ToWords(v, true),
+            "Ww" => ToWordsTitle(v),
             _ => null!
         };
         return result is not null;
     }
 
-    private static bool TryFormatCustomSequence(long value, string primaryToken, out string result)
+    private static bool TryFormatCustomSequence(BigInteger value, string primaryToken, out string result)
     {
         result = string.Empty;
         if (string.IsNullOrEmpty(primaryToken))
             return false;
+        if (value > long.MaxValue || value < 0)
+            return false;
+        long v = (long)value;
 
         var codepoints = GetCodepoints(primaryToken).ToList();
         if (codepoints.Count != 1)
@@ -215,76 +229,76 @@ public static class FormatIntegerEngine
         // Circled digits: U+24EA (0), U+2460-U+2473 (1-20), U+3251-U+325F (21-35), U+32B1-U+32BF (36-50)
         if (cp >= 0x2460 && cp <= 0x2473)
         {
-            if (value == 0)
+            if (v == 0)
             {
                 result = "\u24EA";
                 return true;
             }
-            if (value <= 20) { result = char.ConvertFromUtf32((int)(0x2460 + value - 1)); return true; }
-            if (value <= 35) { result = char.ConvertFromUtf32((int)(0x3251 + value - 21)); return true; }
-            if (value <= 50) { result = char.ConvertFromUtf32((int)(0x32B1 + value - 36)); return true; }
+            if (v <= 20) { result = char.ConvertFromUtf32((int)(0x2460 + v - 1)); return true; }
+            if (v <= 35) { result = char.ConvertFromUtf32((int)(0x3251 + v - 21)); return true; }
+            if (v <= 50) { result = char.ConvertFromUtf32((int)(0x32B1 + v - 36)); return true; }
             return false;
         }
 
         // Digits with full stop: special zero U+1F100, primary U+2488-U+249B (1-20)
         if (cp == 0x1F100)
         {
-            if (value == 0) { result = "\ud83c\udd00"; return true; }
-            if (value > 20) return false;
-            result = char.ConvertFromUtf32((int)(0x2488 + value - 1));
+            if (v == 0) { result = "\ud83c\udd00"; return true; }
+            if (v > 20) return false;
+            result = char.ConvertFromUtf32((int)(0x2488 + v - 1));
             return true;
         }
         if (cp >= 0x2488 && cp <= 0x249B)
         {
-            if (value == 0) { result = "\ud83c\udd00"; return true; }
-            if (value > 20) return false;
-            result = char.ConvertFromUtf32((int)(0x2488 + value - 1));
+            if (v == 0) { result = "\ud83c\udd00"; return true; }
+            if (v > 20) return false;
+            result = char.ConvertFromUtf32((int)(0x2488 + v - 1));
             return true;
         }
 
         // Dingbat negative circled: special zero U+24FF, primary U+2776-U+277F (1-10), secondary U+24EB-U+24F3 (11-20)
         if (cp == 0x2776)
         {
-            if (value == 0) { result = "\u24FF"; return true; }
-            if (value <= 10) { result = char.ConvertFromUtf32((int)(0x2776 + value - 1)); return true; }
-            if (value <= 20) { result = char.ConvertFromUtf32((int)(0x24EB + value - 11)); return true; }
+            if (v == 0) { result = "\u24FF"; return true; }
+            if (v <= 10) { result = char.ConvertFromUtf32((int)(0x2776 + v - 1)); return true; }
+            if (v <= 20) { result = char.ConvertFromUtf32((int)(0x24EB + v - 11)); return true; }
             return false;
         }
 
         // Dingbat circled sans-serif: special zero U+1F10B, primary U+2780-U+2789 (1-10)
         if (cp == 0x2780)
         {
-            if (value == 0) { result = "\ud83c\udd0b"; return true; }
-            if (value > 10) return false;
-            result = char.ConvertFromUtf32((int)(0x2780 + value - 1));
+            if (v == 0) { result = "\ud83c\udd0b"; return true; }
+            if (v > 10) return false;
+            result = char.ConvertFromUtf32((int)(0x2780 + v - 1));
             return true;
         }
 
         // Dingbat negative circled sans-serif: special zero U+1F10C, primary U+278A-U+2793 (1-10)
         if (cp == 0x278A)
         {
-            if (value == 0) { result = "\ud83c\udd0c"; return true; }
-            if (value > 10) return false;
-            result = char.ConvertFromUtf32((int)(0x278A + value - 1));
+            if (v == 0) { result = "\ud83c\udd0c"; return true; }
+            if (v > 10) return false;
+            result = char.ConvertFromUtf32((int)(0x278A + v - 1));
             return true;
         }
 
         // Greek uppercase letters: U+0391-U+03A1 (24 letters, excluding U+03A2)
         if (cp == 0x0391)
         {
-            result = ToGreekAlphabetic(value, true);
+            result = ToGreekAlphabetic(v, true);
             return true;
         }
 
         // Greek lowercase letters: U+03B1-U+03C9 (24 letters, excluding U+03C2)
         if (cp == 0x03B1)
         {
-            result = ToGreekAlphabetic(value, false);
+            result = ToGreekAlphabetic(v, false);
             return true;
         }
 
         // Generic contiguous digit blocks (also handles parenthesized, full-stop, etc.)
-        if (TryFormatContiguousBlock(value, cp, out result))
+        if (TryFormatContiguousBlock(v, cp, out result))
             return true;
 
         return false;
@@ -336,15 +350,18 @@ public static class FormatIntegerEngine
     /// Tries to format <paramref name="value"/> using a known contiguous Unicode digit block.
     /// Any codepoint within the block identifies the sequence (not just the first codepoint).
     /// </summary>
-    private static bool TryFormatContiguousBlock(long value, int tokenCp, out string result)
+    private static bool TryFormatContiguousBlock(BigInteger value, int tokenCp, out string result)
     {
         result = string.Empty;
+        if (value > int.MaxValue || value < 0)
+            return false;
+        int v = (int)value;
         foreach (var (blockStart, count, startValue) in ContiguousDigitBlocks)
         {
             if (tokenCp >= blockStart && tokenCp < blockStart + count)
             {
-                if (value < startValue || value >= startValue + count) return false;
-                result = char.ConvertFromUtf32(blockStart + (int)value - startValue);
+                if (v < startValue || v >= startValue + count) return false;
+                result = char.ConvertFromUtf32(blockStart + v - startValue);
                 return true;
             }
         }
@@ -370,7 +387,7 @@ public static class FormatIntegerEngine
         return sb.ToString();
     }
 
-    private static bool TryFormatDecimalPattern(long value, string primaryToken, out string result)
+    private static bool TryFormatDecimalPattern(BigInteger value, string primaryToken, out string result)
     {
         result = string.Empty;
         try
@@ -384,7 +401,7 @@ public static class FormatIntegerEngine
         }
     }
 
-    private static string FormatDecimalPattern(long value, string primaryToken)
+    private static string FormatDecimalPattern(BigInteger value, string primaryToken)
     {
         if (string.IsNullOrEmpty(primaryToken))
             throw new InvalidOperationException("FODF1310");
@@ -449,7 +466,7 @@ public static class FormatIntegerEngine
         var template = BuildGroupingTemplate(separators, totalDigits);
 
         // Format the number
-        long absValue = Math.Abs(value);
+        BigInteger absValue = BigInteger.Abs(value);
         string s1 = absValue.ToString(CultureInfo.InvariantCulture);
         int minWidth = codepoints.Count(cp => IsDecimalDigit(cp, out _, out _));
         
@@ -648,7 +665,7 @@ public static class FormatIntegerEngine
         return count;
     }
 
-    private static string ToOrdinal(string result, long value, string? suffix, string? language)
+    private static string ToOrdinal(string result, BigInteger value, string? suffix, string? language)
     {
         // Simple heuristic: if result contains only digits (and separators), treat as digits
         bool isDigits = result.All(c => char.IsDigit(c) || IsGroupingSeparatorChar(c));
@@ -667,7 +684,9 @@ public static class FormatIntegerEngine
         else
         {
             // For words, convert to ordinal word
-            return ToOrdinalWords(result, value, language);
+            if (value > long.MaxValue || value < 0)
+                return result + "th";
+            return ToOrdinalWords(result, (long)value, language);
         }
     }
 

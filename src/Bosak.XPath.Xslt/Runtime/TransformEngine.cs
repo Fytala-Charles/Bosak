@@ -55,10 +55,12 @@
 //                      | Charles Korthout | 3.8   | 01-06-2026     | EvaluateSequenceConstructor extracts attributes/namespace nodes for raw sequence return    |
 //                      | Charles Korthout | 3.9   | 01-06-2026     | Initial template selection applies templates to children, not document node (XSLT 5.4)   |
 //                      | Charles Korthout | 4.0   | 01-06-2026     | Per-document key indices; cross-document key() lookup; save/restore focus on lazy build |
+//                      | Charles Korthout | 4.1   | 03-06-2026     | xsl:number value: BigInteger pipeline for large integers/doubles (fixes number-0111/0807) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
+using System.Numerics;
 using System.Text;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -3489,7 +3491,7 @@ public sealed class TransformEngine
         }
 
         // Evaluate start-at as AVT, then parse as space-separated integers (XSLT 3.0)
-        long[]? startAtValues = null;
+        BigInteger[]? startAtValues = null;
         if (!string.IsNullOrEmpty(startAtAttr))
         {
             var evaluated = EvaluateAvt(startAtAttr);
@@ -3545,7 +3547,7 @@ public sealed class TransformEngine
             if (HasNegativeValue(result) && !format.Contains(';'))
                 throw new InvalidOperationException("XTDE0980");
 
-            var numbers = XdmValueToLongArray(result);
+            var numbers = XdmValueToBigIntegerArray(result);
             if (numbers.Length > 0)
             {
                 // Apply start-at to each number: value - 1 + start-at
@@ -3553,7 +3555,7 @@ public sealed class TransformEngine
                 {
                     var startAt = startAtValues != null && startAtValues.Length > 0
                         ? (i < startAtValues.Length ? startAtValues[i] : startAtValues[^1])
-                        : 1;
+                        : BigInteger.One;
                     numbers[i] = numbers[i] - 1 + startAt;
                 }
                 var formatted = FormatNumberSequence(numbers, format, ordinal, lang, groupingSeparator, groupingSize);
@@ -3579,7 +3581,7 @@ public sealed class TransformEngine
                 else if (isEmptySequence)
                 {
                     // Empty sequence → emit prefix+suffix only.
-                    var formatted = FormatNumberSequence(System.Array.Empty<long>(), format, ordinal, lang, groupingSeparator, groupingSize);
+                    var formatted = FormatNumberSequence(System.Array.Empty<BigInteger>(), format, ordinal, lang, groupingSeparator, groupingSize);
                     if (!string.IsNullOrEmpty(formatted))
                     {
                         if (!string.IsNullOrEmpty(valueAttr) && IsFirstSignificantChild())
@@ -3627,14 +3629,14 @@ public sealed class TransformEngine
                     for (int i = 0; i < numbers.Length; i++)
                     {
                         var startAt = i < startAtValues.Length ? startAtValues[i] : startAtValues[^1];
-                        numbers[i] = (int)(numbers[i] - 1 + startAt);
+                        numbers[i] = (int)(numbers[i] - 1 + (int)startAt);
                     }
                 }
             }
 
             // Format even when no numbers match: prefix+suffix is still emitted
             // (e.g. format="(1)" with no matches produces "()").
-            var numsToFormat = numbers?.Select(n => (long)n).ToArray() ?? System.Array.Empty<long>();
+            var numsToFormat = numbers?.Select(n => (BigInteger)n).ToArray() ?? System.Array.Empty<BigInteger>();
             var formatted = FormatNumberSequence(numsToFormat, format, ordinal, lang, groupingSeparator, groupingSize);
             _lastAddedWasAtomic = false;
             AddTextNode(formatted);
@@ -3962,7 +3964,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Formats a sequence of integers according to an <c>xsl:number</c> format string.
     /// </summary>
-    private string FormatNumberSequence(long[] numbers, string format, bool ordinal, string? lang, string? groupingSeparator, int groupingSize)
+    private string FormatNumberSequence(BigInteger[] numbers, string format, bool ordinal, string? lang, string? groupingSeparator, int groupingSize)
     {
         var (prefix, tokens, separators, suffix) = ParseXslNumberFormat(format);
 
@@ -4098,15 +4100,15 @@ public sealed class TransformEngine
     /// Parses a start-at attribute value string into an array of integers.
     /// Handles space-separated values and single values.
     /// </summary>
-    private static long[] ParseStartAtValues(string value)
+    private static BigInteger[] ParseStartAtValues(string value)
     {
         var parts = value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length == 0)
-            return [1L];
-        var result = new long[parts.Length];
+            return [BigInteger.One];
+        var result = new BigInteger[parts.Length];
         for (int i = 0; i < parts.Length; i++)
         {
-            if (!long.TryParse(parts[i], out result[i]))
+            if (!BigInteger.TryParse(parts[i], out result[i]))
                 throw new InvalidOperationException("XTSE0020");
         }
         return result;
@@ -4154,48 +4156,48 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// Converts an <see cref="XdmValue"/> to a <see cref="long"/> if it represents a number.
+    /// Converts an <see cref="XdmValue"/> to a <see cref="BigInteger"/> if it represents a number.
     /// </summary>
-    private static long? XdmValueToLong(XdmValue value)
+    private static BigInteger? XdmValueToBigInteger(XdmValue value)
     {
         // If it's a singleton sequence, extract the first item
         if (value.Kind == XdmValueKind.Sequence && value.SequenceValue != null)
         {
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
-                return XdmValueToLong(item);
+                return XdmValueToBigInteger(item);
             return null;
         }
 
         return value.Kind switch
         {
-            XdmValueKind.Integer => value.IntegerValue,
-            XdmValueKind.Decimal => (long)Math.Round(value.DecimalValue, MidpointRounding.AwayFromZero),
-            XdmValueKind.Double => (long)Math.Round(value.DoubleValue, MidpointRounding.AwayFromZero),
-            XdmValueKind.Float => (long)Math.Round(value.DoubleValue, MidpointRounding.AwayFromZero),
-            XdmValueKind.Node => long.TryParse(value.NodeValue?.StringValue ?? "", out var n) ? n : null,
-            _ => long.TryParse(value.ToString(), out var n) ? n : null
+            XdmValueKind.Integer => new BigInteger(value.IntegerValue),
+            XdmValueKind.Decimal => BigInteger.Parse(Math.Round(value.DecimalValue, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture)),
+            XdmValueKind.Double => new BigInteger(value.DoubleValue),
+            XdmValueKind.Float => new BigInteger(value.DoubleValue),
+            XdmValueKind.Node => BigInteger.TryParse(value.NodeValue?.StringValue ?? "", out var n) ? n : null,
+            _ => BigInteger.TryParse(value.ToString(), out var n) ? n : null
         };
     }
 
     /// <summary>
-    /// Converts an <see cref="XdmValue"/> to an array of <see cref="long"/> values.
+    /// Converts an <see cref="XdmValue"/> to an array of <see cref="BigInteger"/> values.
     /// Handles sequences by extracting all numeric items.
     /// </summary>
-    private static long[] XdmValueToLongArray(XdmValue value)
+    private static BigInteger[] XdmValueToBigIntegerArray(XdmValue value)
     {
-        var result = new List<long>();
+        var result = new List<BigInteger>();
         if (value.Kind == XdmValueKind.Sequence && value.SequenceValue != null)
         {
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
             {
-                var n = XdmValueToLong(item);
+                var n = XdmValueToBigInteger(item);
                 if (n.HasValue)
                     result.Add(n.Value);
             }
         }
         else
         {
-            var n = XdmValueToLong(value);
+            var n = XdmValueToBigInteger(value);
             if (n.HasValue)
                 result.Add(n.Value);
         }

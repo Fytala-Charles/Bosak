@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 1.9   | 31-05-2026     | Implemented PrecedesNode/FollowsNode (<< / >>) using DocumentOrder                          |
 //                      | Charles Korthout | 2.0   | 01-06-2026     | Include XPST0017 error code in function-not-found exceptions                             |
 //                      | Charles Korthout | 2.1   | 02-06-2026     | Numeric predicate uses exact equality, not Math.Round (XPath 2.0 §3.2.4)                 |
+//                      | Charles Korthout | 2.2   | 03-06-2026     | MultiplyOrAddInteger: detect overflow, promote to decimal (fixes number-0111)            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2103,7 +2104,7 @@ public static class VmEngine
             return XdmValue.FromFloat(ToFloat(left) + ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) + ToDecimal(right));
-        return XdmValue.FromInteger(ToInteger(left) + ToInteger(right));
+        return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), false);
     }
 
     private static XdmValue AddDuration(XdmValue dateTimeValue, string duration)
@@ -2170,7 +2171,7 @@ public static class VmEngine
             return XdmValue.FromFloat(ToFloat(left) - ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) - ToDecimal(right));
-        return XdmValue.FromInteger(ToInteger(left) - ToInteger(right));
+        return MultiplyOrAddInteger(ToInteger(left), -ToInteger(right), false);
     }
 
     private static XdmValue SubtractDuration(XdmValue dateTimeValue, string duration)
@@ -2642,7 +2643,7 @@ public static class VmEngine
             return XdmValue.FromFloat(ToFloat(left) * ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) * ToDecimal(right));
-        return XdmValue.FromInteger(ToInteger(left) * ToInteger(right));
+        return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), true);
     }
 
     private static XdmValue Divide(XdmValue left, XdmValue right)
@@ -2701,6 +2702,26 @@ public static class VmEngine
         if (IsDecimal(value))
             return XdmValue.FromDecimal(-ToDecimal(value));
         return XdmValue.FromInteger(-ToInteger(value));
+    }
+
+    /// <summary>
+    /// Performs integer multiplication or addition with overflow detection.
+    /// If the result overflows <see cref="long"/>, promotes to <see cref="decimal"/>.
+    /// </summary>
+    private static XdmValue MultiplyOrAddInteger(long a, long b, bool multiply)
+    {
+        try
+        {
+            checked
+            {
+                long result = multiply ? a * b : a + b;
+                return XdmValue.FromInteger(result);
+            }
+        }
+        catch (OverflowException)
+        {
+            return XdmValue.FromDecimal(multiply ? (decimal)a * (decimal)b : (decimal)a + (decimal)b);
+        }
     }
 
     // ------------------------------------------------------------------
