@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-02
-**Commit:** `main` (pending push)
-**Current focus:** `number` cluster **260/271 passed** (95.9% pass rate, 10 failures, 1 skipped).
+**Date:** 2026-06-03
+**Commit:** `c97114b`
+**Current focus:** `number` cluster **262/271 passed** (96.2% pass rate, 8 failures, 1 skipped).
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3255 / **Failed:** ~2206 / **Skipped:** 9139 (14,600 total)
-- Pass rate: **59.6%** (latest run, 2026-06-02)
+- **Passed:** 3,257 / **Failed:** 2,204 / **Skipped:** 9,139 (14,600 total)
+- Pass rate: **59.6%** (latest run, 2026-06-03)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
+- Latest: 3257 passed / 2204 failed / 9139 skipped (59.6%) — large integer support in xsl:number (number-0111, number-0807)
+- Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
 - Previous: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
 - Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
 - Previous: 3198 passed / 2263 failed / 9139 skipped (58.6%) — `fn:doc`/`fn:document` empty-sequence handling, parentless element pattern fixes
@@ -32,6 +33,13 @@
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
 
 ### Recent Fixes (This Session)
+
+1. **.NET 10 migration (REQ-022)** — All 18 `.csproj` files updated from `net9.0` to `net10.0`. Build clean, 867 unit tests pass, XSLT conformance stable.
+2. **Large integer overflow in `xsl:number` (number-0111)** — `VmEngine.Multiply/Add/Subtract` now detect `long` overflow via `checked` arithmetic and promote to `decimal`. Previously `1234567890^3` wrapped to negative, triggering `XTDE0980`.
+3. **`xsl:number` BigInteger formatting pipeline (number-0807)** — `FormatIntegerEngine` now accepts `BigInteger` values. `TransformEngine.xsl:number` value path migrated from `long[]` to `BigInteger[]`. `1e100` now formats as `100000...000` instead of `long.MaxValue`.
+4. **XSLT conformance baseline run** — Full suite: 3,257 passed / 2,204 failed / 9,139 skipped (59.6%). XPath QT3 suite crashes during `prod-LetClause` (register overflow in `IrLowerer`).
+
+### Previous Session Fixes
 
 1. **XPath unprefixed element namespace handling** — `IrLowerer` now emits `NamespaceTest` for unprefixed element names on element axes, enforcing the default element namespace. `VmEngine.NamespaceTest` resolves empty prefix to default element namespace, falls back to empty namespace, and handles `Q{uri}local` URIs directly. Fixes `number-1502` and many tests where `//book` incorrectly matched namespaced elements.
 2. **`Q{uri}local` parser fix** — `XPathParser.ParseNodeTest` now correctly creates `QName` node tests for braced URI literals (e.g., `Q{http://z.test.com/}note`) instead of treating them as `LocalName`. Previously discarded the `nsUri` from `SplitQName`.

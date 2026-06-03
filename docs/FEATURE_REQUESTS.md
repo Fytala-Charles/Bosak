@@ -1042,7 +1042,7 @@ Upgraded all 18 Bosak project files from `net9.0` to `net10.0`.
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-06-02 | Charles Korthout / Kimi | Accepted | .NET 9 is EOL (May 2026); .NET 10 is the correct LTS target |
-| 2026-06-03 | Charles Korthout / Kimi | Implemented | All 18 projects migrated; 867 unit tests pass; conformance rates match baseline |
+| 2026-06-03 | Charles Korthout / Kimi | Implemented | All 18 projects migrated; 867 unit tests pass; XSLT conformance stable at 59.6% (3,257/14,600) |
 
 ---
 

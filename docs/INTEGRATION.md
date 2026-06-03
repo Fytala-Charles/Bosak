@@ -280,14 +280,22 @@ dotnet test Bosak.sln
 **Unit tests:** 867 passed, 0 failed, 0 skipped  
 **Target framework:** `net10.0`
 
+### Conformance Baselines
+
+| Suite | Passed | Failed | Skipped | Pass Rate | Notes |
+|-------|--------|--------|---------|-----------|-------|
+| XSLT 3.0 (W3C) | 3,257 | 2,204 | 9,139 | 59.6% | Stable; +2 from number-0111/0807 fixes |
+| XPath 3.1 (QT3) | — | — | — | — | Crashes during `prod-LetClause` (register overflow); 350/428 sets completed |
+
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
 > ```bash
 > taskkill /F /IM Bosak.XPath.Conformance.exe
+> taskkill /F /IM Bosak.XPath.Xslt.Conformance.exe
 > ```
 
 ---
 
-## 7. Getting Help / Reporting Issues
+## 8. Getting Help / Reporting Issues
 
 - Check `docs/ARCHITECTURE.md` in the Bosak repo for the layer overview and execution pipeline.
 - Check `docs/FEATURE_REQUESTS.md` for the feature request registry.
