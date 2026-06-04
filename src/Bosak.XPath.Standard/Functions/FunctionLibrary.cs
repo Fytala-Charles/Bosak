@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 3.5   | 30-05-2026     | Fixed fn:substring to use Unicode code points; Unicode full case mapping for upper/lower-case |
 //                      | Charles Korthout | 3.6   | 01-06-2026     | Fixed fn:doc/fn:document to resolve empty string against base URI instead of returning empty sequence |
 //                      | Charles Korthout | 3.7   | 02-06-2026     | MinMax treats atomized node strings as numeric (untypedAtomic→double semantics)         |
+//                      | Charles Korthout | 3.8   | 02-06-2026     | Fixed fn:sort/array:sort default fn:data#1 key and lexicographic multi-value key compare |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -1152,6 +1153,13 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Array,
                 Implementation = ArraySort_1
             },
+            [(Namespaces.Array, "sort", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "sort", Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Array,
+                Implementation = ArraySort_2
+            },
             [(Namespaces.Array, "sort", 3)] = new()
             {
                 NamespaceUri = Namespaces.Array, LocalName = "sort", Arity = 3,
@@ -1545,7 +1553,7 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "implicit-timezone", 0)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "implicit-timezone", Arity = 0,
-                ParameterTypes = [], ReturnType = XdmValueKind.String,
+                ParameterTypes = [], ReturnType = XdmValueKind.Duration,
                 Implementation = ImplicitTimezone
             },
 
@@ -2507,6 +2515,13 @@ public static class FunctionLibrary
                 Implementation = Serialize_2
             },
             // ----- fn:trace ---------------------------------------------------
+            [(Namespaces.Fn, "trace", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "trace", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Undefined,
+                Implementation = Trace_1
+            },
             [(Namespaces.Fn, "trace", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "trace", Arity = 2,
@@ -2973,27 +2988,39 @@ public static class FunctionLibrary
     private static XdmValue Sort(EvaluationContext ctx, XdmValue input, XdmValue? collation, XdmValue? keyFunc)
     {
         var items = AsSequence(input).ToList();
-
-        if (keyFunc is not null && !keyFunc.Value.IsUndefined)
+        string? collationUri = collation is not null && !collation.Value.IsUndefined ? collation.ToString() : null;
+        var keyed = new List<(XdmValue Key, XdmValue Item)>();
+        foreach (var item in items)
         {
-            var keyed = new List<(XdmValue Key, XdmValue Item)>();
-            foreach (var item in items)
-            {
-                var key = VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item });
-                keyed.Add((key, item));
-            }
-            keyed.Sort((a, b) => CompareSortKeys(a.Key, b.Key));
-            items = keyed.Select(k => k.Item).ToList();
+            var key = keyFunc is not null && !keyFunc.Value.IsUndefined
+                ? VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item })
+                : Data(item);
+            keyed.Add((key, item));
         }
-        else
-        {
-            items.Sort((a, b) => CompareSortKeys(a, b));
-        }
+        keyed.Sort((a, b) => CompareSortKeys(a.Key, b.Key, collationUri));
+        items = keyed.Select(k => k.Item).ToList();
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
 
-    private static int CompareSortKeys(XdmValue a, XdmValue b)
-        => XdmValueComparer.Instance.Compare(a, b);
+    private static int CompareSortKeys(XdmValue a, XdmValue b, string? collation = null)
+    {
+        var itemsA = Materialize(a);
+        var itemsB = Materialize(b);
+        int minLen = Math.Min(itemsA.Count, itemsB.Count);
+        for (int i = 0; i < minLen; i++)
+        {
+            int cmp = CompareSortItem(itemsA[i], itemsB[i], collation);
+            if (cmp != 0) return cmp;
+        }
+        return itemsA.Count.CompareTo(itemsB.Count);
+    }
+
+    private static int CompareSortItem(XdmValue a, XdmValue b, string? collation)
+    {
+        if (a.Kind == XdmValueKind.String && b.Kind == XdmValueKind.String && collation is not null)
+            return CompareStrings(a.StringValue, b.StringValue, collation);
+        return XdmValueComparer.Instance.Compare(a, b);
+    }
 
     private static XdmValue Innermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -3419,12 +3446,15 @@ public static class FunctionLibrary
     private static XdmValue ImplicitTimezone(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
-        bool negative = offset.TotalMinutes < 0;
-        int hours = Math.Abs(offset.Hours);
-        int minutes = Math.Abs(offset.Minutes);
-        if (minutes == 0)
-            return XdmValue.FromString(negative ? $"PT-{hours}H" : $"PT{hours}H");
-        return XdmValue.FromString(negative ? $"PT-{hours}H{minutes}M" : $"PT{hours}H{minutes}M");
+        bool negative = offset.TotalMilliseconds < 0;
+        offset = negative ? offset.Negate() : offset;
+        var sb = new System.Text.StringBuilder();
+        if (negative) sb.Append('-');
+        sb.Append("PT");
+        if (offset.Hours > 0) sb.Append(offset.Hours).Append('H');
+        if (offset.Minutes > 0) sb.Append(offset.Minutes).Append('M');
+        if (offset.Hours == 0 && offset.Minutes == 0) sb.Append("0S");
+        return XdmValue.FromDuration(sb.ToString());
     }
 
     private static XdmValue XsQNameConstructor(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3798,6 +3828,7 @@ public static class FunctionLibrary
 
     private const string CodepointCollation = "http://www.w3.org/2005/xpath-functions/collation/codepoint";
     private const string HtmlAsciiCaseInsensitiveCollation = "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive";
+    private const string CaseblindCollation = "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind";
     private const string UcaCollationPrefix = "http://www.w3.org/2013/collation/UCA";
 
     private static void ValidateCollation(string collation)
@@ -3808,6 +3839,8 @@ public static class FunctionLibrary
             return;
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return;
+        if (collation == CaseblindCollation)
+            return;
         if (TryParseUca(collation, out _))
             return;
         throw new InvalidOperationException("FOCH0002");
@@ -3815,14 +3848,14 @@ public static class FunctionLibrary
 
     private static StringComparison GetStringComparison(string collation)
     {
-        if (collation == HtmlAsciiCaseInsensitiveCollation)
+        if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
             return StringComparison.OrdinalIgnoreCase;
         return StringComparison.Ordinal;
     }
 
     private static IEqualityComparer<string> GetStringComparer(string collation)
     {
-        if (collation == HtmlAsciiCaseInsensitiveCollation)
+        if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
             return StringComparer.OrdinalIgnoreCase;
         return StringComparer.Ordinal;
     }
@@ -4914,6 +4947,13 @@ public static class FunctionLibrary
     private static XdmValue Error_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => throw new InvalidOperationException($"fn:error({args[0].QNameValue}): {args[1]}");
 
+    private static XdmValue Trace_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = args[0];
+        System.Diagnostics.Trace.WriteLine($"[trace] {value}");
+        return value;
+    }
+
     private static XdmValue Trace_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var value = args[0];
@@ -5736,62 +5776,32 @@ public static class FunctionLibrary
     }
 
     private static XdmValue ArraySort_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ArraySort(ctx, args[0].ArrayValue, null);
+        => ArraySort(ctx, args[0].ArrayValue, null, null);
+
+    private static XdmValue ArraySort_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ArraySort(ctx, args[0].ArrayValue, args[1], null);
 
     private static XdmValue ArraySort_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ArraySort(ctx, args[0].ArrayValue, args[2]);
+        => ArraySort(ctx, args[0].ArrayValue, args[1], args[2]);
 
-    private static XdmValue ArraySort(EvaluationContext ctx, XdmArray arr, XdmValue? keyFunc)
+    private static XdmValue ArraySort(EvaluationContext ctx, XdmArray arr, XdmValue? collation, XdmValue? keyFunc)
     {
         var items = new List<XdmValue>();
         foreach (var item in arr.Values)
             items.Add(item);
 
-        if (keyFunc is not null && !keyFunc.Value.IsUndefined)
+        string? collationUri = collation is not null && !collation.Value.IsUndefined ? collation.ToString() : null;
+        var keyed = new List<(XdmValue Key, XdmValue Item)>();
+        foreach (var item in items)
         {
-            var keyed = new List<(XdmValue Key, XdmValue Item)>();
-            foreach (var item in items)
-            {
-                var key = VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item });
-                keyed.Add((key, item));
-            }
-            keyed.Sort((a, b) => CompareSortKeys(a.Key, b.Key));
-            items = keyed.Select(k => k.Item).ToList();
+            var key = keyFunc is not null && !keyFunc.Value.IsUndefined
+                ? VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item })
+                : Data(item);
+            keyed.Add((key, item));
         }
-        else
-        {
-            items.Sort((a, b) => CompareArraySortItems(a, b));
-        }
+        keyed.Sort((a, b) => CompareSortKeys(a.Key, b.Key, collationUri));
+        items = keyed.Select(k => k.Item).ToList();
         return XdmValue.FromArray(new XdmArray(items));
-    }
-
-    private static int CompareArraySortItems(XdmValue a, XdmValue b)
-    {
-        // If both are sequences, compare lexicographically
-        if (a.IsSequence && b.IsSequence)
-        {
-            var itemsA = Materialize(a);
-            var itemsB = Materialize(b);
-            int minLen = Math.Min(itemsA.Count, itemsB.Count);
-            for (int i = 0; i < minLen; i++)
-            {
-                int cmp = CompareSortKeys(itemsA[i], itemsB[i]);
-                if (cmp != 0) return cmp;
-            }
-            return itemsA.Count.CompareTo(itemsB.Count);
-        }
-        // If one is a sequence and the other is not, unwrap single-item sequences
-        if (a.IsSequence)
-        {
-            var itemsA = Materialize(a);
-            if (itemsA.Count == 1) return CompareSortKeys(itemsA[0], b);
-        }
-        if (b.IsSequence)
-        {
-            var itemsB = Materialize(b);
-            if (itemsB.Count == 1) return CompareSortKeys(a, itemsB[0]);
-        }
-        return CompareSortKeys(a, b);
     }
 
     private static XdmValue ArrayInsertBefore(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

@@ -87,6 +87,12 @@ public sealed class XdmValueComparer : IComparer<XdmValue>
 
     private static int CompareNumeric(XdmValue a, XdmValue b)
     {
+        bool aIsNaN = IsNaN(a);
+        bool bIsNaN = IsNaN(b);
+        if (aIsNaN && bIsNaN) return 0;
+        if (aIsNaN) return 1;
+        if (bIsNaN) return 1;
+
         int aRank = NumericRank(a);
         int bRank = NumericRank(b);
         int maxRank = Math.Max(aRank, bRank);
@@ -98,6 +104,13 @@ public sealed class XdmValueComparer : IComparer<XdmValue>
             3 => ToFloat(a).CompareTo(ToFloat(b)),
             _ => ToDouble(a).CompareTo(ToDouble(b))
         };
+    }
+
+    private static bool IsNaN(XdmValue value)
+    {
+        if (value.Kind == XdmValueKind.Float || value.Kind == XdmValueKind.Double)
+            return double.IsNaN(value.DoubleValue);
+        return false;
     }
 
     private static int NumericRank(XdmValue value) => value.Kind switch

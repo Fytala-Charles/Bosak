@@ -2146,7 +2146,7 @@ public static class VmEngine
         {
             XdmValueKind.DateTime => XdmValue.FromDateTime(dto),
             XdmValueKind.Date => XdmValue.FromDate(dto),
-            XdmValueKind.Time => XdmValue.FromTime(dto),
+            XdmValueKind.Time => XdmValue.FromTime(dto, dateTimeValue.HasTimezone),
             _ => throw new InvalidOperationException("Unexpected kind")
         };
     }
@@ -2158,7 +2158,16 @@ public static class VmEngine
         if (left.Kind == XdmValueKind.DateTime && right.Kind == XdmValueKind.DateTime)
             return XdmValue.FromDuration(FormatDuration(left.DateTimeValue - right.DateTimeValue));
         if (left.Kind == XdmValueKind.Time && right.Kind == XdmValueKind.Time)
-            return XdmValue.FromDuration(FormatDuration(left.TimeValue - right.TimeValue));
+        {
+            // Normalize both times to the same reference date before subtracting,
+            // so that times from different sources (e.g. fn:current-time() vs xs:time literal)
+            // compare only their time-of-day components.
+            var leftDt = left.TimeValue;
+            var rightDt = right.TimeValue;
+            var leftRef = new DateTimeOffset(1, 1, 1, leftDt.Hour, leftDt.Minute, leftDt.Second, leftDt.Millisecond, leftDt.Offset);
+            var rightRef = new DateTimeOffset(1, 1, 1, rightDt.Hour, rightDt.Minute, rightDt.Second, rightDt.Millisecond, rightDt.Offset);
+            return XdmValue.FromDuration(FormatDuration(leftRef - rightRef));
+        }
         if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
             return SubtractDuration(left, right.ToString());
 
@@ -2213,7 +2222,7 @@ public static class VmEngine
         {
             XdmValueKind.DateTime => XdmValue.FromDateTime(dto),
             XdmValueKind.Date => XdmValue.FromDate(dto),
-            XdmValueKind.Time => XdmValue.FromTime(dto),
+            XdmValueKind.Time => XdmValue.FromTime(dto, dateTimeValue.HasTimezone),
             _ => throw new InvalidOperationException("Unexpected kind")
         };
     }
@@ -3411,9 +3420,12 @@ public static class VmEngine
                     string sT = NormalizeDateTimeString(value.ToString().Trim());
                     if (TryParseXPathTime(sT, out var xdtT, out var hasTzT))
                     {
-                        if (xdtT.IsRepresentableAsDateTimeOffset && DateTimeOffset.TryParse(sT, out var dtoT))
+                        // Use xdtT.ToDateTimeOffset() rather than DateTimeOffset.TryParse(sT)
+                        // because TryParse on a time-only string injects the current date,
+                        // breaking subtraction/comparison with times produced by adjust-time-to-timezone.
+                        if (xdtT.IsRepresentableAsDateTimeOffset)
                         {
-                            result = XdmValue.FromTime(dtoT, hasTzT);
+                            result = XdmValue.FromTime(xdtT.ToDateTimeOffset(), hasTzT);
                         }
                         else
                         {
