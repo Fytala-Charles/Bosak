@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-04
-**Commit:** `591c694`
+**Commit:** `cb67d7c`
 **Current focus:** QT3 conformance quick-wins (timezone, sort collation, trace, implicit-timezone).
 
 ---
@@ -10,8 +10,8 @@
 
 ### QT3 Conformance (W3C XPath 3.1 Test Suite)
 
-- **Passed:** 18,659 / **Failed:** 3,212 / **Skipped:** 9,950 (31,821 total)
-- Pass rate: **58.64%**
+- **Passed:** 18,695 / **Failed:** 3,175 / **Skipped:** 9,951 (31,821 total)
+- Pass rate: **58.75%**
 - Runner completes all 428 test sets without crashes
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)

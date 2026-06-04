@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-04
-**Commit:** `591c694`
+**Commit:** `cb67d7c`
 **Current focus:** QT3 conformance quick-wins (timezone, sort collation, trace, implicit-timezone).
 
 ---
@@ -16,7 +16,7 @@
 
 **Recent trajectory:**
 - Latest: 3257 passed / 2204 failed / 9139 skipped (59.6%) — XSLT stable
-- Latest XPath: 18659 passed / 3212 failed / 9950 skipped (58.64%) — timezone + sort collation + trace + implicit-timezone fixes
+- Latest XPath: 18695 passed / 3175 failed / 9951 skipped (58.75%) — +61 tests from quick-win session
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
 - Previous: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
 - Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
@@ -51,7 +51,18 @@
 5. **QT3 `caseblind` collation** — Added recognition of the QT3 test-suite case-insensitive collation URI (`http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind`).
 6. **`array:sort#2`** — Added missing 2-argument `array:sort($array, $collation)` overload.
 7. **NaN sort comparer** — `XdmValueComparer.CompareNumeric` now treats NaN as equal to NaN (placing NaN values together during sort).
-8. **QT3 baseline** — 18,659 passed / 3,212 failed / 9,950 skipped (58.64%). +25 tests from previous baseline.
+8. **QT3 baseline (session part 1)** — 18,659 passed / 3,212 failed / 9,950 skipped (58.64%). +25 tests.
+9. **QT3 baseline (session part 2)** — 18,695 passed / 3,175 failed / 9,951 skipped (58.75%). +61 tests total.
+
+### This Session Fixes (2026-06-04, part 2)
+
+1. **`fn:default-language#0`** — Returns `"en"` with `xs:language` schema type. DependencyFilter skips tests requiring other languages.
+2. **`fn:element-with-id#1`** — Basic implementation searching `id` and `xml:id` attributes.
+3. **`Filter_2` / `ArrayFilter` boolean validation** — Predicate must return `xs:boolean`; strings/empty sequences now raise XPTY0004.
+4. **`ForEachPair_3` arity validation** — Validates function arity is exactly 2.
+5. **`RequireString` type enforcement** — New helper that enforces `xs:string?` arguments. Used by `upper-case`, `lower-case`, `contains`, `starts-with`, `ends-with`.
+6. **Document URI base URI fix** — `XDocumentProvider.LoadXml` uses `LoadOptions.SetBaseUri`; `TestEnvironment` loads source docs via file path.
+7. **QT3 baseline** — 18,695 / 3,175 / 9,951 (58.75%). +61 tests from start of session.
 
 ### Previous Session Fixes
 

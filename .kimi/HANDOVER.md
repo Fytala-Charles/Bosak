@@ -6,6 +6,10 @@
 
 2026-06-04
 
+## Commit
+
+`cb67d7c`
+
 ## What Was Built
 
 | # | Change | Files | Status |
@@ -17,6 +21,13 @@
 | 5 | QT3 `caseblind` collation support added | `FunctionLibrary.cs` | Committed |
 | 6 | `array:sort#2` overload added | `FunctionLibrary.cs` | Committed |
 | 7 | NaN equality in `XdmValueComparer.CompareNumeric` for sorting | `XdmValueComparer.cs` | Committed |
+| 8 | `fn:default-language#0` stub | `FunctionLibrary.cs` | Committed |
+| 9 | `fn:element-with-id#1` basic implementation | `FunctionLibrary.cs` | Committed |
+| 10 | `Filter_2` / `ArrayFilter` boolean validation | `FunctionLibrary.cs` | Committed |
+| 11 | `ForEachPair_3` arity validation | `FunctionLibrary.cs` | Committed |
+| 12 | `RequireString` type enforcement for string functions | `FunctionLibrary.cs` | Committed |
+| 13 | Document URI `BaseUri` fix via `LoadOptions.SetBaseUri` | `XDocumentProvider.cs`, `TestEnvironment.cs` | Committed |
+| 14 | `default-language` dependency filter | `DependencyFilter.cs` | Committed |
 | 8 | File header updates | `VmEngine.cs`, `FunctionLibrary.cs`, `XdmValueComparer.cs` | Committed |
 
 ## Current Branch
@@ -29,7 +40,7 @@
 - [x] QT3 timezone cluster: 219 passed / 0 failed / 27 skipped (89.0%) — was 207/12/27
 - [x] QT3 trace cluster: 29 passed / 0 failed / 1 skipped (96.7%)
 - [x] QT3 sort cluster: 61 passed / 5 failed / 18 skipped (72.6%) — was 50/10/24
-- [x] Full QT3 baseline: 18,659 / 3,212 / 9,950 (58.64%) — +25 from 18,634
+- [x] Full QT3 baseline: 18,695 / 3,175 / 9,951 (58.75%) — +61 from 18,634
 
 ## Next Recommended Work
 
