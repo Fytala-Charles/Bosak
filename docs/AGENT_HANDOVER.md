@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-01
-**Commit:** `2809aa4`
-**Current focus:** Register overflow fix completed. XPath QT3 suite now runs all 428 test sets without crash.
+**Date:** 2026-06-04
+**Commit:** `591c694`
+**Current focus:** QT3 conformance quick-wins (timezone, sort collation, trace, implicit-timezone).
 
 ---
 
@@ -16,7 +16,7 @@
 
 **Recent trajectory:**
 - Latest: 3257 passed / 2204 failed / 9139 skipped (59.6%) — XSLT stable
-- Latest XPath: 18651 passed / 3279 failed / 9891 skipped (58.6%) — all 428 sets complete; register overflow + normalize-space harness fixes
+- Latest XPath: 18659 passed / 3212 failed / 9950 skipped (58.64%) — timezone + sort collation + trace + implicit-timezone fixes
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
 - Previous: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
 - Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
@@ -41,6 +41,17 @@
 4. **XSLT conformance baseline run** — Full suite: 3,257 passed / 2,204 failed / 9,139 skipped (59.6%).
 5. **Register overflow fix (CRITICAL)** — `IrInstruction` register fields expanded from `byte` to `ushort`, removing the 255-register limit. `VmEngine` dynamically sizes register arrays via `module.MaxRegisterCount`. Fixed `_freeRegisters.Clear()` bug in `IrLowerer.Lower()` that caused incorrect register reuse. Fixed `PackArgumentsConsecutive` and argument repacking in `LowerFunctionCall`/`LowerDynamicFunctionCall` to guarantee consecutive register allocation.
 6. **QT3 harness `normalize-space` fix** — `assert-string-value` now respects `normalize-space="true"` and applies XPath `normalize-space()` semantics to both expected and actual values. Fixed 14+ string-value tests. XPath QT3 suite now completes all 31,821 tests across 428 sets (18,651 passed / 3,279 failed / 9,891 skipped, 58.6%).
+
+### This Session Fixes (2026-06-04)
+
+1. **`fn:implicit-timezone` returns `xs:dayTimeDuration`** — Previously returned a plain `String`, causing 12 QT3 failures in the timezone cluster. Now returns `XdmValueKind.Duration` with correctly formatted ISO 8601 dayTimeDuration.
+2. **Time subtraction normalization** — `VmEngine.Subtract` for `xs:time` values now normalizes both operands to a common reference date (`0001-01-01`) before subtracting. Fixes comparisons between `fn:current-time()` and `xs:time` literals that previously failed due to injected current date from `DateTimeOffset.TryParse`.
+3. **`fn:trace#1` overload** — Added missing 1-argument `fn:trace` function.
+4. **`fn:sort` / `array:sort` collation support** — Collation URI is now threaded through `Sort`/`ArraySort` to `CompareSortKeys`, which uses `CompareStrings` with the specified collation for string keys.
+5. **QT3 `caseblind` collation** — Added recognition of the QT3 test-suite case-insensitive collation URI (`http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind`).
+6. **`array:sort#2`** — Added missing 2-argument `array:sort($array, $collation)` overload.
+7. **NaN sort comparer** — `XdmValueComparer.CompareNumeric` now treats NaN as equal to NaN (placing NaN values together during sort).
+8. **QT3 baseline** — 18,659 passed / 3,212 failed / 9,950 skipped (58.64%). +25 tests from previous baseline.
 
 ### Previous Session Fixes
 
@@ -85,8 +96,8 @@
 
 ### QT3 Conformance Baseline
 
-- Passed: ~18,529 / Failed: ~3,490 / Skipped: 9,802 (31,821 total)
-- Pass rate: ~58.2%
+- Passed: 18,659 / Failed: 3,212 / Skipped: 9,950 (31,821 total)
+- Pass rate: 58.64%
 
 ---
 
@@ -265,8 +276,9 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 | Cluster | Failed | Skipped | Notes |
 |---------|--------|---------|-------|
-| **number** | 10 | 1 | 262/271 passing (96.2%). Remaining: non-English word formatting, xsl:iterate not implemented. |
+| **number** | 10 | 1 | 262/273 passing (96.2%). Remaining: non-English word formatting, xsl:iterate not implemented. |
 | **match** | 78 | 107 | Pattern matching gaps. Improved from 106 failures (priority, union keyword, root(), dot predicates, doc() resolution). |
+| **sort** | 5 | 18 | 61/84 passing (72.6%). Remaining: NaN array sorting, map sorting returns empty, inline function `as` keyword not supported, variable-length sequence keys. |
 | **mode** | 88 | 44 | Template mode dispatch issues. |
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |

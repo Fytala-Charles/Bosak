@@ -4,17 +4,20 @@
 
 ## Session Date
 
-2026-06-01
+2026-06-04
 
 ## What Was Built
 
 | # | Change | Files | Status |
 |---|--------|-------|--------|
-| 1 | XPathParser: prevent `map`, `array`, `function` keywords from being parsed as name tests when followed by `{`, `[`, `(` | `XPathParser.cs` | Committed |
-| 2 | PatternCompiler: propagate static XPath/XSLT errors (`XPST`/`XTSE`/`XPTY`) from pattern predicate evaluation instead of swallowing them | `PatternCompiler.cs` | Committed |
-| 3 | VmEngine: include `XPST0017` error code in function-not-found exceptions | `VmEngine.cs` | Committed |
-| 4 | Map/array constructor parsing regression fix (unit tests) | `XPathParser.cs` | Committed |
-| 5 | File header updates | `XPathParser.cs`, `PatternCompiler.cs`, `VmEngine.cs` | Committed |
+| 1 | `fn:implicit-timezone` now returns `xs:dayTimeDuration` instead of `String` | `FunctionLibrary.cs` | Committed |
+| 2 | Time subtraction normalization to common reference date for `xs:time` | `VmEngine.cs` | Committed |
+| 3 | `fn:trace#1` overload added | `FunctionLibrary.cs` | Committed |
+| 4 | `fn:sort` / `array:sort` collation wired through comparison pipeline | `FunctionLibrary.cs` | Committed |
+| 5 | QT3 `caseblind` collation support added | `FunctionLibrary.cs` | Committed |
+| 6 | `array:sort#2` overload added | `FunctionLibrary.cs` | Committed |
+| 7 | NaN equality in `XdmValueComparer.CompareNumeric` for sorting | `XdmValueComparer.cs` | Committed |
+| 8 | File header updates | `VmEngine.cs`, `FunctionLibrary.cs`, `XdmValueComparer.cs` | Committed |
 
 ## Current Branch
 
@@ -22,17 +25,24 @@
 
 ## Test Status
 
-- [x] All unit tests pass (498 tests across Standard, Core, XSLT — 0 failures)
-- [x] XSLT match cluster: 109 passed / 78 failed / 107 skipped (up from 108/79)
-- [x] Map/array constructor unit test regressions resolved
+- [x] All unit tests pass (867 tests across 7 projects — 0 failures)
+- [x] QT3 timezone cluster: 219 passed / 0 failed / 27 skipped (89.0%) — was 207/12/27
+- [x] QT3 trace cluster: 29 passed / 0 failed / 1 skipped (96.7%)
+- [x] QT3 sort cluster: 61 passed / 5 failed / 18 skipped (72.6%) — was 50/10/24
+- [x] Full QT3 baseline: 18,659 / 3,212 / 9,950 (58.64%) — +25 from 18,634
 
 ## Next Recommended Work
 
-- Continue `match` cluster fixes (78 remaining failures):
-  - `match-039` / `match-040` — static error detection for invalid patterns (requires compile-time function validation)
-  - Set operations with predicates (`match-042`–`045`)
-  - Positional predicates (`match-076`, `077`, `098`)
-  - `key()` / `id()` patterns (`match-239`–`241`)
-  - Variable reference patterns (`match-248`–`255`, `272`)
-- `next-match` cluster (28 failures) — apply-imports / apply-templates dispatch chains
-- `number` cluster (152 failures) — localization, `level="any"`, large numbers
+1. **QT3 quick-wins** (est. +20 tests, ~1 hour):
+   - `fn:default-language#0` stub → fixes 6 failures
+   - `fn:element-with-id#1` → fixes 5 failures
+   - `filter`/`for-each`/`for-each-pair` XPTY0004 type-checking → fixes ~15 failures
+   - `fn:contains-token` edge cases → fixes 2 failures
+   - `fn:document-uri` boolean-as-string fix → fixes 4 failures
+
+2. **Sort cluster deep dive** (est. 2–3 hours):
+   - Debug why `fn:sort` / `array:sort` with map key function returns empty
+   - Investigate stable sort requirement for NaN arrays
+   - Parser: inline function `as` keyword support
+
+3. **XSLT clusters**: `match` (78 failures), `mode` (88), `copy` (80)

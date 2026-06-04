@@ -2448,6 +2448,18 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
                 Implementation = Id_1
             },
+            [(Namespaces.Fn, "element-with-id", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "element-with-id", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                Implementation = ElementWithId_1
+            },
+            [(Namespaces.Fn, "default-language", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "default-language", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.String,
+                Implementation = DefaultLanguage_0
+            },
             [(Namespaces.Fn, "collection", 0)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "collection", Arity = 0,
@@ -2933,7 +2945,11 @@ public static class FunctionLibrary
         foreach (var item in AsSequence(args[0]))
         {
             var pred = VmEngine.InvokeFunctionItem(func, ctx, new[] { item });
-            if (pred.EffectiveBooleanValue())
+            if (pred.IsUndefined)
+                throw new InvalidOperationException("XPTY0004");
+            if (pred.Kind != XdmValueKind.Boolean)
+                throw new InvalidOperationException("XPTY0004");
+            if (pred.BooleanValue)
                 result.Add(item);
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
@@ -2965,6 +2981,9 @@ public static class FunctionLibrary
     private static XdmValue ForEachPair_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var func = args[2];
+        int arity = GetFunctionArity(func);
+        if (arity != 2)
+            throw new InvalidOperationException("XPTY0004");
         var seq1 = AsSequence(args[0]).ToList();
         var seq2 = AsSequence(args[1]).ToList();
         var result = new List<XdmValue>();
@@ -2974,6 +2993,19 @@ public static class FunctionLibrary
             AppendResult(VmEngine.InvokeFunctionItem(func, ctx, new[] { seq1[i], seq2[i] }), result);
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static int GetFunctionArity(XdmValue func)
+    {
+        if (func.IsFunction)
+        {
+            var fi = func.FunctionValue;
+            if (fi is NamedFunctionItem named) return named.ArityValue;
+            if (fi is InlineFunctionItem inline) return inline.Parameters.Count;
+            if (fi is CurriedFunctionItem curried) return curried.Arity;
+            if (fi is DelegateFunctionItem del) return del.Arity;
+        }
+        return -1;
     }
 
     private static XdmValue Sort_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3705,36 +3737,36 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Contains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(StringContains(AtomizedString(args[0]), AtomizedString(args[1]), ctx.DefaultCollation));
+        => XdmValue.FromBoolean(StringContains(RequireString(args[0]), RequireString(args[1]), ctx.DefaultCollation));
 
     private static XdmValue Contains_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string s = AtomizedString(args[0]);
-        string search = AtomizedString(args[1]);
+        string s = RequireString(args[0]);
+        string search = RequireString(args[1]);
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
         return XdmValue.FromBoolean(StringContains(s, search, collation));
     }
 
     private static XdmValue StartsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(StringStartsWith(AtomizedString(args[0]), AtomizedString(args[1]), ctx.DefaultCollation));
+        => XdmValue.FromBoolean(StringStartsWith(RequireString(args[0]), RequireString(args[1]), ctx.DefaultCollation));
 
     private static XdmValue StartsWith_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string s = AtomizedString(args[0]);
-        string search = AtomizedString(args[1]);
+        string s = RequireString(args[0]);
+        string search = RequireString(args[1]);
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
         return XdmValue.FromBoolean(StringStartsWith(s, search, collation));
     }
 
     private static XdmValue EndsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(StringEndsWith(AtomizedString(args[0]), AtomizedString(args[1]), ctx.DefaultCollation));
+        => XdmValue.FromBoolean(StringEndsWith(RequireString(args[0]), RequireString(args[1]), ctx.DefaultCollation));
 
     private static XdmValue EndsWith_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string s = AtomizedString(args[0]);
-        string search = AtomizedString(args[1]);
+        string s = RequireString(args[0]);
+        string search = RequireString(args[1]);
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
         return XdmValue.FromBoolean(StringEndsWith(s, search, collation));
@@ -4081,10 +4113,10 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UpperCase(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(ApplyUnicodeCaseMapping(AtomizedString(args[0]), toUpper: true));
+        => XdmValue.FromString(ApplyUnicodeCaseMapping(RequireString(args[0]), toUpper: true));
 
     private static XdmValue LowerCase(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(ApplyUnicodeCaseMapping(AtomizedString(args[0]), toUpper: false));
+        => XdmValue.FromString(ApplyUnicodeCaseMapping(RequireString(args[0]), toUpper: false));
 
     /// <summary>
     /// Applies Unicode full case mapping, handling one-to-many mappings
@@ -4699,6 +4731,55 @@ public static class FunctionLibrary
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
+
+    private static XdmValue ElementWithId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var ids = new HashSet<string>(args[0].ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        if (ids.Count == 0)
+            return XdmValue.Undefined;
+
+        var result = new List<XdmValue>();
+        var focus = ctx.ContextItem;
+        if (focus.IsNode)
+        {
+            var doc = focus.NodeValue.Document ?? focus.NodeValue;
+            if (doc is not null)
+                CollectElementWithId(doc, ids, result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static void CollectElementWithId(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
+    {
+        if (node.NodeKind == XdmNodeKind.Element)
+        {
+            // Check for xml:id attribute (treated as ID even without DTD/schema)
+            foreach (var attr in node.Attributes("id", ""))
+            {
+                if (ids.Contains(AtomizedString(attr)))
+                {
+                    result.Add(XdmValue.FromNode(node));
+                    return;
+                }
+            }
+            foreach (var attr in node.Attributes("id", "http://www.w3.org/XML/1998/namespace"))
+            {
+                if (ids.Contains(AtomizedString(attr)))
+                {
+                    result.Add(XdmValue.FromNode(node));
+                    return;
+                }
+            }
+        }
+        foreach (var child in node.Children(XdmNodeKind.Element))
+        {
+            if (child.IsNode)
+                CollectElementWithId(child.NodeValue!, ids, result);
+        }
+    }
+
+    private static XdmValue DefaultLanguage_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromString("en", "language");
 
     private static void CollectIdElements(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
     {
@@ -5710,7 +5791,11 @@ public static class FunctionLibrary
         foreach (var item in arr.Values)
         {
             var pred = VmEngine.InvokeFunctionItem(func, ctx, new[] { item });
-            if (pred.EffectiveBooleanValue())
+            if (pred.IsUndefined)
+                throw new InvalidOperationException("XPTY0004");
+            if (pred.Kind != XdmValueKind.Boolean)
+                throw new InvalidOperationException("XPTY0004");
+            if (pred.BooleanValue)
                 result.Add(item);
         }
         return XdmValue.FromArray(new XdmArray(result));
@@ -5871,6 +5956,36 @@ public static class FunctionLibrary
         }
 
         return value.ToString();
+    }
+
+    /// <summary>
+    /// Validates that the value is suitable for a string-typed function argument
+    /// (xs:string?, xs:string, etc.) and returns its string value.
+    /// Nodes are atomized; empty sequence becomes "".
+    /// Non-string atomic types (integer, date, boolean, etc.) raise XPTY0004.
+    /// </summary>
+    private static string RequireString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        if (value.IsNode)
+            return value.NodeValue.StringValue;
+
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            throw new InvalidOperationException("FOTY0013");
+
+        if (value.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                return RequireString(item);
+            return string.Empty;
+        }
+
+        if (value.Kind == XdmValueKind.String)
+            return value.StringValue;
+
+        throw new InvalidOperationException("XPTY0004");
     }
 
     private static XdmValue AtomizeValue(XdmValue value)

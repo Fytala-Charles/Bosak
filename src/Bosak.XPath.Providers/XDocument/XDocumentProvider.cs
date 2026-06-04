@@ -62,6 +62,18 @@ public static class XDocumentProvider
         return new XDocumentNode(document);
     }
 
+    /// <summary>
+    /// Loads an XML file and returns the root as an <see cref="IXdmNode"/>.
+    /// The file path is preserved as the document's base URI.
+    /// </summary>
+    public static IXdmNode LoadXml(string filePath)
+    {
+        var document = System.Xml.Linq.XDocument.Load(filePath, LoadOptions.SetBaseUri);
+        var map = ComputeDocumentOrder(document);
+        XDocumentNode.RegisterOrderMap(document, map);
+        return new XDocumentNode(document);
+    }
+
     // ------------------------------------------------------------------
     // Document order indexing
     // ------------------------------------------------------------------

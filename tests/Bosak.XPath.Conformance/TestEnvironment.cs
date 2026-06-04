@@ -175,7 +175,7 @@ internal sealed class TestEnvironment
             {
                 try
                 {
-                    var doc = XDocumentProvider.ParseXml(File.ReadAllText(src.FilePath));
+                    var doc = XDocumentProvider.LoadXml(src.FilePath);
                     ctx = ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
                 }
                 catch (System.Xml.XmlException ex) when (ex.Message.Contains("1.1"))

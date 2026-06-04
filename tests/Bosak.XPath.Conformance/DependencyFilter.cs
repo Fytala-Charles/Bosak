@@ -102,6 +102,13 @@ internal sealed class DependencyFilter
                 if (dep.Value != "1.1")
                     return false;
             }
+
+            if (dep.Type == "default-language")
+            {
+                // Bosak only supports "en" as default language
+                if (dep.Value != "en")
+                    return false;
+            }
         }
 
         // If there are spec dependencies, at least one must be a supported XPath version
