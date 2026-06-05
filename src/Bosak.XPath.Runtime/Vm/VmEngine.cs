@@ -35,6 +35,8 @@
 //                      | Charles Korthout | 2.2   | 03-06-2026     | MultiplyOrAddInteger: detect overflow, promote to decimal (fixes number-0111)            |
 //                      | Charles Korthout | 2.3   | 01-06-2026     | Use module.MaxRegisterCount instead of hardcoded 256 for register array sizing           |
 //                      | Charles Korthout | 2.4   | 05-06-2026     | Inline function sequence param validation; numeric promotion; node()/anyAtomicType matching |
+//                      | Charles Korthout | 2.5   | 05-06-2026     | Removed global NormalizeSequence from Execute; path/union already normalize via opcodes     |
+//                      | Charles Korthout | 2.6   | 05-06-2026     | Added function(*)/map(*)/array(*) support to ValueMatchesType for instance-of checks      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -61,7 +63,7 @@ public static class VmEngine
         // The lowerer uses monotonic register allocation; size is determined at compile time.
         var registers = new XdmValue[module.MaxRegisterCount];
         var (result, _) = ExecuteBlock(module, context, registers, 0);
-        return NormalizeSequence(result);
+        return result;
     }
 
     private static (XdmValue Result, int NextIp) ExecuteBlock(
@@ -1539,23 +1541,7 @@ public static class VmEngine
                         var container = registers[instr.RegisterB];
                         var key = registers[instr.RegisterC];
 
-                        if (container.Kind == XdmValueKind.Map)
-                        {
-                            var vkey = AtomizeMapKey(key);
-                            if (container.MapValue.TryGetValue(vkey, out var value))
-                                registers[instr.RegisterA] = value;
-                            else
-                                registers[instr.RegisterA] = XdmValue.Undefined;
-                        }
-                        else if (container.Kind == XdmValueKind.Array)
-                        {
-                            int idx = (int)ToInteger(key);
-                            registers[instr.RegisterA] = container.ArrayValue.Get(idx);
-                        }
-                        else
-                        {
-                            registers[instr.RegisterA] = XdmValue.Undefined;
-                        }
+                        registers[instr.RegisterA] = LookupValue(container, key);
                         ip++;
                         break;
                     }
@@ -1574,6 +1560,22 @@ public static class VmEngine
                         {
                             foreach (var v in container.ArrayValue.Values)
                                 result.Add(v);
+                        }
+                        else if (container.IsSequence && container.SequenceValue is not null)
+                        {
+                            foreach (var item in XdmSequence.FromSource(container.SequenceValue))
+                            {
+                                if (item.Kind == XdmValueKind.Map)
+                                {
+                                    foreach (var v in item.MapValue.Values)
+                                        result.Add(v);
+                                }
+                                else if (item.Kind == XdmValueKind.Array)
+                                {
+                                    foreach (var v in item.ArrayValue.Values)
+                                        result.Add(v);
+                                }
+                            }
                         }
 
                         registers[instr.RegisterA] = XdmValue.FromSequence(
@@ -4434,6 +4436,15 @@ public static class VmEngine
             return true;
         }
 
+        if (normalized is "function(*)" or "function")
+            return value.IsFunction;
+
+        if (normalized is "map(*)" or "map")
+            return value.IsMap;
+
+        if (normalized is "array(*)" or "array")
+            return value.IsArray;
+
         return ItemInstanceOf(value, normalized);
     }
 
@@ -4793,6 +4804,46 @@ public static class VmEngine
         if (value.IsFunction || value.IsMap || value.IsArray)
             throw new InvalidOperationException("FOTY0013");
         return Atomize(value);
+    }
+
+    private static XdmValue LookupValue(XdmValue container, XdmValue key)
+    {
+        if (container.Kind == XdmValueKind.Map)
+        {
+            var vkey = AtomizeMapKey(key);
+            if (container.MapValue.TryGetValue(vkey, out var value))
+                return value;
+            return XdmValue.Undefined;
+        }
+        if (container.Kind == XdmValueKind.Array)
+        {
+            int idx = (int)ToInteger(key);
+            return container.ArrayValue.Get(idx);
+        }
+        if (container.IsSequence && container.SequenceValue is not null)
+        {
+            var results = new List<XdmValue>();
+            foreach (var item in XdmSequence.FromSource(container.SequenceValue))
+            {
+                var sub = LookupValue(item, key);
+                if (!sub.IsUndefined)
+                {
+                    if (sub.IsSequence && sub.SequenceValue is not null)
+                    {
+                        foreach (var s in XdmSequence.FromSource(sub.SequenceValue))
+                            results.Add(s);
+                    }
+                    else
+                    {
+                        results.Add(sub);
+                    }
+                }
+            }
+            if (results.Count == 0)
+                return XdmValue.Undefined;
+            return XdmValue.FromSequence(MaterializedSequence.FromList(results));
+        }
+        return XdmValue.Undefined;
     }
 
     private static string AtomizedString(XdmValue value)

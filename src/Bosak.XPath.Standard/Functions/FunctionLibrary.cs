@@ -50,6 +50,8 @@
 //                      | Charles Korthout | 3.6   | 01-06-2026     | Fixed fn:doc/fn:document to resolve empty string against base URI instead of returning empty sequence |
 //                      | Charles Korthout | 3.7   | 02-06-2026     | MinMax treats atomized node strings as numeric (untypedAtomic→double semantics)         |
 //                      | Charles Korthout | 3.8   | 02-06-2026     | Fixed fn:sort/array:sort default fn:data#1 key and lexicographic multi-value key compare |
+//                      | Charles Korthout | 3.9   | 05-06-2026     | Atomize sort keys from key function; fix fn-sort-spec-6 node sequence ordering           |
+//                      | Charles Korthout | 4.0   | 05-06-2026     | parse-xml/parse-xml-fragment preserve element whitespace; strip document-level whitespace |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3021,15 +3023,20 @@ public static class FunctionLibrary
     {
         var items = AsSequence(input).ToList();
         string? collationUri = collation is not null && !collation.Value.IsUndefined ? collation.ToString() : null;
-        var keyed = new List<(XdmValue Key, XdmValue Item)>();
-        foreach (var item in items)
+        var keyed = new List<(XdmValue Key, XdmValue Item, int Index)>();
+        for (int i = 0; i < items.Count; i++)
         {
+            var item = items[i];
             var key = keyFunc is not null && !keyFunc.Value.IsUndefined
-                ? VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item })
+                ? Data(VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item }))
                 : Data(item);
-            keyed.Add((key, item));
+            keyed.Add((key, item, i));
         }
-        keyed.Sort((a, b) => CompareSortKeys(a.Key, b.Key, collationUri));
+        keyed.Sort((a, b) =>
+        {
+            int cmp = CompareSortKeys(a.Key, b.Key, collationUri);
+            return cmp != 0 ? cmp : a.Index.CompareTo(b.Index);
+        });
         items = keyed.Select(k => k.Item).ToList();
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
@@ -3520,7 +3527,8 @@ public static class FunctionLibrary
         string xml = AtomizedString(args[0]);
         if (string.IsNullOrEmpty(xml))
             throw new InvalidOperationException("fn:parse-xml argument must not be empty.");
-        var doc = XDocument.Parse(xml);
+        var doc = XDocument.Parse(xml, LoadOptions.PreserveWhitespace);
+        XDocumentProvider.StripDocumentLevelWhitespace(doc);
         return XdmValue.FromNode(doc.ToXdmNode());
     }
 
@@ -3552,7 +3560,8 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(xml))
             return XdmValue.Undefined;
         var wrapper = $"<wrapper xmlns=\"http://www.w3.org/2005/xpath-functions\">{xml}</wrapper>";
-        var doc = XDocument.Parse(wrapper);
+        var doc = XDocument.Parse(wrapper, LoadOptions.PreserveWhitespace);
+        XDocumentProvider.StripDocumentLevelWhitespace(doc);
         var wrapperEl = doc.Root;
         if (wrapperEl is null || !wrapperEl.HasElements)
             return XdmValue.Undefined;
@@ -5876,15 +5885,20 @@ public static class FunctionLibrary
             items.Add(item);
 
         string? collationUri = collation is not null && !collation.Value.IsUndefined ? collation.ToString() : null;
-        var keyed = new List<(XdmValue Key, XdmValue Item)>();
-        foreach (var item in items)
+        var keyed = new List<(XdmValue Key, XdmValue Item, int Index)>();
+        for (int i = 0; i < items.Count; i++)
         {
+            var item = items[i];
             var key = keyFunc is not null && !keyFunc.Value.IsUndefined
-                ? VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item })
+                ? Data(VmEngine.InvokeFunctionItem(keyFunc.Value, ctx, new[] { item }))
                 : Data(item);
-            keyed.Add((key, item));
+            keyed.Add((key, item, i));
         }
-        keyed.Sort((a, b) => CompareSortKeys(a.Key, b.Key, collationUri));
+        keyed.Sort((a, b) =>
+        {
+            int cmp = CompareSortKeys(a.Key, b.Key, collationUri);
+            return cmp != 0 ? cmp : a.Index.CompareTo(b.Index);
+        });
         items = keyed.Select(k => k.Item).ToList();
         return XdmValue.FromArray(new XdmArray(items));
     }

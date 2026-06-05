@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 05-06-2026     | Preserve whitespace in elements; strip document-level whitespace-only text nodes        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -68,10 +69,26 @@ public static class XDocumentProvider
     /// </summary>
     public static IXdmNode LoadXml(string filePath)
     {
-        var document = System.Xml.Linq.XDocument.Load(filePath, LoadOptions.SetBaseUri);
+        var document = System.Xml.Linq.XDocument.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
+        StripDocumentLevelWhitespace(document);
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
         return new XDocumentNode(document);
+    }
+
+    /// <summary>
+    /// Removes whitespace-only text nodes that are direct children of the document node.
+    /// XPath/XQuery processors typically preserve whitespace inside elements but strip
+    /// insignificant whitespace before/after the root element.
+    /// </summary>
+    public static void StripDocumentLevelWhitespace(System.Xml.Linq.XDocument doc)
+    {
+        var toRemove = doc.Nodes()
+            .OfType<System.Xml.Linq.XText>()
+            .Where(t => string.IsNullOrWhiteSpace(t.Value))
+            .ToList();
+        foreach (var node in toRemove)
+            node.Remove();
     }
 
     // ------------------------------------------------------------------
