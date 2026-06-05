@@ -4,31 +4,21 @@
 
 ## Session Date
 
-2026-06-04
+2026-06-05
 
 ## Commit
 
-`cb67d7c`
+`feba2d8`
 
 ## What Was Built
 
 | # | Change | Files | Status |
 |---|--------|-------|--------|
-| 1 | `fn:implicit-timezone` now returns `xs:dayTimeDuration` instead of `String` | `FunctionLibrary.cs` | Committed |
-| 2 | Time subtraction normalization to common reference date for `xs:time` | `VmEngine.cs` | Committed |
-| 3 | `fn:trace#1` overload added | `FunctionLibrary.cs` | Committed |
-| 4 | `fn:sort` / `array:sort` collation wired through comparison pipeline | `FunctionLibrary.cs` | Committed |
-| 5 | QT3 `caseblind` collation support added | `FunctionLibrary.cs` | Committed |
-| 6 | `array:sort#2` overload added | `FunctionLibrary.cs` | Committed |
-| 7 | NaN equality in `XdmValueComparer.CompareNumeric` for sorting | `XdmValueComparer.cs` | Committed |
-| 8 | `fn:default-language#0` stub | `FunctionLibrary.cs` | Committed |
-| 9 | `fn:element-with-id#1` basic implementation | `FunctionLibrary.cs` | Committed |
-| 10 | `Filter_2` / `ArrayFilter` boolean validation | `FunctionLibrary.cs` | Committed |
-| 11 | `ForEachPair_3` arity validation | `FunctionLibrary.cs` | Committed |
-| 12 | `RequireString` type enforcement for string functions | `FunctionLibrary.cs` | Committed |
-| 13 | Document URI `BaseUri` fix via `LoadOptions.SetBaseUri` | `XDocumentProvider.cs`, `TestEnvironment.cs` | Committed |
-| 14 | `default-language` dependency filter | `DependencyFilter.cs` | Committed |
-| 8 | File header updates | `VmEngine.cs`, `FunctionLibrary.cs`, `XdmValueComparer.cs` | Committed |
+| 1 | `SkipSequenceType` parser bug — token indices used as char positions | `XPathParser.cs` | Committed |
+| 2 | `ParseTypeNameAndParens` consumes `as` return type for function tests | `XPathParser.cs` | Committed |
+| 3 | `InvokeFunctionItem` respects `*`/`+`/`?` for sequence parameters | `VmEngine.cs` | Committed |
+| 4 | Numeric promotion (`double`←`decimal`←`integer`) + `anyAtomicType` | `VmEngine.cs` | Committed |
+| 5 | `node()` type test in `ValueMatchesType` | `VmEngine.cs` | Committed |
 
 ## Current Branch
 
@@ -37,23 +27,18 @@
 ## Test Status
 
 - [x] All unit tests pass (867 tests across 7 projects — 0 failures)
-- [x] QT3 timezone cluster: 219 passed / 0 failed / 27 skipped (89.0%) — was 207/12/27
-- [x] QT3 trace cluster: 29 passed / 0 failed / 1 skipped (96.7%)
-- [x] QT3 sort cluster: 61 passed / 5 failed / 18 skipped (72.6%) — was 50/10/24
-- [x] Full QT3 baseline: 18,695 / 3,175 / 9,951 (58.75%) — +61 from 18,634
+- [x] QT3 filter cluster: 21 passed / 0 failed / 14 skipped (was 20/1/14)
+- [x] QT3 for-each cluster: 60 passed / 1 failed / 5 skipped (was 55/6/5)
+- [x] QT3 sort cluster: 34 passed / 3 failed / 10 skipped (was 33/4/10)
+- [x] Full QT3 baseline: 18,722 / 3,148 / 9,951 (58.84%) — +27 this batch, +88 total
 
 ## Next Recommended Work
 
-1. **QT3 quick-wins** (est. +20 tests, ~1 hour):
-   - `fn:default-language#0` stub → fixes 6 failures
-   - `fn:element-with-id#1` → fixes 5 failures
-   - `filter`/`for-each`/`for-each-pair` XPTY0004 type-checking → fixes ~15 failures
-   - `fn:contains-token` edge cases → fixes 2 failures
-   - `fn:document-uri` boolean-as-string fix → fixes 4 failures
+1. **Sort cluster** (3 failures, est. 1–2 hours):
+   - `fn-sort-22`: Map sorting returns empty — key function on map items?
+   - `fn-sort-17`: NaN array stability — may need stable sort
+   - `fn-sort-spec-6`: Variable-length sequence keys
 
-2. **Sort cluster deep dive** (est. 2–3 hours):
-   - Debug why `fn:sort` / `array:sort` with map key function returns empty
-   - Investigate stable sort requirement for NaN arrays
-   - Parser: inline function `as` keyword support
+2. **`for-each-pair-017`** (1 failure): One `false` in string of `true`s — node identity issue?
 
 3. **XSLT clusters**: `match` (78 failures), `mode` (88), `copy` (80)

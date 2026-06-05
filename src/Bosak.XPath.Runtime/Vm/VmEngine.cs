@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 2.1   | 02-06-2026     | Numeric predicate uses exact equality, not Math.Round (XPath 2.0 §3.2.4)                 |
 //                      | Charles Korthout | 2.2   | 03-06-2026     | MultiplyOrAddInteger: detect overflow, promote to decimal (fixes number-0111)            |
 //                      | Charles Korthout | 2.3   | 01-06-2026     | Use module.MaxRegisterCount instead of hardcoded 256 for register array sizing           |
+//                      | Charles Korthout | 2.4   | 05-06-2026     | Inline function sequence param validation; numeric promotion; node()/anyAtomicType matching |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;

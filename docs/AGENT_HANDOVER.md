@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-04
-**Commit:** `cb67d7c`
-**Current focus:** QT3 conformance quick-wins (timezone, sort collation, trace, implicit-timezone).
+**Date:** 2026-06-05
+**Commit:** `feba2d8`
+**Current focus:** QT3 conformance — parser `SkipSequenceType` bug, inline function type checking, numeric promotion.
 
 ---
 
@@ -16,7 +16,7 @@
 
 **Recent trajectory:**
 - Latest: 3257 passed / 2204 failed / 9139 skipped (59.6%) — XSLT stable
-- Latest XPath: 18695 passed / 3175 failed / 9951 skipped (58.75%) — +61 tests from quick-win session
+- Latest XPath: 18722 passed / 3148 failed / 9951 skipped (58.84%) — +88 tests total from parser/VM fixes
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
 - Previous: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
 - Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
@@ -53,6 +53,15 @@
 7. **NaN sort comparer** — `XdmValueComparer.CompareNumeric` now treats NaN as equal to NaN (placing NaN values together during sort).
 8. **QT3 baseline (session part 1)** — 18,659 passed / 3,212 failed / 9,950 skipped (58.64%). +25 tests.
 9. **QT3 baseline (session part 2)** — 18,695 passed / 3,175 failed / 9,951 skipped (58.75%). +61 tests total.
+
+### This Session Fixes (2026-06-05)
+
+1. **`SkipSequenceType` parser bug** — `SkipSequenceType` in `XPathParser.cs` was using token indices (`_position`) as character positions for `GetSpanText`, producing garbage type strings like `"d"` or `"e("` instead of `"xs:integer"`. Fixed to use actual token character spans (`token.Start`, `token.Length`). This was the root cause of ALL `XPTY0004` failures in inline functions with typed parameters/return types.
+2. **`ParseTypeNameAndParens` function return type** — Now consumes `as ReturnType` after `function(...)` for `instance of function(...) as type` expressions.
+3. **`InvokeFunctionItem` sequence parameter validation** — Previously rejected any sequence with >1 item regardless of occurrence indicator (`*`/`+`). Now respects `*` (0+), `+` (1+), `?` (0/1) and validates each item.
+4. **Numeric promotion in `ItemInstanceOf`** — `xs:double` now accepts `integer`/`decimal`; `xs:float` now accepts `integer`/`decimal`/`double`; added `xs:numeric` and `xs:anyAtomicType` support.
+5. **`node()` type test in `ValueMatchesType`** — `ValueMatchesType` was missing `node()` handling (only had `element()`/`attribute()`). Added `normalized == "node()" => value.IsNode`.
+6. **QT3 baseline** — 18,722 / 3,148 / 9,951 (58.84%). +27 tests this batch, +88 total from session start.
 
 ### This Session Fixes (2026-06-04, part 2)
 

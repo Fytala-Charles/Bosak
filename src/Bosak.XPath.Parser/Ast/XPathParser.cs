@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 31-05-2026     | decimal.TryParse fallback to double for oversized decimal literals                       |
 //                      | Charles Korthout | 0.9   | 01-06-2026     | Prevent map/array/function keywords from being parsed as name tests in step expr       |
 //                      | Charles Korthout | 1.0   | 01-06-2026     | ParseAxisStep defaults to attribute/namespace axis for attribute()/namespace-node()    |
+//                      | Charles Korthout | 1.1   | 05-06-2026     | Fixed SkipSequenceType to use token char spans; ParseTypeNameAndParens consumes function return type |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;

@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-04
-**Commit:** `cb67d7c`
-**Current focus:** QT3 conformance quick-wins (timezone, sort collation, trace, implicit-timezone).
+**Date:** 2026-06-05
+**Commit:** `feba2d8`
+**Current focus:** QT3 conformance — parser `SkipSequenceType` bug, inline function type checking, numeric promotion.
 
 ---
 
@@ -10,8 +10,8 @@
 
 ### QT3 Conformance (W3C XPath 3.1 Test Suite)
 
-- **Passed:** 18,695 / **Failed:** 3,175 / **Skipped:** 9,951 (31,821 total)
-- Pass rate: **58.75%**
+- **Passed:** 18,722 / **Failed:** 3,148 / **Skipped:** 9,951 (31,821 total)
+- Pass rate: **58.84%**
 - Runner completes all 428 test sets without crashes
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
@@ -27,22 +27,21 @@
 
 ## Recommended Next Steps
 
-### Immediate: QT3 quick-wins (~1 hour, +15–25 tests)
+### Immediate: QT3 quick-wins (~1 hour, +10–15 tests)
 
 These are clusters with clear, related root causes:
 
-1. **`default-language`** — 6 failures. `fn:default-language#0` not implemented. Stub to return `"en"`.
-2. **`element-with-id`** — 5 failures. `fn:element-with-id#1` not implemented. Similar to existing `id#1`.
-3. **`filter` / `for-each` / `for-each-pair`** — ~15 failures. Missing `XPTY0004` type-checking when function argument has wrong arity/return type.
-4. **`contains-token`** — 2 failures. Token matching edge cases.
-5. **`document-uri`** — 4 failures. Returning boolean-as-string (`'fals'` / `'tru'`) instead of proper substrings.
+1. **`sort` cluster** — 3 failures remaining. `fn-sort-22` (map sorting), `fn-sort-17` (NaN array stability), `fn-sort-spec-6` (variable-length keys).
+2. **`for-each-pair-017`** — 1 failure. One `false` in a string of `true`s — node identity or comparison issue.
+3. **`contains-token`** — 2 failures. Token matching edge cases.
+4. **`document-uri`** — 4 failures. Returning boolean-as-string (`'fals'` / `'tru'`) instead of proper substrings.
+5. **`map-for-each`** — 2 failures. `map-for-each-016` (return type flattening), `map-for-each-007` (expected `XQDY0137`).
 
 ### Short-term: Sort cluster deep dive (~2–3 hours)
 
-The remaining 5 sort failures need investigation:
+The remaining 3 sort failures need investigation:
 - `fn-sort-22` / `array-sort-023`: Sorting maps with `map:get(?, "key")` returns empty sequence
 - `fn-sort-17`: NaN in array sorting (may need stable sort implementation)
-- `fn-sort2-str-2`: Inline function `as` keyword (`function($x as type) as type { ... }`) not supported by parser
 - `fn-sort-spec-6`: Variable-length sequence keys ordering wrong
 
 ### Medium-term: High-density XSLT clusters
