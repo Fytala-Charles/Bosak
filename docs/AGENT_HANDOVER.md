@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-05
 **Commit:** `<uncommitted>`
-**Current focus:** QT3 conformance — function-name formatting and duplicate param validation done, next: node ordering `<<`/`>>` or closure variable scope.
+**Current focus:** QT3 conformance — node ordering `<<`/`>>` fixed, next: closure variable scope or number cluster.
 
 ---
 
@@ -70,6 +70,15 @@
 2. **`inline-function-12a` fix** — `ParseInlineFunction` now validates that parameter names are unique and raises `XQST0039` when duplicates are found.
    - **HigherOrderFunctions cluster**: improved from 34/10/85 to 35/9/85.
 3. **QT3 estimated baseline** — ~18,767 / ~3,103 / 9,951 (approx. +2 tests).
+
+### This Session Fixes (2026-06-05, part 2)
+
+1. **`K-NodeBefore-3` / `K-NodeAfter-3` fix** — Node comparison operators (`is`, `<<`, `>>`) now raise `XPTY0004` when operands are not single nodes. Previously returned `false` for non-node operands.
+2. **`K-NodeBefore-5..11` / `K-NodeAfter-5..11` fix** — `ParseException` now auto-prefixes generic messages with `XPST0003:` when no explicit error code is present. This makes the conformance harness correctly recognize static parse errors.
+   - **node-before cluster**: improved from 16/10/10 to 24/2/10.
+   - **node-after cluster**: improved from 16/10/9 to 24/2/9.
+   - Remaining failures (`nodeexpression28/31/44/47`) are test-environment issues (missing `$works` variable), not operator bugs.
+3. **QT3 estimated baseline** — ~18,783 / ~3,087 / 9,951 (approx. +16 tests this batch).
 
 ### This Session Fixes (2026-06-04, part 2 — latest)
 
@@ -142,8 +151,8 @@
 
 ### QT3 Conformance Baseline
 
-- Passed: 18,767 / Failed: 3,103 / Skipped: 9,951 (31,821 total)
-- Pass rate: ~58.98%
+- Passed: 18,783 / Failed: 3,087 / Skipped: 9,951 (31,821 total)
+- Pass rate: ~59.03%
 
 ---
 
@@ -312,10 +321,11 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 
 ### Next Session Immediate Targets (start here)
 
-1. **`boolean-076/077`** — Node ordering `<<`/`>>`:
-   - `PrecedesNode`/`FollowsNode` may exist but not wired into `CompareGeneral`
-   - Check `VmEngine.cs` general comparison path
-   - **Est: ~1–2 hours**
+1. **`inline-function-16`** — Closure variable scope issue:
+   - Error: `Variable $foo is not defined`
+   - Expression: `function($x as xs:integer) { function() { $x, $foo } }`
+   - Root cause: nested inline function can't access outer inline function params
+   - File: `IrLowerer.cs` or `VmEngine.cs` (complex, ~2–4 hours)
 
 ### Immediate: Quick-win clusters (~few hours, +30–50 tests)
 
@@ -326,7 +336,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - **`core-function`** — **0 failures, 90/90 passed (100%)** ✅
 - **`number`** — **10 failures, 1 skipped (96.0% passing)** — remaining: `number-0111` (large integer overflow), `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting), `number-0807` (double 1e100 formatting), `number-1004` (xsl:iterate not implemented), `number-1501` (whitespace stripping in level="any" count)
 - **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)
-- **`boolean`** — **2 failures, 0 skipped (98% passing)** — only `boolean-076`/`077` (node ordering `<<`/`>>`, unimplemented)
+- **`boolean`** — **0 failures, 0 skipped (100% passing)** ✅ — node ordering `<<`/`>>` fixed.
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
 
@@ -336,7 +346,9 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | **match** | 78 | 107 | Pattern matching gaps. Improved from 106 failures (priority, union keyword, root(), dot predicates, doc() resolution). |
 | **sort** | 0 | 18 | 66/84 passing (100% of runnable). ✅ Clean. |
 | **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
-| **HigherOrderFunctions** | 9 | 85 | 35/129 passing (27.1%). +2 fixed this session (function-name prefix, XQST0039 dup param). |
+| **node-before** | 2 | 10 | 24/36 passing (66.7%). Remaining 2 are environment issues (missing `$works` variable). |
+| **node-after** | 2 | 9 | 24/35 passing (68.6%). Remaining 2 are environment issues. |
+| **HigherOrderFunctions** | 9 | 85 | 35/129 passing (27.1%). +2 fixed earlier this session (function-name prefix, XQST0039 dup param). |
 | **mode** | 88 | 44 | Template mode dispatch issues. |
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
@@ -358,5 +370,5 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `d5a9c50` — typed function signature matching
-- One commit before: `5405926` — fn-sort-spec-6 and fn-for-each-pair-017 fixes
+- Latest: `<uncommitted>` — node comparison operator fixes (XPTY0004 + XPST0003)
+- Previous: `a792924` — function-name prefix and inline-function XQST0039

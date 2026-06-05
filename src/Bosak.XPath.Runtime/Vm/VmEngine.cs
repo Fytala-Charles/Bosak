@@ -38,6 +38,7 @@
 //                      | Charles Korthout | 2.5   | 05-06-2026     | Removed global NormalizeSequence from Execute; path/union already normalize via opcodes     |
 //                      | Charles Korthout | 2.6   | 05-06-2026     | Added function(*)/map(*)/array(*) support to ValueMatchesType for instance-of checks      |
 //                      | Charles Korthout | 2.7   | 05-06-2026     | Added typed function signature matching (function(T...) as R) with contravariant params   |
+//                      | Charles Korthout | 2.8   | 05-06-2026     | Node comparison operators raise XPTY0004 for non-node operands; ParseException XPST0003  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -907,9 +908,13 @@ public static class VmEngine
                         {
                             registers[instr.RegisterA] = XdmValue.Undefined;
                         }
+                        else if (!left.IsNode || !right.IsNode)
+                        {
+                            throw new InvalidOperationException("XPTY0004: Node comparison operator 'is' requires single node operands.");
+                        }
                         else
                         {
-                            bool result = left.IsNode && right.IsNode && left.NodeValue.IsSameNode(right.NodeValue);
+                            bool result = left.NodeValue.IsSameNode(right.NodeValue);
                             registers[instr.RegisterA] = XdmValue.FromBoolean(result);
                         }
                         ip++;
@@ -927,7 +932,7 @@ public static class VmEngine
                         }
                         else if (!left.IsNode || !right.IsNode)
                         {
-                            registers[instr.RegisterA] = XdmValue.FromBoolean(false);
+                            throw new InvalidOperationException("XPTY0004: Node comparison operators '<<' and '>>' require single node operands.");
                         }
                         else
                         {
