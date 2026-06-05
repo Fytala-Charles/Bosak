@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-05
-**Commit:** `feba2d8`
-**Current focus:** QT3 conformance — parser `SkipSequenceType` bug, inline function type checking, numeric promotion.
+**Date:** 2026-06-04
+**Commit:** `5405926`
+**Current focus:** QT3 conformance — typed function signatures, node sort normalization, whitespace preservation.
 
 ---
 
@@ -16,7 +16,7 @@
 
 **Recent trajectory:**
 - Latest: 3257 passed / 2204 failed / 9139 skipped (59.6%) — XSLT stable
-- Latest XPath: 18722 passed / 3148 failed / 9951 skipped (58.84%) — +88 tests total from parser/VM fixes
+- Latest XPath: 18746 passed / 3124 failed / 9951 skipped (58.91%) — +112 tests total from parser/VM/sort fixes
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
 - Previous: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
 - Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
@@ -62,6 +62,22 @@
 4. **Numeric promotion in `ItemInstanceOf`** — `xs:double` now accepts `integer`/`decimal`; `xs:float` now accepts `integer`/`decimal`/`double`; added `xs:numeric` and `xs:anyAtomicType` support.
 5. **`node()` type test in `ValueMatchesType`** — `ValueMatchesType` was missing `node()` handling (only had `element()`/`attribute()`). Added `normalized == "node()" => value.IsNode`.
 6. **QT3 baseline** — 18,722 / 3,148 / 9,951 (58.84%). +27 tests this batch, +88 total from session start.
+
+### This Session Fixes (2026-06-04, part 2 — latest)
+
+1. **`fn-sort-spec-6` fix** — Variable-length node sort keys returned wrong ordering. Root cause: `VmEngine.Execute()` globally called `NormalizeSequence` which sorted all nodes by document order, reversing explicitly constructed sequences like `($emp/name/last, $emp/name/first)`. Also, sort keys were not atomized before comparison.
+   - Removed global `NormalizeSequence(result)` from `Execute()` — path expressions already normalize via `IrOpCode.Normalize` emitted by compiler.
+   - Wrapped key-function results in `Data()` in `Sort()` and `ArraySort()` so node keys are atomized to strings before comparison.
+   - **Sort cluster**: improved from 65/1/18 to 66/0/18.
+2. **`fn-for-each-pair-017` fix** — `deep-equal` on mixed item types returned one `false`. Three root causes:
+   - `instance of function(*)` returned `false` — `ValueMatchesType` didn't handle `function(*)`, `map(*)`, `array(*)`.
+   - Whitespace text nodes were stripped by default .NET XML parsing, but QT3 counts them as part of `//node()`.
+   - Document-level whitespace (before/after root element) was incorrectly preserved when using `PreserveWhitespace`.
+   - Added `function(*)`, `map(*)`, `array(*)` matching to `ValueMatchesType`.
+   - Changed `XDocumentProvider.LoadXml` and `ParseXml_1`/`ParseXmlFragment_1` to use `LoadOptions.PreserveWhitespace`.
+   - Added `StripDocumentLevelWhitespace()` in `XDocumentProvider` to remove whitespace-only text nodes that are direct children of the document node.
+   - **For-each-pair cluster**: improved from 55/1/2 to 56/0/2.
+3. **Commit:** `5405926` — both fixes in single commit.
 
 ### This Session Fixes (2026-06-04, part 2)
 
@@ -116,8 +132,8 @@
 
 ### QT3 Conformance Baseline
 
-- Passed: 18,659 / Failed: 3,212 / Skipped: 9,950 (31,821 total)
-- Pass rate: 58.64%
+- Passed: 18,746 / Failed: 3,124 / Skipped: 9,951 (31,821 total)
+- Pass rate: 58.91%
 
 ---
 

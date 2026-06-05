@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 2.4   | 05-06-2026     | Inline function sequence param validation; numeric promotion; node()/anyAtomicType matching |
 //                      | Charles Korthout | 2.5   | 05-06-2026     | Removed global NormalizeSequence from Execute; path/union already normalize via opcodes     |
 //                      | Charles Korthout | 2.6   | 05-06-2026     | Added function(*)/map(*)/array(*) support to ValueMatchesType for instance-of checks      |
+//                      | Charles Korthout | 2.7   | 05-06-2026     | Added typed function signature matching (function(T...) as R) with contravariant params   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -4436,6 +4437,38 @@ public static class VmEngine
             return true;
         }
 
+        // Handle typed function signatures before general normalization, because function
+        // type strings contain nested type names whose occurrence indicators and xs: prefixes
+        // must not be stripped by the general normalization logic.
+        string trimmedLower = typeName.Trim().ToLowerInvariant();
+        if (trimmedLower.StartsWith("function(") && !trimmedLower.StartsWith("function(*)"))
+        {
+            if (TryParseFunctionType(typeName.Trim(), out var testParamTypes, out var testReturnType))
+            {
+                // function(*) wildcard falls through to the check below
+                bool isFunctionStar = testParamTypes.Length == 1 && testParamTypes[0] == "*";
+                if (!isFunctionStar)
+                {
+                    if (!value.IsFunction) return false;
+                    if (TryGetInlineFunctionSignature(value, out var actualParamTypes, out var actualReturnType))
+                    {
+                        if (actualParamTypes.Length != testParamTypes.Length) return false;
+                        // Parameter types are contravariant: test param must be subtype of actual param
+                        for (int i = 0; i < testParamTypes.Length; i++)
+                        {
+                            if (!IsSequenceTypeSubtype(testParamTypes[i], actualParamTypes[i]))
+                                return false;
+                        }
+                        // Return type is covariant: actual return must be subtype of test return
+                        if (!IsSequenceTypeSubtype(actualReturnType, testReturnType))
+                            return false;
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
+
         if (normalized is "function(*)" or "function")
             return value.IsFunction;
 
@@ -4446,6 +4479,218 @@ public static class VmEngine
             return value.IsArray;
 
         return ItemInstanceOf(value, normalized);
+    }
+
+    /// <summary>
+    /// Parses a function type string such as <c>function(item()*, xs:double) as xs:double</c>.
+    /// </summary>
+    private static bool TryParseFunctionType(string typeName, out string[] paramTypes, out string returnType)
+    {
+        paramTypes = [];
+        returnType = "item()*";
+
+        string s = typeName.Trim();
+        if (!s.StartsWith("function(", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        int openIdx = s.IndexOf('(');
+        int closeIdx = FindMatchingParen(s, openIdx);
+        if (closeIdx < 0) return false;
+
+        string paramList = s.Substring(openIdx + 1, closeIdx - openIdx - 1).Trim();
+        if (string.IsNullOrEmpty(paramList))
+        {
+            paramTypes = [];
+        }
+        else if (paramList == "*")
+        {
+            paramTypes = ["*"];
+        }
+        else
+        {
+            paramTypes = SplitTopLevel(paramList, ',');
+        }
+
+        string after = s.Substring(closeIdx + 1).Trim();
+        if (after.StartsWith("as ", StringComparison.OrdinalIgnoreCase))
+        {
+            returnType = after.Substring(3).Trim();
+        }
+        else
+        {
+            returnType = "item()*";
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Finds the index of the closing parenthesis that matches the opening parenthesis at <paramref name="openIdx"/>.
+    /// </summary>
+    private static int FindMatchingParen(string s, int openIdx)
+    {
+        int depth = 0;
+        for (int i = openIdx; i < s.Length; i++)
+        {
+            if (s[i] == '(') depth++;
+            else if (s[i] == ')') depth--;
+            if (depth == 0) return i;
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Splits a string by a delimiter, respecting nested parentheses.
+    /// </summary>
+    private static string[] SplitTopLevel(string s, char delimiter)
+    {
+        var parts = new List<string>();
+        int depth = 0;
+        int start = 0;
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (s[i] == '(') depth++;
+            else if (s[i] == ')') depth--;
+            else if (s[i] == delimiter && depth == 0)
+            {
+                parts.Add(s.Substring(start, i - start).Trim());
+                start = i + 1;
+            }
+        }
+        parts.Add(s.Substring(start).Trim());
+        return parts.ToArray();
+    }
+
+    /// <summary>
+    /// Extracts the declared parameter and return types from an inline function item.
+    /// </summary>
+    private static bool TryGetInlineFunctionSignature(XdmValue value, out string[] paramTypes, out string returnType)
+    {
+        paramTypes = [];
+        returnType = "item()*";
+
+        if (!value.IsFunction) return false;
+
+        var func = value.FunctionValue as FunctionItem;
+        if (func is InlineFunctionItem inline)
+        {
+            paramTypes = inline.ParameterTypes.Select(pt => pt ?? "item()*").ToArray();
+            returnType = inline.ReturnType ?? "item()*";
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Checks whether <paramref name="actualType"/> is a subtype of <paramref name="testType"/>
+    /// according to XPath 3.1 sequence type subtyping rules.
+    /// </summary>
+    private static bool IsSequenceTypeSubtype(string actualType, string testType)
+    {
+        string actual = actualType.Trim().ToLowerInvariant();
+        string test = testType.Trim().ToLowerInvariant();
+
+        if (actual.StartsWith("xs:")) actual = actual[3..];
+        if (test.StartsWith("xs:")) test = test[3..];
+
+        // Extract occurrence indicators
+        char actualOcc = '\0';
+        char testOcc = '\0';
+        if (actual.Length > 0 && "?+*".Contains(actual[^1]))
+        {
+            actualOcc = actual[^1];
+            actual = actual[..^1].TrimEnd();
+        }
+        if (test.Length > 0 && "?+*".Contains(test[^1]))
+        {
+            testOcc = test[^1];
+            test = test[..^1].TrimEnd();
+        }
+
+        // Every sequence matching actual must also match test
+        bool occOk = (actualOcc, testOcc) switch
+        {
+            ('\0', '\0') => true,
+            ('\0', '?') => true,
+            ('\0', '+') => true,
+            ('\0', '*') => true,
+            ('?', '?') => true,
+            ('?', '*') => true,
+            ('+', '+') => true,
+            ('+', '*') => true,
+            ('*', '*') => true,
+            _ => false,
+        };
+
+        if (!occOk) return false;
+        if (actual == test) return true;
+
+        return IsBaseTypeSubtype(actual, test);
+    }
+
+    /// <summary>
+    /// Checks whether <paramref name="actual"/> is a subtype of <paramref name="test"/>
+    /// by walking the type hierarchy.
+    /// </summary>
+    private static bool IsBaseTypeSubtype(string actual, string test)
+    {
+        var queue = new Queue<string>();
+        queue.Enqueue(actual);
+        var visited = new HashSet<string>();
+
+        while (queue.Count > 0)
+        {
+            string current = queue.Dequeue();
+            if (current == test) return true;
+            if (!visited.Add(current)) continue;
+
+            foreach (var super in GetDirectSupertypes(current))
+                queue.Enqueue(super);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns the immediate supertypes of a given base type name.
+    /// </summary>
+    private static IEnumerable<string> GetDirectSupertypes(string type)
+    {
+        return type switch
+        {
+            "integer" => ["decimal"],
+            "decimal" => ["numeric"],
+            "double" => ["numeric"],
+            "float" => ["numeric"],
+            "numeric" => ["anyatomictype"],
+            "string" => ["anyatomictype"],
+            "boolean" => ["anyatomictype"],
+            "date" => ["anyatomictype"],
+            "time" => ["anyatomictype"],
+            "datetime" => ["anyatomictype"],
+            "duration" => ["anyatomictype"],
+            "daytimeduration" => ["duration"],
+            "yearmonthduration" => ["duration"],
+            "anyuri" => ["anyatomictype"],
+            "qname" => ["anyatomictype"],
+            "notation" => ["anyatomictype"],
+            "hexbinary" => ["anyatomictype"],
+            "base64binary" => ["anyatomictype"],
+            "anyatomictype" => ["item()"],
+            "element()" => ["node()"],
+            "attribute()" => ["node()"],
+            "text()" => ["node()"],
+            "comment()" => ["node()"],
+            "processing-instruction()" => ["node()"],
+            "document-node()" => ["node()"],
+            "namespace-node()" => ["node()"],
+            "node()" => ["item()"],
+            "function(*)" => ["item()"],
+            "map(*)" => ["item()"],
+            "array(*)" => ["item()"],
+            _ => [],
+        };
     }
 
     /// <summary>
