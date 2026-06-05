@@ -52,6 +52,7 @@
 //                      | Charles Korthout | 3.8   | 02-06-2026     | Fixed fn:sort/array:sort default fn:data#1 key and lexicographic multi-value key compare |
 //                      | Charles Korthout | 3.9   | 05-06-2026     | Atomize sort keys from key function; fix fn-sort-spec-6 node sequence ordering           |
 //                      | Charles Korthout | 4.0   | 05-06-2026     | parse-xml/parse-xml-fragment preserve element whitespace; strip document-level whitespace |
+//                      | Charles Korthout | 4.1   | 05-06-2026     | Fix fn:function-name to include standard namespace prefix for built-in functions         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2904,7 +2905,7 @@ public static class FunctionLibrary
     {
         var funcValue = args[0].FunctionValue;
         if (funcValue is NamedFunctionItem named)
-            return XdmValue.FromQName(new XsQName(named.LocalName, named.NamespaceUri));
+            return XdmValue.FromQName(new XsQName(named.LocalName, named.NamespaceUri, GetStandardPrefix(named.NamespaceUri)));
         if (funcValue is CurriedFunctionItem curried)
         {
             // Walk to the base named function
@@ -2912,10 +2913,19 @@ public static class FunctionLibrary
             while (baseFunc is CurriedFunctionItem cf)
                 baseFunc = cf.BaseFunction;
             if (baseFunc is NamedFunctionItem nm)
-                return XdmValue.FromQName(new XsQName(nm.LocalName, nm.NamespaceUri));
+                return XdmValue.FromQName(new XsQName(nm.LocalName, nm.NamespaceUri, GetStandardPrefix(nm.NamespaceUri)));
         }
         return XdmValue.Undefined;
     }
+
+    private static string GetStandardPrefix(string namespaceUri) => namespaceUri switch
+    {
+        Namespaces.Fn => "fn",
+        Namespaces.Math => "math",
+        Namespaces.Map => "map",
+        Namespaces.Array => "array",
+        _ => ""
+    };
 
     private static XdmValue FunctionArity(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {

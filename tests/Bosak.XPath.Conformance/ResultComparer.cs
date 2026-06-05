@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 22-05-2026     | Fixed Double/Float serialization to use XdmValue.ToString for canonical formatting       |
 //                      | Charles Korthout | 0.6   | 27-05-2026     | DeepEqual: single-item sequence is equivalent to bare item (XDM semantics)               |
 //                      | Charles Korthout | 0.7   | 01-06-2026     | assert-string-value respects normalize-space="true"; added NormalizeSpace helper        |
+//                      | Charles Korthout | 0.8   | 05-06-2026     | ValuesEqual now compares QNames by namespace URI and local name (ignores prefix)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -271,6 +272,13 @@ internal static class ResultComparer
             return a.DateValue == b.DateValue;
         if (a.Kind == XdmValueKind.Time && b.Kind == XdmValueKind.Time)
             return a.TimeValue == b.TimeValue;
+
+        // QName comparison: compare namespace URI and local name (prefix is ignored per XPath spec)
+        if (a.Kind == XdmValueKind.QName && b.Kind == XdmValueKind.QName)
+        {
+            return a.QNameValue.NamespaceUri == b.QNameValue.NamespaceUri
+                && a.QNameValue.LocalName == b.QNameValue.LocalName;
+        }
 
         // Numeric value comparison: decimals may differ in trailing zeros (13 vs 13.0)
         bool aIsNumeric = a.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;

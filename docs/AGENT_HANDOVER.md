@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-04
-**Commit:** `d5a9c50`
-**Current focus:** QT3 conformance — typed function signatures complete, next: error-code tests and function-name formatting.
+**Date:** 2026-06-05
+**Commit:** `<uncommitted>`
+**Current focus:** QT3 conformance — function-name formatting and duplicate param validation done, next: node ordering `<<`/`>>` or closure variable scope.
 
 ---
 
@@ -62,6 +62,14 @@
 4. **Numeric promotion in `ItemInstanceOf`** — `xs:double` now accepts `integer`/`decimal`; `xs:float` now accepts `integer`/`decimal`/`double`; added `xs:numeric` and `xs:anyAtomicType` support.
 5. **`node()` type test in `ValueMatchesType`** — `ValueMatchesType` was missing `node()` handling (only had `element()`/`attribute()`). Added `normalized == "node()" => value.IsNode`.
 6. **QT3 baseline** — 18,722 / 3,148 / 9,951 (58.84%). +27 tests this batch, +88 total from session start.
+
+### This Session Fixes (2026-06-05, continued)
+
+1. **`function-item-8` fix** — `fn:function-name` now returns QNames with the standard namespace prefix for built-in functions. `FunctionName` maps known namespace URIs (`fn`, `math`, `map`, `array`) to their conventional prefixes. Also fixed `ValuesEqual` in `ResultComparer.cs` to compare QNames by namespace URI and local name (ignoring prefix), making `assert-eq` spec-compliant for QName values.
+   - **HigherOrderFunctions cluster**: improved from 33/11/85 to 34/10/85.
+2. **`inline-function-12a` fix** — `ParseInlineFunction` now validates that parameter names are unique and raises `XQST0039` when duplicates are found.
+   - **HigherOrderFunctions cluster**: improved from 34/10/85 to 35/9/85.
+3. **QT3 estimated baseline** — ~18,767 / ~3,103 / 9,951 (approx. +2 tests).
 
 ### This Session Fixes (2026-06-04, part 2 — latest)
 
@@ -134,8 +142,8 @@
 
 ### QT3 Conformance Baseline
 
-- Passed: 18,765 / Failed: 3,105 / Skipped: 9,951 (31,821 total)
-- Pass rate: 58.97%
+- Passed: 18,767 / Failed: 3,103 / Skipped: 9,951 (31,821 total)
+- Pass rate: ~58.98%
 
 ---
 
@@ -304,17 +312,7 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 
 ### Next Session Immediate Targets (start here)
 
-1. **`function-item-8`** — `fn:function-name` missing namespace prefix:
-   - Expression: `function-name(fn:abs#1)` returns `function-name`, expected `fn:function-name`
-   - Fix `FunctionName_1` in `FunctionLibrary.cs` to prepend namespace prefix
-   - **Est: ~30 min**
-
-2. **`inline-function-12a`** — Duplicate param name error not raised:
-   - Expected `XQST0039`, but succeeded
-   - Add duplicate param name check in `XPathParser.cs` inline function parsing
-   - **Est: ~30 min**
-
-3. **`boolean-076/077`** — Node ordering `<<`/`>>`:
+1. **`boolean-076/077`** — Node ordering `<<`/`>>`:
    - `PrecedesNode`/`FollowsNode` may exist but not wired into `CompareGeneral`
    - Check `VmEngine.cs` general comparison path
    - **Est: ~1–2 hours**
@@ -338,7 +336,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | **match** | 78 | 107 | Pattern matching gaps. Improved from 106 failures (priority, union keyword, root(), dot predicates, doc() resolution). |
 | **sort** | 0 | 18 | 66/84 passing (100% of runnable). ✅ Clean. |
 | **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
-| **HigherOrderFunctions** | 11 | 85 | 33/129 passing (25.6%). 7 fixed this session (typed function matching). |
+| **HigherOrderFunctions** | 9 | 85 | 35/129 passing (27.1%). +2 fixed this session (function-name prefix, XQST0039 dup param). |
 | **mode** | 88 | 44 | Template mode dispatch issues. |
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |

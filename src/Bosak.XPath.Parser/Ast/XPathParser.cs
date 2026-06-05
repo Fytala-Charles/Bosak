@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 01-06-2026     | Prevent map/array/function keywords from being parsed as name tests in step expr       |
 //                      | Charles Korthout | 1.0   | 01-06-2026     | ParseAxisStep defaults to attribute/namespace axis for attribute()/namespace-node()    |
 //                      | Charles Korthout | 1.1   | 05-06-2026     | Fixed SkipSequenceType to use token char spans; ParseTypeNameAndParens consumes function return type |
+//                      | Charles Korthout | 1.2   | 05-06-2026     | Added XQST0039 duplicate parameter name check in ParseInlineFunction                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1065,6 +1066,14 @@ public sealed class XPathParser
                 parameters.Add(new ParamNode(GetString(nameTok), typeName));
             } while (Match(TokenKind.Comma));
             Expect(TokenKind.RParen);
+
+            // Check for duplicate parameter names (XQST0039)
+            var seenNames = new HashSet<string>();
+            foreach (var param in parameters)
+            {
+                if (!seenNames.Add(param.Name))
+                    throw new ParseException($"XQST0039: Duplicate parameter name ${param.Name} in inline function.", start);
+            }
         }
         string? returnType = null;
         if (Current.Kind == TokenKind.KeywordAs)
