@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-04
-**Commit:** `5405926`
-**Current focus:** QT3 conformance — typed function signatures, node sort normalization, whitespace preservation.
+**Commit:** `d5a9c50`
+**Current focus:** QT3 conformance — typed function signatures complete, next: error-code tests and function-name formatting.
 
 ---
 
@@ -16,7 +16,7 @@
 
 **Recent trajectory:**
 - Latest: 3257 passed / 2204 failed / 9139 skipped (59.6%) — XSLT stable
-- Latest XPath: 18746 passed / 3124 failed / 9951 skipped (58.91%) — +112 tests total from parser/VM/sort fixes
+- Latest XPath: 18765 passed / 3105 failed / 9951 skipped (58.97%) — +131 tests total from parser/VM/sort/function-type fixes
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
 - Previous: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
 - Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
@@ -78,6 +78,8 @@
    - Added `StripDocumentLevelWhitespace()` in `XDocumentProvider` to remove whitespace-only text nodes that are direct children of the document node.
    - **For-each-pair cluster**: improved from 55/1/2 to 56/0/2.
 3. **Commit:** `5405926` — both fixes in single commit.
+4. **Typed function signature matching** — `ValueMatchesType` now parses and validates `function(T1,...) as R` type tests against `InlineFunctionItem` metadata. Implements XPath 3.1 contravariant parameters and covariant return rules with occurrence indicator awareness. Adds `IsSequenceTypeSubtype`, `IsBaseTypeSubtype`, `GetDirectSupertypes`, `TryParseFunctionType`, `TryGetInlineFunctionSignature` helpers. Fixes 7 QT3 tests: `inline-function-6/7/8/9`, `function-item-10/13/14`. HigherOrderFunctions cluster now 33/11/85 (was 26/18/85).
+5. **Commit:** `d5a9c50` — typed function signature matching.
 
 ### This Session Fixes (2026-06-04, part 2)
 
@@ -132,8 +134,8 @@
 
 ### QT3 Conformance Baseline
 
-- Passed: 18,746 / Failed: 3,124 / Skipped: 9,951 (31,821 total)
-- Pass rate: 58.91%
+- Passed: 18,765 / Failed: 3,105 / Skipped: 9,951 (31,821 total)
+- Pass rate: 58.97%
 
 ---
 
