@@ -39,6 +39,7 @@
 //                      | Charles Korthout | 2.6   | 05-06-2026     | Added function(*)/map(*)/array(*) support to ValueMatchesType for instance-of checks      |
 //                      | Charles Korthout | 2.7   | 05-06-2026     | Added typed function signature matching (function(T...) as R) with contravariant params   |
 //                      | Charles Korthout | 2.8   | 05-06-2026     | Node comparison operators raise XPTY0004 for non-node operands; ParseException XPST0003  |
+//                      | Charles Korthout | 2.9   | 05-06-2026     | ResolveVariableName handles Q{uri}local; inline function params bind by expanded QName     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1718,6 +1719,18 @@ public static class VmEngine
 
     private static (string LocalName, string NamespaceUri) ResolveVariableName(string varName, EvaluationContext context)
     {
+        // Braced URI literal: Q{uri}localname or Q{uri}prefix:local
+        if (varName.Length > 2 && varName[0] == 'Q' && varName[1] == '{')
+        {
+            int closeBrace = varName.IndexOf('}');
+            if (closeBrace > 2)
+            {
+                string uri = varName[2..closeBrace];
+                string local = varName[(closeBrace + 1)..];
+                return (local, uri);
+            }
+        }
+
         string localName = varName;
         string? prefix = null;
         int colon = varName.IndexOf(':');
@@ -1847,13 +1860,15 @@ public static class VmEngine
                         }
                     }
 
-                    var saved = new (string Name, bool Had, XdmValue Value)[inline.Parameters.Count];
+                    var saved = new (string LocalName, string NamespaceUri, bool Had, XdmValue Value)[inline.Parameters.Count];
                     for (int i = 0; i < inline.Parameters.Count; i++)
                     {
-                        saved[i].Name = inline.Parameters[i];
-                        saved[i].Had = context.TryGetVariable(inline.Parameters[i], out var oldVal);
+                        var (localName, nsUri) = ResolveVariableName(inline.Parameters[i], context);
+                        saved[i].LocalName = localName;
+                        saved[i].NamespaceUri = nsUri;
+                        saved[i].Had = context.TryGetVariable(localName, out var oldVal, nsUri);
                         saved[i].Value = oldVal;
-                        context.WithVariable(inline.Parameters[i], i < args.Length ? args[i] : XdmValue.Undefined);
+                        context.WithVariable(localName, i < args.Length ? args[i] : XdmValue.Undefined, nsUri);
                     }
                     try
                     {
@@ -1899,9 +1914,9 @@ public static class VmEngine
                         for (int i = 0; i < inline.Parameters.Count; i++)
                         {
                             if (saved[i].Had)
-                                context.WithVariable(saved[i].Name, saved[i].Value);
+                                context.WithVariable(saved[i].LocalName, saved[i].Value, saved[i].NamespaceUri);
                             else
-                                context.RemoveVariable(saved[i].Name);
+                                context.RemoveVariable(saved[i].LocalName, saved[i].NamespaceUri);
                         }
                     }
                 }

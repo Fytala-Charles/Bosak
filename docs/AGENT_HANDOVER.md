@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-05
 **Commit:** `<uncommitted>`
-**Current focus:** QT3 conformance — node ordering `<<`/`>>` fixed, next: closure variable scope or number cluster.
+**Current focus:** QT3 conformance — inline function param binding and node comparisons fixed, next: number cluster or remaining HigherOrderFunctions errors.
 
 ---
 
@@ -80,6 +80,14 @@
    - Remaining failures (`nodeexpression28/31/44/47`) are test-environment issues (missing `$works` variable), not operator bugs.
 3. **QT3 estimated baseline** — ~18,783 / ~3,087 / 9,951 (approx. +16 tests this batch).
 
+### This Session Fixes (2026-06-05, part 3)
+
+1. **`inline-function-16` fix** — `InvokeFunctionItem` now resolves inline function parameter names (including `Q{uri}local` and `prefix:local`) into expanded QNames before binding them to variables in `EvaluationContext`. Previously raw strings like `Q{http://local/}foo` were stored as variable names, so body references to `$Q{http://local/}foo` couldn't find them.
+2. **`function-item-3` fix** — The `is` operator now raises `XPTY0004` for non-node operands (fixed alongside `<<`/`>>` in part 2). `string-join#1 is string-join#1` now correctly errors.
+3. **`ResolveVariableName` braced URI support** — Added `Q{uri}local` parsing to `ResolveVariableName`, matching the compiler's handling of `VariableReferenceNode` with explicit namespace URIs.
+   - **HigherOrderFunctions cluster**: improved from 35/9/85 to 37/7/85.
+4. **QT3 estimated baseline** — ~18,785 / ~3,085 / 9,951 (approx. +2 tests this batch).
+
 ### This Session Fixes (2026-06-04, part 2 — latest)
 
 1. **`fn-sort-spec-6` fix** — Variable-length node sort keys returned wrong ordering. Root cause: `VmEngine.Execute()` globally called `NormalizeSequence` which sorted all nodes by document order, reversing explicitly constructed sequences like `($emp/name/last, $emp/name/first)`. Also, sort keys were not atomized before comparison.
@@ -151,8 +159,8 @@
 
 ### QT3 Conformance Baseline
 
-- Passed: 18,783 / Failed: 3,087 / Skipped: 9,951 (31,821 total)
-- Pass rate: ~59.03%
+- Passed: 18,785 / Failed: 3,085 / Skipped: 9,951 (31,821 total)
+- Pass rate: ~59.04%
 
 ---
 
@@ -321,11 +329,12 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 
 ### Next Session Immediate Targets (start here)
 
-1. **`inline-function-16`** — Closure variable scope issue:
-   - Error: `Variable $foo is not defined`
-   - Expression: `function($x as xs:integer) { function() { $x, $foo } }`
-   - Root cause: nested inline function can't access outer inline function params
-   - File: `IrLowerer.cs` or `VmEngine.cs` (complex, ~2–4 hours)
+1. **`number` cluster** — 10 failures (96.2% passing):
+   - `number-0111`: large integer overflow — already fixed? verify
+   - `number-0802/0812/0813/0828/0829/2506`: non-English word/ordinal formatting
+   - `number-0807`: double `1e100` formatting — already fixed? verify
+   - `number-1004`: `xsl:iterate` not implemented
+   - `number-1501`: whitespace stripping in `level="any"` count
 
 ### Immediate: Quick-win clusters (~few hours, +30–50 tests)
 
@@ -348,7 +357,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
 | **node-before** | 2 | 10 | 24/36 passing (66.7%). Remaining 2 are environment issues (missing `$works` variable). |
 | **node-after** | 2 | 9 | 24/35 passing (68.6%). Remaining 2 are environment issues. |
-| **HigherOrderFunctions** | 9 | 85 | 35/129 passing (27.1%). +2 fixed earlier this session (function-name prefix, XQST0039 dup param). |
+| **HigherOrderFunctions** | 7 | 85 | 37/129 passing (28.7%). +4 fixed this session (function-name prefix, XQST0039, inline-function-16, function-item-3). |
 | **mode** | 88 | 44 | Template mode dispatch issues. |
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
