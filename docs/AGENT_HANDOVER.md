@@ -284,20 +284,40 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 3. **`key()` namespace** — Registered under `http://www.w3.org/2005/xpath-functions` (not XSLT namespace) because the XPath compiler resolves unprefixed function names to the `fn` namespace.
 4. ~~PatternCompiler limitations~~ — **FIXED**: `TemplateRule.CompileMatch` now resolves namespace prefixes to `Q{uri}local` syntax.
 5. ~~XPath unprefixed element namespace~~ — **FIXED**: `IrLowerer` now emits `NamespaceTest` for unprefixed element names on element axes, and `VmEngine.NamespaceTest` correctly handles default element namespace resolution.
-5. **Negative zero** — `double.IsNegative(value)` is used to detect `-0`; `value == 0.0` alone is not sufficient.
-6. **Global variable forward references** — Global variables are evaluated in import/include/local order. Forward references within the same stylesheet are not dependency-sorted.
-7. **Namespace declaration hoisting** — LINQ-to-XML places `xmlns:prefix` on first element using it; Saxon/test suite expects hoisting to outermost element. Root cause of many namespace test failures.
-8. **Sequence constructor batching** — `ExecuteSequenceConstructorDirect` adds items to `_currentContainer` eagerly (one by one). This means adjacent atomics across `xsl:for-each` iterations or multiple `xsl:sequence` instructions are not batched before complex content construction. `_lastAddedWasAtomic` is a partial workaround but cannot fully emulate true sequence accumulation. Root cause of `seqtor-024`, `025`, `026` and possibly others.
-9. **`xsl:namespace-alias` not implemented** — ~26 namespace tests fail.
-10. **`xsl:number level="multiple"`** — Multi-level ancestor chain formatting is incomplete.
-11. **Decimal overflow in `FormatNumberEngine`** — Uses `decimal` which overflows for very large inputs.
-12. **Match pattern gaps** — `descendant-or-self::x[predicate]`, `except`/`intersect`, `id()`/`key()` patterns missing in `PatternCompiler`.
-13. **DateTime year < 1** — `DateTimeOffset` minimum year is 1. Tests using year `-2` cannot pass without switching to a custom date representation.
-14. **Timezone adjustment** — `adjust-time-to-timezone` produces incorrect offsets in some cases.
+6. ~~Global `NormalizeSequence` in `Execute()`~~ — **FIXED**: Removed; path expressions normalize via `IrOpCode.Normalize`. Explicitly constructed sequences preserve document order.
+7. ~~Whitespace text node stripping~~ — **FIXED**: `LoadOptions.PreserveWhitespace` used everywhere; document-level whitespace stripped separately.
+8. ~~Typed function signature matching~~ — **FIXED**: `ValueMatchesType` now parses `function(T...) as R` and applies contravariant params / covariant return subtyping.
+9. **Negative zero** — `double.IsNegative(value)` is used to detect `-0`; `value == 0.0` alone is not sufficient.
+10. **Global variable forward references** — Global variables are evaluated in import/include/local order. Forward references within the same stylesheet are not dependency-sorted.
+11. **Namespace declaration hoisting** — LINQ-to-XML places `xmlns:prefix` on first element using it; Saxon/test suite expects hoisting to outermost element. Root cause of many namespace test failures.
+12. **Sequence constructor batching** — `ExecuteSequenceConstructorDirect` adds items to `_currentContainer` eagerly (one by one). This means adjacent atomics across `xsl:for-each` iterations or multiple `xsl:sequence` instructions are not batched before complex content construction. `_lastAddedWasAtomic` is a partial workaround but cannot fully emulate true sequence accumulation. Root cause of `seqtor-024`, `025`, `026` and possibly others.
+13. **`xsl:namespace-alias` not implemented** — ~26 namespace tests fail.
+14. **`xsl:number level="multiple"`** — Multi-level ancestor chain formatting is incomplete.
+15. **Decimal overflow in `FormatNumberEngine`** — Uses `decimal` which overflows for very large inputs.
+16. **Match pattern gaps** — `descendant-or-self::x[predicate]`, `except`/`intersect`, `id()`/`key()` patterns missing in `PatternCompiler`.
+17. **DateTime year < 1** — `DateTimeOffset` minimum year is 1. Tests using year `-2` cannot pass without switching to a custom date representation.
+18. **Timezone adjustment** — `adjust-time-to-timezone` produces incorrect offsets in some cases.
 
 ---
 
 ## Recommended Next Steps
+
+### Next Session Immediate Targets (start here)
+
+1. **`function-item-8`** — `fn:function-name` missing namespace prefix:
+   - Expression: `function-name(fn:abs#1)` returns `function-name`, expected `fn:function-name`
+   - Fix `FunctionName_1` in `FunctionLibrary.cs` to prepend namespace prefix
+   - **Est: ~30 min**
+
+2. **`inline-function-12a`** — Duplicate param name error not raised:
+   - Expected `XQST0039`, but succeeded
+   - Add duplicate param name check in `XPathParser.cs` inline function parsing
+   - **Est: ~30 min**
+
+3. **`boolean-076/077`** — Node ordering `<<`/`>>`:
+   - `PrecedesNode`/`FollowsNode` may exist but not wired into `CompareGeneral`
+   - Check `VmEngine.cs` general comparison path
+   - **Est: ~1–2 hours**
 
 ### Immediate: Quick-win clusters (~few hours, +30–50 tests)
 
@@ -316,7 +336,9 @@ These clusters are >75% passing with only a handful of distinct root causes:
 |---------|--------|---------|-------|
 | **number** | 10 | 1 | 262/273 passing (96.2%). Remaining: non-English word formatting, xsl:iterate not implemented. |
 | **match** | 78 | 107 | Pattern matching gaps. Improved from 106 failures (priority, union keyword, root(), dot predicates, doc() resolution). |
-| **sort** | 5 | 18 | 61/84 passing (72.6%). Remaining: NaN array sorting, map sorting returns empty, inline function `as` keyword not supported, variable-length sequence keys. |
+| **sort** | 0 | 18 | 66/84 passing (100% of runnable). ✅ Clean. |
+| **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
+| **HigherOrderFunctions** | 11 | 85 | 33/129 passing (25.6%). 7 fixed this session (typed function matching). |
 | **mode** | 88 | 44 | Template mode dispatch issues. |
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
@@ -336,4 +358,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 - `main` — all work is on `main`
 - No feature branches
-- Pending commit: map/array keyword disambiguation, pattern static error propagation, XPST0017 error codes, pattern priority fixes, union/root()/dot predicate fixes
+- All work committed to `main`
+- No pending changes
+- Latest: `d5a9c50` — typed function signature matching
+- One commit before: `5405926` — fn-sort-spec-6 and fn-for-each-pair-017 fixes

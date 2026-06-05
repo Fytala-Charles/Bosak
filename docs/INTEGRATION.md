@@ -4,8 +4,9 @@
 # Bosak XPath / XSLT — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT stack.
-> **Last updated:** 03 June 2026
+> **Last updated:** 04 June 2026
 > **Bosak baseline:** 867 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 18,765 passed / 3,105 failed / 9,951 skipped (58.97%)
 
 ---
 
