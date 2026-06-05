@@ -1810,21 +1810,30 @@ public static class VmEngine
                             var arg = i < args.Length ? args[i] : XdmValue.Undefined;
                             if (!arg.IsUndefined)
                             {
+                                string typeTrimmed = expectedType.TrimEnd();
+                                bool allowsMany = typeTrimmed.EndsWith('*') || typeTrimmed.EndsWith('+');
+                                bool allowsEmpty = typeTrimmed.EndsWith('?') || typeTrimmed.EndsWith('*');
+
                                 if (arg.IsSequence)
                                 {
-                                    int count = 0;
-                                    XdmValue first = default;
+                                    var items = new List<XdmValue>();
                                     foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
-                                    {
-                                        count++;
-                                        if (count == 1) first = item;
-                                    }
-                                    if (count > 1)
+                                        items.Add(item);
+                                    if (!allowsMany && items.Count > 1)
                                         throw new InvalidOperationException("XPTY0004");
-                                    arg = count == 1 ? first : XdmValue.Undefined;
+                                    if (!allowsEmpty && items.Count == 0)
+                                        throw new InvalidOperationException("XPTY0004");
+                                    foreach (var item in items)
+                                    {
+                                        if (!ValueMatchesType(item, expectedType))
+                                            throw new InvalidOperationException("XPTY0004");
+                                    }
                                 }
-                                if (!arg.IsUndefined && !ValueMatchesType(arg, expectedType))
-                                    throw new InvalidOperationException("XPTY0004");
+                                else
+                                {
+                                    if (!ValueMatchesType(arg, expectedType))
+                                        throw new InvalidOperationException("XPTY0004");
+                                }
                             }
                         }
                     }
@@ -4237,8 +4246,10 @@ public static class VmEngine
                 or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
                 => value.Kind == XdmValueKind.Integer,
             "decimal" => value.Kind is XdmValueKind.Decimal or XdmValueKind.Integer,
-            "double" => value.Kind == XdmValueKind.Double,
-            "float" => value.Kind == XdmValueKind.Float,
+            "double" => value.Kind is XdmValueKind.Double or XdmValueKind.Decimal or XdmValueKind.Integer,
+            "float" => value.Kind is XdmValueKind.Float or XdmValueKind.Double or XdmValueKind.Decimal or XdmValueKind.Integer,
+            "numeric" => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float,
+            "anyatomictype" => value.Kind is >= XdmValueKind.String and <= XdmValueKind.Binary,
             "boolean" => value.Kind == XdmValueKind.Boolean,
             "datetime" => value.Kind == XdmValueKind.DateTime,
             "date" => value.Kind == XdmValueKind.Date,
@@ -4366,6 +4377,9 @@ public static class VmEngine
 
         if (normalized == "empty-sequence()")
             return value.IsUndefined;
+
+        if (normalized == "node()")
+            return value.IsNode;
 
         if (normalized.StartsWith("element(") && normalized.EndsWith(')'))
         {

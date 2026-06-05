@@ -1251,7 +1251,11 @@ public sealed class XPathParser
 
             Advance();
         }
-        return GetSpanText(start, _position);
+        if (_position == start)
+            return string.Empty;
+        int charStart = _tokens[start].Start;
+        int charEnd = _tokens[_position - 1].Start + _tokens[_position - 1].Length;
+        return _source[charStart..charEnd];
     }
 
     private (string? Prefix, string Local, OccurrenceIndicator Occurrence) ParseSequenceType()
@@ -1340,6 +1344,19 @@ public sealed class XPathParser
                 }
             } while (parenDepth > 0 && Current.Kind != TokenKind.Eof);
             local = sb.ToString();
+
+            // Function tests may have a return type: function(item()*) as xs:double
+            if (local.StartsWith("function", StringComparison.OrdinalIgnoreCase)
+                && Current.Kind == TokenKind.KeywordAs)
+            {
+                sb.Append(' ');
+                sb.Append(GetString(Current)); // 'as'
+                Advance();
+                sb.Append(' ');
+                string returnType = SkipSequenceType();
+                sb.Append(returnType);
+                local = sb.ToString();
+            }
         }
 
         return (prefix, local, hasParens);
