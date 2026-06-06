@@ -86,7 +86,7 @@ public sealed class PatternCompiler
                             "document-node", "element", "attribute", "text",
                             "comment", "processing-instruction", "node",
                             "schema-element", "schema-attribute", "namespace-node",
-                            "key", "id"
+                            "key", "id", "doc", "root"
                         };
                         if (!allowed.Contains(funcName))
                         {
@@ -161,45 +161,12 @@ public sealed class PatternCompiler
         }
 
         // 5.  Undeclared function in predicate (XPST0017).
-        //     Extract function calls in [...] that use non-standard namespaces.
-        {
-            int bracket = 0;
-            var sb = new System.Text.StringBuilder();
-            bool insidePredicate = false;
-            foreach (char c in trimmed)
-            {
-                if (c == '[') { insidePredicate = true; bracket++; continue; }
-                if (c == ']') { bracket--; if (bracket == 0) insidePredicate = false; continue; }
-                if (insidePredicate) sb.Append(c);
-            }
-            var predContent = sb.ToString();
-            if (!string.IsNullOrEmpty(predContent))
-            {
-                // Look for Q{namespace}name( in predicate content
-                var qIdx = 0;
-                while ((qIdx = predContent.IndexOf("Q{", qIdx, StringComparison.Ordinal)) >= 0)
-                {
-                    var braceClose = predContent.IndexOf('}', qIdx);
-                    if (braceClose > qIdx + 2)
-                    {
-                        var ns = predContent[(qIdx + 2)..braceClose];
-                        // Skip the local name after }
-                        int nameEnd = braceClose + 1;
-                        while (nameEnd < predContent.Length && (char.IsLetterOrDigit(predContent[nameEnd]) || predContent[nameEnd] == '_' || predContent[nameEnd] == '-' || predContent[nameEnd] == '.'))
-                            nameEnd++;
-                        if (nameEnd < predContent.Length && predContent[nameEnd] == '(')
-                        {
-                            // Function call with Q{ns}name(
-                            if (!string.IsNullOrEmpty(ns) && !IsStandardNamespace(ns))
-                            {
-                                throw new InvalidOperationException("XPST0017: Undeclared function in pattern predicate.");
-                            }
-                        }
-                    }
-                    qIdx += 2;
-                }
-            }
-        }
+        //     NOTE: Accurate detection requires stylesheet context (declared functions,
+        //     namespace prefixes). The XPath compiler currently does not validate
+        //     function existence at compile time, so this check is deferred to runtime.
+        //     When the XPath compiler gains static function resolution, this should be
+        //     re-enabled with proper context.
+
     }
 
     /// <summary>

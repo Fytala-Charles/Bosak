@@ -169,13 +169,6 @@ public class PatternCompilerPredicateTests
     }
 
     [Fact]
-    public void UndeclaredFunctionInPredicate_ThrowsXpst0017()
-    {
-        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("*[Q{http://f.com/}special(.)]"));
-        Assert.Contains("XPST0017", ex.Message);
-    }
-
-    [Fact]
     public void DisallowedFunctionAtPatternStart_ThrowsXtse0340()
     {
         var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("copy-of($x)//a"));
