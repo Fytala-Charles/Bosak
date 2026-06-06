@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added ImportPrecedence for xsl:import priority resolution                              |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added multi-mode support (Modes array, #all, #current, #default)                       |
+//                      | Charles Korthout | 0.4   | 05-06-2026     | Strip outer parens in priority computation; added FindMatchingParen helper             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -213,6 +214,14 @@ public sealed class TemplateRule
 
         var trimmed = match.Trim();
 
+        // Strip outer parentheses: (pattern) has same priority as pattern
+        if (trimmed.StartsWith('('))
+        {
+            int close = FindMatchingParen(trimmed, 0);
+            if (close == trimmed.Length - 1)
+                return ComputeDefaultPriority(trimmed[1..close].Trim());
+        }
+
         // Union patterns: take the maximum priority of all branches
         var branches = SplitUnionBranches(trimmed);
         if (branches.Length > 1)
@@ -223,6 +232,14 @@ public sealed class TemplateRule
 
     private static double ComputeSinglePatternPriority(string trimmed)
     {
+        // Strip outer parentheses: (pattern) has same priority as pattern
+        if (trimmed.StartsWith('('))
+        {
+            int close = FindMatchingParen(trimmed, 0);
+            if (close == trimmed.Length - 1)
+                return ComputeSinglePatternPriority(trimmed[1..close].Trim());
+        }
+
         // Document patterns and root pattern
         if (trimmed == "/" || trimmed.StartsWith("doc(") || trimmed.StartsWith("document("))
             return 0.5;
@@ -332,5 +349,22 @@ public sealed class TemplateRule
         }
         parts.Add(pattern[start..].Trim());
         return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
+    }
+
+    /// <summary>
+    /// Finds the index of the matching closing parenthesis for the paren at startIndex.
+    /// Returns -1 if not found.
+    /// </summary>
+    private static int FindMatchingParen(string text, int startIndex)
+    {
+        if (text[startIndex] != '(') return -1;
+        int depth = 1;
+        for (int i = startIndex + 1; i < text.Length; i++)
+        {
+            if (text[i] == '(') depth++;
+            else if (text[i] == ')') depth--;
+            if (depth == 0) return i;
+        }
+        return -1;
     }
 }

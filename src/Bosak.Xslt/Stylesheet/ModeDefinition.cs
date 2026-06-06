@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 05-06-2026     | Added OnMultipleMatch enum and parsing for xsl:mode on-multiple-match                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -36,6 +37,17 @@ public enum OnNoMatch
 }
 
 /// <summary>
+/// Specifies the behavior when multiple template rules match with the same priority.
+/// </summary>
+public enum OnMultipleMatch
+{
+    /// <summary>Use the last matching template (default in XSLT 3.0).</summary>
+    UseLast,
+    /// <summary>Throw an error when multiple templates have the same priority.</summary>
+    Fail
+}
+
+/// <summary>
 /// Represents a parsed xsl:mode declaration.
 /// </summary>
 public sealed class ModeDefinition
@@ -46,10 +58,14 @@ public sealed class ModeDefinition
     /// <summary>The behavior when no template matches a node.</summary>
     public OnNoMatch OnNoMatch { get; }
 
-    public ModeDefinition(string name, OnNoMatch onNoMatch)
+    /// <summary>The behavior when multiple templates match with the same priority.</summary>
+    public OnMultipleMatch OnMultipleMatch { get; }
+
+    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch = OnMultipleMatch.UseLast)
     {
         Name = name;
         OnNoMatch = onNoMatch;
+        OnMultipleMatch = onMultipleMatch;
     }
 
     /// <summary>
@@ -66,6 +82,11 @@ public sealed class ModeDefinition
             "fail" => OnNoMatch.Fail,
             _ => OnNoMatch.ShallowCopy
         };
-        return new ModeDefinition(name, onNoMatch);
+        var onMultipleMatch = element.Attribute("on-multiple-match")?.Value?.ToLowerInvariant() switch
+        {
+            "fail" => OnMultipleMatch.Fail,
+            _ => OnMultipleMatch.UseLast
+        };
+        return new ModeDefinition(name, onNoMatch, onMultipleMatch);
     }
 }

@@ -60,6 +60,7 @@
 //                      | Charles Korthout | 4.3   | 05-06-2026     | WalkDocumentTree: propagate text-node skip across empty elements; fixes number-1501      |
 //                      | Charles Korthout | 4.4   | 05-06-2026     | WalkDocumentTree visits all attrs; ComputeNumberAny counts only first attr; fixes 1101 |
 //                      | Charles Korthout | 4.5   | 05-06-2026     | Initial template selection uses FindBestTemplate for document-node() patterns; fixes 088 |
+//                      | Charles Korthout | 4.6   | 05-06-2026     | XTDE0540 conflict detection when on-multiple-match="fail"; fixes match-082b/c          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2663,6 +2664,7 @@ public sealed class TransformEngine
         Stylesheet.TemplateRule? best = null;
         double bestPriority = double.NegativeInfinity;
         int bestImportPrecedence = -1;
+        bool hasConflict = false;
 
         foreach (var rule in _allTemplateRules)
         {
@@ -2679,18 +2681,33 @@ public sealed class TransformEngine
                     best = rule;
                     bestPriority = rule.Priority;
                     bestImportPrecedence = rule.ImportPrecedence;
+                    hasConflict = false;
                 }
                 else if (rule.Priority == bestPriority && rule.ImportPrecedence < bestImportPrecedence)
                 {
                     best = rule;
                     bestImportPrecedence = rule.ImportPrecedence;
+                    hasConflict = false;
                 }
                 else if (rule.Priority == bestPriority && rule.ImportPrecedence == bestImportPrecedence)
                 {
+                    if (best != null && best != rule)
+                    {
+                        hasConflict = true;
+                    }
                     // XSLT last-wins rule: when priority and import precedence are equal,
                     // the template that appears later in the stylesheet wins.
                     best = rule;
                 }
+            }
+        }
+
+        if (hasConflict && best != null)
+        {
+            var modeDef = _stylesheet.GetModeDefinition(mode);
+            if (modeDef?.OnMultipleMatch == Stylesheet.OnMultipleMatch.Fail)
+            {
+                throw new InvalidOperationException("XTDE0540: Multiple templates match with the same priority.");
             }
         }
 
