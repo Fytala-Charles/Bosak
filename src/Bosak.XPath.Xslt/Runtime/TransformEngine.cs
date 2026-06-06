@@ -58,6 +58,7 @@
 //                      | Charles Korthout | 4.1   | 03-06-2026     | xsl:number value: BigInteger pipeline for large integers/doubles (fixes number-0111/0807) |
 //                      | Charles Korthout | 4.2   | 05-06-2026     | Strip whitespace text nodes from source documents by default (fixes number-1501)           |
 //                      | Charles Korthout | 4.3   | 05-06-2026     | WalkDocumentTree: propagate text-node skip across empty elements; fixes number-1501      |
+//                      | Charles Korthout | 4.4   | 05-06-2026     | WalkDocumentTree visits all attrs; ComputeNumberAny counts only first attr; fixes 1101 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3850,16 +3851,38 @@ public sealed class TransformEngine
         int count = 0;
         bool foundCurrent = false;
 
+        // Per .NET XslCompiledTransform semantics, only the FIRST attribute of each
+        // element is counted by xsl:number level="any".
+        IXdmNode? lastCountedAttributeParent = null;
         WalkDocumentTree(doc, node =>
         {
             if (node.IsSameNode(currentNode))
                 foundCurrent = true;
 
             if (fromMatcher != null && fromMatcher(node, context))
+            {
                 count = 0;
+                lastCountedAttributeParent = null;
+            }
 
             if (countMatcher(node, context))
+            {
+                if (node.NodeKind == XdmNodeKind.Attribute)
+                {
+                    var parent = node.Parent;
+                    if (parent != null && lastCountedAttributeParent != null && lastCountedAttributeParent.IsSameNode(parent))
+                    {
+                        // Skip non-first attributes
+                        return !foundCurrent;
+                    }
+                    lastCountedAttributeParent = parent;
+                }
+                else
+                {
+                    lastCountedAttributeParent = null;
+                }
                 count++;
+            }
 
             return !foundCurrent;
         }, false, out _);
@@ -3961,8 +3984,8 @@ public sealed class TransformEngine
             return false;
 
         // Attributes are in document order immediately after the element's start tag.
-        // Per .NET XslCompiledTransform semantics, only the FIRST attribute of each
-        // element is counted by xsl:number level="any".
+        // All attributes must be visited so that foundCurrent works when currentNode
+        // is a non-first attribute (e.g. number-1101).
         bool hasAttributes = false;
         if (node.NodeKind == XdmNodeKind.Element)
         {
@@ -3973,7 +3996,6 @@ public sealed class TransformEngine
                     hasAttributes = true;
                     if (!visitor(attr))
                         return false;
-                    break; // Only visit the first attribute
                 }
             }
         }

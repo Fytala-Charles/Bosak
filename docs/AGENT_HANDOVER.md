@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-05
 **Commit:** `<uncommitted>`
-**Current focus:** `number-1501` fixed. Remaining `number` cluster failures: `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting, out of scope) and `number-1101` (attribute node numbering / namespace issue).
+**Current focus:** `number-1501` and `number-1101` fixed. `number` cluster at 97.8% (264/271). Only 6 non-English word/ordinal formatting failures remain (out of scope).
 
 ---
 
@@ -124,6 +124,10 @@
    - If an element with attributes has no text children, the skip propagates to the next text node in document order, even across intervening empty elements.
    - Fixed by introducing `skipNextText` parameter and `pendingSkip` out-parameter in `WalkDocumentTree` recursive traversal.
    - **Number cluster**: `number-1501` now passes. Cluster improved from 262/273 (96.2%) to 263/271 (97.3%).
+2. **`number-1101` fix** — `WalkDocumentTree` was only visiting the first attribute of each element. When `xsl:number level="any"` was called with a non-first attribute as the context node (e.g. `//msp:Source/@title`), `foundCurrent` was never set, causing the walk to continue to the end of the document and over-count.
+   - `WalkDocumentTree` now visits **all attributes** (required for correct `foundCurrent` detection).
+   - `ComputeNumberAny` tracks `lastCountedAttributeParent` to ensure only the **first attribute** of each element increments the count, preserving `number-1501` behavior.
+   - **Number cluster**: `number-1101` now passes. Cluster improved from 263/271 (97.3%) to 264/271 (97.8%). Only 6 non-English word/ordinal formatting failures remain.
 
 ### Previous Session Fixes
 
@@ -338,9 +342,8 @@ dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conform
 
 ### Next Session Immediate Targets (start here)
 
-1. **`number` cluster** — 7 failures, 1 skipped (97.3% passing):
-   - `number-0802/0812/0813/0828/0829/2506`: non-English word/ordinal formatting
-   - `number-1101`: attribute node numbering / namespace issue
+1. **`number` cluster** — 6 failures, 1 skipped (97.8% passing):
+   - `number-0802/0812/0813/0828/0829/2506`: non-English word/ordinal formatting (out of scope)
 
 ### Immediate: Quick-win clusters (~few hours, +30–50 tests)
 
@@ -349,7 +352,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - **`expression`** — **0 failures, 102/102 passed (100%)** ✅
 - **`string`** — **0 failures, 136/136 passed (100%)** ✅
 - **`core-function`** — **0 failures, 90/90 passed (100%)** ✅
-- **`number`** — **7 failures, 1 skipped (97.3% passing)** — remaining: `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting), `number-1101` (attribute node numbering / namespace issue)
+- **`number`** — **6 failures, 1 skipped (97.8% passing)** — remaining: `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting, out of scope)
 - **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)
 - **`boolean`** — **0 failures, 0 skipped (100% passing)** ✅ — node ordering `<<`/`>>` fixed.
 
@@ -357,7 +360,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 
 | Cluster | Failed | Skipped | Notes |
 |---------|--------|---------|-------|
-| **number** | 7 | 1 | 263/271 passing (97.3%). Remaining: non-English word formatting, `number-1101` attribute node issue. |
+| **number** | 6 | 1 | 264/271 passing (97.8%). Remaining: non-English word formatting (out of scope). |
 | **match** | 78 | 107 | Pattern matching gaps. Improved from 106 failures (priority, union keyword, root(), dot predicates, doc() resolution). |
 | **sort** | 0 | 18 | 66/84 passing (100% of runnable). ✅ Clean. |
 | **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
