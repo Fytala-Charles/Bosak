@@ -59,6 +59,7 @@
 //                      | Charles Korthout | 4.2   | 05-06-2026     | Strip whitespace text nodes from source documents by default (fixes number-1501)           |
 //                      | Charles Korthout | 4.3   | 05-06-2026     | WalkDocumentTree: propagate text-node skip across empty elements; fixes number-1501      |
 //                      | Charles Korthout | 4.4   | 05-06-2026     | WalkDocumentTree visits all attrs; ComputeNumberAny counts only first attr; fixes 1101 |
+//                      | Charles Korthout | 4.5   | 05-06-2026     | Initial template selection uses FindBestTemplate for document-node() patterns; fixes 088 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -216,9 +217,18 @@ public sealed class TransformEngine
                 else
                 {
                     // XSLT 2.0 §5.4: when there is no template matching "/",
-                    // the built-in template for document nodes applies templates
-                    // to the children of the root node.
-                    ApplyTemplates(source, mode: "", select: null);
+                    // find any template whose match pattern matches the root node.
+                    var bestTemplate = FindBestTemplate(source, "");
+                    if (bestTemplate != null)
+                    {
+                        ExecuteTemplate(bestTemplate, source);
+                    }
+                    else
+                    {
+                        // Built-in template for document nodes applies templates
+                        // to the children of the root node.
+                        ApplyTemplates(source, mode: "", select: null);
+                    }
                 }
             }
         }

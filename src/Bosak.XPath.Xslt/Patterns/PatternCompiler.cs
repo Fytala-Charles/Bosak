@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 01-06-2026     | Wrap compiled patterns with CurrentItem so fn:current() returns candidate node         |
 //                      | Charles Korthout | 0.7   | 01-06-2026     | Propagate static XPath/XSLT errors (XPST/XTSE/XPTY) from pattern predicates            |
 //                      | Charles Korthout | 0.8   | 01-06-2026     | Fix namespace wildcard patterns (prefix:* and Q{uri}*) in node tests                   |
+//                      | Charles Korthout | 0.9   | 05-06-2026     | stepContextNode set from step-before-last, not first step; fixes match-125             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -583,7 +584,8 @@ public sealed class PatternCompiler
                 {
                     if (current == null || !test(current, ctx))
                         return false;
-                    stepContextNode = current;
+                    if (s == steps.Count - 2)
+                        stepContextNode = current;
                     current = current.Parent;
                 }
                 else
@@ -594,7 +596,8 @@ public sealed class PatternCompiler
                         if (test(current, ctx))
                         {
                             found = true;
-                            stepContextNode = current;
+                            if (s == steps.Count - 2)
+                                stepContextNode = current;
                             current = current.Parent;
                             break;
                         }
