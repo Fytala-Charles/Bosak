@@ -16,7 +16,7 @@
 
 using System.Xml.Linq;
 
-namespace Bosak.XPath.Xslt.Stylesheet;
+namespace Bosak.Xslt.Stylesheet;
 
 /// <summary>
 /// Represents a single xsl:key declaration within a stylesheet.

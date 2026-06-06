@@ -23,7 +23,7 @@ using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Xunit;
 
-namespace Bosak.XPath.Xslt.Tests;
+namespace Bosak.Xslt.Tests;
 
 public class PatternCompilerPredicateTests
 {

@@ -28,9 +28,9 @@ using System.IO;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Runtime.Vm;
-using Bosak.XPath.Xslt.Api;
+using Bosak.Xslt.Api;
 
-namespace Bosak.XPath.Xslt.Stylesheet;
+namespace Bosak.Xslt.Stylesheet;
 
 /// <summary>
 /// Represents a loaded XSLT stylesheet, including all imported and included modules.

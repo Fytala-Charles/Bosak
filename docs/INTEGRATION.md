@@ -17,11 +17,11 @@ Add project references to the Bosak layer stack from your consuming project:
 ```xml
 <ItemGroup>
   <ProjectReference Include="..\Bosak\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj" />
-  <ProjectReference Include="..\Bosak\src\Bosak.XPath.Xslt\Bosak.XPath.Xslt.csproj" />
+  <ProjectReference Include="..\Bosak\src\Bosak.Xslt\Bosak.Xslt.csproj" />
 </ItemGroup>
 ```
 
-`Bosak.XPath.Api` and `Bosak.XPath.Xslt` pull in the lower layers automatically (Core, Parser, Compiler, Runtime, Standard, Providers).
+`Bosak.XPath.Api` and `Bosak.Xslt` pull in the lower layers automatically (Core, Parser, Compiler, Runtime, Standard, Providers).
 
 **Target framework:** `net10.0` (both sides must align).
 
@@ -98,7 +98,7 @@ var result = expr.Evaluate(ctx);
 ### 3.1 Compile a Stylesheet
 
 ```csharp
-using Bosak.XPath.Xslt.Api;
+using Bosak.Xslt.Api;
 
 var xsl = @"<xsl:stylesheet version='3.0'
     xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
@@ -291,7 +291,7 @@ dotnet test Bosak.sln
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
 > ```bash
 > taskkill /F /IM Bosak.XPath.Conformance.exe
-> taskkill /F /IM Bosak.XPath.Xslt.Conformance.exe
+> taskkill /F /IM Bosak.Xslt.Conformance.exe
 > ```
 
 ---

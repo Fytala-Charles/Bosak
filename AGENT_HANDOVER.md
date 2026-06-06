@@ -74,7 +74,7 @@ dotnet run --configuration Release -- "../../tests/qt3tests"
 dotnet run --configuration Release -- "../../tests/qt3tests" "timezone"
 
 # Run W3C XSLT 3.0 conformance suite (full catalog)
-dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conformance.csproj
+dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj
 ```
 
 ---

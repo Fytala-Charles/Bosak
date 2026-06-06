@@ -25,10 +25,11 @@
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
-using Bosak.XPath.Xslt.Api;
+using Bosak.XPath.Providers.Xml;
+using Bosak.Xslt.Api;
 using Xunit;
 
-namespace Bosak.XPath.Xslt.Tests;
+namespace Bosak.Xslt.Tests;
 
 public class StylesheetTests
 {
@@ -58,7 +59,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<output>hello</output>", result);
     }
@@ -80,7 +81,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<hello>world</hello>", result);
     }
@@ -105,7 +106,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<hello>you</hello>", result);
     }
@@ -128,7 +129,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<hello>default</hello>", result);
     }
@@ -153,7 +154,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<hello>override</hello>", result);
     }
@@ -181,7 +182,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<before>outer</before>", result);
         Assert.Contains("<inside>inner-param</inside>", result);
@@ -233,7 +234,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("<hello>world</hello>", result);
     }
@@ -252,7 +253,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("<main>override</main>", result);
         Assert.DoesNotContain("<base>original</base>", result);
@@ -272,7 +273,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         // Default priority of "root" (QName) is 0, which is higher than -1
         Assert.Contains("<base>high-priority-default</base>", result);
@@ -295,7 +296,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("formatted", result);
     }
@@ -369,7 +370,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("input"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Equal("hello world", result.Trim());
     }
@@ -387,7 +388,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("input"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<?xml", result);
         Assert.Contains("version=\"1.0\"", result);
@@ -408,7 +409,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("input"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Indented output should contain newlines between elements
         Assert.Contains("\n", result);
@@ -428,7 +429,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("input"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.DoesNotContain("<?xml", result);
         Assert.DoesNotContain("\n", result);
@@ -458,7 +459,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XAttribute("id", "42")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.True(result.Contains("normalized") && result.Contains("42"), $"Expected normalized 42. Got: {result}");
         Assert.DoesNotContain("default", result);
@@ -479,7 +480,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XAttribute("id", "99")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<default>99</default>", result);
     }
@@ -496,7 +497,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XAttribute("id", "x")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // XSLT 2.0 built-in rules apply templates to children, not shallow-copy
         Assert.Equal("<output />", result.Trim());
@@ -517,7 +518,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XAttribute("id", "77")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<default>77</default>", result);
     }
@@ -542,7 +543,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XElement("child", "abc")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<pass1>", result);
         Assert.Contains("<child-processed>abc</child-processed>", result);
@@ -565,7 +566,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XAttribute("id", "55")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<universal>55</universal>", result);
     }
@@ -596,7 +597,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<found>b</found>", result);
     }
@@ -623,7 +624,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<found>a</found>", result);
         Assert.Contains("<found>c</found>", result);
@@ -651,7 +652,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.DoesNotContain("<found", result);
         Assert.Contains("done", result);
@@ -678,7 +679,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<found>item</found>", result);
         Assert.DoesNotContain("<found>other</found>", result);
@@ -709,7 +710,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<found>b</found>", result);
     }
@@ -726,7 +727,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("hello", result);
     }
@@ -747,7 +748,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("hello from include", result);
     }
@@ -764,7 +765,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("hello param", result);
     }
@@ -785,7 +786,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("hello from import", result);
     }
@@ -807,7 +808,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("local override", result);
         Assert.DoesNotContain("from import", result);
@@ -826,7 +827,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("hello world", result);
     }
@@ -851,7 +852,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XElement("item")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<item>tunneled</item>", result);
     }
@@ -875,7 +876,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("<item>tunneled</item>", result);
     }
@@ -903,7 +904,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("<item>deep</item>", result);
     }
@@ -927,7 +928,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("<item>normal</item>", result);
     }
@@ -958,7 +959,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<n>1</n>", result);
         Assert.Contains("<n>2</n>", result);
@@ -991,7 +992,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // item numbering should skip sep elements
         Assert.Contains("<item>1</item>", result);
@@ -1024,7 +1025,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<n>1</n>", result);
         Assert.Contains("<n>2</n>", result);
@@ -1057,7 +1058,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<n>1.1.1</n>", result);
         Assert.Contains("<n>1.1.2</n>", result);
@@ -1085,7 +1086,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<n>005</n>", result);
         Assert.Contains("<n>012</n>", result);
@@ -1109,7 +1110,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<a>a</a>", result);
         Assert.Contains("<A>A</A>", result);
@@ -1146,7 +1147,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         var idxA = result.IndexOf("<item>a</item>");
         var idxB = result.IndexOf("<item>b</item>");
@@ -1178,7 +1179,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         var idxA = result.IndexOf("<item>a</item>");
         var idxB = result.IndexOf("<item>b</item>");
@@ -1210,7 +1211,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         var idx1 = result.IndexOf("<item>1</item>");
         var idx2 = result.IndexOf("<item>2</item>");
@@ -1240,7 +1241,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         var idxA = result.IndexOf("<item>a</item>");
         var idxM = result.IndexOf("<item>m</item>");
@@ -1265,7 +1266,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XAttribute("id", "x"), new XText("text")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<root id=\"x\"", result);
         Assert.Contains("text", result);
@@ -1284,7 +1285,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XElement("child", "text")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Element wrapper should be skipped, only text remains
         Assert.Contains("text", result);
@@ -1305,7 +1306,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XElement("child", "text")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Only text should be copied, elements ignored
         Assert.Contains("text", result);
@@ -1326,7 +1327,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XElement("child", new XElement("grandchild", "text"))));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Full subtree should be deep-copied
         Assert.Contains("<root>", result);
@@ -1349,7 +1350,7 @@ public class StylesheetTests
         var executable = compiler.Compile(xsl);
 
         Assert.Throws<InvalidOperationException>(() =>
-            executable.TransformToString(new Providers.Xml.XDocumentNode(source)));
+            executable.TransformToString(new XDocumentNode(source)));
     }
 
     [Fact]
@@ -1368,7 +1369,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("dummy"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<x>1</x>", result);
         Assert.Contains("<x>2</x>", result);
@@ -1395,7 +1396,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("dummy"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<x>1</x>", result);
         Assert.Contains("<x>2</x>", result);
@@ -1421,7 +1422,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("hello", result);
     }
@@ -1443,7 +1444,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("xy", result);
     }
@@ -1465,7 +1466,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XElement("text", "hello")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("HELLO", result);
     }
@@ -1491,7 +1492,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("6", result);
     }
@@ -1512,7 +1513,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("120", result);
     }
@@ -1536,7 +1537,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("25", result);
     }
@@ -1561,7 +1562,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(new XDocument(new XElement("root"))));
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("<x>1</x>", result);
         Assert.Contains("<x>2</x>", result);
@@ -1597,7 +1598,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Expected order: a1, a3, b1, b2
         var a1Pos = result.IndexOf("<x>a1</x>");
@@ -1634,7 +1635,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Expected order: a3, a1, b2
         var a3Pos = result.IndexOf("<x>a3</x>");
@@ -1668,7 +1669,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Stable sort: original order should be preserved for equal keys
         var firstPos = result.IndexOf("<x>first</x>");
@@ -1711,7 +1712,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root", new XElement("text", "hello")));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xslCaller);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         System.IO.File.Delete(mainPath);
         Assert.Contains("<output>hello</output>", result);
@@ -1747,7 +1748,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xslCaller);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         System.IO.File.Delete(mainPath);
         Assert.Contains("<output>world</output>", result);
@@ -1782,7 +1783,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xslCaller);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         System.IO.File.Delete(mainPath);
         Assert.Contains("<output>from-template</output>", result);
@@ -1808,7 +1809,7 @@ public class StylesheetTests
         var executable = compiler.Compile(xsl);
         var ctx = new EvaluationContext();
         ctx.WithVariable("m", XdmValue.FromMap(map));
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source), ctx);
+        var result = executable.TransformToString(new XDocumentNode(source), ctx);
 
         Assert.Contains("<size>1</size>", result);
         Assert.Contains("<get>v</get>", result);
@@ -1840,7 +1841,7 @@ public class StylesheetTests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Expected order: a1, a3, b2
         var a1Pos = result.IndexOf("<x>a1</x>");
@@ -1855,8 +1856,8 @@ public class StylesheetTests
     public void MatchPattern_DivWithRootPrefix_MatchesRootElement()
     {
         var doc = System.Xml.Linq.XDocument.Parse("<div><and/><or/><div/></div>");
-        var sourceNode = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
-        var compiler = new Bosak.XPath.Xslt.Patterns.PatternCompiler();
+        var sourceNode = new XDocumentNode(doc);
+        var compiler = new Bosak.Xslt.Patterns.PatternCompiler();
         var pattern = compiler.Compile("/div");
 
         var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext();
@@ -1895,7 +1896,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<error>caught</error>", result);
     }
@@ -1917,7 +1918,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("fallback", result);
     }
@@ -1941,7 +1942,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("ok", result);
         Assert.DoesNotContain("should not appear", result);
@@ -1971,7 +1972,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("root"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<ok>done</ok>", result);
         Assert.DoesNotContain("invalid", result);
@@ -1995,7 +1996,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("input"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<root>", result);
         Assert.DoesNotContain("xmlns:xs", result);
@@ -2020,7 +2021,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("input"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<root>", result);
         Assert.DoesNotContain("xmlns:xs", result);
@@ -2045,7 +2046,7 @@ public class StylesheetTests
         var source = new XDocument(new XElement("input"));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("http://example.com/output", result);
         Assert.DoesNotContain("xmlns:xs", result);
@@ -2066,7 +2067,7 @@ public class StylesheetTests
         var compiler = new Api.XsltCompiler();
         compiler.MessageListener = new TestMessageListener(messages);
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("hello world", messages);
         Assert.Contains("<output>done</output>", result);
@@ -2087,7 +2088,7 @@ public class StylesheetTests
         var compiler = new Api.XsltCompiler();
         compiler.MessageListener = new TestMessageListener(messages);
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("debug: info", messages);
         Assert.Contains("<output>done</output>", result);
@@ -2107,7 +2108,7 @@ public class StylesheetTests
         var compiler = new Api.XsltCompiler();
         // No listener set
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<output>done</output>", result);
     }
@@ -2145,7 +2146,7 @@ public class StylesheetTests
             ));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("country=\"FR\"", result);
         Assert.Contains("country=\"DE\"", result);
@@ -2178,7 +2179,7 @@ public class StylesheetTests
             ));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         // Should produce 3 groups: AA, BB, A
         Assert.Contains("type=\"A\" count=\"2\"", result);
@@ -2212,7 +2213,7 @@ public class StylesheetTests
             ));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<v>a1</v>", result);
         Assert.Contains("<v>a2</v>", result);
@@ -2240,7 +2241,7 @@ public class StylesheetTests
             ));
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
-        var result = executable.TransformToString(new Providers.Xml.XDocumentNode(source));
+        var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("key=\"A\"", result);
         Assert.Contains("key=\"B\"", result);
@@ -2250,8 +2251,8 @@ public class StylesheetTests
     public void MatchPattern_PathWithParenthesizedUnion_MatchesCorrectly()
     {
         var doc = System.Xml.Linq.XDocument.Parse("<x><a>23</a><b>25</b></x>");
-        var sourceNode = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
-        var compiler = new Bosak.XPath.Xslt.Patterns.PatternCompiler();
+        var sourceNode = new XDocumentNode(doc);
+        var compiler = new Bosak.Xslt.Patterns.PatternCompiler();
         var pattern = compiler.Compile("x/(a|b)");
 
         var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext();

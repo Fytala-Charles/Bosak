@@ -19,7 +19,7 @@ using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 
-namespace Bosak.XPath.Xslt.Runtime;
+namespace Bosak.Xslt.Runtime;
 
 /// <summary>
 /// Maintains a per-document index for <c>key()</c> lookups based on <c>xsl:key</c> declarations.

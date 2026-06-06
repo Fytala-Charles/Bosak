@@ -16,7 +16,7 @@
 
 using System.Xml.Linq;
 
-namespace Bosak.XPath.Xslt.Api;
+namespace Bosak.Xslt.Api;
 
 /// <summary>
 /// Resolves href URIs referenced by xsl:import and xsl:include into loadable XDocuments.

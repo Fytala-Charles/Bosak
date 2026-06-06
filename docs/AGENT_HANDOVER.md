@@ -168,7 +168,7 @@
 ### Unit Test Status
 
 - **867 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 95 tests in `Bosak.XPath.Xslt.Tests`
+- XSLT-specific tests: 95 tests in `Bosak.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
@@ -196,15 +196,15 @@ XDocument source → Stylesheet.Load() → TransformEngine.Transform()
 
 | File | Responsibility |
 |------|---------------|
-| `src/Bosak.XPath.Xslt/Runtime/TransformEngine.cs` | Main execution engine; add new instruction handlers here. **Recently modified for seqtor fixes.** |
-| `src/Bosak.XPath.Xslt/Stylesheet/Stylesheet.cs` | Parses xsl:stylesheet, resolves imports/includes, collects templates/keys/output/strip-space |
-| `src/Bosak.XPath.Xslt/Stylesheet/TemplateRule.cs` | Single template rule with match pattern, modes, priority, import precedence |
-| `src/Bosak.XPath.Xslt/Stylesheet/KeyDefinition.cs` | Parsed xsl:key declaration |
-| `src/Bosak.XPath.Xslt/Runtime/KeyIndex.cs` | Per-document index for key() lookups; builds via document tree walk |
-| `src/Bosak.XPath.Xslt/Patterns/PatternCompiler.cs` | Compiles match patterns (`item`, `@id`, `*`, `node()`, predicates) |
-| `src/Bosak.XPath.Xslt/Runtime/ResultTreeSerializer.cs` | Serializes result tree with xsl:output properties |
-| `tests/Bosak.XPath.Xslt.Tests/StylesheetTests.cs` | All XSLT unit tests |
-| `tests/Bosak.XPath.Xslt.Conformance/Program.cs` | W3C XSLT 3.0 Test Suite runner |
+| `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Main execution engine; add new instruction handlers here. **Recently modified for seqtor fixes.** |
+| `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Parses xsl:stylesheet, resolves imports/includes, collects templates/keys/output/strip-space |
+| `src/Bosak.Xslt/Stylesheet/TemplateRule.cs` | Single template rule with match pattern, modes, priority, import precedence |
+| `src/Bosak.Xslt/Stylesheet/KeyDefinition.cs` | Parsed xsl:key declaration |
+| `src/Bosak.Xslt/Runtime/KeyIndex.cs` | Per-document index for key() lookups; builds via document tree walk |
+| `src/Bosak.Xslt/Patterns/PatternCompiler.cs` | Compiles match patterns (`item`, `@id`, `*`, `node()`, predicates) |
+| `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs` | Serializes result tree with xsl:output properties |
+| `tests/Bosak.Xslt.Tests/StylesheetTests.cs` | All XSLT unit tests |
+| `tests/Bosak.Xslt.Conformance/Program.cs` | W3C XSLT 3.0 Test Suite runner |
 
 ### Standard Library Files (Often Touched)
 
@@ -300,24 +300,24 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 
 # Run only XSLT tests
-dotnet test tests/Bosak.XPath.Xslt.Tests/Bosak.XPath.Xslt.Tests.csproj
+dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj
 
 # Run QT3 conformance suite (~5 min, Exe project)
 cd tests/Bosak.XPath.Conformance
 dotnet run --configuration Release -- "D:/Development/Bosak/tests/qt3tests"
 
 # Run W3C XSLT 3.0 conformance suite (full catalog)
-dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conformance.csproj
+dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj
 
 # Run specific test set only (e.g. seqtor)
-dotnet run --project tests/Bosak.XPath.Xslt.Conformance/Bosak.XPath.Xslt.Conformance.csproj -- tests/xslt30-test/catalog.xml seqtor
+dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- tests/xslt30-test/catalog.xml seqtor
 ```
 
 ---
 
 ## Known Issues / Gotchas
 
-1. **Conformance runner locks DLLs** — If a previous conformance run is still running, builds will fail. Kill with `taskkill /F /IM Bosak.XPath.Xslt.Conformance.exe` before building.
+1. **Conformance runner locks DLLs** — If a previous conformance run is still running, builds will fail. Kill with `taskkill /F /IM Bosak.Xslt.Conformance.exe` before building.
 2. **Empty element serialization** — `XmlWriter` outputs `<done />` (with space), not `<done/>`. Tests should use flexible assertions.
 3. **`key()` namespace** — Registered under `http://www.w3.org/2005/xpath-functions` (not XSLT namespace) because the XPath compiler resolves unprefixed function names to the `fn` namespace.
 4. ~~PatternCompiler limitations~~ — **FIXED**: `TemplateRule.CompileMatch` now resolves namespace prefixes to `Q{uri}local` syntax.

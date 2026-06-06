@@ -72,10 +72,11 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
-using Bosak.XPath.Xslt.Api;
-using Bosak.XPath.Xslt.Stylesheet;
+using Bosak.XPath.Providers.Xml;
+using Bosak.Xslt.Api;
+using Bosak.Xslt.Stylesheet;
 
-namespace Bosak.XPath.Xslt.Runtime;
+namespace Bosak.Xslt.Runtime;
 
 /// <summary>
 /// The XSLT transform engine. Evaluates a compiled stylesheet against a source document.
@@ -238,7 +239,7 @@ public sealed class TransformEngine
         {
             return XdmValue.FromString(_documentLevelText.ToString());
         }
-        return XdmValue.FromNode(new Providers.Xml.XDocumentNode(_resultDocument));
+        return XdmValue.FromNode(new XDocumentNode(_resultDocument));
     }
 
     /// <summary>
@@ -674,7 +675,7 @@ public sealed class TransformEngine
                     copy.Add(childCopy);
                 }
             }
-            results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(copy)));
+            results.Add(XdmValue.FromNode(new XDocumentNode(copy)));
         }
     }
 
@@ -2960,7 +2961,7 @@ public sealed class TransformEngine
                     // Single element: use it directly as the document root
                     var tempDoc = new XDocument();
                     tempDoc.Add(nodes[0]);
-                    return XdmValue.FromNode(new Providers.Xml.XDocumentNode(tempDoc));
+                    return XdmValue.FromNode(new XDocumentNode(tempDoc));
                 }
                 else
                 {
@@ -2968,7 +2969,7 @@ public sealed class TransformEngine
                     var docWrapper = new XElement("__xdm_doc__");
                     docWrapper.Add(nodes);
                     var tempDoc = new XDocument(docWrapper);
-                    return XdmValue.FromNode(new Providers.Xml.XDocumentNode(tempDoc));
+                    return XdmValue.FromNode(new XDocumentNode(tempDoc));
                 }
             }
 
@@ -2979,26 +2980,26 @@ public sealed class TransformEngine
                 switch (child)
                 {
                     case XElement e:
-                        results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(e)));
+                        results.Add(XdmValue.FromNode(new XDocumentNode(e)));
                         break;
                     case XText t:
                         // Preserve text nodes as text nodes, not atomic strings,
                         // so that CopyToResult can concatenate adjacent text nodes
                         // without inserting spaces (XSLT 3.0 §5.7.2).
-                        results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(new XText(t.Value))));
+                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
                         break;
                     case XComment c:
-                        results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(c)));
+                        results.Add(XdmValue.FromNode(new XDocumentNode(c)));
                         break;
                     case XProcessingInstruction pi:
-                        results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(pi)));
+                        results.Add(XdmValue.FromNode(new XDocumentNode(pi)));
                         break;
                 }
             }
             // Include attributes produced by xsl:attribute / xsl:namespace in the sequence
             foreach (var attr in attributes)
             {
-                results.Add(XdmValue.FromNode(new Providers.Xml.XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                results.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
             }
             if (results.Count == 1)
                 return results[0];
@@ -3137,7 +3138,7 @@ public sealed class TransformEngine
         var rules = _stylesheet.GetAllSpaceHandlingRules();
 
         // Only strip whitespace in XDocument-backed nodes for now
-        if (source is Providers.Xml.XDocumentNode xdocNode)
+        if (source is XDocumentNode xdocNode)
         {
             if (xdocNode.UnderlyingObject is XDocument doc)
             {

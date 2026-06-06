@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>12</LangVersion>
-    <AssemblyName>Bosak.XPath.Xslt</AssemblyName>
-    <RootNamespace>Bosak.XPath.Xslt</RootNamespace>
+    <AssemblyName>Bosak.Xslt</AssemblyName>
+    <RootNamespace>Bosak.Xslt</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

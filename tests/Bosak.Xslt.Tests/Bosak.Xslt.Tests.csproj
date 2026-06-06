@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <LangVersion>12</LangVersion>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Bosak.XPath.Xslt.Tests</AssemblyName>
-    <RootNamespace>Bosak.XPath.Xslt.Tests</RootNamespace>
+    <AssemblyName>Bosak.Xslt.Tests</AssemblyName>
+    <RootNamespace>Bosak.Xslt.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bosak.XPath.Xslt\Bosak.XPath.Xslt.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.Xslt\Bosak.Xslt.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
   </ItemGroup>

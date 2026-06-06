@@ -20,7 +20,7 @@ using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 
-namespace Bosak.XPath.Xslt.Api;
+namespace Bosak.Xslt.Api;
 
 /// <summary>
 /// Registers XSLT-specific XPath functions that cannot live in Bosak.XPath.Standard

@@ -16,7 +16,7 @@
 
 using System.Xml.Linq;
 
-namespace Bosak.XPath.Xslt.Api;
+namespace Bosak.Xslt.Api;
 
 /// <summary>
 /// Default <see cref="IXsltUriResolver"/> that resolves URIs against the local file system.

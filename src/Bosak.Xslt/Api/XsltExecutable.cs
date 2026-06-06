@@ -18,7 +18,7 @@
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 
-namespace Bosak.XPath.Xslt.Api;
+namespace Bosak.Xslt.Api;
 
 /// <summary>
 /// Represents a compiled XSLT stylesheet ready for execution.

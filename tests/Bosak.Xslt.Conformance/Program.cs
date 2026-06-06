@@ -5,7 +5,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 
-namespace Bosak.XPath.Xslt.Conformance;
+namespace Bosak.Xslt.Conformance;
 
 class Program
 {
@@ -279,7 +279,7 @@ class Program
 
             // Compile and run
             var xslText = File.ReadAllText(mainStylesheetPath);
-            var compiler = new Bosak.XPath.Xslt.Api.XsltCompiler { UriResolver = resolver };
+            var compiler = new Bosak.Xslt.Api.XsltCompiler { UriResolver = resolver };
             var baseUri = new Uri(mainStylesheetPath).AbsoluteUri;
             var executable = compiler.Compile(xslText, baseUri);
 
@@ -758,7 +758,7 @@ class Program
     }
 }
 
-public class TestUriResolver : Bosak.XPath.Xslt.Api.IXsltUriResolver
+public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
 {
     private readonly Dictionary<string, string> _mappings = new();
     private readonly string _primaryDir;

@@ -363,7 +363,7 @@ flowchart TB
 
 ```
 src/
-  Bosak.XPath.Xslt/
+  Bosak.Xslt/
     Stylesheet/          Stylesheet DOM, template rule table, import/include resolution
     Patterns/            Pattern AST, pattern compiler, match predicate generation
     Instructions/        XSLT instruction compiler (apply-templates, for-each, value-of, etc.)
@@ -443,7 +443,7 @@ src/
   Bosak.XPath.Api/          Public API, expression compilation, navigator
   Bosak.XPath.Standard/     Standard function library (fn, math, map, array, xs, JSON)
   Bosak.XPath.Providers/    XDocument adapter (XDocumentNode); XmlDocument and streaming adapters planned
-  Bosak.XPath.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
+  Bosak.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
 
 tests/
   Bosak.XPath.Core.Tests/
@@ -451,7 +451,7 @@ tests/
   Bosak.XPath.Runtime.Tests/
   Bosak.XPath.Api.Tests/
   Bosak.XPath.Standard.Tests/
-  Bosak.XPath.Xslt.Tests/   XSLT transform and pattern-matching tests
+  Bosak.Xslt.Tests/   XSLT transform and pattern-matching tests
 ```
 
 The published NuGet package will likely be a single `Bosak.XPath` assembly (produced via ILMerge or source consolidation) to simplify deployment, while development maintains the layered project separation.

@@ -35,11 +35,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.XPath.Compiler.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.XPath.Conformance", "tests\Bosak.XPath.Conformance\Bosak.XPath.Conformance.csproj", "{57412DB6-04A4-4921-83DC-0D0DAD94175F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.XPath.Xslt", "src\Bosak.XPath.Xslt\Bosak.XPath.Xslt.csproj", "{FD9E887D-1D88-40E7-92C2-C3E56D475FB3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.Xslt", "src\Bosak.Xslt\Bosak.Xslt.csproj", "{FD9E887D-1D88-40E7-92C2-C3E56D475FB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.XPath.Xslt.Tests", "tests\Bosak.XPath.Xslt.Tests\Bosak.XPath.Xslt.Tests.csproj", "{B90A5312-C078-4BF8-93E3-052403A788F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.Xslt.Tests", "tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj", "{B90A5312-C078-4BF8-93E3-052403A788F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.XPath.Xslt.Conformance", "tests\Bosak.XPath.Xslt.Conformance\Bosak.XPath.Xslt.Conformance.csproj", "{AD6B498B-D8FD-424E-AD3B-BC288E080305}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.Xslt.Conformance", "tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj", "{AD6B498B-D8FD-424E-AD3B-BC288E080305}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,7 +20,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 
-namespace Bosak.XPath.Xslt.Api;
+namespace Bosak.Xslt.Api;
 
 /// <summary>
 /// Compiles XSLT 2.0/3.0 stylesheets into <see cref="XsltExecutable"/> instances.

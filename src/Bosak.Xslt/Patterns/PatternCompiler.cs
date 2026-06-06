@@ -28,7 +28,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 
-namespace Bosak.XPath.Xslt.Patterns;
+namespace Bosak.Xslt.Patterns;
 
 /// <summary>
 /// Signature for a compiled match pattern predicate.

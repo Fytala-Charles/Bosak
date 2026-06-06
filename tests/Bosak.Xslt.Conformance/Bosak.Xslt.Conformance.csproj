@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj" />
-    <ProjectReference Include="..\..\src\Bosak.XPath.Xslt\Bosak.XPath.Xslt.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.Xslt\Bosak.Xslt.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,32 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-03  
+> **Living Registry** — Last updated: 2026-06-06  
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
+
+---
+
+## ⚠️ BREAKING CHANGE: XSLT Namespace Rename (2026-06-06)
+
+The XSLT implementation has been moved from `Bosak.XPath.Xslt` to its own top-level namespace **`Bosak.Xslt`**.
+
+### What changed
+| Before | After |
+|--------|-------|
+| `Bosak.XPath.Xslt.Api` | `Bosak.Xslt.Api` |
+| `Bosak.XPath.Xslt.Runtime` | `Bosak.Xslt.Runtime` |
+| `Bosak.XPath.Xslt.Patterns` | `Bosak.Xslt.Patterns` |
+| `Bosak.XPath.Xslt.Stylesheet` | `Bosak.Xslt.Stylesheet` |
+| `src/Bosak.XPath.Xslt/` | `src/Bosak.Xslt/` |
+| `tests/Bosak.XPath.Xslt.Tests/` | `tests/Bosak.Xslt.Tests/` |
+| `tests/Bosak.XPath.Xslt.Conformance/` | `tests/Bosak.Xslt.Conformance/` |
+
+### Action required for downstream projects (Customer A, Customer C, Customer D, Customer B)
+1. Update all `using Bosak.XPath.Xslt.*` → `using Bosak.Xslt.*`
+2. Update `.csproj` `<ProjectReference>` paths from `src/Bosak.XPath.Xslt/` to `src/Bosak.Xslt/`
+3. Update package references if consuming Bosak via NuGet (future)
+
+### Rationale
+XPath, XSLT, and future XQuery are three distinct W3C specifications. The new namespace layout (`Bosak.XPath`, `Bosak.Xslt`, `Bosak.XQuery`) reflects this separation and allows each spec to evolve independently.
 
 ---
 
@@ -102,6 +127,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-020 | Customer A | `exclude-result-prefixes` support | Customer A's 42 stylesheets declare `exclude-result-prefixes="xs app"`; without it, output XML is polluted with unused namespace declarations | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
 | REQ-021 | Customer A | `xsl:message` support | Customer A partner overrides use `xsl:message` for debugging and audit logging during transform execution | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
 | REQ-022 | Bosak / Fytala Stack | Migrate to .NET 10 | Bosak targets .NET 9, which reached end-of-life in May 2026. Upgrade to .NET 10 LTS to restore support and unblock Customer B BOD-to-OData integration | **Implemented** | Phase 3 | Charles Korthout | 2026-06-03 |
+| REQ-023 | Bosak / Fytala Stack | Rename XSLT namespace from `Bosak.XPath.Xslt` to `Bosak.Xslt` | Align namespace hierarchy with W3C spec boundaries (XPath, XSLT, XQuery as peers); unblock independent versioning | **Implemented** | Phase 3 | Charles Korthout | 2026-06-06 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -516,7 +542,7 @@ Options supported: `liberal` (trailing commas), `duplicates` (use-first/use-last
 `fn:transform($options)` is an XPath 3.1 function that invokes XSLT from within an XPath expression. This is useful for composing transforms but was entirely unimplemented.
 
 #### Proposed Solution
-Implemented `fn:transform` in `XsltFunctionLibrary` (Bosak.XPath.Xslt project) as a delegate that:
+Implemented `fn:transform` in `XsltFunctionLibrary` (Bosak.Xslt project) as a delegate that:
 1. Accepts a map of options (`stylesheet-location`, `source-node`, `initial-template`, `stylesheet-params`, etc.).
 2. Loads and compiles the referenced stylesheet via `XsltCompiler`.
 3. Runs the transform via `XsltExecutable.Transform` with an isolated `EvaluationContext`.
@@ -1009,7 +1035,7 @@ Upgraded all 18 Bosak project files from `net9.0` to `net10.0`.
 - `Bosak.XPath.Standard`
 - `Bosak.XPath.Api`
 - `Bosak.XPath.Providers`
-- `Bosak.XPath.Xslt`
+- `Bosak.Xslt`
 - All test and conformance projects
 
 **Alternative considered:** Multi-target `net8.0;net9.0;net10.0` to support consumers on older versions. **Rejected** — adds build complexity and testing matrix for an already-EOL runtime.

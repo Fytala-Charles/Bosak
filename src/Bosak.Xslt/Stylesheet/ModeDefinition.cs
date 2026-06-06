@@ -16,7 +16,7 @@
 
 using System.Xml.Linq;
 
-namespace Bosak.XPath.Xslt.Stylesheet;
+namespace Bosak.Xslt.Stylesheet;
 
 /// <summary>
 /// Specifies the built-in template rule behavior when no explicit template matches a node.

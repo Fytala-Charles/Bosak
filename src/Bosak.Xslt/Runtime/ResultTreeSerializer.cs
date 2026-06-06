@@ -19,8 +19,9 @@
 using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 
-namespace Bosak.XPath.Xslt.Runtime;
+namespace Bosak.Xslt.Runtime;
 
 /// <summary>
 /// Serializes XDM result trees to XML strings.
@@ -117,7 +118,7 @@ public static class ResultTreeSerializer
         var props = output ?? new Stylesheet.OutputProperties();
 
         // For XDocument-backed nodes, use XmlWriter for proper serialization control
-        if (node is Providers.Xml.XDocumentNode xdocNode)
+        if (node is XDocumentNode xdocNode)
         {
             var obj = xdocNode.UnderlyingObject;
             if (obj is XElement elem)
@@ -276,7 +277,7 @@ public static class ResultTreeSerializer
 
     private static void WriteNode(XmlWriter writer, IXdmNode node)
     {
-        if (node is Providers.Xml.XDocumentNode xdocNode)
+        if (node is XDocumentNode xdocNode)
         {
             var obj = xdocNode.UnderlyingObject;
             switch (obj)

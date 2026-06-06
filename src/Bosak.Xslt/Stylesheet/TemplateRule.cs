@@ -22,7 +22,7 @@ using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 
-namespace Bosak.XPath.Xslt.Stylesheet;
+namespace Bosak.Xslt.Stylesheet;
 
 /// <summary>
 /// Represents a single xsl:template rule within a stylesheet.
