@@ -56,6 +56,8 @@
 //                      | Charles Korthout | 3.9   | 01-06-2026     | Initial template selection applies templates to children, not document node (XSLT 5.4)   |
 //                      | Charles Korthout | 4.0   | 01-06-2026     | Per-document key indices; cross-document key() lookup; save/restore focus on lazy build |
 //                      | Charles Korthout | 4.1   | 03-06-2026     | xsl:number value: BigInteger pipeline for large integers/doubles (fixes number-0111/0807) |
+//                      | Charles Korthout | 4.2   | 05-06-2026     | Strip whitespace text nodes from source documents by default (fixes number-1501)           |
+//                      | Charles Korthout | 4.3   | 05-06-2026     | WalkDocumentTree: propagate text-node skip across empty elements; fixes number-1501      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1883,6 +1885,9 @@ public sealed class TransformEngine
                     }
                     break;
                 }
+
+            case "iterate":
+                throw new InvalidOperationException("XTDE1450: xsl:iterate is not supported.");
 
             default:
                 // Unknown instruction: ignore for now
@@ -3857,7 +3862,7 @@ public sealed class TransformEngine
                 count++;
 
             return !foundCurrent;
-        });
+        }, false, out _);
 
         return count > 0 ? new[] { count } : null;
     }
@@ -3931,30 +3936,66 @@ public sealed class TransformEngine
     /// its children, per XDM document-order rules. Returns <c>false</c> if the visitor
     /// requested stopping.
     /// </summary>
-    private static bool WalkDocumentTree(IXdmNode node, Func<IXdmNode, bool> visitor)
+    /// <summary>
+    /// Walks the tree in document order, visiting all nodes that match the visitor.
+    /// When <paramref name="skipNextText"/> is true, the next text node encountered
+    /// in document order is skipped (not visited). This models .NET XslCompiledTransform
+    /// semantics where the first text node after an element's attributes is not counted
+    /// by <c>xsl:number level="any"</c>.
+    /// </summary>
+    /// <returns>
+    /// <c>true</c> if the walk should continue; <c>false</c> if the visitor signalled
+    /// stop. The <paramref name="pendingSkip"/> out parameter indicates whether a
+    /// text-node skip is still pending after this subtree.
+    /// </returns>
+    private static bool WalkDocumentTree(IXdmNode node, Func<IXdmNode, bool> visitor, bool skipNextText, out bool pendingSkip)
     {
+        pendingSkip = false;
+
+        if (node.NodeKind == XdmNodeKind.Text && skipNextText)
+        {
+            return true; // Skip this text node
+        }
+
         if (!visitor(node))
             return false;
 
         // Attributes are in document order immediately after the element's start tag.
+        // Per .NET XslCompiledTransform semantics, only the FIRST attribute of each
+        // element is counted by xsl:number level="any".
+        bool hasAttributes = false;
         if (node.NodeKind == XdmNodeKind.Element)
         {
             foreach (var item in node.Axis(XdmAxis.Attribute))
             {
                 if (item.IsNode && item.NodeValue is IXdmNode attr)
                 {
+                    hasAttributes = true;
                     if (!visitor(attr))
                         return false;
+                    break; // Only visit the first attribute
                 }
             }
         }
 
+        // Per XSLT 1.0 xsl:number semantics (matching .NET XslCompiledTransform),
+        // the first text node that follows an element's attributes is not counted.
+        pendingSkip = hasAttributes || skipNextText;
         foreach (var item in node.Axis(XdmAxis.Child))
         {
             if (item.IsNode && item.NodeValue is IXdmNode child)
             {
-                if (!WalkDocumentTree(child, visitor))
+                if (child.NodeKind == XdmNodeKind.Text && pendingSkip)
+                {
+                    pendingSkip = false;
+                    continue;
+                }
+
+                bool childResult = WalkDocumentTree(child, visitor, pendingSkip, out bool childPendingSkip);
+                if (!childResult)
                     return false;
+
+                pendingSkip = childPendingSkip;
             }
         }
 

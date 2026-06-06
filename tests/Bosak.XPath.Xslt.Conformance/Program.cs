@@ -211,8 +211,12 @@ class Program
                 foreach (var feature in deps.Elements(ns + "feature"))
                 {
                     var val = feature.Attribute("value")?.Value ?? "";
-                    if (SkipFeatures.Contains(val))
-                        return TestResult.Skip;
+                    var satisfied = feature.Attribute("satisfied")?.Value ?? "true";
+                    bool isSupported = !SkipFeatures.Contains(val);
+                    if (satisfied == "false" && isSupported)
+                        return TestResult.Skip; // Test requires feature to be absent, but we support it
+                    if (satisfied != "false" && !isSupported)
+                        return TestResult.Skip; // Test requires feature, but we don't support it
                 }
             }
 
@@ -373,10 +377,24 @@ class Program
 
     static bool IsSpecSupported(string specValue)
     {
-        // XSLT20+ means XSLT 2.0 and higher; we support XSLT 2.0/3.0 basics
+        // We support XSLT 3.0 (and by backward compatibility, XSLT 2.0/1.0 features).
         if (specValue.StartsWith("XSLT", StringComparison.OrdinalIgnoreCase))
         {
-            // For now, support all XSLT specs (we'll skip unsupported features via feature checks)
+            var rest = specValue[4..];
+            bool plus = rest.EndsWith("+");
+            if (plus) rest = rest[..^1];
+
+            // Parse the version number (20, 30, etc.)
+            if (int.TryParse(rest, out int requiredVersion))
+            {
+                // Our processor supports XSLT 3.0 = version 30
+                const int ourVersion = 30;
+                if (plus)
+                    return ourVersion >= requiredVersion;
+                else
+                    return ourVersion == requiredVersion;
+            }
+            // Unknown spec format: run it
             return true;
         }
         return false;
