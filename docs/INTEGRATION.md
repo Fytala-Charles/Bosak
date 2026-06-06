@@ -1,9 +1,9 @@
 <!-- Bosak XPath / XSLT — General Integration Guide -->
 <!-- Living document: updated with each significant Bosak change. -->
 
-# Bosak XPath / XSLT — Integration Guide
+# Bosak XPath / XSLT / XQuery — Integration Guide
 
-> **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT stack.
+> **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 04 June 2026
 > **Bosak baseline:** 867 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** 18,765 passed / 3,105 failed / 9,951 skipped (58.97%)
@@ -18,10 +18,11 @@ Add project references to the Bosak layer stack from your consuming project:
 <ItemGroup>
   <ProjectReference Include="..\Bosak\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj" />
   <ProjectReference Include="..\Bosak\src\Bosak.Xslt\Bosak.Xslt.csproj" />
+  <!-- <ProjectReference Include="..\Bosak\src\Bosak.XQuery\Bosak.XQuery.csproj" /> -->
 </ItemGroup>
 ```
 
-`Bosak.XPath.Api` and `Bosak.Xslt` pull in the lower layers automatically (Core, Parser, Compiler, Runtime, Standard, Providers).
+`Bosak.XPath.Api`, `Bosak.Xslt`, and `Bosak.XQuery` pull in the lower layers automatically (Core, Parser, Compiler, Runtime, Standard, Providers).
 
 **Target framework:** `net10.0` (both sides must align).
 

@@ -3,7 +3,7 @@
   <br><br>
   <h1 style="color:#2F4F4F; font-family:Poppins,Segoe UI,sans-serif; margin:0;">Bosak XPath</h1>
   <p style="color:#556B2F; font-family:Poppins,Segoe UI,sans-serif; font-size:1.1rem; margin:0.5rem 0 0;">
-    A high-performance, XDM-first XPath 3.1 engine for .NET
+    A high-performance, XDM-first XPath 3.1 + XSLT 3.0 engine for .NET, with XQuery 3.1 planned
   </p>
 </div>
 
@@ -113,6 +113,8 @@ flowchart TB
 | **Parser** | `Bosak.XPath.Parser` | `XPathLexer`, `XPathParser`, AST nodes |
 | **XDM Core** | `Bosak.XPath.Core` | `XdmValue`, `IXdmNode`, `XdmSequence`, axis kinds |
 | **Node Providers** | `Bosak.XPath.Providers` | `XDocument`, `XmlDocument`, streaming adapters *(planned)* |
+| **XSLT** | `Bosak.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
+| **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, FLWOR engine *(skeleton)* |
 
 ---
 
@@ -135,7 +137,7 @@ flowchart TB
 |-------|-------------|--------|
 | 1 | XPath 3.1 Core — compiler + VM + standard functions | ✅ Complete |
 | 2 | XSLT 2.0/3.0 — template matching, sequence constructors, `fn:transform()` | ✅ Complete |
-| 3 | XQuery 3.1 — FLWOR prolog, query context | 📋 Planned |
+| 3 | XQuery 3.1 — FLWOR prolog, query context | 🚧 Skeleton |
 | 4 | Streaming — `XmlReader`-backed `IXdmNode` | 📋 Planned |
 | 5 | Database backends — XML database adapters | 📋 Planned |
 

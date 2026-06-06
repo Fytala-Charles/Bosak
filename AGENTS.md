@@ -58,6 +58,7 @@ This is a layered XPath 3.1 implementation:
 | Standard | `Bosak.XPath.Standard` | `FunctionLibrary` — `fn:*`, `math:*`, `map:*`, `array:*`, JSON functions |
 | API | `Bosak.XPath.Api` | `XPath31Expression` — public compile/evaluate surface |
 | XSLT | `Bosak.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
+| XQuery | `Bosak.XQuery` | XQuery 3.1 processor (query compiler, FLWOR engine) — skeleton |
 | Providers | `Bosak.XPath.Providers` | `IXdmNode` adapters (`XDocumentNode`) |
 
 The execution pipeline is:

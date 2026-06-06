@@ -128,6 +128,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-021 | Customer A | `xsl:message` support | Customer A partner overrides use `xsl:message` for debugging and audit logging during transform execution | **Implemented** | Phase 2 | Charles Korthout | 2026-05-31 |
 | REQ-022 | Bosak / Fytala Stack | Migrate to .NET 10 | Bosak targets .NET 9, which reached end-of-life in May 2026. Upgrade to .NET 10 LTS to restore support and unblock Customer B BOD-to-OData integration | **Implemented** | Phase 3 | Charles Korthout | 2026-06-03 |
 | REQ-023 | Bosak / Fytala Stack | Rename XSLT namespace from `Bosak.XPath.Xslt` to `Bosak.Xslt` | Align namespace hierarchy with W3C spec boundaries (XPath, XSLT, XQuery as peers); unblock independent versioning | **Implemented** | Phase 3 | Charles Korthout | 2026-06-06 |
+| REQ-024 | Bosak / Fytala Stack | XQuery 3.1 skeleton project structure | Prepare `Bosak.XQuery` project, validate naming convention, and align documentation for future XQuery implementation | **Implemented** | Phase 3 | Charles Korthout | 2026-06-06 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.

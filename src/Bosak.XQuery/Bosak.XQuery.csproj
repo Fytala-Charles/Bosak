@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>12</LangVersion>
+    <AssemblyName>Bosak.XQuery</AssemblyName>
+    <RootNamespace>Bosak.XQuery</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Api\Bosak.XPath.Api.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
+  </ItemGroup>
+
+</Project>

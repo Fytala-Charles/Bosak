@@ -13,7 +13,7 @@
 
 ## Overview
 
-A high-performance .NET implementation of **XPath 3.1** (with forward-compatibility for 4.0), designed as the expression-engine foundation for future XQuery and XSLT processors.
+A high-performance .NET implementation of **XPath 3.1** (with forward-compatibility for 4.0), serving as the expression-engine foundation for the XSLT 3.0 processor and the planned XQuery 3.1 processor.
 
 ## Guiding Principles
 
@@ -444,6 +444,7 @@ src/
   Bosak.XPath.Standard/     Standard function library (fn, math, map, array, xs, JSON)
   Bosak.XPath.Providers/    XDocument adapter (XDocumentNode); XmlDocument and streaming adapters planned
   Bosak.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
+  Bosak.XQuery/       XQuery 3.1 processor skeleton (query compiler, FLWOR engine)
 
 tests/
   Bosak.XPath.Core.Tests/
@@ -452,6 +453,7 @@ tests/
   Bosak.XPath.Api.Tests/
   Bosak.XPath.Standard.Tests/
   Bosak.Xslt.Tests/   XSLT transform and pattern-matching tests
+  Bosak.XQuery.Tests/ XQuery placeholder tests
 ```
 
 The published NuGet package will likely be a single `Bosak.XPath` assembly (produced via ILMerge or source consolidation) to simplify deployment, while development maintains the layered project separation.
