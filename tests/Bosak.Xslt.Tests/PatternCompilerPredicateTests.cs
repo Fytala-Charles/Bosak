@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 31-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 05-06-2026     | Added static validation tests for XTSE0340/XPST0017                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -165,5 +166,26 @@ public class PatternCompilerPredicateTests
                 CollectElements(n, list);
             }
         }
+    }
+
+    [Fact]
+    public void UndeclaredFunctionInPredicate_ThrowsXpst0017()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("*[Q{http://f.com/}special(.)]"));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void DisallowedFunctionAtPatternStart_ThrowsXtse0340()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("copy-of($x)//a"));
+        Assert.Contains("XTSE0340", ex.Message);
+    }
+
+    [Fact]
+    public void KeyNonLiteralArgument_ThrowsXtse0340()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("key('k', 40+2)//a"));
+        Assert.Contains("XTSE0340", ex.Message);
     }
 }

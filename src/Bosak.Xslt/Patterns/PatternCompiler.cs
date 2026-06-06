@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 01-06-2026     | Wrap compiled patterns with CurrentItem so fn:current() returns candidate node         |
 //                      | Charles Korthout | 0.7   | 01-06-2026     | Propagate static XPath/XSLT errors (XPST/XTSE/XPTY) from pattern predicates            |
 //                      | Charles Korthout | 0.8   | 01-06-2026     | Fix namespace wildcard patterns (prefix:* and Q{uri}*) in node tests                   |
+//                      | Charles Korthout | 0.9   | 05-06-2026     | Static pattern validation (XTSE0340/XPST0017) for invalid constructs                   |
 //                      | Charles Korthout | 0.9   | 05-06-2026     | stepContextNode set from step-before-last, not first step; fixes match-125             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -45,6 +46,214 @@ public sealed class PatternCompiler
     private static readonly Regex UnionPattern = new(@"\s*\|\s*", RegexOptions.Compiled);
 
     /// <summary>
+    /// Static validation for constructs that must be rejected at compile time.
+    /// </summary>
+    private static void ValidatePatternSyntax(string trimmed)
+    {
+        // 1.  Disallowed functions at pattern start (XTSE0340).
+        //     Node tests (document-node, element, attribute, text, comment,
+        //     processing-instruction, node, schema-element, schema-attribute,
+        //     namespace-node) and the functions key() / id() are allowed.
+        //     Any other function call at start or after '/' or '//' is an error.
+        {
+            var afterSlash = trimmed;
+            if (afterSlash.StartsWith("//"))
+                afterSlash = afterSlash[2..].TrimStart();
+            else if (afterSlash.StartsWith("/"))
+                afterSlash = afterSlash[1..].TrimStart();
+
+            // Strip axis prefix (e.g., child::, attribute::, descendant::)
+            var axisColon = afterSlash.IndexOf("::", StringComparison.Ordinal);
+            if (axisColon > 0)
+            {
+                var axisName = afterSlash[..axisColon];
+                if (IsAxisName(axisName))
+                    afterSlash = afterSlash[(axisColon + 2)..];
+            }
+
+            // Match:  name(...) at the very start
+            if (afterSlash.Length > 0 && char.IsLetter(afterSlash[0]))
+            {
+                var paren = afterSlash.IndexOf('(');
+                if (paren > 0)
+                {
+                    var firstSpecial = afterSlash.IndexOfAny(new[] { ' ', '/', '|', '[', '@' });
+                    if (firstSpecial < 0 || firstSpecial > paren)
+                    {
+                        var funcName = afterSlash[..paren];
+                        var allowed = new HashSet<string>(StringComparer.Ordinal)
+                        {
+                            "document-node", "element", "attribute", "text",
+                            "comment", "processing-instruction", "node",
+                            "schema-element", "schema-attribute", "namespace-node",
+                            "key", "id"
+                        };
+                        if (!allowed.Contains(funcName))
+                        {
+                            throw new InvalidOperationException("XTSE0340: Function call not allowed at the start of a pattern.");
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2.  key() second argument must be a literal string (XTSE0340).
+        {
+            var idx = 0;
+            while ((idx = trimmed.IndexOf("key(", idx, StringComparison.Ordinal)) >= 0)
+            {
+                var close = FindMatchingParen(trimmed, idx + 3);
+                if (close > 0)
+                {
+                    var args = trimmed[(idx + 4)..close];
+                    var comma = FindTopLevelComma(args);
+                    if (comma >= 0)
+                    {
+                        var secondArg = args[(comma + 1)..].Trim();
+                        // Allow string literals and variable references; reject expressions.
+                        if (!(secondArg.StartsWith('\'') || secondArg.StartsWith('"') || secondArg.StartsWith("$")))
+                        {
+                            throw new InvalidOperationException("XTSE0340: The second argument of key() in a pattern must be a literal string.");
+                        }
+                    }
+                }
+                idx += 4;
+            }
+        }
+
+        // 3.  Parenthesized predicate pattern (.[...]) is not a valid pattern (XTSE0340).
+        {
+            if (trimmed.StartsWith("(.[") || trimmed.Contains("|(.[") || trimmed.Contains("(.[") && trimmed.IndexOf("(.[", StringComparison.Ordinal) == trimmed.IndexOf("(.[", StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException("XTSE0340: Parenthesized predicate pattern is not a valid pattern.");
+            }
+        }
+
+        // 4.  Union pattern constraints:
+        //     a) Union of node pattern and type pattern is not allowed.
+        //     b) Predicate patterns (.[...]) are not valid as union operands.
+        {
+            var branches = SplitTopLevel(trimmed, '|');
+            if (branches.Length > 1)
+            {
+                bool hasNodePattern = false;
+                bool hasTypePattern = false;
+                bool hasPredicatePattern = false;
+                foreach (var b in branches)
+                {
+                    var s = b.Trim();
+                    if (LooksLikeTypePattern(s))
+                        hasTypePattern = true;
+                    else
+                        hasNodePattern = true;
+                    if (s.StartsWith(".["))
+                        hasPredicatePattern = true;
+                }
+                if (hasNodePattern && hasTypePattern)
+                {
+                    throw new InvalidOperationException("XTSE0340: Union of node pattern and type pattern is not allowed.");
+                }
+                if (hasPredicatePattern)
+                {
+                    throw new InvalidOperationException("XTSE0340: Predicate pattern is not allowed in a union.");
+                }
+            }
+        }
+
+        // 5.  Undeclared function in predicate (XPST0017).
+        //     Extract function calls in [...] that use non-standard namespaces.
+        {
+            int bracket = 0;
+            var sb = new System.Text.StringBuilder();
+            bool insidePredicate = false;
+            foreach (char c in trimmed)
+            {
+                if (c == '[') { insidePredicate = true; bracket++; continue; }
+                if (c == ']') { bracket--; if (bracket == 0) insidePredicate = false; continue; }
+                if (insidePredicate) sb.Append(c);
+            }
+            var predContent = sb.ToString();
+            if (!string.IsNullOrEmpty(predContent))
+            {
+                // Look for Q{namespace}name( in predicate content
+                var qIdx = 0;
+                while ((qIdx = predContent.IndexOf("Q{", qIdx, StringComparison.Ordinal)) >= 0)
+                {
+                    var braceClose = predContent.IndexOf('}', qIdx);
+                    if (braceClose > qIdx + 2)
+                    {
+                        var ns = predContent[(qIdx + 2)..braceClose];
+                        // Skip the local name after }
+                        int nameEnd = braceClose + 1;
+                        while (nameEnd < predContent.Length && (char.IsLetterOrDigit(predContent[nameEnd]) || predContent[nameEnd] == '_' || predContent[nameEnd] == '-' || predContent[nameEnd] == '.'))
+                            nameEnd++;
+                        if (nameEnd < predContent.Length && predContent[nameEnd] == '(')
+                        {
+                            // Function call with Q{ns}name(
+                            if (!string.IsNullOrEmpty(ns) && !IsStandardNamespace(ns))
+                            {
+                                throw new InvalidOperationException("XPST0017: Undeclared function in pattern predicate.");
+                            }
+                        }
+                    }
+                    qIdx += 2;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Determines whether a pattern branch looks like a type pattern.
+    /// </summary>
+    private static bool LooksLikeTypePattern(string branch)
+    {
+        var s = branch.Trim();
+        // .[. instance of xs:integer] or (.[. instance of xs:integer])
+        if (s.StartsWith("(.[") || (s.StartsWith(".[") && s.Contains("instance of")))
+            return true;
+        // element(foo) or attribute(bar) etc.
+        if (s.StartsWith("element(") || s.StartsWith("attribute(") ||
+            s.StartsWith("text(") || s.StartsWith("comment(") ||
+            s.StartsWith("processing-instruction(") || s.StartsWith("document-node(") ||
+            s.StartsWith("node("))
+        {
+            // These are actually node tests, not type patterns.
+            return false;
+        }
+        // type-name like xs:integer, but not node kinds
+        // For simplicity, check if it matches the "instance of" form or starts with a type name.
+        if (s.Contains("instance of"))
+            return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Checks whether a string is a valid XPath axis name.
+    /// </summary>
+    private static bool IsAxisName(string name)
+    {
+        return name == "child" || name == "descendant" || name == "attribute" ||
+               name == "self" || name == "descendant-or-self" || name == "following-sibling" ||
+               name == "following" || name == "namespace" || name == "parent" ||
+               name == "ancestor" || name == "preceding-sibling" || name == "preceding" ||
+               name == "ancestor-or-self";
+    }
+
+    /// <summary>
+    /// Checks whether a namespace URI is a standard XPath / XSLT namespace.
+    /// </summary>
+    private static bool IsStandardNamespace(string ns)
+    {
+        return ns == "http://www.w3.org/2005/xpath-functions" ||
+               ns == "http://www.w3.org/2005/xpath-functions/math" ||
+               ns == "http://www.w3.org/2005/xpath-functions/map" ||
+               ns == "http://www.w3.org/2005/xpath-functions/array" ||
+               ns == "http://www.w3.org/2001/XMLSchema" ||
+               ns == "http://www.w3.org/1999/XSL/Transform" ||
+               ns == "http://www.w3.org/XML/1998/namespace";
+    }
+
+    /// <summary>
     /// Compiles a match pattern string into a predicate function.
     /// </summary>
     public PatternPredicate Compile(string pattern)
@@ -57,6 +266,8 @@ public sealed class PatternCompiler
         {
             trimmed = string.Join("|", unionParts);
         }
+
+        ValidatePatternSyntax(trimmed);
 
         var branches = SplitTopLevel(trimmed, '|');
         if (branches.Length == 1)
@@ -1526,5 +1737,23 @@ public sealed class PatternCompiler
             i++;
         }
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Finds the first comma at top level (not inside parentheses or brackets).
+    /// Returns -1 if not found.
+    /// </summary>
+    private static int FindTopLevelComma(string text)
+    {
+        int depth = 0;
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (c == '(' || c == '[') depth++;
+            else if (c == ')' || c == ']') depth--;
+            else if (c == ',' && depth == 0)
+                return i;
+        }
+        return -1;
     }
 }
