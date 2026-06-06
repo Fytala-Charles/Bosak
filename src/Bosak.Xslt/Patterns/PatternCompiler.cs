@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 01-06-2026     | Propagate static XPath/XSLT errors (XPST/XTSE/XPTY) from pattern predicates            |
 //                      | Charles Korthout | 0.8   | 01-06-2026     | Fix namespace wildcard patterns (prefix:* and Q{uri}*) in node tests                   |
 //                      | Charles Korthout | 0.9   | 05-06-2026     | Static pattern validation (XTSE0340/XPST0017) for invalid constructs                   |
+//                      | Charles Korthout | 1.0   | 05-06-2026     | Reject /[predicate] (XTSE0340); allow doc()/root() at pattern start                    |
 //                      | Charles Korthout | 0.9   | 05-06-2026     | stepContextNode set from step-before-last, not first step; fixes match-125             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -121,11 +122,17 @@ public sealed class PatternCompiler
             }
         }
 
-        // 3.  Parenthesized predicate pattern (.[...]) is not a valid pattern (XTSE0340).
+        // 3.  Invalid predicate patterns (XTSE0340).
         {
-            if (trimmed.StartsWith("(.[") || trimmed.Contains("|(.[") || trimmed.Contains("(.[") && trimmed.IndexOf("(.[", StringComparison.Ordinal) == trimmed.IndexOf("(.[", StringComparison.Ordinal))
+            // Parenthesized predicate pattern (.[...])
+            if (trimmed.StartsWith("(.[") || trimmed.Contains("|(.["))
             {
                 throw new InvalidOperationException("XTSE0340: Parenthesized predicate pattern is not a valid pattern.");
+            }
+            // Leading lone slash with predicate: /[expr] or //[expr]
+            if (trimmed.StartsWith("/[") || trimmed.StartsWith("//["))
+            {
+                throw new InvalidOperationException("XTSE0340: Filtered leading lone slash is not a valid pattern.");
             }
         }
 
