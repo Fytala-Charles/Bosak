@@ -70,3 +70,4 @@ xslt_function*.log
 tests/xslt30-test/
 
 /last_test.txt
+*.log
