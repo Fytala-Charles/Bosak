@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-07
-**Commit:** `2479726` (docs update), then `TBD` (apply-imports + for-each-group atomic fixes)
+**Commit:** `2b4753a`
 **Current focus:** `match` cluster at 84.4% (152/294). 27 failures remain (`intersect`/`except` variable patterns, namespace nodes, complex assertions). Next: `next-match` cluster (17/40) or `for-each-group` (38/85).
 
 ---
