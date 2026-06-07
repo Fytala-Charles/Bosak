@@ -148,10 +148,18 @@ public sealed class TransformEngine
         _allTemplateRules = _stylesheet.GetAllTemplateRules().ToList();
         _allNamedTemplates = _stylesheet.GetAllNamedTemplates();
 
-        // Register namespace prefixes declared on the stylesheet root(s)
+        // Register namespace prefixes declared on the stylesheet root(s).
+        // The empty prefix (default namespace) is intentionally skipped so that
+        // XPath select expressions behave like match patterns: unprefixed element
+        // names match the empty namespace, not the stylesheet's default namespace.
+        // This aligns with XSLT 1.0 behaviour and is required because our source
+        // XML (EDIFACT grouped documents) has no namespace on elements.
         foreach (var (prefix, nsUri) in _stylesheet.GetAllNamespaces())
         {
-            _context.WithNamespace(prefix, nsUri);
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                _context.WithNamespace(prefix, nsUri);
+            }
         }
 
         // Collect excluded result prefixes for namespace filtering in literal result elements
@@ -1438,7 +1446,7 @@ public sealed class TransformEngine
                         var currentItems = new List<XdmValue>();
                         foreach (var item in items)
                         {
-                            if (item.IsNode && pattern(item.NodeValue!, _context))
+                            if (item.IsNode && pattern(XdmValue.FromNode(item.NodeValue!), _context))
                             {
                                 if (currentItems.Count > 0)
                                     groups.Add((null, new List<XdmValue>(currentItems)));
@@ -1461,7 +1469,7 @@ public sealed class TransformEngine
                         foreach (var item in items)
                         {
                             currentItems.Add(item);
-                            if (item.IsNode && pattern(item.NodeValue!, _context))
+                            if (item.IsNode && pattern(XdmValue.FromNode(item.NodeValue!), _context))
                             {
                                 groups.Add((null, new List<XdmValue>(currentItems)));
                                 currentItems.Clear();
@@ -2674,7 +2682,7 @@ public sealed class TransformEngine
                 continue;
             if (rule.CompiledMatch == null)
                 continue;
-            if (rule.CompiledMatch(node, _context))
+            if (rule.CompiledMatch(XdmValue.FromNode(node), _context))
             {
                 if (rule.Priority > bestPriority)
                 {
@@ -3690,7 +3698,7 @@ public sealed class TransformEngine
         {
             XdmNodeKind.Element => compiler.Compile(name),
             XdmNodeKind.Attribute => compiler.Compile("@" + name),
-            _ => (n, ctx) => n.NodeKind == node.NodeKind
+            _ => (n, ctx) => n.IsNode && n.NodeValue.NodeKind == node.NodeKind
         };
     }
 
@@ -3780,7 +3788,7 @@ public sealed class TransformEngine
     {
         // Find nearest ancestor-or-self matching count
         IXdmNode? target = null;
-        if (countMatcher(currentNode, context))
+        if (countMatcher(XdmValue.FromNode(currentNode), context))
         {
             target = currentNode;
         }
@@ -3790,7 +3798,7 @@ public sealed class TransformEngine
             {
                 if (item.IsNode && item.NodeValue is IXdmNode ancestor)
                 {
-                    if (countMatcher(ancestor, context))
+                    if (countMatcher(XdmValue.FromNode(ancestor), context))
                     {
                         target = ancestor;
                         break;
@@ -3811,7 +3819,7 @@ public sealed class TransformEngine
             {
                 if (item.IsNode && item.NodeValue is IXdmNode ancestor)
                 {
-                    if (fromMatcher(ancestor, context))
+                    if (fromMatcher(XdmValue.FromNode(ancestor), context))
                     {
                         fromNode = ancestor;
                         break;
@@ -3854,7 +3862,7 @@ public sealed class TransformEngine
         {
             if (item.IsNode && item.NodeValue is IXdmNode sibling)
             {
-                if (countMatcher(sibling, context))
+                if (countMatcher(XdmValue.FromNode(sibling), context))
                     count++;
             }
         }
@@ -3887,13 +3895,13 @@ public sealed class TransformEngine
             if (node.IsSameNode(currentNode))
                 foundCurrent = true;
 
-            if (fromMatcher != null && fromMatcher(node, context))
+            if (fromMatcher != null && fromMatcher(XdmValue.FromNode(node), context))
             {
                 count = 0;
                 lastCountedAttributeParent = null;
             }
 
-            if (countMatcher(node, context))
+            if (countMatcher(XdmValue.FromNode(node), context))
             {
                 if (node.NodeKind == XdmNodeKind.Attribute)
                 {
@@ -3939,7 +3947,7 @@ public sealed class TransformEngine
         {
             foreach (var ancestor in ancestors)
             {
-                if (fromMatcher(ancestor, context))
+                if (fromMatcher(XdmValue.FromNode(ancestor), context))
                 {
                     fromNode = ancestor;
                     break;
@@ -3963,14 +3971,14 @@ public sealed class TransformEngine
 
         foreach (var node in chain)
         {
-            if (countMatcher(node, context))
+            if (countMatcher(XdmValue.FromNode(node), context))
             {
                 int count = 0;
                 foreach (var item in node.Axis(XdmAxis.PrecedingSibling))
                 {
                     if (item.IsNode && item.NodeValue is IXdmNode sibling)
                     {
-                        if (countMatcher(sibling, context))
+                        if (countMatcher(XdmValue.FromNode(sibling), context))
                             count++;
                     }
                 }

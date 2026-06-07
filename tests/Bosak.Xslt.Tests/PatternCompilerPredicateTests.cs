@@ -73,8 +73,8 @@ public class PatternCompilerPredicateTests
         var items = GetChildren(GetChildren(doc)[0]);
 
         Assert.Equal(2, items.Count);
-        Assert.True(pattern(items[0], _ctx));
-        Assert.False(pattern(items[1], _ctx));
+        Assert.True(pattern(XdmValue.FromNode(items[0]), _ctx));
+        Assert.False(pattern(XdmValue.FromNode(items[1]), _ctx));
     }
 
     [Fact]
@@ -91,9 +91,9 @@ public class PatternCompilerPredicateTests
         var children = GetChildren(GetChildren(doc)[0]);
 
         Assert.Equal(3, children.Count);
-        Assert.True(pattern(children[0], _ctx));
-        Assert.False(pattern(children[1], _ctx));
-        Assert.False(pattern(children[2], _ctx));
+        Assert.True(pattern(XdmValue.FromNode(children[0]), _ctx));
+        Assert.False(pattern(XdmValue.FromNode(children[1]), _ctx));
+        Assert.False(pattern(XdmValue.FromNode(children[2]), _ctx));
     }
 
     [Fact]
@@ -109,8 +109,8 @@ public class PatternCompilerPredicateTests
         var children = GetChildren(GetChildren(doc)[0]);
 
         Assert.Equal(2, children.Count);
-        Assert.True(pattern(children[0], _ctx));
-        Assert.False(pattern(children[1], _ctx));
+        Assert.True(pattern(XdmValue.FromNode(children[0]), _ctx));
+        Assert.False(pattern(XdmValue.FromNode(children[1]), _ctx));
     }
 
     [Fact]
@@ -149,11 +149,11 @@ public class PatternCompilerPredicateTests
 
         // a(1-odd), b(2-even), bb(3-odd), c1(4-even), c2(5-odd)
         Assert.Equal(5, allDescendants.Count);
-        Assert.True(oddPattern(allDescendants[0], _ctx));   // a
-        Assert.True(evenPattern(allDescendants[1], _ctx));  // b
-        Assert.True(oddPattern(allDescendants[2], _ctx));   // bb
-        Assert.True(evenPattern(allDescendants[3], _ctx));  // c1
-        Assert.True(oddPattern(allDescendants[4], _ctx));   // c2
+        Assert.True(oddPattern(XdmValue.FromNode(allDescendants[0]), _ctx));   // a
+        Assert.True(evenPattern(XdmValue.FromNode(allDescendants[1]), _ctx));  // b
+        Assert.True(oddPattern(XdmValue.FromNode(allDescendants[2]), _ctx));   // bb
+        Assert.True(evenPattern(XdmValue.FromNode(allDescendants[3]), _ctx));  // c1
+        Assert.True(oddPattern(XdmValue.FromNode(allDescendants[4]), _ctx));   // c2
     }
 
     private static void CollectElements(IXdmNode node, List<IXdmNode> list)

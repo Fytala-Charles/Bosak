@@ -1871,7 +1871,7 @@ public class StylesheetTests
                 var parent = child.Parent;
                 Assert.NotNull(parent);
                 Assert.Equal(Bosak.XPath.Core.Xdm.XdmNodeKind.Document, parent.NodeKind);
-                var matches = pattern(child, ctx);
+                var matches = pattern(XdmValue.FromNode(child), ctx);
                 Assert.True(matches, $"/div should match root {child.NodeKind} {child.LocalName}");
             }
         }
@@ -2275,32 +2275,32 @@ public class StylesheetTests
 
         // Debug: check if the inner union pattern matches
         var innerPattern = compiler.Compile("a|b");
-        Assert.True(innerPattern(aElem, ctx), "a|b should match <a>");
-        Assert.True(innerPattern(bElem, ctx), "a|b should match <b>");
+        Assert.True(innerPattern(XdmValue.FromNode(aElem), ctx), "a|b should match <a>");
+        Assert.True(innerPattern(XdmValue.FromNode(bElem), ctx), "a|b should match <b>");
 
         // Debug: check if element pattern matches
         var xPattern = compiler.Compile("x");
-        Assert.True(xPattern(xElem, ctx), "x should match <x>");
+        Assert.True(xPattern(XdmValue.FromNode(xElem), ctx), "x should match <x>");
 
         // Debug: check parent relationship
         Assert.NotNull(aElem.Parent);
         Assert.Equal("x", aElem.Parent.LocalName);
-        Assert.True(xPattern(aElem.Parent, ctx), "x should match parent of <a>");
+        Assert.True(xPattern(XdmValue.FromNode(aElem.Parent), ctx), "x should match parent of <a>");
 
         // Test simpler path pattern first
         var simplePath = compiler.Compile("x/a");
-        Assert.True(simplePath(aElem, ctx), "x/a should match <a>");
+        Assert.True(simplePath(XdmValue.FromNode(aElem), ctx), "x/a should match <a>");
 
         // Test with single paren
         var parenA = compiler.Compile("(a)");
-        Assert.True(parenA(aElem, ctx), "(a) should match <a>");
+        Assert.True(parenA(XdmValue.FromNode(aElem), ctx), "(a) should match <a>");
 
         var parenPath = compiler.Compile("x/(a)");
-        Assert.True(parenPath(aElem, ctx), "x/(a) should match <a>");
+        Assert.True(parenPath(XdmValue.FromNode(aElem), ctx), "x/(a) should match <a>");
 
         // Now test the parenthesized union path pattern
         var unionPath = compiler.Compile("x/(a|b)");
-        Assert.True(unionPath(aElem, ctx), "x/(a|b) should match <a>");
-        Assert.True(unionPath(bElem, ctx), "x/(a|b) should match <b>");
+        Assert.True(unionPath(XdmValue.FromNode(aElem), ctx), "x/(a|b) should match <a>");
+        Assert.True(unionPath(XdmValue.FromNode(bElem), ctx), "x/(a|b) should match <b>");
     }
 }

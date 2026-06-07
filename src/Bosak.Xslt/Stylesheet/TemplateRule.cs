@@ -107,7 +107,7 @@ public sealed class TemplateRule
         if (!string.IsNullOrEmpty(Match))
         {
             if (Match.Trim() == "/")
-                CompiledMatch = (node, ctx) => node.NodeKind == XdmNodeKind.Document;
+                CompiledMatch = (item, ctx) => item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Document;
             else
             {
                 // Resolve namespace prefixes in the pattern to Q{uri}local syntax

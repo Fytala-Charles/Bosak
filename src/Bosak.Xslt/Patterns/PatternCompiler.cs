@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 05-06-2026     | Static pattern validation (XTSE0340/XPST0017) for invalid constructs                   |
 //                      | Charles Korthout | 1.0   | 05-06-2026     | Reject /[predicate] (XTSE0340); allow doc()/root() at pattern start                    |
 //                      | Charles Korthout | 0.9   | 05-06-2026     | stepContextNode set from step-before-last, not first step; fixes match-125             |
+//                      | Charles Korthout | 1.1   | 05-06-2026     | Added CompileAtomicMatch for .[expr] predicate patterns; fixes match-127/128/130       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -36,7 +37,7 @@ namespace Bosak.Xslt.Patterns;
 /// Signature for a compiled match pattern predicate.
 /// Receives the candidate node and the current evaluation context (needed for variable reference patterns).
 /// </summary>
-public delegate bool PatternPredicate(IXdmNode node, EvaluationContext context);
+public delegate bool PatternPredicate(XdmValue item, EvaluationContext context);
 
 /// <summary>
 /// Compiles XSLT match patterns (e.g. <c>foo[bar]</c>, <c>*</c>, <c>@id | ref</c>)
@@ -45,6 +46,12 @@ public delegate bool PatternPredicate(IXdmNode node, EvaluationContext context);
 public sealed class PatternCompiler
 {
     private static readonly Regex UnionPattern = new(@"\s*\|\s*", RegexOptions.Compiled);
+
+    /// <summary>
+    /// Extracts an IXdmNode from an XdmValue candidate, returning null if the value is not a node.
+    /// </summary>
+    private static IXdmNode? AsNode(XdmValue item)
+        => item.IsNode ? item.NodeValue : null;
 
     /// <summary>
     /// Static validation for constructs that must be rejected at compile time.
@@ -250,7 +257,74 @@ public sealed class PatternCompiler
         }
 
         var compiledBranches = branches.Select(CompileSinglePattern).ToArray();
-        return WrapWithCurrentItem((node, ctx) => compiledBranches.Any(b => b(node, ctx)));
+        return WrapWithCurrentItem((item, ctx) => compiledBranches.Any(b => b(item, ctx)));
+    }
+
+    /// <summary>
+    /// Compiles an atomic-value matcher for predicate patterns (.[expr]).
+    /// Returns null if the pattern is not a predicate pattern that can match atomic values.
+    /// </summary>
+    public System.Func<XdmValue, EvaluationContext, bool>? CompileAtomicMatch(string pattern)
+    {
+        var trimmed = StripXPathComments(pattern).Trim();
+
+        // Strip outer parentheses
+        if (trimmed.StartsWith('('))
+        {
+            int close = FindMatchingParen(trimmed, 0);
+            if (close == trimmed.Length - 1)
+                trimmed = trimmed[1..close].Trim();
+        }
+
+        // Only predicate patterns can match atomic values
+        if (!trimmed.StartsWith(".["))
+            return null;
+
+        int bracketOpen = trimmed.IndexOf('[');
+        if (bracketOpen < 0)
+            return null;
+
+        int bracketClose = -1;
+        int depth = 0;
+        for (int i = bracketOpen; i < trimmed.Length; i++)
+        {
+            if (trimmed[i] == '[') depth++;
+            else if (trimmed[i] == ']') depth--;
+            if (depth == 0)
+            {
+                bracketClose = i;
+                break;
+            }
+        }
+        if (bracketClose < 0)
+            return null;
+
+        string predicateExpr = trimmed[(bracketOpen + 1)..bracketClose].Trim();
+        string remaining = bracketClose + 1 < trimmed.Length ? trimmed[(bracketClose + 1)..] : "";
+
+        var fullPredicate = $"({predicateExpr}){remaining}";
+        var predCompiled = XPath31Expression.Compile(fullPredicate);
+
+        return (item, ctx) =>
+        {
+            var savedItem = ctx.ContextItem;
+            var savedPos = ctx.ContextPosition;
+            var savedSize = ctx.ContextSize;
+            try
+            {
+                var result = predCompiled.Evaluate(ctx.WithFocus(item, 1, 1));
+                return result.EffectiveBooleanValue();
+            }
+            catch (Exception ex)
+            {
+                if (IsStaticError(ex)) throw;
+                return false;
+            }
+            finally
+            {
+                ctx.WithFocus(savedItem, savedPos, savedSize);
+            }
+        };
     }
 
     /// <summary>
@@ -259,13 +333,13 @@ public sealed class PatternCompiler
     /// </summary>
     private static PatternPredicate WrapWithCurrentItem(PatternPredicate inner)
     {
-        return (node, ctx) =>
+        return (item, ctx) =>
         {
             var saved = ctx.CurrentItem;
             try
             {
-                ctx.WithCurrentItem(XdmValue.FromNode(node));
-                return inner(node, ctx);
+                ctx.WithCurrentItem(item);
+                return inner(item, ctx);
             }
             finally
             {
@@ -284,7 +358,7 @@ public sealed class PatternCompiler
         {
             var left = CompileSinglePattern(exceptParts[0]);
             var right = CompileSinglePattern(exceptParts[1]);
-            return (node, ctx) => left(node, ctx) && !right(node, ctx);
+            return (item, ctx) => left(item, ctx) && !right(item, ctx);
         }
 
         // Handle top-level intersect
@@ -293,7 +367,7 @@ public sealed class PatternCompiler
         {
             var left = CompileSinglePattern(intersectParts[0]);
             var right = CompileSinglePattern(intersectParts[1]);
-            return (node, ctx) => left(node, ctx) && right(node, ctx);
+            return (item, ctx) => left(item, ctx) && right(item, ctx);
         }
 
         // Handle // prefix (e.g. //foo, //foo[bar]) — matches any descendant
@@ -301,15 +375,17 @@ public sealed class PatternCompiler
         if (trimmed.StartsWith("//"))
         {
             var innerPattern = CompileSinglePattern(trimmed[2..].Trim());
-            return (node, ctx) =>
+            return (item, ctx) =>
             {
+                var node = AsNode(item);
+                if (node == null) return false;
                 // Walk to the root; //P only matches if root is a document node
                 var root = node;
                 while (root.Parent != null)
                     root = root.Parent;
                 if (root.NodeKind != XdmNodeKind.Document)
                     return false;
-                return innerPattern(node, ctx);
+                return innerPattern(item, ctx);
             };
         }
         // Handle / prefix (e.g. /doc) — matches from the root
@@ -317,7 +393,12 @@ public sealed class PatternCompiler
         {
             trimmed = trimmed[1..].Trim();
             if (string.IsNullOrEmpty(trimmed))
-                return (node, ctx) => node.NodeKind == XdmNodeKind.Document;
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind == XdmNodeKind.Document;
+                };
 
             // For multi-step rooted paths like /*/* or /doc/foo, the document-root check
             // must apply to the first step (the root element), not the candidate node.
@@ -347,7 +428,12 @@ public sealed class PatternCompiler
             }
 
             var inner = CompileSinglePattern(trimmed);
-            return (node, ctx) => inner(node, ctx) && node.Parent?.NodeKind == XdmNodeKind.Document;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return inner(item, ctx) && node.Parent?.NodeKind == XdmNodeKind.Document;
+            };
         }
 
         // Variable reference pattern: $var or $var/path
@@ -365,11 +451,21 @@ public sealed class PatternCompiler
         // Simple document pattern: doc('uri') or document('uri')
         if (trimmed.StartsWith("doc(") && trimmed.EndsWith(')'))
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Document;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Document;
+            };
         }
         if (trimmed.StartsWith("document(") && trimmed.EndsWith(')'))
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Document;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Document;
+            };
         }
 
         // Parenthesized pattern: (pattern) or (pattern)[predicate]
@@ -463,8 +559,10 @@ public sealed class PatternCompiler
             string pathNoSlash = pathPart.TrimStart('/').TrimStart('/');
             var pathCompiled = XPath31Expression.Compile(pathNoSlash);
 
-            return (node, ctx) =>
+            return (item, ctx) =>
             {
+                var node = AsNode(item);
+                if (node == null) return false;
                 try
                 {
                     var varResult = compiledVarCheck.Evaluate(ctx);
@@ -472,15 +570,15 @@ public sealed class PatternCompiler
                         return false;
 
                     // Check if node matches the path pattern
-                    if (!pathPattern(node, ctx))
+                    if (!pathPattern(item, ctx))
                         return false;
 
                     // Check if any node in the variable is an ancestor (or self) of node
                     if (varResult.IsSequence && varResult.SequenceValue != null)
                     {
-                        foreach (var item in XdmSequence.FromSource(varResult.SequenceValue))
+                        foreach (var seqItem in XdmSequence.FromSource(varResult.SequenceValue))
                         {
-                            if (!item.IsNode || item.NodeValue is not IXdmNode vn)
+                            if (!seqItem.IsNode || seqItem.NodeValue is not IXdmNode vn)
                                 continue;
                             if (isDescendant)
                             {
@@ -529,16 +627,18 @@ public sealed class PatternCompiler
 
         // Simple variable reference: $var
         var compiledVar = XPath31Expression.Compile(pattern);
-        return (node, ctx) =>
+        return (item, ctx) =>
         {
+            var node = AsNode(item);
+            if (node == null) return false;
             try
             {
                 var result = compiledVar.Evaluate(ctx);
                 if (result.IsSequence && result.SequenceValue != null)
                 {
-                    foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                    foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
                     {
-                        if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                        if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
                             return true;
                     }
                 }
@@ -581,14 +681,21 @@ public sealed class PatternCompiler
             // No slash found — simple document or root pattern
             if (pattern.StartsWith("root("))
             {
-                return (node, ctx) =>
+                return (item, ctx) =>
                 {
+                    var node = AsNode(item);
+                    if (node == null) return false;
                     var current = node;
                     while (current.Parent != null) current = current.Parent;
                     return current.IsSameNode(node);
                 };
             }
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Document;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Document;
+            };
         }
 
         string docPart = pattern[..slashIdx].Trim();
@@ -598,8 +705,10 @@ public sealed class PatternCompiler
         // This correctly handles multi-step paths, predicates, and descendant axes.
         var fullPathCompiled = XPath31Expression.Compile($"({docPart}){pathPart}");
 
-        return (node, ctx) =>
+        return (item, ctx) =>
         {
+            var node = AsNode(item);
+            if (node == null) return false;
             var savedItem = ctx.ContextItem;
             var savedPos = ctx.ContextPosition;
             var savedSize = ctx.ContextSize;
@@ -608,9 +717,9 @@ public sealed class PatternCompiler
                 var result = fullPathCompiled.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
                 if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
                 {
-                    foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                    foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
                     {
-                        if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                        if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
                             return true;
                     }
                 }
@@ -694,7 +803,7 @@ public sealed class PatternCompiler
         }
 
         if (steps.Count == 0)
-            return (node, ctx) => false;
+            return (item, ctx) => false;
 
         // Determine the effective axis of each step so we can handle descendant::
         // correctly in ancestor checks (a/descendant::b should match deep descendants).
@@ -747,10 +856,12 @@ public sealed class PatternCompiler
                 ancestorTests.Add(CompileSinglePattern(steps[s]));
         }
 
-        return (node, ctx) =>
+        return (item, ctx) =>
         {
+            var node = AsNode(item);
+            if (node == null) return false;
             // For simple or non-predicated last steps, check before ancestor walk
-            if (lastStepPredicate != null && !lastStepPredicate(node, ctx))
+            if (lastStepPredicate != null && !lastStepPredicate(item, ctx))
                 return false;
 
             var current = node.Parent;
@@ -767,7 +878,7 @@ public sealed class PatternCompiler
 
                 if (direct)
                 {
-                    if (current == null || !test(current, ctx))
+                    if (current == null || !test(XdmValue.FromNode(current), ctx))
                         return false;
                     if (s == steps.Count - 2)
                         stepContextNode = current;
@@ -778,7 +889,7 @@ public sealed class PatternCompiler
                     bool found = false;
                     while (current != null)
                     {
-                        if (test(current, ctx))
+                        if (test(XdmValue.FromNode(current), ctx))
                         {
                             found = true;
                             if (s == steps.Count - 2)
@@ -809,9 +920,9 @@ public sealed class PatternCompiler
                     var result = lastStepAxisExpr.Evaluate(ctx.WithFocus(XdmValue.FromNode(focusNode), 1, 1));
                     if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
                     {
-                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
                         {
-                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                            if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
                                 return true;
                         }
                         return false;
@@ -859,33 +970,58 @@ public sealed class PatternCompiler
 
         if (name == "*")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Element;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Element;
+            };
         }
 
         if (name.StartsWith("*:"))
         {
             string local = name[2..];
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
+            };
         }
 
         if (name == "node()" || name == ".")
         {
-            return (node, ctx) => true;
+            return (item, ctx) => true;
         }
 
         if (name == "text()")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Text;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Text;
+            };
         }
 
         if (name == "comment()")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Comment;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Comment;
+            };
         }
 
         if (name == "processing-instruction()")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.ProcessingInstruction;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.ProcessingInstruction;
+            };
         }
 
         if (name.StartsWith("processing-instruction("))
@@ -893,21 +1029,37 @@ public sealed class PatternCompiler
             // processing-instruction(name) or processing-instruction('name')
             var piName = ExtractFunctionArg(name);
             if (string.IsNullOrEmpty(piName))
-                return (node, ctx) => node.NodeKind == XdmNodeKind.ProcessingInstruction;
-            return (node, ctx) =>
-                node.NodeKind == XdmNodeKind.ProcessingInstruction &&
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind == XdmNodeKind.ProcessingInstruction;
+                };
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.ProcessingInstruction &&
                 node.LocalName == piName.Trim('\'');
+            };
         }
 
         if (name == "document-node()")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Document;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Document;
+            };
         }
 
         if (name == "root()")
         {
-            return (node, ctx) =>
+            return (item, ctx) =>
             {
+                var node = AsNode(item);
+                if (node == null) return false;
                 var current = node;
                 while (current.Parent != null) current = current.Parent;
                 return current.IsSameNode(node);
@@ -916,51 +1068,93 @@ public sealed class PatternCompiler
 
         if (name == "element()")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Element;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Element;
+            };
         }
 
         if (name.StartsWith("element("))
         {
             var arg = ExtractFunctionArg(name);
             if (string.IsNullOrEmpty(arg) || arg == "*")
-                return (node, ctx) => node.NodeKind == XdmNodeKind.Element;
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind == XdmNodeKind.Element;
+                };
             // element(name) or element(QName)
             var (ns, local) = ParseQName(arg);
             if (string.IsNullOrEmpty(ns))
-                return (node, ctx) => node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local;
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
+                };
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local;
+            };
         }
 
         if (name == "attribute()")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Attribute;
+            };
         }
 
         if (name.StartsWith("attribute("))
         {
             var arg = ExtractFunctionArg(name);
             if (string.IsNullOrEmpty(arg) || arg == "*")
-                return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute;
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind == XdmNodeKind.Attribute;
+                };
             var (ns, local) = ParseQName(arg);
             if (string.IsNullOrEmpty(ns))
-                return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute && node.LocalName == local;
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == ns && node.LocalName == local;
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind == XdmNodeKind.Attribute && node.LocalName == local;
+                };
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == ns && node.LocalName == local;
+            };
         }
 
         // id('x', $y) pattern — id() may return multiple nodes; check membership.
         if (name.StartsWith("id(") && name.EndsWith(')'))
         {
             var compiledId = XPath31Expression.Compile(name);
-            return (node, ctx) =>
+            return (item, ctx) =>
             {
+                var node = AsNode(item);
+                if (node == null) return false;
                 try
                 {
                     var result = compiledId.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
                     if (result.IsSequence && result.SequenceValue != null)
                     {
-                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
                         {
-                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                            if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
                                 return true;
                         }
                     }
@@ -982,16 +1176,18 @@ public sealed class PatternCompiler
         if (name.StartsWith("key(") && name.EndsWith(')'))
         {
             var compiledKey = XPath31Expression.Compile(name);
-            return (node, ctx) =>
+            return (item, ctx) =>
             {
+                var node = AsNode(item);
+                if (node == null) return false;
                 try
                 {
                     var result = compiledKey.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
                     if (result.IsSequence && result.SequenceValue != null)
                     {
-                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
                         {
-                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                            if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
                                 return true;
                         }
                     }
@@ -1014,23 +1210,35 @@ public sealed class PatternCompiler
 
         if (string.IsNullOrEmpty(nsUri))
         {
-            return (node, ctx) =>
-                node.NodeKind == XdmNodeKind.Element &&
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Element &&
                 node.LocalName == localName &&
                 node.NamespaceUri == "";
+            };
         }
 
         if (localName == "*")
         {
-            return (node, ctx) =>
-                node.NodeKind == XdmNodeKind.Element &&
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Element &&
                 node.NamespaceUri == nsUri;
+            };
         }
 
-        return (node, ctx) =>
-            node.NodeKind == XdmNodeKind.Element &&
+        return (item, ctx) =>
+        {
+            var node = AsNode(item);
+            if (node == null) return false;
+            return node.NodeKind == XdmNodeKind.Element &&
             node.NamespaceUri == nsUri &&
             node.LocalName == localName;
+        };
     }
 
     private PatternPredicate CompileAxisStep(string axis, string nodeTest)
@@ -1041,30 +1249,54 @@ public sealed class PatternCompiler
         {
             case "self":
                 var selfTest = CompileNodeTestPredicate(nodeTest);
-                return (node, ctx) => selfTest(node);
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return selfTest(node);
+                };
 
             case "child":
                 var childTest = CompileNodeTestPredicate(nodeTest);
-                return (node, ctx) =>
-                    node.NodeKind != XdmNodeKind.Document
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind != XdmNodeKind.Document
                     && node.NodeKind != XdmNodeKind.Attribute
                     && node.NodeKind != XdmNodeKind.Namespace
                     && childTest(node);
+                };
 
             case "descendant":
                 // In a pattern step, descendant::foo matches foo that has an ancestor
                 // that matches the preceding step. Since this is used as a step in a path,
                 // we just test the node against the node test.
                 var descTest = CompileNodeTestPredicate(nodeTest);
-                return (node, ctx) => descTest(node);
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return descTest(node);
+                };
 
             case "descendant-or-self":
                 var dosTest = CompileNodeTestPredicate(nodeTest);
-                return (node, ctx) => dosTest(node);
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return dosTest(node);
+                };
 
             case "attribute":
                 var attrTest = CompileAttributeNodeTest(nodeTest);
-                return (node, ctx) => attrTest(node);
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return attrTest(node);
+                };
 
             case "parent":
             case "ancestor":
@@ -1076,16 +1308,36 @@ public sealed class PatternCompiler
                 // These axes are not allowed in patterns per XSLT spec,
                 // but we compile them as node tests for graceful handling.
                 var fallbackTest = CompileNodeTestPredicate(nodeTest);
-                return (node, ctx) => fallbackTest(node);
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return fallbackTest(node);
+                };
 
             case "namespace":
                 if (nodeTest == "*")
-                    return (node, ctx) => node.NodeKind == XdmNodeKind.Namespace;
-                return (node, ctx) => node.NodeKind == XdmNodeKind.Namespace && node.LocalName == nodeTest;
+                    return (item, ctx) =>
+                    {
+                        var node = AsNode(item);
+                        if (node == null) return false;
+                        return node.NodeKind == XdmNodeKind.Namespace;
+                    };
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind == XdmNodeKind.Namespace && node.LocalName == nodeTest;
+                };
 
             default:
                 var defaultTest = CompileNodeTestPredicate(nodeTest);
-                return (node, ctx) => defaultTest(node);
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return defaultTest(node);
+                };
         }
     }
 
@@ -1162,42 +1414,69 @@ public sealed class PatternCompiler
     {
         if (name == "*")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Attribute;
+            };
         }
 
         if (name.StartsWith("*:"))
         {
             string localName2 = name[2..];
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Attribute && node.LocalName == localName2;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Attribute && node.LocalName == localName2;
+            };
         }
 
         // namespace::* 
         if (name == "namespace::*")
         {
-            return (node, ctx) => node.NodeKind == XdmNodeKind.Namespace;
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Namespace;
+            };
         }
 
         var (ns, local) = ParseQName(name);
 
         if (string.IsNullOrEmpty(ns))
         {
-            return (node, ctx) =>
-                node.NodeKind == XdmNodeKind.Attribute &&
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Attribute &&
                 node.LocalName == local &&
                 node.NamespaceUri == "";
+            };
         }
 
         if (local == "*")
         {
-            return (node, ctx) =>
-                node.NodeKind == XdmNodeKind.Attribute &&
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Attribute &&
                 node.NamespaceUri == ns;
+            };
         }
 
-        return (node, ctx) =>
-            node.NodeKind == XdmNodeKind.Attribute &&
+        return (item, ctx) =>
+        {
+            var node = AsNode(item);
+            if (node == null) return false;
+            return node.NodeKind == XdmNodeKind.Attribute &&
             node.NamespaceUri == ns &&
             node.LocalName == local;
+        };
     }
 
     private PatternPredicate CompilePredicatePattern(string pattern)
@@ -1264,8 +1543,10 @@ public sealed class PatternCompiler
             var fullPredicate = $"self::node()[{predicateExpr}]{remaining}";
             var dotCompiled = XPath31Expression.Compile(fullPredicate);
 
-            return (node, ctx) =>
+            return (item, ctx) =>
             {
+                var node = AsNode(item);
+                if (node == null) return false;
                 var savedItem = ctx.ContextItem;
                 var savedPos = ctx.ContextPosition;
                 var savedSize = ctx.ContextSize;
@@ -1315,9 +1596,11 @@ public sealed class PatternCompiler
             var compiledStep = XPath31Expression.Compile(axisStep);
             var fallbackPred = XPath31Expression.Compile($"self::node()[{predicateExpr}]{remaining}");
 
-            return (node, ctx) =>
+            return (item, ctx) =>
             {
-                if (!basePredicate(node, ctx))
+                var node = AsNode(item);
+                if (node == null) return false;
+                if (!basePredicate(item, ctx))
                     return false;
 
                 var parent = node.Parent;
@@ -1338,9 +1621,9 @@ public sealed class PatternCompiler
 
                     if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
                     {
-                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
                         {
-                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                            if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
                                 return true;
                         }
                     }
@@ -1368,9 +1651,11 @@ public sealed class PatternCompiler
         string predXPath = $"self::node()[{predicateExpr}]{remaining}";
         var compiledPred = XPath31Expression.Compile(predXPath);
 
-        return (node, ctx) =>
+        return (item, ctx) =>
         {
-            if (!basePredicate(node, ctx))
+            var node = AsNode(item);
+            if (node == null) return false;
+            if (!basePredicate(item, ctx))
                 return false;
 
             var savedItem = ctx.ContextItem;
@@ -1425,8 +1710,10 @@ public sealed class PatternCompiler
         if (isPathExpression)
         {
             var compiledPath = XPath31Expression.Compile($"({inside})[{predicateExpr}]{remaining}");
-            return (node, ctx) =>
+            return (item, ctx) =>
             {
+                var node = AsNode(item);
+                if (node == null) return false;
                 try
                 {
                     var root = node;
@@ -1435,9 +1722,9 @@ public sealed class PatternCompiler
                     var result = compiledPath.Evaluate(ctx.WithFocus(XdmValue.FromNode(root), 1, 1));
                     if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
                     {
-                        foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                        foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
                         {
-                            if (item.IsNode && item.NodeValue is IXdmNode n && n.IsSameNode(node))
+                            if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
                                 return true;
                         }
                     }
@@ -1457,9 +1744,11 @@ public sealed class PatternCompiler
 
         var compiledPred = XPath31Expression.Compile($"self::node()[{predicateExpr}]{remaining}");
 
-        return (node, ctx) =>
+        return (item, ctx) =>
         {
-            if (!innerPattern(node, ctx))
+            var node = AsNode(item);
+            if (node == null) return false;
+            if (!innerPattern(item, ctx))
                 return false;
 
             try
