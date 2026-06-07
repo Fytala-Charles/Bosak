@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added ImportPrecedence for xsl:import priority resolution                              |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added multi-mode support (Modes array, #all, #current, #default)                       |
 //                      | Charles Korthout | 0.4   | 05-06-2026     | Strip outer parens in priority computation; added FindMatchingParen helper             |
+//                      | Charles Korthout | 0.5   | 07-06-2026     | StripXPathComments in ComputeDefaultPriority; fixes comment-stripped PredicatePattern   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -212,7 +213,7 @@ public sealed class TemplateRule
         if (string.IsNullOrEmpty(match))
             return 0.5;
 
-        var trimmed = match.Trim();
+        var trimmed = StripXPathComments(match).Trim();
 
         // Strip outer parentheses: (pattern) has same priority as pattern
         if (trimmed.StartsWith('('))
@@ -232,6 +233,8 @@ public sealed class TemplateRule
 
     private static double ComputeSinglePatternPriority(string trimmed)
     {
+        trimmed = StripXPathComments(trimmed).Trim();
+
         // Strip outer parentheses: (pattern) has same priority as pattern
         if (trimmed.StartsWith('('))
         {
@@ -349,6 +352,64 @@ public sealed class TemplateRule
         }
         parts.Add(pattern[start..].Trim());
         return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
+    }
+
+    /// <summary>
+    /// Removes XPath comments (: ... :) from the text, preserving string literals.
+    /// </summary>
+    private static string StripXPathComments(string text)
+    {
+        var sb = new System.Text.StringBuilder();
+        int i = 0;
+        while (i < text.Length)
+        {
+            char c = text[i];
+            // Preserve string literals
+            if (c == '\'' || c == '"')
+            {
+                char quote = c;
+                sb.Append(c);
+                i++;
+                while (i < text.Length && text[i] != quote)
+                {
+                    sb.Append(text[i]);
+                    i++;
+                }
+                if (i < text.Length)
+                {
+                    sb.Append(text[i]);
+                    i++;
+                }
+                continue;
+            }
+            // Skip comment
+            if (i + 1 < text.Length && text[i] == '(' && text[i + 1] == ':')
+            {
+                i += 2;
+                int depth = 1;
+                while (i < text.Length && depth > 0)
+                {
+                    if (i + 1 < text.Length && text[i] == ':' && text[i + 1] == ')')
+                    {
+                        depth--;
+                        i += 2;
+                    }
+                    else if (i + 1 < text.Length && text[i] == '(' && text[i + 1] == ':')
+                    {
+                        depth++;
+                        i += 2;
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+                continue;
+            }
+            sb.Append(c);
+            i++;
+        }
+        return sb.ToString();
     }
 
     /// <summary>

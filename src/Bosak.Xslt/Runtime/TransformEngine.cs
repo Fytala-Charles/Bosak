@@ -61,6 +61,7 @@
 //                      | Charles Korthout | 4.4   | 05-06-2026     | WalkDocumentTree visits all attrs; ComputeNumberAny counts only first attr; fixes 1101 |
 //                      | Charles Korthout | 4.5   | 05-06-2026     | Initial template selection uses FindBestTemplate for document-node() patterns; fixes 088 |
 //                      | Charles Korthout | 4.6   | 05-06-2026     | XTDE0540 conflict detection when on-multiple-match="fail"; fixes match-082b/c          |
+//                      | Charles Korthout | 4.7   | 07-06-2026     | ApplyTemplates/next-match support atomic values; built-in rule outputs atomics; +11 tests|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -724,6 +725,7 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Implements xsl:apply-templates: selects nodes and processes each with the best-matching template.
+    /// Supports XSLT 3.0 atomic-value matching.
     /// </summary>
     public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null)
     {
@@ -744,40 +746,160 @@ public sealed class TransformEngine
         try
         {
             // Determine the sequence to process
-            List<IXdmNode> nodes;
+            List<XdmValue> items;
             if (string.IsNullOrEmpty(select))
             {
                 // Default: child nodes
-                nodes = EnumerateNodes(contextNode.Axis(XdmAxis.Child)).ToList();
+                items = EnumerateNodes(contextNode.Axis(XdmAxis.Child))
+                    .Select(XdmValue.FromNode)
+                    .ToList();
             }
             else
             {
                 // Evaluate select expression
                 var compiled = XPath31Expression.Compile(select);
                 var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
-                nodes = EnumerateNodes(result).ToList();
-                // XSLT apply-templates processes nodes in document order
-                nodes.Sort((a, b) => a.DocumentOrder.CompareTo(b.DocumentOrder));
+                items = EnumerateItems(result).ToList();
             }
 
-            // Apply xsl:sort if present
-            if (sortKeys != null && sortKeys.Count > 0)
+            bool allNodes = items.All(i => i.IsNode);
+
+            // Sort nodes by document order; non-node sequences keep original order
+            if (allNodes)
             {
+                items.Sort((a, b) => a.NodeValue!.DocumentOrder.CompareTo(b.NodeValue!.DocumentOrder));
+            }
+
+            // Apply xsl:sort if present (only supported for all-node sequences currently)
+            if (sortKeys != null && sortKeys.Count > 0 && allNodes)
+            {
+                var nodes = items.Select(i => i.NodeValue!).ToList();
                 nodes = SortNodes(nodes, sortKeys);
+                items = nodes.Select(XdmValue.FromNode).ToList();
             }
 
             int pos = 1;
-            int last = nodes.Count;
-            foreach (var node in nodes)
+            int last = items.Count;
+            foreach (var item in items)
             {
-                var rule = FindBestTemplate(node, resolvedMode);
-                if (rule != null)
+                if (item.IsNode)
                 {
-                    ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last);
+                    var node = item.NodeValue!;
+                    var rule = FindBestTemplate(node, resolvedMode);
+                    if (rule != null)
+                    {
+                        ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last);
+                    }
+                    else
+                    {
+                        ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, position: pos, last: last);
+                    }
                 }
                 else
                 {
-                    ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, position: pos, last: last);
+                    var rule = FindBestTemplate(item, resolvedMode);
+                    if (rule != null)
+                    {
+                        ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: pos, last: last);
+                    }
+                    else
+                    {
+                        // Built-in rule for atomic values: output string value
+                        var text = item.ToString();
+                        if (!string.IsNullOrEmpty(text) && _currentContainer is XElement)
+                        {
+                            _currentContainer.Add(new XText(text));
+                        }
+                    }
+                }
+                pos++;
+            }
+        }
+        finally
+        {
+            _modeStack.Pop();
+            _nextMatchExcluded = savedExcluded;
+            _applyTemplatesDepth--;
+        }
+    }
+
+    /// <summary>
+    /// Implements xsl:apply-templates when there is no context node (e.g. inside a named template).
+    /// </summary>
+    public void ApplyTemplates(XdmValue contextItem, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null)
+    {
+        if (++_applyTemplatesDepth > MaxApplyTemplatesDepth)
+        {
+            _applyTemplatesDepth--;
+            throw new InvalidOperationException("xsl:apply-templates recursion depth exceeded maximum allowed depth.");
+        }
+
+        // Save and clear next-match exclusions — apply-templates starts a fresh chain
+        var savedExcluded = _nextMatchExcluded;
+        _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
+
+        // Resolve mode aliases
+        var resolvedMode = ResolveMode(mode);
+
+        _modeStack.Push(resolvedMode);
+        try
+        {
+            // Determine the sequence to process
+            List<XdmValue> items;
+            if (string.IsNullOrEmpty(select))
+            {
+                // No select and no context node: empty sequence
+                items = new List<XdmValue>();
+            }
+            else
+            {
+                // Evaluate select expression with the given context item as focus
+                var compiled = XPath31Expression.Compile(select);
+                var result = compiled.Evaluate(_context.WithFocus(contextItem, 1, 1));
+                items = EnumerateItems(result).ToList();
+            }
+
+            bool allNodes = items.All(i => i.IsNode);
+
+            // Sort nodes by document order; non-node sequences keep original order
+            if (allNodes)
+            {
+                items.Sort((a, b) => a.NodeValue!.DocumentOrder.CompareTo(b.NodeValue!.DocumentOrder));
+            }
+
+            // Apply xsl:sort if present (only supported for all-node sequences currently)
+            if (sortKeys != null && sortKeys.Count > 0 && allNodes)
+            {
+                var nodes = items.Select(i => i.NodeValue!).ToList();
+                nodes = SortNodes(nodes, sortKeys);
+                items = nodes.Select(XdmValue.FromNode).ToList();
+            }
+
+            int pos = 1;
+            int last = items.Count;
+            foreach (var item in items)
+            {
+                if (item.IsNode)
+                {
+                    var node = item.NodeValue!;
+                    var rule = FindBestTemplate(node, resolvedMode);
+                    if (rule != null)
+                    {
+                        ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last);
+                    }
+                    else
+                    {
+                        ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, position: pos, last: last);
+                    }
+                }
+                else
+                {
+                    var rule = FindBestTemplate(item, resolvedMode);
+                    if (rule != null)
+                    {
+                        ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: pos, last: last);
+                    }
+                    // Built-in rule for non-node items does nothing (XSLT 3.0 §6.6)
                 }
                 pos++;
             }
@@ -1245,7 +1367,6 @@ public sealed class TransformEngine
 
             case "apply-templates":
                 {
-                    if (node == null) break;
                     var select = instruction.Attribute("select")?.Value;
                     var mode = instruction.Attribute("mode")?.Value ?? "";
                     var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
@@ -1277,7 +1398,16 @@ public sealed class TransformEngine
                         }
                     }
 
-                    ApplyTemplates(node, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams);
+                    if (node != null)
+                    {
+                        ApplyTemplates(node, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams);
+                    }
+                    else if (!string.IsNullOrEmpty(select))
+                    {
+                        // apply-templates with select but no context node (e.g. inside named template)
+                        ApplyTemplates(contextItem, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams);
+                    }
+                    // If node is null and select is empty, apply-templates has nothing to process
                     break;
                 }
 
@@ -1761,7 +1891,6 @@ public sealed class TransformEngine
 
             case "next-match":
                 {
-                    if (node == null) break;
                     if (_currentTemplateRule == null)
                     {
                         // xsl:next-match is only valid within a template invoked by apply-templates or next-match
@@ -1774,7 +1903,7 @@ public sealed class TransformEngine
                     _nextMatchExcluded.Add(_currentTemplateRule);
                     try
                     {
-                        var nextRule = FindBestTemplate(node, nextMatchMode, _nextMatchExcluded);
+                        var nextRule = FindBestTemplate(contextItem, nextMatchMode, _nextMatchExcluded);
 
                         // Collect xsl:with-param elements (tunnel and non-tunnel)
                         var nextMatchParams = new Dictionary<string, XdmValue>();
@@ -1815,11 +1944,20 @@ public sealed class TransformEngine
 
                         if (nextRule != null)
                         {
-                            ExecuteTemplate(nextRule, node, callParams: nextMatchParams, incomingTunnelParams: mergedTunnelParams);
+                            ExecuteTemplate(nextRule, contextItem, callParams: nextMatchParams, incomingTunnelParams: mergedTunnelParams);
                         }
-                        else
+                        else if (node != null)
                         {
                             ApplyBuiltInRules(node, nextMatchMode, mergedTunnelParams);
+                        }
+                        else if (!contextItem.IsUndefined)
+                        {
+                            // Built-in rule for atomic values: output string value
+                            var text = contextItem.ToString();
+                            if (!string.IsNullOrEmpty(text) && _currentContainer is XElement)
+                            {
+                                _currentContainer.Add(new XText(text));
+                            }
                         }
                     }
                     finally
@@ -2668,6 +2806,12 @@ public sealed class TransformEngine
     /// Finds the highest-priority template rule that matches the given node in the given mode.
     /// </summary>
     private Stylesheet.TemplateRule? FindBestTemplate(IXdmNode node, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null)
+        => FindBestTemplate(XdmValue.FromNode(node), mode, excludedRules);
+
+    /// <summary>
+    /// Finds the highest-priority template rule that matches the given item (node or atomic value) in the given mode.
+    /// </summary>
+    private Stylesheet.TemplateRule? FindBestTemplate(XdmValue item, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null)
     {
         Stylesheet.TemplateRule? best = null;
         double bestPriority = double.NegativeInfinity;
@@ -2682,7 +2826,7 @@ public sealed class TransformEngine
                 continue;
             if (rule.CompiledMatch == null)
                 continue;
-            if (rule.CompiledMatch(XdmValue.FromNode(node), _context))
+            if (rule.CompiledMatch(item, _context))
             {
                 if (rule.Priority > bestPriority)
                 {

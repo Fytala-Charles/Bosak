@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 05-06-2026     | Reject /[predicate] (XTSE0340); allow doc()/root() at pattern start                    |
 //                      | Charles Korthout | 0.9   | 05-06-2026     | stepContextNode set from step-before-last, not first step; fixes match-125             |
 //                      | Charles Korthout | 1.1   | 05-06-2026     | Added CompileAtomicMatch for .[expr] predicate patterns; fixes match-127/128/130       |
+//                      | Charles Korthout | 1.2   | 07-06-2026     | CompileAtomicMatch: runtime numeric predicate check, whitespace/dot tolerance; +11 tests|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -253,10 +254,17 @@ public sealed class PatternCompiler
         var branches = SplitTopLevel(trimmed, '|');
         if (branches.Length == 1)
         {
+            var atomic = CompileAtomicMatch(branches[0]);
+            if (atomic != null)
+                return WrapWithCurrentItem(atomic);
             return WrapWithCurrentItem(CompileSinglePattern(branches[0]));
         }
 
-        var compiledBranches = branches.Select(CompileSinglePattern).ToArray();
+        var compiledBranches = branches.Select(b =>
+        {
+            var atomic = CompileAtomicMatch(b);
+            return atomic ?? CompileSinglePattern(b);
+        }).ToArray();
         return WrapWithCurrentItem((item, ctx) => compiledBranches.Any(b => b(item, ctx)));
     }
 
@@ -264,7 +272,7 @@ public sealed class PatternCompiler
     /// Compiles an atomic-value matcher for predicate patterns (.[expr]).
     /// Returns null if the pattern is not a predicate pattern that can match atomic values.
     /// </summary>
-    public System.Func<XdmValue, EvaluationContext, bool>? CompileAtomicMatch(string pattern)
+    public PatternPredicate? CompileAtomicMatch(string pattern)
     {
         var trimmed = StripXPathComments(pattern).Trim();
 
@@ -277,33 +285,54 @@ public sealed class PatternCompiler
         }
 
         // Only predicate patterns can match atomic values
-        if (!trimmed.StartsWith(".["))
+        // Tolerate whitespace between '.' and '[' (e.g. ". [expr]" after comment stripping)
+        if (!trimmed.StartsWith("."))
+            return null;
+        int afterDot = 1;
+        while (afterDot < trimmed.Length && char.IsWhiteSpace(trimmed[afterDot]))
+            afterDot++;
+        if (afterDot >= trimmed.Length || trimmed[afterDot] != '[')
             return null;
 
-        int bracketOpen = trimmed.IndexOf('[');
-        if (bracketOpen < 0)
-            return null;
-
-        int bracketClose = -1;
-        int depth = 0;
-        for (int i = bracketOpen; i < trimmed.Length; i++)
+        // Extract all predicates after the leading '.'
+        var predicates = new List<string>();
+        string rest = trimmed[1..].TrimStart();
+        while (rest.StartsWith('['))
         {
-            if (trimmed[i] == '[') depth++;
-            else if (trimmed[i] == ']') depth--;
-            if (depth == 0)
-            {
-                bracketClose = i;
-                break;
-            }
+            int close = FindMatchingBracket(rest, 0);
+            if (close < 0)
+                return null;
+            predicates.Add(rest[1..close].Trim());
+            rest = rest[(close + 1)..].TrimStart();
         }
-        if (bracketClose < 0)
+
+        if (predicates.Count == 0)
             return null;
 
-        string predicateExpr = trimmed[(bracketOpen + 1)..bracketClose].Trim();
-        string remaining = bracketClose + 1 < trimmed.Length ? trimmed[(bracketClose + 1)..] : "";
+        // If there's anything after the predicates (e.g. /child::x), atomic values
+        // cannot match, so let the normal node-based path handle it.
+        if (!string.IsNullOrEmpty(rest))
+            return null;
 
-        var fullPredicate = $"({predicateExpr}){remaining}";
-        var predCompiled = XPath31Expression.Compile(fullPredicate);
+        // XSLT 3.0 §6.4: numeric predicate 1 always matches; any other numeric value never matches.
+        // Pre-compile all predicates; apply numeric semantics at runtime for variable expressions.
+        var compiledPredicates = new List<(string expr, bool isLiteralOne, bool isLiteralNever)>();
+        foreach (var pred in predicates)
+        {
+            var stripped = StripXPathComments(pred).Trim();
+            if (int.TryParse(stripped, out int n))
+            {
+                if (n != 1)
+                    compiledPredicates.Add((pred, false, true)); // literal != 1: never matches
+                else
+                    compiledPredicates.Add((pred, true, false)); // literal 1: no-op
+                continue;
+            }
+            compiledPredicates.Add((pred, false, false)); // non-literal: evaluate at runtime
+        }
+
+        // Pre-compile XPath expressions for non-literal predicates
+        var predCompilers = compiledPredicates.Select(p => XPath31Expression.Compile(p.expr)).ToList();
 
         return (item, ctx) =>
         {
@@ -312,8 +341,40 @@ public sealed class PatternCompiler
             var savedSize = ctx.ContextSize;
             try
             {
-                var result = predCompiled.Evaluate(ctx.WithFocus(item, 1, 1));
-                return result.EffectiveBooleanValue();
+                for (int i = 0; i < compiledPredicates.Count; i++)
+                {
+                    var (expr, isLiteralOne, isLiteralNever) = compiledPredicates[i];
+                    if (isLiteralNever)
+                        return false;
+                    if (isLiteralOne)
+                        continue;
+
+                    var result = predCompilers[i].Evaluate(ctx.WithFocus(item, 1, 1));
+
+                    // XSLT 3.0 §6.4: numeric predicate 1 always matches; any other numeric value never matches.
+                    if (result.Kind == XdmValueKind.Integer)
+                    {
+                        if (result.IntegerValue != 1)
+                            return false;
+                        continue; // 1 is a no-op
+                    }
+                    if (result.Kind == XdmValueKind.Decimal)
+                    {
+                        if (result.DecimalValue != 1m)
+                            return false;
+                        continue;
+                    }
+                    if (result.Kind == XdmValueKind.Double || result.Kind == XdmValueKind.Float)
+                    {
+                        if (result.DoubleValue != 1.0)
+                            return false;
+                        continue;
+                    }
+
+                    if (!result.EffectiveBooleanValue())
+                        return false;
+                }
+                return true;
             }
             catch (Exception ex)
             {
@@ -1834,6 +1895,23 @@ public sealed class PatternCompiler
         {
             if (text[i] == '(') depth++;
             else if (text[i] == ')') depth--;
+            if (depth == 0) return i;
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Finds the index of the matching closing bracket for the bracket at startIndex.
+    /// Returns -1 if not found.
+    /// </summary>
+    private static int FindMatchingBracket(string text, int startIndex)
+    {
+        if (text[startIndex] != '[') return -1;
+        int depth = 1;
+        for (int i = startIndex + 1; i < text.Length; i++)
+        {
+            if (text[i] == '[') depth++;
+            else if (text[i] == ']') depth--;
             if (depth == 0) return i;
         }
         return -1;
