@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-07
-**Commit:** `0737336`
-**Current focus:** Atomic-value PredicatePattern matching fixed. `match` cluster at 83.2% (149/294). 30 failures remain (`apply-imports`, `for-each-group` atomic patterns, `intersect`/`except` variable patterns, namespace nodes).
+**Commit:** `2479726` (docs update), then `TBD` (apply-imports + for-each-group atomic fixes)
+**Current focus:** `match` cluster at 84.4% (152/294). 27 failures remain (`intersect`/`except` variable patterns, namespace nodes, complex assertions). Next: `next-match` cluster (17/40) or `for-each-group` (38/85).
 
 ---
 
@@ -10,13 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 3,257 / **Failed:** 2,204 / **Skipped:** 9,139 (14,600 total)
-- Pass rate: **59.6%** (latest run, 2026-06-03)
+- **Passed:** ~3,301 / **Failed:** ~2,112 / **Skipped:** ~9,187 (14,600 total)
+- Pass rate: **61.0%** (latest run, 2026-06-07)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3257 passed / 2204 failed / 9139 skipped (59.6%) — XSLT stable
-- Latest XPath: 18765 passed / 3105 failed / 9951 skipped (58.97%) — +131 tests total from parser/VM/sort/function-type fixes
+- Latest: 3301 passed / 2112 failed / 9187 skipped (61.0%) — apply-imports + for-each-group atomic patterns
+- Latest XPath: 19041 passed / 2829 failed / 9951 skipped (59.84%) — QT3 stable
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
 - Previous: 3232 passed / 2229 failed / 9139 skipped (59.2%) — `expression` cluster 100% (cross-document key() lookup, key index per-document)
 - Previous: 3231 passed / 2230 failed / 9139 skipped (59.2%) — `attribute()` axis fix, initial template selection fix, parentless element patterns, template last-wins rule
@@ -35,12 +35,14 @@
 
 ### Recent Fixes (This Session)
 
-1. **.NET 10 migration (REQ-022)** — All 18 `.csproj` files updated from `net9.0` to `net10.0`. Build clean, 867 unit tests pass, XSLT conformance stable.
-2. **Large integer overflow in `xsl:number` (number-0111)** — `VmEngine.Multiply/Add/Subtract` now detect `long` overflow via `checked` arithmetic and promote to `decimal`. Previously `1234567890^3` wrapped to negative, triggering `XTDE0980`.
-3. **`xsl:number` BigInteger formatting pipeline (number-0807)** — `FormatIntegerEngine` now accepts `BigInteger` values. `TransformEngine.xsl:number` value path migrated from `long[]` to `BigInteger[]`. `1e100` now formats as `100000...000` instead of `long.MaxValue`.
-4. **XSLT conformance baseline run** — Full suite: 3,257 passed / 2,204 failed / 9,139 skipped (59.6%).
-5. **Register overflow fix (CRITICAL)** — `IrInstruction` register fields expanded from `byte` to `ushort`, removing the 255-register limit. `VmEngine` dynamically sizes register arrays via `module.MaxRegisterCount`. Fixed `_freeRegisters.Clear()` bug in `IrLowerer.Lower()` that caused incorrect register reuse. Fixed `PackArgumentsConsecutive` and argument repacking in `LowerFunctionCall`/`LowerDynamicFunctionCall` to guarantee consecutive register allocation.
-6. **QT3 harness `normalize-space` fix** — `assert-string-value` now respects `normalize-space="true"` and applies XPath `normalize-space()` semantics to both expected and actual values. Fixed 14+ string-value tests. XPath QT3 suite now completes all 31,821 tests across 428 sets (18,651 passed / 3,279 failed / 9,891 skipped, 58.6%).
+1. **XSLT 3.0 `xsl:apply-imports` support** — Previously completely unimplemented. Added `case "apply-imports"` in `TransformEngine.ExecuteXsltInstruction`. Finds best matching template with higher import precedence (deeper in import chain). Passes through current tunnel parameters. Falls back to built-in rules for nodes and atomic values. Fixes `match-133` and ~8 mode tests.
+2. **`for-each-group` atomic pattern matching** — `group-starting-with` and `group-ending-with` now evaluate patterns against atomic values, not just nodes. Previously `item.IsNode` guard prevented atomic predicate patterns like `.[. mod 3 = 0]` from matching. Fixes `match-134`, `match-135`, and `next-match-007/022`.
+3. **.NET 10 migration (REQ-022)** — All 18 `.csproj` files updated from `net9.0` to `net10.0`. Build clean, 867 unit tests pass, XSLT conformance stable.
+4. **Large integer overflow in `xsl:number` (number-0111)** — `VmEngine.Multiply/Add/Subtract` now detect `long` overflow via `checked` arithmetic and promote to `decimal`. Previously `1234567890^3` wrapped to negative, triggering `XTDE0980`.
+5. **`xsl:number` BigInteger formatting pipeline (number-0807)** — `FormatIntegerEngine` now accepts `BigInteger` values. `TransformEngine.xsl:number` value path migrated from `long[]` to `BigInteger[]`. `1e100` now formats as `100000...000` instead of `long.MaxValue`.
+6. **XSLT conformance baseline run** — Full suite: 3,301 passed / 2,112 failed / 9,187 skipped (61.0%).
+7. **Register overflow fix (CRITICAL)** — `IrInstruction` register fields expanded from `byte` to `ushort`, removing the 255-register limit. `VmEngine` dynamically sizes register arrays via `module.MaxRegisterCount`. Fixed `_freeRegisters.Clear()` bug in `IrLowerer.Lower()` that caused incorrect register reuse. Fixed `PackArgumentsConsecutive` and argument repacking in `LowerFunctionCall`/`LowerDynamicFunctionCall` to guarantee consecutive register allocation.
+8. **QT3 harness `normalize-space` fix** — `assert-string-value` now respects `normalize-space="true"` and applies XPath `normalize-space()` semantics to both expected and actual values. Fixed 14+ string-value tests. XPath QT3 suite now completes all 31,821 tests across 428 sets (19,041 passed / 2,829 failed / 9,951 skipped, 59.84%).
 
 ### This Session Fixes (2026-06-04)
 

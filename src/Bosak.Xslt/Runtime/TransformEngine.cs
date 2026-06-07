@@ -62,6 +62,7 @@
 //                      | Charles Korthout | 4.5   | 05-06-2026     | Initial template selection uses FindBestTemplate for document-node() patterns; fixes 088 |
 //                      | Charles Korthout | 4.6   | 05-06-2026     | XTDE0540 conflict detection when on-multiple-match="fail"; fixes match-082b/c          |
 //                      | Charles Korthout | 4.7   | 07-06-2026     | ApplyTemplates/next-match support atomic values; built-in rule outputs atomics; +11 tests|
+//                      | Charles Korthout | 4.8   | 07-06-2026     | Added xsl:apply-imports with import-precedence filtering and atomic context items       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1576,7 +1577,7 @@ public sealed class TransformEngine
                         var currentItems = new List<XdmValue>();
                         foreach (var item in items)
                         {
-                            if (item.IsNode && pattern(XdmValue.FromNode(item.NodeValue!), _context))
+                            if (pattern(item, _context))
                             {
                                 if (currentItems.Count > 0)
                                     groups.Add((null, new List<XdmValue>(currentItems)));
@@ -1599,7 +1600,7 @@ public sealed class TransformEngine
                         foreach (var item in items)
                         {
                             currentItems.Add(item);
-                            if (item.IsNode && pattern(XdmValue.FromNode(item.NodeValue!), _context))
+                            if (pattern(item, _context))
                             {
                                 groups.Add((null, new List<XdmValue>(currentItems)));
                                 currentItems.Clear();
@@ -1963,6 +1964,47 @@ public sealed class TransformEngine
                     finally
                     {
                         _nextMatchExcluded.Remove(_currentTemplateRule);
+                    }
+                    break;
+                }
+
+            case "apply-imports":
+                {
+                    if (_currentTemplateRule == null)
+                    {
+                        throw new InvalidOperationException("XTDE0560: xsl:apply-imports evaluated when the current template rule is absent.");
+                    }
+
+                    var applyImportsMode = _modeStack.Count > 0 ? _modeStack.Peek() : "";
+
+                    // Find the best matching template with higher import precedence
+                    // (i.e., deeper in the import chain). Main stylesheet = 0, direct imports = 1, etc.
+                    var importedRule = FindBestTemplate(contextItem, applyImportsMode, minImportPrecedence: _currentTemplateRule.ImportPrecedence);
+
+                    // Pass through current tunnel parameters
+                    var currentTunnelParams = new Dictionary<string, XdmValue>();
+                    if (_tunnelParamStack.Count > 0)
+                    {
+                        foreach (var (k, v) in _tunnelParamStack.Peek())
+                            currentTunnelParams[k] = v;
+                    }
+
+                    if (importedRule != null)
+                    {
+                        ExecuteTemplate(importedRule, contextItem, callParams: null, incomingTunnelParams: currentTunnelParams);
+                    }
+                    else if (node != null)
+                    {
+                        ApplyBuiltInRules(node, applyImportsMode, currentTunnelParams);
+                    }
+                    else if (!contextItem.IsUndefined)
+                    {
+                        // Built-in rule for atomic values: output string value
+                        var text = contextItem.ToString();
+                        if (!string.IsNullOrEmpty(text) && _currentContainer is XElement)
+                        {
+                            _currentContainer.Add(new XText(text));
+                        }
                     }
                     break;
                 }
@@ -2811,7 +2853,11 @@ public sealed class TransformEngine
     /// <summary>
     /// Finds the highest-priority template rule that matches the given item (node or atomic value) in the given mode.
     /// </summary>
-    private Stylesheet.TemplateRule? FindBestTemplate(XdmValue item, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null)
+    /// <param name="item">The context item to match against.</param>
+    /// <param name="mode">The mode to match in.</param>
+    /// <param name="excludedRules">Rules to exclude (used by xsl:next-match).</param>
+    /// <param name="minImportPrecedence">If set, only rules with import precedence greater than this value are considered (used by xsl:apply-imports).</param>
+    private Stylesheet.TemplateRule? FindBestTemplate(XdmValue item, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null, int? minImportPrecedence = null)
     {
         Stylesheet.TemplateRule? best = null;
         double bestPriority = double.NegativeInfinity;
@@ -2821,6 +2867,8 @@ public sealed class TransformEngine
         foreach (var rule in _allTemplateRules)
         {
             if (excludedRules != null && excludedRules.Contains(rule))
+                continue;
+            if (minImportPrecedence.HasValue && rule.ImportPrecedence <= minImportPrecedence.Value)
                 continue;
             if (!MatchesMode(rule, mode))
                 continue;
