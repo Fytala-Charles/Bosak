@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-05
-**Commit:** `<uncommitted>`
-**Current focus:** `number-1501` and `number-1101` fixed. `number` cluster at 97.8% (264/271). Only 6 non-English word/ordinal formatting failures remain (out of scope).
+**Date:** 2026-06-07
+**Commit:** `0737336`
+**Current focus:** Atomic-value PredicatePattern matching fixed. `match` cluster at 83.2% (149/294). 30 failures remain (`apply-imports`, `for-each-group` atomic patterns, `intersect`/`except` variable patterns, namespace nodes).
 
 ---
 
@@ -115,6 +115,18 @@
 5. **`RequireString` type enforcement** — New helper that enforces `xs:string?` arguments. Used by `upper-case`, `lower-case`, `contains`, `starts-with`, `ends-with`.
 6. **Document URI base URI fix** — `XDocumentProvider.LoadXml` uses `LoadOptions.SetBaseUri`; `TestEnvironment` loads source docs via file path.
 7. **QT3 baseline** — 18,695 / 3,175 / 9,951 (58.75%). +61 tests from start of session.
+
+### This Session Fixes (2026-06-07)
+
+1. **Atomic-value PredicatePattern matching** — `PatternCompiler.CompileAtomicMatch` now correctly handles:
+   - Runtime numeric predicate semantics for variable expressions (e.g. `$N=2` returns false per XSLT §6.4).
+   - Whitespace between `.` and `[` after XPath comment stripping.
+   - Multiple predicates compiled individually with proper numeric/boolean evaluation.
+2. **`ApplyTemplates` supports atomic values** — `TransformEngine.ApplyTemplates` now processes sequences containing atomic values, not just nodes. Added `ApplyTemplates(XdmValue)` overload for named-template invocations without a context node.
+3. **`next-match` supports atomic values** — `TransformEngine` `xsl:next-match` now works with atomic context items, using `FindBestTemplate(XdmValue)` and `ExecuteTemplate(rule, XdmValue)`.
+4. **Built-in rule for atomic values** — When no template matches an atomic value (via `apply-templates` or `next-match`), the string value is output to the result tree. Required for `match-131/132` `next-match` chain termination.
+5. **XPath comment stripping in priority computation** — `TemplateRule.ComputeDefaultPriority` / `ComputeSinglePatternPriority` now strip XPath comments before checking pattern shape. Patterns like `(:c:).[expr]` now correctly get PredicatePattern priority (1.0) instead of generic 0.5.
+   - **Match cluster**: improved from 138/41/115 to 149/30/115 (+11 tests). Fixes: match-127/128/130/131/132/240a/240b/240c.
 
 ### This Session Fixes (2026-06-05, part 4 — latest)
 
@@ -332,7 +344,7 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 13. **`xsl:namespace-alias` not implemented** — ~26 namespace tests fail.
 14. **`xsl:number level="multiple"`** — Multi-level ancestor chain formatting is incomplete.
 15. **Decimal overflow in `FormatNumberEngine`** — Uses `decimal` which overflows for very large inputs.
-16. **Match pattern gaps** — `descendant-or-self::x[predicate]`, `except`/`intersect`, `id()`/`key()` patterns missing in `PatternCompiler`.
+16. **Match pattern gaps** — `descendant-or-self::x[predicate]`, `except`/`intersect`, `id()`/`key()` patterns missing in `PatternCompiler`. Atomic-value PredicatePattern (`.[expr]`) now works; remaining gaps are `intersect`/`except` with variables and namespace-node matching.
 17. **DateTime year < 1** — `DateTimeOffset` minimum year is 1. Tests using year `-2` cannot pass without switching to a custom date representation.
 18. **Timezone adjustment** — `adjust-time-to-timezone` produces incorrect offsets in some cases.
 
@@ -342,8 +354,12 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ### Next Session Immediate Targets (start here)
 
-1. **`number` cluster** — 6 failures, 1 skipped (97.8% passing):
-   - `number-0802/0812/0813/0828/0829/2506`: non-English word/ordinal formatting (out of scope)
+1. **`match` cluster** — 30 failures, 115 skipped (83.2% passing):
+   - `match-040`: undeclared function in predicate → XPST0017
+   - `match-069`: namespace node matching
+   - `match-133`: `xsl:apply-imports` not implemented for atomic values
+   - `match-134/135`: `for-each-group` with atomic value patterns (`group-starting-with`/`group-ending-with`)
+   - `match-248-284`: `intersect`/`except` variable patterns
 
 ### Immediate: Quick-win clusters (~few hours, +30–50 tests)
 
@@ -355,13 +371,14 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - **`number`** — **6 failures, 1 skipped (97.8% passing)** — remaining: `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting, out of scope)
 - **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)
 - **`boolean`** — **0 failures, 0 skipped (100% passing)** ✅ — node ordering `<<`/`>>` fixed.
+- **`match`** — **30 failures, 115 skipped (83.2% passing)** — down from 78 failures after atomic-value PredicatePattern fixes.
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
 
 | Cluster | Failed | Skipped | Notes |
 |---------|--------|---------|-------|
 | **number** | 6 | 1 | 264/271 passing (97.8%). Remaining: non-English word formatting (out of scope). |
-| **match** | 78 | 107 | Pattern matching gaps. Improved from 106 failures (priority, union keyword, root(), dot predicates, doc() resolution). |
+| **match** | 30 | 115 | 149/294 passing (83.2%). Down from 78 failures. Atomic-value patterns now work. Remaining: `apply-imports`, `intersect`/`except`, namespace nodes, `for-each-group` atomic patterns. |
 | **sort** | 0 | 18 | 66/84 passing (100% of runnable). ✅ Clean. |
 | **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
 | **node-before** | 2 | 10 | 24/36 passing (66.7%). Remaining 2 are environment issues (missing `$works` variable). |
