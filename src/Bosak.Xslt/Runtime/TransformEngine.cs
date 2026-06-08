@@ -65,6 +65,8 @@
 //                      | Charles Korthout | 4.8   | 07-06-2026     | Added xsl:apply-imports with import-precedence filtering and atomic context items       |
 //                      | Charles Korthout | 4.9   | 07-06-2026     | next-match leaks excluded rules; apply-imports param passing; precedence stack         |
 //                      | Charles Korthout | 5.0   | 07-06-2026     | DeepSkip mode; expand-text truthy values; CopyToResult exclusion cleanup               |
+//                      | Charles Korthout | 5.1   | 07-06-2026     | FindRootTemplate strips XPath comments; next-match/apply-imports pass position/last   |
+//                      | Charles Korthout | 5.2   | 07-06-2026     | ConvertVariableValue for xsl:variable/@as basic atomic types; fixes match-248-254      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -125,6 +127,9 @@ public sealed class TransformEngine
 
     // Documents currently being indexed (prevents re-entrant key() during lazy build)
     private List<IXdmNode> _buildingKeyIndices = new();
+
+    // Sequence accumulator for xsl:sequence inside variable bodies with @as
+    private List<XdmValue>? _sequenceAccumulator;
 
     // Recursion depth guard for xsl:function and xsl:call-template calls
     private int _xsltFunctionCallDepth;
@@ -482,6 +487,7 @@ public sealed class TransformEngine
                             {
                                 varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
                             }
+                            varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
                             _context.WithVariable(varName, varValue);
                         }
                         break;
@@ -718,7 +724,7 @@ public sealed class TransformEngine
     {
         foreach (var rule in _allTemplateRules)
         {
-            if (rule.Match != null && rule.Match.Trim() == "/")
+            if (rule.Match != null && Patterns.PatternCompiler.StripXPathComments(rule.Match).Trim() == "/")
                 return rule;
         }
         return null;
@@ -1025,6 +1031,7 @@ public sealed class TransformEngine
                             }
                         }
                     }
+                    paramValue = ConvertVariableValue(paramValue, child.Attribute("as")?.Value);
                     _context.WithVariable(paramName, paramValue);
                 }
                 else
@@ -1820,6 +1827,7 @@ public sealed class TransformEngine
                             // Build value from sequence constructor (text nodes + XSLT instructions)
                             varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
                         }
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
                         _context.WithVariable(varName, varValue);
                     }
                     break;
@@ -1843,6 +1851,7 @@ public sealed class TransformEngine
                         {
                             varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
                         }
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
                         _context.WithVariable(varName, varValue);
                     }
                     break;
@@ -1890,7 +1899,15 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(select);
                         var result = compiled.Evaluate(_context);
-                        CopyToResult(result, separateAtomicsWithSpace: true);
+                        if (_sequenceAccumulator != null)
+                        {
+                            // Inside a variable body with @as: add sequence items directly
+                            FlattenToList(result, _sequenceAccumulator);
+                        }
+                        else
+                        {
+                            CopyToResult(result, separateAtomicsWithSpace: true);
+                        }
                     }
                     else
                     {
@@ -1989,7 +2006,7 @@ public sealed class TransformEngine
                             _nextMatchExcluded.Add(nextRule);
                             try
                             {
-                                ExecuteTemplate(nextRule, contextItem, callParams: nextMatchParams, incomingTunnelParams: mergedTunnelParams);
+                                ExecuteTemplate(nextRule, contextItem, callParams: nextMatchParams, incomingTunnelParams: mergedTunnelParams, position: _context.ContextPosition, last: _context.ContextSize);
                             }
                             finally
                             {
@@ -2075,7 +2092,7 @@ public sealed class TransformEngine
                     {
                         if (importedRule != null)
                         {
-                            ExecuteTemplate(importedRule, contextItem, callParams: applyImportsParams, incomingTunnelParams: currentTunnelParams);
+                            ExecuteTemplate(importedRule, contextItem, callParams: applyImportsParams, incomingTunnelParams: currentTunnelParams, position: _context.ContextPosition, last: _context.ContextSize);
                         }
                         else if (node != null)
                         {
@@ -2318,6 +2335,7 @@ public sealed class TransformEngine
         var prev = _currentContainer;
         _currentContainer = copy;
         _lastAddedWasAtomic = false;
+        
 
         foreach (var child in source.Nodes())
         {
@@ -2992,6 +3010,7 @@ public sealed class TransformEngine
             {
                 value = EvaluateSequenceConstructor(paramElem, focus, wrapInDocumentNode: string.IsNullOrEmpty(paramElem.Attribute("as")?.Value));
             }
+            value = ConvertVariableValue(value, paramElem.Attribute("as")?.Value);
             _context.WithVariable(name, value);
         }
 
@@ -3010,6 +3029,7 @@ public sealed class TransformEngine
             {
                 value = EvaluateSequenceConstructor(varElem, focus, wrapInDocumentNode: string.IsNullOrEmpty(varElem.Attribute("as")?.Value));
             }
+            value = ConvertVariableValue(value, varElem.Attribute("as")?.Value);
             _context.WithVariable(name, value);
         }
     }
@@ -3308,6 +3328,90 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Applies basic type conversion for the <c>as</c> attribute on xsl:variable / xsl:param.
+    /// Atomizes the value and casts to common atomic types (xs:integer, xs:string, etc.).
+    /// Node types (element(), attribute(), document-node()) are returned unchanged.
+    /// </summary>
+    private static XdmValue ConvertVariableValue(XdmValue value, string? asType)
+    {
+        if (string.IsNullOrEmpty(asType) || value.IsUndefined)
+            return value;
+
+        var originalType = asType.Trim();
+        var type = originalType;
+        bool allowsMultiple = type.EndsWith("*") || type.EndsWith("+");
+        bool allowsEmpty = type.EndsWith("?") || type.EndsWith("*");
+        if (type.EndsWith("?") || type.EndsWith("*") || type.EndsWith("+"))
+            type = type[..^1].Trim();
+
+        // Node types: no conversion needed
+        if (type.Contains("element(") || type.Contains("attribute(") || type.Contains("document-node("))
+            return value;
+
+        // Collect sequence items
+        var items = new List<XdmValue>();
+        if (value.IsNode)
+            items.Add(value);
+        else if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                items.Add(item);
+        }
+        else
+            items.Add(value);
+
+        if (items.Count == 0)
+            return allowsEmpty ? XdmValue.Undefined : value;
+
+        // For multi-item sequences without * or +, don't convert (would be a type error in strict mode)
+        if (items.Count > 1 && !allowsMultiple)
+            return value;
+
+        // Convert each item
+        var converted = new List<XdmValue>();
+        foreach (var item in items)
+        {
+            string str = item.IsNode ? item.NodeValue.StringValue : item.ToString();
+            XdmValue? conv = null;
+
+            if (type == "xs:integer" || type.EndsWith(":integer"))
+            {
+                if (long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out var l))
+                    conv = XdmValue.FromInteger(l);
+            }
+            else if (type == "xs:string" || type.EndsWith(":string"))
+                conv = XdmValue.FromString(str);
+            else if (type == "xs:boolean" || type.EndsWith(":boolean"))
+            {
+                if (bool.TryParse(str, out var b))
+                    conv = XdmValue.FromBoolean(b);
+                else
+                    conv = XdmValue.FromBoolean(!string.IsNullOrWhiteSpace(str));
+            }
+            else if (type == "xs:double" || type.EndsWith(":double"))
+            {
+                if (double.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out var d))
+                    conv = XdmValue.FromDouble(d);
+                else
+                    conv = XdmValue.FromDouble(double.NaN);
+            }
+            else if (type == "xs:decimal" || type.EndsWith(":decimal"))
+            {
+                if (decimal.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out var dec))
+                    conv = XdmValue.FromDecimal(dec);
+                else
+                    conv = XdmValue.FromDecimal(0m);
+            }
+
+            converted.Add(conv ?? item);
+        }
+
+        if (converted.Count == 1)
+            return converted[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(converted));
+    }
+
+    /// <summary>
     /// Evaluates a sequence constructor (child nodes of an xsl:variable, xsl:param, etc.)
     /// and returns the resulting XDM value.
     /// </summary>
@@ -3322,6 +3426,10 @@ public sealed class TransformEngine
             _context.WithFocus(contextItem, 1, 1);
         }
 
+        var savedAccumulator = _sequenceAccumulator;
+        if (!wrapInDocumentNode)
+            _sequenceAccumulator = new List<XdmValue>();
+
         try
         {
             // Create a temporary container to capture the sequence constructor output
@@ -3331,8 +3439,11 @@ public sealed class TransformEngine
             var nodes = wrapper.Nodes().ToList();
             var attributes = wrapper.Attributes().ToList();
 
+            // Include items collected by xsl:sequence into the accumulator
+            var accumulatorItems = _sequenceAccumulator ?? new List<XdmValue>();
+
             // Empty sequence constructor → empty sequence (XSLT 2.0 §11.2)
-            if (nodes.Count == 0 && attributes.Count == 0)
+            if (nodes.Count == 0 && attributes.Count == 0 && accumulatorItems.Count == 0)
                 return XdmValue.FromSequence(XdmSequence.Empty);
 
             if (wrapInDocumentNode)
@@ -3365,6 +3476,7 @@ public sealed class TransformEngine
 
             // wrapInDocumentNode == false: return the raw sequence (used when @as is present)
             var results = new List<XdmValue>();
+            results.AddRange(accumulatorItems);
             foreach (var child in nodes)
             {
                 switch (child)
@@ -3397,6 +3509,7 @@ public sealed class TransformEngine
         }
         finally
         {
+            _sequenceAccumulator = savedAccumulator;
             _context.WithFocus(savedContextItem, savedContextPosition, savedContextSize);
         }
     }

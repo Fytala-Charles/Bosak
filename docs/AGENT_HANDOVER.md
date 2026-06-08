@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-07
 **Commit:** `<uncommitted>`
-**Current focus:** `use-when` cluster improved to 68/102; `match-134/135` fixed via `copy-of` atomic spacing. Next: `intersect`/`except` patterns in PatternCompiler.
+**Current focus:** `match` cluster improved to 156/294 (+11 tests). Fixed: match-241 (position/last in next-match), match-246a/b (XPath comments in root patterns), match-248-254 (xsl:variable/@as type coercion). Next: remaining match failures.
 
 ---
 
@@ -10,12 +10,12 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3,365 / **Failed:** ~2,045 / **Skipped:** ~9,190 (14,600 total)
-- Pass rate: **62.2%** (latest run, 2026-06-07)
+- **Passed:** ~3,376 / **Failed:** ~2,034 / **Skipped:** ~9,190 (14,600 total)
+- Pass rate: **62.4%** (latest run, 2026-06-07)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3365 passed / 2045 failed / 9190 skipped (62.2%) — next-match cluster 37/40, attribute-set 36/50
+- Latest: 3376 passed / 2034 failed / 9190 skipped (62.4%) — match cluster 156/294 (+11), next-match 36/40, attribute-set 36/50
 - Latest: 3301 passed / 2112 failed / 9187 skipped (61.0%) — apply-imports + for-each-group atomic patterns
 - Latest XPath: 19041 passed / 2829 failed / 9951 skipped (59.84%) — QT3 stable
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
@@ -82,6 +82,14 @@
    - **node-after cluster**: improved from 16/10/9 to 24/2/9.
    - Remaining failures (`nodeexpression28/31/44/47`) are test-environment issues (missing `$works` variable), not operator bugs.
 3. **QT3 estimated baseline** — ~18,783 / ~3,087 / 9,951 (approx. +16 tests this batch).
+
+### This Session Fixes (2026-06-07)
+
+1. **`match-253` XPTY0004 fix** — `PatternCompiler.IsStaticError` incorrectly treated XPTY0004 (dynamic type error) as a static error, causing it to propagate from pattern predicate evaluation instead of being treated as "no match". Now only XPST and XTSE codes propagate; XPTY is caught and returns false.
+2. **`match-246a/b` XPath comment in root patterns** — `FindRootTemplate()` did literal string comparison `rule.Match.Trim() == "/"`, so patterns like `(:1:)/(:2:)` were not recognized as root patterns. Now uses `PatternCompiler.StripXPathComments` before comparing.
+3. **`match-241` position()/last() in next-match** — `xsl:next-match` and `xsl:apply-imports` called `ExecuteTemplate` without passing the current context position and size, causing `position()` and `last()` to always be 1/1 inside the next template. Now preserves them across the chain.
+4. **`match-248` through `match-254` xsl:variable @as** — `xsl:variable` and `xsl:param` ignored the `as` attribute for type coercion. Sequence constructors producing text nodes were stored as text nodes instead of being atomized/cast to `xs:integer`, `xs:string`, etc. Added `ConvertVariableValue` helper that applies basic atomization and casting for common atomic types.
+5. **`match` cluster** — improved from 145/294 to **156/294** (+11 tests passing).
 
 ### This Session Fixes (2026-06-05, part 3)
 
@@ -389,12 +397,11 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ### Next Session Immediate Targets (start here)
 
-1. **`match` cluster** — 30 failures, 115 skipped (83.2% passing):
+1. **`match` cluster** — 23 failures, 115 skipped (87.2% passing):
    - `match-040`: undeclared function in predicate → XPST0017
    - `match-069`: namespace node matching
-   - `match-133`: `xsl:apply-imports` not implemented for atomic values
-   - `match-134/135`: `for-each-group` with atomic value patterns (`group-starting-with`/`group-ending-with`)
-   - `match-248-284`: `intersect`/`except` variable patterns
+   - `match-134/135`: sequence constructor batching (adjacent atomics across instruction boundaries)
+   - Remaining: intersect/except variable patterns, DITA-style large pattern sets with complex predicates
 
 ### Immediate: Quick-win clusters (~few hours, +30–50 tests)
 
@@ -406,7 +413,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - **`number`** — **6 failures, 1 skipped (97.8% passing)** — remaining: `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting, out of scope)
 - **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)
 - **`boolean`** — **0 failures, 0 skipped (100% passing)** ✅ — node ordering `<<`/`>>` fixed.
-- **`match`** — **30 failures, 115 skipped (83.2% passing)** — down from 78 failures after atomic-value PredicatePattern fixes.
+- **`match`** — **23 failures, 115 skipped (87.2% passing)** — down from 78 failures after atomic-value PredicatePattern fixes. +11 fixed this session (241, 246a/b, 248-254).
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
 
@@ -440,5 +447,5 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `<uncommitted>` — node comparison operator fixes (XPTY0004 + XPST0003)
-- Previous: `a792924` — function-name prefix and inline-function XQST0039
+- Latest: `<uncommitted>` — match cluster fixes (241, 246a/b, 248-254), xsl:variable @as coercion, next-match position/last preservation
+- Previous: `0bb2e09` — attribute-set, use-when, copy-of atomic spacing, next-match fixes

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-06  
+> **Living Registry** — Last updated: 2026-06-07  
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -131,6 +131,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-024 | Bosak / Fytala Stack | XQuery 3.1 skeleton project structure | Prepare `Bosak.XQuery` project, validate naming convention, and align documentation for future XQuery implementation | **Implemented** | Phase 3 | Charles Korthout | 2026-06-06 |
 | REQ-025 | *(internal)* | `xsl:attribute-set` / `xsl:use-attribute-sets` support | Required for `next-match-012` and broader XSLT 3.0 conformance; attribute sets accumulate across imports/includes | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-026 | *(internal)* | Nested `xsl:use-when` evaluation | `use-when="false()"` on nested XSLT instructions and LREs was ignored; now stripped during stylesheet load | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
+| REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Pending** | TBD | Unassigned | 2026-06-07 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1164,6 +1165,74 @@ Additionally, many other XSLT 3.0 conformance tests depend on attribute sets for
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-06-07 | Charles Korthout / Kimi | Implemented | +19 tests; low-risk tree modification during load |
+
+---
+
+### REQ-027: Publish Bosak Packages to NuGet Feed
+
+**Requesting Application:** Customer B
+**Submitted:** 2026-06-07
+**Status:** Pending
+
+#### Problem Statement
+
+Customer B's `Customer B.DataBridge.Application.BodMapping` project references `Bosak.Xslt` and `Bosak.XPath.Providers` as project references. When `Customer B.DataBridge.Application.BodMapping` is packed as a NuGet package, it declares package dependencies on `Bosak.Xslt` and `Bosak.XPath.Providers`.
+
+However, Bosak projects currently do **not** have NuGet package metadata (`<IsPackable>`, `<PackageId>`, `<Version>`, `<Authors>`, etc.). This means:
+- `dotnet pack` on Bosak projects produces no `.nupkg` files
+- Any consumer that pulls in `Customer B.DataBridge.Application.BodMapping` from a NuGet feed cannot resolve the transitive Bosak dependencies
+- Customer B REQ-019 (publish DataBridge packages to NuGet) is blocked for the BodMapping package
+
+#### Proposed Solution
+
+Add NuGet package metadata to all Bosak projects that Customer B depends on:
+
+1. `Bosak.Xslt`
+2. `Bosak.XPath.Core`
+3. `Bosak.XPath.Runtime`
+4. `Bosak.XPath.Api`
+5. `Bosak.XPath.Standard`
+6. `Bosak.XPath.Providers`
+
+Each `.csproj` needs at minimum:
+```xml
+<PropertyGroup>
+  <IsPackable>true</IsPackable>
+  <PackageId>Bosak.Xslt</PackageId>
+  <Version>1.0.0</Version>
+  <Authors>Fytala</Authors>
+  <Company>Fytala</Company>
+  <Description>...</Description>
+  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+</PropertyGroup>
+```
+
+#### Acceptance Criteria
+- [ ] `Bosak.Xslt` packs as a versioned NuGet package
+- [ ] `Bosak.XPath.Providers` packs as a versioned NuGet package
+- [ ] `Bosak.XPath.Core` packs as a versioned NuGet package
+- [ ] `Bosak.XPath.Runtime` packs as a versioned NuGet package
+- [ ] `Bosak.XPath.Api` packs as a versioned NuGet package
+- [ ] `Bosak.XPath.Standard` packs as a versioned NuGet package
+- [ ] `Customer B.DataBridge.Application.BodMapping` can be restored from a NuGet feed when Bosak packages are present on the same feed
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | No code changes |
+| Compiler | None | No code changes |
+| Runtime | None | No code changes |
+| Standard | None | No code changes |
+| XSLT | None | No code changes |
+| API | New packaging | NuGet package metadata only |
+
+#### Related Requests
+- Customer B REQ-019 (Publish Customer B.DataBridge packages to NuGet feed) — blocked until Bosak packages are available
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-07 | Kimi | Pending | Required for Customer B BodMapping NuGet consumption; low-effort metadata addition |
 
 ---
 

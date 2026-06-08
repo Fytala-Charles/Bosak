@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 07 June 2026
-> **Bosak baseline:** 875 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 18,785 passed / 3,085 failed / 9,951 skipped (59.04%)
+> **Bosak baseline:** 873 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** ~3,376 passed / ~2,034 failed / ~9,190 skipped (62.4%)
 
 ---
 
@@ -201,8 +201,8 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:comment` | ✅ Working | `select` attribute or text content |
 | `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
 | `xsl:decimal-format` | ✅ Working | Parsed and registered for `fn:format-number` |
-| `xsl:variable` | ✅ Working | Lexical scoping; usable in XPath via `$var` |
-| `xsl:param` | ✅ Working | On named templates, global params, default values |
+| `xsl:variable` | ✅ Working | Lexical scoping; `as` attribute with basic atomic types (`xs:integer`, `xs:string`, `xs:boolean`, `xs:double`, `xs:decimal`); usable in XPath via `$var` |
+| `xsl:param` | ✅ Working | On named templates, global params, default values; `as` attribute with basic atomic types |
 | Built-in template rules | ✅ Working | Shallow-copy elements, copy text/attributes |
 | Literal result elements | ✅ Working | Namespace preservation, AVT evaluation |
 | `xsl:import` / `xsl:include` | ✅ Working | URI resolution with correct precedence rules |

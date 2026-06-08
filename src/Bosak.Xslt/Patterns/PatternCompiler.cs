@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.1   | 05-06-2026     | Added CompileAtomicMatch for .[expr] predicate patterns; fixes match-127/128/130       |
 //                      | Charles Korthout | 1.2   | 07-06-2026     | CompileAtomicMatch: runtime numeric predicate check, whitespace/dot tolerance; +11 tests|
 //                      | Charles Korthout | 1.3   | 07-06-2026     | attribute(*, type) comma-split in CompileNodeTest; fixes next-match-011                 |
+//                      | Charles Korthout | 1.4   | 07-06-2026     | IsStaticError no longer treats XPTY as static; StripXPathComments now public            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2008,7 +2009,9 @@ public sealed class PatternCompiler
     private static bool IsStaticError(Exception ex)
     {
         var msg = ex.Message;
-        return msg.Contains("XPST") || msg.Contains("XTSE") || msg.Contains("XPTY");
+        // XPTY errors during pattern evaluation are dynamic errors, not static errors.
+        // In XSLT match patterns, dynamic errors are treated as "does not match".
+        return msg.Contains("XPST") || msg.Contains("XTSE");
     }
 
     /// <summary>
@@ -2030,7 +2033,7 @@ public sealed class PatternCompiler
     /// <summary>
     /// Removes XPath comments <c>(: ... :)</c> from the text, preserving string literals.
     /// </summary>
-    private static string StripXPathComments(string text)
+    public static string StripXPathComments(string text)
     {
         var sb = new System.Text.StringBuilder();
         int i = 0;
