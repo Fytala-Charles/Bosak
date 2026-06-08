@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3,376 / **Failed:** ~2,034 / **Skipped:** ~9,190 (14,600 total)
-- Pass rate: **62.4%** (latest run, 2026-06-07)
+- **Passed:** **3,463** / **Failed:** **1,947** / **Skipped:** 9,190 (14,600 total)
+- Pass rate: **64.0%** (latest run, 2026-06-08)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3376 passed / 2034 failed / 9190 skipped (62.4%) — match cluster 156/294 (+11), next-match 36/40, attribute-set 36/50
+- Latest: 3463 passed / 1947 failed / 9190 skipped (64.0%) — match cluster 160/294 (+3 this session), next-match 36/40, attribute-set 36/50
+- Previous: 3376 passed / 2034 failed / 9190 skipped (62.4%) — match cluster 156/294 (+11)
 - Latest: 3301 passed / 2112 failed / 9187 skipped (61.0%) — apply-imports + for-each-group atomic patterns
 - Latest XPath: 19041 passed / 2829 failed / 9951 skipped (59.84%) — QT3 stable
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
