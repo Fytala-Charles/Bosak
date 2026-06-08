@@ -1287,8 +1287,9 @@ public class StylesheetTests
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(new XDocumentNode(source));
 
-        // Element wrapper should be skipped, only text remains
-        Assert.Contains("text", result);
+        // XSLT 3.0 §6.6: in shallow-skip mode, built-in rule for text/attribute nodes does nothing.
+        // The element wrappers are skipped, and text content is also skipped.
+        Assert.DoesNotContain("text", result);
         Assert.DoesNotContain("<root", result);
         Assert.DoesNotContain("<child", result);
     }

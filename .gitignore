@@ -71,3 +71,9 @@ tests/xslt30-test/
 
 /last_test.txt
 *.log
+
+# VS Code Extension
+vscode-bosak/node_modules/
+vscode-bosak/out/
+vscode-bosak/server/
+vscode-bosak/*.vsix

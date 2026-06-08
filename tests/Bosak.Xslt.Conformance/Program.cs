@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 07-06-2026     | PreserveWhitespace in TestUriResolver; skip package tests                               |
+//                      | Charles Korthout | 0.3   | 08-06-2026     | Added initial-mode support and source/@select handling in LoadEnvironment              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -69,6 +70,7 @@ class Program
         "call-template-1002",
         "call-template-1003",
         // Deep recursion in xsl:function exceeds safe stack limit
+        "function-2109",
         "seqtor-029",
         "seqtor-030",
         "seqtor-031",
@@ -350,14 +352,20 @@ class Program
             if (initialTemplateElem != null)
                 initialTemplate = initialTemplateElem.Attribute("name")?.Value;
 
+            // Check for initial-mode
+            string? initialMode = null;
+            var initialModeElem = testElem.Element(ns + "initial-mode");
+            if (initialModeElem != null)
+                initialMode = initialModeElem.Attribute("name")?.Value;
+
             string resultXml;
             if (sourceNode != null)
             {
-                resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate);
+                resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode);
             }
             else
             {
-                resultXml = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), evalContext, initialTemplate);
+                resultXml = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), evalContext, initialTemplate, initialMode);
             }
 
             // Compare with expected result
@@ -426,28 +434,52 @@ class Program
         var source = envElem.Element(ns + "source");
         if (source == null) return null;
 
+        XDocument? doc = null;
         var content = source.Element(ns + "content");
         if (content != null)
         {
             var cdata = content.Nodes().OfType<XCData>().FirstOrDefault();
             var xmlText = cdata?.Value ?? content.Value;
-            var doc = XDocument.Parse(xmlText, LoadOptions.PreserveWhitespace);
-            return new XDocumentNode(doc);
+            doc = XDocument.Parse(xmlText, LoadOptions.PreserveWhitespace);
         }
 
         var file = source.Attribute("file")?.Value;
-        if (file != null)
+        if (file != null && doc == null)
         {
             var path = Path.Combine(testSetDir, file);
             if (!File.Exists(path)) path = Path.Combine(catalogDir, file);
             if (File.Exists(path))
             {
-                var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
-                return new XDocumentNode(doc);
+                doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
             }
         }
 
-        return null;
+        if (doc == null) return null;
+
+        // Handle select="..." on source (e.g. role="." select="/doc")
+        var select = source.Attribute("select")?.Value;
+        if (!string.IsNullOrEmpty(select))
+        {
+            var node = new XDocumentNode(doc);
+            var compiled = XPath31Expression.Compile(select);
+            var evalContext = new EvaluationContext();
+            evalContext.WithFocus(XdmValue.FromNode(node), 1, 1);
+            var result = compiled.Evaluate(evalContext);
+            if (result.IsNode && result.NodeValue != null)
+            {
+                return result.NodeValue;
+            }
+            if (result.IsSequence && result.SequenceValue != null)
+            {
+                foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                {
+                    if (item.IsNode && item.NodeValue != null)
+                        return item.NodeValue;
+                }
+            }
+        }
+
+        return new XDocumentNode(doc);
     }
 
     static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir)

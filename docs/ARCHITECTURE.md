@@ -314,9 +314,10 @@ var result2 = expr.Evaluate(document, ctx);
 |-------|-------------|--------|
 | 1 | XPath 3.1 Core | Expression compiler + standard functions ✅ |
 | 2 | XSLT 2.0 / 3.0 | Template matching, sequence constructors, `fn:transform()` ✅ |
-| 3 | XQuery 3.1 | FLWOR expressions, query prolog. Reuses XPath engine entirely. 📋 Planned |
-| 4 | Streaming | `IXdmNode` backed by `XmlReader` with look-ahead constraints. 📋 Planned |
-| 5 | Database backends | `IXdmNode` implementations over XML databases. 📋 Planned |
+| 3 | Language Server | LSP diagnostics & completions for XPath / XSLT in VS Code ✅ |
+| 4 | XQuery 3.1 | FLWOR expressions, query prolog. Reuses XPath engine entirely. 📋 Planned |
+| 5 | Streaming | `IXdmNode` backed by `XmlReader` with look-ahead constraints. 📋 Planned |
+| 6 | Database backends | `IXdmNode` implementations over XML databases. 📋 Planned |
 
 ---
 
@@ -445,6 +446,7 @@ src/
   Bosak.XPath.Providers/    XDocument adapter (XDocumentNode); XmlDocument and streaming adapters planned
   Bosak.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
   Bosak.XQuery/       XQuery 3.1 processor skeleton (query compiler, FLWOR engine)
+  Bosak.LanguageServer/   LSP server for XPath / XSLT diagnostics & completions (OmniSharp 0.19.9)
 
 tests/
   Bosak.XPath.Core.Tests/

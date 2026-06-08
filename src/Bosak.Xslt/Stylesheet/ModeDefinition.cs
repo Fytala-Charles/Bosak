@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 26-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 05-06-2026     | Added OnMultipleMatch enum and parsing for xsl:mode on-multiple-match                  |
 //                      | Charles Korthout | 0.3   | 07-06-2026     | Added DeepSkip to OnNoMatch enum and parsing; fixes next-match-034                     |
+//                      | Charles Korthout | 0.4   | 08-06-2026     | FromElement expands mode name QNames to Clark notation                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -25,7 +26,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// </summary>
 public enum OnNoMatch
 {
-    /// <summary>Shallow-copy the node (default in XSLT 3.0).</summary>
+    /// <summary>Shallow-copy the node.</summary>
     ShallowCopy,
     /// <summary>Skip the element node, apply-templates to children only.</summary>
     ShallowSkip,
@@ -76,15 +77,16 @@ public sealed class ModeDefinition
     /// </summary>
     public static ModeDefinition? FromElement(XElement element)
     {
-        var name = element.Attribute("name")?.Value ?? "";
+        var name = ExpandModeName(element.Attribute("name")?.Value ?? "", element);
         var onNoMatch = element.Attribute("on-no-match")?.Value?.ToLowerInvariant() switch
         {
+            "shallow-copy" => OnNoMatch.ShallowCopy,
             "shallow-skip" => OnNoMatch.ShallowSkip,
             "text-only-copy" => OnNoMatch.TextOnlyCopy,
             "deep-copy" => OnNoMatch.DeepCopy,
             "deep-skip" => OnNoMatch.DeepSkip,
             "fail" => OnNoMatch.Fail,
-            _ => OnNoMatch.ShallowCopy
+            _ => OnNoMatch.ShallowSkip
         };
         var onMultipleMatch = element.Attribute("on-multiple-match")?.Value?.ToLowerInvariant() switch
         {
@@ -92,5 +94,32 @@ public sealed class ModeDefinition
             _ => OnMultipleMatch.UseLast
         };
         return new ModeDefinition(name, onNoMatch, onMultipleMatch);
+    }
+
+    private static string ExpandModeName(string mode, XElement element)
+    {
+        if (mode == "#current" || mode == "#default" || mode == "#all")
+            return mode;
+
+        int colon = mode.IndexOf(':');
+        if (colon < 0)
+            return mode;
+
+        var prefix = mode.Substring(0, colon);
+        var local = mode.Substring(colon + 1);
+
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
+                {
+                    return $"{{{attr.Value}}}{local}";
+                }
+            }
+            current = current.Parent;
+        }
+        return mode;
     }
 }

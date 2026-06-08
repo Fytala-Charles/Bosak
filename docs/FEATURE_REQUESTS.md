@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-07  
+> **Living Registry** — Last updated: 2026-06-08  
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -132,6 +132,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-025 | *(internal)* | `xsl:attribute-set` / `xsl:use-attribute-sets` support | Required for `next-match-012` and broader XSLT 3.0 conformance; attribute sets accumulate across imports/includes | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-026 | *(internal)* | Nested `xsl:use-when` evaluation | `use-when="false()"` on nested XSLT instructions and LREs was ignored; now stripped during stylesheet load | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Pending** | TBD | Unassigned | 2026-06-07 |
+| REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1 and XSLT 3.0 development: syntax highlighting, realtime diagnostics, auto-completion | **Implemented** | 0.1.2 | Charles Korthout | 2026-06-08 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -962,6 +963,61 @@ Customer A partner override stylesheets use `xsl:message` for debugging and audi
 |------|-------|----------|-----------|
 | 2026-05-31 | Kimi | Pending | P2 — debugging aid; no production blocking impact |
 | 2026-05-31 | Kimi | Implemented | IXsltMessageListener interface, XsltCompiler.MessageListener, TransformEngine handler for select and sequence constructor, 3 unit tests pass |
+
+---
+
+### REQ-028: VS Code Language Server Extension
+
+**Requesting Application:** Bosak / Fytala Stack  
+**Submitted:** 2026-06-08  
+**Status:** **Implemented**
+
+#### Problem Statement
+
+Developers working with XPath 3.1 and XSLT 3.0 in VS Code had no IDE support specific to the Bosak engine. Generic XML extensions provide basic syntax highlighting but no XPath/XSLT-aware diagnostics, completions, or error reporting. This slows down stylesheet development and makes it hard to catch errors early.
+
+#### Proposed Solution
+
+Build a Language Server Protocol (LSP) implementation and VS Code extension:
+
+1. **`Bosak.LanguageServer`** — .NET 10 console app using OmniSharp.Extensions.LanguageServer 0.19.9:
+   - `TextDocumentSyncHandler`: full-document sync for `.xpath`, `.xsl`, `.xslt`
+   - `DiagnosticsHandler`: XPath parse errors; XSLT XML well-formedness + XPath-in-attribute validation (`select`, `test`, `match`, `use-when`)
+   - `CompletionHandler`: XPath functions, axes, keywords; XSLT instructions
+   - `DocumentManager`: in-memory store of open document contents
+2. **`vscode-bosak`** — TypeScript VS Code extension client:
+   - Syntax highlighting (TextMate grammars for XPath and XSLT)
+   - LSP client connecting via stdio
+   - Bundled server support: server binary shipped inside the VSIX
+   - Context-menu commands (Evaluate XPath, Run XSLT — placeholders for future wiring)
+
+#### Acceptance Criteria
+
+- [x] `Bosak.LanguageServer` compiles with 0 errors, 0 warnings
+- [x] VSIX packages extension + bundled server (2.71 MB)
+- [x] Installable via `code --install-extension vscode-bosak-0.1.2.vsix`
+- [x] Diagnostics appear for invalid XPath expressions
+- [x] Diagnostics appear for malformed XSLT and invalid XPath in attributes
+- [x] Completions trigger for XPath functions and XSLT instructions
+- [x] All 873 unit tests still pass
+
+#### Impact Analysis
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | Reused for diagnostics |
+| Compiler | None | Reused for diagnostics |
+| Runtime | None | |
+| Standard | None | |
+| XSLT | None | |
+| API | None | |
+| Tooling | New project | `Bosak.LanguageServer` + `vscode-bosak/` |
+
+#### Decision Log
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-08 | Charles Korthout / Kimi | Implemented | Developer experience improvement; no production blocking impact |
 
 ---
 

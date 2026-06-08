@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 05-06-2026     | Strip outer parens in priority computation; added FindMatchingParen helper             |
 //                      | Charles Korthout | 0.5   | 07-06-2026     | StripXPathComments in ComputeDefaultPriority; fixes comment-stripped PredicatePattern   |
 //                      | Charles Korthout | 0.6   | 07-06-2026     | ValidateUnionPattern before split; restores XTSE0340 for union patterns                |
+//                      | Charles Korthout | 0.7   | 08-06-2026     | ParseModes expands QNames to Clark notation; fixes mode-0901 QName comparison          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -81,7 +82,7 @@ public sealed class TemplateRule
         var match = element.Attribute("match")?.Value;
         var name = element.Attribute("name")?.Value;
         var modeAttr = element.Attribute("mode")?.Value;
-        var modes = ParseModes(modeAttr);
+        var modes = ParseModes(modeAttr, element);
 
         if (string.IsNullOrEmpty(match) && string.IsNullOrEmpty(name))
             return Array.Empty<TemplateRule>(); // Invalid template
@@ -134,13 +135,72 @@ public sealed class TemplateRule
         return rules;
     }
 
-    private static IReadOnlyList<string> ParseModes(string? modeAttr)
+    private static IReadOnlyList<string> ParseModes(string? modeAttr, XElement element)
     {
         if (string.IsNullOrEmpty(modeAttr))
             return new[] { "" }; // default mode
 
         var modes = modeAttr.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        return modes.Length > 0 ? modes : new[] { "" };
+        if (modes.Length == 0)
+            return new[] { "" };
+
+        var result = new List<string>(modes.Length);
+        foreach (var m in modes)
+        {
+            if (m == "#default")
+            {
+                result.Add("");
+            }
+            else if (m == "#all" || m == "#current")
+            {
+                result.Add(m);
+            }
+            else
+            {
+                result.Add(ExpandModeName(m, element));
+            }
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Expands a mode name to Clark notation ({uri}local) using the in-scope
+    /// namespaces of the given element. No-op for #default, #all, #current.
+    /// </summary>
+    private static string ExpandModeName(string mode, XElement element)
+    {
+        int colon = mode.IndexOf(':');
+        if (colon < 0)
+            return mode; // no prefix
+
+        var prefix = mode.Substring(0, colon);
+        var local = mode.Substring(colon + 1);
+
+        // Find the namespace URI for this prefix in the element's scope
+        var nsAttr = element.GetPrefixOfNamespace(XNamespace.Get("http://dummy"));
+        // Use the element's attributes to find xmlns:prefix
+        foreach (var attr in element.Attributes())
+        {
+            if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
+            {
+                return $"{{{attr.Value}}}{local}";
+            }
+        }
+        // If not found on this element, try ancestor elements
+        var ancestor = element.Parent;
+        while (ancestor != null)
+        {
+            foreach (var attr in ancestor.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
+                {
+                    return $"{{{attr.Value}}}{local}";
+                }
+            }
+            ancestor = ancestor.Parent;
+        }
+        // Prefix not found — return as-is (will likely fail to match, which is correct)
+        return mode;
     }
 
     /// <summary>

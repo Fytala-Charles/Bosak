@@ -1009,11 +1009,37 @@ public sealed class PatternCompiler
 
             if (rootAtDocument)
             {
-                // For rooted paths like /*/*, the first step must match a child of the document.
-                // After walking ancestors, 'current' is the parent of the node that matched
-                // the first step, which must be the document node.
-                if (current?.NodeKind != XdmNodeKind.Document)
-                    return false;
+                if (separators.Count > 0 && !separators[0])
+                {
+                    // Indirect path after first step (//): any matching ancestor is fine,
+                    // but the root element must match the first step.
+                    var root = node;
+                    while (root.Parent != null)
+                        root = root.Parent;
+                    IXdmNode? rootElement = null;
+                    foreach (var child in root.Axis(XdmAxis.Child))
+                    {
+                        if (child.IsNode)
+                        {
+                            rootElement = child.NodeValue;
+                            break;
+                        }
+                    }
+                    if (rootElement == null)
+                        return false;
+
+                    var firstStepTest = steps.Count > 1 ? ancestorTests[^1] : lastStepPredicate;
+                    if (firstStepTest == null || !firstStepTest(XdmValue.FromNode(rootElement), ctx))
+                        return false;
+                }
+                else
+                {
+                    // Direct path after first step (/): the matched ancestor must be the
+                    // root element. After walking ancestors, 'current' is the parent of the
+                    // node that matched the first step, which must be the document node.
+                    if (current?.NodeKind != XdmNodeKind.Document)
+                        return false;
+                }
             }
 
             return true;

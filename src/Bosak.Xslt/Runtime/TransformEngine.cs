@@ -33,6 +33,10 @@
 //                      | Charles Korthout | 1.5   | 27-05-2026     | Process text nodes in sequence constructors; strip document-level whitespace            |
 //                      | Charles Korthout | 1.7   | 28-05-2026     | Added xsl:next-match with excluded-rule chain; call-template clears current template rule |
 //                      | Charles Korthout | 1.8   | 29-05-2026     | Reduced MaxXsltFunctionCallDepth to 32 to prevent .NET stack overflow crashes             |
+//                      | Charles Korthout | 2.9   | 08-06-2026     | Fixed apply-templates inside xsl:function to pass with-param and preserve atomic values   |
+//                      | Charles Korthout | 3.1   | 08-06-2026     | Fixed text-node built-in rule for XDocument container (text-only-copy at document level)  |
+//                      | Charles Korthout | 3.2   | 08-06-2026     | Added initialMode support to Transform; fixed #current in initial mode; source select     |
+//                      | Charles Korthout | 3.3   | 08-06-2026     | Evaluate global params/vars in document order (interleaved); fixes match-272              |
 //                      | Charles Korthout | 1.9   | 29-05-2026     | Added expand-text / Text Value Template support with XPath string literal awareness       |
 //                      | Charles Korthout | 2.0   | 30-05-2026     | Skip comments in CopyLiteralElement; fixes string-050/051/089 conformance tests         |
 //                      | Charles Korthout | 2.1   | 30-05-2026     | EvaluateSequenceConstructor always wraps in document node via synthetic wrapper         |
@@ -188,7 +192,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the stylesheet transformation.
     /// </summary>
-    public XdmValue Transform(IXdmNode source, string? initialTemplate = null)
+    public XdmValue Transform(IXdmNode source, string? initialTemplate = null, string? initialMode = null)
     {
         // Ensure xsl:function registrations are present (re-entrant transforms)
         RegisterXsltFunctions();
@@ -228,6 +232,29 @@ public sealed class TransformEngine
             if (_allNamedTemplates.TryGetValue("xsl:initial-template", out var initialTemplateRule))
             {
                 CallTemplate("xsl:initial-template", source);
+            }
+            else if (!string.IsNullOrEmpty(initialMode))
+            {
+                // Start transformation in the specified initial mode.
+                // If a template matches the document node in this mode, execute it;
+                // otherwise apply the built-in rule for the document node.
+                _modeStack.Push(initialMode);
+                try
+                {
+                    var rootTemplate = FindBestTemplate(source, initialMode);
+                    if (rootTemplate != null)
+                    {
+                        ExecuteTemplate(rootTemplate, source);
+                    }
+                    else
+                    {
+                        ApplyBuiltInRules(source, initialMode);
+                    }
+                }
+                finally
+                {
+                    _modeStack.Pop();
+                }
             }
             else
             {
@@ -361,7 +388,7 @@ public sealed class TransformEngine
     /// Executes the body of an xsl:function declaration, binding parameters and
     /// returning the sequence produced by the function body.
     /// </summary>
-    private const int MaxXsltFunctionCallDepth = 32;
+    private const int MaxXsltFunctionCallDepth = 20;
 
     private XdmValue ExecuteXsltFunction(Stylesheet.XsltFunctionDefinition def, ReadOnlySpan<XdmValue> args)
     {
@@ -566,6 +593,79 @@ public sealed class TransformEngine
                         }
                         break;
                     }
+                case "apply-templates":
+                    {
+                        var modeRaw = instruction.Attribute("mode")?.Value ?? "";
+                        var mode = ExpandModeName(modeRaw, instruction);
+                        var select = instruction.Attribute("select")?.Value;
+                        var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+
+                        // Collect xsl:with-param elements (tunnel and non-tunnel)
+                        var withParams = new Dictionary<string, XdmValue>();
+                        var tunnelParams = new Dictionary<string, XdmValue>();
+                        foreach (var wp in instruction.Elements(XName.Get("with-param", Stylesheet.Stylesheet.XslNamespace)))
+                        {
+                            var wpName = wp.Attribute("name")?.Value;
+                            var wpSelect = wp.Attribute("select")?.Value;
+                            var wpTunnel = wp.Attribute("tunnel")?.Value == "yes";
+                            if (!string.IsNullOrEmpty(wpName))
+                            {
+                                XdmValue wpValue;
+                                if (!string.IsNullOrEmpty(wpSelect))
+                                {
+                                    var compiled = XPath31Expression.Compile(wpSelect);
+                                    wpValue = compiled.Evaluate(_context);
+                                }
+                                else
+                                {
+                                    wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
+                                }
+                                if (wpTunnel)
+                                    tunnelParams[wpName] = wpValue;
+                                else
+                                    withParams[wpName] = wpValue;
+                            }
+                        }
+
+                        var savedContainer = _currentContainer;
+                        var savedLastAtomic = _lastAddedWasAtomic;
+                        var savedAccumulator = _sequenceAccumulator;
+                        var temp = new XElement("__temp__");
+                        _currentContainer = temp;
+                        _lastAddedWasAtomic = false;
+                        _sequenceAccumulator = results;
+                        try
+                        {
+                            // XSLT 2.0 erratum XT.E19: #current in a function refers to the unnamed mode.
+                            // Save and clear the mode stack so ResolveMode("#current") returns "".
+                            var savedModes = new List<string>(_modeStack);
+                            savedModes.Reverse();
+                            _modeStack.Clear();
+                            try
+                            {
+                                ApplyTemplates(contextItem, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams);
+                            }
+                            finally
+                            {
+                                foreach (var m in savedModes)
+                                    _modeStack.Push(m);
+                            }
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _lastAddedWasAtomic = savedLastAtomic;
+                            _sequenceAccumulator = savedAccumulator;
+                        }
+                        foreach (var node in temp.Nodes())
+                        {
+                            if (node is XElement e)
+                                results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                            else if (node is XText t && !string.IsNullOrEmpty(t.Value))
+                                results.Add(XdmValue.FromString(t.Value));
+                        }
+                        break;
+                    }
                 case "call-template":
                     {
                         var calledName = instruction.Attribute("name")?.Value;
@@ -596,9 +696,27 @@ public sealed class TransformEngine
                                         withParams[wpName] = wpValue;
                                 }
                             }
-                            // CallTemplate produces a result tree fragment, not a sequence.
-                            // For function bodies, we ignore call-template output.
-                            CallTemplate(calledName, contextItem, withParams, tunnelParams);
+                            var savedContainer = _currentContainer;
+                            var savedLastAtomic = _lastAddedWasAtomic;
+                            var temp = new XElement("__temp__");
+                            _currentContainer = temp;
+                            _lastAddedWasAtomic = false;
+                            try
+                            {
+                                CallTemplate(calledName, contextItem, withParams, tunnelParams);
+                            }
+                            finally
+                            {
+                                _currentContainer = savedContainer;
+                                _lastAddedWasAtomic = savedLastAtomic;
+                            }
+                            foreach (var node in temp.Nodes())
+                            {
+                                if (node is XElement e)
+                                    results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                else if (node is XText t && !string.IsNullOrEmpty(t.Value))
+                                    results.Add(XdmValue.FromString(t.Value));
+                            }
                         }
                         break;
                     }
@@ -924,6 +1042,40 @@ public sealed class TransformEngine
         {
             return "";
         }
+        return mode;
+    }
+
+    /// <summary>
+    /// Expands a mode attribute value to Clark notation ({uri}local) using
+    /// the in-scope namespaces of the instruction element. No-op for special
+    /// mode names (#current, #default, #all) and unprefixed names.
+    /// </summary>
+    private static string ExpandModeName(string mode, XElement instruction)
+    {
+        if (mode == "#current" || mode == "#default" || mode == "#all")
+            return mode;
+
+        int colon = mode.IndexOf(':');
+        if (colon < 0)
+            return mode;
+
+        var prefix = mode.Substring(0, colon);
+        var local = mode.Substring(colon + 1);
+
+        // Search for xmlns:prefix declaration on instruction or ancestors
+        var current = instruction;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
+                {
+                    return $"{{{attr.Value}}}{local}";
+                }
+            }
+            current = current.Parent;
+        }
+        // Prefix not declared — return as-is (will fail to match)
         return mode;
     }
 
@@ -1404,7 +1556,8 @@ public sealed class TransformEngine
             case "apply-templates":
                 {
                     var select = instruction.Attribute("select")?.Value;
-                    var mode = instruction.Attribute("mode")?.Value ?? "";
+                    var modeRaw = instruction.Attribute("mode")?.Value ?? "";
+                    var mode = ExpandModeName(modeRaw, instruction);
                     var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
 
                     // Collect xsl:with-param elements (tunnel and non-tunnel)
@@ -2609,11 +2762,17 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Returns the default on-no-match behavior for the stylesheet version.
-    /// All versions default to ShallowSkip (apply templates to children) for
-    /// compatibility with the XSLT test suite expectations.
+    /// XSLT 3.0 defaults to shallow-skip; XSLT 1.0/2.0 default to text-only-copy
+    /// (traditional built-in rules: apply templates to children, copy text/attributes).
     /// </summary>
     private Stylesheet.OnNoMatch GetDefaultOnNoMatch()
     {
+        var version = _stylesheet.Version;
+        if (!string.IsNullOrEmpty(version) &&
+            (version.StartsWith("1.") || version.StartsWith("2.")))
+        {
+            return Stylesheet.OnNoMatch.TextOnlyCopy;
+        }
         return Stylesheet.OnNoMatch.ShallowSkip;
     }
 
@@ -2634,6 +2793,15 @@ public sealed class TransformEngine
             var modeDef = _stylesheet.GetModeDefinition(mode);
             var behavior = modeDef?.OnNoMatch ?? GetDefaultOnNoMatch();
 
+
+            // XSLT 3.0 §6.6: if on-no-match is fail, built-in rule signals XTDE0555
+            // for all node kinds except document (which delegates to children).
+            if (behavior == Stylesheet.OnNoMatch.Fail && node.NodeKind != XdmNodeKind.Document)
+            {
+                throw new InvalidOperationException(
+                    $"XTDE0555: No matching template found for node '{node.LocalName}' in mode '{mode}'.");
+            }
+
             switch (node.NodeKind)
             {
             case XdmNodeKind.Document:
@@ -2647,7 +2815,10 @@ public sealed class TransformEngine
 
             case XdmNodeKind.Text:
                 // Built-in: copy text value (only if we have an element container)
-                if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail && behavior != Stylesheet.OnNoMatch.DeepSkip)
+                // XSLT 3.0 §6.6: for text/attribute nodes, built-in rule does nothing
+                // when on-no-match is shallow-skip or deep-skip.
+                if (behavior != Stylesheet.OnNoMatch.DeepSkip &&
+                    behavior != Stylesheet.OnNoMatch.ShallowSkip)
                 {
                     _lastAddedWasAtomic = false;
                     AddTextNode(node.StringValue);
@@ -2655,11 +2826,26 @@ public sealed class TransformEngine
                 break;
 
             case XdmNodeKind.Attribute:
-                // Built-in: copy attribute's string-value as a text node (XSLT 2.0 §6.4)
-                if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail && behavior != Stylesheet.OnNoMatch.DeepSkip)
+                // XSLT 3.0 §6.6: built-in rule for attribute nodes
+                if (_currentContainer is XElement &&
+                    behavior != Stylesheet.OnNoMatch.DeepSkip &&
+                    behavior != Stylesheet.OnNoMatch.ShallowSkip)
                 {
-                    _lastAddedWasAtomic = false;
-                    AddTextNode(node.StringValue);
+                    if (behavior == Stylesheet.OnNoMatch.ShallowCopy ||
+                        behavior == Stylesheet.OnNoMatch.DeepCopy)
+                    {
+                        if (_currentContainer is XElement elem)
+                        {
+                            elem.SetAttributeValue(
+                                XName.Get(node.LocalName, node.NamespaceUri),
+                                node.StringValue);
+                        }
+                    }
+                    else if (behavior == Stylesheet.OnNoMatch.TextOnlyCopy)
+                    {
+                        _lastAddedWasAtomic = false;
+                        AddTextNode(node.StringValue);
+                    }
                 }
                 break;
 
@@ -2674,6 +2860,19 @@ public sealed class TransformEngine
                 if (_currentContainer is XElement && behavior == Stylesheet.OnNoMatch.ShallowCopy)
                 {
                     _currentContainer.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
+                }
+                break;
+
+            case XdmNodeKind.Namespace:
+                // XSLT 3.0 §6.6: for namespace nodes, built-in rule copies the namespace
+                // only when on-no-match is shallow-copy; otherwise does nothing.
+                if (_currentContainer is XElement nsElem &&
+                    (behavior == Stylesheet.OnNoMatch.ShallowCopy ||
+                     behavior == Stylesheet.OnNoMatch.DeepCopy))
+                {
+                    nsElem.SetAttributeValue(
+                        XNamespace.Xmlns + node.LocalName,
+                        node.StringValue);
                 }
                 break;
             }
@@ -2691,30 +2890,26 @@ public sealed class TransformEngine
         {
             case Stylesheet.OnNoMatch.ShallowCopy:
                 {
+                    // XSLT 3.0 §6.6 (bug 28774): shallow-copy creates the element shell
+                    // without copying attributes; templates are applied to children AND attributes.
                     var copy = new XElement(
                         XName.Get(node.LocalName, node.NamespaceUri));
-                    foreach (var attr in node.Attributes())
-                    {
-                        copy.SetAttributeValue(
-                            XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
-                            attr.NodeValue!.StringValue);
-                    }
                     _currentContainer.Add(copy);
 
                     var previousContainer = _currentContainer;
                     _currentContainer = copy;
-                    ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
+                    ApplyTemplates(node, mode, select: "@* | node()", sortKeys: null, incomingTunnelParams, callParams: null);
                     _currentContainer = previousContainer;
                 }
                 break;
 
             case Stylesheet.OnNoMatch.ShallowSkip:
-                // Skip element node, only apply-templates to children
-                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
+                // XSLT 3.0 §6.6 (bug 28774): shallow-skip applies templates to children AND attributes.
+                ApplyTemplates(node, mode, select: "@* | node()", sortKeys: null, incomingTunnelParams, callParams: null);
                 break;
 
             case Stylesheet.OnNoMatch.TextOnlyCopy:
-                // Recurse to children without copying the element wrapper
+                // Recurse to children without copying the element wrapper (attributes are not processed).
                 ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
                 break;
 
@@ -2983,15 +3178,25 @@ public sealed class TransformEngine
         // being set when they evaluate XPath expressions (e.g. xsl:value-of/@select).
         _context.WithFocus(focus, 1, 1);
 
-        // Evaluate global parameters first
-        var allParams = _stylesheet.GetAllGlobalParameters();
-        foreach (var (name, paramElem) in allParams)
+        // Collect globals in precedence order: imports first, then includes, then local.
+        // Within each stylesheet module, params and vars are evaluated in document order.
+        var globals = new List<(string Name, XElement Element, bool IsParam)>();
+
+        foreach (var imported in _stylesheet.Imports)
+            CollectGlobalsInDocumentOrder(imported, globals);
+
+        foreach (var included in _stylesheet.Includes)
+            CollectGlobalsInDocumentOrder(included, globals);
+
+        CollectGlobalsInDocumentOrder(_stylesheet, globals);
+
+        foreach (var (name, elem, isParam) in globals)
         {
-            // If already supplied by caller (e.g. fn:transform), keep the supplied value
-            if (_context.TryGetVariable(name, out _))
+            // Skip parameters already supplied by caller (e.g. fn:transform)
+            if (isParam && _context.TryGetVariable(name, out _))
                 continue;
 
-            var select = paramElem.Attribute("select")?.Value;
+            var select = elem.Attribute("select")?.Value;
             XdmValue value;
             if (!string.IsNullOrEmpty(select))
             {
@@ -3000,29 +3205,40 @@ public sealed class TransformEngine
             }
             else
             {
-                value = EvaluateSequenceConstructor(paramElem, focus, wrapInDocumentNode: string.IsNullOrEmpty(paramElem.Attribute("as")?.Value));
+                value = EvaluateSequenceConstructor(elem, focus, wrapInDocumentNode: string.IsNullOrEmpty(elem.Attribute("as")?.Value));
             }
-            value = ConvertVariableValue(value, paramElem.Attribute("as")?.Value);
+            value = ConvertVariableValue(value, elem.Attribute("as")?.Value);
             _context.WithVariable(name, value);
         }
+    }
 
-        // Then evaluate global variables
-        var allVars = _stylesheet.GetAllGlobalVariables();
-        foreach (var (name, varElem) in allVars)
+    private static void CollectGlobalsInDocumentOrder(Stylesheet.Stylesheet stylesheet, List<(string Name, XElement Element, bool IsParam)> globals)
+    {
+        var paramList = stylesheet.GlobalParameters;
+        var varList = stylesheet.GlobalVariables;
+
+        int i = 0, j = 0;
+        while (i < paramList.Count || j < varList.Count)
         {
-            var select = varElem.Attribute("select")?.Value;
-            XdmValue value;
-            if (!string.IsNullOrEmpty(select))
+            XElement? nextParam = i < paramList.Count ? paramList[i] : null;
+            XElement? nextVar = j < varList.Count ? varList[j] : null;
+
+            if (nextParam != null && (nextVar == null || nextParam.NodesBeforeSelf().Count() <= nextVar.NodesBeforeSelf().Count()))
             {
-                var compiled = XPath31Expression.Compile(select);
-                value = compiled.Evaluate(_context);
+                var name = nextParam.Attribute("name")?.Value ?? "";
+                globals.Add((name, nextParam, true));
+                i++;
+            }
+            else if (nextVar != null)
+            {
+                var name = nextVar.Attribute("name")?.Value ?? "";
+                globals.Add((name, nextVar, false));
+                j++;
             }
             else
             {
-                value = EvaluateSequenceConstructor(varElem, focus, wrapInDocumentNode: string.IsNullOrEmpty(varElem.Attribute("as")?.Value));
+                break;
             }
-            value = ConvertVariableValue(value, varElem.Attribute("as")?.Value);
-            _context.WithVariable(name, value);
         }
     }
 
@@ -3078,7 +3294,7 @@ public sealed class TransformEngine
                 }
                 else if (rule.Priority == bestPriority)
                 {
-                    if (best != null && best != rule)
+                    if (best != null && best != rule && best.Element != rule.Element)
                         hasConflict = true;
                     // XSLT last-wins rule: when priority and import precedence are equal,
                     // the template that appears later in the stylesheet wins.
@@ -3498,7 +3714,14 @@ public sealed class TransformEngine
             // Include attributes produced by xsl:attribute / xsl:namespace in the sequence
             foreach (var attr in attributes)
             {
-                results.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                if (attr.IsNamespaceDeclaration)
+                {
+                    results.Add(XdmValue.FromNode(XDocumentNode.CreateNamespaceNode(attr, wrapper)));
+                }
+                else
+                {
+                    results.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                }
             }
             if (results.Count == 1)
                 return results[0];

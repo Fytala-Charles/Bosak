@@ -1,0 +1,87 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "XPath",
+  "scopeName": "source.xpath",
+  "fileTypes": [".xpath"],
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#string" },
+    { "include": "#number" },
+    { "include": "#operator" },
+    { "include": "#function" },
+    { "include": "#variable" },
+    { "include": "#axis" },
+    { "include": "#node-test" },
+    { "include": "#keyword" }
+  ],
+  "repository": {
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.block.xpath",
+          "begin": "\\(:",
+          "end": ":\\)",
+          "patterns": [
+            { "include": "#comment" }
+          ]
+        }
+      ]
+    },
+    "string": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.xpath",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            { "name": "constant.character.escape.xpath", "match": "\\\\." }
+          ]
+        },
+        {
+          "name": "string.quoted.single.xpath",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            { "name": "constant.character.escape.xpath", "match": "\\\\." }
+          ]
+        }
+      ]
+    },
+    "number": {
+      "name": "constant.numeric.xpath",
+      "match": "\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b"
+    },
+    "operator": {
+      "name": "keyword.operator.xpath",
+      "match": "\\b(or|and|div|idiv|mod|union|intersect|except|to|is|eq|ne|lt|le|gt|ge)\\b|!=|<=|>=|<<|>>|[+\-*/|=<>!|]"
+    },
+    "function": {
+      "patterns": [
+        {
+          "name": "support.function.xpath",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9._-]*(?::[a-zA-Z_][a-zA-Z0-9._-]*)?)\\s*(?=\\()"
+        }
+      ]
+    },
+    "variable": {
+      "name": "variable.other.xpath",
+      "match": "\\$[a-zA-Z_][a-zA-Z0-9._-]*(?::[a-zA-Z_][a-zA-Z0-9._-]*)?"
+    },
+    "axis": {
+      "name": "keyword.other.axis.xpath",
+      "match": "\\b(child|descendant|attribute|self|descendant-or-self|following-sibling|following|namespace|parent|ancestor|preceding-sibling|preceding|ancestor-or-self)\\s*::"
+    },
+    "node-test": {
+      "patterns": [
+        {
+          "name": "support.type.node.xpath",
+          "match": "\\b(node|text|comment|processing-instruction|document-node|element|attribute|schema-element|schema-attribute)\\s*(?=\\()"
+        }
+      ]
+    },
+    "keyword": {
+      "name": "keyword.control.xpath",
+      "match": "\\b(for|let|some|every|in|return|if|then|else|satisfies)\\b"
+    }
+  }
+}

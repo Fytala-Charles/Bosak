@@ -12,7 +12,7 @@
 <div align="center">
 
 [![.NET 10](https://img.shields.io/badge/.NET-10-2F4F4F?logo=dotnet&logoColor=F0FFF0)](https://dotnet.microsoft.com/)
-[![License](https://img.shields.io/badge/License-Fytala-556B2F)](LICENSE.txt)
+[![License](https://img.shields.io/badge/License-Dual%20Usage-556B2F)](LICENSE.md)
 [![Status](https://img.shields.io/badge/Status-Alpha-518D8F)]()
 
 </div>
@@ -115,6 +115,8 @@ flowchart TB
 | **Node Providers** | `Bosak.XPath.Providers` | `XDocument`, `XmlDocument`, streaming adapters *(planned)* |
 | **XSLT** | `Bosak.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
 | **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, FLWOR engine *(skeleton)* |
+| **Language Server** | `Bosak.LanguageServer` | LSP server for XPath / XSLT diagnostics & completions |
+| **VS Code Extension** | `vscode-bosak/` | TypeScript client for the language server |
 
 ---
 
@@ -140,6 +142,28 @@ flowchart TB
 | 3 | XQuery 3.1 — FLWOR prolog, query context | 🚧 Skeleton |
 | 4 | Streaming — `XmlReader`-backed `IXdmNode` | 📋 Planned |
 | 5 | Database backends — XML database adapters | 📋 Planned |
+
+---
+
+## VS Code Extension
+
+A Language Server Protocol (LSP) implementation and VS Code extension provide IDE features for XPath and XSLT development.
+
+### Quick Install
+
+```bash
+# 1. Build the language server
+dotnet build src/Bosak.LanguageServer/Bosak.LanguageServer.csproj
+
+# 2. Build the extension
+cd vscode-bosak
+npm install
+npm run compile
+
+# 3. Open in VS Code and press F5 to launch the Extension Development Host
+```
+
+See [`vscode-bosak/README.md`](./vscode-bosak/README.md) for full installation options (VSIX, custom server path, troubleshooting).
 
 ---
 

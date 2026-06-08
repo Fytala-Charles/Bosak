@@ -54,6 +54,13 @@ public sealed class XDocumentNode : IXdmNode
         _namespaceOwner = owner;
     }
 
+    /// <summary>
+    /// Creates an <see cref="IXdmNode"/> representing a namespace node
+    /// from an <see cref="XAttribute"/> namespace declaration.
+    /// </summary>
+    public static XDocumentNode CreateNamespaceNode(XAttribute declaration, XElement owner)
+        => new XDocumentNode(declaration, owner);
+
     internal static void RegisterOrderMap(System.Xml.Linq.XDocument doc, Dictionary<XObject, long> map)
         => OrderMaps.AddOrUpdate(doc, map);
 

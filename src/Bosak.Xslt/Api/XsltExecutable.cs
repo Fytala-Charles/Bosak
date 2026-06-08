@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 31-05-2026     | Added IXsltMessageListener pass-through to TransformEngine                              |
+//                      | Charles Korthout | 0.3   | 08-06-2026     | Added initialMode parameter to Transform/TransformToString                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -40,10 +41,10 @@ public sealed class XsltExecutable
     /// <param name="source">The source document or node to transform.</param>
     /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
     /// <returns>The result of the transformation as an XDM value.</returns>
-    public XdmValue Transform(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null)
+    public XdmValue Transform(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
     {
         var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener);
-        return engine.Transform(source, initialTemplate);
+        return engine.Transform(source, initialTemplate, initialMode);
     }
 
     /// <summary>
@@ -51,10 +52,12 @@ public sealed class XsltExecutable
     /// </summary>
     /// <param name="source">The source document or node to transform.</param>
     /// <param name="context">Optional evaluation context.</param>
+    /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
+    /// <param name="initialMode">Optional name of the initial mode to use.</param>
     /// <returns>The serialized result of the transformation.</returns>
-    public string TransformToString(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null)
+    public string TransformToString(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
     {
-        var result = Transform(source, context, initialTemplate);
+        var result = Transform(source, context, initialTemplate, initialMode);
         return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);
     }
 }

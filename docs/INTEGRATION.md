@@ -4,7 +4,7 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 07 June 2026
+> **Last updated:** 08 June 2026
 > **Bosak baseline:** 873 unit tests passed / 0 failed / 0 skipped
 > **XSLT baseline:** ~3,376 passed / ~2,034 failed / ~9,190 skipped (62.4%)
 
@@ -299,7 +299,53 @@ dotnet test Bosak.sln
 
 ---
 
-## 8. Getting Help / Reporting Issues
+## 8. VS Code Extension
+
+Bosak ships with a VS Code extension (`vscode-bosak/`) that provides syntax highlighting, realtime diagnostics, and auto-completion via a Language Server Protocol (LSP) server.
+
+### 8.1 Building & Running
+
+```bash
+# Build the language server (.NET 10)
+dotnet build src/Bosak.LanguageServer/Bosak.LanguageServer.csproj
+
+# Build the extension client (Node.js 18+)
+cd vscode-bosak
+npm install
+npm run compile
+
+# Launch Extension Development Host
+code . --goto src/extension.ts
+# Then press F5 inside VS Code
+```
+
+### 8.2 Packaging as VSIX
+
+```bash
+cd vscode-bosak
+npx vsce package
+# Produces: vscode-bosak-0.1.0.vsix
+```
+
+Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**
+
+### 8.3 Extension Settings
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `bosak.server.path` | `string \| null` | `null` | Absolute path to `Bosak.LanguageServer` binary. When null, the extension searches the workspace. |
+| `bosak.trace.server` | `string` | `"off"` | LSP traffic tracing: `"off"`, `"messages"`, `"verbose"`. |
+
+### 8.4 Supported File Types
+
+| Language | Extensions | Features |
+|----------|------------|----------|
+| XPath | `.xpath` | Syntax highlight, diagnostics, completions (functions, axes, keywords) |
+| XSLT | `.xsl`, `.xslt` | Syntax highlight, diagnostics, completions (XSLT instructions + XPath) |
+
+---
+
+## 9. Getting Help / Reporting Issues
 
 - Check `docs/ARCHITECTURE.md` in the Bosak repo for the layer overview and execution pipeline.
 - Check `docs/FEATURE_REQUESTS.md` for the feature request registry.

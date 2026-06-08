@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "XSLT",
+  "scopeName": "text.xml.xsl",
+  "fileTypes": [".xsl", ".xslt"],
+  "patterns": [
+    { "include": "text.xml" },
+    { "include": "#xslt-instruction" }
+  ],
+  "repository": {
+    "xslt-instruction": {
+      "patterns": [
+        {
+          "begin": "(<)(xsl:[a-zA-Z-]+)",
+          "beginCaptures": {
+            "1": { "name": "punctuation.definition.tag.begin.xml" },
+            "2": { "name": "entity.name.tag.namespace.xml" }
+          },
+          "end": "(/?>)",
+          "endCaptures": {
+            "1": { "name": "punctuation.definition.tag.end.xml" }
+          },
+          "patterns": [
+            { "include": "#xslt-attribute" },
+            { "include": "text.xml#attribute" }
+          ]
+        }
+      ]
+    },
+    "xslt-attribute": {
+      "patterns": [
+        {
+          "name": "meta.attribute.xpath.xslt",
+          "begin": "(select|test|match|xpath-default-namespace|default-collation|use-when|as|name|mode|priority|visibility|streamability|[(override|context-item|href|type|method|encoding|indent|omit-xml-declaration|standalone|doctype-public|doctype-system|media-type|normalization-form|use-character-maps|output-version|byte-order-mark|escape-uri-attributes|include-content-type|undeclare-prefixes)])\s*=\s*\"",
+          "beginCaptures": {
+            "1": { "name": "entity.other.attribute-name.local.xml" }
+          },
+          "end": "\"",
+          "patterns": [
+            { "include": "source.xpath" }
+          ]
+        }
+      ]
+    }
+  }
+}
