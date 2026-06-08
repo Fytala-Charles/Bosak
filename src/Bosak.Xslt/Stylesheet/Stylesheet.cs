@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 31-05-2026     | Decimal-format merging from imports/includes; descendant namespace collection            |
 //                      | Charles Korthout | 1.0   | 31-05-2026     | Added exclude-result-prefixes parsing and GetAllExcludedResultPrefixes                   |
 //                      | Charles Korthout | 1.1   | 31-05-2026     | Added literal result element stylesheet support (WrapLiteralResultElement)               |
+//                      | Charles Korthout | 1.2   | 07-06-2026     | Fix import+include same file: separate _includedUris, copy _resolvedUris to children     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -41,6 +42,7 @@ public sealed class Stylesheet
     private readonly string? _baseUri;
     private readonly IXsltUriResolver _resolver;
     private readonly HashSet<string> _resolvedUris;
+    private readonly HashSet<string> _includedUris = new();
     private readonly List<TemplateRule> _templateRules = new();
     private readonly Dictionary<string, TemplateRule> _namedTemplates = new();
     private readonly List<Stylesheet> _imports = new();
@@ -53,6 +55,7 @@ public sealed class Stylesheet
     private readonly Dictionary<string, ModeDefinition> _modeDefinitions = new();
     private readonly List<XsltFunctionDefinition> _functionDefinitions = new();
     private readonly List<DecimalFormatDefinition> _decimalFormats = new();
+    private readonly List<AttributeSetDefinition> _attributeSets = new();
     private readonly HashSet<string> _excludedResultPrefixes = new();
     private OutputProperties? _outputProperties;
 
@@ -63,6 +66,10 @@ public sealed class Stylesheet
         _resolver = resolver;
         ImportPrecedence = importPrecedence;
         _resolvedUris = resolvedUris ?? new HashSet<string>();
+
+        // Add this stylesheet's own URI to the resolved set for circular-reference detection
+        if (!string.IsNullOrEmpty(baseUri))
+            _resolvedUris.Add(baseUri);
 
         // Handle literal result element stylesheets before loading
         var root = _document.Root;
@@ -182,7 +189,7 @@ public sealed class Stylesheet
         // Helper to evaluate use-when on top-level elements
         bool UseWhen(XElement elem)
         {
-            var useWhen = elem.Attribute("use-when")?.Value;
+            var useWhen = GetUseWhenAttribute(elem);
             if (string.IsNullOrEmpty(useWhen))
                 return true;
             try
@@ -190,12 +197,62 @@ public sealed class Stylesheet
                 var compiled = XPath31Expression.Compile(useWhen);
                 var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext();
                 Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
+                // Add in-scope namespace declarations so prefixes in use-when resolve correctly
+                foreach (var attr in elem.Attributes().Where(a => a.IsNamespaceDeclaration))
+                {
+                    var prefix = attr.Name.LocalName;
+                    if (prefix == "xmlns") prefix = "";
+                    ctx.WithNamespace(prefix, attr.Value);
+                }
                 var result = compiled.Evaluate(ctx);
                 return result.EffectiveBooleanValue();
             }
             catch
             {
                 return true; // If evaluation fails, include the element (fail-safe)
+            }
+        }
+
+        /// <summary>
+        /// Gets the value of the <c>use-when</c> attribute, checking both the no-namespace
+        /// form (used on XSLT elements) and the <c>xsl:use-when</c> form (used on LREs).
+        /// </summary>
+        static string? GetUseWhenAttribute(XElement elem)
+        {
+            // On XSLT elements, use-when has no namespace
+            var attr = elem.Attribute("use-when");
+            if (attr != null)
+                return attr.Value;
+            // On literal result elements, use-when must be in the XSLT namespace
+            attr = elem.Attribute(XName.Get("use-when", XslNamespace));
+            if (attr != null)
+                return attr.Value;
+            return null;
+        }
+
+        /// <summary>
+        /// Recursively strips elements whose <c>use-when</c> attribute evaluates to <c>false()</c>.
+        /// This is applied to the entire stylesheet tree, including nested elements inside
+        /// template bodies, so that <c>use-when</c> on instructions and LREs is respected.
+        /// </summary>
+        void StripUseWhenElements(XElement parent)
+        {
+            // Process children first (depth-first) so we strip descendants before
+            // deciding whether to strip the parent. Then process the parent's children
+            // in a separate pass to avoid modifying a collection while iterating.
+            var children = parent.Elements().ToList();
+            foreach (var child in children)
+            {
+                StripUseWhenElements(child);
+            }
+
+            // Now remove any direct children whose use-when is false
+            foreach (var child in children)
+            {
+                if (!UseWhen(child))
+                {
+                    child.Remove();
+                }
             }
         }
 
@@ -216,6 +273,10 @@ public sealed class Stylesheet
             if (!string.IsNullOrEmpty(href))
                 ResolveInclude(href);
         }
+
+        // Apply use-when stripping to the entire tree (nested elements inside templates,
+        // literal result elements, etc.) after imports/includes are resolved.
+        StripUseWhenElements(root);
 
         // Parse top-level xsl:param declarations
         foreach (var param in root.Elements(XName.Get("param", XslNamespace)))
@@ -284,13 +345,18 @@ public sealed class Stylesheet
         foreach (var template in root.Elements(XName.Get("template", XslNamespace)))
         {
             if (!UseWhen(template)) continue;
-            var rule = TemplateRule.FromElement(template, this);
-            if (rule != null)
+            var rules = TemplateRule.FromElement(template, this);
+            if (rules.Count > 0)
             {
-                if (!string.IsNullOrEmpty(rule.Match))
-                    _templateRules.Add(rule);
-                if (!string.IsNullOrEmpty(rule.Name))
-                    _namedTemplates[rule.Name] = rule;
+                foreach (var rule in rules)
+                {
+                    if (!string.IsNullOrEmpty(rule.Match))
+                        _templateRules.Add(rule);
+                }
+                // Named templates: register only the first rule (all share the same body)
+                var firstNamed = rules.FirstOrDefault(r => !string.IsNullOrEmpty(r.Name));
+                if (firstNamed != null && firstNamed.Name != null)
+                    _namedTemplates[firstNamed.Name] = firstNamed;
             }
         }
 
@@ -310,6 +376,15 @@ public sealed class Stylesheet
             var def = DecimalFormatDefinition.FromElement(df, this);
             if (def != null)
                 _decimalFormats.Add(def);
+        }
+
+        // Parse xsl:attribute-set declarations
+        foreach (var attrSet in root.Elements(XName.Get("attribute-set", XslNamespace)))
+        {
+            if (!UseWhen(attrSet)) continue;
+            var def = AttributeSetDefinition.FromElement(attrSet, this);
+            if (def != null)
+                _attributeSets.Add(def);
         }
     }
 
@@ -347,16 +422,15 @@ public sealed class Stylesheet
         if (_resolvedUris.Contains(resolvedUri))
             throw new InvalidOperationException($"Circular stylesheet reference detected: {resolvedUri}");
 
-        _resolvedUris.Add(resolvedUri);
+        var childResolvedUris = new HashSet<string>(_resolvedUris) { resolvedUri };
 
         try
         {
             var doc = _resolver.Resolve(href, _baseUri);
-            _imports.Add(new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, _resolvedUris));
+            _imports.Add(new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris));
         }
         catch (FileNotFoundException ex)
         {
-            _resolvedUris.Remove(resolvedUri);
             throw new InvalidOperationException($"XTSE0165: Failed to resolve xsl:import href '{href}'.", ex);
         }
     }
@@ -367,19 +441,25 @@ public sealed class Stylesheet
 
         // XSLT allows the same stylesheet to be included multiple times;
         // subsequent includes are silently ignored.
-        if (_resolvedUris.Contains(resolvedUri))
+        if (_includedUris.Contains(resolvedUri))
             return;
 
-        _resolvedUris.Add(resolvedUri);
+        // Circular reference detection: if this URI is already in the ancestor chain,
+        // including it would create a cycle.
+        if (_resolvedUris.Contains(resolvedUri))
+            throw new InvalidOperationException($"Circular stylesheet reference detected: {resolvedUri}");
+
+        _includedUris.Add(resolvedUri);
+        var childResolvedUris = new HashSet<string>(_resolvedUris) { resolvedUri };
 
         try
         {
             var doc = _resolver.Resolve(href, _baseUri);
-            _includes.Add(new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, _resolvedUris));
+            _includes.Add(new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris));
         }
         catch (FileNotFoundException ex)
         {
-            _resolvedUris.Remove(resolvedUri);
+            _includedUris.Remove(resolvedUri);
             throw new InvalidOperationException($"XTSE0165: Failed to resolve xsl:include href '{href}'.", ex);
         }
     }
@@ -721,6 +801,48 @@ public sealed class Stylesheet
                 case "exponent-separator": existing.ExponentSeparator = def.Format.ExponentSeparator; break;
             }
         }
+    }
+
+    /// <summary>
+    /// Collects all attribute-set definitions from this stylesheet, its includes, and its imports.
+    /// Attribute sets accumulate (merge) across modules: imported first, then included, then local.
+    /// </summary>
+    public Dictionary<(string LocalName, string NamespaceUri), List<AttributeSetDefinition>> GetAllAttributeSets()
+    {
+        var result = new Dictionary<(string, string), List<AttributeSetDefinition>>();
+
+        // Imported first (lowest precedence)
+        foreach (var imported in _imports)
+        {
+            foreach (var (key, list) in imported.GetAllAttributeSets())
+            {
+                if (!result.TryGetValue(key, out var existing))
+                    result[key] = existing = new List<AttributeSetDefinition>();
+                existing.AddRange(list);
+            }
+        }
+
+        // Included next
+        foreach (var included in _includes)
+        {
+            foreach (var (key, list) in included.GetAllAttributeSets())
+            {
+                if (!result.TryGetValue(key, out var existing))
+                    result[key] = existing = new List<AttributeSetDefinition>();
+                existing.AddRange(list);
+            }
+        }
+
+        // Local last (highest precedence)
+        foreach (var def in _attributeSets)
+        {
+            var key = (def.LocalName, def.NamespaceUri);
+            if (!result.TryGetValue(key, out var existing))
+                result[key] = existing = new List<AttributeSetDefinition>();
+            existing.Add(def);
+        }
+
+        return result;
     }
 
     /// <summary>The XSLT namespace URI.</summary>

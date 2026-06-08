@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 0.9   | 05-06-2026     | stepContextNode set from step-before-last, not first step; fixes match-125             |
 //                      | Charles Korthout | 1.1   | 05-06-2026     | Added CompileAtomicMatch for .[expr] predicate patterns; fixes match-127/128/130       |
 //                      | Charles Korthout | 1.2   | 07-06-2026     | CompileAtomicMatch: runtime numeric predicate check, whitespace/dot tolerance; +11 tests|
+//                      | Charles Korthout | 1.3   | 07-06-2026     | attribute(*, type) comma-split in CompileNodeTest; fixes next-match-011                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1140,15 +1141,16 @@ public sealed class PatternCompiler
         if (name.StartsWith("element("))
         {
             var arg = ExtractFunctionArg(name);
-            if (string.IsNullOrEmpty(arg) || arg == "*")
+            // element(name) or element(QName); may include a type argument: element(name, type)
+            var nameArg = string.IsNullOrEmpty(arg) ? "" : arg.Split(',')[0].Trim();
+            if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return (item, ctx) =>
                 {
                     var node = AsNode(item);
                     if (node == null) return false;
                     return node.NodeKind == XdmNodeKind.Element;
                 };
-            // element(name) or element(QName)
-            var (ns, local) = ParseQName(arg);
+            var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
                 return (item, ctx) =>
                 {
@@ -1177,14 +1179,16 @@ public sealed class PatternCompiler
         if (name.StartsWith("attribute("))
         {
             var arg = ExtractFunctionArg(name);
-            if (string.IsNullOrEmpty(arg) || arg == "*")
+            // attribute(name) or attribute(QName); may include a type argument: attribute(name, type)
+            var nameArg = string.IsNullOrEmpty(arg) ? "" : arg.Split(',')[0].Trim();
+            if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return (item, ctx) =>
                 {
                     var node = AsNode(item);
                     if (node == null) return false;
                     return node.NodeKind == XdmNodeKind.Attribute;
                 };
-            var (ns, local) = ParseQName(arg);
+            var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
                 return (item, ctx) =>
                 {
@@ -1427,9 +1431,10 @@ public sealed class PatternCompiler
         if (nodeTest.StartsWith("element("))
         {
             var arg = ExtractFunctionArg(nodeTest);
-            if (string.IsNullOrEmpty(arg) || arg == "*")
+            var nameArg = string.IsNullOrEmpty(arg) ? "" : arg.Split(',')[0].Trim();
+            if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return node => node.NodeKind == XdmNodeKind.Element;
-            var (ns, local) = ParseQName(arg);
+            var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
                 return node => node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
             return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local;

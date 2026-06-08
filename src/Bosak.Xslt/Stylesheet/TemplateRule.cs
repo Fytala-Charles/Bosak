@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added multi-mode support (Modes array, #all, #current, #default)                       |
 //                      | Charles Korthout | 0.4   | 05-06-2026     | Strip outer parens in priority computation; added FindMatchingParen helper             |
 //                      | Charles Korthout | 0.5   | 07-06-2026     | StripXPathComments in ComputeDefaultPriority; fixes comment-stripped PredicatePattern   |
+//                      | Charles Korthout | 0.6   | 07-06-2026     | ValidateUnionPattern before split; restores XTSE0340 for union patterns                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -71,9 +72,11 @@ public sealed class TemplateRule
     }
 
     /// <summary>
-    /// Creates a <see cref="TemplateRule"/> from an xsl:template element.
+    /// Creates one or more <see cref="TemplateRule"/> instances from an xsl:template element.
+    /// Union patterns in the match attribute (e.g. <c>match="a|b"</c>) are split into
+    /// separate rules so that <c>xsl:next-match</c> can continue to the other branches.
     /// </summary>
-    public static TemplateRule? FromElement(XElement element, Stylesheet stylesheet)
+    public static IReadOnlyList<TemplateRule> FromElement(XElement element, Stylesheet stylesheet)
     {
         var match = element.Attribute("match")?.Value;
         var name = element.Attribute("name")?.Value;
@@ -81,14 +84,54 @@ public sealed class TemplateRule
         var modes = ParseModes(modeAttr);
 
         if (string.IsNullOrEmpty(match) && string.IsNullOrEmpty(name))
-            return null; // Invalid template (no match and no name)
+            return Array.Empty<TemplateRule>(); // Invalid template
 
         var priorityAttr = element.Attribute("priority");
-        double priority = priorityAttr != null && double.TryParse(priorityAttr.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var p)
-            ? p
-            : ComputeDefaultPriority(match);
+        double explicitPriority = 0.0;
+        bool hasExplicitPriority = priorityAttr != null && double.TryParse(priorityAttr.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out explicitPriority);
 
-        return new TemplateRule(element, match, name, modes, priority, stylesheet);
+        if (string.IsNullOrEmpty(match))
+        {
+            // Named template only
+            return new[] { new TemplateRule(element, match, name, modes, 0.5, stylesheet) };
+        }
+
+        // When an explicit priority is given, the entire union is a single template rule.
+        // Splitting only happens when priorities are computed per-branch, so that
+        // xsl:next-match can continue to other branches with different priorities.
+        if (hasExplicitPriority)
+        {
+            return new[] { new TemplateRule(element, match, name, modes, explicitPriority, stylesheet) };
+        }
+
+        var trimmed = StripXPathComments(match).Trim();
+
+        // Strip outer parentheses: (pattern) is semantically equivalent to pattern
+        if (trimmed.StartsWith('('))
+        {
+            int close = FindMatchingParen(trimmed, 0);
+            if (close == trimmed.Length - 1)
+                trimmed = trimmed[1..close].Trim();
+        }
+
+        // Validate union pattern constraints before splitting (XTSE0340)
+        ValidateUnionPattern(trimmed);
+
+        var branches = SplitUnionBranches(trimmed);
+        if (branches.Length <= 1)
+        {
+            double priority = ComputeDefaultPriority(match);
+            return new[] { new TemplateRule(element, match, name, modes, priority, stylesheet) };
+        }
+
+        // Create a separate TemplateRule for each branch of the union
+        var rules = new List<TemplateRule>(branches.Length);
+        foreach (var branch in branches)
+        {
+            double priority = ComputeSinglePatternPriority(branch);
+            rules.Add(new TemplateRule(element, branch, name, modes, priority, stylesheet));
+        }
+        return rules;
     }
 
     private static IReadOnlyList<string> ParseModes(string? modeAttr)
@@ -295,6 +338,54 @@ public sealed class TemplateRule
         if (trimmed == "*" || IsKindTest(trimmed) || trimmed == ".")
             return -0.5;
 
+        // ElementTest and AttributeTest with arguments
+        if (trimmed.StartsWith("element(") && trimmed.EndsWith(")"))
+        {
+            var arg = ExtractFunctionArg(trimmed);
+            if (string.IsNullOrEmpty(arg) || arg == "*")
+                return -0.5;                    // element() or element(*)
+            if (arg.Contains(','))
+            {
+                var parts = arg.Split(',').Select(s => s.Trim()).ToArray();
+                if (parts.Length == 2)
+                    return parts[0] == "*" ? 0.0 : 0.25; // element(*,T) or element(E,T)
+            }
+            return 0.0;                         // element(E)
+        }
+
+        if (trimmed.StartsWith("attribute(") && trimmed.EndsWith(")"))
+        {
+            var arg = ExtractFunctionArg(trimmed);
+            if (string.IsNullOrEmpty(arg) || arg == "*")
+                return -0.5;                    // attribute() or attribute(*)
+            if (arg.Contains(','))
+            {
+                var parts = arg.Split(',').Select(s => s.Trim()).ToArray();
+                if (parts.Length == 2)
+                    return parts[0] == "*" ? 0.0 : 0.25; // attribute(*,T) or attribute(A,T)
+            }
+            return 0.0;                         // attribute(A)
+        }
+
+        // processing-instruction("name") or processing-instruction(name) → 0
+        if (trimmed.StartsWith("processing-instruction(") && trimmed.EndsWith(")"))
+        {
+            var arg = ExtractFunctionArg(trimmed);
+            return string.IsNullOrEmpty(arg) ? -0.5 : 0.0;
+        }
+
+        // document-node() → -0.5; document-node(element(E)) → priority of inner test
+        if (trimmed.StartsWith("document-node(") && trimmed.EndsWith(")"))
+        {
+            var arg = ExtractFunctionArg(trimmed);
+            return string.IsNullOrEmpty(arg) ? -0.5 : ComputeSinglePatternPriority(arg);
+        }
+
+        // schema-element and schema-attribute have priority 0.25
+        if ((trimmed.StartsWith("schema-element(") || trimmed.StartsWith("schema-attribute(")) &&
+            trimmed.EndsWith(")"))
+            return 0.25;
+
         // Namespace wildcards without axis
         if (trimmed.EndsWith(":*") || trimmed.StartsWith("*:"))
             return -0.25;
@@ -332,6 +423,54 @@ public sealed class TemplateRule
             or "document-node()" => true,
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Validates union pattern constraints (XTSE0340) before splitting.
+    /// </summary>
+    private static void ValidateUnionPattern(string pattern)
+    {
+        var branches = SplitUnionBranches(pattern);
+        if (branches.Length <= 1) return;
+
+        bool hasNodePattern = false;
+        bool hasTypePattern = false;
+        bool hasPredicatePattern = false;
+        foreach (var b in branches)
+        {
+            var s = b.Trim();
+            if (LooksLikeTypePattern(s))
+                hasTypePattern = true;
+            else
+                hasNodePattern = true;
+            if (s.StartsWith(".["))
+                hasPredicatePattern = true;
+        }
+        if (hasNodePattern && hasTypePattern)
+        {
+            throw new InvalidOperationException("XTSE0340: Union of node pattern and type pattern is not allowed.");
+        }
+        if (hasPredicatePattern)
+        {
+            throw new InvalidOperationException("XTSE0340: Predicate pattern is not allowed in a union.");
+        }
+    }
+
+    private static bool LooksLikeTypePattern(string branch)
+    {
+        var s = branch.Trim();
+        if (s.StartsWith("(.[") || (s.StartsWith(".[") && s.Contains("instance of")))
+            return true;
+        if (s.StartsWith("element(") || s.StartsWith("attribute(") ||
+            s.StartsWith("text(") || s.StartsWith("comment(") ||
+            s.StartsWith("processing-instruction(") || s.StartsWith("document-node(") ||
+            s.StartsWith("node("))
+        {
+            return false;
+        }
+        if (s.Contains("instance of"))
+            return true;
+        return false;
     }
 
     private static string[] SplitUnionBranches(string pattern)
@@ -410,6 +549,18 @@ public sealed class TemplateRule
             i++;
         }
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Extracts the argument string from a function-like call, e.g. "name, type" from "element(name, type)".
+    /// </summary>
+    private static string ExtractFunctionArg(string s)
+    {
+        int open = s.IndexOf('(');
+        if (open < 0) return "";
+        int close = FindMatchingParen(s, open);
+        if (close < 0) return "";
+        return s[(open + 1)..close].Trim();
     }
 
     /// <summary>

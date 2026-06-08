@@ -260,7 +260,7 @@ public class StylesheetTests
     }
 
     [Fact]
-    public void Imported_Template_With_Higher_Priority_Wins()
+    public void Imported_Template_Has_Lower_Import_Precedence()
     {
         var resolver = new InMemoryResolver();
         resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
@@ -275,9 +275,9 @@ public class StylesheetTests
         var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
         var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
-        // Default priority of "root" (QName) is 0, which is higher than -1
-        Assert.Contains("<base>high-priority-default</base>", result);
-        Assert.DoesNotContain("<main>low-priority</main>", result);
+        // Main stylesheet has higher import precedence, so it wins regardless of priority
+        Assert.Contains("<main>low-priority</main>", result);
+        Assert.DoesNotContain("<base>high-priority-default</base>", result);
     }
 
     [Fact]

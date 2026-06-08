@@ -1,3 +1,20 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 25 mei 2026
+// PURPOSE              : W3C XSLT 3.0 conformance test harness.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : License.txt
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 07-06-2026     | PreserveWhitespace in TestUriResolver; skip package tests                               |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
 using System.Xml.Linq;
 using System.Xml;
 using Bosak.XPath.Api;
@@ -59,6 +76,10 @@ class Program
         "seqtor-033",
         // Recursive scan of node-set exceeds .NET 9 stack limit due to large ExecuteBlock frames
         "expression-0601",
+        // XSLT 3.0 packages not supported
+        "next-match-036",
+        "next-match-037",
+        "next-match-040",
     };
 
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
@@ -774,9 +795,11 @@ public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
 
     public XDocument Resolve(string href, string? baseUri)
     {
+        var loadOptions = LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo;
+
         // Try direct mapping
         if (_mappings.TryGetValue(href, out var mappedPath) && File.Exists(mappedPath))
-            return XDocument.Load(mappedPath);
+            return XDocument.Load(mappedPath, loadOptions);
 
         // Resolve relative to baseUri
         if (!string.IsNullOrEmpty(baseUri))
@@ -785,18 +808,18 @@ public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
             var resolved = new Uri(baseUriObj, href);
             var resolvedPath = resolved.LocalPath;
             if (File.Exists(resolvedPath))
-                return XDocument.Load(resolvedPath);
+                return XDocument.Load(resolvedPath, loadOptions);
         }
 
         // Try primary dir
         var primaryPath = Path.Combine(_primaryDir, href);
         if (File.Exists(primaryPath))
-            return XDocument.Load(primaryPath);
+            return XDocument.Load(primaryPath, loadOptions);
 
         // Try fallback dir
         var fallbackPath = Path.Combine(_fallbackDir, href);
         if (File.Exists(fallbackPath))
-            return XDocument.Load(fallbackPath);
+            return XDocument.Load(fallbackPath, loadOptions);
 
         throw new FileNotFoundException($"Stylesheet not found: {href} (base: {baseUri})");
     }

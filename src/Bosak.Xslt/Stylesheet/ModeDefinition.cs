@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 05-06-2026     | Added OnMultipleMatch enum and parsing for xsl:mode on-multiple-match                  |
+//                      | Charles Korthout | 0.3   | 07-06-2026     | Added DeepSkip to OnNoMatch enum and parsing; fixes next-match-034                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -32,6 +33,8 @@ public enum OnNoMatch
     TextOnlyCopy,
     /// <summary>Deep-copy the entire subtree.</summary>
     DeepCopy,
+    /// <summary>Skip the element node and all descendants.</summary>
+    DeepSkip,
     /// <summary>Throw an error when no template matches.</summary>
     Fail
 }
@@ -79,6 +82,7 @@ public sealed class ModeDefinition
             "shallow-skip" => OnNoMatch.ShallowSkip,
             "text-only-copy" => OnNoMatch.TextOnlyCopy,
             "deep-copy" => OnNoMatch.DeepCopy,
+            "deep-skip" => OnNoMatch.DeepSkip,
             "fail" => OnNoMatch.Fail,
             _ => OnNoMatch.ShallowCopy
         };

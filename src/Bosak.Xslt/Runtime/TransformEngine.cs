@@ -63,6 +63,8 @@
 //                      | Charles Korthout | 4.6   | 05-06-2026     | XTDE0540 conflict detection when on-multiple-match="fail"; fixes match-082b/c          |
 //                      | Charles Korthout | 4.7   | 07-06-2026     | ApplyTemplates/next-match support atomic values; built-in rule outputs atomics; +11 tests|
 //                      | Charles Korthout | 4.8   | 07-06-2026     | Added xsl:apply-imports with import-precedence filtering and atomic context items       |
+//                      | Charles Korthout | 4.9   | 07-06-2026     | next-match leaks excluded rules; apply-imports param passing; precedence stack         |
+//                      | Charles Korthout | 5.0   | 07-06-2026     | DeepSkip mode; expand-text truthy values; CopyToResult exclusion cleanup               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -107,6 +109,10 @@ public sealed class TransformEngine
 
     // Tunnel parameter stack: each frame is the tunnel params visible at that call depth
     private readonly Stack<Dictionary<string, XdmValue>> _tunnelParamStack = new();
+
+    // Apply-imports precedence stack: tracks the import precedence threshold for xsl:next-match
+    // when called inside a template invoked by xsl:apply-imports (XSLT 3.0 §6.5)
+    private readonly Stack<int> _applyImportsPrecedenceStack = new();
 
     // Current template rule for xsl:next-match
     private Stylesheet.TemplateRule? _currentTemplateRule;
@@ -229,18 +235,12 @@ public sealed class TransformEngine
                 else
                 {
                     // XSLT 2.0 §5.4: when there is no template matching "/",
-                    // find any template whose match pattern matches the root node.
-                    var bestTemplate = FindBestTemplate(source, "");
-                    if (bestTemplate != null)
-                    {
-                        ExecuteTemplate(bestTemplate, source);
-                    }
-                    else
-                    {
-                        // Built-in template for document nodes applies templates
-                        // to the children of the root node.
-                        ApplyTemplates(source, mode: "", select: null);
-                    }
+                    // the built-in template rule for the document node is invoked.
+                    // This built-in rule applies templates to the children of the
+                    // document node. We must NOT search for other patterns (like
+                    // node() or document-node()) that might match the document node
+                    // directly, as that causes incorrect next-match chaining.
+                    ApplyTemplates(source, mode: "", select: null);
                 }
             }
         }
@@ -946,8 +946,23 @@ public sealed class TransformEngine
         var savedCurrent = _context.CurrentItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
-        _context.WithFocus(contextItem, position, last);
-        _context.WithCurrentItem(contextItem);
+
+        // Handle xsl:context-item use="absent" in named templates
+        var contextItemAbsent = rule.Element.Elements()
+            .Any(e => e.Name.LocalName == "context-item"
+                   && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                   && e.Attribute("use")?.Value == "absent");
+
+        if (contextItemAbsent)
+        {
+            _context.WithFocus(XdmValue.Undefined, position, last);
+            _context.WithCurrentItem(XdmValue.Undefined);
+        }
+        else
+        {
+            _context.WithFocus(contextItem, position, last);
+            _context.WithCurrentItem(contextItem);
+        }
 
         // Snapshot current variables for lexical scoping
         var snapshot = _context.SnapshotVariables();
@@ -1100,6 +1115,10 @@ public sealed class TransformEngine
                     var prev = _currentContainer;
                     _currentContainer = elem;
                     _lastAddedWasAtomic = false;
+
+                    // Apply attribute sets; xsl:attribute children in the element body override them.
+                    ApplyAttributeSets(instruction, elem);
+
                     foreach (var childNode in instruction.Nodes())
                     {
                         switch (childNode)
@@ -1292,6 +1311,17 @@ public sealed class TransformEngine
                             nodeToCopy = result.NodeValue;
                     }
 
+                    // XSLT 3.0: xsl:copy with select="..." processes the sequence as if by xsl:for-each,
+                    // which clears the current template rule and next-match exclusions.
+                    var hasSelect = !string.IsNullOrEmpty(copySelect);
+                    var savedCopyTemplateRule = _currentTemplateRule;
+                    var savedCopyExcluded = _nextMatchExcluded;
+                    if (hasSelect)
+                    {
+                        _currentTemplateRule = null;
+                        _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
+                    }
+
                     switch (nodeToCopy.NodeKind)
                     {
                         case XdmNodeKind.Element:
@@ -1362,6 +1392,12 @@ public sealed class TransformEngine
                                 }
                             }
                             break;
+                    }
+
+                    if (hasSelect)
+                    {
+                        _currentTemplateRule = savedCopyTemplateRule;
+                        _nextMatchExcluded = savedCopyExcluded;
                     }
                     break;
                 }
@@ -1854,7 +1890,7 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(select);
                         var result = compiled.Evaluate(_context);
-                        CopyToResult(result);
+                        CopyToResult(result, separateAtomicsWithSpace: true);
                     }
                     else
                     {
@@ -1892,19 +1928,24 @@ public sealed class TransformEngine
 
             case "next-match":
                 {
-                    if (_currentTemplateRule == null)
+                    if (_currentTemplateRule == null || _context.ContextItem.IsUndefined)
                     {
                         // xsl:next-match is only valid within a template invoked by apply-templates or next-match
-                        // If called from a named template, for-each, or other context where the current
-                        // template rule is absent, raise XTDE0560.
+                        // If called from a named template with context-item use="absent", for-each, or other
+                        // context where the current template rule or context item is absent, raise XTDE0560.
                         throw new InvalidOperationException("XTDE0560: xsl:next-match evaluated when the current template rule is absent.");
                     }
 
                     var nextMatchMode = _modeStack.Count > 0 ? _modeStack.Peek() : "";
+                    // If inside a template invoked by xsl:apply-imports, restrict next-match
+                    // to templates with higher import precedence than the apply-imports caller.
+                    int? nextMatchMinPrec = _applyImportsPrecedenceStack.Count > 0
+                        ? _applyImportsPrecedenceStack.Peek()
+                        : null;
                     _nextMatchExcluded.Add(_currentTemplateRule);
                     try
                     {
-                        var nextRule = FindBestTemplate(contextItem, nextMatchMode, _nextMatchExcluded);
+                        var nextRule = FindBestTemplate(contextItem, nextMatchMode, _nextMatchExcluded, minImportPrecedence: nextMatchMinPrec);
 
                         // Collect xsl:with-param elements (tunnel and non-tunnel)
                         var nextMatchParams = new Dictionary<string, XdmValue>();
@@ -1945,7 +1986,15 @@ public sealed class TransformEngine
 
                         if (nextRule != null)
                         {
-                            ExecuteTemplate(nextRule, contextItem, callParams: nextMatchParams, incomingTunnelParams: mergedTunnelParams);
+                            _nextMatchExcluded.Add(nextRule);
+                            try
+                            {
+                                ExecuteTemplate(nextRule, contextItem, callParams: nextMatchParams, incomingTunnelParams: mergedTunnelParams);
+                            }
+                            finally
+                            {
+                                _nextMatchExcluded.Remove(nextRule);
+                            }
                         }
                         else if (node != null)
                         {
@@ -1981,30 +2030,70 @@ public sealed class TransformEngine
                     // (i.e., deeper in the import chain). Main stylesheet = 0, direct imports = 1, etc.
                     var importedRule = FindBestTemplate(contextItem, applyImportsMode, minImportPrecedence: _currentTemplateRule.ImportPrecedence);
 
-                    // Pass through current tunnel parameters
+                    // Collect xsl:with-param elements (tunnel and non-tunnel)
+                    var applyImportsParams = new Dictionary<string, XdmValue>();
+                    var applyImportsTunnelParams = new Dictionary<string, XdmValue>();
+                    foreach (var wp in instruction.Elements(XName.Get("with-param", Stylesheet.Stylesheet.XslNamespace)))
+                    {
+                        var wpName = wp.Attribute("name")?.Value;
+                        var wpSelect = wp.Attribute("select")?.Value;
+                        var wpTunnel = wp.Attribute("tunnel")?.Value == "yes";
+                        if (!string.IsNullOrEmpty(wpName))
+                        {
+                            XdmValue wpValue;
+                            if (!string.IsNullOrEmpty(wpSelect))
+                            {
+                                var compiled = XPath31Expression.Compile(wpSelect);
+                                wpValue = compiled.Evaluate(_context);
+                            }
+                            else
+                            {
+                                wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
+                            }
+                            if (wpTunnel)
+                                applyImportsTunnelParams[wpName] = wpValue;
+                            else
+                                applyImportsParams[wpName] = wpValue;
+                        }
+                    }
+
+                    // Pass through current tunnel parameters, overridden by newly supplied ones
                     var currentTunnelParams = new Dictionary<string, XdmValue>();
                     if (_tunnelParamStack.Count > 0)
                     {
                         foreach (var (k, v) in _tunnelParamStack.Peek())
                             currentTunnelParams[k] = v;
                     }
+                    foreach (var (k, v) in applyImportsTunnelParams)
+                        currentTunnelParams[k] = v;
 
-                    if (importedRule != null)
+                    // Push the current template rule's precedence so that xsl:next-match
+                    // inside the imported template is restricted to higher import precedence
+                    // rules (XSLT 3.0 §6.5).
+                    _applyImportsPrecedenceStack.Push(_currentTemplateRule.ImportPrecedence);
+                    try
                     {
-                        ExecuteTemplate(importedRule, contextItem, callParams: null, incomingTunnelParams: currentTunnelParams);
-                    }
-                    else if (node != null)
-                    {
-                        ApplyBuiltInRules(node, applyImportsMode, currentTunnelParams);
-                    }
-                    else if (!contextItem.IsUndefined)
-                    {
-                        // Built-in rule for atomic values: output string value
-                        var text = contextItem.ToString();
-                        if (!string.IsNullOrEmpty(text) && _currentContainer is XElement)
+                        if (importedRule != null)
                         {
-                            _currentContainer.Add(new XText(text));
+                            ExecuteTemplate(importedRule, contextItem, callParams: applyImportsParams, incomingTunnelParams: currentTunnelParams);
                         }
+                        else if (node != null)
+                        {
+                            ApplyBuiltInRules(node, applyImportsMode, currentTunnelParams);
+                        }
+                        else if (!contextItem.IsUndefined)
+                        {
+                            // Built-in rule for atomic values: output string value
+                            var text = contextItem.ToString();
+                            if (!string.IsNullOrEmpty(text) && _currentContainer is XElement)
+                            {
+                                _currentContainer.Add(new XText(text));
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        _applyImportsPrecedenceStack.Pop();
                     }
                     break;
                 }
@@ -2097,6 +2186,77 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Applies the named attribute sets to the target element.
+    /// Attribute sets accumulate across imports/includes (merge semantics).
+    /// </summary>
+    private void ApplyAttributeSets(XElement source, XElement target, HashSet<(string LocalName, string NamespaceUri)>? visited = null)
+    {
+        // Check both xsl:use-attribute-sets (on literal elements) and use-attribute-sets (on xsl:element / xsl:attribute-set)
+        var useAttrSetsRaw = source.Attribute(XNamespace.Get(Stylesheet.Stylesheet.XslNamespace) + "use-attribute-sets")?.Value
+            ?? source.Attribute("use-attribute-sets")?.Value;
+        if (string.IsNullOrWhiteSpace(useAttrSetsRaw))
+            return;
+
+        visited ??= new HashSet<(string, string)>();
+        var allSets = _stylesheet.GetAllAttributeSets();
+        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+
+        foreach (var name in useAttrSetsRaw.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var trimmed = name.Trim();
+            if (string.IsNullOrEmpty(trimmed)) continue;
+
+            // Resolve QName
+            string localName;
+            string nsUri;
+            int colon = trimmed.IndexOf(':');
+            if (colon >= 0)
+            {
+                var prefix = trimmed.Substring(0, colon);
+                localName = trimmed.Substring(colon + 1);
+                nsUri = source.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+            }
+            else
+            {
+                localName = trimmed;
+                nsUri = "";
+            }
+
+            var key = (localName, nsUri);
+            if (!allSets.TryGetValue(key, out var defs))
+                continue;
+
+            if (!visited.Add(key))
+                continue; // Cycle detected — skip to avoid infinite recursion
+
+            var prevContainer = _currentContainer;
+            _currentContainer = target;
+            try
+            {
+                foreach (var def in defs)
+                {
+                    // Recursively apply referenced attribute sets
+                    if (!string.IsNullOrWhiteSpace(def.UseAttributeSets))
+                    {
+                        ApplyAttributeSets(def.Element, target, visited);
+                    }
+
+                    // Execute this definition's xsl:attribute children
+                    foreach (var attrChild in def.Element.Elements(XName.Get("attribute", xslNs)))
+                    {
+                        ExecuteXsltInstruction(attrChild, _context.ContextItem);
+                    }
+                }
+            }
+            finally
+            {
+                _currentContainer = prevContainer;
+                visited.Remove(key);
+            }
+        }
+    }
+
+    /// <summary>
     /// Copies a literal result element to the output.
     /// </summary>
     private void CopyLiteralElement(XElement source)
@@ -2118,6 +2278,9 @@ public sealed class TransformEngine
                 copy.SetAttributeValue(XNamespace.Xmlns + prefix, source.Name.NamespaceName);
             }
         }
+
+        // Apply attribute sets first; literal attributes override them.
+        ApplyAttributeSets(source, copy);
 
         foreach (var attr in source.Attributes())
         {
@@ -2284,7 +2447,9 @@ public sealed class TransformEngine
     /// <summary>
     /// Copies an XDM value (node or sequence) into the result tree.
     /// </summary>
-    private void CopyToResult(XdmValue value)
+    /// <param name="value">The value to copy.</param>
+    /// <param name="separateAtomicsWithSpace">If true, consecutive atomic values are separated by a space (complex content construction). If false, they are concatenated directly (xsl:copy-of behavior).</param>
+    private void CopyToResult(XdmValue value, bool separateAtomicsWithSpace = true)
     {
         if (value.IsUndefined)
             return;
@@ -2299,7 +2464,7 @@ public sealed class TransformEngine
             // XSLT 3.0 §5.7.1: process sequence for complex content construction.
             // - Zero-length text nodes are discarded.
             // - Adjacent text nodes are merged.
-            // - Consecutive atomic values are joined with a single space (#x20).
+            // - Consecutive atomic values are joined with a single space (#x20) (unless copy-of).
             // - Text nodes and atomics in a contiguous run are merged into one text node.
             var sb = new StringBuilder();
             bool prevWasAtomic = false;
@@ -2355,7 +2520,8 @@ public sealed class TransformEngine
                 else
                 {
                     // Atomic value: insert space only if previous item was also atomic
-                    if (prevWasAtomic)
+                    // and separateAtomicsWithSpace is true (complex content construction)
+                    if (separateAtomicsWithSpace && prevWasAtomic)
                     {
                         sb.Append(' ');
                     }
@@ -2471,7 +2637,7 @@ public sealed class TransformEngine
 
             case XdmNodeKind.Text:
                 // Built-in: copy text value (only if we have an element container)
-                if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail)
+                if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail && behavior != Stylesheet.OnNoMatch.DeepSkip)
                 {
                     _lastAddedWasAtomic = false;
                     AddTextNode(node.StringValue);
@@ -2480,7 +2646,7 @@ public sealed class TransformEngine
 
             case XdmNodeKind.Attribute:
                 // Built-in: copy attribute's string-value as a text node (XSLT 2.0 §6.4)
-                if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail)
+                if (_currentContainer is XElement && behavior != Stylesheet.OnNoMatch.Fail && behavior != Stylesheet.OnNoMatch.DeepSkip)
                 {
                     _lastAddedWasAtomic = false;
                     AddTextNode(node.StringValue);
@@ -2544,6 +2710,10 @@ public sealed class TransformEngine
 
             case Stylesheet.OnNoMatch.DeepCopy:
                 CopyNodeToResult(node);
+                break;
+
+            case Stylesheet.OnNoMatch.DeepSkip:
+                // Skip element and all descendants — do nothing
                 break;
 
             case Stylesheet.OnNoMatch.Fail:
@@ -2861,7 +3031,7 @@ public sealed class TransformEngine
     {
         Stylesheet.TemplateRule? best = null;
         double bestPriority = double.NegativeInfinity;
-        int bestImportPrecedence = -1;
+        int bestImportPrecedence = int.MaxValue;
         bool hasConflict = false;
 
         foreach (var rule in _allTemplateRules)
@@ -2874,27 +3044,30 @@ public sealed class TransformEngine
                 continue;
             if (rule.CompiledMatch == null)
                 continue;
-            if (rule.CompiledMatch(item, _context))
+            if (!rule.CompiledMatch(item, _context))
+                continue;
+
+            // XSLT spec §6.4: import precedence is checked BEFORE priority.
+            // Higher import precedence (lower numeric value in our system) always wins.
+            if (best == null || rule.ImportPrecedence < bestImportPrecedence)
+            {
+                best = rule;
+                bestPriority = rule.Priority;
+                bestImportPrecedence = rule.ImportPrecedence;
+                hasConflict = false;
+            }
+            else if (rule.ImportPrecedence == bestImportPrecedence)
             {
                 if (rule.Priority > bestPriority)
                 {
                     best = rule;
                     bestPriority = rule.Priority;
-                    bestImportPrecedence = rule.ImportPrecedence;
                     hasConflict = false;
                 }
-                else if (rule.Priority == bestPriority && rule.ImportPrecedence < bestImportPrecedence)
-                {
-                    best = rule;
-                    bestImportPrecedence = rule.ImportPrecedence;
-                    hasConflict = false;
-                }
-                else if (rule.Priority == bestPriority && rule.ImportPrecedence == bestImportPrecedence)
+                else if (rule.Priority == bestPriority)
                 {
                     if (best != null && best != rule)
-                    {
                         hasConflict = true;
-                    }
                     // XSLT last-wins rule: when priority and import precedence are equal,
                     // the template that appears later in the stylesheet wins.
                     best = rule;
@@ -3481,7 +3654,7 @@ public sealed class TransformEngine
         {
             var attr = current.Attribute("expand-text");
             if (attr != null)
-                return attr.Value == "yes";
+                return attr.Value is "yes" or "true" or "1";
             current = current.Parent;
         }
         return false;

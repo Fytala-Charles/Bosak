@@ -129,6 +129,8 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-022 | Bosak / Fytala Stack | Migrate to .NET 10 | Bosak targets .NET 9, which reached end-of-life in May 2026. Upgrade to .NET 10 LTS to restore support and unblock Customer B BOD-to-OData integration | **Implemented** | Phase 3 | Charles Korthout | 2026-06-03 |
 | REQ-023 | Bosak / Fytala Stack | Rename XSLT namespace from `Bosak.XPath.Xslt` to `Bosak.Xslt` | Align namespace hierarchy with W3C spec boundaries (XPath, XSLT, XQuery as peers); unblock independent versioning | **Implemented** | Phase 3 | Charles Korthout | 2026-06-06 |
 | REQ-024 | Bosak / Fytala Stack | XQuery 3.1 skeleton project structure | Prepare `Bosak.XQuery` project, validate naming convention, and align documentation for future XQuery implementation | **Implemented** | Phase 3 | Charles Korthout | 2026-06-06 |
+| REQ-025 | *(internal)* | `xsl:attribute-set` / `xsl:use-attribute-sets` support | Required for `next-match-012` and broader XSLT 3.0 conformance; attribute sets accumulate across imports/includes | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
+| REQ-026 | *(internal)* | Nested `xsl:use-when` evaluation | `use-when="false()"` on nested XSLT instructions and LREs was ignored; now stripped during stylesheet load | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1070,6 +1072,98 @@ Upgraded all 18 Bosak project files from `net9.0` to `net10.0`.
 |------|-------|----------|-----------|
 | 2026-06-02 | Charles Korthout / Kimi | Accepted | .NET 9 is EOL (May 2026); .NET 10 is the correct LTS target |
 | 2026-06-03 | Charles Korthout / Kimi | Implemented | All 18 projects migrated; 867 unit tests pass; XSLT conformance stable at 59.6% (3,257/14,600) |
+
+---
+
+### REQ-025: `xsl:attribute-set` / `xsl:use-attribute-sets` Support
+
+**Requesting Application:** *(internal — conformance)*  
+**Submitted:** 2026-06-07  
+**Status:** **Implemented**
+
+#### Problem Statement
+
+The `next-match-012` conformance test requires `xsl:attribute-set` and `xsl:use-attribute-sets` support. The test defines an attribute set containing `xsl:attribute` children, one of which calls `xsl:next-match`. Without attribute-set support, the test fails because the attribute set is never applied.
+
+Additionally, many other XSLT 3.0 conformance tests depend on attribute sets for reusable attribute definitions.
+
+#### Proposed Solution
+
+1. Parse `xsl:attribute-set` declarations at stylesheet load time (including imported/included stylesheets).
+2. Store attribute sets in a dictionary keyed by resolved `{namespace, local-name}`.
+3. Implement merge semantics: unlike templates (last-wins), attribute sets **accumulate** across imports/includes. Collect `List<AttributeSetDefinition>` per name so runtime can apply them in precedence order.
+4. Add `ApplyAttributeSets` to `TransformEngine`:
+   - Reads `use-attribute-sets` attribute from `xsl:element` and literal result elements.
+   - Resolves names, looks up sets via `_stylesheet.GetAllAttributeSets()`.
+   - Recursively applies referenced sets (cycle detection via `HashSet<string>`).
+   - Executes each set's `xsl:attribute` children via `ExecuteXsltInstruction`.
+5. Literal attributes on LREs and `xsl:attribute` children of `xsl:element` override attribute-set values for the same name.
+
+#### Acceptance Criteria
+- [x] `xsl:attribute-set` declarations parsed and stored
+- [x] `use-attribute-sets` on LREs applies attributes from named sets
+- [x] `use-attribute-sets` on `xsl:element` applies attributes from named sets
+- [x] Attribute sets accumulate across imports/includes (merge semantics)
+- [x] Circular `use-attribute-sets` references are detected and prevented
+- [x] `xsl:next-match` inside an attribute set works correctly (current template rule preserved)
+- [x] `next-match-012` conformance test passes
+- [x] `attribute-set` conformance test set: 36/50 passing (73.5%)
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Parse `xsl:attribute-set` declarations |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine.ApplyAttributeSets` |
+| Standard | None | |
+| XSLT | New instruction | `xsl:attribute-set` + `use-attribute-sets` |
+| API | None | |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-07 | Charles Korthout / Kimi | Implemented | Required for next-match-012; also enables 36 attribute-set conformance tests |
+
+---
+
+### REQ-026: Nested `xsl:use-when` Evaluation
+
+**Requesting Application:** *(internal — conformance)*  
+**Submitted:** 2026-06-07  
+**Status:** **Implemented**
+
+#### Problem Statement
+
+`use-when` attributes on nested XSLT instructions and literal result elements were completely ignored. Only top-level declarations (imports, includes, templates, etc.) had `use-when` support. This caused 50+ conformance test failures in the `use-when` cluster, including tests where `use-when="false()"` on `xsl:sort` should suppress the sort, or `use-when="false()"` on `xsl:value-of` should remove the instruction.
+
+#### Proposed Solution
+
+1. Add `StripUseWhenElements(XElement)` to `Stylesheet.Load()` that recursively processes the entire stylesheet tree after imports/includes are resolved.
+2. `GetUseWhenAttribute` checks both no-namespace `use-when` (for XSLT elements) and `xsl:use-when` (for LREs).
+3. Evaluate `use-when` XPath expressions with in-scope namespace declarations passed to the evaluation context.
+4. Remove elements whose `use-when` evaluates to `false()` from the XDocument tree before templates are parsed.
+
+#### Acceptance Criteria
+- [x] `use-when="false()"` on nested `xsl:sort` removes the sort instruction
+- [x] `use-when="false()"` on `xsl:value-of` removes the instruction
+- [x] `xsl:use-when="false()"` on LREs removes the element
+- [x] In-scope namespace prefixes are available to `use-when` XPath expressions
+- [x] `use-when` cluster: 68/102 passing (+19 from 49/102)
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `Stylesheet.Load()` recursive stripping |
+| Compiler | None | |
+| Runtime | None | |
+| Standard | None | |
+| XSLT | Modified | `use-when` now applies to all elements |
+| API | None | |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-07 | Charles Korthout / Kimi | Implemented | +19 tests; low-risk tree modification during load |
 
 ---
 

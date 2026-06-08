@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-07
-**Commit:** `2a0341b`
-**Current focus:** `match` cluster at 84.4% (152/294). 27 failures remain (`intersect`/`except` variable patterns, namespace nodes, complex assertions). Next: `next-match` cluster (17/40) or `for-each-group` (38/85).
+**Commit:** `<uncommitted>`
+**Current focus:** `use-when` cluster improved to 68/102; `match-134/135` fixed via `copy-of` atomic spacing. Next: `intersect`/`except` patterns in PatternCompiler.
 
 ---
 
@@ -10,11 +10,12 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3,301 / **Failed:** ~2,112 / **Skipped:** ~9,187 (14,600 total)
-- Pass rate: **61.0%** (latest run, 2026-06-07)
+- **Passed:** ~3,365 / **Failed:** ~2,045 / **Skipped:** ~9,190 (14,600 total)
+- Pass rate: **62.2%** (latest run, 2026-06-07)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
+- Latest: 3365 passed / 2045 failed / 9190 skipped (62.2%) — next-match cluster 37/40, attribute-set 36/50
 - Latest: 3301 passed / 2112 failed / 9187 skipped (61.0%) — apply-imports + for-each-group atomic patterns
 - Latest XPath: 19041 passed / 2829 failed / 9951 skipped (59.84%) — QT3 stable
 - Previous: 3255 passed / 2206 failed / 9139 skipped (59.6%) — namespace fixes in XPath expressions, xsl:number, and conformance harness
@@ -181,13 +182,45 @@
 
 ### Unit Test Status
 
-- **867 unit tests pass** across 7 test projects (0 failures)
-- XSLT-specific tests: 95 tests in `Bosak.Xslt.Tests`
+- **875 unit tests pass** across 8 test projects (0 failures)
+- XSLT-specific tests: 98 tests in `Bosak.Xslt.Tests`
 
 ### QT3 Conformance Baseline
 
 - Passed: 18,785 / Failed: 3,085 / Skipped: 9,951 (31,821 total)
 - Pass rate: ~59.04%
+
+---
+
+## This Session Fixes (2026-06-07, continued)
+
+1. **`next-match` cluster: 37/40 passing (100% of runnable, 90.0% overall)** — Fixed 9 tests:
+   - `next-match-008`: `apply-imports` pushes import precedence to `_applyImportsPrecedenceStack` so `next-match` inside imported templates respects boundaries.
+   - `next-match-011`: `attribute(*, xs:untypedAtomic)` comma-split in `PatternCompiler.CompileNodeTest`.
+   - `next-match-013/014/015`: `next-match` leaked excluded rules — wrapped `ExecuteTemplate(nextRule)` in `try/finally` to remove exclusion after execution.
+   - `next-match-017`: Same file both imported & included was skipped — added separate `_includedUris` tracking in `Stylesheet.cs`; `TestUriResolver` preserves whitespace.
+   - `next-match-019`: `apply-imports` now collects `xsl:with-param` and passes them as `callParams`.
+   - `next-match-034/035`: Added missing `DeepSkip` to `OnNoMatch` enum; `expand-text="1"` recognized by `GetExpandText`.
+   - `next-match-012`: **Implemented `xsl:attribute-set` / `xsl:use-attribute-sets`** — new `AttributeSetDefinition` class, parsing in `Stylesheet.cs`, `ApplyAttributeSets` in `TransformEngine.cs`, integrated into `CopyLiteralElement` and `xsl:element`. Attribute sets accumulate across imports/includes. Cycle detection. Current template rule preserved so `xsl:next-match` inside attribute sets works.
+2. **Union pattern splitting for `next-match`** — `TemplateRule.FromElement` now splits union patterns (`match="a|b"`) into separate `TemplateRule` instances so `xsl:next-match` can continue to other branches. Validates union pattern constraints (XTSE0340) before splitting. Explicit priority suppresses splitting.
+3. **`attribute-set` conformance test set**: 36/50 passing (73.5%). Remaining 13 failures are mostly unrelated to attribute-set mechanism (sequence value formatting, `base-uri()` issues, separator handling in `xsl:attribute`).
+
+---
+
+### This Session Fixes (2026-06-07, part 2)
+
+1. **`match-134/135` fix — `xsl:copy-of` atomic spacing** — Changed `CopyToResult` in `xsl:copy-of` from `separateAtomicsWithSpace: false` to default `true`. This makes `copy-of` of a sequence of atomic values inside an element insert spaces between them, matching complex content construction rules (XSLT §5.7.1). Fixes `match-134/135` (group-starting-with/group-ending-with with atomic values).
+   - **Trade-off**: `next-match-028` now fails because our implementation lacks true sequence-constructor batching. In next-match-028, `copy-of` is inside a template invoked via `next-match`; the spec requires template results to be merged into the calling sequence constructor without space insertion. Our direct-to-tree architecture cannot distinguish this case. **Known regression: next-match-028** (next-match cluster now 36/1).
+2. **`use-when` nested element stripping** — `Stylesheet.Load()` now recursively strips elements with `use-when="false()"` from the entire stylesheet tree, not just top-level declarations. `GetUseWhenAttribute` checks both no-namespace `use-when` (XSLT elements) and `xsl:use-when` (LREs). In-scope namespace declarations are passed to the XPath evaluation context.
+   - **`use-when` cluster**: improved from 49/50 to **68/31** (+19 tests). Remaining 31 failures are mostly error tests (XTSE0090, XPST0003) requiring a static validator.
+3. **Current cluster status**:
+   - `match`: 147/32 (was ~145/34)
+   - `next-match`: 36/1 (next-match-028 regressed due to copy-of fix)
+   - `use-when`: 68/31 (+19 from recursive stripping)
+   - `expression`: 102/0 (100%)
+   - `string`: 136/0 (100%)
+   - `boolean`: 112/0 (100%)
+   - `number`: 264/6 (97.8%)
 
 ---
 

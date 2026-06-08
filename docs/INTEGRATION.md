@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 04 June 2026
-> **Bosak baseline:** 867 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 18,765 passed / 3,105 failed / 9,951 skipped (58.97%)
+> **Last updated:** 07 June 2026
+> **Bosak baseline:** 875 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 18,785 passed / 3,085 failed / 9,951 skipped (59.04%)
 
 ---
 
@@ -216,6 +216,8 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:mode` | ✅ Working | `on-no-match` declarations |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
 | `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
+| `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
+| `xsl:use-when` | ⚠️ Partial | Top-level and nested elements; `true()`/`false()` evaluation works. Error cases (XTSE0090, XPST0003) not yet validated. |
 
 ---
 
@@ -279,15 +281,15 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-**Unit tests:** 867 passed, 0 failed, 0 skipped  
+**Unit tests:** 875 passed, 0 failed, 0 skipped  
 **Target framework:** `net10.0`
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 3,257 | 2,204 | 9,139 | 59.6% | Stable; +2 from number-0111/0807 fixes |
-| XPath 3.1 (QT3) | 18,651 | 3,279 | 9,891 | 58.6% | Completed all 428 sets; register overflow fixed (byte→ushort); normalize-space harness fix |
+| XSLT 3.0 (W3C) | ~3,384 | ~2,026 | ~9,193 | 62.5% | +127 from next-match, attribute-set, use-when, copy-of fixes |
+| XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
 > ```bash
