@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-07
-**Commit:** `<uncommitted>`
-**Current focus:** `match` cluster improved to 156/294 (+11 tests). Fixed: match-241 (position/last in next-match), match-246a/b (XPath comments in root patterns), match-248-254 (xsl:variable/@as type coercion). Next: remaining match failures.
+**Date:** 2026-06-08
+**Commit:** `319cc3c`
+**Current focus:** `match` cluster improved to 160/294 (+3 tests this session). Fixed: match-255 (position()/last() in xsl:variable sequence constructors), match-256 (atomic value built-in rule), match-261 (Q{uri}* priority). Next: remaining match failures (19 left).
 
 ---
 
@@ -82,6 +82,13 @@
    - **node-after cluster**: improved from 16/10/9 to 24/2/9.
    - Remaining failures (`nodeexpression28/31/44/47`) are test-environment issues (missing `$works` variable), not operator bugs.
 3. **QT3 estimated baseline** — ~18,783 / ~3,087 / 9,951 (approx. +16 tests this batch).
+
+### This Session Fixes (2026-06-08)
+
+1. **`match-255` position()/last() in xsl:variable sequence constructors** — `EvaluateSequenceConstructor` reset context position and size to 1/1, so `position()` inside `xsl:variable` (e.g. inside `xsl:for-each`) always returned 1. Fixed to preserve the caller's context position and size per XSLT 2.0 §5.7.1.
+2. **`match-256` atomic value built-in rule** — `ApplyTemplates` output the string value of unmatched atomic values. XSLT 3.0 §6.6 specifies the built-in rule for atomic values does nothing. Removed the text-output path for atomic values in `ApplyTemplates(IXdmNode, ...)`.
+3. **`match-261` Q{uri}* priority** — `ComputeSinglePatternPriority` didn't recognize `Q{uri}*` as a namespace wildcard (priority -0.25). Two root causes: (a) the `Q{uri}*` pattern wasn't checked in the namespace-wildcard branch, and (b) the path-pattern detection (`contains('/')`) incorrectly triggered because the URI contains `/` characters. Fixed both.
+4. **`match` cluster** — improved from 157/294 to **160/294** (+3 tests passing). Overall XSLT conformance: 3379/2031 (62.5%).
 
 ### This Session Fixes (2026-06-07)
 
@@ -397,11 +404,12 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ### Next Session Immediate Targets (start here)
 
-1. **`match` cluster** — 23 failures, 115 skipped (87.2% passing):
-   - `match-040`: undeclared function in predicate → XPST0017
-   - `match-069`: namespace node matching
-   - `match-134/135`: sequence constructor batching (adjacent atomics across instruction boundaries)
-   - Remaining: intersect/except variable patterns, DITA-style large pattern sets with complex predicates
+1. **`match` cluster** — 19 failures, 115 skipped (89.4% passing):
+   - `match-040`: undeclared function in predicate → XPST0017 (requires compile-time validation)
+   - `match-069`: namespace node matching (requires XDM namespace-node support)
+   - `match-088/100`: document-node() patterns (blocked by initial-template selection behavior)
+   - `match-266/273-278/280-284`: union/intersect/except in path patterns (requires PatternCompiler architectural work)
+   - `match-272`: variable reference patterns with global variable forward references (requires dependency-sorted evaluation)
 
 ### Immediate: Quick-win clusters (~few hours, +30–50 tests)
 
@@ -413,14 +421,14 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - **`number`** — **6 failures, 1 skipped (97.8% passing)** — remaining: `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting, out of scope)
 - **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)
 - **`boolean`** — **0 failures, 0 skipped (100% passing)** ✅ — node ordering `<<`/`>>` fixed.
-- **`match`** — **23 failures, 115 skipped (87.2% passing)** — down from 78 failures after atomic-value PredicatePattern fixes. +11 fixed this session (241, 246a/b, 248-254).
+- **`match`** — **19 failures, 115 skipped (89.4% passing)** — down from 78 failures. +14 fixed across two sessions (241, 246a/b, 248-254, 255, 256, 261).
 
 ### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
 
 | Cluster | Failed | Skipped | Notes |
 |---------|--------|---------|-------|
 | **number** | 6 | 1 | 264/271 passing (97.8%). Remaining: non-English word formatting (out of scope). |
-| **match** | 30 | 115 | 149/294 passing (83.2%). Down from 78 failures. Atomic-value patterns now work. Remaining: `apply-imports`, `intersect`/`except`, namespace nodes, `for-each-group` atomic patterns. |
+| **match** | 19 | 115 | 160/294 passing (89.4%). Down from 78 failures. Remaining: `intersect`/`except`/union path patterns, namespace nodes, document-node() initial template, compile-time XPST0017. |
 | **sort** | 0 | 18 | 66/84 passing (100% of runnable). ✅ Clean. |
 | **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
 | **node-before** | 2 | 10 | 24/36 passing (66.7%). Remaining 2 are environment issues (missing `$works` variable). |
