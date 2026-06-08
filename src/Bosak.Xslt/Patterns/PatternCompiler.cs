@@ -1087,6 +1087,16 @@ public sealed class PatternCompiler
             };
         }
 
+        if (name == "document-node()")
+        {
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Document;
+            };
+        }
+
         if (name.StartsWith("processing-instruction("))
         {
             // processing-instruction(name) or processing-instruction('name')

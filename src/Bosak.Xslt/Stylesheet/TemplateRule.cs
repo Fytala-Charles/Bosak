@@ -290,8 +290,27 @@ public sealed class TemplateRule
         if (trimmed == "/" || trimmed.StartsWith("doc(") || trimmed.StartsWith("document("))
             return 0.5;
 
-        // Path patterns (contain /)
-        if (trimmed.Contains('/'))
+        // Path patterns (contain / outside of Q{} braces)
+        bool hasPathSlash = false;
+        int qDepth = 0;
+        for (int pi = 0; pi < trimmed.Length; pi++)
+        {
+            if (trimmed[pi] == 'Q' && pi + 1 < trimmed.Length && trimmed[pi + 1] == '{')
+            {
+                qDepth++;
+                pi++;
+            }
+            else if (qDepth > 0 && trimmed[pi] == '}')
+            {
+                qDepth--;
+            }
+            else if (qDepth == 0 && trimmed[pi] == '/')
+            {
+                hasPathSlash = true;
+                break;
+            }
+        }
+        if (hasPathSlash)
             return 0.5;
 
         // PredicatePattern: .[expr]
@@ -309,8 +328,9 @@ public sealed class TemplateRule
             if ((axis == "child" || axis == "attribute") && IsQNameNodeTest(nodeTest))
                 return axis == "child" ? 0.0 : 0.5;
 
-            // Namespace wildcards: NCName:* or *:NCName → -0.25
-            if (nodeTest.EndsWith(":*") || nodeTest.StartsWith("*:"))
+            // Namespace wildcards: NCName:*, *:NCName, or Q{uri}* → -0.25
+            if (nodeTest.EndsWith(":*") || nodeTest.StartsWith("*:") ||
+                (nodeTest.StartsWith("Q{") && nodeTest.EndsWith("*")))
                 return -0.25;
 
             // KindTest or * → -0.5
@@ -327,7 +347,8 @@ public sealed class TemplateRule
             var name = trimmed[1..].Trim();
             if (name == "*")
                 return -0.5;
-            if (name.EndsWith(":*") || name.StartsWith("*:"))
+            if (name.EndsWith(":*") || name.StartsWith("*:") ||
+                (name.StartsWith("Q{") && name.EndsWith("*")))
                 return -0.25;
             if (!name.Contains('*') && !name.Contains('('))
                 return 0.5;
@@ -386,8 +407,9 @@ public sealed class TemplateRule
             trimmed.EndsWith(")"))
             return 0.25;
 
-        // Namespace wildcards without axis
-        if (trimmed.EndsWith(":*") || trimmed.StartsWith("*:"))
+        // Namespace wildcards without axis: NCName:*, *:NCName, or Q{uri}*
+        if (trimmed.EndsWith(":*") || trimmed.StartsWith("*:") ||
+            (trimmed.StartsWith("Q{") && trimmed.EndsWith("*")))
             return -0.25;
 
         // Patterns with a predicate

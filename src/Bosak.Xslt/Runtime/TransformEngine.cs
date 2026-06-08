@@ -809,15 +809,7 @@ public sealed class TransformEngine
                     {
                         ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: pos, last: last);
                     }
-                    else
-                    {
-                        // Built-in rule for atomic values: output string value
-                        var text = item.ToString();
-                        if (!string.IsNullOrEmpty(text) && _currentContainer is XElement)
-                        {
-                            _currentContainer.Add(new XText(text));
-                        }
-                    }
+                    // Built-in rule for atomic values does nothing (XSLT 3.0 §6.6)
                 }
                 pos++;
             }
@@ -3423,7 +3415,12 @@ public sealed class TransformEngine
         var savedContextSize = _context.ContextSize;
         if (contextItem.Kind != XdmValueKind.Undefined)
         {
-            _context.WithFocus(contextItem, 1, 1);
+            // Preserve the caller's context position and size so that position()/last()
+            // inside sequence constructors (e.g. xsl:variable within xsl:for-each)
+            // reflect the containing instruction's focus, per XSLT 2.0 §5.7.1.
+            int pos = _context.ContextPosition > 0 ? _context.ContextPosition : 1;
+            int size = _context.ContextSize > 0 ? _context.ContextSize : 1;
+            _context.WithFocus(contextItem, pos, size);
         }
 
         var savedAccumulator = _sequenceAccumulator;
