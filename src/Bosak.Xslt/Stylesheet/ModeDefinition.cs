@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 05-06-2026     | Added OnMultipleMatch enum and parsing for xsl:mode on-multiple-match                  |
 //                      | Charles Korthout | 0.3   | 07-06-2026     | Added DeepSkip to OnNoMatch enum and parsing; fixes next-match-034                     |
 //                      | Charles Korthout | 0.4   | 08-06-2026     | FromElement expands mode name QNames to Clark notation                                 |
+//                      | Charles Korthout | 0.5   | 09-06-2026     | Added NormalizeModeName; trim whitespace from mode/on-no-match attribute values       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -77,8 +78,8 @@ public sealed class ModeDefinition
     /// </summary>
     public static ModeDefinition? FromElement(XElement element)
     {
-        var name = ExpandModeName(element.Attribute("name")?.Value ?? "", element);
-        var onNoMatch = element.Attribute("on-no-match")?.Value?.ToLowerInvariant() switch
+        var name = ExpandModeName(element.Attribute("name")?.Value?.Trim() ?? "", element);
+        var onNoMatch = element.Attribute("on-no-match")?.Value?.Trim()?.ToLowerInvariant() switch
         {
             "shallow-copy" => OnNoMatch.ShallowCopy,
             "shallow-skip" => OnNoMatch.ShallowSkip,
@@ -88,7 +89,7 @@ public sealed class ModeDefinition
             "fail" => OnNoMatch.Fail,
             _ => OnNoMatch.ShallowSkip
         };
-        var onMultipleMatch = element.Attribute("on-multiple-match")?.Value?.ToLowerInvariant() switch
+        var onMultipleMatch = element.Attribute("on-multiple-match")?.Value?.Trim()?.ToLowerInvariant() switch
         {
             "fail" => OnMultipleMatch.Fail,
             _ => OnMultipleMatch.UseLast
@@ -103,7 +104,7 @@ public sealed class ModeDefinition
 
         int colon = mode.IndexOf(':');
         if (colon < 0)
-            return mode;
+            return NormalizeModeName(mode);
 
         var prefix = mode.Substring(0, colon);
         var local = mode.Substring(colon + 1);
@@ -115,11 +116,26 @@ public sealed class ModeDefinition
             {
                 if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
                 {
-                    return $"{{{attr.Value}}}{local}";
+                    return NormalizeModeName($"{{{attr.Value}}}{local}");
                 }
             }
             current = current.Parent;
         }
+        return NormalizeModeName(mode);
+    }
+
+    /// <summary>
+    /// Normalizes a mode name so that <c>Q{{}}local</c> or <c>{{}}local</c>
+    /// (empty namespace URI) is treated the same as <c>local</c>.
+    /// </summary>
+    public static string NormalizeModeName(string mode)
+    {
+        // Q{}local → local
+        if (mode.Length > 3 && mode.StartsWith("Q{") && mode[2] == '}')
+            return mode.Substring(3);
+        // {}local → local
+        if (mode.Length > 2 && mode[0] == '{' && mode[1] == '}')
+            return mode.Substring(2);
         return mode;
     }
 }

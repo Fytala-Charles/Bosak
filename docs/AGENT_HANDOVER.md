@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-09
-**Commit:** `<uncommitted>`
-**Current focus:** Iterative key index building fixes cross-key `key()` dependencies (key-063/064). FormatXPathDouble/Float trailing-zero bug fixed (sum() returning 5 instead of 50). Next: mode cluster on-no-match=fail failures, default-mode + #current resolution.
+**Commit:** `e39758d`
+**Current focus:** Mode cluster default-mode resolution fixed (mode-1619). Initial mode validation implemented (XTDE0045/0050). Next: remaining mode cluster static-validation errors, seqtor batching refactor.
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** **3,543** / **Failed:** **1,866** / **Skipped:** 9,191 (14,600 total)
-- Pass rate: **65.5%** (latest run, 2026-06-09)
+- **Passed:** **3,554** / **Failed:** **1,855** / **Skipped:** 9,191 (14,600 total)
+- Pass rate: **65.7%** (latest run, 2026-06-09)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3543 passed / 1866 failed / 9191 skipped (65.5%) — key-063/064 + sum() trailing-zero fix (+16 tests)
+- Latest: 3554 passed / 1855 failed / 9191 skipped (65.7%) — mode cluster fixes: default-mode resolution, XTDE0045/0050 (+11 tests)
+- Previous: 3543 passed / 1866 failed / 9191 skipped (65.5%) — key-063/064 + sum() trailing-zero fix (+16 tests)
 - Previous: 3527 passed / 1882 failed / 9191 skipped (65.2%) — copy cluster +10 tests (PI kind-test args, fn:copy-of fixes, function context isolation)
 - Previous: 3463 passed / 1947 failed / 9190 skipped (64.0%) — match cluster 160/294 (+3 this session), next-match 36/40, attribute-set 36/50
 - Previous: 3376 passed / 2034 failed / 9190 skipped (62.4%) — match cluster 156/294 (+11)
@@ -36,6 +37,25 @@
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
+
+### This Session Fixes (2026-06-09 — Mode Cluster)
+
+1. **`apply-templates` default-mode resolution** — When `xsl:apply-templates` had no `mode` attribute but an ancestor or the instruction itself had `default-mode`, the mode incorrectly fell back to `_modeStack.Peek()` (the calling template's mode) instead of respecting the in-scope `default-mode`. This caused `mode-1619` to process attributes in the wrong mode.
+   - **Fix**: Mode resolution now checks `_defaultModeStack` first; if an explicit `default-mode` is in scope, it uses `CurrentDefaultMode`. Otherwise it falls back to `_modeStack.Peek()` (mode inheritance) or the stylesheet's default mode.
+   - **File changed**: `TransformEngine.cs` (`ExecuteXsltInstruction` apply-templates case).
+   - **Fixed**: `mode-1619` (+1 mode cluster test). Also fixed ~8 other tests across clusters that use `xsl:default-mode`.
+2. **Initial mode existence validation (XTDE0045)** — Starting a transformation with an initial mode that only matched `mode="#all"` templates (or had no matching templates at all) incorrectly succeeded instead of raising XTDE0045. Per W3C erratum #3690, `#all` templates do not satisfy initial mode existence.
+   - **Fix**: Added `ModeExists` helper that checks for explicit `xsl:mode` declarations or non-`#all` template rules with the exact mode name.
+   - **File changed**: `TransformEngine.cs` (`Transform` entry point).
+   - **Fixed**: `initial-mode-002` (+1 test).
+3. **Required parameter validation (XTDE0050)** — Global `xsl:param required="yes"` with no supplied value was silently evaluated as empty sequence instead of raising XTDE0050.
+   - **Fix**: `InitializeGlobalParametersAndVariables` now checks `required="yes"` before evaluating defaults and throws XTDE0050 if the parameter is missing from the context.
+   - **File changed**: `TransformEngine.cs`.
+   - **Fixed**: `initial-mode-003` (+1 test).
+4. **Conformance harness: initial-mode parameters** — The test harness did not read `<param>` elements nested inside `<initial-mode>`, so initial-mode parameters (e.g. `initial-mode-004`) were not passed to the transformation.
+   - **Fix**: Harness now collects parameters from both direct children of `<test>` and nested inside `<initial-mode>`.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+5. **Build/test verified** — 873 unit tests pass, 0 failures. XSLT conformance: +11 tests (3554/1855/9191, 65.7%).
 
 ### This Session Fixes (2026-06-09 — Key Index + Numeric Serialization)
 
@@ -476,7 +496,16 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ### Next Session Immediate Targets (start here)
 
-1. **`match` cluster** — 19 failures, 115 skipped (89.4% passing):
+1. **`mode` cluster remaining** — 36 failures in `mode` test-set, 2 in `initial-mode` (out of scope for quick fix):
+   - `mode-1442/1443`: `warning-on-no-match` not implemented
+   - `mode-1444/1447/1502/1904`: static validation errors (XTSE0020, XTSE0545) — requires schema validator
+   - `mode-1510/1511-1514`: accumulators not implemented
+   - `mode-1801/1802`: `initial-mode/@select` not supported
+   - `mode-1803`: `xsl:package` not supported
+   - `mode-1902`: private mode visibility not supported
+   - `initial-mode-004`: initial-mode parameter passing to template params needs API change
+   - `initial-mode-005`: mode propagation to `match="*"` templates — spec ambiguity, needs investigation
+2. **`match` cluster** — 19 failures, 115 skipped (89.4% passing):
    - `match-040`: undeclared function in predicate → XPST0017 (requires compile-time validation)
    - `match-069`: namespace node matching (requires XDM namespace-node support)
    - `match-088/100`: document-node() patterns (blocked by initial-template selection behavior)
@@ -506,7 +535,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | **node-before** | 2 | 10 | 24/36 passing (66.7%). Remaining 2 are environment issues (missing `$works` variable). |
 | **node-after** | 2 | 9 | 24/35 passing (68.6%). Remaining 2 are environment issues. |
 | **HigherOrderFunctions** | 7 | 85 | 37/129 passing (28.7%). +4 fixed this session (function-name prefix, XQST0039, inline-function-16, function-item-3). |
-| **mode** | 88 | 44 | Template mode dispatch issues. |
+| **mode** | 36 | 44 | 102/188 passing (70.8% of runnable). Down from 45 failures. Remaining: static validation, accumulators, packages, visibility. |
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
 | **for-each-group** | 62 | 3 | `xsl:for-each-group` implementation gaps. |
@@ -527,7 +556,8 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `<uncommitted>` — iterative key index build (key-063/064), FormatXPathDouble/Float trailing-zero fix
+- Latest: `<uncommitted>` — mode cluster fixes: default-mode resolution, XTDE0045/0050 validation, harness initial-mode params
+- Previous: `<uncommitted>` — iterative key index build (key-063/064), FormatXPathDouble/Float trailing-zero fix
 - Previous: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)
 - Previous: `<uncommitted>` — match cluster fixes (241, 246a/b, 248-254), xsl:variable @as coercion, next-match position/last preservation
 - Previous: `0bb2e09` — attribute-set, use-when, copy-of atomic spacing, next-match fixes

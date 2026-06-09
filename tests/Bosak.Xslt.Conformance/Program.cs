@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 07-06-2026     | PreserveWhitespace in TestUriResolver; skip package tests                               |
 //                      | Charles Korthout | 0.3   | 08-06-2026     | Added initial-mode support and source/@select handling in LoadEnvironment              |
+//                      | Charles Korthout | 0.4   | 09-06-2026     | Read <param> elements inside <initial-mode> for initial-mode parameter passing         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -333,8 +334,12 @@ class Program
                 throw new FileNotFoundException($"Document not found: {uri}");
             };
 
-            // Set test parameters on evaluation context
-            foreach (var param in testElem.Elements(ns + "param"))
+            // Set test parameters on evaluation context (both direct children and inside initial-mode)
+            var paramElements = testElem.Elements(ns + "param").ToList();
+            var initialModeElem = testElem.Element(ns + "initial-mode");
+            if (initialModeElem != null)
+                paramElements.AddRange(initialModeElem.Elements(ns + "param"));
+            foreach (var param in paramElements)
             {
                 var paramName = param.Attribute("name")?.Value;
                 var paramSelect = param.Attribute("select")?.Value;
@@ -354,7 +359,6 @@ class Program
 
             // Check for initial-mode
             string? initialMode = null;
-            var initialModeElem = testElem.Element(ns + "initial-mode");
             if (initialModeElem != null)
                 initialMode = initialModeElem.Attribute("name")?.Value;
 

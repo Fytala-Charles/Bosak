@@ -72,6 +72,7 @@
 //                      | Charles Korthout | 5.1   | 07-06-2026     | FindRootTemplate strips XPath comments; next-match/apply-imports pass position/last   |
 //                      | Charles Korthout | 5.2   | 07-06-2026     | ConvertVariableValue for xsl:variable/@as basic atomic types; fixes match-248-254      |
 //                      | Charles Korthout | 5.3   | 08-06-2026     | Iterative key index build for cross-key dependencies (key-063/064); removed re-entrancy guard |
+//                      | Charles Korthout | 5.4   | 09-06-2026     | Fixed apply-templates default-mode resolution; XTDE0045/0050 validation; ModeExists helper |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -267,6 +268,11 @@ public sealed class TransformEngine
                 // If the mode is #unnamed, treat it as the empty unnamed mode
                 if (resolvedInitialMode == "#unnamed")
                     resolvedInitialMode = "";
+                // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
+                if (!ModeExists(resolvedInitialMode))
+                {
+                    throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' does not exist in the stylesheet.");
+                }
                 _modeStack.Push(resolvedInitialMode);
                 try
                 {
@@ -630,7 +636,7 @@ public sealed class TransformEngine
                     }
                 case "apply-templates":
                     {
-                        var modeRaw = instruction.Attribute("mode")?.Value ?? "";
+                        var modeRaw = instruction.Attribute("mode")?.Value?.Trim() ?? "";
                         var mode = ExpandModeName(modeRaw, instruction);
                         var select = instruction.Attribute("select")?.Value;
                         var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
@@ -912,6 +918,7 @@ public sealed class TransformEngine
 
         // Resolve mode aliases
         var resolvedMode = ResolveMode(mode);
+        System.Console.WriteLine($"DEBUG ApplyTemplates: mode='{mode}', resolvedMode='{resolvedMode}', stackCount={_modeStack.Count}");
 
         _modeStack.Push(resolvedMode);
         try
@@ -1117,6 +1124,34 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Returns true if the given mode is declared or used by a non-#all template in the stylesheet.
+    /// Used for XTDE0045 initial mode validation.
+    /// </summary>
+    private bool ModeExists(string mode)
+    {
+        if (string.IsNullOrEmpty(mode))
+            return true; // unnamed mode always exists
+
+        // Check for explicit xsl:mode declaration
+        if (_stylesheet.GetModeDefinition(mode) != null)
+            return true;
+
+        // Check for template rules with this exact mode (not #all)
+        foreach (var rule in _allTemplateRules)
+        {
+            if (rule.MatchesAllModes)
+                continue;
+            foreach (var m in rule.Modes)
+            {
+                if (m == mode)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Expands a mode attribute value to Clark notation ({uri}local) using
     /// the in-scope namespaces of the instruction element. No-op for special
     /// mode names (#current, #default, #all) and unprefixed names.
@@ -1128,7 +1163,7 @@ public sealed class TransformEngine
 
         int colon = mode.IndexOf(':');
         if (colon < 0)
-            return mode;
+            return Stylesheet.ModeDefinition.NormalizeModeName(mode);
 
         var prefix = mode.Substring(0, colon);
         var local = mode.Substring(colon + 1);
@@ -1141,13 +1176,13 @@ public sealed class TransformEngine
             {
                 if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
                 {
-                    return $"{{{attr.Value}}}{local}";
+                    return Stylesheet.ModeDefinition.NormalizeModeName($"{{{attr.Value}}}{local}");
                 }
             }
             current = current.Parent;
         }
-        // Prefix not declared — return as-is (will fail to match)
-        return mode;
+        // Prefix not declared — return normalized name (will fail to match)
+        return Stylesheet.ModeDefinition.NormalizeModeName(mode);
     }
 
     /// <summary>
@@ -1571,15 +1606,17 @@ public sealed class TransformEngine
                             {
                                 var copy = new XElement(
                                     XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
-                                // Shallow copy includes attributes for element nodes.
-                                // (Strictly XSLT does not copy attributes automatically, but
-                                // removing this breaks namespace-inheritance tests because
-                                // our XDocument adapter does not model namespace nodes.)
+                                // Shallow copy copies namespace declarations but not regular attributes.
+                                // (xsl:copy-of is required to copy attributes explicitly.)
                                 foreach (var attr in nodeToCopy.Attributes())
                                 {
-                                    copy.SetAttributeValue(
-                                        XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
-                                        attr.NodeValue!.StringValue);
+                                    var attrNode = attr.NodeValue!;
+                                    if (attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/")
+                                    {
+                                        copy.SetAttributeValue(
+                                            XName.Get(attrNode.LocalName, attrNode.NamespaceUri),
+                                            attrNode.StringValue);
+                                    }
                                 }
                                 _currentContainer.Add(copy);
                                 var prev = _currentContainer;
@@ -1651,9 +1688,9 @@ public sealed class TransformEngine
             case "apply-templates":
                 {
                     var select = instruction.Attribute("select")?.Value;
-                    var modeRaw = instruction.Attribute("mode")?.Value;
+                    var modeRaw = instruction.Attribute("mode")?.Value?.Trim();
                     var mode = string.IsNullOrEmpty(modeRaw)
-                        ? CurrentDefaultMode
+                        ? (_defaultModeStack.Count > 0 ? CurrentDefaultMode : (_modeStack.Count > 0 ? _modeStack.Peek() : CurrentDefaultMode))
                         : ExpandModeName(modeRaw, instruction);
                     var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
 
@@ -2941,6 +2978,7 @@ public sealed class TransformEngine
                 // Built-in: copy text value (only if we have an element container)
                 // XSLT 3.0 §6.6: for text/attribute nodes, built-in rule does nothing
                 // when on-no-match is shallow-skip or deep-skip.
+                System.Console.WriteLine($"DEBUG ApplyBuiltInRules Text: mode='{mode}', behavior={behavior}, text='{node.StringValue}'");
                 if (behavior != Stylesheet.OnNoMatch.DeepSkip &&
                     behavior != Stylesheet.OnNoMatch.ShallowSkip)
                 {
@@ -3332,6 +3370,16 @@ public sealed class TransformEngine
 
         foreach (var (name, elem, isParam) in globals)
         {
+            // Check required parameters before evaluating defaults
+            if (isParam)
+            {
+                var required = elem.Attribute("required")?.Value;
+                if (required == "yes" && !_context.TryGetVariable(name, out _))
+                {
+                    throw new InvalidOperationException($"XTDE0050: No value supplied for required parameter '{name}'.");
+                }
+            }
+
             // Skip parameters already supplied by caller (e.g. fn:transform)
             if (isParam && _context.TryGetVariable(name, out _))
                 continue;

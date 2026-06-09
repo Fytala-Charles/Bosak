@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 07-06-2026     | StripXPathComments in ComputeDefaultPriority; fixes comment-stripped PredicatePattern   |
 //                      | Charles Korthout | 0.6   | 07-06-2026     | ValidateUnionPattern before split; restores XTSE0340 for union patterns                |
 //                      | Charles Korthout | 0.7   | 08-06-2026     | ParseModes expands QNames to Clark notation; fixes mode-0901 QName comparison          |
+//                      | Charles Korthout | 0.8   | 09-06-2026     | Trim default-mode attribute; use ModeDefinition.NormalizeModeName for empty URI       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -140,7 +141,7 @@ public sealed class TemplateRule
         if (string.IsNullOrEmpty(modeAttr))
         {
             // If the template has default-mode, use that; otherwise use stylesheet's default-mode
-            var templateDefaultMode = element.Attribute("default-mode")?.Value;
+            var templateDefaultMode = element.Attribute("default-mode")?.Value?.Trim();
             if (!string.IsNullOrEmpty(templateDefaultMode))
                 return new[] { ExpandModeName(templateDefaultMode, element) };
             if (!string.IsNullOrEmpty(stylesheetDefaultMode))
@@ -179,7 +180,7 @@ public sealed class TemplateRule
     {
         int colon = mode.IndexOf(':');
         if (colon < 0)
-            return mode; // no prefix
+            return ModeDefinition.NormalizeModeName(mode); // no prefix
 
         var prefix = mode.Substring(0, colon);
         var local = mode.Substring(colon + 1);
@@ -191,7 +192,7 @@ public sealed class TemplateRule
         {
             if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
             {
-                return $"{{{attr.Value}}}{local}";
+                return ModeDefinition.NormalizeModeName($"{{{attr.Value}}}{local}");
             }
         }
         // If not found on this element, try ancestor elements
@@ -202,13 +203,13 @@ public sealed class TemplateRule
             {
                 if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
                 {
-                    return $"{{{attr.Value}}}{local}";
+                    return ModeDefinition.NormalizeModeName($"{{{attr.Value}}}{local}");
                 }
             }
             ancestor = ancestor.Parent;
         }
-        // Prefix not found — return as-is (will likely fail to match, which is correct)
-        return mode;
+        // Prefix not found — return normalized name (will likely fail to match, which is correct)
+        return ModeDefinition.NormalizeModeName(mode);
     }
 
     /// <summary>
