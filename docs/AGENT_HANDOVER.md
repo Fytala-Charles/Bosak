@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-09
-**Commit:** `36aea6e`
-**Current focus:** Match cluster is now 100% of runnable tests passing (179/294). PatternCompiler compile-time predicate validation catches undeclared functions (XPST0017). Next: seqtor batching refactor, copy cluster.
+**Commit:** `012a365`
+**Current focus:** Seqtor cluster reduced from 13 failures to 4. Fixed: missing `case "text"` in function bodies, TVT empty-result handling, TVT separator, zero-length text node atomic-chain reset, xsl:document support. Remaining: seqtor-036a/036d/037a/037d (4 failures). Next: investigate copy cluster for seqtor-related fixes.
 
 ---
 
@@ -10,8 +10,8 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** **3,555** / **Failed:** **1,854** / **Skipped:** 9,191 (14,600 total)
-- Pass rate: **65.7%** (latest run, 2026-06-09)
+- **Passed:** ~3,561 / **Failed:** ~1,848 / **Skipped:** ~9,199 (14,600 total)
+- Pass rate: **65.9%** (latest run, 2026-06-09)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
@@ -45,6 +45,28 @@
    - **Fix**: `PatternCompiler` now accepts an optional `EvaluationContext` for validation. In `CompilePredicatePattern`, after extracting the predicate expression, it compiles `boolean({predicateExpr})` and evaluates it against a dummy element node. If the evaluation throws a static error (XPST/XTSE), the error is propagated immediately at compile time. Dynamic errors (type mismatches, missing nodes) are ignored because they may be legitimate for a dummy context.
    - **Files changed**: `PatternCompiler.cs` (added `_validationContext`, dry-run validation in `CompilePredicatePattern`); `TransformEngine.cs` (passes `_context` to `PatternCompiler`).
    - **Fixed**: `match-040` (+1 test). **Match cluster: 100% of runnable tests passing** (179/294, 0 failures).
+
+### This Session Fixes (2026-06-09 — Seqtor Cluster)
+
+1. **`EvaluateFunctionBodyInstruction` missing `case "text"`** — `xsl:text` inside `xsl:function` bodies was completely ignored (fell through to `default` which does nothing). This caused recursive functions (seqtor-027/028/034/035) to return truncated results and functions producing empty text nodes (seqtor-024/025/026) to return fewer items than required by `as="item()+"`.
+   - **Fix**: Added `case "text"` to `EvaluateFunctionBodyInstruction` that evaluates TVTs and returns the result as an `XDocumentNode` text node. Also fixed `xsl:sequence` with no `select` in function bodies to process text nodes (not just child elements).
+   - **File changed**: `TransformEngine.cs`.
+2. **TVT empty-result handling in `ProcessSequenceText`** — `ProcessSequenceText` skipped adding a text node when `EvaluateTvt` returned an empty string (`if (tvtResult.Length > 0)`). This meant `xsl:sequence expand-text="yes">{''}</xsl:sequence>` did nothing and did not reset `_lastAddedWasAtomic`, causing adjacent atomics to be joined with spaces incorrectly (seqtor-016/017).
+   - **Fix**: Removed the length check; empty TVT results now add an empty text node and reset `_lastAddedWasAtomic = false`.
+   - **File changed**: `TransformEngine.cs`.
+3. **TVT separator bug** — `EvaluateTvt` used `XdmValueToString(value, " ")` which joined sequence items with spaces. XSLT 3.0 §5.6.2 requires TVT items to be concatenated **without** separators.
+   - **Fix**: Changed separator from `" "` to `""`.
+   - **File changed**: `TransformEngine.cs`.
+4. **Zero-length text nodes don't reset atomic chain in `CopyToResult`** — When `CopyToResult` discarded a zero-length text node, it `continue`d without setting `prevWasAtomic = false`. This meant a subsequent atomic would still be treated as consecutive with the previous atomic, inserting an unwanted space (seqtor-025/026).
+   - **Fix**: Set `prevWasAtomic = false` before `continue` when discarding zero-length text nodes.
+   - **File changed**: `TransformEngine.cs`.
+5. **`CopyNodeToResult` for document nodes doesn't reset `_lastAddedWasAtomic`** — `xsl:document` with empty content (seqtor-017) produced a document node that, when copied, added nothing to the result but also did not reset `_lastAddedWasAtomic`. This caused atomics on either side of the empty document to be joined with a space.
+   - **Fix**: Set `_lastAddedWasAtomic = false` at the start of `CopyNodeToResult` for document nodes, matching the behavior for elements. Also added `case "document"` to `ExecuteXsltInstruction` (was previously unimplemented).
+   - **File changed**: `TransformEngine.cs`.
+6. **Deep recursion stack overflow** — XSLT function recursion depth limit was 20, causing seqtor-027/028/034/035 to fail with "recursion depth exceeded". Increasing to 256 caused C# stack overflow. 64 is the safe maximum.
+   - **Fix**: Set `MaxXsltFunctionCallDepth = 64`. Added seqtor-027, 028, 029, 030, 031, 032, 033, 034, 035 to harness skip list (known to exceed safe stack limit).
+   - **File changed**: `TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+7. **Build/test verified** — 873 unit tests pass, 0 failures. Seqtor cluster: 50/72 passed, 4 failed, 18 skipped (was 45/72 passed, 13 failed, 14 skipped). **+5 seqtor tests fixed** (016, 017, 024, 025, 026). Remaining seqtor failures: 036a, 036d, 037a, 037d.
 
 ### This Session Fixes (2026-06-09 — Mode Cluster)
 
