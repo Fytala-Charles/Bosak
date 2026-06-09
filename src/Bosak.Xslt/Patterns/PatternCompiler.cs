@@ -25,12 +25,15 @@
 //                      | Charles Korthout | 1.2   | 07-06-2026     | CompileAtomicMatch: runtime numeric predicate check, whitespace/dot tolerance; +11 tests|
 //                      | Charles Korthout | 1.3   | 07-06-2026     | attribute(*, type) comma-split in CompileNodeTest; fixes next-match-011                 |
 //                      | Charles Korthout | 1.4   | 07-06-2026     | IsStaticError no longer treats XPTY as static; StripXPathComments now public            |
+//                      | Charles Korthout | 1.5   | 09-06-2026     | Compile-time predicate validation via dry-run against dummy node; fixes match-040      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 
@@ -49,6 +52,13 @@ public delegate bool PatternPredicate(XdmValue item, EvaluationContext context);
 public sealed class PatternCompiler
 {
     private static readonly Regex UnionPattern = new(@"\s*\|\s*", RegexOptions.Compiled);
+
+    private readonly EvaluationContext? _validationContext;
+
+    public PatternCompiler(EvaluationContext? validationContext = null)
+    {
+        _validationContext = validationContext;
+    }
 
     /// <summary>
     /// Extracts an IXdmNode from an XdmValue candidate, returning null if the value is not a node.
@@ -1856,6 +1866,28 @@ public sealed class PatternCompiler
         string basePattern = pattern[..bracketOpen].Trim();
         string predicateExpr = pattern[(bracketOpen + 1)..bracketClose].Trim();
         string remaining = bracketClose + 1 < pattern.Length ? pattern[(bracketClose + 1)..] : "";
+
+        // Static validation: dry-run predicate against a dummy node to catch XPST0017
+        // and other static errors in predicates that might never be evaluated at runtime.
+        if (_validationContext != null)
+        {
+            try
+            {
+                var dummyNode = new XDocumentNode(new XElement("__dummy__"));
+                var validationExpr = XPath31Expression.Compile($"boolean({predicateExpr})");
+                validationExpr.Evaluate(_validationContext.WithFocus(XdmValue.FromNode(dummyNode), 1, 1));
+            }
+            catch (Exception ex) when (IsStaticError(ex))
+            {
+                throw;
+            }
+            catch
+            {
+                // Ignore dynamic errors (type errors, missing nodes, etc.) —
+                // these are legitimate for a dummy context and do not indicate
+                // a static pattern problem.
+            }
+        }
 
         // Special case: .[predicate] or [predicate] matches any node where the predicate is true.
         // Handle . with trailing comments: strip leading '.' and check the rest is only comments/whitespace.

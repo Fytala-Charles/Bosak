@@ -73,6 +73,7 @@
 //                      | Charles Korthout | 5.2   | 07-06-2026     | ConvertVariableValue for xsl:variable/@as basic atomic types; fixes match-248-254      |
 //                      | Charles Korthout | 5.3   | 08-06-2026     | Iterative key index build for cross-key dependencies (key-063/064); removed re-entrancy guard |
 //                      | Charles Korthout | 5.4   | 09-06-2026     | Fixed apply-templates default-mode resolution; XTDE0045/0050 validation; ModeExists helper |
+//                      | Charles Korthout | 5.5   | 09-06-2026     | Pass EvaluationContext to PatternCompiler for compile-time predicate validation          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -201,7 +202,7 @@ public sealed class TransformEngine
         // Ensure xsl:function registrations are present (re-entrant transforms)
         RegisterXsltFunctions();
         // Compile all template match patterns before execution
-        var patternCompiler = new Patterns.PatternCompiler();
+        var patternCompiler = new Patterns.PatternCompiler(_context);
         foreach (var rule in _allTemplateRules)
         {
             rule.CompileMatch(patternCompiler);

@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-09
 **Commit:** `c640b3d`
-**Current focus:** Mode cluster default-mode resolution fixed (mode-1619). Initial mode validation implemented (XTDE0045/0050). Next: remaining mode cluster static-validation errors, seqtor batching refactor.
+**Current focus:** Match cluster is now 100% of runnable tests passing (179/294). PatternCompiler compile-time predicate validation catches undeclared functions (XPST0017). Next: seqtor batching refactor, copy cluster.
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** **3,554** / **Failed:** **1,855** / **Skipped:** 9,191 (14,600 total)
+- **Passed:** **3,555** / **Failed:** **1,854** / **Skipped:** 9,191 (14,600 total)
 - Pass rate: **65.7%** (latest run, 2026-06-09)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3554 passed / 1855 failed / 9191 skipped (65.7%) — mode cluster fixes: default-mode resolution, XTDE0045/0050 (+11 tests)
+- Latest: 3555 passed / 1854 failed / 9191 skipped (65.7%) — match cluster 100% runnable (179/294, +1 match-040); mode cluster +11 tests
+- Previous: 3554 passed / 1855 failed / 9191 skipped (65.7%) — mode cluster fixes: default-mode resolution, XTDE0045/0050 (+11 tests)
 - Previous: 3543 passed / 1866 failed / 9191 skipped (65.5%) — key-063/064 + sum() trailing-zero fix (+16 tests)
 - Previous: 3527 passed / 1882 failed / 9191 skipped (65.2%) — copy cluster +10 tests (PI kind-test args, fn:copy-of fixes, function context isolation)
 - Previous: 3463 passed / 1947 failed / 9190 skipped (64.0%) — match cluster 160/294 (+3 this session), next-match 36/40, attribute-set 36/50
@@ -37,6 +38,13 @@
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
+
+### This Session Fixes (2026-06-09 — Match Cluster)
+
+1. **Compile-time predicate validation for undeclared functions (match-040)** — Patterns like `*[f:special(.)]` with undeclared functions in predicates previously only raised XPST0017 at runtime, and only if the base pattern actually matched a node. Since `match-040` uses an element source with no matching elements, the error was silently swallowed, producing `<out>OK!</out>` instead of the expected static error.
+   - **Fix**: `PatternCompiler` now accepts an optional `EvaluationContext` for validation. In `CompilePredicatePattern`, after extracting the predicate expression, it compiles `boolean({predicateExpr})` and evaluates it against a dummy element node. If the evaluation throws a static error (XPST/XTSE), the error is propagated immediately at compile time. Dynamic errors (type mismatches, missing nodes) are ignored because they may be legitimate for a dummy context.
+   - **Files changed**: `PatternCompiler.cs` (added `_validationContext`, dry-run validation in `CompilePredicatePattern`); `TransformEngine.cs` (passes `_context` to `PatternCompiler`).
+   - **Fixed**: `match-040` (+1 test). **Match cluster: 100% of runnable tests passing** (179/294, 0 failures).
 
 ### This Session Fixes (2026-06-09 — Mode Cluster)
 
@@ -496,7 +504,8 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ### Next Session Immediate Targets (start here)
 
-1. **`mode` cluster remaining** — 36 failures in `mode` test-set, 2 in `initial-mode` (out of scope for quick fix):
+1. **`match` cluster** — **100% of runnable tests passing** ✅ (179/294, 0 failures, 115 skipped).
+2. **`mode` cluster remaining** — 36 failures in `mode` test-set, 2 in `initial-mode` (out of scope for quick fix):
    - `mode-1442/1443`: `warning-on-no-match` not implemented
    - `mode-1444/1447/1502/1904`: static validation errors (XTSE0020, XTSE0545) — requires schema validator
    - `mode-1510/1511-1514`: accumulators not implemented
@@ -529,7 +538,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | Cluster | Failed | Skipped | Notes |
 |---------|--------|---------|-------|
 | **number** | 6 | 1 | 264/271 passing (97.8%). Remaining: non-English word formatting (out of scope). |
-| **match** | 19 | 115 | 160/294 passing (89.4%). Down from 78 failures. Remaining: `intersect`/`except`/union path patterns, namespace nodes, document-node() initial template, compile-time XPST0017. |
+| **match** | 0 | 115 | **179/294 passing (100% of runnable)** ✅ — match-040 fixed by compile-time predicate validation. |
 | **sort** | 0 | 18 | 66/84 passing (100% of runnable). ✅ Clean. |
 | **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
 | **node-before** | 2 | 10 | 24/36 passing (66.7%). Remaining 2 are environment issues (missing `$works` variable). |
@@ -556,8 +565,8 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `<uncommitted>` — mode cluster fixes: default-mode resolution, XTDE0045/0050 validation, harness initial-mode params
-- Previous: `<uncommitted>` — iterative key index build (key-063/064), FormatXPathDouble/Float trailing-zero fix
+- Latest: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
+- Previous: `<uncommitted>` — mode cluster fixes: default-mode resolution, XTDE0045/0050 validation, harness initial-mode params
 - Previous: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)
 - Previous: `<uncommitted>` — match cluster fixes (241, 246a/b, 248-254), xsl:variable @as coercion, next-match position/last preservation
 - Previous: `0bb2e09` — attribute-set, use-when, copy-of atomic spacing, next-match fixes
