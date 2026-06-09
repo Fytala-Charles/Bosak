@@ -5,6 +5,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Bosak.LanguageServer</PackageId>
+    <Description>Language Server Protocol implementation for XPath 3.1 and XSLT 3.0</Description>
   </PropertyGroup>
 
   <ItemGroup>

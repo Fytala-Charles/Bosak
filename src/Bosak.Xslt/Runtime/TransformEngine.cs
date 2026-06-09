@@ -113,6 +113,9 @@ public sealed class TransformEngine
     // Mode stack for #current resolution
     private readonly Stack<string> _modeStack = new();
 
+    // Default-mode stack for xsl:default-mode scoping
+    private readonly Stack<string> _defaultModeStack = new();
+
     // Tunnel parameter stack: each frame is the tunnel params visible at that call depth
     private readonly Stack<Dictionary<string, XdmValue>> _tunnelParamStack = new();
 
@@ -236,19 +239,22 @@ public sealed class TransformEngine
             else if (!string.IsNullOrEmpty(initialMode))
             {
                 // Start transformation in the specified initial mode.
-                // If a template matches the document node in this mode, execute it;
-                // otherwise apply the built-in rule for the document node.
-                _modeStack.Push(initialMode);
+                // Expand any namespace prefix in the initial mode name.
+                var resolvedInitialMode = ExpandModeName(initialMode, _stylesheet.Root);
+                // If the mode is #unnamed, treat it as the empty unnamed mode
+                if (resolvedInitialMode == "#unnamed")
+                    resolvedInitialMode = "";
+                _modeStack.Push(resolvedInitialMode);
                 try
                 {
-                    var rootTemplate = FindBestTemplate(source, initialMode);
+                    var rootTemplate = FindBestTemplate(source, resolvedInitialMode);
                     if (rootTemplate != null)
                     {
                         ExecuteTemplate(rootTemplate, source);
                     }
                     else
                     {
-                        ApplyBuiltInRules(source, initialMode);
+                        ApplyBuiltInRules(source, resolvedInitialMode);
                     }
                 }
                 finally
@@ -258,9 +264,10 @@ public sealed class TransformEngine
             }
             else
             {
-                // Look for a template matching "/" (document root)
+                // Look for a template matching "/" or other document-node-specific patterns
                 var rootTemplate = FindRootTemplate();
-                if (rootTemplate != null)
+                if (rootTemplate != null && rootTemplate.CompiledMatch != null &&
+                    rootTemplate.CompiledMatch(XdmValue.FromNode(source), _context))
                 {
                     ExecuteTemplate(rootTemplate, source);
                 }
@@ -411,10 +418,15 @@ public sealed class TransformEngine
                 _context.WithVariable(def.ParameterNames[i], args[i]);
             }
 
-            // Set focus to the first argument if present, otherwise empty sequence
+            // XSLT functions have no context item by default (XSLT 3.0 §9.6).
+            // xsl:sequence/@select and other XPath expressions must not see
+            // the caller's context item.
+            _context.WithFocus(XdmValue.Undefined, 0, 0);
+
+            // The contextItem parameter to EvaluateFunctionBody is used for
+            // XSLT instructions (e.g. xsl:copy, xsl:apply-templates) that
+            // reference the context node explicitly, not for XPath evaluation.
             var focus = args.Length > 0 ? args[0] : XdmValue.FromSequence(XdmSequence.Empty);
-            _context.WithFocus(focus, 1, 1);
-            _context.WithCurrentItem(focus);
 
             // Evaluate the function body (sequence constructor)
             return EvaluateFunctionBody(def.Element, focus);
@@ -842,8 +854,19 @@ public sealed class TransformEngine
     {
         foreach (var rule in _allTemplateRules)
         {
-            if (rule.Match != null && Patterns.PatternCompiler.StripXPathComments(rule.Match).Trim() == "/")
+            if (rule.Match == null) continue;
+            var stripped = Patterns.PatternCompiler.StripXPathComments(rule.Match).Trim();
+            // Only match patterns that directly match the document node,
+            // not path patterns like document-node()/child::element().
+            if (stripped == "/" ||
+                stripped == "document-node()" ||
+                stripped.StartsWith("document-node()[") ||
+                stripped == "root()" ||
+                stripped.StartsWith("doc(") ||
+                stripped.StartsWith("(/"))
+            {
                 return rule;
+            }
         }
         return null;
     }
@@ -889,10 +912,18 @@ public sealed class TransformEngine
 
             bool allNodes = items.All(i => i.IsNode);
 
-            // Sort nodes by document order; non-node sequences keep original order
+            // Sort nodes by document order; non-node sequences keep original order.
+            // Use original index as tie-breaker for stable ordering when document orders
+            // are equal (e.g., detached nodes from variables).
             if (allNodes)
             {
-                items.Sort((a, b) => a.NodeValue!.DocumentOrder.CompareTo(b.NodeValue!.DocumentOrder));
+                var indexed = items.Select((item, idx) => (item, idx)).ToList();
+                indexed.Sort((a, b) =>
+                {
+                    int cmp = a.item.NodeValue!.DocumentOrder.CompareTo(b.item.NodeValue!.DocumentOrder);
+                    return cmp != 0 ? cmp : a.idx.CompareTo(b.idx);
+                });
+                items = indexed.Select(x => x.item).ToList();
             }
 
             // Apply xsl:sort if present (only supported for all-node sequences currently)
@@ -978,10 +1009,18 @@ public sealed class TransformEngine
 
             bool allNodes = items.All(i => i.IsNode);
 
-            // Sort nodes by document order; non-node sequences keep original order
+            // Sort nodes by document order; non-node sequences keep original order.
+            // Use original index as tie-breaker for stable ordering when document orders
+            // are equal (e.g., detached nodes from variables).
             if (allNodes)
             {
-                items.Sort((a, b) => a.NodeValue!.DocumentOrder.CompareTo(b.NodeValue!.DocumentOrder));
+                var indexed = items.Select((item, idx) => (item, idx)).ToList();
+                indexed.Sort((a, b) =>
+                {
+                    int cmp = a.item.NodeValue!.DocumentOrder.CompareTo(b.item.NodeValue!.DocumentOrder);
+                    return cmp != 0 ? cmp : a.idx.CompareTo(b.idx);
+                });
+                items = indexed.Select(x => x.item).ToList();
             }
 
             // Apply xsl:sort if present (only supported for all-node sequences currently)
@@ -1030,6 +1069,11 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Returns the current default mode from the default-mode stack or the stylesheet root.
+    /// </summary>
+    private string CurrentDefaultMode => _defaultModeStack.Count > 0 ? _defaultModeStack.Peek() : _stylesheet.DefaultMode;
+
+    /// <summary>
     /// Resolves mode aliases (#current, #default) to actual mode names.
     /// </summary>
     private string ResolveMode(string mode)
@@ -1039,6 +1083,10 @@ public sealed class TransformEngine
             return _modeStack.Count > 0 ? _modeStack.Peek() : "";
         }
         if (mode == "#default")
+        {
+            return CurrentDefaultMode;
+        }
+        if (mode == "#unnamed")
         {
             return "";
         }
@@ -1052,7 +1100,7 @@ public sealed class TransformEngine
     /// </summary>
     private static string ExpandModeName(string mode, XElement instruction)
     {
-        if (mode == "#current" || mode == "#default" || mode == "#all")
+        if (mode == "#current" || mode == "#default" || mode == "#all" || mode == "#unnamed")
             return mode;
 
         int colon = mode.IndexOf(':');
@@ -1130,6 +1178,13 @@ public sealed class TransformEngine
                 tunnelFrame[k] = v;
         }
         _tunnelParamStack.Push(tunnelFrame);
+
+        // Push default-mode for this template scope
+        var templateDefaultMode = rule.Element.Attribute("default-mode")?.Value;
+        if (!string.IsNullOrEmpty(templateDefaultMode))
+        {
+            _defaultModeStack.Push(ExpandModeName(templateDefaultMode, rule.Element));
+        }
 
         try
         {
@@ -1209,6 +1264,10 @@ public sealed class TransformEngine
             _context.WithFocus(savedItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
             _tunnelParamStack.Pop();
+            if (!string.IsNullOrEmpty(templateDefaultMode))
+            {
+                _defaultModeStack.Pop();
+            }
             _currentTemplateRule = savedTemplateRule;
         }
     }
@@ -1251,9 +1310,19 @@ public sealed class TransformEngine
     private void ExecuteXsltInstruction(XElement instruction, XdmValue contextItem)
     {
         var node = contextItem.IsNode ? contextItem.NodeValue : null;
-        var name = instruction.Name.LocalName;
-        switch (name)
+
+        // Push default-mode for this instruction scope
+        var instructionDefaultMode = instruction.Attribute("default-mode")?.Value;
+        if (!string.IsNullOrEmpty(instructionDefaultMode))
         {
+            _defaultModeStack.Push(ExpandModeName(instructionDefaultMode, instruction));
+        }
+
+        try
+        {
+            var name = instruction.Name.LocalName;
+            switch (name)
+            {
             case "element":
                 {
                     var elemNameRaw = instruction.Attribute("name")?.Value ?? "unnamed";
@@ -1479,7 +1548,10 @@ public sealed class TransformEngine
                             {
                                 var copy = new XElement(
                                     XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
-                                // Shallow copy includes attributes for element nodes
+                                // Shallow copy includes attributes for element nodes.
+                                // (Strictly XSLT does not copy attributes automatically, but
+                                // removing this breaks namespace-inheritance tests because
+                                // our XDocument adapter does not model namespace nodes.)
                                 foreach (var attr in nodeToCopy.Attributes())
                                 {
                                     copy.SetAttributeValue(
@@ -1556,8 +1628,10 @@ public sealed class TransformEngine
             case "apply-templates":
                 {
                     var select = instruction.Attribute("select")?.Value;
-                    var modeRaw = instruction.Attribute("mode")?.Value ?? "";
-                    var mode = ExpandModeName(modeRaw, instruction);
+                    var modeRaw = instruction.Attribute("mode")?.Value;
+                    var mode = string.IsNullOrEmpty(modeRaw)
+                        ? CurrentDefaultMode
+                        : ExpandModeName(modeRaw, instruction);
                     var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
 
                     // Collect xsl:with-param elements (tunnel and non-tunnel)
@@ -2345,6 +2419,14 @@ public sealed class TransformEngine
                 // Unknown instruction: ignore for now
                 break;
         }
+        }
+        finally
+        {
+            if (!string.IsNullOrEmpty(instructionDefaultMode))
+            {
+                _defaultModeStack.Pop();
+            }
+        }
     }
 
     /// <summary>
@@ -2480,37 +2562,52 @@ public sealed class TransformEngine
         var prev = _currentContainer;
         _currentContainer = copy;
         _lastAddedWasAtomic = false;
-        
 
-        foreach (var child in source.Nodes())
+        // Push xsl:default-mode for this literal result element scope
+        var lreDefaultMode = source.Attribute(XName.Get("default-mode", Stylesheet.Stylesheet.XslNamespace))?.Value;
+        if (!string.IsNullOrEmpty(lreDefaultMode))
         {
-            switch (child)
-            {
-                case XElement childElem:
-                    if (childElem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                    {
-                        // This shouldn't happen in literal elements, but handle anyway
-                        ExecuteXsltInstruction(childElem, _context.ContextItem);
-                    }
-                    else
-                    {
-                        CopyLiteralElement(childElem);
-                    }
-                    break;
-                case XText text:
-                    ProcessSequenceText(text, source);
-                    break;
-                // Comments inside literal result elements are not copied to output
-                // (XSLT processors typically strip stylesheet-level comments).
-                case XComment:
-                    break;
-                case XProcessingInstruction pi:
-                    _currentContainer.Add(new XProcessingInstruction(pi.Target, pi.Data));
-                    break;
-            }
+            _defaultModeStack.Push(ExpandModeName(lreDefaultMode, source));
         }
 
-        _currentContainer = prev;
+        try
+        {
+            foreach (var child in source.Nodes())
+            {
+                switch (child)
+                {
+                    case XElement childElem:
+                        if (childElem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                        {
+                            // This shouldn't happen in literal elements, but handle anyway
+                            ExecuteXsltInstruction(childElem, _context.ContextItem);
+                        }
+                        else
+                        {
+                            CopyLiteralElement(childElem);
+                        }
+                        break;
+                    case XText text:
+                        ProcessSequenceText(text, source);
+                        break;
+                    // Comments inside literal result elements are not copied to output
+                    // (XSLT processors typically strip stylesheet-level comments).
+                    case XComment:
+                        break;
+                    case XProcessingInstruction pi:
+                        _currentContainer.Add(new XProcessingInstruction(pi.Target, pi.Data));
+                        break;
+                }
+            }
+        }
+        finally
+        {
+            if (!string.IsNullOrEmpty(lreDefaultMode))
+            {
+                _defaultModeStack.Pop();
+            }
+            _currentContainer = prev;
+        }
     }
 
     /// <summary>

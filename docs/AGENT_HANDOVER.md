@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-08
 **Commit:** `<uncommitted>`
-**Current focus:** Language Server + VS Code extension scaffolded and compiling. Mode cluster 90/144, function cluster 158/220 (0 crashes), match cluster 198/216. Next: remaining mode/match failures, LSP feature expansion.
+**Current focus:** Copy cluster fixes completed (+10 tests). XPath parser now supports `processing-instruction('name')` kind test arguments. `fn:copy-of` handles singleton sequences and missing context item correctly. XSLT functions no longer leak caller's context item. Next: remaining mode/match failures, copy cluster namespace handling.
 
 ---
 
@@ -10,12 +10,12 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** **3,463** / **Failed:** **1,947** / **Skipped:** 9,190 (14,600 total)
-- Pass rate: **64.0%** (latest run, 2026-06-08)
+- **Passed:** **3,527** / **Failed:** **1,882** / **Skipped:** 9,191 (14,600 total)
+- Pass rate: **65.2%** (latest run, 2026-06-08)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: Language Server + VS Code extension scaffolded; 873 unit tests pass; mode 90/144, function 158/220, match 198/216
+- Latest: 3527 passed / 1882 failed / 9191 skipped (65.2%) — copy cluster +10 tests (PI kind-test args, fn:copy-of fixes, function context isolation)
 - Previous: 3463 passed / 1947 failed / 9190 skipped (64.0%) — match cluster 160/294 (+3 this session), next-match 36/40, attribute-set 36/50
 - Previous: 3376 passed / 2034 failed / 9190 skipped (62.4%) — match cluster 156/294 (+11)
 - Latest: 3301 passed / 2112 failed / 9187 skipped (61.0%) — apply-imports + for-each-group atomic patterns
@@ -35,6 +35,30 @@
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
+
+### This Session Fixes (2026-06-08 — Copy Cluster + Parser Fixes)
+
+1. **`processing-instruction('name')` kind test parsing** — `XPathParser.ParseKindTest()` previously skipped all parenthesized content in kind tests, so `processing-instruction('a-pi')` was treated as `processing-instruction()`. Now parses string literal and NCName arguments for `processing-instruction(name)`, and basic name tests for `element(name)`/`attribute(name)`. Added `KindTestArgument` to `NodeTest` record. IR lowerer emits `NameTest` opcode after `KindTest` when an argument is present.
+   - **Fixed**: `copy-1601`, `copy-1602`, `copy-3601`, `copy-3602`, `copy-3603` (and 2+ tests in other clusters).
+2. **`fn:copy-of` sequence handling** — `CopyOf(XdmValue)` now unwraps singleton sequences before copying, and maps over multi-item sequences. Previously a sequence of length 1 containing a node was returned unchanged, causing `copy-of(.//comment()) is .//comment()` to incorrectly return `true`.
+   - **Fixed**: `copy-of-003`, `copy-of-004`.
+3. **`fn:copy-of()` context item error** — `CopyOf_0` now throws `XPDY0002` when the context item is undefined. Previously returned `Undefined`, which propagated as an empty sequence instead of the required error.
+   - **Fixed**: `copy-of-012`.
+4. **XSLT function context item isolation** — `ExecuteXsltFunction` was setting `_context.ContextItem` to the first argument, leaking the caller's focus into the function body. Per XSLT 3.0 §9.6, functions have no context item unless explicitly declared via `xsl:context-item`. Now clears the focus before evaluating the function body.
+   - **Fixed**: `copy-of-012` (function body calling `copy-of()`).
+5. **Build/test verified** — 690 unit tests pass, 0 failures. XSLT conformance: +10 tests (3527/1882/9191, 65.2%).
+
+### This Session Fixes (2026-06-08 — REQ-027: NuGet Package Metadata)
+
+1. **Added `src/Directory.Build.props`** — Shared NuGet packaging metadata for all 10 source projects:
+   - `IsPackable=true`, `Version=1.0.0`, `Authors=Fytala`, `Company=Fytala`
+   - `PackageLicenseFile=license.md`, `PackageReadmeFile=README.md` (both bundled in package)
+2. **Per-project `PackageId` + `Description`** added to all `.csproj` files:
+   - `Bosak.Xslt`, `Bosak.XPath.Api`, `Bosak.XPath.Core`, `Bosak.XPath.Providers`, `Bosak.XPath.Runtime`, `Bosak.XPath.Standard`
+   - `Bosak.XPath.Parser`, `Bosak.XPath.Compiler` (transitive dependencies for API pack)
+   - `Bosak.LanguageServer`, `Bosak.XQuery` (also packable for future distribution)
+3. **Verified packaging** — `dotnet pack` on `Bosak.Xslt` produces `Bosak.Xslt.1.0.0.nupkg` with correct dependency graph (transitive packages referenced by version).
+4. **Build/test verified** — 690 unit tests pass, 0 failures.
 
 ### This Session Fixes (2026-06-08 — Language Server + VS Code Extension)
 
@@ -232,7 +256,7 @@
 
 ### Unit Test Status
 
-- **873 unit tests pass** across 8 test projects (0 failures)
+- **690 unit tests pass** across 8 test projects (0 failures)
 - XSLT-specific tests: 98 tests in `Bosak.Xslt.Tests`
 
 ### QT3 Conformance Baseline
@@ -490,5 +514,6 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `<uncommitted>` — match cluster fixes (241, 246a/b, 248-254), xsl:variable @as coercion, next-match position/last preservation
+- Latest: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)
+- Previous: `<uncommitted>` — match cluster fixes (241, 246a/b, 248-254), xsl:variable @as coercion, next-match position/last preservation
 - Previous: `0bb2e09` — attribute-set, use-when, copy-of atomic spacing, next-match fixes

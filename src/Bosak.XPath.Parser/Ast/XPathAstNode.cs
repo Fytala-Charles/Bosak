@@ -144,7 +144,7 @@ public sealed record ArrayConstructorNode(IReadOnlyList<XPathAstNode> Items, boo
 // Node tests
 // ------------------------------------------------------------------
 
-public sealed record NodeTest(NameTestKind Kind, string? Name = null, string? NamespaceUri = null);
+public sealed record NodeTest(NameTestKind Kind, string? Name = null, string? NamespaceUri = null, string? KindTestArgument = null);
 
 // ------------------------------------------------------------------
 // Enums

@@ -417,20 +417,42 @@ public sealed class PatternCompiler
 
         // Handle top-level except (not inside parentheses/brackets)
         var exceptParts = SplitTopLevel(trimmed, "except");
-        if (exceptParts.Length == 2)
+        if (exceptParts.Length >= 2)
         {
-            var left = CompileSinglePattern(exceptParts[0]);
-            var right = CompileSinglePattern(exceptParts[1]);
-            return (item, ctx) => left(item, ctx) && !right(item, ctx);
+            // Use XPath-from-root only when all branches are path expressions or axis steps.
+            // Simple patterns like 'foo' or '@*' must use pattern-based matching.
+            if (exceptParts.All(p => p.Contains("::") || p.Contains('/')))
+                return CompileSetPattern(trimmed);
+
+            var first = CompileSinglePattern(exceptParts[0]);
+            var rest = exceptParts[1..].Select(p => CompileSinglePattern(p)).ToArray();
+            return (item, ctx) =>
+            {
+                if (!first(item, ctx)) return false;
+                foreach (var r in rest)
+                    if (r(item, ctx)) return false;
+                return true;
+            };
         }
 
         // Handle top-level intersect
         var intersectParts = SplitTopLevel(trimmed, "intersect");
-        if (intersectParts.Length == 2)
+        if (intersectParts.Length >= 2)
         {
-            var left = CompileSinglePattern(intersectParts[0]);
-            var right = CompileSinglePattern(intersectParts[1]);
-            return (item, ctx) => left(item, ctx) && right(item, ctx);
+            // Use XPath-from-root only when all branches are path expressions or axis steps.
+            // Simple patterns like 'foo' or '@*' must use pattern-based matching.
+            if (intersectParts.All(p => p.Contains("::") || p.Contains('/')))
+                return CompileSetPattern(trimmed);
+
+            var first = CompileSinglePattern(intersectParts[0]);
+            var rest = intersectParts[1..].Select(p => CompileSinglePattern(p)).ToArray();
+            return (item, ctx) =>
+            {
+                if (!first(item, ctx)) return false;
+                foreach (var r in rest)
+                    if (!r(item, ctx)) return false;
+                return true;
+            };
         }
 
         // Handle // prefix (e.g. //foo, //foo[bar]) — matches any descendant
@@ -805,6 +827,45 @@ public sealed class PatternCompiler
     }
 
     /// <summary>
+    /// Compiles a top-level except or intersect pattern as an XPath expression
+    /// evaluated from the root of the candidate node.
+    /// </summary>
+    private PatternPredicate CompileSetPattern(string pattern)
+    {
+        var compiled = XPath31Expression.Compile(pattern);
+        return (item, ctx) =>
+        {
+            var node = AsNode(item);
+            if (node == null) return false;
+            try
+            {
+                var root = node;
+                while (root.Parent != null)
+                    root = root.Parent;
+                var result = compiled.Evaluate(ctx.WithFocus(XdmValue.FromNode(root), 1, 1));
+                if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
+                {
+                    foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
+                    {
+                        if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
+                            return true;
+                    }
+                }
+                else if (result.IsNode && result.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                if (IsStaticError(ex)) throw;
+                return false;
+            }
+        };
+    }
+
+    /// <summary>
     /// Compiles a simple path pattern like <c>a/b</c> or <c>a/b/c</c>.
     /// The last step is the node test; preceding steps are ancestor checks.
     /// </summary>
@@ -868,6 +929,132 @@ public sealed class PatternCompiler
         if (steps.Count == 0)
             return (item, ctx) => false;
 
+        // Expand parenthesized union steps into multiple path patterns.
+        // For example, x/(child::a|descendant::b) becomes x/child::a | x/descendant::b.
+        for (int sIdx = 0; sIdx < steps.Count; sIdx++)
+        {
+            var step = steps[sIdx];
+            if (step.StartsWith('('))
+            {
+                int closeParen = FindMatchingParen(step, 0);
+                if (closeParen == step.Length - 1)
+                {
+                    string inside = step[1..closeParen].Trim();
+                    var unionBranches = SplitTopLevel(inside, '|');
+                    if (unionBranches.Length > 1)
+                    {
+                        var expandedPatterns = new List<string>();
+                        foreach (var branch in unionBranches)
+                        {
+                            var newSteps = new List<string>(steps);
+                            newSteps[sIdx] = branch.Trim();
+                            var sb = new System.Text.StringBuilder();
+                            for (int ns = 0; ns < newSteps.Count; ns++)
+                            {
+                                if (ns > 0)
+                                    sb.Append(separators[ns - 1] ? "/" : "//");
+                                sb.Append(newSteps[ns]);
+                            }
+                            expandedPatterns.Add(sb.ToString());
+                        }
+                        var compiledBranches = expandedPatterns.Select(p => CompileSinglePattern(p)).ToArray();
+                        return (item, ctx) => compiledBranches.Any(b => b(item, ctx));
+                    }
+                }
+            }
+        }
+
+        // For steps containing except/intersect (e.g., x/(descendant::a except child::a)),
+        // compile the entire path as XPath and evaluate from the root.
+        for (int sIdx = 0; sIdx < steps.Count; sIdx++)
+        {
+            var step = steps[sIdx];
+            if (step.StartsWith('('))
+            {
+                int closeParen = FindMatchingParen(step, 0);
+                if (closeParen == step.Length - 1)
+                {
+                    string inside = step[1..closeParen].Trim();
+                    var exceptBranches = SplitTopLevel(inside, "except");
+                    var intersectBranches = SplitTopLevel(inside, "intersect");
+                    if (exceptBranches.Length >= 2 || intersectBranches.Length >= 2)
+                    {
+                        var sb = new System.Text.StringBuilder();
+                        for (int ns = 0; ns < steps.Count; ns++)
+                        {
+                            if (ns > 0)
+                                sb.Append(separators[ns - 1] ? "/" : "//");
+                            sb.Append(steps[ns]);
+                        }
+                        var compiledPath = XPath31Expression.Compile(sb.ToString());
+
+                        // For parentless nodes, the first step may need child-or-top semantics.
+                        // Compile a self-axis variant and union the results.
+                        XPath31Expression? compiledSelfPath = null;
+                        if (steps.Count > 0 && !steps[0].Contains("::"))
+                        {
+                            var selfSb = new System.Text.StringBuilder();
+                            selfSb.Append("self::").Append(steps[0]);
+                            for (int ns = 1; ns < steps.Count; ns++)
+                            {
+                                selfSb.Append(separators[ns - 1] ? "/" : "//");
+                                selfSb.Append(steps[ns]);
+                            }
+                            compiledSelfPath = XPath31Expression.Compile(selfSb.ToString());
+                        }
+
+                        return (item, ctx) =>
+                        {
+                            var node = AsNode(item);
+                            if (node == null) return false;
+                            try
+                            {
+                                var root = node;
+                                while (root.Parent != null)
+                                    root = root.Parent;
+                                var result = compiledPath.Evaluate(ctx.WithFocus(XdmValue.FromNode(root), 1, 1));
+                                if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
+                                {
+                                    foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
+                                    {
+                                        if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                            return true;
+                                    }
+                                }
+                                else if (result.IsNode && result.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                                {
+                                    return true;
+                                }
+
+                                if (compiledSelfPath != null)
+                                {
+                                    var selfResult = compiledSelfPath.Evaluate(ctx.WithFocus(XdmValue.FromNode(root), 1, 1));
+                                    if (selfResult.Kind == XdmValueKind.Sequence && selfResult.SequenceValue != null)
+                                    {
+                                        foreach (var seqItem in XdmSequence.FromSource(selfResult.SequenceValue))
+                                        {
+                                            if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                                return true;
+                                        }
+                                    }
+                                    else if (selfResult.IsNode && selfResult.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                                    {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
+                            catch (Exception ex)
+                            {
+                                if (IsStaticError(ex)) throw;
+                                return false;
+                            }
+                        };
+                    }
+                }
+            }
+        }
+
         // Determine the effective axis of each step so we can handle descendant::
         // correctly in ancestor checks (a/descendant::b should match deep descendants).
         var stepAxes = new List<string>();
@@ -895,16 +1082,34 @@ public sealed class PatternCompiler
 
         XPath31Expression? lastStepAxisExpr = null;
         PatternPredicate? lastStepPredicate = null;
+        XPath31Expression? lastStepSetExpr = null;
 
-        if (lastStepNeedsAxisContext && lastStepStr.Contains("::"))
+        // Detect parenthesized except/intersect in the last step.
+        // These must be evaluated from the matching ancestor context, not the candidate.
+        if (lastStepStr.StartsWith('('))
+        {
+            int closeParen = FindMatchingParen(lastStepStr, 0);
+            if (closeParen == lastStepStr.Length - 1)
+            {
+                string inside = lastStepStr[1..closeParen].Trim();
+                var exceptBranches = SplitTopLevel(inside, "except");
+                var intersectBranches = SplitTopLevel(inside, "intersect");
+                if (exceptBranches.Length >= 2 || intersectBranches.Length >= 2)
+                {
+                    lastStepSetExpr = XPath31Expression.Compile(inside);
+                }
+            }
+        }
+
+        if (lastStepSetExpr == null && lastStepNeedsAxisContext && lastStepStr.Contains("::"))
         {
             lastStepAxisExpr = XPath31Expression.Compile(lastStepStr);
         }
-        else if (lastStepHasPredicate)
+        else if (lastStepSetExpr == null && lastStepHasPredicate)
         {
             lastStepPredicate = CompilePredicatePattern(lastStepStr);
         }
-        else
+        else if (lastStepSetExpr == null)
         {
             lastStepPredicate = CompileSinglePattern(lastStepStr);
         }
@@ -927,7 +1132,11 @@ public sealed class PatternCompiler
             if (lastStepPredicate != null && !lastStepPredicate(item, ctx))
                 return false;
 
-            var current = node.Parent;
+            // For descendant-or-self and self axes, the candidate itself may serve as
+            // the matching node for preceding steps (e.g., x/descendant-or-self::x).
+            bool lastAxisIncludesSelf = stepAxes.Count > 0 &&
+                (stepAxes[^1] == "descendant-or-self" || stepAxes[^1] == "self");
+            var current = lastAxisIncludesSelf ? node : node.Parent;
             IXdmNode? stepContextNode = null;
 
             for (int s = steps.Count - 2; s >= 0; s--)
@@ -981,6 +1190,46 @@ public sealed class PatternCompiler
                         return false;
 
                     var result = lastStepAxisExpr.Evaluate(ctx.WithFocus(XdmValue.FromNode(focusNode), 1, 1));
+                    if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
+                    {
+                        foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
+                        {
+                            if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                return true;
+                        }
+                        return false;
+                    }
+                    else if (result.IsNode && result.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    if (IsStaticError(ex)) throw;
+                    return false;
+                }
+                finally
+                {
+                    ctx.WithFocus(savedItem, savedPos, savedSize);
+                }
+            }
+
+            // For parenthesized except/intersect in the last step, evaluate the set
+            // expression from the matching ancestor context.
+            if (lastStepSetExpr != null)
+            {
+                var savedItem = ctx.ContextItem;
+                var savedPos = ctx.ContextPosition;
+                var savedSize = ctx.ContextSize;
+                try
+                {
+                    var focusNode = stepContextNode ?? node.Parent;
+                    if (focusNode == null)
+                        return false;
+
+                    var result = lastStepSetExpr.Evaluate(ctx.WithFocus(XdmValue.FromNode(focusNode), 1, 1));
                     if (result.Kind == XdmValueKind.Sequence && result.SequenceValue != null)
                     {
                         foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))

@@ -770,6 +770,17 @@ public sealed class IrLowerer
                 Emit(IrOpCode.KindTest, (ushort)afterTestReg, (ushort)axisReg, operand: namePoolIdx);
                 FreeRegister(axisReg);
                 axisReg = afterTestReg;
+
+                // If the kind test has an argument (e.g. processing-instruction('name')),
+                // emit a NameTest to filter by that name.
+                if (!string.IsNullOrEmpty(node.NodeTest.KindTestArgument))
+                {
+                    int argPoolIdx = AddToLiteralPool(node.NodeTest.KindTestArgument);
+                    afterTestReg = AllocRegister();
+                    Emit(IrOpCode.NameTest, (ushort)afterTestReg, (ushort)axisReg, operand: argPoolIdx);
+                    FreeRegister(axisReg);
+                    axisReg = afterTestReg;
+                }
             }
 
             if (node.NodeTest.Kind != NameTestKind.KindTest && node.NodeTest.Kind != NameTestKind.NamespaceAny)

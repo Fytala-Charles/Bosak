@@ -104,6 +104,9 @@ public sealed class Stylesheet
     /// <summary>The import precedence of this stylesheet (0 = main, higher = deeper import).</summary>
     public int ImportPrecedence { get; }
 
+    /// <summary>The default mode for xsl:apply-templates within this stylesheet (empty string = unnamed mode).</summary>
+    public string DefaultMode { get; private set; } = "";
+
     /// <summary>
     /// Recursively collects all template rules from this stylesheet, its includes, and its imports.
     /// Order: local first, then includes (same precedence), then imports (lower precedence).
@@ -175,6 +178,34 @@ public sealed class Stylesheet
             throw new InvalidOperationException("XTSE0010: The version attribute is required on xsl:stylesheet or xsl:transform.");
 
         Version = versionAttr.Value;
+
+        // Parse xsl:default-mode on stylesheet root
+        var defaultModeAttr = root.Attribute("default-mode")?.Value ?? "";
+        DefaultMode = defaultModeAttr;
+        if (!string.IsNullOrEmpty(defaultModeAttr) && defaultModeAttr != "#current" && defaultModeAttr != "#default" && defaultModeAttr != "#all" && defaultModeAttr != "#unnamed")
+        {
+            int colon = defaultModeAttr.IndexOf(':');
+            if (colon >= 0)
+            {
+                var prefix = defaultModeAttr.Substring(0, colon);
+                var local = defaultModeAttr.Substring(colon + 1);
+                var current = root;
+                while (current != null)
+                {
+                    foreach (var attr in current.Attributes())
+                    {
+                        if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
+                        {
+                            DefaultMode = $"{{{attr.Value}}}{local}";
+                            break;
+                        }
+                    }
+                    if (DefaultMode != defaultModeAttr)
+                        break;
+                    current = current.Parent;
+                }
+            }
+        }
 
         // Parse exclude-result-prefixes
         var excludePrefixesAttr = root.Attribute("exclude-result-prefixes")?.Value;
@@ -850,6 +881,7 @@ public sealed class Stylesheet
 
     /// <summary>The version attribute of the stylesheet root element.</summary>
     public string? Version { get; private set; }
+
 }
 
 /// <summary>
@@ -1006,6 +1038,36 @@ public static class StylesheetExtensions
             current = current.Parent;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Expands a mode name with optional namespace prefix to Clark notation.
+    /// </summary>
+    private static string ExpandModeName(string mode, XElement element)
+    {
+        if (mode == "#current" || mode == "#default" || mode == "#all" || mode == "#unnamed")
+            return mode;
+
+        int colon = mode.IndexOf(':');
+        if (colon < 0)
+            return mode;
+
+        var prefix = mode.Substring(0, colon);
+        var local = mode.Substring(colon + 1);
+
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
+                {
+                    return $"{{{attr.Value}}}{local}";
+                }
+            }
+            current = current.Parent;
+        }
+        return mode;
     }
 }
 

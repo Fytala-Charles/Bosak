@@ -131,7 +131,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-024 | Bosak / Fytala Stack | XQuery 3.1 skeleton project structure | Prepare `Bosak.XQuery` project, validate naming convention, and align documentation for future XQuery implementation | **Implemented** | Phase 3 | Charles Korthout | 2026-06-06 |
 | REQ-025 | *(internal)* | `xsl:attribute-set` / `xsl:use-attribute-sets` support | Required for `next-match-012` and broader XSLT 3.0 conformance; attribute sets accumulate across imports/includes | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-026 | *(internal)* | Nested `xsl:use-when` evaluation | `use-when="false()"` on nested XSLT instructions and LREs was ignored; now stripped during stylesheet load | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
-| REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Pending** | TBD | Unassigned | 2026-06-07 |
+| REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1 and XSLT 3.0 development: syntax highlighting, realtime diagnostics, auto-completion | **Implemented** | 0.1.2 | Charles Korthout | 2026-06-08 |
 
 > **Legend:
@@ -1289,6 +1289,7 @@ Each `.csproj` needs at minimum:
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-06-07 | Kimi | Pending | Required for Customer B BodMapping NuGet consumption; low-effort metadata addition |
+| 2026-06-08 | Kimi | Implemented | Added `src/Directory.Build.props` with shared NuGet metadata; all 10 src projects now packable; 6 core packages verified: Bosak.Xslt, Bosak.XPath.Api, Bosak.XPath.Core, Bosak.XPath.Providers, Bosak.XPath.Runtime, Bosak.XPath.Standard |
 
 ---
 

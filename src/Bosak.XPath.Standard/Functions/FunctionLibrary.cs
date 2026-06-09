@@ -8557,7 +8557,7 @@ public static class FunctionLibrary
     {
         var item = ctx.ContextItem;
         if (item.IsUndefined)
-            return XdmValue.Undefined;
+            throw new InvalidOperationException("XPDY0002: copy-of() requires a context item.");
         return CopyOf(item);
     }
 
@@ -8571,6 +8571,21 @@ public static class FunctionLibrary
 
     private static XdmValue CopyOf(XdmValue item)
     {
+        // If a singleton sequence was passed, extract the node.
+        if (item.IsSequence)
+        {
+            var items = new List<XdmValue>();
+            foreach (var seqItem in XdmSequence.FromSource(item.SequenceValue!))
+                items.Add(seqItem);
+            if (items.Count == 1)
+                return CopyOf(items[0]);
+            // Map over each item for multi-item sequences.
+            var results = new List<XdmValue>(items.Count);
+            foreach (var i in items)
+                results.Add(CopyOf(i));
+            return XdmValue.FromSequence(MaterializedSequence.FromList(results));
+        }
+
         if (item.IsNode && item.NodeValue != null)
         {
             var copied = DeepCopyNode(item.NodeValue);

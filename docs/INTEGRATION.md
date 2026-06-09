@@ -6,11 +6,13 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 08 June 2026
 > **Bosak baseline:** 873 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** ~3,376 passed / ~2,034 failed / ~9,190 skipped (62.4%)
+> **XSLT baseline:** 3,487 passed / 1,922 failed / 9,191 skipped (64.5%)
 
 ---
 
-## 1. Project References
+## 1. Consuming Bosak
+
+### 1.1 Via Project References (development)
 
 Add project references to the Bosak layer stack from your consuming project:
 
@@ -25,6 +27,40 @@ Add project references to the Bosak layer stack from your consuming project:
 `Bosak.XPath.Api`, `Bosak.Xslt`, and `Bosak.XQuery` pull in the lower layers automatically (Core, Parser, Compiler, Runtime, Standard, Providers).
 
 **Target framework:** `net10.0` (both sides must align).
+
+### 1.2 Via NuGet Packages
+
+All Bosak source projects are now packable. After packing (`dotnet pack`), the following packages are produced:
+
+| Package | Description |
+|---------|-------------|
+| `Bosak.Xslt` | XSLT 3.0 processor and transform engine |
+| `Bosak.XPath.Api` | Public API for compiling and evaluating XPath 3.1 |
+| `Bosak.XPath.Core` | XDM types and core abstractions |
+| `Bosak.XPath.Runtime` | Register-based VM execution engine |
+| `Bosak.XPath.Standard` | Standard XPath 3.1 / XQuery function library |
+| `Bosak.XPath.Providers` | `IXdmNode` adapters for `System.Xml.Linq` |
+| `Bosak.XPath.Parser` | Recursive-descent XPath 3.1 parser |
+| `Bosak.XPath.Compiler` | AST-to-IR compilation pipeline |
+
+**Consuming from a private feed:**
+```bash
+# Pack all projects
+dotnet pack Bosak.sln --output ./nupkgs
+
+# Push to your private NuGet feed
+dotnet nuget push ./nupkgs/Bosak.Xslt.1.0.0.nupkg --source https://your-feed/nuget/v3/index.json
+```
+
+Then reference in your consuming project:
+```xml
+<ItemGroup>
+  <PackageReference Include="Bosak.Xslt" Version="1.0.0" />
+  <PackageReference Include="Bosak.XPath.Providers" Version="1.0.0" />
+</ItemGroup>
+```
+
+> **Note:** Transitive dependencies are automatically resolved. You only need to reference the top-level packages your code directly uses (`Bosak.Xslt` and/or `Bosak.XPath.Api`).
 
 ---
 
@@ -288,7 +324,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | ~3,384 | ~2,026 | ~9,193 | 62.5% | +127 from next-match, attribute-set, use-when, copy-of fixes |
+| XSLT 3.0 (W3C) | 3,487 | 1,922 | 9,191 | 64.5% | +127 from next-match, attribute-set, use-when, copy-of fixes |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

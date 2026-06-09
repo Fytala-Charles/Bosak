@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>preview</LangVersion>
+    <PackageId>Bosak.XPath.Providers</PackageId>
+    <Description>IXdmNode adapter implementations for System.Xml.Linq</Description>
   </PropertyGroup>
 
   <ItemGroup>

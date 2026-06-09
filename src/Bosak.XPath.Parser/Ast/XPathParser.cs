@@ -803,17 +803,74 @@ public sealed class XPathParser
         Advance();
         Expect(TokenKind.LParen);
 
-        // For now, skip the content inside kind test parentheses.
-        // A full implementation would parse PI names, element names/types, etc.
-        int depth = 1;
-        while (!IsAtEnd && depth > 0)
+        string? argument = null;
+
+        // Parse simple kind-test arguments: processing-instruction(name), element(name), attribute(name).
+        // For now we do not parse schema types or nested kind tests (e.g. document-node(element(x))).
+        if (Current.Kind == TokenKind.RParen)
         {
-            if (Current.Kind == TokenKind.LParen) depth++;
-            else if (Current.Kind == TokenKind.RParen) depth--;
-            if (depth > 0) Advance();
+            // empty parentheses, e.g. node(), text(), element()
         }
+        else if (name == "processing-instruction")
+        {
+            // argument is an NCName or string literal
+            if (Current.Kind == TokenKind.StringLiteral)
+                argument = Unquote(GetString(Current));
+            else if (Current.Kind == TokenKind.Name)
+                argument = GetString(Current);
+            // skip to closing paren
+            while (!IsAtEnd && Current.Kind != TokenKind.RParen)
+                Advance();
+        }
+        else if (name == "element" || name == "attribute")
+        {
+            // argument is a name test (QName, *, prefix:*, or NCName)
+            if (Current.Kind == TokenKind.Star)
+            {
+                argument = "*";
+                Advance();
+            }
+            else if (Current.Kind == TokenKind.Name)
+            {
+                var argName = GetString(Current);
+                Advance();
+                if (Current.Kind == TokenKind.Colon)
+                {
+                    Advance();
+                    if (Current.Kind == TokenKind.Star)
+                    {
+                        argument = argName + ":*";
+                        Advance();
+                    }
+                    else if (Current.Kind == TokenKind.Name)
+                    {
+                        argument = argName + ":" + GetString(Current);
+                        Advance();
+                    }
+                }
+                else
+                {
+                    argument = argName;
+                }
+            }
+            // skip remainder (e.g. comma + type) to closing paren
+            while (!IsAtEnd && Current.Kind != TokenKind.RParen)
+                Advance();
+        }
+        else
+        {
+            // For other kind tests (schema-element, schema-attribute, document-node) skip content.
+            int depth = 1;
+            while (!IsAtEnd && depth > 0)
+            {
+                if (Current.Kind == TokenKind.LParen) depth++;
+                else if (Current.Kind == TokenKind.RParen) depth--;
+                if (depth > 0) Advance();
+            }
+        }
+
         Expect(TokenKind.RParen);
-        return new NodeTest(NameTestKind.KindTest, name);
+        return new NodeTest(NameTestKind.KindTest, name, KindTestArgument: argument);
     }
 
     private List<XPathAstNode> ParsePredicateList()

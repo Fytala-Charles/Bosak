@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>preview</LangVersion>
+    <PackageId>Bosak.XPath.Api</PackageId>
+    <Description>Public API surface for compiling and evaluating XPath 3.1 expressions</Description>
   </PropertyGroup>
 
   <ItemGroup>

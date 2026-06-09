@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>preview</LangVersion>
+    <PackageId>Bosak.XPath.Compiler</PackageId>
+    <Description>AST-to-IR compilation pipeline for XPath 3.1</Description>
   </PropertyGroup>
 
   <ItemGroup>

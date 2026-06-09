@@ -82,7 +82,7 @@ public sealed class TemplateRule
         var match = element.Attribute("match")?.Value;
         var name = element.Attribute("name")?.Value;
         var modeAttr = element.Attribute("mode")?.Value;
-        var modes = ParseModes(modeAttr, element);
+        var modes = ParseModes(modeAttr, element, stylesheet.DefaultMode);
 
         if (string.IsNullOrEmpty(match) && string.IsNullOrEmpty(name))
             return Array.Empty<TemplateRule>(); // Invalid template
@@ -135,10 +135,18 @@ public sealed class TemplateRule
         return rules;
     }
 
-    private static IReadOnlyList<string> ParseModes(string? modeAttr, XElement element)
+    private static IReadOnlyList<string> ParseModes(string? modeAttr, XElement element, string stylesheetDefaultMode)
     {
         if (string.IsNullOrEmpty(modeAttr))
-            return new[] { "" }; // default mode
+        {
+            // If the template has default-mode, use that; otherwise use stylesheet's default-mode
+            var templateDefaultMode = element.Attribute("default-mode")?.Value;
+            if (!string.IsNullOrEmpty(templateDefaultMode))
+                return new[] { ExpandModeName(templateDefaultMode, element) };
+            if (!string.IsNullOrEmpty(stylesheetDefaultMode))
+                return new[] { stylesheetDefaultMode };
+            return new[] { "" }; // unnamed mode
+        }
 
         var modes = modeAttr.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         if (modes.Length == 0)
