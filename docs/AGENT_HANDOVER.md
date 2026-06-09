@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-09
-**Commit:** `e39758d`
+**Commit:** `c640b3d`
 **Current focus:** Mode cluster default-mode resolution fixed (mode-1619). Initial mode validation implemented (XTDE0045/0050). Next: remaining mode cluster static-validation errors, seqtor batching refactor.
 
 ---
