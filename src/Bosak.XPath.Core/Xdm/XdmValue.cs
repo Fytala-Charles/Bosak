@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 22-05-2026     | Added Duration value factory, accessor, and ToString support                             |
 //                      | Charles Korthout | 0.6   | 22-05-2026     | Added FormatXPathFloat, fixed FormatXPathDouble exponent and negative zero               |
 //                      | Charles Korthout | 0.6   | 23-05-2026     | Fixed decimal ToString invariant culture; added XPath canonical double formatting        |
+//                      | Charles Korthout | 0.7   | 08-06-2026     | Fixed FormatXPathDouble/Float stripping trailing zeros from whole numbers (e.g. 50→5)   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -439,8 +440,11 @@ public readonly struct XdmValue
         string r = value.ToString("R", CultureInfo.InvariantCulture);
         if (r.Contains('E') || r.Contains('e'))
             return NormalizeScientific(r);
-        r = r.TrimEnd('0').TrimEnd('.');
-        if (r == "-0") r = "0";
+        if (r.Contains('.'))
+        {
+            r = r.TrimEnd('0').TrimEnd('.');
+            if (r == "-0") r = "0";
+        }
         return r;
     }
 
@@ -484,8 +488,11 @@ public readonly struct XdmValue
         string r = value.ToString("R", CultureInfo.InvariantCulture);
         if (r.Contains('E') || r.Contains('e'))
             return NormalizeScientific(r);
-        r = r.TrimEnd('0').TrimEnd('.');
-        if (r == "-0") r = "0";
+        if (r.Contains('.'))
+        {
+            r = r.TrimEnd('0').TrimEnd('.');
+            if (r == "-0") r = "0";
+        }
         return r;
     }
 

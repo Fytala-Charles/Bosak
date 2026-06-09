@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 08-06-2026     | Added TotalEntryCount, ClearKey, BuildSingleKey for iterative cross-key builds          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -28,6 +29,21 @@ public sealed class KeyIndex
 {
     // key name → key value string → list of nodes
     private readonly Dictionary<string, Dictionary<string, List<IXdmNode>>> _index = new();
+
+    /// <summary>
+    /// Returns the total number of (keyName, keyValue, node) entries in the index.
+    /// </summary>
+    public int TotalEntryCount
+    {
+        get
+        {
+            int count = 0;
+            foreach (var keyDict in _index.Values)
+                foreach (var nodes in keyDict.Values)
+                    count += nodes.Count;
+            return count;
+        }
+    }
 
     /// <summary>
     /// Adds a node under the given key name and key value.
@@ -50,6 +66,17 @@ public sealed class KeyIndex
     }
 
     /// <summary>
+    /// Removes all entries for the specified key name.
+    /// </summary>
+    public void ClearKey(string keyName)
+    {
+        if (_index.TryGetValue(keyName, out var keyDict))
+        {
+            keyDict.Clear();
+        }
+    }
+
+    /// <summary>
     /// Looks up nodes by key name and key value.
     /// </summary>
     public IEnumerable<IXdmNode> Lookup(string keyName, string keyValue)
@@ -68,8 +95,14 @@ public sealed class KeyIndex
     /// Builds the index for a source document against the given stylesheet key definitions.
     /// </summary>
     public static KeyIndex Build(IXdmNode sourceDocument, IEnumerable<Stylesheet.KeyDefinition> keyDefinitions, EvaluationContext context)
+        => Build(sourceDocument, keyDefinitions, context, new KeyIndex());
+
+    /// <summary>
+    /// Builds the index into an existing <see cref="KeyIndex"/> instance, allowing
+    /// recursive <c>key()</c> calls inside <c>xsl:key/@use</c> to access already-built keys.
+    /// </summary>
+    public static KeyIndex Build(IXdmNode sourceDocument, IEnumerable<Stylesheet.KeyDefinition> keyDefinitions, EvaluationContext context, KeyIndex index)
     {
-        var index = new KeyIndex();
         var patternCompiler = new Patterns.PatternCompiler();
 
         foreach (var keyDef in keyDefinitions)
@@ -83,6 +116,19 @@ public sealed class KeyIndex
         }
 
         return index;
+    }
+
+    /// <summary>
+    /// Builds a single key definition into the given index, walking the document tree once.
+    /// </summary>
+    public static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index)
+    {
+        var patternCompiler = new Patterns.PatternCompiler();
+        var resolvedMatch = ResolveNamespacePrefixes(keyDef.Match, keyDef.Element);
+        var compiledMatch = patternCompiler.Compile(resolvedMatch);
+        var useExpr = XPath31Expression.Compile(keyDef.Use);
+
+        IndexNodes(sourceDocument, keyDef.Name, compiledMatch, useExpr, context, index);
     }
 
     private static void IndexNodes(IXdmNode node, string keyName, Patterns.PatternPredicate match, XPath31Expression useExpr, EvaluationContext context, KeyIndex index)

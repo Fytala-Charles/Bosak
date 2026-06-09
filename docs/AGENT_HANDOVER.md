@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-08
+**Date:** 2026-06-09
 **Commit:** `<uncommitted>`
-**Current focus:** Copy cluster fixes completed (+10 tests). XPath parser now supports `processing-instruction('name')` kind test arguments. `fn:copy-of` handles singleton sequences and missing context item correctly. XSLT functions no longer leak caller's context item. Next: remaining mode/match failures, copy cluster namespace handling.
+**Current focus:** Iterative key index building fixes cross-key `key()` dependencies (key-063/064). FormatXPathDouble/Float trailing-zero bug fixed (sum() returning 5 instead of 50). Next: mode cluster on-no-match=fail failures, default-mode + #current resolution.
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** **3,527** / **Failed:** **1,882** / **Skipped:** 9,191 (14,600 total)
-- Pass rate: **65.2%** (latest run, 2026-06-08)
+- **Passed:** **3,543** / **Failed:** **1,866** / **Skipped:** 9,191 (14,600 total)
+- Pass rate: **65.5%** (latest run, 2026-06-09)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3527 passed / 1882 failed / 9191 skipped (65.2%) — copy cluster +10 tests (PI kind-test args, fn:copy-of fixes, function context isolation)
+- Latest: 3543 passed / 1866 failed / 9191 skipped (65.5%) — key-063/064 + sum() trailing-zero fix (+16 tests)
+- Previous: 3527 passed / 1882 failed / 9191 skipped (65.2%) — copy cluster +10 tests (PI kind-test args, fn:copy-of fixes, function context isolation)
 - Previous: 3463 passed / 1947 failed / 9190 skipped (64.0%) — match cluster 160/294 (+3 this session), next-match 36/40, attribute-set 36/50
 - Previous: 3376 passed / 2034 failed / 9190 skipped (62.4%) — match cluster 156/294 (+11)
 - Latest: 3301 passed / 2112 failed / 9187 skipped (61.0%) — apply-imports + for-each-group atomic patterns
@@ -35,6 +36,18 @@
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
+
+### This Session Fixes (2026-06-09 — Key Index + Numeric Serialization)
+
+1. **Iterative key index building for cross-key dependencies** — `xsl:key/@use` expressions calling `key()` (key-063: `k2` uses `key('k1',@code)`) and `xsl:key/@match` patterns calling `key()` (key-064: `k1` matches `key('k2','2')`) previously failed because `GetOrBuildKeyIndex` returned empty during index construction due to a re-entrancy guard. Single-pass declaration-order building also failed when dependencies were reversed (k1 depends on k2, but k2 is declared after k1).
+   - **Solution**: All key definitions are rebuilt iteratively into the same `KeyIndex` until the total entry count stabilizes. This naturally resolves arbitrary cross-key dependencies without dependency analysis.
+   - **Files changed**: `KeyIndex.cs` (added `TotalEntryCount`, `ClearKey`, `BuildSingleKey`); `TransformEngine.cs` (replaced single-pass build with iterative loop; removed `_buildingKeyIndices` re-entrancy guard).
+   - **Fixed**: `key-063`, `key-064` (+4 key cluster tests). Key cluster: 53 → 57 passed.
+2. **`FormatXPathDouble` / `FormatXPathFloat` trailing-zero bug** — `50.0.ToString("R")` returns `"50"` (no decimal point). The existing code unconditionally called `TrimEnd('0')`, which stripped the trailing zero from whole numbers: `"50"` → `"5"`. This caused `sum(//a/@value)` to return `5` instead of `50` when attribute values were `20` and `30`.
+   - **Fix**: Only trim trailing zeros when the string contains a decimal point.
+   - **File changed**: `XdmValue.cs` (`FormatXPathDouble` and `FormatXPathFloat`).
+   - **Impact**: +16 tests across multiple clusters (any test using `sum()` on whole numbers ending in 0).
+3. **Build/test verified** — 873 unit tests pass, 0 failures. XSLT conformance: +16 tests (3543/1866/9191, 65.5%).
 
 ### This Session Fixes (2026-06-08 — Copy Cluster + Parser Fixes)
 
@@ -256,7 +269,7 @@
 
 ### Unit Test Status
 
-- **690 unit tests pass** across 8 test projects (0 failures)
+- **873 unit tests pass** across 8 test projects (0 failures)
 - XSLT-specific tests: 98 tests in `Bosak.Xslt.Tests`
 
 ### QT3 Conformance Baseline
@@ -497,7 +510,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
 | **for-each-group** | 62 | 3 | `xsl:for-each-group` implementation gaps. |
-| **key** | 63 | 8 | `key()` / `xsl:key` behavior. |
+| **key** | 34 | 8 | `key()` / `xsl:key` behavior. 57/99 passing (was 53). |
 | **use-when** | 61 | 0 | Static evaluation of `use-when` expressions. |
 
 ### Medium-term: Architectural refactor (~2–3 days, broad impact)
@@ -514,6 +527,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)
+- Latest: `<uncommitted>` — iterative key index build (key-063/064), FormatXPathDouble/Float trailing-zero fix
+- Previous: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)
 - Previous: `<uncommitted>` — match cluster fixes (241, 246a/b, 248-254), xsl:variable @as coercion, next-match position/last preservation
 - Previous: `0bb2e09` — attribute-set, use-when, copy-of atomic spacing, next-match fixes

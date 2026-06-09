@@ -71,6 +71,7 @@
 //                      | Charles Korthout | 5.0   | 07-06-2026     | DeepSkip mode; expand-text truthy values; CopyToResult exclusion cleanup               |
 //                      | Charles Korthout | 5.1   | 07-06-2026     | FindRootTemplate strips XPath comments; next-match/apply-imports pass position/last   |
 //                      | Charles Korthout | 5.2   | 07-06-2026     | ConvertVariableValue for xsl:variable/@as basic atomic types; fixes match-248-254      |
+//                      | Charles Korthout | 5.3   | 08-06-2026     | Iterative key index build for cross-key dependencies (key-063/064); removed re-entrancy guard |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -132,8 +133,7 @@ public sealed class TransformEngine
     // Key index for key() function lookups — one per document root node
     private List<(IXdmNode DocRoot, KeyIndex Index)>? _keyIndices;
 
-    // Documents currently being indexed (prevents re-entrant key() during lazy build)
-    private List<IXdmNode> _buildingKeyIndices = new();
+
 
     // Sequence accumulator for xsl:sequence inside variable bodies with @as
     private List<XdmValue>? _sequenceAccumulator;
@@ -206,14 +206,37 @@ public sealed class TransformEngine
             rule.CompileMatch(patternCompiler);
         }
 
-        // Build key index if the stylesheet defines xsl:key
+        // Always register key() function before building key indices, because
+        // xsl:key/@use expressions may call key() recursively (key-063/064).
+        RegisterKeyFunction();
+
+        // Build key indices iteratively to handle cross-key dependencies
+        // (e.g. key-063 where k2's use calls key('k1',...), or key-064 where
+        // k1's match calls key('k2',...)).
         var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
         if (allKeyDefs.Count > 0)
         {
             _keyIndices = new List<(IXdmNode, KeyIndex)>();
-            var sourceIndex = KeyIndex.Build(source, allKeyDefs, _context);
+            var sourceIndex = new KeyIndex();
+            // Add the index before building so recursive key() calls inside
+            // xsl:key/@use or match can query the partially-built index.
             _keyIndices.Add((source, sourceIndex));
-            RegisterKeyFunction();
+
+            int maxIterations = allKeyDefs.Count + 1;
+            int previousTotal = -1;
+            for (int i = 0; i < maxIterations; i++)
+            {
+                int currentTotal = sourceIndex.TotalEntryCount;
+                if (currentTotal == previousTotal)
+                    break;
+                previousTotal = currentTotal;
+
+                foreach (var keyDef in allKeyDefs)
+                {
+                    sourceIndex.ClearKey(keyDef.Name);
+                    KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex);
+                }
+            }
         }
 
         RegisterGroupingFunctions();
@@ -2888,6 +2911,10 @@ public sealed class TransformEngine
         try
         {
             var modeDef = _stylesheet.GetModeDefinition(mode);
+            // Named modes with no explicit xsl:mode declaration inherit the
+            // unnamed mode's on-no-match behavior (XSLT 3.0 §3.5.2).
+            if (modeDef == null && !string.IsNullOrEmpty(mode))
+                modeDef = _stylesheet.GetModeDefinition("");
             var behavior = modeDef?.OnNoMatch ?? GetDefaultOnNoMatch();
 
 
@@ -3155,6 +3182,7 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Retrieves or lazily builds the <see cref="KeyIndex"/> for the specified document root.
+    /// Uses iterative rebuilding to handle cross-key dependencies (e.g. key-064).
     /// </summary>
     private KeyIndex? GetOrBuildKeyIndex(IXdmNode docRoot)
     {
@@ -3165,27 +3193,42 @@ public sealed class TransformEngine
                 return existingIndex;
         }
 
-        // Guard against re-entrant key() calls during lazy index building.
-        if (_buildingKeyIndices.Any(b => b.IsSameNode(docRoot)))
-            return null;
-        _buildingKeyIndices.Add(docRoot);
-
         var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
-        // KeyIndex.Build mutates the context focus; save and restore to avoid
+        if (allKeyDefs.Count == 0)
+            return null;
+
+        // Build iteratively for this document; add the index first so that
+        // recursive key() calls inside xsl:key/@use or match can query it.
+        var keyIndex = new KeyIndex();
+        _keyIndices!.Add((docRoot, keyIndex));
+
+        // KeyIndex.BuildSingleKey mutates the context focus; save and restore to avoid
         // corrupting the currently executing template's focus.
         var savedItem = _context.ContextItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
         try
         {
-            var keyIndex = KeyIndex.Build(docRoot, allKeyDefs, _context);
-            _keyIndices!.Add((docRoot, keyIndex));
+            int maxIterations = allKeyDefs.Count + 1;
+            int previousTotal = -1;
+            for (int i = 0; i < maxIterations; i++)
+            {
+                int currentTotal = keyIndex.TotalEntryCount;
+                if (currentTotal == previousTotal)
+                    break;
+                previousTotal = currentTotal;
+
+                foreach (var keyDef in allKeyDefs)
+                {
+                    keyIndex.ClearKey(keyDef.Name);
+                    KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
+                }
+            }
             return keyIndex;
         }
         finally
         {
             _context.WithFocus(savedItem, savedPosition, savedSize);
-            _buildingKeyIndices.RemoveAll(b => b.IsSameNode(docRoot));
         }
     }
 
