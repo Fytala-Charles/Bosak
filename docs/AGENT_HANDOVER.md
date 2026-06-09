@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-09
-**Commit:** `c640b3d`
+**Commit:** `36aea6e`
 **Current focus:** Match cluster is now 100% of runnable tests passing (179/294). PatternCompiler compile-time predicate validation catches undeclared functions (XPST0017). Next: seqtor batching refactor, copy cluster.
 
 ---
