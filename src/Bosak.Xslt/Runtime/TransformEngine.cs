@@ -425,7 +425,7 @@ public sealed class TransformEngine
     /// Executes the body of an xsl:function declaration, binding parameters and
     /// returning the sequence produced by the function body.
     /// </summary>
-    private const int MaxXsltFunctionCallDepth = 20;
+    private const int MaxXsltFunctionCallDepth = 64;
 
     private XdmValue ExecuteXsltFunction(Stylesheet.XsltFunctionDefinition def, ReadOnlySpan<XdmValue> args)
     {
@@ -515,9 +515,28 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            foreach (var child in instruction.Elements())
+                            foreach (var child in instruction.Nodes())
                             {
-                                EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                switch (child)
+                                {
+                                    case XText text:
+                                        if (GetExpandText(instruction) && ContainsTvtExpression(text.Value))
+                                        {
+                                            var tvtResult = EvaluateTvt(text.Value);
+                                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(tvtResult))));
+                                        }
+                                        else if (!IsWhitespaceOnly(text.Value))
+                                        {
+                                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(text.Value))));
+                                        }
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        EvaluateFunctionBodyInstruction(elem, results, contextItem);
+                                        break;
+                                    case XElement elem:
+                                        results.Add(XdmValue.FromNode(new XDocumentNode(elem)));
+                                        break;
+                                }
                             }
                         }
                         break;
@@ -703,8 +722,8 @@ public sealed class TransformEngine
                         {
                             if (node is XElement e)
                                 results.Add(XdmValue.FromNode(new XDocumentNode(e)));
-                            else if (node is XText t && !string.IsNullOrEmpty(t.Value))
-                                results.Add(XdmValue.FromString(t.Value));
+                            else if (node is XText t)
+                                results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
                         }
                         break;
                     }
@@ -794,6 +813,16 @@ public sealed class TransformEngine
                                 }
                             }
                         }
+                        break;
+                    }
+                case "text":
+                    {
+                        var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
+                        if (GetExpandText(instruction))
+                        {
+                            text = EvaluateTvt(text);
+                        }
+                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(text))));
                         break;
                     }
                 case "number":
@@ -2211,6 +2240,23 @@ public sealed class TransformEngine
                     break;
                 }
 
+            case "document":
+                {
+                    var docContent = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: true);
+                    if (docContent.IsNode && docContent.NodeValue != null)
+                    {
+                        CopyNodeToResult(docContent.NodeValue);
+                    }
+                    else if (docContent.IsSequence && docContent.SequenceValue != null)
+                    {
+                        foreach (var item in XdmSequence.FromSource(docContent.SequenceValue))
+                        {
+                            CopyToResult(item);
+                        }
+                    }
+                    break;
+                }
+
             case "copy-of":
                 {
                     var select = instruction.Attribute("select")?.Value;
@@ -2795,11 +2841,12 @@ public sealed class TransformEngine
             {
                 anyItemProcessed = true;
 
-                // Discard zero-length text nodes
+                // Discard zero-length text nodes, but they still break the atomic chain
                 if (item.IsNode && item.NodeValue != null &&
                     item.NodeValue.NodeKind == XdmNodeKind.Text &&
                     item.NodeValue.StringValue.Length == 0)
                 {
+                    prevWasAtomic = false;
                     continue;
                 }
 
@@ -2870,6 +2917,7 @@ public sealed class TransformEngine
     {
         if (node.NodeKind == XdmNodeKind.Document)
         {
+            _lastAddedWasAtomic = false;
             foreach (var child in node.Axis(XdmAxis.Child))
             {
                 CopyNodeToResult(child.NodeValue!);
@@ -4250,7 +4298,7 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(expr);
                         var value = compiled.Evaluate(_context);
-                        sb.Append(XdmValueToString(value, " "));
+                        sb.Append(XdmValueToString(value, ""));
                     }
                     i = j;
                     continue;
@@ -4327,11 +4375,8 @@ public sealed class TransformEngine
         if (GetExpandText(parent) && ContainsTvtExpression(text.Value))
         {
             var tvtResult = EvaluateTvt(text.Value);
-            if (tvtResult.Length > 0)
-            {
-                _lastAddedWasAtomic = false;
-                AddTextNode(tvtResult);
-            }
+            _lastAddedWasAtomic = false;
+            AddTextNode(tvtResult);
         }
         else if (IsWhitespacePreserveContext(parent))
         {

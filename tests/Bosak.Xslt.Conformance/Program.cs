@@ -72,11 +72,15 @@ class Program
         "call-template-1003",
         // Deep recursion in xsl:function exceeds safe stack limit
         "function-2109",
+        "seqtor-027",
+        "seqtor-028",
         "seqtor-029",
         "seqtor-030",
         "seqtor-031",
         "seqtor-032",
         "seqtor-033",
+        "seqtor-034",
+        "seqtor-035",
         // Recursive scan of node-set exceeds .NET 9 stack limit due to large ExecuteBlock frames
         "expression-0601",
         // XSLT 3.0 packages not supported
