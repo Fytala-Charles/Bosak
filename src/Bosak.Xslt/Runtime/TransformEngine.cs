@@ -557,6 +557,13 @@ public sealed class TransformEngine
                             var tvtResult = EvaluateTvt(text);
                             results.Add(XdmValue.FromString(tvtResult));
                         }
+                        else
+                        {
+                            // xsl:value-of with sequence-constructor content (no @select)
+                            var voSep = instruction.Attribute("separator")?.Value ?? "";
+                            var textValue = EvaluateSimpleContent(instruction, contextItem, voSep);
+                            results.Add(XdmValue.FromString(textValue));
+                        }
                         break;
                     }
                 case "variable":
@@ -811,6 +818,43 @@ public sealed class TransformEngine
                                         EvaluateFunctionBodyInstruction(child, results, contextItem);
                                     }
                                 }
+                            }
+                        }
+                        break;
+                    }
+                case "copy-of":
+                    {
+                        var copySelect = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(copySelect))
+                        {
+                            var compiled = XPath31Expression.Compile(copySelect);
+                            var result = compiled.Evaluate(_context);
+                            var fnCopyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
+                                ?? instruction.Attribute("_copy-namespaces")?.Value
+                                ?? "yes";
+                            var fnCopyNamespacesAttr = EvaluateAvt(fnCopyNamespacesAttrRaw);
+                            bool fnCopyAllNs = fnCopyNamespacesAttr != "no" && fnCopyNamespacesAttr != "false";
+                            if (result.IsSequence && result.SequenceValue != null)
+                            {
+                                foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                {
+                                    if (item.IsNode && item.NodeValue != null)
+                                    {
+                                        results.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue, fnCopyAllNs)));
+                                    }
+                                    else
+                                    {
+                                        results.Add(item);
+                                    }
+                                }
+                            }
+                            else if (result.IsNode && result.NodeValue != null)
+                            {
+                                results.Add(XdmValue.FromNode(CopyXdmNode(result.NodeValue, fnCopyAllNs)));
+                            }
+                            else
+                            {
+                                results.Add(result);
                             }
                         }
                         break;
@@ -1463,7 +1507,8 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        value = EvaluateSimpleContent(instruction, contextItem);
+                        var attrSep = instruction.Attribute("separator")?.Value ?? "";
+                        value = EvaluateSimpleContent(instruction, contextItem, attrSep);
                     }
                     if (_currentContainer is XElement targetElem)
                     {
@@ -1503,7 +1548,8 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        var textValue = EvaluateSimpleContent(instruction, contextItem);
+                        var voSep = instruction.Attribute("separator")?.Value ?? "";
+                        var textValue = EvaluateSimpleContent(instruction, contextItem, voSep);
                         _lastAddedWasAtomic = false;
                         AddTextNode(textValue);
                     }
@@ -1536,7 +1582,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        commentText = EvaluateSimpleContent(instruction, contextItem);
+                        commentText = EvaluateSimpleContent(instruction, contextItem, " ");
                     }
                     _currentContainer.Add(new XComment(commentText));
                     break;
@@ -1556,7 +1602,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        piData = EvaluateSimpleContent(instruction, contextItem);
+                        piData = EvaluateSimpleContent(instruction, contextItem, " ");
                     }
                     // XSLT 3.0 §11.4.4: leading spaces in PI data are removed
                     piData = piData.TrimStart();
@@ -1578,7 +1624,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        nsUri = EvaluateSimpleContent(instruction, contextItem);
+                        nsUri = EvaluateSimpleContent(instruction, contextItem, " ");
                     }
                     if (_currentContainer is XElement targetElem)
                     {
@@ -1599,7 +1645,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        msgText = EvaluateSimpleContent(instruction, contextItem);
+                        msgText = EvaluateSimpleContent(instruction, contextItem, " ");
                     }
                     _messageListener?.OnMessage(msgText);
                     break;
@@ -1638,15 +1684,32 @@ public sealed class TransformEngine
                                     XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
                                 // Shallow copy copies namespace declarations but not regular attributes.
                                 // (xsl:copy-of is required to copy attributes explicitly.)
-                                foreach (var attr in nodeToCopy.Attributes())
+                                var inheritNamespacesAttrRaw = instruction.Attribute("inherit-namespaces")?.Value
+                                    ?? instruction.Attribute("_inherit-namespaces")?.Value
+                                    ?? "yes";
+                                var inheritNamespacesAttr = EvaluateAvt(inheritNamespacesAttrRaw);
+                                if (inheritNamespacesAttr != "no" && inheritNamespacesAttr != "false")
                                 {
-                                    var attrNode = attr.NodeValue!;
-                                    if (attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/")
+                                    foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
                                     {
-                                        copy.SetAttributeValue(
-                                            XName.Get(attrNode.LocalName, attrNode.NamespaceUri),
-                                            attrNode.StringValue);
+                                        if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                                        {
+                                            if (ns.NodeValue.LocalName == "")
+                                            {
+                                                copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                                            }
+                                            else
+                                            {
+                                                copy.SetAttributeValue(
+                                                    XNamespace.Xmlns + ns.NodeValue.LocalName,
+                                                    ns.NodeValue.StringValue);
+                                            }
+                                        }
                                     }
+                                }
+                                else
+                                {
+                                    AddRequiredNamespaceDeclarations(nodeToCopy, copy);
                                 }
                                 _currentContainer.Add(copy);
                                 var prev = _currentContainer;
@@ -2264,7 +2327,60 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(select);
                         var result = compiled.Evaluate(_context);
-                        CopyToResult(result);
+                        var copyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
+                        ?? instruction.Attribute("_copy-namespaces")?.Value
+                        ?? "yes";
+                    var copyNamespacesAttr = EvaluateAvt(copyNamespacesAttrRaw);
+                    bool copyAllNs = copyNamespacesAttr != "no" && copyNamespacesAttr != "false";
+
+                    if (_sequenceAccumulator != null)
+                        {
+                            // In a sequence-returning context (variable with @as),
+                            // preserve document nodes by adding copies to the accumulator.
+                            if (result.IsSequence && result.SequenceValue != null)
+                            {
+                                foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                {
+                                    if (item.IsNode && item.NodeValue != null)
+                                    {
+                                        _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue, copyAllNs)));
+                                    }
+                                    else
+                                    {
+                                        _sequenceAccumulator.Add(item);
+                                    }
+                                }
+                            }
+                            else if (result.IsNode && result.NodeValue != null)
+                            {
+                                _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(result.NodeValue, copyAllNs)));
+                            }
+                            else
+                            {
+                                _sequenceAccumulator.Add(result);
+                            }
+                        }
+                        else
+                        {
+                            if (result.IsSequence && result.SequenceValue != null)
+                            {
+                                foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                {
+                                    if (item.IsNode && item.NodeValue != null)
+                                        CopyNodeToResult(CopyXdmNode(item.NodeValue, copyAllNs));
+                                    else
+                                        CopyToResult(item);
+                                }
+                            }
+                            else if (result.IsNode && result.NodeValue != null)
+                            {
+                                CopyNodeToResult(CopyXdmNode(result.NodeValue, copyAllNs));
+                            }
+                            else
+                            {
+                                CopyToResult(result);
+                            }
+                        }
                     }
                     break;
                 }
@@ -2619,12 +2735,17 @@ public sealed class TransformEngine
         // Determine if #all is specified — this excludes every prefix.
         bool excludeAll = _excludedResultPrefixes.Contains("#all");
 
-        // If the element has a non-empty namespace URI and uses a prefix,
-        // ensure the prefix is declared on the copied element, unless excluded.
+        // If the element has a non-empty namespace URI, ensure the namespace
+        // is declared on the copied element (either as xmlns or xmlns:prefix),
+        // unless excluded.
         if (!string.IsNullOrEmpty(source.Name.NamespaceName))
         {
             var prefix = source.GetPrefixOfNamespace(source.Name.Namespace);
-            if (!string.IsNullOrEmpty(prefix) && !excludeAll && !_excludedResultPrefixes.Contains(prefix))
+            if (prefix == "")
+            {
+                copy.SetAttributeValue("xmlns", source.Name.NamespaceName);
+            }
+            else if (!string.IsNullOrEmpty(prefix) && !excludeAll && !_excludedResultPrefixes.Contains(prefix))
             {
                 copy.SetAttributeValue(XNamespace.Xmlns + prefix, source.Name.NamespaceName);
             }
@@ -2885,6 +3006,25 @@ public sealed class TransformEngine
                     sb.Append(item.NodeValue.StringValue);
                     prevWasAtomic = false;
                 }
+                else if (item.IsNode && item.NodeValue != null &&
+                         item.NodeValue.NodeKind == XdmNodeKind.Document)
+                {
+                    // Document nodes in complex content are replaced by their children (XSLT 3.0 §5.7.1)
+                    if (sb.Length > 0)
+                    {
+                        AddTextNode(sb.ToString());
+                        sb.Clear();
+                    }
+                    prevWasAtomic = false;
+                    _lastAddedWasAtomic = false;
+                    foreach (var child in item.NodeValue.Axis(XdmAxis.Child))
+                    {
+                        if (child.IsNode && child.NodeValue != null)
+                        {
+                            CopyNodeToResult(child.NodeValue);
+                        }
+                    }
+                }
                 else
                 {
                     // Atomic value: insert space only if previous item was also atomic
@@ -2910,6 +3050,204 @@ public sealed class TransformEngine
         else
         {
             AppendAtomicText(value.ToString());
+        }
+    }
+
+    /// <summary>
+    /// Creates a deep copy of an XDM node, returning a new IXdmNode wrapper.
+    /// </summary>
+    private IXdmNode CopyXdmNode(IXdmNode node)
+        => CopyXdmNode(node, copyAllNamespaces: true);
+
+    private IXdmNode CopyXdmNode(IXdmNode node, bool copyAllNamespaces)
+    {
+        switch (node.NodeKind)
+        {
+            case XdmNodeKind.Document:
+                {
+                    var children = new List<IXdmNode>();
+                    foreach (var child in node.Axis(XdmAxis.Child))
+                    {
+                        if (child.IsNode && child.NodeValue != null)
+                            children.Add(child.NodeValue);
+                    }
+                    var elementCount = children.Count(c => c.NodeKind == XdmNodeKind.Element);
+                    if (elementCount == 1 && children.Count == 1)
+                    {
+                        var newDoc = new XDocument();
+                        CopyNodeToContainer(children[0], newDoc, copyAllNamespaces);
+                        return new XDocumentNode(newDoc);
+                    }
+                    else
+                    {
+                        // XDocument cannot hold multiple root elements or mixed content;
+                        // use a synthetic wrapper element like EvaluateSequenceConstructor does.
+                        var docWrapper = new XElement("__xdm_doc__");
+                        foreach (var child in children)
+                        {
+                            CopyNodeToContainer(child, docWrapper, copyAllNamespaces);
+                        }
+                        var tempDoc = new XDocument(docWrapper);
+                        return new XDocumentNode(tempDoc);
+                    }
+                }
+            case XdmNodeKind.Element:
+                {
+                    var copy = new XElement(XName.Get(node.LocalName, node.NamespaceUri));
+                    if (copyAllNamespaces)
+                    {
+                        foreach (var ns in node.Axis(XdmAxis.Namespace))
+                        {
+                            if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                            {
+                                if (ns.NodeValue.LocalName == "")
+                                {
+                                    copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                                }
+                                else
+                                {
+                                    copy.SetAttributeValue(
+                                        XNamespace.Xmlns + ns.NodeValue.LocalName,
+                                        ns.NodeValue.StringValue);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AddRequiredNamespaceDeclarations(node, copy);
+                    }
+                    foreach (var attr in node.Attributes())
+                    {
+                        copy.SetAttributeValue(
+                            XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
+                            attr.NodeValue!.StringValue);
+                    }
+                    foreach (var child in node.Axis(XdmAxis.Child))
+                    {
+                        CopyNodeToContainer(child.NodeValue!, copy, copyAllNamespaces);
+                    }
+                    return new XDocumentNode(copy);
+                }
+            case XdmNodeKind.Text:
+                return new XDocumentNode(new XText(node.StringValue));
+            case XdmNodeKind.Comment:
+                return new XDocumentNode(new XComment(node.StringValue));
+            case XdmNodeKind.ProcessingInstruction:
+                return new XDocumentNode(new XProcessingInstruction(node.LocalName, node.StringValue));
+            case XdmNodeKind.Attribute:
+                return new XDocumentNode(new XAttribute(
+                    XName.Get(node.LocalName, node.NamespaceUri),
+                    node.StringValue));
+            default:
+                return node;
+        }
+    }
+
+    /// <summary>
+    /// Adds only the namespace declarations required for the element's own name
+    /// and its attribute names.
+    /// </summary>
+    private void AddRequiredNamespaceDeclarations(IXdmNode source, XElement target)
+    {
+        // Element's own namespace
+        if (!string.IsNullOrEmpty(source.NamespaceUri))
+        {
+            var prefix = GetPrefixForNamespace(source, source.NamespaceUri);
+            if (prefix == "")
+                target.SetAttributeValue("xmlns", source.NamespaceUri);
+            else if (!string.IsNullOrEmpty(prefix))
+                target.SetAttributeValue(XNamespace.Xmlns + prefix, source.NamespaceUri);
+        }
+
+        // Attribute namespaces
+        foreach (var attr in source.Attributes())
+        {
+            var attrNode = attr.NodeValue;
+            if (attrNode != null && !string.IsNullOrEmpty(attrNode.NamespaceUri)
+                && attrNode.NamespaceUri != "http://www.w3.org/2000/xmlns/")
+            {
+                var attrPrefix = GetPrefixForNamespace(source, attrNode.NamespaceUri);
+                if (attrPrefix == "")
+                    target.SetAttributeValue("xmlns", attrNode.NamespaceUri);
+                else if (!string.IsNullOrEmpty(attrPrefix))
+                    target.SetAttributeValue(XNamespace.Xmlns + attrPrefix, attrNode.NamespaceUri);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns the prefix used for the given namespace URI on the specified element,
+    /// or empty string for the default namespace.
+    /// </summary>
+    private string GetPrefixForNamespace(IXdmNode element, string namespaceUri)
+    {
+        foreach (var ns in element.Axis(XdmAxis.Namespace))
+        {
+            if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.StringValue == namespaceUri)
+                return ns.NodeValue.LocalName;
+        }
+        return string.Empty;
+    }
+
+    /// <summary>
+    /// Copies a node and adds it to the specified XML container.
+    /// </summary>
+    private void CopyNodeToContainer(IXdmNode node, XContainer container)
+        => CopyNodeToContainer(node, container, copyAllNamespaces: true);
+
+    private void CopyNodeToContainer(IXdmNode node, XContainer container, bool copyAllNamespaces)
+    {
+        switch (node.NodeKind)
+        {
+            case XdmNodeKind.Element:
+                {
+                    var elem = new XElement(XName.Get(node.LocalName, node.NamespaceUri));
+                    if (copyAllNamespaces)
+                    {
+                        foreach (var ns in node.Axis(XdmAxis.Namespace))
+                        {
+                            if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                            {
+                                if (ns.NodeValue.LocalName == "")
+                                {
+                                    elem.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                                }
+                                else
+                                {
+                                    elem.SetAttributeValue(
+                                        XNamespace.Xmlns + ns.NodeValue.LocalName,
+                                        ns.NodeValue.StringValue);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AddRequiredNamespaceDeclarations(node, elem);
+                    }
+                    foreach (var attr in node.Attributes())
+                    {
+                        elem.SetAttributeValue(
+                            XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
+                            attr.NodeValue!.StringValue);
+                    }
+                    container.Add(elem);
+                    foreach (var child in node.Axis(XdmAxis.Child))
+                    {
+                        CopyNodeToContainer(child.NodeValue!, elem, copyAllNamespaces);
+                    }
+                    break;
+                }
+            case XdmNodeKind.Text:
+                container.Add(new XText(node.StringValue));
+                break;
+            case XdmNodeKind.Comment:
+                container.Add(new XComment(node.StringValue));
+                break;
+            case XdmNodeKind.ProcessingInstruction:
+                container.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
+                break;
         }
     }
 
@@ -3105,6 +3443,22 @@ public sealed class TransformEngine
                     // without copying attributes; templates are applied to children AND attributes.
                     var copy = new XElement(
                         XName.Get(node.LocalName, node.NamespaceUri));
+                    foreach (var ns in node.Axis(XdmAxis.Namespace))
+                    {
+                        if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                        {
+                            if (ns.NodeValue.LocalName == "")
+                            {
+                                copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                            }
+                            else
+                            {
+                                copy.SetAttributeValue(
+                                    XNamespace.Xmlns + ns.NodeValue.LocalName,
+                                    ns.NodeValue.StringValue);
+                            }
+                        }
+                    }
                     _currentContainer.Add(copy);
 
                     var previousContainer = _currentContainer;
@@ -4055,38 +4409,350 @@ public sealed class TransformEngine
     /// Evaluates the sequence constructor within the given element and returns
     /// the concatenated string value, applying simple content construction rules.
     /// </summary>
-    private string EvaluateSimpleContent(XElement parent, XdmValue contextItem)
+    /// <param name="parent">The element whose child nodes form the sequence constructor.</param>
+    /// <param name="contextItem">The current context item for XPath evaluations.</param>
+    /// <param name="separator">The separator inserted between successive strings after atomization.</param>
+    private string EvaluateSimpleContent(XElement parent, XdmValue contextItem, string separator = " ")
     {
-        var savedContainer = _currentContainer;
-        var savedLastAtomic = _lastAddedWasAtomic;
-        var temp = new XElement("__temp__");
-        _currentContainer = temp;
-        _lastAddedWasAtomic = false;
-        try
+        var items = new List<XdmValue>();
+        CollectSimpleContentItems(parent, contextItem, items);
+        return ConstructSimpleContentString(items, separator);
+    }
+
+    /// <summary>
+    /// Collects the raw XDM items produced by evaluating a sequence constructor
+    /// for simple content construction.
+    /// </summary>
+    private void CollectSimpleContentItems(XElement parent, XdmValue contextItem, List<XdmValue> items)
+    {
+        foreach (var node in parent.Nodes())
         {
-            foreach (var node in parent.Nodes())
+            switch (node)
             {
-                switch (node)
+                case XText text:
+                    CollectSimpleContentText(text, parent, items);
+                    break;
+                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                    CollectSimpleContentXsltInstruction(elem, contextItem, items);
+                    break;
+                case XElement elem:
+                    var copy = CopyLiteralElementToXElement(elem);
+                    items.Add(XdmValue.FromNode(new XDocumentNode(copy)));
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Processes a literal text node in simple content and adds the resulting
+    /// text node to the items list.
+    /// </summary>
+    private void CollectSimpleContentText(XText text, XElement parent, List<XdmValue> items)
+    {
+        string value;
+        if (GetExpandText(parent) && ContainsTvtExpression(text.Value))
+        {
+            value = EvaluateTvt(text.Value);
+        }
+        else if (IsWhitespacePreserveContext(parent))
+        {
+            value = text.Value;
+        }
+        else if (IsWhitespaceOnly(text.Value))
+        {
+            return;
+        }
+        else
+        {
+            value = text.Value;
+        }
+        items.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+    }
+
+    /// <summary>
+    /// Processes an XSLT instruction in simple content and adds the resulting
+    /// items to the items list.
+    /// </summary>
+    private void CollectSimpleContentXsltInstruction(XElement instruction, XdmValue contextItem, List<XdmValue> items)
+    {
+        var name = instruction.Name.LocalName;
+        switch (name)
+        {
+            case "sequence":
                 {
-                    case XText text:
-                        ProcessSequenceText(text, parent);
-                        break;
-                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                        var currentNode = contextItem.IsNode ? contextItem.NodeValue : null;
-                        ExecuteXsltInstruction(elem, currentNode!);
-                        break;
-                    case XElement elem:
-                        CopyLiteralElement(elem);
-                        break;
+                    var seqSelect = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(seqSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(seqSelect);
+                        var result = compiled.Evaluate(_context);
+                        if (result.IsSequence && result.SequenceValue != null)
+                        {
+                            foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                items.Add(item);
+                        }
+                        else
+                        {
+                            items.Add(result);
+                        }
+                    }
+                    else
+                    {
+                        CollectSimpleContentItems(instruction, contextItem, items);
+                    }
+                    break;
+                }
+
+            case "copy-of":
+                {
+                    var copySelect = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(copySelect))
+                    {
+                        var compiled = XPath31Expression.Compile(copySelect);
+                        var result = compiled.Evaluate(_context);
+                        if (result.IsSequence && result.SequenceValue != null)
+                        {
+                            foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                items.Add(item);
+                        }
+                        else
+                        {
+                            items.Add(result);
+                        }
+                    }
+                    break;
+                }
+
+            case "for-each":
+                {
+                    var feSelect = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(feSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(feSelect);
+                        var result = compiled.Evaluate(_context);
+                        var feItems = new List<XdmValue>();
+                        if (result.IsSequence && result.SequenceValue != null)
+                        {
+                            foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                feItems.Add(item);
+                        }
+                        else
+                        {
+                            feItems.Add(result);
+                        }
+
+                        var savedItem = _context.ContextItem;
+                        var savedCurrent = _context.CurrentItem;
+                        var savedPosition = _context.ContextPosition;
+                        var savedSize = _context.ContextSize;
+                        try
+                        {
+                            for (int i = 0; i < feItems.Count; i++)
+                            {
+                                _context.WithFocus(feItems[i], i + 1, feItems.Count);
+                                _context.WithCurrentItem(feItems[i]);
+                                CollectSimpleContentItems(instruction, feItems[i], items);
+                            }
+                        }
+                        finally
+                        {
+                            _context.WithFocus(savedItem, savedPosition, savedSize);
+                            _context.WithCurrentItem(savedCurrent);
+                        }
+                    }
+                    break;
+                }
+
+            case "if":
+                {
+                    var test = instruction.Attribute("test")?.Value;
+                    if (!string.IsNullOrEmpty(test))
+                    {
+                        var compiled = XPath31Expression.Compile(test);
+                        if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                        {
+                            CollectSimpleContentItems(instruction, contextItem, items);
+                        }
+                    }
+                    break;
+                }
+
+            case "choose":
+                {
+                    bool matched = false;
+                    foreach (var when in instruction.Elements(XName.Get("when", Stylesheet.Stylesheet.XslNamespace)))
+                    {
+                        var whenTest = when.Attribute("test")?.Value;
+                        if (!string.IsNullOrEmpty(whenTest))
+                        {
+                            var compiled = XPath31Expression.Compile(whenTest);
+                            if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                            {
+                                CollectSimpleContentItems(when, contextItem, items);
+                                matched = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!matched)
+                    {
+                        var otherwise = instruction.Element(XName.Get("otherwise", Stylesheet.Stylesheet.XslNamespace));
+                        if (otherwise != null)
+                        {
+                            CollectSimpleContentItems(otherwise, contextItem, items);
+                        }
+                    }
+                    break;
+                }
+
+            case "variable":
+            case "param":
+                {
+                    var varName = instruction.Attribute("name")?.Value;
+                    var varSelect = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(varName))
+                    {
+                        XdmValue varValue;
+                        if (!string.IsNullOrEmpty(varSelect))
+                        {
+                            var compiled = XPath31Expression.Compile(varSelect);
+                            varValue = compiled.Evaluate(_context);
+                        }
+                        else
+                        {
+                            varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+                        }
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
+                        _context.WithVariable(varName, varValue);
+                    }
+                    break;
+                }
+
+            case "message":
+                {
+                    var msgSelect = instruction.Attribute("select")?.Value;
+                    string msgText;
+                    if (!string.IsNullOrEmpty(msgSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(msgSelect);
+                        msgText = XdmValueToString(compiled.Evaluate(_context), " ");
+                    }
+                    else
+                    {
+                        msgText = EvaluateSimpleContent(instruction, contextItem);
+                    }
+                    _messageListener?.OnMessage(msgText);
+                    break;
+                }
+
+            case "result-document":
+            case "fallback":
+                // No output in simple content
+                break;
+
+            default:
+                // Fallback: execute into a temporary container and extract nodes.
+                var savedContainer = _currentContainer;
+                var temp = new XElement("__fallback__");
+                _currentContainer = temp;
+                try
+                {
+                    var currentNode = contextItem.IsNode ? contextItem.NodeValue : null;
+                    ExecuteXsltInstruction(instruction, currentNode!);
+                    foreach (var child in temp.Nodes())
+                    {
+                        switch (child)
+                        {
+                            case XText t:
+                                items.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                                break;
+                            case XElement e:
+                                items.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                break;
+                            case XComment c:
+                                items.Add(XdmValue.FromNode(new XDocumentNode(c)));
+                                break;
+                            case XProcessingInstruction pi:
+                                items.Add(XdmValue.FromNode(new XDocumentNode(pi)));
+                                break;
+                        }
+                    }
+                }
+                finally
+                {
+                    _currentContainer = savedContainer;
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Applies simple content construction rules to a list of items and returns
+    /// the concatenated string.
+    /// </summary>
+    private static string ConstructSimpleContentString(List<XdmValue> items, string separator)
+    {
+        var strings = new List<string>();
+        string? pendingText = null;
+
+        foreach (var item in items)
+        {
+            bool isTextNode = item.IsNode && item.NodeValue != null &&
+                              item.NodeValue.NodeKind == XdmNodeKind.Text;
+
+            if (isTextNode && item.NodeValue!.StringValue.Length == 0)
+            {
+                continue; // Remove zero-length text nodes
+            }
+
+            if (isTextNode)
+            {
+                if (pendingText != null)
+                {
+                    pendingText += item.NodeValue!.StringValue;
+                }
+                else
+                {
+                    pendingText = item.NodeValue!.StringValue;
                 }
             }
+            else
+            {
+                if (pendingText != null)
+                {
+                    strings.Add(pendingText);
+                    pendingText = null;
+                }
+                // Atomize and cast to string
+                strings.Add(item.ToString());
+            }
+        }
+
+        if (pendingText != null)
+        {
+            strings.Add(pendingText);
+        }
+
+        return string.Join(separator, strings);
+    }
+
+    /// <summary>
+    /// Copies a literal result element into a standalone XElement without
+    /// adding it to the current result container.
+    /// </summary>
+    private XElement CopyLiteralElementToXElement(XElement source)
+    {
+        var savedContainer = _currentContainer;
+        var temp = new XElement("__temp__");
+        _currentContainer = temp;
+        try
+        {
+            CopyLiteralElement(source);
+            return temp.Elements().First();
         }
         finally
         {
             _currentContainer = savedContainer;
-            _lastAddedWasAtomic = savedLastAtomic;
         }
-        return temp.Value;
     }
 
     // ------------------------------------------------------------------

@@ -138,6 +138,19 @@ public static class ResultTreeSerializer
 
     private static string SerializeXElement(XElement element, Stylesheet.OutputProperties props)
     {
+        // Unwrap synthetic document wrappers created for document nodes that
+        // contain multiple root elements (XDocument cannot represent those).
+        if (element.Name.LocalName == "__xdm_doc__" && element.Name.NamespaceName == "")
+        {
+            using var writer = new StringWriter();
+            var settings = CreateXmlWriterSettings(props);
+            settings.ConformanceLevel = ConformanceLevel.Fragment;
+            using var xmlWriter = XmlWriter.Create(writer, settings);
+            foreach (var child in element.Nodes())
+                child.WriteTo(xmlWriter);
+            xmlWriter.Flush();
+            return ConvertHexEntitiesToDecimal(writer.ToString());
+        }
         return SerializeWithEncoding(element, props);
     }
 
@@ -287,7 +300,15 @@ public static class ResultTreeSerializer
                         child.WriteTo(writer);
                     break;
                 case XElement elem:
-                    elem.WriteTo(writer);
+                    if (elem.Name.LocalName == "__xdm_doc__" && elem.Name.NamespaceName == "")
+                    {
+                        foreach (var child in elem.Nodes())
+                            child.WriteTo(writer);
+                    }
+                    else
+                    {
+                        elem.WriteTo(writer);
+                    }
                     break;
                 case XText text:
                     writer.WriteString(text.Value);

@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-09
 **Commit:** `012a365`
-**Current focus:** Seqtor cluster reduced from 13 failures to 4. Fixed: missing `case "text"` in function bodies, TVT empty-result handling, TVT separator, zero-length text node atomic-chain reset, xsl:document support. Remaining: seqtor-036a/036d/037a/037d (4 failures). Next: investigate copy cluster for seqtor-related fixes.
+**Current focus:** Fixed copy cluster namespace in-scope tests (copy-0612/0620), document-node handling (copy-4303/4304), and namespace propagation (copy-3702). Copy cluster: 88/49/144 (was 83/54/144). Next: investigate remaining copy cluster edge cases (copy-4501–5201), or tackle on-empty/where-populated if edge cases are complex.
 
 ---
 
@@ -10,8 +10,8 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3,561 / **Failed:** ~1,848 / **Skipped:** ~9,199 (14,600 total)
-- Pass rate: **65.9%** (latest run, 2026-06-09)
+- **Passed:** ~3,587 / **Failed:** ~1,818 / **Skipped:** ~9,195 (14,600 total)
+- Pass rate: **66.4%** (latest run, 2026-06-09)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
@@ -38,6 +38,23 @@
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
+
+### This Session Fixes (2026-06-09 — Copy Cluster Document Nodes + Namespaces)
+
+1. **Document node handling in `CopyToResult` sequence processing (copy-4303)** — `CopyToResult`'s sequence-processing loop had no branch for `XdmNodeKind.Document`. Document nodes fell through to the atomic branch, where `item.ToString()` (the document's string-value) was appended with spaces. XSLT 3.0 §5.7.1 requires document nodes in complex content to be replaced by their children.
+   - **Fix**: Added an `else if (item.NodeValue.NodeKind == XdmNodeKind.Document)` branch that flushes accumulated text, then iterates the document's children and recursively calls `CopyNodeToResult` for each.
+   - **File changed**: `TransformEngine.cs`.
+   - **Fixed**: `copy-4303`.
+
+2. **Document node deep copy with multiple root elements (copy-4304)** — `CopyXdmNode` for `Document` created a raw `XDocument` and added children directly. `XDocument` can only contain one root element, so copying a document node with multiple element children (e.g. `<a/><b/><c/>`) threw `InvalidOperationException: "This operation would create an incorrectly structured document."`
+   - **Fix**: If the document node has exactly one child (and it's an element), create a normal `XDocument`. Otherwise, wrap children in a synthetic `__xdm_doc__` element inside an `XDocument`, exactly as `EvaluateSequenceConstructor` does for mixed content. Added unwrapping logic in `ResultTreeSerializer.WriteNode` and `SerializeXElement` so the synthetic wrapper never appears in serialized output.
+   - **Files changed**: `TransformEngine.cs`, `ResultTreeSerializer.cs`.
+   - **Fixed**: `copy-4304`.
+
+3. **Namespace declaration propagation in node copying (copy-3702)** — `CopyXdmNode` and `CopyNodeToContainer` for `Element` copied attributes and children, but did not copy namespace declarations. This caused copied elements to lose in-scope namespace prefixes.
+   - **Fix**: Added iteration over `node.Axis(XdmAxis.Namespace)` in both `CopyXdmNode` and `CopyNodeToContainer`. For each namespace node (except `xml`), sets `xmlns:prefix` or `xmlns` (default namespace) on the copied element. Handles empty prefix (default namespace) specially to avoid `XName` with empty local name.
+   - **Files changed**: `TransformEngine.cs`.
+   - **Fixed**: `copy-3702`.
 
 ### This Session Fixes (2026-06-09 — Match Cluster)
 
@@ -567,7 +584,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | **node-after** | 2 | 9 | 24/35 passing (68.6%). Remaining 2 are environment issues. |
 | **HigherOrderFunctions** | 7 | 85 | 37/129 passing (28.7%). +4 fixed this session (function-name prefix, XQST0039, inline-function-16, function-item-3). |
 | **mode** | 36 | 44 | 102/188 passing (70.8% of runnable). Down from 45 failures. Remaining: static validation, accumulators, packages, visibility. |
-| **copy** | 80 | 20 | `xsl:copy`, `xsl:copy-of` behavior gaps. |
+| **copy** | 49 | 144 | `xsl:copy`, `xsl:copy-of` behavior gaps. 88/281 passing. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
 | **for-each-group** | 62 | 3 | `xsl:for-each-group` implementation gaps. |
 | **key** | 34 | 8 | `key()` / `xsl:key` behavior. 57/99 passing (was 53). |
@@ -587,7 +604,8 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
+- Latest: `<uncommitted>` — copy cluster document-node fixes (copy-4303/4304), namespace propagation (copy-3702)
+- Previous: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
 - Previous: `<uncommitted>` — mode cluster fixes: default-mode resolution, XTDE0045/0050 validation, harness initial-mode params
 - Previous: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)
 - Previous: `<uncommitted>` — match cluster fixes (241, 246a/b, 248-254), xsl:variable @as coercion, next-match position/last preservation

@@ -8680,20 +8680,20 @@ public static class FunctionLibrary
 
         if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
         {
-            foreach (var attr in elem.Attributes())
-            {
-                if (attr.IsNamespaceDeclaration)
-                {
-                    var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
-                    if (seen.Add(prefix))
-                        prefixes.Add(XdmValue.FromString(prefix));
-                }
-            }
-            // Walk up ancestors
-            var current = elem.Parent;
+            // Collect elements from root to this element (document order) so that
+            // prefixes are returned in the order of their first declaration.
+            var path = new List<XElement>();
+            var current = elem;
             while (current != null)
             {
-                foreach (var attr in current.Attributes())
+                path.Add(current);
+                current = current.Parent;
+            }
+            path.Reverse();
+
+            foreach (var el in path)
+            {
+                foreach (var attr in el.Attributes())
                 {
                     if (attr.IsNamespaceDeclaration)
                     {
@@ -8702,7 +8702,6 @@ public static class FunctionLibrary
                             prefixes.Add(XdmValue.FromString(prefix));
                     }
                 }
-                current = current.Parent;
             }
         }
 
