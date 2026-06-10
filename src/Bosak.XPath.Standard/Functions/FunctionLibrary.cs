@@ -8688,6 +8688,10 @@ public static class FunctionLibrary
             {
                 path.Add(current);
                 current = current.Parent;
+
+                // Stop at namespace inheritance barrier (inherit-namespaces="no").
+                if (current is XElement parent && parent.Annotation<NamespaceInheritanceBarrier>() != null)
+                    break;
             }
             path.Reverse();
 
@@ -8737,6 +8741,10 @@ public static class FunctionLibrary
                     }
                 }
                 current = current.Parent;
+
+                // Stop at namespace inheritance barrier (inherit-namespaces="no").
+                if (current is XElement parent && parent.Annotation<NamespaceInheritanceBarrier>() != null)
+                    break;
             }
         }
 

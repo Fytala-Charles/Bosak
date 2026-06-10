@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 08 June 2026
-> **Bosak baseline:** 873 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 3,487 passed / 1,922 failed / 9,191 skipped (64.5%)
+> **Last updated:** 10 June 2026
+> **Bosak baseline:** 875 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 3,468 passed / 1,937 failed / 9,195 skipped (64.2%)
 
 ---
 
@@ -320,11 +320,17 @@ dotnet test Bosak.sln
 **Unit tests:** 875 passed, 0 failed, 0 skipped  
 **Target framework:** `net10.0`
 
+### Behavioral Changes
+
+| Change | Impact | When |
+|--------|--------|------|
+| Namespace node `parent::node()` now returns the element whose namespace axis includes the node (`_namespaceOwner`), not the element where the underlying `XAttribute` declaration resides. | Fixes `.. is $e` for inherited namespace nodes in XPath. Required for XSLT `namespace::*` axis correctness. | 2026-06-10 |
+
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 3,487 | 1,922 | 9,191 | 64.5% | +127 from next-match, attribute-set, use-when, copy-of fixes |
+| XSLT 3.0 (W3C) | 3,468 | 1,937 | 9,195 | 64.2% | +13 copy cluster tests fixed (namespace axis parent handling) |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

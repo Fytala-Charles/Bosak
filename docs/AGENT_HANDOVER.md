@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-09
-**Commit:** `012a365`
-**Current focus:** Fixed copy cluster namespace in-scope tests (copy-0612/0620), document-node handling (copy-4303/4304), and namespace propagation (copy-3702). Copy cluster: 88/49/144 (was 83/54/144). Next: investigate remaining copy cluster edge cases (copy-4501–5201), or tackle on-empty/where-populated if edge cases are complex.
+**Date:** 2026-06-10
+**Commit:** `<uncommitted>`
+**Current focus:** Fixed namespace axis parent handling for inherited namespace nodes. Copy cluster: 101/36/144 (was 88/49/144). All copy-061x/062x namespace axis tests now pass. Next: investigate remaining copy cluster failures (copy-0104/0105, copy-1201–1221, copy-4501–5201), or tackle mode cluster remaining failures.
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3,587 / **Failed:** ~1,818 / **Skipped:** ~9,195 (14,600 total)
-- Pass rate: **66.4%** (latest run, 2026-06-09)
+- **Passed:** ~3,468 / **Failed:** ~1,937 / **Skipped:** ~9,195 (14,600 total)
+- Pass rate: **64.2%** (latest run, 2026-06-10)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3555 passed / 1854 failed / 9191 skipped (65.7%) — match cluster 100% runnable (179/294, +1 match-040); mode cluster +11 tests
+- Latest: 3468 passed / 1937 failed / 9195 skipped (64.2%) — copy cluster +13 tests (namespace axis parent fix, copy-0616/0618/0624/0626)
+- Previous: 3555 passed / 1854 failed / 9191 skipped (65.7%) — match cluster 100% runnable (179/294, +1 match-040); mode cluster +11 tests
 - Previous: 3554 passed / 1855 failed / 9191 skipped (65.7%) — mode cluster fixes: default-mode resolution, XTDE0045/0050 (+11 tests)
 - Previous: 3543 passed / 1866 failed / 9191 skipped (65.5%) — key-063/064 + sum() trailing-zero fix (+16 tests)
 - Previous: 3527 passed / 1882 failed / 9191 skipped (65.2%) — copy cluster +10 tests (PI kind-test args, fn:copy-of fixes, function context isolation)
@@ -38,6 +39,13 @@
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
+
+### This Session Fixes (2026-06-10 — Namespace Axis Parent Handling)
+
+1. **`GetXPathParent` namespace node parent fix (copy-0616/0618/0624/0626)** — `GetXPathParent` checked `node.Parent` before considering that the node might be a namespace node. For namespace nodes backed by an `XAttribute`, `node.Parent` returns the element where the namespace declaration physically resides (e.g., ancestor `c`), not the element whose namespace axis includes it (e.g., `p`). This caused `.. is $e` to return false for inherited namespace nodes, producing the `(BAD!)` marker in test output.
+   - **Fix**: Moved the namespace-node parent check (`_namespaceOwner`) to the top of `GetXPathParent`, before the generic `node.Parent` lookup.
+   - **Files changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
+   - **Fixed**: `copy-0616`, `copy-0618`, `copy-0624`, `copy-0626` (+4 tests). Copy cluster: 101/36/144 (was 88/49/144).
 
 ### This Session Fixes (2026-06-09 — Copy Cluster Document Nodes + Namespaces)
 
@@ -584,7 +592,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | **node-after** | 2 | 9 | 24/35 passing (68.6%). Remaining 2 are environment issues. |
 | **HigherOrderFunctions** | 7 | 85 | 37/129 passing (28.7%). +4 fixed this session (function-name prefix, XQST0039, inline-function-16, function-item-3). |
 | **mode** | 36 | 44 | 102/188 passing (70.8% of runnable). Down from 45 failures. Remaining: static validation, accumulators, packages, visibility. |
-| **copy** | 49 | 144 | `xsl:copy`, `xsl:copy-of` behavior gaps. 88/281 passing. |
+| **copy** | 36 | 144 | `xsl:copy`, `xsl:copy-of` behavior gaps. 101/281 passing. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
 | **for-each-group** | 62 | 3 | `xsl:for-each-group` implementation gaps. |
 | **key** | 34 | 8 | `key()` / `xsl:key` behavior. 57/99 passing (was 53). |
@@ -604,7 +612,8 @@ These clusters are >75% passing with only a handful of distinct root causes:
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `<uncommitted>` — copy cluster document-node fixes (copy-4303/4304), namespace propagation (copy-3702)
+- Latest: `<uncommitted>` — namespace axis parent fix (copy-0616/0618/0624/0626)
+- Previous: `<uncommitted>` — copy cluster document-node fixes (copy-4303/4304), namespace propagation (copy-3702)
 - Previous: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
 - Previous: `<uncommitted>` — mode cluster fixes: default-mode resolution, XTDE0045/0050 validation, harness initial-mode params
 - Previous: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)

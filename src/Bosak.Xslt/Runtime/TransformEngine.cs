@@ -633,6 +633,14 @@ public sealed class TransformEngine
                             var compiled = XPath31Expression.Compile(select);
                             var feResult = compiled.Evaluate(_context);
                             var feItems = EnumerateItems(feResult).ToList();
+
+                            // Apply xsl:sort if present
+                            var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                            if (sortElements.Count > 0)
+                            {
+                                feItems = SortItems(feItems, sortElements);
+                            }
+
                             var savedFocus = _context.ContextItem;
                             var savedCurrent = _context.CurrentItem;
                             int pos = 1;
@@ -1463,6 +1471,16 @@ public sealed class TransformEngine
                     var elemNs = elemNsRaw != null ? EvaluateAvt(elemNsRaw) : null;
                     var (elemLocalName, elemNsUri) = ResolveElementName(instruction, elemName, elemNs);
                     var elem = new XElement(XName.Get(elemLocalName, elemNsUri));
+
+                    var elemInheritNsRaw = instruction.Attribute("inherit-namespaces")?.Value
+                        ?? instruction.Attribute("_inherit-namespaces")?.Value
+                        ?? "yes";
+                    var elemInheritNs = EvaluateAvt(elemInheritNsRaw);
+                    if (elemInheritNs == "no" || elemInheritNs == "false")
+                    {
+                        elem.AddAnnotation(new NamespaceInheritanceBarrier());
+                    }
+
                     _currentContainer.Add(elem);
                     var prev = _currentContainer;
                     _currentContainer = elem;
@@ -1684,32 +1702,31 @@ public sealed class TransformEngine
                                     XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
                                 // Shallow copy copies namespace declarations but not regular attributes.
                                 // (xsl:copy-of is required to copy attributes explicitly.)
+                                // xsl:copy always copies all namespace nodes from the source element.
+                                foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
+                                {
+                                    if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                                    {
+                                        if (ns.NodeValue.LocalName == "")
+                                        {
+                                            copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                                        }
+                                        else
+                                        {
+                                            copy.SetAttributeValue(
+                                                XNamespace.Xmlns + ns.NodeValue.LocalName,
+                                                ns.NodeValue.StringValue);
+                                        }
+                                    }
+                                }
+
                                 var inheritNamespacesAttrRaw = instruction.Attribute("inherit-namespaces")?.Value
                                     ?? instruction.Attribute("_inherit-namespaces")?.Value
                                     ?? "yes";
                                 var inheritNamespacesAttr = EvaluateAvt(inheritNamespacesAttrRaw);
-                                if (inheritNamespacesAttr != "no" && inheritNamespacesAttr != "false")
+                                if (inheritNamespacesAttr == "no" || inheritNamespacesAttr == "false")
                                 {
-                                    foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
-                                    {
-                                        if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
-                                        {
-                                            if (ns.NodeValue.LocalName == "")
-                                            {
-                                                copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
-                                            }
-                                            else
-                                            {
-                                                copy.SetAttributeValue(
-                                                    XNamespace.Xmlns + ns.NodeValue.LocalName,
-                                                    ns.NodeValue.StringValue);
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    AddRequiredNamespaceDeclarations(nodeToCopy, copy);
+                                    copy.AddAnnotation(new NamespaceInheritanceBarrier());
                                 }
                                 _currentContainer.Add(copy);
                                 var prev = _currentContainer;
@@ -2732,6 +2749,13 @@ public sealed class TransformEngine
         // an explicit namespace declaration when the element uses a non-empty namespace.
         var copy = new XElement(source.Name);
 
+        // Handle inherit-namespaces="no" on literal result elements.
+        var lreInheritNs = source.Attribute(XName.Get("inherit-namespaces", Stylesheet.Stylesheet.XslNamespace))?.Value ?? "yes";
+        if (lreInheritNs == "no" || lreInheritNs == "false")
+        {
+            copy.AddAnnotation(new NamespaceInheritanceBarrier());
+        }
+
         // Determine if #all is specified — this excludes every prefix.
         bool excludeAll = _excludedResultPrefixes.Contains("#all");
 
@@ -3061,6 +3085,10 @@ public sealed class TransformEngine
 
     private IXdmNode CopyXdmNode(IXdmNode node, bool copyAllNamespaces)
     {
+        if (node.NodeKind == XdmNodeKind.Element && node.LocalName == "r")
+        {
+            System.Console.WriteLine($"DEBUG CopyXdmNode r: copyAllNs={copyAllNamespaces}, ns={node.NamespaceUri}");
+        }
         switch (node.NodeKind)
         {
             case XdmNodeKind.Document:
@@ -3117,8 +3145,17 @@ public sealed class TransformEngine
                     {
                         AddRequiredNamespaceDeclarations(node, copy);
                     }
+                    if (node.LocalName == "r")
+                    {
+                        System.Console.WriteLine($"DEBUG CopyXdmNode r after ns: attrs={string.Join(",", copy.Attributes().Select(a => $"{a.Name}={a.Value}"))}");
+                    }
                     foreach (var attr in node.Attributes())
                     {
+                        // Skip namespace declarations — they are handled by the namespace axis
+                        // (copy-all) or AddRequiredNamespaceDeclarations (copy-required) above.
+                        if (attr.NodeValue is { } attrNode &&
+                            attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/")
+                            continue;
                         copy.SetAttributeValue(
                             XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
                             attr.NodeValue!.StringValue);
@@ -3228,6 +3265,11 @@ public sealed class TransformEngine
                     }
                     foreach (var attr in node.Attributes())
                     {
+                        // Skip namespace declarations — they are handled by the namespace axis
+                        // (copy-all) or AddRequiredNamespaceDeclarations (copy-required) above.
+                        if (attr.NodeValue is { } attrNode &&
+                            attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/")
+                            continue;
                         elem.SetAttributeValue(
                             XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
                             attr.NodeValue!.StringValue);
@@ -3266,12 +3308,50 @@ public sealed class TransformEngine
             _lastAddedWasAtomic = false;
             var copy = new XElement(
                 XName.Get(node.LocalName, node.NamespaceUri));
-            foreach (var attr in node.Attributes())
+
+            // Copy explicit namespace declarations and attributes from the source element.
+            // Use the underlying XElement when available so we copy only the declarations
+            // that are actually present on this element, not inherited ones.
+            if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement srcElem)
             {
-                copy.SetAttributeValue(
-                    XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
-                    attr.NodeValue!.StringValue);
+                if (node.LocalName == "r")
+                {
+                    System.Console.WriteLine($"DEBUG CopyNodeToResult r attrs: {string.Join(",", srcElem.Attributes().Select(a => $"{a.Name}={a.Value}"))}");
+                }
+                foreach (var attr in srcElem.Attributes())
+                {
+                    copy.SetAttributeValue(attr.Name, attr.Value);
+                }
             }
+            else
+            {
+                // Fallback for non-XDocumentNode implementations: copy namespace axis
+                // (may include inherited declarations, but best effort).
+                foreach (var ns in node.Axis(XdmAxis.Namespace))
+                {
+                    if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                    {
+                        if (ns.NodeValue.LocalName == "")
+                        {
+                            copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                        }
+                        else
+                        {
+                            copy.SetAttributeValue(
+                                XNamespace.Xmlns + ns.NodeValue.LocalName,
+                                ns.NodeValue.StringValue);
+                        }
+                    }
+                }
+
+                foreach (var attr in node.Attributes())
+                {
+                    copy.SetAttributeValue(
+                        XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
+                        attr.NodeValue!.StringValue);
+                }
+            }
+
             _currentContainer.Add(copy);
             var prev = _currentContainer;
             _currentContainer = copy;
@@ -4263,16 +4343,23 @@ public sealed class TransformEngine
                 var elementCount = nodes.OfType<XElement>().Count();
                 if (elementCount == 1 && nodes.Count == 1)
                 {
-                    // Single element: use it directly as the document root
-                    var tempDoc = new XDocument();
-                    tempDoc.Add(nodes[0]);
+                    // Single element: use it directly as the document root.
+                    // Remove from wrapper first so XDocument does not clone and
+                    // lose XElement annotations (e.g. NamespaceInheritanceBarrier).
+                    nodes[0].Remove();
+                    var tempDoc = new XDocument(nodes[0]);
                     return XdmValue.FromNode(new XDocumentNode(tempDoc));
                 }
                 else
                 {
-                    // Mixed content: wrap in synthetic document wrapper
+                    // Mixed content: wrap in synthetic document wrapper.
+                    // Remove each node from wrapper first to preserve annotations.
                     var docWrapper = new XElement("__xdm_doc__");
-                    docWrapper.Add(nodes);
+                    foreach (var node in nodes)
+                    {
+                        node.Remove();
+                        docWrapper.Add(node);
+                    }
                     var tempDoc = new XDocument(docWrapper);
                     return XdmValue.FromNode(new XDocumentNode(tempDoc));
                 }
@@ -4538,6 +4625,13 @@ public sealed class TransformEngine
                         else
                         {
                             feItems.Add(result);
+                        }
+
+                        // Apply xsl:sort if present
+                        var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                        if (sortElements.Count > 0)
+                        {
+                            feItems = SortItems(feItems, sortElements);
                         }
 
                         var savedItem = _context.ContextItem;

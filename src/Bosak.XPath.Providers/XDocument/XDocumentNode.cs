@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 27-05-2026     | Lazy document order computation for proper node sorting                                |
 //                      | Charles Korthout | 0.6   | 30-05-2026     | Fixed StringValue for XDocument without root element (uses all text node children)     |
 //                      | Charles Korthout | 0.7   | 30-05-2026     | Added synthetic document wrapper for mixed-content document nodes                      |
+//                      | Charles Korthout | 0.8   | 10-06-2026     | Fixed GetXPathParent for namespace nodes: parent axis returns _namespaceOwner         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -321,6 +322,11 @@ public sealed class XDocumentNode : IXdmNode
     /// </summary>
     private XObject? GetXPathParent(XObject node)
     {
+        // Namespace nodes: parent is the element whose namespace axis includes the node,
+        // not the element where the underlying XAttribute declaration resides.
+        if (node == _node && _isNamespaceNode && _namespaceOwner is not null)
+            return _namespaceOwner;
+
         var parent = node.Parent;
         if (parent is not null)
         {
@@ -334,8 +340,6 @@ public sealed class XDocumentNode : IXdmNode
         }
         if (node is XElement elem && elem.Document is not null && elem.Document.Root == elem)
             return elem.Document;
-        if (node == _node && _isNamespaceNode && _namespaceOwner is not null)
-            return _namespaceOwner;
         return null;
     }
 
@@ -411,6 +415,11 @@ public sealed class XDocumentNode : IXdmNode
                 }
             }
             current = current.Parent;
+
+            // Stop walking up when we hit an element that was created with
+            // inherit-namespaces="no" (XSLT 3.0 §11.9.2).
+            if (current is XElement parent && parent.Annotation<NamespaceInheritanceBarrier>() != null)
+                break;
         }
 
         // The xml namespace is always implicitly in scope
