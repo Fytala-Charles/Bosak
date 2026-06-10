@@ -233,6 +233,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:if` / `xsl:choose` | ✅ Working | `when` + `otherwise` |
 | `xsl:element` / `xsl:attribute` | ✅ Working | |
 | `xsl:text` | ✅ Working | |
+| `xsl:copy` | ✅ Working | Shallow copy with `@select` support; focus set correctly per item |
 | `xsl:copy-of` | ✅ Working | Deep copy of nodes; Document nodes supported |
 | `xsl:comment` | ✅ Working | `select` attribute or text content |
 | `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
@@ -325,12 +326,14 @@ dotnet test Bosak.sln
 | Change | Impact | When |
 |--------|--------|------|
 | Namespace node `parent::node()` now returns the element whose namespace axis includes the node (`_namespaceOwner`), not the element where the underlying `XAttribute` declaration resides. | Fixes `.. is $e` for inherited namespace nodes in XPath. Required for XSLT `namespace::*` axis correctness. | 2026-06-10 |
+| `xsl:copy` now raises `XTTE0945` (no context item), `XTTE3180` (select returns >1 item), `XTDE0410` (attribute after children), and `XTDE0420` (attribute on non-element) per XSLT 3.0 spec. | Previously these error conditions were silently ignored or produced wrong results. | 2026-06-10 |
+| XSLT functions (`xsl:function`) no longer leak the first argument as the context item. | Functions now correctly have no context item per XSLT 3.0 §9.6. Fixes `xsl:copy` inside functions. | 2026-06-10 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 3,468 | 1,937 | 9,195 | 64.2% | +13 copy cluster tests fixed (namespace axis parent handling) |
+| XSLT 3.0 (W3C) | ~3,482 | ~1,923 | 9,195 | ~64.4% | +14 copy cluster tests fixed (error handling, function context item, document node cases) |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

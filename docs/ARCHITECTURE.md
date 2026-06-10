@@ -385,6 +385,7 @@ src/
 | `xsl:apply-templates` | 🎯 Phase 1 | Default mode, `select` attribute |
 | `xsl:call-template` | 🎯 Phase 1 | Named template calls with `xsl:with-param` |
 | `xsl:value-of` | 🎯 Phase 1 | Text node construction |
+| `xsl:copy` | 🎯 Phase 1 | Shallow copy; `@select` attribute support |
 | `xsl:copy-of` | 🎯 Phase 1 | Deep copy to result tree |
 | `xsl:for-each` | 🎯 Phase 1 | Iteration over sequence |
 | `xsl:if` / `xsl:choose` | 🎯 Phase 1 | Conditional logic |

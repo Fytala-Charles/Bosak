@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-10
 **Commit:** `<uncommitted>`
-**Current focus:** Fixed namespace axis parent handling for inherited namespace nodes. Copy cluster: 101/36/144 (was 88/49/144). All copy-061x/062x namespace axis tests now pass. Next: investigate remaining copy cluster failures (copy-0104/0105, copy-1201–1221, copy-4501–5201), or tackle mode cluster remaining failures.
+**Current focus:** Fixed xsl:copy error handling (XTTE0945/3180, XTDE0410/0420), function context item isolation, document-node-in-element cases. Copy cluster: 115/22/144 (was 101/36/144). Next: investigate remaining copy cluster failures (namespace serialization copy-1205/1207-1221, copy-5101; static errors copy-0104/0105; XML parsing copy-1201/1202/1501/2101; missing features copy-3003/4308).
 
 ---
 
@@ -10,12 +10,12 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3,468 / **Failed:** ~1,937 / **Skipped:** ~9,195 (14,600 total)
-- Pass rate: **64.2%** (latest run, 2026-06-10)
+- **Passed:** ~3,482 / **Failed:** ~1,923 / **Skipped:** ~9,195 (14,600 total)
+- Pass rate: **64.4%** (latest run, 2026-06-10)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: 3468 passed / 1937 failed / 9195 skipped (64.2%) — copy cluster +13 tests (namespace axis parent fix, copy-0616/0618/0624/0626)
+- Latest: ~3482 passed / ~1923 failed / 9195 skipped (~64.4%) — copy cluster +14 tests (error handling, function context item, document node cases)
 - Previous: 3555 passed / 1854 failed / 9191 skipped (65.7%) — match cluster 100% runnable (179/294, +1 match-040); mode cluster +11 tests
 - Previous: 3554 passed / 1855 failed / 9191 skipped (65.7%) — mode cluster fixes: default-mode resolution, XTDE0045/0050 (+11 tests)
 - Previous: 3543 passed / 1866 failed / 9191 skipped (65.5%) — key-063/064 + sum() trailing-zero fix (+16 tests)
@@ -39,6 +39,36 @@
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
+
+### This Session Fixes (2026-06-10 — xsl:copy Error Handling + Function Context Item)
+
+1. **Removed debug line crash on atomic values (copy-4803/4804 + 3 others)** — A debug `Console.WriteLine` in the `xsl:copy` handler unconditionally accessed `result.SequenceValue`, which throws for atomic string values. This caused 5 tests to crash with `InvalidOperationException: Cannot access SequenceValue on XDM value of kind 'String'`.
+   - **Fix**: Removed the offending debug line.
+   - **Fixed**: `copy-4803`, `copy-4804`, and 3 other tests that happened to hit the same code path.
+
+2. **`xsl:copy` document node in element context (copy-0801/4201/4301/4302)** — `ExecuteSingleCopy` for `Document` created a new `XDocument` and tried to `_currentContainer.Add(newDoc)`. When `_currentContainer` was an `XElement`, LINQ-to-XML threw `InvalidOperationException: A node of type Document cannot be added to content`.
+   - **Fix**: For `Document` case in `ExecuteSingleCopy`, process instruction children directly into `_currentContainer` without creating an `XDocument`. Per XSLT 3.0 §5.7.1, document nodes in complex content are replaced by their children.
+   - **Fixed**: `copy-0801`, `copy-4201`, `copy-4301`, `copy-4302` (+4 tests).
+
+3. **XSLT functions have no context item (copy-4307/4309)** — `ExecuteXsltFunction` passed `args[0]` as the context item to `EvaluateFunctionBody`. Per XSLT 3.0 §9.6, functions have no context item. This caused `xsl:copy` inside function bodies to silently succeed using the first argument instead of raising `XTTE0945`.
+   - **Fix**: Changed `ExecuteXsltFunction` to pass `XdmValue.Undefined` to `EvaluateFunctionBody`.
+   - **Fixed**: `copy-4307`, `copy-4309` (+2 tests).
+
+4. **`xsl:copy` error checking (XTTE0945, XTTE3180, XTDE0410, XTDE0420)** — `xsl:copy` without `@select` and no context item silently did nothing instead of raising `XTTE0945`. `xsl:copy/@select` returning more than one item iterated all items instead of raising `XTTE3180`. Attributes added after children or to non-elements were silently ignored instead of raising `XTDE0410`/`XTDE0420`.
+   - **Fix**: 
+     - Main `ExecuteXsltInstruction` handler: throw `XTTE0945` when `node == null` and no `@select`. Throw `XTTE3180` when `@select` returns >1 item.
+     - `EvaluateFunctionBodyInstruction` handler: throw `XTTE0945` when `nodeToCopy == null` and no `@select`.
+     - `ExecuteSingleCopy` Attribute case: throw `XTDE0420` if container is not `XElement`; throw `XTDE0410` if element already has child nodes.
+     - `CopyNodeToResult` Attribute case: same checks.
+     - `xsl:attribute` handler: same checks.
+     - `EvaluateSequenceConstructor`: throw `XTDE0420` when `wrapInDocumentNode=true` and real attributes exist in sequence constructor content.
+   - **Fixed**: `copy-4701`, `copy-4702`, `copy-4601`, `copy-4805` (+4 tests).
+
+5. **Cleaned up debug Console.WriteLine statements** — Removed 6 debug `Console.WriteLine` calls from `TransformEngine.cs` that were polluting conformance runner output.
+
+**Copy cluster**: 115/281 passing, 22 failed, 144 skipped (83.9% of runnable) — up from 101/281.
+
+---
 
 ### This Session Fixes (2026-06-10 — Namespace Axis Parent Handling)
 
@@ -592,7 +622,7 @@ These clusters are >75% passing with only a handful of distinct root causes:
 | **node-after** | 2 | 9 | 24/35 passing (68.6%). Remaining 2 are environment issues. |
 | **HigherOrderFunctions** | 7 | 85 | 37/129 passing (28.7%). +4 fixed this session (function-name prefix, XQST0039, inline-function-16, function-item-3). |
 | **mode** | 36 | 44 | 102/188 passing (70.8% of runnable). Down from 45 failures. Remaining: static validation, accumulators, packages, visibility. |
-| **copy** | 36 | 144 | `xsl:copy`, `xsl:copy-of` behavior gaps. 101/281 passing. |
+| **copy** | 22 | 144 | `xsl:copy`, `xsl:copy-of` behavior gaps. 115/281 passing. |
 | **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
 | **for-each-group** | 62 | 3 | `xsl:for-each-group` implementation gaps. |
 | **key** | 34 | 8 | `key()` / `xsl:key` behavior. 57/99 passing (was 53). |

@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 30-05-2026     | Fixed StringValue for XDocument without root element (uses all text node children)     |
 //                      | Charles Korthout | 0.7   | 30-05-2026     | Added synthetic document wrapper for mixed-content document nodes                      |
 //                      | Charles Korthout | 0.8   | 10-06-2026     | Fixed GetXPathParent for namespace nodes: parent axis returns _namespaceOwner         |
+//                      | Charles Korthout | 0.9   | 10-06-2026     | ParentlessOrderMaps for stable document order on detached/copied element trees         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -35,6 +36,7 @@ namespace Bosak.XPath.Providers.Xml;
 public sealed class XDocumentNode : IXdmNode
 {
     private static readonly ConditionalWeakTable<System.Xml.Linq.XDocument, Dictionary<XObject, long>> OrderMaps = new();
+    private static readonly ConditionalWeakTable<XElement, Dictionary<XObject, long>> ParentlessOrderMaps = new();
 
     private readonly XObject _node;
     private readonly bool _isNamespaceNode;
@@ -143,13 +145,38 @@ public sealed class XDocumentNode : IXdmNode
         get
         {
             var doc = _node.Document;
-            if (doc is null) return 0;
-            if (!OrderMaps.TryGetValue(doc, out var map))
+            if (doc is not null)
             {
-                map = ComputeDocumentOrder(doc);
-                OrderMaps.AddOrUpdate(doc, map);
+                if (!OrderMaps.TryGetValue(doc, out var map))
+                {
+                    map = ComputeDocumentOrder(doc);
+                    OrderMaps.AddOrUpdate(doc, map);
+                }
+                return map.TryGetValue(_node, out var idx) ? idx : 0;
             }
-            return map.TryGetValue(_node, out var idx) ? idx : 0;
+
+            // Parentless node: compute order relative to the root element of its tree.
+            XElement? treeRoot = null;
+            if (_node is XNode xnode)
+            {
+                treeRoot = GetTreeRoot(xnode);
+            }
+            else if (_node is XAttribute attr && attr.Parent is XElement parent)
+            {
+                treeRoot = GetTreeRoot(parent);
+            }
+
+            if (treeRoot is not null)
+            {
+                if (!ParentlessOrderMaps.TryGetValue(treeRoot, out var map))
+                {
+                    map = ComputeElementTreeOrder(treeRoot);
+                    ParentlessOrderMaps.AddOrUpdate(treeRoot, map);
+                }
+                return map.TryGetValue(_node, out var idx) ? idx : 0;
+            }
+
+            return 0;
         }
     }
 
@@ -159,6 +186,25 @@ public sealed class XDocumentNode : IXdmNode
         long index = 0;
         map[doc] = index++;
         Traverse(doc, ref index, map);
+        return map;
+    }
+
+    private static XElement? GetTreeRoot(XNode node)
+    {
+        var current = node;
+        while (current.Parent is XElement parent)
+            current = parent;
+        return current as XElement;
+    }
+
+    private static Dictionary<XObject, long> ComputeElementTreeOrder(XElement root)
+    {
+        var map = new Dictionary<XObject, long>();
+        long index = 0;
+        map[root] = index++;
+        foreach (var attr in root.Attributes())
+            map[attr] = index++;
+        Traverse(root, ref index, map);
         return map;
     }
 

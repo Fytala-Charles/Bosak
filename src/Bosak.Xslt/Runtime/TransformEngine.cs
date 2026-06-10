@@ -74,6 +74,7 @@
 //                      | Charles Korthout | 5.3   | 08-06-2026     | Iterative key index build for cross-key dependencies (key-063/064); removed re-entrancy guard |
 //                      | Charles Korthout | 5.4   | 09-06-2026     | Fixed apply-templates default-mode resolution; XTDE0045/0050 validation; ModeExists helper |
 //                      | Charles Korthout | 5.5   | 09-06-2026     | Pass EvaluationContext to PatternCompiler for compile-time predicate validation          |
+//                      | Charles Korthout | 5.6   | 10-06-2026     | xsl:copy error handling (XTTE0945/3180, XTDE0410/0420); function context item isolation; parentless document order |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -453,13 +454,9 @@ public sealed class TransformEngine
             // the caller's context item.
             _context.WithFocus(XdmValue.Undefined, 0, 0);
 
-            // The contextItem parameter to EvaluateFunctionBody is used for
-            // XSLT instructions (e.g. xsl:copy, xsl:apply-templates) that
-            // reference the context node explicitly, not for XPath evaluation.
-            var focus = args.Length > 0 ? args[0] : XdmValue.FromSequence(XdmSequence.Empty);
-
-            // Evaluate the function body (sequence constructor)
-            return EvaluateFunctionBody(def.Element, focus);
+            // XSLT functions have no context item (XSLT 3.0 §9.6).
+            // Evaluate the function body with an absent context item.
+            return EvaluateFunctionBody(def.Element, XdmValue.Undefined);
         }
         finally
         {
@@ -867,6 +864,49 @@ public sealed class TransformEngine
                         }
                         break;
                     }
+                case "copy":
+                    {
+                        IXdmNode? nodeToCopy = null;
+                        var copySelect = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(copySelect))
+                        {
+                            var compiled = XPath31Expression.Compile(copySelect);
+                            var result = compiled.Evaluate(_context);
+                            if (result.IsNode && result.NodeValue != null)
+                            {
+                                nodeToCopy = result.NodeValue;
+                                _context.WithFocus(XdmValue.FromNode(nodeToCopy), 1, 1);
+                            }
+                            else if (result.IsSequence && result.SequenceValue != null)
+                            {
+                                var items = new List<XdmValue>();
+                                foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                    items.Add(item);
+                                if (items.Count > 1)
+                                    throw new InvalidOperationException("XTTE3180");
+                                if (items.Count == 1 && items[0].IsNode && items[0].NodeValue != null)
+                                {
+                                    _context.WithFocus(items[0], 1, 1);
+                                    var fnCopied = CopyNodeForFunctionBody(items[0].NodeValue, instruction);
+                                    if (fnCopied != null)
+                                        results.Add(XdmValue.FromNode(fnCopied));
+                                }
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            nodeToCopy = contextItem.IsNode ? contextItem.NodeValue : null;
+                        }
+
+                        if (nodeToCopy == null)
+                            throw new InvalidOperationException("XTTE0945");
+
+                        var copied = CopyNodeForFunctionBody(nodeToCopy, instruction);
+                        if (copied != null)
+                            results.Add(XdmValue.FromNode(copied));
+                        break;
+                    }
                 case "text":
                     {
                         var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
@@ -1000,8 +1040,6 @@ public sealed class TransformEngine
 
         // Resolve mode aliases
         var resolvedMode = ResolveMode(mode);
-        System.Console.WriteLine($"DEBUG ApplyTemplates: mode='{mode}', resolvedMode='{resolvedMode}', stackCount={_modeStack.Count}");
-
         _modeStack.Push(resolvedMode);
         try
         {
@@ -1528,10 +1566,11 @@ public sealed class TransformEngine
                         var attrSep = instruction.Attribute("separator")?.Value ?? "";
                         value = EvaluateSimpleContent(instruction, contextItem, attrSep);
                     }
-                    if (_currentContainer is XElement targetElem)
-                    {
-                        targetElem.SetAttributeValue(XName.Get(attrLocalName, attrNsUri), value);
-                    }
+                    if (_currentContainer is not XElement attrTarget)
+                        throw new InvalidOperationException("XTDE0420");
+                    if (attrTarget.Nodes().Any())
+                        throw new InvalidOperationException("XTDE0410");
+                    attrTarget.SetAttributeValue(XName.Get(attrLocalName, attrNsUri), value);
                     break;
                 }
 
@@ -1671,126 +1710,60 @@ public sealed class TransformEngine
 
             case "copy":
                 {
-                    if (node == null) break;
                     // XSLT 3.0: optional select attribute; default is context item
-                    IXdmNode nodeToCopy = node;
+                    IXdmNode nodeToCopy = node!;
                     var copySelect = instruction.Attribute("select")?.Value;
-                    if (!string.IsNullOrEmpty(copySelect))
-                    {
-                        var compiled = XPath31Expression.Compile(copySelect);
-                        var result = compiled.Evaluate(_context);
-                        if (result.IsNode && result.NodeValue != null)
-                            nodeToCopy = result.NodeValue;
-                    }
-
-                    // XSLT 3.0: xsl:copy with select="..." processes the sequence as if by xsl:for-each,
-                    // which clears the current template rule and next-match exclusions.
-                    var hasSelect = !string.IsNullOrEmpty(copySelect);
+                    bool hasSelect = !string.IsNullOrEmpty(copySelect);
                     var savedCopyTemplateRule = _currentTemplateRule;
                     var savedCopyExcluded = _nextMatchExcluded;
+
                     if (hasSelect)
                     {
                         _currentTemplateRule = null;
                         _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
-                    }
+                        var compiled = XPath31Expression.Compile(copySelect);
+                        var result = compiled.Evaluate(_context);
 
-                    switch (nodeToCopy.NodeKind)
-                    {
-                        case XdmNodeKind.Element:
+                        if (result.IsSequence && result.SequenceValue != null)
+                        {
+                            var items = new List<XdmValue>();
+                            foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                items.Add(item);
+                            if (items.Count > 1)
+                                throw new InvalidOperationException("XTTE3180");
+                            if (items.Count == 1)
                             {
-                                var copy = new XElement(
-                                    XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
-                                // Shallow copy copies namespace declarations but not regular attributes.
-                                // (xsl:copy-of is required to copy attributes explicitly.)
-                                // xsl:copy always copies all namespace nodes from the source element.
-                                foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
+                                var item = items[0];
+                                _context.WithFocus(item, 1, 1);
+                                if (item.IsNode && item.NodeValue != null)
+                                    ExecuteSingleCopy(item.NodeValue, instruction);
+                                else if (!item.IsUndefined)
                                 {
-                                    if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
-                                    {
-                                        if (ns.NodeValue.LocalName == "")
-                                        {
-                                            copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
-                                        }
-                                        else
-                                        {
-                                            copy.SetAttributeValue(
-                                                XNamespace.Xmlns + ns.NodeValue.LocalName,
-                                                ns.NodeValue.StringValue);
-                                        }
-                                    }
+                                    _lastAddedWasAtomic = false;
+                                    AddTextNode(item.StringValue);
                                 }
-
-                                var inheritNamespacesAttrRaw = instruction.Attribute("inherit-namespaces")?.Value
-                                    ?? instruction.Attribute("_inherit-namespaces")?.Value
-                                    ?? "yes";
-                                var inheritNamespacesAttr = EvaluateAvt(inheritNamespacesAttrRaw);
-                                if (inheritNamespacesAttr == "no" || inheritNamespacesAttr == "false")
-                                {
-                                    copy.AddAnnotation(new NamespaceInheritanceBarrier());
-                                }
-                                _currentContainer.Add(copy);
-                                var prev = _currentContainer;
-                                _currentContainer = copy;
-                                foreach (var childNode in instruction.Nodes())
-                                {
-                                    switch (childNode)
-                                    {
-                                        case XText text:
-                                            ProcessSequenceText(text, instruction);
-                                            break;
-                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                            ExecuteXsltInstruction(elem, nodeToCopy);
-                                            break;
-                                        case XElement elem:
-                                            CopyLiteralElement(elem);
-                                            break;
-                                    }
-                                }
-                                _currentContainer = prev;
-                                break;
                             }
-                        case XdmNodeKind.Text:
+                        }
+                        else if (result.IsNode && result.NodeValue != null)
+                        {
+                            nodeToCopy = result.NodeValue;
+                            _context.WithFocus(XdmValue.FromNode(nodeToCopy), 1, 1);
+                            ExecuteSingleCopy(nodeToCopy, instruction);
+                        }
+                        else if (!result.IsUndefined)
+                        {
                             _lastAddedWasAtomic = false;
-                            AddTextNode(nodeToCopy.StringValue);
-                            break;
-                        case XdmNodeKind.Attribute:
-                            if (_currentContainer is XElement target)
-                            {
-                                target.SetAttributeValue(
-                                    XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri),
-                                    nodeToCopy.StringValue);
-                            }
-                            break;
-                        case XdmNodeKind.Comment:
-                            _currentContainer.Add(new XComment(nodeToCopy.StringValue));
-                            break;
-                        case XdmNodeKind.ProcessingInstruction:
-                            _currentContainer.Add(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
-                            break;
-                        default:
-                            // Document and other kinds: just process children
-                            foreach (var childNode in instruction.Nodes())
-                            {
-                                switch (childNode)
-                                {
-                                    case XText text:
-                                        ProcessSequenceText(text, instruction);
-                                        break;
-                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                        ExecuteXsltInstruction(elem, nodeToCopy);
-                                        break;
-                                    case XElement elem:
-                                        CopyLiteralElement(elem);
-                                        break;
-                                }
-                            }
-                            break;
-                    }
+                            AddTextNode(result.StringValue);
+                        }
 
-                    if (hasSelect)
-                    {
                         _currentTemplateRule = savedCopyTemplateRule;
                         _nextMatchExcluded = savedCopyExcluded;
+                    }
+                    else
+                    {
+                        if (nodeToCopy == null)
+                            throw new InvalidOperationException("XTTE0945");
+                        ExecuteSingleCopy(nodeToCopy, instruction);
                     }
                     break;
                 }
@@ -2831,7 +2804,7 @@ public sealed class TransformEngine
                     case XElement childElem:
                         if (childElem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                         {
-                            // This shouldn't happen in literal elements, but handle anyway
+
                             ExecuteXsltInstruction(childElem, _context.ContextItem);
                         }
                         else
@@ -3085,10 +3058,6 @@ public sealed class TransformEngine
 
     private IXdmNode CopyXdmNode(IXdmNode node, bool copyAllNamespaces)
     {
-        if (node.NodeKind == XdmNodeKind.Element && node.LocalName == "r")
-        {
-            System.Console.WriteLine($"DEBUG CopyXdmNode r: copyAllNs={copyAllNamespaces}, ns={node.NamespaceUri}");
-        }
         switch (node.NodeKind)
         {
             case XdmNodeKind.Document:
@@ -3145,10 +3114,6 @@ public sealed class TransformEngine
                     {
                         AddRequiredNamespaceDeclarations(node, copy);
                     }
-                    if (node.LocalName == "r")
-                    {
-                        System.Console.WriteLine($"DEBUG CopyXdmNode r after ns: attrs={string.Join(",", copy.Attributes().Select(a => $"{a.Name}={a.Value}"))}");
-                    }
                     foreach (var attr in node.Attributes())
                     {
                         // Skip namespace declarations — they are handled by the namespace axis
@@ -3178,6 +3143,197 @@ public sealed class TransformEngine
                     node.StringValue));
             default:
                 return node;
+        }
+    }
+
+    /// <summary>
+    /// Creates a copy of a node for use inside an xsl:function body, processing
+    /// the children of the xsl:copy instruction and adding them to the copied node.
+    /// </summary>
+    private IXdmNode? CopyNodeForFunctionBody(IXdmNode nodeToCopy, XElement copyInstruction)
+    {
+        switch (nodeToCopy.NodeKind)
+        {
+            case XdmNodeKind.Element:
+                {
+                    var copy = new XElement(XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
+                    // Copy namespace declarations
+                    foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
+                    {
+                        if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                        {
+                            if (ns.NodeValue.LocalName == "")
+                                copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                            else
+                                copy.SetAttributeValue(XNamespace.Xmlns + ns.NodeValue.LocalName, ns.NodeValue.StringValue);
+                        }
+                    }
+                    // Process children of xsl:copy into the copied element
+                    var savedContainer = _currentContainer;
+                    _currentContainer = copy;
+                    try
+                    {
+                        foreach (var child in copyInstruction.Elements())
+                        {
+                            if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                ExecuteXsltInstruction(child, nodeToCopy);
+                            else
+                                CopyLiteralElement(child);
+                        }
+                    }
+                    finally
+                    {
+                        _currentContainer = savedContainer;
+                    }
+                    return new XDocumentNode(copy);
+                }
+            case XdmNodeKind.Text:
+                return new XDocumentNode(new XText(nodeToCopy.StringValue));
+            case XdmNodeKind.Comment:
+                return new XDocumentNode(new XComment(nodeToCopy.StringValue));
+            case XdmNodeKind.ProcessingInstruction:
+                return new XDocumentNode(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
+            case XdmNodeKind.Attribute:
+                return new XDocumentNode(new XAttribute(
+                    XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri),
+                    nodeToCopy.StringValue));
+            case XdmNodeKind.Document:
+                {
+                    var newDoc = new XDocument();
+                    var savedContainer = _currentContainer;
+                    _currentContainer = newDoc;
+                    try
+                    {
+                        foreach (var child in copyInstruction.Elements())
+                        {
+                            if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                ExecuteXsltInstruction(child, nodeToCopy);
+                            else
+                                CopyLiteralElement(child);
+                        }
+                    }
+                    finally
+                    {
+                        _currentContainer = savedContainer;
+                    }
+                    return new XDocumentNode(newDoc);
+                }
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>
+    /// Performs a single xsl:copy for the given node in result-tree context.
+    /// </summary>
+    private void ExecuteSingleCopy(IXdmNode nodeToCopy, XElement instruction)
+    {
+        switch (nodeToCopy.NodeKind)
+        {
+            case XdmNodeKind.Element:
+                {
+                    var copy = new XElement(
+                        XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
+                    foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
+                    {
+                        if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                        {
+                            if (ns.NodeValue.LocalName == "")
+                                copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                            else
+                                copy.SetAttributeValue(
+                                    XNamespace.Xmlns + ns.NodeValue.LocalName,
+                                    ns.NodeValue.StringValue);
+                        }
+                    }
+
+                    var inheritNamespacesAttrRaw = instruction.Attribute("inherit-namespaces")?.Value
+                        ?? instruction.Attribute("_inherit-namespaces")?.Value
+                        ?? "yes";
+                    var inheritNamespacesAttr = EvaluateAvt(inheritNamespacesAttrRaw);
+                    if (inheritNamespacesAttr == "no" || inheritNamespacesAttr == "false")
+                    {
+                        copy.AddAnnotation(new NamespaceInheritanceBarrier());
+                    }
+                    _currentContainer.Add(copy);
+                    var prev = _currentContainer;
+                    _currentContainer = copy;
+                    foreach (var childNode in instruction.Nodes())
+                    {
+                        switch (childNode)
+                        {
+                            case XText text:
+                                ProcessSequenceText(text, instruction);
+                                break;
+                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                ExecuteXsltInstruction(elem, nodeToCopy);
+                                break;
+                            case XElement elem:
+                                CopyLiteralElement(elem);
+                                break;
+                        }
+                    }
+                    _currentContainer = prev;
+                    break;
+                }
+            case XdmNodeKind.Text:
+                _lastAddedWasAtomic = false;
+                AddTextNode(nodeToCopy.StringValue);
+                break;
+            case XdmNodeKind.Attribute:
+                if (_currentContainer is not XElement attrTarget)
+                    throw new InvalidOperationException("XTDE0420");
+                if (attrTarget.Nodes().Any())
+                    throw new InvalidOperationException("XTDE0410");
+                attrTarget.SetAttributeValue(
+                    XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri),
+                    nodeToCopy.StringValue);
+                break;
+            case XdmNodeKind.Comment:
+                _currentContainer.Add(new XComment(nodeToCopy.StringValue));
+                break;
+            case XdmNodeKind.ProcessingInstruction:
+                _currentContainer.Add(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
+                break;
+            case XdmNodeKind.Document:
+                {
+                    // Document node in complex content: process children into the current container.
+                    // XSLT 3.0 §5.7.1: a document node in a sequence is replaced by its children.
+                    foreach (var childNode in instruction.Nodes())
+                    {
+                        switch (childNode)
+                        {
+                            case XText text:
+                                ProcessSequenceText(text, instruction);
+                                break;
+                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                ExecuteXsltInstruction(elem, nodeToCopy);
+                                break;
+                            case XElement elem:
+                                CopyLiteralElement(elem);
+                                break;
+                        }
+                    }
+                    break;
+                }
+            default:
+                // Other kinds: just process children
+                foreach (var childNode in instruction.Nodes())
+                {
+                    switch (childNode)
+                    {
+                        case XText text:
+                            ProcessSequenceText(text, instruction);
+                            break;
+                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                            ExecuteXsltInstruction(elem, nodeToCopy);
+                            break;
+                        case XElement elem:
+                            CopyLiteralElement(elem);
+                            break;
+                    }
+                }
+                break;
         }
     }
 
@@ -3314,10 +3470,7 @@ public sealed class TransformEngine
             // that are actually present on this element, not inherited ones.
             if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement srcElem)
             {
-                if (node.LocalName == "r")
-                {
-                    System.Console.WriteLine($"DEBUG CopyNodeToResult r attrs: {string.Join(",", srcElem.Attributes().Select(a => $"{a.Name}={a.Value}"))}");
-                }
+
                 foreach (var attr in srcElem.Attributes())
                 {
                     copy.SetAttributeValue(attr.Name, attr.Value);
@@ -3376,9 +3529,13 @@ public sealed class TransformEngine
             _lastAddedWasAtomic = false;
             _currentContainer.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
         }
-        else if (node.NodeKind == XdmNodeKind.Attribute && _currentContainer is XElement parent)
+        else if (node.NodeKind == XdmNodeKind.Attribute)
         {
-            parent.SetAttributeValue(
+            if (_currentContainer is not XElement attrParent)
+                throw new InvalidOperationException("XTDE0420");
+            if (attrParent.Nodes().Any())
+                throw new InvalidOperationException("XTDE0410");
+            attrParent.SetAttributeValue(
                 XName.Get(node.LocalName, node.NamespaceUri),
                 node.StringValue);
         }
@@ -3445,7 +3602,6 @@ public sealed class TransformEngine
                 // Built-in: copy text value (only if we have an element container)
                 // XSLT 3.0 §6.6: for text/attribute nodes, built-in rule does nothing
                 // when on-no-match is shallow-skip or deep-skip.
-                System.Console.WriteLine($"DEBUG ApplyBuiltInRules Text: mode='{mode}', behavior={behavior}, text='{node.StringValue}'");
                 if (behavior != Stylesheet.OnNoMatch.DeepSkip &&
                     behavior != Stylesheet.OnNoMatch.ShallowSkip)
                 {
@@ -4332,6 +4488,11 @@ public sealed class TransformEngine
 
             if (wrapInDocumentNode)
             {
+                // XSLT 3.0 §5.7.1: attribute nodes in document-node content are an error.
+                var realAttrs = attributes.Where(a => !a.IsNamespaceDeclaration).ToList();
+                if (realAttrs.Count > 0)
+                    throw new InvalidOperationException("XTDE0420");
+
                 // Apply complex content rules: remove zero-length text nodes,
                 // merge adjacent text nodes.
                 nodes = ApplyComplexContentRules(nodes);
@@ -4346,7 +4507,8 @@ public sealed class TransformEngine
                     // Single element: use it directly as the document root.
                     // Remove from wrapper first so XDocument does not clone and
                     // lose XElement annotations (e.g. NamespaceInheritanceBarrier).
-                    nodes[0].Remove();
+                    if (nodes[0].Parent != null)
+                        nodes[0].Remove();
                     var tempDoc = new XDocument(nodes[0]);
                     return XdmValue.FromNode(new XDocumentNode(tempDoc));
                 }
@@ -4357,7 +4519,8 @@ public sealed class TransformEngine
                     var docWrapper = new XElement("__xdm_doc__");
                     foreach (var node in nodes)
                     {
-                        node.Remove();
+                        if (node.Parent != null)
+                            node.Remove();
                         docWrapper.Add(node);
                     }
                     var tempDoc = new XDocument(docWrapper);
