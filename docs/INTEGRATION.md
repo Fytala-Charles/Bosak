@@ -256,7 +256,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
 | `xsl:use-when` | ⚠️ Partial | Top-level and nested elements; `true()`/`false()` evaluation works. Error cases (XTSE0090, XPST0003) not yet validated. |
 | `xsl:where-populated` | ✅ Working | Filters empty sequences, empty text nodes, empty PIs, empty comments, and empty elements |
-| `xsl:on-empty` | ✅ Working | Evaluated by parent container when sequence constructor produces no nodes; supports `@select` and sequence constructor children |
+| `xsl:on-empty` | ✅ Working | Evaluated by parent container (xsl:copy, xsl:document, literal result elements, general sequence constructors) when sequence constructor produces no nodes; supports `@select` and sequence constructor children |
 
 ---
 
@@ -337,7 +337,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | ~3,487 | ~1,918 | 9,195 | ~64.5% | +5 copy cluster tests (where-populated, on-empty); + parser fix for prefixed function calls |
+| XSLT 3.0 (W3C) | ~3,493 | ~1,912 | 9,195 | ~64.6% | +6 copy cluster tests (xsl:on-empty in xsl:copy/xsl:document, copy-namespaces validation, node() pattern fix) |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

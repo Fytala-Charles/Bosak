@@ -1060,6 +1060,12 @@ Additionally, the XPath parser incorrectly treated prefixed names like `my:node(
 - [x] `copy-1215` (non-empty text node) passes
 - [x] `copy-1216` (empty PI) passes
 - [x] `copy-1217` (non-empty PI) passes
+- [x] `copy-1205` (xsl:copy on-empty on element) passes
+- [x] `copy-1208` (xsl:copy on-empty on document node) passes
+- [x] `copy-1209` (xsl:document with xsl:on-empty) passes
+- [x] `copy-1210` (namespace node on document node raises XTDE0420) passes
+- [x] `element-0607` (invalid copy-namespaces on xsl:copy-of raises XTSE0020) passes
+- [x] `element-0608` (invalid copy-namespaces on xsl:copy raises XTSE0020) passes
 - [x] `my:node()` function call works correctly in XPath expressions
 
 #### Impact Analysis
