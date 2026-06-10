@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added SnapshotVariables / RestoreVariables for lexical scoping                         |
 //                      | Charles Korthout | 0.6   | 27-05-2026     | Added DefaultCollation property and WithDefaultCollation helper                        |
 //                      | Charles Korthout | 0.7   | 30-05-2026     | Added BackwardsCompatible property for XPath 1.0 general-comparison coercion rules     |
+//                      | Charles Korthout | 0.8   | 10-06-2026     | Added LazyVariableResolver and _evaluatedLazyGlobals for deferred XSLT globals         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -42,6 +43,17 @@ public sealed class EvaluationContext
     // Variable bindings: QName key -> XdmValue
     private readonly Dictionary<(string LocalName, string NamespaceUri), XdmValue> _variables;
 
+    // Cache for evaluated lazy variables (e.g. XSLT global variables with sequence constructors).
+    // Survives RestoreVariables so once-evaluated globals remain available across template scopes.
+    private readonly Dictionary<(string LocalName, string NamespaceUri), XdmValue> _evaluatedLazyGlobals;
+
+    /// <summary>
+    /// Optional callback for lazy variable resolution. Invoked when a variable is not found
+    /// in <see cref="_variables"/> but a lazy resolver is registered. This enables XSLT global
+    /// variables with sequence constructors to be evaluated on first reference.
+    /// </summary>
+    public Func<string, string, XdmValue?>? LazyVariableResolver { get; set; }
+
     // Namespace prefixes
     private readonly Dictionary<string, string> _namespaces;
 
@@ -64,6 +76,7 @@ public sealed class EvaluationContext
         _contextPosition = 0;
         _contextSize = 0;
         _variables = new Dictionary<(string, string), XdmValue>();
+        _evaluatedLazyGlobals = new Dictionary<(string, string), XdmValue>();
         _namespaces = new Dictionary<string, string>
         {
             ["xml"] = "http://www.w3.org/XML/1998/namespace",
@@ -155,7 +168,26 @@ public sealed class EvaluationContext
     }
 
     public bool TryGetVariable(string localName, out XdmValue value, string namespaceUri = "")
-        => _variables.TryGetValue((localName, namespaceUri), out value);
+    {
+        if (_variables.TryGetValue((localName, namespaceUri), out value))
+            return true;
+
+        if (_evaluatedLazyGlobals.TryGetValue((localName, namespaceUri), out value))
+            return true;
+
+        if (LazyVariableResolver != null)
+        {
+            var lazyValue = LazyVariableResolver(localName, namespaceUri);
+            if (lazyValue != null)
+            {
+                value = lazyValue.Value;
+                _evaluatedLazyGlobals[(localName, namespaceUri)] = value;
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public bool RemoveVariable(string localName, string namespaceUri = "")
         => _variables.Remove((localName, namespaceUri));

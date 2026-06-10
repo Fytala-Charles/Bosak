@@ -76,6 +76,7 @@
 //                      | Charles Korthout | 5.5   | 09-06-2026     | Pass EvaluationContext to PatternCompiler for compile-time predicate validation          |
 //                      | Charles Korthout | 5.6   | 10-06-2026     | xsl:copy error handling (XTTE0945/3180, XTDE0410/0420); function context item isolation; parentless document order |
 //                      | Charles Korthout | 5.7   | 10-06-2026     | xsl:where-populated filters empty PIs/comments; xsl:on-empty in CopyLiteralElement; copy-1213/1214/1215/1216/1217 |
+//                      | Charles Korthout | 5.8   | 10-06-2026     | Named template entry points have no context item; lazy global variable evaluation     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -153,6 +154,9 @@ public sealed class TransformEngine
     // Recursion depth guard for xsl:apply-templates
     private int _applyTemplatesDepth;
     private const int MaxApplyTemplatesDepth = 256;
+
+    // Deferred global variables with sequence constructors (evaluated lazily on first reference)
+    private readonly Dictionary<string, (XElement Element, string? AsType)> _lazyGlobals = new();
 
     /// <summary>The parsed xsl:output serialization properties.</summary>
     public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
@@ -254,14 +258,16 @@ public sealed class TransformEngine
         if (!string.IsNullOrEmpty(initialTemplate))
         {
             // Start from a named template (xsl:initial-template or test harness)
-            CallTemplate(initialTemplate, source);
+            // Named template entry points have no context item (XSLT 3.0 §6.5)
+            CallTemplate(initialTemplate, XdmValue.Undefined);
         }
         else
         {
             // Check for xsl:initial-template as the implicit entry point
             if (_allNamedTemplates.TryGetValue("xsl:initial-template", out var initialTemplateRule))
             {
-                CallTemplate("xsl:initial-template", source);
+                // Named template entry points have no context item (XSLT 3.0 §6.5)
+                CallTemplate("xsl:initial-template", XdmValue.Undefined);
             }
             else if (!string.IsNullOrEmpty(initialMode))
             {
@@ -4113,6 +4119,8 @@ public sealed class TransformEngine
     /// <summary>
     /// Evaluates top-level xsl:param and xsl:variable declarations and binds them into the context.
     /// Order: imported first, then included, then local. Parameters are evaluated before variables.
+    /// Global variables with sequence constructors (no @select) are evaluated lazily on first
+    /// reference, using the context item present at the point of reference (per XSLT 3.0 §9.6).
     /// </summary>
     private void InitializeGlobalParametersAndVariables(IXdmNode source)
     {
@@ -4152,19 +4160,38 @@ public sealed class TransformEngine
                 continue;
 
             var select = elem.Attribute("select")?.Value;
-            XdmValue value;
             if (!string.IsNullOrEmpty(select))
             {
+                // Eager evaluation for @select expressions (uses global context item)
                 var compiled = XPath31Expression.Compile(select);
-                value = compiled.Evaluate(_context);
+                var value = compiled.Evaluate(_context);
+                value = ConvertVariableValue(value, elem.Attribute("as")?.Value);
+                _context.WithVariable(name, value);
             }
             else
             {
-                value = EvaluateSequenceConstructor(elem, focus, wrapInDocumentNode: string.IsNullOrEmpty(elem.Attribute("as")?.Value));
+                // Defer sequence-constructor variables to lazy evaluation on first reference.
+                // This ensures the context item at the point of first reference is used,
+                // which is required for tests like copy-4308 (no context item in initial template)
+                // while still allowing copy-2203 to work (context item present in match="/").
+                _lazyGlobals[name] = (elem, elem.Attribute("as")?.Value);
             }
-            value = ConvertVariableValue(value, elem.Attribute("as")?.Value);
-            _context.WithVariable(name, value);
         }
+
+        // Register lazy variable resolver on the context
+        _context.LazyVariableResolver = (localName, namespaceUri) =>
+        {
+            if (string.IsNullOrEmpty(namespaceUri) && _lazyGlobals.TryGetValue(localName, out var info))
+            {
+                _lazyGlobals.Remove(localName);
+                var currentItem = _context.ContextItem;
+                var value = EvaluateSequenceConstructor(info.Element, currentItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                value = ConvertVariableValue(value, info.AsType);
+                _context.WithVariable(localName, value);
+                return value;
+            }
+            return null;
+        };
     }
 
     private static void CollectGlobalsInDocumentOrder(Stylesheet.Stylesheet stylesheet, List<(string Name, XElement Element, bool IsParam)> globals)

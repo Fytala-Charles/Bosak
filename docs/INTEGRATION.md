@@ -234,11 +234,11 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:element` / `xsl:attribute` | ✅ Working | |
 | `xsl:text` | ✅ Working | |
 | `xsl:copy` | ✅ Working | Shallow copy with `@select` support; focus set correctly per item |
-| `xsl:copy-of` | ✅ Working | Deep copy of nodes; Document nodes supported |
+| `xsl:copy-of` | ✅ Working | Deep copy of nodes; Document nodes supported. Static validation rejects disallowed children (`XTSE0260`) and invalid attributes (`XTSE0090`). |
 | `xsl:comment` | ✅ Working | `select` attribute or text content |
 | `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
 | `xsl:decimal-format` | ✅ Working | Parsed and registered for `fn:format-number` |
-| `xsl:variable` | ✅ Working | Lexical scoping; `as` attribute with basic atomic types (`xs:integer`, `xs:string`, `xs:boolean`, `xs:double`, `xs:decimal`); usable in XPath via `$var` |
+| `xsl:variable` | ✅ Working | Lexical scoping; `as` attribute with basic atomic types (`xs:integer`, `xs:string`, `xs:boolean`, `xs:double`, `xs:decimal`); usable in XPath via `$var`. Global variables with sequence constructors are evaluated lazily on first reference using the context item at that point. |
 | `xsl:param` | ✅ Working | On named templates, global params, default values; `as` attribute with basic atomic types |
 | Built-in template rules | ✅ Working | Shallow-copy elements, copy text/attributes |
 | Literal result elements | ✅ Working | Namespace preservation, AVT evaluation |

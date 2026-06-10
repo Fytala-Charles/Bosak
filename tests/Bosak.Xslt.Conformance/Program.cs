@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 07-06-2026     | PreserveWhitespace in TestUriResolver; skip package tests                               |
 //                      | Charles Korthout | 0.3   | 08-06-2026     | Added initial-mode support and source/@select handling in LoadEnvironment              |
 //                      | Charles Korthout | 0.4   | 09-06-2026     | Read <param> elements inside <initial-mode> for initial-mode parameter passing         |
+//                      | Charles Korthout | 0.5   | 10-06-2026     | Print PASS for expected-error tests; added skip reason debug output                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -397,6 +398,7 @@ class Program
             var resultElem = testCase.Element(ns + "result");
             if (resultElem != null && resultElem.Element(ns + "error") != null)
             {
+                Console.WriteLine($"  PASS {name}");
                 return TestResult.Pass;
             }
             if (resultElem != null && resultElem.Element(ns + "any-of") != null)

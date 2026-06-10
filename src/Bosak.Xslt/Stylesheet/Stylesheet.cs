@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 31-05-2026     | Added exclude-result-prefixes parsing and GetAllExcludedResultPrefixes                   |
 //                      | Charles Korthout | 1.1   | 31-05-2026     | Added literal result element stylesheet support (WrapLiteralResultElement)               |
 //                      | Charles Korthout | 1.2   | 07-06-2026     | Fix import+include same file: separate _includedUris, copy _resolvedUris to children     |
+//                      | Charles Korthout | 1.3   | 10-06-2026     | Added ValidateInstructionTree for xsl:copy-of static validation (XTSE0090/0260)        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -416,6 +417,49 @@ public sealed class Stylesheet
             var def = AttributeSetDefinition.FromElement(attrSet, this);
             if (def != null)
                 _attributeSets.Add(def);
+        }
+
+        // Static validation: check for disallowed attributes and children on XSLT instructions
+        ValidateInstructionTree(root);
+    }
+
+    /// <summary>
+    /// Performs static validation of the stylesheet tree, checking for disallowed
+    /// attributes and children on XSLT instructions.
+    /// </summary>
+    private static void ValidateInstructionTree(XElement root)
+    {
+        foreach (var elem in root.DescendantsAndSelf())
+        {
+            if (elem.Name.NamespaceName != XslNamespace)
+                continue;
+
+            var localName = elem.Name.LocalName;
+
+            // xsl:copy-of must be empty (no children)
+            if (localName == "copy-of")
+            {
+                // XTSE0260: xsl:copy-of must not have children
+                if (elem.Elements().Any())
+                    throw new InvalidOperationException("XTSE0260");
+
+                // XTSE0090: xsl:copy-of does not allow invalid attributes
+                foreach (var attr in elem.Attributes())
+                {
+                    var attrName = attr.Name.LocalName;
+                    // Strip leading underscore for AVT forms (e.g. _copy-namespaces)
+                    var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
+                    if (attr.Name.NamespaceName == "" &&
+                        baseName != "select" &&
+                        baseName != "copy-accumulators" &&
+                        baseName != "copy-namespaces" &&
+                        baseName != "type" &&
+                        baseName != "validation")
+                    {
+                        throw new InvalidOperationException("XTSE0090");
+                    }
+                }
+            }
         }
     }
 

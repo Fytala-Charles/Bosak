@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-10
-**Commit:** `79518bd`
-**Current focus:** Fixed xsl:where-populated, xsl:on-empty, and XPath parser kind-test bug. Copy cluster: 107/21/144 (84.7% of runnable). Seqtor: 54/0/18 (100% of runnable).
+**Commit:** `33356a4`
+**Current focus:** Fixed copy-4308 (XTTE0945 no context item), copy-0104/0105 static validation, and 5 additional copy tests via lazy global variables. Copy cluster: 110/18/20 (86.9% of runnable). Seqtor: 54/0/18 (100% of runnable).
 
 ---
 
@@ -59,6 +59,29 @@
 **Copy cluster**: 107/148 passing, 21 failed, 20 skipped (84.7% of runnable) — up from 106/22/144 (83.9%).
 **Seqtor cluster**: 54/72 passing, 0 failed, 18 skipped (100% of runnable) — unchanged.
 **Unit tests**: 873 passed, 0 failed.
+
+---
+
+### This Session Fixes (2026-06-10 — Lazy Globals, Named Template Context Item, Static Validation)
+
+1. **Named template entry points have no context item (copy-4308)** — `TransformEngine.Transform` passed the source document as context item to named template invocations (`xsl:initial-template` or test harness initial templates). Per XSLT 3.0 §6.5, named template entry points should have no context item.
+   - **Fix**: Changed `CallTemplate` invocations in `Transform` to pass `XdmValue.Undefined` instead of `source`.
+   - **Fixed**: `copy-4308` (+1 test).
+   - **File changed**: `TransformEngine.cs`.
+
+2. **Lazy evaluation of global variables with sequence constructors (copy-2203, 4101, 4102, 4401, 4901)** — Global variables with sequence constructors were evaluated eagerly during stylesheet priming with the source document as context item. This caused `xsl:call-template` inside global variables to inherit the source document context item, which broke `copy-4308`. But making the context item absent during priming broke `copy-2203` (`xsl:apply-templates select="/"` needs a context item).
+   - **Fix**: Added `LazyVariableResolver` to `EvaluationContext` and `_evaluatedLazyGlobals` cache. `InitializeGlobalParametersAndVariables` now defers sequence-constructor variables to `_lazyGlobals`. When first referenced, the variable is evaluated using the CURRENT context item at the point of reference. This allows `copy-2203` to work (referenced from `match="/"` which has the source document as context item) while `copy-4308` fails correctly (referenced from `xsl:initial-template` which has no context item).
+   - **Fixed**: `copy-2203`, `copy-4101`, `copy-4102`, `copy-4401`, `copy-4901` (+5 tests).
+   - **Files changed**: `TransformEngine.cs`, `EvaluationContext.cs`.
+
+3. **Static validation for xsl:copy-of (copy-0104, copy-0105)** — `xsl:copy-of` with child elements or invalid attributes was silently accepted at runtime.
+   - **Fix**: Added `ValidateInstructionTree` in `Stylesheet.Load` that checks `xsl:copy-of` for disallowed children (`XTSE0260`) and disallowed attributes (`XTSE0090`). Handles underscore-prefixed AVT attributes (e.g. `_copy-namespaces`).
+   - **Fixed**: `copy-0104` (XTSE0260), `copy-0105` (XTSE0090) (+2 tests).
+   - **File changed**: `Stylesheet.cs`.
+
+**Copy cluster**: 110/148 passing, 18 failed, 20 skipped (86.9% of runnable) — up from 107/21/144 (84.7%).
+**Seqtor cluster**: 54/72 passing, 0 failed, 18 skipped (100% of runnable) — unchanged.
+**Unit tests**: 873 passed, 0 failed (+1 new test: `Copy4308Tests`).
 
 ---
 
