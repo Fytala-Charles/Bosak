@@ -133,6 +133,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-026 | *(internal)* | Nested `xsl:use-when` evaluation | `use-when="false()"` on nested XSLT instructions and LREs was ignored; now stripped during stylesheet load | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1 and XSLT 3.0 development: syntax highlighting, realtime diagnostics, auto-completion | **Implemented** | 0.1.2 | Charles Korthout | 2026-06-08 |
+| REQ-029 | *(internal)* | `xsl:where-populated` and `xsl:on-empty` support | Required for copy-1213/1214/1215/1216/1217 conformance tests; where-populated filters empty nodes, on-empty provides fallback content | **Implemented** | TBD | Charles Korthout | 2026-06-10 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1018,6 +1019,63 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-06-08 | Charles Korthout / Kimi | Implemented | Developer experience improvement; no production blocking impact |
+
+---
+
+### REQ-029: `xsl:where-populated` and `xsl:on-empty` Support
+
+**Requesting Application:** *(internal — conformance)*
+**Submitted:** 2026-06-10
+**Status:** **Implemented**
+
+#### Problem Statement
+
+The `copy-1213` through `copy-1217` conformance tests require `xsl:where-populated` and `xsl:on-empty` support:
+
+- `xsl:where-populated` filters the result of its sequence constructor, discarding items that are "deemed empty" (empty text nodes, empty PIs, empty comments, empty elements, document nodes with no children).
+- `xsl:on-empty` provides fallback content when its parent container's sequence constructor produces no nodes.
+
+Additionally, the XPath parser incorrectly treated prefixed names like `my:node()` as kind tests (`child::node()`) instead of function calls, causing `copy-1214` to fail because `my:node()` returned the document's child element instead of calling the user-defined function.
+
+#### Proposed Solution
+
+1. **`xsl:where-populated` in `TransformEngine.ExecuteXsltInstruction`**:
+   - Evaluates sequence constructor into a temporary container.
+   - Checks if the container has any "non-empty" nodes (text with content, PIs with content, comments with content, elements with children).
+   - If populated, copies nodes and attributes to the real result container.
+   - For `@select`, checks if the result sequence is empty before copying.
+
+2. **`xsl:on-empty` in `CopyLiteralElement`**:
+   - Collects `xsl:on-empty` children before processing other children.
+   - Skips them during normal processing.
+   - After all children are processed, if no nodes were added to the copy, evaluates each `xsl:on-empty` (via `@select` or sequence constructor) and copies results to the parent container.
+
+3. **Parser fix for prefixed kind tests**:
+   - In `XPathParser.ParseStep` and `ParseNodeTest`, added `string.IsNullOrEmpty(prefix)` guard before treating a name as a kind test.
+   - Prefixed names followed by `()` are now always parsed as function calls.
+
+#### Acceptance Criteria
+- [x] `copy-1213` (non-empty comment) passes
+- [x] `copy-1214` (empty text node + on-empty function call) passes
+- [x] `copy-1215` (non-empty text node) passes
+- [x] `copy-1216` (empty PI) passes
+- [x] `copy-1217` (non-empty PI) passes
+- [x] `my:node()` function call works correctly in XPath expressions
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Kind-test parsing now excludes prefixed names |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine` new instruction handlers |
+| Standard | None | |
+| XSLT | New instructions | `xsl:where-populated`, `xsl:on-empty` |
+| API | None | |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-10 | Charles Korthout / Kimi | Implemented | Required for copy cluster conformance; low-risk parser fix + instruction handlers |
 
 ---
 

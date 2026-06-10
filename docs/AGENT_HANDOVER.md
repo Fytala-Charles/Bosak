@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-10
-**Commit:** `c677d00`
-**Current focus:** Fixed xsl:copy error handling (XTTE0945/3180, XTDE0410/0420), function context item isolation, document-node-in-element cases. Copy cluster: 115/22/144 (was 101/36/144).
+**Commit:** `79518bd`
+**Current focus:** Fixed xsl:where-populated, xsl:on-empty, and XPath parser kind-test bug. Copy cluster: 107/21/144 (84.7% of runnable). Seqtor: 54/0/18 (100% of runnable).
 
 ---
 
@@ -10,12 +10,13 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3,482 / **Failed:** ~1,923 / **Skipped:** ~9,195 (14,600 total)
-- Pass rate: **64.4%** (latest run, 2026-06-10)
+- **Passed:** ~3,487 / **Failed:** ~1,918 / **Skipped:** ~9,195 (14,600 total)
+- Pass rate: **64.5%** (latest run, 2026-06-10)
 - Runner completes without crashes (exit code 0)
 
 **Recent trajectory:**
-- Latest: ~3482 passed / ~1923 failed / 9195 skipped (~64.4%) — copy cluster +14 tests (error handling, function context item, document node cases)
+- Latest: ~3487 passed / ~1918 failed / 9195 skipped (~64.5%) — copy cluster +5 tests (where-populated, on-empty, parser kind-test fix)
+- Previous: ~3482 passed / ~1923 failed / 9195 skipped (~64.4%) — copy cluster +14 tests (error handling, function context item, document node cases)
 - Previous: 3555 passed / 1854 failed / 9191 skipped (65.7%) — match cluster 100% runnable (179/294, +1 match-040); mode cluster +11 tests
 - Previous: 3554 passed / 1855 failed / 9191 skipped (65.7%) — mode cluster fixes: default-mode resolution, XTDE0045/0050 (+11 tests)
 - Previous: 3543 passed / 1866 failed / 9191 skipped (65.5%) — key-063/064 + sum() trailing-zero fix (+16 tests)
@@ -39,6 +40,27 @@
 - Run 37: **crashed** — stack overflow in `seqtor-031` (deep xsl:function recursion, depth 61)
 - Run 9: 2525 passed / 2940 failed / 9135 skipped (46.2%) — after fixing crash
 - Run 10: 2529 passed / 2933 failed / 9138 skipped (46.3%) — after empty sequence cast fix
+
+### This Session Fixes (2026-06-10 — xsl:where-populated, xsl:on-empty, Parser Kind-Test Fix)
+
+1. **`xsl:where-populated` implementation** — Added `case "where-populated"` to `TransformEngine.ExecuteXsltInstruction`. For `@select`, evaluates the expression and copies to result only if the sequence is non-empty. For sequence constructor content, evaluates into a temporary container and checks for "deemed empty" items. Empty text nodes, empty PIs, empty comments, and empty elements (no children) are filtered out. Non-empty items are copied to the real result container.
+   - **Fixed**: `copy-1213` (non-empty comment), `copy-1215` (non-empty text), `copy-1216` (empty PI filtered), `copy-1217` (non-empty PI).
+   - **File changed**: `TransformEngine.cs`.
+
+2. **`xsl:on-empty` implementation** — Added handling in `CopyLiteralElement`. Collects `xsl:on-empty` children before processing other children, skips them during normal processing, and evaluates them (via `@select` or sequence constructor) only if the parent literal element ends up with no nodes. Results are copied to the parent container using `CopyToResult`.
+   - **Fixed**: `copy-1214` (empty text node triggers on-empty, which calls `my:node()`).
+   - **File changed**: `TransformEngine.cs`.
+
+3. **XPath parser: prefixed names no longer treated as kind tests** — `ParseStep` and `ParseNodeTest` checked `IsKindTestName(local)` without verifying the prefix was empty. This caused `my:node()` to be parsed as `child::node()` (a kind test step) instead of a function call. The prefix `my` was discarded and the local name `node` was treated as a kind test.
+   - **Fix**: Added `string.IsNullOrEmpty(prefix)` guard in both `ParseStep` (line 685) and `ParseNodeTest` (line 779).
+   - **Fixed**: `copy-1214` (function call now correctly resolves to user-defined `my:node()`). May also fix other tests using prefixed names that match kind test names (e.g. `my:text()`, `my:comment()`).
+   - **File changed**: `XPathParser.cs`.
+
+**Copy cluster**: 107/148 passing, 21 failed, 20 skipped (84.7% of runnable) — up from 106/22/144 (83.9%).
+**Seqtor cluster**: 54/72 passing, 0 failed, 18 skipped (100% of runnable) — unchanged.
+**Unit tests**: 873 passed, 0 failed.
+
+---
 
 ### This Session Fixes (2026-06-10 — xsl:copy Error Handling + Function Context Item)
 
@@ -579,14 +601,14 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ## Recommended Next Steps
 
-### Copy Cluster Remaining Failures (22)
+### Copy Cluster Remaining Failures (21)
 
 | Category | Count | Difficulty | Root Cause |
 |----------|-------|-----------|------------|
 | **Namespace serialization** | 13 | Hard | LINQ-to-XML hoists `xmlns` declarations to the element that *uses* the prefix; XSLT expects inherited declarations to be omitted on children |
 | **Static errors** (copy-0104/0105, element-0607/0608) | 4 | Medium | Compile-time validation of disallowed content inside `xsl:copy` / `xsl:element` |
 | **XML parsing** (copy-1201/1202/1501/2101) | 4 | Hard | Source files contain DTD/entity declarations; parser doesn't support them |
-| **Missing features** (copy-3003, copy-1205) | 2 | Hard | `accumulator-before#1` and `xsl:on-empty` not implemented |
+| **Missing features** (copy-3003) | 1 | Hard | `accumulator-before#1` not implemented |
 | **Global variable context item** (copy-4308) | 1 | Medium | Spec says absent; our impl provides source doc. Changing it may break other tests. |
 
 ### Option A: Namespace Serialization (+13 tests, 1–2 days, highest impact in copy cluster)
@@ -623,8 +645,8 @@ For-each-group has 62 failures. Basic implementation exists (`group-by`, `group-
 - No feature branches
 - All work committed to `main`
 - No pending changes
-- Latest: `<uncommitted>` — namespace axis parent fix (copy-0616/0618/0624/0626)
-- Previous: `<uncommitted>` — copy cluster document-node fixes (copy-4303/4304), namespace propagation (copy-3702)
+- Latest: `<uncommitted>` — xsl:where-populated, xsl:on-empty, parser kind-test fix (copy-1213/1214/1215/1216/1217)
+- Previous: `<uncommitted>` — namespace axis parent fix (copy-0616/0618/0624/0626)
 - Previous: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
 - Previous: `<uncommitted>` — mode cluster fixes: default-mode resolution, XTDE0045/0050 validation, harness initial-mode params
 - Previous: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)

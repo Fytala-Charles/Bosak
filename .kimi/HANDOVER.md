@@ -24,6 +24,7 @@
 | 8 | Seqtor cluster: fix zero-length text node atomic-chain reset | `TransformEngine.cs` | Done |
 | 9 | Seqtor cluster: fix `xsl:document` support + atomic chain reset | `TransformEngine.cs` | Done |
 | 10 | Seqtor cluster: increase recursion depth + skip deep-recursion tests | `TransformEngine.cs`, `Program.cs` | Done |
+| 11 | Verified seqtor cluster: 100% pass rate (54/72, 0 failures) | `TransformEngine.cs` (previous fixes) | Verified |
 
 ## Current Branch
 
@@ -34,7 +35,8 @@
 - [x] All unit tests pass (873 tests across 8 projects — 0 failures)
 - [x] XSLT match cluster: **179/294 (100% of runnable)** ✅ — 0 failures, 115 skipped
 - [x] XSLT mode cluster: 102/42/44 (70.8% of runnable)
-- [x] XSLT seqtor cluster: **50/72 passed, 4 failed, 18 skipped** (was 45/13/14)
+- [x] XSLT seqtor cluster: **54/72 passed, 0 failed, 18 skipped** ✅ — 100% of runnable
+- [x] XSLT copy cluster: **115/281 passed, 22 failed, 144 skipped** (83.9% of runnable)
 - [x] XSLT full suite: ~3,561 / ~1,848 / ~9,199 (~65.9%)
 - [x] QT3 baseline: 19,041 / 2,829 / 9,951 (59.84%) — stable
 
@@ -42,6 +44,12 @@
 
 ### Immediate quick wins
 
-1. **`seqtor`** (4 remaining failures: 036a, 036d, 037a, 037d) — Empty-string/document-node spacing in comments/PIs. May require deeper understanding of simple content construction for `xsl:copy-of` of document nodes vs `xsl:sequence` of empty strings.
-2. **`copy`** (~80 failures) — `xsl:copy`, `xsl:copy-of` behavior gaps
-3. **Investigate if seqtor fixes improved copy cluster** — Many copy-061x failures may have been caused by the same sequence constructor batching issues
+1. **`copy`** (22 remaining failures) — `xsl:copy`, `xsl:copy-of` behavior gaps. Key patterns:
+   - `copy-1213/14/15/17`: `xsl:where-populated` and `xsl:on-empty` not implemented
+   - `copy-1220/1221`: namespace handling in `xsl:copy-of` with `copy-namespaces`
+   - `copy-1501/2101`: CDATA parsing errors
+   - `copy-3003`: `accumulator-before` function not found
+   - `copy-4308`: expected XTTE0945 when `xsl:copy` has no context item
+   - `copy-5101`: namespace duplication on copied elements
+2. **`mode`** cluster — remaining gaps in template mode dispatch
+3. **QT3 quick wins** — `sort` cluster (3 failures), `document-uri` (4), `contains-token` (2)

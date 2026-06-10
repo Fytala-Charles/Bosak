@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 21-05-2026     | Fixed SkipSequenceType RParen consumption; ParseSequenceType handles item()/function(*)/empty-sequence() |
 //                      | Charles Korthout | 0.7   | 26-05-2026     | Added ExpectName() to allow XPath keywords as variable names ($mod, $div, etc.)                       |
 //                      | Charles Korthout | 0.8   | 31-05-2026     | decimal.TryParse fallback to double for oversized decimal literals                       |
+//                      | Charles Korthout | 0.9   | 10-06-2026     | Kind-test parsing no longer treats prefixed names (e.g. my:node()) as kind tests         |
 //                      | Charles Korthout | 0.9   | 01-06-2026     | Prevent map/array/function keywords from being parsed as name tests in step expr       |
 //                      | Charles Korthout | 1.0   | 01-06-2026     | ParseAxisStep defaults to attribute/namespace axis for attribute()/namespace-node()    |
 //                      | Charles Korthout | 1.1   | 05-06-2026     | Fixed SkipSequenceType to use token char spans; ParseTypeNameAndParens consumes function return type |
@@ -675,11 +676,12 @@ public sealed class XPathParser
         }
 
         // Name that is a kind test: node(), text(), etc.
+        // Prefixed names are always function calls, never kind tests.
         if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
         {
             var name = GetString(Current);
-            var (_, local, _) = SplitQName(name);
-            if (IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
+            var (prefix, local, _) = SplitQName(name);
+            if (string.IsNullOrEmpty(prefix) && IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
             {
                 return ParseAxisStep(start);
             }
@@ -773,7 +775,8 @@ public sealed class XPathParser
             var (prefix, local, nsUri) = SplitQName(name);
 
             // Kind test: node(), text(), etc.
-            if (IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
+            // Prefixed names are always function calls, never kind tests.
+            if (string.IsNullOrEmpty(prefix) && IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
             {
                 return ParseKindTest();
             }

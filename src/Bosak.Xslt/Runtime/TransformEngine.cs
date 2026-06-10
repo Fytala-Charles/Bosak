@@ -75,6 +75,7 @@
 //                      | Charles Korthout | 5.4   | 09-06-2026     | Fixed apply-templates default-mode resolution; XTDE0045/0050 validation; ModeExists helper |
 //                      | Charles Korthout | 5.5   | 09-06-2026     | Pass EvaluationContext to PatternCompiler for compile-time predicate validation          |
 //                      | Charles Korthout | 5.6   | 10-06-2026     | xsl:copy error handling (XTTE0945/3180, XTDE0410/0420); function context item isolation; parentless document order |
+//                      | Charles Korthout | 5.7   | 10-06-2026     | xsl:where-populated filters empty PIs/comments; xsl:on-empty in CopyLiteralElement; copy-1213/1214/1215/1216/1217 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1768,6 +1769,82 @@ public sealed class TransformEngine
                     break;
                 }
 
+            case "where-populated":
+                {
+                    var wpSelect = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(wpSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(wpSelect);
+                        var result = compiled.Evaluate(_context);
+                        bool isEmpty = result.IsUndefined ||
+                            (result.IsSequence && result.SequenceValue != null &&
+                             !XdmSequence.FromSource(result.SequenceValue).GetEnumerator().MoveNext());
+                        if (!isEmpty)
+                        {
+                            CopyToResult(result, separateAtomicsWithSpace: true);
+                        }
+                    }
+                    else
+                    {
+                        var temp = new XElement("__wp_temp__");
+                        var savedContainer = _currentContainer;
+                        var savedAccumulator = _sequenceAccumulator;
+                        var savedLastAtomic = _lastAddedWasAtomic;
+                        _currentContainer = temp;
+                        _sequenceAccumulator = null;
+                        _lastAddedWasAtomic = false;
+                        try
+                        {
+                            foreach (var childNode in instruction.Nodes())
+                            {
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        ProcessSequenceText(text, instruction);
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, contextItem);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _sequenceAccumulator = savedAccumulator;
+                            _lastAddedWasAtomic = savedLastAtomic;
+                        }
+
+                        bool hasContent = temp.Nodes().Any(n => n switch
+                        {
+                            XText t => t.Value.Length > 0,
+                            XComment c => c.Value.Length > 0,
+                            XProcessingInstruction pi => !string.IsNullOrEmpty(pi.Data),
+                            XElement e => e.Nodes().Any(),
+                            _ => true
+                        })
+                                       || temp.Attributes().Any(a => !a.IsNamespaceDeclaration);
+                        if (hasContent)
+                        {
+                            foreach (var wpNode in temp.Nodes().ToList())
+                            {
+                                wpNode.Remove();
+                                _currentContainer.Add(wpNode);
+                            }
+                            foreach (var attr in temp.Attributes().ToList())
+                            {
+                                if (attr.IsNamespaceDeclaration) continue;
+                                if (_currentContainer is XElement e)
+                                    e.SetAttributeValue(attr.Name, attr.Value);
+                            }
+                        }
+                    }
+                    break;
+                }
+
             case "apply-templates":
                 {
                     var select = instruction.Attribute("select")?.Value;
@@ -2797,14 +2874,24 @@ public sealed class TransformEngine
 
         try
         {
+            // Collect xsl:on-empty children before processing
+            var onEmptyElements = source.Elements(XName.Get("on-empty", Stylesheet.Stylesheet.XslNamespace)).ToList();
+
             foreach (var child in source.Nodes())
             {
+                // Skip xsl:on-empty elements during normal processing
+                if (child is XElement childElemOnEmpty &&
+                    childElemOnEmpty.Name.LocalName == "on-empty" &&
+                    childElemOnEmpty.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                {
+                    continue;
+                }
+
                 switch (child)
                 {
                     case XElement childElem:
                         if (childElem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                         {
-
                             ExecuteXsltInstruction(childElem, _context.ContextItem);
                         }
                         else
@@ -2822,6 +2909,39 @@ public sealed class TransformEngine
                     case XProcessingInstruction pi:
                         _currentContainer.Add(new XProcessingInstruction(pi.Target, pi.Data));
                         break;
+                }
+            }
+
+            // If no children were added, evaluate xsl:on-empty instructions
+            if (!copy.Nodes().Any() && onEmptyElements.Count > 0)
+            {
+                foreach (var onEmpty in onEmptyElements)
+                {
+                    var oeSelect = onEmpty.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(oeSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(oeSelect);
+                        var result = compiled.Evaluate(_context);
+                        CopyToResult(result, separateAtomicsWithSpace: true);
+                    }
+                    else
+                    {
+                        foreach (var childNode in onEmpty.Nodes())
+                        {
+                            switch (childNode)
+                            {
+                                case XText text:
+                                    ProcessSequenceText(text, onEmpty);
+                                    break;
+                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elem, _context.ContextItem);
+                                    break;
+                                case XElement elem:
+                                    CopyLiteralElement(elem);
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -3299,6 +3419,14 @@ public sealed class TransformEngine
                 {
                     // Document node in complex content: process children into the current container.
                     // XSLT 3.0 §5.7.1: a document node in a sequence is replaced by its children.
+                    // First copy the source document node's children, then process the sequence constructor.
+                    foreach (var child in nodeToCopy.Axis(XdmAxis.Child))
+                    {
+                        if (child.IsNode && child.NodeValue != null)
+                        {
+                            CopyNodeToResult(child.NodeValue);
+                        }
+                    }
                     foreach (var childNode in instruction.Nodes())
                     {
                         switch (childNode)

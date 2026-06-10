@@ -135,7 +135,8 @@ public static class VmEngine
                             (localName, nsUri) = ResolveFunctionName(funcName, context);
                         }
 
-                        if (!context.TryResolveFunction(nsUri, localName, argCount, out var sig))
+                        bool found = context.TryResolveFunction(nsUri, localName, argCount, out var sig);
+                        if (!found)
                             throw new InvalidOperationException(
                                 $"XPST0017: Function {{{nsUri}}}{localName}#{argCount} not found.");
 

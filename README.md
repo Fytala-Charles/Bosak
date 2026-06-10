@@ -32,6 +32,7 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 - **Zero-Allocation Sequences** — Lazy struct enumerators avoid `IEnumerable<T>` boxing on hot paths
 - **Pluggable Backends** — Works with `XDocument`, `XmlDocument`, streaming readers, or custom `IXdmNode` providers
 - **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), FLWOR, JSON functions
+- **XSLT 3.0 Transform Engine** — Template matching, sequence constructors, `xsl:copy`/`xsl:copy-of`, `xsl:for-each-group`, `xsl:where-populated`, `xsl:on-empty`, `fn:transform()`
 
 ---
 
@@ -206,7 +207,7 @@ The harness:
 | **XPath (QT3)** | 428 test sets, ~32,000 tests |
 | Pass Rate (XPath) | **~58.6%** (18,651 passed / 3,279 failed / 9,891 skipped) |
 | **XSLT 3.0** | 234 test sets, ~14,600 tests |
-| Pass Rate (XSLT) | **~59.6%** (3,257 passed / 2,204 failed / 9,139 skipped) |
+| Pass Rate (XSLT) | **~64.5%** (3,487 passed / 1,918 failed / 9,195 skipped) |
 | Unsupported Features | Schema awareness, XQuery-only, XML 1.1, serialization, streaming, higher-order functions |
 
 ### Known Limitations

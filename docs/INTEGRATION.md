@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 10 June 2026
-> **Bosak baseline:** 875 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 3,468 passed / 1,937 failed / 9,195 skipped (64.2%)
+> **Bosak baseline:** 873 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 3,487 passed / 1,918 failed / 9,195 skipped (64.5%)
 
 ---
 
@@ -255,6 +255,8 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
 | `xsl:use-when` | ⚠️ Partial | Top-level and nested elements; `true()`/`false()` evaluation works. Error cases (XTSE0090, XPST0003) not yet validated. |
+| `xsl:where-populated` | ✅ Working | Filters empty sequences, empty text nodes, empty PIs, empty comments, and empty elements |
+| `xsl:on-empty` | ✅ Working | Evaluated by parent container when sequence constructor produces no nodes; supports `@select` and sequence constructor children |
 
 ---
 
@@ -328,12 +330,14 @@ dotnet test Bosak.sln
 | Namespace node `parent::node()` now returns the element whose namespace axis includes the node (`_namespaceOwner`), not the element where the underlying `XAttribute` declaration resides. | Fixes `.. is $e` for inherited namespace nodes in XPath. Required for XSLT `namespace::*` axis correctness. | 2026-06-10 |
 | `xsl:copy` now raises `XTTE0945` (no context item), `XTTE3180` (select returns >1 item), `XTDE0410` (attribute after children), and `XTDE0420` (attribute on non-element) per XSLT 3.0 spec. | Previously these error conditions were silently ignored or produced wrong results. | 2026-06-10 |
 | XSLT functions (`xsl:function`) no longer leak the first argument as the context item. | Functions now correctly have no context item per XSLT 3.0 §9.6. Fixes `xsl:copy` inside functions. | 2026-06-10 |
+| `xsl:where-populated` now correctly filters empty PIs, comments, and text nodes. | Previously only whitespace-only text nodes were filtered; empty PIs/comments passed through incorrectly. | 2026-06-10 |
+| XPath parser no longer treats prefixed names as kind tests (e.g. `my:node()`). | `my:node()` was parsed as `child::node()` instead of a function call. Affected any prefixed name where local name matched a kind test. | 2026-06-10 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | ~3,482 | ~1,923 | 9,195 | ~64.4% | +14 copy cluster tests fixed (error handling, function context item, document node cases) |
+| XSLT 3.0 (W3C) | ~3,487 | ~1,918 | 9,195 | ~64.5% | +5 copy cluster tests (where-populated, on-empty); + parser fix for prefixed function calls |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
