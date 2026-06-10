@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-10
-**Commit:** `<uncommitted>`
-**Current focus:** Fixed xsl:copy error handling (XTTE0945/3180, XTDE0410/0420), function context item isolation, document-node-in-element cases. Copy cluster: 115/22/144 (was 101/36/144). Next: investigate remaining copy cluster failures (namespace serialization copy-1205/1207-1221, copy-5101; static errors copy-0104/0105; XML parsing copy-1201/1202/1501/2101; missing features copy-3003/4308).
+**Commit:** `c677d00`
+**Current focus:** Fixed xsl:copy error handling (XTTE0945/3180, XTDE0410/0420), function context item isolation, document-node-in-element cases. Copy cluster: 115/22/144 (was 101/36/144).
 
 ---
 
@@ -579,60 +579,41 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ## Recommended Next Steps
 
-### Next Session Immediate Targets (start here)
+### Copy Cluster Remaining Failures (22)
 
-1. **`match` cluster** — **100% of runnable tests passing** ✅ (179/294, 0 failures, 115 skipped).
-2. **`mode` cluster remaining** — 36 failures in `mode` test-set, 2 in `initial-mode` (out of scope for quick fix):
-   - `mode-1442/1443`: `warning-on-no-match` not implemented
-   - `mode-1444/1447/1502/1904`: static validation errors (XTSE0020, XTSE0545) — requires schema validator
-   - `mode-1510/1511-1514`: accumulators not implemented
-   - `mode-1801/1802`: `initial-mode/@select` not supported
-   - `mode-1803`: `xsl:package` not supported
-   - `mode-1902`: private mode visibility not supported
-   - `initial-mode-004`: initial-mode parameter passing to template params needs API change
-   - `initial-mode-005`: mode propagation to `match="*"` templates — spec ambiguity, needs investigation
-2. **`match` cluster** — 19 failures, 115 skipped (89.4% passing):
-   - `match-040`: undeclared function in predicate → XPST0017 (requires compile-time validation)
-   - `match-069`: namespace node matching (requires XDM namespace-node support)
-   - `match-088/100`: document-node() patterns (blocked by initial-template selection behavior)
-   - `match-266/273-278/280-284`: union/intersect/except in path patterns (requires PatternCompiler architectural work)
-   - `match-272`: variable reference patterns with global variable forward references (requires dependency-sorted evaluation)
+| Category | Count | Difficulty | Root Cause |
+|----------|-------|-----------|------------|
+| **Namespace serialization** | 13 | Hard | LINQ-to-XML hoists `xmlns` declarations to the element that *uses* the prefix; XSLT expects inherited declarations to be omitted on children |
+| **Static errors** (copy-0104/0105, element-0607/0608) | 4 | Medium | Compile-time validation of disallowed content inside `xsl:copy` / `xsl:element` |
+| **XML parsing** (copy-1201/1202/1501/2101) | 4 | Hard | Source files contain DTD/entity declarations; parser doesn't support them |
+| **Missing features** (copy-3003, copy-1205) | 2 | Hard | `accumulator-before#1` and `xsl:on-empty` not implemented |
+| **Global variable context item** (copy-4308) | 1 | Medium | Spec says absent; our impl provides source doc. Changing it may break other tests. |
 
-### Immediate: Quick-win clusters (~few hours, +30–50 tests)
+### Option A: Namespace Serialization (+13 tests, 1–2 days, highest impact in copy cluster)
+Fix the 13 namespace serialization mismatches. Two possible approaches:
+1. **Post-process before serialization**: Walk the result tree and remove redundant namespace declarations already in scope on the parent.
+2. **Custom `XmlWriter`**: Hook into `XmlWriter.WriteStartElement` to suppress namespace declarations that match an ancestor's in-scope namespace.
 
-These clusters are >75% passing with only a handful of distinct root causes:
+This would push copy cluster to ~128/281 (92% of runnable). The other copy failures are mostly hard walls (DTD parsing, missing features).
 
-- **`expression`** — **0 failures, 102/102 passed (100%)** ✅
-- **`string`** — **0 failures, 136/136 passed (100%)** ✅
-- **`core-function`** — **0 failures, 90/90 passed (100%)** ✅
-- **`number`** — **6 failures, 1 skipped (97.8% passing)** — remaining: `number-0802/0812/0813/0828/0829/2506` (non-English word/ordinal formatting, out of scope)
-- **`position`** — **5 failures, 3 skipped (96.2% passing)** — remaining: `position-0103` (`xsl:merge` unimplemented), `position-2201` (empty output, complex), `position-4101` (`xsl:apply-imports` unimplemented), `position-4104` (`position()` in pattern predicate, complex), `position-4105` (`xsl:for-each-group` unimplemented)
-- **`boolean`** — **0 failures, 0 skipped (100% passing)** ✅ — node ordering `<<`/`>>` fixed.
-- **`match`** — **19 failures, 115 skipped (89.4% passing)** — down from 78 failures. +14 fixed across two sessions (241, 246a/b, 248-254, 255, 256, 261).
+### Option B: Key Cluster (+potentially 10–20 tests, 1 day, medium impact)
+Key cluster is at 57/99 passing with 34 failures. Many may share root causes with already-fixed patterns (cross-document key lookup, key index initialization). A quick exploratory run could reveal low-hanging fruit.
 
-### Short-term: High-density clusters (~1–2 days each, +50–100 tests)
+### Option C: For-each-group Cluster (+potentially 10–30 tests, 1–2 days, high impact)
+For-each-group has 62 failures. Basic implementation exists (`group-by`, `group-adjacent`, `group-starting-with`, `group-ending-with`), but edge cases in pattern matching, atomic values, and sorting likely remain.
 
-| Cluster | Failed | Skipped | Notes |
-|---------|--------|---------|-------|
-| **number** | 6 | 1 | 264/271 passing (97.8%). Remaining: non-English word formatting (out of scope). |
-| **match** | 0 | 115 | **179/294 passing (100% of runnable)** ✅ — match-040 fixed by compile-time predicate validation. |
-| **sort** | 0 | 18 | 66/84 passing (100% of runnable). ✅ Clean. |
-| **for-each-pair** | 0 | 2 | 56/58 passing (100% of runnable). ✅ Clean. |
-| **node-before** | 2 | 10 | 24/36 passing (66.7%). Remaining 2 are environment issues (missing `$works` variable). |
-| **node-after** | 2 | 9 | 24/35 passing (68.6%). Remaining 2 are environment issues. |
-| **HigherOrderFunctions** | 7 | 85 | 37/129 passing (28.7%). +4 fixed this session (function-name prefix, XQST0039, inline-function-16, function-item-3). |
-| **mode** | 36 | 44 | 102/188 passing (70.8% of runnable). Down from 45 failures. Remaining: static validation, accumulators, packages, visibility. |
-| **copy** | 22 | 144 | `xsl:copy`, `xsl:copy-of` behavior gaps. 115/281 passing. |
-| **date** | 68 | 0 | Known `DateTimeOffset` limitation, but many others may be fixable. |
-| **for-each-group** | 62 | 3 | `xsl:for-each-group` implementation gaps. |
-| **key** | 34 | 8 | `key()` / `xsl:key` behavior. 57/99 passing (was 53). |
-| **use-when** | 61 | 0 | Static evaluation of `use-when` expressions. |
+### Recommendation
+**Option A** — namespace serialization. It is the biggest single block of remaining copy failures, and the root cause is well understood. Options B and C involve more exploration time for less certain yield.
 
-### Medium-term: Architectural refactor (~2–3 days, broad impact)
-
-**Sequence constructor batching** — Refactor `ExecuteSequenceConstructorDirect` to accumulate raw `XdmValue` items in a list and apply complex content construction rules (§5.7.1) only when flushing. This would:
-- Fix remaining 13 seqtor failures (`seqtor-016`, `017`, `024`, `025`, `026`, `027`, `028`, `034`, `035`, `036a`, `036d`, `037a`, `037d`)
-- Likely improve many other clusters that depend on correct sequence construction (`sequence`, `copy`, `variable`, etc.)
+### Completed Clusters (no work needed)
+- **`expression`** — 0 failures, 102/102 passed (100%) ✅
+- **`string`** — 0 failures, 136/136 passed (100%) ✅
+- **`core-function`** — 0 failures, 90/90 passed (100%) ✅
+- **`boolean`** — 0 failures, 0 skipped (100% passing) ✅
+- **`match`** — 0 failures, 115 skipped. 179/294 passing (100% of runnable) ✅
+- **`sort`** — 0 failures, 18 skipped. 66/84 passing (100% of runnable) ✅
+- **`for-each-pair`** — 0 failures, 2 skipped. 56/58 passing (100% of runnable) ✅
+- **`number`** — 6 failures, 1 skipped (97.8% passing). Remaining are non-English word/ordinal formatting (out of scope).
 
 ---
 
