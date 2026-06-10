@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-10
-**Commit:** `33356a4`
-**Current focus:** Fixed copy-4308 (XTTE0945 no context item), copy-0104/0105 static validation, and 5 additional copy tests via lazy global variables. Copy cluster: 110/18/20 (86.9% of runnable). Seqtor: 54/0/18 (100% of runnable).
+**Commit:** `7caaec4`
+**Current focus:** Fixed xsl:on-empty support in xsl:copy and xsl:document, copy-namespaces validation (XTSE0020), and node()/. pattern matching. Copy cluster: 120/8/20 (93.8% of runnable). Seqtor: 54/0/18 (100% of runnable).
 
 ---
 
@@ -14,8 +14,44 @@
 - Pass rate: **64.5%** (latest run, 2026-06-10)
 - Runner completes without crashes (exit code 0)
 
+### This Session Fixes (2026-06-10 — xsl:on-empty, copy-namespaces validation, node() pattern fix)
+
+1. **`xsl:on-empty` in `xsl:copy` (copy-1205/1208)** — `ExecuteSingleCopy` did not handle `xsl:on-empty` for element or document nodes. For element nodes, the copied element was returned empty instead of evaluating `on-empty` children. For document nodes, an empty document node was returned instead of the `on-empty` value.
+   - **Fix**: In `ExecuteSingleCopy` Element case, collect `xsl:on-empty` children, skip them during normal processing, and evaluate them (via `@select` or sequence constructor) if the copied element ends up with no child nodes. In Document case, collect children into a temporary collector; if empty, evaluate `on-empty` and add directly to the result container; otherwise move collected children.
+   - **Fixed**: `copy-1205`, `copy-1208` (+2 tests).
+   - **File changed**: `TransformEngine.cs`.
+
+2. **`xsl:on-empty` in `xsl:document` and general sequence constructors (copy-1209)** — `EvaluateSequenceConstructor` did not handle `xsl:on-empty`. Inside `xsl:document`, an empty sequence constructor produced an empty document node instead of evaluating `xsl:on-empty`.
+   - **Fix**: After `ExecuteSequenceConstructorDirect`, check if the wrapper is empty and if there are `xsl:on-empty` direct children. If so, evaluate them (adding results to the wrapper via `CopyToResult` or `ProcessSequenceText`/`ExecuteXsltInstruction`), then re-read nodes/attributes/accumulator.
+   - **Fixed**: `copy-1209` (+1 test).
+   - **File changed**: `TransformEngine.cs`.
+
+3. **Namespace nodes on document nodes in `xsl:copy` (copy-1210)** — `xsl:namespace` inside `xsl:copy` on a document node silently added namespace declarations to a temporary collector element, then `on-empty` fired because the collector had no child nodes. The test expects `XTDE0420`.
+   - **Fix**: After processing the sequence constructor in `ExecuteSingleCopy` Document case, check if the temporary collector has any namespace-declaration attributes. If so, throw `XTDE0420`.
+   - **Fixed**: `copy-1210` (+1 test).
+   - **File changed**: `TransformEngine.cs`.
+
+4. **`copy-namespaces` value validation (element-0607/0608)** — `ValidateInstructionTree` allowed invalid `copy-namespaces` values like `"TRUE"` and `"FALSE"` on `xsl:copy-of` and did not validate `xsl:copy` attributes at all.
+   - **Fix**: Added `xsl:copy` attribute validation (XTSE0090) and literal `copy-namespaces` value validation (must be `yes`/`no`/`true`/`false`/`1`/`0` after trimming; XTSE0020). Extended `xsl:copy-of` validation to also check `copy-namespaces` values.
+   - **Fixed**: `element-0607`, `element-0608` (+2 tests).
+   - **File changed**: `Stylesheet.cs`.
+
+5. **`node()` and `.` pattern matching atomic values** — `PatternCompiler` returned `(item, ctx) => true` for `node()` and `.` patterns, causing them to match atomic values. This shadowed built-in templates and caused unexpected behavior.
+   - **Fix**: Changed to `(item, ctx) => AsNode(item) != null` so only nodes match.
+   - **File changed**: `PatternCompiler.cs`.
+
+6. **`xsl:namespace` XTDE0420 for non-element containers** — `xsl:namespace` silently did nothing when `_currentContainer` was not an `XElement`. It should raise `XTDE0420`.
+   - **Fix**: Added `else { throw new InvalidOperationException("XTDE0420"); }` in the `xsl:namespace` handler.
+   - **File changed**: `TransformEngine.cs`.
+
+**Copy cluster**: 120/148 passing, 8 failed, 20 skipped (93.8% of runnable) — up from 114/14/20 (89.1%).
+**Seqtor cluster**: 54/72 passing, 0 failed, 18 skipped (100% of runnable) — unchanged.
+**Unit tests**: 875 passed, 0 failed (+1 new test: `Copy4301Tests`).
+
+---
+
 **Recent trajectory:**
-- Latest: ~3487 passed / ~1918 failed / 9195 skipped (~64.5%) — copy cluster +5 tests (where-populated, on-empty, parser kind-test fix)
+- Latest: ~3493 passed / ~1912 failed / 9195 skipped (~64.6%) — copy cluster +6 tests (xsl:on-empty, copy-namespaces validation, node() pattern fix)
 - Previous: ~3482 passed / ~1923 failed / 9195 skipped (~64.4%) — copy cluster +14 tests (error handling, function context item, document node cases)
 - Previous: 3555 passed / 1854 failed / 9191 skipped (65.7%) — match cluster 100% runnable (179/294, +1 match-040); mode cluster +11 tests
 - Previous: 3554 passed / 1855 failed / 9191 skipped (65.7%) — mode cluster fixes: default-mode resolution, XTDE0045/0050 (+11 tests)
