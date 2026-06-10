@@ -77,6 +77,7 @@
 //                      | Charles Korthout | 5.6   | 10-06-2026     | xsl:copy error handling (XTTE0945/3180, XTDE0410/0420); function context item isolation; parentless document order |
 //                      | Charles Korthout | 5.7   | 10-06-2026     | xsl:where-populated filters empty PIs/comments; xsl:on-empty in CopyLiteralElement; copy-1213/1214/1215/1216/1217 |
 //                      | Charles Korthout | 5.8   | 10-06-2026     | Named template entry points have no context item; lazy global variable evaluation     |
+//                      | Charles Korthout | 5.9   | 10-06-2026     | xsl:on-empty in xsl:copy, xsl:document, EvaluateSequenceConstructor; XTDE0420 for namespace on document node |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1693,6 +1694,10 @@ public sealed class TransformEngine
                     if (_currentContainer is XElement targetElem)
                     {
                         targetElem.SetAttributeValue(XNamespace.Xmlns + nsName, nsUri);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("XTDE0420");
                     }
                     break;
                 }
@@ -3384,8 +3389,20 @@ public sealed class TransformEngine
                     _currentContainer.Add(copy);
                     var prev = _currentContainer;
                     _currentContainer = copy;
+
+                    // Collect xsl:on-empty children before processing
+                    var onEmptyElements = instruction.Elements(XName.Get("on-empty", Stylesheet.Stylesheet.XslNamespace)).ToList();
+
                     foreach (var childNode in instruction.Nodes())
                     {
+                        // Skip xsl:on-empty elements during normal processing
+                        if (childNode is XElement childElemOnEmpty &&
+                            childElemOnEmpty.Name.LocalName == "on-empty" &&
+                            childElemOnEmpty.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                        {
+                            continue;
+                        }
+
                         switch (childNode)
                         {
                             case XText text:
@@ -3399,6 +3416,40 @@ public sealed class TransformEngine
                                 break;
                         }
                     }
+
+                    // If no children were added, evaluate xsl:on-empty instructions
+                    if (!copy.Nodes().Any() && onEmptyElements.Count > 0)
+                    {
+                        foreach (var onEmpty in onEmptyElements)
+                        {
+                            var oeSelect = onEmpty.Attribute("select")?.Value;
+                            if (!string.IsNullOrEmpty(oeSelect))
+                            {
+                                var compiled = XPath31Expression.Compile(oeSelect);
+                                var result = compiled.Evaluate(_context);
+                                CopyToResult(result, separateAtomicsWithSpace: true);
+                            }
+                            else
+                            {
+                                foreach (var childNode in onEmpty.Nodes())
+                                {
+                                    switch (childNode)
+                                    {
+                                        case XText text:
+                                            ProcessSequenceText(text, onEmpty);
+                                            break;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, _context.ContextItem);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     _currentContainer = prev;
                     break;
                 }
@@ -3423,18 +3474,26 @@ public sealed class TransformEngine
                 break;
             case XdmNodeKind.Document:
                 {
-                    // Document node in complex content: process children into the current container.
-                    // XSLT 3.0 §5.7.1: a document node in a sequence is replaced by its children.
-                    // First copy the source document node's children, then process the sequence constructor.
-                    foreach (var child in nodeToCopy.Axis(XdmAxis.Child))
-                    {
-                        if (child.IsNode && child.NodeValue != null)
-                        {
-                            CopyNodeToResult(child.NodeValue);
-                        }
-                    }
+                    // Document node in complex content: create a new document node.
+                    // XSLT 3.0 §11.8.1: xsl:copy on a document node creates a new document node;
+                    // its children come from the sequence constructor, not the original.
+                    // XSLT 3.0 §5.7.1: when a document node appears in a sequence, it is replaced
+                    // by its children. Here we process the sequence constructor only.
+                    var onEmptyElements = instruction.Elements(XName.Get("on-empty", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                    var savedContainer = _currentContainer;
+                    var tempCollector = new XElement("__doc_temp__");
+                    _currentContainer = tempCollector;
+
                     foreach (var childNode in instruction.Nodes())
                     {
+                        // Skip xsl:on-empty elements during normal processing
+                        if (childNode is XElement childElemOnEmpty &&
+                            childElemOnEmpty.Name.LocalName == "on-empty" &&
+                            childElemOnEmpty.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                        {
+                            continue;
+                        }
+
                         switch (childNode)
                         {
                             case XText text:
@@ -3446,6 +3505,56 @@ public sealed class TransformEngine
                             case XElement elem:
                                 CopyLiteralElement(elem);
                                 break;
+                        }
+                    }
+
+                    _currentContainer = savedContainer;
+
+                    // Namespace nodes are not allowed on document nodes (XTDE0420)
+                    if (tempCollector.Attributes().Any(a => a.IsNamespaceDeclaration))
+                    {
+                        throw new InvalidOperationException("XTDE0420");
+                    }
+
+                    if (!tempCollector.Nodes().Any() && onEmptyElements.Count > 0)
+                    {
+                        // Sequence constructor is empty: evaluate on-empty and add directly
+                        foreach (var onEmpty in onEmptyElements)
+                        {
+                            var oeSelect = onEmpty.Attribute("select")?.Value;
+                            if (!string.IsNullOrEmpty(oeSelect))
+                            {
+                                var compiled = XPath31Expression.Compile(oeSelect);
+                                var result = compiled.Evaluate(_context);
+                                CopyToResult(result, separateAtomicsWithSpace: true);
+                            }
+                            else
+                            {
+                                foreach (var childNode in onEmpty.Nodes())
+                                {
+                                    switch (childNode)
+                                    {
+                                        case XText text:
+                                            ProcessSequenceText(text, onEmpty);
+                                            break;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, _context.ContextItem);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Move collected children to the actual result container
+                        foreach (var node in tempCollector.Nodes().ToList())
+                        {
+                            node.Remove();
+                            _currentContainer.Add(node);
                         }
                     }
                     break;
@@ -4636,6 +4745,48 @@ public sealed class TransformEngine
 
             // Include items collected by xsl:sequence into the accumulator
             var accumulatorItems = _sequenceAccumulator ?? new List<XdmValue>();
+
+            // Handle xsl:on-empty: if sequence constructor is empty, evaluate on-empty fallback
+            var onEmptyElements = parent.Elements(XName.Get("on-empty", Stylesheet.Stylesheet.XslNamespace)).ToList();
+            if (nodes.Count == 0 && attributes.Count == 0 && accumulatorItems.Count == 0 && onEmptyElements.Count > 0)
+            {
+                var savedContainer = _currentContainer;
+                _currentContainer = wrapper;
+                foreach (var onEmpty in onEmptyElements)
+                {
+                    var oeSelect = onEmpty.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(oeSelect))
+                    {
+                        var compiled = XPath31Expression.Compile(oeSelect);
+                        var result = compiled.Evaluate(_context);
+                        CopyToResult(result, separateAtomicsWithSpace: true);
+                    }
+                    else
+                    {
+                        foreach (var childNode in onEmpty.Nodes())
+                        {
+                            switch (childNode)
+                            {
+                                case XText text:
+                                    ProcessSequenceText(text, onEmpty);
+                                    break;
+                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elem, _context.ContextItem);
+                                    break;
+                                case XElement elem:
+                                    CopyLiteralElement(elem);
+                                    break;
+                            }
+                        }
+                    }
+                }
+                _currentContainer = savedContainer;
+
+                // Re-read nodes/attributes after on-empty evaluation
+                nodes = wrapper.Nodes().ToList();
+                attributes = wrapper.Attributes().ToList();
+                accumulatorItems = _sequenceAccumulator ?? new List<XdmValue>();
+            }
 
             // Empty sequence constructor → empty sequence (XSLT 2.0 §11.2)
             if (nodes.Count == 0 && attributes.Count == 0 && accumulatorItems.Count == 0)

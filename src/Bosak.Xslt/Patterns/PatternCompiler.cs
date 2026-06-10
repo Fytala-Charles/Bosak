@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 01-06-2026     | Wrap compiled patterns with CurrentItem so fn:current() returns candidate node         |
 //                      | Charles Korthout | 0.7   | 01-06-2026     | Propagate static XPath/XSLT errors (XPST/XTSE/XPTY) from pattern predicates            |
 //                      | Charles Korthout | 0.8   | 01-06-2026     | Fix namespace wildcard patterns (prefix:* and Q{uri}*) in node tests                   |
+//                      | Charles Korthout | 0.9   | 10-06-2026     | Fix node() and . patterns to only match nodes, not atomic values                       |
 //                      | Charles Korthout | 0.9   | 05-06-2026     | Static pattern validation (XTSE0340/XPST0017) for invalid constructs                   |
 //                      | Charles Korthout | 1.0   | 05-06-2026     | Reject /[predicate] (XTSE0340); allow doc()/root() at pattern start                    |
 //                      | Charles Korthout | 0.9   | 05-06-2026     | stepContextNode set from step-before-last, not first step; fixes match-125             |
@@ -1339,7 +1340,7 @@ public sealed class PatternCompiler
 
         if (name == "node()" || name == ".")
         {
-            return (item, ctx) => true;
+            return (item, ctx) => AsNode(item) != null;
         }
 
         if (name == "text()")

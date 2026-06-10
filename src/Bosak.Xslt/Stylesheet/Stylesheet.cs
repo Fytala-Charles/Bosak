@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 31-05-2026     | Added literal result element stylesheet support (WrapLiteralResultElement)               |
 //                      | Charles Korthout | 1.2   | 07-06-2026     | Fix import+include same file: separate _includedUris, copy _resolvedUris to children     |
 //                      | Charles Korthout | 1.3   | 10-06-2026     | Added ValidateInstructionTree for xsl:copy-of static validation (XTSE0090/0260)        |
+//                      | Charles Korthout | 1.4   | 10-06-2026     | ValidateInstructionTree checks xsl:copy attributes and copy-namespaces values (XTSE0020) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -457,6 +458,47 @@ public sealed class Stylesheet
                         baseName != "validation")
                     {
                         throw new InvalidOperationException("XTSE0090");
+                    }
+
+                    // XTSE0020: validate copy-namespaces value if it's a literal (not AVT)
+                    if (baseName == "copy-namespaces" && !attrName.StartsWith("_"))
+                    {
+                        var val = attr.Value.Trim();
+                        if (val != "yes" && val != "no" && val != "true" && val != "false" && val != "1" && val != "0")
+                        {
+                            throw new InvalidOperationException("XTSE0020");
+                        }
+                    }
+                }
+            }
+
+            // xsl:copy attribute validation
+            if (localName == "copy")
+            {
+                // XTSE0090: xsl:copy does not allow invalid attributes
+                foreach (var attr in elem.Attributes())
+                {
+                    var attrName = attr.Name.LocalName;
+                    var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
+                    if (attr.Name.NamespaceName == "" &&
+                        baseName != "select" &&
+                        baseName != "copy-namespaces" &&
+                        baseName != "inherit-namespaces" &&
+                        baseName != "use-attribute-sets" &&
+                        baseName != "type" &&
+                        baseName != "validation")
+                    {
+                        throw new InvalidOperationException("XTSE0090");
+                    }
+
+                    // XTSE0020: validate copy-namespaces value if it's a literal (not AVT)
+                    if (baseName == "copy-namespaces" && !attrName.StartsWith("_"))
+                    {
+                        var val = attr.Value.Trim();
+                        if (val != "yes" && val != "no" && val != "true" && val != "false" && val != "1" && val != "0")
+                        {
+                            throw new InvalidOperationException("XTSE0020");
+                        }
                     }
                 }
             }
