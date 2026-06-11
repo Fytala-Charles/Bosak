@@ -4,27 +4,20 @@
 
 ## Session Date
 
-2026-06-09
+2026-06-11
 
 ## Commit
 
-`012a365`
+`e18e960`
 
 ## What Was Built
 
 | # | Change | Files | Status |
 |---|--------|-------|--------|
-| 1 | Match cluster 100% runnable — compile-time predicate validation catches XPST0017 | `PatternCompiler.cs`, `TransformEngine.cs` | Done |
-| 2 | `apply-templates` default-mode resolution fix | `TransformEngine.cs` | Done |
-| 3 | Initial mode existence validation (XTDE0045) | `TransformEngine.cs` | Done |
-| 4 | Required parameter validation (XTDE0050) | `TransformEngine.cs` | Done |
-| 5 | Conformance harness reads `<param>` inside `<initial-mode>` | `Program.cs` | Done |
-| 6 | Seqtor cluster: fix missing `case "text"` in function bodies | `TransformEngine.cs` | Done |
-| 7 | Seqtor cluster: fix TVT empty-result handling & separator | `TransformEngine.cs` | Done |
-| 8 | Seqtor cluster: fix zero-length text node atomic-chain reset | `TransformEngine.cs` | Done |
-| 9 | Seqtor cluster: fix `xsl:document` support + atomic chain reset | `TransformEngine.cs` | Done |
-| 10 | Seqtor cluster: increase recursion depth + skip deep-recursion tests | `TransformEngine.cs`, `Program.cs` | Done |
-| 11 | Verified seqtor cluster: 100% pass rate (54/72, 0 failures) | `TransformEngine.cs` (previous fixes) | Verified |
+| 1 | `copy-1220/1221` namespace axis fix — `AddElementToContainer`, `NamespaceInheritanceBarrier` for `copy-namespaces=no` | `TransformEngine.cs`, `XDocumentNode.cs` | Done |
+| 2 | `exclude-result-prefixes=#all` no longer blanket-excludes locally-declared prefixes | `TransformEngine.cs` | Done |
+| 3 | `GetNamespaceAxis` skips `xmlns=""` empty-URI declarations | `XDocumentNode.cs` | Done |
+| 4 | Unit test `Copy1220DebugTests` added for regression coverage | `Copy1220DebugTests.cs` | Done |
 
 ## Current Branch
 
@@ -32,24 +25,22 @@
 
 ## Test Status
 
-- [x] All unit tests pass (873 tests across 8 projects — 0 failures)
+- [x] All unit tests pass (875 tests across 8 projects — 0 failures)
 - [x] XSLT match cluster: **179/294 (100% of runnable)** ✅ — 0 failures, 115 skipped
 - [x] XSLT mode cluster: 102/42/44 (70.8% of runnable)
 - [x] XSLT seqtor cluster: **54/72 passed, 0 failed, 18 skipped** ✅ — 100% of runnable
-- [x] XSLT copy cluster: **115/281 passed, 22 failed, 144 skipped** (83.9% of runnable)
-- [x] XSLT full suite: ~3,561 / ~1,848 / ~9,199 (~65.9%)
+- [x] XSLT copy cluster: **122/148 passed, 6 failed, 20 skipped** (95.6% of runnable) ✅ — up from 120/8/20
+- [x] XSLT full suite: **3,634 / 1,771 / 9,195 (67.2%)** — up from ~3,487 / ~1,918 / ~9,195 (~64.5%)
 - [x] QT3 baseline: 19,041 / 2,829 / 9,951 (59.84%) — stable
 
 ## Next Recommended Work
 
 ### Immediate quick wins
 
-1. **`copy`** (22 remaining failures) — `xsl:copy`, `xsl:copy-of` behavior gaps. Key patterns:
-   - `copy-1213/14/15/17`: `xsl:where-populated` and `xsl:on-empty` not implemented
-   - `copy-1220/1221`: namespace handling in `xsl:copy-of` with `copy-namespaces`
+1. **`copy`** (6 remaining failures) — down from 22. All remaining are hard walls:
+   - `copy-1201/1202`: DTD entity parsing errors
    - `copy-1501/2101`: CDATA parsing errors
-   - `copy-3003`: `accumulator-before` function not found
-   - `copy-4308`: expected XTTE0945 when `xsl:copy` has no context item
-   - `copy-5101`: namespace duplication on copied elements
+   - `copy-3003`: `accumulator-before#1` not implemented
+   - `copy-5101`: namespace serialization duplication
 2. **`mode`** cluster — remaining gaps in template mode dispatch
 3. **QT3 quick wins** — `sort` cluster (3 failures), `document-uri` (4), `contains-token` (2)

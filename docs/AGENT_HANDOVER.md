@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-10
-**Commit:** `7caaec4`
-**Current focus:** Fixed xsl:on-empty support in xsl:copy and xsl:document, copy-namespaces validation (XTSE0020), and node()/. pattern matching. Copy cluster: 120/8/20 (93.8% of runnable). Seqtor: 54/0/18 (100% of runnable).
+**Date:** 2026-06-11
+**Commit:** `e18e960`
+**Current focus:** Fixed copy-1220/1221 namespace axis handling in xsl:copy-of with copy-namespaces=yes/no. Copy cluster: 122/6/20 (95.6% of runnable). Full suite: 3,634/1,771/9,195 (67.2%).
 
 ---
 
@@ -10,9 +10,27 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** ~3,487 / **Failed:** ~1,918 / **Skipped:** ~9,195 (14,600 total)
-- Pass rate: **64.5%** (latest run, 2026-06-10)
+- **Passed:** 3,634 / **Failed:** 1,771 / **Skipped:** 9,195 (14,600 total)
+- Pass rate: **67.2%** (latest run, 2026-06-11)
 - Runner completes without crashes (exit code 0)
+
+### This Session Fixes (2026-06-11 — copy-1220/1221 namespace axis)
+
+1. **`copy-1220` namespace axis fix** — `xsl:copy-of` with `copy-namespaces="yes"` placed a no-namespace element inside a result-tree parent with a default namespace. LINQ-to-XML did not add `xmlns=""` explicitly, so `GetNamespaceAxis` walked up to the parent and incorrectly included the parent's default namespace in the child's namespace axis.
+   - **Fix**: Added `AddElementToContainer` helper that detects when a no-namespace element is added to a parent with a default namespace, and explicitly adds `xmlns=""` to prevent inheritance. Used in `CopyNodeToResult`, `CopyNodeToContainer`, `ExecuteSingleCopy`, `CopyLiteralElement`, and `xsl:element`.
+   - **Fix**: `GetNamespaceAxis` now skips namespace declarations with empty URI (`xmlns=""`) — they undeclare the namespace and should not create a namespace node. The empty prefix is still added to `seen` to prevent walking up further.
+   - **Fix**: `CopyLiteralElement` no longer blanket-skips all namespace declarations when `exclude-result-prefixes` contains `#all`. `#all` refers to prefixes in scope for the stylesheet root, not locally-declared prefixes on literal result elements.
+   - **Fixed**: `copy-1220` (+1 test).
+   - **Files changed**: `TransformEngine.cs`, `XDocumentNode.cs`.
+
+2. **`copy-1221` namespace axis fix (`copy-namespaces="no"`)** — With `copy-namespaces="no"`, `CopyXdmNode` only copies namespace declarations required for namespace fixup. However, descendants of the copied element still inherited namespace declarations from the copied parent via `GetNamespaceAxis` walking up the tree.
+   - **Fix**: `CopyXdmNode` now adds `NamespaceInheritanceBarrier` to copied elements when `copyAllNamespaces` is false. `CopyNodeToResult` and `CopyNodeToContainer` preserve this annotation. `GetNamespaceAxis` already stops walking up when it encounters this barrier.
+   - **Fixed**: `copy-1221` (+1 test).
+   - **Files changed**: `TransformEngine.cs`.
+
+**Copy cluster**: 122/148 passing, 6 failed, 20 skipped (95.6% of runnable) — up from 120/8/20 (93.8%).
+**Full suite**: 3,634 passed / 1,771 failed / 9,195 skipped (67.2%) — up from ~3,487/~1,918/~9,195 (64.5%).
+**Unit tests**: 875 passed, 0 failed (+2 new tests: `Copy1220DebugTests`).
 
 ### This Session Fixes (2026-06-10 — xsl:on-empty, copy-namespaces validation, node() pattern fix)
 
@@ -660,22 +678,20 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ## Recommended Next Steps
 
-### Copy Cluster Remaining Failures (21)
+### Copy Cluster Remaining Failures (6)
 
 | Category | Count | Difficulty | Root Cause |
 |----------|-------|-----------|------------|
-| **Namespace serialization** | 13 | Hard | LINQ-to-XML hoists `xmlns` declarations to the element that *uses* the prefix; XSLT expects inherited declarations to be omitted on children |
-| **Static errors** (copy-0104/0105, element-0607/0608) | 4 | Medium | Compile-time validation of disallowed content inside `xsl:copy` / `xsl:element` |
+| **Namespace serialization** | 1 | Hard | `copy-5101`: LINQ-to-XML hoists `xmlns` declarations to the element that *uses* the prefix; XSLT expects inherited declarations to be omitted on children |
 | **XML parsing** (copy-1201/1202/1501/2101) | 4 | Hard | Source files contain DTD/entity declarations; parser doesn't support them |
 | **Missing features** (copy-3003) | 1 | Hard | `accumulator-before#1` not implemented |
-| **Global variable context item** (copy-4308) | 1 | Medium | Spec says absent; our impl provides source doc. Changing it may break other tests. |
 
-### Option A: Namespace Serialization (+13 tests, 1–2 days, highest impact in copy cluster)
-Fix the 13 namespace serialization mismatches. Two possible approaches:
+All other copy failures have been fixed. The remaining 6 are hard walls (DTD parsing, missing features, serialization architecture).
+
+### Option A: Namespace Serialization (`copy-5101`, hard)
+Fix the remaining namespace serialization mismatch. Two possible approaches:
 1. **Post-process before serialization**: Walk the result tree and remove redundant namespace declarations already in scope on the parent.
 2. **Custom `XmlWriter`**: Hook into `XmlWriter.WriteStartElement` to suppress namespace declarations that match an ancestor's in-scope namespace.
-
-This would push copy cluster to ~128/281 (92% of runnable). The other copy failures are mostly hard walls (DTD parsing, missing features).
 
 ### Option B: Key Cluster (+potentially 10–20 tests, 1 day, medium impact)
 Key cluster is at 57/99 passing with 34 failures. Many may share root causes with already-fixed patterns (cross-document key lookup, key index initialization). A quick exploratory run could reveal low-hanging fruit.
