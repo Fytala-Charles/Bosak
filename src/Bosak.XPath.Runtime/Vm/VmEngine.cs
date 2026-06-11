@@ -680,8 +680,14 @@ public static class VmEngine
                         string name = (string)literalPool[instr.Operand]!;
                         var input = registers[instr.RegisterB];
                         var filtered = FilterNodes(input, n =>
-                            n.LocalName == name ||
-                            (name.Contains(':') && n.LocalName == name.Split(':')[1]));
+                        {
+                            if (n.LocalName != name && !(name.Contains(':') && n.LocalName == name.Split(':')[1]))
+                                return false;
+                            // Unprefixed attribute names always match no namespace
+                            if (n.NodeKind == XdmNodeKind.Attribute && !name.Contains(':'))
+                                return n.NamespaceUri == "";
+                            return true;
+                        });
                         registers[instr.RegisterA] = filtered;
                         ip++;
                         break;

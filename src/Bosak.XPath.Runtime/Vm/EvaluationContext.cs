@@ -109,6 +109,12 @@ public sealed class EvaluationContext
     public bool BackwardsCompatible { get; set; }
 
     /// <summary>
+    /// The default element namespace URI for unprefixed element and type names.
+    /// When set, <see cref="TryResolveNamespace"/> returns this value for the empty prefix.
+    /// </summary>
+    public string? DefaultElementNamespace { get; set; }
+
+    /// <summary>
     /// Loads a document by URI, using the cache and <see cref="DocumentLoader"/>.
     /// </summary>
     public IXdmNode LoadDocument(string uri)
@@ -219,7 +225,31 @@ public sealed class EvaluationContext
     }
 
     public bool TryResolveNamespace(string prefix, out string namespaceUri)
-        => _namespaces.TryGetValue(prefix, out namespaceUri!);
+    {
+        if (prefix == "" && !string.IsNullOrEmpty(DefaultElementNamespace))
+        {
+            namespaceUri = DefaultElementNamespace;
+            return true;
+        }
+        return _namespaces.TryGetValue(prefix, out namespaceUri!);
+    }
+
+    /// <summary>
+    /// Returns a snapshot of the current namespace bindings.
+    /// </summary>
+    public Dictionary<string, string> SnapshotNamespaces()
+        => new(_namespaces);
+
+    /// <summary>
+    /// Restores namespace bindings from a snapshot, discarding any bindings
+    /// added since the snapshot was taken.
+    /// </summary>
+    public void RestoreNamespaces(Dictionary<string, string> snapshot)
+    {
+        _namespaces.Clear();
+        foreach (var kv in snapshot)
+            _namespaces[kv.Key] = kv.Value;
+    }
 
     // ------------------------------------------------------------------
     // Functions

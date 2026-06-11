@@ -226,9 +226,39 @@ public sealed class TemplateRule
                 // Resolve namespace prefixes in the pattern to Q{uri}local syntax
                 // so the pattern compiler can match namespaced elements correctly.
                 var resolved = ResolveNamespacePrefixes(Match);
-                CompiledMatch = compiler.Compile(resolved);
+                var defaultNs = GetXPathDefaultNamespace(Element);
+                CompiledMatch = compiler.Compile(resolved, defaultNs);
             }
         }
+    }
+
+    /// <summary>
+    /// Returns the effective xpath-default-namespace for the given element by walking
+    /// the ancestor chain and finding the nearest xpath-default-namespace attribute.
+    /// </summary>
+    private static string? GetXPathDefaultNamespace(XElement element)
+    {
+        var current = element;
+        while (current != null)
+        {
+            // The XSLT-namespaced form (e.g. xsl:xpath-default-namespace) is effective on any element
+            var attr = current.Attribute(XName.Get("xpath-default-namespace", Stylesheet.XslNamespace));
+            if (attr != null)
+            {
+                // XTSE0090: xsl:xpath-default-namespace is not allowed on XSLT elements
+                if (current.Name.NamespaceName == Stylesheet.XslNamespace)
+                    throw new InvalidOperationException("XTSE0090");
+                return attr.Value;
+            }
+            // The no-namespace form is only effective on XSLT elements
+            if (current.Name.NamespaceName == Stylesheet.XslNamespace)
+            {
+                attr = current.Attribute("xpath-default-namespace");
+                if (attr != null) return attr.Value;
+            }
+            current = current.Parent;
+        }
+        return null;
     }
 
     /// <summary>

@@ -2853,7 +2853,7 @@ public static class FunctionLibrary
     {
         var seq = args[0];
         if (!seq.IsSequence)
-            return XdmValue.FromSequence(XdmSequence.Empty);
+            return XdmValue.Undefined;
 
         // TODO: Return a lazy sequence view skipping the first item.
         // For now, materialize.
@@ -8153,18 +8153,24 @@ public static class FunctionLibrary
 
     private static XdmValue LocalNameFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
+        if (args[0].Kind == XdmValueKind.Undefined || IsEmptySequence(args[0]))
+            return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = args[0].QNameValue;
         return XdmValue.FromString(qn.LocalName);
     }
 
     private static XdmValue NamespaceUriFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
+        if (args[0].Kind == XdmValueKind.Undefined || IsEmptySequence(args[0]))
+            return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = args[0].QNameValue;
         return XdmValue.FromString(qn.NamespaceUri);
     }
 
     private static XdmValue PrefixFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
+        if (args[0].Kind == XdmValueKind.Undefined || IsEmptySequence(args[0]))
+            return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = args[0].QNameValue;
         return XdmValue.FromString(qn.Prefix);
     }
@@ -8671,7 +8677,7 @@ public static class FunctionLibrary
 
     private static XdmValue InScopePrefixes(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = args[0].IsNode ? args[0].NodeValue : null;
+        var node = GetNodeFromValue(args[0]);
         if (node == null || node.NodeKind != XdmNodeKind.Element)
             return XdmValue.Undefined;
 
@@ -8680,8 +8686,7 @@ public static class FunctionLibrary
 
         if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
         {
-            // Collect elements from root to this element (document order) so that
-            // prefixes are returned in the order of their first declaration.
+            // Collect the ancestor-or-self chain.
             var path = new List<XElement>();
             var current = elem;
             while (current != null)
@@ -8693,8 +8698,9 @@ public static class FunctionLibrary
                 if (current is XElement parent && parent.Annotation<NamespaceInheritanceBarrier>() != null)
                     break;
             }
-            path.Reverse();
 
+            // Process from target element toward the root so that innermost
+            // declarations (and undeclarations) win.
             foreach (var el in path)
             {
                 foreach (var attr in el.Attributes())
@@ -8702,8 +8708,15 @@ public static class FunctionLibrary
                     if (attr.IsNamespaceDeclaration)
                     {
                         var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
-                        if (seen.Add(prefix))
+                        if (attr.Value == "" && prefix == "")
+                        {
+                            // xmlns="" undeclares the default namespace.
+                            seen.Add("");
+                        }
+                        else if (seen.Add(prefix))
+                        {
                             prefixes.Add(XdmValue.FromString(prefix));
+                        }
                     }
                 }
             }
@@ -8719,7 +8732,7 @@ public static class FunctionLibrary
     private static XdmValue NamespaceUriForPrefix(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var prefix = AtomizedString(args[0]);
-        var node = args[1].IsNode ? args[1].NodeValue : null;
+        var node = GetNodeFromValue(args[1]);
         if (node == null || node.NodeKind != XdmNodeKind.Element)
             return XdmValue.Undefined;
 
@@ -8737,7 +8750,12 @@ public static class FunctionLibrary
                     {
                         var attrPrefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
                         if (attrPrefix == prefix)
+                        {
+                            // xmlns="" undeclares the default namespace.
+                            if (attr.Value == "" && prefix == "")
+                                return XdmValue.Undefined;
                             return XdmValue.FromString(attr.Value);
+                        }
                     }
                 }
                 current = current.Parent;

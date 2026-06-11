@@ -732,7 +732,10 @@ public sealed class IrLowerer
             }
             else if (node.NodeTest.Kind == NameTestKind.QName && !string.IsNullOrEmpty(node.NodeTest.Name))
             {
-                namePoolIdx = AddToLiteralPool(node.NodeTest.Name);
+                // For *:local, preserve the wildcard in the name test so the VM knows not to
+                // apply the no-namespace restriction for unprefixed attribute names.
+                var nameToPool = node.NodeTest.NamespaceUri == "*" ? "*:" + node.NodeTest.Name : node.NodeTest.Name;
+                namePoolIdx = AddToLiteralPool(nameToPool);
                 // If a real prefix is present (not the wildcard "*"), emit NamespaceTest
                 // to filter by resolved URI.
                 if (!string.IsNullOrEmpty(node.NodeTest.NamespaceUri) && node.NodeTest.NamespaceUri != "*")

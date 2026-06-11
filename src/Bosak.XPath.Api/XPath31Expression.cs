@@ -30,10 +30,14 @@ namespace Bosak.XPath.Api;
 public sealed class XPath31Expression
 {
     private readonly IrModule _module;
+    private readonly IReadOnlyDictionary<string, string>? _namespaces;
+    private readonly string? _defaultElementNamespace;
 
-    private XPath31Expression(IrModule module)
+    private XPath31Expression(IrModule module, IReadOnlyDictionary<string, string>? namespaces = null, string? defaultElementNamespace = null)
     {
         _module = module;
+        _namespaces = namespaces;
+        _defaultElementNamespace = defaultElementNamespace;
     }
 
     /// <summary>
@@ -61,7 +65,7 @@ public sealed class XPath31Expression
         var lowerer = new IrLowerer();
         var module = lowerer.Lower(optimized);
 
-        return new XPath31Expression(module);
+        return new XPath31Expression(module, options.Namespaces, options.DefaultElementNamespace);
     }
 
     /// <summary>
@@ -83,7 +87,37 @@ public sealed class XPath31Expression
     {
         ArgumentNullException.ThrowIfNull(context);
         FunctionLibrary.Populate(context);
-        return VmEngine.Execute(_module, context);
+
+        var savedDefaultNs = context.DefaultElementNamespace;
+        try
+        {
+            if (_defaultElementNamespace != null)
+                context.DefaultElementNamespace = _defaultElementNamespace;
+
+            if (_namespaces != null && _namespaces.Count > 0)
+            {
+                var snapshot = context.SnapshotNamespaces();
+                try
+                {
+                    foreach (var (prefix, nsUri) in _namespaces)
+                    {
+                        if (!string.IsNullOrEmpty(prefix))
+                            context.WithNamespace(prefix, nsUri);
+                    }
+                    return VmEngine.Execute(_module, context);
+                }
+                finally
+                {
+                    context.RestoreNamespaces(snapshot);
+                }
+            }
+
+            return VmEngine.Execute(_module, context);
+        }
+        finally
+        {
+            context.DefaultElementNamespace = savedDefaultNs;
+        }
     }
 
     /// <summary>

@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-11
 **Commit:** `e18e960`
-**Current focus:** Fixed copy-1220/1221 namespace axis handling in xsl:copy-of with copy-namespaces=yes/no. Copy cluster: 122/6/20 (95.6% of runnable). Full suite: 3,634/1,771/9,195 (67.2%).
+**Current focus:** Fixed xpath-default-namespace handling throughout XSLT → XPath pipeline; resolved all unit test regressions. Namespace cluster: 201/47/28 (81.0%). Full suite: 3,634/1,771/9,195 (67.2%).
 
 ---
 
@@ -13,6 +13,28 @@
 - **Passed:** 3,634 / **Failed:** 1,771 / **Skipped:** 9,195 (14,600 total)
 - Pass rate: **67.2%** (latest run, 2026-06-11)
 - Runner completes without crashes (exit code 0)
+
+### This Session Fixes (2026-06-11 — xpath-default-namespace + unit test regressions)
+
+1. **`xpath-default-namespace` wired through full pipeline** — Added `DefaultElementNamespace` to `CompileOptions` and `EvaluationContext`. Threaded through `TransformEngine.CompileXPath` (in-scope namespaces + xpath-default-namespace from ancestor chain), `PatternCompiler` (pattern compilation with default element namespace), `TemplateRule.ResolveNamespacePrefixes` (resolves unprefixed names in patterns to `Q{uri}local`), `VmEngine.NamespaceTest` (empty prefix resolves to default element namespace), and `SpaceHandlingRule` / `MatchesNameTest` (strip-space/preserve-space respects xpath-default-namespace). Also added XTSE0090 validation for `t:xpath-default-namespace` on XSLT-namespace elements.
+   - **Fixed**: xpath-default-namespace-0101 through 1102 (21/22 passing). Only xpath-default-namespace-1201 remains (built-in template parameter passing).
+   - **Files changed**: `CompileOptions.cs`, `XPath31Expression.cs`, `EvaluationContext.cs`, `VmEngine.cs`, `PatternCompiler.cs`, `TemplateRule.cs`, `Stylesheet.cs`, `TransformEngine.cs`.
+
+2. **`NodeToQName` regression fix** — `NodeToQName` was accidentally changed to return `XdmValue.FromSequence(XdmSequence.Empty)` for non-nameable nodes (text, comment, document) instead of `XdmValue.Undefined`. This broke `fn:node-name(child::text())` which must return empty sequence per XPath spec (i.e., `IsUndefined == true`).
+   - **Fixed**: `Bosak.XPath.Standard.Tests.FunctionLibraryTests.NodeName_TextNode`.
+   - **File changed**: `FunctionLibrary.cs`.
+
+3. **`CopyLiteralElement` ancestor namespace walk removed** — A previous fix added ancestor-walking logic that copied ALL namespace declarations from `xsl:stylesheet` onto literal result elements. This leaked `xmlns:xs` and other prefixes into output even when `exclude-result-prefixes="#all"` was specified, breaking 9 XSLT unit tests (`ExcludeResultPrefixes_All`, `FnTransform_Basic_Transform`, `TryCatch_InFunctionBody_CatchReturnsFallback`, `ForEach_Over_Atomic_Sequence_With_CallTemplate`, `XslFunction_Returns_Sequence`, `MapKey_Lookup_CSharp_vs_XPath`, `FnTransform_With_Stylesheet_Params`, `FnTransform_With_Initial_Template`, `Copy1220_NamespaceAxisAccessible`).
+   - **Fix**: Removed the ancestor walk; restored original behavior of copying only namespace declarations explicitly present on the literal result element itself.
+   - **File changed**: `TransformEngine.cs`.
+
+4. **`*:local` name test compilation fix** — The VM `NameTest` opcode enforces no-namespace for unprefixed attribute names (`@attr`). However, `*:attr` (any namespace, local name `attr`) compiled to the same `NameTest("attr")` instruction with no distinguishing marker, causing it to incorrectly reject namespaced attributes.
+   - **Fix**: `IrLowerer` now emits `"*:local"` into the literal pool for `*:local` patterns. `NameTest` sees the colon and skips the no-namespace restriction.
+   - **Fixed**: namespace-1402 and related tests that regressed after the attribute namespace fix.
+   - **File changed**: `IrLowerer.cs`.
+
+**Namespace cluster**: 201/276 passing, 47 failed, 28 skipped (81.0%).
+**Unit tests**: 877 passed, 0 failed across 8 test projects.
 
 ### This Session Fixes (2026-06-11 — copy-1220/1221 namespace axis)
 

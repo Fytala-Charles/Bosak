@@ -413,6 +413,76 @@ public sealed class TransformEngine
         }
     }
 
+    /// <summary>
+    /// Collects all namespace declarations in scope for the given element
+    /// by walking up the ancestor chain.
+    /// </summary>
+    private static Dictionary<string, string> GetInScopeNamespaces(XElement element)
+    {
+        var result = new Dictionary<string, string>();
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration)
+                {
+                    string prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                    if (!result.ContainsKey(prefix))
+                        result[prefix] = attr.Value;
+                }
+            }
+            current = current.Parent;
+        }
+        result["xml"] = "http://www.w3.org/XML/1998/namespace";
+        return result;
+    }
+
+    /// <summary>
+    /// Returns the effective xpath-default-namespace for the given element by walking
+    /// the ancestor chain and finding the nearest xpath-default-namespace attribute.
+    /// </summary>
+    private static string? GetXPathDefaultNamespace(XElement element)
+    {
+        var current = element;
+        while (current != null)
+        {
+            // The XSLT-namespaced form (e.g. xsl:xpath-default-namespace) is effective on any element
+            var attr = current.Attribute(XName.Get("xpath-default-namespace", Stylesheet.Stylesheet.XslNamespace));
+            if (attr != null)
+            {
+                // XTSE0090: xsl:xpath-default-namespace is not allowed on XSLT elements
+                if (current.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                    throw new InvalidOperationException("XTSE0090");
+                return attr.Value;
+            }
+            // The no-namespace form is only effective on XSLT elements
+            if (current.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+            {
+                attr = current.Attribute("xpath-default-namespace");
+                if (attr != null) return attr.Value;
+            }
+            current = current.Parent;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Compiles an XPath expression with the in-scope namespace bindings
+    /// and xpath-default-namespace from the given instruction element.
+    /// </summary>
+    private XPath31Expression CompileXPath(string expression, XElement instruction)
+    {
+        var nsMap = GetInScopeNamespaces(instruction);
+        var defaultNs = GetXPathDefaultNamespace(instruction);
+        if (nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs))
+        {
+            var options = new CompileOptions { Namespaces = nsMap, DefaultElementNamespace = defaultNs };
+            return XPath31Expression.Compile(expression, options);
+        }
+        return XPath31Expression.Compile(expression);
+    }
+
     private void RegisterXsltFunctions()
     {
         var allFuncs = _stylesheet.GetAllFunctionDefinitions();
@@ -695,7 +765,7 @@ public sealed class TransformEngine
                                 XdmValue wpValue;
                                 if (!string.IsNullOrEmpty(wpSelect))
                                 {
-                                    var compiled = XPath31Expression.Compile(wpSelect);
+                                    var compiled = CompileXPath(wpSelect, wp);
                                     wpValue = compiled.Evaluate(_context);
                                 }
                                 else
@@ -765,7 +835,7 @@ public sealed class TransformEngine
                                     XdmValue wpValue;
                                     if (!string.IsNullOrEmpty(wpSelect))
                                     {
-                                        var compiled = XPath31Expression.Compile(wpSelect);
+                                        var compiled = CompileXPath(wpSelect, wp);
                                         wpValue = compiled.Evaluate(_context);
                                     }
                                     else
@@ -959,6 +1029,26 @@ public sealed class TransformEngine
                         }
                         break;
                     }
+                case "perform-sort":
+                    {
+                        var psSelect = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(psSelect))
+                        {
+                            var compiled = XPath31Expression.Compile(psSelect);
+                            var psResult = compiled.Evaluate(_context);
+                            var psItems = EnumerateItems(psResult).ToList();
+
+                            var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                            if (sortElements.Count > 0)
+                            {
+                                psItems = SortItems(psItems, sortElements);
+                            }
+
+                            foreach (var item in psItems)
+                                results.Add(item);
+                        }
+                        break;
+                    }
                 default:
                     // Unknown XSLT instruction in function body: ignore
                     break;
@@ -1035,7 +1125,7 @@ public sealed class TransformEngine
     /// Implements xsl:apply-templates: selects nodes and processes each with the best-matching template.
     /// Supports XSLT 3.0 atomic-value matching.
     /// </summary>
-    public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null)
+    public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null, XElement? instruction = null)
     {
         if (++_applyTemplatesDepth > MaxApplyTemplatesDepth)
         {
@@ -1064,7 +1154,7 @@ public sealed class TransformEngine
             else
             {
                 // Evaluate select expression
-                var compiled = XPath31Expression.Compile(select);
+                var compiled = instruction != null ? CompileXPath(select, instruction) : XPath31Expression.Compile(select);
                 var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
                 items = EnumerateItems(result).ToList();
             }
@@ -1133,7 +1223,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Implements xsl:apply-templates when there is no context node (e.g. inside a named template).
     /// </summary>
-    public void ApplyTemplates(XdmValue contextItem, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null)
+    public void ApplyTemplates(XdmValue contextItem, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null, XElement? instruction = null)
     {
         if (++_applyTemplatesDepth > MaxApplyTemplatesDepth)
         {
@@ -1161,7 +1251,7 @@ public sealed class TransformEngine
             else
             {
                 // Evaluate select expression with the given context item as focus
-                var compiled = XPath31Expression.Compile(select);
+                var compiled = instruction != null ? CompileXPath(select, instruction) : XPath31Expression.Compile(select);
                 var result = compiled.Evaluate(_context.WithFocus(contextItem, 1, 1));
                 items = EnumerateItems(result).ToList();
             }
@@ -1406,8 +1496,8 @@ public sealed class TransformEngine
                         else
                         {
                             // Check for content (sequence constructor as default value)
-                            var contentElements = child.Elements().ToList();
-                            if (contentElements.Count > 0)
+                            var contentNodes = child.Nodes().ToList();
+                            if (contentNodes.Count > 0)
                             {
                                 paramValue = EvaluateSequenceConstructor(child, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(child.Attribute("as")?.Value));
                             }
@@ -1516,7 +1606,7 @@ public sealed class TransformEngine
                     var elemName = EvaluateAvt(elemNameRaw);
                     var elemNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
                     var elemNs = elemNsRaw != null ? EvaluateAvt(elemNsRaw) : null;
-                    var (elemLocalName, elemNsUri) = ResolveElementName(instruction, elemName, elemNs);
+                    var (elemLocalName, elemNsUri) = ResolveElementName(instruction, elemName, elemNs, "XTDE0830");
                     var elem = new XElement(XName.Get(elemLocalName, elemNsUri));
 
                     var elemInheritNsRaw = instruction.Attribute("inherit-namespaces")?.Value
@@ -1561,12 +1651,12 @@ public sealed class TransformEngine
                     var attrName = EvaluateAvt(attrNameRaw);
                     var attrNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
                     var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw) : null;
-                    var (attrLocalName, attrNsUri) = ResolveElementName(instruction, attrName, attrNs);
+                    var (attrLocalName, attrNsUri) = ResolveAttributeName(instruction, attrName, attrNs, "XTDE0860");
                     var select = instruction.Attribute("select")?.Value;
                     string value;
                     if (!string.IsNullOrEmpty(select))
                     {
-                        var compiled = XPath31Expression.Compile(select);
+                        var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
                         value = result.ToString();
                     }
@@ -1588,7 +1678,7 @@ public sealed class TransformEngine
                     var select = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(select))
                     {
-                        var compiled = XPath31Expression.Compile(select);
+                        var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
                         string textValue;
                         if (_context.BackwardsCompatible)
@@ -1642,7 +1732,7 @@ public sealed class TransformEngine
                     string commentText;
                     if (!string.IsNullOrEmpty(commentSelect))
                     {
-                        var compiled = XPath31Expression.Compile(commentSelect);
+                        var compiled = CompileXPath(commentSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         commentText = XdmValueToString(result);
                     }
@@ -1662,7 +1752,7 @@ public sealed class TransformEngine
                     string piData;
                     if (!string.IsNullOrEmpty(piSelect))
                     {
-                        var compiled = XPath31Expression.Compile(piSelect);
+                        var compiled = CompileXPath(piSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         piData = XdmValueToString(result);
                     }
@@ -1684,7 +1774,7 @@ public sealed class TransformEngine
                     string nsUri;
                     if (!string.IsNullOrEmpty(nsSelect))
                     {
-                        var compiled = XPath31Expression.Compile(nsSelect);
+                        var compiled = CompileXPath(nsSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         nsUri = result.ToString();
                     }
@@ -1694,7 +1784,15 @@ public sealed class TransformEngine
                     }
                     if (_currentContainer is XElement targetElem)
                     {
-                        targetElem.SetAttributeValue(XNamespace.Xmlns + nsName, nsUri);
+                        if (string.IsNullOrEmpty(nsName))
+                        {
+                            // Default namespace declaration
+                            targetElem.SetAttributeValue("xmlns", nsUri);
+                        }
+                        else
+                        {
+                            targetElem.SetAttributeValue(XNamespace.Xmlns + nsName, nsUri);
+                        }
                     }
                     else
                     {
@@ -1709,7 +1807,7 @@ public sealed class TransformEngine
                     string msgText;
                     if (!string.IsNullOrEmpty(msgSelect))
                     {
-                        var compiled = XPath31Expression.Compile(msgSelect);
+                        var compiled = CompileXPath(msgSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         msgText = XdmValueToString(result, " ");
                     }
@@ -1734,7 +1832,7 @@ public sealed class TransformEngine
                     {
                         _currentTemplateRule = null;
                         _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
-                        var compiled = XPath31Expression.Compile(copySelect);
+                        var compiled = CompileXPath(copySelect, instruction);
                         var result = compiled.Evaluate(_context);
 
                         if (result.IsSequence && result.SequenceValue != null)
@@ -1786,7 +1884,7 @@ public sealed class TransformEngine
                     var wpSelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(wpSelect))
                     {
-                        var compiled = XPath31Expression.Compile(wpSelect);
+                        var compiled = CompileXPath(wpSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         bool isEmpty = result.IsUndefined ||
                             (result.IsSequence && result.SequenceValue != null &&
@@ -1879,7 +1977,7 @@ public sealed class TransformEngine
                             XdmValue wpValue;
                             if (!string.IsNullOrEmpty(wpSelect))
                             {
-                                var compiled = XPath31Expression.Compile(wpSelect);
+                                var compiled = CompileXPath(wpSelect, wp);
                                 wpValue = compiled.Evaluate(_context);
                             }
                             else
@@ -1895,12 +1993,12 @@ public sealed class TransformEngine
 
                     if (node != null)
                     {
-                        ApplyTemplates(node, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams);
+                        ApplyTemplates(node, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams, instruction);
                     }
                     else if (!string.IsNullOrEmpty(select))
                     {
                         // apply-templates with select but no context node (e.g. inside named template)
-                        ApplyTemplates(contextItem, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams);
+                        ApplyTemplates(contextItem, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams, instruction);
                     }
                     // If node is null and select is empty, apply-templates has nothing to process
                     break;
@@ -1911,7 +2009,7 @@ public sealed class TransformEngine
                     var select = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(select))
                     {
-                        var compiled = XPath31Expression.Compile(select);
+                        var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
                         var items = EnumerateItems(result).ToList();
 
@@ -1972,7 +2070,7 @@ public sealed class TransformEngine
                     var select = instruction.Attribute("select")?.Value;
                     if (string.IsNullOrEmpty(select)) break;
 
-                    var compiled = XPath31Expression.Compile(select);
+                    var compiled = CompileXPath(select, instruction);
                     var result = compiled.Evaluate(_context);
                     var items = EnumerateItems(result).ToList();
                     if (items.Count == 0) break;
@@ -1988,7 +2086,7 @@ public sealed class TransformEngine
 
                     if (!string.IsNullOrEmpty(groupBy))
                     {
-                        var keyExpr = XPath31Expression.Compile(groupBy);
+                        var keyExpr = CompileXPath(groupBy, instruction);
                         var dict = new Dictionary<string, List<XdmValue>>();
                         var keyOrder = new List<string>();
                         foreach (var item in items)
@@ -2033,7 +2131,7 @@ public sealed class TransformEngine
                     }
                     else if (!string.IsNullOrEmpty(groupAdjacent))
                     {
-                        var keyExpr = XPath31Expression.Compile(groupAdjacent);
+                        var keyExpr = CompileXPath(groupAdjacent, instruction);
                         var currentItems = new List<XdmValue>();
                         XdmValue? currentKey = null;
                         string? currentKeyStr = null;
@@ -2066,8 +2164,9 @@ public sealed class TransformEngine
                     }
                     else if (!string.IsNullOrEmpty(groupStarting))
                     {
+                        var defaultNs = GetXPathDefaultNamespace(instruction);
                         var patternCompiler = new Patterns.PatternCompiler();
-                        var pattern = patternCompiler.Compile(groupStarting);
+                        var pattern = patternCompiler.Compile(groupStarting, defaultNs);
                         var currentItems = new List<XdmValue>();
                         foreach (var item in items)
                         {
@@ -2088,8 +2187,9 @@ public sealed class TransformEngine
                     }
                     else if (!string.IsNullOrEmpty(groupEnding))
                     {
+                        var defaultNs = GetXPathDefaultNamespace(instruction);
                         var patternCompiler = new Patterns.PatternCompiler();
-                        var pattern = patternCompiler.Compile(groupEnding);
+                        var pattern = patternCompiler.Compile(groupEnding, defaultNs);
                         var currentItems = new List<XdmValue>();
                         foreach (var item in items)
                         {
@@ -2180,7 +2280,7 @@ public sealed class TransformEngine
                     var test = instruction.Attribute("test")?.Value;
                     if (!string.IsNullOrEmpty(test))
                     {
-                        var compiled = XPath31Expression.Compile(test);
+                        var compiled = CompileXPath(test, instruction);
                         var result = compiled.Evaluate(_context);
                         if (result.EffectiveBooleanValue())
                         {
@@ -2212,7 +2312,7 @@ public sealed class TransformEngine
                         var test = when.Attribute("test")?.Value;
                         if (!string.IsNullOrEmpty(test))
                         {
-                            var compiled = XPath31Expression.Compile(test);
+                            var compiled = CompileXPath(test, when);
                             var result = compiled.Evaluate(_context);
                             if (result.EffectiveBooleanValue())
                             {
@@ -2325,7 +2425,7 @@ public sealed class TransformEngine
                                 XdmValue wpValue;
                                 if (!string.IsNullOrEmpty(wpSelect))
                                 {
-                                    var compiled = XPath31Expression.Compile(wpSelect);
+                                    var compiled = CompileXPath(wpSelect, wp);
                                     wpValue = compiled.Evaluate(_context);
                                 }
                                 else
@@ -2498,7 +2598,7 @@ public sealed class TransformEngine
                                 XdmValue wpValue;
                                 if (!string.IsNullOrEmpty(wpSelect))
                                 {
-                                    var compiled = XPath31Expression.Compile(wpSelect);
+                                    var compiled = CompileXPath(wpSelect, wp);
                                     wpValue = compiled.Evaluate(_context);
                                 }
                                 else
@@ -2581,7 +2681,7 @@ public sealed class TransformEngine
                             XdmValue wpValue;
                             if (!string.IsNullOrEmpty(wpSelect))
                             {
-                                var compiled = XPath31Expression.Compile(wpSelect);
+                                var compiled = CompileXPath(wpSelect, wp);
                                 wpValue = compiled.Evaluate(_context);
                             }
                             else
@@ -2716,6 +2816,27 @@ public sealed class TransformEngine
 
             case "iterate":
                 throw new InvalidOperationException("XTDE1450: xsl:iterate is not supported.");
+
+            case "perform-sort":
+                {
+                    var psSelect2 = instruction.Attribute("select")?.Value;
+                    if (!string.IsNullOrEmpty(psSelect2))
+                    {
+                        var compiled = XPath31Expression.Compile(psSelect2);
+                        var psResult = compiled.Evaluate(_context);
+                        var psItems = EnumerateItems(psResult).ToList();
+
+                        var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                        if (sortElements.Count > 0)
+                        {
+                            psItems = SortItems(psItems, sortElements);
+                        }
+
+                        foreach (var item in psItems)
+                            CopyToResult(item);
+                    }
+                    break;
+                }
 
             default:
                 // Unknown instruction: ignore for now
@@ -3702,16 +3823,104 @@ public sealed class TransformEngine
     /// when a no-namespace element is inserted into a parent that carries a default
     /// namespace.  Without this, LINQ-to-XML would silently inherit the parent's
     /// default namespace, making the namespace axis return the wrong namespace nodes.
+    /// Also adds default-namespace undeclarations (xmlns="") when the parent has
+    /// <see cref="NamespaceInheritanceBarrier"/> (inherit-namespaces="no").
+    /// Prefixed namespace undeclarations (xmlns:prefix="") are not added here because
+    /// LINQ-to-XML does not support them; they require XML 1.1 serialization.
     /// </summary>
     private void AddElementToContainer(XElement element, XContainer container)
     {
-        if (container is XElement parentElem &&
-            string.IsNullOrEmpty(element.Name.NamespaceName) &&
-            !string.IsNullOrEmpty(parentElem.Name.NamespaceName))
+        if (container is XElement parentElem)
         {
-            element.SetAttributeValue("xmlns", "");
+            if (string.IsNullOrEmpty(element.Name.NamespaceName))
+            {
+                var parentDefaultNs = GetDefaultNamespaceUri(parentElem);
+                if (!string.IsNullOrEmpty(parentDefaultNs))
+                {
+                    element.SetAttributeValue("xmlns", "");
+                }
+            }
+
+            if (parentElem.Annotation<NamespaceInheritanceBarrier>() != null)
+            {
+                var parentDefaultNs = GetDefaultNamespaceUri(parentElem);
+                if (parentDefaultNs != null)
+                {
+                    // Does the child already have an explicit default namespace declaration?
+                    bool childHasDefaultNsDecl = false;
+                    foreach (var childAttr in element.Attributes())
+                    {
+                        if (childAttr.Name.LocalName == "xmlns" &&
+                            childAttr.Name.NamespaceName == "")
+                        {
+                            childHasDefaultNsDecl = true;
+                            break;
+                        }
+                    }
+
+                    if (!childHasDefaultNsDecl)
+                    {
+                        // Does the child use the parent's default namespace?
+                        bool childUsesDefaultNs = false;
+                        if (element.Name.NamespaceName == parentDefaultNs)
+                        {
+                            bool childUsesPrefix = false;
+                            foreach (var childAttr in element.Attributes())
+                            {
+                                if (childAttr.IsNamespaceDeclaration &&
+                                    childAttr.Value == parentDefaultNs)
+                                {
+                                    var prefix = childAttr.Name.LocalName == "xmlns"
+                                        ? ""
+                                        : childAttr.Name.LocalName;
+                                    if (prefix != "")
+                                    {
+                                        childUsesPrefix = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            childUsesDefaultNs = !childUsesPrefix;
+                        }
+
+                        if (!childUsesDefaultNs)
+                        {
+                            element.SetAttributeValue("xmlns", "");
+                        }
+                    }
+                }
+            }
         }
         container.Add(element);
+    }
+
+    /// <summary>
+    /// Returns the default namespace URI in effect for the given element,
+    /// or <c>null</c> if the element has no default namespace.
+    /// Checks explicit <c>xmlns</c> attributes first, then infers from the
+    /// element name when it has no prefixed namespace declaration.
+    /// </summary>
+    private static string? GetDefaultNamespaceUri(XElement element)
+    {
+        foreach (var attr in element.Attributes())
+        {
+            if (attr.IsNamespaceDeclaration && attr.Name.LocalName == "xmlns")
+                return attr.Value;
+        }
+        if (!string.IsNullOrEmpty(element.Name.NamespaceName))
+        {
+            foreach (var attr in element.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration && attr.Value == element.Name.NamespaceName)
+                {
+                    var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                    if (prefix != "")
+                        return null; // element uses a prefix, not default namespace
+                }
+            }
+            return element.Name.NamespaceName;
+        }
+        return null;
     }
 
     private void CopyNodeToResult(IXdmNode node)
@@ -5417,7 +5626,7 @@ public sealed class TransformEngine
 
         foreach (var rule in rules)
         {
-            if (MatchesNameTest(rule.NameTest, element))
+            if (MatchesNameTest(rule, element))
             {
                 if (rule.IsStrip && (bestStrip == null || rule.Precedence > bestStrip.Value.Precedence))
                     bestStrip = rule;
@@ -5439,27 +5648,41 @@ public sealed class TransformEngine
         return bestStrip.Value.Precedence > bestPreserve.Value.Precedence;
     }
 
-    private static bool MatchesNameTest(string nameTest, XElement element)
+    private static bool MatchesNameTest(SpaceHandlingRule rule, XElement element)
     {
+        var nameTest = rule.NameTest;
         if (nameTest == "*")
             return true;
+
+        if (nameTest.StartsWith("Q{"))
+        {
+            int closeBrace = nameTest.IndexOf('}');
+            if (closeBrace > 2)
+            {
+                var nsUri = nameTest[2..closeBrace];
+                var localName = nameTest[(closeBrace + 1)..];
+                return element.Name.NamespaceName == nsUri && element.Name.LocalName == localName;
+            }
+        }
 
         if (nameTest.EndsWith(":*"))
         {
             // prefix:* - would need prefix resolution; for now, match any element
-            // A proper implementation would resolve the prefix to a namespace URI
             return true;
         }
 
         if (nameTest.Contains(':'))
         {
             // QName with prefix - would need prefix resolution
-            // For now, try matching local name only as a fallback
             var localName = nameTest.Contains(':') ? nameTest.Split(':')[1] : nameTest;
             return element.Name.LocalName == localName;
         }
 
-        return element.Name.LocalName == nameTest;
+        // Unprefixed name: match local name and namespace
+        // If NamespaceUri is specified, match exactly that namespace.
+        // If NamespaceUri is null (no xpath-default-namespace), match no namespace.
+        var expectedNs = rule.NamespaceUri ?? "";
+        return element.Name.LocalName == nameTest && element.Name.NamespaceName == expectedNs;
     }
 
     // ------------------------------------------------------------------
@@ -5829,13 +6052,14 @@ public sealed class TransformEngine
         }
         else
         {
+            var defaultNs = GetXPathDefaultNamespace(instruction);
             var countMatcher = string.IsNullOrEmpty(countPattern)
                 ? CreateDefaultCountMatcher(targetNode)
-                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(countPattern, instruction));
+                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(countPattern, instruction), defaultNs);
 
             var fromMatcher = string.IsNullOrEmpty(fromPattern)
                 ? null
-                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(fromPattern, instruction));
+                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(fromPattern, instruction), defaultNs);
 
             int[]? numbers = level switch
             {
@@ -6511,7 +6735,13 @@ public sealed class TransformEngine
     /// given, the prefix is resolved against the in-scope namespaces of the
     /// instruction element.
     /// </summary>
-    private static (string LocalName, string NamespaceUri) ResolveElementName(XElement instruction, string name, string? explicitNamespace)
+    private static (string LocalName, string NamespaceUri) ResolveElementName(XElement instruction, string name, string? explicitNamespace, string errorCode)
+        => ResolveName(instruction, name, explicitNamespace, errorCode, useDefaultNamespace: true);
+
+    private static (string LocalName, string NamespaceUri) ResolveAttributeName(XElement instruction, string name, string? explicitNamespace, string errorCode)
+        => ResolveName(instruction, name, explicitNamespace, errorCode, useDefaultNamespace: false);
+
+    private static (string LocalName, string NamespaceUri) ResolveName(XElement instruction, string name, string? explicitNamespace, string errorCode, bool useDefaultNamespace)
     {
         int colon = name.IndexOf(':');
         if (colon >= 0)
@@ -6521,14 +6751,20 @@ public sealed class TransformEngine
             if (explicitNamespace != null)
                 return (localName, explicitNamespace);
             var ns = instruction.GetNamespaceOfPrefix(prefix);
-            return (localName, ns?.NamespaceName ?? "");
+            if (ns == null)
+                throw new InvalidOperationException(errorCode);
+            return (localName, ns.NamespaceName);
         }
         else
         {
             if (explicitNamespace != null)
                 return (name, explicitNamespace);
-            var ns = instruction.GetDefaultNamespace();
-            return (name, ns?.NamespaceName ?? "");
+            if (useDefaultNamespace)
+            {
+                var ns = instruction.GetDefaultNamespace();
+                return (name, ns?.NamespaceName ?? "");
+            }
+            return (name, "");
         }
     }
 }

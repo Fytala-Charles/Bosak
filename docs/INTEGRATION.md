@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 10 June 2026
-> **Bosak baseline:** 873 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 3,487 passed / 1,918 failed / 9,195 skipped (64.5%)
+> **Last updated:** 11 June 2026
+> **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** ~3,634 passed / ~1,771 failed / 9,195 skipped (~67.2%)
 
 ---
 
@@ -320,13 +320,20 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-**Unit tests:** 875 passed, 0 failed, 0 skipped  
+**Unit tests:** 877 passed, 0 failed, 0 skipped  
 **Target framework:** `net10.0`
 
 ### Behavioral Changes
 
 | Change | Impact | When |
 |--------|--------|------|
+| `xpath-default-namespace` fully wired through XSLT → XPath pipeline. | `CompileOptions.DefaultElementNamespace` added; threaded through `CompileXPath`, `PatternCompiler`, `TemplateRule.ResolveNamespacePrefixes`, `VmEngine.NamespaceTest`, and whitespace stripping (`SpaceHandlingRule`). Fixes xpath-default-namespace-0101 through 1102 (21/22 passing). | 2026-06-11 |
+| `xsl:attribute` with unprefixed name now uses empty namespace URI. | Previously inherited default namespace from parent; now correctly produces no-namespace attributes per XSLT spec. Fixes namespace-3306. | 2026-06-11 |
+| `xsl:call-template` evaluates default `xsl:param` values when no `with-param` is provided. | Previously omitted parameters fell back to empty sequence instead of evaluating the param's `select` or sequence constructor. Fixes namespace-3501/3503. | 2026-06-11 |
+| `AddElementToContainer` injects `xmlns=""` when no-namespace element is placed inside a default-namespace parent. | Prevents LINQ-to-XML from silently inheriting parent's default namespace. Fixes namespace-0913. | 2026-06-11 |
+| `fn:node-name` on text nodes returns `XdmValue.Undefined` (empty sequence). | Was incorrectly returning empty sequence due to unintended `NodeToQName` change. Reverted to spec-compliant `Undefined`. | 2026-06-11 |
+| `CopyLiteralElement` no longer walks ancestor chain to copy namespace declarations. | Was leaking `xmlns:xs` and other stylesheet prefixes into literal result elements, breaking `exclude-result-prefixes` and `fn:transform` output. | 2026-06-11 |
+| `*:local` name tests now emit `"*:local"` into the literal pool. | Prevents VM from applying the no-namespace attribute restriction to `*:local` patterns. Fixes namespace-1402 and related tests. | 2026-06-11 |
 | Namespace node `parent::node()` now returns the element whose namespace axis includes the node (`_namespaceOwner`), not the element where the underlying `XAttribute` declaration resides. | Fixes `.. is $e` for inherited namespace nodes in XPath. Required for XSLT `namespace::*` axis correctness. | 2026-06-10 |
 | `xsl:copy` now raises `XTTE0945` (no context item), `XTTE3180` (select returns >1 item), `XTDE0410` (attribute after children), and `XTDE0420` (attribute on non-element) per XSLT 3.0 spec. | Previously these error conditions were silently ignored or produced wrong results. | 2026-06-10 |
 | XSLT functions (`xsl:function`) no longer leak the first argument as the context item. | Functions now correctly have no context item per XSLT 3.0 §9.6. Fixes `xsl:copy` inside functions. | 2026-06-10 |
@@ -337,7 +344,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | ~3,493 | ~1,912 | 9,195 | ~64.6% | +6 copy cluster tests (xsl:on-empty in xsl:copy/xsl:document, copy-namespaces validation, node() pattern fix) |
+| XSLT 3.0 (W3C) | ~3,634 | ~1,771 | 9,195 | ~67.2% | +147 tests (xpath-default-namespace, namespace axis, copy-1220/1221, unit test regression fixes) |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

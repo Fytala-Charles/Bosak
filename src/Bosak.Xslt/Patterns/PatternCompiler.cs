@@ -55,10 +55,22 @@ public sealed class PatternCompiler
     private static readonly Regex UnionPattern = new(@"\s*\|\s*", RegexOptions.Compiled);
 
     private readonly EvaluationContext? _validationContext;
+    private string? _defaultElementNamespace;
 
     public PatternCompiler(EvaluationContext? validationContext = null)
     {
         _validationContext = validationContext;
+    }
+
+    /// <summary>
+    /// Compiles an XPath expression with the current default element namespace.
+    /// </summary>
+    private XPath31Expression CompilePatternXPath(string expression)
+    {
+        if (string.IsNullOrEmpty(_defaultElementNamespace))
+            return XPath31Expression.Compile(expression);
+        var options = new CompileOptions { DefaultElementNamespace = _defaultElementNamespace };
+        return XPath31Expression.Compile(expression, options);
     }
 
     /// <summary>
@@ -251,8 +263,9 @@ public sealed class PatternCompiler
     /// <summary>
     /// Compiles a match pattern string into a predicate function.
     /// </summary>
-    public PatternPredicate Compile(string pattern)
+    public PatternPredicate Compile(string pattern, string? defaultElementNamespace = null)
     {
+        _defaultElementNamespace = defaultElementNamespace;
         var trimmed = StripXPathComments(pattern).Trim();
 
         // Normalize top-level "union" to "|" so both syntaxes split uniformly.
@@ -345,7 +358,7 @@ public sealed class PatternCompiler
         }
 
         // Pre-compile XPath expressions for non-literal predicates
-        var predCompilers = compiledPredicates.Select(p => XPath31Expression.Compile(p.expr)).ToList();
+        var predCompilers = compiledPredicates.Select(p => CompilePatternXPath(p.expr)).ToList();
 
         return (item, ctx) =>
         {
@@ -650,10 +663,10 @@ public sealed class PatternCompiler
             var pathPattern = CompileSinglePattern(pathPart.TrimStart('/'));
 
             // Evaluate: match node N if N matches pathPattern and some node in $var is an ancestor
-            var compiledVarCheck = XPath31Expression.Compile(varPart);
+            var compiledVarCheck = CompilePatternXPath(varPart);
             bool isDescendant = pathPart.StartsWith("//");
             string pathNoSlash = pathPart.TrimStart('/').TrimStart('/');
-            var pathCompiled = XPath31Expression.Compile(pathNoSlash);
+            var pathCompiled = CompilePatternXPath(pathNoSlash);
 
             return (item, ctx) =>
             {
@@ -722,7 +735,7 @@ public sealed class PatternCompiler
         }
 
         // Simple variable reference: $var
-        var compiledVar = XPath31Expression.Compile(pattern);
+        var compiledVar = CompilePatternXPath(pattern);
         return (item, ctx) =>
         {
             var node = AsNode(item);
@@ -799,7 +812,7 @@ public sealed class PatternCompiler
 
         // Compile the full path as an XPath expression: (docPart)pathPart
         // This correctly handles multi-step paths, predicates, and descendant axes.
-        var fullPathCompiled = XPath31Expression.Compile($"({docPart}){pathPart}");
+        var fullPathCompiled = CompilePatternXPath($"({docPart}){pathPart}");
 
         return (item, ctx) =>
         {
@@ -843,7 +856,7 @@ public sealed class PatternCompiler
     /// </summary>
     private PatternPredicate CompileSetPattern(string pattern)
     {
-        var compiled = XPath31Expression.Compile(pattern);
+        var compiled = CompilePatternXPath(pattern);
         return (item, ctx) =>
         {
             var node = AsNode(item);
@@ -997,7 +1010,7 @@ public sealed class PatternCompiler
                                 sb.Append(separators[ns - 1] ? "/" : "//");
                             sb.Append(steps[ns]);
                         }
-                        var compiledPath = XPath31Expression.Compile(sb.ToString());
+                        var compiledPath = CompilePatternXPath(sb.ToString());
 
                         // For parentless nodes, the first step may need child-or-top semantics.
                         // Compile a self-axis variant and union the results.
@@ -1011,7 +1024,7 @@ public sealed class PatternCompiler
                                 selfSb.Append(separators[ns - 1] ? "/" : "//");
                                 selfSb.Append(steps[ns]);
                             }
-                            compiledSelfPath = XPath31Expression.Compile(selfSb.ToString());
+                            compiledSelfPath = CompilePatternXPath(selfSb.ToString());
                         }
 
                         return (item, ctx) =>
@@ -1107,14 +1120,14 @@ public sealed class PatternCompiler
                 var intersectBranches = SplitTopLevel(inside, "intersect");
                 if (exceptBranches.Length >= 2 || intersectBranches.Length >= 2)
                 {
-                    lastStepSetExpr = XPath31Expression.Compile(inside);
+                    lastStepSetExpr = CompilePatternXPath(inside);
                 }
             }
         }
 
         if (lastStepSetExpr == null && lastStepNeedsAxisContext && lastStepStr.Contains("::"))
         {
-            lastStepAxisExpr = XPath31Expression.Compile(lastStepStr);
+            lastStepAxisExpr = CompilePatternXPath(lastStepStr);
         }
         else if (lastStepSetExpr == null && lastStepHasPredicate)
         {
@@ -1449,12 +1462,15 @@ public sealed class PatternCompiler
                 };
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
+            {
+                var defaultNs = _defaultElementNamespace ?? "";
                 return (item, ctx) =>
                 {
                     var node = AsNode(item);
                     if (node == null) return false;
-                    return node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
+                    return node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == defaultNs && node.LocalName == local;
                 };
+            }
             return (item, ctx) =>
             {
                 var node = AsNode(item);
@@ -1504,7 +1520,7 @@ public sealed class PatternCompiler
         // id('x', $y) pattern — id() may return multiple nodes; check membership.
         if (name.StartsWith("id(") && name.EndsWith(')'))
         {
-            var compiledId = XPath31Expression.Compile(name);
+            var compiledId = CompilePatternXPath(name);
             return (item, ctx) =>
             {
                 var node = AsNode(item);
@@ -1537,7 +1553,7 @@ public sealed class PatternCompiler
         // key('k', 'v') pattern — key() may return multiple nodes; check membership.
         if (name.StartsWith("key(") && name.EndsWith(')'))
         {
-            var compiledKey = XPath31Expression.Compile(name);
+            var compiledKey = CompilePatternXPath(name);
             return (item, ctx) =>
             {
                 var node = AsNode(item);
@@ -1572,13 +1588,14 @@ public sealed class PatternCompiler
 
         if (string.IsNullOrEmpty(nsUri))
         {
+            var defaultNs = _defaultElementNamespace ?? "";
             return (item, ctx) =>
             {
                 var node = AsNode(item);
                 if (node == null) return false;
                 return node.NodeKind == XdmNodeKind.Element &&
                 node.LocalName == localName &&
-                node.NamespaceUri == "";
+                node.NamespaceUri == defaultNs;
             };
         }
 
@@ -1733,13 +1750,19 @@ public sealed class PatternCompiler
                 return node => node.NodeKind == XdmNodeKind.Element;
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
-                return node => node.NodeKind == XdmNodeKind.Element && node.LocalName == local;
+            {
+                var defaultNs = _defaultElementNamespace ?? "";
+                return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == defaultNs && node.LocalName == local;
+            }
             return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local;
         }
 
         var (nsUri, localName) = ParseQName(nodeTest);
         if (string.IsNullOrEmpty(nsUri))
-            return node => node.NodeKind == XdmNodeKind.Element && node.LocalName == localName && node.NamespaceUri == "";
+        {
+            var defaultNs = _defaultElementNamespace ?? "";
+            return node => node.NodeKind == XdmNodeKind.Element && node.LocalName == localName && node.NamespaceUri == defaultNs;
+        }
         if (localName == "*")
             return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == nsUri;
         return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == nsUri && node.LocalName == localName;
@@ -1875,7 +1898,7 @@ public sealed class PatternCompiler
             try
             {
                 var dummyNode = new XDocumentNode(new XElement("__dummy__"));
-                var validationExpr = XPath31Expression.Compile($"boolean({predicateExpr})");
+                var validationExpr = CompilePatternXPath($"boolean({predicateExpr})");
                 validationExpr.Evaluate(_validationContext.WithFocus(XdmValue.FromNode(dummyNode), 1, 1));
             }
             catch (Exception ex) when (IsStaticError(ex))
@@ -1926,7 +1949,7 @@ public sealed class PatternCompiler
         if (IsDotPattern(basePattern) || string.IsNullOrEmpty(basePattern))
         {
             var fullPredicate = $"self::node()[{predicateExpr}]{remaining}";
-            var dotCompiled = XPath31Expression.Compile(fullPredicate);
+            var dotCompiled = CompilePatternXPath(fullPredicate);
 
             return (item, ctx) =>
             {
@@ -1978,8 +2001,8 @@ public sealed class PatternCompiler
                 axisStep = $"attribute::{basePattern[1..]}[{predicateExpr}]{remaining}";
             else
                 axisStep = $"child::{basePattern}[{predicateExpr}]{remaining}";
-            var compiledStep = XPath31Expression.Compile(axisStep);
-            var fallbackPred = XPath31Expression.Compile($"self::node()[{predicateExpr}]{remaining}");
+            var compiledStep = CompilePatternXPath(axisStep);
+            var fallbackPred = CompilePatternXPath($"self::node()[{predicateExpr}]{remaining}");
 
             return (item, ctx) =>
             {
@@ -2034,7 +2057,7 @@ public sealed class PatternCompiler
         // with the node as focus. This means position()/last() will be 1/1, which is a limitation
         // for patterns like (foo|baz)[position()=2], but handles the common case of (foo|baz)[*].
         string predXPath = $"self::node()[{predicateExpr}]{remaining}";
-        var compiledPred = XPath31Expression.Compile(predXPath);
+        var compiledPred = CompilePatternXPath(predXPath);
 
         return (item, ctx) =>
         {
@@ -2094,7 +2117,7 @@ public sealed class PatternCompiler
         bool isPathExpression = inside.Contains('/');
         if (isPathExpression)
         {
-            var compiledPath = XPath31Expression.Compile($"({inside})[{predicateExpr}]{remaining}");
+            var compiledPath = CompilePatternXPath($"({inside})[{predicateExpr}]{remaining}");
             return (item, ctx) =>
             {
                 var node = AsNode(item);
@@ -2127,7 +2150,7 @@ public sealed class PatternCompiler
             };
         }
 
-        var compiledPred = XPath31Expression.Compile($"self::node()[{predicateExpr}]{remaining}");
+        var compiledPred = CompilePatternXPath($"self::node()[{predicateExpr}]{remaining}");
 
         return (item, ctx) =>
         {

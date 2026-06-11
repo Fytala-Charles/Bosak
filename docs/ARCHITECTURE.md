@@ -289,6 +289,14 @@ var ctx = new EvaluationContext()
     .WithVariable("minPrice", new XdmValue(10.0m));
 
 var result2 = expr.Evaluate(document, ctx);
+
+// With default element namespace (XSLT xpath-default-namespace)
+var options = new CompileOptions
+{
+    Namespaces = new Dictionary<string, string> { ["p"] = "http://example.com" },
+    DefaultElementNamespace = "http://example.com"
+};
+var expr3 = XPath31Expression.Compile("//book", options);
 ```
 
 ---

@@ -339,11 +339,13 @@ public sealed class Stylesheet
         {
             if (!UseWhen(strip)) continue;
             var elements = strip.Attribute("elements")?.Value;
+            var stripDefaultNs = GetXPathDefaultNamespace(strip);
             if (!string.IsNullOrEmpty(elements))
             {
                 foreach (var nameTest in elements.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    _stripSpaceRules.Add(new SpaceHandlingRule(nameTest, isStrip: true, ImportPrecedence));
+                    var (resolvedName, nsUri) = ResolveNameTest(nameTest, stripDefaultNs);
+                    _stripSpaceRules.Add(new SpaceHandlingRule(resolvedName, isStrip: true, ImportPrecedence, nsUri));
                 }
             }
         }
@@ -351,11 +353,13 @@ public sealed class Stylesheet
         {
             if (!UseWhen(preserve)) continue;
             var elements = preserve.Attribute("elements")?.Value;
+            var preserveDefaultNs = GetXPathDefaultNamespace(preserve);
             if (!string.IsNullOrEmpty(elements))
             {
                 foreach (var nameTest in elements.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    _preserveSpaceRules.Add(new SpaceHandlingRule(nameTest, isStrip: false, ImportPrecedence));
+                    var (resolvedName, nsUri) = ResolveNameTest(nameTest, preserveDefaultNs);
+                    _preserveSpaceRules.Add(new SpaceHandlingRule(resolvedName, isStrip: false, ImportPrecedence, nsUri));
                 }
             }
         }
@@ -797,7 +801,10 @@ public sealed class Stylesheet
                     result[prefix] = attr.Value;
                 }
             }
-            // Also collect namespace declarations from descendant elements
+            // Also collect namespace declarations from descendant elements,
+            // but only add new prefixes — do not override root declarations.
+            // This prevents literal result elements from shadowing stylesheet
+            // prefixes while still making locally-declared prefixes available.
             foreach (var elem in _document.Root.Descendants())
             {
                 foreach (var attr in elem.Attributes())
@@ -807,7 +814,8 @@ public sealed class Stylesheet
                         var prefix = attr.Name.LocalName;
                         if (prefix == "xmlns")
                             prefix = string.Empty;
-                        result[prefix] = attr.Value;
+                        if (!result.ContainsKey(prefix))
+                            result[prefix] = attr.Value;
                     }
                 }
             }
@@ -968,6 +976,45 @@ public sealed class Stylesheet
     /// <summary>The version attribute of the stylesheet root element.</summary>
     public string? Version { get; private set; }
 
+    /// <summary>
+    /// Returns the effective xpath-default-namespace for the given element by walking
+    /// the ancestor chain and finding the nearest xpath-default-namespace attribute.
+    /// </summary>
+    private static string? GetXPathDefaultNamespace(XElement element)
+    {
+        var current = element;
+        while (current != null)
+        {
+            var attr = current.Attribute(XName.Get("xpath-default-namespace", XslNamespace));
+            if (attr != null)
+            {
+                // XTSE0090: xsl:xpath-default-namespace is not allowed on XSLT elements
+                if (current.Name.NamespaceName == XslNamespace)
+                    throw new InvalidOperationException("XTSE0090");
+                return attr.Value;
+            }
+            if (current.Name.NamespaceName == XslNamespace)
+            {
+                attr = current.Attribute("xpath-default-namespace");
+                if (attr != null) return attr.Value;
+            }
+            current = current.Parent;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Resolves a name test string using the given default namespace.
+    /// Returns the resolved name test and the namespace URI (if any).
+    /// </summary>
+    private static (string ResolvedName, string? NamespaceUri) ResolveNameTest(string nameTest, string? defaultNamespace)
+    {
+        if (nameTest == "*" || nameTest.Contains(':'))
+            return (nameTest, null);
+        if (!string.IsNullOrEmpty(defaultNamespace))
+            return ($"Q{{{defaultNamespace}}}{nameTest}", defaultNamespace);
+        return (nameTest, null);
+    }
 }
 
 /// <summary>
@@ -1163,13 +1210,15 @@ public static class StylesheetExtensions
 public readonly struct SpaceHandlingRule
 {
     public string NameTest { get; }
+    public string? NamespaceUri { get; }
     public bool IsStrip { get; }
     public int Precedence { get; }
 
-    public SpaceHandlingRule(string nameTest, bool isStrip, int precedence)
+    public SpaceHandlingRule(string nameTest, bool isStrip, int precedence, string? namespaceUri = null)
     {
         NameTest = nameTest;
         IsStrip = isStrip;
         Precedence = precedence;
+        NamespaceUri = namespaceUri;
     }
 }

@@ -37,6 +37,12 @@ public sealed class CompileOptions
     public IReadOnlyDictionary<string, string>? Namespaces { get; init; }
 
     /// <summary>
+    /// The default element namespace URI for unprefixed element and type names
+    /// in XPath expressions. When null or empty, unprefixed names match no namespace.
+    /// </summary>
+    public string? DefaultElementNamespace { get; init; }
+
+    /// <summary>
     /// Statically-known variable types for optimization and early error detection.
     /// Key = variable QName (e.g., "xs:QName"), Value = XDM type.
     /// </summary>
