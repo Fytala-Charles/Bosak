@@ -79,6 +79,8 @@
 //                      | Charles Korthout | 5.8   | 10-06-2026     | Named template entry points have no context item; lazy global variable evaluation     |
 //                      | Charles Korthout | 5.9   | 10-06-2026     | xsl:on-empty in xsl:copy, xsl:document, EvaluateSequenceConstructor; XTDE0420 for namespace on document node |
 //                      | Charles Korthout | 5.10  | 11-06-2026     | Fixed copy-1220/1221 namespace axis: AddElementToContainer, NamespaceInheritanceBarrier for copy-namespaces=no |
+//                      | Charles Korthout | 5.11  | 11-06-2026     | Isolated _sequenceAccumulator when wrapInDocumentNode=true; fixes as-1303 xsl:document content leakage |
+//                      | Charles Korthout | 5.12  | 11-06-2026     | Runtime XTSE0010 for @as on xsl:call-template; fixes as-1601                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -535,7 +537,8 @@ public sealed class TransformEngine
 
             // XSLT functions have no context item (XSLT 3.0 §9.6).
             // Evaluate the function body with an absent context item.
-            return EvaluateFunctionBody(def.Element, XdmValue.Undefined);
+            var result = EvaluateFunctionBody(def.Element, XdmValue.Undefined);
+            return ConvertVariableValue(result, def.ReturnType);
         }
         finally
         {
@@ -772,6 +775,7 @@ public sealed class TransformEngine
                                 {
                                     wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                                 }
+                                wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value);
                                 if (wpTunnel)
                                     tunnelParams[wpName] = wpValue;
                                 else
@@ -842,6 +846,7 @@ public sealed class TransformEngine
                                     {
                                         wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                                     }
+                                    wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value);
                                     if (wpTunnel)
                                         tunnelParams[wpName] = wpValue;
                                     else
@@ -1049,6 +1054,74 @@ public sealed class TransformEngine
                         }
                         break;
                     }
+                case "element":
+                    {
+                        var savedContainer = _currentContainer;
+                        var savedLastAtomic = _lastAddedWasAtomic;
+                        var temp = new XElement("__temp__");
+                        _currentContainer = temp;
+                        _lastAddedWasAtomic = false;
+                        try
+                        {
+                            ExecuteXsltInstruction(instruction, contextItem);
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _lastAddedWasAtomic = savedLastAtomic;
+                        }
+                        var createdElem = temp.Elements().FirstOrDefault();
+                        if (createdElem != null)
+                        {
+                            createdElem.Remove();
+                            results.Add(XdmValue.FromNode(new XDocumentNode(createdElem)));
+                        }
+                        break;
+                    }
+                case "attribute":
+                    {
+                        var savedContainer = _currentContainer;
+                        var savedLastAtomic = _lastAddedWasAtomic;
+                        var temp = new XElement("__temp__");
+                        _currentContainer = temp;
+                        _lastAddedWasAtomic = false;
+                        try
+                        {
+                            ExecuteXsltInstruction(instruction, contextItem);
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _lastAddedWasAtomic = savedLastAtomic;
+                        }
+                        var createdAttr = temp.Attributes().FirstOrDefault();
+                        if (createdAttr != null)
+                        {
+                            results.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(createdAttr.Name, createdAttr.Value))));
+                        }
+                        break;
+                    }
+                case "document":
+                    {
+                        var savedContainer = _currentContainer;
+                        var savedLastAtomic = _lastAddedWasAtomic;
+                        var savedAccumulator = _sequenceAccumulator;
+                        var temp = new XElement("__temp__");
+                        _currentContainer = temp;
+                        _lastAddedWasAtomic = false;
+                        _sequenceAccumulator = results;
+                        try
+                        {
+                            ExecuteXsltInstruction(instruction, contextItem);
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _lastAddedWasAtomic = savedLastAtomic;
+                            _sequenceAccumulator = savedAccumulator;
+                        }
+                        break;
+                    }
                 default:
                     // Unknown XSLT instruction in function body: ignore
                     break;
@@ -1056,23 +1129,29 @@ public sealed class TransformEngine
         }
         else
         {
-            // Literal result element in function body: create a shallow copy as a node
-            var copy = new XElement(instruction.Name);
-            foreach (var attr in instruction.Attributes())
-                copy.SetAttributeValue(attr.Name, attr.Value);
-            foreach (var child in instruction.Nodes())
+            // Literal result element in function body: evaluate it fully
+            // (including nested XSLT instructions) using the same logic as
+            // templates, but capture the result as a detached node.
+            var savedContainer = _currentContainer;
+            var savedLastAtomic = _lastAddedWasAtomic;
+            var temp = new XElement("__temp__");
+            _currentContainer = temp;
+            _lastAddedWasAtomic = false;
+            try
             {
-                if (child is XText text)
-                    copy.Add(new XText(text.Value));
-                else if (child is XElement childElem)
+                CopyLiteralElement(instruction);
+                var copied = temp.Elements().FirstOrDefault();
+                if (copied != null)
                 {
-                    var childCopy = new XElement(childElem.Name);
-                    foreach (var attr in childElem.Attributes())
-                        childCopy.SetAttributeValue(attr.Name, attr.Value);
-                    copy.Add(childCopy);
+                    copied.Remove();
+                    results.Add(XdmValue.FromNode(new XDocumentNode(copied)));
                 }
             }
-            results.Add(XdmValue.FromNode(new XDocumentNode(copy)));
+            finally
+            {
+                _currentContainer = savedContainer;
+                _lastAddedWasAtomic = savedLastAtomic;
+            }
         }
     }
 
@@ -1197,7 +1276,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, position: pos, last: last);
+                        ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, callParams, position: pos, last: last);
                     }
                 }
                 else
@@ -1294,7 +1373,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, position: pos, last: last);
+                        ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, callParams, position: pos, last: last);
                     }
                 }
                 else
@@ -1412,6 +1491,20 @@ public sealed class TransformEngine
 
     public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1, bool setCurrentRule = true)
     {
+        var asType = rule.Element.Attribute("as")?.Value;
+        var savedContainer = _currentContainer;
+        var savedLastAtomic = _lastAddedWasAtomic;
+        var savedAccumulator = _sequenceAccumulator;
+        XElement? tempContainer = null;
+
+        if (!string.IsNullOrEmpty(asType))
+        {
+            tempContainer = new XElement("__temp__");
+            _currentContainer = tempContainer;
+            _lastAddedWasAtomic = false;
+            _sequenceAccumulator = null;
+        }
+
         var savedTemplateRule = _currentTemplateRule;
         if (setCurrentRule)
             _currentTemplateRule = rule;
@@ -1546,6 +1639,51 @@ public sealed class TransformEngine
                 _defaultModeStack.Pop();
             }
             _currentTemplateRule = savedTemplateRule;
+
+            if (tempContainer != null)
+            {
+                var items = new List<XdmValue>();
+                foreach (var attr in tempContainer.Attributes())
+                {
+                    items.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                }
+                foreach (var node in tempContainer.Nodes())
+                {
+                    switch (node)
+                    {
+                        case XElement e:
+                            items.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                            break;
+                        case XText t when !string.IsNullOrEmpty(t.Value):
+                            items.Add(XdmValue.FromString(t.Value));
+                            break;
+                        case XComment c:
+                            items.Add(XdmValue.FromNode(new XDocumentNode(c)));
+                            break;
+                        case XProcessingInstruction pi:
+                            items.Add(XdmValue.FromNode(new XDocumentNode(pi)));
+                            break;
+                    }
+                }
+
+                _currentContainer = savedContainer;
+                _lastAddedWasAtomic = savedLastAtomic;
+                _sequenceAccumulator = savedAccumulator;
+
+                if (items.Count > 0)
+                {
+                    var result = items.Count == 1 ? items[0] :
+                        XdmValue.FromSequence(MaterializedSequence.FromList(items));
+                    result = ConvertVariableValue(result, asType);
+                    CopyToResult(result);
+                }
+            }
+            else
+            {
+                _currentContainer = savedContainer;
+                _lastAddedWasAtomic = savedLastAtomic;
+                _sequenceAccumulator = savedAccumulator;
+            }
         }
     }
 
@@ -1984,6 +2122,7 @@ public sealed class TransformEngine
                             {
                                 wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                             }
+                            wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value);
                             if (wpTunnel)
                                 tunnelParams[wpName] = wpValue;
                             else
@@ -2410,6 +2549,8 @@ public sealed class TransformEngine
 
             case "call-template":
                 {
+                    if (!string.IsNullOrEmpty(instruction.Attribute("as")?.Value))
+                        throw new InvalidOperationException("XTSE0010: Attribute 'as' is not permitted on xsl:call-template");
                     var calledName = instruction.Attribute("name")?.Value;
                     if (!string.IsNullOrEmpty(calledName))
                     {
@@ -2432,6 +2573,7 @@ public sealed class TransformEngine
                                 {
                                     wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                                 }
+                                wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value);
                                 if (wpTunnel)
                                     tunnelParams[wpName] = wpValue;
                                 else
@@ -2487,13 +2629,28 @@ public sealed class TransformEngine
                     var docContent = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: true);
                     if (docContent.IsNode && docContent.NodeValue != null)
                     {
-                        CopyNodeToResult(docContent.NodeValue);
+                        if (_sequenceAccumulator != null)
+                        {
+                            _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(docContent.NodeValue, copyAllNamespaces: true)));
+                        }
+                        else
+                        {
+                            CopyNodeToResult(docContent.NodeValue);
+                        }
                     }
                     else if (docContent.IsSequence && docContent.SequenceValue != null)
                     {
-                        foreach (var item in XdmSequence.FromSource(docContent.SequenceValue))
+                        if (_sequenceAccumulator != null)
                         {
-                            CopyToResult(item);
+                            foreach (var item in XdmSequence.FromSource(docContent.SequenceValue))
+                                _sequenceAccumulator.Add(item);
+                        }
+                        else
+                        {
+                            foreach (var item in XdmSequence.FromSource(docContent.SequenceValue))
+                            {
+                                CopyToResult(item);
+                            }
                         }
                     }
                     break;
@@ -2605,6 +2762,7 @@ public sealed class TransformEngine
                                 {
                                     wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                                 }
+                                wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value);
                                 if (wpTunnel)
                                     nextMatchTunnelParams[wpName] = wpValue;
                                 else
@@ -2688,6 +2846,7 @@ public sealed class TransformEngine
                             {
                                 wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
                             }
+                            wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value);
                             if (wpTunnel)
                                 applyImportsTunnelParams[wpName] = wpValue;
                             else
@@ -4038,7 +4197,7 @@ public sealed class TransformEngine
     /// Applies built-in template rules when no explicit template matches.
     /// Respects xsl:mode on-no-match declarations.
     /// </summary>
-    public void ApplyBuiltInRules(IXdmNode node, string mode, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1)
+    public void ApplyBuiltInRules(IXdmNode node, string mode, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null, int position = 1, int last = 1)
     {
         var savedItem = _context.ContextItem;
         var savedCurrent = _context.CurrentItem;
@@ -4068,11 +4227,11 @@ public sealed class TransformEngine
             {
             case XdmNodeKind.Document:
                 // Built-in: apply templates to children of the document node
-                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
+                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams);
                 break;
 
             case XdmNodeKind.Element:
-                ApplyBuiltInRulesForElement(node, mode, behavior, incomingTunnelParams);
+                ApplyBuiltInRulesForElement(node, mode, behavior, incomingTunnelParams, callParams);
                 break;
 
             case XdmNodeKind.Text:
@@ -4146,7 +4305,7 @@ public sealed class TransformEngine
         }
     }
 
-    private void ApplyBuiltInRulesForElement(IXdmNode node, string mode, Stylesheet.OnNoMatch behavior, Dictionary<string, XdmValue>? incomingTunnelParams)
+    private void ApplyBuiltInRulesForElement(IXdmNode node, string mode, Stylesheet.OnNoMatch behavior, Dictionary<string, XdmValue>? incomingTunnelParams, Dictionary<string, XdmValue>? callParams = null)
     {
         switch (behavior)
         {
@@ -4176,19 +4335,19 @@ public sealed class TransformEngine
 
                     var previousContainer = _currentContainer;
                     _currentContainer = copy;
-                    ApplyTemplates(node, mode, select: "@* | node()", sortKeys: null, incomingTunnelParams, callParams: null);
+                    ApplyTemplates(node, mode, select: "@* | node()", sortKeys: null, incomingTunnelParams, callParams);
                     _currentContainer = previousContainer;
                 }
                 break;
 
             case Stylesheet.OnNoMatch.ShallowSkip:
                 // XSLT 3.0 §6.6 (bug 28774): shallow-skip applies templates to children AND attributes.
-                ApplyTemplates(node, mode, select: "@* | node()", sortKeys: null, incomingTunnelParams, callParams: null);
+                ApplyTemplates(node, mode, select: "@* | node()", sortKeys: null, incomingTunnelParams, callParams);
                 break;
 
             case Stylesheet.OnNoMatch.TextOnlyCopy:
                 // Recurse to children without copying the element wrapper (attributes are not processed).
-                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams: null);
+                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams);
                 break;
 
             case Stylesheet.OnNoMatch.DeepCopy:
@@ -4486,6 +4645,34 @@ public sealed class TransformEngine
 
         CollectGlobalsInDocumentOrder(_stylesheet, globals);
 
+        // Pre-register all globals that have a sequence constructor (no @select)
+        // so the resolver can handle references from eager @select expressions
+        // even when the reference precedes evaluation.
+        foreach (var (name, elem, isParam) in globals)
+        {
+            var select = elem.Attribute("select")?.Value;
+            if (string.IsNullOrEmpty(select))
+                _lazyGlobals[name] = (elem, elem.Attribute("as")?.Value);
+        }
+
+        // Register lazy variable resolver BEFORE evaluating any @select expressions.
+        // This fixes tests like as-1202 where an eager global variable references
+        // a sequence-constructor global declared earlier in document order.
+        _context.LazyVariableResolver = (localName, namespaceUri) =>
+        {
+            if (string.IsNullOrEmpty(namespaceUri) && _lazyGlobals.TryGetValue(localName, out var info))
+            {
+                _lazyGlobals.Remove(localName);
+                var currentItem = _context.ContextItem;
+                var value = EvaluateSequenceConstructor(info.Element, currentItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                value = ConvertVariableValue(value, info.AsType);
+                _context.WithVariable(localName, value);
+                return value;
+            }
+            return null;
+        };
+
+        // Evaluate globals in document order.
         foreach (var (name, elem, isParam) in globals)
         {
             // Check required parameters before evaluating defaults
@@ -4511,30 +4698,9 @@ public sealed class TransformEngine
                 value = ConvertVariableValue(value, elem.Attribute("as")?.Value);
                 _context.WithVariable(name, value);
             }
-            else
-            {
-                // Defer sequence-constructor variables to lazy evaluation on first reference.
-                // This ensures the context item at the point of first reference is used,
-                // which is required for tests like copy-4308 (no context item in initial template)
-                // while still allowing copy-2203 to work (context item present in match="/").
-                _lazyGlobals[name] = (elem, elem.Attribute("as")?.Value);
-            }
+            // Sequence-constructor globals are already in _lazyGlobals;
+            // they resolve on first reference.
         }
-
-        // Register lazy variable resolver on the context
-        _context.LazyVariableResolver = (localName, namespaceUri) =>
-        {
-            if (string.IsNullOrEmpty(namespaceUri) && _lazyGlobals.TryGetValue(localName, out var info))
-            {
-                _lazyGlobals.Remove(localName);
-                var currentItem = _context.ContextItem;
-                var value = EvaluateSequenceConstructor(info.Element, currentItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
-                value = ConvertVariableValue(value, info.AsType);
-                _context.WithVariable(localName, value);
-                return value;
-            }
-            return null;
-        };
     }
 
     private static void CollectGlobalsInDocumentOrder(Stylesheet.Stylesheet stylesheet, List<(string Name, XElement Element, bool IsParam)> globals)
@@ -4871,14 +5037,16 @@ public sealed class TransformEngine
             return value;
 
         var originalType = asType.Trim();
-        var type = originalType;
+        // Strip XPath comments (: ... :) from the type string
+        var type = System.Text.RegularExpressions.Regex.Replace(originalType, @"\(:[^:]*:\)", "").Trim();
         bool allowsMultiple = type.EndsWith("*") || type.EndsWith("+");
         bool allowsEmpty = type.EndsWith("?") || type.EndsWith("*");
         if (type.EndsWith("?") || type.EndsWith("*") || type.EndsWith("+"))
             type = type[..^1].Trim();
 
-        // Node types: no conversion needed
-        if (type.Contains("element(") || type.Contains("attribute(") || type.Contains("document-node("))
+        // Node types and item(): no atomization or casting needed
+        if (type is "node()" or "text()" or "comment()" or "processing-instruction()" or "namespace-node()" or "item()"
+            || type.Contains("element(") || type.Contains("attribute(") || type.Contains("document-node("))
             return value;
 
         // Collect sequence items
@@ -4900,43 +5068,29 @@ public sealed class TransformEngine
         if (items.Count > 1 && !allowsMultiple)
             return value;
 
-        // Convert each item
+        // Convert each item via atomization + casting
         var converted = new List<XdmValue>();
         foreach (var item in items)
         {
-            string str = item.IsNode ? item.NodeValue.StringValue : item.ToString();
-            XdmValue? conv = null;
+            // Atomize nodes to xs:untypedAtomic before casting
+            XdmValue atomic = item.IsNode
+                ? XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic")
+                : item;
 
-            if (type == "xs:integer" || type.EndsWith(":integer"))
+            // Subtype substitution: if the value already matches the declared type, keep it as-is
+            if (VmEngine.ValueMatchesType(atomic, type))
             {
-                if (long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out var l))
-                    conv = XdmValue.FromInteger(l);
+                converted.Add(atomic);
             }
-            else if (type == "xs:string" || type.EndsWith(":string"))
-                conv = XdmValue.FromString(str);
-            else if (type == "xs:boolean" || type.EndsWith(":boolean"))
+            else if (VmEngine.TryCast(atomic, type, out var casted))
             {
-                if (bool.TryParse(str, out var b))
-                    conv = XdmValue.FromBoolean(b);
-                else
-                    conv = XdmValue.FromBoolean(!string.IsNullOrWhiteSpace(str));
+                converted.Add(casted);
             }
-            else if (type == "xs:double" || type.EndsWith(":double"))
+            else
             {
-                if (double.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out var d))
-                    conv = XdmValue.FromDouble(d);
-                else
-                    conv = XdmValue.FromDouble(double.NaN);
+                // Cast failed: type error
+                throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {type}");
             }
-            else if (type == "xs:decimal" || type.EndsWith(":decimal"))
-            {
-                if (decimal.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out var dec))
-                    conv = XdmValue.FromDecimal(dec);
-                else
-                    conv = XdmValue.FromDecimal(0m);
-            }
-
-            converted.Add(conv ?? item);
         }
 
         if (converted.Count == 1)
@@ -4967,6 +5121,8 @@ public sealed class TransformEngine
         var savedAccumulator = _sequenceAccumulator;
         if (!wrapInDocumentNode)
             _sequenceAccumulator = new List<XdmValue>();
+        else
+            _sequenceAccumulator = null; // When building a document node, all content goes into the wrapper
 
         try
         {

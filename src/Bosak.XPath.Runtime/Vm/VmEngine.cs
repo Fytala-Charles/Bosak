@@ -3140,7 +3140,9 @@ public static class VmEngine
     public static bool TryCast(XdmValue value, string typeName, out XdmValue result)
     {
         result = value;
-        string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
+        string normalized = typeName.ToLowerInvariant().Replace("xs:", "").Replace("xsd:", "");
+        if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
+            normalized = normalized[..^1].TrimEnd();
 
         // Empty sequence casts to empty sequence for all types
         if (value.IsUndefined)
@@ -4277,8 +4279,8 @@ public static class VmEngine
                 or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
                 => value.Kind == XdmValueKind.Integer,
             "decimal" => value.Kind is XdmValueKind.Decimal or XdmValueKind.Integer,
-            "double" => value.Kind is XdmValueKind.Double or XdmValueKind.Decimal or XdmValueKind.Integer,
-            "float" => value.Kind is XdmValueKind.Float or XdmValueKind.Double or XdmValueKind.Decimal or XdmValueKind.Integer,
+            "double" => value.Kind == XdmValueKind.Double,
+            "float" => value.Kind == XdmValueKind.Float,
             "numeric" => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float,
             "anyatomictype" => value.Kind is >= XdmValueKind.String and <= XdmValueKind.Binary,
             "boolean" => value.Kind == XdmValueKind.Boolean,
@@ -4306,6 +4308,11 @@ public static class VmEngine
             "idref" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("IDREF", StringComparison.OrdinalIgnoreCase) == true,
             "entity" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("ENTITY", StringComparison.OrdinalIgnoreCase) == true,
             "node" => value.IsNode,
+            "document-node" or "document-node()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Document,
+            "text" or "text()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Text,
+            "comment" or "comment()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Comment,
+            "processing-instruction" or "processing-instruction()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction,
+            "namespace-node" or "namespace-node()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Namespace,
             "item" => !value.IsUndefined,
             _ => false
         };
@@ -4322,6 +4329,8 @@ public static class VmEngine
     private static bool IsElementTypeCompatible(string typeName)
     {
         typeName = typeName.ToLowerInvariant().Replace("xs:", "").Replace("*", "").Trim();
+        if (typeName.EndsWith('?'))
+            typeName = typeName[..^1].Trim();
         // In non-schema-aware processing, elements have type xs:anyType / xs:untyped.
         // xs:anyAtomicType and xs:untypedAtomic are atomic types, not element types.
         return typeName is "anytype" or "untyped";
@@ -4330,6 +4339,8 @@ public static class VmEngine
     private static bool IsAttributeTypeCompatible(string typeName)
     {
         typeName = typeName.ToLowerInvariant().Replace("xs:", "").Replace("*", "").Trim();
+        if (typeName.EndsWith('?'))
+            typeName = typeName[..^1].Trim();
         // In non-schema-aware processing, attributes have type xs:untypedAtomic.
         // xs:untypedAtomic is derived from xs:anyAtomicType, so both match.
         // xs:anyType and xs:untyped are element types, not attribute types.
@@ -4389,7 +4400,7 @@ public static class VmEngine
     /// <summary>
     /// Checks whether an XDM value matches a declared type name (e.g. "xs:string", "element(foo)").
     /// </summary>
-    private static bool ValueMatchesType(XdmValue value, string typeName)
+    public static bool ValueMatchesType(XdmValue value, string typeName)
     {
         if (string.IsNullOrEmpty(typeName)) return true;
 
@@ -4399,9 +4410,11 @@ public static class VmEngine
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
             normalized = normalized[..^1].TrimEnd();
 
-        // Strip xs: prefix
+        // Strip xs:/xsd: prefix
         if (normalized.StartsWith("xs:"))
             normalized = normalized[3..];
+        else if (normalized.StartsWith("xsd:"))
+            normalized = normalized[4..];
 
         if (normalized == "item()")
             return !value.IsUndefined;
@@ -4428,8 +4441,12 @@ public static class VmEngine
             }
             // element(name) or element(name, T) → check name match (basic, no namespace)
             var namePart = inner.Split(',')[0].Trim();
-            if (namePart != "*" && value.NodeValue.LocalName != namePart)
-                return false;
+            if (namePart != "*")
+            {
+                var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
+                if (value.NodeValue.LocalName != testLocalName)
+                    return false;
+            }
             if (inner.Contains(','))
             {
                 var typePart = inner.Substring(inner.IndexOf(',') + 1).Trim();
@@ -4454,8 +4471,12 @@ public static class VmEngine
             }
             // attribute(name) or attribute(name, T) → check name match
             var namePart = inner.Split(',')[0].Trim();
-            if (namePart != "*" && value.NodeValue.LocalName != namePart)
-                return false;
+            if (namePart != "*")
+            {
+                var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
+                if (value.NodeValue.LocalName != testLocalName)
+                    return false;
+            }
             if (inner.Contains(','))
             {
                 var typePart = inner.Substring(inner.IndexOf(',') + 1).Trim();
@@ -4463,6 +4484,38 @@ public static class VmEngine
             }
             return true;
         }
+
+        // document-node(element(...)) — check document node and its single child element
+        if (normalized.StartsWith("document-node(element(") && normalized.EndsWith(')'))
+        {
+            if (!value.IsNode || value.NodeValue.NodeKind != XdmNodeKind.Document)
+                return false;
+            var childElems = new List<XdmValue>();
+            foreach (var c in value.NodeValue.Axis(XdmAxis.Child))
+            {
+                if (c.NodeValue?.NodeKind == XdmNodeKind.Element)
+                    childElems.Add(c);
+            }
+            if (childElems.Count != 1)
+                return false;
+            var inner = normalized.Substring("document-node(".Length, normalized.Length - "document-node(".Length - 1);
+            return ValueMatchesType(XdmValue.FromNode(childElems[0].NodeValue!), inner);
+        }
+
+        if (normalized is "document-node()" or "document-node")
+            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Document;
+
+        if (normalized is "text()" or "text")
+            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Text;
+
+        if (normalized is "comment()" or "comment")
+            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Comment;
+
+        if (normalized is "processing-instruction()" or "processing-instruction")
+            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction;
+
+        if (normalized is "namespace-node()" or "namespace-node")
+            return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Namespace;
 
         // Handle typed function signatures before general normalization, because function
         // type strings contain nested type names whose occurrence indicators and xs: prefixes

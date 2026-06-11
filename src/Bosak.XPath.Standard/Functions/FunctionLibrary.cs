@@ -6293,8 +6293,8 @@ public static class FunctionLibrary
 
     private static XdmValue Abs(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        XdmValue arg = args[0];
-        if (arg.IsUndefined || IsEmptySequence(arg))
+        XdmValue arg = AtomizeValue(args[0]);
+        if (arg.IsUndefined)
             return XdmValue.Undefined;
 
         return arg.Kind switch
@@ -6303,7 +6303,7 @@ public static class FunctionLibrary
             XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Abs(arg.DecimalValue)),
             XdmValueKind.Double => XdmValue.FromDouble(Math.Abs(arg.DoubleValue)),
             XdmValueKind.Float => XdmValue.FromFloat(Math.Abs((float)arg.DoubleValue)),
-            _ => throw new InvalidOperationException("XPTY0004")
+            _ => XdmValue.FromDouble(Math.Abs(ConvertToDouble(arg)))
         };
     }
 

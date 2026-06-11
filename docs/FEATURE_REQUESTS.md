@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-10  
+> **Living Registry** — Last updated: 2026-06-11  
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -134,6 +134,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1 and XSLT 3.0 development: syntax highlighting, realtime diagnostics, auto-completion | **Implemented** | 0.1.2 | Charles Korthout | 2026-06-08 |
 | REQ-029 | *(internal)* | `xsl:where-populated` and `xsl:on-empty` support | Required for copy-1213/1214/1215/1216/1217 conformance tests; where-populated filters empty nodes, on-empty provides fallback content | **Implemented** | TBD | Charles Korthout | 2026-06-10 |
+| REQ-030 | *(internal)* | XSLT `@as` type coercion and atomization | Required for as-0101 through as-1602 conformance tests; `xsl:variable`, `xsl:param`, `xsl:function`, `xsl:with-param` `@as` attribute must coerce/atomize per XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -695,8 +696,8 @@ Without `xsl:function` support, Customer A's basesheets cannot execute on Bosak.
 - [x] `xsl:function name="app:parse-edidate"` is parsed and callable from XPath
 - [x] Functions defined in imported stylesheets are available to the importing stylesheet
 - [x] Functions defined in included stylesheets are available to the including stylesheet
-- [ ] Function parameters with `as="xs:string?"` are type-checked
-- [ ] Function return type with `as="xs:date?"` is enforced
+- [x] Function parameters with `as="xs:string?"` are type-checked (via `ConvertVariableValue`)
+- [x] Function return type with `as="xs:date?"` is enforced (via `ConvertVariableValue`)
 - [x] Recursive functions work (e.g., `app:factorial($n)` calling itself)
 - [x] All 22 Customer A helper functions execute correctly
 
@@ -1354,6 +1355,62 @@ Each `.csproj` needs at minimum:
 |------|-------|----------|-----------|
 | 2026-06-07 | Kimi | Pending | Required for Customer B BodMapping NuGet consumption; low-effort metadata addition |
 | 2026-06-08 | Kimi | Implemented | Added `src/Directory.Build.props` with shared NuGet metadata; all 10 src projects now packable; 6 core packages verified: Bosak.Xslt, Bosak.XPath.Api, Bosak.XPath.Core, Bosak.XPath.Providers, Bosak.XPath.Runtime, Bosak.XPath.Standard |
+
+---
+
+### REQ-030: XSLT `@as` Type Coercion and Atomization
+
+**Requesting Application:** *(internal — conformance)*  
+**Submitted:** 2026-06-11  
+**Status:** **Implemented**
+
+#### Problem Statement
+
+The XSLT `as` attribute (`xsl:variable/@as`, `xsl:param/@as`, `xsl:function/@as`, `xsl:with-param/@as`) is central to XSLT 3.0 type safety. Bosak previously ignored `as` entirely for sequence constructors, returning raw nodes instead of atomized/cast values. This caused 60+ failures in the W3C `as` conformance test cluster — the largest single remaining block of XSLT failures.
+
+Specific gaps included:
+- No atomization: text nodes from sequence constructors were stored as text nodes, not cast to `xs:integer`, `xs:string`, etc.
+- No subtype substitution: `xs:integer` values rejected for `xs:decimal` parameters.
+- No type promotion: `xs:float` values rejected for `xs:double` parameters.
+- Node type tests (`element(name, type)`, `attribute(name, type)`, `document-node(element(...))`) not validated.
+- `xsl:with-param` did not coerce values to the target template's `xsl:param/@as`.
+- `xsl:function` bodies did not validate return values against `@as`.
+- Functions like `abs()` did not atomize `xs:untypedAtomic` arguments, causing `XPTY0004` crashes.
+
+#### Proposed Solution
+
+1. **`ConvertVariableValue` helper** — Centralized atomization + casting for all variable/param/function return paths. Atomizes nodes to `xs:untypedAtomic`, then delegates to `VmEngine.TryCast` for atomic coercion. Node tests bypass atomization and return as-is.
+2. **`VmEngine.TryCast` enhancements** — Strip occurrence indicators and `xsd:` prefix. Subtype substitution: integer→decimal, float→double, anyURI→string.
+3. **`VmEngine.ValueMatchesType` enhancements** — Public visibility. Added `element(name, type)`, `attribute(name, type)`, `document-node(element(...))` validation with namespace resolution. Added `document-node()`, `text()`, `comment()`, `processing-instruction()`, `namespace-node()` forms.
+4. **`ItemInstanceOf` cleanup** — Exact kind matching for `double`/`float` (post-promotion), subtype for `decimal`→`integer`. Added node-kind matching.
+5. **`Abs()` atomization** — `FunctionLibrary.Abs()` now atomizes before checking type and falls back to `ConvertToDouble()`.
+6. **Param propagation** — `ApplyBuiltInRules` passes `callParams` through built-in shallow-copy/skip modes.
+7. **Lazy global params** — Sequence-constructor global params evaluated on first reference.
+8. **`xsl:document` accumulator isolation** — Set `_sequenceAccumulator = null` when `wrapInDocumentNode=true` to prevent content leakage.
+
+#### Acceptance Criteria
+- [x] `as` cluster 99/99 passing (100%)
+- [x] `xsl:variable/@as="xs:integer"` with text sequence constructor `"42"` returns `xs:integer(42)`
+- [x] `xsl:param/@as="xs:decimal"` accepts `xs:integer` arguments (subtype substitution)
+- [x] `xsl:with-param` coerces values to target param's `@as`
+- [x] `xsl:function/@as="xs:double"` enforces return type; string `"hello"` raises `XPTY0004`
+- [x] Node tests (`element(*, xs:untyped)`, `document-node(element(doc, xs:untyped))`) validate structure
+- [x] `@as` on `xsl:call-template` raises `XTSE0010`
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | Modified | `VmEngine.TryCast`, `ValueMatchesType`, `ItemInstanceOf` |
+| Standard | Modified | `FunctionLibrary.Abs()` atomization |
+| XSLT | Modified | `TransformEngine.ConvertVariableValue`, param passing, lazy globals, document accumulator |
+| API | None | No surface change |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-11 | Kimi | Implemented | 60+ conformance tests fixed; unblocks remaining XSLT clusters |
 
 ---
 

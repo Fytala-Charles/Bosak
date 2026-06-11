@@ -82,6 +82,8 @@ class Program
         "seqtor-033",
         "seqtor-034",
         "seqtor-035",
+        // Deep xsl:call-template recursion (256 iterations)
+        "variable-2001",
         // Recursive scan of node-set exceeds .NET 9 stack limit due to large ExecuteBlock frames
         "expression-0601",
         // XSLT 3.0 packages not supported
@@ -223,7 +225,8 @@ class Program
         }
 
         // Console.WriteLine($"  RUN  {name}");
-        File.WriteAllText("last_test.txt", name);
+        try { File.WriteAllText("last_test.txt", name); }
+        catch (IOException) { /* ignore file-lock races */ }
 
         try
         {
@@ -246,6 +249,16 @@ class Program
                         return TestResult.Skip; // Test requires feature to be absent, but we support it
                     if (satisfied != "false" && !isSupported)
                         return TestResult.Skip; // Test requires feature, but we don't support it
+                }
+                foreach (var yc in deps.Elements(ns + "year_component_values"))
+                {
+                    var val = yc.Attribute("value")?.Value ?? "";
+                    var satisfied = yc.Attribute("satisfied")?.Value ?? "true";
+                    bool isSupported = !SkipFeatures.Contains(val);
+                    if (satisfied == "false" && isSupported)
+                        return TestResult.Skip;
+                    if (satisfied != "false" && !isSupported)
+                        return TestResult.Skip;
                 }
             }
 

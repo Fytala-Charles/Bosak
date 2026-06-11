@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 11 June 2026
 > **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** ~3,634 passed / ~1,771 failed / 9,195 skipped (~67.2%)
+> **XSLT baseline:** ~3,764 passed / ~1,625 failed / 9,211 skipped (~69.8%)
 
 ---
 
@@ -234,12 +234,12 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:element` / `xsl:attribute` | ✅ Working | |
 | `xsl:text` | ✅ Working | |
 | `xsl:copy` | ✅ Working | Shallow copy with `@select` support; focus set correctly per item |
-| `xsl:copy-of` | ✅ Working | Deep copy of nodes; Document nodes supported. Static validation rejects disallowed children (`XTSE0260`) and invalid attributes (`XTSE0090`). |
+| `xsl:copy-of` | ✅ Working | Deep copy of nodes; Document nodes supported. `copy-namespaces` respected. Static validation rejects disallowed children (`XTSE0260`) and invalid attributes (`XTSE0090`). |
 | `xsl:comment` | ✅ Working | `select` attribute or text content |
 | `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
 | `xsl:decimal-format` | ✅ Working | Parsed and registered for `fn:format-number` |
-| `xsl:variable` | ✅ Working | Lexical scoping; `as` attribute with basic atomic types (`xs:integer`, `xs:string`, `xs:boolean`, `xs:double`, `xs:decimal`); usable in XPath via `$var`. Global variables with sequence constructors are evaluated lazily on first reference using the context item at that point. |
-| `xsl:param` | ✅ Working | On named templates, global params, default values; `as` attribute with basic atomic types |
+| `xsl:variable` | ✅ Working | Lexical scoping; `as` attribute with full atomic type coercion and atomization (`xs:integer`, `xs:string`, `xs:boolean`, `xs:double`, `xs:decimal`, `xs:duration`, `xs:QName`, `xs:dateTime`, gYear, etc.). Node type tests (`element(...)`, `attribute(...)`, `document-node(...)`, `node()`, `item()`) bypass atomization. Usable in XPath via `$var`. Global variables with sequence constructors are evaluated lazily on first reference using the context item at that point. |
+| `xsl:param` | ✅ Working | On named templates, global params, default values; `as` attribute with full atomic type coercion and atomization. Subtype substitution (integer→decimal, float→double) and type promotion supported. |
 | Built-in template rules | ✅ Working | Shallow-copy elements, copy text/attributes |
 | Literal result elements | ✅ Working | Namespace preservation, AVT evaluation |
 | `xsl:import` / `xsl:include` | ✅ Working | URI resolution with correct precedence rules |
@@ -248,7 +248,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:number` | ✅ Working | `single`, `any`, `multiple` levels; format tokens |
 | `xsl:key` / `key()` | ✅ Working | Indexed lookup with `xsl:key` definitions |
 | `xsl:output` | ✅ Working | `method`, `indent`, `omit-xml-declaration`, `encoding` |
-| `xsl:function` | ✅ Working | User-defined XPath functions in XSLT |
+| `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |
 | `xsl:mode` | ✅ Working | `on-no-match` declarations |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
@@ -335,6 +335,9 @@ dotnet test Bosak.sln
 | `CopyLiteralElement` no longer walks ancestor chain to copy namespace declarations. | Was leaking `xmlns:xs` and other stylesheet prefixes into literal result elements, breaking `exclude-result-prefixes` and `fn:transform` output. | 2026-06-11 |
 | `*:local` name tests now emit `"*:local"` into the literal pool. | Prevents VM from applying the no-namespace attribute restriction to `*:local` patterns. Fixes namespace-1402 and related tests. | 2026-06-11 |
 | Namespace node `parent::node()` now returns the element whose namespace axis includes the node (`_namespaceOwner`), not the element where the underlying `XAttribute` declaration resides. | Fixes `.. is $e` for inherited namespace nodes in XPath. Required for XSLT `namespace::*` axis correctness. | 2026-06-10 |
+| `xsl:variable`/`xsl:param`/`xsl:function`/`xsl:with-param` `@as` now fully supports atomic type coercion and atomization. | `ConvertVariableValue` rewrites atomization + casting via `VmEngine.TryCast`. Subtype substitution (integer→decimal, float→double) and type promotion. Node type tests (`element(...)`, `attribute(...)`, `document-node(...)`) bypass atomization. | 2026-06-11 |
+| `xsl:document` no longer leaks outer `_sequenceAccumulator` into its sequence constructor. | `wrapInDocumentNode=true` now isolates the accumulator, ensuring `xsl:copy-of` inside `xsl:document` unwinds document nodes into the new document instead of the outer variable. | 2026-06-11 |
+| `xsl:call-template/@as` now raises `XTSE0010` at runtime. | `@as` is not permitted on `xsl:call-template`; previously ignored. | 2026-06-11 |
 | `xsl:copy` now raises `XTTE0945` (no context item), `XTTE3180` (select returns >1 item), `XTDE0410` (attribute after children), and `XTDE0420` (attribute on non-element) per XSLT 3.0 spec. | Previously these error conditions were silently ignored or produced wrong results. | 2026-06-10 |
 | XSLT functions (`xsl:function`) no longer leak the first argument as the context item. | Functions now correctly have no context item per XSLT 3.0 §9.6. Fixes `xsl:copy` inside functions. | 2026-06-10 |
 | `xsl:where-populated` now correctly filters empty PIs, comments, and text nodes. | Previously only whitespace-only text nodes were filtered; empty PIs/comments passed through incorrectly. | 2026-06-10 |
@@ -344,7 +347,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | ~3,634 | ~1,771 | 9,195 | ~67.2% | +147 tests (xpath-default-namespace, namespace axis, copy-1220/1221, unit test regression fixes) |
+| XSLT 3.0 (W3C) | ~3,764 | ~1,625 | 9,211 | ~69.8% | +130 tests (`as` cluster 99/99, xpath-default-namespace, namespace axis, copy-1220/1221) |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
