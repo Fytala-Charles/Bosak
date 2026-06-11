@@ -78,6 +78,7 @@
 //                      | Charles Korthout | 5.7   | 10-06-2026     | xsl:where-populated filters empty PIs/comments; xsl:on-empty in CopyLiteralElement; copy-1213/1214/1215/1216/1217 |
 //                      | Charles Korthout | 5.8   | 10-06-2026     | Named template entry points have no context item; lazy global variable evaluation     |
 //                      | Charles Korthout | 5.9   | 10-06-2026     | xsl:on-empty in xsl:copy, xsl:document, EvaluateSequenceConstructor; XTDE0420 for namespace on document node |
+//                      | Charles Korthout | 5.10  | 11-06-2026     | Fixed copy-1220/1221 namespace axis: AddElementToContainer, NamespaceInheritanceBarrier for copy-namespaces=no |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1527,7 +1528,7 @@ public sealed class TransformEngine
                         elem.AddAnnotation(new NamespaceInheritanceBarrier());
                     }
 
-                    _currentContainer.Add(elem);
+                    AddElementToContainer(elem, _currentContainer);
                     var prev = _currentContainer;
                     _currentContainer = elem;
                     _lastAddedWasAtomic = false;
@@ -2817,12 +2818,9 @@ public sealed class TransformEngine
             copy.AddAnnotation(new NamespaceInheritanceBarrier());
         }
 
-        // Determine if #all is specified — this excludes every prefix.
-        bool excludeAll = _excludedResultPrefixes.Contains("#all");
-
         // If the element has a non-empty namespace URI, ensure the namespace
-        // is declared on the copied element (either as xmlns or xmlns:prefix),
-        // unless excluded.
+        // is declared on the copied element (either as xmlns or xmlns:prefix).
+        // The element's own namespace is always required and is never excluded.
         if (!string.IsNullOrEmpty(source.Name.NamespaceName))
         {
             var prefix = source.GetPrefixOfNamespace(source.Name.Namespace);
@@ -2830,7 +2828,7 @@ public sealed class TransformEngine
             {
                 copy.SetAttributeValue("xmlns", source.Name.NamespaceName);
             }
-            else if (!string.IsNullOrEmpty(prefix) && !excludeAll && !_excludedResultPrefixes.Contains(prefix))
+            else if (!string.IsNullOrEmpty(prefix) && !_excludedResultPrefixes.Contains(prefix))
             {
                 copy.SetAttributeValue(XNamespace.Xmlns + prefix, source.Name.NamespaceName);
             }
@@ -2850,8 +2848,9 @@ public sealed class TransformEngine
                 {
                     continue; // Already handled above
                 }
-                // Skip excluded prefixes
-                if (excludeAll || _excludedResultPrefixes.Contains(declaredPrefix))
+                // Skip explicitly excluded prefixes (e.g. exclude-result-prefixes="xs").
+                // #all is not a prefix name and is handled at serialization time.
+                if (_excludedResultPrefixes.Contains(declaredPrefix))
                     continue;
                 // Skip XSLT namespace declaration — it is not copied to the result tree
                 if (attr.Value == Stylesheet.Stylesheet.XslNamespace)
@@ -2870,7 +2869,7 @@ public sealed class TransformEngine
             copy.SetAttributeValue(attrName, attrValue);
         }
 
-        _currentContainer.Add(copy);
+        AddElementToContainer(copy, _currentContainer);
 
         var prev = _currentContainer;
         _currentContainer = copy;
@@ -3244,6 +3243,7 @@ public sealed class TransformEngine
                     else
                     {
                         AddRequiredNamespaceDeclarations(node, copy);
+                        copy.AddAnnotation(new NamespaceInheritanceBarrier());
                     }
                     foreach (var attr in node.Attributes())
                     {
@@ -3386,7 +3386,7 @@ public sealed class TransformEngine
                     {
                         copy.AddAnnotation(new NamespaceInheritanceBarrier());
                     }
-                    _currentContainer.Add(copy);
+                    AddElementToContainer(copy, _currentContainer);
                     var prev = _currentContainer;
                     _currentContainer = copy;
 
@@ -3673,7 +3673,12 @@ public sealed class TransformEngine
                             XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
                             attr.NodeValue!.StringValue);
                     }
-                    container.Add(elem);
+                    if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement srcElem &&
+                        srcElem.Annotation<NamespaceInheritanceBarrier>() != null)
+                    {
+                        elem.AddAnnotation(new NamespaceInheritanceBarrier());
+                    }
+                    AddElementToContainer(elem, container);
                     foreach (var child in node.Axis(XdmAxis.Child))
                     {
                         CopyNodeToContainer(child.NodeValue!, elem, copyAllNamespaces);
@@ -3690,6 +3695,23 @@ public sealed class TransformEngine
                 container.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
                 break;
         }
+    }
+
+    /// <summary>
+    /// Adds an element to a container, explicitly undeclaring the default namespace
+    /// when a no-namespace element is inserted into a parent that carries a default
+    /// namespace.  Without this, LINQ-to-XML would silently inherit the parent's
+    /// default namespace, making the namespace axis return the wrong namespace nodes.
+    /// </summary>
+    private void AddElementToContainer(XElement element, XContainer container)
+    {
+        if (container is XElement parentElem &&
+            string.IsNullOrEmpty(element.Name.NamespaceName) &&
+            !string.IsNullOrEmpty(parentElem.Name.NamespaceName))
+        {
+            element.SetAttributeValue("xmlns", "");
+        }
+        container.Add(element);
     }
 
     private void CopyNodeToResult(IXdmNode node)
@@ -3713,10 +3735,13 @@ public sealed class TransformEngine
             // that are actually present on this element, not inherited ones.
             if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement srcElem)
             {
-
                 foreach (var attr in srcElem.Attributes())
                 {
                     copy.SetAttributeValue(attr.Name, attr.Value);
+                }
+                if (srcElem.Annotation<NamespaceInheritanceBarrier>() != null)
+                {
+                    copy.AddAnnotation(new NamespaceInheritanceBarrier());
                 }
             }
             else
@@ -3748,7 +3773,7 @@ public sealed class TransformEngine
                 }
             }
 
-            _currentContainer.Add(copy);
+            AddElementToContainer(copy, _currentContainer);
             var prev = _currentContainer;
             _currentContainer = copy;
             foreach (var child in node.Axis(XdmAxis.Child))

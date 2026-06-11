@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 30-05-2026     | Added synthetic document wrapper for mixed-content document nodes                      |
 //                      | Charles Korthout | 0.8   | 10-06-2026     | Fixed GetXPathParent for namespace nodes: parent axis returns _namespaceOwner         |
 //                      | Charles Korthout | 0.9   | 10-06-2026     | ParentlessOrderMaps for stable document order on detached/copied element trees         |
+//                      | Charles Korthout | 1.0   | 11-06-2026     | GetNamespaceAxis skips empty-URI declarations (xmlns="") and stops at inheritance barriers |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -455,6 +456,13 @@ public sealed class XDocumentNode : IXdmNode
                     continue;
 
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                // An empty URI (xmlns="" or xmlns:prefix="") undeclares the namespace;
+                // it does not create a namespace node, but it stops inheritance.
+                if (attr.Value == string.Empty)
+                {
+                    seen.Add(prefix);
+                    continue;
+                }
                 if (seen.Add(prefix))
                 {
                     items.Add(XdmValue.FromNode(new XDocumentNode(attr, element)));
