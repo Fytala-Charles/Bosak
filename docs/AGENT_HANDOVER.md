@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-11
-**Commit:** `<pending — as-cluster 100%>`
+**Commit:** `0894bcb`
 **Current focus:** XSLT `as` cluster (xsl:variable/@as, xsl:param/@as, xsl:function/@as type coercion and atomization) now 99/99 passing (100%). Fixed xsl:document sequence-accumulator isolation, runtime XTSE0010 for @as on xsl:call-template, and ConvertVariableValue atomic cast failure handling.
 
 ---
