@@ -831,9 +831,9 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 - **`predicate`** — 0 failures, 0 skipped. 57/57 passing (100%) ✅
 
 ### Regressed / Active Clusters
-- **`string`** — 6 failures (was 0). Likely namespace-serialization fallout from base-uri changes.
-- **`sort`** — 19 failures (was 0). Needs investigation; may share root cause with recent copy/namespace changes.
-- **`expression`** — 1 failure (was 0). Quick follow-up.
+- **`string`** — 6 failures (was 0 in previous baseline). Likely namespace-serialization fallout from base-uri changes; highest priority quick win.
+- **`sort`** — 19 failures. XSLT `xsl:sort` edge cases in typed/atomic keys, stable sort, and collations; separate from the QT3 `fn:sort` work.
+- **`expression`** — 1 failure. Small follow-up.
 - **`copy`** — 5 failures remaining; hard walls (DTD, accumulator, namespace serialization).
 
 ---
