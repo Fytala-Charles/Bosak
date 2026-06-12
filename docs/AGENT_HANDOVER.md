@@ -1,6 +1,59 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
+**Commit:** `e69746c`
+**Current focus:** Full W3C XSLT 3.0 conformance suite re-run after restoring the `for-each-group` cluster.
+
+---
+
+## Full Suite Results (2026-06-12)
+
+- **Total:** 14,600
+- **Passed:** 3,931
+- **Failed:** 1,457
+- **Skipped:** 9,212
+- **Pass rate:** 73.0% (up from 72.2%)
+
+## Notable Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped |
+|---|---|---|---|---|
+| string | 136 | 136 | 0 | 0 |
+| key | 99 | 91 | 0 | 8 |
+| for-each-group | 85 | 78 | 0 | 7 |
+| match | 294 | 179 | 0 | 115 |
+| base-uri | 55 | 50 | 0 | 5 |
+| as | 204 | 99 | 0 | 105 |
+| copy | 148 | 122 | 6 | 20 |
+| sort | 80 | 61 | 19 | 0 |
+| number | 271 | 264 | 6 | 1 |
+
+## Smallest Failure Clusters (easy wins)
+
+- `built-in-templates` — 1 failed
+- `expression` — 1 failed
+- `node` — 1 failed
+- `for` — 2 failed
+- `format-number` — 2 failed
+- `position` — 2 failed
+- `collection` — 3 failed
+- `xsl-document` — 3 failed
+- `construct-node` — 4 failed
+- `declared-modes` — 4 failed
+- `element` — 4 failed
+- `include` — 4 failed
+
+## Recommended Next Steps
+
+1. Pick off the 1–4 failure clusters above for quick pass-rate gains.
+2. Then revisit the `copy` cluster (6 failures), which is the next natural continuation.
+3. After that, tackle `sort` (19 failures) or `apply-templates`/`choose` (11–12 failures).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-12
 **Commit:** `<uncommitted>`
 **Current focus:** XSLT `for-each-group` cluster restored to 78/85 passing (0 failed, 7 skipped). Fixed `for-each-group-089` by making `XDocumentNode` honor XDM node identity in `Equals`/`GetHashCode`, so accumulator values copied with `copy-accumulators="yes"` are found by `accumulator-after()`.
 
