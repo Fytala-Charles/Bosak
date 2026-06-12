@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `<uncommitted>`
+**Commit:** `3740328`
 **Current focus:** XSLT `string` cluster restored to 136/136 passing (100%). Fixed global sequence-constructor variables to evaluate with the initial context item, and made named-template entry points without a source document use an absent initial context item.
 
 ---
@@ -910,7 +910,7 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 - `main` — all work is on `main`
 - No feature branches
-- Latest: `<uncommitted>` — XSLT string cluster restored to 136/136 passing; global variables use initial context item; named-template entry points without source use absent context item
+- Latest: `3740328` — XSLT string cluster restored to 136/136 passing; global variables use initial context item; named-template entry points without source use absent context item
 - Previous: `a9916d1` — XSLT key cluster restored to 100% runnable; match regression fixes; docs sync
 - Previous: `81c51b5` — XSLT base-uri cluster fix + docs sync + refreshed next steps (document('') resolution, xml:* prefix handling, base URI propagation)
 - Previous: `fdb3987` — docs: update AGENT_HANDOVER commit hash for as-cluster session
