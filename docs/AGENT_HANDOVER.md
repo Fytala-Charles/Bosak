@@ -1,6 +1,41 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
+**Commit:** `<uncommitted>`
+**Current focus:** XSLT `key` cluster now 91/91 runnable passing (0 failed, 8 skipped). Match cluster remains 0 runnable failures. Restored composite keys, content-constructor key typing, document-order results, pattern focus isolation, and `key()` pattern validation.
+
+---
+
+## This Session Fixes (2026-06-12 — `key` cluster 100% runnable + match regression fix)
+
+1. **Preserve typed atomic values in raw sequence constructors** — `CopyToResult` now adds atomic/node values to `_sequenceAccumulator` when one is active (e.g. `xsl:key` content constructor, `xsl:variable/@as`, `xsl:function` body) instead of converting them to text nodes in the result tree. This fixes `key-082` and `key-073/074/075` where `string-length(.)` and `string-to-codepoints(.)` produced integer keys that were being stored as strings.
+   - **Files changed**: `TransformEngine.cs`.
+
+2. **Composite `xsl:key` support** — `KeyIndex` now stores composite keys as value tuples and provides `LookupComposite`. `TransformEngine` detects composite key definitions and routes 2-arg and 3-arg `key()` lookups through the tuple matcher. This fixes `key-093`.
+   - **Files changed**: `KeyIndex.cs`, `TransformEngine.cs`.
+
+3. **Document-order key lookup results** — `KeyIndex.Lookup` and `LookupComposite` sort matching entries by `DocumentOrder` before returning them. Multiple `xsl:key` definitions with the same name now produce results in document order rather than definition order. This fixes `key-073/074/075` ordering.
+   - **Files changed**: `KeyIndex.cs`.
+
+4. **Pattern predicate focus isolation** — `PatternCompiler.WrapWithCurrentItem` now saves and restores the caller's context item/position/size. Previously pattern predicates used inside `xsl:number` left the focus on the last candidate tested, corrupting subsequent instructions. This fixes `key-035`.
+   - **Files changed**: `PatternCompiler.cs`.
+
+5. **`key()` pattern validation restored** — `PatternCompiler.ValidatePatternSyntax` now checks the second argument of `key()` in match patterns and raises XTSE0340 for invalid expressions, while allowing string/numeric literals, variable references, and parenthesized sequences. Validation also catches `key()` after a leading `/`. This fixes `key-083`, `key-093`, `key-097`, `match-079`, and `match-080`.
+   - **Files changed**: `PatternCompiler.cs`.
+
+6. **Unit test regressions** — Updated `PatternCompilerPredicateTests.KeyNonLiteralArgument_ThrowsXtse0340` to expect success (XSLT 3.0 allows expressions in `key()` patterns) and rewrote `Copy4308Tests` to reflect that global sequence-constructor variables use the global context item.
+   - **Files changed**: `PatternCompilerPredicateTests.cs`, `Copy4308Tests.cs`.
+
+**`key` cluster**: 91/91 runnable passing, 0 failed, 8 skipped (100%).
+**`match` cluster**: 179/294 passing, 0 runnable failures.
+**Unit tests**: 877 passed, 0 failed across 8 test projects.
+**Full W3C XSLT 3.0 suite**: 3,884 passed / 1,504 failed / 9,212 skipped (72.1%).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-12
 **Commit:** `81c51b5`
 **Current focus:** XSLT `base-uri` cluster now 50/50 passing (100%), 5 skipped. Fixed `document('')` resolving against template's effective base URI, `xsl:copy` / `xsl:copy-of` preserving base URIs through copies, and built-in template rules propagating base URIs.
 
@@ -102,8 +137,8 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 3,819 / **Failed:** 1,569 / **Skipped:** 9,212 (14,600 total)
-- Pass rate: **70.9%** (latest run, 2026-06-12)
+- **Passed:** 3,884 / **Failed:** 1,504 / **Skipped:** 9,212 (14,600 total)
+- Pass rate: **72.1%** (latest run, 2026-06-12)
 - Runner completes without crashes (exit code 0)
 
 ### This Session Fixes (2026-06-11 — xpath-default-namespace + unit test regressions)
@@ -183,7 +218,8 @@
 ---
 
 **Recent trajectory:**
-- Latest: 3,819 passed / 1,569 failed / 9,212 skipped (70.9%) — base-uri cluster 50/50 passing; xml:* prefix resolution; copy cluster improvements from base URI propagation
+- Latest: 3,884 passed / 1,504 failed / 9,212 skipped (72.1%) — key cluster 91/91 runnable passing; match cluster 0 runnable failures; key() pattern validation restored
+- Previous: 3,819 passed / 1,569 failed / 9,212 skipped (70.9%) — base-uri cluster 50/50 passing; xml:* prefix resolution; copy cluster improvements from base URI propagation
 - Previous: 3,764 passed / 1,625 failed / 9,211 skipped (69.8%) — as cluster 100%
 - Previous: ~3493 passed / ~1912 failed / 9195 skipped (~64.6%) — copy cluster +6 tests (xsl:on-empty, copy-namespaces validation, node() pattern fix)
 - Previous: ~3482 passed / ~1923 failed / 9195 skipped (~64.4%) — copy cluster +14 tests (error handling, function context item, document node cases)
@@ -801,7 +837,7 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 | `base-uri` | 50 | 0 | 5 | ✅ 100% of runnable |
 | `copy` | 123 | 5 | 20 | DTD / accumulator hard walls remain |
 | `string` | 130 | 6 | 0 | Regressed from 136/136; likely namespace-serialization side effect |
-| `key` | 57 | 34 | 8 | Cross-document / index edge cases |
+| `key` | 91 | 0 | 8 | ✅ 100% of runnable; content-constructor typing, composite keys, document-order results, focus isolation, pattern validation |
 | `for-each-group` | 39 | 39 | 7 | Biggest runnable failure block |
 | `function` | 53 | 26 | 31 | Function items / higher-order XSLT |
 | `mode` | 84 | 41 | 44 | Mode dispatch edge cases |
@@ -810,17 +846,18 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 ### Option A: Restore `string` Cluster to 100% (quick win, 1 session)
 `string` dropped from 136/136 to 130/136 after the base-uri work. Failures `string-025/030/035/041/134/135` look like namespace-axis/serialization fallout (expected `xmlns:*` attributes or text content, got empty). A targeted run should reveal whether these share a single root cause with the copy namespace work.
 
-### Option B: `key` Cluster (+10–20 tests, 1–2 days, medium impact)
-`key` is at 57/99 passing with 34 failures. Cross-document key lookup and index initialization are mostly fixed; remaining failures are likely edge cases in match patterns, `use` expressions, and key scope. This is a well-bounded cluster with clear spec behavior.
-
-### Option C: `for-each-group` Cluster (+15–30 tests, 2–3 days, high impact)
+### Option B: `for-each-group` Cluster (+15–30 tests, 2–3 days, high impact)
 `for-each-group` is the largest remaining runnable block (39/85 passing). The basic implementation exists for all four grouping algorithms, but edge cases in pattern matching, atomic values, collation, and group sorting remain. Highest potential yield but also highest exploration cost.
 
+### Option C: `copy` Cluster (+5–7 tests, medium impact)
+`copy` has 5–7 remaining failures around DTD entity references, CDATA parsing, `is` node-comparison, accumulators (`accumulator-before#1`), and context-item behavior. Most are hard walls (DTD, accumulator), but the context-item and node-comparison failures may be quick fixes.
+
 ### Recommendation
-**Option A first** — the `string` regressions are unexpected and likely fixable quickly. After restoring `string`, move to **Option B (`key`)** because it is a self-contained cluster with a high pass-rate ceiling. Keep **Option C (`for-each-group`)** as the next major milestone once `key` is stable.
+**Option A first** — the `string` regressions are unexpected and likely fixable quickly. After restoring `string`, move to **Option B (`for-each-group`)** because it is the largest remaining runnable block. Keep **Option C (`copy`)** for targeted fixes around context item and node comparison.
 
 ### Completed / Near-Complete Clusters
 - **`base-uri`** — 0 failures, 50/50 passed (100%) ✅ (5 skipped for XInclude dependency)
+- **`key`** — 0 failures, 8 skipped. 91/99 passing (100% of runnable) ✅
 - **`match`** — 0 failures, 115 skipped. 179/294 passing (100% of runnable) ✅
 - **`boolean`** — 0 failures, 0 skipped (100% passing) ✅
 - **`core-function`** — 0 failures, 90/90 passed (100%) ✅
@@ -834,7 +871,8 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 - **`string`** — 6 failures (was 0 in previous baseline). Likely namespace-serialization fallout from base-uri changes; highest priority quick win.
 - **`sort`** — 19 failures. XSLT `xsl:sort` edge cases in typed/atomic keys, stable sort, and collations; separate from the QT3 `fn:sort` work.
 - **`expression`** — 1 failure. Small follow-up.
-- **`copy`** — 5 failures remaining; hard walls (DTD, accumulator, namespace serialization).
+- **`copy`** — 5–7 failures remaining; hard walls (DTD, accumulator, namespace serialization) plus context-item / node-comparison quick fixes.
+- **`for-each-group`** — 39 failures. Largest runnable block.
 
 ---
 

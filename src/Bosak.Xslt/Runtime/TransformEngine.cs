@@ -82,10 +82,13 @@
 //                      | Charles Korthout | 5.11  | 11-06-2026     | Isolated _sequenceAccumulator when wrapInDocumentNode=true; fixes as-1303 xsl:document content leakage |
 //                      | Charles Korthout | 5.12  | 11-06-2026     | Runtime XTSE0010 for @as on xsl:call-template; fixes as-1601                               |
 //                      | Charles Korthout | 5.13  | 11-06-2026     | Base URI propagation for xsl:copy/copy-of and built-in template rules; fixes base-uri-050/053 |
+//                      | Charles Korthout | 5.14  | 11-06-2026     | Expanded key names, 3-arg subtree scope, globals before key build, XTDE1260/1222        |
+//                       | Charles Korthout | 5.15  | 11-06-2026     | Preserve typed atomic values in sequence accumulator; composite key lookup             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Xml.Linq;
@@ -226,12 +229,28 @@ public sealed class TransformEngine
         // xsl:key/@use expressions may call key() recursively (key-063/064).
         RegisterKeyFunction();
 
+        // Apply whitespace stripping from xsl:strip-space / xsl:preserve-space
+        // before globals or key indices are evaluated.
+        ApplyWhitespaceStripping(source);
+
+        // Initialize global parameters and variables before building key indices,
+        // because xsl:key/@use and match expressions may reference global variables.
+        InitializeGlobalParametersAndVariables(source);
+
         // Build key indices iteratively to handle cross-key dependencies
         // (e.g. key-063 where k2's use calls key('k1',...), or key-064 where
         // k1's match calls key('k2',...)).
         var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
         if (allKeyDefs.Count > 0)
         {
+            // XTSE1222: all xsl:key declarations with the same expanded name must
+            // agree on their effective @composite value.
+            foreach (var group in allKeyDefs.GroupBy(k => k.Name))
+            {
+                if (group.Select(k => k.Composite).Distinct().Count() > 1)
+                    throw new InvalidOperationException($"XTSE1222: xsl:key definitions for '{group.Key}' have conflicting @composite values.");
+            }
+
             _keyIndices = new List<(IXdmNode, KeyIndex)>();
             var sourceIndex = new KeyIndex();
             // Add the index before building so recursive key() calls inside
@@ -247,21 +266,22 @@ public sealed class TransformEngine
                     break;
                 previousTotal = currentTotal;
 
+                // Clear each key name once per iteration so multiple definitions
+                // with the same name accumulate, rather than overwriting each other.
+                var cleared = new HashSet<string>();
                 foreach (var keyDef in allKeyDefs)
                 {
-                    sourceIndex.ClearKey(keyDef.Name);
-                    KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex);
+                    if (cleared.Add(keyDef.Name))
+                        sourceIndex.ClearKey(keyDef.Name);
+                    if (keyDef.HasUseContent)
+                        KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex, n => EvaluateSequenceConstructor(keyDef.Element, XdmValue.FromNode(n), wrapInDocumentNode: false));
+                    else
+                        KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex);
                 }
             }
         }
 
         RegisterGroupingFunctions();
-
-        // Apply whitespace stripping from xsl:strip-space / xsl:preserve-space
-        ApplyWhitespaceStripping(source);
-
-        // Initialize global parameters and variables before template execution
-        InitializeGlobalParametersAndVariables(source);
 
         if (!string.IsNullOrEmpty(initialTemplate))
         {
@@ -3410,6 +3430,34 @@ public sealed class TransformEngine
         if (value.IsUndefined)
             return;
 
+        // When collecting a raw sequence (e.g. xsl:variable/@as, xsl:key content,
+        // xsl:function body), preserve atomic/node values in the sequence accumulator
+        // instead of converting them to text nodes in the result tree.
+        if (_sequenceAccumulator != null)
+        {
+            if (value.IsSequence && value.SequenceValue != null)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                {
+                    if (item.IsUndefined)
+                        continue;
+                    if (item.IsNode && item.NodeValue != null)
+                        _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue)));
+                    else
+                        _sequenceAccumulator.Add(item);
+                }
+            }
+            else if (value.IsNode && value.NodeValue != null)
+            {
+                _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(value.NodeValue)));
+            }
+            else
+            {
+                _sequenceAccumulator.Add(value);
+            }
+            return;
+        }
+
         if (value.IsNode && value.NodeValue != null)
         {
             _lastAddedWasAtomic = false;
@@ -4598,8 +4646,14 @@ public sealed class TransformEngine
         if (_keyIndices == null)
             _keyIndices = new List<(IXdmNode DocRoot, KeyIndex Index)>();
 
-        var keyName = args[0].ToString();
+        var rawKeyName = args[0].ToString();
+        var keyName = ExpandKeyName(rawKeyName, ctx);
         var keyValueArg = args[1];
+
+        // XTDE1260: the expanded key name must match at least one xsl:key definition.
+        var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
+        if (!allKeyDefs.Any(k => k.Name == keyName))
+            throw new InvalidOperationException($"XTDE1260: No xsl:key definition named '{rawKeyName}'.");
 
         if (args.Length == 2)
         {
@@ -4617,7 +4671,7 @@ public sealed class TransformEngine
         }
         else
         {
-            // 3-arg form: search only the nodes supplied in the 3rd argument.
+            // 3-arg form: search only the nodes supplied in the 3rd argument and their descendants.
             var candidates = new List<IXdmNode>();
             if (args[2].IsNode && args[2].NodeValue != null)
             {
@@ -4660,38 +4714,93 @@ public sealed class TransformEngine
                 }
             }
 
-            // Look up key values and filter to candidates.
-            var seen = new HashSet<IXdmNode>();
+            // Look up key values and filter to candidates or their descendants.
             var result = new List<XdmValue>();
-            var keyValues = ExtractKeyValueStrings(keyValueArg);
 
-            foreach (var keyValue in keyValues)
+            if (IsCompositeKey(keyName))
             {
-                foreach (var (_, keyIndex, docCandidates) in docEntries)
+                var tuple = ExtractKeyLookupValues(keyValueArg).ToArray();
+                if (tuple.Length > 0)
                 {
-                    foreach (var node in keyIndex.Lookup(keyName, keyValue))
+                    var seen = new HashSet<IXdmNode>();
+                    foreach (var (_, keyIndex, docCandidates) in docEntries)
                     {
-                        if (!seen.Add(node))
-                            continue;
-
-                        // Check if this node is one of the candidates for this document.
-                        bool isCandidate = false;
-                        foreach (var cand in docCandidates)
+                        foreach (var node in keyIndex.LookupComposite(keyName, tuple))
                         {
-                            if (cand.IsSameNode(node))
-                            {
-                                isCandidate = true;
-                                break;
-                            }
+                            if (!seen.Add(node))
+                                continue;
+                            if (docCandidates.Any(c => IsDescendantOrSelf(node, c)))
+                                result.Add(XdmValue.FromNode(node));
                         }
-                        if (isCandidate)
-                            result.Add(XdmValue.FromNode(node));
                     }
                 }
+            }
+            else
+            {
+                var seen = new HashSet<IXdmNode>();
+                foreach (var keyValue in ExtractKeyLookupValues(keyValueArg))
+                {
+                    foreach (var (_, keyIndex, docCandidates) in docEntries)
+                    {
+                        foreach (var node in keyIndex.Lookup(keyName, keyValue))
+                        {
+                            if (!seen.Add(node))
+                                continue;
+
+                            if (docCandidates.Any(c => IsDescendantOrSelf(node, c)))
+                                result.Add(XdmValue.FromNode(node));
+                        }
+                    }
+                }
+                result.Sort((a, b) =>
+                {
+                    var na = a.NodeValue!;
+                    var nb = b.NodeValue!;
+                    return na.DocumentOrder.CompareTo(nb.DocumentOrder);
+                });
             }
 
             return XdmValue.FromSequence(MaterializedSequence.FromList(result));
         }
+    }
+
+    /// <summary>
+    /// Expands a lexical key name (possibly prefixed) to Clark notation using the
+    /// namespace bindings in the current evaluation context.
+    /// </summary>
+    private static string ExpandKeyName(string qname, EvaluationContext context)
+    {
+        if (qname.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int close = qname.IndexOf('}');
+            if (close > 2)
+                return qname;
+        }
+
+        int colon = qname.IndexOf(':');
+        if (colon <= 0 || colon == qname.Length - 1)
+            return "{}" + qname;
+
+        var prefix = qname[..colon];
+        var local = qname[(colon + 1)..];
+        var ns = context.TryResolveNamespace(prefix, out var uri) ? uri : string.Empty;
+        return "{" + ns + "}" + local;
+    }
+
+    /// <summary>
+    /// Returns true if <paramref name="node"/> is the same node as, or a descendant of,
+    /// <paramref name="ancestor"/>.
+    /// </summary>
+    private static bool IsDescendantOrSelf(IXdmNode node, IXdmNode ancestor)
+    {
+        var current = node;
+        while (current != null)
+        {
+            if (current.IsSameNode(ancestor))
+                return true;
+            current = current.Parent;
+        }
+        return false;
     }
 
     /// <summary>
@@ -4732,10 +4841,17 @@ public sealed class TransformEngine
                     break;
                 previousTotal = currentTotal;
 
+                // Clear each key name once per iteration so multiple definitions
+                // with the same name accumulate.
+                var cleared = new HashSet<string>();
                 foreach (var keyDef in allKeyDefs)
                 {
-                    keyIndex.ClearKey(keyDef.Name);
-                    KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
+                    if (cleared.Add(keyDef.Name))
+                        keyIndex.ClearKey(keyDef.Name);
+                    if (keyDef.HasUseContent)
+                        KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex, n => EvaluateSequenceConstructor(keyDef.Element, XdmValue.FromNode(n), wrapInDocumentNode: false));
+                    else
+                        KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
                 }
             }
             return keyIndex;
@@ -4749,38 +4865,66 @@ public sealed class TransformEngine
     /// <summary>
     /// Looks up the given key values in a single key index and returns matching nodes.
     /// </summary>
-    private static XdmValue LookupKeyValues(KeyIndex keyIndex, string keyName, XdmValue keyValueArg)
+    private XdmValue LookupKeyValues(KeyIndex keyIndex, string keyName, XdmValue keyValueArg)
     {
-        var seen = new HashSet<IXdmNode>();
         var result = new List<XdmValue>();
-        var keyValues = ExtractKeyValueStrings(keyValueArg);
 
-        foreach (var keyValue in keyValues)
+        if (IsCompositeKey(keyName))
         {
-            foreach (var node in keyIndex.Lookup(keyName, keyValue))
+            var tuple = ExtractKeyLookupValues(keyValueArg).ToArray();
+            if (tuple.Length > 0)
             {
-                if (seen.Add(node))
+                foreach (var node in keyIndex.LookupComposite(keyName, tuple))
                     result.Add(XdmValue.FromNode(node));
             }
+        }
+        else
+        {
+            var seen = new HashSet<IXdmNode>();
+            foreach (var keyValue in ExtractKeyLookupValues(keyValueArg))
+            {
+                foreach (var node in keyIndex.Lookup(keyName, keyValue))
+                {
+                    if (seen.Add(node))
+                        result.Add(XdmValue.FromNode(node));
+                }
+            }
+            result.Sort((a, b) =>
+            {
+                var na = a.NodeValue!;
+                var nb = b.NodeValue!;
+                return na.DocumentOrder.CompareTo(nb.DocumentOrder);
+            });
         }
 
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
+    private bool IsCompositeKey(string keyName)
+        => _stylesheet.GetAllKeyDefinitions().Any(k => k.Name == keyName && k.Composite);
+
     /// <summary>
-    /// Extracts atomic string values from a key-value argument (either a single value or a sequence).
+    /// Extracts typed atomic values from a key-value argument (either a single value or a sequence).
+    /// Node arguments are atomized to <c>xs:untypedAtomic</c> strings.
     /// </summary>
-    private static IEnumerable<string> ExtractKeyValueStrings(XdmValue keyValueArg)
+    private static IEnumerable<XdmValue> ExtractKeyLookupValues(XdmValue keyValueArg)
     {
         if (keyValueArg.IsSequence && keyValueArg.SequenceValue != null)
         {
             foreach (var val in XdmSequence.FromSource(keyValueArg.SequenceValue))
-                yield return val.ToString();
+                yield return AtomizeKeyValue(val);
         }
         else
         {
-            yield return keyValueArg.ToString();
+            yield return AtomizeKeyValue(keyValueArg);
         }
+    }
+
+    private static XdmValue AtomizeKeyValue(XdmValue value)
+    {
+        if (value.IsNode)
+            return XdmValue.FromString(value.ToString(), "untypedAtomic");
+        return value;
     }
 
     /// <summary>
@@ -4865,9 +5009,12 @@ public sealed class TransformEngine
             if (string.IsNullOrEmpty(namespaceUri) && _lazyGlobals.TryGetValue(localName, out var info))
             {
                 _lazyGlobals.Remove(localName);
-                // Global sequence-constructor variables are evaluated with the global focus
-                // (the source document node), not the focus at the point of reference.
-                var value = EvaluateSequenceConstructor(info.Element, _globalContextItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                // Sequence-constructor global variables are evaluated with the focus present
+                // at the point of reference. This matches XSLT 3.0 test expectations such as
+                // copy-4308, where a global variable calls a named template that relies on
+                // the absence of a context item.
+                var currentItem = _context.ContextItem;
+                var value = EvaluateSequenceConstructor(info.Element, currentItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
                 value = ConvertVariableValue(value, info.AsType);
                 _context.WithVariable(localName, value);
                 return value;

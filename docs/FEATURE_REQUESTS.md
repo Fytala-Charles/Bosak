@@ -280,7 +280,7 @@ Implement `xsl:sort` as a child of `xsl:apply-templates` and `xsl:for-each`:
 
 **Requesting Application:** Customer A  
 **Submitted:** 2026-05-24  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 Customer A generates human-readable documents where line items need sequential numbering (1, 2, 3…). Today this requires awkward XPath workarounds (`count(preceding-sibling::*) + 1`) which break when elements are filtered or reordered.
@@ -310,6 +310,7 @@ Implement `xsl:number` with at least `level="single"` (sibling numbering):
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-24 | Kimi | Pending | Phase 2 item |
+| 2026-06-12 | Kimi | Implemented | Core `xsl:key`/`key()` support complete; key cluster 91/91 runnable passing in W3C XSLT 3.0 suite |
 | 2026-05-24 | Kimi | Implemented | OutputProperties + text/xml methods + indent + omit-xml-declaration + tests |
 
 ---
@@ -329,10 +330,13 @@ Customer A transforms often need to look up reference data (e.g., convert a prod
 3. Implement `key($name, $value)` as an XPath function extension or runtime intrinsic.
 
 #### Acceptance Criteria
-- [ ] `<xsl:key name="products" match="product" use="@code"/>` is parsed and indexed
-- [ ] `key('products', $code)` returns the matching node(s)
-- [ ] Index is rebuilt per source document (not shared across transforms)
-- [ ] Works inside `xsl:for-each`, `xsl:if`, and `xsl:value-of select`
+- [x] `<xsl:key name="products" match="product" use="@code"/>` is parsed and indexed
+- [x] `key('products', $code)` returns the matching node(s)
+- [x] Index is rebuilt per source document (not shared across transforms)
+- [x] Works inside `xsl:for-each`, `xsl:if`, and `xsl:value-of select`
+- [x] Composite keys (`xsl:key` with sequence-constructor content) work
+- [x] Results are returned in document order
+- [x] `key()` patterns in `match` attributes validated per XTSE0340
 
 #### Impact Analysis
 | Layer | Impact | Notes |

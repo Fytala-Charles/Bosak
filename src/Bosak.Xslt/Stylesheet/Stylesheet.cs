@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 07-06-2026     | Fix import+include same file: separate _includedUris, copy _resolvedUris to children     |
 //                      | Charles Korthout | 1.3   | 10-06-2026     | Added ValidateInstructionTree for xsl:copy-of static validation (XTSE0090/0260)        |
 //                      | Charles Korthout | 1.4   | 10-06-2026     | ValidateInstructionTree checks xsl:copy attributes and copy-namespaces values (XTSE0020) |
+//                      | Charles Korthout | 1.5   | 11-06-2026     | Made GetXPathDefaultNamespace internal for xsl:key index building                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -333,8 +334,7 @@ public sealed class Stylesheet
         {
             if (!UseWhen(key)) continue;
             var def = KeyDefinition.FromElement(key, this);
-            if (def != null)
-                _keyDefinitions.Add(def);
+            _keyDefinitions.Add(def);
         }
 
         // Parse xsl:strip-space and xsl:preserve-space declarations
@@ -983,7 +983,7 @@ public sealed class Stylesheet
     /// Returns the effective xpath-default-namespace for the given element by walking
     /// the ancestor chain and finding the nearest xpath-default-namespace attribute.
     /// </summary>
-    private static string? GetXPathDefaultNamespace(XElement element)
+    internal static string? GetXPathDefaultNamespace(XElement element)
     {
         var current = element;
         while (current != null)

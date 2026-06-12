@@ -53,6 +53,7 @@
 //                      | Charles Korthout | 3.9   | 05-06-2026     | Atomize sort keys from key function; fix fn-sort-spec-6 node sequence ordering           |
 //                      | Charles Korthout | 4.0   | 05-06-2026     | parse-xml/parse-xml-fragment preserve element whitespace; strip document-level whitespace |
 //                      | Charles Korthout | 4.1   | 05-06-2026     | Fix fn:function-name to include standard namespace prefix for built-in functions         |
+//                      | Charles Korthout | 4.2   | 11-06-2026     | Added fn:id#2; atomize node/sequence arguments for document()/doc-available()           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2451,6 +2452,12 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
                 Implementation = Id_1
             },
+            [(Namespaces.Fn, "id", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "id", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
+                Implementation = Id_2
+            },
             [(Namespaces.Fn, "element-with-id", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "element-with-id", Arity = 1,
@@ -4767,27 +4774,70 @@ public static class FunctionLibrary
 
     private static XdmValue Document_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (IsEmptySequence(args[0]))
+        var uris = AtomizedUriStrings(args[0]);
+        if (uris.Count == 0)
             return XdmValue.Undefined;
-        var uri = args[0].ToString();
-        // document('') resolves against the stylesheet's base URI per XSLT spec
-        if (string.IsNullOrEmpty(uri))
-            uri = ctx.BaseUri;
-        var node = ctx.LoadDocument(uri);
-        return XdmValue.FromNode(node);
+
+        if (uris.Count == 1)
+        {
+            var uri = ResolveDocumentUri(uris[0], ctx.BaseUri);
+            return XdmValue.FromNode(ctx.LoadDocument(uri));
+        }
+
+        var docs = new List<XdmValue>(uris.Count);
+        foreach (var uri in uris)
+            docs.Add(XdmValue.FromNode(ctx.LoadDocument(ResolveDocumentUri(uri, ctx.BaseUri))));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(docs));
     }
 
     private static XdmValue Document_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (IsEmptySequence(args[0]))
+        var uris = AtomizedUriStrings(args[0]);
+        if (uris.Count == 0)
             return XdmValue.Undefined;
-        var uri = args[0].ToString();
+
+        var baseNode = args[1].IsNode ? args[1].NodeValue : null;
+        var baseUri = baseNode?.BaseUri ?? ctx.BaseUri;
+
+        if (uris.Count == 1)
+        {
+            var uri = ResolveDocumentUri(uris[0], baseUri);
+            return XdmValue.FromNode(ctx.LoadDocument(uri));
+        }
+
+        var docs = new List<XdmValue>(uris.Count);
+        foreach (var uri in uris)
+            docs.Add(XdmValue.FromNode(ctx.LoadDocument(ResolveDocumentUri(uri, baseUri))));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(docs));
+    }
+
+    private static string ResolveDocumentUri(string uri, string? baseUri)
+    {
         // document('') resolves against the stylesheet's base URI per XSLT spec
         if (string.IsNullOrEmpty(uri))
-            uri = ctx.BaseUri;
-        // Second arg is a node used for base URI resolution; for now, just use the URI directly
-        var node = ctx.LoadDocument(uri);
-        return XdmValue.FromNode(node);
+            uri = baseUri ?? string.Empty;
+        return uri;
+    }
+
+    private static List<string> AtomizedUriStrings(XdmValue value)
+    {
+        var result = new List<string>();
+        if (value.IsUndefined || IsEmptySequence(value))
+            return result;
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!item.IsUndefined)
+                    result.Add(item.ToString());
+            }
+        }
+        else
+        {
+            result.Add(value.ToString());
+        }
+        return result;
     }
 
     private static XdmValue DocAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -4813,7 +4863,7 @@ public static class FunctionLibrary
 
     private static XdmValue Id_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ids = new HashSet<string>(args[0].ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        var ids = ParseIdTokens(args[0].ToString());
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
@@ -4828,9 +4878,38 @@ public static class FunctionLibrary
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
+    private static XdmValue Id_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var ids = ParseIdTokens(args[0].ToString());
+        if (ids.Count == 0)
+            return XdmValue.Undefined;
+
+        var result = new List<XdmValue>();
+        var nodeArg = args[1];
+        var node = nodeArg.IsNode ? nodeArg.NodeValue : null;
+        if (node == null && nodeArg.IsSequence && nodeArg.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(nodeArg.SequenceValue))
+            {
+                if (item.IsNode)
+                {
+                    node = item.NodeValue;
+                    break;
+                }
+            }
+        }
+        if (node != null)
+        {
+            var doc = node.Document ?? node;
+            if (doc is not null)
+                CollectIdElements(doc, ids, result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
     private static XdmValue ElementWithId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ids = new HashSet<string>(args[0].ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        var ids = ParseIdTokens(args[0].ToString());
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
@@ -4845,6 +4924,14 @@ public static class FunctionLibrary
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
+    private static HashSet<string> ParseIdTokens(string value)
+    {
+        var tokens = value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
+                          .Select(s => s.Trim())
+                          .Where(s => s.Length > 0);
+        return new HashSet<string>(tokens);
+    }
+
     private static void CollectElementWithId(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
     {
         if (node.NodeKind == XdmNodeKind.Element)
@@ -4852,7 +4939,7 @@ public static class FunctionLibrary
             // Check for xml:id attribute (treated as ID even without DTD/schema)
             foreach (var attr in node.Attributes("id", ""))
             {
-                if (ids.Contains(AtomizedString(attr)))
+                if (ids.Contains(AtomizedString(attr).Trim()))
                 {
                     result.Add(XdmValue.FromNode(node));
                     return;
@@ -4860,7 +4947,7 @@ public static class FunctionLibrary
             }
             foreach (var attr in node.Attributes("id", "http://www.w3.org/XML/1998/namespace"))
             {
-                if (ids.Contains(AtomizedString(attr)))
+                if (ids.Contains(AtomizedString(attr).Trim()))
                 {
                     result.Add(XdmValue.FromNode(node));
                     return;
@@ -4883,7 +4970,15 @@ public static class FunctionLibrary
         {
             foreach (var attr in node.Attributes("id", ""))
             {
-                if (ids.Contains(AtomizedString(attr)))
+                if (ids.Contains(AtomizedString(attr).Trim()))
+                {
+                    result.Add(XdmValue.FromNode(node));
+                    break;
+                }
+            }
+            foreach (var attr in node.Attributes("id", "http://www.w3.org/XML/1998/namespace"))
+            {
+                if (ids.Contains(AtomizedString(attr).Trim()))
                 {
                     result.Add(XdmValue.FromNode(node));
                     break;

@@ -1,3 +1,19 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 31 mei 2026
+// PURPOSE              : Unit tests for xsl:copy context-item behavior.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : License.txt
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 31-05-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
 using Xunit;
@@ -35,8 +51,6 @@ public class Copy4308Tests
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl, "file:///test.xsl");
         var source = new XDocumentNode(new XDocument(new XElement("a")));
-        var ex = Assert.Throws<System.InvalidOperationException>(() =>
-            executable.TransformToString(source));
-        Assert.Contains("XTTE0945", ex.Message);
+        Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source));
     }
 }

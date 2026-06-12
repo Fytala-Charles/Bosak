@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 12 June 2026
 > **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 3,819 passed / 1,569 failed / 9,212 skipped (~70.9%)
+> **XSLT baseline:** 3,884 passed / 1,504 failed / 9,212 skipped (~72.1%)
 
 ---
 
@@ -246,7 +246,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | Modes | ✅ Working | Named modes, `#current`, `#default`, `#all`, multi-mode templates |
 | `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable` |
 | `xsl:number` | ✅ Working | `single`, `any`, `multiple` levels; format tokens |
-| `xsl:key` / `key()` | ✅ Working | Indexed lookup with `xsl:key` definitions |
+| `xsl:key` / `key()` | ✅ Working | Indexed lookup; composite keys; content-constructor keys preserve typed atomic values; results returned in document order; `key()` allowed in match patterns with XTSE0340 validation |
 | `xsl:output` | ✅ Working | `method`, `indent`, `omit-xml-declaration`, `encoding` |
 | `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |
@@ -342,12 +342,16 @@ dotnet test Bosak.sln
 | XSLT functions (`xsl:function`) no longer leak the first argument as the context item. | Functions now correctly have no context item per XSLT 3.0 §9.6. Fixes `xsl:copy` inside functions. | 2026-06-10 |
 | `xsl:where-populated` now correctly filters empty PIs, comments, and text nodes. | Previously only whitespace-only text nodes were filtered; empty PIs/comments passed through incorrectly. | 2026-06-10 |
 | XPath parser no longer treats prefixed names as kind tests (e.g. `my:node()`). | `my:node()` was parsed as `child::node()` instead of a function call. Affected any prefixed name where local name matched a kind test. | 2026-06-10 |
+| `xsl:key` content constructors now preserve typed atomic key values. | `string-length(.)`, `string-to-codepoints(.)`, and other atomic producers are stored as typed values rather than converted to text nodes. Fixes `key-082`, `key-073/074/075`. | 2026-06-12 |
+| `key()` lookup results are returned in document order. | Multiple `xsl:key` definitions with the same name no longer return nodes in definition order. Fixes `key-073/074/075` ordering. | 2026-06-12 |
+| Pattern predicates in `key()` match patterns now isolate caller focus. | `PatternCompiler.WrapWithCurrentItem` saves/restores context item, position, and size so `xsl:number` with `key()` patterns does not corrupt subsequent instructions. Fixes `key-035`. | 2026-06-12 |
+| `key()` pattern validation restored. | XTSE0340 is raised for invalid second arguments in `key()` match patterns; numeric literals, variable references, and parenthesized sequences are allowed. Fixes `key-083`, `key-093`, `key-097`, `match-079`, `match-080`. | 2026-06-12 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | ~3,764 | ~1,625 | 9,211 | ~69.8% | +130 tests (`as` cluster 99/99, xpath-default-namespace, namespace axis, copy-1220/1221) |
+| XSLT 3.0 (W3C) | 3,884 | 1,504 | 9,212 | 72.1% | +65 tests from previous baseline; key cluster 91/91 runnable passing; match cluster 0 runnable failures |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

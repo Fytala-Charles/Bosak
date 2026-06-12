@@ -27,6 +27,9 @@
 //                      | Charles Korthout | 1.3   | 07-06-2026     | attribute(*, type) comma-split in CompileNodeTest; fixes next-match-011                 |
 //                      | Charles Korthout | 1.4   | 07-06-2026     | IsStaticError no longer treats XPTY as static; StripXPathComments now public            |
 //                      | Charles Korthout | 1.5   | 09-06-2026     | Compile-time predicate validation via dry-run against dummy node; fixes match-040      |
+//                      | Charles Korthout | 1.6   | 11-06-2026     | Removed over-restrictive key() second-arg check; allow literals/exprs in patterns      |
+//                       | Charles Korthout | 1.7   | 11-06-2026     | Save/restore focus in WrapWithCurrentItem to protect caller context item                |
+//                       | Charles Korthout | 1.8   | 11-06-2026     | Restored key() second-arg restriction to literal/variable reference in patterns        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -87,14 +90,22 @@ public sealed class PatternCompiler
         // 1.  Disallowed functions at pattern start (XTSE0340).
         //     Node tests (document-node, element, attribute, text, comment,
         //     processing-instruction, node, schema-element, schema-attribute,
-        //     namespace-node) and the functions key() / id() are allowed.
-        //     Any other function call at start or after '/' or '//' is an error.
+        //     namespace-node) and the functions key() / id() / doc() / root() are
+        //     allowed at the very start of a pattern. After a leading '/' or '//',
+        //     only node-test functions are permitted; key()/id()/doc()/root() are not.
         {
+            bool hadLeadingSlash = false;
             var afterSlash = trimmed;
             if (afterSlash.StartsWith("//"))
+            {
+                hadLeadingSlash = true;
                 afterSlash = afterSlash[2..].TrimStart();
+            }
             else if (afterSlash.StartsWith("/"))
+            {
+                hadLeadingSlash = true;
                 afterSlash = afterSlash[1..].TrimStart();
+            }
 
             // Strip axis prefix (e.g., child::, attribute::, descendant::)
             var axisColon = afterSlash.IndexOf("::", StringComparison.Ordinal);
@@ -115,47 +126,30 @@ public sealed class PatternCompiler
                     if (firstSpecial < 0 || firstSpecial > paren)
                     {
                         var funcName = afterSlash[..paren];
-                        var allowed = new HashSet<string>(StringComparer.Ordinal)
+                        var nodeTestFunctions = new HashSet<string>(StringComparer.Ordinal)
                         {
                             "document-node", "element", "attribute", "text",
                             "comment", "processing-instruction", "node",
-                            "schema-element", "schema-attribute", "namespace-node",
+                            "schema-element", "schema-attribute", "namespace-node"
+                        };
+                        var allowedAtStart = new HashSet<string>(nodeTestFunctions, StringComparer.Ordinal)
+                        {
                             "key", "id", "doc", "root"
                         };
-                        if (!allowed.Contains(funcName))
+                        if (!allowedAtStart.Contains(funcName))
                         {
                             throw new InvalidOperationException("XTSE0340: Function call not allowed at the start of a pattern.");
                         }
-                    }
-                }
-            }
-        }
-
-        // 2.  key() second argument must be a literal string (XTSE0340).
-        {
-            var idx = 0;
-            while ((idx = trimmed.IndexOf("key(", idx, StringComparison.Ordinal)) >= 0)
-            {
-                var close = FindMatchingParen(trimmed, idx + 3);
-                if (close > 0)
-                {
-                    var args = trimmed[(idx + 4)..close];
-                    var comma = FindTopLevelComma(args);
-                    if (comma >= 0)
-                    {
-                        var secondArg = args[(comma + 1)..].Trim();
-                        // Allow string literals and variable references; reject expressions.
-                        if (!(secondArg.StartsWith('\'') || secondArg.StartsWith('"') || secondArg.StartsWith("$")))
+                        if (hadLeadingSlash && !nodeTestFunctions.Contains(funcName))
                         {
-                            throw new InvalidOperationException("XTSE0340: The second argument of key() in a pattern must be a literal string.");
+                            throw new InvalidOperationException("XTSE0340: Function call not allowed after a leading '/' in a pattern.");
                         }
                     }
                 }
-                idx += 4;
             }
         }
 
-        // 3.  Invalid predicate patterns (XTSE0340).
+        // 2.  Invalid predicate patterns (XTSE0340).
         {
             // Parenthesized predicate pattern (.[...])
             if (trimmed.StartsWith("(.[") || trimmed.Contains("|(.["))
@@ -200,13 +194,94 @@ public sealed class PatternCompiler
             }
         }
 
-        // 5.  Undeclared function in predicate (XPST0017).
+        // 5.  Restricted arguments for key() in patterns (XTSE0340 / XPST0017).
+        //     XSLT 2.0/3.0 require the second argument of key() within a match pattern
+        //     to be a string literal or a variable reference; arbitrary expressions are
+        //     not allowed.
+        ValidateKeyFunctionArguments(trimmed);
+
+        // 6.  Undeclared function in predicate (XPST0017).
         //     NOTE: Accurate detection requires stylesheet context (declared functions,
         //     namespace prefixes). The XPath compiler currently does not validate
         //     function existence at compile time, so this check is deferred to runtime.
         //     When the XPath compiler gains static function resolution, this should be
         //     re-enabled with proper context.
 
+    }
+
+    /// <summary>
+    /// Validates that every occurrence of key() in a pattern uses an allowed
+    /// second argument (literal, variable reference, or parenthesized sequence).
+    /// </summary>
+    private static void ValidateKeyFunctionArguments(string pattern)
+    {
+        int i = 0;
+        while (i < pattern.Length)
+        {
+            int start = pattern.IndexOf("key(", i, StringComparison.Ordinal);
+            if (start < 0) break;
+
+            int close = FindMatchingParen(pattern, start + 3);
+            if (close > 0)
+            {
+                var args = pattern[(start + 4)..close];
+                var firstComma = FindTopLevelComma(args);
+                if (firstComma >= 0)
+                {
+                    var rest = args[(firstComma + 1)..];
+                    var secondComma = FindTopLevelComma(rest);
+                    var secondArg = (secondComma >= 0 ? rest[..secondComma] : rest).Trim();
+                    if (!IsAllowedKeyPatternArgument(secondArg))
+                    {
+                        throw new InvalidOperationException("XTSE0340: The second argument of key() in a pattern must be a literal, variable reference, or parenthesized sequence.");
+                    }
+                }
+                i = close + 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    private static bool IsAllowedKeyPatternArgument(string arg)
+    {
+        if (string.IsNullOrEmpty(arg))
+            return false;
+
+        // String literals and variable references are always allowed.
+        if (arg[0] == '\'' || arg[0] == '\"' || arg[0] == '$')
+            return true;
+
+        // Parenthesized sequence constructor (e.g. composite key tuples).
+        if (arg[0] == '(' && FindMatchingParen(arg, 0) == arg.Length - 1)
+            return true;
+
+        // Numeric literals (integer/decimal), optionally negative.
+        int pos = 0;
+        if (arg[0] == '-')
+        {
+            if (arg.Length == 1)
+                return false;
+            pos = 1;
+        }
+        bool hasDigits = false;
+        while (pos < arg.Length && char.IsDigit(arg[pos]))
+        {
+            hasDigits = true;
+            pos++;
+        }
+        if (pos < arg.Length && arg[pos] == '.')
+        {
+            pos++;
+            while (pos < arg.Length && char.IsDigit(arg[pos]))
+            {
+                hasDigits = true;
+                pos++;
+            }
+        }
+        return hasDigits && pos == arg.Length;
     }
 
     /// <summary>
@@ -422,7 +497,10 @@ public sealed class PatternCompiler
     {
         return (item, ctx) =>
         {
-            var saved = ctx.CurrentItem;
+            var savedCurrent = ctx.CurrentItem;
+            var savedItem = ctx.ContextItem;
+            var savedPos = ctx.ContextPosition;
+            var savedSize = ctx.ContextSize;
             try
             {
                 ctx.WithCurrentItem(item);
@@ -430,7 +508,8 @@ public sealed class PatternCompiler
             }
             finally
             {
-                ctx.WithCurrentItem(saved);
+                ctx.WithCurrentItem(savedCurrent);
+                ctx.WithFocus(savedItem, savedPos, savedSize);
             }
         };
     }
@@ -1351,7 +1430,19 @@ public sealed class PatternCompiler
             };
         }
 
-        if (name == "node()" || name == ".")
+        if (name == "node()")
+        {
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind is not XdmNodeKind.Document
+                    and not XdmNodeKind.Attribute
+                    and not XdmNodeKind.Namespace;
+            };
+        }
+
+        if (name == ".")
         {
             return (item, ctx) => AsNode(item) != null;
         }
