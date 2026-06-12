@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `<uncommitted>`
+**Commit:** `a9916d1`
 **Current focus:** XSLT `key` cluster now 91/91 runnable passing (0 failed, 8 skipped). Match cluster remains 0 runnable failures. Restored composite keys, content-constructor key typing, document-order results, pattern focus isolation, and `key()` pattern validation.
 
 ---
@@ -880,7 +880,8 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 - `main` — all work is on `main`
 - No feature branches
-- Latest: `81c51b5` — XSLT base-uri cluster fix + docs sync + refreshed next steps (document('') resolution, xml:* prefix handling, base URI propagation)
+- Latest: `a9916d1` — XSLT key cluster restored to 100% runnable; match regression fixes; docs sync
+- Previous: `81c51b5` — XSLT base-uri cluster fix + docs sync + refreshed next steps (document('') resolution, xml:* prefix handling, base URI propagation)
 - Previous: `fdb3987` — docs: update AGENT_HANDOVER commit hash for as-cluster session
 - Previous: `<uncommitted>` — namespace axis parent fix (copy-0616/0618/0624/0626)
 - Previous: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
