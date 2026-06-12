@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
+**Commit:** `<uncommitted>`
+**Current focus:** XSLT `string` cluster restored to 136/136 passing (100%). Fixed global sequence-constructor variables to evaluate with the initial context item, and made named-template entry points without a source document use an absent initial context item.
+
+---
+
+## This Session Fixes (2026-06-12 — `string` cluster 100%)
+
+1. **Global sequence-constructor variables use initial context item** — `TransformEngine` now evaluates top-level `xsl:variable` sequence constructors with a singleton focus based on the root node of the tree containing the initial context node (XSLT 3.0 §9.6). Previously they were evaluated with the focus present at the point of reference, which broke `string-041`: a global variable containing `<xsl:value-of select="doc"/>` was evaluated with the `doc` element as context, returning an empty result instead of `"Test"`.
+   - **Files changed**: `TransformEngine.cs`, `XsltExecutable.cs`.
+
+2. **Named-template entry points may have no source document** — `XsltExecutable.Transform`/`TransformToString` now accept a null source node. The conformance harness passes `null` when a test has no explicit source and uses a named template (explicit `<initial-template>` or implicit `xsl:template name="xsl:initial-template"`). This gives named-template entry points without a source document an absent initial context item, matching XSLT 3.0 §6.5 and keeping `copy-4308` (expected XTTE0945) passing.
+   - **Files changed**: `XsltExecutable.cs`, `TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+3. **Unit test update** — `Copy4308Tests` now passes `null` as the source document and asserts the expected `XTTE0945` error, reflecting the correct spec behavior for named-template entry points with no initial context item.
+   - **File changed**: `Copy4308Tests.cs`.
+
+**`string` cluster**: 136/136 passing, 0 failed, 0 skipped (100%).
+**`key` cluster**: 91/91 runnable passing, 0 failed, 8 skipped.
+**`match` cluster**: 179/294 passing, 0 runnable failures.
+**`copy` cluster**: 122/148 passing, 6 failed, 20 skipped.
+**Unit tests**: 877 passed, 0 failed across 8 test projects.
+**Full W3C XSLT 3.0 suite**: 3,888 passed / 1,500 failed / 9,212 skipped (72.2%).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-12
 **Commit:** `a9916d1`
 **Current focus:** XSLT `key` cluster now 91/91 runnable passing (0 failed, 8 skipped). Match cluster remains 0 runnable failures. Restored composite keys, content-constructor key typing, document-order results, pattern focus isolation, and `key()` pattern validation.
 
@@ -137,8 +165,8 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 3,884 / **Failed:** 1,504 / **Skipped:** 9,212 (14,600 total)
-- Pass rate: **72.1%** (latest run, 2026-06-12)
+- **Passed:** 3,888 / **Failed:** 1,500 / **Skipped:** 9,212 (14,600 total)
+- Pass rate: **72.2%** (latest run, 2026-06-12)
 - Runner completes without crashes (exit code 0)
 
 ### This Session Fixes (2026-06-11 — xpath-default-namespace + unit test regressions)
@@ -218,7 +246,8 @@
 ---
 
 **Recent trajectory:**
-- Latest: 3,884 passed / 1,504 failed / 9,212 skipped (72.1%) — key cluster 91/91 runnable passing; match cluster 0 runnable failures; key() pattern validation restored
+- Latest: 3,888 passed / 1,500 failed / 9,212 skipped (72.2%) — string cluster 136/136 passing; named-template entry points without source use absent context item; global variables use initial context item
+- Previous: 3,884 passed / 1,504 failed / 9,212 skipped (72.1%) — key cluster 91/91 runnable passing; match cluster 0 runnable failures; key() pattern validation restored
 - Previous: 3,819 passed / 1,569 failed / 9,212 skipped (70.9%) — base-uri cluster 50/50 passing; xml:* prefix resolution; copy cluster improvements from base URI propagation
 - Previous: 3,764 passed / 1,625 failed / 9,211 skipped (69.8%) — as cluster 100%
 - Previous: ~3493 passed / ~1912 failed / 9195 skipped (~64.6%) — copy cluster +6 tests (xsl:on-empty, copy-namespaces validation, node() pattern fix)
@@ -835,30 +864,31 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 | Cluster | Passed | Failed | Skipped | Notes |
 |---------|--------|--------|---------|-------|
 | `base-uri` | 50 | 0 | 5 | ✅ 100% of runnable |
-| `copy` | 123 | 5 | 20 | DTD / accumulator hard walls remain |
-| `string` | 130 | 6 | 0 | Regressed from 136/136; likely namespace-serialization side effect |
+| `copy` | 122 | 6 | 20 | DTD / accumulator hard walls remain |
+| `string` | 136 | 0 | 0 | ✅ 100% passing; global variable initial-context fix |
 | `key` | 91 | 0 | 8 | ✅ 100% of runnable; content-constructor typing, composite keys, document-order results, focus isolation, pattern validation |
 | `for-each-group` | 39 | 39 | 7 | Biggest runnable failure block |
 | `function` | 53 | 26 | 31 | Function items / higher-order XSLT |
 | `mode` | 84 | 41 | 44 | Mode dispatch edge cases |
 | `variable` | 78 | 28 | 2 | Variable coercion / tunnel / scope |
 
-### Option A: Restore `string` Cluster to 100% (quick win, 1 session)
-`string` dropped from 136/136 to 130/136 after the base-uri work. Failures `string-025/030/035/041/134/135` look like namespace-axis/serialization fallout (expected `xmlns:*` attributes or text content, got empty). A targeted run should reveal whether these share a single root cause with the copy namespace work.
-
-### Option B: `for-each-group` Cluster (+15–30 tests, 2–3 days, high impact)
+### Option A: `for-each-group` Cluster (+15–30 tests, 2–3 days, high impact)
 `for-each-group` is the largest remaining runnable block (39/85 passing). The basic implementation exists for all four grouping algorithms, but edge cases in pattern matching, atomic values, collation, and group sorting remain. Highest potential yield but also highest exploration cost.
 
-### Option C: `copy` Cluster (+5–7 tests, medium impact)
-`copy` has 5–7 remaining failures around DTD entity references, CDATA parsing, `is` node-comparison, accumulators (`accumulator-before#1`), and context-item behavior. Most are hard walls (DTD, accumulator), but the context-item and node-comparison failures may be quick fixes.
+### Option B: `copy` Cluster (+5–6 tests, medium impact)
+`copy` has 5–6 remaining failures around DTD entity references, CDATA parsing, `is` node-comparison, accumulators (`accumulator-before#1`), and context-item behavior. Most are hard walls (DTD, accumulator), but the context-item and node-comparison failures may be quick fixes.
+
+### Option C: `sort` Cluster (+19 tests, medium effort)
+`sort` has 19 failures around typed/atomic keys, stable sort, and collations. Separate from the QT3 `fn:sort` work; a focused session could restore a chunk of these.
 
 ### Recommendation
-**Option A first** — the `string` regressions are unexpected and likely fixable quickly. After restoring `string`, move to **Option B (`for-each-group`)** because it is the largest remaining runnable block. Keep **Option C (`copy`)** for targeted fixes around context item and node comparison.
+**Option A first** — `for-each-group` is the largest remaining runnable block and the highest-impact next milestone. Keep **Option B (`copy`)** for targeted fixes around context item and node comparison, and **Option C (`sort`)** as a follow-up.
 
 ### Completed / Near-Complete Clusters
 - **`base-uri`** — 0 failures, 50/50 passed (100%) ✅ (5 skipped for XInclude dependency)
 - **`key`** — 0 failures, 8 skipped. 91/99 passing (100% of runnable) ✅
 - **`match`** — 0 failures, 115 skipped. 179/294 passing (100% of runnable) ✅
+- **`string`** — 0 failures, 0 skipped. 136/136 passing (100%) ✅
 - **`boolean`** — 0 failures, 0 skipped (100% passing) ✅
 - **`core-function`** — 0 failures, 90/90 passed (100%) ✅
 - **`for-each-pair`** — 0 failures, 2 skipped. 56/58 passing (100% of runnable) ✅
@@ -868,11 +898,11 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 - **`predicate`** — 0 failures, 0 skipped. 57/57 passing (100%) ✅
 
 ### Regressed / Active Clusters
-- **`string`** — 6 failures (was 0 in previous baseline). Likely namespace-serialization fallout from base-uri changes; highest priority quick win.
+- **`for-each-group`** — 39 failures. Largest runnable block.
 - **`sort`** — 19 failures. XSLT `xsl:sort` edge cases in typed/atomic keys, stable sort, and collations; separate from the QT3 `fn:sort` work.
 - **`expression`** — 1 failure. Small follow-up.
-- **`copy`** — 5–7 failures remaining; hard walls (DTD, accumulator, namespace serialization) plus context-item / node-comparison quick fixes.
-- **`for-each-group`** — 39 failures. Largest runnable block.
+- **`copy`** — 6 failures remaining; hard walls (DTD, accumulator, namespace serialization) plus context-item / node-comparison quick fixes.
+- **`variable`** — 28 failures. Variable coercion / tunnel / scope.
 
 ---
 
@@ -880,7 +910,8 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 - `main` — all work is on `main`
 - No feature branches
-- Latest: `a9916d1` — XSLT key cluster restored to 100% runnable; match regression fixes; docs sync
+- Latest: `<uncommitted>` — XSLT string cluster restored to 136/136 passing; global variables use initial context item; named-template entry points without source use absent context item
+- Previous: `a9916d1` — XSLT key cluster restored to 100% runnable; match regression fixes; docs sync
 - Previous: `81c51b5` — XSLT base-uri cluster fix + docs sync + refreshed next steps (document('') resolution, xml:* prefix handling, base URI propagation)
 - Previous: `fdb3987` — docs: update AGENT_HANDOVER commit hash for as-cluster session
 - Previous: `<uncommitted>` — namespace axis parent fix (copy-0616/0618/0624/0626)

@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 12 June 2026
 > **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 3,884 passed / 1,504 failed / 9,212 skipped (~72.1%)
+> **XSLT baseline:** 3,888 passed / 1,500 failed / 9,212 skipped (~72.2%)
 
 ---
 
@@ -238,7 +238,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:comment` | ✅ Working | `select` attribute or text content |
 | `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
 | `xsl:decimal-format` | ✅ Working | Parsed and registered for `fn:format-number` |
-| `xsl:variable` | ✅ Working | Lexical scoping; `as` attribute with full atomic type coercion and atomization (`xs:integer`, `xs:string`, `xs:boolean`, `xs:double`, `xs:decimal`, `xs:duration`, `xs:QName`, `xs:dateTime`, gYear, etc.). Node type tests (`element(...)`, `attribute(...)`, `document-node(...)`, `node()`, `item()`) bypass atomization. Usable in XPath via `$var`. Global variables with sequence constructors are evaluated lazily on first reference using the context item at that point. |
+| `xsl:variable` | ✅ Working | Lexical scoping; `as` attribute with full atomic type coercion and atomization (`xs:integer`, `xs:string`, `xs:boolean`, `xs:double`, `xs:decimal`, `xs:duration`, `xs:QName`, `xs:dateTime`, gYear, etc.). Node type tests (`element(...)`, `attribute(...)`, `document-node(...)`, `node()`, `item()`) bypass atomization. Usable in XPath via `$var`. Global variables with sequence constructors are evaluated lazily on first reference with a singleton focus based on the root node of the tree containing the initial context node (XSLT 3.0 §9.6). |
 | `xsl:param` | ✅ Working | On named templates, global params, default values; `as` attribute with full atomic type coercion and atomization. Subtype substitution (integer→decimal, float→double) and type promotion supported. |
 | Built-in template rules | ✅ Working | Shallow-copy elements, copy text/attributes |
 | Literal result elements | ✅ Working | Namespace preservation, AVT evaluation |
@@ -334,6 +334,8 @@ dotnet test Bosak.sln
 | `fn:node-name` on text nodes returns `XdmValue.Undefined` (empty sequence). | Was incorrectly returning empty sequence due to unintended `NodeToQName` change. Reverted to spec-compliant `Undefined`. | 2026-06-11 |
 | `CopyLiteralElement` no longer walks ancestor chain to copy namespace declarations. | Was leaking `xmlns:xs` and other stylesheet prefixes into literal result elements, breaking `exclude-result-prefixes` and `fn:transform` output. | 2026-06-11 |
 | `*:local` name tests now emit `"*:local"` into the literal pool. | Prevents VM from applying the no-namespace attribute restriction to `*:local` patterns. Fixes namespace-1402 and related tests. | 2026-06-11 |
+| Global sequence-constructor variables now evaluate with the initial context item. | `xsl:variable` sequence constructors at the top level use a singleton focus based on the root of the source tree (XSLT 3.0 §9.6), not the focus at the point of reference. Fixes `string-041`. | 2026-06-12 |
+| Named-template entry points without a source document use an absent context item. | `XsltExecutable.Transform`/`TransformToString` accept a null source; the conformance harness passes null for named-template tests with no explicit source. Keeps `copy-4308` (XTTE0945) correct. | 2026-06-12 |
 | Namespace node `parent::node()` now returns the element whose namespace axis includes the node (`_namespaceOwner`), not the element where the underlying `XAttribute` declaration resides. | Fixes `.. is $e` for inherited namespace nodes in XPath. Required for XSLT `namespace::*` axis correctness. | 2026-06-10 |
 | `xsl:variable`/`xsl:param`/`xsl:function`/`xsl:with-param` `@as` now fully supports atomic type coercion and atomization. | `ConvertVariableValue` rewrites atomization + casting via `VmEngine.TryCast`. Subtype substitution (integer→decimal, float→double) and type promotion. Node type tests (`element(...)`, `attribute(...)`, `document-node(...)`) bypass atomization. | 2026-06-11 |
 | `xsl:document` no longer leaks outer `_sequenceAccumulator` into its sequence constructor. | `wrapInDocumentNode=true` now isolates the accumulator, ensuring `xsl:copy-of` inside `xsl:document` unwinds document nodes into the new document instead of the outer variable. | 2026-06-11 |
@@ -351,7 +353,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 3,884 | 1,504 | 9,212 | 72.1% | +65 tests from previous baseline; key cluster 91/91 runnable passing; match cluster 0 runnable failures |
+| XSLT 3.0 (W3C) | 3,888 | 1,500 | 9,212 | 72.2% | +4 tests from previous baseline; string cluster 136/136 passing; named-template entry points without source use absent initial context item |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

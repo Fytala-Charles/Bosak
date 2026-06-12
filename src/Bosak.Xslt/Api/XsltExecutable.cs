@@ -38,10 +38,12 @@ public sealed class XsltExecutable
     /// <summary>
     /// Transforms the supplied source document using this stylesheet.
     /// </summary>
-    /// <param name="source">The source document or node to transform.</param>
+    /// <param name="source">The source document or node to transform. May be null for named-template entry points with no initial context item.</param>
     /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
+    /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
+    /// <param name="initialMode">Optional name of the initial mode to use.</param>
     /// <returns>The result of the transformation as an XDM value.</returns>
-    public XdmValue Transform(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
+    public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
     {
         var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener);
         return engine.Transform(source, initialTemplate, initialMode);
@@ -50,12 +52,12 @@ public sealed class XsltExecutable
     /// <summary>
     /// Transforms the supplied source document and serializes the result to a string.
     /// </summary>
-    /// <param name="source">The source document or node to transform.</param>
+    /// <param name="source">The source document or node to transform. May be null for named-template entry points with no initial context item.</param>
     /// <param name="context">Optional evaluation context.</param>
     /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
     /// <param name="initialMode">Optional name of the initial mode to use.</param>
     /// <returns>The serialized result of the transformation.</returns>
-    public string TransformToString(IXdmNode source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
+    public string TransformToString(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
     {
         var result = Transform(source, context, initialTemplate, initialMode);
         return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);

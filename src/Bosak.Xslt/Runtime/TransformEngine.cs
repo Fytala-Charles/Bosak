@@ -214,8 +214,13 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the stylesheet transformation.
     /// </summary>
-    public XdmValue Transform(IXdmNode source, string? initialTemplate = null, string? initialMode = null)
+    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null)
     {
+        // A source document is required unless an initial template is supplied or the
+        // stylesheet declares an xsl:initial-template.
+        if (source == null && string.IsNullOrEmpty(initialTemplate) && !_allNamedTemplates.ContainsKey("xsl:initial-template"))
+            throw new ArgumentException("A source document is required unless an initial template is specified.", nameof(source));
+
         // Ensure xsl:function registrations are present (re-entrant transforms)
         RegisterXsltFunctions();
         // Compile all template match patterns before execution
@@ -231,7 +236,8 @@ public sealed class TransformEngine
 
         // Apply whitespace stripping from xsl:strip-space / xsl:preserve-space
         // before globals or key indices are evaluated.
-        ApplyWhitespaceStripping(source);
+        if (source != null)
+            ApplyWhitespaceStripping(source);
 
         // Initialize global parameters and variables before building key indices,
         // because xsl:key/@use and match expressions may reference global variables.
@@ -241,7 +247,7 @@ public sealed class TransformEngine
         // (e.g. key-063 where k2's use calls key('k1',...), or key-064 where
         // k1's match calls key('k2',...)).
         var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
-        if (allKeyDefs.Count > 0)
+        if (source != null && allKeyDefs.Count > 0)
         {
             // XTSE1222: all xsl:key declarations with the same expanded name must
             // agree on their effective @composite value.
@@ -274,7 +280,7 @@ public sealed class TransformEngine
                     if (cleared.Add(keyDef.Name))
                         sourceIndex.ClearKey(keyDef.Name);
                     if (keyDef.HasUseContent)
-                        KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex, n => EvaluateSequenceConstructor(keyDef.Element, XdmValue.FromNode(n), wrapInDocumentNode: false));
+                        KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex, n => EvaluateSequenceConstructor(keyDef.Element!, XdmValue.FromNode(n), wrapInDocumentNode: false));
                     else
                         KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex);
                 }
@@ -313,14 +319,14 @@ public sealed class TransformEngine
                 _modeStack.Push(resolvedInitialMode);
                 try
                 {
-                    var rootTemplate = FindBestTemplate(source, resolvedInitialMode);
+                    var rootTemplate = FindBestTemplate(source!, resolvedInitialMode);
                     if (rootTemplate != null)
                     {
-                        ExecuteTemplate(rootTemplate, source);
+                        ExecuteTemplate(rootTemplate, source!);
                     }
                     else
                     {
-                        ApplyBuiltInRules(source, resolvedInitialMode);
+                        ApplyBuiltInRules(source!, resolvedInitialMode);
                     }
                 }
                 finally
@@ -333,9 +339,9 @@ public sealed class TransformEngine
                 // Look for a template matching "/" or other document-node-specific patterns
                 var rootTemplate = FindRootTemplate();
                 if (rootTemplate != null && rootTemplate.CompiledMatch != null &&
-                    rootTemplate.CompiledMatch(XdmValue.FromNode(source), _context))
+                    rootTemplate.CompiledMatch(XdmValue.FromNode(source!), _context))
                 {
-                    ExecuteTemplate(rootTemplate, source);
+                    ExecuteTemplate(rootTemplate, source!);
                 }
                 else
                 {
@@ -345,7 +351,7 @@ public sealed class TransformEngine
                     // document node. We must NOT search for other patterns (like
                     // node() or document-node()) that might match the document node
                     // directly, as that causes incorrect next-match chaining.
-                    ApplyTemplates(source, mode: "", select: null);
+                    ApplyTemplates(source!, mode: "", select: null);
                 }
             }
         }
@@ -4967,17 +4973,19 @@ public sealed class TransformEngine
     /// Evaluates top-level xsl:param and xsl:variable declarations and binds them into the context.
     /// Order: imported first, then included, then local. Parameters are evaluated before variables.
     /// Global variables with sequence constructors (no @select) are evaluated lazily on first
-    /// reference, using the context item present at the point of reference (per XSLT 3.0 §9.6).
+    /// reference, using a singleton focus based on the root of the tree containing the initial
+    /// context node (per XSLT 3.0 §9.6). If no initial context node is supplied, the focus is absent.
     /// </summary>
-    private void InitializeGlobalParametersAndVariables(IXdmNode source)
+    private void InitializeGlobalParametersAndVariables(IXdmNode? source)
     {
-        var focus = XdmValue.FromNode(source);
+        var focus = source != null ? XdmValue.FromNode(source) : XdmValue.Undefined;
         _globalContextItem = focus;
 
         // Set the focus once for all global param/var evaluations.
         // Sequence constructors inside global variables rely on _context.ContextItem
         // being set when they evaluate XPath expressions (e.g. xsl:value-of/@select).
-        _context.WithFocus(focus, 1, 1);
+        if (source != null)
+            _context.WithFocus(focus, 1, 1);
 
         // Collect globals in precedence order: imports first, then includes, then local.
         // Within each stylesheet module, params and vars are evaluated in document order.
@@ -5009,15 +5017,24 @@ public sealed class TransformEngine
             if (string.IsNullOrEmpty(namespaceUri) && _lazyGlobals.TryGetValue(localName, out var info))
             {
                 _lazyGlobals.Remove(localName);
-                // Sequence-constructor global variables are evaluated with the focus present
-                // at the point of reference. This matches XSLT 3.0 test expectations such as
-                // copy-4308, where a global variable calls a named template that relies on
-                // the absence of a context item.
-                var currentItem = _context.ContextItem;
-                var value = EvaluateSequenceConstructor(info.Element, currentItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
-                value = ConvertVariableValue(value, info.AsType);
-                _context.WithVariable(localName, value);
-                return value;
+                // Global variables are evaluated with a singleton focus based on the root node
+                // of the tree containing the initial context node (XSLT 3.0 §9.6). Save the
+                // caller's focus so it is not corrupted by the global's sequence constructor.
+                var savedItem = _context.ContextItem;
+                var savedPos = _context.ContextPosition;
+                var savedSize = _context.ContextSize;
+                try
+                {
+                    _context.WithFocus(_globalContextItem, 1, 1);
+                    var value = EvaluateSequenceConstructor(info.Element, _globalContextItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                    value = ConvertVariableValue(value, info.AsType);
+                    _context.WithVariable(localName, value);
+                    return value;
+                }
+                finally
+                {
+                    _context.WithFocus(savedItem, savedPos, savedSize);
+                }
             }
             return null;
         };

@@ -50,7 +50,7 @@ public class Copy4308Tests
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl, "file:///test.xsl");
-        var source = new XDocumentNode(new XDocument(new XElement("a")));
-        Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source));
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null!));
+        Assert.Contains("XTTE0945", ex.Message);
     }
 }

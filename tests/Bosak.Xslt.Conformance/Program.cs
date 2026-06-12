@@ -378,11 +378,14 @@ class Program
                 }
             }
 
-            // Check for initial-template
+            // Check for initial-template (explicit in test catalog or implicit xsl:initial-template)
             string? initialTemplate = null;
             var initialTemplateElem = testElem.Element(ns + "initial-template");
             if (initialTemplateElem != null)
                 initialTemplate = initialTemplateElem.Attribute("name")?.Value;
+
+            bool hasImplicitInitialTemplate = xslDoc.Descendants()
+                .Any(e => e.Name.LocalName == "template" && e.Attribute("name")?.Value == "xsl:initial-template");
 
             // Check for initial-mode
             string? initialMode = null;
@@ -393,6 +396,12 @@ class Program
             if (sourceNode != null)
             {
                 resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode);
+            }
+            else if (!string.IsNullOrEmpty(initialTemplate) || hasImplicitInitialTemplate)
+            {
+                // Named-template entry points with no explicit source document have no
+                // initial context item (XSLT 3.0 §6.5 / §9.6).
+                resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode);
             }
             else
             {

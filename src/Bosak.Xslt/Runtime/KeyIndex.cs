@@ -314,7 +314,7 @@ public sealed class KeyIndex
 
     private static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index, Patterns.PatternCompiler patternCompiler)
     {
-        var defaultNs = Bosak.Xslt.Stylesheet.Stylesheet.GetXPathDefaultNamespace(keyDef.Element);
+        var defaultNs = Bosak.Xslt.Stylesheet.Stylesheet.GetXPathDefaultNamespace(keyDef.Element!);
         var resolvedMatch = ResolveNamespacePrefixes(keyDef.Match, keyDef.Element);
         var compiledMatch = patternCompiler.Compile(resolvedMatch, defaultNs);
         var useExpr = string.IsNullOrEmpty(keyDef.Use)
@@ -338,7 +338,7 @@ public sealed class KeyIndex
     public static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index, Func<IXdmNode, XdmValue> useEvaluator)
     {
         var patternCompiler = new Patterns.PatternCompiler();
-        var defaultNs = Bosak.Xslt.Stylesheet.Stylesheet.GetXPathDefaultNamespace(keyDef.Element);
+        var defaultNs = Bosak.Xslt.Stylesheet.Stylesheet.GetXPathDefaultNamespace(keyDef.Element!);
         var resolvedMatch = ResolveNamespacePrefixes(keyDef.Match, keyDef.Element);
         var compiledMatch = patternCompiler.Compile(resolvedMatch, defaultNs);
 
