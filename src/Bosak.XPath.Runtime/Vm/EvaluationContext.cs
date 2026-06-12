@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 27-05-2026     | Added DefaultCollation property and WithDefaultCollation helper                        |
 //                      | Charles Korthout | 0.7   | 30-05-2026     | Added BackwardsCompatible property for XPath 1.0 general-comparison coercion rules     |
 //                      | Charles Korthout | 0.8   | 10-06-2026     | Added LazyVariableResolver and _evaluatedLazyGlobals for deferred XSLT globals         |
+//                      | Charles Korthout | 0.9   | 11-06-2026     | TryResolveNamespace resolves predefined xml prefix to XML namespace URI                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -229,6 +230,11 @@ public sealed class EvaluationContext
         if (prefix == "" && !string.IsNullOrEmpty(DefaultElementNamespace))
         {
             namespaceUri = DefaultElementNamespace;
+            return true;
+        }
+        if (prefix == "xml")
+        {
+            namespaceUri = "http://www.w3.org/XML/1998/namespace";
             return true;
         }
         return _namespaces.TryGetValue(prefix, out namespaceUri!);

@@ -81,6 +81,7 @@
 //                      | Charles Korthout | 5.10  | 11-06-2026     | Fixed copy-1220/1221 namespace axis: AddElementToContainer, NamespaceInheritanceBarrier for copy-namespaces=no |
 //                      | Charles Korthout | 5.11  | 11-06-2026     | Isolated _sequenceAccumulator when wrapInDocumentNode=true; fixes as-1303 xsl:document content leakage |
 //                      | Charles Korthout | 5.12  | 11-06-2026     | Runtime XTSE0010 for @as on xsl:call-template; fixes as-1601                               |
+//                      | Charles Korthout | 5.13  | 11-06-2026     | Base URI propagation for xsl:copy/copy-of and built-in template rules; fixes base-uri-050/053 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -477,12 +478,60 @@ public sealed class TransformEngine
     {
         var nsMap = GetInScopeNamespaces(instruction);
         var defaultNs = GetXPathDefaultNamespace(instruction);
-        if (nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs))
+        var baseUri = GetEffectiveBaseUri(instruction);
+        if (nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(baseUri))
         {
-            var options = new CompileOptions { Namespaces = nsMap, DefaultElementNamespace = defaultNs };
+            var options = new CompileOptions { Namespaces = nsMap, DefaultElementNamespace = defaultNs, BaseUri = baseUri };
             return XPath31Expression.Compile(expression, options);
         }
         return XPath31Expression.Compile(expression);
+    }
+
+    /// <summary>
+    /// Computes the effective base URI of an XSLT instruction by walking up the
+    /// ancestor chain and resolving <c>xml:base</c> attributes per XML Base spec.
+    /// </summary>
+    private string? GetEffectiveBaseUri(XElement? element)
+    {
+        if (element == null)
+            return null;
+
+        string baseUri = element.Document?.BaseUri ?? string.Empty;
+        if (string.IsNullOrEmpty(baseUri))
+            baseUri = _stylesheet.BaseUri ?? string.Empty;
+        var chain = new List<string>();
+        var current = element;
+        while (current != null)
+        {
+            var xmlBase = current.Attribute(XNamespace.Xml + "base")?.Value;
+            if (xmlBase != null)
+                chain.Add(xmlBase);
+            current = current.Parent;
+        }
+
+        for (int i = chain.Count - 1; i >= 0; i--)
+        {
+            if (Bosak.XPath.Standard.Functions.FunctionLibrary.IsAbsoluteUri(chain[i]))
+                baseUri = chain[i];
+            else if (!string.IsNullOrEmpty(baseUri))
+            {
+                try
+                {
+                    baseUri = new Uri(new Uri(baseUri), chain[i]).AbsoluteUri;
+                }
+                catch (UriFormatException)
+                {
+                    // If the base URI is not a valid .NET Uri,
+                    // preserve the xml:base value as-is (XSLT test suites
+                    // use intentionally malformed URIs like d://tests/)
+                    baseUri = chain[i];
+                }
+            }
+            else
+                baseUri = chain[i];
+        }
+
+        return string.IsNullOrEmpty(baseUri) ? null : baseUri;
     }
 
     private void RegisterXsltFunctions()
@@ -3145,7 +3194,7 @@ public sealed class TransformEngine
                 continue;
 
             var attrName = XName.Get(attr.Name.LocalName, attr.Name.NamespaceName);
-            var attrValue = EvaluateAvt(attr.Value);
+            var attrValue = EvaluateAvt(attr.Value, source);
             copy.SetAttributeValue(attrName, attrValue);
         }
 
@@ -3248,13 +3297,14 @@ public sealed class TransformEngine
     /// <summary>
     /// Evaluates Attribute Value Templates (AVTs): {expr} is evaluated, {{ and }} are escaped.
     /// </summary>
-    private string EvaluateAvt(string value)
+    private string EvaluateAvt(string value, XElement? baseUriElement = null)
     {
         if (string.IsNullOrEmpty(value) || !value.Contains('{'))
             return value;
 
         var sb = new System.Text.StringBuilder();
         int i = 0;
+        var avtBaseUri = GetEffectiveBaseUri(baseUriElement);
         while (i < value.Length)
         {
             if (i + 1 < value.Length && value[i] == '{' && value[i + 1] == '{')
@@ -3280,7 +3330,15 @@ public sealed class TransformEngine
                     var expr = value.Substring(i + 1, end - i - 1);
                     if (!string.IsNullOrEmpty(expr))
                     {
-                        var compiled = XPath31Expression.Compile(expr);
+                        XPath31Expression compiled;
+                        if (!string.IsNullOrEmpty(avtBaseUri))
+                        {
+                            compiled = XPath31Expression.Compile(expr, new CompileOptions { BaseUri = avtBaseUri });
+                        }
+                        else
+                        {
+                            compiled = XPath31Expression.Compile(expr);
+                        }
                         var result = compiled.Evaluate(_context);
                         sb.Append(XdmValueToString(result));
                     }
@@ -3479,11 +3537,11 @@ public sealed class TransformEngine
                             children.Add(child.NodeValue);
                     }
                     var elementCount = children.Count(c => c.NodeKind == XdmNodeKind.Element);
+                    XDocument newDoc;
                     if (elementCount == 1 && children.Count == 1)
                     {
-                        var newDoc = new XDocument();
+                        newDoc = new XDocument();
                         CopyNodeToContainer(children[0], newDoc, copyAllNamespaces);
-                        return new XDocumentNode(newDoc);
                     }
                     else
                     {
@@ -3494,13 +3552,25 @@ public sealed class TransformEngine
                         {
                             CopyNodeToContainer(child, docWrapper, copyAllNamespaces);
                         }
-                        var tempDoc = new XDocument(docWrapper);
-                        return new XDocumentNode(tempDoc);
+                        newDoc = new XDocument(docWrapper);
                     }
+                    // Preserve base URI from the source document
+                    if (!string.IsNullOrEmpty(node.BaseUri))
+                        newDoc.AddAnnotation(node.BaseUri);
+                    return new XDocumentNode(newDoc);
                 }
             case XdmNodeKind.Element:
                 {
                     var copy = new XElement(XName.Get(node.LocalName, node.NamespaceUri));
+                    // Preserve base URI from the source element, but only if the source
+                    // element does not carry its own xml:base attribute. A copied relative
+                    // xml:base must be re-resolved against the new context (e.g. the
+                    // stylesheet base URI of the copying instruction); adding a resolved
+                    // absolute annotation would short-circuit that resolution.
+                    bool hasXmlBase = node is XDocumentNode xdn && xdn.UnderlyingObject is XElement srcElem
+                        && srcElem.Attribute(XNamespace.Xml + "base") != null;
+                    if (!hasXmlBase && !string.IsNullOrEmpty(node.BaseUri))
+                        copy.AddAnnotation(node.BaseUri);
                     if (copyAllNamespaces)
                     {
                         foreach (var ns in node.Axis(XdmAxis.Namespace))
@@ -3645,6 +3715,19 @@ public sealed class TransformEngine
                 {
                     var copy = new XElement(
                         XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri));
+                    // Preserve base URI from the source element
+                    if (nodeToCopy is XDocumentNode srcXdn && srcXdn.UnderlyingObject is XElement srcElem)
+                    {
+                        var baseUriAnnotation = srcElem.Annotation<string>();
+                        if (baseUriAnnotation != null)
+                            copy.AddAnnotation(baseUriAnnotation);
+                        else if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
+                            copy.AddAnnotation(nodeToCopy.BaseUri);
+                    }
+                    else if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
+                    {
+                        copy.AddAnnotation(nodeToCopy.BaseUri);
+                    }
                     foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
                     {
                         if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
@@ -3754,87 +3837,159 @@ public sealed class TransformEngine
                 break;
             case XdmNodeKind.Document:
                 {
-                    // Document node in complex content: create a new document node.
                     // XSLT 3.0 §11.8.1: xsl:copy on a document node creates a new document node;
                     // its children come from the sequence constructor, not the original.
-                    // XSLT 3.0 §5.7.1: when a document node appears in a sequence, it is replaced
-                    // by its children. Here we process the sequence constructor only.
                     var onEmptyElements = instruction.Elements(XName.Get("on-empty", Stylesheet.Stylesheet.XslNamespace)).ToList();
-                    var savedContainer = _currentContainer;
-                    var tempCollector = new XElement("__doc_temp__");
-                    _currentContainer = tempCollector;
+                    var srcBaseUri = nodeToCopy.BaseUri;
 
-                    foreach (var childNode in instruction.Nodes())
+                    if (_sequenceAccumulator != null)
                     {
-                        // Skip xsl:on-empty elements during normal processing
-                        if (childNode is XElement childElemOnEmpty &&
-                            childElemOnEmpty.Name.LocalName == "on-empty" &&
-                            childElemOnEmpty.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                        // In a sequence-returning context (e.g. xsl:variable with @as),
+                        // produce an actual document node so base-uri() works correctly.
+                        var newDoc = new XDocument();
+                        if (!string.IsNullOrEmpty(srcBaseUri))
+                            newDoc.AddAnnotation(srcBaseUri);
+                        var savedContainer = _currentContainer;
+                        _currentContainer = newDoc;
+
+                        foreach (var childNode in instruction.Nodes())
                         {
-                            continue;
-                        }
-
-                        switch (childNode)
-                        {
-                            case XText text:
-                                ProcessSequenceText(text, instruction);
-                                break;
-                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                ExecuteXsltInstruction(elem, nodeToCopy);
-                                break;
-                            case XElement elem:
-                                CopyLiteralElement(elem);
-                                break;
-                        }
-                    }
-
-                    _currentContainer = savedContainer;
-
-                    // Namespace nodes are not allowed on document nodes (XTDE0420)
-                    if (tempCollector.Attributes().Any(a => a.IsNamespaceDeclaration))
-                    {
-                        throw new InvalidOperationException("XTDE0420");
-                    }
-
-                    if (!tempCollector.Nodes().Any() && onEmptyElements.Count > 0)
-                    {
-                        // Sequence constructor is empty: evaluate on-empty and add directly
-                        foreach (var onEmpty in onEmptyElements)
-                        {
-                            var oeSelect = onEmpty.Attribute("select")?.Value;
-                            if (!string.IsNullOrEmpty(oeSelect))
+                            if (childNode is XElement childElemOnEmpty &&
+                                childElemOnEmpty.Name.LocalName == "on-empty" &&
+                                childElemOnEmpty.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                             {
-                                var compiled = XPath31Expression.Compile(oeSelect);
-                                var result = compiled.Evaluate(_context);
-                                CopyToResult(result, separateAtomicsWithSpace: true);
+                                continue;
                             }
-                            else
+                            switch (childNode)
                             {
-                                foreach (var childNode in onEmpty.Nodes())
+                                case XText text:
+                                    ProcessSequenceText(text, instruction);
+                                    break;
+                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elem, nodeToCopy);
+                                    break;
+                                case XElement elem:
+                                    CopyLiteralElement(elem);
+                                    break;
+                            }
+                        }
+
+                        _currentContainer = savedContainer;
+
+                        if (!newDoc.Nodes().Any() && onEmptyElements.Count > 0)
+                        {
+                            foreach (var onEmpty in onEmptyElements)
+                            {
+                                var oeSelect = onEmpty.Attribute("select")?.Value;
+                                if (!string.IsNullOrEmpty(oeSelect))
                                 {
-                                    switch (childNode)
+                                    var compiled = XPath31Expression.Compile(oeSelect);
+                                    var result = compiled.Evaluate(_context);
+                                    CopyToResult(result, separateAtomicsWithSpace: true);
+                                }
+                                else
+                                {
+                                    foreach (var childNode in onEmpty.Nodes())
                                     {
-                                        case XText text:
-                                            ProcessSequenceText(text, onEmpty);
-                                            break;
-                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                            ExecuteXsltInstruction(elem, _context.ContextItem);
-                                            break;
-                                        case XElement elem:
-                                            CopyLiteralElement(elem);
-                                            break;
+                                        switch (childNode)
+                                        {
+                                            case XText text:
+                                                ProcessSequenceText(text, onEmpty);
+                                                break;
+                                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                                ExecuteXsltInstruction(elem, _context.ContextItem);
+                                                break;
+                                            case XElement elem:
+                                                CopyLiteralElement(elem);
+                                                break;
+                                        }
                                     }
                                 }
                             }
                         }
+
+                        _sequenceAccumulator.Add(XdmValue.FromNode(new XDocumentNode(newDoc)));
                     }
                     else
                     {
-                        // Move collected children to the actual result container
-                        foreach (var node in tempCollector.Nodes().ToList())
+                        // Direct result tree: document node in complex content is replaced
+                        // by its children (XSLT 3.0 §5.7.1). Process children into a temp
+                        // collector and then move them to the result container, preserving
+                        // the source document's base URI on child elements.
+                        var savedContainer = _currentContainer;
+                        var tempCollector = new XElement("__doc_temp__");
+                        _currentContainer = tempCollector;
+
+                        foreach (var childNode in instruction.Nodes())
                         {
-                            node.Remove();
-                            _currentContainer.Add(node);
+                            if (childNode is XElement childElemOnEmpty &&
+                                childElemOnEmpty.Name.LocalName == "on-empty" &&
+                                childElemOnEmpty.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                            {
+                                continue;
+                            }
+                            switch (childNode)
+                            {
+                                case XText text:
+                                    ProcessSequenceText(text, instruction);
+                                    break;
+                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elem, nodeToCopy);
+                                    break;
+                                case XElement elem:
+                                    CopyLiteralElement(elem);
+                                    break;
+                            }
+                        }
+
+                        _currentContainer = savedContainer;
+
+                        // Namespace nodes are not allowed on document nodes (XTDE0420)
+                        if (tempCollector.Attributes().Any(a => a.IsNamespaceDeclaration))
+                        {
+                            throw new InvalidOperationException("XTDE0420");
+                        }
+
+                        if (!tempCollector.Nodes().Any() && onEmptyElements.Count > 0)
+                        {
+                            foreach (var onEmpty in onEmptyElements)
+                            {
+                                var oeSelect = onEmpty.Attribute("select")?.Value;
+                                if (!string.IsNullOrEmpty(oeSelect))
+                                {
+                                    var compiled = XPath31Expression.Compile(oeSelect);
+                                    var result = compiled.Evaluate(_context);
+                                    CopyToResult(result, separateAtomicsWithSpace: true);
+                                }
+                                else
+                                {
+                                    foreach (var childNode in onEmpty.Nodes())
+                                    {
+                                        switch (childNode)
+                                        {
+                                            case XText text:
+                                                ProcessSequenceText(text, onEmpty);
+                                                break;
+                                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                                ExecuteXsltInstruction(elem, _context.ContextItem);
+                                                break;
+                                            case XElement elem:
+                                                CopyLiteralElement(elem);
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var node in tempCollector.Nodes().ToList())
+                            {
+                                node.Remove();
+                                if (node is XElement elem && !string.IsNullOrEmpty(srcBaseUri) && elem.Annotation<string>() == null)
+                                    elem.AddAnnotation(srcBaseUri);
+                                _currentContainer.Add(node);
+                            }
                         }
                     }
                     break;
@@ -3919,6 +4074,15 @@ public sealed class TransformEngine
             case XdmNodeKind.Element:
                 {
                     var elem = new XElement(XName.Get(node.LocalName, node.NamespaceUri));
+                    // Preserve base URI from the source element, but only if the source
+                    // element does not carry its own xml:base attribute. A copied relative
+                    // xml:base must be re-resolved against the new context (e.g. the
+                    // stylesheet base URI of the copying instruction); adding a resolved
+                    // absolute annotation would short-circuit that resolution.
+                    bool hasXmlBase = node is XDocumentNode xdn && xdn.UnderlyingObject is XElement srcElem
+                        && srcElem.Attribute(XNamespace.Xml + "base") != null;
+                    if (!hasXmlBase && !string.IsNullOrEmpty(node.BaseUri))
+                        elem.AddAnnotation(node.BaseUri);
                     if (copyAllNamespaces)
                     {
                         foreach (var ns in node.Axis(XdmAxis.Namespace))
@@ -3953,8 +4117,8 @@ public sealed class TransformEngine
                             XName.Get(attr.NodeValue!.LocalName, attr.NodeValue!.NamespaceUri),
                             attr.NodeValue!.StringValue);
                     }
-                    if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement srcElem &&
-                        srcElem.Annotation<NamespaceInheritanceBarrier>() != null)
+                    if (node is XDocumentNode xdocNode2 && xdocNode2.UnderlyingObject is XElement srcElem2 &&
+                        srcElem2.Annotation<NamespaceInheritanceBarrier>() != null)
                     {
                         elem.AddAnnotation(new NamespaceInheritanceBarrier());
                     }
@@ -4111,6 +4275,19 @@ public sealed class TransformEngine
                 {
                     copy.AddAnnotation(new NamespaceInheritanceBarrier());
                 }
+                // Preserve base URI from the source element, but only if the source
+                // element does not carry its own xml:base attribute. A copied relative
+                // xml:base must be re-resolved against the new context.
+                bool hasXmlBase = srcElem.Attribute(XNamespace.Xml + "base") != null;
+                var baseUriAnnotation = srcElem.Annotation<string>();
+                if (baseUriAnnotation != null)
+                {
+                    copy.AddAnnotation(baseUriAnnotation);
+                }
+                else if (!hasXmlBase && !string.IsNullOrEmpty(node.BaseUri))
+                {
+                    copy.AddAnnotation(node.BaseUri);
+                }
             }
             else
             {
@@ -4226,8 +4403,26 @@ public sealed class TransformEngine
             switch (node.NodeKind)
             {
             case XdmNodeKind.Document:
-                // Built-in: apply templates to children of the document node
-                ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams);
+                if ((behavior == Stylesheet.OnNoMatch.ShallowCopy || behavior == Stylesheet.OnNoMatch.DeepCopy) &&
+                    _sequenceAccumulator != null)
+                {
+                    // In a sequence-returning context, shallow-copy/deep-copy of a document
+                    // node produces an actual document node (possibly empty) so that its
+                    // base URI is preserved.
+                    var newDoc = new XDocument();
+                    if (!string.IsNullOrEmpty(node.BaseUri))
+                        newDoc.AddAnnotation(node.BaseUri);
+                    var savedContainer = _currentContainer;
+                    _currentContainer = newDoc;
+                    ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams);
+                    _currentContainer = savedContainer;
+                    _sequenceAccumulator.Add(XdmValue.FromNode(new XDocumentNode(newDoc)));
+                }
+                else
+                {
+                    // Built-in: apply templates to children of the document node
+                    ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams);
+                }
                 break;
 
             case XdmNodeKind.Element:
@@ -4315,6 +4510,9 @@ public sealed class TransformEngine
                     // without copying attributes; templates are applied to children AND attributes.
                     var copy = new XElement(
                         XName.Get(node.LocalName, node.NamespaceUri));
+                    // Preserve base URI from the source element
+                    if (!string.IsNullOrEmpty(node.BaseUri))
+                        copy.AddAnnotation(node.BaseUri);
                     foreach (var ns in node.Axis(XdmAxis.Namespace))
                     {
                         if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
@@ -5205,7 +5403,12 @@ public sealed class TransformEngine
                     // lose XElement annotations (e.g. NamespaceInheritanceBarrier).
                     if (nodes[0].Parent != null)
                         nodes[0].Remove();
+                    var effectiveBaseUri = GetEffectiveBaseUri(parent);
+                    if (nodes[0] is XElement rootElem && !string.IsNullOrEmpty(effectiveBaseUri) && rootElem.Annotation<string>() == null)
+                        rootElem.AddAnnotation(effectiveBaseUri);
                     var tempDoc = new XDocument(nodes[0]);
+                    if (!string.IsNullOrEmpty(effectiveBaseUri))
+                        tempDoc.AddAnnotation(effectiveBaseUri);
                     return XdmValue.FromNode(new XDocumentNode(tempDoc));
                 }
                 else
@@ -5219,12 +5422,41 @@ public sealed class TransformEngine
                             node.Remove();
                         docWrapper.Add(node);
                     }
+                    var effectiveBaseUri = GetEffectiveBaseUri(parent);
+                    if (!string.IsNullOrEmpty(effectiveBaseUri) && docWrapper.Annotation<string>() == null)
+                        docWrapper.AddAnnotation(effectiveBaseUri);
                     var tempDoc = new XDocument(docWrapper);
+                    if (!string.IsNullOrEmpty(effectiveBaseUri))
+                        tempDoc.AddAnnotation(effectiveBaseUri);
                     return XdmValue.FromNode(new XDocumentNode(tempDoc));
                 }
             }
 
             // wrapInDocumentNode == false: return the raw sequence (used when @as is present)
+            // Remove nodes from the temporary wrapper so they don't have __temp__ as parent.
+            foreach (var node in nodes)
+            {
+                if (node.Parent != null)
+                    node.Remove();
+            }
+            var effectiveBaseUriNoWrap = GetEffectiveBaseUri(parent);
+            if (!string.IsNullOrEmpty(effectiveBaseUriNoWrap))
+            {
+                foreach (var child in nodes.OfType<XElement>())
+                {
+                    if (child.Annotation<string>() == null)
+                        child.AddAnnotation(effectiveBaseUriNoWrap);
+                }
+                // Also set annotation on element nodes in accumulatorItems (e.g. from xsl:copy-of)
+                foreach (var item in accumulatorItems)
+                {
+                    if (item.IsNode && item.NodeValue is XDocumentNode xdn && xdn.UnderlyingObject is XElement accElem)
+                    {
+                        if (accElem.Annotation<string>() == null)
+                            accElem.AddAnnotation(effectiveBaseUriNoWrap);
+                    }
+                }
+            }
             var results = new List<XdmValue>();
             results.AddRange(accumulatorItems);
             foreach (var child in nodes)

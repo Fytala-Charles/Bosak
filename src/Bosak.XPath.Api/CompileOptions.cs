@@ -55,6 +55,13 @@ public sealed class CompileOptions
     public bool StrictStaticTyping { get; init; }
 
     /// <summary>
+    /// The static base URI for resolving relative URIs in expressions
+    /// (e.g. <c>resolve-uri('file.xml')</c>). When null, the runtime
+    /// context's <see cref="EvaluationContext.BaseUri"/> is used.
+    /// </summary>
+    public string? BaseUri { get; init; }
+
+    /// <summary>
     /// If true, enables IL JIT compilation for hot expressions after
     /// a threshold of executions. Defaults to false (register VM only).
     /// </summary>

@@ -91,6 +91,9 @@ public sealed class Stylesheet
     /// <summary>The root element of the stylesheet (xsl:stylesheet or xsl:transform).</summary>
     public XElement Root => _document.Root!;
 
+    /// <summary>The base URI of this stylesheet, used for resolving relative xml:base values.</summary>
+    public string? BaseUri => _baseUri;
+
     /// <summary>All template rules defined in this stylesheet, ordered by priority.</summary>
     public IReadOnlyList<TemplateRule> TemplateRules => _templateRules;
 

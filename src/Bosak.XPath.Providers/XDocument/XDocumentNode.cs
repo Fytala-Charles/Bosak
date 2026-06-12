@@ -227,7 +227,99 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
-    public string BaseUri => _node.BaseUri ?? string.Empty;
+    public string BaseUri => ComputeBaseUri();
+
+    private string ComputeBaseUri()
+    {
+        // For XDocument, check annotation first (used for constructed document nodes)
+        if (_node is System.Xml.Linq.XDocument doc)
+        {
+            var annotatedDoc = doc.Annotation<string>();
+            if (!string.IsNullOrEmpty(annotatedDoc))
+                return annotatedDoc;
+            return doc.BaseUri ?? string.Empty;
+        }
+
+        // For XElement, walk up and resolve xml:base attributes per XML Base spec
+        if (_node is XElement elem)
+            return ResolveXmlBase(elem);
+
+        // For attributes, text, comments, PIs — use parent element's base URI
+        var parent = _node.Parent;
+        if (parent is XElement parentElem)
+            return ResolveXmlBase(parentElem);
+
+        // Fallback for other node types: check annotation then BaseUri
+        var annotated = _node.Annotation<string>();
+        if (!string.IsNullOrEmpty(annotated))
+            return annotated;
+
+        return _node.BaseUri ?? string.Empty;
+    }
+
+    /// <summary>
+    /// Resolves the effective base URI of an element by walking up the ancestor
+    /// chain and applying <c>xml:base</c> attributes per the XML Base specification.
+    /// For constructed nodes, checks for a base URI annotation on the root element.
+    /// </summary>
+    private static string ResolveXmlBase(XElement element)
+    {
+        // Collect xml:base attributes from this element up to the root
+        var chain = new List<string>();
+        XElement? root = null;
+        var current = element;
+        while (current != null)
+        {
+            root = current;
+            var xmlBase = current.Attribute(XNamespace.Xml + "base")?.Value;
+            if (xmlBase != null)
+                chain.Add(xmlBase);
+            current = current.Parent;
+        }
+
+        if (chain.Count == 0 && root == null)
+            return element.BaseUri ?? string.Empty;
+
+        // Start with the document's base URI or annotation, or a base URI annotation on the root element
+        string baseUri = element.Document?.BaseUri ?? string.Empty;
+        if (string.IsNullOrEmpty(baseUri) && element.Document != null)
+        {
+            var docAnnotatedBase = element.Document.Annotation<string>();
+            if (!string.IsNullOrEmpty(docAnnotatedBase))
+                baseUri = docAnnotatedBase;
+        }
+        if (string.IsNullOrEmpty(baseUri) && root != null)
+        {
+            var annotatedBase = root.Annotation<string>();
+            if (!string.IsNullOrEmpty(annotatedBase))
+                baseUri = annotatedBase;
+        }
+
+        if (chain.Count == 0)
+            return baseUri;
+
+        // Resolve from root to this element (reverse order of collection)
+        for (int i = chain.Count - 1; i >= 0; i--)
+        {
+            if (Uri.IsWellFormedUriString(chain[i], UriKind.Absolute))
+                baseUri = chain[i];
+            else if (!string.IsNullOrEmpty(baseUri))
+            {
+                try
+                {
+                    baseUri = new Uri(new Uri(baseUri), chain[i]).AbsoluteUri;
+                }
+                catch (UriFormatException)
+                {
+                    baseUri = chain[i];
+                }
+            }
+            else
+                baseUri = chain[i];
+        }
+
+        return baseUri;
+    }
 
     // ------------------------------------------------------------------
     // Tree navigation

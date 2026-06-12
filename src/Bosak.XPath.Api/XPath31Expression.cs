@@ -32,12 +32,14 @@ public sealed class XPath31Expression
     private readonly IrModule _module;
     private readonly IReadOnlyDictionary<string, string>? _namespaces;
     private readonly string? _defaultElementNamespace;
+    private readonly string? _baseUri;
 
-    private XPath31Expression(IrModule module, IReadOnlyDictionary<string, string>? namespaces = null, string? defaultElementNamespace = null)
+    private XPath31Expression(IrModule module, IReadOnlyDictionary<string, string>? namespaces = null, string? defaultElementNamespace = null, string? baseUri = null)
     {
         _module = module;
         _namespaces = namespaces;
         _defaultElementNamespace = defaultElementNamespace;
+        _baseUri = baseUri;
     }
 
     /// <summary>
@@ -65,7 +67,7 @@ public sealed class XPath31Expression
         var lowerer = new IrLowerer();
         var module = lowerer.Lower(optimized);
 
-        return new XPath31Expression(module, options.Namespaces, options.DefaultElementNamespace);
+        return new XPath31Expression(module, options.Namespaces, options.DefaultElementNamespace, options.BaseUri);
     }
 
     /// <summary>
@@ -89,10 +91,13 @@ public sealed class XPath31Expression
         FunctionLibrary.Populate(context);
 
         var savedDefaultNs = context.DefaultElementNamespace;
+        var savedBaseUri = context.BaseUri;
         try
         {
             if (_defaultElementNamespace != null)
                 context.DefaultElementNamespace = _defaultElementNamespace;
+            if (_baseUri != null)
+                context.BaseUri = _baseUri;
 
             if (_namespaces != null && _namespaces.Count > 0)
             {
@@ -117,6 +122,7 @@ public sealed class XPath31Expression
         finally
         {
             context.DefaultElementNamespace = savedDefaultNs;
+            context.BaseUri = savedBaseUri;
         }
     }
 

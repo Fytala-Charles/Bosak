@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-11  
+> **Living Registry** — Last updated: 2026-06-12  
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -135,6 +135,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1 and XSLT 3.0 development: syntax highlighting, realtime diagnostics, auto-completion | **Implemented** | 0.1.2 | Charles Korthout | 2026-06-08 |
 | REQ-029 | *(internal)* | `xsl:where-populated` and `xsl:on-empty` support | Required for copy-1213/1214/1215/1216/1217 conformance tests; where-populated filters empty nodes, on-empty provides fallback content | **Implemented** | TBD | Charles Korthout | 2026-06-10 |
 | REQ-030 | *(internal)* | XSLT `@as` type coercion and atomization | Required for as-0101 through as-1602 conformance tests; `xsl:variable`, `xsl:param`, `xsl:function`, `xsl:with-param` `@as` attribute must coerce/atomize per XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
+| REQ-031 | *(internal)* | XSLT `base-uri` cluster conformance | `document('')`, `fn:base-uri()`, `fn:static-base-uri()`, and `xml:base` propagation through copies must match XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1083,6 +1084,57 @@ Additionally, the XPath parser incorrectly treated prefixed names like `my:node(
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-06-10 | Charles Korthout / Kimi | Implemented | Required for copy cluster conformance; low-risk parser fix + instruction handlers |
+
+---
+
+### REQ-031: XSLT `base-uri` Cluster Conformance
+
+**Requesting Application:** *(internal — conformance)*
+**Submitted:** 2026-06-11
+**Status:** **Implemented**
+
+#### Problem Statement
+
+The W3C XSLT 3.0 `base-uri` test cluster was failing because Bosak did not correctly handle base URI resolution in several areas:
+
+- `document('')` inside a template returned the wrong stylesheet document or failed because the static base URI was the main stylesheet file rather than the template's effective base URI.
+- `xml:base` attributes on `xsl:template` and `xsl:stylesheet` were ignored when compiling XPath expressions, so `fn:static-base-uri()` returned the wrong URI.
+- `xsl:copy` and `xsl:copy-of` did not preserve source base URIs on copied document/element nodes.
+- `xml:*` prefixed names (e.g. `xml:base`) were not resolving to `http://www.w3.org/XML/1998/namespace` in node tests.
+- `fn:base-uri`, `fn:resolve-uri`, and `fn:static-base-uri` returned plain strings instead of `xs:anyURI`.
+
+#### Proposed Solution
+
+1. **Effective base URI in XPath compilation** — `TransformEngine.CompileXPath` now computes `GetEffectiveBaseUri(element)` by walking the ancestor chain and resolving `xml:base` attributes, then passes this URI into `EvaluationContext.BaseUri`.
+2. **`document('')` resolution** — `FunctionLibrary.Document_1` / `Document_2` resolve an empty URI against `ctx.BaseUri`. The conformance harness `DocumentLoader` returns the compiled stylesheet document when the requested URI matches the stylesheet base URI.
+3. **Base URI propagation through copies** — `TransformEngine.EvaluateSequenceConstructor` annotates newly constructed document nodes and elements with the effective base URI. `ExecuteSingleCopy`, `CopyXdmNode`, `CopyNodeToContainer`, and `CopyNodeToResult` preserve source base URI annotations. Built-in template rules shallow-copy/deep-copy base URIs onto created elements.
+4. **`xml` prefix resolution** — `XPathParser.ParseNodeTest` returns a `QName` node test for `xml:local` bound to `http://www.w3.org/XML/1998/namespace`. `EvaluationContext.TryResolveNamespace` hard-codes the same URI for the `xml` prefix.
+5. **`xs:anyURI` returns** — `FunctionLibrary.BaseUri_*`, `ResolveUri`, and `StaticBaseUri` wrap string results with `XdmValue.FromString(uri, "anyURI")`.
+
+#### Acceptance Criteria
+- [x] `base-uri-050` passes (`document('')` resolves against template's effective base URI)
+- [x] `base-uri-053` passes (`fn:base-uri()` on copied nodes reflects `xml:base` chain and source base URIs)
+- [x] `base-uri-052` explicitly skipped (requires XInclude support)
+- [x] `fn:base-uri`, `fn:resolve-uri`, `fn:static-base-uri` return `xs:anyURI`
+- [x] Base URI propagation also improves `copy-*` test results
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `xml:local` node tests resolve to XML namespace |
+| Compiler | Modified | `CompileXPath` takes effective base URI from element chain |
+| Runtime | Modified | `EvaluationContext` predefined `xml` prefix; base URI annotations |
+| Standard | Modified | URI functions return `xs:anyURI` |
+| XSLT | Modified | `TransformEngine` preserves base URIs through copies and built-in rules |
+| API | Modified | `CompileOptions` and `XPath31Expression` expose base URI |
+
+#### Related Requests
+- REQ-001 (`xsl:import`/`xsl:include`) — import/include base URI resolution is related
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-11 | Charles Korthout / Kimi | Implemented | Required for XSLT 3.0 conformance; fixes multiple clusters depending on base URI correctness |
 
 ---
 

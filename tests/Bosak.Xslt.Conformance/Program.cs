@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 08-06-2026     | Added initial-mode support and source/@select handling in LoadEnvironment              |
 //                      | Charles Korthout | 0.4   | 09-06-2026     | Read <param> elements inside <initial-mode> for initial-mode parameter passing         |
 //                      | Charles Korthout | 0.5   | 10-06-2026     | Print PASS for expected-error tests; added skip reason debug output                     |
+//                      | Charles Korthout | 0.6   | 11-06-2026     | Annotate loaded documents with base URI; skip base-uri-052 (XInclude)                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -90,6 +91,8 @@ class Program
         "next-match-036",
         "next-match-037",
         "next-match-040",
+        // XInclude not supported
+        "base-uri-052",
     };
 
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
@@ -327,6 +330,8 @@ class Program
 
             // Set up document loader that handles document('') by returning the stylesheet
             var xslDoc = XDocument.Parse(xslText, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+            if (string.IsNullOrEmpty(xslDoc.BaseUri))
+                xslDoc.AddAnnotation(baseUri);
             var evalContext = new Bosak.XPath.Runtime.Vm.EvaluationContext();
             evalContext.BaseUri = baseUri;
             evalContext.DocumentLoader = uri =>
@@ -339,14 +344,18 @@ class Program
                 var localPath = new Uri(resolvedUri).LocalPath;
                 if (File.Exists(localPath))
                 {
-                    var doc = XDocument.Load(localPath);
+                    var doc = XDocument.Load(localPath, LoadOptions.PreserveWhitespace);
+                    if (string.IsNullOrEmpty(doc.BaseUri))
+                        doc.AddAnnotation(resolvedUri);
                     return new XDocumentNode(doc);
                 }
                 // Try test set dir
                 var testPath = Path.Combine(testSetDir, uri);
                 if (File.Exists(testPath))
                 {
-                    var doc = XDocument.Load(testPath);
+                    var doc = XDocument.Load(testPath, LoadOptions.PreserveWhitespace);
+                    if (string.IsNullOrEmpty(doc.BaseUri))
+                        doc.AddAnnotation(new Uri(testPath).AbsoluteUri);
                     return new XDocumentNode(doc);
                 }
                 throw new FileNotFoundException($"Document not found: {uri}");
@@ -467,6 +476,7 @@ class Program
         }
 
         var file = source.Attribute("file")?.Value;
+        string? sourceUri = null;
         if (file != null && doc == null)
         {
             var path = Path.Combine(testSetDir, file);
@@ -474,10 +484,13 @@ class Program
             if (File.Exists(path))
             {
                 doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
+                sourceUri = new Uri(path).AbsoluteUri;
             }
         }
 
         if (doc == null) return null;
+        if (string.IsNullOrEmpty(doc.BaseUri) && sourceUri != null)
+            doc.AddAnnotation(sourceUri);
 
         // Handle select="..." on source (e.g. role="." select="/doc")
         var select = source.Attribute("select")?.Value;

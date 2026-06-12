@@ -1,8 +1,38 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-06-11
-**Commit:** `0894bcb`
-**Current focus:** XSLT `as` cluster (xsl:variable/@as, xsl:param/@as, xsl:function/@as type coercion and atomization) now 99/99 passing (100%). Fixed xsl:document sequence-accumulator isolation, runtime XTSE0010 for @as on xsl:call-template, and ConvertVariableValue atomic cast failure handling.
+**Date:** 2026-06-12
+**Commit:** `<uncommitted>`
+**Current focus:** XSLT `base-uri` cluster now 50/50 passing (100%), 5 skipped. Fixed `document('')` resolving against template's effective base URI, `xsl:copy` / `xsl:copy-of` preserving base URIs through copies, and built-in template rules propagating base URIs.
+
+---
+
+## This Session Fixes (2026-06-11 — `base-uri` cluster 100%)
+
+1. **`document('')` resolves against template base URI (base-uri-050)** — When `document('')` is called inside a template, it must return the stylesheet document containing that template. The harness and runtime now track each template's effective base URI (via `xml:base` on `xsl:template`) and feed it into `EvaluationContext.BaseUri` during XPath compilation.
+   - **Files changed**: `TransformEngine.cs`, `FunctionLibrary.cs`, `Program.cs`.
+
+2. **`xml:*` prefixed names parsed correctly (base-uri-053)** — `ParseNodeTest` was failing on `xml:base` because the `xml` prefix has a fixed namespace URI but was not being resolved through the normal namespace map. Added an explicit fallback that returns `QName(local, http://www.w3.org/XML/1998/namespace)` when the prefix is `xml`.
+   - **File changed**: `XPathParser.cs`.
+
+3. **Predefined `xml` prefix resolves at runtime (base-uri-053)** — `EvaluationContext.TryResolveNamespace` now returns `http://www.w3.org/XML/1998/namespace` for the `xml` prefix even if it was not explicitly bound.
+   - **File changed**: `EvaluationContext.cs`.
+
+4. **Base URI propagation through copies (base-uri-053)** — `xsl:copy` and `xsl:copy-of` now preserve source base URIs on document/element copies. `EvaluateSequenceConstructor` annotates constructed document nodes and elements with the effective base URI. Built-in template rules shallow-copy and deep-copy base URIs onto created elements. `XDocumentNode.ComputeBaseUri` resolves annotations and `xml:base` chains correctly.
+   - **Files changed**: `TransformEngine.cs`, `XDocumentNode.cs`.
+
+5. **Base URI annotations in harness (base-uri-050/053)** — `DocumentLoader` returns the compiled stylesheet for `document('')`. Loaded source documents get annotated with their source file URI when `BaseUri` is empty.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+6. **Skip base-uri-052** — Requires XInclude processing of `baseuri052.xml`; XInclude is not implemented.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+7. **`fn:base-uri` / `fn:resolve-uri` / `fn:static-base-uri` return `xs:anyURI`** — `FunctionLibrary.BaseUri_*`, `ResolveUri`, and `StaticBaseUri` now wrap string results with `XdmValue.FromString(uri, "anyURI")` so tests comparing type pass.
+   - **File changed**: `FunctionLibrary.cs`.
+
+**`base-uri` cluster**: 50/50 passing, 0 failed, 5 skipped (100%).
+**`copy` cluster**: improved vs baseline due to base URI propagation fixes.
+**Full suite**: 3,819 passed / 1,569 failed / 9,212 skipped (70.9%) — up from 3,764/1,625/9,211 (69.8%).
+**Unit tests**: 877 passed, 0 failed across 8 test projects.
 
 ---
 
@@ -63,8 +93,8 @@
 ---
 
 **Date:** 2026-06-11
-**Commit:** `e18e960`
-**Current focus:** Fixed xpath-default-namespace handling throughout XSLT → XPath pipeline; resolved all unit test regressions. Namespace cluster: 201/47/28 (81.0%). Full suite: 3,634/1,771/9,195 (67.2%).
+**Commit:** `<uncommitted>`
+**Current focus:** XSLT `base-uri` cluster 50/50 passing (100%), 5 skipped. Fixed `document('')` against template effective base URI, `xml:*` prefix resolution, and base URI propagation through copies / built-in rules. Copy cluster improved as a side effect.
 
 ---
 
@@ -72,8 +102,8 @@
 
 ### XSLT Conformance (W3C XSLT 3.0 Test Suite)
 
-- **Passed:** 3,634 / **Failed:** 1,771 / **Skipped:** 9,195 (14,600 total)
-- Pass rate: **67.2%** (latest run, 2026-06-11)
+- **Passed:** 3,819 / **Failed:** 1,569 / **Skipped:** 9,212 (14,600 total)
+- Pass rate: **70.9%** (latest run, 2026-06-12)
 - Runner completes without crashes (exit code 0)
 
 ### This Session Fixes (2026-06-11 — xpath-default-namespace + unit test regressions)
@@ -153,7 +183,9 @@
 ---
 
 **Recent trajectory:**
-- Latest: ~3493 passed / ~1912 failed / 9195 skipped (~64.6%) — copy cluster +6 tests (xsl:on-empty, copy-namespaces validation, node() pattern fix)
+- Latest: 3,819 passed / 1,569 failed / 9,212 skipped (70.9%) — base-uri cluster 50/50 passing; xml:* prefix resolution; copy cluster improvements from base URI propagation
+- Previous: 3,764 passed / 1,625 failed / 9,211 skipped (69.8%) — as cluster 100%
+- Previous: ~3493 passed / ~1912 failed / 9195 skipped (~64.6%) — copy cluster +6 tests (xsl:on-empty, copy-namespaces validation, node() pattern fix)
 - Previous: ~3482 passed / ~1923 failed / 9195 skipped (~64.4%) — copy cluster +14 tests (error handling, function context item, document node cases)
 - Previous: 3555 passed / 1854 failed / 9191 skipped (65.7%) — match cluster 100% runnable (179/294, +1 match-040); mode cluster +11 tests
 - Previous: 3554 passed / 1855 failed / 9191 skipped (65.7%) — mode cluster fixes: default-mode resolution, XTDE0045/0050 (+11 tests)
@@ -787,6 +819,7 @@ For-each-group has 62 failures. Basic implementation exists (`group-by`, `group-
 **Option A** — namespace serialization. It is the biggest single block of remaining copy failures, and the root cause is well understood. Options B and C involve more exploration time for less certain yield.
 
 ### Completed Clusters (no work needed)
+- **`base-uri`** — 0 failures, 50/50 passed (100%) ✅ (5 skipped for XInclude dependency)
 - **`expression`** — 0 failures, 102/102 passed (100%) ✅
 - **`string`** — 0 failures, 136/136 passed (100%) ✅
 - **`core-function`** — 0 failures, 90/90 passed (100%) ✅
@@ -802,9 +835,8 @@ For-each-group has 62 failures. Basic implementation exists (`group-by`, `group-
 
 - `main` — all work is on `main`
 - No feature branches
-- All work committed to `main`
-- No pending changes
-- Latest: `<uncommitted>` — xsl:where-populated, xsl:on-empty, parser kind-test fix (copy-1213/1214/1215/1216/1217)
+- Latest: `<uncommitted>` — XSLT base-uri cluster fix (document('') resolution, xml:* prefix handling, base URI propagation)
+- Previous: `fdb3987` — docs: update AGENT_HANDOVER commit hash for as-cluster session
 - Previous: `<uncommitted>` — namespace axis parent fix (copy-0616/0618/0624/0626)
 - Previous: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
 - Previous: `<uncommitted>` — mode cluster fixes: default-mode resolution, XTDE0045/0050 validation, harness initial-mode params

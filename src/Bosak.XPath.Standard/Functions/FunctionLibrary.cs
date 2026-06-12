@@ -3129,21 +3129,98 @@ public static class FunctionLibrary
     }
 
     private static XdmValue ResolveUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ResolveUri(ctx, AtomizedString(args[0]), ctx.BaseUri);
+    {
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        return ResolveUri(ctx, AtomizedString(args[0]), ctx.BaseUri);
+    }
 
     private static XdmValue ResolveUri_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ResolveUri(ctx, AtomizedString(args[0]), AtomizedString(args[1]));
+    {
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        return ResolveUri(ctx, AtomizedString(args[0]), AtomizedString(args[1]));
+    }
 
     private static XdmValue ResolveUri(EvaluationContext ctx, string relative, string? baseUri)
     {
-        if (string.IsNullOrEmpty(relative))
+        if (relative == null)
             return XdmValue.Undefined;
-        if (Uri.IsWellFormedUriString(relative, UriKind.Absolute))
-            return XdmValue.FromString(relative);
+        if (string.IsNullOrEmpty(relative))
+        {
+            if (string.IsNullOrEmpty(baseUri))
+                throw new InvalidOperationException("FODC0005: No base URI available");
+            return XdmValue.FromString(baseUri, "anyURI");
+        }
+        if (IsAbsoluteUri(relative))
+            return XdmValue.FromString(relative, "anyURI");
         if (string.IsNullOrEmpty(baseUri))
             throw new InvalidOperationException("FODC0005: No base URI available");
-        var resolved = new Uri(new Uri(baseUri), relative).AbsoluteUri;
-        return XdmValue.FromString(resolved);
+        var resolved = ResolveRelativeUri(baseUri, relative);
+        return XdmValue.FromString(resolved, "anyURI");
+    }
+
+    /// <summary>
+    /// Checks whether a string is an absolute URI per RFC 3986.
+    /// More permissive than <see cref="Uri.IsWellFormedUriString"/>:
+    /// accepts <c>g:h</c> style URIs that .NET rejects as DOS paths.
+    /// </summary>
+    public static bool IsAbsoluteUri(string uri)
+    {
+        if (Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+            return true;
+
+        // Manual RFC 3986 check: scheme ':' [path]
+        int colonIndex = uri.IndexOf(':');
+        if (colonIndex <= 0)
+            return false;
+
+        // If '/' '?' or '#' appear before ':', it's not a scheme
+        for (int i = 0; i < colonIndex; i++)
+        {
+            char c = uri[i];
+            if (c == '/' || c == '?' || c == '#')
+                return false;
+        }
+
+        // Scheme must start with a letter
+        if (!char.IsLetter(uri[0]))
+            return false;
+
+        return true;
+    }
+
+    /// <summary>
+    /// Resolves a relative URI against a base URI, handling edge cases
+    /// that .NET's <see cref="Uri"/> class misinterprets.
+    /// </summary>
+    private static string ResolveRelativeUri(string baseUri, string relative)
+    {
+        try
+        {
+            var resolved = new Uri(new Uri(baseUri), relative).AbsoluteUri;
+            // RFC 3986: network-path references like //g have empty path.
+            // .NET normalizes empty path to "/", so strip trailing "/" when
+            // the relative URI is //authority with no path.
+            if (relative.StartsWith("//") && resolved.EndsWith("/"))
+            {
+                int pathStart = relative.IndexOf('/', 2);
+                if (pathStart < 0)
+                    resolved = resolved.TrimEnd('/');
+            }
+            return resolved;
+        }
+        catch (UriFormatException)
+        {
+            // If the base URI itself is not a valid .NET Uri,
+            // fall back to simple concatenation
+            if (baseUri.EndsWith('/'))
+                return baseUri + relative;
+            int lastSlash = baseUri.LastIndexOf('/');
+            if (lastSlash >= 0)
+                return baseUri.Substring(0, lastSlash + 1) + relative;
+            return relative;
+        }
     }
 
     private static XdmValue Not(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3408,9 +3485,9 @@ public static class FunctionLibrary
 
     private static XdmValue StaticBaseUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        // Return the static base URI of the containing expression, if known.
-        // For now, return empty sequence since we don't track static base URI.
-        return XdmValue.Undefined;
+        if (string.IsNullOrEmpty(ctx.BaseUri))
+            return XdmValue.Undefined;
+        return XdmValue.FromString(ctx.BaseUri, "anyURI");
     }
 
     private static XdmValue TypeAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5176,7 +5253,7 @@ public static class FunctionLibrary
         if (!item.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:base-uri() context item is not a node.");
         var uri = item.NodeValue!.BaseUri;
-        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri, "anyURI");
     }
 
     private static XdmValue BaseUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5201,7 +5278,7 @@ public static class FunctionLibrary
         if (!arg.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:base-uri() argument is not a node.");
         var uri = arg.NodeValue!.BaseUri;
-        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri, "anyURI");
     }
 
     private static XdmValue DocumentUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
