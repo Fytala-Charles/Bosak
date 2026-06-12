@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 10-06-2026     | Fixed GetXPathParent for namespace nodes: parent axis returns _namespaceOwner         |
 //                      | Charles Korthout | 0.9   | 10-06-2026     | ParentlessOrderMaps for stable document order on detached/copied element trees         |
 //                      | Charles Korthout | 1.0   | 11-06-2026     | GetNamespaceAxis skips empty-URI declarations (xmlns="") and stops at inheritance barriers |
+//                      | Charles Korthout | 1.1   | 11-06-2026     | Override Equals/GetHashCode for IXdmNode identity-based equality                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -140,6 +141,17 @@ public sealed class XDocumentNode : IXdmNode
            && ReferenceEquals(_node, xn._node)
            && _isNamespaceNode == xn._isNamespaceNode
            && ReferenceEquals(_namespaceOwner, xn._namespaceOwner);
+
+    public override bool Equals(object? obj)
+        => obj is IXdmNode other && IsSameNode(other);
+
+    public override int GetHashCode()
+    {
+        int h = RuntimeHelpers.GetHashCode(_node);
+        if (_isNamespaceNode)
+            h = HashCode.Combine(h, RuntimeHelpers.GetHashCode(_namespaceOwner));
+        return h;
+    }
 
     public long DocumentOrder
     {

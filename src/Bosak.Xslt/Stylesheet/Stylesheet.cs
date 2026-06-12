@@ -51,6 +51,7 @@ public sealed class Stylesheet
     private readonly List<Stylesheet> _imports = new();
     private readonly List<Stylesheet> _includes = new();
     private readonly List<KeyDefinition> _keyDefinitions = new();
+    private readonly List<AccumulatorDefinition> _accumulators = new();
     private readonly List<XElement> _globalVariables = new();
     private readonly List<XElement> _globalParameters = new();
     private readonly List<SpaceHandlingRule> _stripSpaceRules = new();
@@ -101,6 +102,9 @@ public sealed class Stylesheet
     /// <summary>Named templates indexed by name.</summary>
     public IReadOnlyDictionary<string, TemplateRule> NamedTemplates => _namedTemplates;
 
+    /// <summary>Accumulator declarations defined in this stylesheet.</summary>
+    public IReadOnlyList<AccumulatorDefinition> Accumulators => _accumulators;
+
     /// <summary>Stylesheets imported via xsl:import (lower precedence).</summary>
     public IReadOnlyList<Stylesheet> Imports => _imports;
 
@@ -132,6 +136,27 @@ public sealed class Stylesheet
         {
             foreach (var rule in imported.GetAllTemplateRules())
                 yield return rule;
+        }
+    }
+
+    /// <summary>
+    /// Recursively collects all accumulator declarations from this stylesheet, its includes, and its imports.
+    /// </summary>
+    public IEnumerable<AccumulatorDefinition> GetAllAccumulators()
+    {
+        foreach (var acc in _accumulators)
+            yield return acc;
+
+        foreach (var included in _includes)
+        {
+            foreach (var acc in included.GetAllAccumulators())
+                yield return acc;
+        }
+
+        foreach (var imported in _imports)
+        {
+            foreach (var acc in imported.GetAllAccumulators())
+                yield return acc;
         }
     }
 
@@ -335,6 +360,15 @@ public sealed class Stylesheet
             if (!UseWhen(key)) continue;
             var def = KeyDefinition.FromElement(key, this);
             _keyDefinitions.Add(def);
+        }
+
+        // Parse xsl:accumulator declarations
+        foreach (var acc in root.Elements(XName.Get("accumulator", XslNamespace)))
+        {
+            if (!UseWhen(acc)) continue;
+            var def = AccumulatorDefinition.FromElement(acc, this);
+            if (def != null)
+                _accumulators.Add(def);
         }
 
         // Parse xsl:strip-space and xsl:preserve-space declarations

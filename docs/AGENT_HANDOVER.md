@@ -1,6 +1,25 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
+**Commit:** `<uncommitted>`
+**Current focus:** XSLT `for-each-group` cluster restored to 78/85 passing (0 failed, 7 skipped). Fixed `for-each-group-089` by making `XDocumentNode` honor XDM node identity in `Equals`/`GetHashCode`, so accumulator values copied with `copy-accumulators="yes"` are found by `accumulator-after()`.
+
+---
+
+## This Session Fixes (2026-06-12 — `for-each-group` cluster 100% runnable)
+
+1. **`XDocumentNode` identity-based equality** — Added `Equals`/`GetHashCode` overrides that use the underlying LINQ-to-XML `XObject` reference (plus namespace-node owner). This fixes accumulator value lookups on copied nodes: `AttachAccumulatorValues` stores values keyed by source nodes, and `accumulator-after()` now retrieves the copied annotation instead of falling back to the initial value.
+   - **Fixed**: `for-each-group-089` (accumulator-after inside `xsl:for-each-group` + `copy-accumulators`).
+   - **File changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
+
+**`for-each-group` cluster**: 78/85 passing, 0 failed, 7 skipped (100% runnable).
+**Unit tests**: 877 passed, 0 failed across 8 test projects.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-12
 **Commit:** `3740328`
 **Current focus:** XSLT `string` cluster restored to 136/136 passing (100%). Fixed global sequence-constructor variables to evaluate with the initial context item, and made named-template entry points without a source document use an absent initial context item.
 

@@ -200,7 +200,13 @@ public sealed class PatternCompiler
         //     not allowed.
         ValidateKeyFunctionArguments(trimmed);
 
-        // 6.  Undeclared function in predicate (XPST0017).
+        // 6.  Disallow current-group() and current-grouping-key() in patterns.
+        if (ContainsFunctionCall(trimmed, "current-group"))
+            throw new InvalidOperationException("XTSE1060: current-group() is not allowed in a match pattern");
+        if (ContainsFunctionCall(trimmed, "current-grouping-key"))
+            throw new InvalidOperationException("XTSE1070: current-grouping-key() is not allowed in a match pattern");
+
+        // 7.  Undeclared function in predicate (XPST0017).
         //     NOTE: Accurate detection requires stylesheet context (declared functions,
         //     namespace prefixes). The XPath compiler currently does not validate
         //     function existence at compile time, so this check is deferred to runtime.
@@ -283,6 +289,81 @@ public sealed class PatternCompiler
         }
         return hasDigits && pos == arg.Length;
     }
+
+    /// <summary>
+    /// Returns true when the supplied pattern contains a call to the named function,
+    /// ignoring occurrences inside string literals.
+    /// </summary>
+    private static bool ContainsFunctionCall(string pattern, string name)
+    {
+        var stripped = StripStringLiterals(pattern);
+        int i = 0;
+        while (i < stripped.Length)
+        {
+            int idx = stripped.IndexOf(name + "(", i, StringComparison.Ordinal);
+            if (idx < 0) return false;
+            // Ensure the match is not part of a longer name.
+            if ((idx == 0 || !IsNameChar(stripped[idx - 1])) &&
+                (idx + name.Length < stripped.Length && stripped[idx + name.Length] == '('))
+            {
+                return true;
+            }
+            i = idx + 1;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Returns a copy of the pattern with the contents of string literals replaced by spaces,
+    /// so that literal text does not interfere with syntactic checks.
+    /// </summary>
+    private static string StripStringLiterals(string pattern)
+    {
+        var sb = new System.Text.StringBuilder(pattern.Length);
+        char? inString = null;
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+            if (inString == null)
+            {
+                if (c == '\'' || c == '"')
+                {
+                    inString = c;
+                    sb.Append(c);
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            else
+            {
+                if (c == inString.Value)
+                {
+                    // Handle doubled quote inside string literal.
+                    if (i + 1 < pattern.Length && pattern[i + 1] == inString.Value)
+                    {
+                        sb.Append(c);
+                        sb.Append(c);
+                        i++;
+                    }
+                    else
+                    {
+                        inString = null;
+                        sb.Append(c);
+                    }
+                }
+                else
+                {
+                    sb.Append(' ');
+                }
+            }
+        }
+        return sb.ToString();
+    }
+
+    private static bool IsNameChar(char c)
+        => char.IsLetterOrDigit(c) || c == '_' || c == '-' || c == '.';
 
     /// <summary>
     /// Determines whether a pattern branch looks like a type pattern.

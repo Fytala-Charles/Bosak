@@ -84,6 +84,8 @@
 //                      | Charles Korthout | 5.13  | 11-06-2026     | Base URI propagation for xsl:copy/copy-of and built-in template rules; fixes base-uri-050/053 |
 //                      | Charles Korthout | 5.14  | 11-06-2026     | Expanded key names, 3-arg subtree scope, globals before key build, XTDE1260/1222        |
 //                       | Charles Korthout | 5.15  | 11-06-2026     | Preserve typed atomic values in sequence accumulator; composite key lookup             |
+//                      | Charles Korthout | 5.16  | 11-06-2026     | Fixed xsl:for-each-group: focus, composite keys, date/time eq, sort current-group      |
+//                      | Charles Korthout | 5.17  | 12-06-2026     | Collation-aware grouping, function-body for-each-group, pattern current-group checks   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -166,6 +168,10 @@ public sealed class TransformEngine
     // Deferred global variables with sequence constructors (evaluated lazily on first reference)
     private readonly Dictionary<string, (XElement Element, string? AsType)> _lazyGlobals = new();
 
+    // Accumulator declarations and cached accumulator values per source tree.
+    private readonly List<Stylesheet.AccumulatorDefinition> _accumulators;
+    private readonly Dictionary<(IXdmNode Root, string ClarkName), Dictionary<IXdmNode, (XdmValue Before, XdmValue After)>> _accumulatorCache = new();
+
     // Focus used for global variable/param evaluation (the source document node).
     private XdmValue _globalContextItem = XdmValue.Undefined;
 
@@ -186,6 +192,7 @@ public sealed class TransformEngine
 
         _allTemplateRules = _stylesheet.GetAllTemplateRules().ToList();
         _allNamedTemplates = _stylesheet.GetAllNamedTemplates();
+        _accumulators = _stylesheet.GetAllAccumulators().ToList();
 
         // Register namespace prefixes declared on the stylesheet root(s).
         // The empty prefix (default namespace) is intentionally skipped so that
@@ -209,6 +216,9 @@ public sealed class TransformEngine
 
         // Register xsl:function declarations as callable XPath functions
         RegisterXsltFunctions();
+
+        // Register accumulator-before()/accumulator-after() when accumulators are declared
+        RegisterAccumulatorFunctions();
     }
 
     /// <summary>
@@ -582,6 +592,188 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Registers the XSLT <c>accumulator-before()</c> and <c>accumulator-after()</c>
+    /// functions for every declared accumulator.
+    /// </summary>
+    private void RegisterAccumulatorFunctions()
+    {
+        if (_accumulators.Count == 0)
+            return;
+
+        _context.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "accumulator-before",
+            Arity = 1,
+            ParameterTypes = new List<XdmValueKind> { XdmValueKind.String },
+            ReturnType = XdmValueKind.Sequence,
+            Implementation = (ctx, args) => GetAccumulatorValue(ctx, args, before: true)
+        });
+
+        _context.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "accumulator-after",
+            Arity = 1,
+            ParameterTypes = new List<XdmValueKind> { XdmValueKind.String },
+            ReturnType = XdmValueKind.Sequence,
+            Implementation = (ctx, args) => GetAccumulatorValue(ctx, args, before: false)
+        });
+    }
+
+    /// <summary>
+    /// Implements <c>accumulator-before()</c> / <c>accumulator-after()</c>.
+    /// </summary>
+    private XdmValue GetAccumulatorValue(EvaluationContext ctx, ReadOnlySpan<XdmValue> args, bool before)
+    {
+        var nameArg = args[0];
+        var name = nameArg.IsAtomic ? nameArg.ToString() : string.Empty;
+        if (string.IsNullOrEmpty(name))
+            throw new InvalidOperationException("XTDE3341: accumulator name must be a string");
+
+        var accName = ResolveAccumulatorFunctionName(name, ctx);
+        if (string.IsNullOrEmpty(accName))
+            throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
+
+        var contextItem = ctx.ContextItem;
+        if (!contextItem.IsNode || contextItem.NodeValue == null)
+            throw new InvalidOperationException("XTDE3362: accumulator functions require a context item that is a node");
+
+        var node = contextItem.NodeValue;
+
+        // First check for values copied with copy-accumulators="yes"
+        if (node is XDocumentNode xdn && xdn.UnderlyingObject is XElement elem)
+        {
+            var copied = elem.Annotation<AccumulatorValues>();
+            if (copied != null && copied.Values.TryGetValue(accName, out var pair))
+                return before ? pair.Before : pair.After;
+        }
+
+        // Otherwise compute from the source tree.
+        var acc = _accumulators.FirstOrDefault(a => a.ClarkName == accName);
+        if (acc == null)
+            throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
+
+        var root = GetRootNode(node);
+        var nodeValues = GetAccumulatorNodeValues(acc, root);
+        if (nodeValues.TryGetValue(node, out var values))
+            return before ? values.Before : values.After;
+
+        // Nodes not visited by the accumulator (e.g. attributes/text matched indirectly)
+        // return the initial value for before and after.
+        var initialCompiled = CompileXPath(acc.InitialValue, acc.Element);
+        return initialCompiled.Evaluate(new EvaluationContext());
+    }
+
+    /// <summary>
+    /// Resolves an accumulator name supplied to <c>accumulator-before()</c> / <c>accumulator-after()</c>
+    /// to Clark notation using the in-scope namespaces of the calling expression.
+    /// </summary>
+    private string ResolveAccumulatorFunctionName(string name, EvaluationContext ctx)
+    {
+        if (name.StartsWith("{"))
+            return name;
+
+        var colon = name.IndexOf(':');
+        if (colon < 0)
+        {
+            // Unprefixed accumulator names are in no namespace.
+            foreach (var acc in _accumulators)
+            {
+                if (acc.LocalName == name && string.IsNullOrEmpty(acc.NamespaceUri))
+                    return acc.ClarkName;
+            }
+            return "";
+        }
+
+        var prefix = name[..colon];
+        var local = name[(colon + 1)..];
+        if (ctx.TryResolveNamespace(prefix, out var nsUri))
+        {
+            var clark = $"{{{nsUri}}}{local}";
+            if (_accumulators.Any(a => a.ClarkName == clark))
+                return clark;
+        }
+        return "";
+    }
+
+    /// <summary>
+    /// Returns the cached accumulator values for every node in the source tree,
+    /// computing them on first use.
+    /// </summary>
+    private Dictionary<IXdmNode, (XdmValue Before, XdmValue After)> GetAccumulatorNodeValues(Stylesheet.AccumulatorDefinition acc, IXdmNode root)
+    {
+        var key = (root, acc.ClarkName);
+        if (!_accumulatorCache.TryGetValue(key, out var nodeValues))
+        {
+            nodeValues = ComputeAccumulatorValues(acc, root);
+            _accumulatorCache[key] = nodeValues;
+        }
+        return nodeValues;
+    }
+
+    /// <summary>
+    /// Computes the accumulator value before and after each node in the source tree.
+    /// </summary>
+    private Dictionary<IXdmNode, (XdmValue Before, XdmValue After)> ComputeAccumulatorValues(Stylesheet.AccumulatorDefinition acc, IXdmNode root)
+    {
+        var result = new Dictionary<IXdmNode, (XdmValue Before, XdmValue After)>();
+        var initialCompiled = CompileXPath(acc.InitialValue, acc.Element);
+        var current = initialCompiled.Evaluate(new EvaluationContext());
+
+        // Compile match patterns for the rules.
+        var compiledRules = new List<(Stylesheet.AccumulatorRule Rule, Patterns.PatternPredicate Match)>();
+        var patternCompiler = new Patterns.PatternCompiler(_context);
+        foreach (var rule in acc.Rules)
+        {
+            var defaultNs = GetXPathDefaultNamespace(rule.Element);
+            var match = patternCompiler.Compile(rule.Match, defaultNs ?? "");
+            compiledRules.Add((rule, match));
+        }
+
+        foreach (var value in root.Axis(XdmAxis.DescendantOrSelf))
+        {
+            if (!value.IsNode || value.NodeValue == null)
+                continue;
+            var node = value.NodeValue;
+            var before = current;
+
+            var matchingRule = compiledRules.FirstOrDefault(r => r.Match(XdmValue.FromNode(node), _context));
+            if (matchingRule.Rule != null && !string.IsNullOrEmpty(matchingRule.Rule.Select))
+            {
+                var ruleCtx = new EvaluationContext().WithFocus(XdmValue.FromNode(node), 1, 1);
+                ruleCtx.WithVariable("value", current);
+                var compiled = CompileXPath(matchingRule.Rule.Select, matchingRule.Rule.Element);
+                current = compiled.Evaluate(ruleCtx);
+            }
+
+            result[node] = (before, current);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Attaches the accumulator values for the source node to a copied element.
+    /// </summary>
+    private void AttachAccumulatorValues(IXdmNode sourceNode, XElement copy)
+    {
+        if (_accumulators.Count == 0)
+            return;
+
+        var root = GetRootNode(sourceNode);
+        var values = new AccumulatorValues();
+        foreach (var acc in _accumulators)
+        {
+            var nodeValues = GetAccumulatorNodeValues(acc, root);
+            if (nodeValues.TryGetValue(sourceNode, out var pair))
+                values.Values[acc.ClarkName] = pair;
+        }
+        if (values.Values.Count > 0)
+            copy.AddAnnotation(values);
+    }
+
+    /// <summary>
     /// Executes the body of an xsl:function declaration, binding parameters and
     /// returning the sequence produced by the function body.
     /// </summary>
@@ -826,6 +1018,93 @@ public sealed class TransformEngine
                         }
                         break;
                     }
+                case "for-each-group":
+                    {
+                        var select = instruction.Attribute("select")?.Value;
+                        if (string.IsNullOrEmpty(select)) break;
+
+                        var compiled = CompileXPath(select, instruction);
+                        var feResult = compiled.Evaluate(_context);
+                        var feItems = EnumerateItems(feResult).ToList();
+                        if (feItems.Count == 0) break;
+
+                        var collationAttr = instruction.Attribute("collation")?.Value;
+                        var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? null : EvaluateAvt(collationAttr, instruction);
+
+                        ValidateForEachGroupAttributes(instruction);
+
+                        var savedFocus = _context.ContextItem;
+                        var savedPosition = _context.ContextPosition;
+                        var savedSize = _context.ContextSize;
+                        var savedCurrent = _context.CurrentItem;
+                        var savedGroup = _currentGroup;
+                        var savedKey = _currentGroupingKey;
+
+                        try
+                        {
+                            var groups = BuildForEachGroups(instruction, feItems, effectiveCollation);
+
+                            var bindGroup = instruction.Attribute("bind-group")?.Value;
+                            var bindKey = instruction.Attribute("bind-grouping-key")?.Value;
+
+                            var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                            for (int sortIdx = 0; sortIdx < sortElements.Count; sortIdx++)
+                            {
+                                var stableAttr = sortElements[sortIdx].Attribute("stable")?.Value;
+                                if (sortIdx > 0 && !string.IsNullOrEmpty(stableAttr))
+                                    throw new InvalidOperationException("XTSE1017: @stable is allowed only on the first xsl:sort");
+                                if (!string.IsNullOrEmpty(stableAttr))
+                                {
+                                    var v = stableAttr.Trim();
+                                    if (v != "yes" && v != "true" && v != "1" &&
+                                        v != "no" && v != "false" && v != "0")
+                                        throw new InvalidOperationException("XTSE0020: invalid value for @stable");
+                                }
+                            }
+                            if (sortElements.Count > 0 && groups.Count > 0)
+                            {
+                                groups = SortGroups(groups, sortElements);
+                            }
+
+                            int pos = 1;
+                            foreach (var (key, groupItems) in groups)
+                            {
+                                _currentGroup = groupItems;
+                                _currentGroupingKey = key;
+                                var rep = groupItems[0];
+                                _context.WithFocus(rep, pos, groups.Count);
+                                _context.WithCurrentItem(rep);
+                                var feSnapshot = _context.SnapshotVariables();
+                                try
+                                {
+                                    if (!string.IsNullOrEmpty(bindGroup))
+                                        _context.WithVariable(bindGroup, XdmValue.FromSequence(MaterializedSequence.FromList(groupItems)));
+                                    if (!string.IsNullOrEmpty(bindKey) && key != null)
+                                        _context.WithVariable(bindKey, key.Value);
+
+                                    foreach (var child in instruction.Elements())
+                                    {
+                                        if (child.Name.LocalName == "sort" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                            continue;
+                                        EvaluateFunctionBodyInstruction(child, results, rep);
+                                    }
+                                }
+                                finally
+                                {
+                                    _context.RestoreVariables(feSnapshot);
+                                }
+                                pos++;
+                            }
+                        }
+                        finally
+                        {
+                            _context.WithFocus(savedFocus, savedPosition, savedSize);
+                            _context.WithCurrentItem(savedCurrent);
+                            _currentGroup = savedGroup;
+                            _currentGroupingKey = savedKey;
+                        }
+                        break;
+                    }
                 case "apply-templates":
                     {
                         var modeRaw = instruction.Attribute("mode")?.Value?.Trim() ?? "";
@@ -999,15 +1278,18 @@ public sealed class TransformEngine
                             var fnCopyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
                                 ?? instruction.Attribute("_copy-namespaces")?.Value
                                 ?? "yes";
-                            var fnCopyNamespacesAttr = EvaluateAvt(fnCopyNamespacesAttrRaw);
+                            var fnCopyNamespacesAttr = EvaluateAvt(fnCopyNamespacesAttrRaw, instruction);
                             bool fnCopyAllNs = fnCopyNamespacesAttr != "no" && fnCopyNamespacesAttr != "false";
+                            var fnCopyAccumulatorsAttrRaw = instruction.Attribute("copy-accumulators")?.Value ?? "no";
+                            var fnCopyAccumulatorsAttr = EvaluateAvt(fnCopyAccumulatorsAttrRaw, instruction);
+                            bool fnCopyAccumulators = fnCopyAccumulatorsAttr == "yes" || fnCopyAccumulatorsAttr == "true";
                             if (result.IsSequence && result.SequenceValue != null)
                             {
                                 foreach (var item in XdmSequence.FromSource(result.SequenceValue))
                                 {
                                     if (item.IsNode && item.NodeValue != null)
                                     {
-                                        results.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue, fnCopyAllNs)));
+                                        results.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue, fnCopyAllNs, fnCopyAccumulators)));
                                     }
                                     else
                                     {
@@ -1017,7 +1299,7 @@ public sealed class TransformEngine
                             }
                             else if (result.IsNode && result.NodeValue != null)
                             {
-                                results.Add(XdmValue.FromNode(CopyXdmNode(result.NodeValue, fnCopyAllNs)));
+                                results.Add(XdmValue.FromNode(CopyXdmNode(result.NodeValue, fnCopyAllNs, fnCopyAccumulators)));
                             }
                             else
                             {
@@ -1318,18 +1600,13 @@ public sealed class TransformEngine
 
             bool allNodes = items.All(i => i.IsNode);
 
-            // Sort nodes by document order; non-node sequences keep original order.
-            // Use original index as tie-breaker for stable ordering when document orders
-            // are equal (e.g., detached nodes from variables).
+            // Sort nodes by document order within each source tree; keep the relative
+            // order of nodes from different trees as it appeared in the selected sequence.
+            // Document order across trees is implementation-defined; preserving the input
+            // order matches the expectation of the conformance suite.
             if (allNodes)
             {
-                var indexed = items.Select((item, idx) => (item, idx)).ToList();
-                indexed.Sort((a, b) =>
-                {
-                    int cmp = a.item.NodeValue!.DocumentOrder.CompareTo(b.item.NodeValue!.DocumentOrder);
-                    return cmp != 0 ? cmp : a.idx.CompareTo(b.idx);
-                });
-                items = indexed.Select(x => x.item).ToList();
+                items = SortNodesByDocumentOrderPreservingTreeOrder(items);
             }
 
             // Apply xsl:sort if present (only supported for all-node sequences currently)
@@ -1819,16 +2096,16 @@ public sealed class TransformEngine
             case "element":
                 {
                     var elemNameRaw = instruction.Attribute("name")?.Value ?? "unnamed";
-                    var elemName = EvaluateAvt(elemNameRaw);
+                    var elemName = EvaluateAvt(elemNameRaw, instruction);
                     var elemNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
-                    var elemNs = elemNsRaw != null ? EvaluateAvt(elemNsRaw) : null;
+                    var elemNs = elemNsRaw != null ? EvaluateAvt(elemNsRaw, instruction) : null;
                     var (elemLocalName, elemNsUri) = ResolveElementName(instruction, elemName, elemNs, "XTDE0830");
                     var elem = new XElement(XName.Get(elemLocalName, elemNsUri));
 
                     var elemInheritNsRaw = instruction.Attribute("inherit-namespaces")?.Value
                         ?? instruction.Attribute("_inherit-namespaces")?.Value
                         ?? "yes";
-                    var elemInheritNs = EvaluateAvt(elemInheritNsRaw);
+                    var elemInheritNs = EvaluateAvt(elemInheritNsRaw, instruction);
                     if (elemInheritNs == "no" || elemInheritNs == "false")
                     {
                         elem.AddAnnotation(new NamespaceInheritanceBarrier());
@@ -1864,9 +2141,9 @@ public sealed class TransformEngine
             case "attribute":
                 {
                     var attrNameRaw = instruction.Attribute("name")?.Value ?? "unnamed";
-                    var attrName = EvaluateAvt(attrNameRaw);
+                    var attrName = EvaluateAvt(attrNameRaw, instruction);
                     var attrNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
-                    var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw) : null;
+                    var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw, instruction) : null;
                     var (attrLocalName, attrNsUri) = ResolveAttributeName(instruction, attrName, attrNs, "XTDE0860");
                     var select = instruction.Attribute("select")?.Value;
                     string value;
@@ -1874,7 +2151,7 @@ public sealed class TransformEngine
                     {
                         var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
-                        value = result.ToString();
+                        value = XdmValueToString(result, " ");
                     }
                     else
                     {
@@ -1963,7 +2240,7 @@ public sealed class TransformEngine
             case "processing-instruction":
                 {
                     var piNameRaw = instruction.Attribute("name")?.Value ?? "";
-                    var piName = EvaluateAvt(piNameRaw);
+                    var piName = EvaluateAvt(piNameRaw, instruction);
                     var piSelect = instruction.Attribute("select")?.Value;
                     string piData;
                     if (!string.IsNullOrEmpty(piSelect))
@@ -1985,7 +2262,7 @@ public sealed class TransformEngine
             case "namespace":
                 {
                     var nsNameRaw = instruction.Attribute("name")?.Value ?? "";
-                    var nsName = EvaluateAvt(nsNameRaw);
+                    var nsName = EvaluateAvt(nsNameRaw, instruction);
                     var nsSelect = instruction.Attribute("select")?.Value;
                     string nsUri;
                     if (!string.IsNullOrEmpty(nsSelect))
@@ -2287,153 +2564,11 @@ public sealed class TransformEngine
                     var select = instruction.Attribute("select")?.Value;
                     if (string.IsNullOrEmpty(select)) break;
 
-                    var compiled = CompileXPath(select, instruction);
-                    var result = compiled.Evaluate(_context);
-                    var items = EnumerateItems(result).ToList();
-                    if (items.Count == 0) break;
-
-                    var groupBy = instruction.Attribute("group-by")?.Value;
-                    var groupAdjacent = instruction.Attribute("group-adjacent")?.Value;
-                    var groupStarting = instruction.Attribute("group-starting-with")?.Value;
-                    var groupEnding = instruction.Attribute("group-ending-with")?.Value;
-                    var bindGroup = instruction.Attribute("bind-group")?.Value;
-                    var bindKey = instruction.Attribute("bind-grouping-key")?.Value;
-
-                    var groups = new List<(XdmValue? Key, List<XdmValue> Items)>();
-
-                    if (!string.IsNullOrEmpty(groupBy))
-                    {
-                        var keyExpr = CompileXPath(groupBy, instruction);
-                        var dict = new Dictionary<string, List<XdmValue>>();
-                        var keyOrder = new List<string>();
-                        foreach (var item in items)
-                        {
-                            _context.WithFocus(item, 1, 1);
-                            var keyValue = keyExpr.Evaluate(_context);
-                            if (keyValue.IsSequence && keyValue.SequenceValue != null)
-                            {
-                                var seq = XdmSequence.FromSource(keyValue.SequenceValue);
-                                foreach (var kv in seq)
-                                {
-                                    var keyStr = GetGroupingKeyString(kv);
-                                    if (!dict.TryGetValue(keyStr, out var list))
-                                    {
-                                        list = new List<XdmValue>();
-                                        dict[keyStr] = list;
-                                        keyOrder.Add(keyStr);
-                                    }
-                                    if (!list.Contains(item))
-                                        list.Add(item);
-                                }
-                            }
-                            else
-                            {
-                                var keyStr = GetGroupingKeyString(keyValue);
-                                if (!dict.TryGetValue(keyStr, out var list))
-                                {
-                                    list = new List<XdmValue>();
-                                    dict[keyStr] = list;
-                                    keyOrder.Add(keyStr);
-                                }
-                                if (!list.Contains(item))
-                                    list.Add(item);
-                            }
-                        }
-                        var seenKeys = new HashSet<string>();
-                        foreach (var keyStr in keyOrder)
-                        {
-                            if (seenKeys.Add(keyStr))
-                                groups.Add((XdmValue.FromString(keyStr), dict[keyStr]));
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(groupAdjacent))
-                    {
-                        var keyExpr = CompileXPath(groupAdjacent, instruction);
-                        var currentItems = new List<XdmValue>();
-                        XdmValue? currentKey = null;
-                        string? currentKeyStr = null;
-                        foreach (var item in items)
-                        {
-                            _context.WithFocus(item, 1, 1);
-                            var keyValue = keyExpr.Evaluate(_context);
-                            var keyStr = GetGroupingKeyString(keyValue);
-                            if (currentKeyStr == null)
-                            {
-                                currentKeyStr = keyStr;
-                                currentKey = keyValue;
-                                currentItems.Add(item);
-                            }
-                            else if (currentKeyStr == keyStr)
-                            {
-                                currentItems.Add(item);
-                            }
-                            else
-                            {
-                                groups.Add((currentKey, new List<XdmValue>(currentItems)));
-                                currentKeyStr = keyStr;
-                                currentKey = keyValue;
-                                currentItems.Clear();
-                                currentItems.Add(item);
-                            }
-                        }
-                        if (currentItems.Count > 0)
-                            groups.Add((currentKey, new List<XdmValue>(currentItems)));
-                    }
-                    else if (!string.IsNullOrEmpty(groupStarting))
-                    {
-                        var defaultNs = GetXPathDefaultNamespace(instruction);
-                        var patternCompiler = new Patterns.PatternCompiler();
-                        var pattern = patternCompiler.Compile(groupStarting, defaultNs);
-                        var currentItems = new List<XdmValue>();
-                        foreach (var item in items)
-                        {
-                            if (pattern(item, _context))
-                            {
-                                if (currentItems.Count > 0)
-                                    groups.Add((null, new List<XdmValue>(currentItems)));
-                                currentItems.Clear();
-                                currentItems.Add(item);
-                            }
-                            else
-                            {
-                                currentItems.Add(item);
-                            }
-                        }
-                        if (currentItems.Count > 0)
-                            groups.Add((null, new List<XdmValue>(currentItems)));
-                    }
-                    else if (!string.IsNullOrEmpty(groupEnding))
-                    {
-                        var defaultNs = GetXPathDefaultNamespace(instruction);
-                        var patternCompiler = new Patterns.PatternCompiler();
-                        var pattern = patternCompiler.Compile(groupEnding, defaultNs);
-                        var currentItems = new List<XdmValue>();
-                        foreach (var item in items)
-                        {
-                            currentItems.Add(item);
-                            if (pattern(item, _context))
-                            {
-                                groups.Add((null, new List<XdmValue>(currentItems)));
-                                currentItems.Clear();
-                            }
-                        }
-                        if (currentItems.Count > 0)
-                            groups.Add((null, new List<XdmValue>(currentItems)));
-                    }
-
-                    // Handle xsl:sort children (sort groups by representative)
-                    var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
-                    if (sortElements.Count > 0 && groups.Count > 0)
-                    {
-                        var reps = groups.Select(g => g.Items[0]).ToList();
-                        var sortedReps = SortItems(reps, sortElements);
-                        var orderMap = new Dictionary<XdmValue, int>();
-                        for (int i = 0; i < sortedReps.Count; i++)
-                            orderMap[sortedReps[i]] = i;
-                        groups = groups.OrderBy(g => orderMap[g.Items[0]]).ToList();
-                    }
-
+                    // Save the caller's focus and group state BEFORE constructing groups,
+                    // because evaluating grouping keys/patterns mutates the focus.
                     var savedFocus = _context.ContextItem;
+                    var savedPosition = _context.ContextPosition;
+                    var savedSize = _context.ContextSize;
                     var savedCurrent = _context.CurrentItem;
                     var savedTemplateRule = _currentTemplateRule;
                     var savedNextMatchExcluded = _nextMatchExcluded;
@@ -2442,53 +2577,94 @@ public sealed class TransformEngine
                     _currentTemplateRule = null;
                     _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
 
-                    int pos = 1;
-                    foreach (var (key, groupItems) in groups)
+                    try
                     {
-                        _currentGroup = groupItems;
-                        _currentGroupingKey = key;
-                        var rep = groupItems[0];
-                        _context.WithFocus(rep, pos, groups.Count);
-                        _context.WithCurrentItem(rep);
-                        var feSnapshot = _context.SnapshotVariables();
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(bindGroup))
-                                _context.WithVariable(bindGroup, XdmValue.FromSequence(MaterializedSequence.FromList(groupItems)));
-                            if (!string.IsNullOrEmpty(bindKey) && key != null)
-                                _context.WithVariable(bindKey, key.Value);
+                        var compiled = CompileXPath(select, instruction);
+                        var result = compiled.Evaluate(_context);
+                        var items = EnumerateItems(result).ToList();
+                        if (items.Count == 0) break;
 
-                            foreach (var childNode in instruction.Nodes())
+                        var collationAttr = instruction.Attribute("collation")?.Value;
+                        var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? null : EvaluateAvt(collationAttr, instruction);
+
+                        ValidateForEachGroupAttributes(instruction);
+
+                        var groups = BuildForEachGroups(instruction, items, effectiveCollation);
+
+                        var bindGroup = instruction.Attribute("bind-group")?.Value;
+                        var bindKey = instruction.Attribute("bind-grouping-key")?.Value;
+
+                        // Handle xsl:sort children. In XSLT 2.0 current-group()/current-grouping-key()
+                        // are visible in the sort keys; in XSLT 3.0 they are not.
+                        var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                        for (int sortIdx = 0; sortIdx < sortElements.Count; sortIdx++)
+                        {
+                            var stableAttr = sortElements[sortIdx].Attribute("stable")?.Value;
+                            if (sortIdx > 0 && !string.IsNullOrEmpty(stableAttr))
+                                throw new InvalidOperationException("XTSE1017: @stable is allowed only on the first xsl:sort");
+                            if (!string.IsNullOrEmpty(stableAttr))
                             {
-                                switch (childNode)
-                                {
-                                    case XText text:
-                                        ProcessSequenceText(text, instruction);
-                                        break;
-                                    case XElement elem when elem.Name.LocalName == "sort" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                        continue;
-                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                        ExecuteXsltInstruction(elem, rep);
-                                        break;
-                                    case XElement elem:
-                                        CopyLiteralElement(elem);
-                                        break;
-                                }
+                                var v = stableAttr.Trim();
+                                if (v != "yes" && v != "true" && v != "1" &&
+                                    v != "no" && v != "false" && v != "0")
+                                    throw new InvalidOperationException("XTSE0020: invalid value for @stable");
                             }
                         }
-                        finally
+                        if (sortElements.Count > 0 && groups.Count > 0)
                         {
-                            _context.RestoreVariables(feSnapshot);
+                            groups = SortGroups(groups, sortElements);
                         }
-                        pos++;
-                    }
 
-                    _context.WithFocus(savedFocus, 1, 1);
-                    _context.WithCurrentItem(savedCurrent);
-                    _currentTemplateRule = savedTemplateRule;
-                    _nextMatchExcluded = savedNextMatchExcluded;
-                    _currentGroup = savedGroup;
-                    _currentGroupingKey = savedKey;
+                        int pos = 1;
+                        foreach (var (key, groupItems) in groups)
+                        {
+                            _currentGroup = groupItems;
+                            _currentGroupingKey = key;
+                            var rep = groupItems[0];
+                            _context.WithFocus(rep, pos, groups.Count);
+                            _context.WithCurrentItem(rep);
+                            var feSnapshot = _context.SnapshotVariables();
+                            try
+                            {
+                                if (!string.IsNullOrEmpty(bindGroup))
+                                    _context.WithVariable(bindGroup, XdmValue.FromSequence(MaterializedSequence.FromList(groupItems)));
+                                if (!string.IsNullOrEmpty(bindKey) && key != null)
+                                    _context.WithVariable(bindKey, key.Value);
+
+                                foreach (var childNode in instruction.Nodes())
+                                {
+                                    switch (childNode)
+                                    {
+                                        case XText text:
+                                            ProcessSequenceText(text, instruction);
+                                            break;
+                                        case XElement elem when elem.Name.LocalName == "sort" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            continue;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, rep);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                _context.RestoreVariables(feSnapshot);
+                            }
+                            pos++;
+                        }
+                    }
+                    finally
+                    {
+                        _context.WithFocus(savedFocus, savedPosition, savedSize);
+                        _context.WithCurrentItem(savedCurrent);
+                        _currentTemplateRule = savedTemplateRule;
+                        _nextMatchExcluded = savedNextMatchExcluded;
+                        _currentGroup = savedGroup;
+                        _currentGroupingKey = savedKey;
+                    }
                     break;
                 }
 
@@ -2744,10 +2920,13 @@ public sealed class TransformEngine
                         var copyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
                         ?? instruction.Attribute("_copy-namespaces")?.Value
                         ?? "yes";
-                    var copyNamespacesAttr = EvaluateAvt(copyNamespacesAttrRaw);
-                    bool copyAllNs = copyNamespacesAttr != "no" && copyNamespacesAttr != "false";
+                        var copyNamespacesAttr = EvaluateAvt(copyNamespacesAttrRaw, instruction);
+                        bool copyAllNs = copyNamespacesAttr != "no" && copyNamespacesAttr != "false";
+                        var copyAccumulatorsAttrRaw = instruction.Attribute("copy-accumulators")?.Value ?? "no";
+                        var copyAccumulatorsAttr = EvaluateAvt(copyAccumulatorsAttrRaw, instruction);
+                        bool copyAccumulators = copyAccumulatorsAttr == "yes" || copyAccumulatorsAttr == "true";
 
-                    if (_sequenceAccumulator != null)
+                        if (_sequenceAccumulator != null)
                         {
                             // In a sequence-returning context (variable with @as),
                             // preserve document nodes by adding copies to the accumulator.
@@ -2757,7 +2936,7 @@ public sealed class TransformEngine
                                 {
                                     if (item.IsNode && item.NodeValue != null)
                                     {
-                                        _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue, copyAllNs)));
+                                        _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue, copyAllNs, copyAccumulators)));
                                     }
                                     else
                                     {
@@ -2767,7 +2946,7 @@ public sealed class TransformEngine
                             }
                             else if (result.IsNode && result.NodeValue != null)
                             {
-                                _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(result.NodeValue, copyAllNs)));
+                                _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(result.NodeValue, copyAllNs, copyAccumulators)));
                             }
                             else
                             {
@@ -2781,14 +2960,14 @@ public sealed class TransformEngine
                                 foreach (var item in XdmSequence.FromSource(result.SequenceValue))
                                 {
                                     if (item.IsNode && item.NodeValue != null)
-                                        CopyNodeToResult(CopyXdmNode(item.NodeValue, copyAllNs));
+                                        CopyNodeToResult(CopyXdmNode(item.NodeValue, copyAllNs, copyAccumulators));
                                     else
                                         CopyToResult(item);
                                 }
                             }
                             else if (result.IsNode && result.NodeValue != null)
                             {
-                                CopyNodeToResult(CopyXdmNode(result.NodeValue, copyAllNs));
+                                CopyNodeToResult(CopyXdmNode(result.NodeValue, copyAllNs, copyAccumulators));
                             }
                             else
                             {
@@ -3325,15 +3504,23 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Evaluates Attribute Value Templates (AVTs): {expr} is evaluated, {{ and }} are escaped.
+    /// Expressions are compiled with the in-scope namespaces, xpath-default-namespace, and
+    /// base URI of the element that carries the attribute.
     /// </summary>
-    private string EvaluateAvt(string value, XElement? baseUriElement = null)
+    private string EvaluateAvt(string value, XElement? contextElement = null)
     {
         if (string.IsNullOrEmpty(value) || !value.Contains('{'))
             return value;
 
         var sb = new System.Text.StringBuilder();
         int i = 0;
-        var avtBaseUri = GetEffectiveBaseUri(baseUriElement);
+        var avtBaseUri = GetEffectiveBaseUri(contextElement);
+        var nsMap = contextElement != null ? GetInScopeNamespaces(contextElement) : null;
+        var defaultNs = contextElement != null ? GetXPathDefaultNamespace(contextElement) : null;
+        bool needsOptions = (nsMap != null && nsMap.Count > 1)
+            || !string.IsNullOrEmpty(defaultNs)
+            || !string.IsNullOrEmpty(avtBaseUri);
+
         while (i < value.Length)
         {
             if (i + 1 < value.Length && value[i] == '{' && value[i + 1] == '{')
@@ -3360,9 +3547,15 @@ public sealed class TransformEngine
                     if (!string.IsNullOrEmpty(expr))
                     {
                         XPath31Expression compiled;
-                        if (!string.IsNullOrEmpty(avtBaseUri))
+                        if (needsOptions)
                         {
-                            compiled = XPath31Expression.Compile(expr, new CompileOptions { BaseUri = avtBaseUri });
+                            var options = new CompileOptions
+                            {
+                                Namespaces = nsMap,
+                                DefaultElementNamespace = defaultNs,
+                                BaseUri = avtBaseUri
+                            };
+                            compiled = XPath31Expression.Compile(expr, options);
                         }
                         else
                         {
@@ -3579,9 +3772,12 @@ public sealed class TransformEngine
     /// Creates a deep copy of an XDM node, returning a new IXdmNode wrapper.
     /// </summary>
     private IXdmNode CopyXdmNode(IXdmNode node)
-        => CopyXdmNode(node, copyAllNamespaces: true);
+        => CopyXdmNode(node, copyAllNamespaces: true, copyAccumulators: false);
 
     private IXdmNode CopyXdmNode(IXdmNode node, bool copyAllNamespaces)
+        => CopyXdmNode(node, copyAllNamespaces, copyAccumulators: false);
+
+    private IXdmNode CopyXdmNode(IXdmNode node, bool copyAllNamespaces, bool copyAccumulators)
     {
         switch (node.NodeKind)
         {
@@ -3598,7 +3794,7 @@ public sealed class TransformEngine
                     if (elementCount == 1 && children.Count == 1)
                     {
                         newDoc = new XDocument();
-                        CopyNodeToContainer(children[0], newDoc, copyAllNamespaces);
+                        CopyNodeToContainer(children[0], newDoc, copyAllNamespaces, copyAccumulators);
                     }
                     else
                     {
@@ -3607,7 +3803,7 @@ public sealed class TransformEngine
                         var docWrapper = new XElement("__xdm_doc__");
                         foreach (var child in children)
                         {
-                            CopyNodeToContainer(child, docWrapper, copyAllNamespaces);
+                            CopyNodeToContainer(child, docWrapper, copyAllNamespaces, copyAccumulators);
                         }
                         newDoc = new XDocument(docWrapper);
                     }
@@ -3628,6 +3824,8 @@ public sealed class TransformEngine
                         && srcElem.Attribute(XNamespace.Xml + "base") != null;
                     if (!hasXmlBase && !string.IsNullOrEmpty(node.BaseUri))
                         copy.AddAnnotation(node.BaseUri);
+                    if (copyAccumulators)
+                        AttachAccumulatorValues(node, copy);
                     if (copyAllNamespaces)
                     {
                         foreach (var ns in node.Axis(XdmAxis.Namespace))
@@ -3665,7 +3863,7 @@ public sealed class TransformEngine
                     }
                     foreach (var child in node.Axis(XdmAxis.Child))
                     {
-                        CopyNodeToContainer(child.NodeValue!, copy, copyAllNamespaces);
+                        CopyNodeToContainer(child.NodeValue!, copy, copyAllNamespaces, copyAccumulators);
                     }
                     return new XDocumentNode(copy);
                 }
@@ -3801,7 +3999,7 @@ public sealed class TransformEngine
                     var inheritNamespacesAttrRaw = instruction.Attribute("inherit-namespaces")?.Value
                         ?? instruction.Attribute("_inherit-namespaces")?.Value
                         ?? "yes";
-                    var inheritNamespacesAttr = EvaluateAvt(inheritNamespacesAttrRaw);
+                    var inheritNamespacesAttr = EvaluateAvt(inheritNamespacesAttrRaw, instruction);
                     if (inheritNamespacesAttr == "no" || inheritNamespacesAttr == "false")
                     {
                         copy.AddAnnotation(new NamespaceInheritanceBarrier());
@@ -4122,9 +4320,12 @@ public sealed class TransformEngine
     /// Copies a node and adds it to the specified XML container.
     /// </summary>
     private void CopyNodeToContainer(IXdmNode node, XContainer container)
-        => CopyNodeToContainer(node, container, copyAllNamespaces: true);
+        => CopyNodeToContainer(node, container, copyAllNamespaces: true, copyAccumulators: false);
 
     private void CopyNodeToContainer(IXdmNode node, XContainer container, bool copyAllNamespaces)
+        => CopyNodeToContainer(node, container, copyAllNamespaces, copyAccumulators: false);
+
+    private void CopyNodeToContainer(IXdmNode node, XContainer container, bool copyAllNamespaces, bool copyAccumulators)
     {
         switch (node.NodeKind)
         {
@@ -4179,10 +4380,12 @@ public sealed class TransformEngine
                     {
                         elem.AddAnnotation(new NamespaceInheritanceBarrier());
                     }
+                    if (copyAccumulators)
+                        AttachAccumulatorValues(node, elem);
                     AddElementToContainer(elem, container);
                     foreach (var child in node.Axis(XdmAxis.Child))
                     {
-                        CopyNodeToContainer(child.NodeValue!, elem, copyAllNamespaces);
+                        CopyNodeToContainer(child.NodeValue!, elem, copyAllNamespaces, copyAccumulators);
                     }
                     break;
                 }
@@ -4332,6 +4535,11 @@ public sealed class TransformEngine
                 {
                     copy.AddAnnotation(new NamespaceInheritanceBarrier());
                 }
+                var accValues = srcElem.Annotation<AccumulatorValues>();
+                if (accValues != null)
+                {
+                    copy.AddAnnotation(accValues);
+                }
                 // Preserve base URI from the source element, but only if the source
                 // element does not carry its own xml:base attribute. A copied relative
                 // xml:base must be re-resolved against the new context.
@@ -4418,13 +4626,9 @@ public sealed class TransformEngine
     /// </summary>
     private Stylesheet.OnNoMatch GetDefaultOnNoMatch()
     {
-        var version = _stylesheet.Version;
-        if (!string.IsNullOrEmpty(version) &&
-            (version.StartsWith("1.") || version.StartsWith("2.")))
-        {
-            return Stylesheet.OnNoMatch.TextOnlyCopy;
-        }
-        return Stylesheet.OnNoMatch.ShallowSkip;
+        // XSLT 1.0/2.0/3.0 all default to the traditional text-only-copy built-in rule:
+        // text and attribute nodes are copied, document/element nodes delegate to children.
+        return Stylesheet.OnNoMatch.TextOnlyCopy;
     }
 
     /// <summary>
@@ -4947,7 +5151,9 @@ public sealed class TransformEngine
             ReturnType = XdmValueKind.Sequence,
             Implementation = (ctx, args) =>
             {
-                if (_currentGroup == null || _currentGroup.Count == 0)
+                if (_currentGroup == null)
+                    throw new InvalidOperationException("XTDE1061: current-group() is not defined in the current context");
+                if (_currentGroup.Count == 0)
                     return XdmValue.Undefined;
                 return XdmValue.FromSequence(MaterializedSequence.FromList(_currentGroup));
             }
@@ -4963,7 +5169,7 @@ public sealed class TransformEngine
             Implementation = (ctx, args) =>
             {
                 if (_currentGroupingKey == null)
-                    return XdmValue.Undefined;
+                    throw new InvalidOperationException("XTDE1071: current-grouping-key() is not defined in the current context");
                 return _currentGroupingKey.Value;
             }
         });
@@ -5255,6 +5461,65 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Sorts a sequence of nodes by document order, but keeps the relative order of
+    /// nodes from different source trees as it appeared in the original sequence.
+    /// </summary>
+    private static List<XdmValue> SortNodesByDocumentOrderPreservingTreeOrder(List<XdmValue> items)
+    {
+        var indexed = items.Select((item, idx) => (item, idx)).ToList();
+        var rootOrder = new Dictionary<IXdmNode, int>();
+        var groups = indexed.GroupBy(a =>
+        {
+            var root = GetRootNode(a.item.NodeValue!);
+            if (!rootOrder.TryGetValue(root, out var order))
+            {
+                order = rootOrder.Count;
+                rootOrder[root] = order;
+            }
+            return root;
+        }).ToList();
+
+        var sorted = new List<XdmValue>(items.Count);
+        foreach (var g in groups.OrderBy(g => rootOrder[g.Key]))
+        {
+            var list = g.ToList();
+            list.Sort((a, b) =>
+            {
+                int cmp = a.item.NodeValue!.DocumentOrder.CompareTo(b.item.NodeValue!.DocumentOrder);
+                return cmp != 0 ? cmp : a.idx.CompareTo(b.idx);
+            });
+            foreach (var x in list)
+                sorted.Add(x.item);
+        }
+        return sorted;
+    }
+
+    /// <summary>
+    /// Returns the root node of the tree containing the given node.
+    /// For a node inside a document this is the document node; for a parentless
+    /// tree it is the root element.
+    /// </summary>
+    private static IXdmNode GetRootNode(IXdmNode node)
+    {
+        var current = node;
+        while (true)
+        {
+            IXdmNode? parent = null;
+            foreach (var value in current.Axis(XdmAxis.Parent))
+            {
+                if (value.IsNode)
+                {
+                    parent = value.NodeValue;
+                    break;
+                }
+            }
+            if (parent == null)
+                return current;
+            current = parent;
+        }
+    }
+
+    /// <summary>
     /// Converts an XDM value to its string representation, concatenating sequence items.
     /// </summary>
     private static string XdmValueToString(XdmValue value)
@@ -5392,6 +5657,620 @@ public sealed class TransformEngine
         if (!bOk) return 1;   // any number is greater than NaN
         return da.CompareTo(db);
     }
+
+    /// <summary>
+    /// Sorts the groups produced by <c>xsl:for-each-group</c> according to the
+    /// contained <c>xsl:sort</c> specifications. Evaluates each sort key with the
+    /// group's representative item as the focus item and, in XSLT 2.0, with
+    /// <c>current-group()</c> and <c>current-grouping-key()</c> available.
+    /// </summary>
+    private List<(XdmValue? Key, List<XdmValue> Items)> SortGroups(
+        List<(XdmValue? Key, List<XdmValue> Items)> groups,
+        List<XElement> sortSpecs)
+    {
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        var savedCurrent = _context.CurrentItem;
+        var savedGroup = _currentGroup;
+        var savedKey = _currentGroupingKey;
+        bool exposeGroupInSort = !IsXslt30OrHigher();
+
+        try
+        {
+            var keyed = new List<(XdmValue? Key, List<XdmValue> Items, List<SortKey> Keys, int OriginalIndex)>();
+            for (int idx = 0; idx < groups.Count; idx++)
+            {
+                var (key, items) = groups[idx];
+                var rep = items[0];
+                _context.WithFocus(rep, idx + 1, groups.Count);
+                _context.WithCurrentItem(rep);
+                if (exposeGroupInSort)
+                {
+                    _currentGroup = items;
+                    _currentGroupingKey = key;
+                }
+
+                var keys = new List<SortKey>();
+                foreach (var spec in sortSpecs)
+                {
+                    var select = spec.Attribute("select")?.Value ?? ".";
+                    var dataType = spec.Attribute("data-type")?.Value ?? "text";
+                    var order = spec.Attribute("order")?.Value ?? "ascending";
+                    var descending = order.Trim().ToLowerInvariant() == "descending";
+                    var isNumeric = dataType.Trim().ToLowerInvariant() == "number";
+
+                    var compiled = XPath31Expression.Compile(select);
+                    var keyValue = compiled.Evaluate(_context);
+                    keys.Add(new SortKey(keyValue, descending, isNumeric));
+                }
+                keyed.Add((key, items, keys, idx));
+            }
+
+            keyed.Sort((a, b) =>
+            {
+                for (int i = 0; i < a.Keys.Count; i++)
+                {
+                    var cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
+                    if (cmp != 0) return cmp;
+                }
+                // Stable sort: preserve original relative order when all keys equal
+                return a.OriginalIndex.CompareTo(b.OriginalIndex);
+            });
+
+            return keyed.Select(k => (k.Key, k.Items)).ToList();
+        }
+        finally
+        {
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+            _context.WithCurrentItem(savedCurrent);
+            _currentGroup = savedGroup;
+            _currentGroupingKey = savedKey;
+        }
+    }
+
+    /// <summary>
+    /// Validates the attributes of an <c>xsl:for-each-group</c> instruction and throws
+    /// the appropriate static errors (XTSE0020/0080/0090/1017/1080/1090).
+    /// </summary>
+    private void ValidateForEachGroupAttributes(XElement instruction)
+    {
+        var groupBy = instruction.Attribute("group-by")?.Value;
+        var groupAdjacent = instruction.Attribute("group-adjacent")?.Value;
+        var groupStarting = instruction.Attribute("group-starting-with")?.Value;
+        var groupEnding = instruction.Attribute("group-ending-with")?.Value;
+        var collation = instruction.Attribute("collation")?.Value;
+        var compositeAttr = instruction.Attribute("composite")?.Value;
+        var bindGroup = instruction.Attribute("bind-group")?.Value;
+        var bindKey = instruction.Attribute("bind-grouping-key")?.Value;
+
+        if (!string.IsNullOrEmpty(compositeAttr))
+        {
+            var v = compositeAttr.Trim();
+            if (v != "yes" && v != "true" && v != "1" &&
+                v != "no" && v != "false" && v != "0")
+                throw new InvalidOperationException("XTSE0020: invalid value for @composite");
+        }
+
+        int groupingAttrCount = 0;
+        if (!string.IsNullOrEmpty(groupBy)) groupingAttrCount++;
+        if (!string.IsNullOrEmpty(groupAdjacent)) groupingAttrCount++;
+        if (!string.IsNullOrEmpty(groupStarting)) groupingAttrCount++;
+        if (!string.IsNullOrEmpty(groupEnding)) groupingAttrCount++;
+
+        if (groupingAttrCount == 0)
+            throw new InvalidOperationException("XTSE1080: xsl:for-each-group requires one of group-by, group-adjacent, group-starting-with, or group-ending-with");
+        if (groupingAttrCount > 1)
+            throw new InvalidOperationException("XTSE1080: xsl:for-each-group allows only one of group-by, group-adjacent, group-starting-with, or group-ending-with");
+
+        if (!string.IsNullOrEmpty(collation) &&
+            string.IsNullOrEmpty(groupBy) && string.IsNullOrEmpty(groupAdjacent))
+            throw new InvalidOperationException("XTSE1090: @collation is allowed only with group-by or group-adjacent");
+
+        if (IsXslt30OrHigher() && (!string.IsNullOrEmpty(bindGroup) || !string.IsNullOrEmpty(bindKey)))
+            throw new InvalidOperationException("XTSE0090: @bind-group and @bind-grouping-key are not permitted in XSLT 3.0");
+    }
+
+    /// <summary>
+    /// Builds the groups for an <c>xsl:for-each-group</c> instruction from the supplied
+    /// population items, respecting <c>@composite</c> and the supplied collation.
+    /// </summary>
+    private List<(XdmValue? Key, List<XdmValue> Items)> BuildForEachGroups(
+        XElement instruction,
+        List<XdmValue> items,
+        string? collation)
+    {
+        var groupBy = instruction.Attribute("group-by")?.Value;
+        var groupAdjacent = instruction.Attribute("group-adjacent")?.Value;
+        var groupStarting = instruction.Attribute("group-starting-with")?.Value;
+        var groupEnding = instruction.Attribute("group-ending-with")?.Value;
+        bool composite = IsCompositeGrouping(instruction);
+
+        var groups = new List<(XdmValue? Key, List<XdmValue> Items)>();
+
+        if (!string.IsNullOrEmpty(groupBy))
+        {
+            var keyExpr = CompileXPath(groupBy, instruction);
+            for (int idx = 0; idx < items.Count; idx++)
+            {
+                var item = items[idx];
+                _context.WithFocus(item, idx + 1, items.Count);
+                var keyValue = keyExpr.Evaluate(_context);
+                var keyItems = EnumerateKeyItems(keyValue);
+                if (composite)
+                {
+                    var compositeKey = XdmValue.FromSequence(MaterializedSequence.FromList(keyItems));
+                    AddToGroup(groups, compositeKey, item, collation);
+                }
+                else
+                {
+                    foreach (var keyItem in keyItems)
+                        AddToGroup(groups, keyItem, item, collation);
+                }
+            }
+        }
+        else if (!string.IsNullOrEmpty(groupAdjacent))
+        {
+            var keyExpr = CompileXPath(groupAdjacent, instruction);
+            XdmValue currentKey = XdmValue.Undefined;
+            List<XdmValue>? currentItems = null;
+            for (int idx = 0; idx < items.Count; idx++)
+            {
+                var item = items[idx];
+                _context.WithFocus(item, idx + 1, items.Count);
+                var keyValue = keyExpr.Evaluate(_context);
+                var keyItems = EnumerateKeyItems(keyValue);
+
+                XdmValue itemKey;
+                if (composite)
+                {
+                    itemKey = XdmValue.FromSequence(MaterializedSequence.FromList(keyItems));
+                }
+                else
+                {
+                    if (keyItems.Count == 0)
+                        throw new InvalidOperationException("XTTE1100: group-adjacent key evaluates to an empty sequence");
+                    if (keyItems.Count > 1)
+                        throw new InvalidOperationException("XTTE1100: group-adjacent key evaluates to a sequence of more than one item");
+                    itemKey = keyItems[0];
+                }
+
+                if (currentItems == null)
+                {
+                    currentItems = new List<XdmValue> { item };
+                    currentKey = itemKey;
+                }
+                else if (GroupingKeysEqual(currentKey, itemKey, collation))
+                {
+                    currentItems.Add(item);
+                }
+                else
+                {
+                    groups.Add((currentKey, currentItems));
+                    currentItems = new List<XdmValue> { item };
+                    currentKey = itemKey;
+                }
+            }
+            if (currentItems != null)
+                groups.Add((currentKey, currentItems));
+        }
+        else if (!string.IsNullOrEmpty(groupStarting))
+        {
+            var defaultNs = GetXPathDefaultNamespace(instruction);
+            var patternCompiler = new Patterns.PatternCompiler();
+            var pattern = patternCompiler.Compile(groupStarting, defaultNs);
+            List<XdmValue>? currentItems = null;
+            for (int idx = 0; idx < items.Count; idx++)
+            {
+                var item = items[idx];
+                _context.WithFocus(item, idx + 1, items.Count);
+                if (pattern(item, _context))
+                {
+                    if (currentItems != null && currentItems.Count > 0)
+                        groups.Add((null, currentItems));
+                    currentItems = new List<XdmValue> { item };
+                }
+                else
+                {
+                    currentItems ??= new List<XdmValue>();
+                    currentItems.Add(item);
+                }
+            }
+            if (currentItems != null && currentItems.Count > 0)
+                groups.Add((null, currentItems));
+        }
+        else if (!string.IsNullOrEmpty(groupEnding))
+        {
+            var defaultNs = GetXPathDefaultNamespace(instruction);
+            var patternCompiler = new Patterns.PatternCompiler();
+            var pattern = patternCompiler.Compile(groupEnding, defaultNs);
+            List<XdmValue>? currentItems = null;
+            for (int idx = 0; idx < items.Count; idx++)
+            {
+                var item = items[idx];
+                _context.WithFocus(item, idx + 1, items.Count);
+                currentItems ??= new List<XdmValue>();
+                currentItems.Add(item);
+                if (pattern(item, _context))
+                {
+                    groups.Add((null, currentItems));
+                    currentItems = null;
+                }
+            }
+            if (currentItems != null && currentItems.Count > 0)
+                groups.Add((null, currentItems));
+        }
+
+        return groups;
+    }
+
+    /// <summary>
+    /// Adds an item to an existing group whose key is equal under XDM eq semantics
+    /// (including the requested collation for string comparisons), or creates a new
+    /// group when no matching group exists.
+    /// </summary>
+    private static void AddToGroup(List<(XdmValue? Key, List<XdmValue> Items)> groups, XdmValue key, XdmValue item, string? collation)
+    {
+        foreach (var g in groups)
+        {
+            if (g.Key != null && GroupingKeysEqual(g.Key.Value, key, collation))
+            {
+                if (!g.Items.Contains(item))
+                    g.Items.Add(item);
+                return;
+            }
+        }
+        groups.Add((key, new List<XdmValue> { item }));
+    }
+
+    /// <summary>
+    /// Atomizes the items of a grouping key expression and returns them as a list.
+    /// </summary>
+    private static List<XdmValue> EnumerateKeyItems(XdmValue value)
+    {
+        var result = new List<XdmValue>();
+        if (value.IsUndefined)
+            return result;
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!item.IsUndefined)
+                    result.Add(AtomizeKeyItem(item));
+            }
+        }
+        else
+        {
+            result.Add(AtomizeKeyItem(value));
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Atomizes a single grouping key item. Nodes become xs:untypedAtomic values.
+    /// </summary>
+    private static XdmValue AtomizeKeyItem(XdmValue value)
+    {
+        if (value.IsNode)
+            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
+        return value;
+    }
+
+    /// <summary>
+    /// Compares two grouping keys using the same rules as the XPath <c>eq</c> operator,
+    /// including numeric promotion, untyped-atomic casting, date/time normalization,
+    /// and the supplied string collation.
+    /// </summary>
+    private static bool GroupingKeysEqual(XdmValue a, XdmValue b, string? collation = null)
+    {
+        if (a.IsUndefined || b.IsUndefined)
+            return false;
+
+        if (a.IsSequence && b.IsSequence)
+        {
+            var aItems = EnumerateKeyItems(a);
+            var bItems = EnumerateKeyItems(b);
+            if (aItems.Count != bItems.Count)
+                return false;
+            for (int i = 0; i < aItems.Count; i++)
+            {
+                if (!AtomicValuesEqual(aItems[i], bItems[i], collation))
+                    return false;
+            }
+            return true;
+        }
+
+        if (!a.IsSequence && !b.IsSequence)
+            return AtomicValuesEqual(a, b, collation);
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true when the supplied value kind represents a numeric atomic type.
+    /// </summary>
+    private static bool IsNumeric(XdmValueKind kind)
+        => kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+
+    private static double ToDouble(XdmValue value)
+        => value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (double)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
+            _ => double.Parse(value.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture)
+        };
+
+    private static float ToFloat(XdmValue value)
+        => value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (float)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => (float)value.DoubleValue,
+            _ => float.Parse(value.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture)
+        };
+
+    private static decimal ToDecimal(XdmValue value)
+        => value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => (decimal)value.DoubleValue,
+            _ => decimal.Parse(value.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture)
+        };
+
+    /// <summary>
+    /// Compares two atomic XDM values using XPath <c>eq</c> semantics and the
+    /// supplied string collation for string/untypedAtomic comparisons.
+    /// </summary>
+    private static bool AtomicValuesEqual(XdmValue a, XdmValue b, string? collation = null)
+    {
+        if (a.IsUndefined || b.IsUndefined)
+            return false;
+
+        var aKind = a.Kind;
+        var bKind = b.Kind;
+
+        // Both numeric: compare numeric values with proper promotion (per XPath eq).
+        if (IsNumeric(aKind) && IsNumeric(bKind))
+        {
+            // Grouping treats NaN as equal to itself, unlike XPath value comparisons.
+            bool aIsNaN = (aKind is XdmValueKind.Double or XdmValueKind.Float) && double.IsNaN(a.DoubleValue);
+            bool bIsNaN = (bKind is XdmValueKind.Double or XdmValueKind.Float) && double.IsNaN(b.DoubleValue);
+            if (aIsNaN || bIsNaN)
+                return aIsNaN && bIsNaN;
+
+            if (aKind == XdmValueKind.Double || bKind == XdmValueKind.Double)
+                return ToDouble(a) == ToDouble(b);
+            if (aKind == XdmValueKind.Float || bKind == XdmValueKind.Float)
+                return ToFloat(a) == ToFloat(b);
+            if (aKind == XdmValueKind.Decimal || bKind == XdmValueKind.Decimal)
+                return ToDecimal(a) == ToDecimal(b);
+            return a.IntegerValue == b.IntegerValue;
+        }
+
+        // Same kind exact comparison.
+        if (aKind == bKind)
+        {
+            switch (aKind)
+            {
+                case XdmValueKind.String:
+                    return GroupingStringEquals(a.ToString(), b.ToString(), collation);
+                case XdmValueKind.Boolean:
+                    return a.BooleanValue == b.BooleanValue;
+                case XdmValueKind.DateTime:
+                case XdmValueKind.Date:
+                case XdmValueKind.Time:
+                    return NormalizeDateTime(a, aKind) == NormalizeDateTime(b, bKind);
+                case XdmValueKind.Duration:
+                    return string.Equals(a.ToString(), b.ToString(), StringComparison.Ordinal);
+                case XdmValueKind.QName:
+                    var qa = a.QNameValue;
+                    var qb = b.QNameValue;
+                    return qa.LocalName == qb.LocalName && qa.NamespaceUri == qb.NamespaceUri;
+                case XdmValueKind.Uri:
+                    return GroupingStringEquals(a.ToString(), b.ToString(), collation);
+            }
+        }
+
+        // untypedAtomic on either side: cast to the other operand's type.
+        if (IsUntypedAtomic(a))
+            return UntypedAtomicEqualsOther(a, b, collation);
+        if (IsUntypedAtomic(b))
+            return UntypedAtomicEqualsOther(b, a, collation);
+
+        // String / URI cross-comparison.
+        if ((aKind == XdmValueKind.String || aKind == XdmValueKind.Uri) &&
+            (bKind == XdmValueKind.String || bKind == XdmValueKind.Uri))
+        {
+            return GroupingStringEquals(a.ToString(), b.ToString(), collation);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Compares an xs:untypedAtomic value with another atomic value using the
+    /// casting rules of the XPath <c>eq</c> operator and the supplied string collation.
+    /// </summary>
+    private static bool UntypedAtomicEqualsOther(XdmValue untyped, XdmValue other, string? collation = null)
+    {
+        var s = untyped.ToString();
+        var otherKind = other.Kind;
+
+        if (otherKind is XdmValueKind.String or XdmValueKind.Uri)
+            return GroupingStringEquals(s, other.ToString(), collation);
+
+        if (IsNumeric(otherKind))
+        {
+            // Cast untypedAtomic to the other operand's numeric type, per XPath eq rules.
+            if (otherKind == XdmValueKind.Float)
+            {
+                if (!float.TryParse(s, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float f))
+                    return false;
+                return f == ToFloat(other);
+            }
+            if (otherKind == XdmValueKind.Double)
+            {
+                if (!double.TryParse(s, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double d))
+                    return false;
+                if (double.IsNaN(d))
+                    return false;
+                return d == ToDouble(other);
+            }
+            if (otherKind == XdmValueKind.Decimal)
+            {
+                if (!decimal.TryParse(s, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal d))
+                    return false;
+                return d == ToDecimal(other);
+            }
+            if (otherKind == XdmValueKind.Integer)
+            {
+                if (!long.TryParse(s, out long d))
+                    return false;
+                return d == other.IntegerValue;
+            }
+        }
+
+        if (otherKind == XdmValueKind.Boolean)
+        {
+            if (bool.TryParse(s, out bool b))
+                return b == other.BooleanValue;
+            return false;
+        }
+
+        if (otherKind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time)
+        {
+            if (DateTimeOffset.TryParse(s, out var dt))
+                return dt.ToUniversalTime() == NormalizeDateTime(other, otherKind);
+            return false;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Normalizes a date/time value to UTC for comparison.
+    /// </summary>
+    private static DateTimeOffset NormalizeDateTime(XdmValue value, XdmValueKind kind)
+    {
+        var dt = kind switch
+        {
+            XdmValueKind.DateTime => value.DateTimeValue,
+            XdmValueKind.Date => value.DateValue,
+            XdmValueKind.Time => value.TimeValue,
+            _ => throw new InvalidOperationException()
+        };
+        return dt.ToUniversalTime();
+    }
+
+    /// <summary>
+    /// Determines whether the supplied value is an xs:untypedAtomic atomic value.
+    /// </summary>
+    private static bool IsUntypedAtomic(XdmValue value)
+        => value.Kind == XdmValueKind.String &&
+           string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Returns true if the <c>xsl:for-each-group</c> instruction requests composite
+    /// grouping keys (<c>composite="yes"</c>, <c>"true"</c>, or <c>"1"</c>).
+    /// </summary>
+    private static bool IsCompositeGrouping(XElement instruction)
+    {
+        var value = instruction.Attribute("composite")?.Value;
+        return value is "yes" or "true" or "1";
+    }
+
+    /// <summary>
+    /// Returns true when the containing stylesheet declares an XSLT version of 3.0 or higher.
+    /// </summary>
+    private bool IsXslt30OrHigher()
+    {
+        var v = _stylesheet.Version;
+        return v is "3.0" or "3.1";
+    }
+
+    private const string CodepointCollation = "http://www.w3.org/2005/xpath-functions/collation/codepoint";
+    private const string HtmlAsciiCaseInsensitiveCollation = "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive";
+    private const string CaseblindCollation = "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind";
+    private const string UcaCollationPrefix = "http://www.w3.org/2013/collation/UCA";
+
+    /// <summary>
+    /// Compares two strings using the supplied collation URI. Falls back to codepoint
+    /// comparison when no collation is supplied or when the URI is unrecognized.
+    /// </summary>
+    private static bool GroupingStringEquals(string a, string b, string? collation)
+    {
+        if (string.IsNullOrEmpty(collation) || collation == CodepointCollation)
+            return string.Equals(a, b, StringComparison.Ordinal);
+
+        if (TryParseUcaCollation(collation, out var uca))
+            return uca.CompareInfo.Compare(a, b, uca.Options) == 0;
+
+        if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
+            return string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
+
+        // Unknown collation: behave as codepoint (caller normally validates earlier).
+        return string.Equals(a, b, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Parses a UCA collation URI into a culture and compare options.
+    /// </summary>
+    private static bool TryParseUcaCollation(string uri, out UcaCollationInfo info)
+    {
+        info = default;
+        if (!uri.StartsWith(UcaCollationPrefix, StringComparison.Ordinal))
+            return false;
+
+        string query = uri.Length > UcaCollationPrefix.Length && uri[UcaCollationPrefix.Length] == '?'
+            ? uri[(UcaCollationPrefix.Length + 1)..]
+            : string.Empty;
+
+        string lang = "en";
+        string strength = "tertiary";
+        bool alternateBlanked = false;
+        foreach (var param in query.Split(';', StringSplitOptions.RemoveEmptyEntries))
+        {
+            int eq = param.IndexOf('=');
+            if (eq < 0) continue;
+            string key = param[..eq].Trim();
+            string val = param[(eq + 1)..].Trim();
+            if (key == "lang")
+                lang = val;
+            else if (key == "strength")
+                strength = val;
+            else if (key == "alternate" && val == "blanked")
+                alternateBlanked = true;
+        }
+
+        try
+        {
+            var culture = CultureInfo.GetCultureInfo(lang);
+            var options = strength.ToLowerInvariant() switch
+            {
+                "primary" => CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace,
+                "secondary" => CompareOptions.IgnoreCase,
+                "tertiary" => CompareOptions.None,
+                "quaternary" => CompareOptions.None,
+                "identical" => CompareOptions.Ordinal,
+                _ => CompareOptions.None,
+            };
+
+            if (alternateBlanked)
+                options |= CompareOptions.IgnoreSymbols;
+
+            info = new UcaCollationInfo(culture.CompareInfo, options);
+            return true;
+        }
+        catch (CultureNotFoundException)
+        {
+            return false;
+        }
+    }
+
+    private readonly record struct UcaCollationInfo(CompareInfo CompareInfo, CompareOptions Options);
 
     /// <summary>
     /// Applies basic type conversion for the <c>as</c> attribute on xsl:variable / xsl:param.
@@ -6469,10 +7348,10 @@ public sealed class TransformEngine
         var groupingSizeAttr = instruction.Attribute("grouping-size")?.Value;
 
         // Evaluate format as AVT (it is always an AVT per XSLT spec)
-        var format = EvaluateAvt(formatAttr);
+        var format = EvaluateAvt(formatAttr, instruction);
 
         // Evaluate optional AVT attributes
-        string? lang = string.IsNullOrEmpty(langAttr) ? null : EvaluateAvt(langAttr);
+        string? lang = string.IsNullOrEmpty(langAttr) ? null : EvaluateAvt(langAttr, instruction);
         if (!string.IsNullOrEmpty(lang))
         {
             try
@@ -6488,14 +7367,14 @@ public sealed class TransformEngine
         int groupingSize = 0;
         if (!string.IsNullOrEmpty(groupingSizeAttr))
         {
-            var gsEval = EvaluateAvt(groupingSizeAttr);
+            var gsEval = EvaluateAvt(groupingSizeAttr, instruction);
             int.TryParse(gsEval, out groupingSize);
         }
 
         bool ordinal = false;
         if (!string.IsNullOrEmpty(ordinalAttr))
         {
-            var ordEval = EvaluateAvt(ordinalAttr);
+            var ordEval = EvaluateAvt(ordinalAttr, instruction);
             ordinal = ordEval.Equals("yes", StringComparison.OrdinalIgnoreCase);
         }
 
@@ -6503,7 +7382,7 @@ public sealed class TransformEngine
         BigInteger[]? startAtValues = null;
         if (!string.IsNullOrEmpty(startAtAttr))
         {
-            var evaluated = EvaluateAvt(startAtAttr);
+            var evaluated = EvaluateAvt(startAtAttr, instruction);
             startAtValues = ParseStartAtValues(evaluated);
         }
 
@@ -7324,5 +8203,14 @@ public sealed class TransformEngine
             }
             return (name, "");
         }
+    }
+
+    /// <summary>
+    /// Annotation attached to copied elements when <c>copy-accumulators="yes"</c> is used.
+    /// Maps accumulator Clark names to their before/after values for the source node.
+    /// </summary>
+    private sealed class AccumulatorValues
+    {
+        public Dictionary<string, (XdmValue Before, XdmValue After)> Values { get; } = new();
     }
 }
