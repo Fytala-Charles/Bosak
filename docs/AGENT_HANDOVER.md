@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `24a444a`
+**Commit:** `dfff95c`
 **Current focus:** XSLT `base-uri` cluster now 50/50 passing (100%), 5 skipped. Fixed `document('')` resolving against template's effective base URI, `xsl:copy` / `xsl:copy-of` preserving base URIs through copies, and built-in template rules propagating base URIs.
 
 ---
@@ -835,7 +835,7 @@ For-each-group has 62 failures. Basic implementation exists (`group-by`, `group-
 
 - `main` — all work is on `main`
 - No feature branches
-- Latest: `24a444a` — XSLT base-uri cluster fix (document('') resolution, xml:* prefix handling, base URI propagation)
+- Latest: `dfff95c` — XSLT base-uri cluster fix + docs sync (document('') resolution, xml:* prefix handling, base URI propagation)
 - Previous: `fdb3987` — docs: update AGENT_HANDOVER commit hash for as-cluster session
 - Previous: `<uncommitted>` — namespace axis parent fix (copy-0616/0618/0624/0626)
 - Previous: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
