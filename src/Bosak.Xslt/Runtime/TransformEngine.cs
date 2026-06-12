@@ -163,6 +163,9 @@ public sealed class TransformEngine
     // Deferred global variables with sequence constructors (evaluated lazily on first reference)
     private readonly Dictionary<string, (XElement Element, string? AsType)> _lazyGlobals = new();
 
+    // Focus used for global variable/param evaluation (the source document node).
+    private XdmValue _globalContextItem = XdmValue.Undefined;
+
     /// <summary>The parsed xsl:output serialization properties.</summary>
     public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
 
@@ -4825,6 +4828,7 @@ public sealed class TransformEngine
     private void InitializeGlobalParametersAndVariables(IXdmNode source)
     {
         var focus = XdmValue.FromNode(source);
+        _globalContextItem = focus;
 
         // Set the focus once for all global param/var evaluations.
         // Sequence constructors inside global variables rely on _context.ContextItem
@@ -4861,8 +4865,9 @@ public sealed class TransformEngine
             if (string.IsNullOrEmpty(namespaceUri) && _lazyGlobals.TryGetValue(localName, out var info))
             {
                 _lazyGlobals.Remove(localName);
-                var currentItem = _context.ContextItem;
-                var value = EvaluateSequenceConstructor(info.Element, currentItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                // Global sequence-constructor variables are evaluated with the global focus
+                // (the source document node), not the focus at the point of reference.
+                var value = EvaluateSequenceConstructor(info.Element, _globalContextItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
                 value = ConvertVariableValue(value, info.AsType);
                 _context.WithVariable(localName, value);
                 return value;
@@ -6163,7 +6168,8 @@ public sealed class TransformEngine
                     {
                         var compiled = XPath31Expression.Compile(expr);
                         var value = compiled.Evaluate(_context);
-                        sb.Append(XdmValueToString(value, ""));
+                        // XSLT 3.0 §5.6.2: atomized TVT items are joined with a single space.
+                        sb.Append(XdmValueToString(value, " "));
                     }
                     i = j;
                     continue;

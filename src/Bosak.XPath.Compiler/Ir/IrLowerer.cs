@@ -734,7 +734,9 @@ public sealed class IrLowerer
             {
                 // For *:local, preserve the wildcard in the name test so the VM knows not to
                 // apply the no-namespace restriction for unprefixed attribute names.
-                var nameToPool = node.NodeTest.NamespaceUri == "*" ? "*:" + node.NodeTest.Name : node.NodeTest.Name;
+                // For any resolved prefix or URI, use the *:local form so the NameTest opcode
+                // checks only the local name and lets the preceding NamespaceTest enforce the URI.
+                var nameToPool = string.IsNullOrEmpty(node.NodeTest.NamespaceUri) ? node.NodeTest.Name : "*:" + node.NodeTest.Name;
                 namePoolIdx = AddToLiteralPool(nameToPool);
                 // If a real prefix is present (not the wildcard "*"), emit NamespaceTest
                 // to filter by resolved URI.
