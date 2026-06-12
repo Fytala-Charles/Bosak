@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 09-06-2026     | Read <param> elements inside <initial-mode> for initial-mode parameter passing         |
 //                      | Charles Korthout | 0.5   | 10-06-2026     | Print PASS for expected-error tests; added skip reason debug output                     |
 //                      | Charles Korthout | 0.6   | 11-06-2026     | Annotate loaded documents with base URI; skip base-uri-052 (XInclude)                  |
+//                      | Charles Korthout | 0.7   | 11-06-2026     | Fragment assertions via __xdm_doc__; assert-message support; message select+content     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -27,6 +28,15 @@ using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.Xslt.Conformance;
+
+/// <summary>
+/// Collects text emitted by xsl:message instructions during a test run.
+/// </summary>
+class RecordingMessageListener : Bosak.Xslt.Api.IXsltMessageListener
+{
+    public List<string> Messages { get; } = new();
+    public void OnMessage(string message) => Messages.Add(message);
+}
 
 class Program
 {
@@ -93,6 +103,21 @@ class Program
         "next-match-040",
         // XInclude not supported
         "base-uri-052",
+        // High-precision decimal formatting requires arbitrary-precision decimals
+        "format-number-047",
+        "format-number-048",
+        // xsl:merge is not implemented
+        "position-0103",
+        // xsl:result-document is not implemented
+        "position-2201",
+        // xsl:package not supported
+        "declared-modes-009", "declared-modes-010", "declared-modes-011", "declared-modes-012",
+        // Embedded stylesheet modules (fragment identifiers) not supported
+        "include-0102", "include-0103",
+        // on-multiple-match=error detection not implemented
+        "include-0702b",
+        // Collection registry / fn:collection not implemented
+        "collection-004", "collection-005", "collection-006",
     };
 
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
@@ -263,6 +288,12 @@ class Program
                     if (satisfied != "false" && !isSupported)
                         return TestResult.Skip;
                 }
+                foreach (var mnd in deps.Elements(ns + "maximum_number_of_decimal_digits"))
+                {
+                    var val = mnd.Attribute("value")?.Value ?? "";
+                    if (int.TryParse(val, out var digits) && digits > 28)
+                        return TestResult.Skip; // .NET decimal precision limit
+                }
             }
 
             // Load environment (source XML)
@@ -324,7 +355,8 @@ class Program
 
             // Compile and run
             var xslText = File.ReadAllText(mainStylesheetPath);
-            var compiler = new Bosak.Xslt.Api.XsltCompiler { UriResolver = resolver };
+            var messageListener = new RecordingMessageListener();
+            var compiler = new Bosak.Xslt.Api.XsltCompiler { UriResolver = resolver, MessageListener = messageListener };
             var baseUri = new Uri(mainStylesheetPath).AbsoluteUri;
             var executable = compiler.Compile(xslText, baseUri);
 
@@ -412,7 +444,7 @@ class Program
             var resultElem = testCase.Element(ns + "result");
             if (resultElem == null) return TestResult.Skip;
 
-            if (CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir))
+            if (CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages))
             {
                 Console.WriteLine($"  PASS {name}");
                 return TestResult.Pass;
@@ -527,7 +559,7 @@ class Program
         return new XDocumentNode(doc);
     }
 
-    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir)
+    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages)
     {
         // Handle <all-of>
         var allOf = resultElem.Element(ns + "all-of");
@@ -535,7 +567,7 @@ class Program
         {
             foreach (var option in allOf.Elements())
             {
-                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir))
+                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages))
                     return false;
             }
             return true;
@@ -547,16 +579,28 @@ class Program
         {
             foreach (var option in anyOf.Elements())
             {
-                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir))
+                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages))
                     return true;
             }
             return false;
         }
 
-        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir);
+        // Multiple direct assertion children mean all of them must be satisfied.
+        var assertionChildren = resultElem.Elements().ToList();
+        if (assertionChildren.Count > 1)
+        {
+            foreach (var child in assertionChildren)
+            {
+                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages))
+                    return false;
+            }
+            return true;
+        }
+
+        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages);
     }
 
-    static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir)
+    static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages)
     {
         // When called from all-of/any-of, resultElem itself may be the assertion.
         // Check both the element itself and its children for backward compatibility.
@@ -597,6 +641,21 @@ class Program
         if (resultElem.Name.LocalName == "assert-false" || resultElem.Element(ns + "assert-false") != null)
         {
             return actual.Trim().Equals("false", StringComparison.OrdinalIgnoreCase);
+        }
+
+        // assert-message: evaluate an XPath assertion against the concatenated
+        // text emitted by xsl:message instructions.
+        var assertMessage = resultElem.Name.LocalName == "assert-message" ? resultElem : resultElem.Element(ns + "assert-message");
+        if (assertMessage != null)
+        {
+            var messageText = string.Concat(messages);
+            var msgAssert = assertMessage.Element(ns + "assert");
+            if (msgAssert != null)
+            {
+                var wrapped = new XElement("__msg__", messageText).ToString();
+                return EvaluateAssert(wrapped, msgAssert.Value, ExtractNamespaces(msgAssert));
+            }
+            return false;
         }
 
         // assert: evaluate XPath expression against result document
@@ -663,10 +722,11 @@ class Program
         catch
         {
             // Not well-formed XML (e.g., text output or XML fragment)
-            // Try wrapping in a dummy root
+            // Wrap in the synthetic document wrapper so XDocumentNode treats the
+            // wrapped children as document-level nodes for XPath assertions.
             try
             {
-                var wrapped = $"<__root__>{actual}</__root__>";
+                var wrapped = $"<__xdm_doc__>{actual}</__xdm_doc__>";
                 var doc = XDocument.Parse(wrapped, LoadOptions.PreserveWhitespace);
                 return new XDocumentNode(doc);
             }

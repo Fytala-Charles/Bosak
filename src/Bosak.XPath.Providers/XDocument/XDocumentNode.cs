@@ -127,7 +127,7 @@ public sealed class XDocumentNode : IXdmNode
                 XComment c => c.Value,
                 XProcessingInstruction pi => pi.Data,
                 System.Xml.Linq.XDocument d => GetSyntheticWrapper(d) is { } wrapper
-                    ? string.Concat(wrapper.Nodes().OfType<XText>().Select(t => t.Value))
+                    ? wrapper.Value
                     : (d.Root != null ? d.Root.Value : string.Concat(d.Nodes().OfType<XText>().Select(t => t.Value))),
                 _ => string.Empty
             };

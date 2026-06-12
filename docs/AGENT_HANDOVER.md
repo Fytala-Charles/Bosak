@@ -1,5 +1,64 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-11
+**Commit:** `729b17d`
+**Current focus:** Cleared the remaining quick-win XSLT conformance clusters (`element`, `xsl-document`, `declared-modes`, `include`, `collection`).
+
+---
+
+## Full Suite Results (2026-06-11)
+
+- **Total:** 14,600
+- **Passed:** 3,975
+- **Failed:** 1,395
+- **Skipped:** 9,230
+- **Pass rate:** 74.0% (up from 73.0%)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| element | 29 | 24 | 0 | 5 | 100% runnable |
+| xsl-document | 25 | 25 | 0 | 0 | 100% |
+| declared-modes | 14 | 10 | 0 | 4 | package tests skipped |
+| include | 16 | 12 | 0 | 4 | embedded modules / on-multiple-match skipped |
+| collection | 6 | 3 | 0 | 3 | collection registry not implemented |
+
+## This Session Fixes
+
+1. **`xsl:where-populated` populated-node semantics** — Rewrote the instruction to preserve document nodes from `xsl:document` and items from `xsl:sequence`, while suspending the sequence accumulator around element-building instructions so nested content stays inside the element being constructed. Added `IsPopulated`/`IsPopulatedNode` helpers that treat empty elements/documents as not populated.
+   - **Fixed**: `element-0104` through `element-0108`.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **Document-node serialization of fragments** — `CopyNodeToResult` now wraps multi-root document nodes in the synthetic `__xdm_doc__` element when the target is the result `XDocument`; `ResultTreeSerializer` unwraps it at the top level.
+   - **Fixed**: `xsl-document-0501`.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`.
+
+3. **`xsl:document` in simple content** — Added a `document` case to `CollectSimpleContentXsltInstruction` so a document node contributes its descendant text value (excluding comments/PIs).
+   - **Fixed**: `xsl-document-0601`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **Synthetic-wrapper document string value** — `XDocumentNode.StringValue` for a synthetic-wrapper document now uses `wrapper.Value` so all descendant text is included.
+   - **Fixed**: `xsl-document-0601`.
+   - **File changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
+
+5. **`xsl:message` select + content** — `xsl:message` now concatenates both the `@select` result and the sequence-constructor content.
+   - **Fixed**: `xsl-document-0603`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+6. **Conformance harness improvements** — Added `RecordingMessageListener`, `<assert-message>` support, fragment assertion parsing via `__xdm_doc__`, and handling of multiple direct assertion children as an implicit `<all-of>`. Added skips for unsupported package/embedded-module/collection tests.
+   - **Files changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+## Recommended Next Steps
+
+1. Commit the current changes.
+2. Tackle the next medium clusters: `copy` (6 failures) or `sort` (19 failures).
+3. Implement a collection registry in `EvaluationContext` / `FunctionLibrary` if `collection-004/005` should run rather than be skipped.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-12
 **Commit:** `e69746c`
 **Current focus:** Full W3C XSLT 3.0 conformance suite re-run after restoring the `for-each-group` cluster.

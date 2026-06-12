@@ -348,12 +348,18 @@ dotnet test Bosak.sln
 | `key()` lookup results are returned in document order. | Multiple `xsl:key` definitions with the same name no longer return nodes in definition order. Fixes `key-073/074/075` ordering. | 2026-06-12 |
 | Pattern predicates in `key()` match patterns now isolate caller focus. | `PatternCompiler.WrapWithCurrentItem` saves/restores context item, position, and size so `xsl:number` with `key()` patterns does not corrupt subsequent instructions. Fixes `key-035`. | 2026-06-12 |
 | `key()` pattern validation restored. | XTSE0340 is raised for invalid second arguments in `key()` match patterns; numeric literals, variable references, and parenthesized sequences are allowed. Fixes `key-083`, `key-093`, `key-097`, `match-079`, `match-080`. | 2026-06-12 |
+| `xsl:where-populated` now implements populated-node semantics per XSLT 3.0. | Document nodes from `xsl:document` and items from `xsl:sequence` are preserved; empty elements/documents are filtered; `xsl:on-empty` children are honoured. Fixes `element-0104` through `element-0108`. | 2026-06-11 |
+| Fragment document nodes now serialize correctly. | Multi-root `xsl:document` results are wrapped in `__xdm_doc__` during copying and unwrapped by `ResultTreeSerializer`. Fixes `xsl-document-0501`. | 2026-06-11 |
+| `xsl:document` inside simple content contributes the document's string value. | Excludes comment/PI descendants; fixes `xsl-document-0601`. | 2026-06-11 |
+| `XDocumentNode.StringValue` for synthetic-wrapper documents includes all descendant text. | Previously only direct text children of the wrapper were included. | 2026-06-11 |
+| `xsl:message` now includes both `@select` and sequence-constructor content. | Both contributions are concatenated, matching XSLT 3.0 semantics. Fixes `xsl-document-0603`. | 2026-06-11 |
+| Conformance harness supports `<assert-message>` and fragment assertions. | Messages are captured via `RecordingMessageListener`; multiple direct assertion children are treated as an implicit `<all-of>`. | 2026-06-11 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 3,888 | 1,500 | 9,212 | 72.2% | +4 tests from previous baseline; string cluster 136/136 passing; named-template entry points without source use absent initial context item |
+| XSLT 3.0 (W3C) | 3,975 | 1,395 | 9,230 | 74.0% | element, xsl-document, declared-modes, include, collection clusters now 100% runnable (after skips) |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

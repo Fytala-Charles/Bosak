@@ -156,6 +156,22 @@ public static class ResultTreeSerializer
 
     private static string SerializeXDocument(XDocument document, Stylesheet.OutputProperties props)
     {
+        // Unwrap synthetic document wrappers at the top level so fragments with
+        // multiple root elements serialize correctly.
+        if (document.Root is { } root &&
+            root.Name.LocalName == "__xdm_doc__" &&
+            root.Name.NamespaceName == "")
+        {
+            using var writer = new StringWriter();
+            var settings = CreateXmlWriterSettings(props);
+            settings.ConformanceLevel = ConformanceLevel.Fragment;
+            using var xmlWriter = XmlWriter.Create(writer, settings);
+            foreach (var child in root.Nodes())
+                child.WriteTo(xmlWriter);
+            xmlWriter.Flush();
+            return ConvertHexEntitiesToDecimal(writer.ToString());
+        }
+
         return SerializeWithEncoding(document, props);
     }
 

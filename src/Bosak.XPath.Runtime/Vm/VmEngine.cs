@@ -1983,7 +1983,7 @@ public static class VmEngine
             return XdmValue.Undefined;
 
         if (value.IsNode)
-            return XdmValue.FromString(value.NodeValue.StringValue);
+            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
 
         if (value.IsSequence)
         {
@@ -2127,8 +2127,24 @@ public static class VmEngine
     // Arithmetic
     // ------------------------------------------------------------------
 
+    private static bool IsEmptySequence(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return true;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            foreach (var _ in XdmSequence.FromSource(value.SequenceValue))
+                return false;
+            return true;
+        }
+        return false;
+    }
+
     private static XdmValue Add(XdmValue left, XdmValue right)
     {
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
+
         // Date/Time + Duration
         if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
             return AddDuration(left, right.ToString());
@@ -2145,6 +2161,12 @@ public static class VmEngine
             return XdmValue.FromFloat(ToFloat(left) + ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) + ToDecimal(right));
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
+
         return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), false);
     }
 
@@ -2193,6 +2215,9 @@ public static class VmEngine
 
     private static XdmValue Subtract(XdmValue left, XdmValue right)
     {
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
+
         if (left.Kind == XdmValueKind.Date && right.Kind == XdmValueKind.Date)
             return XdmValue.FromDuration(FormatDuration(left.DateValue - right.DateValue));
         if (left.Kind == XdmValueKind.DateTime && right.Kind == XdmValueKind.DateTime)
@@ -2221,6 +2246,12 @@ public static class VmEngine
             return XdmValue.FromFloat(ToFloat(left) - ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) - ToDecimal(right));
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
+
         return MultiplyOrAddInteger(ToInteger(left), -ToInteger(right), false);
     }
 
@@ -2681,6 +2712,9 @@ public static class VmEngine
 
     private static XdmValue Multiply(XdmValue left, XdmValue right)
     {
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
+
         // Duration * number or number * Duration
         if (left.Kind == XdmValueKind.Duration)
             return MultiplyDuration(left, right);
@@ -2693,11 +2727,20 @@ public static class VmEngine
             return XdmValue.FromFloat(ToFloat(left) * ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) * ToDecimal(right));
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromDouble(ToDouble(left) * ToDouble(right));
+
         return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), true);
     }
 
     private static XdmValue Divide(XdmValue left, XdmValue right)
     {
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
+
         // Duration div number
         if (left.Kind == XdmValueKind.Duration && !IsDuration(right))
             return DivideDuration(left, right);
@@ -2711,33 +2754,59 @@ public static class VmEngine
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromFloat(ToFloat(left) / ToFloat(right));
         // XPath div always returns decimal (or double), never integer
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
+
         return XdmValue.FromDecimal(ToDecimal(left) / ToDecimal(right));
     }
 
     private static XdmValue IntegerDivide(XdmValue left, XdmValue right)
     {
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromInteger((long)(ToDouble(left) / ToDouble(right)));
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromInteger((long)(ToFloat(left) / ToFloat(right)));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromInteger((long)(ToDecimal(left) / ToDecimal(right)));
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromInteger((long)(ToDouble(left) / ToDouble(right)));
+
         return XdmValue.FromInteger(ToInteger(left) / ToInteger(right));
     }
 
     private static XdmValue Modulo(XdmValue left, XdmValue right)
     {
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) % ToDouble(right));
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromFloat(ToFloat(left) % ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) % ToDecimal(right));
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromDouble(ToDouble(left) % ToDouble(right));
+
         return XdmValue.FromInteger(ToInteger(left) % ToInteger(right));
     }
 
     private static XdmValue Negate(XdmValue value)
     {
+        if (IsEmptySequence(value))
+            return XdmValue.Undefined;
+
         if (value.Kind == XdmValueKind.Duration)
         {
             var s = value.DurationValue;
@@ -3125,6 +3194,10 @@ public static class VmEngine
 
     private static bool IsNumeric(XdmValue value)
         => IsDouble(value) || IsFloat(value) || IsDecimal(value) || value.Kind == XdmValueKind.Integer;
+
+    private static bool IsUntypedAtomic(XdmValue value)
+        => value.Kind == XdmValueKind.String &&
+           string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
 
     // ------------------------------------------------------------------
     // Type operations
