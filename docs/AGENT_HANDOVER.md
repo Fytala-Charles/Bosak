@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-11
-**Commit:** `729b17d`
+**Commit:** `f54de46`
 **Current focus:** Cleared the remaining quick-win XSLT conformance clusters (`element`, `xsl-document`, `declared-modes`, `include`, `collection`).
 
 ---
