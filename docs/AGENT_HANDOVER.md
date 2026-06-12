@@ -794,40 +794,47 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ## Recommended Next Steps
 
-### Copy Cluster Remaining Failures (6)
+### Current Cluster Standings (post base-uri run)
 
-| Category | Count | Difficulty | Root Cause |
-|----------|-------|-----------|------------|
-| **Namespace serialization** | 1 | Hard | `copy-5101`: LINQ-to-XML hoists `xmlns` declarations to the element that *uses* the prefix; XSLT expects inherited declarations to be omitted on children |
-| **XML parsing** (copy-1201/1202/1501/2101) | 4 | Hard | Source files contain DTD/entity declarations; parser doesn't support them |
-| **Missing features** (copy-3003) | 1 | Hard | `accumulator-before#1` not implemented |
+| Cluster | Passed | Failed | Skipped | Notes |
+|---------|--------|--------|---------|-------|
+| `base-uri` | 50 | 0 | 5 | ✅ 100% of runnable |
+| `copy` | 123 | 5 | 20 | DTD / accumulator hard walls remain |
+| `string` | 130 | 6 | 0 | Regressed from 136/136; likely namespace-serialization side effect |
+| `key` | 57 | 34 | 8 | Cross-document / index edge cases |
+| `for-each-group` | 39 | 39 | 7 | Biggest runnable failure block |
+| `function` | 53 | 26 | 31 | Function items / higher-order XSLT |
+| `mode` | 84 | 41 | 44 | Mode dispatch edge cases |
+| `variable` | 78 | 28 | 2 | Variable coercion / tunnel / scope |
 
-All other copy failures have been fixed. The remaining 6 are hard walls (DTD parsing, missing features, serialization architecture).
+### Option A: Restore `string` Cluster to 100% (quick win, 1 session)
+`string` dropped from 136/136 to 130/136 after the base-uri work. Failures `string-025/030/035/041/134/135` look like namespace-axis/serialization fallout (expected `xmlns:*` attributes or text content, got empty). A targeted run should reveal whether these share a single root cause with the copy namespace work.
 
-### Option A: Namespace Serialization (`copy-5101`, hard)
-Fix the remaining namespace serialization mismatch. Two possible approaches:
-1. **Post-process before serialization**: Walk the result tree and remove redundant namespace declarations already in scope on the parent.
-2. **Custom `XmlWriter`**: Hook into `XmlWriter.WriteStartElement` to suppress namespace declarations that match an ancestor's in-scope namespace.
+### Option B: `key` Cluster (+10–20 tests, 1–2 days, medium impact)
+`key` is at 57/99 passing with 34 failures. Cross-document key lookup and index initialization are mostly fixed; remaining failures are likely edge cases in match patterns, `use` expressions, and key scope. This is a well-bounded cluster with clear spec behavior.
 
-### Option B: Key Cluster (+potentially 10–20 tests, 1 day, medium impact)
-Key cluster is at 57/99 passing with 34 failures. Many may share root causes with already-fixed patterns (cross-document key lookup, key index initialization). A quick exploratory run could reveal low-hanging fruit.
-
-### Option C: For-each-group Cluster (+potentially 10–30 tests, 1–2 days, high impact)
-For-each-group has 62 failures. Basic implementation exists (`group-by`, `group-adjacent`, `group-starting-with`, `group-ending-with`), but edge cases in pattern matching, atomic values, and sorting likely remain.
+### Option C: `for-each-group` Cluster (+15–30 tests, 2–3 days, high impact)
+`for-each-group` is the largest remaining runnable block (39/85 passing). The basic implementation exists for all four grouping algorithms, but edge cases in pattern matching, atomic values, collation, and group sorting remain. Highest potential yield but also highest exploration cost.
 
 ### Recommendation
-**Option A** — namespace serialization. It is the biggest single block of remaining copy failures, and the root cause is well understood. Options B and C involve more exploration time for less certain yield.
+**Option A first** — the `string` regressions are unexpected and likely fixable quickly. After restoring `string`, move to **Option B (`key`)** because it is a self-contained cluster with a high pass-rate ceiling. Keep **Option C (`for-each-group`)** as the next major milestone once `key` is stable.
 
-### Completed Clusters (no work needed)
+### Completed / Near-Complete Clusters
 - **`base-uri`** — 0 failures, 50/50 passed (100%) ✅ (5 skipped for XInclude dependency)
-- **`expression`** — 0 failures, 102/102 passed (100%) ✅
-- **`string`** — 0 failures, 136/136 passed (100%) ✅
-- **`core-function`** — 0 failures, 90/90 passed (100%) ✅
-- **`boolean`** — 0 failures, 0 skipped (100% passing) ✅
 - **`match`** — 0 failures, 115 skipped. 179/294 passing (100% of runnable) ✅
-- **`sort`** — 0 failures, 18 skipped. 66/84 passing (100% of runnable) ✅
+- **`boolean`** — 0 failures, 0 skipped (100% passing) ✅
+- **`core-function`** — 0 failures, 90/90 passed (100%) ✅
 - **`for-each-pair`** — 0 failures, 2 skipped. 56/58 passing (100% of runnable) ✅
 - **`number`** — 6 failures, 1 skipped (97.8% passing). Remaining are non-English word/ordinal formatting (out of scope).
+- **`seqtor`** — 0 failures, 18 skipped. 54/72 passing (100% of runnable) ✅
+- **`next-match`** — 0 failures, 3 skipped. 37/40 passing (100% of runnable) ✅
+- **`predicate`** — 0 failures, 0 skipped. 57/57 passing (100%) ✅
+
+### Regressed / Active Clusters
+- **`string`** — 6 failures (was 0). Likely namespace-serialization fallout from base-uri changes.
+- **`sort`** — 19 failures (was 0). Needs investigation; may share root cause with recent copy/namespace changes.
+- **`expression`** — 1 failure (was 0). Quick follow-up.
+- **`copy`** — 5 failures remaining; hard walls (DTD, accumulator, namespace serialization).
 
 ---
 
