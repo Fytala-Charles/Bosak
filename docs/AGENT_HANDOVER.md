@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `a06e035`
+**Commit:** `81c51b5`
 **Current focus:** XSLT `base-uri` cluster now 50/50 passing (100%), 5 skipped. Fixed `document('')` resolving against template's effective base URI, `xsl:copy` / `xsl:copy-of` preserving base URIs through copies, and built-in template rules propagating base URIs.
 
 ---
@@ -842,7 +842,7 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 - `main` — all work is on `main`
 - No feature branches
-- Latest: `a06e035` — XSLT base-uri cluster fix + docs sync + refreshed next steps (document('') resolution, xml:* prefix handling, base URI propagation)
+- Latest: `81c51b5` — XSLT base-uri cluster fix + docs sync + refreshed next steps (document('') resolution, xml:* prefix handling, base URI propagation)
 - Previous: `fdb3987` — docs: update AGENT_HANDOVER commit hash for as-cluster session
 - Previous: `<uncommitted>` — namespace axis parent fix (copy-0616/0618/0624/0626)
 - Previous: `<uncommitted>` — match cluster 100% runnable (match-040 compile-time validation); mode cluster fixes
