@@ -235,6 +235,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:text` | ✅ Working | |
 | `xsl:copy` | ✅ Working | Shallow copy with `@select` support; focus set correctly per item |
 | `xsl:copy-of` | ✅ Working | Deep copy of nodes; Document nodes supported. `copy-namespaces` respected. Static validation rejects disallowed children (`XTSE0260`) and invalid attributes (`XTSE0090`). |
+| `xsl:evaluate` | ✅ Working | Dynamic XPath 3.1 evaluation inside XSLT; supports context item, `xsl:with-param` / `@with-params`, in-scope namespaces, base URI, default collation, and `@as` coercion. Stylesheet functions are visible only when not `private`/`hidden`. Java extension functions are not supported. |
 | `xsl:comment` | ✅ Working | `select` attribute or text content |
 | `fn:copy-of` | ✅ Working | XSLT 3.0 context function |
 | `xsl:decimal-format` | ✅ Working | Parsed and registered for `fn:format-number` |
@@ -357,12 +358,14 @@ dotnet test Bosak.sln
 | `xsl:copy` shallow copy no longer copies source attributes/children. | Source attributes and children must now be produced by the contained sequence constructor, matching the XSLT spec. Fixes `attribute-set-0107`. | 2026-06-13 |
 | XPath parser resolves the `xml` prefix to the XML namespace in node tests. | Previously `@xml:*` fell back to a prefix-only match that matched attributes in any namespace. Fixes `attribute-0901`. | 2026-06-13 |
 | `fn:document#1/#2` supports URI fragment identifiers. | Fragment identifiers resolve to the element with matching `id`/`xml:id`; relative document URIs resolve from the stylesheet base URI. Fixes `id-001`. | 2026-06-13 |
+| `xsl:evaluate` is fully supported. | Dynamic XPath 3.1 evaluation inside XSLT with context item, parameters, namespaces, base URI, default collation, and `@as` coercion. Fixes the entire `evaluate` cluster. | 2026-06-13 |
+| Cross-tree document order now follows document creation order. | `XDocumentNode.DocumentOrder` combines a global creation sequence (high bits) with the per-document local index (low bits), so union/path results across separately constructed temporary trees are stable. Fixes `evaluate-002`. | 2026-06-13 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,061 | 1,213 | 9,326 | 77.0% | attribute-set cluster now 100% runnable; attribute and id clusters reduced to 1 failure each |
+| XSLT 3.0 (W3C) | 4,111 | 1,162 | 9,327 | 78.0% | `evaluate` cluster now 100% runnable; full suite +2 passes / -2 failures |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

@@ -55,6 +55,20 @@ public sealed class EvaluationContext
     /// </summary>
     public Func<string, string, XdmValue?>? LazyVariableResolver { get; set; }
 
+    /// <summary>
+    /// When true, <see cref="Bosak.XPath.Standard.Functions.FunctionLibrary.Populate"/> will not
+    /// be called automatically by <see cref="XPath31Expression.Evaluate"/>. Used by XSLT's
+    /// <c>xsl:evaluate</c> to supply a restricted function library.
+    /// </summary>
+    public bool SkipStandardFunctionPopulation { get; set; }
+
+    /// <summary>
+    /// Optional collation-aware string comparer used by XPath comparison operators.
+    /// Arguments are (left, right, collationUri); returns a value with the same sign
+    /// conventions as <see cref="string.Compare(string, string)"/>.
+    /// </summary>
+    public Func<string, string, string, int>? CollationComparer { get; set; }
+
     // Namespace prefixes
     private readonly Dictionary<string, string> _namespaces;
 
@@ -270,6 +284,36 @@ public sealed class EvaluationContext
 
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
         => _functions.TryGetValue((namespaceUri, localName, arity), out signature!);
+
+    /// <summary>
+    /// Removes a registered function signature, if present.
+    /// </summary>
+    public bool UnregisterFunction(string namespaceUri, string localName, int arity)
+        => _functions.Remove((namespaceUri, localName, arity));
+
+    /// <summary>
+    /// Returns a shallow copy of the currently registered function signatures.
+    /// </summary>
+    public Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> SnapshotFunctions()
+        => new Dictionary<(string, string, int), FunctionSignature>(_functions);
+
+    /// <summary>
+    /// Replaces the current function library with the supplied snapshot.
+    /// </summary>
+    public void RestoreFunctions(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> snapshot)
+    {
+        _functions.Clear();
+        foreach (var (key, value) in snapshot)
+            _functions[key] = value;
+    }
+
+    /// <summary>
+    /// Removes all registered functions.
+    /// </summary>
+    public void ClearFunctions()
+    {
+        _functions.Clear();
+    }
 
     // ------------------------------------------------------------------
     // Decimal Formats

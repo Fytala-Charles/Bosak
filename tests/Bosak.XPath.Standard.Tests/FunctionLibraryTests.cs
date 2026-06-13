@@ -915,8 +915,11 @@ public class FunctionLibraryTests
     public void DeepEqual_Nodes()
     {
         var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
-        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
-        Assert.Equal("true", EvalStr("fn:deep-equal(root,root)"));
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var ctx = new EvaluationContext();
+        ctx.WithFocus(XdmValue.FromNode(node), 1, 1);
+        FunctionLibrary.Populate(ctx);
+        Assert.Equal("true", XPath31Expression.Compile("fn:deep-equal(root,root)").Evaluate(ctx).ToString());
     }
 
     [Fact]

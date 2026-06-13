@@ -464,6 +464,8 @@ public static class VmEngine
                 case IrOpCode.PathStepMap:
                     {
                         var sequence = registers[instr.RegisterB];
+                        if (sequence.IsUndefined)
+                            throw new InvalidOperationException("XPDY0002: An axis step requires a context item.");
                         int rhsEntry = instr.Operand;
 
                         var items = MaterializeSequence(sequence);
@@ -893,7 +895,7 @@ public static class VmEngine
                 case IrOpCode.ValueGreaterThan:
                 case IrOpCode.ValueGreaterThanOrEqual:
                     {
-                        var cmpResult = Compare(instr.OpCode, registers[instr.RegisterB], registers[instr.RegisterC]);
+                        var cmpResult = Compare(instr.OpCode, registers[instr.RegisterB], registers[instr.RegisterC], context);
                         registers[instr.RegisterA] = cmpResult;
                         ip++;
                         break;
@@ -907,7 +909,7 @@ public static class VmEngine
                 case IrOpCode.GeneralGreaterThanOrEqual:
                     // General comparisons have existential semantics over sequences.
                     {
-                        var cmpResult = CompareGeneral(instr.OpCode, registers[instr.RegisterB], registers[instr.RegisterC], context.BackwardsCompatible);
+                        var cmpResult = CompareGeneral(instr.OpCode, registers[instr.RegisterB], registers[instr.RegisterC], context);
                         registers[instr.RegisterA] = cmpResult;
                         ip++;
                         break;
@@ -1786,7 +1788,9 @@ public static class VmEngine
     private static XdmValue ApplyAxis(XdmValue input, XdmAxis axis)
     {
         if (input.IsUndefined)
-            return XdmValue.Undefined;
+            throw new InvalidOperationException("XPDY0002: An axis step requires a context item.");
+        if (input.IsAtomic)
+            throw new InvalidOperationException("XPTY0020: An axis step requires a context item that is a node.");
 
         if (input.IsNode)
             return XdmValue.FromSequence(input.NodeValue.Axis(axis));
@@ -2854,7 +2858,7 @@ public static class VmEngine
     // Comparisons
     // ------------------------------------------------------------------
 
-    private static XdmValue Compare(IrOpCode op, XdmValue left, XdmValue right, bool strict = true)
+    private static XdmValue Compare(IrOpCode op, XdmValue left, XdmValue right, EvaluationContext context, bool strict = true)
     {
         bool leftFromNode = IsNodeOrigin(left);
         bool rightFromNode = IsNodeOrigin(right);
@@ -2866,10 +2870,14 @@ public static class VmEngine
         if (left.IsUndefined || right.IsUndefined)
             return XdmValue.Undefined;
 
-        return XdmValue.FromBoolean(CompareCore(op, left, right, strict, leftFromNode, rightFromNode));
+        return XdmValue.FromBoolean(CompareCore(op, left, right, strict, leftFromNode, rightFromNode, context));
     }
 
-    private static bool CompareCore(IrOpCode op, XdmValue left, XdmValue right, bool strict, bool leftFromNode, bool rightFromNode)
+    private static int CompareStrings(string left, string right, string collation, EvaluationContext context)
+        => context.CollationComparer?.Invoke(left, right, collation)
+           ?? string.CompareOrdinal(left, right);
+
+    private static bool CompareCore(IrOpCode op, XdmValue left, XdmValue right, bool strict, bool leftFromNode, bool rightFromNode, EvaluationContext context)
     {
         if (IsDouble(left) || IsDouble(right))
         {
@@ -3042,7 +3050,7 @@ public static class VmEngine
             }
             // Indeterminate comparison: lt/gt/le/ge return false; eq/ne use string fallback
             return op is IrOpCode.Equal or IrOpCode.ValueEqual or IrOpCode.NotEqual or IrOpCode.ValueNotEqual
-                ? string.CompareOrdinal(left.ToString(), right.ToString()) == (op is IrOpCode.Equal or IrOpCode.ValueEqual ? 0 : 1)
+                ? CompareStrings(left.ToString(), right.ToString(), context.DefaultCollation, context) == (op is IrOpCode.Equal or IrOpCode.ValueEqual ? 0 : 1)
                 : false;
         }
 
@@ -3053,7 +3061,7 @@ public static class VmEngine
         // If both are explicitly strings, compare as strings (don't parse as numbers)
         if (left.Kind == XdmValueKind.String && right.Kind == XdmValueKind.String)
         {
-            int cmp = string.CompareOrdinal(lStr, rStr);
+            int cmp = CompareStrings(lStr, rStr, context.DefaultCollation, context);
             return op switch
             {
                 IrOpCode.Equal or IrOpCode.ValueEqual => cmp == 0,
@@ -3109,7 +3117,7 @@ public static class VmEngine
         if (strict && left.Kind != right.Kind)
             throw new InvalidOperationException("XPTY0004");
 
-        int cmp2 = string.CompareOrdinal(lStr, rStr);
+        int cmp2 = CompareStrings(lStr, rStr, context.DefaultCollation, context);
         return op switch
         {
             IrOpCode.Equal or IrOpCode.ValueEqual => cmp2 == 0,
@@ -3122,7 +3130,7 @@ public static class VmEngine
         };
     }
 
-    private static XdmValue CompareGeneral(IrOpCode op, XdmValue left, XdmValue right, bool backwardsCompatible = false)
+    private static XdmValue CompareGeneral(IrOpCode op, XdmValue left, XdmValue right, EvaluationContext context)
     {
         // General comparisons use existential semantics over sequences.
         // If either operand is an empty sequence, the result is an empty sequence.
@@ -3144,7 +3152,7 @@ public static class VmEngine
                     continue;
 
                 // XPath 1.0 backwards compatibility coercion rules
-                if (backwardsCompatible)
+                if (context.BackwardsCompatible)
                 {
                     ApplyBackwardsCompatibleCoercion(ref atomizedL, ref atomizedR);
                 }
@@ -3160,8 +3168,8 @@ public static class VmEngine
                         IrOpCode.GeneralGreaterThanOrEqual => IrOpCode.GreaterThanOrEqual,
                         _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
                     },
-                    atomizedL, atomizedR, strict: !backwardsCompatible,
-                    IsNodeOrigin(l), IsNodeOrigin(r));
+                    atomizedL, atomizedR, strict: !context.BackwardsCompatible,
+                    IsNodeOrigin(l), IsNodeOrigin(r), context);
 
                 if (match)
                     return XdmValue.FromBoolean(true);

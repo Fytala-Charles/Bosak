@@ -1,6 +1,66 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
+**Commit:** (working tree — previous commit `3f59c9f`)
+**Current focus:** `evaluate` cluster now fully green (0 runnable failures); cross-tree document ordering fixed.
+
+---
+
+## Full Suite Results (2026-06-13)
+
+- **Total:** 14,600
+- **Passed:** 4,111
+- **Failed:** 1,162
+- **Skipped:** 9,327
+- **Pass rate:** 78.0% (+2 passes / -2 failures vs. previous 4,109/1,164)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| evaluate | 57 | 40 | 0 | 17 | ✅ 100% runnable |
+| sort | 80 | 80 | 0 | 0 | ✅ 100% |
+| for-each-group | 85 | 78 | 0 | 7 | ✅ 100% runnable |
+| variable | 108 | 106 | 0 | 2 | ✅ 100% runnable |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable |
+| id | 43 | 8 | 0 | 35 | ✅ 100% runnable |
+| match | 294 | 179 | 0 | 115 | ✅ 100% runnable |
+| select | 158 | 155 | 0 | 3 | ✅ 100% runnable |
+| construct-node | 34 | 34 | 0 | 0 | ✅ 100% |
+| copy | 148 | 128 | 0 | 20 | ✅ 100% runnable |
+| element | 29 | 24 | 0 | 5 | ✅ 100% runnable |
+| xsl-document | 25 | 25 | 0 | 0 | ✅ 100% |
+| next-match | 40 | 37 | 0 | 3 | ✅ 100% runnable |
+| expression | 105 | 102 | 0 | 3 | ✅ 100% runnable |
+| key | 99 | 91 | 0 | 8 | ✅ 100% runnable |
+| boolean | 112 | 112 | 0 | 0 | ✅ 100% |
+| string | 136 | 136 | 0 | 0 | ✅ 100% |
+| core-function | 90 | 90 | 0 | 0 | ✅ 100% |
+
+## This Session Fixes
+
+1. **Cross-tree document ordering** — `XDocumentNode.DocumentOrder` now combines a global creation sequence number (high bits) with the per-document local index (low bits). This makes union/path results across separately constructed temporary trees follow document creation order, fixing `evaluate-002`.
+   - **File changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
+
+2. **`evaluate` cluster completion** — The remaining `evaluate-002` failure is now resolved. The cluster is 40/0/17 (all runnable tests pass). Earlier in the sweep the following were also fixed:
+   - Duplicate parameter handling (`evaluate-018c`)
+   - `current()` inside `xsl:evaluate` → XTDE3160
+   - Absent context item → XPDY0002 (`evaluate-022/024/025/025a`)
+   - Stylesheet function visibility honored (`evaluate-045`)
+   - Default collation propagation (`evaluate-049`)
+   - Inline function closures over `xsl:with-param` (`evaluate-051`)
+   - Added `evaluate-008` to the skip list (Java extension functions)
+
+## Notes
+
+- Unit-test suite: **877 passed / 0 failed** across 8 projects.
+- Full conformance suite re-run completed after this fix.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-13
 **Commit:** (working tree — previous commit `b0c339c`)
 **Current focus:** `attribute` cluster now green except for harness-level assertion gaps; `id` cluster fully green.
 

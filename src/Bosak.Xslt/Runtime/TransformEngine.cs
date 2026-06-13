@@ -99,6 +99,7 @@
 //                      | Charles Korthout | 5.28  | 13-06-2026     | xsl:copy attribute sets/source attrs; attribute-set variable scope; separator          |
 //                      | Charles Korthout | 5.29  | 13-06-2026     | xsl:copy shallow copy no longer copies source attributes/children                       |
 //                      | Charles Korthout | 5.30  | 13-06-2026     | Namespace fixup for xsl:attribute prefix hints and literal result attribute names      |
+//                      | Charles Korthout | 5.31  | 13-06-2026     | Implemented xsl:evaluate with context-item, namespace-context, with-param, and @as     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -215,6 +216,7 @@ public sealed class TransformEngine
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
         _context.BaseUri = stylesheet.BaseUri ?? string.Empty;
         FunctionLibrary.Populate(_context);
+        _context.CollationComparer = FunctionLibrary.CompareStrings;
         XsltFunctionLibrary.Populate(_context);
 
         _resultDocument = new XDocument();
@@ -654,6 +656,81 @@ public sealed class TransformEngine
             };
             _context.RegisterFunction(sig);
         }
+    }
+
+    /// <summary>
+    /// Returns true if the exception represents a static error in the target expression
+    /// of an <c>xsl:evaluate</c> instruction. Such errors are reported as XTDE3160.
+    /// </summary>
+    private static bool IsXPathStaticError(InvalidOperationException ex)
+    {
+        var msg = ex.Message;
+        return msg.StartsWith("XPST", StringComparison.Ordinal)
+            || msg.StartsWith("XTSE", StringComparison.Ordinal)
+            || msg.Contains("XPST0017", StringComparison.Ordinal)
+            || msg.Contains("XTSE", StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Removes XSLT-defined functions from the dynamic context used by <c>xsl:evaluate</c>.
+    /// </summary>
+    private static void RemoveXsltContextFunctions(EvaluationContext context)
+    {
+        const string Fn = "http://www.w3.org/2005/xpath-functions";
+        context.UnregisterFunction(Fn, "current", 0);
+        context.UnregisterFunction(Fn, "key", 2);
+        context.UnregisterFunction(Fn, "key", 3);
+        context.UnregisterFunction(Fn, "current-group", 0);
+        context.UnregisterFunction(Fn, "current-grouping-key", 0);
+    }
+
+    /// <summary>
+    /// Registers stylesheet functions that are visible inside an <c>xsl:evaluate</c>
+    /// target expression (public, final, or abstract; not private or hidden).
+    /// </summary>
+    private void RegisterVisibleXsltFunctions(EvaluationContext context)
+    {
+        foreach (var (key, def) in _stylesheet.GetAllFunctionDefinitions())
+        {
+            if (def.Visibility is "private" or "hidden")
+                continue;
+
+            var sig = new FunctionSignature
+            {
+                NamespaceUri = def.NamespaceUri,
+                LocalName = def.LocalName,
+                Arity = def.Arity,
+                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
+            };
+            context.RegisterFunction(sig);
+        }
+    }
+
+    /// <summary>
+    /// Computes the effective default collation at the given instruction by walking
+    /// the ancestor axis for a [xsl:]default-collation attribute.
+    /// </summary>
+    private static string GetEffectiveDefaultCollation(XElement instruction)
+    {
+        var current = instruction;
+        while (current != null)
+        {
+            var attr = current.Attribute(XName.Get("default-collation", Stylesheet.Stylesheet.XslNamespace));
+            if (attr != null)
+                return attr.Value;
+
+            if (current.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+            {
+                attr = current.Attribute("default-collation");
+                if (attr != null)
+                    return attr.Value;
+            }
+
+            current = current.Parent;
+        }
+        return string.Empty;
     }
 
     /// <summary>
@@ -1151,11 +1228,15 @@ public sealed class TransformEngine
         var savedCurrent = _context.CurrentItem;
         try
         {
-            // Bind parameters
+            // Bind parameters, applying the XPath function conversion rules for each
+            // xsl:param/@as type.
+            var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
             for (int i = 0; i < def.ParameterNames.Count && i < args.Length; i++)
             {
+                var asType = i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null;
+                var converted = ConvertFunctionArgument(args[i], asType);
                 var (fpLocal, fpNs) = ExpandVariableName(def.Element, def.ParameterNames[i]);
-                _context.WithVariable(fpLocal, args[i], fpNs);
+                _context.WithVariable(fpLocal, converted, fpNs);
             }
 
             // XSLT functions have no context item by default (XSLT 3.0 §9.6).
@@ -1582,6 +1663,12 @@ public sealed class TransformEngine
                                 }
                             }
                         }
+                        break;
+                    }
+                case "evaluate":
+                    {
+                        var evalResult = EvaluateXslEvaluate(instruction, contextItem);
+                        FlattenToList(evalResult, results);
                         break;
                     }
                 case "copy-of":
@@ -2411,6 +2498,169 @@ public sealed class TransformEngine
         finally
         {
             _callTemplateDepth--;
+        }
+    }
+
+    /// <summary>
+    /// Evaluates an <c>xsl:evaluate</c> instruction and returns the resulting XDM value.
+    /// </summary>
+    private XdmValue EvaluateXslEvaluate(XElement instruction, XdmValue contextItem)
+    {
+        var xpathRaw = instruction.Attribute("xpath")?.Value;
+        if (string.IsNullOrEmpty(xpathRaw))
+            throw new InvalidOperationException("XTSE0010: xsl:evaluate requires an @xpath attribute");
+        // The @xpath attribute is itself an XPath expression whose string value is the
+        // expression to be evaluated dynamically.
+        var xpathCompiled = CompileXPath(xpathRaw, instruction);
+        var xpathValue = xpathCompiled.Evaluate(_context);
+        var xpath = AtomizedFirstString(xpathValue);
+        if (string.IsNullOrEmpty(xpath))
+            throw new InvalidOperationException("XTSE0010: xsl:evaluate @xpath evaluated to an empty string");
+
+        // Determine the namespace context for the dynamic XPath expression.
+        var nsContextElement = instruction;
+        var nsContextSelect = instruction.Attribute("namespace-context")?.Value;
+        if (!string.IsNullOrEmpty(nsContextSelect))
+        {
+            var nsCtxCompiled = CompileXPath(nsContextSelect, instruction);
+            var nsCtxResult = nsCtxCompiled.Evaluate(_context);
+            IXdmNode? nsCtxNode = null;
+            if (nsCtxResult.IsNode)
+                nsCtxNode = nsCtxResult.NodeValue;
+            else if (nsCtxResult.IsSequence && nsCtxResult.SequenceValue != null)
+            {
+                var enumerator = XdmSequence.FromSource(nsCtxResult.SequenceValue).GetEnumerator();
+                if (enumerator.MoveNext())
+                    nsCtxNode = enumerator.Current.IsNode ? enumerator.Current.NodeValue : null;
+            }
+            if (nsCtxNode != null)
+            {
+                if (nsCtxNode is XDocumentNode xdocNode && xdocNode.UnderlyingObject is System.Xml.Linq.XDocument doc && doc.Root != null)
+                    nsContextElement = doc.Root;
+                else if (nsCtxNode is XDocumentNode xelemNode && xelemNode.UnderlyingObject is System.Xml.Linq.XElement elem)
+                    nsContextElement = elem;
+            }
+        }
+
+        var baseUriRaw = instruction.Attribute("base-uri")?.Value;
+        var baseUri = !string.IsNullOrEmpty(baseUriRaw) ? EvaluateAvt(baseUriRaw, instruction) : GetEffectiveBaseUri(instruction);
+
+        string? defaultNs;
+        Dictionary<string, string> nsMap;
+        if (!string.IsNullOrEmpty(nsContextSelect))
+        {
+            // When @namespace-context is present, the default namespace comes from the
+            // namespace-context node's in-scope default namespace binding.
+            var defaultNsDecl = nsContextElement.GetDefaultNamespace();
+            defaultNs = defaultNsDecl?.NamespaceName ?? string.Empty;
+            nsMap = GetInScopeNamespaces(nsContextElement);
+        }
+        else
+        {
+            // Without @namespace-context, the default element/type namespace is taken from
+            // the innermost [xsl:]xpath-default-namespace attribute only.
+            defaultNs = GetXPathDefaultNamespace(instruction);
+            nsMap = GetInScopeNamespaces(instruction);
+        }
+
+        var compileOptions = new CompileOptions
+        {
+            Namespaces = nsMap,
+            DefaultElementNamespace = defaultNs,
+            BaseUri = baseUri
+        };
+        XPath31Expression compiled;
+        try
+        {
+            compiled = XPath31Expression.Compile(xpath, compileOptions);
+        }
+        catch (InvalidOperationException ex) when (IsXPathStaticError(ex))
+        {
+            throw new InvalidOperationException($"XTDE3160: {ex.Message}", ex);
+        }
+
+        // Evaluate the requested context item. The default is absent.
+        var evalContextItem = XdmValue.Undefined;
+        var contextItemSelect = instruction.Attribute("context-item")?.Value;
+        if (!string.IsNullOrEmpty(contextItemSelect))
+        {
+            var ctxCompiled = CompileXPath(contextItemSelect, instruction);
+            var ctxResult = ctxCompiled.Evaluate(_context);
+            if (ctxResult.IsSequence && ctxResult.SequenceValue != null)
+            {
+                var enumerator = XdmSequence.FromSource(ctxResult.SequenceValue).GetEnumerator();
+                if (enumerator.MoveNext())
+                {
+                    evalContextItem = enumerator.Current;
+                    if (enumerator.MoveNext())
+                        throw new InvalidOperationException("XTTE3210: context-item expression returned more than one item");
+                }
+            }
+            else if (!ctxResult.IsUndefined)
+            {
+                evalContextItem = ctxResult;
+            }
+        }
+
+        var evalParams = CollectEvaluateParams(instruction, contextItem);
+        var savedVariables = _context.SnapshotVariables();
+        var savedFunctions = _context.SnapshotFunctions();
+        var savedContextItem = _context.ContextItem;
+        var savedContextPosition = _context.ContextPosition;
+        var savedContextSize = _context.ContextSize;
+        var savedCurrentItem = _context.CurrentItem;
+        var savedDefaultCollation = _context.DefaultCollation;
+        var savedSkipPopulation = _context.SkipStandardFunctionPopulation;
+        XdmValue result = XdmValue.Undefined;
+        try
+        {
+            // Set up the function library for the target expression: standard XPath
+            // functions plus visible stylesheet functions. XSLT-defined functions such as
+            // current() and key() are not available.
+            _context.ClearFunctions();
+            Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(_context);
+            RemoveXsltContextFunctions(_context);
+            RegisterVisibleXsltFunctions(_context);
+
+            // Variables passed via xsl:with-param or with-params override any existing
+            // variables (including globals and locals) for the dynamic expression.
+            foreach (var kv in evalParams)
+            {
+                var (local, ns) = ParseVariableKey(kv.Key);
+                _context.WithVariable(local, kv.Value, ns);
+            }
+
+            if (!evalContextItem.IsUndefined)
+                _context.WithFocus(evalContextItem, 1, 1);
+            else
+                _context.WithFocus(XdmValue.Undefined, 0, 0);
+
+            // XSLT-specific dynamic context components are absent inside xsl:evaluate.
+            _context.WithCurrentItem(XdmValue.Undefined);
+            _context.DefaultCollation = GetEffectiveDefaultCollation(instruction);
+            _context.SkipStandardFunctionPopulation = true;
+
+            result = compiled.Evaluate(_context);
+            var asAttr = instruction.Attribute("as")?.Value;
+            if (!string.IsNullOrEmpty(asAttr))
+                result = ConvertVariableValue(result, asAttr, isParam: false);
+            return result;
+        }
+        catch (InvalidOperationException ex) when (IsXPathStaticError(ex))
+        {
+            throw new InvalidOperationException($"XTDE3160: {ex.Message}", ex);
+        }
+        finally
+        {
+            _context.DefaultCollation = savedDefaultCollation;
+            _context.SkipStandardFunctionPopulation = savedSkipPopulation;
+            _context.WithFocus(savedContextItem, savedContextPosition, savedContextSize);
+            _context.WithCurrentItem(savedCurrentItem);
+            _context.RestoreFunctions(savedFunctions);
+            // If the result is or contains a function item, the dynamic expression's
+            // parameters may be captured in a closure; keep them available.
+            if (!ContainsFunctionItem(result))
+                _context.RestoreVariables(savedVariables);
         }
     }
 
@@ -3538,6 +3788,13 @@ public sealed class TransformEngine
                             }
                         }
                     }
+                    break;
+                }
+
+            case "evaluate":
+                {
+                    var evalResult = EvaluateXslEvaluate(instruction, contextItem);
+                    CopyToResult(evalResult, separateAtomicsWithSpace: true);
                     break;
                 }
 
@@ -7284,6 +7541,71 @@ public sealed class TransformEngine
         => string.IsNullOrEmpty(namespaceUri) ? localName : $"{{{namespaceUri}}}{localName}";
 
     /// <summary>
+    /// Parses a Clark-notation variable key back into its local name and namespace URI.
+    /// </summary>
+    private static (string LocalName, string NamespaceUri) ParseVariableKey(string key)
+    {
+        if (key.StartsWith("{") && key.IndexOf('}') is int end && end > 0)
+        {
+            return (key[(end + 1)..], key[1..end]);
+        }
+        return (key, "");
+    }
+
+    /// <summary>
+    /// Returns the string value of the first item in an XDM value, atomizing it if necessary.
+    /// </summary>
+    private static string AtomizedFirstString(XdmValue value)
+    {
+        if (value.IsNode && value.NodeValue != null)
+            return value.NodeValue.StringValue;
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            var enumerator = value.SequenceValue.GetEnumerator();
+            if (!enumerator.MoveNext())
+                return "";
+            var item = enumerator.Current;
+            if (item.IsUndefined)
+                return "";
+            if (item.IsNode && item.NodeValue != null)
+                return item.NodeValue.StringValue;
+            return item.ToString();
+        }
+        return value.ToString();
+    }
+
+    /// <summary>
+    /// Returns true if the value is or contains a function item (including inside maps,
+    /// arrays, or sequences). Such values may capture variables in their closure.
+    /// </summary>
+    private static bool ContainsFunctionItem(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return false;
+        if (value.Kind == XdmValueKind.Function)
+            return true;
+        if (value.Kind == XdmValueKind.Map && value.MapValue != null)
+        {
+            foreach (var entry in value.MapValue.Entries)
+                if (ContainsFunctionItem(entry.Value))
+                    return true;
+        }
+        if (value.Kind == XdmValueKind.Array && value.ArrayValue != null)
+        {
+            foreach (var item in value.ArrayValue.Values)
+                if (ContainsFunctionItem(item))
+                    return true;
+        }
+        if (value.Kind == XdmValueKind.Sequence && value.SequenceValue != null)
+        {
+            foreach (var item in value.SequenceValue)
+                if (ContainsFunctionItem(item))
+                    return true;
+        }
+        return false;
+    }
+
+    /// <summary>
     /// Returns true if the typed atomic value can be promoted to the target numeric type
     /// per XPath/XSLT function conversion rules (e.g. <c>xs:integer</c> to <c>xs:double</c>).
     /// </summary>
@@ -7362,6 +7684,40 @@ public sealed class TransformEngine
     }
 
     private static string RegexEscape(string value) => System.Text.RegularExpressions.Regex.Escape(value);
+
+    /// <summary>
+    /// Collects parameters for <c>xsl:evaluate</c> from the optional <c>with-params</c>
+    /// attribute (a map of QNames to values) and from child <c>xsl:with-param</c> elements.
+    /// </summary>
+    private Dictionary<string, XdmValue> CollectEvaluateParams(XElement instruction, XdmValue contextItem)
+    {
+        var result = new Dictionary<string, XdmValue>();
+
+        // xsl:with-param children supply the initial bindings.
+        var (childWithParams, _) = CollectWithParams(instruction, contextItem);
+        foreach (var kv in childWithParams)
+            result[kv.Key] = kv.Value;
+
+        // The with-params attribute overrides any child xsl:with-param with the same name.
+        var withParamsAttr = instruction.Attribute("with-params")?.Value;
+        if (!string.IsNullOrEmpty(withParamsAttr))
+        {
+            var mapCompiled = CompileXPath(withParamsAttr, instruction);
+            var mapValue = mapCompiled.Evaluate(_context);
+            if (mapValue.IsMap && mapValue.MapValue != null)
+            {
+                foreach (var entry in mapValue.MapValue.Entries)
+                {
+                    if (entry.Key.Kind != XdmValueKind.QName)
+                        continue;
+                    var qn = entry.Key.QNameValue;
+                    result[VariableKey(qn.LocalName, qn.NamespaceUri)] = entry.Value;
+                }
+            }
+        }
+
+        return result;
+    }
 
     /// <summary>
     /// Collects <c>xsl:with-param</c> children of <paramref name="instruction"/>, expanding
@@ -7454,6 +7810,32 @@ public sealed class TransformEngine
     /// <param name="value">The value to convert/validate.</param>
     /// <param name="asType">The declared sequence type, or null/empty for no constraint.</param>
     /// <param name="isParam">If true, type/cardinality mismatches raise <c>XTTE0590</c>; otherwise <c>XTTE0570</c>.</param>
+    /// <summary>
+    /// Converts a function call argument to the required type of an <c>xsl:param</c>,
+    /// using the XPath function conversion rules and reporting failures as XPTY0004.
+    /// </summary>
+    private static XdmValue ConvertFunctionArgument(XdmValue value, string? asType)
+    {
+        if (string.IsNullOrEmpty(asType))
+            return value;
+
+        try
+        {
+            return ConvertVariableValue(value, asType, isParam: true);
+        }
+        catch (InvalidOperationException ex)
+        {
+            var msg = ex.Message;
+            if (msg.StartsWith("XTTE0590", StringComparison.Ordinal) ||
+                msg.StartsWith("XTTE0570", StringComparison.Ordinal))
+            {
+                var suffix = msg.Length > 8 ? msg[8..] : string.Empty;
+                throw new InvalidOperationException($"XPTY0004{suffix}", ex);
+            }
+            throw;
+        }
+    }
+
     private static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false)
     {
         if (string.IsNullOrEmpty(asType))

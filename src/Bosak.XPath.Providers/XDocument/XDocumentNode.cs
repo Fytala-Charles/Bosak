@@ -21,10 +21,12 @@
 //                      | Charles Korthout | 0.9   | 10-06-2026     | ParentlessOrderMaps for stable document order on detached/copied element trees         |
 //                      | Charles Korthout | 1.0   | 11-06-2026     | GetNamespaceAxis skips empty-URI declarations (xmlns="") and stops at inheritance barriers |
 //                      | Charles Korthout | 1.1   | 11-06-2026     | Override Equals/GetHashCode for IXdmNode identity-based equality                         |
+//                      | Charles Korthout | 1.2   | 13-06-2026     | Composite DocumentOrder includes global creation sequence for cross-document sorting    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 
@@ -39,6 +41,10 @@ public sealed class XDocumentNode : IXdmNode
 {
     private static readonly ConditionalWeakTable<System.Xml.Linq.XDocument, Dictionary<XObject, long>> OrderMaps = new();
     private static readonly ConditionalWeakTable<XElement, Dictionary<XObject, long>> ParentlessOrderMaps = new();
+    private static readonly ConditionalWeakTable<System.Xml.Linq.XDocument, StrongBox<long>> DocumentSequences = new();
+    private static readonly ConditionalWeakTable<XElement, StrongBox<long>> ElementTreeSequences = new();
+    private static long _sequenceCounter;
+    private static readonly object SequenceLock = new();
 
     private readonly XObject _node;
     private readonly bool _isNamespaceNode;
@@ -165,7 +171,9 @@ public sealed class XDocumentNode : IXdmNode
                     map = ComputeDocumentOrder(doc);
                     OrderMaps.AddOrUpdate(doc, map);
                 }
-                return map.TryGetValue(_node, out var idx) ? idx : 0;
+                long local = map.TryGetValue(_node, out var idx) ? idx : 0;
+                long seq = GetDocumentSequence(doc);
+                return CombineOrder(seq, local);
             }
 
             // Parentless node: compute order relative to the root element of its tree.
@@ -186,10 +194,43 @@ public sealed class XDocumentNode : IXdmNode
                     map = ComputeElementTreeOrder(treeRoot);
                     ParentlessOrderMaps.AddOrUpdate(treeRoot, map);
                 }
-                return map.TryGetValue(_node, out var idx) ? idx : 0;
+                long local = map.TryGetValue(_node, out var idx) ? idx : 0;
+                long seq = GetElementTreeSequence(treeRoot);
+                return CombineOrder(seq, local);
             }
 
             return 0;
+        }
+    }
+
+    private static long CombineOrder(long sequence, long local)
+        => (sequence << 32) | (local & 0xffffffffL);
+
+    private static long GetDocumentSequence(System.Xml.Linq.XDocument doc)
+    {
+        if (DocumentSequences.TryGetValue(doc, out var box))
+            return box.Value;
+        lock (SequenceLock)
+        {
+            if (DocumentSequences.TryGetValue(doc, out box))
+                return box.Value;
+            var seq = Interlocked.Increment(ref _sequenceCounter);
+            DocumentSequences.AddOrUpdate(doc, new StrongBox<long>(seq));
+            return seq;
+        }
+    }
+
+    private static long GetElementTreeSequence(XElement root)
+    {
+        if (ElementTreeSequences.TryGetValue(root, out var box))
+            return box.Value;
+        lock (SequenceLock)
+        {
+            if (ElementTreeSequences.TryGetValue(root, out box))
+                return box.Value;
+            var seq = Interlocked.Increment(ref _sequenceCounter);
+            ElementTreeSequences.AddOrUpdate(root, new StrongBox<long>(seq));
+            return seq;
         }
     }
 

@@ -47,6 +47,12 @@ public sealed class XsltFunctionDefinition
     /// <summary>Parent stylesheet that declared this function.</summary>
     public Stylesheet Stylesheet { get; }
 
+    /// <summary>
+    /// Visibility of the function: <c>public</c>, <c>private</c>, <c>final</c>, or <c>abstract</c>.
+    /// Defaults to <c>private</c> when the attribute is absent.
+    /// </summary>
+    public string Visibility { get; }
+
     private XsltFunctionDefinition(
         string namespaceUri,
         string localName,
@@ -55,7 +61,8 @@ public sealed class XsltFunctionDefinition
         string? returnType,
         XElement element,
         int importPrecedence,
-        Stylesheet stylesheet)
+        Stylesheet stylesheet,
+        string visibility)
     {
         NamespaceUri = namespaceUri;
         LocalName = localName;
@@ -65,6 +72,7 @@ public sealed class XsltFunctionDefinition
         Element = element;
         ImportPrecedence = importPrecedence;
         Stylesheet = stylesheet;
+        Visibility = visibility;
     }
 
     /// <summary>
@@ -106,6 +114,14 @@ public sealed class XsltFunctionDefinition
         }
 
         var returnType = element.Attribute("as")?.Value;
+        var visibility = element.Attribute("visibility")?.Value?.ToLowerInvariant() switch
+        {
+            "public" => "public",
+            "final" => "final",
+            "abstract" => "abstract",
+            "private" => "private",
+            _ => "private"
+        };
 
         return new XsltFunctionDefinition(
             nsUri,
@@ -115,6 +131,7 @@ public sealed class XsltFunctionDefinition
             returnType,
             element,
             stylesheet.ImportPrecedence,
-            stylesheet);
+            stylesheet,
+            visibility);
     }
 }

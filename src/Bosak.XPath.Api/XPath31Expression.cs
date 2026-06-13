@@ -88,7 +88,8 @@ public sealed class XPath31Expression
     public XdmValue Evaluate(EvaluationContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
-        FunctionLibrary.Populate(context);
+        if (!context.SkipStandardFunctionPopulation)
+            FunctionLibrary.Populate(context);
 
         var savedDefaultNs = context.DefaultElementNamespace;
         var savedBaseUri = context.BaseUri;

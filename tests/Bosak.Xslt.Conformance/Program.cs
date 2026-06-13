@@ -125,6 +125,8 @@ class Program
         "include-0702b",
         // Collection registry / fn:collection not implemented
         "collection-004", "collection-005", "collection-006",
+        // Java extension functions are not supported
+        "evaluate-008",
     };
 
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)

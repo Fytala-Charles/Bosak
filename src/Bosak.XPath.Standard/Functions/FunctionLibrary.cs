@@ -3239,10 +3239,18 @@ public static class FunctionLibrary
         => XdmValue.FromBoolean(!args[0].EffectiveBooleanValue());
 
     private static XdmValue Position(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromInteger(ctx.ContextPosition);
+    {
+        if (ctx.ContextItem.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: fn:position() called with no context item.");
+        return XdmValue.FromInteger(ctx.ContextPosition);
+    }
 
     private static XdmValue Last(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromInteger(ctx.ContextSize);
+    {
+        if (ctx.ContextItem.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: fn:last() called with no context item.");
+        return XdmValue.FromInteger(ctx.ContextSize);
+    }
 
     private static XdmValue Current(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => ctx.CurrentItem;
@@ -4034,7 +4042,11 @@ public static class FunctionLibrary
         return StringComparer.Ordinal;
     }
 
-    private static int CompareStrings(string s1, string s2, string collation)
+    /// <summary>
+    /// Compares two strings using the supplied collation URI. Returns a negative value,
+    /// zero, or a positive value using the same conventions as <see cref="string.Compare"/>.
+    /// </summary>
+    public static int CompareStrings(string s1, string s2, string collation)
     {
         if (TryParseUca(collation, out var uca))
             return uca.CompareInfo.Compare(s1, s2, uca.Options);
@@ -4160,8 +4172,8 @@ public static class FunctionLibrary
         var options = strength.ToLowerInvariant() switch
         {
             "primary" => CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace,
-            "secondary" => CompareOptions.IgnoreNonSpace,
-            "tertiary" => CompareOptions.None,
+            "secondary" => CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace,
+            "tertiary" => CompareOptions.IgnoreNonSpace,
             "quaternary" => CompareOptions.None,
             "identical" => CompareOptions.Ordinal,
             _ => CompareOptions.None,
