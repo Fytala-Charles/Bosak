@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.2   | 05-06-2026     | Added XQST0039 duplicate parameter name check in ParseInlineFunction                     |
 //                      | Charles Korthout | 1.3   | 11-06-2026     | xml prefix falls back to PrefixedName; other prefixes use QName for NamespaceTest       |
 //                      | Charles Korthout | 1.4   | 13-06-2026     | Empty-URI EQName support in SplitQName (Q{}local)                                       |
+//                      | Charles Korthout | 1.5   | 13-06-2026     | Resolve xml prefix in node tests to the XML namespace                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -796,11 +797,11 @@ public sealed class XPathParser
             if (prefix is null)
                 return new NodeTest(NameTestKind.LocalName, local);
 
-            // The xml prefix is predefined; if it is not present in the static namespace
-            // context, fall back to PrefixedName so the VM matches the full name without
-            // requiring empty-namespace resolution (needed for e.g. @xml:base).
+            // The xml prefix is predefined in every XML document. Resolve it to the
+            // standard XML namespace so node tests such as @xml:lang match attributes
+            // in that namespace rather than being treated as prefix-only wildcards.
             if (prefix == "xml")
-                return new NodeTest(NameTestKind.PrefixedName, prefix + ":" + local);
+                return new NodeTest(NameTestKind.QName, local, "http://www.w3.org/XML/1998/namespace");
 
             return new NodeTest(NameTestKind.QName, local, prefix);
         }

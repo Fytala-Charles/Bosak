@@ -1,23 +1,26 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `66fdf49`
-**Current focus:** Quick-win cluster sweep continued — `initial-mode` and `global-context-item` clusters now green; full conformance re-run in progress to measure net improvement.
+**Commit:** (working tree — previous commit `70cad7b`)
+**Current focus:** Quick-win cluster sweep continued — `attribute-set` cluster now green, `attribute` and `id` clusters reduced to 1 failure each.
 
 ---
 
 ## Full Suite Results (2026-06-13)
 
 - **Total:** 14,600
-- **Passed:** 4,045
-- **Failed:** 1,229
+- **Passed:** 4,061
+- **Failed:** 1,213
 - **Skipped:** 9,326
-- **Pass rate:** 76.7% (+10 passes / -10 failures vs. previous 4,035/1,239)
+- **Pass rate:** 77.0% (+16 passes / -16 failures vs. previous 4,045/1,229)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable |
+| attribute | 30 | 15 | 3 | 12 | 3 remaining: 2 complex-assertion harness gaps, 1 namespace fixup |
+| id | 43 | 7 | 1 | 35 | 1 remaining whitespace formatting failure |
 | initial-mode | 5 | 5 | 0 | 0 | ✅ 100% |
 | global-context-item | 14 | 3 | 0 | 11 | ✅ 100% runnable |
 | mode | 188 | 89 | 36 | 63 | 3 fewer failures after default-mode fix |
@@ -27,17 +30,14 @@
 
 ## This Session Fixes
 
-1. **`xsl:apply-templates` default mode** — An absent `mode` attribute now resolves to the current default mode (usually the unnamed mode) instead of the current mode. This fixes `initial-mode-005` and reduces failures in the `mode` cluster.
+1. **`xsl:copy` shallow-copy semantics** — Element shallow copies now copy only the element name and namespace bindings; source attributes and children are no longer copied automatically. This fixes the remaining `attribute-set-0107` failure and aligns with the XSLT spec.
    - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
-2. **External parameters for initial mode / initial template** — `CollectExternalParameters` reads parameter values supplied on the `EvaluationContext` and passes them as `xsl:with-param`/`tunnel` values when invoking the initial mode or initial template. This fixes `initial-mode-004`.
-   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+2. **XML namespace prefix in XPath node tests** — The XPath parser now resolves the predefined `xml` prefix to `http://www.w3.org/XML/1998/namespace` for node tests such as `@xml:att1`, instead of falling back to a prefix-only match that matched attributes in any namespace. This fixes `attribute-0901`.
+   - **File changed**: `src/Bosak.XPath.Parser/Ast/XPathParser.cs`.
 
-3. **`xsl:global-context-item` support** — `Stylesheet` now parses `xsl:global-context-item` and reports `XTSE3089` when `use="absent"` is combined with `as`. The transform engine reports `XTDE3086` when `use="required"` and no source/context item is supplied. This fixes `glob-cxt-item-011` and `glob-cxt-item-012`.
-   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
-
-4. **Lexer unit-test alignment** — `IntegerFollowedByDot` now expects `123.` to be a single `DecimalLiteral`, matching the XPath grammar and the lexer change that fixed `select-3501/3502`.
-   - **File changed**: `tests/Bosak.XPath.Parser.Tests/LexerTests.cs`.
+3. **`fn:document` fragment-identifier support** — `fn:document#1` and `fn:document#2` now split URI fragment identifiers and return the element with a matching `id` or `xml:id` attribute. The runtime context `BaseUri` is also initialized from the stylesheet base URI so relative document URIs resolve correctly. This fixes `id-001`.
+   - **Files changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
 ## Notes
 

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-13  
+> **Living Registry** — Last updated: 2026-06-13    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

@@ -96,6 +96,8 @@
 //                      | Charles Korthout | 5.25  | 13-06-2026     | xsl:for-each requires @select; select-7501 XTSE0010                                    |
 //                      | Charles Korthout | 5.26  | 13-06-2026     | Pass external params to initial mode/template; default mode for apply-templates        |
 //                      | Charles Korthout | 5.27  | 13-06-2026     | Enforce xsl:global-context-item use=required (XTDE3086)                                |
+//                      | Charles Korthout | 5.28  | 13-06-2026     | xsl:copy attribute sets/source attrs; attribute-set variable scope; separator          |
+//                      | Charles Korthout | 5.29  | 13-06-2026     | xsl:copy shallow copy no longer copies source attributes/children                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -163,7 +165,10 @@ public sealed class TransformEngine
     private IXdmNode? _initialSource;
     private string _initialMode = "";
 
-
+    // Snapshot of variables visible at the start of the transformation. Attribute sets
+    // are evaluated with only top-level variables/parameters in scope, so this snapshot
+    // is used to hide local template variables during attribute-set execution.
+    private Dictionary<(string LocalName, string NamespaceUri), XdmValue> _attributeSetVariableSnapshot = new();
 
     // Sequence accumulator for xsl:sequence inside variable bodies with @as
     private List<XdmValue>? _sequenceAccumulator;
@@ -207,6 +212,7 @@ public sealed class TransformEngine
         _context = context ?? new EvaluationContext();
         _messageListener = messageListener;
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
+        _context.BaseUri = stylesheet.BaseUri ?? string.Empty;
         FunctionLibrary.Populate(_context);
         XsltFunctionLibrary.Populate(_context);
 
@@ -279,6 +285,10 @@ public sealed class TransformEngine
         // and building key indices, because both match-pattern predicate validation
         // and xsl:key/@use expressions may reference global variables/parameters.
         InitializeGlobalParametersAndVariables(source);
+
+        // Capture the variable bindings that are visible before any template executes.
+        // Attribute sets are evaluated with only these top-level bindings in scope.
+        _attributeSetVariableSnapshot = _context.SnapshotVariables();
 
         // Compile all template match patterns before execution. The validation
         // dry-run for pattern predicates needs the lazy global resolver registered
@@ -2486,7 +2496,8 @@ public sealed class TransformEngine
                     {
                         var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
-                        value = XdmValueToString(result, " ");
+                        var attrSep = instruction.Attribute("separator")?.Value ?? " ";
+                        value = XdmValueToString(result, attrSep);
                     }
                     else
                     {
@@ -3594,6 +3605,12 @@ public sealed class TransformEngine
 
             var prevContainer = _currentContainer;
             _currentContainer = target;
+
+            // Attribute sets are evaluated with only top-level variables/parameters in
+            // scope; local template variables must not be visible. Save the current
+            // variable bindings and restore the pre-transformation snapshot.
+            var savedVariables = _context.SnapshotVariables();
+            _context.RestoreVariables(_attributeSetVariableSnapshot);
             try
             {
                 foreach (var def in defs)
@@ -3613,6 +3630,7 @@ public sealed class TransformEngine
             }
             finally
             {
+                _context.RestoreVariables(savedVariables);
                 _currentContainer = prevContainer;
                 visited.Remove(key);
             }
@@ -4397,6 +4415,13 @@ public sealed class TransformEngine
                     AddElementToContainer(copy, _currentContainer);
                     var prev = _currentContainer;
                     _currentContainer = copy;
+
+                    // xsl:copy performs a shallow copy of an element: it copies the name and
+                    // namespace bindings, but not the attributes or children of the source node.
+                    // Attributes and children must be produced by the contained sequence constructor.
+
+                    // Apply any attribute sets specified on xsl:copy
+                    ApplyAttributeSets(instruction, copy);
 
                     // Suspend the outer sequence accumulator while constructing the content
                     // of the copied element, so children are added to the copy rather than

@@ -58,6 +58,7 @@
 //                      | Charles Korthout | 4.4   | 11-06-2026     | fn:root/fn:path handle parentless (temporary-tree) element roots; fixes accumulator-088 |
 //                      | Charles Korthout | 4.5   | 13-06-2026     | fn:sum returns xs:integer when all atomized items are integers                           |
 //                      | Charles Korthout | 4.6   | 13-06-2026     | fn:type-available parses Q{uri}local EQName syntax                                       |
+//                      | Charles Korthout | 4.7   | 13-06-2026     | fn:document#1/#2 resolves fragment identifiers to elements                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4817,14 +4818,11 @@ public static class FunctionLibrary
             return XdmValue.Undefined;
 
         if (uris.Count == 1)
-        {
-            var uri = ResolveDocumentUri(uris[0], ctx.BaseUri);
-            return XdmValue.FromNode(ctx.LoadDocument(uri));
-        }
+            return LoadDocumentWithFragment(ctx, uris[0], ctx.BaseUri);
 
         var docs = new List<XdmValue>(uris.Count);
         foreach (var uri in uris)
-            docs.Add(XdmValue.FromNode(ctx.LoadDocument(ResolveDocumentUri(uri, ctx.BaseUri))));
+            docs.Add(LoadDocumentWithFragment(ctx, uri, ctx.BaseUri));
         return XdmValue.FromSequence(MaterializedSequence.FromList(docs));
     }
 
@@ -4838,14 +4836,11 @@ public static class FunctionLibrary
         var baseUri = baseNode?.BaseUri ?? ctx.BaseUri;
 
         if (uris.Count == 1)
-        {
-            var uri = ResolveDocumentUri(uris[0], baseUri);
-            return XdmValue.FromNode(ctx.LoadDocument(uri));
-        }
+            return LoadDocumentWithFragment(ctx, uris[0], baseUri);
 
         var docs = new List<XdmValue>(uris.Count);
         foreach (var uri in uris)
-            docs.Add(XdmValue.FromNode(ctx.LoadDocument(ResolveDocumentUri(uri, baseUri))));
+            docs.Add(LoadDocumentWithFragment(ctx, uri, baseUri));
         return XdmValue.FromSequence(MaterializedSequence.FromList(docs));
     }
 
@@ -4855,6 +4850,58 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(uri))
             uri = baseUri ?? string.Empty;
         return uri;
+    }
+
+    private static XdmValue LoadDocumentWithFragment(EvaluationContext ctx, string uri, string? baseUri)
+    {
+        string? fragment = null;
+        var hash = uri.IndexOf('#');
+        if (hash >= 0)
+        {
+            fragment = uri[(hash + 1)..];
+            uri = uri[..hash];
+        }
+
+        var documentUri = ResolveDocumentUri(uri, baseUri);
+        var savedBaseUri = ctx.BaseUri;
+        try
+        {
+            if (!string.IsNullOrEmpty(baseUri))
+                ctx.BaseUri = baseUri;
+            var doc = ctx.LoadDocument(documentUri);
+            if (string.IsNullOrEmpty(fragment))
+                return XdmValue.FromNode(doc);
+
+            var target = FindElementById(doc, fragment);
+            return target != null ? XdmValue.FromNode(target) : XdmValue.Undefined;
+        }
+        finally
+        {
+            ctx.BaseUri = savedBaseUri;
+        }
+    }
+
+    private static IXdmNode? FindElementById(IXdmNode root, string id)
+    {
+        foreach (var item in root.Axis(XdmAxis.DescendantOrSelf))
+        {
+            if (!item.IsNode)
+                continue;
+            var node = item.NodeValue!;
+            if (node.NodeKind != XdmNodeKind.Element)
+                continue;
+            foreach (var attrItem in node.Axis(XdmAxis.Attribute))
+            {
+                if (!attrItem.IsNode)
+                    continue;
+                var attr = attrItem.NodeValue!;
+                if (attr.LocalName == "id" && attr.NamespaceUri == "" && attr.StringValue == id)
+                    return node;
+                if (attr.LocalName == "id" && attr.NamespaceUri == "http://www.w3.org/XML/1998/namespace" && attr.StringValue == id)
+                    return node;
+            }
+        }
+        return null;
     }
 
     private static List<string> AtomizedUriStrings(XdmValue value)

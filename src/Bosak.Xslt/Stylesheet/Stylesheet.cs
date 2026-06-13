@@ -29,6 +29,7 @@
 //                      | Charles Korthout | 1.7   | 11-06-2026     | XTSE0130 for no-namespace top-level elements; fixes accumulator-078                     |
 //                      | Charles Korthout | 1.8   | 13-06-2026     | Empty-URI EQName support for variable/param names (Q{}local)                             |
 //                      | Charles Korthout | 1.9   | 13-06-2026     | Parse xsl:global-context-item; XTSE3089 for use=absent with as                         |
+//                      | Charles Korthout | 2.0   | 13-06-2026     | XTSE0710 validation for xsl:attribute-set/@use-attribute-sets                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -501,6 +502,37 @@ public sealed class Stylesheet
             var def = AttributeSetDefinition.FromElement(attrSet, this);
             if (def != null)
                 _attributeSets.Add(def);
+        }
+
+        // Static validation: xsl:attribute-set/@use-attribute-sets must reference
+        // existing attribute sets (XTSE0710).
+        var allAttrSets = GetAllAttributeSets();
+        foreach (var attrSet in _attributeSets)
+        {
+            if (string.IsNullOrWhiteSpace(attrSet.UseAttributeSets))
+                continue;
+            foreach (var name in attrSet.UseAttributeSets.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var trimmed = name.Trim();
+                if (string.IsNullOrEmpty(trimmed))
+                    continue;
+                string localName;
+                string nsUri;
+                int colon = trimmed.IndexOf(':');
+                if (colon >= 0)
+                {
+                    var prefix = trimmed.Substring(0, colon);
+                    localName = trimmed.Substring(colon + 1);
+                    nsUri = attrSet.Element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                }
+                else
+                {
+                    localName = trimmed;
+                    nsUri = "";
+                }
+                if (!allAttrSets.ContainsKey((localName, nsUri)))
+                    throw new InvalidOperationException($"XTSE0710: Attribute set '{trimmed}' is not defined.");
+            }
         }
 
         // Static validation: check for disallowed attributes and children on XSLT instructions

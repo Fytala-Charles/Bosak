@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 June 2026
 > **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,010 passed / 1,360 failed / 9,230 skipped (~74.7%)
+> **XSLT baseline:** 4,061 passed / 1,213 failed / 9,326 skipped (~77.0%)
 
 ---
 
@@ -354,12 +354,15 @@ dotnet test Bosak.sln
 | `XDocumentNode.StringValue` for synthetic-wrapper documents includes all descendant text. | Previously only direct text children of the wrapper were included. | 2026-06-11 |
 | `xsl:message` now includes both `@select` and sequence-constructor content. | Both contributions are concatenated, matching XSLT 3.0 semantics. Fixes `xsl-document-0603`. | 2026-06-11 |
 | Conformance harness supports `<assert-message>` and fragment assertions. | Messages are captured via `RecordingMessageListener`; multiple direct assertion children are treated as an implicit `<all-of>`. | 2026-06-11 |
+| `xsl:copy` shallow copy no longer copies source attributes/children. | Source attributes and children must now be produced by the contained sequence constructor, matching the XSLT spec. Fixes `attribute-set-0107`. | 2026-06-13 |
+| XPath parser resolves the `xml` prefix to the XML namespace in node tests. | Previously `@xml:*` fell back to a prefix-only match that matched attributes in any namespace. Fixes `attribute-0901`. | 2026-06-13 |
+| `fn:document#1/#2` supports URI fragment identifiers. | Fragment identifiers resolve to the element with matching `id`/`xml:id`; relative document URIs resolve from the stylesheet base URI. Fixes `id-001`. | 2026-06-13 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 3,975 | 1,395 | 9,230 | 74.0% | element, xsl-document, declared-modes, include, collection clusters now 100% runnable (after skips) |
+| XSLT 3.0 (W3C) | 4,061 | 1,213 | 9,326 | 77.0% | attribute-set cluster now 100% runnable; attribute and id clusters reduced to 1 failure each |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
