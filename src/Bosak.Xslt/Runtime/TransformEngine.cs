@@ -98,6 +98,7 @@
 //                      | Charles Korthout | 5.27  | 13-06-2026     | Enforce xsl:global-context-item use=required (XTDE3086)                                |
 //                      | Charles Korthout | 5.28  | 13-06-2026     | xsl:copy attribute sets/source attrs; attribute-set variable scope; separator          |
 //                      | Charles Korthout | 5.29  | 13-06-2026     | xsl:copy shallow copy no longer copies source attributes/children                       |
+//                      | Charles Korthout | 5.30  | 13-06-2026     | Namespace fixup for xsl:attribute prefix hints and literal result attribute names      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2490,6 +2491,32 @@ public sealed class TransformEngine
                     var attrNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
                     var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw, instruction) : null;
                     var (attrLocalName, attrNsUri) = ResolveAttributeName(instruction, attrName, attrNs, "XTDE0860");
+                    if (_currentContainer is not XElement attrTarget)
+                        throw new InvalidOperationException("XTDE0420");
+
+                    // If the supplied attribute name includes a prefix that is declared in the
+                    // stylesheet but not yet bound on the parent element, copy that namespace
+                    // binding to the parent. The prefix is only a hint and may be replaced by
+                    // namespace fixup if it conflicts with the requested namespace URI.
+                    var attrPrefixHint = attrName.Contains(':') ? attrName[..attrName.IndexOf(':')] : null;
+                    if (!string.IsNullOrEmpty(attrPrefixHint)
+                        && attrPrefixHint != "xml"
+                        && attrPrefixHint != "xmlns"
+                        && !_excludedResultPrefixes.Contains(attrPrefixHint))
+                    {
+                        var parentNs = attrTarget.GetNamespaceOfPrefix(attrPrefixHint);
+                        if (parentNs == null)
+                        {
+                            var styleNs = instruction.GetNamespaceOfPrefix(attrPrefixHint);
+                            if (styleNs != null
+                                && !string.IsNullOrEmpty(styleNs.NamespaceName)
+                                && styleNs.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
+                            {
+                                attrTarget.SetAttributeValue(XNamespace.Xmlns + attrPrefixHint, styleNs.NamespaceName);
+                            }
+                        }
+                    }
+
                     var select = instruction.Attribute("select")?.Value;
                     string value;
                     if (!string.IsNullOrEmpty(select))
@@ -2504,8 +2531,6 @@ public sealed class TransformEngine
                         var attrSep = instruction.Attribute("separator")?.Value ?? "";
                         value = EvaluateSimpleContent(instruction, contextItem, attrSep);
                     }
-                    if (_currentContainer is not XElement attrTarget)
-                        throw new InvalidOperationException("XTDE0420");
                     if (attrTarget.Nodes().Any())
                         throw new InvalidOperationException("XTDE0410");
                     attrTarget.SetAttributeValue(XName.Get(attrLocalName, attrNsUri), value);
@@ -3666,6 +3691,35 @@ public sealed class TransformEngine
             else if (!string.IsNullOrEmpty(prefix) && !_excludedResultPrefixes.Contains(prefix))
             {
                 copy.SetAttributeValue(XNamespace.Xmlns + prefix, source.Name.NamespaceName);
+            }
+        }
+
+        // For root-level literal result elements, if an attribute's local name matches an
+        // in-scope namespace prefix in the stylesheet, copy that namespace binding to the
+        // result element. This handles cases such as attribute-1301 where the result tree
+        // is queried with namespace-uri-for-prefix() using a prefix that is otherwise only
+        // present in the stylesheet.
+        bool isRootLevelLiteral = _currentContainer is not XElement parent || parent.Name.LocalName == "__temp__";
+        if (isRootLevelLiteral && !_excludedResultPrefixes.Contains("#all"))
+        {
+            foreach (var attr in source.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration)
+                    continue;
+                var local = attr.Name.LocalName;
+                if (string.IsNullOrEmpty(local) || local == "xml" || local == "xmlns")
+                    continue;
+                if (_excludedResultPrefixes.Contains(local))
+                    continue;
+                var styleNs = source.GetNamespaceOfPrefix(local);
+                if (styleNs == null || string.IsNullOrEmpty(styleNs.NamespaceName))
+                    continue;
+                if (styleNs.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                    continue;
+                var existing = copy.GetNamespaceOfPrefix(local);
+                if (existing != null && existing.NamespaceName == styleNs.NamespaceName)
+                    continue;
+                copy.SetAttributeValue(XNamespace.Xmlns + local, styleNs.NamespaceName);
             }
         }
 
@@ -8519,12 +8573,44 @@ public sealed class TransformEngine
         }
         else
         {
-            if (!IsWhitespaceOnly(text.Value))
+            // XSLT 3.0 §4.3: comments/PIs are removed and adjacent text nodes are
+            // merged before whitespace stripping. A whitespace-only text node that
+            // would become adjacent to a non-whitespace text node after that step
+            // must be preserved, because it becomes part of the merged text node.
+            if (!IsWhitespaceOnly(text.Value) || IsAdjacentToNonWhitespaceText(text, parent))
             {
                 _lastAddedWasAtomic = false;
                 AddTextNode(text.Value);
             }
         }
+    }
+
+    /// <summary>
+    /// Determines whether a whitespace-only text node in a sequence constructor
+    /// would be merged with a non-whitespace text node after comments and PIs
+    /// are removed from the stylesheet (XSLT 3.0 §4.3). Such nodes are preserved.
+    /// </summary>
+    private static bool IsAdjacentToNonWhitespaceText(XText text, XElement parent)
+    {
+        bool IsNonWhitespaceText(XNode? node)
+            => node is XText t && !IsWhitespaceOnly(t.Value);
+
+        bool SkipNode(XNode? node)
+            => node is XComment || node is XProcessingInstruction || (node is XText t && IsWhitespaceOnly(t.Value));
+
+        var prev = text.PreviousNode;
+        while (prev != null && SkipNode(prev))
+            prev = prev.PreviousNode;
+        if (IsNonWhitespaceText(prev))
+            return true;
+
+        var next = text.NextNode;
+        while (next != null && SkipNode(next))
+            next = next.NextNode;
+        if (IsNonWhitespaceText(next))
+            return true;
+
+        return false;
     }
 
     // ------------------------------------------------------------------

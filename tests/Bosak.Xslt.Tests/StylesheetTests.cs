@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 27-05-2026     | Added fn:transform tests (basic, stylesheet-params, initial-template) and map key lookup  |
 //                      | Charles Korthout | 0.8   | 31-05-2026     | Added xsl:try / xsl:catch tests (result tree, select attribute, function body)         |
 //                      | Charles Korthout | 0.9   | 31-05-2026     | Added xsl:for-each-group tests (group-by, group-adjacent, group-starting-with, current-grouping-key) |
+//                      | Charles Korthout | 0.10  | 13-06-2026     | Relaxed fn:transform assertions to tolerate copied in-scope namespaces                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1716,7 +1717,8 @@ public class StylesheetTests
         var result = executable.TransformToString(new XDocumentNode(source));
 
         System.IO.File.Delete(mainPath);
-        Assert.Contains("<output>hello</output>", result);
+        var doc = XDocument.Parse(result);
+        Assert.Equal("hello", doc.Descendants("output").Single().Value);
     }
 
     [Fact]
@@ -1752,7 +1754,8 @@ public class StylesheetTests
         var result = executable.TransformToString(new XDocumentNode(source));
 
         System.IO.File.Delete(mainPath);
-        Assert.Contains("<output>world</output>", result);
+        var doc = XDocument.Parse(result);
+        Assert.Equal("world", doc.Descendants("output").Single().Value);
     }
 
     [Fact]
@@ -1787,7 +1790,8 @@ public class StylesheetTests
         var result = executable.TransformToString(new XDocumentNode(source));
 
         System.IO.File.Delete(mainPath);
-        Assert.Contains("<output>from-template</output>", result);
+        var doc = XDocument.Parse(result);
+        Assert.Equal("from-template", doc.Descendants("output").Single().Value);
     }
 
     [Fact]
