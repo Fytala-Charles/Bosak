@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `d26be2a`
+**Commit:** `607fb88`
 **Current focus:** `function` cluster now fully green (0 runnable failures); `function-available` green.
 
 ---
