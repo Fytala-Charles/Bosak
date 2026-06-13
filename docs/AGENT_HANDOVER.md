@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `d8dc31f`
-**Current focus:** Quick-win cluster sweep — `type-available`, `construct-node`, and `match` clusters now green; continuing with remaining 1–5 failure clusters.
+**Commit:** `<uncommitted>`
+**Current focus:** Quick-win cluster sweep — `type-available`, `construct-node`, `match`, and `select` clusters now green; continuing with remaining 1–5 failure clusters.
 
 ---
 
@@ -23,6 +23,7 @@
 | construct-node | 34 | 34 | 0 | 0 | ✅ 100% |
 | match | 294 | 179 | 0 | 115 | ✅ 100% runnable |
 | next-match | 40 | 37 | 0 | 3 | (unchanged, 3 stack-limit skips) |
+| select | 158 | 155 | 0 | 3 | ✅ 100% runnable |
 
 ## This Session Fixes
 
@@ -43,6 +44,15 @@
 
 6. **Case-preserving element/attribute name type matching** — `ValueMatchesType` no longer lower-cases local names in `element(name)` and `attribute(name)` sequence types, fixing `match-233` (`element(A)`). The same fix also cleared the remaining two `match` cluster failures (`match-249`, `match-251`).
    - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+7. **XPath trailing-dot decimal literals** — `XPathLexer.ReadNumber` now treats a number with a trailing dot (e.g. `5.`) as a `DecimalLiteral` rather than an integer followed by a separate dot. This fixes `select-3501` (`5.*.`) and `select-3502` (`5.+*`).
+   - **File changed**: `src/Bosak.XPath.Parser/Lexer/XPathLexer.cs`.
+
+8. **`xsl:for-each` missing `@select` validation** — `ExecuteXsltInstruction` now throws `XTSE0010` when `xsl:for-each` has no `select` attribute, fixing `select-7501`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+9. **Zero-length text-node normalization fix** — `ApplyComplexContentRules` no longer splits adjacent text nodes when an empty text node appears between them, fixing the `select-2301` regression introduced by the zero-length text-node preservation change.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
 ## Notes
 

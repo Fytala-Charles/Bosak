@@ -93,6 +93,7 @@
 //                      | Charles Korthout | 5.22  | 11-06-2026     | Accumulator fixes: sequence-constructor rules, map/array apply, xsl:iterate, root/path |
 //                      | Charles Korthout | 5.23  | 13-06-2026     | Empty-URI EQName support; initialize globals before pattern compile; variable cluster green |
 //                      | Charles Korthout | 5.24  | 13-06-2026     | xsl:value-of/xsl:text preserve zero-length text nodes for typed variables             |
+//                      | Charles Korthout | 5.25  | 13-06-2026     | xsl:for-each requires @select; select-7501 XTSE0010                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1316,6 +1317,8 @@ public sealed class TransformEngine
                 case "for-each":
                     {
                         var select = instruction.Attribute("select")?.Value;
+                        if (string.IsNullOrEmpty(select))
+                            throw new InvalidOperationException("XTSE0010: xsl:for-each requires a select attribute");
                         if (!string.IsNullOrEmpty(select))
                         {
                             var compiled = XPath31Expression.Compile(select);
@@ -2828,6 +2831,8 @@ public sealed class TransformEngine
             case "for-each":
                 {
                     var select = instruction.Attribute("select")?.Value;
+                    if (string.IsNullOrEmpty(select))
+                        throw new InvalidOperationException("XTSE0010: xsl:for-each requires a select attribute");
                     if (!string.IsNullOrEmpty(select))
                     {
                         var compiled = CompileXPath(select, instruction);
@@ -7689,12 +7694,9 @@ public sealed class TransformEngine
             {
                 if (t.Value.Length == 0)
                 {
-                    // Discard zero-length text nodes, but flush any accumulated text first
-                    if (textBuffer.Length > 0)
-                    {
-                        result.Add(new XText(textBuffer.ToString()));
-                        textBuffer.Clear();
-                    }
+                    // Discard zero-length text nodes. Do not flush the buffer here;
+                    // an empty text node between two non-empty text nodes must not
+                    // split them (select-2301).
                     continue;
                 }
                 textBuffer.Append(t.Value);

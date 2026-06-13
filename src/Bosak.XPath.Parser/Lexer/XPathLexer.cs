@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-06-2026     | Trailing dot in number is DecimalLiteral (fixes select-3501/3502)                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
@@ -180,7 +181,6 @@ public ref struct XPathLexer
     private Token ReadNumber(int start)
     {
         bool hasDot = false;
-        bool hasDigitsAfterDot = false;
         bool hasExponent = false;
 
         // Integer part
@@ -192,25 +192,17 @@ public ref struct XPathLexer
         // Decimal point
         if (_position < _source.Length && _source[_position] == '.')
         {
-            int dotPos = _position;
             _position++;
 
             while (_position < _source.Length && char.IsDigit(_source[_position]))
             {
-                hasDigitsAfterDot = true;
                 _position++;
             }
 
-            // If no digits after the dot, rollback so the dot is tokenized separately.
-            // "123." → IntegerLiteral(123) + Dot
-            if (!hasDigitsAfterDot)
-            {
-                _position = dotPos;
-            }
-            else
-            {
-                hasDot = true;
-            }
+            // A trailing dot is part of a decimal literal per XPath 3.1:
+            // DecimalLiteral ::= Digits '.' Digits?
+            // This makes "5.*." parse as (5.0 * .) and "5.+*" as (5.0 + *).
+            hasDot = true;
         }
 
         // Exponent
