@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `a8af83b`
-**Current focus:** XSLT `as` cluster now 99/99 runnable tests passing (0 failed, 105 skipped); full suite re-run complete.
+**Commit:** `2375474`
+**Current focus:** XSLT `as` cluster 99/99 runnable passing; `accumulator` regression (accumulator-077) fixed. Full suite re-run complete.
 
 ---
 
@@ -27,6 +27,9 @@
 
 2. **URI promotion branch** — Extracted `xs:anyURI` → `xs:string` promotion into a dedicated `IsUriPromotion` branch, so the new subtype-substitution branch does not regress `as-0116`.
    - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **Parameterized `map(K,V)` / `array(T)` type matching** — `ValueMatchesType` now accepts empty maps/arrays for any parameterized type and validates each entry/member for non-empty ones. This fixes the `accumulator-077` regression caused by the stricter `@as` validation (`as="map(xs:integer, xs:string)"` with `initial-value="map{}"`).
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
 
 ## Notes
 
