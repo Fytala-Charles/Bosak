@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `<uncommitted>`
+**Commit:** `6482dae`
 **Current focus:** Quick-win cluster sweep — `type-available`, `construct-node`, `match`, and `select` clusters now green; continuing with remaining 1–5 failure clusters.
 
 ---
