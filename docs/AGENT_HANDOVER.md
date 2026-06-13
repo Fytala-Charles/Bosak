@@ -1,6 +1,54 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
+**Commit:** `66fdf49`
+**Current focus:** Quick-win cluster sweep continued — `initial-mode` and `global-context-item` clusters now green; full conformance re-run in progress to measure net improvement.
+
+---
+
+## Full Suite Results (2026-06-13, before this step)
+
+- **Total:** 14,600
+- **Passed:** 4,035
+- **Failed:** 1,239
+- **Skipped:** 9,326
+- **Pass rate:** 76.5%
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| initial-mode | 5 | 5 | 0 | 0 | ✅ 100% |
+| global-context-item | 14 | 3 | 0 | 11 | ✅ 100% runnable |
+| mode | 188 | 89 | 36 | 63 | 3 fewer failures after default-mode fix |
+| select | 158 | 155 | 0 | 3 | ✅ 100% runnable |
+| construct-node | 34 | 34 | 0 | 0 | ✅ 100% |
+| match | 336 | 216 | 0 | 120 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`xsl:apply-templates` default mode** — An absent `mode` attribute now resolves to the current default mode (usually the unnamed mode) instead of the current mode. This fixes `initial-mode-005` and reduces failures in the `mode` cluster.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **External parameters for initial mode / initial template** — `CollectExternalParameters` reads parameter values supplied on the `EvaluationContext` and passes them as `xsl:with-param`/`tunnel` values when invoking the initial mode or initial template. This fixes `initial-mode-004`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`xsl:global-context-item` support** — `Stylesheet` now parses `xsl:global-context-item` and reports `XTSE3089` when `use="absent"` is combined with `as`. The transform engine reports `XTDE3086` when `use="required"` and no source/context item is supplied. This fixes `glob-cxt-item-011` and `glob-cxt-item-012`.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **Lexer unit-test alignment** — `IntegerFollowedByDot` now expects `123.` to be a single `DecimalLiteral`, matching the XPath grammar and the lexer change that fixed `select-3501/3502`.
+   - **File changed**: `tests/Bosak.XPath.Parser.Tests/LexerTests.cs`.
+
+## Notes
+
+- Unit-test suite: **877 passed / 0 failed** across 8 projects.
+- A full conformance suite is running in the background; update this file with final numbers when it completes.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-13
 **Commit:** `6482dae`
 **Current focus:** Quick-win cluster sweep — `type-available`, `construct-node`, `match`, and `select` clusters now green; continuing with remaining 1–5 failure clusters.
 
