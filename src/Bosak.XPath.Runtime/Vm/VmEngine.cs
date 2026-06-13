@@ -4537,8 +4537,11 @@ public static class VmEngine
                 var typePart = inner.Substring(3).Trim();
                 return IsElementTypeCompatible(typePart);
             }
-            // element(name) or element(name, T) → check name match (basic, no namespace)
-            var namePart = inner.Split(',')[0].Trim();
+            // element(name) or element(name, T) → check name match (basic, no namespace).
+            // Use the case-preserved type string so local names such as 'A' are not lowercased.
+            var casePreserved = GetCasePreservedTypeName(typeName);
+            var cpInner = casePreserved.Substring(8, casePreserved.Length - 9).Trim();
+            var namePart = cpInner.Split(',')[0].Trim();
             if (namePart != "*")
             {
                 var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
@@ -4567,8 +4570,11 @@ public static class VmEngine
                 var typePart = inner.Substring(3).Trim();
                 return IsAttributeTypeCompatible(typePart);
             }
-            // attribute(name) or attribute(name, T) → check name match
-            var namePart = inner.Split(',')[0].Trim();
+            // attribute(name) or attribute(name, T) → check name match.
+            // Use the case-preserved type string so local names keep their original case.
+            var casePreserved = GetCasePreservedTypeName(typeName);
+            var cpInner = casePreserved.Substring(10, casePreserved.Length - 11).Trim();
+            var namePart = cpInner.Split(',')[0].Trim();
             if (namePart != "*")
             {
                 var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
@@ -4693,6 +4699,23 @@ public static class VmEngine
             return value.IsArray;
 
         return ItemInstanceOf(value, normalized);
+    }
+
+    /// <summary>
+    /// Strips occurrence indicators and the <c>xs:/xsd:</c> prefix from a type name
+    /// while preserving the original case of the remaining text (needed for element
+    /// and attribute local-name matching).
+    /// </summary>
+    private static string GetCasePreservedTypeName(string typeName)
+    {
+        var s = typeName.Trim();
+        if (s.EndsWith('?') || s.EndsWith('*') || s.EndsWith('+'))
+            s = s[..^1].TrimEnd();
+        if (s.StartsWith("xs:"))
+            s = s[3..];
+        else if (s.StartsWith("xsd:"))
+            s = s[4..];
+        return s;
     }
 
     /// <summary>

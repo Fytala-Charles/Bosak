@@ -57,6 +57,7 @@
 //                      | Charles Korthout | 4.3   | 13-06-2026     | ToDoubleValue converts xs:boolean to 1/0; fixes sort-046 conditional sort key          |
 //                      | Charles Korthout | 4.4   | 11-06-2026     | fn:root/fn:path handle parentless (temporary-tree) element roots; fixes accumulator-088 |
 //                      | Charles Korthout | 4.5   | 13-06-2026     | fn:sum returns xs:integer when all atomized items are integers                           |
+//                      | Charles Korthout | 4.6   | 13-06-2026     | fn:type-available parses Q{uri}local EQName syntax                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3505,11 +3506,25 @@ public static class FunctionLibrary
         string name = AtomizedString(args[0]);
         // For now, return true for common built-in schema types that are always available
         string localName = name;
-        if (name.StartsWith("{"))
+        string? nsUri = null;
+        if (name.StartsWith("Q{"))
+        {
+            // EQName syntax: Q{uri}local
+            int close = name.IndexOf('}');
+            if (close >= 2)
+            {
+                nsUri = name.Substring(2, close - 2);
+                localName = name.Substring(close + 1);
+            }
+        }
+        else if (name.StartsWith("{"))
         {
             int close = name.IndexOf('}');
             if (close > 0)
+            {
+                nsUri = name.Substring(1, close - 1);
                 localName = name.Substring(close + 1);
+            }
         }
         else
         {
@@ -3518,6 +3533,15 @@ public static class FunctionLibrary
                 localName = name.Substring(colon + 1);
         }
         localName = localName.ToLowerInvariant();
+
+        // If an explicit namespace URI was supplied, the type is only available
+        // when it is the XML Schema namespace.
+        if (nsUri is not null && nsUri != Namespaces.Xs)
+            return XdmValue.False;
+
+        // For an EQName with no namespace (Q{}local), no schema is in scope.
+        if (nsUri == string.Empty && name.StartsWith("Q{"))
+            return XdmValue.False;
         string[] builtInTypes =
         [
             "string", "boolean", "integer", "decimal", "float", "double",

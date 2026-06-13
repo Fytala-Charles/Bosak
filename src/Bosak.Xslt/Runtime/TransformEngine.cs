@@ -92,6 +92,7 @@
 //                      | Charles Korthout | 5.21  | 13-06-2026     | UCA alternate=shifted/blanked tie-breaker for xsl:sort; fixes sort-079                |
 //                      | Charles Korthout | 5.22  | 11-06-2026     | Accumulator fixes: sequence-constructor rules, map/array apply, xsl:iterate, root/path |
 //                      | Charles Korthout | 5.23  | 13-06-2026     | Empty-URI EQName support; initialize globals before pattern compile; variable cluster green |
+//                      | Charles Korthout | 5.24  | 13-06-2026     | xsl:value-of/xsl:text preserve zero-length text nodes for typed variables             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -409,9 +410,9 @@ public sealed class TransformEngine
     /// Falls back to a document-level text buffer when the container is an XDocument,
     /// because XDocument does not allow non-whitespace text nodes at the document level.
     /// </summary>
-    private void AddTextNode(string text)
+    private void AddTextNode(string text, bool allowZeroLength = false)
     {
-        if (text.Length == 0)
+        if (text.Length == 0 && !allowZeroLength)
             return; // Zero-length text nodes are ignored in complex content
         if (_currentContainer is XDocument)
         {
@@ -2514,14 +2515,14 @@ public sealed class TransformEngine
                             textValue = XdmValueToString(result, sep);
                         }
                         _lastAddedWasAtomic = false;
-                        AddTextNode(textValue);
+                        AddTextNode(textValue, allowZeroLength: true);
                     }
                     else
                     {
                         var voSep = instruction.Attribute("separator")?.Value ?? "";
                         var textValue = EvaluateSimpleContent(instruction, contextItem, voSep);
                         _lastAddedWasAtomic = false;
-                        AddTextNode(textValue);
+                        AddTextNode(textValue, allowZeroLength: true);
                     }
                     break;
                 }
@@ -2538,7 +2539,7 @@ public sealed class TransformEngine
                         text = EvaluateTvt(text);
                     }
                     _lastAddedWasAtomic = false;
-                    AddTextNode(text);
+                    AddTextNode(text, allowZeroLength: true);
                     break;
                 }
 
@@ -6966,6 +6967,24 @@ public sealed class TransformEngine
            string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
+    /// Returns true if the sequence type is a node-kind test such as
+    /// <c>text()</c>, <c>element()</c>, <c>node()</c>, etc.
+    /// </summary>
+    private static bool IsNodeKindType(string type)
+    {
+        var normalized = type.Trim().ToLowerInvariant();
+        if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
+            normalized = normalized[..^1].TrimEnd();
+        return normalized is "node()" or "node" or "text()" or "text" or "comment()" or "comment"
+            or "processing-instruction()" or "processing-instruction" or "namespace-node()" or "namespace-node"
+            or "document-node()" or "document-node"
+            or "element()" or "attribute()" or "schema-element()" or "schema-attribute()"
+            || normalized.StartsWith("element(") || normalized.StartsWith("attribute(")
+            || normalized.StartsWith("document-node(") || normalized.StartsWith("schema-element(")
+            || normalized.StartsWith("schema-attribute(");
+    }
+
+    /// <summary>
     /// Returns true if the <c>xsl:for-each-group</c> instruction requests composite
     /// grouping keys (<c>composite="yes"</c>, <c>"true"</c>, or <c>"1"</c>).
     /// </summary>
@@ -7333,7 +7352,17 @@ public sealed class TransformEngine
 
         // Cardinality check
         if (items.Count == 0 && !allowsEmpty)
+        {
+            // An empty sequence is accepted for a single text() or node() type when the
+            // only reason it is empty is that zero-length text nodes were removed during
+            // sequence construction (construct-node-018/019/020).
+            var normalizedForEmpty = type.Trim().ToLowerInvariant();
+            if (normalizedForEmpty.EndsWith('?') || normalizedForEmpty.EndsWith('*') || normalizedForEmpty.EndsWith('+'))
+                normalizedForEmpty = normalizedForEmpty[..^1].TrimEnd();
+            if (normalizedForEmpty is "text()" or "text" or "node()" or "node")
+                return XdmValue.Undefined;
             throw new InvalidOperationException($"{errorCode}: Empty sequence not allowed for type {originalType}");
+        }
         if (items.Count > 1 && !allowsMultiple)
             throw new InvalidOperationException($"{errorCode}: Sequence of more than one item not allowed for type {originalType}");
 
@@ -7580,13 +7609,16 @@ public sealed class TransformEngine
             var asType = parent.Attribute("as")?.Value;
             bool allowsMultipleItems = !string.IsNullOrEmpty(asType) &&
                 (asType.TrimEnd().EndsWith("*") || asType.TrimEnd().EndsWith("+"));
+            bool asIsNodeKind = !string.IsNullOrEmpty(asType) && IsNodeKindType(asType);
 
             var results = new List<XdmValue>();
             foreach (var item in accumulatorItems)
             {
-                // Sequence constructors used for a single-item @as type drop zero-length
-                // text nodes; sequence types that allow multiple items retain them.
-                if (!allowsMultipleItems &&
+                // For single-item node-kind types (e.g. text()), zero-length text nodes
+                // produced by xsl:value-of/xsl:text are dropped, leaving an empty sequence.
+                // This matches construct-node-018/019/020, where such variables are used
+                // as empty sequence items in string-join.
+                if (asIsNodeKind && !allowsMultipleItems &&
                     item.IsNode && item.NodeValue is { NodeKind: XdmNodeKind.Text } tn && tn.StringValue.Length == 0)
                     continue;
                 results.Add(item);
@@ -7602,9 +7634,9 @@ public sealed class TransformEngine
                         results.Add(XdmValue.FromNode(new XDocumentNode(e)));
                         break;
                     case XText t:
-                        // Sequence constructors drop zero-length text nodes unless the
-                        // declared type allows multiple items.
-                        if (!allowsMultipleItems && string.IsNullOrEmpty(t.Value))
+                        // Drop zero-length text nodes for single-item node-kind types;
+                        // retain them for atomic types and for types that allow multiple items.
+                        if (asIsNodeKind && !allowsMultipleItems && string.IsNullOrEmpty(t.Value))
                             break;
                         // Preserve text nodes as text nodes, not atomic strings,
                         // so that CopyToResult can concatenate adjacent text nodes

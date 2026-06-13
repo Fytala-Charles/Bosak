@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `2375474`
-**Current focus:** XSLT `as` cluster 99/99 runnable passing; `accumulator` regression (accumulator-077) fixed. Full suite re-run complete.
+**Commit:** `<uncommitted>`
+**Current focus:** Quick-win cluster sweep — `type-available`, `construct-node`, and `match` clusters now green; continuing with remaining 1–5 failure clusters.
 
 ---
 
@@ -19,6 +19,10 @@
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
 | as | 204 | 99 | 0 | 105 | ✅ 100% runnable |
+| type-available | 7 | 3 | 0 | 4 | ✅ 100% runnable |
+| construct-node | 34 | 34 | 0 | 0 | ✅ 100% |
+| match | 294 | 179 | 0 | 115 | ✅ 100% runnable |
+| next-match | 40 | 37 | 0 | 3 | (unchanged, 3 stack-limit skips) |
 
 ## This Session Fixes
 
@@ -29,6 +33,15 @@
    - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
 3. **Parameterized `map(K,V)` / `array(T)` type matching** — `ValueMatchesType` now accepts empty maps/arrays for any parameterized type and validates each entry/member for non-empty ones. This fixes the `accumulator-077` regression caused by the stricter `@as` validation (`as="map(xs:integer, xs:string)"` with `initial-value="map{}"`).
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+4. **`fn:type-available` EQName support** — `type-available()` now recognizes `Q{uri}local` syntax and returns `false` for no-namespace (`Q{}local`) types while continuing to report built-in schema types in the XSD namespace.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+5. **`xsl:value-of` / `xsl:text` zero-length text nodes** — `ExecuteSequenceConstructor` now preserves zero-length text nodes produced by `xsl:value-of` and `xsl:text` for atomic/multiple-item types, and drops them for single-item node-kind types (where an empty sequence is accepted for `text()` / `node()`). This fixes `construct-node-018/019/020/034`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+6. **Case-preserving element/attribute name type matching** — `ValueMatchesType` no longer lower-cases local names in `element(name)` and `attribute(name)` sequence types, fixing `match-233` (`element(A)`). The same fix also cleared the remaining two `match` cluster failures (`match-249`, `match-251`).
    - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
 
 ## Notes
