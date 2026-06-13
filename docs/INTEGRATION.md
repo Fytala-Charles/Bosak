@@ -360,12 +360,19 @@ dotnet test Bosak.sln
 | `fn:document#1/#2` supports URI fragment identifiers. | Fragment identifiers resolve to the element with matching `id`/`xml:id`; relative document URIs resolve from the stylesheet base URI. Fixes `id-001`. | 2026-06-13 |
 | `xsl:evaluate` is fully supported. | Dynamic XPath 3.1 evaluation inside XSLT with context item, parameters, namespaces, base URI, default collation, and `@as` coercion. Fixes the entire `evaluate` cluster. | 2026-06-13 |
 | Cross-tree document order now follows document creation order. | `XDocumentNode.DocumentOrder` combines a global creation sequence (high bits) with the per-document local index (low bits), so union/path results across separately constructed temporary trees are stable. Fixes `evaluate-002`. | 2026-06-13 |
+| `xsl:function` validation and static errors are implemented. | `Stylesheet.ValidateInstructionTree` reports XTSE0020/XTSE0080/XTSE0770/XTSE0090/XTSE0740 for invalid function declarations, reserved namespaces, duplicate signatures, and `Q{}local` names. Fixes function cluster validation tests. | 2026-06-13 |
+| `xsl:function` supports deterministic memoization. | `new-each-time="no"` results are cached per (name, arity, argument) key; AVTs on `_new-each-time` select deterministic/non-deterministic mode at run time. Fixes `function-0240` and related tests. | 2026-06-13 |
+| `fn:function-available` is fully spec compliant. | Parses EQNames, atomizes/casts the arity argument, reports `fn:concat` for any variadic arity, and reports the full XSLT 3.0 function set. Fixes `function-available` cluster. | 2026-06-13 |
+| `fn:element-available` is implemented. | Reports availability for XSLT 2.0/3.0 instructions in the XSLT namespace. Fixes function cluster tests that test stylesheet instructions dynamically. | 2026-06-13 |
+| `fn:available-environment-variables` and `fn:environment-variable` are implemented. | Returns/succeeds on process environment variables; matching is case-sensitive exact. Fixes function cluster environment tests. | 2026-06-13 |
+| Numeric arguments to `fn:subsequence` and `fn:format-integer` are atomized. | Atomization now preserves `xs:untypedAtomic`, so attribute and element text nodes are accepted implicitly. Fixes `function-0502`, `function-0503`, and related tests. | 2026-06-13 |
+| Namespace context is applied to `xsl:variable`/`xsl:param`/`xsl:with-param` @select expressions. | Local and global variable/param `select` expressions, and named-template default param values, now use the in-scope namespace bindings and effective default namespace. Fixes unprefixed EQName tests in `function` cluster. | 2026-06-13 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,111 | 1,162 | 9,327 | 78.0% | `evaluate` cluster now 100% runnable; full suite +2 passes / -2 failures |
+| XSLT 3.0 (W3C) | 4,135 | 1,138 | 9,327 | 78.4% | `function` cluster now 100% runnable; full suite +24 passes / -24 failures |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

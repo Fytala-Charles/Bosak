@@ -179,6 +179,9 @@ public sealed class TransformEngine
     private int _xsltFunctionCallDepth;
     private int _callTemplateDepth;
 
+    // Memoization cache for deterministic xsl:function declarations (new-each-time="no")
+    private readonly Dictionary<XsltFunctionCacheKey, XdmValue> _xsltFunctionCache = new();
+
     // Current group state for xsl:for-each-group / current-group() / current-grouping-key()
     private List<XdmValue>? _currentGroup;
     private XdmValue? _currentGroupingKey;
@@ -548,8 +551,10 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// Returns the effective xpath-default-namespace for the given element by walking
-    /// the ancestor chain and finding the nearest xpath-default-namespace attribute.
+    /// Returns the effective default element namespace for the given element.
+    /// First checks for an explicit <c>xpath-default-namespace</c> attribute;
+    /// otherwise falls back to the ordinary XML default namespace declaration
+    /// (<c>xmlns="..."</c>) in scope on the element.
     /// </summary>
     private static string? GetXPathDefaultNamespace(XElement element)
     {
@@ -573,7 +578,10 @@ public sealed class TransformEngine
             }
             current = current.Parent;
         }
-        return null;
+
+        // Fall back to the in-scope default namespace declaration.
+        var defaultNs = element.GetDefaultNamespace().NamespaceName;
+        return string.IsNullOrEmpty(defaultNs) ? null : defaultNs;
     }
 
     /// <summary>
@@ -1226,8 +1234,16 @@ public sealed class TransformEngine
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
         var savedCurrent = _context.CurrentItem;
+        var savedAccumulator = _sequenceAccumulator;
+        _sequenceAccumulator = null;
+        var effectiveNewEachTime = GetEffectiveFunctionAttribute(def.Element, "new-each-time");
+        bool memoize = IsDeterministicNewEachTime(effectiveNewEachTime);
+        XsltFunctionCacheKey? cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
         try
         {
+            if (cacheKey.HasValue && _xsltFunctionCache.TryGetValue(cacheKey.Value, out var cached))
+                return cached;
+
             // Bind parameters, applying the XPath function conversion rules for each
             // xsl:param/@as type.
             var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
@@ -1247,15 +1263,38 @@ public sealed class TransformEngine
             // XSLT functions have no context item (XSLT 3.0 §9.6).
             // Evaluate the function body with an absent context item.
             var result = EvaluateFunctionBody(def.Element, XdmValue.Undefined);
-            return ConvertVariableValue(result, def.ReturnType);
+            var convertedResult = ConvertVariableValue(result, def.ReturnType);
+            if (cacheKey.HasValue)
+                _xsltFunctionCache[cacheKey.Value] = convertedResult;
+            return convertedResult;
         }
         finally
         {
             _xsltFunctionCallDepth--;
+            _sequenceAccumulator = savedAccumulator;
             _context.RestoreVariables(snapshot);
             _context.WithFocus(savedFocus, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
         }
+    }
+
+    private string GetEffectiveFunctionAttribute(XElement functionElement, string name)
+    {
+        var avtAttr = functionElement.Attribute("_" + name);
+        if (avtAttr != null)
+            return EvaluateAvt(avtAttr.Value, functionElement).Trim();
+
+        var staticAttr = functionElement.Attribute(name);
+        return staticAttr?.Value.Trim() ?? string.Empty;
+    }
+
+    private static bool IsDeterministicNewEachTime(string value)
+    {
+        return value switch
+        {
+            "no" or "false" or "0" or "maybe" or "probably" => true,
+            _ => false
+        };
     }
 
     /// <summary>
@@ -1364,7 +1403,7 @@ public sealed class TransformEngine
                             XdmValue varValue;
                             if (!string.IsNullOrEmpty(varSelect))
                             {
-                                var compiled = XPath31Expression.Compile(varSelect);
+                                var compiled = CompileXPath(varSelect, instruction);
                                 varValue = compiled.Evaluate(_context);
                             }
                             else
@@ -2363,7 +2402,7 @@ public sealed class TransformEngine
                         var paramSelect = child.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(paramSelect))
                         {
-                            var compiled = XPath31Expression.Compile(paramSelect);
+                            var compiled = CompileXPath(paramSelect, child);
                             paramValue = compiled.Evaluate(_context);
                         }
                         else
@@ -3400,7 +3439,7 @@ public sealed class TransformEngine
                         XdmValue varValue;
                         if (!string.IsNullOrEmpty(varSelect))
                         {
-                            var compiled = XPath31Expression.Compile(varSelect);
+                            var compiled = CompileXPath(varSelect, instruction);
                             varValue = compiled.Evaluate(_context);
                         }
                         else
@@ -6025,7 +6064,7 @@ public sealed class TransformEngine
                         if (SelectReferencesVariable(select, info.Element, localName, namespaceUri))
                             throw new InvalidOperationException($"XPST0008: Variable ${localName} is out of scope in its own declaration.");
 
-                        var compiled = XPath31Expression.Compile(select);
+                        var compiled = CompileXPath(select, info.Element);
                         value = compiled.Evaluate(_context);
                     }
                     else
@@ -7833,6 +7872,87 @@ public sealed class TransformEngine
                 throw new InvalidOperationException($"XPTY0004{suffix}", ex);
             }
             throw;
+        }
+    }
+
+    /// <summary>
+    /// Cache key for deterministic xsl:function memoization.
+    /// </summary>
+    private readonly struct XsltFunctionCacheKey : IEquatable<XsltFunctionCacheKey>
+    {
+        public string NamespaceUri { get; }
+        public string LocalName { get; }
+        public int Arity { get; }
+        public object?[] ArgumentKeys { get; }
+
+        public XsltFunctionCacheKey(string ns, string local, int arity, ReadOnlySpan<XdmValue> args)
+        {
+            NamespaceUri = ns;
+            LocalName = local;
+            Arity = arity;
+            ArgumentKeys = new object?[args.Length];
+            for (int i = 0; i < args.Length; i++)
+                ArgumentKeys[i] = BuildArgumentKey(args[i]);
+        }
+
+        private static object? BuildArgumentKey(XdmValue value)
+        {
+            if (value.IsUndefined)
+                return "__undefined__";
+            if (value.IsNode)
+                return value.NodeValue;
+            if (value.IsSequence && value.SequenceValue is { } seq)
+            {
+                var list = new List<object?>();
+                foreach (var item in XdmSequence.FromSource(seq))
+                    list.Add(BuildArgumentKey(item));
+                return list;
+            }
+            // Atomic value: include kind to distinguish e.g. integer 1 from string "1".
+            return (value.Kind, value.ToString());
+        }
+
+        public bool Equals(XsltFunctionCacheKey other)
+        {
+            if (NamespaceUri != other.NamespaceUri || LocalName != other.LocalName || Arity != other.Arity)
+                return false;
+            if (ArgumentKeys.Length != other.ArgumentKeys.Length)
+                return false;
+            for (int i = 0; i < ArgumentKeys.Length; i++)
+            {
+                if (!KeysEqual(ArgumentKeys[i], other.ArgumentKeys[i]))
+                    return false;
+            }
+            return true;
+        }
+
+        public override bool Equals(object? obj) => obj is XsltFunctionCacheKey key && Equals(key);
+
+        public override int GetHashCode()
+        {
+            var h = new HashCode();
+            h.Add(NamespaceUri);
+            h.Add(LocalName);
+            h.Add(Arity);
+            foreach (var k in ArgumentKeys)
+                h.Add(k);
+            return h.ToHashCode();
+        }
+
+        private static bool KeysEqual(object? a, object? b)
+        {
+            if (ReferenceEquals(a, b)) return true;
+            if (a is null || b is null) return false;
+            if (a is IXdmNode na && b is IXdmNode nb)
+                return na.IsSameNode(nb);
+            if (a is List<object?> la && b is List<object?> lb)
+            {
+                if (la.Count != lb.Count) return false;
+                for (int i = 0; i < la.Count; i++)
+                    if (!KeysEqual(la[i], lb[i])) return false;
+                return true;
+            }
+            return a.Equals(b);
         }
     }
 

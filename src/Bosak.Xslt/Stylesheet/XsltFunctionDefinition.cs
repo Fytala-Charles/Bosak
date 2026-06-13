@@ -11,8 +11,10 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-06-2026     | EQName support and reserved namespace validation for xsl:function/@name                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Bosak.Xslt.Stylesheet;
@@ -79,30 +81,66 @@ public sealed class XsltFunctionDefinition
     /// Parses an &lt;xsl:function&gt; element into a <see cref="XsltFunctionDefinition"/>.
     /// Returns <c>null</c> if the element is missing required attributes.
     /// </summary>
+    private static readonly HashSet<string> ReservedFunctionNamespaces = new(StringComparer.Ordinal)
+    {
+        "http://www.w3.org/2001/XMLSchema",
+        "http://www.w3.org/1999/XSL/Transform",
+        "http://www.w3.org/2005/xpath-functions",
+        "http://www.w3.org/XML/1998/namespace"
+    };
+
     public static XsltFunctionDefinition? FromElement(XElement element, Stylesheet stylesheet)
     {
         var nameAttr = element.Attribute("name")?.Value;
         if (string.IsNullOrEmpty(nameAttr))
             return null;
 
-        // Resolve QName: prefix:local or just local (no prefix = no namespace)
+        // Resolve QName: prefix:local, Q{uri}local EQName, or just local.
         string nsUri;
         string localName;
-        var colonIndex = nameAttr.IndexOf(':');
-        if (colonIndex > 0)
+        if (nameAttr.Length > 2 && nameAttr[0] == 'Q' && nameAttr[1] == '{')
         {
-            var prefix = nameAttr[..colonIndex];
-            localName = nameAttr[(colonIndex + 1)..];
-            nsUri = element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
+            int closeBrace = nameAttr.IndexOf('}');
+            if (closeBrace < 2)
+                throw new InvalidOperationException("XTSE0020: Invalid EQName in xsl:function/@name.");
+            nsUri = nameAttr[2..closeBrace];
+            localName = nameAttr[(closeBrace + 1)..];
         }
         else
         {
-            localName = nameAttr;
-            nsUri = string.Empty;
+            var colonIndex = nameAttr.IndexOf(':');
+            if (colonIndex >= 0)
+            {
+                var prefix = nameAttr[..colonIndex];
+                localName = nameAttr[(colonIndex + 1)..];
+                if (element.GetNamespaceOfPrefix(prefix) is not { } ns)
+                    throw new InvalidOperationException($"XPST0081: Undefined namespace prefix '{prefix}' in xsl:function/@name.");
+                nsUri = ns.NamespaceName;
+            }
+            else
+            {
+                localName = nameAttr;
+                nsUri = string.Empty;
+            }
         }
 
         if (string.IsNullOrEmpty(localName))
-            return null;
+            throw new InvalidOperationException("XTSE0020: xsl:function/@name must have a local name.");
+
+        try
+        {
+            XmlConvert.VerifyNCName(localName);
+        }
+        catch (XmlException)
+        {
+            throw new InvalidOperationException($"XTSE0020: '{nameAttr}' is not a valid QName in xsl:function/@name.");
+        }
+
+        if (string.IsNullOrEmpty(nsUri))
+            throw new InvalidOperationException("XTSE0740: xsl:function name must be in a namespace.");
+
+        if (ReservedFunctionNamespaces.Contains(nsUri))
+            throw new InvalidOperationException("XTSE0080: xsl:function name must not use a reserved namespace.");
 
         // Collect parameter names from xsl:param children
         var paramNames = new List<string>();

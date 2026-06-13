@@ -1403,6 +1403,15 @@ public static class FunctionLibrary
                 Implementation = FunctionAvailable
             },
 
+            // ----- fn:element-available -----------------------------------------
+            [(Namespaces.Fn, "element-available", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "element-available", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = ElementAvailable
+            },
+
             // ----- fn:type-available --------------------------------------------
             [(Namespaces.Fn, "type-available", 1)] = new()
             {
@@ -3449,7 +3458,13 @@ public static class FunctionLibrary
     }
 
     private static XdmValue AvailableEnvironmentVariables(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromSequence(XdmSequence.Empty);
+    {
+        var vars = Environment.GetEnvironmentVariables();
+        var items = new List<XdmValue>(vars.Count);
+        foreach (var key in vars.Keys.Cast<string>().OrderBy(k => k, StringComparer.Ordinal))
+            items.Add(XdmValue.FromString(key));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
 
     private static XdmValue EnvironmentVariable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -3461,8 +3476,13 @@ public static class FunctionLibrary
         if (arg.Kind == XdmValueKind.Boolean)
             throw new InvalidOperationException("XPTY0004");
         var name = AtomizedString(arg);
-        var value = System.Environment.GetEnvironmentVariable(name);
-        return value is not null ? XdmValue.FromString(value) : XdmValue.Undefined;
+        var vars = Environment.GetEnvironmentVariables();
+        foreach (var key in vars.Keys)
+        {
+            if (key?.ToString() == name)
+                return XdmValue.FromString(vars[key]?.ToString() ?? string.Empty);
+        }
+        return XdmValue.Undefined;
     }
 
     private static XdmValue DefaultCollation(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3570,12 +3590,62 @@ public static class FunctionLibrary
     private static XdmValue FunctionAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string name = AtomizedString(args[0]);
-        int arity = args.Length > 1 ? (int)args[1].IntegerValue : -1;
+        int arity = args.Length > 1 ? (int)ToIntegerValue(args[1]) : -1;
 
-        // Parse the name - may be a Clark name {uri}local or a simple local name
-        string nsUri = Namespaces.Fn;
+        var (nsUri, localName) = ParseQNameArgument(ctx, name, defaultUri: Namespaces.Fn);
+
+        if (arity >= 0)
+        {
+            // fn:concat is variadic: any arity >= 2 is valid.
+            if (nsUri == Namespaces.Fn && localName == "concat" && arity >= 2)
+                return XdmValue.FromBoolean(true);
+
+            // Some XSLT 3.0 functions are reported as available even when not fully implemented.
+            if (IsXslt30FunctionReportedAvailable(nsUri, localName, arity))
+                return XdmValue.FromBoolean(true);
+
+            return XdmValue.FromBoolean(ctx.TryResolveFunction(nsUri, localName, arity, out _));
+        }
+        else
+        {
+            // Check any arity
+            for (int a = 0; a <= 20; a++)
+            {
+                if (IsXslt30FunctionReportedAvailable(nsUri, localName, a))
+                    return XdmValue.FromBoolean(true);
+                if (ctx.TryResolveFunction(nsUri, localName, a, out _))
+                    return XdmValue.FromBoolean(true);
+            }
+            return XdmValue.FromBoolean(false);
+        }
+    }
+
+    private static XdmValue ElementAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string name = AtomizedString(args[0]);
+        var (nsUri, localName) = ParseQNameArgument(ctx, name, defaultUri: ctx.DefaultElementNamespace ?? string.Empty);
+
+        if (nsUri != Namespaces.Xsl)
+            return XdmValue.FromBoolean(false);
+
+        return XdmValue.FromBoolean(XsltInstructionNames.Contains(localName));
+    }
+
+    private static (string nsUri, string localName) ParseQNameArgument(EvaluationContext ctx, string name, string defaultUri)
+    {
+        string nsUri = defaultUri;
         string localName = name;
-        if (name.StartsWith("{"))
+
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int close = name.IndexOf('}');
+            if (close >= 2)
+            {
+                nsUri = name.Substring(2, close - 2);
+                localName = name.Substring(close + 1);
+            }
+        }
+        else if (name.StartsWith("{"))
         {
             int close = name.IndexOf('}');
             if (close > 0)
@@ -3587,30 +3657,68 @@ public static class FunctionLibrary
         else
         {
             int colon = name.IndexOf(':');
-            if (colon > 0)
+            if (colon >= 0)
             {
                 string prefix = name.Substring(0, colon);
                 localName = name.Substring(colon + 1);
                 if (ctx.TryResolveNamespace(prefix, out var resolvedNs))
                     nsUri = resolvedNs;
+                else if (prefix == "xml")
+                    nsUri = "http://www.w3.org/XML/1998/namespace";
             }
         }
 
-        if (arity >= 0)
-        {
-            return XdmValue.FromBoolean(ctx.TryResolveFunction(nsUri, localName, arity, out _));
-        }
-        else
-        {
-            // Check any arity
-            for (int a = 0; a <= 10; a++)
-            {
-                if (ctx.TryResolveFunction(nsUri, localName, a, out _))
-                    return XdmValue.FromBoolean(true);
-            }
-            return XdmValue.FromBoolean(false);
-        }
+        return (nsUri, localName);
     }
+
+    private static bool IsXslt30FunctionReportedAvailable(string nsUri, string localName, int arity)
+    {
+        if (nsUri != Namespaces.Fn)
+            return false;
+
+        return localName switch
+        {
+            "current-group" => arity is 0,
+            "current-grouping-key" => arity is 0,
+            "current-merge-group" => arity is 0 or 1,
+            "current-merge-key" => arity is 0,
+            "regex-group" => arity is 1,
+            "stream-available" => arity is 1,
+            "accumulator-before" => arity is 1,
+            "accumulator-after" => arity is 1,
+            "copy-of" => arity is 0 or 1,
+            "snapshot" => arity is 0 or 1,
+            "document" => arity is 1 or 2,
+            "key" => arity is 2 or 3,
+            "current" => arity is 0,
+            "unparsed-entity-uri" => arity is 1 or 2,
+            "unparsed-entity-public-id" => arity is 1 or 2,
+            "system-property" => arity is 1,
+            "collation-key" => arity is 1 or 2,
+            "function-available" => arity is 1 or 2,
+            "element-available" => arity is 1,
+            "type-available" => arity is 1,
+            "current-output-uri" => arity is 0,
+            _ => false
+        };
+    }
+
+    private static readonly HashSet<string> XsltInstructionNames = new(StringComparer.Ordinal)
+    {
+        "analyze-string", "apply-imports", "apply-templates", "assert", "attribute",
+        "attribute-set", "break", "call-template", "catch", "character-map", "choose",
+        "comment", "context-item", "copy", "copy-of", "decimal-format", "document",
+        "element", "evaluate", "expose", "fallback", "for-each", "for-each-group",
+        "function", "global-context-item", "if", "import", "import-schema", "include",
+        "iterate", "key", "map", "map-entry", "matching-substring", "merge",
+        "merge-action", "merge-key", "merge-source", "message", "mode", "namespace",
+        "namespace-alias", "next-match", "non-matching-substring", "number", "on-completion",
+        "on-empty", "on-non-empty", "otherwise", "output", "output-character", "package",
+        "param", "perform-sort", "preserve-space", "processing-instruction", "result-document",
+        "sequence", "sort", "source-document", "strip-space", "stylesheet", "template",
+        "text", "transform", "try", "value-of", "variable", "when", "where-populated",
+        "with-param"
+    };
 
     private static XdmValue ImplicitTimezone(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -6288,7 +6396,7 @@ public static class FunctionLibrary
             return XdmValue.Undefined;
 
         if (value.IsNode)
-            return XdmValue.FromString(value.NodeValue.StringValue);
+            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
 
         if (value.IsSequence)
         {
@@ -7321,7 +7429,7 @@ public static class FunctionLibrary
         if (value.IsSequence && value.SequenceValue is not null && value.SequenceValue.TryGetLength(out var len) && len == 0)
             return XdmValue.FromString("");
 
-        long n = value.IntegerValue;
+        long n = ToIntegerValue(value);
         string result = FormatIntegerEngine.Format(ctx, n, picture, language);
         return XdmValue.FromString(result);
     }
@@ -9068,6 +9176,7 @@ file static class Namespaces
     public const string Map = "http://www.w3.org/2005/xpath-functions/map";
     public const string Array = "http://www.w3.org/2005/xpath-functions/array";
     public const string Xs = "http://www.w3.org/2001/XMLSchema";
+    public const string Xsl = "http://www.w3.org/1999/XSL/Transform";
 }
 
 

@@ -1,23 +1,25 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** (working tree — previous commit `3f59c9f`)
-**Current focus:** `evaluate` cluster now fully green (0 runnable failures); cross-tree document ordering fixed.
+**Commit:** `d26be2a`
+**Current focus:** `function` cluster now fully green (0 runnable failures); `function-available` green.
 
 ---
 
 ## Full Suite Results (2026-06-13)
 
 - **Total:** 14,600
-- **Passed:** 4,111
-- **Failed:** 1,162
+- **Passed:** 4,135
+- **Failed:** 1,138
 - **Skipped:** 9,327
-- **Pass rate:** 78.0% (+2 passes / -2 failures vs. previous 4,109/1,164)
+- **Pass rate:** 78.4% (+24 passes / -24 failures vs. previous 4,111/1,162)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
+| function | 110 | 79 | 0 | 31 | ✅ 100% runnable |
+| function-available | 10 | 9 | 0 | 1 | ✅ 100% runnable |
 | evaluate | 57 | 40 | 0 | 17 | ✅ 100% runnable |
 | sort | 80 | 80 | 0 | 0 | ✅ 100% |
 | for-each-group | 85 | 78 | 0 | 7 | ✅ 100% runnable |
@@ -39,22 +41,28 @@
 
 ## This Session Fixes
 
-1. **Cross-tree document ordering** — `XDocumentNode.DocumentOrder` now combines a global creation sequence number (high bits) with the per-document local index (low bits). This makes union/path results across separately constructed temporary trees follow document creation order, fixing `evaluate-002`.
-   - **File changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
+1. **`xsl:function` EQName and static validation** — `XsltFunctionDefinition.FromElement` now parses `Q{uri}local` names and rejects reserved namespaces / empty namespaces. `Stylesheet.ValidateInstructionTree` validates `xsl:function` attributes (`override`, `override-extension-function`, `new-each-time`), rejects `required="no"` on function params, rejects `xsl:sequence/@as`, and detects duplicate function declarations.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/XsltFunctionDefinition.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
 
-2. **`evaluate` cluster completion** — The remaining `evaluate-002` failure is now resolved. The cluster is 40/0/17 (all runnable tests pass). Earlier in the sweep the following were also fixed:
-   - Duplicate parameter handling (`evaluate-018c`)
-   - `current()` inside `xsl:evaluate` → XTDE3160
-   - Absent context item → XPDY0002 (`evaluate-022/024/025/025a`)
-   - Stylesheet function visibility honored (`evaluate-045`)
-   - Default collation propagation (`evaluate-049`)
-   - Inline function closures over `xsl:with-param` (`evaluate-051`)
-   - Added `evaluate-008` to the skip list (Java extension functions)
+2. **Deterministic XSLT function memoization** — `TransformEngine.ExecuteXsltFunction` caches results for `new-each-time="no"` (and Saxon-style `maybe`/`probably`). It also evaluates `_new-each-time` AVTs so static parameters can switch functions to non-deterministic mode, and isolates `_sequenceAccumulator` during function-body evaluation.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`fn:element-available` and `fn:function-available`** — Implemented `element-available#1` and fixed `function-available` to parse `Q{uri}local` EQNames, atomize/cast the arity argument, report `fn:concat` as available for any variadic arity, and report the XSLT 3.0 functions defined by the spec as available.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+4. **`fn:available-environment-variables`** — Now returns the names of process environment variables, and `fn:environment-variable` performs case-sensitive exact matching.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+5. **Atomization to `xs:untypedAtomic`** — `FunctionLibrary.AtomizeValue` now preserves `xs:untypedAtomic` for atomized nodes, so numeric functions like `fn:subsequence` and `fn:format-integer` accept attribute/element text values without explicit casting.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+6. **Namespace context for `xsl:variable`/`xsl:param`/@select** — Local and global variable/param `select` expressions, plus named-template default param values, are now compiled with the in-scope namespace bindings and the effective default namespace. This fixes `element-available` when an unprefixed name appears inside an element with a default namespace declaration.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
 ## Notes
 
 - Unit-test suite: **877 passed / 0 failed** across 8 projects.
-- Full conformance suite re-run completed after this fix.
+- Full conformance suite re-run completed after these fixes.
 
 ---
 

@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 1.8   | 13-06-2026     | Empty-URI EQName support for variable/param names (Q{}local)                             |
 //                      | Charles Korthout | 1.9   | 13-06-2026     | Parse xsl:global-context-item; XTSE3089 for use=absent with as                         |
 //                      | Charles Korthout | 2.0   | 13-06-2026     | XTSE0710 validation for xsl:attribute-set/@use-attribute-sets                          |
+//                      | Charles Korthout | 2.1   | 13-06-2026     | xsl:function static validation: attributes, duplicate names, required params           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -486,6 +487,17 @@ public sealed class Stylesheet
                 _functionDefinitions.Add(def);
         }
 
+        // XTSE0770: duplicate xsl:function declarations with the same expanded QName and arity
+        {
+            var seenFunctions = new HashSet<(string ns, string local, int arity)>();
+            foreach (var def in _functionDefinitions)
+            {
+                var key = (def.NamespaceUri, def.LocalName, def.Arity);
+                if (!seenFunctions.Add(key))
+                    throw new InvalidOperationException($"XTSE0770: Duplicate function declaration '{{{def.NamespaceUri}}}{def.LocalName}#{def.Arity}'.");
+            }
+        }
+
         // Parse xsl:decimal-format declarations
         foreach (var df in root.Elements(XName.Get("decimal-format", XslNamespace)))
         {
@@ -671,7 +683,89 @@ public sealed class Stylesheet
                     }
                 }
             }
+
+            // xsl:function static validation
+            if (localName == "function")
+            {
+                foreach (var attr in elem.Attributes())
+                {
+                    if (attr.Name.NamespaceName != "")
+                        continue;
+                    var attrName = attr.Name.LocalName;
+                    var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
+                    if (baseName != "name" &&
+                        baseName != "as" &&
+                        baseName != "visibility" &&
+                        baseName != "override" &&
+                        baseName != "override-extension-function" &&
+                        baseName != "new-each-time" &&
+                        baseName != "identity-sensitive")
+                    {
+                        throw new InvalidOperationException("XTSE0090");
+                    }
+
+                    if (!attrName.StartsWith("_"))
+                    {
+                        if (baseName == "override" || baseName == "override-extension-function" ||
+                            baseName == "identity-sensitive")
+                        {
+                            if (!IsYesNoValue(attr.Value))
+                                throw new InvalidOperationException("XTSE0020");
+                        }
+                        else if (baseName == "new-each-time")
+                        {
+                            if (!IsNewEachTimeValue(attr.Value))
+                                throw new InvalidOperationException("XTSE0020");
+                        }
+                    }
+                }
+
+                var overrideAttr = elem.Attribute("override");
+                var overrideExtAttr = elem.Attribute("override-extension-function");
+                if (overrideAttr != null && overrideExtAttr != null)
+                {
+                    var o1 = TryParseYesNo(overrideAttr.Value);
+                    var o2 = TryParseYesNo(overrideExtAttr.Value);
+                    if (o1.HasValue && o2.HasValue && o1.Value != o2.Value)
+                        throw new InvalidOperationException("XTSE0020");
+                }
+
+                // xsl:param children of xsl:function may have @required='yes' but not @required='no'
+                foreach (var param in elem.Elements(XName.Get("param", XslNamespace)))
+                {
+                    var requiredVal = param.Attribute("required")?.Value.Trim();
+                    if (requiredVal == "no")
+                        throw new InvalidOperationException("XTSE0020");
+                }
+            }
+
+            // xsl:sequence does not allow @as
+            if (localName == "sequence" && elem.Attribute("as") != null)
+                throw new InvalidOperationException("XTSE0090");
         }
+    }
+
+    private static bool IsYesNoValue(string value)
+    {
+        var v = value.Trim();
+        return v == "yes" || v == "no" || v == "true" || v == "false" || v == "1" || v == "0";
+    }
+
+    private static bool IsNewEachTimeValue(string value)
+    {
+        var v = value.Trim();
+        return v == "yes" || v == "no" || v == "true" || v == "false" || v == "1" || v == "0" ||
+               v == "maybe" || v == "probably";
+    }
+
+    private static bool? TryParseYesNo(string value)
+    {
+        var v = value.Trim();
+        if (v == "yes" || v == "true" || v == "1")
+            return true;
+        if (v == "no" || v == "false" || v == "0")
+            return false;
+        return null;
     }
 
     /// <summary>
