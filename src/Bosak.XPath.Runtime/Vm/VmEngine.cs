@@ -42,6 +42,7 @@
 //                      | Charles Korthout | 2.9   | 05-06-2026     | ResolveVariableName handles Q{uri}local; inline function params bind by expanded QName     |
 //                      | Charles Korthout | 2.10  | 11-06-2026     | Apply opcode invokes map/array functions; date comparison casts untypedAtomic operands    |
 //                      | Charles Korthout | 2.11  | 13-06-2026     | Empty-URI EQName support in ResolveVariableName (Q{}local)                              |
+//                      | Charles Korthout | 2.12  | 13-06-2026     | Parameterized map(K,V) and array(T) matching in ValueMatchesType                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -4648,6 +4649,42 @@ public static class VmEngine
 
         if (normalized is "function(*)" or "function")
             return value.IsFunction;
+
+        // Parameterized map types: map(K, V). Empty maps match any key/value types;
+        // otherwise every entry must match the declared key and value types.
+        if (normalized.StartsWith("map(") && normalized.EndsWith(')'))
+        {
+            if (!value.IsMap) return false;
+            var inner = normalized.Substring(4, normalized.Length - 5).Trim();
+            if (string.IsNullOrEmpty(inner) || inner == "*")
+                return true;
+            var parts = SplitTopLevel(inner, ',');
+            if (parts.Length != 2)
+                return true; // malformed, be permissive
+            string keyType = parts[0].Trim();
+            string valueType = parts[1].Trim();
+            foreach (var entry in value.MapValue.Entries)
+            {
+                if (!ValueMatchesType(entry.Key, keyType)) return false;
+                if (!ValueMatchesType(entry.Value, valueType)) return false;
+            }
+            return true;
+        }
+
+        // Parameterized array types: array(T). Empty arrays match any member type;
+        // otherwise every member must match the declared type.
+        if (normalized.StartsWith("array(") && normalized.EndsWith(')'))
+        {
+            if (!value.IsArray) return false;
+            var inner = normalized.Substring(6, normalized.Length - 7).Trim();
+            if (string.IsNullOrEmpty(inner) || inner == "*")
+                return true;
+            foreach (var member in value.ArrayValue.Values)
+            {
+                if (!ValueMatchesType(member, inner)) return false;
+            }
+            return true;
+        }
 
         if (normalized is "map(*)" or "map")
             return value.IsMap;
