@@ -26,6 +26,8 @@
 //                      | Charles Korthout | 1.4   | 10-06-2026     | ValidateInstructionTree checks xsl:copy attributes and copy-namespaces values (XTSE0020) |
 //                      | Charles Korthout | 1.5   | 11-06-2026     | Made GetXPathDefaultNamespace internal for xsl:key index building                       |
 //                      | Charles Korthout | 1.6   | 11-06-2026     | Added DeclaredModes parsing                                                             |
+//                      | Charles Korthout | 1.7   | 11-06-2026     | XTSE0130 for no-namespace top-level elements; fixes accumulator-078                     |
+//                      | Charles Korthout | 1.8   | 13-06-2026     | Empty-URI EQName support for variable/param names (Q{}local)                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -427,6 +429,14 @@ public sealed class Stylesheet
         if (outputElem != null)
             _outputProperties = OutputProperties.FromElement(outputElem);
 
+        // XTSE0130: top-level elements in no namespace are not permitted unless they are
+        // XSLT instructions. Data elements in other namespaces are allowed.
+        foreach (var topLevel in root.Elements())
+        {
+            if (topLevel.Name.NamespaceName != XslNamespace && string.IsNullOrEmpty(topLevel.Name.NamespaceName))
+                throw new InvalidOperationException($"XTSE0130: Top-level element '{topLevel.Name.LocalName}' is not permitted in no namespace.");
+        }
+
         // Collect template rules from this stylesheet
         foreach (var template in root.Elements(XName.Get("template", XslNamespace)))
         {
@@ -481,7 +491,7 @@ public sealed class Stylesheet
     /// Performs static validation of the stylesheet tree, checking for disallowed
     /// attributes and children on XSLT instructions.
     /// </summary>
-    private static void ValidateInstructionTree(XElement root)
+    private void ValidateInstructionTree(XElement root)
     {
         foreach (var elem in root.DescendantsAndSelf())
         {
@@ -489,6 +499,60 @@ public sealed class Stylesheet
                 continue;
 
             var localName = elem.Name.LocalName;
+
+            // XTSE0580: duplicate parameter names within a template or function
+            if (localName is "template" or "function")
+            {
+                var seenParams = new HashSet<string>();
+                foreach (var param in elem.Elements(XName.Get("param", XslNamespace)))
+                {
+                    var paramName = param.Attribute("name")?.Value;
+                    if (string.IsNullOrEmpty(paramName))
+                        continue;
+                    var (pLocal, pNs) = ExpandVariableName(param, paramName);
+                    var key = string.IsNullOrEmpty(pNs) ? pLocal : $"{{{pNs}}}{pLocal}";
+                    if (!seenParams.Add(key))
+                        throw new InvalidOperationException($"XTSE0580: Duplicate parameter name '{paramName}'.");
+                }
+            }
+
+            // XTSE0680: xsl:call-template with a parameter not declared by the named template.
+            // This is only an error in XSLT 2.0 and later; XSLT 1.0 backwards-compatible
+            // stylesheets silently ignore unknown parameters.
+            if (localName == "call-template" && !IsVersion10(root))
+            {
+                var calledName = elem.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(calledName))
+                {
+                    var allNamed = GetAllNamedTemplates();
+                    if (allNamed.TryGetValue(calledName, out var rule))
+                    {
+                        var declaredParams = new HashSet<string>();
+                        foreach (var param in rule.Element.Elements(XName.Get("param", XslNamespace)))
+                        {
+                            var paramName = param.Attribute("name")?.Value;
+                            if (!string.IsNullOrEmpty(paramName))
+                            {
+                                var (pLocal, pNs) = ExpandVariableName(param, paramName);
+                                var key = string.IsNullOrEmpty(pNs) ? pLocal : $"{{{pNs}}}{pLocal}";
+                                declaredParams.Add(key);
+                            }
+                        }
+                        foreach (var wp in elem.Elements(XName.Get("with-param", XslNamespace)))
+                        {
+                            if (wp.Attribute("tunnel")?.Value == "yes")
+                                continue;
+                            var wpName = wp.Attribute("name")?.Value;
+                            if (string.IsNullOrEmpty(wpName))
+                                continue;
+                            var (wpLocal, wpNs) = ExpandVariableName(wp, wpName);
+                            var wpKey = string.IsNullOrEmpty(wpNs) ? wpLocal : $"{{{wpNs}}}{wpLocal}";
+                            if (!declaredParams.Contains(wpKey))
+                                throw new InvalidOperationException($"XTSE0680: Parameter '{wpName}' is not declared by template '{calledName}'.");
+                        }
+                    }
+                }
+            }
 
             // xsl:copy-of must be empty (no children)
             if (localName == "copy-of")
@@ -583,6 +647,56 @@ public sealed class Stylesheet
         }
 
         return new XDocument(wrapper);
+    }
+
+    /// <summary>
+    /// Resolves a lexical variable or parameter name to an expanded QName.
+    /// Handles <c>Q{uri}local</c> EQNames and prefixed QNames using the namespaces
+    /// in scope on the declaring element.
+    /// </summary>
+    private static (string LocalName, string NamespaceUri) ExpandVariableName(XElement element, string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return ("", "");
+
+        // The empty URI form Q{}local is permitted and means "no namespace".
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int closeBrace = name.IndexOf('}');
+            if (closeBrace >= 2)
+            {
+                string uri = name[2..closeBrace];
+                string rest = name[(closeBrace + 1)..];
+                int restColon = rest.IndexOf(':');
+                string local = restColon < 0 ? rest : rest[(restColon + 1)..];
+                return (local, uri);
+            }
+        }
+
+        int colon = name.IndexOf(':');
+        if (colon >= 0)
+        {
+            string prefix = name[..colon];
+            string local = name[(colon + 1)..];
+            if (prefix == "xml")
+                return (local, "http://www.w3.org/XML/1998/namespace");
+
+            var ns = element.GetNamespaceOfPrefix(prefix);
+            if (ns == null)
+                throw new InvalidOperationException($"XPST0081: Undefined namespace prefix '{prefix}'");
+            return (local, ns.NamespaceName);
+        }
+
+        return (name, "");
+    }
+
+    /// <summary>
+    /// Returns true if the effective stylesheet version is 1.0 (backwards-compatible mode).
+    /// </summary>
+    private static bool IsVersion10(XElement root)
+    {
+        var version = root.Attribute("version")?.Value?.Trim();
+        return version is "1.0" or "1";
     }
 
     private void ResolveImport(string href)

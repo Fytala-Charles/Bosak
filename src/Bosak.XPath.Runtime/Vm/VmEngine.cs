@@ -40,6 +40,8 @@
 //                      | Charles Korthout | 2.7   | 05-06-2026     | Added typed function signature matching (function(T...) as R) with contravariant params   |
 //                      | Charles Korthout | 2.8   | 05-06-2026     | Node comparison operators raise XPTY0004 for non-node operands; ParseException XPST0003  |
 //                      | Charles Korthout | 2.9   | 05-06-2026     | ResolveVariableName handles Q{uri}local; inline function params bind by expanded QName     |
+//                      | Charles Korthout | 2.10  | 11-06-2026     | Apply opcode invokes map/array functions; date comparison casts untypedAtomic operands    |
+//                      | Charles Korthout | 2.11  | 13-06-2026     | Empty-URI EQName support in ResolveVariableName (Q{}local)                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -195,7 +197,10 @@ public static class VmEngine
                         }
 
                         if (!context.TryGetVariable(localName, out var value, nsUri))
-                            throw new InvalidOperationException($"Variable ${localName} is not defined.");
+                        {
+                            string displayName = string.IsNullOrEmpty(nsUri) ? localName : $"Q{{{nsUri}}}{localName}";
+                            throw new InvalidOperationException($"XPST0008: Variable ${displayName} is not defined.");
+                        }
 
                         registers[instr.RegisterA] = value;
                         ip++;
@@ -1631,13 +1636,13 @@ public static class VmEngine
 
                 case IrOpCode.Apply:
                     {
-                        var func = (FunctionItem)registers[instr.RegisterB].FunctionValue;
+                        var funcValue = registers[instr.RegisterB];
                         int argCount = instr.RegisterC;
                         int firstArgReg = instr.Operand;
                         XdmValue[] args = new XdmValue[argCount];
                         for (int i = 0; i < argCount; i++)
                             args[i] = registers[firstArgReg + i];
-                        registers[instr.RegisterA] = InvokeFunctionItem(func, context, args);
+                        registers[instr.RegisterA] = InvokeFunctionItem(funcValue, context, args);
                         ip++;
                         break;
                     }
@@ -1727,10 +1732,11 @@ public static class VmEngine
     private static (string LocalName, string NamespaceUri) ResolveVariableName(string varName, EvaluationContext context)
     {
         // Braced URI literal: Q{uri}localname or Q{uri}prefix:local
+        // The empty URI form Q{}local is permitted and means "no namespace".
         if (varName.Length > 2 && varName[0] == 'Q' && varName[1] == '{')
         {
             int closeBrace = varName.IndexOf('}');
-            if (closeBrace > 2)
+            if (closeBrace >= 2)
             {
                 string uri = varName[2..closeBrace];
                 string local = varName[(closeBrace + 1)..];
@@ -3000,7 +3006,25 @@ public static class VmEngine
         if (leftDateSub is not null || rightDateSub is not null)
         {
             if (leftDateSub is null || rightDateSub is null || leftDateSub != rightDateSub)
-                throw new InvalidOperationException("XPTY0004");
+            {
+                // XPath general comparison promotion: an atomized untypedAtomic value
+                // (typically from a node) is cast to the date/time subtype of the other
+                // operand when the types would otherwise be incompatible.
+                if (leftDateSub is not null && right.Kind == XdmValueKind.String && right.SchemaTypeName == "untypedAtomic" && TryCast(right, leftDateSub, out var castedRight))
+                {
+                    right = castedRight;
+                    rightDateSub = leftDateSub;
+                }
+                else if (rightDateSub is not null && left.Kind == XdmValueKind.String && left.SchemaTypeName == "untypedAtomic" && TryCast(left, rightDateSub, out var castedLeft))
+                {
+                    left = castedLeft;
+                    leftDateSub = rightDateSub;
+                }
+                else
+                {
+                    throw new InvalidOperationException("XPTY0004");
+                }
+            }
             var cmp = CompareDateTimeValues(left, right, leftDateSub);
             if (cmp.HasValue)
             {
@@ -4396,7 +4420,7 @@ public static class VmEngine
         if (schemaTypeName is null) return true;
         return schemaTypeName.ToLowerInvariant() is
             "normalizedstring" or "token" or "language" or "nmtoken" or "name"
-            or "ncname" or "id" or "idref" or "entity" or "untypedatomic";
+            or "ncname" or "id" or "idref" or "entity";
     }
 
     private static bool IsElementTypeCompatible(string typeName)

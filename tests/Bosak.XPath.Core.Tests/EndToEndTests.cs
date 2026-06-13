@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added end-to-end tests for string, sequence, and aggregate functions                   |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added tests for Intersect, Except, and SimpleMap operators                             |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added tests for Map, Array, and Lookup                                                 |
+//                      | Charles Korthout | 0.5   | 13-06-2026     | Updated FunctionCall_Sum to expect xs:integer for all-integer input                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -623,7 +624,7 @@ public class EndToEndTests
     public void FunctionCall_Sum()
     {
         var result = Evaluate("sum((1, 2, 3))", LoadDocument());
-        Assert.Equal(6m, result.DecimalValue);
+        Assert.Equal(6L, result.IntegerValue);
     }
 
     [Fact]

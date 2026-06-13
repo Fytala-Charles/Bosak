@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.1   | 05-06-2026     | Fixed SkipSequenceType to use token char spans; ParseTypeNameAndParens consumes function return type |
 //                      | Charles Korthout | 1.2   | 05-06-2026     | Added XQST0039 duplicate parameter name check in ParseInlineFunction                     |
 //                      | Charles Korthout | 1.3   | 11-06-2026     | xml prefix falls back to PrefixedName; other prefixes use QName for NamespaceTest       |
+//                      | Charles Korthout | 1.4   | 13-06-2026     | Empty-URI EQName support in SplitQName (Q{}local)                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1218,10 +1219,11 @@ public sealed class XPathParser
     private static (string? Prefix, string Local, string? NamespaceUri) SplitQName(string qname)
     {
         // Braced URI literal: Q{uri}localname or Q{uri}prefix:local
+        // The empty URI form Q{}local is permitted and means "no namespace".
         if (qname.Length > 2 && qname[0] == 'Q' && qname[1] == '{')
         {
             int closeBrace = qname.IndexOf('}');
-            if (closeBrace > 2)
+            if (closeBrace >= 2)
             {
                 string nsUri = qname[2..closeBrace];
                 string rest = qname[(closeBrace + 1)..];

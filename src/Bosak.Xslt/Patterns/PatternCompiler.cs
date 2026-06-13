@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 1.6   | 11-06-2026     | Removed over-restrictive key() second-arg check; allow literals/exprs in patterns      |
 //                       | Charles Korthout | 1.7   | 11-06-2026     | Save/restore focus in WrapWithCurrentItem to protect caller context item                |
 //                       | Charles Korthout | 1.8   | 11-06-2026     | Restored key() second-arg restriction to literal/variable reference in patterns        |
+//                      | Charles Korthout | 1.9   | 13-06-2026     | Empty-URI EQName support in ParseQName (Q{}local)                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2491,13 +2492,14 @@ public sealed class PatternCompiler
     /// <summary>
     /// Parses a qualified name into (namespaceUri, localName).
     /// Supports prefix:local and Q{uri}local syntax.
+    /// The empty URI form Q{}local is permitted and means "no namespace".
     /// </summary>
     private static (string NamespaceUri, string LocalName) ParseQName(string name)
     {
         if (name.StartsWith("Q{"))
         {
             int closeBrace = name.IndexOf('}');
-            if (closeBrace > 2)
+            if (closeBrace >= 2)
             {
                 var ns = name[2..closeBrace];
                 var local = name[(closeBrace + 1)..];

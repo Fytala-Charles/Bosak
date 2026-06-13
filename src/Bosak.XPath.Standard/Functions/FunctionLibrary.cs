@@ -55,6 +55,8 @@
 //                      | Charles Korthout | 4.1   | 05-06-2026     | Fix fn:function-name to include standard namespace prefix for built-in functions         |
 //                      | Charles Korthout | 4.2   | 11-06-2026     | Added fn:id#2; atomize node/sequence arguments for document()/doc-available()           |
 //                      | Charles Korthout | 4.3   | 13-06-2026     | ToDoubleValue converts xs:boolean to 1/0; fixes sort-046 conditional sort key          |
+//                      | Charles Korthout | 4.4   | 11-06-2026     | fn:root/fn:path handle parentless (temporary-tree) element roots; fixes accumulator-088 |
+//                      | Charles Korthout | 4.5   | 13-06-2026     | fn:sum returns xs:integer when all atomized items are integers                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3727,7 +3729,8 @@ public static class FunctionLibrary
 
         var segments = new List<string>();
         var current = node;
-        while (current.NodeKind != XdmNodeKind.Document)
+        bool reachedDocument = false;
+        while (true)
         {
             string seg = current.NodeKind switch
             {
@@ -3748,8 +3751,18 @@ public static class FunctionLibrary
             var enumerator = parentSeq.GetEnumerator();
             if (!enumerator.MoveNext())
                 break;
-            current = enumerator.Current.NodeValue;
+            var parent = enumerator.Current.NodeValue;
+            if (parent.NodeKind == XdmNodeKind.Document)
+            {
+                reachedDocument = true;
+                break;
+            }
+            current = parent;
         }
+
+        if (!reachedDocument)
+            return "Q{http://www.w3.org/2005/xpath-functions}root()";
+
         segments.Reverse();
         return "/" + string.Join("/", segments);
     }
@@ -5710,6 +5723,7 @@ public static class FunctionLibrary
         }
         return total.Kind switch
         {
+            XdmValueKind.Integer => XdmValue.FromDecimal((decimal)total.IntegerValue / items.Count),
             XdmValueKind.Decimal => XdmValue.FromDecimal(total.DecimalValue / items.Count),
             XdmValueKind.Float => XdmValue.FromFloat((float)total.DoubleValue / items.Count),
             _ => XdmValue.FromDouble(total.DoubleValue / items.Count)
@@ -6282,6 +6296,18 @@ public static class FunctionLibrary
         };
     }
 
+    private static long ToIntegerValue(XdmValue value)
+    {
+        value = AtomizeValue(value);
+        return value.Kind switch
+        {
+            XdmValueKind.Integer => value.IntegerValue,
+            XdmValueKind.Decimal => (long)value.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => (long)value.DoubleValue,
+            _ => long.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : 0
+        };
+    }
+
     private static XdmValue Sum(List<XdmValue> items)
     {
         bool allIntegerOrDecimal = true;
@@ -6335,10 +6361,18 @@ public static class FunctionLibrary
 
         if (allIntegerOrDecimal)
         {
-            decimal sum = 0m;
+            bool allInteger = items.All(item => AtomizeValue(item).Kind == XdmValueKind.Integer);
+            if (allInteger)
+            {
+                long intSum = 0;
+                foreach (var item in items)
+                    intSum += ToIntegerValue(item);
+                return XdmValue.FromInteger(intSum);
+            }
+            decimal decSum = 0m;
             foreach (var item in items)
-                sum += ToDecimalValue(item);
-            return XdmValue.FromDecimal(sum);
+                decSum += ToDecimalValue(item);
+            return XdmValue.FromDecimal(decSum);
         }
         if (!anyDouble && !anyUntyped)
         {
