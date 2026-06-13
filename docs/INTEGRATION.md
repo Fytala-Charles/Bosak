@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 June 2026
-> **Bosak baseline:** 1,051 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,009 passed / 1,361 failed / 9,230 skipped (~74.7%)
+> **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 4,010 passed / 1,360 failed / 9,230 skipped (~74.7%)
 
 ---
 
@@ -244,7 +244,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | Literal result elements | ✅ Working | Namespace preservation, AVT evaluation |
 | `xsl:import` / `xsl:include` | ✅ Working | URI resolution with correct precedence rules |
 | Modes | ✅ Working | Named modes, `#current`, `#default`, `#all`, multi-mode templates |
-| `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable`, AVTs for `lang`/`case-order`/`collation`; recognized collations (codepoint, html-ascii-case-insensitive, caseblind, UCA basic). UCA `alternate=shifted` semantics are partial (one known failure: `sort-079`). |
+| `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable`, AVTs for `lang`/`case-order`/`collation`; recognized collations including UCA `alternate=non-ignorable`, `blanked`, and `shifted`. |
 | `xsl:number` | ✅ Working | `single`, `any`, `multiple` levels; format tokens |
 | `xsl:key` / `key()` | ✅ Working | Indexed lookup; composite keys; content-constructor keys preserve typed atomic values; results returned in document order; `key()` allowed in match patterns with XTSE0340 validation |
 | `xsl:output` | ✅ Working | `method`, `indent`, `omit-xml-declaration`, `encoding` |

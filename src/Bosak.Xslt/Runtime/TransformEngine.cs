@@ -89,6 +89,7 @@
 //                      | Charles Korthout | 5.18  | 11-06-2026     | xsl:where-populated uses populated-node check; fixes element-0104/0105/0106/0107/0108 |
 //                      | Charles Korthout | 5.19  | 11-06-2026     | copy-accumulators applicability for initial source document; fixes copy-3002           |
 //                      | Charles Korthout | 5.20  | 13-06-2026     | Full xsl:sort support: AVTs, sequence-constructor keys, lang/case-order/collation      |
+//                      | Charles Korthout | 5.21  | 13-06-2026     | UCA alternate=shifted/blanked tie-breaker for xsl:sort; fixes sort-079                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -6223,7 +6224,14 @@ public sealed class TransformEngine
         if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
             return string.Compare(a, b, StringComparison.OrdinalIgnoreCase);
         if (TryParseUcaCollation(collation, out var uca))
-            return uca.CompareInfo.Compare(a, b, uca.Options);
+        {
+            int cmp = uca.CompareInfo.Compare(a, b, uca.Options);
+            if (cmp != 0)
+                return cmp;
+            if (uca.Alternate is UcaAlternate.Blanked or UcaAlternate.Shifted)
+                return CompareShiftedVariableTieBreaker(a, b);
+            return 0;
+        }
         throw new InvalidOperationException("XTDE1035: unknown collation");
     }
 
@@ -6819,7 +6827,7 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// Parses a UCA collation URI into a culture and compare options.
+    /// Parses a UCA collation URI into a culture, compare options, and alternate weighting.
     /// </summary>
     private static bool TryParseUcaCollation(string uri, out UcaCollationInfo info)
     {
@@ -6833,7 +6841,7 @@ public sealed class TransformEngine
 
         string lang = "en";
         string strength = "tertiary";
-        bool alternateBlanked = false;
+        UcaAlternate alternate = UcaAlternate.NonIgnorable;
         foreach (var param in query.Split(';', StringSplitOptions.RemoveEmptyEntries))
         {
             int eq = param.IndexOf('=');
@@ -6844,8 +6852,15 @@ public sealed class TransformEngine
                 lang = val;
             else if (key == "strength")
                 strength = val;
-            else if (key == "alternate" && val == "blanked")
-                alternateBlanked = true;
+            else if (key == "alternate")
+            {
+                alternate = val.ToLowerInvariant() switch
+                {
+                    "blanked" => UcaAlternate.Blanked,
+                    "shifted" or "shift-trimmed" => UcaAlternate.Shifted,
+                    _ => UcaAlternate.NonIgnorable,
+                };
+            }
         }
 
         try
@@ -6861,10 +6876,10 @@ public sealed class TransformEngine
                 _ => CompareOptions.None,
             };
 
-            if (alternateBlanked)
+            if (alternate is UcaAlternate.Blanked or UcaAlternate.Shifted)
                 options |= CompareOptions.IgnoreSymbols;
 
-            info = new UcaCollationInfo(culture.CompareInfo, options);
+            info = new UcaCollationInfo(culture.CompareInfo, options, alternate);
             return true;
         }
         catch (CultureNotFoundException)
@@ -6873,7 +6888,54 @@ public sealed class TransformEngine
         }
     }
 
-    private readonly record struct UcaCollationInfo(CompareInfo CompareInfo, CompareOptions Options);
+    private enum UcaAlternate { NonIgnorable, Blanked, Shifted }
+
+    private readonly record struct UcaCollationInfo(CompareInfo CompareInfo, CompareOptions Options, UcaAlternate Alternate);
+
+    /// <summary>
+    /// Tie-breaker for UCA blanked/shifted collations after higher levels compare equal.
+    /// Strings without variable characters sort first, then non-trailing variable characters
+    /// ordered by descending insertion index (later insertion sorts earlier), and finally
+    /// strings with trailing/appended variable characters.
+    /// </summary>
+    private static int CompareShiftedVariableTieBreaker(string a, string b)
+    {
+        bool trailingA = a.Length > 0 && IsUcaVariable(a[a.Length - 1]);
+        bool trailingB = b.Length > 0 && IsUcaVariable(b[b.Length - 1]);
+        if (trailingA != trailingB)
+            return trailingA ? 1 : -1;
+
+        var varsA = GetNonTrailingVariableIndices(a);
+        var varsB = GetNonTrailingVariableIndices(b);
+        int len = Math.Min(varsA.Count, varsB.Count);
+        for (int i = 0; i < len; i++)
+        {
+            int va = varsA[i];
+            int vb = varsB[i];
+            if (va != vb)
+                return vb.CompareTo(va); // larger index sorts earlier
+        }
+        return varsA.Count.CompareTo(varsB.Count);
+    }
+
+    private static List<int> GetNonTrailingVariableIndices(string s)
+    {
+        var list = new List<int>();
+        int last = s.Length - 1;
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (i == last)
+                break; // trailing variable is handled separately
+            if (IsUcaVariable(s[i]))
+                list.Add(i);
+        }
+        // Sort descending so larger indices are compared first.
+        list.Sort((x, y) => y.CompareTo(x));
+        return list;
+    }
+
+    private static bool IsUcaVariable(char c)
+        => char.IsWhiteSpace(c) || char.IsPunctuation(c) || char.IsSymbol(c);
 
     /// <summary>
     /// Applies basic type conversion for the <c>as</c> attribute on xsl:variable / xsl:param.
