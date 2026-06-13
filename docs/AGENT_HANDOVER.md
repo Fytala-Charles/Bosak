@@ -6,13 +6,13 @@
 
 ---
 
-## Full Suite Results (2026-06-13, before this step)
+## Full Suite Results (2026-06-13)
 
 - **Total:** 14,600
-- **Passed:** 4,035
-- **Failed:** 1,239
+- **Passed:** 4,045
+- **Failed:** 1,229
 - **Skipped:** 9,326
-- **Pass rate:** 76.5%
+- **Pass rate:** 76.7% (+10 passes / -10 failures vs. previous 4,035/1,239)
 
 ## Cluster Status
 
@@ -42,7 +42,7 @@
 ## Notes
 
 - Unit-test suite: **877 passed / 0 failed** across 8 projects.
-- A full conformance suite is running in the background; update this file with final numbers when it completes.
+- Full conformance suite re-run completed after these fixes.
 
 ---
 
