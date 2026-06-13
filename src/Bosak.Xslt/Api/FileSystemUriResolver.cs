@@ -11,9 +11,11 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 11-06-2026     | Resolve external DTDs when loading stylesheets                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Bosak.Xslt.Api;
@@ -38,7 +40,13 @@ public sealed class FileSystemUriResolver : IXsltUriResolver
             var path = uri.LocalPath;
             if (!File.Exists(path))
                 throw new FileNotFoundException($"Stylesheet file not found: {path}", path);
-            return XDocument.Load(path, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+            var settings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Parse,
+                XmlResolver = new XmlUrlResolver(),
+            };
+            using var reader = XmlReader.Create(path, settings);
+            return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
         }
 
         // For non-file URIs, attempt a web request

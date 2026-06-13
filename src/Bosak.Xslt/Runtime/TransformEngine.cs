@@ -87,6 +87,8 @@
 //                      | Charles Korthout | 5.16  | 11-06-2026     | Fixed xsl:for-each-group: focus, composite keys, date/time eq, sort current-group      |
 //                      | Charles Korthout | 5.17  | 12-06-2026     | Collation-aware grouping, function-body for-each-group, pattern current-group checks   |
 //                      | Charles Korthout | 5.18  | 11-06-2026     | xsl:where-populated uses populated-node check; fixes element-0104/0105/0106/0107/0108 |
+//                      | Charles Korthout | 5.19  | 11-06-2026     | copy-accumulators applicability for initial source document; fixes copy-3002           |
+//                      | Charles Korthout | 5.20  | 13-06-2026     | Full xsl:sort support: AVTs, sequence-constructor keys, lang/case-order/collation      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -148,6 +150,11 @@ public sealed class TransformEngine
 
     // Key index for key() function lookups — one per document root node
     private List<(IXdmNode DocRoot, KeyIndex Index)>? _keyIndices;
+
+    // The initial source document supplied to Transform, and the initial mode used
+    // to process it. Used to determine accumulator applicability for copied trees.
+    private IXdmNode? _initialSource;
+    private string _initialMode = "";
 
 
 
@@ -227,9 +234,13 @@ public sealed class TransformEngine
     /// </summary>
     public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null)
     {
+        _initialSource = source;
+        _initialMode = initialMode ?? "";
+
         // A source document is required unless an initial template is supplied or the
-        // stylesheet declares an xsl:initial-template.
-        if (source == null && string.IsNullOrEmpty(initialTemplate) && !_allNamedTemplates.ContainsKey("xsl:initial-template"))
+        // stylesheet declares an xsl:initial-template (with any namespace prefix).
+        var implicitInitialTemplate = string.IsNullOrEmpty(initialTemplate) ? FindInitialTemplateName() : null;
+        if (source == null && string.IsNullOrEmpty(initialTemplate) && implicitInitialTemplate == null)
             throw new ArgumentException("A source document is required unless an initial template is specified.", nameof(source));
 
         // Ensure xsl:function registrations are present (re-entrant transforms)
@@ -309,10 +320,11 @@ public sealed class TransformEngine
         else
         {
             // Check for xsl:initial-template as the implicit entry point
-            if (_allNamedTemplates.TryGetValue("xsl:initial-template", out var initialTemplateRule))
+            var effectiveInitialTemplate = implicitInitialTemplate ?? initialTemplate;
+            if (!string.IsNullOrEmpty(effectiveInitialTemplate) && _allNamedTemplates.TryGetValue(effectiveInitialTemplate, out var initialTemplateRule))
             {
                 // Named template entry points have no context item (XSLT 3.0 §6.5)
-                CallTemplate("xsl:initial-template", XdmValue.Undefined);
+                CallTemplate(effectiveInitialTemplate, XdmValue.Undefined);
             }
             else if (!string.IsNullOrEmpty(initialMode))
             {
@@ -322,6 +334,7 @@ public sealed class TransformEngine
                 // If the mode is #unnamed, treat it as the empty unnamed mode
                 if (resolvedInitialMode == "#unnamed")
                     resolvedInitialMode = "";
+                _initialMode = resolvedInitialMode;
                 // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
                 if (!ModeExists(resolvedInitialMode))
                 {
@@ -664,8 +677,13 @@ public sealed class TransformEngine
         if (node is XDocumentNode xdn && xdn.UnderlyingObject is XElement elem)
         {
             var copied = elem.Annotation<AccumulatorValues>();
-            if (copied != null && copied.Values.TryGetValue(accName, out var pair))
-                return before ? pair.Before : pair.After;
+            if (copied != null)
+            {
+                if (copied.InapplicableNames.Contains(accName))
+                    throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
+                if (copied.ApplicableNames.Contains(accName) && copied.Values.TryGetValue(accName, out var pair))
+                    return before ? pair.Before : pair.After;
+            }
         }
 
         // Otherwise compute from the source tree.
@@ -682,6 +700,34 @@ public sealed class TransformEngine
         // return the initial value for before and after.
         var initialCompiled = CompileXPath(acc.InitialValue, acc.Element);
         return initialCompiled.Evaluate(new EvaluationContext());
+    }
+
+    /// <summary>
+    /// Determines whether an accumulator is applicable to a source tree when copying
+    /// accumulator values. For the initial source document, applicability is controlled
+    /// by the initial mode's <c>use-accumulators</c> declaration; for other trees (temporary
+    /// trees, documents loaded with <c>doc()</c>, etc.) all accumulators are treated as applicable.
+    /// </summary>
+    private bool IsAccumulatorApplicableToTree(string accClarkName, IXdmNode sourceNode)
+    {
+        if (_initialSource == null)
+            return true;
+
+        var sourceRoot = GetRootNode(sourceNode);
+        var initialRoot = GetRootNode(_initialSource);
+        if (!sourceRoot.IsSameNode(initialRoot))
+            return true;
+
+        var modeDef = _stylesheet.GetModeDefinition(_initialMode);
+        if (modeDef != null)
+        {
+            if (modeDef.UseAllAccumulators)
+                return true;
+            return modeDef.UseAccumulators.Contains(accClarkName);
+        }
+
+        // No xsl:mode declaration for the initial mode: no accumulators are applicable.
+        return false;
     }
 
     /// <summary>
@@ -784,12 +830,19 @@ public sealed class TransformEngine
         var values = new AccumulatorValues();
         foreach (var acc in _accumulators)
         {
-            var nodeValues = GetAccumulatorNodeValues(acc, root);
-            if (nodeValues.TryGetValue(sourceNode, out var pair))
-                values.Values[acc.ClarkName] = pair;
+            if (IsAccumulatorApplicableToTree(acc.ClarkName, sourceNode))
+            {
+                values.ApplicableNames.Add(acc.ClarkName);
+                var nodeValues = GetAccumulatorNodeValues(acc, root);
+                if (nodeValues.TryGetValue(sourceNode, out var pair))
+                    values.Values[acc.ClarkName] = pair;
+            }
+            else
+            {
+                values.InapplicableNames.Add(acc.ClarkName);
+            }
         }
-        if (values.Values.Count > 0)
-            copy.AddAnnotation(values);
+        copy.AddAnnotation(values);
     }
 
     /// <summary>
@@ -1418,21 +1471,26 @@ public sealed class TransformEngine
                 case "perform-sort":
                     {
                         var psSelect = instruction.Attribute("select")?.Value;
+                        List<XdmValue> psItems;
                         if (!string.IsNullOrEmpty(psSelect))
                         {
                             var compiled = XPath31Expression.Compile(psSelect);
                             var psResult = compiled.Evaluate(_context);
-                            var psItems = EnumerateItems(psResult).ToList();
-
-                            var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
-                            if (sortElements.Count > 0)
-                            {
-                                psItems = SortItems(psItems, sortElements);
-                            }
-
-                            foreach (var item in psItems)
-                                results.Add(item);
+                            psItems = EnumerateItems(psResult).ToList();
                         }
+                        else
+                        {
+                            psItems = EvaluatePerformSortContent(instruction, contextItem);
+                        }
+
+                        var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                        if (sortElements.Count > 0)
+                        {
+                            psItems = SortItems(psItems, sortElements);
+                        }
+
+                        foreach (var item in psItems)
+                            results.Add(item);
                         break;
                     }
                 case "element":
@@ -3289,21 +3347,26 @@ public sealed class TransformEngine
             case "perform-sort":
                 {
                     var psSelect2 = instruction.Attribute("select")?.Value;
+                    List<XdmValue> psItems;
                     if (!string.IsNullOrEmpty(psSelect2))
                     {
                         var compiled = XPath31Expression.Compile(psSelect2);
                         var psResult = compiled.Evaluate(_context);
-                        var psItems = EnumerateItems(psResult).ToList();
-
-                        var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
-                        if (sortElements.Count > 0)
-                        {
-                            psItems = SortItems(psItems, sortElements);
-                        }
-
-                        foreach (var item in psItems)
-                            CopyToResult(item);
+                        psItems = EnumerateItems(psResult).ToList();
                     }
+                    else
+                    {
+                        psItems = EvaluatePerformSortContent(instruction, _context.ContextItem);
+                    }
+
+                    var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                    if (sortElements.Count > 0)
+                    {
+                        psItems = SortItems(psItems, sortElements);
+                    }
+
+                    foreach (var item in psItems)
+                        CopyToResult(item);
                     break;
                 }
 
@@ -4160,6 +4223,12 @@ public sealed class TransformEngine
                     var prev = _currentContainer;
                     _currentContainer = copy;
 
+                    // Suspend the outer sequence accumulator while constructing the content
+                    // of the copied element, so children are added to the copy rather than
+                    // escaping to the enclosing variable sequence.
+                    var savedSequenceAccumulator = _sequenceAccumulator;
+                    _sequenceAccumulator = null;
+
                     // Collect xsl:on-empty children before processing
                     var onEmptyElements = instruction.Elements(XName.Get("on-empty", Stylesheet.Stylesheet.XslNamespace)).ToList();
 
@@ -4220,6 +4289,7 @@ public sealed class TransformEngine
                         }
                     }
 
+                    _sequenceAccumulator = savedSequenceAccumulator;
                     NormalizeElementContent(copy);
                     _currentContainer = prev;
                     break;
@@ -5729,6 +5799,29 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Returns the lexical name of a named template whose local name is "initial-template"
+    /// and whose prefix resolves to the XSLT namespace, or <c>null</c> if none exists.
+    /// </summary>
+    private string? FindInitialTemplateName()
+    {
+        foreach (var pair in _allNamedTemplates)
+        {
+            var name = pair.Key;
+            var colonIndex = name.IndexOf(':');
+            if (colonIndex < 0)
+                continue;
+            var prefix = name[..colonIndex];
+            var local = name[(colonIndex + 1)..];
+            if (local != "initial-template")
+                continue;
+            var ns = pair.Value.Element.GetNamespaceOfPrefix(prefix);
+            if (ns?.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                return name;
+        }
+        return null;
+    }
+
+    /// <summary>
     /// Converts an XDM value to its string representation, concatenating sequence items.
     /// </summary>
     private static string XdmValueToString(XdmValue value)
@@ -5784,7 +5877,6 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Sorts a list of nodes according to xsl:sort specifications.
-    /// Supports a single sort key (primary only).
     /// </summary>
     private List<IXdmNode> SortNodes(List<IXdmNode> nodes, List<XElement> sortSpecs)
     {
@@ -5793,8 +5885,16 @@ public sealed class TransformEngine
         return sorted.Select(v => v.NodeValue!).ToList();
     }
 
+    private enum SortDataType { Text, Number, Auto }
+    private readonly record struct SortControl(bool Descending, SortDataType DataType, string? Lang, string? CaseOrder, string? Collation);
+    private readonly record struct SortKey(XdmValue Value, SortControl Control);
+    private readonly record struct SortEntry(XdmValue Item, List<SortKey> Keys, int OriginalIndex);
+
     private List<XdmValue> SortItems(List<XdmValue> items, List<XElement> sortSpecs)
     {
+        ValidateSortSpecs(sortSpecs);
+        var controls = sortSpecs.Select(EvaluateSortControl).ToList();
+
         var savedFocus = _context.ContextItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
@@ -5805,19 +5905,11 @@ public sealed class TransformEngine
             for (int idx = 0; idx < items.Count; idx++)
             {
                 var item = items[idx];
-                _context.WithFocus(item, 1, 1);
+                _context.WithFocus(item, idx + 1, items.Count);
                 var keys = new List<SortKey>();
-                foreach (var spec in sortSpecs)
+                for (int i = 0; i < sortSpecs.Count; i++)
                 {
-                    var select = spec.Attribute("select")?.Value ?? ".";
-                    var dataType = spec.Attribute("data-type")?.Value ?? "text";
-                    var order = spec.Attribute("order")?.Value ?? "ascending";
-                    var descending = order.Trim().ToLowerInvariant() == "descending";
-                    var isNumeric = dataType.Trim().ToLowerInvariant() == "number";
-
-                    var compiled = XPath31Expression.Compile(select);
-                    var keyValue = compiled.Evaluate(_context);
-                    keys.Add(new SortKey(keyValue, descending, isNumeric));
+                    keys.Add(new SortKey(EvaluateSortKeyValue(sortSpecs[i]), controls[i]));
                 }
                 keyed.Add(new SortEntry(item, keys, idx));
             }
@@ -5841,30 +5933,337 @@ public sealed class TransformEngine
         }
     }
 
-    private readonly record struct SortKey(XdmValue Value, bool Descending, bool IsNumeric);
-    private readonly record struct SortEntry(XdmValue Item, List<SortKey> Keys, int OriginalIndex);
+    /// <summary>
+    /// Evaluates the sequence constructor content of an <c>xsl:perform-sort</c> instruction
+    /// (excluding its <c>xsl:sort</c> children) and returns the items to be sorted.
+    /// </summary>
+    private List<XdmValue> EvaluatePerformSortContent(XElement instruction, XdmValue contextItem)
+    {
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        try
+        {
+            _context.WithFocus(contextItem, 1, 1);
+
+            // Build a synthetic parent containing only the non-sort sequence-constructor children.
+            var seqParent = new XElement("__perform-sort-content__");
+            foreach (var child in instruction.Elements())
+            {
+                if (child.Name.LocalName == "sort" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                    continue;
+                seqParent.Add(child);
+            }
+
+            var result = EvaluateSequenceConstructor(seqParent, contextItem, wrapInDocumentNode: false);
+            return EnumerateItems(result).ToList();
+        }
+        finally
+        {
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+        }
+    }
+
+    private void ValidateSortSpecs(List<XElement> sortSpecs)
+    {
+        for (int i = 0; i < sortSpecs.Count; i++)
+        {
+            var spec = sortSpecs[i];
+            var stableAttr = spec.Attribute("stable")?.Value;
+            if (!string.IsNullOrEmpty(stableAttr))
+            {
+                if (i > 0)
+                    throw new InvalidOperationException("XTSE1017: @stable is allowed only on the first xsl:sort");
+                var v = stableAttr.Trim();
+                bool valid;
+                if (IsXslt30OrHigher())
+                    valid = v == "true" || v == "false" || v == "1" || v == "0";
+                else
+                    valid = v == "yes" || v == "no";
+                if (!valid)
+                    throw new InvalidOperationException("XTSE0020: invalid value for @stable");
+            }
+        }
+    }
+
+    private SortControl EvaluateSortControl(XElement spec)
+    {
+        var orderRaw = spec.Attribute("order")?.Value ?? "ascending";
+        var order = EvaluateAvt(orderRaw, spec).Trim();
+        bool descending;
+        if (order.Equals("ascending", StringComparison.OrdinalIgnoreCase))
+            descending = false;
+        else if (order.Equals("descending", StringComparison.OrdinalIgnoreCase))
+            descending = true;
+        else
+            throw SortAttributeError(orderRaw, "XTSE0020", "XTDE0030");
+
+        var dataTypeRaw = spec.Attribute("data-type")?.Value;
+        SortDataType dataType;
+        if (string.IsNullOrEmpty(dataTypeRaw))
+        {
+            dataType = SortDataType.Auto;
+        }
+        else
+        {
+            var dt = EvaluateAvt(dataTypeRaw, spec).Trim();
+            if (dt.Equals("text", StringComparison.OrdinalIgnoreCase))
+                dataType = SortDataType.Text;
+            else if (dt.Equals("number", StringComparison.OrdinalIgnoreCase))
+                dataType = SortDataType.Number;
+            else if (IsLexicalQName(dt))
+                dataType = SortDataType.Text; // unsupported typed sort: fall back to string comparison
+            else
+                throw SortAttributeError(dataTypeRaw, "XTSE0020", "XTDE0030");
+        }
+
+        var langRaw = spec.Attribute("lang")?.Value;
+        string? lang = null;
+        if (!string.IsNullOrEmpty(langRaw))
+        {
+            lang = EvaluateAvt(langRaw, spec).Trim();
+            if (!IsValidLanguage(lang))
+                throw SortAttributeError(langRaw, "XTSE0020", "XTDE0030");
+        }
+
+        var caseOrderRaw = spec.Attribute("case-order")?.Value;
+        string? caseOrder = null;
+        if (!string.IsNullOrEmpty(caseOrderRaw))
+        {
+            caseOrder = EvaluateAvt(caseOrderRaw, spec).Trim();
+            if (caseOrder != "lower-first" && caseOrder != "upper-first")
+                throw SortAttributeError(caseOrderRaw, "XTSE0020", "XTDE0030");
+        }
+
+        var collationRaw = spec.Attribute("collation")?.Value;
+        string? collation = null;
+        if (!string.IsNullOrEmpty(collationRaw))
+        {
+            collation = EvaluateAvt(collationRaw, spec).Trim();
+            if (!IsRecognizedCollation(collation))
+                throw new InvalidOperationException("XTDE1035: unknown collation");
+        }
+
+        return new SortControl(descending, dataType, lang, caseOrder, collation);
+    }
+
+    private XdmValue EvaluateSortKeyValue(XElement spec)
+    {
+        var selectAttr = spec.Attribute("select");
+        if (selectAttr != null)
+        {
+            var compiled = CompileXPath(selectAttr.Value, spec);
+            return compiled.Evaluate(_context);
+        }
+        if (spec.HasElements)
+        {
+            return EvaluateSequenceConstructor(spec, _context.ContextItem, wrapInDocumentNode: false);
+        }
+        return CompileXPath(".", spec).Evaluate(_context);
+    }
+
+    private InvalidOperationException SortAttributeError(string? rawValue, string staticCode, string dynamicCode)
+    {
+        var code = ContainsAvt(rawValue) ? dynamicCode : staticCode;
+        return new InvalidOperationException($"{code}: invalid sort attribute value '{rawValue}'");
+    }
+
+    private static bool ContainsAvt(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return false;
+        bool inString = false;
+        char stringChar = '\0';
+        for (int i = 0; i < value.Length; i++)
+        {
+            char c = value[i];
+            if (inString)
+            {
+                if (c == stringChar)
+                    inString = false;
+                continue;
+            }
+            if (c == '\'' || c == '"')
+            {
+                inString = true;
+                stringChar = c;
+                continue;
+            }
+            if (c == '{' && i + 1 < value.Length && value[i + 1] == '{')
+            {
+                i++;
+                continue;
+            }
+            if (c == '{')
+            {
+                for (int j = i + 1; j < value.Length; j++)
+                {
+                    if (value[j] == '}')
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static bool IsLexicalQName(string value)
+    {
+        // A lexical QName is either a local name or prefix:local-name.
+        if (string.IsNullOrEmpty(value))
+            return false;
+        foreach (char c in value)
+        {
+            if (c == ':')
+                return true;
+        }
+        return !value.Contains(' ');
+    }
+
+    private static bool IsValidLanguage(string lang)
+    {
+        if (string.IsNullOrEmpty(lang))
+            return false;
+        try
+        {
+            _ = CultureInfo.GetCultureInfo(lang);
+            return true;
+        }
+        catch (CultureNotFoundException)
+        {
+            return false;
+        }
+    }
+
+    private bool IsRecognizedCollation(string collation)
+    {
+        if (string.IsNullOrEmpty(collation))
+            return false;
+        if (collation == CodepointCollation ||
+            collation == HtmlAsciiCaseInsensitiveCollation ||
+            collation == CaseblindCollation)
+            return true;
+        return TryParseUcaCollation(collation, out _);
+    }
 
     private int CompareSortKey(SortKey a, SortKey b)
     {
         int cmp;
-        if (a.IsNumeric)
+        bool numeric = a.Control.DataType == SortDataType.Number ||
+                       (a.Control.DataType == SortDataType.Auto && IsNumericValue(a.Value) && IsNumericValue(b.Value));
+        if (numeric)
             cmp = CompareNumericSortKey(a.Value, b.Value);
+        else if (a.Control.DataType == SortDataType.Text ||
+                 !string.IsNullOrEmpty(a.Control.Collation) ||
+                 !string.IsNullOrEmpty(a.Control.Lang))
+            cmp = CompareTextSortKey(a.Value, b.Value, a.Control.Collation, a.Control.Lang, a.Control.CaseOrder);
         else
             cmp = XdmValueComparer.Instance.Compare(a.Value, b.Value);
 
-        return a.Descending ? -cmp : cmp;
+        return a.Control.Descending ? -cmp : cmp;
+    }
+
+    private static bool IsNumericValue(XdmValue value)
+    {
+        var item = AtomizeFirstItem(value);
+        return item.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
     }
 
     private static int CompareNumericSortKey(XdmValue a, XdmValue b)
     {
-        var sa = XdmValueToString(a);
-        var sb = XdmValueToString(b);
-        bool aOk = double.TryParse(sa, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double da);
-        bool bOk = double.TryParse(sb, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double db);
-        if (!aOk && !bOk) return 0;
-        if (!aOk) return -1;  // NaN is less than any number (XSLT spec)
-        if (!bOk) return 1;   // any number is greater than NaN
+        double da = GetSortKeyDouble(a);
+        double db = GetSortKeyDouble(b);
+        if (double.IsNaN(da) && double.IsNaN(db)) return 0;
+        if (double.IsNaN(da)) return -1; // NaN sorts before any number in xsl:sort data-type="number"
+        if (double.IsNaN(db)) return 1;
         return da.CompareTo(db);
+    }
+
+    private static double GetSortKeyDouble(XdmValue value)
+    {
+        var item = AtomizeFirstItem(value);
+        if (item.IsUndefined)
+            return double.NaN;
+        return item.Kind switch
+        {
+            XdmValueKind.Integer => item.IntegerValue,
+            XdmValueKind.Decimal => (double)item.DecimalValue,
+            XdmValueKind.Float or XdmValueKind.Double => item.DoubleValue,
+            _ => double.TryParse(item.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out double d) ? d : double.NaN
+        };
+    }
+
+    private static int CompareTextSortKey(XdmValue a, XdmValue b, string? collation, string? lang, string? caseOrder)
+    {
+        var sa = AtomizeFirstItem(a).ToString() ?? string.Empty;
+        var sb = AtomizeFirstItem(b).ToString() ?? string.Empty;
+        return CompareStrings(sa, sb, collation, lang, caseOrder);
+    }
+
+    private static int CompareStrings(string a, string b, string? collation, string? lang, string? caseOrder)
+    {
+        if (!string.IsNullOrEmpty(collation))
+            return CompareStringCollation(a, b, collation);
+
+        if (!string.IsNullOrEmpty(lang))
+        {
+            var culture = CultureInfo.GetCultureInfo(lang);
+            int cmp = culture.CompareInfo.Compare(a, b, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace);
+            if (cmp != 0)
+                return cmp;
+            return CompareCaseOrder(a, b, caseOrder);
+        }
+
+        return string.CompareOrdinal(a, b);
+    }
+
+    private static int CompareStringCollation(string a, string b, string collation)
+    {
+        if (collation == CodepointCollation)
+            return string.CompareOrdinal(a, b);
+        if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
+            return string.Compare(a, b, StringComparison.OrdinalIgnoreCase);
+        if (TryParseUcaCollation(collation, out var uca))
+            return uca.CompareInfo.Compare(a, b, uca.Options);
+        throw new InvalidOperationException("XTDE1035: unknown collation");
+    }
+
+    private static int CompareCaseOrder(string a, string b, string? caseOrder)
+    {
+        bool lowerFirst = caseOrder != "upper-first";
+        int len = Math.Min(a.Length, b.Length);
+        for (int i = 0; i < len; i++)
+        {
+            char ca = a[i];
+            char cb = b[i];
+            if (ca == cb)
+                continue;
+            bool aLower = char.IsLower(ca);
+            bool bLower = char.IsLower(cb);
+            bool aUpper = char.IsUpper(ca);
+            bool bUpper = char.IsUpper(cb);
+            if ((aLower && bUpper) || (aUpper && bLower))
+                return lowerFirst ? (aLower ? -1 : 1) : (aUpper ? -1 : 1);
+            return ca.CompareTo(cb);
+        }
+        return a.Length.CompareTo(b.Length);
+    }
+
+    private static XdmValue AtomizeFirstItem(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return value;
+        if (value.IsNode)
+            return XdmValue.FromString(value.NodeValue!.StringValue);
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!item.IsUndefined)
+                    return AtomizeFirstItem(item);
+            }
+            return XdmValue.Undefined;
+        }
+        return value;
     }
 
     /// <summary>
@@ -5887,6 +6286,9 @@ public sealed class TransformEngine
 
         try
         {
+            ValidateSortSpecs(sortSpecs);
+            var controls = sortSpecs.Select(EvaluateSortControl).ToList();
+
             var keyed = new List<(XdmValue? Key, List<XdmValue> Items, List<SortKey> Keys, int OriginalIndex)>();
             for (int idx = 0; idx < groups.Count; idx++)
             {
@@ -5901,17 +6303,9 @@ public sealed class TransformEngine
                 }
 
                 var keys = new List<SortKey>();
-                foreach (var spec in sortSpecs)
+                for (int i = 0; i < sortSpecs.Count; i++)
                 {
-                    var select = spec.Attribute("select")?.Value ?? ".";
-                    var dataType = spec.Attribute("data-type")?.Value ?? "text";
-                    var order = spec.Attribute("order")?.Value ?? "ascending";
-                    var descending = order.Trim().ToLowerInvariant() == "descending";
-                    var isNumeric = dataType.Trim().ToLowerInvariant() == "number";
-
-                    var compiled = XPath31Expression.Compile(select);
-                    var keyValue = compiled.Evaluate(_context);
-                    keys.Add(new SortKey(keyValue, descending, isNumeric));
+                    keys.Add(new SortKey(EvaluateSortKeyValue(sortSpecs[i]), controls[i]));
                 }
                 keyed.Add((key, items, keys, idx));
             }
@@ -8459,5 +8853,16 @@ public sealed class TransformEngine
     private sealed class AccumulatorValues
     {
         public Dictionary<string, (XdmValue Before, XdmValue After)> Values { get; } = new();
+
+        /// <summary>
+        /// The names of the accumulators that are applicable to the copied tree.
+        /// </summary>
+        public HashSet<string> ApplicableNames { get; } = new();
+
+        /// <summary>
+        /// The names of the accumulators that are known but not applicable to the copied tree.
+        /// Used to raise XTDE3362 when one of them is requested.
+        /// </summary>
+        public HashSet<string> InapplicableNames { get; } = new();
     }
 }

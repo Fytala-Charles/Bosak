@@ -1,5 +1,62 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-13
+**Commit:** `<uncommitted>`
+**Current focus:** XSLT `sort` cluster restored to 79/80 passing; only `sort-079` remains due to incomplete UCA `alternate=shifted` collation semantics.
+
+---
+
+## Full Suite Results (2026-06-13)
+
+- **Total:** 14,600
+- **Passed:** 4,009
+- **Failed:** 1,361
+- **Skipped:** 9,230
+- **Pass rate:** 74.7% (up from 74.1%)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| sort | 80 | 79 | 1 | 0 | 98.8% runnable; `sort-079` is the only remaining failure |
+
+## This Session Fixes
+
+1. **`xsl:sort` full attribute support** — Refactored `SortItems`/`EvaluateSortKey` to evaluate all standard `xsl:sort` attributes via AVTs (`order`, `data-type`, `lang`, `case-order`, `collation`), validate `@stable` on the first key only, and support sequence-constructor sort keys.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **`xsl:perform-sort` sequence-constructor content** — Added `EvaluatePerformSortContent` so the sequence constructor inside `xsl:perform-sort` is evaluated as the input sequence before sorting.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **Numeric and auto-numeric sorting** — Implemented `data-type="number"` and auto-numeric detection; NaN sorts before numbers, matching XSLT/XPath sort semantics.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **Text sorting with `lang`, `case-order`, and collations** — Added locale-aware comparison and recognized collations (codepoint, html-ascii-case-insensitive, caseblind, UCA basic).
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+5. **Whitespace stripping** — `ApplyWhitespaceStripping` now removes whitespace-only text nodes even when no explicit `xsl:strip-space` rules exist, fixing several sort tests that depend on stripped source trees.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+6. **`fn:number()` untyped parsing** — `ToDoubleValue` now parses untyped atomic string values as numbers, so numeric sorts over attribute/element text work correctly.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+7. **Conformance harness improvements** — Added harness support needed to run the `sort` cluster reliably and report per-test results.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+## Known Remaining Issue
+
+- **`sort-079`** — UCA collation with `alternate=shifted`/`blanked` requires variable characters (spaces, hyphens) to sort lower than regular characters with insertion-position significance. The current implementation only maps `blanked` to `CompareOptions.IgnoreSymbols`; full shifted semantics are not yet implemented.
+
+## Recommended Next Steps
+
+1. Decide whether to implement full UCA `alternate=shifted` semantics for `sort-079` or defer it.
+2. Tackle the remaining `accumulator` failures and broader `mode`/`type` cluster issues.
+3. Commit the current changes.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-11
 **Commit:** `f54de46`
 **Current focus:** Cleared the remaining quick-win XSLT conformance clusters (`element`, `xsl-document`, `declared-modes`, `include`, `collection`).

@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added IXsltUriResolver support for xsl:import/xsl:include                              |
 //                      | Charles Korthout | 0.3   | 31-05-2026     | Added IXsltMessageListener support for xsl:message                                      |
+//                      | Charles Korthout | 0.4   | 11-06-2026     | Resolve external DTDs when compiling stylesheets from strings                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -45,7 +46,13 @@ public sealed class XsltCompiler
     /// <returns>An executable stylesheet.</returns>
     public XsltExecutable Compile(string xsl, string? baseUri = null)
     {
-        var doc = XDocument.Parse(xsl, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+        var settings = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Parse,
+            XmlResolver = new XmlUrlResolver(),
+        };
+        using var reader = XmlReader.Create(new StringReader(xsl), settings, baseUri ?? "");
+        var doc = XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
         return Compile(doc, baseUri);
     }
 

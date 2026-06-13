@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.3   | 10-06-2026     | Added ValidateInstructionTree for xsl:copy-of static validation (XTSE0090/0260)        |
 //                      | Charles Korthout | 1.4   | 10-06-2026     | ValidateInstructionTree checks xsl:copy attributes and copy-namespaces values (XTSE0020) |
 //                      | Charles Korthout | 1.5   | 11-06-2026     | Made GetXPathDefaultNamespace internal for xsl:key index building                       |
+//                      | Charles Korthout | 1.6   | 11-06-2026     | Added DeclaredModes parsing                                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -118,6 +119,13 @@ public sealed class Stylesheet
     public string DefaultMode { get; private set; } = "";
 
     /// <summary>
+    /// Whether every mode used in the stylesheet must be explicitly declared.
+    /// A value of <c>false</c> (from xsl:package/@declared-modes="no") means implicit
+    /// mode declarations are allowed.
+    /// </summary>
+    public bool DeclaredModes { get; private set; } = true;
+
+    /// <summary>
     /// Recursively collects all template rules from this stylesheet, its includes, and its imports.
     /// Order: local first, then includes (same precedence), then imports (lower precedence).
     /// </summary>
@@ -209,6 +217,10 @@ public sealed class Stylesheet
             throw new InvalidOperationException("XTSE0010: The version attribute is required on xsl:stylesheet or xsl:transform.");
 
         Version = versionAttr.Value;
+
+        // Parse xsl:declared-modes on stylesheet/package root
+        var declaredModesAttr = root.Attribute("declared-modes")?.Value?.Trim()?.ToLowerInvariant();
+        DeclaredModes = declaredModesAttr != "no";
 
         // Parse xsl:default-mode on stylesheet root
         var defaultModeAttr = root.Attribute("default-mode")?.Value ?? "";

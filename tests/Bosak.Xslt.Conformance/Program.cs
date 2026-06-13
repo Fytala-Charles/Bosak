@@ -17,6 +17,8 @@
 //                      | Charles Korthout | 0.5   | 10-06-2026     | Print PASS for expected-error tests; added skip reason debug output                     |
 //                      | Charles Korthout | 0.6   | 11-06-2026     | Annotate loaded documents with base URI; skip base-uri-052 (XInclude)                  |
 //                      | Charles Korthout | 0.7   | 11-06-2026     | Fragment assertions via __xdm_doc__; assert-message support; message select+content     |
+//                      | Charles Korthout | 0.8   | 11-06-2026     | Concatenate adjacent CDATA sections when reading inline source content                 |
+//                      | Charles Korthout | 0.9   | 13-06-2026     | Detect initial-template with any namespace prefix; support xsl:sort fully               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -361,7 +363,7 @@ class Program
             var executable = compiler.Compile(xslText, baseUri);
 
             // Set up document loader that handles document('') by returning the stylesheet
-            var xslDoc = XDocument.Parse(xslText, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+            var xslDoc = LoadDocumentFromText(xslText, baseUri);
             if (string.IsNullOrEmpty(xslDoc.BaseUri))
                 xslDoc.AddAnnotation(baseUri);
             var evalContext = new Bosak.XPath.Runtime.Vm.EvaluationContext();
@@ -376,7 +378,7 @@ class Program
                 var localPath = new Uri(resolvedUri).LocalPath;
                 if (File.Exists(localPath))
                 {
-                    var doc = XDocument.Load(localPath, LoadOptions.PreserveWhitespace);
+                    var doc = LoadDocumentFromFile(localPath);
                     if (string.IsNullOrEmpty(doc.BaseUri))
                         doc.AddAnnotation(resolvedUri);
                     return new XDocumentNode(doc);
@@ -385,7 +387,7 @@ class Program
                 var testPath = Path.Combine(testSetDir, uri);
                 if (File.Exists(testPath))
                 {
-                    var doc = XDocument.Load(testPath, LoadOptions.PreserveWhitespace);
+                    var doc = LoadDocumentFromFile(testPath);
                     if (string.IsNullOrEmpty(doc.BaseUri))
                         doc.AddAnnotation(new Uri(testPath).AbsoluteUri);
                     return new XDocumentNode(doc);
@@ -417,7 +419,7 @@ class Program
                 initialTemplate = initialTemplateElem.Attribute("name")?.Value;
 
             bool hasImplicitInitialTemplate = xslDoc.Descendants()
-                .Any(e => e.Name.LocalName == "template" && e.Attribute("name")?.Value == "xsl:initial-template");
+                .Any(e => e.Name.LocalName == "template" && IsInitialTemplateName(e));
 
             // Check for initial-mode
             string? initialMode = null;
@@ -502,6 +504,46 @@ class Program
         return false;
     }
 
+    static bool IsInitialTemplateName(XElement templateElement)
+    {
+        const string XslNamespace = "http://www.w3.org/1999/XSL/Transform";
+        var nameAttr = templateElement.Attribute("name")?.Value;
+        if (string.IsNullOrEmpty(nameAttr))
+            return false;
+        var colonIndex = nameAttr.IndexOf(':');
+        if (colonIndex < 0)
+            return nameAttr == "initial-template";
+        var prefix = nameAttr[..colonIndex];
+        var local = nameAttr[(colonIndex + 1)..];
+        if (local != "initial-template")
+            return false;
+        // Resolve the prefix against the in-scope namespaces of the template element.
+        var ns = templateElement.GetNamespaceOfPrefix(prefix);
+        return ns?.NamespaceName == XslNamespace;
+    }
+
+    static XDocument LoadDocumentFromFile(string path)
+    {
+        var settings = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Parse,
+            XmlResolver = new XmlUrlResolver(),
+        };
+        using var reader = XmlReader.Create(path, settings);
+        return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+    }
+
+    static XDocument LoadDocumentFromText(string xml, string baseUri)
+    {
+        var settings = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Parse,
+            XmlResolver = new XmlUrlResolver(),
+        };
+        using var reader = XmlReader.Create(new StringReader(xml), settings, baseUri);
+        return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+    }
+
     static IXdmNode? LoadEnvironment(XElement envElem, string testSetDir, string catalogDir, XNamespace ns)
     {
         var source = envElem.Element(ns + "source");
@@ -511,8 +553,9 @@ class Program
         var content = source.Element(ns + "content");
         if (content != null)
         {
-            var cdata = content.Nodes().OfType<XCData>().FirstOrDefault();
-            var xmlText = cdata?.Value ?? content.Value;
+            // Inline source content may be split across multiple adjacent CDATA
+            // sections (nested CDATA escaping). Concatenate all text nodes.
+            var xmlText = string.Concat(content.Nodes().OfType<XText>().Select(t => t.Value));
             doc = XDocument.Parse(xmlText, LoadOptions.PreserveWhitespace);
         }
 

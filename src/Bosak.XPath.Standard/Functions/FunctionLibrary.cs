@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 4.0   | 05-06-2026     | parse-xml/parse-xml-fragment preserve element whitespace; strip document-level whitespace |
 //                      | Charles Korthout | 4.1   | 05-06-2026     | Fix fn:function-name to include standard namespace prefix for built-in functions         |
 //                      | Charles Korthout | 4.2   | 11-06-2026     | Added fn:id#2; atomize node/sequence arguments for document()/doc-available()           |
+//                      | Charles Korthout | 4.3   | 13-06-2026     | ToDoubleValue converts xs:boolean to 1/0; fixes sort-046 conditional sort key          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -6248,6 +6249,7 @@ public static class FunctionLibrary
             XdmValueKind.Integer => value.IntegerValue,
             XdmValueKind.Decimal => (double)value.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
+            XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
             _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : double.NaN
         };
     }

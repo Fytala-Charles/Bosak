@@ -15,9 +15,12 @@
 //                      | Charles Korthout | 0.3   | 07-06-2026     | Added DeepSkip to OnNoMatch enum and parsing; fixes next-match-034                     |
 //                      | Charles Korthout | 0.4   | 08-06-2026     | FromElement expands mode name QNames to Clark notation                                 |
 //                      | Charles Korthout | 0.5   | 09-06-2026     | Added NormalizeModeName; trim whitespace from mode/on-no-match attribute values       |
+//                      | Charles Korthout | 0.6   | 11-06-2026     | Added use-accumulators parsing                                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Bosak.Xslt.Stylesheet;
@@ -66,11 +69,24 @@ public sealed class ModeDefinition
     /// <summary>The behavior when multiple templates match with the same priority.</summary>
     public OnMultipleMatch OnMultipleMatch { get; }
 
+    /// <summary>The accumulator names (as Clark names) that are applicable to this mode.</summary>
+    public IReadOnlySet<string> UseAccumulators { get; }
+
+    /// <summary>Whether this mode uses all accumulators.</summary>
+    public bool UseAllAccumulators { get; }
+
     public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch = OnMultipleMatch.UseLast)
+        : this(name, onNoMatch, onMultipleMatch, new HashSet<string>(), false)
+    {
+    }
+
+    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, IReadOnlySet<string> useAccumulators, bool useAllAccumulators)
     {
         Name = name;
         OnNoMatch = onNoMatch;
         OnMultipleMatch = onMultipleMatch;
+        UseAccumulators = useAccumulators;
+        UseAllAccumulators = useAllAccumulators;
     }
 
     /// <summary>
@@ -94,7 +110,27 @@ public sealed class ModeDefinition
             "fail" => OnMultipleMatch.Fail,
             _ => OnMultipleMatch.UseLast
         };
-        return new ModeDefinition(name, onNoMatch, onMultipleMatch);
+
+        var useAllAccumulators = false;
+        var useAccumulators = new HashSet<string>();
+        var useAccAttr = element.Attribute("use-accumulators")?.Value;
+        if (!string.IsNullOrWhiteSpace(useAccAttr))
+        {
+            foreach (var token in useAccAttr.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var t = token.Trim();
+                if (t == "#all")
+                {
+                    useAllAccumulators = true;
+                }
+                else if (!string.IsNullOrEmpty(t))
+                {
+                    useAccumulators.Add(ResolveAccumulatorName(t, element));
+                }
+            }
+        }
+
+        return new ModeDefinition(name, onNoMatch, onMultipleMatch, useAccumulators, useAllAccumulators);
     }
 
     private static string ExpandModeName(string mode, XElement element)
@@ -122,6 +158,39 @@ public sealed class ModeDefinition
             current = current.Parent;
         }
         return NormalizeModeName(mode);
+    }
+
+    /// <summary>
+    /// Resolves an accumulator name (EQName) to Clark notation.
+    /// A lexical QName without a prefix is in no namespace; the default namespace is not used.
+    /// </summary>
+    private static string ResolveAccumulatorName(string name, XElement element)
+    {
+        if (name.StartsWith("Q{") && name.Length > 2)
+        {
+            return NormalizeModeName(name);
+        }
+
+        int colon = name.IndexOf(':');
+        if (colon < 0)
+            return NormalizeModeName(name);
+
+        var prefix = name.Substring(0, colon);
+        var local = name.Substring(colon + 1);
+
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
+                {
+                    return NormalizeModeName($"{{{attr.Value}}}{local}");
+                }
+            }
+            current = current.Parent;
+        }
+        return NormalizeModeName(name);
     }
 
     /// <summary>
