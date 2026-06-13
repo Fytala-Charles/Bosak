@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-06-2026     | Update IntegerFollowedByDot for decimal-literal grammar                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Lexer;
@@ -126,11 +127,12 @@ public class LexerTests
     [Fact]
     public void IntegerFollowedByDot()
     {
+        // Per the XPath grammar, "123." is a single decimal literal, not an integer
+        // followed by a path step. The trailing dot is part of the literal.
         var src = "123.";
         var toks = Tokenize(src);
-        Assert.Equal(2, toks.Length);
-        AssertToken(toks[0], TokenKind.IntegerLiteral, "123", src);
-        AssertToken(toks[1], TokenKind.Dot, ".", src);
+        Assert.Single(toks);
+        AssertToken(toks[0], TokenKind.DecimalLiteral, "123.", src);
     }
 
     [Fact]

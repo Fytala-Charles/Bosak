@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.6   | 11-06-2026     | Added DeclaredModes parsing                                                             |
 //                      | Charles Korthout | 1.7   | 11-06-2026     | XTSE0130 for no-namespace top-level elements; fixes accumulator-078                     |
 //                      | Charles Korthout | 1.8   | 13-06-2026     | Empty-URI EQName support for variable/param names (Q{}local)                             |
+//                      | Charles Korthout | 1.9   | 13-06-2026     | Parse xsl:global-context-item; XTSE3089 for use=absent with as                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -126,6 +127,12 @@ public sealed class Stylesheet
     /// mode declarations are allowed.
     /// </summary>
     public bool DeclaredModes { get; private set; } = true;
+
+    /// <summary>The value of the xsl:global-context-item/@use attribute, or null if absent.</summary>
+    public string? GlobalContextItemUse { get; private set; }
+
+    /// <summary>The value of the xsl:global-context-item/@as attribute, or null if absent.</summary>
+    public string? GlobalContextItemAs { get; private set; }
 
     /// <summary>
     /// Recursively collects all template rules from this stylesheet, its includes, and its imports.
@@ -422,6 +429,19 @@ public sealed class Stylesheet
             var def = ModeDefinition.FromElement(mode);
             if (def != null)
                 _modeDefinitions[def.Name] = def;
+        }
+
+        // Parse xsl:global-context-item declaration (XSLT 3.0)
+        foreach (var gci in root.Elements(XName.Get("global-context-item", XslNamespace)))
+        {
+            if (!UseWhen(gci)) continue;
+            var use = gci.Attribute("use")?.Value?.Trim();
+            var asType = gci.Attribute("as")?.Value?.Trim();
+            // XTSE3089: use="absent" and as must not both be present.
+            if (use == "absent" && !string.IsNullOrEmpty(asType))
+                throw new InvalidOperationException("XTSE3089: xsl:global-context-item must not have an as attribute when use is absent.");
+            GlobalContextItemUse = use;
+            GlobalContextItemAs = asType;
         }
 
         // Parse xsl:output (first one wins per spec)

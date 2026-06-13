@@ -94,6 +94,8 @@
 //                      | Charles Korthout | 5.23  | 13-06-2026     | Empty-URI EQName support; initialize globals before pattern compile; variable cluster green |
 //                      | Charles Korthout | 5.24  | 13-06-2026     | xsl:value-of/xsl:text preserve zero-length text nodes for typed variables             |
 //                      | Charles Korthout | 5.25  | 13-06-2026     | xsl:for-each requires @select; select-7501 XTSE0010                                    |
+//                      | Charles Korthout | 5.26  | 13-06-2026     | Pass external params to initial mode/template; default mode for apply-templates        |
+//                      | Charles Korthout | 5.27  | 13-06-2026     | Enforce xsl:global-context-item use=required (XTDE3086)                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -256,6 +258,10 @@ public sealed class TransformEngine
         if (source == null && string.IsNullOrEmpty(initialTemplate) && implicitInitialTemplate == null)
             throw new ArgumentException("A source document is required unless an initial template is specified.", nameof(source));
 
+        // XTDE3086: a required global context item must be supplied.
+        if (_stylesheet.GlobalContextItemUse == "required" && source == null)
+            throw new InvalidOperationException("XTDE3086: A global context item is required but none was supplied.");
+
         // Ensure xsl:function registrations are present (re-entrant transforms)
         RegisterXsltFunctions();
 
@@ -336,10 +342,11 @@ public sealed class TransformEngine
             // template rule against the source node so that xsl:next-match has a current
             // template rule and a context item. Otherwise invoke it as a plain named
             // template, which has no current template rule.
+            var (initCallParams, initTunnelParams) = CollectExternalParameters(entryRule.Element);
             if (entryRule.CompiledMatch != null && source != null)
-                ExecuteTemplate(entryRule, source, setCurrentRule: true);
+                ExecuteTemplate(entryRule, source, callParams: initCallParams, incomingTunnelParams: initTunnelParams, setCurrentRule: true);
             else
-                CallTemplate(effectiveInitialTemplate, XdmValue.Undefined);
+                CallTemplate(effectiveInitialTemplate, XdmValue.Undefined, initCallParams, initTunnelParams);
         }
         else if (!string.IsNullOrEmpty(initialMode))
             {
@@ -361,7 +368,8 @@ public sealed class TransformEngine
                     var rootTemplate = FindBestTemplate(source!, resolvedInitialMode);
                     if (rootTemplate != null)
                     {
-                        ExecuteTemplate(rootTemplate, source!);
+                        var (initCallParams, initTunnelParams) = CollectExternalParameters(rootTemplate.Element);
+                        ExecuteTemplate(rootTemplate, source!, callParams: initCallParams, incomingTunnelParams: initTunnelParams);
                     }
                     else
                     {
@@ -2465,7 +2473,9 @@ public sealed class TransformEngine
 
             case "attribute":
                 {
-                    var attrNameRaw = instruction.Attribute("name")?.Value ?? "unnamed";
+                    var attrNameRaw = instruction.Attribute("name")?.Value;
+                    if (string.IsNullOrEmpty(attrNameRaw))
+                        throw new InvalidOperationException("XTSE0010: xsl:attribute requires a name attribute");
                     var attrName = EvaluateAvt(attrNameRaw, instruction);
                     var attrNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
                     var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw, instruction) : null;
@@ -2808,8 +2818,10 @@ public sealed class TransformEngine
                 {
                     var select = instruction.Attribute("select")?.Value;
                     var modeRaw = instruction.Attribute("mode")?.Value?.Trim();
+                    // Absent mode attribute means #default, which resolves to the current default mode
+                    // (usually the unnamed mode), not the current mode.
                     var mode = string.IsNullOrEmpty(modeRaw)
-                        ? (_defaultModeStack.Count > 0 ? CurrentDefaultMode : (_modeStack.Count > 0 ? _modeStack.Peek() : CurrentDefaultMode))
+                        ? CurrentDefaultMode
                         : ExpandModeName(modeRaw, instruction);
                     var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
 
@@ -7307,6 +7319,51 @@ public sealed class TransformEngine
                 withParams[wpKey] = wpValue;
         }
         return (withParams, tunnelParams);
+    }
+
+    /// <summary>
+    /// Collects values for the <c>xsl:param</c> children of <paramref name="templateElement"/>
+    /// from variables supplied on the evaluation context. This is used to pass external
+    /// parameters when invoking the initial template or initial mode.
+    /// </summary>
+    private (Dictionary<string, XdmValue> CallParams, Dictionary<string, XdmValue> TunnelParams) CollectExternalParameters(XElement templateElement)
+    {
+        var callParams = new Dictionary<string, XdmValue>();
+        var tunnelParams = new Dictionary<string, XdmValue>();
+        foreach (var child in templateElement.Elements())
+        {
+            if (child.Name.LocalName != "param" || child.Name.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
+                break; // xsl:param children must appear first
+
+            var paramName = child.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(paramName))
+                continue;
+
+            var (paramLocal, paramNs) = ExpandVariableName(child, paramName);
+            if (!_context.TryGetVariable(paramLocal, out var value, paramNs))
+            {
+                // Fallback: callers may store prefixed names (e.g. "my:b") as a single
+                // local name with an empty namespace URI.
+                if (paramName.Contains(':') && _context.TryGetVariable(paramName, out value, ""))
+                {
+                    // value found with raw prefixed name
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            var paramKey = VariableKey(paramLocal, paramNs);
+            var paramAs = child.Attribute("as")?.Value;
+            value = ConvertVariableValue(value, paramAs, isParam: true);
+
+            if (child.Attribute("tunnel")?.Value == "yes")
+                tunnelParams[paramKey] = value;
+            else
+                callParams[paramKey] = value;
+        }
+        return (callParams, tunnelParams);
     }
 
     /// <summary>
