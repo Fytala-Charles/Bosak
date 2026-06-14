@@ -1,18 +1,18 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `52598d6`
-**Current focus:** `date` cluster committed and pushed; next step is full-suite triage or the next failing cluster.
+**Commit:** `8c5b885`
+**Current focus:** Full-suite triage complete; whitespace regression fixed. WIP XSLT runtime/pattern changes remain unstaged.
 
 ---
 
-## Full Suite Results (after date cluster fixes)
+## Full Suite Results (after whitespace fix, includes unstaged WIP XSLT changes)
 
 - **Total:** 14,600
-- **Passed:** 4,010
-- **Failed:** 1,261
+- **Passed:** 4,305
+- **Failed:** 966
 - **Skipped:** 9,329
-- **Pass rate:** 76.1%
+- **Pass rate:** 81.7%
 
 ## Cluster Status
 
@@ -49,6 +49,9 @@
 
 9. **Unit-test alignment** — Replaced environment-dependent implicit-timezone ordering cases with explicit-timezone cases.
    - **File changed**: `tests/Bosak.XPath.Runtime.Tests/VmEngineTests.cs`.
+
+10. **Stylesheet whitespace preservation** — Fixed a regression where parsing the stylesheet into an `XDocument` for static-parameter expansion stripped whitespace-only text nodes, breaking `xsl:text` spaces and causing 200+ failures across axes, number, select, expression, etc.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
 
 ## Notes
 
