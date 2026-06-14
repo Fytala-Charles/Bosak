@@ -31,6 +31,8 @@
 //                      | Charles Korthout | 1.9   | 13-06-2026     | Parse xsl:global-context-item; XTSE3089 for use=absent with as                         |
 //                      | Charles Korthout | 2.0   | 13-06-2026     | XTSE0710 validation for xsl:attribute-set/@use-attribute-sets                          |
 //                      | Charles Korthout | 2.1   | 13-06-2026     | xsl:function static validation: attributes, duplicate names, required params           |
+//                      | Charles Korthout | 2.2   | 13-06-2026     | Added xsl:merge static validation (required children, merge-key placement)             |
+//                      | Charles Korthout | 2.3   | 13-06-2026     | XTSE1650 import-schema; merge-source validation/type and sort-before-merge checks      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -742,7 +744,250 @@ public sealed class Stylesheet
             // xsl:sequence does not allow @as
             if (localName == "sequence" && elem.Attribute("as") != null)
                 throw new InvalidOperationException("XTSE0090");
+
+            // xsl:import-schema is only supported by schema-aware processors
+            if (localName == "import-schema")
+                throw new InvalidOperationException("XTSE1650: xsl:import-schema requires a schema-aware processor");
+
+            // xsl:merge validation
+            if (localName == "merge")
+            {
+                var mergeSources = elem.Elements(XName.Get("merge-source", XslNamespace)).ToList();
+                var mergeActions = elem.Elements(XName.Get("merge-action", XslNamespace)).ToList();
+
+                // XTSE0010: at least one merge-source and exactly one merge-action
+                if (mergeSources.Count == 0)
+                    throw new InvalidOperationException("XTSE0010: xsl:merge must contain at least one xsl:merge-source");
+                if (mergeActions.Count != 1)
+                    throw new InvalidOperationException("XTSE0010: xsl:merge must contain exactly one xsl:merge-action");
+
+                // XTSE0090: xsl:merge allows only use-when (and xml:*)
+                foreach (var attr in elem.Attributes())
+                {
+                    if (attr.Name.NamespaceName == "" &&
+                        attr.Name.LocalName != "use-when" &&
+                        attr.Name.LocalName != "_use-when")
+                    {
+                        throw new InvalidOperationException("XTSE0090");
+                    }
+                }
+
+                // All merge-sources must specify the same number of merge keys
+                int? keyCount = null;
+                foreach (var source in mergeSources)
+                {
+                    var count = source.Elements(XName.Get("merge-key", XslNamespace)).Count();
+                    if (keyCount == null)
+                        keyCount = count;
+                    else if (keyCount != count)
+                        throw new InvalidOperationException("XTSE0010: all xsl:merge-source elements must have the same number of xsl:merge-key children");
+                }
+
+                // Validate child order: merge-source*, merge-action, fallback*
+                bool actionSeen = false;
+                foreach (var child in elem.Elements())
+                {
+                    if (child.Name.NamespaceName != XslNamespace)
+                        throw new InvalidOperationException("XTSE0010: xsl:merge may only contain XSLT namespace children");
+
+                    var childName = child.Name.LocalName;
+                    if (childName == "merge-source")
+                    {
+                        if (actionSeen)
+                            throw new InvalidOperationException("XTSE0010: xsl:merge-source must appear before xsl:merge-action");
+                    }
+                    else if (childName == "merge-action")
+                    {
+                        actionSeen = true;
+                    }
+                    else if (childName == "fallback")
+                    {
+                        if (!actionSeen)
+                            throw new InvalidOperationException("XTSE0010: xsl:fallback must follow xsl:merge-action");
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("XTSE0010: xsl:merge may only contain xsl:merge-source, xsl:merge-action, and xsl:fallback children");
+                    }
+                }
+            }
+
+            // xsl:merge-source validation
+            if (localName == "merge-source")
+            {
+                // Must be child of xsl:merge
+                if (elem.Parent?.Name.LocalName != "merge" || elem.Parent?.Name.NamespaceName != XslNamespace)
+                    throw new InvalidOperationException("XTSE0010: xsl:merge-source must be a child of xsl:merge");
+
+                var hasSelect = elem.Attribute("select") != null || elem.Attribute("_select") != null;
+                var hasForEachItem = elem.Attribute("for-each-item") != null || elem.Attribute("_for-each-item") != null;
+                var hasForEachSource = elem.Attribute("for-each-source") != null || elem.Attribute("_for-each-source") != null;
+
+                // XTSE3195: @for-each-item and @for-each-source are mutually exclusive
+                if (hasForEachItem && hasForEachSource)
+                    throw new InvalidOperationException("XTSE3195: xsl:merge-source cannot have both for-each-item and for-each-source");
+
+                // Must have @select or @for-each-item or @for-each-source
+                if (!hasSelect && !hasForEachItem && !hasForEachSource)
+                    throw new InvalidOperationException("XTSE0010: xsl:merge-source must have a select, for-each-item, or for-each-source attribute");
+
+                // Must contain at least one xsl:merge-key
+                var mergeKeys = elem.Elements(XName.Get("merge-key", XslNamespace)).ToList();
+                if (mergeKeys.Count == 0)
+                    throw new InvalidOperationException("XTSE0010: xsl:merge-source must contain at least one xsl:merge-key");
+
+                // XTSE0010: only xsl:merge-key children are permitted (whitespace text is ignored)
+                foreach (var child in elem.Elements())
+                {
+                    if (child.Name.NamespaceName != XslNamespace || child.Name.LocalName != "merge-key")
+                        throw new InvalidOperationException("XTSE0010: xsl:merge-source may only contain xsl:merge-key children");
+                }
+
+                // XTSE0090 / XTSE0020: attribute validation
+                var hasValidation = false;
+                var hasType = false;
+                string? validationValue = null;
+                foreach (var attr in elem.Attributes())
+                {
+                    if (attr.Name.NamespaceName != "")
+                        continue;
+                    var attrName = attr.Name.LocalName;
+                    var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
+                    if (!IsMergeSourceAttribute(baseName))
+                        throw new InvalidOperationException("XTSE0090");
+
+                    if (!attrName.StartsWith("_"))
+                    {
+                        if (baseName == "streamable")
+                        {
+                            if (!IsYesNoValue(attr.Value))
+                                throw new InvalidOperationException("XTSE0020: invalid value for streamable");
+                        }
+                        else if (baseName == "sort-before-merge")
+                        {
+                            if (!IsYesNoValue(attr.Value))
+                                throw new InvalidOperationException("XTSE0020: invalid value for sort-before-merge");
+                        }
+                        else if (baseName == "validation")
+                        {
+                            hasValidation = true;
+                            validationValue = attr.Value.Trim();
+                            if (validationValue is not "strict" and not "lax" and not "preserve" and not "strip")
+                                throw new InvalidOperationException("XTSE0020: invalid value for validation");
+                        }
+                        else if (baseName == "type")
+                        {
+                            hasType = true;
+                        }
+                    }
+                }
+
+                // XTSE1505: validation and type are mutually exclusive
+                if (hasValidation && hasType)
+                    throw new InvalidOperationException("XTSE1505: xsl:merge-source cannot have both validation and type attributes");
+
+                // XTSE1660: non-schema-aware processors do not support the type attribute
+                if (hasType)
+                    throw new InvalidOperationException("XTSE1660: xsl:merge-source/@type requires a schema-aware processor");
+
+                // Validate @name is a valid NCName/EQName if present
+                var nameAttr = elem.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(nameAttr))
+                {
+                    if (!IsValidMergeSourceName(nameAttr))
+                        throw new InvalidOperationException("XTSE0020: invalid xsl:merge-source name");
+                }
+            }
+
+            // xsl:merge-key validation
+            if (localName == "merge-key")
+            {
+                // Must be child of xsl:merge-source
+                if (elem.Parent?.Name.LocalName != "merge-source" || elem.Parent?.Name.NamespaceName != XslNamespace)
+                    throw new InvalidOperationException("XTSE0010: xsl:merge-key must be a child of xsl:merge-source");
+
+                // XTSE0090: disallowed attributes
+                foreach (var attr in elem.Attributes())
+                {
+                    if (attr.Name.NamespaceName != "")
+                        continue;
+                    var attrName = attr.Name.LocalName;
+                    var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
+                    if (baseName != "select" &&
+                        baseName != "order" &&
+                        baseName != "data-type" &&
+                        baseName != "lang" &&
+                        baseName != "case-order" &&
+                        baseName != "collation" &&
+                        baseName != "use-when")
+                    {
+                        throw new InvalidOperationException("XTSE0090");
+                    }
+                }
+
+                // XTSE3200: select attribute and sequence-constructor content are mutually exclusive
+                if (elem.Attribute("select") != null || elem.Attribute("_select") != null)
+                {
+                    bool hasNonWhitespaceContent = false;
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XElement)
+                        {
+                            hasNonWhitespaceContent = true;
+                            break;
+                        }
+                        if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                        {
+                            hasNonWhitespaceContent = true;
+                            break;
+                        }
+                    }
+                    if (hasNonWhitespaceContent)
+                        throw new InvalidOperationException("XTSE3200: xsl:merge-key cannot have both a select attribute and content");
+                }
+            }
+
+            // xsl:merge-action validation
+            if (localName == "merge-action")
+            {
+                // Must be child of xsl:merge
+                if (elem.Parent?.Name.LocalName != "merge" || elem.Parent?.Name.NamespaceName != XslNamespace)
+                    throw new InvalidOperationException("XTSE0010: xsl:merge-action must be a child of xsl:merge");
+
+                // XTSE0090: xsl:merge-action does not allow attributes
+                foreach (var attr in elem.Attributes())
+                {
+                    if (attr.Name.NamespaceName == "" &&
+                        attr.Name.LocalName != "use-when" &&
+                        attr.Name.LocalName != "_use-when")
+                    {
+                        throw new InvalidOperationException("XTSE0090");
+                    }
+                }
+            }
         }
+    }
+
+    private static bool IsMergeSourceAttribute(string baseName)
+    {
+        return baseName is "select" or "for-each-item" or "for-each-source"
+                   or "name" or "streamable" or "sort-before-merge"
+                   or "use-accumulators" or "validation" or "type" or "use-when";
+    }
+
+    private static bool IsValidMergeSourceName(string name)
+    {
+        // Allow Q{uri}local EQNames and simple NCNames
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int closeBrace = name.IndexOf('}');
+            return closeBrace >= 2 && closeBrace < name.Length - 1;
+        }
+        // Simple NCName check: no colons, not starting with digit
+        if (string.IsNullOrEmpty(name) || name.Contains(':'))
+            return false;
+        var first = name[0];
+        return first == '_' || char.IsLetter(first);
     }
 
     private static bool IsYesNoValue(string value)

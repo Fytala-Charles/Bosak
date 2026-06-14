@@ -100,6 +100,8 @@
 //                      | Charles Korthout | 5.29  | 13-06-2026     | xsl:copy shallow copy no longer copies source attributes/children                       |
 //                      | Charles Korthout | 5.30  | 13-06-2026     | Namespace fixup for xsl:attribute prefix hints and literal result attribute names      |
 //                      | Charles Korthout | 5.31  | 13-06-2026     | Implemented xsl:evaluate with context-item, namespace-context, with-param, and @as     |
+//                      | Charles Korthout | 5.32  | 13-06-2026     | Implemented xsl:merge, current-merge-group, and current-merge-key                      |
+//                      | Charles Korthout | 5.33  | 13-06-2026     | Merge fixes: XTDE2210, named-source lookup, apply-templates clearing, globals in accumulators |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -186,6 +188,12 @@ public sealed class TransformEngine
     private List<XdmValue>? _currentGroup;
     private XdmValue? _currentGroupingKey;
 
+    // Current merge state for xsl:merge / current-merge-group() / current-merge-key()
+    private List<XdmValue>? _currentMergeGroup;
+    private XdmValue? _currentMergeKey;
+    private Dictionary<string, List<XdmValue>>? _currentNamedMergeGroups;
+    private HashSet<string>? _currentMergeSourceNames;
+
     // Recursion depth guard for xsl:apply-templates
     private int _applyTemplatesDepth;
     private const int MaxApplyTemplatesDepth = 256;
@@ -204,6 +212,7 @@ public sealed class TransformEngine
     private readonly List<Stylesheet.AccumulatorDefinition> _accumulators;
     private readonly Dictionary<(IXdmNode Root, string ClarkName), Dictionary<IXdmNode, (XdmValue Before, XdmValue After)>> _accumulatorCache = new();
     private readonly HashSet<(IXdmNode Root, string ClarkName)> _accumulatorsInProgress = new();
+    private readonly Dictionary<IXdmNode, HashSet<string>> _accumulatorApplicability = new();
 
     // Focus used for global variable/param evaluation (the source document node).
     private XdmValue _globalContextItem = XdmValue.Undefined;
@@ -299,6 +308,17 @@ public sealed class TransformEngine
         // Compile all template match patterns before execution. The validation
         // dry-run for pattern predicates needs the lazy global resolver registered
         // above so that variable references such as $servletName can be resolved.
+
+        // Evaluate AVTs in non-standard _match attributes now that global variables
+        // (including static parameters) are available in the runtime context.
+        foreach (var rule in _allTemplateRules)
+        {
+            if (rule.Element.Attribute("match") == null && rule.Element.Attribute("_match") != null && rule.Match != null)
+            {
+                rule.Match = EvaluateAvt(rule.Match, rule.Element);
+            }
+        }
+
         var patternCompiler = new Patterns.PatternCompiler(_context);
         foreach (var rule in _allTemplateRules)
         {
@@ -690,6 +710,9 @@ public sealed class TransformEngine
         context.UnregisterFunction(Fn, "key", 3);
         context.UnregisterFunction(Fn, "current-group", 0);
         context.UnregisterFunction(Fn, "current-grouping-key", 0);
+        context.UnregisterFunction(Fn, "current-merge-group", 0);
+        context.UnregisterFunction(Fn, "current-merge-group", 1);
+        context.UnregisterFunction(Fn, "current-merge-key", 0);
     }
 
     /// <summary>
@@ -805,6 +828,9 @@ public sealed class TransformEngine
         }
 
         // Otherwise compute from the source tree.
+        if (!IsAccumulatorApplicableToTree(accName, node))
+            throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
+
         var acc = _accumulators.FirstOrDefault(a => a.ClarkName == accName);
         if (acc == null)
             throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
@@ -828,10 +854,16 @@ public sealed class TransformEngine
     /// </summary>
     private bool IsAccumulatorApplicableToTree(string accClarkName, IXdmNode sourceNode)
     {
+        var sourceRoot = GetRootNode(sourceNode);
+
+        // Non-initial trees may have an explicit applicability set (e.g. from xsl:merge-source
+        // use-accumulators). If such a set is recorded, membership governs applicability.
+        if (_accumulatorApplicability.TryGetValue(sourceRoot, out var applicableSet))
+            return applicableSet.Contains(accClarkName);
+
         if (_initialSource == null)
             return true;
 
-        var sourceRoot = GetRootNode(sourceNode);
         var initialRoot = GetRootNode(_initialSource);
         if (!sourceRoot.IsSameNode(initialRoot))
             return true;
@@ -986,8 +1018,8 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Creates an evaluation context for accumulator expressions. It contains the
-    /// standard function library, XSLT-specific functions, and the accumulator
-    /// functions, with an optional focus node and the accumulator <c>$value</c>
+    /// standard function library, XSLT-specific functions, the accumulator
+    /// functions, global stylesheet variables, and the accumulator <c>$value</c>
     /// variable pre-bound.
     /// </summary>
     private EvaluationContext CreateAccumulatorEvaluationContext(IXdmNode? focusNode = null, XdmValue? value = null)
@@ -996,6 +1028,16 @@ public sealed class TransformEngine
         FunctionLibrary.Populate(ctx);
         XsltFunctionLibrary.Populate(ctx);
         RegisterAccumulatorFunctions(ctx);
+
+        // Accumulator expressions may reference global variables/parameters.
+        ctx.LazyVariableResolver = _context.LazyVariableResolver;
+        foreach (var (name, _) in _stylesheet.GetAllGlobalVariables())
+        {
+            var (localName, ns) = ExpandVariableName(_stylesheet.Root, name);
+            if (_context.TryGetVariable(localName, out var varValue, ns))
+                ctx.WithVariable(localName, varValue, ns);
+        }
+
         if (focusNode != null)
             ctx.WithFocus(XdmValue.FromNode(focusNode), 1, 1);
         if (value != null)
@@ -1235,7 +1277,15 @@ public sealed class TransformEngine
         var savedSize = _context.ContextSize;
         var savedCurrent = _context.CurrentItem;
         var savedAccumulator = _sequenceAccumulator;
+        var savedMergeGroup = _currentMergeGroup;
+        var savedMergeKey = _currentMergeKey;
+        var savedNamedGroups = _currentNamedMergeGroups;
+        var savedMergeSourceNames = _currentMergeSourceNames;
         _sequenceAccumulator = null;
+        _currentMergeGroup = null;
+        _currentMergeKey = null;
+        _currentNamedMergeGroups = null;
+        _currentMergeSourceNames = null;
         var effectiveNewEachTime = GetEffectiveFunctionAttribute(def.Element, "new-each-time");
         bool memoize = IsDeterministicNewEachTime(effectiveNewEachTime);
         XsltFunctionCacheKey? cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
@@ -1275,6 +1325,10 @@ public sealed class TransformEngine
             _context.RestoreVariables(snapshot);
             _context.WithFocus(savedFocus, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
+            _currentMergeGroup = savedMergeGroup;
+            _currentMergeKey = savedMergeKey;
+            _currentNamedMergeGroups = savedNamedGroups;
+            _currentMergeSourceNames = savedMergeSourceNames;
         }
     }
 
@@ -1931,6 +1985,34 @@ public sealed class TransformEngine
                         }
                         break;
                     }
+                case "merge":
+                    {
+                        var savedContainer = _currentContainer;
+                        var savedLastAtomic = _lastAddedWasAtomic;
+                        var savedAccumulator = _sequenceAccumulator;
+                        var temp = new XElement("__temp__");
+                        _currentContainer = temp;
+                        _lastAddedWasAtomic = false;
+                        _sequenceAccumulator = results;
+                        try
+                        {
+                            ExecuteMergeInstruction(instruction, contextItem);
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _lastAddedWasAtomic = savedLastAtomic;
+                            _sequenceAccumulator = savedAccumulator;
+                        }
+                        foreach (var node in temp.Nodes())
+                        {
+                            if (node is XElement e)
+                                results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                            else if (node is XText t && !string.IsNullOrEmpty(t.Value))
+                                results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                        }
+                        break;
+                    }
                 default:
                     // Unknown XSLT instruction in function body: ignore
                     break;
@@ -2325,6 +2407,14 @@ public sealed class TransformEngine
         var savedCurrent = _context.CurrentItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
+        var savedMergeGroup = _currentMergeGroup;
+        var savedMergeKey = _currentMergeKey;
+        var savedNamedGroups = _currentNamedMergeGroups;
+        var savedMergeSourceNames = _currentMergeSourceNames;
+        _currentMergeGroup = null;
+        _currentMergeKey = null;
+        _currentNamedMergeGroups = null;
+        _currentMergeSourceNames = null;
 
         // Handle xsl:context-item use="absent" in named templates
         var contextItemAbsent = rule.Element.Elements()
@@ -2463,6 +2553,10 @@ public sealed class TransformEngine
                 _defaultModeStack.Pop();
             }
             _currentTemplateRule = savedTemplateRule;
+            _currentMergeGroup = savedMergeGroup;
+            _currentMergeKey = savedMergeKey;
+            _currentNamedMergeGroups = savedNamedGroups;
+            _currentMergeSourceNames = savedMergeSourceNames;
 
             if (tempContainer != null)
             {
@@ -2650,6 +2744,9 @@ public sealed class TransformEngine
         var savedCurrentItem = _context.CurrentItem;
         var savedDefaultCollation = _context.DefaultCollation;
         var savedSkipPopulation = _context.SkipStandardFunctionPopulation;
+        var savedMergeGroup = _currentMergeGroup;
+        var savedMergeKey = _currentMergeKey;
+        var savedNamedMergeGroups = _currentNamedMergeGroups;
         XdmValue result = XdmValue.Undefined;
         try
         {
@@ -2678,6 +2775,9 @@ public sealed class TransformEngine
             _context.WithCurrentItem(XdmValue.Undefined);
             _context.DefaultCollation = GetEffectiveDefaultCollation(instruction);
             _context.SkipStandardFunctionPopulation = true;
+            _currentMergeGroup = null;
+            _currentMergeKey = null;
+            _currentNamedMergeGroups = null;
 
             result = compiled.Evaluate(_context);
             var asAttr = instruction.Attribute("as")?.Value;
@@ -3343,6 +3443,12 @@ public sealed class TransformEngine
                     break;
                 }
 
+            case "merge":
+                {
+                    ExecuteMergeInstruction(instruction, contextItem);
+                    break;
+                }
+
             case "if":
                 {
                     var test = instruction.Attribute("test")?.Value;
@@ -3486,7 +3592,7 @@ public sealed class TransformEngine
                     if (!string.IsNullOrEmpty(calledName))
                     {
                         var (withParams, tunnelParams) = CollectWithParams(instruction, contextItem);
-                        CallTemplate(calledName, contextItem, withParams, tunnelParams);
+                        WithoutMergeContext(() => CallTemplate(calledName, contextItem, withParams, tunnelParams));
                     }
                     break;
                 }
@@ -5443,6 +5549,14 @@ public sealed class TransformEngine
         var savedCurrent = _context.CurrentItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
+        var savedMergeGroup = _currentMergeGroup;
+        var savedMergeKey = _currentMergeKey;
+        var savedNamedGroups = _currentNamedMergeGroups;
+        var savedMergeSourceNames = _currentMergeSourceNames;
+        _currentMergeGroup = null;
+        _currentMergeKey = null;
+        _currentNamedMergeGroups = null;
+        _currentMergeSourceNames = null;
         _context.WithFocus(XdmValue.FromNode(node), position, last);
         _context.WithCurrentItem(XdmValue.FromNode(node));
         try
@@ -5560,6 +5674,10 @@ public sealed class TransformEngine
         {
             _context.WithFocus(savedItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
+            _currentMergeGroup = savedMergeGroup;
+            _currentMergeKey = savedMergeKey;
+            _currentNamedMergeGroups = savedNamedGroups;
+            _currentMergeSourceNames = savedMergeSourceNames;
         }
     }
 
@@ -5973,6 +6091,59 @@ public sealed class TransformEngine
                 if (_currentGroupingKey == null)
                     throw new InvalidOperationException("XTDE1071: current-grouping-key() is not defined in the current context");
                 return _currentGroupingKey.Value;
+            }
+        });
+
+        _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "current-merge-group",
+            Arity = 0,
+            ParameterTypes = [],
+            ReturnType = XdmValueKind.Sequence,
+            Implementation = (ctx, args) =>
+            {
+                if (_currentMergeGroup == null)
+                    throw new InvalidOperationException("XTDE3480: current-merge-group() is not defined in the current context");
+                if (_currentMergeGroup.Count == 0)
+                    return XdmValue.Undefined;
+                return XdmValue.FromSequence(MaterializedSequence.FromList(_currentMergeGroup));
+            }
+        });
+
+        _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "current-merge-group",
+            Arity = 1,
+            ParameterTypes = [XdmValueKind.Undefined],
+            ReturnType = XdmValueKind.Sequence,
+            Implementation = (ctx, args) =>
+            {
+                if (_currentNamedMergeGroups == null || _currentMergeSourceNames == null)
+                    throw new InvalidOperationException("XTDE3480: current-merge-group() is not defined in the current context");
+                var nameValue = AtomizeFirstItem(args[0]);
+                var name = nameValue.IsUndefined ? "" : nameValue.ToString();
+                if (string.IsNullOrEmpty(name) || !_currentMergeSourceNames.Contains(name))
+                    throw new InvalidOperationException($"XTDE3490: no xsl:merge-source named '{name}'");
+                if (!_currentNamedMergeGroups.TryGetValue(name, out var group) || group.Count == 0)
+                    return XdmValue.Undefined;
+                return XdmValue.FromSequence(MaterializedSequence.FromList(group));
+            }
+        });
+
+        _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "current-merge-key",
+            Arity = 0,
+            ParameterTypes = [],
+            ReturnType = XdmValueKind.Undefined,
+            Implementation = (ctx, args) =>
+            {
+                if (_currentMergeKey == null)
+                    throw new InvalidOperationException("XTDE3510: current-merge-key() is not defined in the current context");
+                return _currentMergeKey.Value;
             }
         });
     }
@@ -10009,6 +10180,448 @@ public sealed class TransformEngine
                 return (name, ns?.NamespaceName ?? "");
             }
             return (name, "");
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // xsl:merge implementation
+    // ---------------------------------------------------------------------------------------------
+
+    private readonly record struct MergeEntry(XdmValue Item, int SourceIndex, int OriginalIndex, List<SortKey> Keys);
+
+    /// <summary>
+    /// Evaluates an <c>xsl:merge</c> instruction.
+    /// </summary>
+    private void ExecuteMergeInstruction(XElement instruction, XdmValue contextItem)
+    {
+        var xsl = Stylesheet.Stylesheet.XslNamespace;
+        var sourceElements = instruction.Elements(XName.Get("merge-source", xsl)).ToList();
+        var actionElement = instruction.Elements(XName.Get("merge-action", xsl)).FirstOrDefault();
+        if (sourceElements.Count == 0 || actionElement == null)
+            return;
+
+        var sourceNames = new List<string?>();
+        var sourceControls = new List<List<SortControl>>();
+        var allEntries = new List<MergeEntry>();
+        int sourceIndex = 0;
+
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        try
+        {
+            foreach (var sourceElem in sourceElements)
+            {
+                var name = sourceElem.Attribute("name")?.Value;
+                sourceNames.Add(name);
+                var keySpecElems = sourceElem.Elements(XName.Get("merge-key", xsl)).ToList();
+
+                // Evaluate sort controls using the current focus (the focus of the
+                // containing xsl:merge instruction), so AVTs such as order="{if(position()...)}"
+                // see the correct position/size.
+                var controls = new List<SortControl>();
+                foreach (var keySpec in keySpecElems)
+                    controls.Add(EvaluateSortControl(keySpec));
+                sourceControls.Add(controls);
+
+                var sourceItems = EvaluateMergeSourceItems(sourceElem, contextItem);
+
+                for (int originalIndex = 0; originalIndex < sourceItems.Count; originalIndex++)
+                {
+                    var item = sourceItems[originalIndex];
+                    var keys = new List<SortKey>();
+                    for (int k = 0; k < keySpecElems.Count; k++)
+                    {
+                        var keyValue = EvaluateMergeKeyValue(keySpecElems[k], item, controls[k]);
+                        keys.Add(new SortKey(keyValue, controls[k]));
+                    }
+                    allEntries.Add(new MergeEntry(item, sourceIndex, originalIndex, keys));
+                }
+                sourceIndex++;
+            }
+        }
+        finally
+        {
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+        }
+
+        if (sourceControls.Count == 0)
+            return;
+
+        var keyControls = sourceControls[0];
+
+        // XTDE2210: corresponding merge-key elements across sources must have the same
+        // effective values for data-type, order, lang, case-order, and collation.
+        for (int s = 1; s < sourceControls.Count; s++)
+        {
+            var otherControls = sourceControls[s];
+            int maxKeys = Math.Max(keyControls.Count, otherControls.Count);
+            for (int k = 0; k < maxKeys; k++)
+            {
+                var a = k < keyControls.Count ? keyControls[k] : new SortControl(false, SortDataType.Auto, null, null, null);
+                var b = k < otherControls.Count ? otherControls[k] : new SortControl(false, SortDataType.Auto, null, null, null);
+                if (a.DataType != b.DataType ||
+                    a.Descending != b.Descending ||
+                    a.Lang != b.Lang ||
+                    a.CaseOrder != b.CaseOrder ||
+                    a.Collation != b.Collation)
+                {
+                    throw new InvalidOperationException("XTDE2210: xsl:merge-key specifications are incompatible across xsl:merge-source elements");
+                }
+            }
+        }
+
+        if (allEntries.Count == 0)
+            return;
+
+        // Sort globally by key tuple, then source order, then original document order.
+        allEntries.Sort((a, b) =>
+        {
+            int minKeys = Math.Min(a.Keys.Count, b.Keys.Count);
+            for (int i = 0; i < minKeys; i++)
+            {
+                int cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
+                if (cmp != 0) return cmp;
+            }
+            if (a.Keys.Count != b.Keys.Count)
+                return a.Keys.Count.CompareTo(b.Keys.Count);
+            int srcCmp = a.SourceIndex.CompareTo(b.SourceIndex);
+            if (srcCmp != 0) return srcCmp;
+            return a.OriginalIndex.CompareTo(b.OriginalIndex);
+        });
+
+        // Build groups of consecutive equal-key items.
+        var groups = new List<(int Start, int End, List<SortKey> Keys)>();
+        int pos = 0;
+        while (pos < allEntries.Count)
+        {
+            int groupStart = pos;
+            var groupKey = allEntries[pos].Keys;
+            pos++;
+            while (pos < allEntries.Count)
+            {
+                var otherKey = allEntries[pos].Keys;
+                if (groupKey.Count != otherKey.Count)
+                    break;
+                bool equal = true;
+                for (int i = 0; i < groupKey.Count; i++)
+                {
+                    if (CompareSortKey(groupKey[i], otherKey[i]) != 0)
+                    {
+                        equal = false;
+                        break;
+                    }
+                }
+                if (!equal) break;
+                pos++;
+            }
+            groups.Add((groupStart, pos, groupKey));
+        }
+
+        // Emit the merge-action for each group.
+        for (int groupIndex = 0; groupIndex < groups.Count; groupIndex++)
+        {
+            var (groupStart, groupEnd, groupKey) = groups[groupIndex];
+            int groupPos = groupIndex + 1;
+            int totalGroups = groups.Count;
+
+            var groupItems = new List<XdmValue>();
+            var namedGroups = new Dictionary<string, List<XdmValue>>();
+            for (int i = groupStart; i < groupEnd; i++)
+            {
+                var entry = allEntries[i];
+                groupItems.Add(entry.Item);
+                var name = sourceNames[entry.SourceIndex];
+                if (!string.IsNullOrEmpty(name))
+                {
+                    if (!namedGroups.TryGetValue(name, out var list))
+                    {
+                        list = new List<XdmValue>();
+                        namedGroups[name] = list;
+                    }
+                    list.Add(entry.Item);
+                }
+            }
+
+            var savedMergeGroup = _currentMergeGroup;
+            var savedMergeKey = _currentMergeKey;
+            var savedNamedGroups = _currentNamedMergeGroups;
+            var savedSourceNames = _currentMergeSourceNames;
+            var savedActionFocus = _context.ContextItem;
+            var savedActionPosition = _context.ContextPosition;
+            var savedActionSize = _context.ContextSize;
+            try
+            {
+                _currentMergeGroup = groupItems;
+                _currentNamedMergeGroups = namedGroups;
+                _currentMergeSourceNames = new HashSet<string>(sourceNames.Where(n => !string.IsNullOrEmpty(n)).Select(n => n!));
+                if (groupKey.Count == 1)
+                {
+                    _currentMergeKey = groupKey[0].Value;
+                }
+                else
+                {
+                    var keySeq = groupKey.Select(k => k.Value).ToList();
+                    _currentMergeKey = XdmValue.FromSequence(MaterializedSequence.FromList(keySeq));
+                }
+
+                // The focus inside xsl:merge-action is the current group: position/size are
+                // defined as the position and number of merge groups. The context item is set
+                // to the first item of the group so that position() works.
+                var groupContext = groupItems.Count > 0 ? groupItems[0] : XdmValue.Undefined;
+                _context.WithFocus(groupContext, groupPos, totalGroups);
+
+                foreach (var childNode in actionElement.Nodes())
+                {
+                    switch (childNode)
+                    {
+                        case XText text:
+                            ProcessSequenceText(text, actionElement);
+                            break;
+                        case XElement elem when elem.Name.LocalName == "sort" && elem.Name.NamespaceName == xsl:
+                            continue;
+                        case XElement elem when elem.Name.NamespaceName == xsl:
+                            ExecuteXsltInstruction(elem, XdmValue.Undefined);
+                            break;
+                        case XElement elem:
+                            CopyLiteralElement(elem);
+                            break;
+                    }
+                }
+            }
+            finally
+            {
+                _currentMergeGroup = savedMergeGroup;
+                _currentMergeKey = savedMergeKey;
+                _currentNamedMergeGroups = savedNamedGroups;
+                _currentMergeSourceNames = savedSourceNames;
+                _context.WithFocus(savedActionFocus, savedActionPosition, savedActionSize);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Evaluates the selected items for a single <c>xsl:merge-source</c>.
+    /// </summary>
+    private List<XdmValue> EvaluateMergeSourceItems(XElement sourceElem, XdmValue contextItem)
+    {
+        var selectAttr = sourceElem.Attribute("select")?.Value;
+        if (string.IsNullOrEmpty(selectAttr))
+        {
+            var underSelect = sourceElem.Attribute("_select")?.Value;
+            if (!string.IsNullOrEmpty(underSelect))
+                selectAttr = EvaluateAvt(underSelect, sourceElem);
+        }
+        var forEachItemAttr = sourceElem.Attribute("for-each-item")?.Value;
+        var forEachSourceAttr = sourceElem.Attribute("for-each-source")?.Value;
+        var result = new List<XdmValue>();
+
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        try
+        {
+            if (!string.IsNullOrEmpty(forEachItemAttr))
+            {
+                var compiled = CompileXPath(forEachItemAttr, sourceElem);
+                var feResult = compiled.Evaluate(_context);
+                var feItems = EnumerateItems(feResult).ToList();
+                for (int idx = 0; idx < feItems.Count; idx++)
+                {
+                    _context.WithFocus(feItems[idx], idx + 1, feItems.Count);
+                    RecordAccumulatorApplicability(sourceElem, feItems[idx]);
+                    if (!string.IsNullOrEmpty(selectAttr))
+                    {
+                        var selCompiled = CompileXPath(selectAttr, sourceElem);
+                        var selResult = selCompiled.Evaluate(_context);
+                        result.AddRange(EnumerateItems(selResult));
+                    }
+                    else
+                    {
+                        result.Add(feItems[idx]);
+                    }
+                }
+                return result;
+            }
+
+            if (!string.IsNullOrEmpty(forEachSourceAttr))
+            {
+                var compiled = CompileXPath(forEachSourceAttr, sourceElem);
+                var fsResult = compiled.Evaluate(_context);
+                var fsItems = EnumerateItems(fsResult).ToList();
+                for (int idx = 0; idx < fsItems.Count; idx++)
+                {
+                    XdmValue sourceContext;
+                    if (fsItems[idx].IsNode)
+                    {
+                        sourceContext = fsItems[idx];
+                    }
+                    else
+                    {
+                        var uri = fsItems[idx].ToString();
+                        var baseUri = GetEffectiveBaseUri(sourceElem);
+                        var resolvedUri = string.IsNullOrEmpty(uri) ? baseUri ?? "" : uri;
+                        var savedBaseUri = _context.BaseUri;
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(baseUri))
+                                _context.BaseUri = baseUri;
+                            var doc = _context.LoadDocument(resolvedUri);
+                            sourceContext = XdmValue.FromNode(doc);
+                        }
+                        finally
+                        {
+                            _context.BaseUri = savedBaseUri;
+                        }
+                    }
+                    RecordAccumulatorApplicability(sourceElem, sourceContext);
+                    _context.WithFocus(sourceContext, idx + 1, fsItems.Count);
+                    if (!string.IsNullOrEmpty(selectAttr))
+                    {
+                        var selCompiled = CompileXPath(selectAttr, sourceElem);
+                        var selResult = selCompiled.Evaluate(_context);
+                        result.AddRange(EnumerateItems(selResult));
+                    }
+                    else
+                    {
+                        result.Add(sourceContext);
+                    }
+                }
+                return result;
+            }
+
+            if (!string.IsNullOrEmpty(selectAttr))
+            {
+                var compiled = CompileXPath(selectAttr, sourceElem);
+                var selResult = compiled.Evaluate(_context);
+                return EnumerateItems(selResult).ToList();
+            }
+        }
+        finally
+        {
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Records the accumulator applicability set declared by <c>use-accumulators</c> on an
+    /// <c>xsl:merge-source</c> for the source tree containing <paramref name="sourceContext"/>.
+    /// </summary>
+    private void RecordAccumulatorApplicability(XElement sourceElem, XdmValue sourceContext)
+    {
+        if (!sourceContext.IsNode || sourceContext.NodeValue == null)
+            return;
+
+        var useAccAttr = sourceElem.Attribute("use-accumulators")?.Value;
+        if (string.IsNullOrWhiteSpace(useAccAttr))
+            return;
+
+        var root = GetRootNode(sourceContext.NodeValue);
+        var trimmed = useAccAttr.Trim();
+        HashSet<string> set;
+        if (trimmed == "#all")
+        {
+            set = new HashSet<string>(_accumulators.Select(a => a.ClarkName));
+        }
+        else
+        {
+            set = new HashSet<string>();
+            foreach (var name in trimmed.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                set.Add(ResolveAccumulatorClarkName(name, sourceElem));
+        }
+
+        _accumulatorApplicability[root] = set;
+    }
+
+    /// <summary>
+    /// Resolves an accumulator name (possibly prefixed or in Clark notation) to Clark notation
+    /// using the in-scope namespaces of <paramref name="contextElement"/>.
+    /// </summary>
+    private static string ResolveAccumulatorClarkName(string name, XElement contextElement)
+    {
+        if (name.StartsWith("{"))
+            return name;
+
+        var colon = name.IndexOf(':');
+        if (colon < 0)
+            return name; // unprefixed accumulator names are in no namespace
+
+        var prefix = name[..colon];
+        var local = name[(colon + 1)..];
+        if (prefix == "xml")
+            return "{http://www.w3.org/XML/1998/namespace}" + local;
+
+        var ns = contextElement.GetNamespaceOfPrefix(prefix);
+        if (ns == null)
+            throw new InvalidOperationException($"XPST0081: Undefined namespace prefix '{prefix}'");
+        return $"{{{ns.NamespaceName}}}{local}";
+    }
+
+    /// <summary>
+    /// Evaluates a single <c>xsl:merge-key</c> for the given item and returns the atomized key value.
+    /// Raises XTTE1020 if the key expression evaluates to more than one item.
+    /// </summary>
+    private XdmValue EvaluateMergeKeyValue(XElement keySpec, XdmValue item, SortControl control)
+    {
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        try
+        {
+            _context.WithFocus(item, 1, 1);
+            var selectAttr = keySpec.Attribute("select")?.Value;
+            XdmValue keyValue;
+            if (!string.IsNullOrEmpty(selectAttr))
+            {
+                var compiled = CompileXPath(selectAttr, keySpec);
+                keyValue = compiled.Evaluate(_context);
+            }
+            else
+            {
+                keyValue = item;
+            }
+
+            var enumerated = EnumerateItems(keyValue).Take(2).ToList();
+            if (enumerated.Count > 1)
+                throw new InvalidOperationException("XTTE1020: xsl:merge-key must evaluate to a single item");
+
+            var atomized = AtomizeFirstItem(keyValue);
+
+            // data-type="number" follows the XPath number() function semantics: unparseable
+            // values produce NaN rather than a dynamic error. CompareNumericSortKey handles
+            // NaN values by treating them as equal and sorting them before ordinary numbers.
+            return atomized;
+        }
+        finally
+        {
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+        }
+    }
+
+    /// <summary>
+    /// Executes <paramref name="action"/> with the merge context cleared.
+    /// Used for xsl:call-template and xsl:apply-templates so that current-merge-group()
+    /// and current-merge-key() are not visible in the called template.
+    /// </summary>
+    private void WithoutMergeContext(Action action)
+    {
+        var savedMergeGroup = _currentMergeGroup;
+        var savedMergeKey = _currentMergeKey;
+        var savedNamedGroups = _currentNamedMergeGroups;
+        try
+        {
+            _currentMergeGroup = null;
+            _currentMergeKey = null;
+            _currentNamedMergeGroups = null;
+            action();
+        }
+        finally
+        {
+            _currentMergeGroup = savedMergeGroup;
+            _currentMergeKey = savedMergeKey;
+            _currentNamedMergeGroups = savedNamedGroups;
         }
     }
 

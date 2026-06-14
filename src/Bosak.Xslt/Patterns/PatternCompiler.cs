@@ -31,6 +31,8 @@
 //                       | Charles Korthout | 1.7   | 11-06-2026     | Save/restore focus in WrapWithCurrentItem to protect caller context item                |
 //                       | Charles Korthout | 1.8   | 11-06-2026     | Restored key() second-arg restriction to literal/variable reference in patterns        |
 //                      | Charles Korthout | 1.9   | 13-06-2026     | Empty-URI EQName support in ParseQName (Q{}local)                                       |
+//                      | Charles Korthout | 2.0   | 13-06-2026     | Disallow current-merge-group/current-merge-key in match patterns                        |
+//                      | Charles Korthout | 2.1   | 13-06-2026     | match="." matches atomic items as well as nodes                                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -206,6 +208,10 @@ public sealed class PatternCompiler
             throw new InvalidOperationException("XTSE1060: current-group() is not allowed in a match pattern");
         if (ContainsFunctionCall(trimmed, "current-grouping-key"))
             throw new InvalidOperationException("XTSE1070: current-grouping-key() is not allowed in a match pattern");
+        if (ContainsFunctionCall(trimmed, "current-merge-group"))
+            throw new InvalidOperationException("XTSE1060: current-merge-group() is not allowed in a match pattern");
+        if (ContainsFunctionCall(trimmed, "current-merge-key"))
+            throw new InvalidOperationException("XTSE1070: current-merge-key() is not allowed in a match pattern");
 
         // 7.  Undeclared function in predicate (XPST0017).
         //     NOTE: Accurate detection requires stylesheet context (declared functions,
@@ -1526,7 +1532,8 @@ public sealed class PatternCompiler
 
         if (name == ".")
         {
-            return (item, ctx) => AsNode(item) != null;
+            // match="." matches any item (node or atomic) in XSLT 3.0.
+            return (item, ctx) => true;
         }
 
         if (name == "text()")
@@ -2123,17 +2130,23 @@ public sealed class PatternCompiler
         {
             var fullPredicate = $"self::node()[{predicateExpr}]{remaining}";
             var dotCompiled = CompilePatternXPath(fullPredicate);
+            var atomicPredicate = string.IsNullOrEmpty(predicateExpr) ? "true()" : $"boolean({predicateExpr})";
+            var atomicCompiled = CompilePatternXPath(atomicPredicate);
 
             return (item, ctx) =>
             {
-                var node = AsNode(item);
-                if (node == null) return false;
                 var savedItem = ctx.ContextItem;
                 var savedPos = ctx.ContextPosition;
                 var savedSize = ctx.ContextSize;
                 try
                 {
-                    var result = dotCompiled.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
+                    if (!item.IsNode)
+                    {
+                        var atomicResult = atomicCompiled.Evaluate(ctx.WithFocus(item, 1, 1));
+                        return atomicResult.EffectiveBooleanValue();
+                    }
+
+                    var result = dotCompiled.Evaluate(ctx.WithFocus(item, 1, 1));
                     return result.EffectiveBooleanValue();
                 }
                 catch (Exception ex)

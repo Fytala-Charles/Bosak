@@ -38,7 +38,7 @@ public sealed class TemplateRule
     public XElement Element { get; }
 
     /// <summary>The match pattern string (e.g. "foo[bar]"), or null for named templates.</summary>
-    public string? Match { get; }
+    public string? Match { get; internal set; }
 
     /// <summary>The template name, or null for match-only templates.</summary>
     public string? Name { get; }
@@ -81,6 +81,8 @@ public sealed class TemplateRule
     public static IReadOnlyList<TemplateRule> FromElement(XElement element, Stylesheet stylesheet)
     {
         var match = element.Attribute("match")?.Value;
+        if (string.IsNullOrEmpty(match))
+            match = element.Attribute("_match")?.Value;
         var name = element.Attribute("name")?.Value;
         var modeAttr = element.Attribute("mode")?.Value;
         var modes = ParseModes(modeAttr, element, stylesheet.DefaultMode);
