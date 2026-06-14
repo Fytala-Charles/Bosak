@@ -1,12 +1,12 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `8c5b885`
-**Current focus:** Full-suite triage complete; whitespace regression fixed. WIP XSLT runtime/pattern changes remain unstaged.
+**Commit:** `37c7a19`
+**Current focus:** xsl:merge support committed; full-suite baseline re-established. Next step is to diff and pick the next cluster.
 
 ---
 
-## Full Suite Results (after whitespace fix, includes unstaged WIP XSLT changes)
+## Full Suite Results (committed baseline)
 
 - **Total:** 14,600
 - **Passed:** 4,305
@@ -52,6 +52,9 @@
 
 10. **Stylesheet whitespace preservation** — Fixed a regression where parsing the stylesheet into an `XDocument` for static-parameter expansion stripped whitespace-only text nodes, breaking `xsl:text` spaces and causing 200+ failures across axes, number, select, expression, etc.
    - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+11. **`xsl:merge` support** — Implemented `xsl:merge`, `xsl:merge-source`, `xsl:merge-key`, `xsl:merge-action`, `current-merge-group()`, and `current-merge-key()` in the runtime, plus static validation and error handling.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Patterns/PatternCompiler.cs`, `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
 
 ## Notes
 
