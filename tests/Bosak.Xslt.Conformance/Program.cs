@@ -374,7 +374,7 @@ class Program
             XDocument xslDoc;
             try
             {
-                xslDoc = XDocument.Parse(xslText);
+                xslDoc = XDocument.Parse(xslText, LoadOptions.PreserveWhitespace);
                 var xslRoot = xslDoc.Root;
                 if (xslRoot != null && xslRoot.Name == XName.Get("package", "http://www.w3.org/1999/XSL/Transform"))
                 {
