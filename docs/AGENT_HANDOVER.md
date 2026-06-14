@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `f8699e2` (dirty)
-**Current focus:** `date` cluster now fully green (0 runnable failures); full suite re-run shows 4010/1261/9329.
+**Commit:** `52598d6`
+**Current focus:** `date` cluster committed and pushed; next step is full-suite triage or the next failing cluster.
 
 ---
 
