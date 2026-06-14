@@ -26,10 +26,12 @@
 //                      | Charles Korthout | 1.3   | 11-06-2026     | xml prefix falls back to PrefixedName; other prefixes use QName for NamespaceTest       |
 //                      | Charles Korthout | 1.4   | 13-06-2026     | Empty-URI EQName support in SplitQName (Q{}local)                                       |
 //                      | Charles Korthout | 1.5   | 13-06-2026     | Resolve xml prefix in node tests to the XML namespace                                    |
+//                      | Charles Korthout | 1.6   | 13-06-2026     | Fixed Unquote to preserve doubled quotes that do not match the enclosing delimiter      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Lexer;
@@ -1250,7 +1252,16 @@ public sealed class XPathParser
         if (text.Length >= 2 &&
             ((text[0] == '\'' && text[^1] == '\'') || (text[0] == '"' && text[^1] == '"')))
         {
-            return text[1..^1].Replace("\"\"", "\"").Replace("''", "'");
+            char quote = text[0];
+            var inner = text[1..^1];
+            var sb = new StringBuilder(inner.Length);
+            for (int i = 0; i < inner.Length; i++)
+            {
+                sb.Append(inner[i]);
+                if (inner[i] == quote && i + 1 < inner.Length && inner[i + 1] == quote)
+                    i++;
+            }
+            return sb.ToString();
         }
         return text;
     }

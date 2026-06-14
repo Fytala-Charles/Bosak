@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 10-06-2026     | Added LazyVariableResolver and _evaluatedLazyGlobals for deferred XSLT globals         |
 //                      | Charles Korthout | 0.9   | 11-06-2026     | TryResolveNamespace resolves predefined xml prefix to XML namespace URI                 |
 //                      | Charles Korthout | 1.0   | 13-06-2026     | Added ImplicitTimezoneOffsetMinutes property (defaults to UTC)                          |
+//                      | Charles Korthout | 1.1   | 13-06-2026     | Added RegexGroups property for xsl:analyze-string / regex-group()                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -118,6 +119,12 @@ public sealed class EvaluationContext
     /// has no explicit timezone. Defaults to UTC (0 minutes).
     /// </summary>
     public int ImplicitTimezoneOffsetMinutes { get; set; }
+
+    /// <summary>
+    /// Captured substring values for the current <c>xsl:analyze-string</c> matching substring,
+    /// indexed by group number (0 is the whole match). Used by <c>regex-group()</c>.
+    /// </summary>
+    public string[]? RegexGroups { get; set; }
 
     /// <summary>
     /// Custom document loader. If null, fn:doc will throw unless the API layer provides one.

@@ -33,6 +33,7 @@
 //                      | Charles Korthout | 1.9   | 13-06-2026     | Empty-URI EQName support in ParseQName (Q{}local)                                       |
 //                      | Charles Korthout | 2.0   | 13-06-2026     | Disallow current-merge-group/current-merge-key in match patterns                        |
 //                      | Charles Korthout | 2.1   | 13-06-2026     | match="." matches atomic items as well as nodes                                         |
+//                      | Charles Korthout | 2.2   | 13-06-2026     | WrapWithCurrentItem clears regex-group state for pattern evaluation                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -579,7 +580,9 @@ public sealed class PatternCompiler
 
     /// <summary>
     /// Wraps a compiled pattern so that <c>fn:current()</c> returns the candidate node
-    /// being tested, as required by XSLT match-pattern semantics.
+    /// being tested, as required by XSLT match-pattern semantics. Also clears the
+    /// <c>regex-group()</c> state so patterns cannot see captured substrings from an
+    /// enclosing <c>xsl:analyze-string</c>.
     /// </summary>
     private static PatternPredicate WrapWithCurrentItem(PatternPredicate inner)
     {
@@ -589,15 +592,18 @@ public sealed class PatternCompiler
             var savedItem = ctx.ContextItem;
             var savedPos = ctx.ContextPosition;
             var savedSize = ctx.ContextSize;
+            var savedRegexGroups = ctx.RegexGroups;
             try
             {
                 ctx.WithCurrentItem(item);
+                ctx.RegexGroups = null;
                 return inner(item, ctx);
             }
             finally
             {
                 ctx.WithCurrentItem(savedCurrent);
                 ctx.WithFocus(savedItem, savedPos, savedSize);
+                ctx.RegexGroups = savedRegexGroups;
             }
         };
     }

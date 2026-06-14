@@ -102,6 +102,8 @@
 //                      | Charles Korthout | 5.31  | 13-06-2026     | Implemented xsl:evaluate with context-item, namespace-context, with-param, and @as     |
 //                      | Charles Korthout | 5.32  | 13-06-2026     | Implemented xsl:merge, current-merge-group, and current-merge-key                      |
 //                      | Charles Korthout | 5.33  | 13-06-2026     | Merge fixes: XTDE2210, named-source lookup, apply-templates clearing, globals in accumulators |
+//                      | Charles Korthout | 5.34  | 13-06-2026     | Implemented xsl:analyze-string and regex-group()                                          |
+//                      | Charles Korthout | 5.35  | 13-06-2026     | XSLT 3.0 zero-length match semantics, XSD regex validation, and backreference translation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -109,6 +111,7 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -193,6 +196,8 @@ public sealed class TransformEngine
     private XdmValue? _currentMergeKey;
     private Dictionary<string, List<XdmValue>>? _currentNamedMergeGroups;
     private HashSet<string>? _currentMergeSourceNames;
+
+
 
     // Recursion depth guard for xsl:apply-templates
     private int _applyTemplatesDepth;
@@ -1281,11 +1286,13 @@ public sealed class TransformEngine
         var savedMergeKey = _currentMergeKey;
         var savedNamedGroups = _currentNamedMergeGroups;
         var savedMergeSourceNames = _currentMergeSourceNames;
+        var savedRegexGroups = _context.RegexGroups;
         _sequenceAccumulator = null;
         _currentMergeGroup = null;
         _currentMergeKey = null;
         _currentNamedMergeGroups = null;
         _currentMergeSourceNames = null;
+        _context.RegexGroups = null;
         var effectiveNewEachTime = GetEffectiveFunctionAttribute(def.Element, "new-each-time");
         bool memoize = IsDeterministicNewEachTime(effectiveNewEachTime);
         XsltFunctionCacheKey? cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
@@ -1329,6 +1336,7 @@ public sealed class TransformEngine
             _currentMergeKey = savedMergeKey;
             _currentNamedMergeGroups = savedNamedGroups;
             _currentMergeSourceNames = savedMergeSourceNames;
+            _context.RegexGroups = savedRegexGroups;
         }
     }
 
@@ -2011,6 +2019,11 @@ public sealed class TransformEngine
                             else if (node is XText t && !string.IsNullOrEmpty(t.Value))
                                 results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
                         }
+                        break;
+                    }
+                case "analyze-string":
+                    {
+                        ExecuteAnalyzeString(instruction, contextItem, (child, ctx) => EvaluateAnalyzeStringChild(child, results, ctx));
                         break;
                     }
                 default:
@@ -3446,6 +3459,12 @@ public sealed class TransformEngine
             case "merge":
                 {
                     ExecuteMergeInstruction(instruction, contextItem);
+                    break;
+                }
+
+            case "analyze-string":
+                {
+                    ExecuteAnalyzeString(instruction, contextItem, ExecuteAnalyzeStringChild);
                     break;
                 }
 
@@ -6144,6 +6163,24 @@ public sealed class TransformEngine
                 if (_currentMergeKey == null)
                     throw new InvalidOperationException("XTDE3510: current-merge-key() is not defined in the current context");
                 return _currentMergeKey.Value;
+            }
+        });
+
+        _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "regex-group",
+            Arity = 1,
+            ParameterTypes = [XdmValueKind.Integer],
+            ReturnType = XdmValueKind.String,
+            Implementation = (ctx, args) =>
+            {
+                var nValue = AtomizeFirstItem(args[0]);
+                if (nValue.IsUndefined || !long.TryParse(nValue.ToString(), out long n))
+                    return XdmValue.FromString(string.Empty);
+                if (_context.RegexGroups == null || n < 0 || n >= _context.RegexGroups.Length)
+                    return XdmValue.FromString(string.Empty);
+                return XdmValue.FromString(_context.RegexGroups[n]);
             }
         });
     }
@@ -10396,6 +10433,214 @@ public sealed class TransformEngine
                 _currentNamedMergeGroups = savedNamedGroups;
                 _currentMergeSourceNames = savedSourceNames;
                 _context.WithFocus(savedActionFocus, savedActionPosition, savedActionSize);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Evaluates an <c>xsl:analyze-string</c> instruction, invoking <paramref name="executeChild"/>
+    /// for each matching/non-matching substring child.
+    /// </summary>
+    private void ExecuteAnalyzeString(XElement instruction, XdmValue contextItem, Action<XElement, XdmValue> executeChild)
+    {
+        var xsl = Stylesheet.Stylesheet.XslNamespace;
+
+        var selectAttr = instruction.Attribute("select")?.Value;
+        XdmValue selectValue = !string.IsNullOrEmpty(selectAttr)
+            ? CompileXPath(selectAttr, instruction).Evaluate(_context)
+            : contextItem;
+
+        var selectedItems = EnumerateItems(selectValue).ToList();
+        if (selectedItems.Count > 1)
+            throw new InvalidOperationException("XPTY0004: xsl:analyze-string select must evaluate to zero or one items");
+
+        string input;
+        if (selectedItems.Count == 0)
+        {
+            input = string.Empty;
+        }
+        else
+        {
+            var atomized = AtomizeFirstItem(selectedItems[0]);
+            if (atomized.Kind != XdmValueKind.String)
+                throw new InvalidOperationException("XPTY0004");
+            input = atomized.ToString();
+        }
+
+        var regexAttr = instruction.Attribute("regex");
+        if (regexAttr == null || regexAttr.Value == null)
+            throw new InvalidOperationException("XTSE0010: xsl:analyze-string requires a regex attribute");
+        string pattern = EvaluateAvt(regexAttr.Value, instruction);
+
+        var flagsAttr = instruction.Attribute("flags")?.Value ?? string.Empty;
+        string flags = EvaluateAvt(flagsAttr, instruction);
+
+        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode);
+        if (isQuoteMode)
+            pattern = Regex.Escape(pattern);
+        else
+            pattern = RegexHelper.ValidateAndTranslatePattern(pattern);
+
+        var matchingChild = instruction.Element(XName.Get("matching-substring", xsl));
+        var nonMatchingChild = instruction.Element(XName.Get("non-matching-substring", xsl));
+        if (matchingChild == null && nonMatchingChild == null)
+            throw new InvalidOperationException("XTSE1130: xsl:analyze-string must contain at least one xsl:matching-substring or xsl:non-matching-substring");
+
+        // Validate child order: matching-substring*, non-matching-substring?, fallback*
+        bool seenNonMatching = false;
+        bool seenFallback = false;
+        foreach (var child in instruction.Elements())
+        {
+            var ln = child.Name.LocalName;
+            if (ln == "matching-substring")
+            {
+                if (seenNonMatching || seenFallback)
+                    throw new InvalidOperationException("XTSE0010: xsl:matching-substring must precede xsl:non-matching-substring and xsl:fallback");
+            }
+            else if (ln == "non-matching-substring")
+            {
+                if (seenFallback)
+                    throw new InvalidOperationException("XTSE0010: xsl:non-matching-substring must precede xsl:fallback");
+                seenNonMatching = true;
+            }
+            else if (ln == "fallback")
+            {
+                seenFallback = true;
+            }
+            else if (child.Name.NamespaceName == xsl)
+            {
+                throw new InvalidOperationException("XTSE0010: invalid child of xsl:analyze-string");
+            }
+        }
+
+        bool xslt20 = decimal.TryParse(_stylesheet.Version, out var version) && version < 3.0m;
+        if (xslt20 && Regex.IsMatch(string.Empty, pattern, options))
+            throw new InvalidOperationException("XTDE1150: regex matches zero-length string");
+
+        // Precompute the sequence of matching and non-matching substrings using the
+        // XSLT 3.0 position-based algorithm (§17.1). This correctly handles regexes
+        // that match zero-length substrings.
+        var segments = new List<(bool IsMatch, string Text, Match? Match)>();
+        var regex = new Regex(pattern, options);
+        int pos = 0;
+        var pendingNonMatch = new StringBuilder();
+
+        while (true)
+        {
+            var match = regex.Match(input, pos);
+            bool matchedHere = match.Success && match.Index == pos;
+
+            if (matchedHere)
+            {
+                if (pendingNonMatch.Length > 0)
+                {
+                    segments.Add((false, pendingNonMatch.ToString(), null));
+                    pendingNonMatch.Clear();
+                }
+
+                segments.Add((true, match.Value, match));
+
+                if (match.Length == 0)
+                {
+                    if (pos == input.Length)
+                        break;
+                    pendingNonMatch.Append(input[pos]);
+                    pos++;
+                }
+                else
+                {
+                    pos += match.Length;
+                    if (pos > input.Length)
+                        pos = input.Length;
+                }
+            }
+            else
+            {
+                if (pos == input.Length)
+                {
+                    if (pendingNonMatch.Length > 0)
+                        segments.Add((false, pendingNonMatch.ToString(), null));
+                    break;
+                }
+
+                pendingNonMatch.Append(input[pos]);
+                pos++;
+            }
+        }
+
+        var savedGroups = _context.RegexGroups;
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        var savedCurrent = _context.CurrentItem;
+        try
+        {
+            int total = segments.Count;
+            for (int i = 0; i < segments.Count; i++)
+            {
+                var (isMatch, text, match) = segments[i];
+                _context.RegexGroups = isMatch && match != null
+                    ? match.Groups.Cast<Group>().Select(g => g.Success ? g.Value : string.Empty).ToArray()
+                    : null;
+                var substringItem = XdmValue.FromString(text, "string");
+                _context.WithFocus(substringItem, i + 1, total);
+                _context.WithCurrentItem(substringItem);
+
+                if (isMatch && matchingChild != null)
+                    executeChild(matchingChild, contextItem);
+                else if (!isMatch && nonMatchingChild != null)
+                    executeChild(nonMatchingChild, contextItem);
+            }
+        }
+        finally
+        {
+            _context.RegexGroups = savedGroups;
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+            _context.WithCurrentItem(savedCurrent);
+        }
+    }
+
+    private void ExecuteAnalyzeStringChild(XElement child, XdmValue contextItem)
+    {
+        foreach (var node in child.Nodes())
+        {
+            switch (node)
+            {
+                case XText text:
+                    ProcessSequenceText(text, child);
+                    break;
+                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                    ExecuteXsltInstruction(elem, contextItem);
+                    break;
+                case XElement elem:
+                    CopyLiteralElement(elem);
+                    break;
+            }
+        }
+    }
+
+    private void EvaluateAnalyzeStringChild(XElement child, List<XdmValue> results, XdmValue contextItem)
+    {
+        foreach (var node in child.Nodes())
+        {
+            switch (node)
+            {
+                case XText text:
+                    if (GetExpandText(child) && ContainsTvtExpression(text.Value))
+                    {
+                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(EvaluateTvt(text.Value)))));
+                    }
+                    else if (!IsWhitespaceOnly(text.Value))
+                    {
+                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(text.Value))));
+                    }
+                    break;
+                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                    EvaluateFunctionBodyInstruction(elem, results, contextItem);
+                    break;
+                case XElement elem:
+                    results.Add(XdmValue.FromNode(new XDocumentNode(elem)));
+                    break;
             }
         }
     }

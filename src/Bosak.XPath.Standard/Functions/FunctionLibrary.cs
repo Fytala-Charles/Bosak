@@ -61,6 +61,8 @@
 //                      | Charles Korthout | 4.7   | 13-06-2026     | fn:document#1/#2 resolves fragment identifiers to elements                                |
 //                      | Charles Korthout | 4.8   | 13-06-2026     | fn:collection resolves relative URIs against base URI for xsl:merge tests               |
 //                      | Charles Korthout | 4.9   | 13-06-2026     | Adjust-time/date/dateTime use implicit timezone; dateTime constructor supports extended years |
+//                      | Charles Korthout | 5.0   | 13-06-2026     | Registered fn:regex-group#1 for xsl:analyze-string                                      |
+//                      | Charles Korthout | 5.1   | 13-06-2026     | Shared RegexHelper: XSD validation, backreference translation, and quote-preserving unquote |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -475,6 +477,13 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
                 ReturnType = XdmValueKind.Node,
                 Implementation = AnalyzeString_3
+            },
+            [(Namespaces.Fn, "regex-group", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "regex-group", Arity = 1,
+                ParameterTypes = [XdmValueKind.Integer],
+                ReturnType = XdmValueKind.String,
+                Implementation = RegexGroup
             },
 
             // ----- fn:apply ---------------------------------------------------
@@ -3949,6 +3958,15 @@ public static class FunctionLibrary
     private static XdmValue AnalyzeString_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => AnalyzeString(AtomizedString(args[0]), AtomizedString(args[1]), AtomizedString(args[2]));
 
+    private static XdmValue RegexGroup(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (args[0].IsUndefined || !long.TryParse(AtomizedString(args[0]), out long n))
+            return XdmValue.FromString(string.Empty);
+        if (ctx.RegexGroups == null || n < 0 || n >= ctx.RegexGroups.Length)
+            return XdmValue.FromString(string.Empty);
+        return XdmValue.FromString(ctx.RegexGroups[n]);
+    }
+
     private static XdmValue AnalyzeString(string value, string pattern, string flags)
     {
         XNamespace fn = "http://www.w3.org/2005/xpath-functions";
@@ -3957,11 +3975,13 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(value))
             return XdmValue.FromNode(new XDocumentNode(result));
 
-        var options = ParseRegexFlags(flags, out bool isQuoteMode);
-        if (isQuoteMode) pattern = Regex.Escape(pattern);
+        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode);
+        if (isQuoteMode)
+            pattern = Regex.Escape(pattern);
+        else
+            pattern = RegexHelper.ValidateAndTranslatePattern(pattern);
 
-        if (Regex.IsMatch(string.Empty, pattern, options))
-            throw new InvalidOperationException("FORX0003");
+        RegexHelper.CheckZeroLengthMatch(pattern, options);
 
         var matches = Regex.Matches(value, pattern, options);
         int pos = 0;
@@ -3972,22 +3992,25 @@ public static class FunctionLibrary
                 result.Add(new XElement(fn + "non-match", value[pos..match.Index]));
 
             var matchEl = new XElement(fn + "match");
-            int matchPos = match.Index;
+            int[] parents = RegexHelper.GetCapturingGroupParents(pattern);
+            var root = new GroupNode(match.Index, match.Length);
+            var nodes = new GroupNode?[match.Groups.Count];
             for (int g = 1; g < match.Groups.Count; g++)
             {
                 var group = match.Groups[g];
-                if (group.Success)
-                {
-                    if (group.Index > matchPos)
-                        matchEl.Add(new XText(value[matchPos..group.Index]));
-                    var groupEl = new XElement(fn + "group", group.Value);
-                    groupEl.SetAttributeValue("nr", g);
-                    matchEl.Add(groupEl);
-                    matchPos = group.Index + group.Length;
-                }
+                if (!group.Success)
+                    continue;
+
+                var node = new GroupNode(g, group.Index, group.Length);
+                nodes[g] = node;
+                int parent = parents.Length > g ? parents[g] : 0;
+                if (parent == 0 || nodes[parent] == null)
+                    root.Children.Add(node);
+                else
+                    nodes[parent]!.Children.Add(node);
             }
-            if (matchPos < match.Index + match.Length)
-                matchEl.Add(new XText(value[matchPos..(match.Index + match.Length)]));
+
+            RenderNode(matchEl, root, value, fn);
             result.Add(matchEl);
             pos = match.Index + match.Length;
         }
@@ -3996,6 +4019,55 @@ public static class FunctionLibrary
             result.Add(new XElement(fn + "non-match", value[pos..]));
 
         return XdmValue.FromNode(new XDocumentNode(result));
+    }
+
+    private sealed class GroupNode
+    {
+        public int? Nr { get; }
+        public int Index { get; }
+        public int Length { get; }
+        public int End => Index + Length;
+        public List<GroupNode> Children { get; } = new List<GroupNode>();
+
+        public GroupNode(int index, int length)
+        {
+            Index = index;
+            Length = length;
+        }
+
+        public GroupNode(int nr, int index, int length)
+        {
+            Nr = nr;
+            Index = index;
+            Length = length;
+        }
+    }
+
+    private static void RenderNode(XContainer outer, GroupNode node, string value, XNamespace fn)
+    {
+        XContainer container = outer;
+        XElement? groupEl = null;
+        if (node.Nr.HasValue)
+        {
+            groupEl = new XElement(fn + "group");
+            groupEl.SetAttributeValue("nr", node.Nr.Value);
+            container = groupEl;
+        }
+
+        int pos = node.Index;
+        foreach (var child in node.Children)
+        {
+            if (child.Index > pos)
+                container.Add(new XText(value[pos..child.Index]));
+            RenderNode(container, child, value, fn);
+            pos = child.End;
+        }
+
+        if (node.End > pos)
+            container.Add(new XText(value[pos..node.End]));
+
+        if (groupEl != null)
+            outer.Add(groupEl);
     }
 
     private static XdmValue Contains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -4564,7 +4636,7 @@ public static class FunctionLibrary
     private static XdmValue Matches_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
-        string pattern = AtomizedString(args[1]);
+        string pattern = RegexHelper.ValidateAndTranslatePattern(AtomizedString(args[1]));
         return XdmValue.FromBoolean(Regex.IsMatch(input, pattern));
     }
 
@@ -4572,100 +4644,47 @@ public static class FunctionLibrary
     {
         string input = AtomizedString(args[0]);
         string pattern = AtomizedString(args[1]);
-        var options = ParseRegexFlags(AtomizedString(args[2]), out bool isQuoteMode);
-        if (isQuoteMode) pattern = Regex.Escape(pattern);
+        var options = RegexHelper.ParseRegexFlags(AtomizedString(args[2]), out bool isQuoteMode);
+        if (isQuoteMode)
+            pattern = Regex.Escape(pattern);
+        else
+            pattern = RegexHelper.ValidateAndTranslatePattern(pattern);
         return XdmValue.FromBoolean(Regex.IsMatch(input, pattern, options));
     }
 
-    private static string ValidateAndTranslateReplacement(string replacement)
-    {
-        var sb = new System.Text.StringBuilder(replacement.Length);
-        for (int i = 0; i < replacement.Length; i++)
-        {
-            char c = replacement[i];
-            if (c == '$')
-            {
-                if (i + 1 < replacement.Length)
-                {
-                    char next = replacement[i + 1];
-                    if (next == '$')
-                    {
-                        sb.Append("$$");
-                        i++;
-                    }
-                    else if (char.IsDigit(next))
-                    {
-                        sb.Append('$').Append(next);
-                        i++;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("FORX0004");
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException("FORX0004");
-                }
-            }
-            else if (c == '\\')
-            {
-                if (i + 1 < replacement.Length)
-                {
-                    char next = replacement[i + 1];
-                    if (next == '\\')
-                    {
-                        sb.Append('\\');
-                        i++;
-                    }
-                    else if (next == '$')
-                    {
-                        sb.Append("$$");
-                        i++;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("FORX0004");
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException("FORX0004");
-                }
-            }
-            else
-            {
-                sb.Append(c);
-            }
-        }
-        return sb.ToString();
-    }
-
-    private static void CheckZeroLengthMatch(string pattern, RegexOptions options)
-    {
-        if (Regex.IsMatch(string.Empty, pattern, options))
-            throw new InvalidOperationException("FORX0003");
-    }
 
     private static XdmValue Replace_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
-        string pattern = AtomizedString(args[1]);
+        string originalPattern = AtomizedString(args[1]);
+        string pattern = RegexHelper.ValidateAndTranslatePattern(originalPattern);
         string replacement = AtomizedString(args[2]);
-        CheckZeroLengthMatch(pattern, RegexOptions.None);
-        string netReplacement = ValidateAndTranslateReplacement(replacement);
+        RegexHelper.CheckZeroLengthMatch(pattern, RegexOptions.None);
+        int groupCount = RegexHelper.CountCapturingGroups(originalPattern);
+        string netReplacement = RegexHelper.ValidateAndTranslateReplacement(replacement, groupCount);
         return XdmValue.FromString(Regex.Replace(input, pattern, netReplacement));
     }
 
     private static XdmValue Replace_4(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
-        string pattern = AtomizedString(args[1]);
+        string originalPattern = AtomizedString(args[1]);
         string replacement = AtomizedString(args[2]);
-        var options = ParseRegexFlags(AtomizedString(args[3]), out bool isQuoteMode);
-        if (isQuoteMode) pattern = Regex.Escape(pattern);
-        CheckZeroLengthMatch(pattern, options);
-        string netReplacement = ValidateAndTranslateReplacement(replacement);
+        var options = RegexHelper.ParseRegexFlags(AtomizedString(args[3]), out bool isQuoteMode);
+        string pattern;
+        string netReplacement;
+        if (isQuoteMode)
+        {
+            pattern = Regex.Escape(originalPattern);
+            netReplacement = RegexHelper.EscapeReplacementForQuoteMode(replacement);
+        }
+        else
+        {
+            pattern = RegexHelper.ValidateAndTranslatePattern(originalPattern);
+            int groupCount = RegexHelper.CountCapturingGroups(originalPattern);
+            netReplacement = RegexHelper.ValidateAndTranslateReplacement(replacement, groupCount);
+        }
+        RegexHelper.CheckZeroLengthMatch(pattern, options);
         return XdmValue.FromString(Regex.Replace(input, pattern, netReplacement, options));
     }
 
@@ -4696,11 +4715,13 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(input))
             return XdmValue.FromSequence(XdmSequence.Empty);
 
-        var options = ParseRegexFlags(flags, out bool isQuoteMode);
-        if (isQuoteMode) pattern = Regex.Escape(pattern);
+        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode);
+        if (isQuoteMode)
+            pattern = Regex.Escape(pattern);
+        else
+            pattern = RegexHelper.ValidateAndTranslatePattern(pattern);
 
-        if (Regex.IsMatch(string.Empty, pattern, options))
-            throw new InvalidOperationException("fn:tokenize: pattern must not match the empty string");
+        RegexHelper.CheckZeroLengthMatch(pattern, options);
 
         var parts = Regex.Split(input, pattern, options);
         var result = new List<XdmValue>();
@@ -5650,25 +5671,6 @@ public static class FunctionLibrary
             return XdmValue.Undefined;
         var uri = node.BaseUri;
         return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
-    }
-
-    private static RegexOptions ParseRegexFlags(string flags, out bool isQuoteMode)
-    {
-        var options = RegexOptions.None;
-        isQuoteMode = false;
-        foreach (char c in flags)
-        {
-            switch (c)
-            {
-                case 'i': options |= RegexOptions.IgnoreCase; break;
-                case 'm': options |= RegexOptions.Multiline; break;
-                case 's': options |= RegexOptions.Singleline; break;
-                case 'x': options |= RegexOptions.IgnorePatternWhitespace; break;
-                case 'q': isQuoteMode = true; break;
-                default: throw new InvalidOperationException($"Unknown regex flag: '{c}'");
-            }
-        }
-        return options;
     }
 
     // ------------------------------------------------------------------
