@@ -1,6 +1,56 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
+**Commit:** `21701f9`
+**Current focus:** `analyze-string` cluster completed; regex handling centralized in `RegexHelper`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,363
+- **Failed:** 908
+- **Skipped:** 9,329
+- **Pass rate:** 82.8% (+58 passes / -58 failures vs. previous 4,305/966)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **Centralized regex helper** — Added `RegexHelper` to parse flags, validate XSD regex syntax, translate patterns and replacement strings, detect zero-length matches, and map capturing-group nesting.
+   - **File added**: `src/Bosak.XPath.Standard/Functions/RegexHelper.cs`.
+
+2. **`xsl:analyze-string` conformance** — Implemented XSLT 3.0 zero-length match semantics, validated regex syntax (FORX0002 / XTDE1150), propagated regex groups for `regex-group()`, enforced XTSE1130 child requirements, and fixed whitespace/TVT handling for regex/flags attributes.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Patterns/PatternCompiler.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+3. **`fn:analyze-string` nested groups** — Group elements are now emitted with the nested structure required by the spec, using the regex parent map from `RegexHelper`.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+4. **`fn:replace` replacement-string escaping** — Replacement strings now correctly handle `$`, `\`, and digit back-references per XPath/XSD rules.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+5. **XPath string literal parsing** — Doubled quotes inside double-quoted string literals are now unescaped correctly, fixing AVT/TVT cases such as `replace($s, '""', '"')`.
+   - **File changed**: `src/Bosak.XPath.Parser/Ast/XPathParser.cs`.
+
+6. **Regex-group execution context** — `EvaluationContext` now carries the most recent regex capture-group array, and pattern matching clears stale groups to prevent `regex-group()` leakage.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`, `src/Bosak.Xslt/Patterns/PatternCompiler.cs`.
+
+## Notes
+
+- Unit-test suite: **877 passed / 0 failed** across 8 projects.
+- XPath `fn-analyze-string` cluster: **25 passed / 0 failed / 9 skipped**.
+- Scratch files in `tmpdebug/` and `merge_fails*.txt` were excluded from the commit.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-13
 **Commit:** `37c7a19`
 **Current focus:** xsl:merge support committed; full-suite baseline re-established. Next step is to diff and pick the next cluster.
 
