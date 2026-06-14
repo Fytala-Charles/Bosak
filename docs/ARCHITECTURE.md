@@ -242,6 +242,7 @@ flowchart TD
 - Instruction pointer walks the bytecode.
 - Axis instructions delegate to the `IXdmNode` provider.
 - Function calls dispatch through a vtable in `EvaluationContext`.
+- `EvaluationContext.ImplicitTimezoneOffsetMinutes` supplies the dynamic context's implicit timezone (default UTC) for date/time comparisons and `adjust-*-to-timezone#1`.
 
 **Performance features**:
 - **Sequence pipelining**: Axis results are not buffered unless required by sorting or positional predicates.

@@ -43,6 +43,7 @@
 //                      | Charles Korthout | 2.10  | 11-06-2026     | Apply opcode invokes map/array functions; date comparison casts untypedAtomic operands    |
 //                      | Charles Korthout | 2.11  | 13-06-2026     | Empty-URI EQName support in ResolveVariableName (Q{}local)                              |
 //                      | Charles Korthout | 2.12  | 13-06-2026     | Parameterized map(K,V) and array(T) matching in ValueMatchesType                         |
+//                      | Charles Korthout | 2.13  | 13-06-2026     | Date/time comparison uses implicit timezone; time constructor avoids DateTimeOffset       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2183,32 +2184,34 @@ public static class VmEngine
 
     private static XdmValue AddDuration(XdmValue dateTimeValue, string duration)
     {
-        var dto = dateTimeValue.Kind switch
+        bool hasTz = dateTimeValue.HasTimezone;
+        var xdt = dateTimeValue.Kind switch
         {
-            XdmValueKind.DateTime => dateTimeValue.DateTimeValue,
-            XdmValueKind.Date => dateTimeValue.DateValue,
-            XdmValueKind.Time => dateTimeValue.TimeValue,
+            XdmValueKind.DateTime => dateTimeValue.DateTimeXPathValue,
+            XdmValueKind.Date => dateTimeValue.DateXPathValue,
+            XdmValueKind.Time => dateTimeValue.TimeXPathValue,
             _ => throw new InvalidOperationException("Expected date/time value")
         };
+        int tzMinutes = xdt.TimezoneOffsetMinutes;
+        bool isTime = dateTimeValue.Kind == XdmValueKind.Time;
 
+        XPathDateTime result;
         if (IsYearMonthDurationString(duration))
         {
             var (years, months, _, _, _, _) = ParseDuration(duration);
-            var dt = dto.DateTime;
-            int newMonth = dt.Month + (int)months;
-            int newYear = dt.Year + (int)years + (newMonth - 1) / 12;
-            newMonth = ((newMonth - 1) % 12) + 1;
-            if (newMonth <= 0) { newYear -= 1; newMonth += 12; }
-            int newDay = Math.Min(dt.Day, DateTime.DaysInMonth(newYear, newMonth));
-            var newDt = new DateTime(newYear, newMonth, newDay, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Kind);
-            dto = new DateTimeOffset(newDt, dto.Offset);
+            if (isTime)
+            {
+                result = xdt;
+            }
+            else
+            {
+                var (ny, nm, nd) = XPathDateTimeHelper.AddMonths(xdt.Year, xdt.Month, xdt.Day, years * 12 + months);
+                result = new XPathDateTime(ny, nm, nd, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, tzMinutes, hasTz);
+            }
         }
         else if (IsDayTimeDurationString(duration))
         {
-            var (_, _, days, hours, minutes, seconds) = ParseDuration(duration);
-            long ticks = (long)(seconds * TimeSpan.TicksPerSecond);
-            var ts = TimeSpan.FromDays(days) + TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes) + TimeSpan.FromTicks(ticks);
-            dto = dto + ts;
+            result = AddDayTimeDuration(xdt, duration, isTime, tzMinutes, hasTz);
         }
         else
         {
@@ -2217,11 +2220,48 @@ public static class VmEngine
 
         return dateTimeValue.Kind switch
         {
-            XdmValueKind.DateTime => XdmValue.FromDateTime(dto),
-            XdmValueKind.Date => XdmValue.FromDate(dto),
-            XdmValueKind.Time => XdmValue.FromTime(dto, dateTimeValue.HasTimezone),
+            XdmValueKind.DateTime => XdmValue.FromDateTime(result, hasTz),
+            XdmValueKind.Date => XdmValue.FromDate(result, hasTz),
+            XdmValueKind.Time => XdmValue.FromTime(result, hasTz),
             _ => throw new InvalidOperationException("Unexpected kind")
         };
+    }
+
+    private static XPathDateTime AddDayTimeDuration(XPathDateTime xdt, string duration, bool isTime, int tzMinutes, bool hasTz)
+    {
+        var (_, _, days, hours, minutes, seconds) = ParseDuration(duration);
+        long deltaMs = ((days * 24L + hours) * 3600L + minutes * 60L) * 1000L + (long)(seconds * 1000m);
+        long msOfDay = (xdt.Hour * 3600L + xdt.Minute * 60L + xdt.Second) * 1000L + xdt.Millisecond;
+        if (isTime)
+        {
+            long totalMs = (msOfDay + deltaMs) % 86400000L;
+            if (totalMs < 0) totalMs += 86400000L;
+            return MsToTime(totalMs, tzMinutes, hasTz);
+        }
+        long totalMsFull = msOfDay + deltaMs;
+        long dayOffset = totalMsFull / 86400000L;
+        long newMsOfDay = totalMsFull % 86400000L;
+        if (newMsOfDay < 0) { newMsOfDay += 86400000L; dayOffset--; }
+        var (ny, nm, nd) = XPathDateTimeHelper.CivilFromDays(XPathDateTimeHelper.DaysFromCivil(xdt.Year, xdt.Month, xdt.Day) + dayOffset);
+        return MsToDateTime(ny, nm, nd, newMsOfDay, tzMinutes, hasTz);
+    }
+
+    private static XPathDateTime MsToTime(long totalMs, int tzMinutes, bool hasTz)
+    {
+        int hour = (int)(totalMs / 3600000L); totalMs %= 3600000L;
+        int minute = (int)(totalMs / 60000L); totalMs %= 60000L;
+        int second = (int)(totalMs / 1000L);
+        int ms = (int)(totalMs % 1000L);
+        return new XPathDateTime(1, 1, 1, hour, minute, second, ms, tzMinutes, hasTz);
+    }
+
+    private static XPathDateTime MsToDateTime(long year, int month, int day, long totalMs, int tzMinutes, bool hasTz)
+    {
+        int hour = (int)(totalMs / 3600000L); totalMs %= 3600000L;
+        int minute = (int)(totalMs / 60000L); totalMs %= 60000L;
+        int second = (int)(totalMs / 1000L);
+        int ms = (int)(totalMs % 1000L);
+        return new XPathDateTime(year, month, day, hour, minute, second, ms, tzMinutes, hasTz);
     }
 
     private static XdmValue Subtract(XdmValue left, XdmValue right)
@@ -2230,19 +2270,16 @@ public static class VmEngine
             return XdmValue.Undefined;
 
         if (left.Kind == XdmValueKind.Date && right.Kind == XdmValueKind.Date)
-            return XdmValue.FromDuration(FormatDuration(left.DateValue - right.DateValue));
+            return XdmValue.FromDuration(FormatDurationFromDateTimeDiff(left.DateXPathValue, right.DateXPathValue));
         if (left.Kind == XdmValueKind.DateTime && right.Kind == XdmValueKind.DateTime)
-            return XdmValue.FromDuration(FormatDuration(left.DateTimeValue - right.DateTimeValue));
+            return XdmValue.FromDuration(FormatDurationFromDateTimeDiff(left.DateTimeXPathValue, right.DateTimeXPathValue));
         if (left.Kind == XdmValueKind.Time && right.Kind == XdmValueKind.Time)
         {
-            // Normalize both times to the same reference date before subtracting,
-            // so that times from different sources (e.g. fn:current-time() vs xs:time literal)
-            // compare only their time-of-day components.
-            var leftDt = left.TimeValue;
-            var rightDt = right.TimeValue;
-            var leftRef = new DateTimeOffset(1, 1, 1, leftDt.Hour, leftDt.Minute, leftDt.Second, leftDt.Millisecond, leftDt.Offset);
-            var rightRef = new DateTimeOffset(1, 1, 1, rightDt.Hour, rightDt.Minute, rightDt.Second, rightDt.Millisecond, rightDt.Offset);
-            return XdmValue.FromDuration(FormatDuration(leftRef - rightRef));
+            var leftDt = left.TimeXPathValue;
+            var rightDt = right.TimeXPathValue;
+            var leftRef = new XPathDateTime(1972, 12, 31, leftDt.Hour, leftDt.Minute, leftDt.Second, leftDt.Millisecond, leftDt.TimezoneOffsetMinutes, left.HasTimezone);
+            var rightRef = new XPathDateTime(1972, 12, 31, rightDt.Hour, rightDt.Minute, rightDt.Second, rightDt.Millisecond, rightDt.TimezoneOffsetMinutes, right.HasTimezone);
+            return XdmValue.FromDuration(FormatDurationFromDateTimeDiff(leftRef, rightRef));
         }
         if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
             return SubtractDuration(left, right.ToString());
@@ -2266,34 +2303,49 @@ public static class VmEngine
         return MultiplyOrAddInteger(ToInteger(left), -ToInteger(right), false);
     }
 
+    private static string FormatDurationFromDateTimeDiff(XPathDateTime left, XPathDateTime right)
+    {
+        var ul = XPathDateTimeHelper.NormalizeToUtc(left);
+        var ur = XPathDateTimeHelper.NormalizeToUtc(right);
+        decimal msL = (decimal)XPathDateTimeHelper.DaysFromCivil(ul.Year, ul.Month, ul.Day) * 86400000m
+            + ((ul.Hour * 3600m + ul.Minute * 60m + ul.Second) * 1000m + ul.Millisecond);
+        decimal msR = (decimal)XPathDateTimeHelper.DaysFromCivil(ur.Year, ur.Month, ur.Day) * 86400000m
+            + ((ur.Hour * 3600m + ur.Minute * 60m + ur.Second) * 1000m + ur.Millisecond);
+        return FormatDurationFromMilliseconds(msL - msR);
+    }
+
     private static XdmValue SubtractDuration(XdmValue dateTimeValue, string duration)
     {
-        var dto = dateTimeValue.Kind switch
+        bool hasTz = dateTimeValue.HasTimezone;
+        var xdt = dateTimeValue.Kind switch
         {
-            XdmValueKind.DateTime => dateTimeValue.DateTimeValue,
-            XdmValueKind.Date => dateTimeValue.DateValue,
-            XdmValueKind.Time => dateTimeValue.TimeValue,
+            XdmValueKind.DateTime => dateTimeValue.DateTimeXPathValue,
+            XdmValueKind.Date => dateTimeValue.DateXPathValue,
+            XdmValueKind.Time => dateTimeValue.TimeXPathValue,
             _ => throw new InvalidOperationException("Expected date/time value")
         };
+        int tzMinutes = xdt.TimezoneOffsetMinutes;
+        bool isTime = dateTimeValue.Kind == XdmValueKind.Time;
 
+        XPathDateTime result;
         if (IsYearMonthDurationString(duration))
         {
             var (years, months, _, _, _, _) = ParseDuration(duration);
-            var dt = dto.DateTime;
-            int newMonth = dt.Month - (int)months;
-            int newYear = dt.Year - (int)years + (newMonth - 1) / 12;
-            newMonth = ((newMonth - 1) % 12) + 1;
-            if (newMonth <= 0) { newYear -= 1; newMonth += 12; }
-            int newDay = Math.Min(dt.Day, DateTime.DaysInMonth(newYear, newMonth));
-            var newDt = new DateTime(newYear, newMonth, newDay, dt.Hour, dt.Minute, dt.Second, dt.Millisecond, dt.Kind);
-            dto = new DateTimeOffset(newDt, dto.Offset);
+            if (isTime)
+            {
+                result = xdt;
+            }
+            else
+            {
+                var (ny, nm, nd) = XPathDateTimeHelper.AddMonths(xdt.Year, xdt.Month, xdt.Day, -(years * 12 + months));
+                result = new XPathDateTime(ny, nm, nd, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, tzMinutes, hasTz);
+            }
         }
         else if (IsDayTimeDurationString(duration))
         {
             var (_, _, days, hours, minutes, seconds) = ParseDuration(duration);
-            long ticks = (long)(seconds * TimeSpan.TicksPerSecond);
-            var ts = TimeSpan.FromDays(days) + TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes) + TimeSpan.FromTicks(ticks);
-            dto = dto - ts;
+            long deltaMs = ((days * 24L + hours) * 3600L + minutes * 60L) * 1000L + (long)(seconds * 1000m);
+            result = AddDayTimeDuration(xdt, $"-P{days}DT{hours}H{minutes}M{seconds}S", isTime, tzMinutes, hasTz);
         }
         else
         {
@@ -2302,36 +2354,57 @@ public static class VmEngine
 
         return dateTimeValue.Kind switch
         {
-            XdmValueKind.DateTime => XdmValue.FromDateTime(dto),
-            XdmValueKind.Date => XdmValue.FromDate(dto),
-            XdmValueKind.Time => XdmValue.FromTime(dto, dateTimeValue.HasTimezone),
+            XdmValueKind.DateTime => XdmValue.FromDateTime(result, hasTz),
+            XdmValueKind.Date => XdmValue.FromDate(result, hasTz),
+            XdmValueKind.Time => XdmValue.FromTime(result, hasTz),
             _ => throw new InvalidOperationException("Unexpected kind")
         };
     }
 
-    private static string FormatDuration(TimeSpan ts)
+    private static string FormatDuration(TimeSpan ts) => FormatDurationFromMilliseconds((decimal)ts.TotalMilliseconds);
+
+    private static string FormatDurationFromMilliseconds(decimal totalMs)
     {
-        bool negative = ts.TotalMilliseconds < 0;
-        ts = negative ? ts.Negate() : ts;
+        if (totalMs == 0) return "PT0S";
+        bool negative = totalMs < 0;
+        decimal remaining = negative ? -totalMs : totalMs;
+        long days = (long)(remaining / 86400000m);
+        remaining -= (decimal)days * 86400000m;
+        int hours = (int)(remaining / 3600000m);
+        remaining -= hours * 3600000m;
+        int minutes = (int)(remaining / 60000m);
+        remaining -= minutes * 60000m;
+        int seconds = (int)(remaining / 1000m);
+        decimal frac = remaining - seconds * 1000m;
+        decimal sec = seconds + frac / 1000m;
+        return FormatDayTimeDurationParts(negative, days, hours, minutes, sec);
+    }
+
+    private static string FormatDayTimeDurationParts(bool negative, long days, int hours, int minutes, decimal seconds)
+    {
         var sb = new System.Text.StringBuilder();
         if (negative) sb.Append('-');
         sb.Append('P');
-        if (ts.Days > 0) sb.Append($"{ts.Days}D");
-        if (ts.Hours > 0 || ts.Minutes > 0 || ts.Seconds > 0 || ts.Milliseconds > 0)
+        if (days > 0) sb.Append(days).Append('D');
+        if (hours > 0 || minutes > 0 || seconds > 0)
         {
             sb.Append('T');
-            if (ts.Hours > 0) sb.Append($"{ts.Hours}H");
-            if (ts.Minutes > 0) sb.Append($"{ts.Minutes}M");
-            if (ts.Seconds > 0 || ts.Milliseconds > 0)
+            if (hours > 0) sb.Append(hours).Append('H');
+            if (minutes > 0) sb.Append(minutes).Append('M');
+            if (seconds > 0 || (hours == 0 && minutes == 0))
             {
-                sb.Append($"{ts.Seconds}");
-                if (ts.Milliseconds > 0)
-                    sb.Append($".{ts.Milliseconds:000}");
-                sb.Append('S');
+                sb.Append(FormatDecimalTrim(seconds)).Append('S');
             }
         }
         if (sb.Length == (negative ? 2 : 1)) sb.Append("T0S");
         return sb.ToString();
+    }
+
+    private static string FormatDecimalTrim(decimal value)
+    {
+        string s = value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        if (s.Contains('.')) s = s.TrimEnd('0').TrimEnd('.');
+        return s;
     }
 
     private static (long Years, long Months, long Days, long Hours, long Minutes, decimal Seconds) ParseDuration(string s)
@@ -2436,59 +2509,51 @@ public static class VmEngine
 
     /// <summary>
     /// Compares two date/time values of the same subtype.
-    /// Returns null if the comparison is indeterminate (one operand lacks a timezone
-    /// and the two possible positions straddle the other operand).
+    /// A value without a timezone is treated as having the implicit timezone from the dynamic context.
     /// </summary>
-    private static int? CompareDateTimeValues(XdmValue left, XdmValue right, string subtype)
+    private static int? CompareDateTimeValues(XdmValue left, XdmValue right, string subtype, EvaluationContext context)
     {
-        var leftXdt = GetXPathDateTime(left, subtype);
-        var rightXdt = GetXPathDateTime(right, subtype);
+        var leftXdt = AsComparableDateTime(GetXPathDateTime(left, subtype), subtype);
+        var rightXdt = AsComparableDateTime(GetXPathDateTime(right, subtype), subtype);
 
         bool leftHasTz = left.HasTimezone;
         bool rightHasTz = right.HasTimezone;
 
-        // Both have timezones: normalize to UTC and compare
-        if (leftHasTz && rightHasTz)
-        {
-            var leftUtc = NormalizeToUtc(leftXdt, subtype);
-            var rightUtc = NormalizeToUtc(rightXdt, subtype);
-            return CompareNormalizedDateTime(leftUtc, rightUtc);
-        }
-
-        // Neither has timezone: compare components directly
+        // Neither has timezone: compare local components directly
         if (!leftHasTz && !rightHasTz)
         {
-            return CompareNormalizedDateTime(leftXdt, rightXdt);
+            return XPathDateTimeHelper.CompareComponents(leftXdt, rightXdt);
         }
 
-        // Exactly one has timezone: test with ±14:00 implicit timezone bounds
-        // zoned = operand with timezone, unzoned = operand without timezone
-        var zonedXdt = leftHasTz ? leftXdt : rightXdt;
-        var unzonedXdt = leftHasTz ? rightXdt : leftXdt;
-        var zonedUtc = NormalizeToUtc(zonedXdt, subtype);
+        int implicitTz = GetImplicitTimezoneOffsetMinutes(context);
 
-        // Test with unzoned implicit timezone = +14:00
-        var unzonedPlus14 = NormalizeToUtc(
-            new XPathDateTime(unzonedXdt.Year, unzonedXdt.Month, unzonedXdt.Day,
-                unzonedXdt.Hour, unzonedXdt.Minute, unzonedXdt.Second, unzonedXdt.Millisecond,
-                14 * 60, true), subtype);
-        int cmpPlus14 = leftHasTz
-            ? CompareNormalizedDateTime(zonedUtc, unzonedPlus14)
-            : CompareNormalizedDateTime(unzonedPlus14, zonedUtc);
+        var leftEffective = leftHasTz
+            ? leftXdt
+            : new XPathDateTime(leftXdt.Year, leftXdt.Month, leftXdt.Day,
+                leftXdt.Hour, leftXdt.Minute, leftXdt.Second, leftXdt.Millisecond,
+                implicitTz, true);
+        var rightEffective = rightHasTz
+            ? rightXdt
+            : new XPathDateTime(rightXdt.Year, rightXdt.Month, rightXdt.Day,
+                rightXdt.Hour, rightXdt.Minute, rightXdt.Second, rightXdt.Millisecond,
+                implicitTz, true);
 
-        // Test with unzoned implicit timezone = -14:00
-        var unzonedMinus14 = NormalizeToUtc(
-            new XPathDateTime(unzonedXdt.Year, unzonedXdt.Month, unzonedXdt.Day,
-                unzonedXdt.Hour, unzonedXdt.Minute, unzonedXdt.Second, unzonedXdt.Millisecond,
-                -14 * 60, true), subtype);
-        int cmpMinus14 = leftHasTz
-            ? CompareNormalizedDateTime(zonedUtc, unzonedMinus14)
-            : CompareNormalizedDateTime(unzonedMinus14, zonedUtc);
+        var leftUtc = XPathDateTimeHelper.NormalizeToUtc(leftEffective);
+        var rightUtc = XPathDateTimeHelper.NormalizeToUtc(rightEffective);
+        return XPathDateTimeHelper.CompareComponents(leftUtc, rightUtc);
+    }
 
-        // If both evaluations agree, return that result; otherwise indeterminate
-        if (cmpPlus14 == cmpMinus14)
-            return cmpPlus14;
-        return null;
+    private static int GetImplicitTimezoneOffsetMinutes(EvaluationContext context)
+        => context.ImplicitTimezoneOffsetMinutes;
+
+    private static XPathDateTime AsComparableDateTime(XPathDateTime xdt, string subtype)
+    {
+        if (subtype == "time")
+        {
+            // xs:time comparisons use the reference date 1972-12-31 (per XPath spec).
+            return new XPathDateTime(1972, 12, 31, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, xdt.TimezoneOffsetMinutes, xdt.HasTimezone);
+        }
+        return xdt;
     }
 
     private static XPathDateTime GetXPathDateTime(XdmValue value, string subtype)
@@ -2500,72 +2565,6 @@ public static class VmEngine
             "time" => value.TimeXPathValue,
             _ => throw new InvalidOperationException($"Unsupported date/time subtype: {subtype}")
         };
-    }
-
-    /// <summary>
-    /// Normalizes a date/time value to UTC by applying its timezone offset.
-    /// For xs:time, uses 1972-12-31 as the reference date.
-    /// </summary>
-    private static XPathDateTime NormalizeToUtc(XPathDateTime xdt, string subtype)
-    {
-        // For xs:time, use a reference date (1972-12-31 per spec)
-        long year = xdt.Year;
-        int month = xdt.Month;
-        int day = xdt.Day;
-        if (subtype == "time")
-        {
-            year = 1972;
-            month = 12;
-            day = 31;
-        }
-
-        if (!xdt.HasTimezone)
-        {
-            // No timezone: return as-is (used for comparing two no-timezone values)
-            return new XPathDateTime(year, month, day, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, 0, false);
-        }
-
-        var offset = TimeSpan.FromMinutes(xdt.TimezoneOffsetMinutes);
-        if (year is >= 1 and <= 9999)
-        {
-            // Use DateTimeOffset for values in the supported range
-            var dto = new DateTimeOffset((int)year, month, day, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, offset);
-            var utc = dto.UtcDateTime;
-            return new XPathDateTime(utc.Year, utc.Month, utc.Day, utc.Hour, utc.Minute, utc.Second, utc.Millisecond, 0, true);
-        }
-        else
-        {
-            // Extended years: normalize manually
-            var totalMinutes = xdt.Hour * 60L + xdt.Minute - xdt.TimezoneOffsetMinutes;
-            var totalSeconds = totalMinutes * 60 + xdt.Second;
-            var totalMs = totalSeconds * 1000 + xdt.Millisecond;
-            // Normalize day boundary crossings manually (simplified)
-            var newDay = day + (int)(totalMs / 86400000);
-            totalMs %= 86400000;
-            if (totalMs < 0) { totalMs += 86400000; newDay--; }
-            var newHour = (int)(totalMs / 3600000);
-            totalMs %= 3600000;
-            var newMinute = (int)(totalMs / 60000);
-            totalMs %= 60000;
-            var newSecond = (int)(totalMs / 1000);
-            var newMs = (int)(totalMs % 1000);
-            return new XPathDateTime(year, month, newDay, newHour, newMinute, newSecond, newMs, 0, true);
-        }
-    }
-
-    /// <summary>
-    /// Compares two normalized XPathDateTime values (both in UTC or both without timezone).
-    /// </summary>
-    private static int CompareNormalizedDateTime(XPathDateTime a, XPathDateTime b)
-    {
-        if (a.Year != b.Year) return a.Year < b.Year ? -1 : 1;
-        if (a.Month != b.Month) return a.Month < b.Month ? -1 : 1;
-        if (a.Day != b.Day) return a.Day < b.Day ? -1 : 1;
-        if (a.Hour != b.Hour) return a.Hour < b.Hour ? -1 : 1;
-        if (a.Minute != b.Minute) return a.Minute < b.Minute ? -1 : 1;
-        if (a.Second != b.Second) return a.Second < b.Second ? -1 : 1;
-        if (a.Millisecond != b.Millisecond) return a.Millisecond < b.Millisecond ? -1 : 1;
-        return 0;
     }
 
     private static (long TotalMonths, decimal TotalSeconds) NormalizeDuration(string s)
@@ -3034,7 +3033,22 @@ public static class VmEngine
                     throw new InvalidOperationException("XPTY0004");
                 }
             }
-            var cmp = CompareDateTimeValues(left, right, leftDateSub);
+            // gYear/gYearMonth/gMonth/gMonthDay/gDay only support equality; use lexical comparison.
+            if (leftDateSub is "gYear" or "gYearMonth" or "gMonth" or "gMonthDay" or "gDay")
+            {
+                if (op is IrOpCode.LessThan or IrOpCode.ValueLessThan or IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan
+                    or IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual or IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual)
+                    throw new InvalidOperationException("XPTY0004");
+                int lexCmp = string.CompareOrdinal(left.ToString(), right.ToString());
+                return op switch
+                {
+                    IrOpCode.Equal or IrOpCode.ValueEqual => lexCmp == 0,
+                    IrOpCode.NotEqual or IrOpCode.ValueNotEqual => lexCmp != 0,
+                    _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+                };
+            }
+
+            var cmp = CompareDateTimeValues(left, right, leftDateSub, context);
             if (cmp.HasValue)
             {
                 return op switch
@@ -3568,17 +3582,7 @@ public static class VmEngine
                     string sT = NormalizeDateTimeString(value.ToString().Trim());
                     if (TryParseXPathTime(sT, out var xdtT, out var hasTzT))
                     {
-                        // Use xdtT.ToDateTimeOffset() rather than DateTimeOffset.TryParse(sT)
-                        // because TryParse on a time-only string injects the current date,
-                        // breaking subtraction/comparison with times produced by adjust-time-to-timezone.
-                        if (xdtT.IsRepresentableAsDateTimeOffset)
-                        {
-                            result = XdmValue.FromTime(xdtT.ToDateTimeOffset(), hasTzT);
-                        }
-                        else
-                        {
-                            result = XdmValue.FromTime(xdtT, hasTzT);
-                        }
+                        result = XdmValue.FromTime(xdtT, hasTzT);
                         return true;
                     }
                     // Fallback for backward compatibility with dateTime-shaped strings cast to time
@@ -4998,7 +5002,7 @@ public static class VmEngine
 
         string yearStr = m.Groups["year"].Value;
         long year = long.Parse(yearStr, CultureInfo.InvariantCulture);
-        if (Math.Abs(year) > 999999999999L) return false;
+        if (year > int.MaxValue || year < int.MinValue) return false;
         // Reject + sign and leading zeros for years longer than 4 digits
         if (yearStr.StartsWith('+')) return false;
         if (yearStr.Length > 4 && yearStr[0] == '0') return false;
@@ -5024,7 +5028,7 @@ public static class VmEngine
 
         // Validate time components
         if (hour > 24 || minute > 59 || second > 59) return false;
-        if (hour == 24 && (minute != 0 || second != 0 || hasFrac)) return false;
+        if (hour == 24 && (minute != 0 || second != 0 || millisecond != 0)) return false;
 
         int tzMinutes = 0;
         hasTz = m.Groups["tz"].Success;
@@ -5042,7 +5046,7 @@ public static class VmEngine
             }
         }
 
-        xdt = new XPathDateTime(year, month, day, hour, minute, second, millisecond, tzMinutes, hasTz);
+        xdt = NormalizeHour24(new XPathDateTime(year, month, day, hour, minute, second, millisecond, tzMinutes, hasTz));
         return true;
     }
 
@@ -5055,7 +5059,7 @@ public static class VmEngine
 
         string yearStr = m.Groups["year"].Value;
         long year = long.Parse(yearStr, CultureInfo.InvariantCulture);
-        if (Math.Abs(year) > 999999999999L) return false;
+        if (year > int.MaxValue || year < int.MinValue) return false;
         // Reject + sign and leading zeros for years longer than 4 digits
         if (yearStr.StartsWith('+')) return false;
         if (yearStr.Length > 4 && yearStr[0] == '0') return false;
@@ -5105,7 +5109,7 @@ public static class VmEngine
 
         // Validate time components
         if (hour > 24 || minute > 59 || second > 59) return false;
-        if (hour == 24 && (minute != 0 || second != 0 || hasFrac)) return false;
+        if (hour == 24 && (minute != 0 || second != 0 || millisecond != 0)) return false;
 
         int tzMinutes = 0;
         hasTz = m.Groups["tz"].Success;
@@ -5121,6 +5125,9 @@ public static class VmEngine
             }
         }
 
+        // xs:time normalizes 24:00:00 to 00:00:00 on the same (reference) day.
+        if (hour == 24)
+            hour = 0;
         xdt = new XPathDateTime(1, 1, 1, hour, minute, second, millisecond, tzMinutes, hasTz);
         return true;
     }
@@ -5139,7 +5146,7 @@ public static class VmEngine
     private static bool IsLeapYear(long year)
     {
         if (year == 0) return true; // Year 0 is a leap year in XML Schema (proleptic Gregorian)
-        if (year < 0) year = -year + 1; // Adjust for year -1 = 2 BCE, etc.
+        if (year < 0) year = -year; // BCE leap years align with the negated year number
         return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
     }
 
@@ -5170,20 +5177,37 @@ public static class VmEngine
         if (idx >= 0)
         {
             int after = idx + "T24:00:00".Length;
-            // Do not normalize if followed by fractional seconds (e.g., T24:00:00.001)
+            // Allow T24:00:00 followed by all-zero fractional seconds.
             if (after >= s.Length || s[after] != '.')
             {
-                string datePart = s[..idx];
-                string rest = s[after..];
-                if (DateTimeOffset.TryParse(datePart, out var dto))
-                {
-                    dto = dto.AddDays(1);
-                    string newDate = dto.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                    return newDate + "T00:00:00" + rest;
-                }
+                // no fractional seconds - normalize directly
+            }
+            else
+            {
+                int i = after + 1;
+                while (i < s.Length && char.IsDigit(s[i])) i++;
+                if (!s[(after + 1)..i].All(c => c == '0'))
+                    return s; // leave non-zero fractional T24 for the parser to reject
+                after = i;
+            }
+            string datePart = s[..idx];
+            string rest = s[after..];
+            if (DateTimeOffset.TryParse(datePart, out var dto))
+            {
+                dto = dto.AddDays(1);
+                string newDate = dto.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                return newDate + "T00:00:00" + rest;
             }
         }
         return s;
+    }
+
+    private static XPathDateTime NormalizeHour24(XPathDateTime xdt)
+    {
+        if (xdt.Hour != 24)
+            return xdt;
+        var (year, month, day) = XPathDateTimeHelper.AddDays(xdt.Year, xdt.Month, xdt.Day, 1);
+        return new XPathDateTime(year, month, day, 0, 0, 0, 0, xdt.TimezoneOffsetMinutes, xdt.HasTimezone);
     }
 
     private static bool TryParseDouble(string s, out double result)

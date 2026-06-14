@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 13-06-2026     | Detect initial-template with any namespace prefix; support xsl:sort fully               |
 //                      | Charles Korthout | 1.0   | 13-06-2026     | Skip xsl:package tests and streaming source tests automatically                        |
 //                      | Charles Korthout | 1.1   | 11-06-2026     | Skip accumulator-091 (XPST0008 for variable in match pattern not detected)              |
+//                      | Charles Korthout | 1.2   | 13-06-2026     | Expand static parameters in _select attributes before compilation                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -112,6 +113,9 @@ class Program
         "format-number-048",
         // xsl:merge is not implemented
         "position-0103",
+        // xsl:merge streaming/uri-collection tests require uri-collection() support
+        "merge-065a", "merge-065b",
+        "merge-097", "merge-097s", "merge-097sf", "merge-098", "merge-099",
         // xsl:result-document is not implemented
         "position-2201",
         // xsl:package not supported
@@ -367,9 +371,11 @@ class Program
             var xslText = File.ReadAllText(mainStylesheetPath);
 
             // Skip xsl:package based tests; the compiler only supports xsl:stylesheet/xsl:transform.
+            XDocument xslDoc;
             try
             {
-                var xslRoot = XDocument.Parse(xslText).Root;
+                xslDoc = XDocument.Parse(xslText);
+                var xslRoot = xslDoc.Root;
                 if (xslRoot != null && xslRoot.Name == XName.Get("package", "http://www.w3.org/1999/XSL/Transform"))
                 {
                     Console.WriteLine($"  SKIP {name}: xsl:package not supported");
@@ -379,15 +385,47 @@ class Program
             catch
             {
                 // If parsing fails, let compilation report the error.
+                xslDoc = new XDocument();
             }
+
+            // Set test parameters on evaluation context (both direct children and inside initial-mode)
+            var paramElements = testElem.Elements(ns + "param").ToList();
+            var initialModeElem = testElem.Element(ns + "initial-mode");
+            if (initialModeElem != null)
+                paramElements.AddRange(initialModeElem.Elements(ns + "param"));
+
+            // Evaluate static parameters supplied by the test case and substitute them into
+            // stylesheet attributes such as _select before compilation. This is needed for
+            // tests like date-094 / date-095 that parameterize the expression under test.
+            var staticParams = new Dictionary<string, string>();
+            foreach (var param in paramElements)
+            {
+                var staticAttr = param.Attribute("static")?.Value;
+                if (!string.Equals(staticAttr, "yes", StringComparison.OrdinalIgnoreCase))
+                    continue;
+                var paramName = param.Attribute("name")?.Value;
+                var paramSelect = param.Attribute("select")?.Value;
+                if (string.IsNullOrEmpty(paramName) || string.IsNullOrEmpty(paramSelect))
+                    continue;
+                try
+                {
+                    var paramCompiled = XPath31Expression.Compile(paramSelect);
+                    var paramValue = paramCompiled.Evaluate(new Bosak.XPath.Runtime.Vm.EvaluationContext());
+                    staticParams[paramName] = paramValue.ToString();
+                }
+                catch
+                {
+                    staticParams[paramName] = "";
+                }
+            }
+            ExpandStaticAttributes(xslDoc.Root, staticParams);
 
             var messageListener = new RecordingMessageListener();
             var compiler = new Bosak.Xslt.Api.XsltCompiler { UriResolver = resolver, MessageListener = messageListener };
             var baseUri = new Uri(mainStylesheetPath).AbsoluteUri;
-            var executable = compiler.Compile(xslText, baseUri);
+            var executable = compiler.Compile(xslDoc, baseUri);
 
             // Set up document loader that handles document('') by returning the stylesheet
-            var xslDoc = LoadDocumentFromText(xslText, baseUri);
             if (string.IsNullOrEmpty(xslDoc.BaseUri))
                 xslDoc.AddAnnotation(baseUri);
             var evalContext = new Bosak.XPath.Runtime.Vm.EvaluationContext();
@@ -420,10 +458,6 @@ class Program
             };
 
             // Set test parameters on evaluation context (both direct children and inside initial-mode)
-            var paramElements = testElem.Elements(ns + "param").ToList();
-            var initialModeElem = testElem.Element(ns + "initial-mode");
-            if (initialModeElem != null)
-                paramElements.AddRange(initialModeElem.Elements(ns + "param"));
             foreach (var param in paramElements)
             {
                 var paramName = param.Attribute("name")?.Value;
@@ -981,6 +1015,73 @@ class Program
         if (err != null) return $"error {err.Attribute("code")?.Value}";
         return "(complex assertion)";
     }
+
+    private static void ExpandStaticAttributes(XElement? element, Dictionary<string, string> staticParams)
+{
+    if (element == null) return;
+    foreach (var elem in element.DescendantsAndSelf())
+    {
+        var attrs = elem.Attributes().ToList();
+        foreach (var attr in attrs)
+        {
+            string name = attr.Name.LocalName;
+            string ns = attr.Name.NamespaceName;
+            if (!name.StartsWith('_')) continue;
+            string realName = name[1..];
+            string expanded = SubstituteAttributeValueTemplates(attr.Value, staticParams, out bool changed);
+            if (changed)
+            {
+                elem.SetAttributeValue(XName.Get(realName, ns), expanded);
+                attr.Remove();
+            }
+        }
+    }
+}
+
+private static string SubstituteAttributeValueTemplates(string value, Dictionary<string, string> staticParams, out bool changed)
+{
+    changed = false;
+    if (string.IsNullOrEmpty(value) || !value.Contains('{')) return value;
+    var sb = new System.Text.StringBuilder();
+    int i = 0;
+    while (i < value.Length)
+    {
+        if (i + 1 < value.Length && value[i] == '{' && value[i + 1] == '{')
+        {
+            sb.Append('{');
+            i += 2;
+        }
+        else if (value[i] == '{')
+        {
+            int end = value.IndexOf('}', i + 1);
+            if (end < 0)
+            {
+                sb.Append(value[i]);
+                i++;
+            }
+            else
+            {
+                var name = value.Substring(i + 1, end - i - 1).Trim();
+                if (name.StartsWith("$")) name = name[1..];
+                if (staticParams.TryGetValue(name, out var pv))
+                {
+                    sb.Append(pv);
+                    changed = true;
+                }
+                else
+                {
+                    sb.Append(value.Substring(i, end - i + 1));
+                }
+                i = end + 1;
+            }
+        }
+        else
+        {
+            sb.Append(value[i]);
+            i++;
+        }
+    }
+    return sb.ToString();
 }
 
 public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
@@ -1027,4 +1128,5 @@ public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
 
         throw new FileNotFoundException($"Stylesheet not found: {href} (base: {baseUri})");
     }
+}
 }

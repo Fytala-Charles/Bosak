@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-06-2026     | Updated date/time ordering tests to use explicit timezones                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -531,14 +532,14 @@ public class VmEngineTests
 
     [Theory]
     [InlineData("xs:date('2004-12-25Z') lt xs:date('2004-12-25-05:00')", true)]
-    [InlineData("xs:date('2008-01-31') lt xs:date('2008-01-31+09:00')", false)]   // indeterminate
-    [InlineData("xs:date('2008-01-31+09:00') lt xs:date('2008-01-31')", false)]   // indeterminate
-    [InlineData("xs:date('2008-01-31') le xs:date('2008-01-31+09:00')", false)]   // indeterminate
-    [InlineData("xs:date('2008-01-31+09:00') le xs:date('2008-01-31')", false)]   // indeterminate
-    [InlineData("xs:dateTime('2008-01-31T00:01:00') lt xs:dateTime('2008-01-31T00:01:00+09:00')", false)] // indeterminate
-    [InlineData("xs:dateTime('2008-01-31T00:01:00+09:00') lt xs:dateTime('2008-01-31T00:01:00')", false)] // indeterminate
-    [InlineData("xs:dateTime('2008-01-31T00:01:00') le xs:dateTime('2008-01-31T00:01:00+09:00')", false)] // indeterminate
-    [InlineData("xs:dateTime('2008-01-31T00:01:00+09:00') le xs:dateTime('2008-01-31T00:01:00')", false)] // indeterminate
+    [InlineData("xs:date('2008-01-31+02:00') lt xs:date('2008-01-31+09:00')", false)]
+    [InlineData("xs:date('2008-01-31+09:00') lt xs:date('2008-01-31+02:00')", true)]
+    [InlineData("xs:date('2008-01-31+02:00') le xs:date('2008-01-31+09:00')", false)]
+    [InlineData("xs:date('2008-01-31+09:00') le xs:date('2008-01-31+02:00')", true)]
+    [InlineData("xs:dateTime('2008-01-31T00:01:00+02:00') lt xs:dateTime('2008-01-31T00:01:00+09:00')", false)]
+    [InlineData("xs:dateTime('2008-01-31T00:01:00+09:00') lt xs:dateTime('2008-01-31T00:01:00+02:00')", true)]
+    [InlineData("xs:dateTime('2008-01-31T00:01:00+02:00') le xs:dateTime('2008-01-31T00:01:00+09:00')", false)]
+    [InlineData("xs:dateTime('2008-01-31T00:01:00+09:00') le xs:dateTime('2008-01-31T00:01:00+02:00')", true)]
     [InlineData("xs:time('12:00:00-05:00') lt xs:time('23:00:00+06:00')", false)] // equal in UTC
     [InlineData("xs:time('12:00:00-05:00') eq xs:time('23:00:00+06:00')", true)]  // equal in UTC
     [InlineData("xs:date('2004-12-25Z') eq xs:date('2004-12-25-05:00')", false)]  // different in UTC

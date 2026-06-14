@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-13    
+> **Living Registry** — Last updated: 2026-06-13 (date cluster stabilized)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -136,6 +136,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-029 | *(internal)* | `xsl:where-populated` and `xsl:on-empty` support | Required for copy-1213/1214/1215/1216/1217 conformance tests; where-populated filters empty nodes, on-empty provides fallback content | **Implemented** | TBD | Charles Korthout | 2026-06-10 |
 | REQ-030 | *(internal)* | XSLT `@as` type coercion and atomization | Required for as-0101 through as-1602 conformance tests; `xsl:variable`, `xsl:param`, `xsl:function`, `xsl:with-param` `@as` attribute must coerce/atomize per XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 | REQ-031 | *(internal)* | XSLT `base-uri` cluster conformance | `document('')`, `fn:base-uri()`, `fn:static-base-uri()`, and `xml:base` propagation through copies must match XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
+| REQ-032 | *(internal)* | XSLT 3.0 `xsl:merge` instruction | Required for `merge` conformance cluster: merge sources/keys/action, `current-merge-group()`, `current-merge-key()`, static/dynamic errors | **Implemented** | TBD | Charles Korthout | 2026-06-13 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -473,18 +474,19 @@ Switched `FormatXPathDouble` to use `"R"` round-trip format plus `"E16"` scienti
 
 **Requesting Application:** *(internal — conformance)*  
 **Submitted:** 2026-05-24  
-**Status:** Implemented
+**Status:** Implemented / Stabilized
 
 #### Problem Statement
-Date/time equality comparisons worked, but ordering comparisons (`<`, `>`, `<=`, `>=`) had 9 QT3 failures. The `VmEngine.Compare()` path needed actual comparison semantics for `xs:dateTime`, `xs:date`, `xs:time`, and `g*` types.
+Date/time equality comparisons worked, but ordering comparisons (`<`, `>`, `<=`, `>=`) had 9 QT3 failures. The `VmEngine.Compare()` path needed actual comparison semantics for `xs:dateTime`, `xs:date`, `xs:time`, and `g*` types. The subsequent XSLT `date` cluster also needed implicit-timezone handling, midnight normalization, timezone adjustment, and constructor bounds.
 
 #### Proposed Solution
-Extended `VmEngine.Compare()` to call `CompareDateTimeValues` with UTC normalization and indeterminate handling (±14:00 bounds per XPath spec). Proper ordering now works for all date/time subtypes.
+Extended `VmEngine.Compare()` to call `CompareDateTimeValues` with the dynamic context's implicit timezone. Added `EvaluationContext.ImplicitTimezoneOffsetMinutes`, rewrote `adjust-*-to-timezone` and the `fn:dateTime#2` constructor to use `XPathDateTime`, normalized `xs:time('24:00:00')` to the same reference day, fixed `IsLeapYear` for negative years, enforced year-range bounds, and corrected AM/PM width formatting.
 
 #### Acceptance Criteria
 - [x] All remaining `op-dateTime-less-than` etc. QT3 tests pass
 - [x] `xs:date("2024-01-01") < xs:date("2024-01-02")` → `true`
-- [x] Incomparable pairs (e.g., `xs:time` with different implicit timezones) handled per spec
+- [x] Incomparable pairs handled using the implicit timezone
+- [x] XSLT `date` cluster: 130 passed / 0 failed / 8 skipped
 
 #### Impact Analysis
 | Layer | Impact | Notes |
@@ -1467,6 +1469,44 @@ Specific gaps included:
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-06-11 | Kimi | Implemented | 60+ conformance tests fixed; unblocks remaining XSLT clusters |
+
+---
+
+### REQ-032: XSLT 3.0 `xsl:merge` instruction
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-06-13  
+**Status:** Implemented
+
+#### Problem Statement
+The XSLT 3.0 `xsl:merge` instruction and its companion functions `current-merge-group()` and `current-merge-key()` were unimplemented. The `merge` conformance cluster had 21 runnable failures (72 % pass rate) and blocked progress on the broader XSLT 3.0 conformance sweep.
+
+#### Proposed Solution
+Implement `xsl:merge`, `xsl:merge-source`, `xsl:merge-key`, and `xsl:merge-action` semantics in the runtime, plus the required static validation and error handling.
+
+#### Acceptance Criteria
+- [x] Multiple `xsl:merge-source` inputs are evaluated and sorted by key tuple.
+- [x] `current-merge-group()` and `current-merge-group($name)` return the correct items inside `xsl:merge-action`.
+- [x] `current-merge-key()` returns the shared key value for the current merge group.
+- [x] Static errors (`XTSE0010`, `XTSE0020`, `XTSE3200`, `XTSE1505`) are raised for invalid merge markup.
+- [x] Dynamic errors (`XTDE2210`, `XTDE3480`, `XTDE3490`, `XTDE3510`, `XTDE3362`) are raised in the correct contexts.
+- [x] `xsl:merge` works inside `xsl:function` bodies and interacts correctly with `xsl:apply-templates`.
+- [x] `merge` conformance cluster reaches 0 runnable failures.
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine.ExecuteMergeInstruction`, merge context functions, accumulator applicability |
+| Standard | Modified | `FunctionLibrary.DateTime_2` atomization fix |
+| XSLT | Modified | `TransformEngine`, `Stylesheet` validation, `PatternCompiler` atomic `.` match, `TemplateRule` dynamic `_match` |
+| API | None | No surface change |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-13 | Kimi | Implemented | Merge cluster now 75/0/31; unblocks `date` cluster sweep |
 
 ---
 

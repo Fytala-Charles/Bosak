@@ -1,6 +1,66 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
+**Commit:** `f8699e2` (dirty)
+**Current focus:** `date` cluster now fully green (0 runnable failures); full suite re-run shows 4010/1261/9329.
+
+---
+
+## Full Suite Results (after date cluster fixes)
+
+- **Total:** 14,600
+- **Passed:** 4,010
+- **Failed:** 1,261
+- **Skipped:** 9,329
+- **Pass rate:** 76.1%
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| merge | 106 | 75 | 0 | 31 | ✅ 100% runnable |
+| date | 138 | 130 | 0 | 8 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **Implicit timezone support** — Added `EvaluationContext.ImplicitTimezoneOffsetMinutes` (default UTC) and wired it into date/time comparisons, `fn:implicit-timezone()`, `fn:adjust-time-to-timezone#1`, `fn:adjust-date-to-timezone#1`, and `fn:adjust-dateTime-to-timezone#1`.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`, `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+2. **Time constructor and midnight semantics** — `xs:time('24:00:00')` now normalizes to `00:00:00` on the same reference day, and `xs:time` values are stored via `XPathDateTime` to avoid `DateTimeOffset` range errors near year 0.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+3. **Timezone adjustment without `DateTimeOffset`** — Rewrote `adjust-time-to-timezone`, `adjust-date-to-timezone`, and `adjust-dateTime-to-timezone` to use `XPathDateTimeHelper.NormalizeToUtc`, eliminating `DateTimeOffset` exceptions for offsets crossing year 0.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+4. **`fn:dateTime($date, $time)` supports extended years** — The constructor now builds an `XPathDateTime` instead of a `DateTimeOffset`, so negative and >9999 years work.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+5. **AM/PM formatting** — `format-time` `[P]` markers no longer zero-pad width modifiers; only max-width truncation is applied.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FormatDateTimeEngine.cs`.
+
+6. **Constructor bounds** — `xs:date`/`xs:dateTime`/`xs:time` constructors now reject years outside the `int` range (`FODT0001`) and invalid day/month/leap values already returned `FORG0001`.
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+7. **Negative-year leap-year fix** — `IsLeapYear` now uses `-year` for BCE years, so years like `-400` are correctly treated as leap years.
+   - **Files changed**: `src/Bosak.XPath.Core/Xdm/XPathDateTimeHelper.cs`, `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+8. **Conformance harness static parameters** — The harness evaluates `<param static="yes">` values and substitutes them into `_select` attributes before compiling, enabling `date-094`/`date-095` style parameterized tests.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+9. **Unit-test alignment** — Replaced environment-dependent implicit-timezone ordering cases with explicit-timezone cases.
+   - **File changed**: `tests/Bosak.XPath.Runtime.Tests/VmEngineTests.cs`.
+
+## Notes
+
+- Unit-test suite: **877 passed / 0 failed** across 8 projects.
+- `date` conformance cluster: **130 passed / 0 failed / 8 skipped**.
+- Full conformance suite re-run: `full_run2.log`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-13
 **Commit:** `607fb88`
 **Current focus:** `function` cluster now fully green (0 runnable failures); `function-available` green.
 

@@ -59,6 +59,8 @@
 //                      | Charles Korthout | 4.5   | 13-06-2026     | fn:sum returns xs:integer when all atomized items are integers                           |
 //                      | Charles Korthout | 4.6   | 13-06-2026     | fn:type-available parses Q{uri}local EQName syntax                                       |
 //                      | Charles Korthout | 4.7   | 13-06-2026     | fn:document#1/#2 resolves fragment identifiers to elements                                |
+//                      | Charles Korthout | 4.8   | 13-06-2026     | fn:collection resolves relative URIs against base URI for xsl:merge tests               |
+//                      | Charles Korthout | 4.9   | 13-06-2026     | Adjust-time/date/dateTime use implicit timezone; dateTime constructor supports extended years |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3722,15 +3724,17 @@ public static class FunctionLibrary
 
     private static XdmValue ImplicitTimezone(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
-        bool negative = offset.TotalMilliseconds < 0;
-        offset = negative ? offset.Negate() : offset;
+        int totalMinutes = ctx.ImplicitTimezoneOffsetMinutes;
+        bool negative = totalMinutes < 0;
+        totalMinutes = Math.Abs(totalMinutes);
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
         var sb = new System.Text.StringBuilder();
         if (negative) sb.Append('-');
         sb.Append("PT");
-        if (offset.Hours > 0) sb.Append(offset.Hours).Append('H');
-        if (offset.Minutes > 0) sb.Append(offset.Minutes).Append('M');
-        if (offset.Hours == 0 && offset.Minutes == 0) sb.Append("0S");
+        if (hours > 0) sb.Append(hours).Append('H');
+        if (minutes > 0) sb.Append(minutes).Append('M');
+        if (hours == 0 && minutes == 0) sb.Append("0S");
         return XdmValue.FromDuration(sb.ToString());
     }
 
@@ -5206,11 +5210,12 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(uri))
             return XdmValue.Undefined;
 
-        if (System.IO.Directory.Exists(uri))
+        var resolved = ResolveUriAgainstBase(uri, ctx.BaseUri);
+        if (System.IO.Directory.Exists(resolved))
         {
-            var files = System.IO.Directory.GetFiles(uri, "*.xml");
+            var files = System.IO.Directory.GetFiles(resolved, "*.xml");
             var nodes = new List<XdmValue>(files.Length);
-            foreach (var file in files)
+            foreach (var file in files.OrderBy(f => f, StringComparer.Ordinal))
             {
                 nodes.Add(XdmValue.FromNode(ctx.LoadDocument(file)));
             }
@@ -5218,6 +5223,30 @@ public static class FunctionLibrary
         }
 
         return XdmValue.Undefined;
+    }
+
+    private static string ResolveUriAgainstBase(string uri, string? baseUri)
+    {
+        if (System.IO.Path.IsPathRooted(uri))
+            return uri;
+        if (string.IsNullOrEmpty(baseUri))
+            return uri;
+        if (Uri.IsWellFormedUriString(baseUri, UriKind.Absolute))
+        {
+            try
+            {
+                var baseObj = new Uri(baseUri);
+                var resolved = new Uri(baseObj, uri);
+                if (resolved.IsFile)
+                    return resolved.LocalPath;
+                return resolved.AbsoluteUri;
+            }
+            catch { }
+        }
+        var baseDir = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(baseUri));
+        if (!string.IsNullOrEmpty(baseDir))
+            return System.IO.Path.Combine(baseDir, uri);
+        return uri;
     }
 
     private static XdmValue UnparsedText_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5902,7 +5931,7 @@ public static class FunctionLibrary
             {
                 var (years, months, _, _, _, _) = ParseDuration(s);
                 long totalMonths = years * 12 + months;
-                return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths / items.Count));
+                return XdmValue.FromDuration(FormatYearMonthDuration((long)Math.Round((decimal)totalMonths / items.Count)));
             }
             if (IsDayTimeDurationString(s))
             {
@@ -6675,14 +6704,13 @@ public static class FunctionLibrary
 
     private static int CompareDateTimeValues(XdmValue a, XdmValue b)
     {
-        if (a.Kind == XdmValueKind.DateTime && b.Kind == XdmValueKind.DateTime)
-            return a.DateTimeValue.CompareTo(b.DateTimeValue);
-        if (a.Kind == XdmValueKind.Date && b.Kind == XdmValueKind.Date)
-            return a.DateValue.CompareTo(b.DateValue);
-        if (a.Kind == XdmValueKind.Time && b.Kind == XdmValueKind.Time)
-            return a.TimeValue.CompareTo(b.TimeValue);
+        if (a.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time
+            && b.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time)
+        {
+            return XdmValueComparer.Instance.Compare(a, b);
+        }
         if (a.Kind == XdmValueKind.Duration && b.Kind == XdmValueKind.Duration)
-            return string.Compare(a.DurationValue, b.DurationValue, StringComparison.Ordinal);
+            return XdmValueComparer.Instance.Compare(a, b);
         return string.Compare(a.ToString(), b.ToString(), StringComparison.Ordinal);
     }
 
@@ -7513,32 +7541,42 @@ public static class FunctionLibrary
 
     private static XdmValue DateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[0].IsUndefined || args[0].IsSequence || args[1].IsUndefined || args[1].IsSequence)
+        // Atomize the arguments: nodes/sequences are passed through AtomizeValue.
+        var dateInput = AtomizeValue(args[0]);
+        var timeInput = AtomizeValue(args[1]);
+        if (dateInput.IsUndefined || timeInput.IsUndefined)
             return XdmValue.Undefined;
 
-        var date = args[0].DateValue;
-        var time = args[1].TimeValue;
-        bool dateHasTz = args[0].HasTimezone;
-        bool timeHasTz = args[1].HasTimezone;
+        // Cast the arguments to xs:date and xs:time. This handles nodes and untypedAtomic
+        // values (e.g. attributes/elements passed to fn:dateTime in xsl:merge-key).
+        var dateArg = VmEngine.Cast(dateInput, "date");
+        var timeArg = VmEngine.Cast(timeInput, "time");
+        if (dateArg.IsUndefined || timeArg.IsUndefined)
+            return XdmValue.Undefined;
+
+        var date = dateArg.DateXPathValue;
+        var time = timeArg.TimeXPathValue;
+        bool dateHasTz = date.HasTimezone;
+        bool timeHasTz = time.HasTimezone;
 
         TimeSpan offset;
         bool hasTimezone;
 
         if (dateHasTz && timeHasTz)
         {
-            if (date.Offset != time.Offset)
+            if (date.TimezoneOffsetMinutes != time.TimezoneOffsetMinutes)
                 throw new InvalidOperationException("FORG0008");
-            offset = date.Offset;
+            offset = TimeSpan.FromMinutes(date.TimezoneOffsetMinutes);
             hasTimezone = true;
         }
         else if (dateHasTz)
         {
-            offset = date.Offset;
+            offset = TimeSpan.FromMinutes(date.TimezoneOffsetMinutes);
             hasTimezone = true;
         }
         else if (timeHasTz)
         {
-            offset = time.Offset;
+            offset = TimeSpan.FromMinutes(time.TimezoneOffsetMinutes);
             hasTimezone = true;
         }
         else
@@ -7547,7 +7585,8 @@ public static class FunctionLibrary
             hasTimezone = false;
         }
 
-        var combined = new DateTimeOffset(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second, time.Millisecond, offset);
+        int offsetMinutes = (int)offset.TotalMinutes;
+        var combined = new XPathDateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second, time.Millisecond, offsetMinutes, hasTimezone);
         return XdmValue.FromDateTime(combined, hasTimezone);
     }
 
@@ -7571,14 +7610,9 @@ public static class FunctionLibrary
         var arg = args[0];
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
-        var dto = arg.DateValue;
+        var xdt = arg.DateXPathValue;
         bool hasTz = arg.HasTimezone;
-        TimeSpan implicitTz = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
-        if (!hasTz)
-            return XdmValue.FromDate(new DateTimeOffset(dto.Year, dto.Month, dto.Day, 0, 0, 0, implicitTz), hasTimezone: true);
-        DateTime utc = dto.DateTime - dto.Offset;
-        DateTime newLocal = utc + implicitTz;
-        return XdmValue.FromDate(new DateTimeOffset(newLocal.Year, newLocal.Month, newLocal.Day, 0, 0, 0, implicitTz), hasTimezone: true);
+        return DoAdjustDateToTimezone(xdt, hasTz, ctx.ImplicitTimezoneOffsetMinutes, removeTimezone: false);
     }
 
     private static XdmValue AdjustDateToTimezone_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7588,19 +7622,32 @@ public static class FunctionLibrary
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
-        var dto = arg.DateValue;
+        var xdt = arg.DateXPathValue;
         bool hasTz = arg.HasTimezone;
 
         if (tzArg.IsUndefined || IsEmptySequence(tzArg))
-            return XdmValue.FromDate(new DateTimeOffset(dto.Year, dto.Month, dto.Day, 0, 0, 0, dto.Offset), hasTimezone: false);
+            return DoAdjustDateToTimezone(xdt, hasTz, 0, removeTimezone: true);
 
-        TimeSpan targetOffset = XmlConvert.ToTimeSpan(AtomizedString(tzArg));
+        int targetOffset = (int)XmlConvert.ToTimeSpan(AtomizedString(tzArg)).TotalMinutes;
+        return DoAdjustDateToTimezone(xdt, hasTz, targetOffset, removeTimezone: false);
+    }
+
+    private static XdmValue DoAdjustDateToTimezone(XPathDateTime xdt, bool hasTz, int targetOffset, bool removeTimezone)
+    {
+        if (removeTimezone)
+        {
+            return XdmValue.FromDate(new XPathDateTime(xdt.Year, xdt.Month, xdt.Day, 0, 0, 0, 0, 0, false), false);
+        }
+
         if (!hasTz)
-            return XdmValue.FromDate(new DateTimeOffset(dto.Year, dto.Month, dto.Day, 0, 0, 0, targetOffset), hasTimezone: true);
+        {
+            return XdmValue.FromDate(new XPathDateTime(xdt.Year, xdt.Month, xdt.Day, 0, 0, 0, 0, targetOffset, true), true);
+        }
 
-        DateTime utc = dto.DateTime - dto.Offset;
-        DateTime newLocal = utc + targetOffset;
-        return XdmValue.FromDate(new DateTimeOffset(newLocal.Year, newLocal.Month, newLocal.Day, 0, 0, 0, targetOffset), hasTimezone: true);
+        var normalized = XPathDateTimeHelper.NormalizeToUtc(xdt);
+        var withTarget = new XPathDateTime(normalized.Year, normalized.Month, normalized.Day, normalized.Hour, normalized.Minute, normalized.Second, normalized.Millisecond, -targetOffset, true);
+        var targetLocal = XPathDateTimeHelper.NormalizeToUtc(withTarget);
+        return XdmValue.FromDate(new XPathDateTime(targetLocal.Year, targetLocal.Month, targetLocal.Day, 0, 0, 0, 0, targetOffset, true), true);
     }
 
     private static XdmValue AdjustTimeToTimezone_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7608,14 +7655,9 @@ public static class FunctionLibrary
         var arg = args[0];
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
-        var dto = arg.TimeValue;
+        var xdt = arg.TimeXPathValue;
         bool hasTz = arg.HasTimezone;
-        TimeSpan implicitTz = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
-        if (!hasTz)
-            return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, implicitTz), hasTimezone: true);
-        DateTime utc = dto.DateTime - dto.Offset;
-        DateTime newLocal = utc + implicitTz;
-        return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, newLocal.Hour, newLocal.Minute, newLocal.Second, newLocal.Millisecond, implicitTz), hasTimezone: true);
+        return DoAdjustTimeToTimezone(xdt, hasTz, ctx.ImplicitTimezoneOffsetMinutes, removeTimezone: false);
     }
 
     private static XdmValue AdjustTimeToTimezone_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7625,19 +7667,36 @@ public static class FunctionLibrary
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
-        var dto = arg.TimeValue;
+        var xdt = arg.TimeXPathValue;
         bool hasTz = arg.HasTimezone;
 
         if (tzArg.IsUndefined || IsEmptySequence(tzArg))
-            return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, dto.Offset), hasTimezone: false);
+            return DoAdjustTimeToTimezone(xdt, hasTz, 0, removeTimezone: true);
 
-        TimeSpan targetOffset = XmlConvert.ToTimeSpan(AtomizedString(tzArg));
+        int targetOffset = (int)XmlConvert.ToTimeSpan(AtomizedString(tzArg)).TotalMinutes;
+        return DoAdjustTimeToTimezone(xdt, hasTz, targetOffset, removeTimezone: false);
+    }
+
+    private static XdmValue DoAdjustTimeToTimezone(XPathDateTime xdt, bool hasTz, int targetOffset, bool removeTimezone)
+    {
+        if (removeTimezone)
+        {
+            return XdmValue.FromTime(new XPathDateTime(1, 1, 1, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, 0, false), false);
+        }
+
         if (!hasTz)
-            return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, targetOffset), hasTimezone: true);
+        {
+            // Add a timezone while preserving the local time-of-day.
+            return XdmValue.FromTime(new XPathDateTime(1, 1, 1, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, targetOffset, true), true);
+        }
 
-        DateTime utc = dto.DateTime - dto.Offset;
-        DateTime newLocal = utc + targetOffset;
-        return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, newLocal.Hour, newLocal.Minute, newLocal.Second, newLocal.Millisecond, targetOffset), hasTimezone: true);
+        // Translate an existing timezone to the target timezone, preserving the instant.
+        // Use a safe reference date to avoid DateTimeOffset range issues near year 0.
+        var effective = new XPathDateTime(2000, 1, 1, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, xdt.TimezoneOffsetMinutes, true);
+        var utc = XPathDateTimeHelper.NormalizeToUtc(effective);
+        var withTarget = new XPathDateTime(utc.Year, utc.Month, utc.Day, utc.Hour, utc.Minute, utc.Second, utc.Millisecond, -targetOffset, true);
+        var targetLocal = XPathDateTimeHelper.NormalizeToUtc(withTarget);
+        return XdmValue.FromTime(new XPathDateTime(1, 1, 1, targetLocal.Hour, targetLocal.Minute, targetLocal.Second, targetLocal.Millisecond, targetOffset, true), true);
     }
 
     private static XdmValue AdjustDateTimeToTimezone_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7645,14 +7704,9 @@ public static class FunctionLibrary
         var arg = args[0];
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
-        var dto = arg.DateTimeValue;
+        var xdt = arg.DateTimeXPathValue;
         bool hasTz = arg.HasTimezone;
-        TimeSpan implicitTz = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
-        if (!hasTz)
-            return XdmValue.FromDateTime(new DateTimeOffset(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, implicitTz), hasTimezone: true);
-        DateTime utc = dto.DateTime - dto.Offset;
-        DateTime newLocal = utc + implicitTz;
-        return XdmValue.FromDateTime(new DateTimeOffset(newLocal.Year, newLocal.Month, newLocal.Day, newLocal.Hour, newLocal.Minute, newLocal.Second, newLocal.Millisecond, implicitTz), hasTimezone: true);
+        return DoAdjustDateTimeToTimezone(xdt, hasTz, ctx.ImplicitTimezoneOffsetMinutes, removeTimezone: false);
     }
 
     private static XdmValue AdjustDateTimeToTimezone_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7662,19 +7716,32 @@ public static class FunctionLibrary
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
-        var dto = arg.DateTimeValue;
+        var xdt = arg.DateTimeXPathValue;
         bool hasTz = arg.HasTimezone;
 
         if (tzArg.IsUndefined || IsEmptySequence(tzArg))
-            return XdmValue.FromDateTime(new DateTimeOffset(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, dto.Offset), hasTimezone: false);
+            return DoAdjustDateTimeToTimezone(xdt, hasTz, 0, removeTimezone: true);
 
-        TimeSpan targetOffset = XmlConvert.ToTimeSpan(AtomizedString(tzArg));
+        int targetOffset = (int)XmlConvert.ToTimeSpan(AtomizedString(tzArg)).TotalMinutes;
+        return DoAdjustDateTimeToTimezone(xdt, hasTz, targetOffset, removeTimezone: false);
+    }
+
+    private static XdmValue DoAdjustDateTimeToTimezone(XPathDateTime xdt, bool hasTz, int targetOffset, bool removeTimezone)
+    {
+        if (removeTimezone)
+        {
+            return XdmValue.FromDateTime(new XPathDateTime(xdt.Year, xdt.Month, xdt.Day, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, 0, false), false);
+        }
+
         if (!hasTz)
-            return XdmValue.FromDateTime(new DateTimeOffset(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, dto.Second, dto.Millisecond, targetOffset), hasTimezone: true);
+        {
+            return XdmValue.FromDateTime(new XPathDateTime(xdt.Year, xdt.Month, xdt.Day, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, targetOffset, true), true);
+        }
 
-        DateTime utc = dto.DateTime - dto.Offset;
-        DateTime newLocal = utc + targetOffset;
-        return XdmValue.FromDateTime(new DateTimeOffset(newLocal.Year, newLocal.Month, newLocal.Day, newLocal.Hour, newLocal.Minute, newLocal.Second, newLocal.Millisecond, targetOffset), hasTimezone: true);
+        var normalized = XPathDateTimeHelper.NormalizeToUtc(xdt);
+        var withTarget = new XPathDateTime(normalized.Year, normalized.Month, normalized.Day, normalized.Hour, normalized.Minute, normalized.Second, normalized.Millisecond, -targetOffset, true);
+        var targetLocal = XPathDateTimeHelper.NormalizeToUtc(withTarget);
+        return XdmValue.FromDateTime(targetLocal, true);
     }
 
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -8061,22 +8128,34 @@ public static class FunctionLibrary
     private static bool IsYearMonthDurationString(string s)
     {
         if (string.IsNullOrEmpty(s)) return false;
-        if (s.StartsWith('-')) s = s[1..];
-        return s.StartsWith('P') && !s.Contains('D') && !s.Contains('T');
+        var t = s.StartsWith('-') ? s[1..] : s;
+        if (!t.StartsWith('P')) return false;
+        int tIndex = t.IndexOf('T');
+        bool hasYm = t.Contains('Y') || (tIndex < 0 ? t.Contains('M') : t[..tIndex].Contains('M'));
+        bool hasDt = t.Contains('D') || tIndex >= 0;
+        return hasYm && !hasDt;
     }
 
     private static bool IsDayTimeDurationString(string s)
     {
         if (string.IsNullOrEmpty(s)) return false;
-        if (s.StartsWith('-')) s = s[1..];
-        return s.StartsWith('P') && (s.Contains('D') || s.Contains('T')) && !s.Contains('Y') && !s.Contains('M');
+        var t = s.StartsWith('-') ? s[1..] : s;
+        if (!t.StartsWith('P')) return false;
+        int tIndex = t.IndexOf('T');
+        bool hasYm = t.Contains('Y') || (tIndex < 0 ? t.Contains('M') : t[..tIndex].Contains('M'));
+        bool hasDt = t.Contains('D') || tIndex >= 0;
+        return !hasYm && hasDt;
     }
 
     private static bool IsGenericDurationString(string s)
     {
         if (string.IsNullOrEmpty(s)) return false;
-        if (s.StartsWith('-')) s = s[1..];
-        return s.StartsWith('P') && (s.Contains('Y') || s.Contains('M')) && (s.Contains('D') || s.Contains('T'));
+        var t = s.StartsWith('-') ? s[1..] : s;
+        if (!t.StartsWith('P')) return false;
+        int tIndex = t.IndexOf('T');
+        bool hasYm = t.Contains('Y') || (tIndex < 0 ? t.Contains('M') : t[..tIndex].Contains('M'));
+        bool hasDt = t.Contains('D') || tIndex >= 0;
+        return hasYm && hasDt;
     }
 
     private static string FormatYearMonthDuration(long totalMonths)
@@ -8114,12 +8193,19 @@ public static class FunctionLibrary
             if (minutes > 0) sb.Append($"{minutes}M");
             if (seconds > 0 || (hours == 0 && minutes == 0))
             {
-                sb.Append(seconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                sb.Append(FormatDecimalTrim(seconds));
                 sb.Append('S');
             }
         }
         if (sb.Length == (negative ? 2 : 1)) sb.Append("T0S");
         return sb.ToString();
+    }
+
+    private static string FormatDecimalTrim(decimal value)
+    {
+        string s = value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        if (s.Contains('.')) s = s.TrimEnd('0').TrimEnd('.');
+        return s;
     }
 
     private static string FormatDayTimeDuration(TimeSpan ts)

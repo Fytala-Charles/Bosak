@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-06-2026     | Compare dateTime values by instant for xsl:merge key ordering                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -68,6 +69,8 @@ public sealed class XdmValueComparer : IComparer<XdmValue>
             var bSub = GetDateTimeSubtype(b);
             if (aSub != bSub)
                 throw new InvalidOperationException("XPTY0004");
+            if (TryCompareDateTimeByInstant(a, b, aSub!, out var instantCmp))
+                return instantCmp;
             return string.CompareOrdinal(a.ToString(), b.ToString());
         }
 
@@ -149,7 +152,60 @@ public sealed class XdmValueComparer : IComparer<XdmValue>
 
     private static int CompareDuration(XdmValue a, XdmValue b)
     {
-        return string.CompareOrdinal(a.ToString(), b.ToString());
+        var subA = GetDurationSubtype(a.DurationValue);
+        var subB = GetDurationSubtype(b.DurationValue);
+        if (subA != subB)
+            throw new InvalidOperationException("XTDE1030");
+        if (subA == DurationSubtype.Duration)
+            throw new InvalidOperationException("XTDE1030");
+
+        var normA = XPathDateTimeHelper.NormalizeDuration(a.DurationValue);
+        var normB = XPathDateTimeHelper.NormalizeDuration(b.DurationValue);
+        if (subA == DurationSubtype.YearMonthDuration)
+            return normA.Item1.CompareTo(normB.Item1);
+        return normA.Item2.CompareTo(normB.Item2);
+    }
+
+    private static DurationSubtype GetDurationSubtype(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return DurationSubtype.Duration;
+        var t = s.StartsWith('-') ? s[1..] : s;
+        if (!t.StartsWith('P')) return DurationSubtype.Duration;
+        int tIndex = t.IndexOf('T');
+        bool hasYm = t.Contains('Y') || (tIndex >= 0 && t[..tIndex].Contains('M')) || (tIndex < 0 && t.Contains('M'));
+        bool hasDt = t.Contains('D') || tIndex >= 0;
+        if (hasYm && !hasDt) return DurationSubtype.YearMonthDuration;
+        if (!hasYm && hasDt) return DurationSubtype.DayTimeDuration;
+        return DurationSubtype.Duration;
+    }
+
+    private enum DurationSubtype { YearMonthDuration, DayTimeDuration, Duration }
+
+    private static bool TryCompareDateTimeByInstant(XdmValue a, XdmValue b, string subtype, out int cmp)
+    {
+        cmp = 0;
+        try
+        {
+            XPathDateTime xa = GetDateTimeValue(a, subtype);
+            XPathDateTime xb = GetDateTimeValue(b, subtype);
+            cmp = XPathDateTimeHelper.CompareByInstant(xa, xb);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static XPathDateTime GetDateTimeValue(XdmValue value, string subtype)
+    {
+        return subtype switch
+        {
+            "dateTime" => value.DateTimeXPathValue,
+            "date" => value.DateXPathValue,
+            "time" => value.TimeXPathValue,
+            _ => throw new InvalidOperationException($"Unsupported date/time subtype: {subtype}")
+        };
     }
 
     private static double ToDouble(XdmValue value) => value.Kind switch

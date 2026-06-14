@@ -367,12 +367,13 @@ dotnet test Bosak.sln
 | `fn:available-environment-variables` and `fn:environment-variable` are implemented. | Returns/succeeds on process environment variables; matching is case-sensitive exact. Fixes function cluster environment tests. | 2026-06-13 |
 | Numeric arguments to `fn:subsequence` and `fn:format-integer` are atomized. | Atomization now preserves `xs:untypedAtomic`, so attribute and element text nodes are accepted implicitly. Fixes `function-0502`, `function-0503`, and related tests. | 2026-06-13 |
 | Namespace context is applied to `xsl:variable`/`xsl:param`/`xsl:with-param` @select expressions. | Local and global variable/param `select` expressions, and named-template default param values, now use the in-scope namespace bindings and effective default namespace. Fixes unprefixed EQName tests in `function` cluster. | 2026-06-13 |
+| `date` cluster is fully passing. | Implicit timezone, `xs:time` midnight semantics, timezone adjustment, AM/PM formatting, extended-year constructor bounds, and static-parameter substitution in the harness. Fixes all runnable `date` tests. | 2026-06-13 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,135 | 1,138 | 9,327 | 78.4% | `function` cluster now 100% runnable; full suite +24 passes / -24 failures |
+| XSLT 3.0 (W3C) | 4,010 | 1,261 | 9,329 | 76.1% | `date` cluster now 100% runnable; full suite currently 4010/1261 |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

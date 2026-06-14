@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 30-05-2026     | Added BackwardsCompatible property for XPath 1.0 general-comparison coercion rules     |
 //                      | Charles Korthout | 0.8   | 10-06-2026     | Added LazyVariableResolver and _evaluatedLazyGlobals for deferred XSLT globals         |
 //                      | Charles Korthout | 0.9   | 11-06-2026     | TryResolveNamespace resolves predefined xml prefix to XML namespace URI                 |
+//                      | Charles Korthout | 1.0   | 13-06-2026     | Added ImplicitTimezoneOffsetMinutes property (defaults to UTC)                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -111,6 +112,12 @@ public sealed class EvaluationContext
     /// Optional base URI used to resolve relative document URIs.
     /// </summary>
     public string? BaseUri { get; set; }
+
+    /// <summary>
+    /// The implicit timezone offset in minutes used when a date, time, or dateTime value
+    /// has no explicit timezone. Defaults to UTC (0 minutes).
+    /// </summary>
+    public int ImplicitTimezoneOffsetMinutes { get; set; }
 
     /// <summary>
     /// Custom document loader. If null, fn:doc will throw unless the API layer provides one.

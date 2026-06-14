@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 23-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Full rewrite: digit families, grouping separators, fractional seconds, AM/PM case       |
+//                      | Charles Korthout | 0.3   | 13-06-2026     | AM/PM marker width modifier truncates only; no zero padding                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -646,7 +647,10 @@ internal static class FormatDateTimeEngine
             _ => ampm.ToUpperInvariant()
         };
 
-        return ApplyWidth(ampm, minWidth, maxWidth, '0');
+        // Width modifiers on the am/pm marker only truncate; they do not pad with zeros.
+        if (maxWidth != int.MaxValue && ampm.Length > maxWidth)
+            return ampm[..maxWidth];
+        return ampm;
     }
 
     private static string FormatTimezone(XPathDateTime value, string presentation, int minWidth, int maxWidth)
