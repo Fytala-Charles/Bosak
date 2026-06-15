@@ -5271,18 +5271,18 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedText_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedText(args[0].ToString(), null);
+        => UnparsedText(args[0].ToString(), null, ctx.BaseUri);
 
     private static XdmValue UnparsedText_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedText(args[0].ToString(), args[1].ToString());
+        => UnparsedText(args[0].ToString(), args[1].ToString(), ctx.BaseUri);
 
-    private static XdmValue UnparsedText(string href, string? encoding)
+    private static XdmValue UnparsedText(string href, string? encoding, string? baseUri = null)
     {
         if (string.IsNullOrEmpty(href))
             throw new InvalidOperationException("FOUT1170");
         try
         {
-            var path = ResolveUri(href);
+            var path = ResolveUriAgainstBase(href, baseUri);
             if (!File.Exists(path))
                 throw new InvalidOperationException("FOUT1170");
             encoding ??= "UTF-8";
@@ -5301,18 +5301,18 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedTextAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextAvailable(args[0].ToString(), null);
+        => UnparsedTextAvailable(args[0].ToString(), null, ctx.BaseUri);
 
     private static XdmValue UnparsedTextAvailable_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextAvailable(args[0].ToString(), args[1].ToString());
+        => UnparsedTextAvailable(args[0].ToString(), args[1].ToString(), ctx.BaseUri);
 
-    private static XdmValue UnparsedTextAvailable(string href, string? encoding)
+    private static XdmValue UnparsedTextAvailable(string href, string? encoding, string? baseUri = null)
     {
         if (string.IsNullOrEmpty(href))
             return XdmValue.False;
         try
         {
-            var path = ResolveUri(href);
+            var path = ResolveUriAgainstBase(href, baseUri);
             if (!File.Exists(path))
                 return XdmValue.False;
             if (encoding is not null)
@@ -5326,14 +5326,14 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedTextLines_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextLines(args[0].ToString(), null);
+        => UnparsedTextLines(args[0].ToString(), null, ctx.BaseUri);
 
     private static XdmValue UnparsedTextLines_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextLines(args[0].ToString(), args[1].ToString());
+        => UnparsedTextLines(args[0].ToString(), args[1].ToString(), ctx.BaseUri);
 
-    private static XdmValue UnparsedTextLines(string href, string? encoding)
+    private static XdmValue UnparsedTextLines(string href, string? encoding, string? baseUri = null)
     {
-        var textValue = UnparsedText(href, encoding);
+        var textValue = UnparsedText(href, encoding, baseUri);
         var text = textValue.StringValue;
         if (string.IsNullOrEmpty(text))
             return XdmValue.Undefined;

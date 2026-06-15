@@ -741,6 +741,35 @@ public sealed class Stylesheet
                 }
             }
 
+            // xsl:message static validation
+            if (localName == "message")
+            {
+                foreach (var attr in elem.Attributes())
+                {
+                    if (attr.Name.NamespaceName != "")
+                        continue;
+                    var attrName = attr.Name.LocalName;
+                    var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
+                    if (baseName != "select" &&
+                        baseName != "terminate" &&
+                        baseName != "error-code" &&
+                        baseName != "use-when")
+                    {
+                        throw new InvalidOperationException("XTSE0090");
+                    }
+
+                    // XTSE0020: literal terminate value must be a valid boolean/yes-no.
+                    // Attribute value templates (containing unescaped '{') are evaluated at
+                    // runtime and are not validated here.
+                    if (baseName == "terminate" && !attrName.StartsWith("_"))
+                    {
+                        var val = attr.Value;
+                        if (!IsAvtValue(val) && !IsYesNoValue(val))
+                            throw new InvalidOperationException("XTSE0020");
+                    }
+                }
+            }
+
             // xsl:sequence does not allow @as
             if (localName == "sequence" && elem.Attribute("as") != null)
                 throw new InvalidOperationException("XTSE0090");
@@ -994,6 +1023,17 @@ public sealed class Stylesheet
     {
         var v = value.Trim();
         return v == "yes" || v == "no" || v == "true" || v == "false" || v == "1" || v == "0";
+    }
+
+    private static bool IsAvtValue(string value)
+    {
+        // An attribute value template contains an unescaped '{'.
+        for (int i = 0; i < value.Length - 1; i++)
+        {
+            if (value[i] == '{' && value[i + 1] != '{')
+                return true;
+        }
+        return false;
     }
 
     private static bool IsNewEachTimeValue(string value)

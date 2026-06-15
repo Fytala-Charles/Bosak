@@ -504,7 +504,8 @@ class Program
             var resultElem = testCase.Element(ns + "result");
             if (resultElem == null) return TestResult.Skip;
 
-            if (CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages))
+            int messageIndex = 0;
+            if (CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, ref messageIndex))
             {
                 Console.WriteLine($"  PASS {name}");
                 return TestResult.Pass;
@@ -660,7 +661,7 @@ class Program
         return new XDocumentNode(doc);
     }
 
-    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages)
+    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, ref int messageIndex)
     {
         // Handle <all-of>
         var allOf = resultElem.Element(ns + "all-of");
@@ -668,7 +669,7 @@ class Program
         {
             foreach (var option in allOf.Elements())
             {
-                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages))
+                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, ref messageIndex))
                     return false;
             }
             return true;
@@ -680,7 +681,7 @@ class Program
         {
             foreach (var option in anyOf.Elements())
             {
-                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages))
+                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, ref messageIndex))
                     return true;
             }
             return false;
@@ -692,17 +693,41 @@ class Program
         {
             foreach (var child in assertionChildren)
             {
-                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages))
+                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, ref messageIndex))
                     return false;
             }
             return true;
         }
 
-        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages);
+        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, ref messageIndex);
     }
 
-    static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages)
+    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages)
     {
+        int messageIndex = 0;
+        return CompareResult(actual, resultElem, ns, testSetDir, catalogDir, messages, ref messageIndex);
+    }
+
+    static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, ref int messageIndex)
+    {
+        // assert-message must be checked before assert-xml because an assert-message
+        // can contain an assert-xml child that should be evaluated against the message,
+        // not against the primary result document.
+        var assertMessage = resultElem.Name.LocalName == "assert-message" ? resultElem : resultElem.Element(ns + "assert-message");
+        if (assertMessage != null)
+        {
+            if (messages == null || messageIndex >= messages.Count)
+                return false;
+
+            var messageText = messages[messageIndex];
+            if (CompareMessageAssertion(messageText, assertMessage, ns, testSetDir, catalogDir))
+            {
+                messageIndex++;
+                return true;
+            }
+            return false;
+        }
+
         // When called from all-of/any-of, resultElem itself may be the assertion.
         // Check both the element itself and its children for backward compatibility.
         var assertXml = resultElem.Name.LocalName == "assert-xml" ? resultElem : resultElem.Element(ns + "assert-xml");
@@ -744,21 +769,6 @@ class Program
             return actual.Trim().Equals("false", StringComparison.OrdinalIgnoreCase);
         }
 
-        // assert-message: evaluate an XPath assertion against the concatenated
-        // text emitted by xsl:message instructions.
-        var assertMessage = resultElem.Name.LocalName == "assert-message" ? resultElem : resultElem.Element(ns + "assert-message");
-        if (assertMessage != null)
-        {
-            var messageText = string.Concat(messages);
-            var msgAssert = assertMessage.Element(ns + "assert");
-            if (msgAssert != null)
-            {
-                var wrapped = new XElement("__msg__", messageText).ToString();
-                return EvaluateAssert(wrapped, msgAssert.Value, ExtractNamespaces(msgAssert));
-            }
-            return false;
-        }
-
         // assert: evaluate XPath expression against result document
         var assertExpr = resultElem.Name.LocalName == "assert" ? resultElem : resultElem.Element(ns + "assert");
         if (assertExpr != null)
@@ -790,6 +800,97 @@ class Program
         {
             // If we reach here, no error was thrown - that's handled by the caller
             return false;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Evaluates an assertion element that is nested inside an &lt;assert-message&gt; element.
+    /// The assertion is checked against the current message text without consuming messages.
+    /// </summary>
+    static bool CompareMessageAssertion(string messageText, XElement assertion, XNamespace ns, string testSetDir, string catalogDir)
+    {
+        // If the assertion wrapper itself is the assert-message element, evaluate all of
+        // its child assertions against the same message.
+        if (assertion.Name.LocalName == "assert-message")
+        {
+            var children = assertion.Elements().ToList();
+            if (children.Count == 0)
+                return false;
+            foreach (var child in children)
+            {
+                if (!CompareMessageAssertion(messageText, child, ns, testSetDir, catalogDir))
+                    return false;
+            }
+            return true;
+        }
+
+        // all-of
+        if (assertion.Name.LocalName == "all-of")
+        {
+            foreach (var child in assertion.Elements())
+            {
+                if (!CompareMessageAssertion(messageText, child, ns, testSetDir, catalogDir))
+                    return false;
+            }
+            return true;
+        }
+
+        // any-of
+        if (assertion.Name.LocalName == "any-of")
+        {
+            foreach (var child in assertion.Elements())
+            {
+                if (CompareMessageAssertion(messageText, child, ns, testSetDir, catalogDir))
+                    return true;
+            }
+            return false;
+        }
+
+        // assert-string-value
+        if (assertion.Name.LocalName == "assert-string-value")
+        {
+            return messageText == assertion.Value;
+        }
+
+        // assert-xml
+        if (assertion.Name.LocalName == "assert-xml")
+        {
+            var expected = assertion.Value.Trim();
+            var fileAttr = assertion.Attribute("file")?.Value;
+            if (string.IsNullOrEmpty(expected) && !string.IsNullOrEmpty(fileAttr))
+            {
+                var filePath = Path.Combine(testSetDir, fileAttr);
+                if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
+                if (File.Exists(filePath))
+                    expected = File.ReadAllText(filePath).Trim();
+            }
+            var normActual = NormalizeXml(messageText);
+            var normExpected = NormalizeXml(expected);
+            return normActual == normExpected || messageText.Trim() == expected || XmlEquals(messageText, expected);
+        }
+
+        // assert: evaluate an XPath against the message. The message is wrapped in a
+        // synthetic element so that XML fragments (multiple top-level nodes, comments,
+        // text mixed with elements) can be parsed as a document.
+        if (assertion.Name.LocalName == "assert")
+        {
+            var wrapped = $"<__msg__>{messageText}</__msg__>";
+            var expr = assertion.Value;
+            // A message may contain several top-level elements; treat a leading absolute
+            // path as a descendant path so tests like /smart or /comment() still match.
+            if (!expr.StartsWith("//") && expr.StartsWith("/"))
+                expr = "/" + expr;
+            return EvaluateAssert(wrapped, expr, ExtractNamespaces(assertion));
+        }
+
+        // assert-eq
+        if (assertion.Name.LocalName == "assert-eq")
+        {
+            var expected = assertion.Attribute("expected")?.Value ?? assertion.Value;
+            var expr = assertion.Attribute("select")?.Value ?? assertion.Value;
+            return EvaluateAssertEq(messageText, expr, expected, ExtractNamespaces(assertion));
         }
 
         return false;

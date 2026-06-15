@@ -1744,23 +1744,31 @@ public sealed class TransformEngine
                                 EvaluateFunctionBodyInstruction(child, results, contextItem);
                             }
                         }
-                        catch
+                        catch (Exception ex)
                         {
                             if (catchElem != null)
                             {
-                                var catchSelect = catchElem.Attribute("select")?.Value;
-                                if (!string.IsNullOrEmpty(catchSelect))
+                                var previous = BindCatchErrorVariables(ex);
+                                try
                                 {
-                                    var compiled = XPath31Expression.Compile(catchSelect);
-                                    var catchResult = compiled.Evaluate(_context);
-                                    FlattenToList(catchResult, results);
-                                }
-                                else
-                                {
-                                    foreach (var child in catchElem.Elements())
+                                    var catchSelect = catchElem.Attribute("select")?.Value;
+                                    if (!string.IsNullOrEmpty(catchSelect))
                                     {
-                                        EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                        var compiled = XPath31Expression.Compile(catchSelect);
+                                        var catchResult = compiled.Evaluate(_context);
+                                        FlattenToList(catchResult, results);
                                     }
+                                    else
+                                    {
+                                        foreach (var child in catchElem.Elements())
+                                        {
+                                            EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                        }
+                                    }
+                                }
+                                finally
+                                {
+                                    RestoreCatchErrorVariables(previous);
                                 }
                             }
                         }
@@ -3071,18 +3079,35 @@ public sealed class TransformEngine
 
             case "message":
                 {
-                    // xsl:message may have both a @select attribute and a sequence
-                    // constructor; both contribute to the emitted message.
-                    var msgSelect = instruction.Attribute("select")?.Value;
-                    var msgParts = new System.Text.StringBuilder();
-                    if (!string.IsNullOrEmpty(msgSelect))
+                    // XSLT 3.0 §11.3: xsl:message may have both a @select attribute and a
+                    // sequence constructor. The resulting sequence is emitted to the message
+                    // listener; terminate/error-code attributes control whether processing stops.
+                    bool terminate = EvaluateMessageTerminate(instruction, contextItem);
+                    string errorCode = EvaluateMessageErrorCode(instruction);
+
+                    XdmValue messageValue;
+                    string messageString;
+                    try
                     {
-                        var compiled = CompileXPath(msgSelect, instruction);
-                        var result = compiled.Evaluate(_context);
-                        msgParts.Append(XdmValueToString(result, " "));
+                        messageValue = BuildMessageValue(instruction, contextItem);
+                        messageString = SerializeMessageValue(messageValue);
                     }
-                    msgParts.Append(EvaluateSimpleContent(instruction, contextItem, " "));
-                    _messageListener?.OnMessage(msgParts.ToString());
+                    catch (Exception ex)
+                    {
+                        // A dynamic error evaluating the message content is recoverable when
+                        // terminate="no" (XSLT 3.0). Continue without emitting a message.
+                        if (!terminate)
+                            break;
+
+                        throw new XsltRuntimeException(errorCode, ex.Message, XdmValue.Undefined);
+                    }
+
+                    _messageListener?.OnMessage(messageString);
+
+                    if (terminate)
+                    {
+                        throw new XsltRuntimeException(errorCode, messageString, messageValue);
+                    }
                     break;
                 }
 
@@ -3921,34 +3946,42 @@ public sealed class TransformEngine
                             }
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         if (catchElem != null)
                         {
-                            var catchSelect = catchElem.Attribute("select")?.Value;
-                            if (!string.IsNullOrEmpty(catchSelect))
+                            var previous = BindCatchErrorVariables(ex);
+                            try
                             {
-                                var compiled = XPath31Expression.Compile(catchSelect);
-                                var catchResult = compiled.Evaluate(_context);
-                                CopyToResult(catchResult);
-                            }
-                            else
-                            {
-                                foreach (var childNode in catchElem.Nodes())
+                                var catchSelect = catchElem.Attribute("select")?.Value;
+                                if (!string.IsNullOrEmpty(catchSelect))
                                 {
-                                    switch (childNode)
+                                    var compiled = XPath31Expression.Compile(catchSelect);
+                                    var catchResult = compiled.Evaluate(_context);
+                                    CopyToResult(catchResult);
+                                }
+                                else
+                                {
+                                    foreach (var childNode in catchElem.Nodes())
                                     {
-                                        case XText text:
-                                            ProcessSequenceText(text, catchElem);
-                                            break;
-                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                            ExecuteXsltInstruction(elem, contextItem);
-                                            break;
-                                        case XElement elem:
-                                            CopyLiteralElement(elem);
-                                            break;
+                                        switch (childNode)
+                                        {
+                                            case XText text:
+                                                ProcessSequenceText(text, catchElem);
+                                                break;
+                                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                                ExecuteXsltInstruction(elem, contextItem);
+                                                break;
+                                            case XElement elem:
+                                                CopyLiteralElement(elem);
+                                                break;
+                                        }
                                     }
                                 }
+                            }
+                            finally
+                            {
+                                RestoreCatchErrorVariables(previous);
                             }
                         }
                     }
@@ -6657,6 +6690,260 @@ public sealed class TransformEngine
         }
 
         return value.ToString();
+    }
+
+    /// <summary>
+    /// Builds the XDM value that represents the content of an <c>xsl:message</c>
+    /// instruction by evaluating @select and the sequence constructor.
+    /// </summary>
+    private XdmValue BuildMessageValue(XElement instruction, XdmValue contextItem)
+    {
+        var items = new List<XdmValue>();
+
+        var msgSelect = instruction.Attribute("select")?.Value;
+        if (!string.IsNullOrEmpty(msgSelect))
+        {
+            var compiled = CompileXPath(msgSelect, instruction);
+            FlattenToList(compiled.Evaluate(_context), items);
+        }
+
+        if (instruction.HasElements || instruction.Nodes().OfType<XText>().Any())
+        {
+            var seqValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: true);
+            if (!seqValue.IsUndefined)
+                FlattenToList(seqValue, items);
+        }
+
+        if (items.Count == 0)
+            return XdmValue.FromSequence(XdmSequence.Empty);
+
+        // If every item is atomic, the message is a simple space-separated string.
+        if (items.TrueForAll(i => !i.IsNode))
+            return XdmValue.FromString(string.Join(" ", items.Select(i => i.ToString())), "untypedAtomic");
+
+        // Otherwise flatten any document nodes so that the serialization below can
+        // treat the content as a sequence of nodes/atomics.
+        var flat = new List<XdmValue>();
+        foreach (var item in items)
+            FlattenMessageItem(item, flat);
+
+        return XdmValue.FromSequence(MaterializedSequence.FromList(flat));
+    }
+
+    /// <summary>
+    /// Flattens a message item, unwrapping document nodes (including synthetic
+    /// <c>__xdm_doc__</c> wrappers) into their constituent children.
+    /// </summary>
+    private static void FlattenMessageItem(XdmValue item, List<XdmValue> results)
+    {
+        if (item.IsSequence && item.SequenceValue != null)
+        {
+            foreach (var child in XdmSequence.FromSource(item.SequenceValue))
+                FlattenMessageItem(child, results);
+            return;
+        }
+
+        if (!item.IsNode)
+        {
+            results.Add(item);
+            return;
+        }
+
+        var node = item.NodeValue;
+        if (node == null)
+            return;
+
+        if (node is XDocumentNode docNode && docNode.UnderlyingObject is System.Xml.Linq.XDocument doc)
+        {
+            var root = doc.Root;
+            if (root != null && root.Name.LocalName == "__xdm_doc__")
+            {
+                foreach (var child in root.Nodes())
+                    results.Add(XdmValue.FromNode(new XDocumentNode(child)));
+                return;
+            }
+            if (root != null)
+                results.Add(XdmValue.FromNode(new XDocumentNode(root)));
+            return;
+        }
+
+        results.Add(item);
+    }
+
+    /// <summary>
+    /// Serializes the message XDM value to the string passed to the message listener.
+    /// Atomic values become text; nodes are serialized as XML.
+    /// </summary>
+    private static string SerializeMessageValue(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        // Simple atomic string produced by BuildMessageValue for all-atomic sequences.
+        if (value.IsAtomic)
+            return value.ToString();
+
+        var items = new List<XdmValue>();
+        FlattenToList(value, items);
+
+        var wrapper = new XElement("__msg__");
+        foreach (var item in items)
+        {
+            if (item.IsNode)
+            {
+                var node = item.NodeValue;
+                if (node == null)
+                    continue;
+                if (node is XDocumentNode docNode)
+                {
+                    var underlying = docNode.UnderlyingObject;
+                    switch (underlying)
+                    {
+                        case System.Xml.Linq.XElement elem:
+                            wrapper.Add(new XElement(elem));
+                            break;
+                        case System.Xml.Linq.XText text:
+                            wrapper.Add(new XText(text.Value));
+                            break;
+                        case System.Xml.Linq.XComment comment:
+                            wrapper.Add(new XComment(comment.Value));
+                            break;
+                        case System.Xml.Linq.XProcessingInstruction pi:
+                            wrapper.Add(new XProcessingInstruction(pi.Target, pi.Data));
+                            break;
+                        case System.Xml.Linq.XDocument doc:
+                            if (doc.Root != null)
+                                wrapper.Add(new XElement(doc.Root));
+                            break;
+                    }
+                }
+                else
+                {
+                    wrapper.Add(new XText(node.StringValue));
+                }
+            }
+            else if (!item.IsUndefined)
+            {
+                wrapper.Add(new XText(item.ToString()));
+            }
+        }
+
+        var saveOptions = System.Xml.Linq.SaveOptions.DisableFormatting;
+        return string.Concat(wrapper.Nodes().Select(n => n.ToString(saveOptions)));
+    }
+
+    /// <summary>
+    /// Evaluates the <c>terminate</c> attribute of <c>xsl:message</c>.
+    /// </summary>
+    private bool EvaluateMessageTerminate(XElement instruction, XdmValue contextItem)
+    {
+        var terminateAttr = instruction.Attribute("terminate")?.Value;
+        if (string.IsNullOrEmpty(terminateAttr))
+            return false;
+
+        var value = EvaluateAvt(terminateAttr, instruction).Trim();
+        if (value.Equals("yes", StringComparison.OrdinalIgnoreCase) ||
+            value.Equals("true", StringComparison.OrdinalIgnoreCase) ||
+            value == "1")
+            return true;
+
+        if (value.Equals("no", StringComparison.OrdinalIgnoreCase) ||
+            value.Equals("false", StringComparison.OrdinalIgnoreCase) ||
+            value == "0")
+            return false;
+
+        // Invalid effective value is a dynamic error.
+        throw new InvalidOperationException("XTDE0975");
+    }
+
+    /// <summary>
+    /// Evaluates the <c>error-code</c> attribute of <c>xsl:message</c>.
+    /// </summary>
+    private string EvaluateMessageErrorCode(XElement instruction)
+    {
+        var codeAttr = instruction.Attribute("error-code")?.Value;
+        if (string.IsNullOrEmpty(codeAttr))
+            return "XTMM9000";
+
+        var expanded = EvaluateAvt(codeAttr, instruction).Trim();
+        if (expanded.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            var close = expanded.IndexOf('}');
+            if (close > 2)
+            {
+                var ns = expanded[2..close];
+                var local = expanded[(close + 1)..];
+                if (string.IsNullOrEmpty(ns))
+                    return $"Q{{}}{local}";
+                return $"Q{{{ns}}}{local}";
+            }
+        }
+
+        var colon = expanded.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = expanded[..colon];
+            var local = expanded[(colon + 1)..];
+            var ns = instruction.GetNamespaceOfPrefix(prefix);
+            if (ns == null)
+                throw new InvalidOperationException("XTDE0040");
+            return $"Q{{{ns.NamespaceName}}}{local}";
+        }
+
+        return $"Q{{}}{expanded}";
+    }
+
+    /// <summary>
+    /// Binds the <c>err:*</c> variables used by <c>xsl:catch</c> to the details of the
+    /// caught exception. Returns the previous values so they can be restored.
+    /// </summary>
+    private (XdmValue Code, XdmValue Description, XdmValue Value) BindCatchErrorVariables(Exception ex)
+    {
+        const string ErrNs = "http://www.w3.org/2005/xqt-errors";
+
+        string code;
+        string description;
+        XdmValue value;
+
+        if (ex is XsltRuntimeException xre)
+        {
+            code = xre.ErrorCode;
+            description = xre.Message;
+            value = xre.ErrorValue;
+        }
+        else if (ex is InvalidOperationException ioe && ioe.Message.Contains(':'))
+        {
+            code = ioe.Message[..ioe.Message.IndexOf(':')];
+            description = ioe.Message[(code.Length + 1)..];
+            value = XdmValue.Undefined;
+        }
+        else
+        {
+            code = ex.GetType().Name;
+            description = ex.Message;
+            value = XdmValue.Undefined;
+        }
+
+        _context.TryGetVariable("code", out var prevCode, ErrNs);
+        _context.TryGetVariable("description", out var prevDesc, ErrNs);
+        _context.TryGetVariable("value", out var prevValue, ErrNs);
+
+        _context.WithVariable("code", XdmValue.FromString(code), ErrNs);
+        _context.WithVariable("description", XdmValue.FromString(description), ErrNs);
+        _context.WithVariable("value", value, ErrNs);
+        _context.WithVariable("module", XdmValue.FromString(string.Empty), ErrNs);
+        _context.WithVariable("line-number", XdmValue.FromInteger(0), ErrNs);
+        _context.WithVariable("column-number", XdmValue.FromInteger(0), ErrNs);
+
+        return (prevCode, prevDesc, prevValue);
+    }
+
+    private void RestoreCatchErrorVariables((XdmValue Code, XdmValue Description, XdmValue Value) previous)
+    {
+        const string ErrNs = "http://www.w3.org/2005/xqt-errors";
+        _context.WithVariable("code", previous.Code, ErrNs);
+        _context.WithVariable("description", previous.Description, ErrNs);
+        _context.WithVariable("value", previous.Value, ErrNs);
     }
 
     /// <summary>
@@ -10888,5 +11175,30 @@ public sealed class TransformEngine
         /// Used to raise XTDE3362 when one of them is requested.
         /// </summary>
         public HashSet<string> InapplicableNames { get; } = new();
+    }
+}
+
+/// <summary>
+/// Exception thrown when an XSLT instruction reports a dynamic error, carrying the
+/// XSLT error code, description, and optional error value (e.g. the value of an
+/// <c>xsl:message</c> that terminated processing).
+/// </summary>
+public sealed class XsltRuntimeException : InvalidOperationException
+{
+    /// <summary>
+    /// The XSLT error code (e.g. <c>XTMM9000</c>).</summary>
+    public string ErrorCode { get; }
+
+    /// <summary>
+    /// The value associated with the error, used for <c>$err:value</c> in <c>xsl:catch</c>.</summary>
+    public XdmValue ErrorValue { get; }
+
+    /// <summary>
+    /// Creates a new XSLT runtime exception.</summary>
+    public XsltRuntimeException(string errorCode, string description, XdmValue errorValue)
+        : base($"{errorCode}: {description}")
+    {
+        ErrorCode = errorCode;
+        ErrorValue = errorValue;
     }
 }
