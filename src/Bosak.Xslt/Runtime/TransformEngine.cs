@@ -104,6 +104,8 @@
 //                      | Charles Korthout | 5.33  | 13-06-2026     | Merge fixes: XTDE2210, named-source lookup, apply-templates clearing, globals in accumulators |
 //                      | Charles Korthout | 5.34  | 13-06-2026     | Implemented xsl:analyze-string and regex-group()                                          |
 //                      | Charles Korthout | 5.35  | 13-06-2026     | XSLT 3.0 zero-length match semantics, XSD regex validation, and backreference translation |
+//                      | Charles Korthout | 5.36  | 15-06-2026     | Mode cluster fixes: initial-template context item, union-pattern conflict, mode validation |
+//                      | Charles Korthout | 5.37  | 15-06-2026     | Emit warning-on-no-match/multiple-match via OnWarning; default to recovery/last-wins     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -387,7 +389,10 @@ public sealed class TransformEngine
             if (entryRule.CompiledMatch != null && source != null)
                 ExecuteTemplate(entryRule, source, callParams: initCallParams, incomingTunnelParams: initTunnelParams, setCurrentRule: true);
             else
-                CallTemplate(effectiveInitialTemplate, XdmValue.Undefined, initCallParams, initTunnelParams);
+            {
+                var initialContextItem = source != null ? XdmValue.FromNode(source) : XdmValue.Undefined;
+                CallTemplate(effectiveInitialTemplate, initialContextItem, initCallParams, initTunnelParams);
+            }
         }
         else if (!string.IsNullOrEmpty(initialMode))
             {
@@ -402,6 +407,12 @@ public sealed class TransformEngine
                 if (!ModeExists(resolvedInitialMode))
                 {
                     throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' does not exist in the stylesheet.");
+                }
+                // A private or abstract mode cannot be used as the initial mode.
+                var initialModeDef = _stylesheet.GetModeDefinition(resolvedInitialMode);
+                if (initialModeDef != null && (initialModeDef.Visibility == Stylesheet.ModeVisibility.Private || initialModeDef.Visibility == Stylesheet.ModeVisibility.Abstract))
+                {
+                    throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' is not visible.");
                 }
                 _modeStack.Push(resolvedInitialMode);
                 try
@@ -881,8 +892,9 @@ public sealed class TransformEngine
             return modeDef.UseAccumulators.Contains(accClarkName);
         }
 
-        // No xsl:mode declaration for the initial mode: no accumulators are applicable.
-        return false;
+        // No explicit xsl:mode declaration for the initial mode: the default is #all,
+        // so every accumulator declared in the stylesheet is applicable to the tree.
+        return true;
     }
 
     /// <summary>
@@ -5614,11 +5626,26 @@ public sealed class TransformEngine
         try
         {
             var modeDef = _stylesheet.GetModeDefinition(mode);
+            var typed = modeDef?.Typed ?? false;
             // Named modes with no explicit xsl:mode declaration inherit the
             // unnamed mode's on-no-match behavior (XSLT 3.0 §3.5.2).
             if (modeDef == null && !string.IsNullOrEmpty(mode))
                 modeDef = _stylesheet.GetModeDefinition("");
             var behavior = modeDef?.OnNoMatch ?? GetDefaultOnNoMatch();
+
+            // xsl:mode warning-on-no-match: warn whenever the built-in rule processes
+            // a node (document nodes are never considered a no-match).
+            if (modeDef?.WarningOnNoMatch == true && node.NodeKind != XdmNodeKind.Document)
+            {
+                _messageListener?.OnWarning($"No matching template for node '{node.LocalName}' in mode '{mode}'.");
+            }
+
+            // typed="yes" requires schema-validated nodes; untyped element/attribute
+            // nodes raise XTTE3100 when the built-in rule would process them.
+            if (typed && (node.NodeKind == XdmNodeKind.Element || node.NodeKind == XdmNodeKind.Attribute))
+            {
+                throw new InvalidOperationException($"XTTE3100: Mode '{mode}' is typed, but the context node is untyped.");
+            }
 
 
             // XSLT 3.0 §6.6: if on-no-match is fail, built-in rule signals XTDE0555
@@ -6289,6 +6316,11 @@ public sealed class TransformEngine
                 var savedPos = _context.ContextPosition;
                 var savedSize = _context.ContextSize;
                 var savedVariables = _context.SnapshotVariables();
+                // #current inside a global variable/parameter refers to the unnamed mode
+                // (XSLT 2.0 erratum XT.E19), so isolate the mode stack from the caller.
+                var savedModes = new List<string>(_modeStack);
+                savedModes.Reverse();
+                _modeStack.Clear();
                 try
                 {
                     _context.WithFocus(_globalContextItem, 1, 1);
@@ -6320,6 +6352,9 @@ public sealed class TransformEngine
                 {
                     _context.RestoreVariables(savedVariables);
                     _context.WithFocus(savedItem, savedPos, savedSize);
+                    _modeStack.Clear();
+                    foreach (var m in savedModes)
+                        _modeStack.Push(m);
                     _evaluatingGlobals.Remove(key);
                 }
             }
@@ -6351,6 +6386,9 @@ public sealed class TransformEngine
                         var savedItem = _context.ContextItem;
                         var savedPos = _context.ContextPosition;
                         var savedSize = _context.ContextSize;
+                        var savedModes = new List<string>(_modeStack);
+                        savedModes.Reverse();
+                        _modeStack.Clear();
                         try
                         {
                             _context.WithFocus(_globalContextItem, 1, 1);
@@ -6361,6 +6399,9 @@ public sealed class TransformEngine
                         finally
                         {
                             _context.WithFocus(savedItem, savedPos, savedSize);
+                            _modeStack.Clear();
+                            foreach (var m in savedModes)
+                                _modeStack.Push(m);
                         }
                     }
                 }
@@ -6466,10 +6507,17 @@ public sealed class TransformEngine
         if (hasConflict && best != null)
         {
             var modeDef = _stylesheet.GetModeDefinition(mode);
+
             if (modeDef?.OnMultipleMatch == Stylesheet.OnMultipleMatch.Fail)
             {
                 throw new InvalidOperationException("XTDE0540: Multiple templates match with the same priority.");
             }
+
+            if (modeDef?.WarningOnMultipleMatch == true)
+            {
+                _messageListener?.OnWarning($"Multiple templates match with the same priority in mode '{mode}'.");
+            }
+            // Otherwise default to last-wins / recovery.
         }
 
         return best;

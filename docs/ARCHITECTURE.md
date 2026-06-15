@@ -422,7 +422,7 @@ src/
 | `xsl:function` | ✅ Implemented | User-defined XPath functions in XSLT |
 | `fn:transform()` | ✅ Implemented | XPath function invoking XSLT from expressions |
 | Tunnel parameters | ✅ Implemented | `tunnel="yes"` propagation |
-| `xsl:mode` | ✅ Implemented | `on-no-match` declarations |
+| `xsl:mode` | ✅ Implemented | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks, and `#unnamed` normalization |
 | `xsl:analyze-string` | ✅ Implemented | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics |
 | XSLT 3.0 packages | 🔮 Phase 3 | `xsl:package`, `xsl:use-package` |
 | Streaming | 🔮 Phase 3 | `streamable="yes"` (skeletal support only) |

@@ -70,6 +70,7 @@ public sealed class Stylesheet
     private readonly List<AttributeSetDefinition> _attributeSets = new();
     private readonly HashSet<string> _excludedResultPrefixes = new();
     private OutputProperties? _outputProperties;
+    private readonly bool _isRootStylesheet;
 
     public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null)
     {
@@ -78,6 +79,7 @@ public sealed class Stylesheet
         _resolver = resolver;
         ImportPrecedence = importPrecedence;
         _resolvedUris = resolvedUris ?? new HashSet<string>();
+        _isRootStylesheet = _resolvedUris.Count == 0;
 
         // Add this stylesheet's own URI to the resolved set for circular-reference detection
         if (!string.IsNullOrEmpty(baseUri))
@@ -236,9 +238,13 @@ public sealed class Stylesheet
         DeclaredModes = declaredModesAttr != "no";
 
         // Parse xsl:default-mode on stylesheet root
-        var defaultModeAttr = root.Attribute("default-mode")?.Value ?? "";
+        var defaultModeAttr = root.Attribute("default-mode")?.Value?.Trim() ?? "";
         DefaultMode = defaultModeAttr;
-        if (!string.IsNullOrEmpty(defaultModeAttr) && defaultModeAttr != "#current" && defaultModeAttr != "#default" && defaultModeAttr != "#all" && defaultModeAttr != "#unnamed")
+        if (defaultModeAttr == "#unnamed" || defaultModeAttr == "#default")
+        {
+            DefaultMode = ""; // the unnamed mode
+        }
+        else if (!string.IsNullOrEmpty(defaultModeAttr) && defaultModeAttr != "#current" && defaultModeAttr != "#all")
         {
             int colon = defaultModeAttr.IndexOf(':');
             if (colon >= 0)
@@ -426,14 +432,48 @@ public sealed class Stylesheet
             }
         }
 
-        // Parse xsl:mode declarations
+        // Parse xsl:mode declarations. Collect all local declarations first so that
+        // duplicate or conflicting declarations at the same import precedence can be
+        // detected before the dictionary overwrites earlier entries.
+        var localModes = new List<ModeDefinition>();
         foreach (var mode in root.Elements(XName.Get("mode", XslNamespace)))
         {
             if (!UseWhen(mode)) continue;
             var def = ModeDefinition.FromElement(mode);
             if (def != null)
-                _modeDefinitions[def.Name] = def;
+                localModes.Add(def);
         }
+
+        // Check for duplicate/conflicting local declarations in this stylesheet module.
+        // For non-root modules this is deferred to the root-level validation, because
+        // conflicts in imported modules may be overridden by a higher-precedence declaration.
+        if (_isRootStylesheet)
+        {
+            var seenLocalModes = new Dictionary<string, ModeDefinition>();
+            foreach (var def in localModes)
+            {
+                if (seenLocalModes.TryGetValue(def.Name, out var existing))
+                {
+                    if (!AreModesEquivalent(existing, def))
+                        throw new InvalidOperationException($"XTSE0545: Conflicting xsl:mode declarations for mode '{def.Name}' at the same import precedence.");
+                }
+                else
+                {
+                    seenLocalModes[def.Name] = def;
+                }
+            }
+        }
+
+        foreach (var def in localModes)
+        {
+            _modeDefinitions[def.Name] = def;
+        }
+
+        // Validate mode definitions across the complete stylesheet tree. Conflicting
+        // declarations at the winning import precedence are a static error; declarations
+        // overridden by a higher-precedence declaration are ignored.
+        if (_isRootStylesheet)
+            ValidateModeDefinitions();
 
         // Parse xsl:global-context-item declaration (XSLT 3.0)
         foreach (var gci in root.Elements(XName.Get("global-context-item", XslNamespace)))
@@ -1339,6 +1379,72 @@ public sealed class Stylesheet
     /// Looks up a mode definition by name, considering import/include precedence.
     /// Local definitions override included, which override imported.
     /// </summary>
+    private void ValidateModeDefinitions()
+    {
+        var all = new Dictionary<string, List<(int Precedence, ModeDefinition Def)>>();
+        CollectModeDefinitions(this, all);
+
+        foreach (var (name, list) in all)
+        {
+            var minPrecedence = list.Min(x => x.Precedence);
+            var top = list.Where(x => x.Precedence == minPrecedence).Select(x => x.Def).ToList();
+            if (top.Count <= 1)
+                continue;
+
+            var first = top[0];
+            for (int i = 1; i < top.Count; i++)
+            {
+                if (!AreModesEquivalent(first, top[i]))
+                {
+                    var details = string.Join(", ", list.Select(x => $"(p={x.Precedence},on={x.Def.OnNoMatch},vis={x.Def.Visibility},acc={string.Join("|", x.Def.UseAccumulators)})"));
+                    throw new InvalidOperationException($"XTSE0545: Conflicting xsl:mode declarations for mode '{name}' at the same import precedence. [{details}]");
+                }
+            }
+        }
+    }
+
+    private static void CollectModeDefinitions(Stylesheet stylesheet, Dictionary<string, List<(int Precedence, ModeDefinition Def)>> map)
+    {
+        foreach (var kv in stylesheet._modeDefinitions)
+        {
+            if (!map.TryGetValue(kv.Key, out var list))
+            {
+                list = new List<(int, ModeDefinition)>();
+                map[kv.Key] = list;
+            }
+            list.Add((stylesheet.ImportPrecedence, kv.Value));
+        }
+        foreach (var included in stylesheet._includes)
+            CollectModeDefinitions(included, map);
+        foreach (var imported in stylesheet._imports)
+            CollectModeDefinitions(imported, map);
+    }
+
+    private static bool HasSamePrecedenceMode(Stylesheet stylesheet, string name)
+    {
+        if (stylesheet._modeDefinitions.ContainsKey(name))
+            return true;
+        foreach (var included in stylesheet._includes)
+        {
+            if (included.ImportPrecedence == stylesheet.ImportPrecedence && HasSamePrecedenceMode(included, name))
+                return true;
+        }
+        return false;
+    }
+
+    private static bool AreModesEquivalent(ModeDefinition a, ModeDefinition b)
+    {
+        return a.OnNoMatch == b.OnNoMatch
+            && a.OnMultipleMatch == b.OnMultipleMatch
+            && a.Visibility == b.Visibility
+            && a.Typed == b.Typed
+            && a.WarningOnNoMatch == b.WarningOnNoMatch
+            && a.WarningOnMultipleMatch == b.WarningOnMultipleMatch
+            && a.Streamable == b.Streamable
+            && a.UseAllAccumulators == b.UseAllAccumulators
+            && a.UseAccumulators.SetEquals(b.UseAccumulators);
+    }
+
     public ModeDefinition? GetModeDefinition(string name)
     {
         // Local first (highest precedence)

@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 2.0   | 13-06-2026     | Disallow current-merge-group/current-merge-key in match patterns                        |
 //                      | Charles Korthout | 2.1   | 13-06-2026     | match="." matches atomic items as well as nodes                                         |
 //                      | Charles Korthout | 2.2   | 13-06-2026     | WrapWithCurrentItem clears regex-group state for pattern evaluation                     |
+//                      | Charles Korthout | 2.3   | 13-06-2026     | Route attribute patterns with predicates through CompilePredicatePattern               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -775,6 +776,13 @@ public sealed class PatternCompiler
                     return CompilePathPattern(trimmed);
                 }
             }
+        }
+
+        // Attribute pattern with predicates (@*[pred], @name[pred]): route through
+        // CompilePredicatePattern so the predicate is evaluated against the candidate.
+        if (trimmed.StartsWith('@') && trimmed.Contains('['))
+        {
+            return CompilePredicatePattern(trimmed);
         }
 
         // Attribute pattern: @name or @*

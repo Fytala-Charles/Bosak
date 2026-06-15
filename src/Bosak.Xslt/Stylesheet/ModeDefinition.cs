@@ -56,6 +56,21 @@ public enum OnMultipleMatch
 }
 
 /// <summary>
+/// Specifies the visibility of an <c>xsl:mode</c> declaration.
+/// </summary>
+public enum ModeVisibility
+{
+    /// <summary>Visible to stylesheets that import this one.</summary>
+    Public,
+    /// <summary>Visible only within this stylesheet package.</summary>
+    Private,
+    /// <summary>Visible but cannot be overridden.</summary>
+    Final,
+    /// <summary>Must be overridden by an importing stylesheet.</summary>
+    Abstract
+}
+
+/// <summary>
 /// Represents a parsed xsl:mode declaration.
 /// </summary>
 public sealed class ModeDefinition
@@ -69,6 +84,21 @@ public sealed class ModeDefinition
     /// <summary>The behavior when multiple templates match with the same priority.</summary>
     public OnMultipleMatch OnMultipleMatch { get; }
 
+    /// <summary>The visibility of the mode.</summary>
+    public ModeVisibility Visibility { get; }
+
+    /// <summary>Whether the mode requires typed (schema-validated) nodes.</summary>
+    public bool Typed { get; }
+
+    /// <summary>Whether to emit a warning when no template matches a node.</summary>
+    public bool WarningOnNoMatch { get; }
+
+    /// <summary>Whether to emit a warning when multiple templates match with the same priority.</summary>
+    public bool WarningOnMultipleMatch { get; }
+
+    /// <summary>Whether the mode is declared streamable.</summary>
+    public bool Streamable { get; }
+
     /// <summary>The accumulator names (as Clark names) that are applicable to this mode.</summary>
     public IReadOnlySet<string> UseAccumulators { get; }
 
@@ -76,15 +106,20 @@ public sealed class ModeDefinition
     public bool UseAllAccumulators { get; }
 
     public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch = OnMultipleMatch.UseLast)
-        : this(name, onNoMatch, onMultipleMatch, new HashSet<string>(), false)
+        : this(name, onNoMatch, onMultipleMatch, ModeVisibility.Private, false, false, false, false, new HashSet<string>(), false)
     {
     }
 
-    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, IReadOnlySet<string> useAccumulators, bool useAllAccumulators)
+    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, bool typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators)
     {
         Name = name;
         OnNoMatch = onNoMatch;
         OnMultipleMatch = onMultipleMatch;
+        Visibility = visibility;
+        Typed = typed;
+        WarningOnNoMatch = warningOnNoMatch;
+        WarningOnMultipleMatch = warningOnMultipleMatch;
+        Streamable = streamable;
         UseAccumulators = useAccumulators;
         UseAllAccumulators = useAllAccumulators;
     }
@@ -111,6 +146,31 @@ public sealed class ModeDefinition
             _ => OnMultipleMatch.UseLast
         };
 
+        var visibilityAttr = element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
+        var visibility = visibilityAttr switch
+        {
+            "public" => ModeVisibility.Public,
+            "private" => ModeVisibility.Private,
+            "final" => ModeVisibility.Final,
+            "abstract" => ModeVisibility.Abstract,
+            null or "" => string.IsNullOrEmpty(name) ? ModeVisibility.Private : ModeVisibility.Public,
+            _ => throw new InvalidOperationException("XTSE0020")
+        };
+
+        // The unnamed mode can only be private; public/final/abstract are not allowed.
+        if (string.IsNullOrEmpty(name) && visibility != ModeVisibility.Private)
+            throw new InvalidOperationException("XTSE0020");
+
+        // A named mode cannot be abstract.
+        if (!string.IsNullOrEmpty(name) && visibility == ModeVisibility.Abstract)
+            throw new InvalidOperationException("XTSE0020");
+
+        var typed = ParseYesNoAttribute(element, "typed");
+
+        var warningOnNoMatch = ParseYesNoAttribute(element, "warning-on-no-match");
+        var warningOnMultipleMatch = ParseYesNoAttribute(element, "warning-on-multiple-match");
+        var streamable = ParseYesNoAttribute(element, "streamable");
+
         var useAllAccumulators = false;
         var useAccumulators = new HashSet<string>();
         var useAccAttr = element.Attribute("use-accumulators")?.Value;
@@ -130,7 +190,20 @@ public sealed class ModeDefinition
             }
         }
 
-        return new ModeDefinition(name, onNoMatch, onMultipleMatch, useAccumulators, useAllAccumulators);
+        return new ModeDefinition(name, onNoMatch, onMultipleMatch, visibility, typed, warningOnNoMatch, warningOnMultipleMatch, streamable, useAccumulators, useAllAccumulators);
+    }
+
+    private static bool ParseYesNoAttribute(XElement element, string attributeName)
+    {
+        var value = element.Attribute(attributeName)?.Value?.Trim();
+        if (string.IsNullOrEmpty(value))
+            return false;
+        // Values are case-sensitive: only the lower-case/standard forms are allowed.
+        if (value is "yes" or "true" or "1")
+            return true;
+        if (value is "no" or "false" or "0")
+            return false;
+        throw new InvalidOperationException("XTSE0020");
     }
 
     private static string ExpandModeName(string mode, XElement element)
@@ -199,6 +272,9 @@ public sealed class ModeDefinition
     /// </summary>
     public static string NormalizeModeName(string mode)
     {
+        // #unnamed is the unnamed mode
+        if (mode == "#unnamed")
+            return "";
         // Q{}local → local
         if (mode.Length > 3 && mode.StartsWith("Q{") && mode[2] == '}')
             return mode.Substring(3);

@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 June 2026
 > **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,420 passed / 851 failed / 9,329 skipped (~83.9%)
+> **XSLT baseline:** 4,457 passed / 811 failed / 9,332 skipped (~84.6%)
 
 ---
 
@@ -251,7 +251,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:output` | ✅ Working | `method`, `indent`, `omit-xml-declaration`, `encoding` |
 | `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |
-| `xsl:mode` | ✅ Working | `on-no-match` declarations |
+| `xsl:mode` | ✅ Working | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks (`XTSE0545`), and `#unnamed` normalization |
 | `xsl:analyze-string` | ✅ Working | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
 | `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
@@ -259,8 +259,9 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:use-when` | ⚠️ Partial | Top-level and nested elements; `true()`/`false()` evaluation works. Error cases (XTSE0090, XPST0003) not yet validated. |
 | `xsl:where-populated` | ✅ Working | Filters empty sequences, empty text nodes, empty PIs, empty comments, and empty elements |
 | `xsl:on-empty` | ✅ Working | Evaluated by parent container (xsl:copy, xsl:document, literal result elements, general sequence constructors) when sequence constructor produces no nodes; supports `@select` and sequence constructor children |
-| `xsl:message` | ✅ Working | Evaluates `terminate` and `error-code`; emits serialized message text via `IMessageListener`; terminating messages throw `XsltRuntimeException` carrying the XDM value |
+| `xsl:message` | ✅ Working | Evaluates `terminate` and `error-code`; emits serialized message text via `IXsltMessageListener`; terminating messages throw `XsltRuntimeException` carrying the XDM value. The listener also receives `OnWarning` callbacks for XSLT warnings (e.g. no-matching-template / multiple-template warnings). |
 | `xsl:try` / `xsl:catch` | ⚠️ Partial | Catches terminating `xsl:message` and binds `$err:code`, `$err:description`, `$err:value`; recovery of arbitrary dynamic errors is still being hardened |
+| `xsl:result-document` | 🔮 Phase 3 | Secondary result documents are not yet implemented |
 
 ---
 

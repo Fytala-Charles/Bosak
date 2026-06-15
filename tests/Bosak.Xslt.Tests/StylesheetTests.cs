@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 31-05-2026     | Added xsl:try / xsl:catch tests (result tree, select attribute, function body)         |
 //                      | Charles Korthout | 0.9   | 31-05-2026     | Added xsl:for-each-group tests (group-by, group-adjacent, group-starting-with, current-grouping-key) |
 //                      | Charles Korthout | 0.10  | 13-06-2026     | Relaxed fn:transform assertions to tolerate copied in-scope namespaces                   |
+//                      | Charles Korthout | 0.11  | 15-06-2026     | TestMessageListener implements IXsltMessageListener.OnWarning                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2123,6 +2124,7 @@ public class StylesheetTests
         private readonly List<string> _messages;
         public TestMessageListener(List<string> messages) => _messages = messages;
         public void OnMessage(string message) => _messages.Add(message);
+        public void OnWarning(string message) { }
     }
 
     [Fact]

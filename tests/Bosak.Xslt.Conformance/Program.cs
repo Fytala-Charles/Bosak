@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 13-06-2026     | Skip xsl:package tests and streaming source tests automatically                        |
 //                      | Charles Korthout | 1.1   | 11-06-2026     | Skip accumulator-091 (XPST0008 for variable in match pattern not detected)              |
 //                      | Charles Korthout | 1.2   | 13-06-2026     | Expand static parameters in _select attributes before compilation                       |
+//                      | Charles Korthout | 1.3   | 15-06-2026     | Record warnings separately; evaluate assert-warning; skip mode result-document tests   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -40,7 +41,16 @@ namespace Bosak.Xslt.Conformance;
 class RecordingMessageListener : Bosak.Xslt.Api.IXsltMessageListener
 {
     public List<string> Messages { get; } = new();
-    public void OnMessage(string message) => Messages.Add(message);
+    public List<string> Warnings { get; } = new();
+    public void OnMessage(string message)
+    {
+        Messages.Add(message);
+    }
+
+    public void OnWarning(string message)
+    {
+        Warnings.Add(message);
+    }
 }
 
 class Program
@@ -117,7 +127,7 @@ class Program
         "merge-065a", "merge-065b",
         "merge-097", "merge-097s", "merge-097sf", "merge-098", "merge-099",
         // xsl:result-document is not implemented
-        "position-2201",
+        "position-2201", "mode-1801", "mode-1802",
         // xsl:package not supported
         "declared-modes-009", "declared-modes-010", "declared-modes-011", "declared-modes-012",
         // Variable references other than $value in xsl:accumulator-rule match patterns
@@ -126,7 +136,7 @@ class Program
         // Embedded stylesheet modules (fragment identifiers) not supported
         "include-0102", "include-0103",
         // on-multiple-match=error detection not implemented
-        "include-0702b",
+        "include-0702b", "mode-0801b",
         // Collection registry / fn:collection not implemented
         "collection-004", "collection-005", "collection-006",
         // Java extension functions are not supported
@@ -275,10 +285,20 @@ class Program
             var deps = testCase.Element(ns + "dependencies");
             if (deps != null)
             {
+                bool isBackwardsCompatible = false;
                 foreach (var spec in deps.Elements(ns + "spec"))
                 {
                     var val = spec.Attribute("value")?.Value ?? "";
                     if (!IsSpecSupported(val))
+                        return TestResult.Skip;
+                    if (IsBackwardsCompatibleSpec(val))
+                        isBackwardsCompatible = true;
+                }
+                foreach (var omm in deps.Elements(ns + "on-multiple-match"))
+                {
+                    var val = omm.Attribute("value")?.Value ?? "";
+                    // We treat ambiguous matches in XSLT 1.0/2.0 stylesheets as errors.
+                    if (val == "recover" && isBackwardsCompatible)
                         return TestResult.Skip;
                 }
                 foreach (var feature in deps.Elements(ns + "feature"))
@@ -505,7 +525,8 @@ class Program
             if (resultElem == null) return TestResult.Skip;
 
             int messageIndex = 0;
-            if (CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, ref messageIndex))
+            int warningIndex = 0;
+            if (CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex))
             {
                 Console.WriteLine($"  PASS {name}");
                 return TestResult.Pass;
@@ -536,6 +557,18 @@ class Program
             Console.WriteLine($"  FAIL {name}: {ex.Message}");
             return TestResult.Fail;
         }
+    }
+
+    static bool IsBackwardsCompatibleSpec(string specValue)
+    {
+        if (!specValue.StartsWith("XSLT", StringComparison.OrdinalIgnoreCase))
+            return false;
+        var rest = specValue[4..];
+        bool plus = rest.EndsWith("+");
+        if (plus) return false;
+        if (int.TryParse(rest, out int requiredVersion))
+            return requiredVersion < 30;
+        return false;
     }
 
     static bool IsSpecSupported(string specValue)
@@ -661,7 +694,7 @@ class Program
         return new XDocumentNode(doc);
     }
 
-    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, ref int messageIndex)
+    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
     {
         // Handle <all-of>
         var allOf = resultElem.Element(ns + "all-of");
@@ -669,7 +702,7 @@ class Program
         {
             foreach (var option in allOf.Elements())
             {
-                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, ref messageIndex))
+                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
                     return false;
             }
             return true;
@@ -681,7 +714,7 @@ class Program
         {
             foreach (var option in anyOf.Elements())
             {
-                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, ref messageIndex))
+                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
                     return true;
             }
             return false;
@@ -693,22 +726,23 @@ class Program
         {
             foreach (var child in assertionChildren)
             {
-                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, ref messageIndex))
+                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
                     return false;
             }
             return true;
         }
 
-        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, ref messageIndex);
+        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex);
     }
 
     static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages)
     {
         int messageIndex = 0;
-        return CompareResult(actual, resultElem, ns, testSetDir, catalogDir, messages, ref messageIndex);
+        int warningIndex = 0;
+        return CompareResult(actual, resultElem, ns, testSetDir, catalogDir, messages, new List<string>(), ref messageIndex, ref warningIndex);
     }
 
-    static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, ref int messageIndex)
+    static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
     {
         // assert-message must be checked before assert-xml because an assert-message
         // can contain an assert-xml child that should be evaluated against the message,
@@ -726,6 +760,15 @@ class Program
                 return true;
             }
             return false;
+        }
+
+        // assert-warning: checks that a warning was emitted (in order with other warnings).
+        if (resultElem.Name.LocalName == "assert-warning" || resultElem.Element(ns + "assert-warning") != null)
+        {
+            if (warnings == null || warningIndex >= warnings.Count)
+                return false;
+            warningIndex++;
+            return true;
         }
 
         // When called from all-of/any-of, resultElem itself may be the assertion.

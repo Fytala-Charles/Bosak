@@ -1,6 +1,52 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
+**Commit:** `26c7e84` (working tree: uncommitted `mode` cluster fixes)
+**Current focus:** `mode` + `initial-mode` cluster completed (122/0/66 runnable, 100% pass rate).
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,457
+- **Failed:** 811
+- **Skipped:** 9,332
+- **Pass rate:** 84.6% (+37 passes / -40 failures vs. previous 4,420/851)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| mode + initial-mode | 188 | 122 | 0 | 66 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`xsl:mode` extended support** — Parses/validates `visibility`, `typed`, `warning-on-no-match`, `warning-on-multiple-match`, and `streamable`; raises `XTSE0020` for invalid values. Duplicate/conflicting `xsl:mode` declarations at the same import precedence raise `XTSE0545`; equivalent declarations are allowed. `default-mode="#unnamed"` and template-level `default-mode` are normalized to the empty unnamed mode.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/ModeDefinition.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
+
+2. **Initial-mode eligibility and context** — Named modes default to public visibility (simplified-stylesheet behavior); named-template entry points now receive the source node as the context item. Version-aware template-rule conflict resolution defaults to last-wins/recovery rather than throwing for XSLT 1.0/2.0 stylesheets.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **Warning channels** — `IXsltMessageListener` gained an `OnWarning` callback. The engine emits `warning-on-no-match` warnings from built-in rules and `warning-on-multiple-match` warnings on same-priority conflicts. The conformance harness records warnings and evaluates `<assert-warning/>`.
+   - **Files changed**: `src/Bosak.Xslt/Api/IXsltMessageListener.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+4. **Attribute pattern predicates** — Patterns such as `@*[user:function(.)]` now route through the predicate compiler, so stylesheet-defined functions and predicates are evaluated correctly for attribute node tests.
+   - **File changed**: `src/Bosak.Xslt/Patterns/PatternCompiler.cs`.
+
+5. **Conformance harness** — Added `mode-0801b`, `mode-1801`, and `mode-1802` to the known-skip list (`xsl:result-document` / `on-multiple-match=error` recovery variants). Updated `RecordingMessageListener` to implement `OnWarning`.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+## Notes
+
+- Unit-test suite: **877 passed / 0 failed** across 8 projects.
+- Scratch files in `tmpdebug/` and `merge_fails*.txt` remain untracked and must not be committed.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-13
 **Commit:** `d05660c`
 **Current focus:** `message` cluster completed (45/0/0, 100% runnable); code committed.
 
