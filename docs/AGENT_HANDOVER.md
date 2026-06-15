@@ -1,5 +1,48 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-15
+**Commit:** `c6001e0`
+**Current focus:** XSLT `format-date-en` cluster now 33/33 passing (100%).
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,487
+- **Failed:** 781
+- **Skipped:** 9,332
+- **Pass rate:** 85.2% (+30 passes / -30 failures vs. previous 4,457/811)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| format-date-en | 33 | 33 | 0 | 0 | ✅ 100% |
+
+## This Session Fixes
+
+1. **English cardinal/ordinal number words** — Implemented `W`, `w`, `Ww`, `Wo`, `wo`, `Wwo` presentation modifiers for numeric date/time components. Supports uppercase, lowercase, and title-case output for values up to billions.
+   - **Files changed**: `src/Bosak.XPath.Standard/Functions/FormatDateTimeEngine.cs`.
+
+2. **Era-aware negative year formatting** — When the picture contains an era component (`[E...]`), negative years are rendered as absolute values and the default year minimum width drops to 1, producing output such as `55BC` instead of `0-55BC`.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FormatDateTimeEngine.cs`.
+
+3. **Ordinal year width handling** — `[Y1o]` now appends the ordinal suffix to the full year (`1990th`) rather than truncating to a single digit.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FormatDateTimeEngine.cs`.
+
+4. **Regression coverage** — Added unit tests for cardinal/ordinal words, ordinal numeric year, and BC/AD year formatting.
+   - **File added**: `tests/Bosak.XPath.Standard.Tests/FormatDateTimeEngineTests.cs`.
+
+## Notes
+
+- Unit-test suite: **877 passed / 0 failed** across 8 projects (305 in Bosak.XPath.Standard.Tests).
+- Scratch files in `tmpdebug/` and `merge_fails*.txt` remain untracked and must not be committed.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-13
 **Commit:** `5123ed7`
 **Current focus:** `mode` + `initial-mode` cluster completed (122/0/66 runnable, 100% pass rate); committed and pushed.
