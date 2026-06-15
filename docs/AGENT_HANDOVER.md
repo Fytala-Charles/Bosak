@@ -1,6 +1,50 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
+**Commit:** `d05660c`
+**Current focus:** `message` cluster completed (45/0/0, 100% runnable); code committed.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,420
+- **Failed:** 851
+- **Skipped:** 9,329
+- **Pass rate:** 83.9% (+51 passes / -51 failures vs. previous 4,369/902)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| message | 45 | 45 | 0 | 0 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`xsl:message` conformance** — Evaluate `terminate` and `error-code`, serialize node/comment/document content, emit messages via listener, and throw `XsltRuntimeException` carrying the captured XDM value when terminating.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+2. **`xsl:try`/`xsl:catch` error variables** — Caught `XsltRuntimeException` now binds `$err:code`, `$err:description`, and `$err:value` in both result-tree and function-body contexts.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`fn:unparsed-text` base-URI resolution** — Relative `href` is now resolved against `EvaluationContext.BaseUri`.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+4. **Conformance harness `assert-message`** — Records messages in order and supports nested `assert-xml`, `assert-string-value`, `assert`, and `assert-eq` assertions.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+## Notes
+
+- Unit-test suite: **877 passed / 0 failed** across 8 projects.
+- Scratch files in `tmpdebug/` and `merge_fails*.txt` were excluded from the commit.
+- Next cluster candidates: `mode` (33), `format-date-en` (30), `use-when` (28), `on-empty` (28), `document` (28), `try` (26).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-13
 **Commit:** `21701f9`
 **Current focus:** `analyze-string` cluster completed; regex handling centralized in `RegexHelper`.
 

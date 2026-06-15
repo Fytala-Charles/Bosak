@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 June 2026
 > **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,363 passed / 908 failed / 9,329 skipped (~82.8%)
+> **XSLT baseline:** 4,420 passed / 851 failed / 9,329 skipped (~83.9%)
 
 ---
 
@@ -259,6 +259,8 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:use-when` | ⚠️ Partial | Top-level and nested elements; `true()`/`false()` evaluation works. Error cases (XTSE0090, XPST0003) not yet validated. |
 | `xsl:where-populated` | ✅ Working | Filters empty sequences, empty text nodes, empty PIs, empty comments, and empty elements |
 | `xsl:on-empty` | ✅ Working | Evaluated by parent container (xsl:copy, xsl:document, literal result elements, general sequence constructors) when sequence constructor produces no nodes; supports `@select` and sequence constructor children |
+| `xsl:message` | ✅ Working | Evaluates `terminate` and `error-code`; emits serialized message text via `IMessageListener`; terminating messages throw `XsltRuntimeException` carrying the XDM value |
+| `xsl:try` / `xsl:catch` | ⚠️ Partial | Catches terminating `xsl:message` and binds `$err:code`, `$err:description`, `$err:value`; recovery of arbitrary dynamic errors is still being hardened |
 
 ---
 
@@ -371,12 +373,14 @@ dotnet test Bosak.sln
 | Numeric arguments to `fn:subsequence` and `fn:format-integer` are atomized. | Atomization now preserves `xs:untypedAtomic`, so attribute and element text nodes are accepted implicitly. Fixes `function-0502`, `function-0503`, and related tests. | 2026-06-13 |
 | Namespace context is applied to `xsl:variable`/`xsl:param`/`xsl:with-param` @select expressions. | Local and global variable/param `select` expressions, and named-template default param values, now use the in-scope namespace bindings and effective default namespace. Fixes unprefixed EQName tests in `function` cluster. | 2026-06-13 |
 | `date` cluster is fully passing. | Implicit timezone, `xs:time` midnight semantics, timezone adjustment, AM/PM formatting, extended-year constructor bounds, and static-parameter substitution in the harness. Fixes all runnable `date` tests. | 2026-06-13 |
+| `xsl:message` now implements terminate/error-code semantics and serializes node content. | Messages evaluate `@terminate` and `@error-code`, emit via `IMessageListener`, and throw `XsltRuntimeException` with the captured XDM value when terminating; `xsl:try`/`xsl:catch` binds `$err:code`, `$err:description`, `$err:value`. Fixes the `message` conformance cluster (45/0/0). | 2026-06-13 |
+| `fn:unparsed-text` resolves relative `href` against `EvaluationContext.BaseUri`. | Previously resolved only against the static base URI parameter; now uses the dynamic base URI when no explicit base is supplied. Required for `message-0313`. | 2026-06-13 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,010 | 1,261 | 9,329 | 76.1% | `date` cluster now 100% runnable; full suite currently 4010/1261 |
+| XSLT 3.0 (W3C) | 4,420 | 851 | 9,329 | 83.9% | `message` cluster now 100% runnable; full suite currently 4420/851 |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
