@@ -267,6 +267,17 @@ public delegate XdmValue XPathFunction(EvaluationContext context, ReadOnlySpan<X
 
 Functions are registered in a `FunctionLibrary` that supports runtime extensibility.
 
+#### Regular-expression support
+
+Regular expressions are centralized in `RegexHelper` (`src/Bosak.XPath.Standard/Functions/RegexHelper.cs`). It is used by `fn:matches`, `fn:replace`, `fn:tokenize`, `fn:analyze-string`, and `xsl:analyze-string` to:
+
+- Parse `i`, `m`, `s`, `x`, and `q` flags.
+- Validate XSD regex syntax and reject invalid patterns (`FORX0002`).
+- Translate XSD-specific constructs (e.g. ambiguous backreferences, category escapes) to .NET `Regex` syntax.
+- Translate XPath/XSD replacement strings for `fn:replace`.
+- Detect patterns that match the empty string (`FORX0003`).
+- Build capturing-group parent maps so `fn:analyze-string` emits the correctly nested `<group>` tree required by the spec.
+
 ---
 
 ### 6. Public API (`Bosak.XPath.Api`)
@@ -412,6 +423,7 @@ src/
 | `fn:transform()` | ✅ Implemented | XPath function invoking XSLT from expressions |
 | Tunnel parameters | ✅ Implemented | `tunnel="yes"` propagation |
 | `xsl:mode` | ✅ Implemented | `on-no-match` declarations |
+| `xsl:analyze-string` | ✅ Implemented | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics |
 | XSLT 3.0 packages | 🔮 Phase 3 | `xsl:package`, `xsl:use-package` |
 | Streaming | 🔮 Phase 3 | `streamable="yes"` (skeletal support only) |
 

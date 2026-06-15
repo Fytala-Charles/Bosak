@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 June 2026
 > **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,061 passed / 1,213 failed / 9,326 skipped (~77.0%)
+> **XSLT baseline:** 4,363 passed / 908 failed / 9,329 skipped (~82.8%)
 
 ---
 
@@ -252,6 +252,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |
 | `xsl:mode` | ✅ Working | `on-no-match` declarations |
+| `xsl:analyze-string` | ✅ Working | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
 | `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
@@ -272,12 +273,14 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 - Decimal formatting (`fn:format-number`)
 - JSON functions: `fn:parse-json`, `fn:json-to-xml`, `fn:xml-to-json`, `fn:json-doc`
 - Date/time ordering (`lt`, `gt`, `le`, `ge`)
+- `fn:analyze-string` — nested group structure and zero-length checks
 
 ### Known gaps
 - `fn:load-xquery-module` — not implemented
 - `fn:serialize` — partial (no XML serialization options)
 - `fn:transform` options (`delivery-format`, etc.) — partial
 - Schema-aware operations — not supported
+- Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — XSD regex validation and some flag/edge-case behavior still being hardened; see conformance logs for current status
 
 ---
 
