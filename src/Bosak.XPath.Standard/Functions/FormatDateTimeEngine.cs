@@ -13,6 +13,8 @@
 //                      | Charles Korthout | 0.1   | 23-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Full rewrite: digit families, grouping separators, fractional seconds, AM/PM case       |
 //                      | Charles Korthout | 0.3   | 13-06-2026     | AM/PM marker width modifier truncates only; no zero padding                               |
+//                      | Charles Korthout | 0.4   | 13-06-2026     | Name width modifiers, default component widths, ordinal suffixes, fallback lang/cal   |
+//                      | Charles Korthout | 0.5   | 13-06-2026     | English number words, era-aware negative years, ordinal-year width handling          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -30,6 +32,7 @@ internal static class FormatDateTimeEngine
 {
     public static string Format(XPathDateTime value, string picture, string? language, string? calendar, string? place, DateTimeComponents components)
     {
+        bool hasEra = ContainsEraMarker(picture);
         var sb = new StringBuilder();
         int pos = 0;
 
@@ -52,11 +55,34 @@ internal static class FormatDateTimeEngine
                 throw FormatError("FOFD1340");
 
             string marker = picture[(bracket + 1)..close];
-            sb.Append(FormatMarker(value, marker, components));
+            sb.Append(FormatMarker(value, marker, components, language, calendar, hasEra));
             pos = close + 1;
         }
 
         return sb.ToString();
+    }
+
+    private static bool ContainsEraMarker(string picture)
+    {
+        int pos = 0;
+        while (pos < picture.Length)
+        {
+            int bracket = picture.IndexOf('[', pos);
+            if (bracket < 0)
+                break;
+            if (bracket + 1 < picture.Length && picture[bracket + 1] == '[')
+            {
+                pos = bracket + 2;
+                continue;
+            }
+            int close = picture.IndexOf(']', bracket + 1);
+            if (close < 0)
+                break;
+            if (bracket + 1 < close && picture[bracket + 1] == 'E')
+                return true;
+            pos = close + 1;
+        }
+        return false;
     }
 
     private static int FindClosingBracket(string picture, int openPos)
@@ -79,7 +105,7 @@ internal static class FormatDateTimeEngine
         return new InvalidOperationException(code);
     }
 
-    private static string FormatMarker(XPathDateTime value, string marker, DateTimeComponents components)
+    private static string FormatMarker(XPathDateTime value, string marker, DateTimeComponents components, string? language, string? calendar, bool hasEra)
     {
         // Remove all whitespace from the marker content (whitespace within a variable marker is ignored)
         marker = new string(marker.Where(c => !char.IsWhiteSpace(c)).ToArray());
@@ -107,12 +133,25 @@ internal static class FormatDateTimeEngine
             ParseWidth(widthSpec, out minWidth, out maxWidth);
         }
 
+        // Component-specific default minimum widths when no explicit width or digit pattern is given.
+        bool hasDigitPattern = presentation.Any(c => char.GetUnicodeCategory(c) == UnicodeCategory.DecimalDigitNumber);
+        if (widthSpec is null && !hasDigitPattern)
+        {
+            int defaultMin = GetDefaultMinWidth(component);
+            if (component == 'Y' && hasEra)
+                defaultMin = 1;
+            minWidth = Math.Max(minWidth, defaultMin);
+        }
+
+        bool languageFallback = !IsLanguageSupported(language);
+        bool calendarFallback = !IsCalendarSupported(calendar);
+
         // Validate component is available for the value type
         ValidateComponentAvailable(component, components);
 
         string result = component switch
         {
-            'Y' => FormatYear(value, presentation, minWidth, maxWidth),
+            'Y' => FormatYear(value, presentation, minWidth, maxWidth, hasEra),
             'M' => FormatMonth(value, presentation, minWidth, maxWidth),
             'D' => FormatDay(value, presentation, minWidth, maxWidth),
             'd' => FormatDayOfYear(value, presentation, minWidth, maxWidth),
@@ -132,8 +171,33 @@ internal static class FormatDateTimeEngine
             _ => throw FormatError("FOFD1340")
         };
 
+        if (languageFallback)
+            result = $"[Language: en]{result}";
+        else if (calendarFallback)
+            result = $"[Calendar: AD]{result}";
+
         return result;
     }
+
+    private static int GetDefaultMinWidth(char component)
+        => component switch
+        {
+            'Y' => 4,
+            'M' or 'D' or 'H' or 'm' or 's' => 2,
+            'd' => 3,
+            _ => 1
+        };
+
+    private static bool IsLanguageSupported(string? language)
+        => string.IsNullOrEmpty(language) ||
+           language.StartsWith("en", StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsCalendarSupported(string? calendar)
+        => string.IsNullOrEmpty(calendar) ||
+           calendar.Equals("AD", StringComparison.OrdinalIgnoreCase) ||
+           calendar.Equals("Gregorian", StringComparison.OrdinalIgnoreCase) ||
+           calendar.Equals("ISO", StringComparison.OrdinalIgnoreCase) ||
+           calendar.Equals("ISO8601", StringComparison.OrdinalIgnoreCase);
 
     private static void ValidateComponentAvailable(char component, DateTimeComponents components)
     {
@@ -317,13 +381,21 @@ internal static class FormatDateTimeEngine
 
     private static string FormatInteger(long value, string presentation, int minWidth, int maxWidth, bool allowTruncate = true)
     {
-        var info = ParseDigitPresentation(presentation, isFractional: false);
+        if (TryFormatWords(value, presentation, out string? wordsResult))
+            return wordsResult;
+
+        bool ordinal = presentation.EndsWith("o") || presentation.EndsWith("O");
+        string digitPresentation = ordinal ? presentation[..^1] : presentation;
+
+        var info = ParseDigitPresentation(digitPresentation, isFractional: false);
         int totalPositions = info.TotalPositions;
         if (totalPositions == 0)
         {
             // No digit characters in presentation - default to the value as string
             string result = value.ToString(CultureInfo.InvariantCulture);
             result = ApplyWidth(result, minWidth, maxWidth, info.ZeroDigit);
+            if (ordinal && value is >= int.MinValue and <= int.MaxValue)
+                result += GetOrdinalSuffix((int)value);
             return result;
         }
 
@@ -366,7 +438,24 @@ internal static class FormatDateTimeEngine
         // Apply width modifier to final string
         result2 = ApplyWidth(result2, minWidth, maxWidth, info.ZeroDigit);
         result2 = MapDigits(result2, info.ZeroDigit);
+        if (ordinal && value is >= int.MinValue and <= int.MaxValue)
+            result2 += GetOrdinalSuffix((int)value);
         return result2;
+    }
+
+    private static string GetOrdinalSuffix(int value)
+    {
+        int n = Math.Abs(value);
+        int lastTwo = n % 100;
+        if (lastTwo >= 11 && lastTwo <= 13)
+            return "th";
+        return (n % 10) switch
+        {
+            1 => "st",
+            2 => "nd",
+            3 => "rd",
+            _ => "th"
+        };
     }
 
     // ------------------------------------------------------------------
@@ -546,9 +635,13 @@ internal static class FormatDateTimeEngine
     // Component formatters
     // ------------------------------------------------------------------
 
-    private static string FormatYear(XPathDateTime value, string presentation, int minWidth, int maxWidth)
+    private static string FormatYear(XPathDateTime value, string presentation, int minWidth, int maxWidth, bool hasEra)
     {
         long year = value.Year;
+
+        if (TryFormatWords(year, presentation, out string? wordsResult))
+            return wordsResult;
+
         if (presentation == "i")
             return ToRoman(year, upper: false);
         if (presentation == "I")
@@ -557,17 +650,24 @@ internal static class FormatDateTimeEngine
         var info = ParseDigitPresentation(presentation, isFractional: false);
         if (info.TotalPositions > 0)
         {
-            return FormatInteger(year, presentation, minWidth, maxWidth);
+            bool ordinal = presentation.EndsWith("o", StringComparison.OrdinalIgnoreCase)
+                        || presentation.EndsWith("O", StringComparison.OrdinalIgnoreCase);
+            long displayYear = hasEra && year < 0 ? -year : year;
+            return FormatInteger(displayYear, presentation, minWidth, maxWidth, allowTruncate: !ordinal);
         }
 
-        string digits = year.ToString(CultureInfo.InvariantCulture);
+        long displayYear2 = hasEra && year < 0 ? -year : year;
+        bool negative = year < 0 && !hasEra;
+        string digits = displayYear2.ToString(CultureInfo.InvariantCulture).TrimStart('-');
         digits = ApplyWidth(digits, minWidth, maxWidth, '0');
+        if (negative)
+            digits = "-" + digits;
         return digits;
     }
 
     private static string FormatMonth(XPathDateTime value, string presentation, int minWidth, int maxWidth)
     {
-        if (TryFormatName(value.Month, presentation, GetMonthNames(), out string? nameResult))
+        if (TryFormatName(value.Month, presentation, GetMonthNames(), GetAbbreviatedMonthNames(), minWidth, maxWidth, out string? nameResult))
             return nameResult;
 
         return FormatInteger(value.Month, presentation, minWidth, maxWidth, allowTruncate: false);
@@ -575,10 +675,6 @@ internal static class FormatDateTimeEngine
 
     private static string FormatDay(XPathDateTime value, string presentation, int minWidth, int maxWidth)
     {
-        var dayNames = GetDayNames();
-        if (TryFormatName((int)GetDayOfWeek(value), presentation, dayNames, out string? nameResult))
-            return nameResult;
-
         return FormatInteger(value.Day, presentation, minWidth, maxWidth, allowTruncate: false);
     }
 
@@ -592,8 +688,7 @@ internal static class FormatDateTimeEngine
         int dow = (int)GetDayOfWeek(value);
         if (dow == 0) dow = 7; // ISO: Monday=1, Sunday=7
 
-        var dayNames = GetDayNames();
-        if (TryFormatName(dow, presentation, dayNames, out string? nameResult))
+        if (TryFormatName(dow, presentation, GetDayNames(), GetAbbreviatedDayNames(), minWidth, maxWidth, out string? nameResult))
             return nameResult;
 
         return FormatInteger(dow, presentation, minWidth, maxWidth, allowTruncate: false);
@@ -641,10 +736,9 @@ internal static class FormatDateTimeEngine
 
         ampm = presentation switch
         {
-            "n" or "nn" or "nnn" => ampm.ToLowerInvariant(),
             "N" or "NN" or "NNN" => ampm.ToUpperInvariant(),
             "Nn" or "NNn" => char.ToUpperInvariant(ampm[0]) + ampm[1..].ToLowerInvariant(),
-            _ => ampm.ToUpperInvariant()
+            _ => ampm.ToLowerInvariant()
         };
 
         // Width modifiers on the am/pm marker only truncate; they do not pad with zeros.
@@ -691,7 +785,7 @@ internal static class FormatDateTimeEngine
     // Name formatting helpers
     // ------------------------------------------------------------------
 
-    private static bool TryFormatName(int index1Based, string presentation, string[] names, [NotNullWhen(true)] out string? result)
+    private static bool TryFormatName(int index1Based, string presentation, string[] names, string[] abbreviatedNames, int minWidth, int maxWidth, [NotNullWhen(true)] out string? result)
     {
         result = null;
         int idx = index1Based - 1;
@@ -706,20 +800,20 @@ internal static class FormatDateTimeEngine
             case "NN":
             case "NNN":
                 result = name.ToUpperInvariant();
-                return true;
+                break;
             case "n":
             case "nn":
             case "nnn":
                 result = name.ToLowerInvariant();
-                return true;
+                break;
             case "Nn":
             case "NNn":
                 result = char.ToUpperInvariant(name[0]) + name[1..].ToLowerInvariant();
-                return true;
+                break;
         }
 
         // For day-of-week with F prefix
-        if (presentation.StartsWith("F"))
+        if (result == null && presentation.StartsWith("F"))
         {
             string sub = presentation[1..];
             switch (sub)
@@ -728,24 +822,60 @@ internal static class FormatDateTimeEngine
                 case "NN":
                 case "NNN":
                     result = name.ToUpperInvariant();
-                    return true;
+                    break;
                 case "n":
                 case "nn":
                 case "nnn":
                     result = name.ToLowerInvariant();
-                    return true;
+                    break;
                 case "Nn":
                 case "NNn":
                     result = char.ToUpperInvariant(name[0]) + name[1..].ToLowerInvariant();
-                    return true;
+                    break;
             }
         }
 
-        return false;
+        if (result == null)
+            return false;
+
+        // Apply width modifier: prefer a culturally-abbreviated form when it fits,
+        // otherwise truncate to maxWidth. Pad only if a minWidth is explicitly set.
+        if (maxWidth != int.MaxValue && result.Length > maxWidth)
+        {
+            string abbrev = abbreviatedNames[idx];
+            // Re-apply the same case transformation to the abbreviation.
+            result = presentation switch
+            {
+                "N" or "NN" or "NNN" or "FN" or "FNN" or "FNNN" => abbrev.ToUpperInvariant(),
+                "n" or "nn" or "nnn" or "Fn" or "Fnn" or "Fnnn" => abbrev.ToLowerInvariant(),
+                _ => char.ToUpperInvariant(abbrev[0]) + abbrev[1..].ToLowerInvariant()
+            };
+
+            if (result.Length > maxWidth)
+                result = result[..maxWidth];
+        }
+
+        if (result.Length < minWidth)
+            result = result.PadRight(minWidth);
+
+        return true;
     }
 
     private static string[] GetMonthNames() => CultureInfo.InvariantCulture.DateTimeFormat.MonthNames;
-    private static string[] GetDayNames() => CultureInfo.InvariantCulture.DateTimeFormat.DayNames;
+    private static string[] GetAbbreviatedMonthNames() => CultureInfo.InvariantCulture.DateTimeFormat.AbbreviatedMonthNames;
+
+    // ISO 8601 ordering: Monday = index 0, Sunday = index 6.
+    private static string[] GetDayNames()
+    {
+        var net = CultureInfo.InvariantCulture.DateTimeFormat.DayNames;
+        return new[] { net[(int)DayOfWeek.Monday], net[(int)DayOfWeek.Tuesday], net[(int)DayOfWeek.Wednesday], net[(int)DayOfWeek.Thursday], net[(int)DayOfWeek.Friday], net[(int)DayOfWeek.Saturday], net[(int)DayOfWeek.Sunday] };
+    }
+
+    private static string[] GetAbbreviatedDayNames()
+    {
+        var net = CultureInfo.InvariantCulture.DateTimeFormat.AbbreviatedDayNames;
+        return new[] { net[(int)DayOfWeek.Monday], net[(int)DayOfWeek.Tuesday], net[(int)DayOfWeek.Wednesday], net[(int)DayOfWeek.Thursday], net[(int)DayOfWeek.Friday], net[(int)DayOfWeek.Saturday], net[(int)DayOfWeek.Sunday] };
+    }
 
     // ------------------------------------------------------------------
     // ISO week / day-of-week / day-of-year calculation
@@ -796,6 +926,175 @@ internal static class FormatDateTimeEngine
             ? new[] { 0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 }
             : new[] { 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
         return daysBeforeMonth[value.Month] + value.Day;
+    }
+
+    // ------------------------------------------------------------------
+    // English number-to-words formatting
+    // ------------------------------------------------------------------
+
+    private static bool TryFormatWords(long value, string presentation, [NotNullWhen(true)] out string? result)
+    {
+        result = null;
+
+        bool ordinal = presentation.EndsWith("o", StringComparison.OrdinalIgnoreCase);
+        string stem = ordinal ? presentation[..^1] : presentation;
+        string? caseSpec = stem switch
+        {
+            "W" => "upper",
+            "w" => "lower",
+            "Ww" => "title",
+            _ => null
+        };
+        if (caseSpec is null)
+            return false;
+
+        if (value is < int.MinValue or > int.MaxValue)
+            return false;
+
+        int intValue = (int)value;
+        string words = ordinal ? ToOrdinalWords(intValue) : ToCardinalWords(intValue);
+        result = caseSpec switch
+        {
+            "upper" => words.ToUpperInvariant(),
+            "lower" => words.ToLowerInvariant(),
+            "title" => ToTitleCase(words),
+            _ => words
+        };
+        return true;
+    }
+
+    private static string ToTitleCase(string words)
+        => CultureInfo.InvariantCulture.TextInfo.ToTitleCase(words.ToLowerInvariant());
+
+    private static readonly string[] Units =
+    {
+        "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+        "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+        "seventeen", "eighteen", "nineteen"
+    };
+
+    private static readonly string[] Tens =
+    {
+        "", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"
+    };
+
+    private static readonly string[] Scales = { "", "thousand", "million", "billion" };
+
+    private static readonly Dictionary<string, string> OrdinalMap = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["zero"] = "zeroth",
+        ["one"] = "first",
+        ["two"] = "second",
+        ["three"] = "third",
+        ["four"] = "fourth",
+        ["five"] = "fifth",
+        ["six"] = "sixth",
+        ["seven"] = "seventh",
+        ["eight"] = "eighth",
+        ["nine"] = "ninth",
+        ["ten"] = "tenth",
+        ["eleven"] = "eleventh",
+        ["twelve"] = "twelfth",
+        ["thirteen"] = "thirteenth",
+        ["fourteen"] = "fourteenth",
+        ["fifteen"] = "fifteenth",
+        ["sixteen"] = "sixteenth",
+        ["seventeen"] = "seventeenth",
+        ["eighteen"] = "eighteenth",
+        ["nineteen"] = "nineteenth",
+        ["twenty"] = "twentieth",
+        ["thirty"] = "thirtieth",
+        ["forty"] = "fortieth",
+        ["fifty"] = "fiftieth",
+        ["sixty"] = "sixtieth",
+        ["seventy"] = "seventieth",
+        ["eighty"] = "eightieth",
+        ["ninety"] = "ninetieth",
+        ["hundred"] = "hundredth",
+        ["thousand"] = "thousandth",
+        ["million"] = "millionth",
+        ["billion"] = "billionth"
+    };
+
+    private static string ToCardinalWords(int value)
+    {
+        if (value < 0)
+            return "minus " + ToCardinalWords(-value);
+        if (value == 0)
+            return "zero";
+
+        var groups = new List<int>();
+        int temp = value;
+        while (temp > 0)
+        {
+            groups.Add(temp % 1000);
+            temp /= 1000;
+        }
+
+        var sb = new StringBuilder();
+        for (int i = groups.Count - 1; i >= 0; i--)
+        {
+            int group = groups[i];
+            if (group == 0)
+                continue;
+
+            if (sb.Length > 0)
+            {
+                if (i == 0 && group < 100)
+                    sb.Append(" and ");
+                else
+                    sb.Append(' ');
+            }
+
+            sb.Append(ConvertLessThanOneThousand(group));
+            if (i > 0)
+                sb.Append(' ').Append(Scales[i]);
+        }
+
+        return sb.ToString();
+    }
+
+    private static string ConvertLessThanOneThousand(int value)
+    {
+        if (value < 20)
+            return Units[value];
+
+        if (value < 100)
+        {
+            int unit = value % 10;
+            return unit == 0
+                ? Tens[value / 10]
+                : Tens[value / 10] + " " + Units[unit];
+        }
+
+        int hundreds = value / 100;
+        int rest = value % 100;
+        return rest == 0
+            ? Units[hundreds] + " hundred"
+            : Units[hundreds] + " hundred and " + ConvertLessThanOneHundred(rest);
+    }
+
+    private static string ConvertLessThanOneHundred(int value)
+    {
+        int unit = value % 10;
+        return unit == 0
+            ? Tens[value / 10]
+            : Tens[value / 10] + " " + Units[unit];
+    }
+
+    private static string ToOrdinalWords(int value)
+    {
+        if (value < 0)
+            return "minus " + ToOrdinalWords(-value);
+        if (value == 0)
+            return "zeroth";
+
+        string[] words = ToCardinalWords(value).Split(' ');
+        string last = words[^1];
+        words[^1] = OrdinalMap.TryGetValue(last, out string? ordinal)
+            ? ordinal
+            : last + "th";
+        return string.Join(' ', words);
     }
 
     // ------------------------------------------------------------------
