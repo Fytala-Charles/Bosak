@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `26c7e84` (working tree: uncommitted `mode` cluster fixes)
-**Current focus:** `mode` + `initial-mode` cluster completed (122/0/66 runnable, 100% pass rate).
+**Commit:** `5123ed7`
+**Current focus:** `mode` + `initial-mode` cluster completed (122/0/66 runnable, 100% pass rate); committed and pushed.
 
 ---
 
