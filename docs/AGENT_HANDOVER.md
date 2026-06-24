@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `<uncommitted>`
+**Commit:** `1510f3f`
 **Current focus:** XSLT `copy` cluster now 128/128 runnable passing (100%). Full suite re-run clean.
 
 ---
