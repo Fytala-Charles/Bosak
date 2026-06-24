@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `9e49047`
+**Commit:** `2a4270b`
 **Current focus:** Completed the `document` cluster fixes.
 
 ---
