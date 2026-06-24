@@ -481,6 +481,62 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Executes an initial function as the transformation entry point.
+    /// </summary>
+    public XdmValue TransformFunction(string name, XdmValue[] args)
+    {
+        RegisterXsltFunctions();
+        RegisterKeyFunction();
+        _context.DocumentPostProcessor = PostProcessLoadedDocument;
+        InitializeGlobalParametersAndVariables(null);
+        _attributeSetVariableSnapshot = _context.SnapshotVariables();
+
+        var (nsUri, localName) = ParseExpandedFunctionName(name);
+        var def = FindFunctionDefinition(nsUri, localName, args.Length);
+        if (def == null || (def.Visibility != "public" && def.Visibility != "final"))
+            throw new InvalidOperationException("XTDE0041");
+
+        return ExecuteXsltFunction(def, args);
+    }
+
+    private (string nsUri, string localName) ParseExpandedFunctionName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            throw new InvalidOperationException("XTDE0041");
+
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int close = name.IndexOf('}');
+            if (close < 2 || close == name.Length - 1)
+                throw new InvalidOperationException("XTDE0041");
+            return (name.Substring(2, close - 2), name.Substring(close + 1));
+        }
+
+        int colon = name.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = name.Substring(0, colon);
+            var local = name.Substring(colon + 1);
+            var ns = _stylesheet.Root.GetNamespaceOfPrefix(prefix);
+            if (ns == null)
+                throw new InvalidOperationException("XTDE0041");
+            return (ns.NamespaceName, local);
+        }
+
+        return (string.Empty, name);
+    }
+
+    private Stylesheet.XsltFunctionDefinition? FindFunctionDefinition(string nsUri, string localName, int arity)
+    {
+        foreach (var (key, def) in _stylesheet.GetAllFunctionDefinitions())
+        {
+            if (def.NamespaceUri == nsUri && def.LocalName == localName && def.Arity == arity)
+                return def;
+        }
+        return null;
+    }
+
+    /// <summary>
     /// Registers all xsl:function declarations from the stylesheet tree as callable
     /// functions on the EvaluationContext.
     /// </summary>

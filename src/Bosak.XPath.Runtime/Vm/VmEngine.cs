@@ -4514,9 +4514,57 @@ public static class VmEngine
     {
         if (string.IsNullOrEmpty(typeName)) return true;
 
+        // empty-sequence() only matches the empty sequence.
+        if (typeName.Trim().Equals("empty-sequence()", StringComparison.OrdinalIgnoreCase))
+            return value.IsUndefined;
+
+        // Sequence values (including the empty sequence) must be checked against the
+        // occurrence indicator of the sequence type. Each item is matched against the
+        // base type recursively so that node tests, function types, and atomic types
+        // are handled uniformly.
+        if (value.IsUndefined || (value.IsSequence && value.SequenceValue != null))
+        {
+            var trimmed = typeName.Trim();
+            char occ = '\0';
+            if (trimmed.Length > 0 && "?+*".Contains(trimmed[^1]))
+            {
+                occ = trimmed[^1];
+                trimmed = trimmed[..^1].TrimEnd();
+            }
+
+            var items = new List<XdmValue>();
+            if (!value.IsUndefined && value.SequenceValue != null)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                    items.Add(item);
+            }
+
+            switch (occ)
+            {
+                case '?':
+                    if (items.Count > 1) return false;
+                    break;
+                case '*':
+                    break;
+                case '+':
+                    if (items.Count == 0) return false;
+                    break;
+                default:
+                    if (items.Count != 1) return false;
+                    break;
+            }
+
+            foreach (var item in items)
+            {
+                if (!ValueMatchesType(item, trimmed))
+                    return false;
+            }
+            return true;
+        }
+
         string normalized = typeName.Trim().ToLowerInvariant();
 
-        // Strip occurrence indicator
+        // Strip occurrence indicator for non-sequence values.
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
             normalized = normalized[..^1].TrimEnd();
 
@@ -4528,9 +4576,6 @@ public static class VmEngine
 
         if (normalized == "item()")
             return !value.IsUndefined;
-
-        if (normalized == "empty-sequence()")
-            return value.IsUndefined;
 
         if (normalized == "node()")
             return value.IsNode;

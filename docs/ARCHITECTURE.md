@@ -428,7 +428,7 @@ src/
 | `xsl:number` | ✅ Implemented | Number formatting |
 | `xsl:key` / `key()` | ✅ Implemented | Indexed lookup |
 | Modes (named) | ✅ Implemented | `mode="foo"`, `xsl:apply-templates mode` |
-| `xsl:function` | ✅ Implemented | User-defined XPath functions in XSLT |
+| `xsl:function` | ✅ Implemented | User-defined XPath functions in XSLT; `@name` and `@_name` AVTs are resolved to expanded QNames at parse time |
 | `fn:transform()` | ✅ Implemented | XPath function invoking XSLT from expressions |
 | Tunnel parameters | ✅ Implemented | `tunnel="yes"` propagation |
 | `xsl:mode` | ✅ Implemented | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks, and `#unnamed` normalization |

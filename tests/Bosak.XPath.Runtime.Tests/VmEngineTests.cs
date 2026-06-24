@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Updated date/time ordering tests to use explicit timezones                             |
+//                      | Charles Korthout | 0.3   | 24-06-2026     | Added ValueMatchesType sequence occurrence-indicator tests                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -550,6 +551,71 @@ public class VmEngineTests
         FunctionLibrary.Populate(ctx);
         var result = expr.Evaluate(ctx);
         Assert.Equal(expected, result.BooleanValue);
+    }
+
+    // ------------------------------------------------------------------
+    // ValueMatchesType sequence types
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ValueMatchesType_SequenceOfIntegers_MatchesIntegerStar()
+    {
+        var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>
+        {
+            XdmValue.FromInteger(1),
+            XdmValue.FromInteger(2)
+        }));
+        Assert.True(VmEngine.ValueMatchesType(seq, "xs:integer*"));
+    }
+
+    [Fact]
+    public void ValueMatchesType_EmptySequence_MatchesIntegerStar()
+    {
+        var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>()));
+        Assert.True(VmEngine.ValueMatchesType(seq, "xs:integer*"));
+    }
+
+    [Fact]
+    public void ValueMatchesType_SequenceOfTwoStrings_DoesNotMatchPlainString()
+    {
+        var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>
+        {
+            XdmValue.FromString("one"),
+            XdmValue.FromString("two")
+        }));
+        Assert.False(VmEngine.ValueMatchesType(seq, "xs:string"));
+    }
+
+    [Fact]
+    public void ValueMatchesType_SingleInteger_MatchesIntegerOptional()
+    {
+        var value = XdmValue.FromInteger(42);
+        Assert.True(VmEngine.ValueMatchesType(value, "xs:integer?"));
+    }
+
+    [Fact]
+    public void ValueMatchesType_EmptySequence_MatchesIntegerOptional()
+    {
+        var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>()));
+        Assert.True(VmEngine.ValueMatchesType(seq, "xs:integer?"));
+    }
+
+    [Fact]
+    public void ValueMatchesType_SequenceOfStrings_MatchesStringPlus()
+    {
+        var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>
+        {
+            XdmValue.FromString("a"),
+            XdmValue.FromString("b")
+        }));
+        Assert.True(VmEngine.ValueMatchesType(seq, "xs:string+"));
+    }
+
+    [Fact]
+    public void ValueMatchesType_EmptySequence_DoesNotMatchStringPlus()
+    {
+        var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>()));
+        Assert.False(VmEngine.ValueMatchesType(seq, "xs:string+"));
     }
 
     // ------------------------------------------------------------------

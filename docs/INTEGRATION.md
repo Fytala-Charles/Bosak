@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 13 June 2026
-> **Bosak baseline:** 877 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,457 passed / 811 failed / 9,332 skipped (~84.6%)
+> **Last updated:** 24 June 2026
+> **Bosak baseline:** 894 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 4,550 passed / 701 failed / 9,349 skipped (~86.7%)
 
 ---
 
@@ -389,12 +389,15 @@ dotnet test Bosak.sln
 | `use-when` namespace context includes all ancestors. | Prefixes declared on any ancestor of the element carrying `use-when` are now in scope for the expression. Fixes `extension-functions-0101`. | 2026-06-24 |
 | `fn:snapshot` is implemented. | Creates a copy of a node with shallow ancestor copies (attributes/namespaces preserved) and deep-copied descendants. Required by the `innermost` cluster. | 2026-06-24 |
 | `fn:innermost` / `fn:outermost` relationship checks are correct. | Both functions now use `IsSameNode` instead of reference equality, and `innermost`/`outermost` apply the correct descendant/ancestor filtering semantics. Fixes `innermost-001/901`. | 2026-06-24 |
+| Conformance harness supports raw XDM comparison for `<initial-function>`. | Tests with `<output tree="no" serialize="no"/>` now compare the raw function result using `assert-type`, `assert-count`, `assert-deep-eq`, and `assert-eq` instead of serializing to a string. Fixes `initial-function-002` and `initial-function-100a..100i`. | 2026-06-24 |
+| `VmEngine.ValueMatchesType` respects sequence occurrence indicators. | Top-level sequence values are now matched against `?`, `*`, and `+` occurrence indicators by checking each item against the base type. Fixes `initial-function-100e` (`xs:string*`). | 2026-06-24 |
+| `xsl:function/@_name` AVTs are expanded to expanded QNames at parse time. | `XsltFunctionDefinition.FromElement` evaluates `_name` attribute value templates (including `xs:QName`-returning expressions) in the static context, so functions declared with dynamic names are registered under the correct expanded QName. Fixes `initial-function-101c..101e`. | 2026-06-24 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,527 | 724 | 9,349 | 86.2% | `innermost` cluster fully passing |
+| XSLT 3.0 (W3C) | 4,550 | 701 | 9,349 | 86.7% | `initial-function` cluster fully passing |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

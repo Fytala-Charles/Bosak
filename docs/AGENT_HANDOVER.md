@@ -1,41 +1,41 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `afabc43`
-**Current focus:** Implemented `fn:snapshot` and fixed `fn:innermost`/`fn:outermost`.
+**Commit:** `d25319b`
+**Current focus:** XSLT `initial-function` cluster now 35/35 passing.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 4,527
-- **Failed:** 724
+- **Passed:** 4,550
+- **Failed:** 701
 - **Skipped:** 9,349
-- **Pass rate:** 86.2% (+7 passes / −7 failures vs. previous 4,520/731)
+- **Pass rate:** 86.7% (+23 passes / −23 failures vs. previous 4,527/724)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
-| innermost | 2 | 2 | 0 | 0 | ✅ All passing |
+| initial-function | 35 | 35 | 0 | 0 | ✅ All passing |
 
 ## This Session Fixes
 
-1. **Implemented `fn:snapshot`** — Added `fn:snapshot#1` to the standard function library. The function creates a copy of a node together with shallow copies of its ancestors (preserving attributes and namespace declarations) and a deep copy of its descendants. Required by the `innermost` cluster.
-   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+1. **Conformance harness raw-XDM comparison for `<initial-function>`** — Tests with `<output tree="no" serialize="no"/>` now invoke `TransformFunction` and compare the raw `XdmValue` result using `assert-type`, `assert-count`, `assert-deep-eq`, and `assert-eq` instead of serializing everything to a string. Fixes `initial-function-002` and `initial-function-100a..100i`.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
 
-2. **Fixed `fn:innermost`** — Corrected the node relationship check to use `IsSameNode` rather than reference equality, and changed the logic to exclude nodes that have descendants in the input sequence (true "innermost" semantics).
-   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+2. **`VmEngine.ValueMatchesType` respects sequence occurrence indicators** — Top-level sequence values are now matched against `?`, `*`, and `+` occurrence indicators by checking each item against the base type. Required by `initial-function-100e` (`xs:string*`).
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
 
-3. **Fixed `fn:outermost`** — Corrected the implementation to exclude nodes that have ancestors in the input sequence, matching the spec definition of "outermost".
-   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+3. **`xsl:function/@_name` AVT expansion** — `XsltFunctionDefinition.FromElement` evaluates `_name` attribute value templates in the static context (including `xs:QName`-returning expressions) and registers the function under the resulting expanded QName. Fixes `initial-function-101c..101e`.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/XsltFunctionDefinition.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
 
 ## Notes
 
-- Unit-test suite: **883 passed / 0 failed** across 8 projects.
-- Full W3C XSLT 3.0 suite: **4,527 passed / 724 failed / 9,349 skipped** (86.2%), up from 4,520/731.
-- Remaining quick-sweep candidate: `initial-function` (needs harness/runtime support for function entry points).
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- Full W3C XSLT 3.0 suite: **4,550 passed / 701 failed / 9,349 skipped** (86.7%), up from 4,527/724.
+- Remaining quick-sweep candidates: none from the original list (`document`, `unparsed-text-lines`, `extension-functions`, `innermost`, `initial-function` all completed).
 
 ---
 

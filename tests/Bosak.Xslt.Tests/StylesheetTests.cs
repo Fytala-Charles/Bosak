@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 31-05-2026     | Added xsl:for-each-group tests (group-by, group-adjacent, group-starting-with, current-grouping-key) |
 //                      | Charles Korthout | 0.10  | 13-06-2026     | Relaxed fn:transform assertions to tolerate copied in-scope namespaces                   |
 //                      | Charles Korthout | 0.11  | 15-06-2026     | TestMessageListener implements IXsltMessageListener.OnWarning                         |
+//                      | Charles Korthout | 0.12  | 24-06-2026     | Added xsl:function/@_name AVT expansion tests                                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2309,5 +2310,87 @@ public class StylesheetTests
         var unionPath = compiler.Compile("x/(a|b)");
         Assert.True(unionPath(XdmValue.FromNode(aElem), ctx), "x/(a|b) should match <a>");
         Assert.True(unionPath(XdmValue.FromNode(bElem), ctx), "x/(a|b) should match <b>");
+    }
+
+    // ------------------------------------------------------------------
+    // xsl:function @_name AVT tests
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void XslFunction_UnderscoreName_LiteralAvt()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function _name='my:square' visibility='public'>
+                <xsl:param name='n' as='xs:integer'/>
+                <xsl:sequence select='$n * $n'/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformFunction("Q{http://example.com/my}square", new[] { XdmValue.FromInteger(12) });
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(144, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XslFunction_UnderscoreName_StringConcatenationAvt()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:function _name=""{'my:'}{'square' || 1}"" visibility='public'>
+                <xsl:param name='n' as='xs:integer'/>
+                <xsl:sequence select='$n * $n'/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformFunction("Q{http://example.com/my}square1", new[] { XdmValue.FromInteger(12) });
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(144, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XslFunction_UnderscoreName_QNameExpression()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'
+            xmlns:x='http://example.com/my'>
+            <xsl:function _name=""{QName('http://example.com/my', 'x:square1')}"" visibility='public'>
+                <xsl:param name='n' as='xs:integer'/>
+                <xsl:sequence select='$n * $n'/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformFunction("Q{http://example.com/my}square1", new[] { XdmValue.FromInteger(12) });
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(144, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XslFunction_UnderscoreName_StaticParam()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:param name='function-name' static='yes' select=""'my:square'""/>
+            <xsl:function _name=""{$function-name}"" visibility='public'>
+                <xsl:param name='n' as='xs:integer'/>
+                <xsl:sequence select='$n * $n'/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformFunction("Q{http://example.com/my}square", new[] { XdmValue.FromInteger(12) });
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(144, result.IntegerValue);
     }
 }

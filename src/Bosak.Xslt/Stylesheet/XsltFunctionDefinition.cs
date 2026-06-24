@@ -12,10 +12,15 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | EQName support and reserved namespace validation for xsl:function/@name                |
+//                      | Charles Korthout | 0.3   | 24-06-2026     | Evaluate _name AVTs to expanded QNames at parse time                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.Xslt.Stylesheet;
 
@@ -92,40 +97,27 @@ public sealed class XsltFunctionDefinition
     public static XsltFunctionDefinition? FromElement(XElement element, Stylesheet stylesheet)
     {
         var nameAttr = element.Attribute("name")?.Value;
-        if (string.IsNullOrEmpty(nameAttr))
-            return null;
+        var underscoreNameAttr = element.Attribute("_name")?.Value;
 
-        // Resolve QName: prefix:local, Q{uri}local EQName, or just local.
-        string nsUri;
-        string localName;
-        if (nameAttr.Length > 2 && nameAttr[0] == 'Q' && nameAttr[1] == '{')
+        string? displayName;
+        if (!string.IsNullOrEmpty(nameAttr))
         {
-            int closeBrace = nameAttr.IndexOf('}');
-            if (closeBrace < 2)
-                throw new InvalidOperationException("XTSE0020: Invalid EQName in xsl:function/@name.");
-            nsUri = nameAttr[2..closeBrace];
-            localName = nameAttr[(closeBrace + 1)..];
+            displayName = nameAttr;
+        }
+        else if (!string.IsNullOrEmpty(underscoreNameAttr))
+        {
+            displayName = underscoreNameAttr;
         }
         else
         {
-            var colonIndex = nameAttr.IndexOf(':');
-            if (colonIndex >= 0)
-            {
-                var prefix = nameAttr[..colonIndex];
-                localName = nameAttr[(colonIndex + 1)..];
-                if (element.GetNamespaceOfPrefix(prefix) is not { } ns)
-                    throw new InvalidOperationException($"XPST0081: Undefined namespace prefix '{prefix}' in xsl:function/@name.");
-                nsUri = ns.NamespaceName;
-            }
-            else
-            {
-                localName = nameAttr;
-                nsUri = string.Empty;
-            }
+            return null;
         }
 
+        // Resolve the (possibly AVT) name to an expanded QName.
+        var (nsUri, localName) = ResolveFunctionName(element, nameAttr, underscoreNameAttr, stylesheet);
+
         if (string.IsNullOrEmpty(localName))
-            throw new InvalidOperationException("XTSE0020: xsl:function/@name must have a local name.");
+            return null;
 
         try
         {
@@ -133,7 +125,7 @@ public sealed class XsltFunctionDefinition
         }
         catch (XmlException)
         {
-            throw new InvalidOperationException($"XTSE0020: '{nameAttr}' is not a valid QName in xsl:function/@name.");
+            throw new InvalidOperationException($"XTSE0020: '{displayName}' is not a valid QName in xsl:function/@name.");
         }
 
         if (string.IsNullOrEmpty(nsUri))
@@ -171,5 +163,300 @@ public sealed class XsltFunctionDefinition
             stylesheet.ImportPrecedence,
             stylesheet,
             visibility);
+    }
+
+    /// <summary>
+    /// Resolves the function name to an expanded QName. The <paramref name="nameAttr"/> is used
+    /// when present; otherwise the <paramref name="underscoreNameAttr"/> AVT is evaluated.
+    /// </summary>
+    private static (string nsUri, string localName) ResolveFunctionName(
+        XElement element,
+        string? nameAttr,
+        string? underscoreNameAttr,
+        Stylesheet stylesheet)
+    {
+        if (!string.IsNullOrEmpty(nameAttr))
+        {
+            return ResolveQNameString(nameAttr, element);
+        }
+
+        if (!string.IsNullOrEmpty(underscoreNameAttr))
+        {
+            return EvaluateNameAvt(underscoreNameAttr, element, stylesheet);
+        }
+
+        return (string.Empty, string.Empty);
+    }
+
+    /// <summary>
+    /// Evaluates an attribute value template used for <c>_name</c> and returns the resulting
+    /// expanded QName. A single expression that yields an <c>xs:QName</c> is used directly;
+    /// otherwise the result is atomized to a string and parsed as an EQName or lexical QName.
+    /// </summary>
+    private static (string nsUri, string localName) EvaluateNameAvt(
+        string avt,
+        XElement element,
+        Stylesheet stylesheet)
+    {
+        var staticParams = EvaluateStaticParameters(stylesheet);
+        var trimmed = avt.Trim();
+
+        // Single expression AVT: {expr}. If it evaluates to a QName, use it directly.
+        if (trimmed.Length >= 2 &&
+            trimmed[0] == '{' &&
+            FindAvtExprEnd(trimmed, 1) == trimmed.Length - 1)
+        {
+            var expr = trimmed[1..^1];
+            var result = EvaluateXPath(expr, element, staticParams);
+            if (result.Kind == XdmValueKind.QName)
+            {
+                var qn = result.QNameValue;
+                return (qn.NamespaceUri, qn.LocalName);
+            }
+            return ResolveQNameString(result.ToString(), element);
+        }
+
+        // General AVT: concatenate string values of each evaluated expression.
+        var expanded = EvaluateAvt(avt, element, staticParams);
+        return ResolveQNameString(expanded, element);
+    }
+
+    /// <summary>
+    /// Resolves a name string in EQName or prefix:local form against the in-scope namespaces
+    /// of the supplied element.
+    /// </summary>
+    private static (string nsUri, string localName) ResolveQNameString(string name, XElement element)
+    {
+        var trimmed = name.Trim();
+        if (string.IsNullOrEmpty(trimmed))
+            return (string.Empty, string.Empty);
+
+        if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
+        {
+            int closeBrace = trimmed.IndexOf('}');
+            if (closeBrace < 2)
+                throw new InvalidOperationException("XTSE0020: Invalid EQName in xsl:function/@_name.");
+            var nsUri = trimmed.Substring(2, closeBrace - 2);
+            var localName = trimmed.Substring(closeBrace + 1);
+            return (nsUri, localName);
+        }
+
+        var colonIndex = trimmed.IndexOf(':');
+        if (colonIndex >= 0)
+        {
+            var prefix = trimmed.Substring(0, colonIndex);
+            var localName = trimmed.Substring(colonIndex + 1);
+            if (element.GetNamespaceOfPrefix(prefix) is not { } ns)
+                throw new InvalidOperationException($"XPST0081: Undefined namespace prefix '{prefix}' in xsl:function/@_name.");
+            return (ns.NamespaceName, localName);
+        }
+
+        return (string.Empty, trimmed);
+    }
+
+    /// <summary>
+    /// Evaluates the static parameters declared in the stylesheet so that <c>_name</c> AVTs
+    /// can reference them.
+    /// </summary>
+    private static Dictionary<string, XdmValue> EvaluateStaticParameters(Stylesheet stylesheet)
+    {
+        var result = new Dictionary<string, XdmValue>();
+        foreach (var param in stylesheet.GlobalParameters)
+        {
+            if (param.Attribute("static")?.Value != "yes")
+                continue;
+
+            var name = param.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(name))
+                continue;
+
+            var (localName, _) = Stylesheet.ExpandVariableName(param, name);
+            var select = param.Attribute("select")?.Value ?? "";
+            if (string.IsNullOrEmpty(select))
+            {
+                result[localName] = XdmValue.Undefined;
+                continue;
+            }
+
+            var ctx = new EvaluationContext();
+            foreach (var kv in result)
+                ctx.WithVariable(kv.Key, kv.Value);
+
+            try
+            {
+                var nsMap = ExtractNamespaces(param);
+                var compiled = XPath31Expression.Compile(select, new CompileOptions { Namespaces = nsMap });
+                result[localName] = compiled.Evaluate(ctx);
+            }
+            catch
+            {
+                result[localName] = XdmValue.Undefined;
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Evaluates a general attribute value template by compiling each <c>{expr}</c> fragment
+    /// as an XPath expression and concatenating the atomized results.
+    /// </summary>
+    private static string EvaluateAvt(string avt, XElement element, Dictionary<string, XdmValue> staticParams)
+    {
+        if (string.IsNullOrEmpty(avt) || !avt.Contains('{'))
+            return avt;
+
+        var nsMap = ExtractNamespaces(element);
+        var ctx = new EvaluationContext();
+        foreach (var kv in staticParams)
+            ctx.WithVariable(kv.Key, kv.Value);
+
+        var sb = new StringBuilder();
+        int i = 0;
+        while (i < avt.Length)
+        {
+            if (i + 1 < avt.Length && avt[i] == '{' && avt[i + 1] == '{')
+            {
+                sb.Append('{');
+                i += 2;
+            }
+            else if (i + 1 < avt.Length && avt[i] == '}' && avt[i + 1] == '}')
+            {
+                sb.Append('}');
+                i += 2;
+            }
+            else if (avt[i] == '{')
+            {
+                int end = FindAvtExprEnd(avt, i + 1);
+                if (end < 0)
+                {
+                    sb.Append(avt[i]);
+                    i++;
+                }
+                else
+                {
+                    var expr = avt.Substring(i + 1, end - i - 1);
+                    if (!string.IsNullOrEmpty(expr))
+                    {
+                        var compiled = XPath31Expression.Compile(expr, new CompileOptions { Namespaces = nsMap });
+                        var result = compiled.Evaluate(ctx);
+                        sb.Append(AtomizedAvtString(result));
+                    }
+                    i = end + 1;
+                }
+            }
+            else
+            {
+                sb.Append(avt[i]);
+                i++;
+            }
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Atomizes a value for AVT concatenation, returning the string value of each item
+    /// without separators.
+    /// </summary>
+    private static string AtomizedAvtString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            var sb = new StringBuilder();
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                sb.Append(item.ToString());
+            return sb.ToString();
+        }
+
+        return value.ToString();
+    }
+
+    /// <summary>
+    /// Evaluates a single XPath expression in the static context of the function declaration.
+    /// </summary>
+    private static XdmValue EvaluateXPath(string expr, XElement element, Dictionary<string, XdmValue> staticParams)
+    {
+        var nsMap = ExtractNamespaces(element);
+        var compiled = XPath31Expression.Compile(expr, new CompileOptions { Namespaces = nsMap });
+        var ctx = new EvaluationContext();
+        foreach (var kv in staticParams)
+            ctx.WithVariable(kv.Key, kv.Value);
+        return compiled.Evaluate(ctx);
+    }
+
+    /// <summary>
+    /// Finds the index of the matching closing brace for an AVT expression, skipping
+    /// string literals and nested braces.
+    /// </summary>
+    private static int FindAvtExprEnd(string value, int start)
+    {
+        char inString = '\0';
+        int braceDepth = 1;
+        for (int i = start; i < value.Length; i++)
+        {
+            char c = value[i];
+            if (inString != '\0')
+            {
+                if (c == inString)
+                {
+                    if (i + 1 < value.Length && value[i + 1] == inString)
+                    {
+                        i++;
+                    }
+                    else
+                    {
+                        inString = '\0';
+                    }
+                }
+                continue;
+            }
+
+            if (c == '\'' || c == '"')
+            {
+                inString = c;
+                continue;
+            }
+
+            if (c == '{')
+            {
+                braceDepth++;
+                continue;
+            }
+
+            if (c == '}')
+            {
+                braceDepth--;
+                if (braceDepth == 0)
+                    return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// Collects the in-scope namespace declarations for an element and its ancestors.
+    /// </summary>
+    private static Dictionary<string, string> ExtractNamespaces(XElement element)
+    {
+        var dict = new Dictionary<string, string>();
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes().Where(a => a.IsNamespaceDeclaration))
+            {
+                var prefix = attr.Name.LocalName;
+                if (prefix == "xmlns")
+                    prefix = "";
+                if (!string.IsNullOrEmpty(prefix) && !dict.ContainsKey(prefix))
+                    dict[prefix] = attr.Value;
+            }
+            current = current.Parent;
+        }
+        return dict;
     }
 }

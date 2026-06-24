@@ -1197,7 +1197,7 @@ public sealed class Stylesheet
     /// Handles <c>Q{uri}local</c> EQNames and prefixed QNames using the namespaces
     /// in scope on the declaring element.
     /// </summary>
-    private static (string LocalName, string NamespaceUri) ExpandVariableName(XElement element, string name)
+    internal static (string LocalName, string NamespaceUri) ExpandVariableName(XElement element, string name)
     {
         if (string.IsNullOrEmpty(name))
             return ("", "");

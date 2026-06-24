@@ -514,8 +514,27 @@ class Program
             if (initialModeElem != null)
                 initialMode = initialModeElem.Attribute("name")?.Value;
 
-            string resultXml;
-            if (sourceNode != null)
+            // Check for initial-function entry point
+            var initialFunctionElem = testElem.Element(ns + "initial-function");
+            bool isInitialFunction = initialFunctionElem != null;
+            bool rawOutput = isInitialFunction && testElem.Element(ns + "output")?.Attribute("tree")?.Value == "no";
+
+            string resultXml = string.Empty;
+            XdmValue? resultValue = null;
+
+            if (isInitialFunction)
+            {
+                var (funcName, args) = ResolveInitialFunction(initialFunctionElem!, evalContext, ns);
+                if (rawOutput)
+                {
+                    resultValue = executable.TransformFunction(funcName, args, evalContext);
+                }
+                else
+                {
+                    resultXml = executable.TransformFunctionToString(funcName, args, evalContext);
+                }
+            }
+            else if (sourceNode != null)
             {
                 resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode);
             }
@@ -536,7 +555,17 @@ class Program
 
             int messageIndex = 0;
             int warningIndex = 0;
-            if (CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex))
+            bool compareOk;
+            if (resultValue != null)
+            {
+                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex);
+            }
+            else
+            {
+                compareOk = CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex);
+            }
+
+            if (compareOk)
             {
                 Console.WriteLine($"  PASS {name}");
                 return TestResult.Pass;
@@ -544,7 +573,7 @@ class Program
 
             Console.WriteLine($"  FAIL {name}: Result mismatch");
             Console.WriteLine($"    Expected: {GetExpectedDescription(resultElem, ns, testSetDir, catalogDir)}");
-            Console.WriteLine($"    Got:      {resultXml.Trim()}");
+            Console.WriteLine($"    Got:      {(resultValue != null ? resultValue.ToString() : resultXml.Trim())}");
             return TestResult.Fail;
         }
         catch (Exception ex)
@@ -704,6 +733,50 @@ class Program
         return new XDocumentNode(doc);
     }
 
+    static (string name, XdmValue[] args) ResolveInitialFunction(XElement initialFunctionElem, EvaluationContext evalContext, XNamespace ns)
+    {
+        var nameAttr = initialFunctionElem.Attribute("name")?.Value;
+        if (string.IsNullOrEmpty(nameAttr))
+            throw new InvalidOperationException("XTDE0041");
+
+        string funcName;
+        if (nameAttr.Length > 2 && nameAttr[0] == 'Q' && nameAttr[1] == '{')
+        {
+            funcName = nameAttr;
+        }
+        else
+        {
+            int colon = nameAttr.IndexOf(':');
+            if (colon >= 0)
+            {
+                var prefix = nameAttr.Substring(0, colon);
+                var local = nameAttr.Substring(colon + 1);
+                var resolvedNs = initialFunctionElem.GetNamespaceOfPrefix(prefix);
+                if (resolvedNs == null)
+                    throw new InvalidOperationException("XTDE0041");
+                funcName = $"Q{{{resolvedNs.NamespaceName}}}{local}";
+            }
+            else
+            {
+                funcName = $"Q{{}}{nameAttr}";
+            }
+        }
+
+        var nsMap = ExtractNamespaces(initialFunctionElem);
+        var args = new List<XdmValue>();
+        foreach (var param in initialFunctionElem.Elements(ns + "param"))
+        {
+            var select = param.Attribute("select")?.Value;
+            if (string.IsNullOrEmpty(select))
+                select = "()";
+            var options = new CompileOptions { Namespaces = nsMap };
+            var compiled = XPath31Expression.Compile(select, options);
+            args.Add(compiled.Evaluate(evalContext));
+        }
+
+        return (funcName, args.ToArray());
+    }
+
     static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
     {
         // Handle <all-of>
@@ -750,6 +823,171 @@ class Program
         int messageIndex = 0;
         int warningIndex = 0;
         return CompareResult(actual, resultElem, ns, testSetDir, catalogDir, messages, new List<string>(), ref messageIndex, ref warningIndex);
+    }
+
+    static bool CompareResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
+    {
+        // Handle <all-of>
+        var allOf = resultElem.Element(ns + "all-of");
+        if (allOf != null)
+        {
+            foreach (var option in allOf.Elements())
+            {
+                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                    return false;
+            }
+            return true;
+        }
+
+        // Handle <any-of>
+        var anyOf = resultElem.Element(ns + "any-of");
+        if (anyOf != null)
+        {
+            foreach (var option in anyOf.Elements())
+            {
+                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                    return true;
+            }
+            return false;
+        }
+
+        // Multiple direct assertion children mean all of them must be satisfied.
+        var assertionChildren = resultElem.Elements().ToList();
+        if (assertionChildren.Count > 1)
+        {
+            foreach (var child in assertionChildren)
+            {
+                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                    return false;
+            }
+            return true;
+        }
+
+        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex);
+    }
+
+    static bool CompareSingleResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
+    {
+        // assert-message
+        var assertMessage = resultElem.Name.LocalName == "assert-message" ? resultElem : resultElem.Element(ns + "assert-message");
+        if (assertMessage != null)
+        {
+            if (messages == null || messageIndex >= messages.Count)
+                return false;
+            var messageText = messages[messageIndex];
+            if (CompareMessageAssertion(messageText, assertMessage, ns, testSetDir, catalogDir))
+            {
+                messageIndex++;
+                return true;
+            }
+            return false;
+        }
+
+        // assert-warning
+        if (resultElem.Name.LocalName == "assert-warning" || resultElem.Element(ns + "assert-warning") != null)
+        {
+            if (warnings == null || warningIndex >= warnings.Count)
+                return false;
+            warningIndex++;
+            return true;
+        }
+
+        // assert-count
+        var assertCount = resultElem.Name.LocalName == "assert-count" ? resultElem : resultElem.Element(ns + "assert-count");
+        if (assertCount != null && int.TryParse(assertCount.Value.Trim(), out var expectedCount))
+        {
+            return CountItems(actual) == expectedCount;
+        }
+
+        // assert-type
+        var assertType = resultElem.Name.LocalName == "assert-type" ? resultElem : resultElem.Element(ns + "assert-type");
+        if (assertType != null)
+        {
+            return Bosak.XPath.Runtime.Vm.VmEngine.ValueMatchesType(actual, assertType.Value.Trim());
+        }
+
+        // assert-eq
+        var assertEq = resultElem.Name.LocalName == "assert-eq" ? resultElem : resultElem.Element(ns + "assert-eq");
+        if (assertEq != null)
+        {
+            var expected = assertEq.Attribute("expected")?.Value ?? assertEq.Value;
+            var expr = assertEq.Attribute("select")?.Value ?? assertEq.Value;
+            var nsDecls = ExtractNamespaces(assertEq);
+            return EvaluateAssertEq(actual, expr, expected, nsDecls);
+        }
+
+        // assert-deep-eq
+        var assertDeepEq = resultElem.Name.LocalName == "assert-deep-eq" ? resultElem : resultElem.Element(ns + "assert-deep-eq");
+        if (assertDeepEq != null)
+        {
+            return EvaluateAssertDeepEq(actual, assertDeepEq.Value, ExtractNamespaces(assertDeepEq));
+        }
+
+        // assert-xml: serialize the value and compare
+        var assertXml = resultElem.Name.LocalName == "assert-xml" ? resultElem : resultElem.Element(ns + "assert-xml");
+        if (assertXml != null)
+        {
+            var expected = assertXml.Value.Trim();
+            var fileAttr = assertXml.Attribute("file")?.Value;
+            if (string.IsNullOrEmpty(expected) && !string.IsNullOrEmpty(fileAttr))
+            {
+                var filePath = Path.Combine(testSetDir, fileAttr);
+                if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
+                if (File.Exists(filePath))
+                    expected = File.ReadAllText(filePath).Trim();
+            }
+            var actualXml = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual);
+            return NormalizeXml(actualXml) == NormalizeXml(expected) || actualXml.Trim() == expected || XmlEquals(actualXml, expected);
+        }
+
+        // assert-string-value
+        var assertString = resultElem.Name.LocalName == "assert-string-value" ? resultElem : resultElem.Element(ns + "assert-string-value");
+        if (assertString != null)
+        {
+            return actual.StringValue == assertString.Value;
+        }
+
+        // assert-true
+        if (resultElem.Name.LocalName == "assert-true" || resultElem.Element(ns + "assert-true") != null)
+        {
+            return actual.EffectiveBooleanValue();
+        }
+
+        // assert-false
+        if (resultElem.Name.LocalName == "assert-false" || resultElem.Element(ns + "assert-false") != null)
+        {
+            return !actual.EffectiveBooleanValue();
+        }
+
+        // assert: evaluate XPath expression against the value
+        var assertExpr = resultElem.Name.LocalName == "assert" ? resultElem : resultElem.Element(ns + "assert");
+        if (assertExpr != null)
+        {
+            var nsDecls = ExtractNamespaces(assertExpr);
+            return EvaluateAssert(actual, assertExpr.Value, nsDecls);
+        }
+
+        // error expected
+        if (resultElem.Name.LocalName == "error" || resultElem.Element(ns + "error") != null)
+        {
+            return false;
+        }
+
+        return false;
+    }
+
+    static int CountItems(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return 0;
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            int count = 0;
+            foreach (var _ in XdmSequence.FromSource(value.SequenceValue))
+                count++;
+            return count;
+        }
+        return 1;
     }
 
     static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
@@ -1054,6 +1292,71 @@ class Program
             }
             var result = compiled.Evaluate(ctx);
             return result.ToString() == expected;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    static bool EvaluateAssert(XdmValue actual, string xpath, Dictionary<string, string>? namespaces = null)
+    {
+        try
+        {
+            var compiled = XPath31Expression.Compile(xpath);
+            var ctx = new EvaluationContext().WithFocus(actual, 1, 1);
+            if (namespaces != null)
+            {
+                foreach (var (prefix, uri) in namespaces)
+                    ctx.WithNamespace(prefix, uri);
+            }
+            var result = compiled.Evaluate(ctx);
+            return result.EffectiveBooleanValue();
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    static bool EvaluateAssertEq(XdmValue actual, string xpath, string expected, Dictionary<string, string>? namespaces = null)
+    {
+        try
+        {
+            var compiled = XPath31Expression.Compile(xpath);
+            var ctx = new EvaluationContext().WithFocus(actual, 1, 1);
+            if (namespaces != null)
+            {
+                foreach (var (prefix, uri) in namespaces)
+                    ctx.WithNamespace(prefix, uri);
+            }
+            var result = compiled.Evaluate(ctx);
+            return result.ToString() == expected;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    static bool EvaluateAssertDeepEq(XdmValue actual, string expectedExpr, Dictionary<string, string>? namespaces = null)
+    {
+        try
+        {
+            var expectedCompiled = XPath31Expression.Compile(expectedExpr);
+            var expectedCtx = new EvaluationContext();
+            if (namespaces != null)
+            {
+                foreach (var (prefix, uri) in namespaces)
+                    expectedCtx.WithNamespace(prefix, uri);
+            }
+            var expected = expectedCompiled.Evaluate(expectedCtx);
+
+            var deepEq = XPath31Expression.Compile("deep-equal($a, $b)");
+            var ctx = new EvaluationContext()
+                .WithVariable("a", actual)
+                .WithVariable("b", expected);
+            return deepEq.Evaluate(ctx).EffectiveBooleanValue();
         }
         catch
         {

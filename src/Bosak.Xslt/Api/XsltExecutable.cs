@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 31-05-2026     | Added IXsltMessageListener pass-through to TransformEngine                              |
 //                      | Charles Korthout | 0.3   | 08-06-2026     | Added initialMode parameter to Transform/TransformToString                             |
+//                      | Charles Korthout | 0.4   | 24-06-2026     | Added TransformFunction/TransformFunctionToString for xsl:function entry points        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -60,6 +61,32 @@ public sealed class XsltExecutable
     public string TransformToString(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
     {
         var result = Transform(source, context, initialTemplate, initialMode);
+        return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);
+    }
+
+    /// <summary>
+    /// Invokes an <c>xsl:function</c> as the transformation entry point and returns its raw XDM value.
+    /// </summary>
+    /// <param name="name">The expanded function name (EQName form <c>Q{{uri}}local</c>).</param>
+    /// <param name="args">Arguments to pass to the function.</param>
+    /// <param name="context">Optional evaluation context.</param>
+    /// <returns>The value returned by the function.</returns>
+    public XdmValue TransformFunction(string name, XdmValue[] args, EvaluationContext? context = null)
+    {
+        var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener);
+        return engine.TransformFunction(name, args);
+    }
+
+    /// <summary>
+    /// Invokes an <c>xsl:function</c> as the transformation entry point and serializes the result to a string.
+    /// </summary>
+    /// <param name="name">The expanded function name (EQName form <c>Q{{uri}}local</c>).</param>
+    /// <param name="args">Arguments to pass to the function.</param>
+    /// <param name="context">Optional evaluation context.</param>
+    /// <returns>The serialized result of the function call.</returns>
+    public string TransformFunctionToString(string name, XdmValue[] args, EvaluationContext? context = null)
+    {
+        var result = TransformFunction(name, args, context);
         return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);
     }
 }
