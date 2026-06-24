@@ -64,6 +64,7 @@
 //                      | Charles Korthout | 5.0   | 13-06-2026     | Registered fn:regex-group#1 for xsl:analyze-string                                      |
 //                      | Charles Korthout | 5.1   | 13-06-2026     | Shared RegexHelper: XSD validation, backreference translation, and quote-preserving unquote |
 //                      | Charles Korthout | 5.2   | 24-06-2026     | element-available uses DefiningElementDefaultNamespace for unprefixed QNames             |
+//                      | Charles Korthout | 5.3   | 24-06-2026     | fn:doc('') resolves against static base URI; atomizes and validates sequence argument    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4953,10 +4954,21 @@ public static class FunctionLibrary
 
     private static XdmValue Doc_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var uri = args[0].ToString();
-        if (string.IsNullOrEmpty(uri))
+        // fn:doc accepts a single optional URI. Atomize the argument; empty sequence
+        // yields empty sequence; more than one item is a type error.
+        var uris = AtomizedUriStrings(args[0]);
+        if (uris.Count == 0)
             return XdmValue.Undefined;
-        var node = ctx.LoadDocument(uri);
+        if (uris.Count > 1)
+            throw new InvalidOperationException("XPTY0004: fn:doc expects a single URI");
+
+        var uri = uris[0];
+        // In XSLT, doc('') resolves against the static base URI (the stylesheet module).
+        // In pure XPath with no base URI, the empty string yields the empty sequence.
+        var resolvedUri = ResolveDocumentUri(uri, ctx.BaseUri);
+        if (string.IsNullOrEmpty(resolvedUri))
+            return XdmValue.Undefined;
+        var node = ctx.LoadDocument(resolvedUri);
         return XdmValue.FromNode(node);
     }
 

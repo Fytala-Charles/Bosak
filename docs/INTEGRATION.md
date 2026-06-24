@@ -378,12 +378,14 @@ dotnet test Bosak.sln
 | `fn:unparsed-text` resolves relative `href` against `EvaluationContext.BaseUri`. | Previously resolved only against the static base URI parameter; now uses the dynamic base URI when no explicit base is supplied. Required for `message-0313`. | 2026-06-13 |
 | `fn:element-available` uses the defining element's default namespace. | Added `EvaluationContext.DefiningElementDefaultNamespace` and `CompileOptions.DefiningElementDefaultNamespace` so that XSLT's `element-available()` expands unprefixed QNames using `xmlns="..."` rather than `xpath-default-namespace`. | 2026-06-24 |
 | `validation="lax"` is accepted on basic processors. | Non-schema-aware processors no longer raise `XTSE1660` for `lax` (or `default-validation="lax"`), matching XSLT 3.0 semantics. Fixes `validation-0102b`. | 2026-06-24 |
+| `fn:doc('')` resolves against the static base URI. | In XSLT, `fn:doc('')` now loads the stylesheet module; in pure XPath it still yields the empty sequence when no base URI is present. Fixes `document-0302`. | 2026-06-24 |
+| `fn:doc` atomizes and validates its argument. | Empty sequence returns empty sequence; more than one item raises `XPTY0004`; prevents literal `\(sequence\)` from being loaded as a URI. Fixes `document-0303/0307/0601/0901/1101`. | 2026-06-24 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,499 | 769 | 9,332 | 85.4% | `function-0302b` and `validation-0102b` fixed in quick sweep |
+| XSLT 3.0 (W3C) | 4,509 | 759 | 9,332 | 85.6% | `document` cluster reduced from 19 to 10 failures |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

@@ -1,6 +1,44 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
+**Commit:** `<to be amended after commit>`
+**Current focus:** Started the `document` cluster; fixed `fn:doc('')` and sequence-argument handling.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,509
+- **Failed:** 759
+- **Skipped:** 9,332
+- **Pass rate:** 85.6% (+10 passes / −10 failures vs. previous 4,499/769)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| document | 64 | 37 | 10 | 17 | ✅ Down from 19 failures |
+
+## This Session Fixes
+
+1. **`fn:doc('')` resolves against static base URI** — `fn:doc('')` now loads the document at the static base URI (e.g. the stylesheet module in XSLT), matching XSLT semantics. Previously it returned the empty sequence unconditionally.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+2. **`fn:doc` atomizes and validates its argument** — The function now atomizes the argument to zero or one URI strings. Empty sequence yields empty sequence; a sequence of more than one item raises `XPTY0004`; this prevents the literal string `\(sequence\)` from being used as a URI.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+## Notes
+
+- Unit-test suite: **883 passed / 0 failed** across 8 projects.
+- Full W3C XSLT 3.0 suite: **4,509 passed / 759 failed / 9,332 skipped** (85.6%), up from 4,499/769.
+- Remaining `document` cluster failures: result mismatches, missing-file resolution, and a null-reference in `document-2402`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-24
 **Commit:** `c4424f1`
 **Current focus:** Quick sweep of small XSLT conformance failure clusters; fixed `function` and `validation` regressions.
 
