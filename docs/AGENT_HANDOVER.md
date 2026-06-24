@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `d25319b`
+**Commit:** `09e53c5`
 **Current focus:** XSLT `initial-function` cluster now 35/35 passing.
 
 ---
