@@ -106,6 +106,8 @@
 //                      | Charles Korthout | 5.35  | 13-06-2026     | XSLT 3.0 zero-length match semantics, XSD regex validation, and backreference translation |
 //                      | Charles Korthout | 5.36  | 15-06-2026     | Mode cluster fixes: initial-template context item, union-pattern conflict, mode validation |
 //                      | Charles Korthout | 5.37  | 15-06-2026     | Emit warning-on-no-match/multiple-match via OnWarning; default to recovery/last-wins     |
+//                      | Charles Korthout | 5.38  | 24-06-2026     | Default use-accumulators is empty list for undeclared initial mode; fixes copy-3002     |
+//                      | Charles Korthout | 5.39  | 24-06-2026     | Named-template entry point treats source tree as global context item for accumulators   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -173,6 +175,12 @@ public sealed class TransformEngine
     // to process it. Used to determine accumulator applicability for copied trees.
     private IXdmNode? _initialSource;
     private string _initialMode = "";
+
+    // True when the transformation entry point is a named template (or implicit
+    // xsl:initial-template). In that case the source tree is the global context item,
+    // not the initial match selection, so accumulator applicability is not governed
+    // by the initial mode's use-accumulators.
+    private bool _startedWithNamedTemplate;
 
     // Snapshot of variables visible at the start of the transformation. Attribute sets
     // are evaluated with only top-level variables/parameters in scope, so this snapshot
@@ -279,6 +287,7 @@ public sealed class TransformEngine
     {
         _initialSource = source;
         _initialMode = initialMode ?? "";
+        _startedWithNamedTemplate = false;
 
         // A source document is required unless an initial template is supplied or the
         // stylesheet declares an xsl:initial-template (with any namespace prefix).
@@ -381,6 +390,7 @@ public sealed class TransformEngine
         var effectiveInitialTemplate = initialTemplate ?? implicitInitialTemplate;
         if (!string.IsNullOrEmpty(effectiveInitialTemplate) && _allNamedTemplates.TryGetValue(effectiveInitialTemplate, out var entryRule))
         {
+            _startedWithNamedTemplate = true;
             // If the designated initial template has a match pattern, execute it as a
             // template rule against the source node so that xsl:next-match has a current
             // template rule and a context item. Otherwise invoke it as a plain named
@@ -884,6 +894,12 @@ public sealed class TransformEngine
         if (!sourceRoot.IsSameNode(initialRoot))
             return true;
 
+        // When the transformation was started with a named template, the source
+        // document is the global context item rather than the initial match
+        // selection, so the initial mode's use-accumulators does not restrict it.
+        if (_startedWithNamedTemplate)
+            return true;
+
         var modeDef = _stylesheet.GetModeDefinition(_initialMode);
         if (modeDef != null)
         {
@@ -892,9 +908,10 @@ public sealed class TransformEngine
             return modeDef.UseAccumulators.Contains(accClarkName);
         }
 
-        // No explicit xsl:mode declaration for the initial mode: the default is #all,
-        // so every accumulator declared in the stylesheet is applicable to the tree.
-        return true;
+        // No explicit xsl:mode declaration for the initial mode: the default for
+        // use-accumulators is an empty list, so no accumulators are applicable to
+        // the initial match selection unless explicitly declared.
+        return false;
     }
 
     /// <summary>

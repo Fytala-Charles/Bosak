@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-13 (date cluster stabilized)    
+> **Living Registry** — Last updated: 2026-06-24 (format-date-en cluster completed)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -137,6 +137,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-030 | *(internal)* | XSLT `@as` type coercion and atomization | Required for as-0101 through as-1602 conformance tests; `xsl:variable`, `xsl:param`, `xsl:function`, `xsl:with-param` `@as` attribute must coerce/atomize per XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 | REQ-031 | *(internal)* | XSLT `base-uri` cluster conformance | `document('')`, `fn:base-uri()`, `fn:static-base-uri()`, and `xml:base` propagation through copies must match XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 | REQ-032 | *(internal)* | XSLT 3.0 `xsl:merge` instruction | Required for `merge` conformance cluster: merge sources/keys/action, `current-merge-group()`, `current-merge-key()`, static/dynamic errors | **Implemented** | TBD | Charles Korthout | 2026-06-13 |
+| REQ-033 | *(internal)* | XSLT `format-date-en` cluster — English number words and era-aware year formatting | Required for `format-date-en` conformance cluster: `[Ww]`, `[Wo]`, era-aware negative years, and ordinal-year width handling | **Implemented** | TBD | Charles Korthout | 2026-06-15 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1507,6 +1508,47 @@ Implement `xsl:merge`, `xsl:merge-source`, `xsl:merge-key`, and `xsl:merge-actio
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-06-13 | Kimi | Implemented | Merge cluster now 75/0/31; unblocks `date` cluster sweep |
+
+---
+
+### REQ-033: XSLT `format-date-en` cluster — English number words and era-aware year formatting
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-06-15  
+**Status:** Implemented
+
+#### Problem Statement
+The XSLT 3.0 `format-date` and `format-dateTime` picture string supports English cardinal/ordinal number-word presentation modifiers (`[W]`, `[w]`, `[Ww]`, `[Wo]`, `[wo]`, `[Wwo]`), era-aware negative-year rendering, and ordinal-year width handling. These were unimplemented, causing the entire `format-date-en` conformance cluster (33 tests) to fail.
+
+#### Proposed Solution
+Extend `FormatDateTimeEngine` to:
+1. Render numeric components as English cardinal words (`one`, `two`, …) and ordinal words (`first`, `second`, …) in uppercase, lowercase, and title-case forms.
+2. When the picture contains an era component (`[E...]`), render negative years as absolute values with the appropriate default minimum width.
+3. For ordinal year presentation (`[Yo]`), append the ordinal suffix to the full year value instead of truncating.
+
+#### Acceptance Criteria
+- [x] Cardinal words `[W]`, `[w]`, `[Ww]` produce uppercase, lowercase, and title-case output.
+- [x] Ordinal words `[Wo]`, `[wo]`, `[Wwo]` produce uppercase, lowercase, and title-case output.
+- [x] Values up to billions are supported.
+- [x] Negative years with an era component render as absolute values (e.g. `55BC` not `0-55BC`).
+- [x] Ordinal year `[Y1o]` renders as `1990th`, not `1st`.
+- [x] `format-date-en` conformance cluster reaches 33/33 passing (0 runnable failures).
+- [x] Regression unit tests added to `FormatDateTimeEngineTests`.
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | None | |
+| Standard | Modified | `FormatDateTimeEngine` number-word helpers |
+| XSLT | None | |
+| API | None | No surface change |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-06-15 | Kimi | Implemented | `format-date-en` cluster now 33/0/0; full suite +30 passes / −30 failures |
 
 ---
 

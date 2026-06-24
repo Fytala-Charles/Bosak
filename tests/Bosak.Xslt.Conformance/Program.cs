@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 11-06-2026     | Skip accumulator-091 (XPST0008 for variable in match pattern not detected)              |
 //                      | Charles Korthout | 1.2   | 13-06-2026     | Expand static parameters in _select attributes before compilation                       |
 //                      | Charles Korthout | 1.3   | 15-06-2026     | Record warnings separately; evaluate assert-warning; skip mode result-document tests   |
+//                      | Charles Korthout | 1.4   | 24-06-2026     | Parse stylesheets with DTD processing enabled; fixes copy-1201/copy-1202               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -389,12 +390,15 @@ class Program
 
             // Compile and run
             var xslText = File.ReadAllText(mainStylesheetPath);
+            var baseUri = new Uri(mainStylesheetPath).AbsoluteUri;
 
             // Skip xsl:package based tests; the compiler only supports xsl:stylesheet/xsl:transform.
             XDocument xslDoc;
             try
             {
-                xslDoc = XDocument.Parse(xslText, LoadOptions.PreserveWhitespace);
+                // Parse with DTD processing enabled so stylesheets that reference external
+                // entity definitions (e.g. copy-1201 / copy-1202) load correctly.
+                xslDoc = LoadDocumentFromText(xslText, baseUri);
                 var xslRoot = xslDoc.Root;
                 if (xslRoot != null && xslRoot.Name == XName.Get("package", "http://www.w3.org/1999/XSL/Transform"))
                 {
@@ -442,7 +446,6 @@ class Program
 
             var messageListener = new RecordingMessageListener();
             var compiler = new Bosak.Xslt.Api.XsltCompiler { UriResolver = resolver, MessageListener = messageListener };
-            var baseUri = new Uri(mainStylesheetPath).AbsoluteUri;
             var executable = compiler.Compile(xslDoc, baseUri);
 
             // Set up document loader that handles document('') by returning the stylesheet

@@ -1,5 +1,52 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-24
+**Commit:** `<uncommitted>`
+**Current focus:** XSLT `copy` cluster now 128/128 runnable passing (100%). Full suite re-run clean.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,490
+- **Failed:** 778
+- **Skipped:** 9,332
+- **Pass rate:** 85.2% (+3 passes / −3 failures vs. previous 4,487/781)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| copy | 148 | 128 | 0 | 20 | ✅ 100% runnable (up from 125/3) |
+
+## This Session Fixes
+
+1. **Housekeeping — `docs/FEATURE_REQUESTS.md`** — Added REQ-033 for the completed `format-date-en` cluster (English number words, era-aware negative-year formatting, ordinal-year width handling) and bumped the "Last updated" date.
+   - **File changed**: `docs/FEATURE_REQUESTS.md`.
+
+2. **Housekeeping — scratch-file cleanup** — Removed untracked temporary files (`merge_fails*.txt`, `mode_fails*.txt`, leftover `tmpdebug/*.xsl`).
+
+3. **DTD-aware stylesheet parsing in conformance harness** — The harness now parses the main stylesheet with `DtdProcessing.Parse` and an `XmlUrlResolver`, so stylesheets that reference external entity definitions (e.g. `copy-1201`, `copy-1202`) load correctly.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+4. **Correct default for `use-accumulators`** — For an undeclared initial mode, the default `use-accumulators` value is now an empty list per the XSLT 3.0 spec, rather than `#all`. This makes `xsl:copy-of` with `copy-accumulators="yes"` raise `XTDE3362` when no accumulator is applicable to the source tree (fixes `copy-3002`).
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+5. **Named-template entry point preserves accumulator applicability** — Transformations started with a named template (or implicit `xsl:initial-template`) treat the source tree as the global context item rather than the initial match selection, so accumulator applicability is not restricted by the unnamed initial mode's empty `use-accumulators` default. This restores `mode-1511` through `mode-1514` to passing.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **883 passed / 0 failed** across 8 projects.
+- `copy` cluster: **128 passed / 0 failed / 20 skipped** (was 125/3/20).
+- `mode` cluster: **117 passed / 0 failed / 52 skipped** (restored after accumulator refinement).
+- Full W3C XSLT 3.0 suite: **4,490 passed / 778 failed / 9,332 skipped** (85.2%), up from 4,487/781.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-15
 **Commit:** `c6001e0`
 **Current focus:** XSLT `format-date-en` cluster now 33/33 passing (100%).
