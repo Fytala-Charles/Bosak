@@ -1,41 +1,45 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `2a4270b`
-**Current focus:** Completed the `document` cluster fixes.
+**Commit:** `d02513a`
+**Current focus:** Quick sweep of `unparsed-text-lines` and `extension-functions` clusters.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 4,513
-- **Failed:** 738
+- **Passed:** 4,520
+- **Failed:** 731
 - **Skipped:** 9,349
-- **Pass rate:** 85.9% (+4 passes / −21 failures vs. previous 4,509/759)
+- **Pass rate:** 86.1% (+7 passes / −7 failures vs. previous 4,513/738)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
-| document | 64 | 42 | 0 | 22 | ✅ All runnable tests passing |
+| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ All passing |
+| extension-functions | 7 | 7 | 0 | 0 | ✅ All passing |
 
 ## This Session Fixes
 
-1. **Stylesheet module base URIs preserved** — `FileSystemUriResolver`, `XsltCompiler.Compile(string)`, and the conformance `TestUriResolver` now load stylesheets with `LoadOptions.SetBaseUri`. This gives every included/imported module a correct `XDocument.BaseUri`, so `fn:doc('')` and `fn:document()` resolve relative URIs against the current module rather than the main stylesheet.
-   - **Files changed**: `src/Bosak.Xslt/Api/FileSystemUriResolver.cs`, `src/Bosak.Xslt/Api/XsltCompiler.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+1. **`fn:unparsed-text-lines` spec compliance** — The function now drops a trailing line terminator (so a final newline does not create an empty trailing line) and validates that decoded text contains only XML-legal characters, raising `FOUT1190` for invalid characters such as NUL.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
 
-2. **Whitespace stripping applied to loaded documents** — Added `EvaluationContext.DocumentPostProcessor`. The XSLT engine registers a post-processor that applies the stylesheet's `xsl:strip-space` / `xsl:preserve-space` rules to documents returned by `fn:doc` and `fn:document`, while skipping stylesheet modules themselves to avoid mutating the compiled stylesheet.
-   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+2. **`fn:function-available` QName validation** — The function now validates that its argument is a valid QName/EQName and that any prefix is in scope, raising `XTDE1400` when these rules are violated. `use-when` expressions propagate this error rather than treating it as a false result.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
 
-3. **Conformance harness skips `xsl:use-package` tests** — The principal stylesheet is now inspected for `xsl:use-package`; such tests are reported as skipped instead of hitting unsupported-package code paths (e.g. `document-2402`).
-   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+3. **`extension-element-prefixes` reserved-namespace check** — The stylesheet loader now rejects `extension-element-prefixes` that map to the XSLT, XML, XML Schema, or XML Schema instance namespaces with `XTSE0800`.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+4. **`use-when` namespace context** — `use-when` expressions now collect namespace declarations from the full ancestor chain, not just the element carrying the attribute.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
 
 ## Notes
 
 - Unit-test suite: **883 passed / 0 failed** across 8 projects.
-- Full W3C XSLT 3.0 suite: **4,513 passed / 738 failed / 9,349 skipped** (85.9%), up from 4,509/759.
-- Remaining quick-sweep candidates: `unparsed-text-lines`, `innermost` (needs `fn:snapshot`), `extension-functions`, `initial-function`.
+- Full W3C XSLT 3.0 suite: **4,520 passed / 731 failed / 9,349 skipped** (86.1%), up from 4,513/738.
+- Remaining quick-sweep candidates: `innermost` (needs `fn:snapshot`), `initial-function` (needs harness/runtime support for function entry points).
 
 ---
 
