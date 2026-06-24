@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `<to be amended after commit>`
+**Commit:** `6548686`
 **Current focus:** Started the `document` cluster; fixed `fn:doc('')` and sequence-argument handling.
 
 ---
