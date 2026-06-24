@@ -108,6 +108,8 @@
 //                      | Charles Korthout | 5.37  | 15-06-2026     | Emit warning-on-no-match/multiple-match via OnWarning; default to recovery/last-wins     |
 //                      | Charles Korthout | 5.38  | 24-06-2026     | Default use-accumulators is empty list for undeclared initial mode; fixes copy-3002     |
 //                      | Charles Korthout | 5.39  | 24-06-2026     | Named-template entry point treats source tree as global context item for accumulators   |
+//                      | Charles Korthout | 5.40  | 24-06-2026     | XPath default namespace no longer falls back to xmlns declaration                     |
+//                      | Charles Korthout | 5.41  | 24-06-2026     | Pass DefiningElementDefaultNamespace through CompileXPath/AVT/xsl:evaluate             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -625,9 +627,9 @@ public sealed class TransformEngine
             current = current.Parent;
         }
 
-        // Fall back to the in-scope default namespace declaration.
-        var defaultNs = element.GetDefaultNamespace().NamespaceName;
-        return string.IsNullOrEmpty(defaultNs) ? null : defaultNs;
+        // The default namespace for XPath expressions (xmlns=...) does NOT affect
+        // XPath name tests; only an explicit xpath-default-namespace attribute does.
+        return null;
     }
 
     /// <summary>
@@ -638,10 +640,17 @@ public sealed class TransformEngine
     {
         var nsMap = GetInScopeNamespaces(instruction);
         var defaultNs = GetXPathDefaultNamespace(instruction);
+        var definingNs = instruction.GetDefaultNamespace().NamespaceName;
         var baseUri = GetEffectiveBaseUri(instruction);
-        if (nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(baseUri))
+        if (nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
         {
-            var options = new CompileOptions { Namespaces = nsMap, DefaultElementNamespace = defaultNs, BaseUri = baseUri };
+            var options = new CompileOptions
+            {
+                Namespaces = nsMap,
+                DefaultElementNamespace = defaultNs,
+                DefiningElementDefaultNamespace = definingNs,
+                BaseUri = baseUri
+            };
             return XPath31Expression.Compile(expression, options);
         }
         return XPath31Expression.Compile(expression);
@@ -2750,6 +2759,7 @@ public sealed class TransformEngine
         {
             Namespaces = nsMap,
             DefaultElementNamespace = defaultNs,
+            DefiningElementDefaultNamespace = instruction.GetDefaultNamespace().NamespaceName,
             BaseUri = baseUri
         };
         XPath31Expression compiled;
@@ -4352,8 +4362,10 @@ public sealed class TransformEngine
         var avtBaseUri = GetEffectiveBaseUri(contextElement);
         var nsMap = contextElement != null ? GetInScopeNamespaces(contextElement) : null;
         var defaultNs = contextElement != null ? GetXPathDefaultNamespace(contextElement) : null;
+        var definingNs = contextElement != null ? contextElement.GetDefaultNamespace().NamespaceName : null;
         bool needsOptions = (nsMap != null && nsMap.Count > 1)
             || !string.IsNullOrEmpty(defaultNs)
+            || !string.IsNullOrEmpty(definingNs)
             || !string.IsNullOrEmpty(avtBaseUri);
 
         while (i < value.Length)
@@ -4388,6 +4400,7 @@ public sealed class TransformEngine
                             {
                                 Namespaces = nsMap,
                                 DefaultElementNamespace = defaultNs,
+                                DefiningElementDefaultNamespace = definingNs,
                                 BaseUri = avtBaseUri
                             };
                             compiled = XPath31Expression.Compile(expr, options);

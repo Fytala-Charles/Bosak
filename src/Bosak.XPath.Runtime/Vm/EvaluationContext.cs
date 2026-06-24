@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 11-06-2026     | TryResolveNamespace resolves predefined xml prefix to XML namespace URI                 |
 //                      | Charles Korthout | 1.0   | 13-06-2026     | Added ImplicitTimezoneOffsetMinutes property (defaults to UTC)                          |
 //                      | Charles Korthout | 1.1   | 13-06-2026     | Added RegexGroups property for xsl:analyze-string / regex-group()                       |
+//                      | Charles Korthout | 1.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -142,6 +143,13 @@ public sealed class EvaluationContext
     /// When set, <see cref="TryResolveNamespace"/> returns this value for the empty prefix.
     /// </summary>
     public string? DefaultElementNamespace { get; set; }
+
+    /// <summary>
+    /// The default namespace URI of the element that contains the XPath expression.
+    /// Used by XSLT's <c>fn:element-available</c> to expand unprefixed lexical QNames
+    /// per the XSLT specification, which differs from the XPath default element namespace.
+    /// </summary>
+    public string? DefiningElementDefaultNamespace { get; set; }
 
     /// <summary>
     /// Loads a document by URI, using the cache and <see cref="DocumentLoader"/>.

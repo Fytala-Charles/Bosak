@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 11-06-2026     | Expanded key names, default namespace, globals before build, no implicit clear           |
 //                      | Charles Korthout | 0.4   | 11-06-2026     | Store typed key values; attribute nodes indexed; dedupe entries                         |
 //                      | Charles Korthout | 0.5   | 11-06-2026     | Document-order lookup results; composite key support                                     |
+//                      | Charles Korthout | 0.6   | 24-06-2026     | Pass DefiningElementDefaultNamespace when compiling key use expressions                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -319,16 +320,20 @@ public sealed class KeyIndex
         var compiledMatch = patternCompiler.Compile(resolvedMatch, defaultNs);
         var useExpr = string.IsNullOrEmpty(keyDef.Use)
             ? null
-            : CompileUseExpression(keyDef.Use, defaultNs);
+            : CompileUseExpression(keyDef.Use, defaultNs, keyDef.Element!.GetDefaultNamespace().NamespaceName);
 
         IndexNodes(sourceDocument, keyDef.Name, compiledMatch, useExpr, keyDef.Composite, context, index);
     }
 
-    private static XPath31Expression CompileUseExpression(string use, string? defaultElementNamespace)
+    private static XPath31Expression CompileUseExpression(string use, string? defaultElementNamespace, string? definingElementDefaultNamespace)
     {
-        if (string.IsNullOrEmpty(defaultElementNamespace))
+        if (string.IsNullOrEmpty(defaultElementNamespace) && string.IsNullOrEmpty(definingElementDefaultNamespace))
             return XPath31Expression.Compile(use);
-        var options = new CompileOptions { DefaultElementNamespace = defaultElementNamespace };
+        var options = new CompileOptions
+        {
+            DefaultElementNamespace = defaultElementNamespace,
+            DefiningElementDefaultNamespace = definingElementDefaultNamespace
+        };
         return XPath31Expression.Compile(use, options);
     }
 

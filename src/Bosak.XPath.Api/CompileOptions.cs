@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Api;
@@ -41,6 +42,13 @@ public sealed class CompileOptions
     /// in XPath expressions. When null or empty, unprefixed names match no namespace.
     /// </summary>
     public string? DefaultElementNamespace { get; init; }
+
+    /// <summary>
+    /// The default namespace URI of the element that contains the XPath expression.
+    /// Used by XSLT's <c>fn:element-available</c> to expand unprefixed lexical QNames
+    /// per the XSLT specification, which differs from the XPath default element namespace.
+    /// </summary>
+    public string? DefiningElementDefaultNamespace { get; init; }
 
     /// <summary>
     /// Statically-known variable types for optimization and early error detection.

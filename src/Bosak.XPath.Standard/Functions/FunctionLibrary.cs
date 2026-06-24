@@ -63,6 +63,7 @@
 //                      | Charles Korthout | 4.9   | 13-06-2026     | Adjust-time/date/dateTime use implicit timezone; dateTime constructor supports extended years |
 //                      | Charles Korthout | 5.0   | 13-06-2026     | Registered fn:regex-group#1 for xsl:analyze-string                                      |
 //                      | Charles Korthout | 5.1   | 13-06-2026     | Shared RegexHelper: XSD validation, backreference translation, and quote-preserving unquote |
+//                      | Charles Korthout | 5.2   | 24-06-2026     | element-available uses DefiningElementDefaultNamespace for unprefixed QNames             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3634,7 +3635,10 @@ public static class FunctionLibrary
     private static XdmValue ElementAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string name = AtomizedString(args[0]);
-        var (nsUri, localName) = ParseQNameArgument(ctx, name, defaultUri: ctx.DefaultElementNamespace ?? string.Empty);
+        // XSLT specifies that element-available uses the default namespace of the
+        // defining element, not the XPath default element namespace.
+        var defaultUri = ctx.DefiningElementDefaultNamespace ?? ctx.DefaultElementNamespace ?? string.Empty;
+        var (nsUri, localName) = ParseQNameArgument(ctx, name, defaultUri: defaultUri);
 
         if (nsUri != Namespaces.Xsl)
             return XdmValue.FromBoolean(false);

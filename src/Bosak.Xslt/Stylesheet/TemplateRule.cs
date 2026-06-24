@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 07-06-2026     | ValidateUnionPattern before split; restores XTSE0340 for union patterns                |
 //                      | Charles Korthout | 0.7   | 08-06-2026     | ParseModes expands QNames to Clark notation; fixes mode-0901 QName comparison          |
 //                      | Charles Korthout | 0.8   | 09-06-2026     | Trim default-mode attribute; use ModeDefinition.NormalizeModeName for empty URI       |
+//                      | Charles Korthout | 0.9   | 24-06-2026     | GetXPathDefaultNamespace no longer falls back to xmlns declaration                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 

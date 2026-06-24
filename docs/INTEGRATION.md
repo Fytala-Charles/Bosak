@@ -334,7 +334,7 @@ dotnet test Bosak.sln
 
 | Change | Impact | When |
 |--------|--------|------|
-| `xpath-default-namespace` fully wired through XSLT → XPath pipeline. | `CompileOptions.DefaultElementNamespace` added; threaded through `CompileXPath`, `PatternCompiler`, `TemplateRule.ResolveNamespacePrefixes`, `VmEngine.NamespaceTest`, and whitespace stripping (`SpaceHandlingRule`). Fixes xpath-default-namespace-0101 through 1102 (21/22 passing). | 2026-06-11 |
+| `xpath-default-namespace` fully wired through XSLT → XPath pipeline. | `CompileOptions.DefaultElementNamespace` controls unprefixed element/type names in XPath expressions. Threaded through `CompileXPath`, `PatternCompiler`, `TemplateRule.ResolveNamespacePrefixes`, `VmEngine.NamespaceTest`, and whitespace stripping (`SpaceHandlingRule`). Fixes xpath-default-namespace-0101 through 1102 (21/22 passing). | 2026-06-11 |
 | `xsl:attribute` with unprefixed name now uses empty namespace URI. | Previously inherited default namespace from parent; now correctly produces no-namespace attributes per XSLT spec. Fixes namespace-3306. | 2026-06-11 |
 | `xsl:call-template` evaluates default `xsl:param` values when no `with-param` is provided. | Previously omitted parameters fell back to empty sequence instead of evaluating the param's `select` or sequence constructor. Fixes namespace-3501/3503. | 2026-06-11 |
 | `AddElementToContainer` injects `xmlns=""` when no-namespace element is placed inside a default-namespace parent. | Prevents LINQ-to-XML from silently inheriting parent's default namespace. Fixes namespace-0913. | 2026-06-11 |
@@ -369,19 +369,21 @@ dotnet test Bosak.sln
 | `xsl:function` validation and static errors are implemented. | `Stylesheet.ValidateInstructionTree` reports XTSE0020/XTSE0080/XTSE0770/XTSE0090/XTSE0740 for invalid function declarations, reserved namespaces, duplicate signatures, and `Q{}local` names. Fixes function cluster validation tests. | 2026-06-13 |
 | `xsl:function` supports deterministic memoization. | `new-each-time="no"` results are cached per (name, arity, argument) key; AVTs on `_new-each-time` select deterministic/non-deterministic mode at run time. Fixes `function-0240` and related tests. | 2026-06-13 |
 | `fn:function-available` is fully spec compliant. | Parses EQNames, atomizes/casts the arity argument, reports `fn:concat` for any variadic arity, and reports the full XSLT 3.0 function set. Fixes `function-available` cluster. | 2026-06-13 |
-| `fn:element-available` is implemented. | Reports availability for XSLT 2.0/3.0 instructions in the XSLT namespace. Fixes function cluster tests that test stylesheet instructions dynamically. | 2026-06-13 |
+| `fn:element-available` is implemented. | Reports availability for XSLT 2.0/3.0 instructions in the XSLT namespace. The unprefixed first argument is expanded using the XML default namespace of the element containing the expression, tracked separately from the XPath default namespace via `CompileOptions.DefiningElementDefaultNamespace`. Fixes `function-0302b`. | 2026-06-24 |
 | `fn:available-environment-variables` and `fn:environment-variable` are implemented. | Returns/succeeds on process environment variables; matching is case-sensitive exact. Fixes function cluster environment tests. | 2026-06-13 |
 | Numeric arguments to `fn:subsequence` and `fn:format-integer` are atomized. | Atomization now preserves `xs:untypedAtomic`, so attribute and element text nodes are accepted implicitly. Fixes `function-0502`, `function-0503`, and related tests. | 2026-06-13 |
 | Namespace context is applied to `xsl:variable`/`xsl:param`/`xsl:with-param` @select expressions. | Local and global variable/param `select` expressions, and named-template default param values, now use the in-scope namespace bindings and effective default namespace. Fixes unprefixed EQName tests in `function` cluster. | 2026-06-13 |
 | `date` cluster is fully passing. | Implicit timezone, `xs:time` midnight semantics, timezone adjustment, AM/PM formatting, extended-year constructor bounds, and static-parameter substitution in the harness. Fixes all runnable `date` tests. | 2026-06-13 |
 | `xsl:message` now implements terminate/error-code semantics and serializes node content. | Messages evaluate `@terminate` and `@error-code`, emit via `IMessageListener`, and throw `XsltRuntimeException` with the captured XDM value when terminating; `xsl:try`/`xsl:catch` binds `$err:code`, `$err:description`, `$err:value`. Fixes the `message` conformance cluster (45/0/0). | 2026-06-13 |
 | `fn:unparsed-text` resolves relative `href` against `EvaluationContext.BaseUri`. | Previously resolved only against the static base URI parameter; now uses the dynamic base URI when no explicit base is supplied. Required for `message-0313`. | 2026-06-13 |
+| `fn:element-available` uses the defining element's default namespace. | Added `EvaluationContext.DefiningElementDefaultNamespace` and `CompileOptions.DefiningElementDefaultNamespace` so that XSLT's `element-available()` expands unprefixed QNames using `xmlns="..."` rather than `xpath-default-namespace`. | 2026-06-24 |
+| `validation="lax"` is accepted on basic processors. | Non-schema-aware processors no longer raise `XTSE1660` for `lax` (or `default-validation="lax"`), matching XSLT 3.0 semantics. Fixes `validation-0102b`. | 2026-06-24 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,420 | 851 | 9,329 | 83.9% | `message` cluster now 100% runnable; full suite currently 4420/851 |
+| XSLT 3.0 (W3C) | 4,499 | 769 | 9,332 | 85.4% | `function-0302b` and `validation-0102b` fixed in quick sweep |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

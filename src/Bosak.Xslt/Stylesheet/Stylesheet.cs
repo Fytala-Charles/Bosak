@@ -33,6 +33,8 @@
 //                      | Charles Korthout | 2.1   | 13-06-2026     | xsl:function static validation: attributes, duplicate names, required params           |
 //                      | Charles Korthout | 2.2   | 13-06-2026     | Added xsl:merge static validation (required children, merge-key placement)             |
 //                      | Charles Korthout | 2.3   | 13-06-2026     | XTSE1650 import-schema; merge-source validation/type and sort-before-merge checks      |
+//                      | Charles Korthout | 2.4   | 24-06-2026     | expand-text on xsl:message; package-version XTSE0090; XTSE1660 for strict/lax/type    |
+//                      | Charles Korthout | 2.5   | 24-06-2026     | Restrict XTSE1660 to strict validation; allow lax on basic processors                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -793,6 +795,7 @@ public sealed class Stylesheet
                     if (baseName != "select" &&
                         baseName != "terminate" &&
                         baseName != "error-code" &&
+                        baseName != "expand-text" &&
                         baseName != "use-when")
                     {
                         throw new InvalidOperationException("XTSE0090");
@@ -817,6 +820,34 @@ public sealed class Stylesheet
             // xsl:import-schema is only supported by schema-aware processors
             if (localName == "import-schema")
                 throw new InvalidOperationException("XTSE1650: xsl:import-schema requires a schema-aware processor");
+
+            // XTSE0090: package-version is only permitted on xsl:package
+            if ((localName == "stylesheet" || localName == "transform") && elem.Attribute("package-version") != null)
+                throw new InvalidOperationException("XTSE0090");
+
+            // XTSE1660: non-schema-aware processors do not support validation/type attributes
+            // that require schema awareness. Only strict requires a schema-aware processor;
+            // lax is permitted (it behaves like skip on a basic processor).
+            var validationAttr = elem.Attribute("validation") ?? elem.Attribute(XName.Get("validation", XslNamespace));
+            if (validationAttr != null)
+            {
+                var val = validationAttr.Value.Trim();
+                if (val == "strict")
+                    throw new InvalidOperationException("XTSE1660");
+            }
+            if (localName is "stylesheet" or "transform" or "package")
+            {
+                var defaultValidationAttr = elem.Attribute("default-validation") ?? elem.Attribute(XName.Get("default-validation", XslNamespace));
+                if (defaultValidationAttr != null)
+                {
+                    var val = defaultValidationAttr.Value.Trim();
+                    if (val == "strict")
+                        throw new InvalidOperationException("XTSE1660");
+                }
+            }
+            var typeAttr = elem.Attribute("type") ?? elem.Attribute(XName.Get("type", XslNamespace));
+            if (typeAttr != null && localName != "merge-source")
+                throw new InvalidOperationException("XTSE1660");
 
             // xsl:merge validation
             if (localName == "merge")

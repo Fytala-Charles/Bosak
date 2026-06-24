@@ -1,6 +1,49 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
+**Commit:** `3230f1d`
+**Current focus:** Quick sweep of small XSLT conformance failure clusters; fixed `function` and `validation` regressions.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,499
+- **Failed:** 769
+- **Skipped:** 9,332
+- **Pass rate:** 85.4% (+9 passes / −9 failures vs. previous 4,490/778)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| function | 84 | 82 | 0 | 2 | ✅ `function-0302b` now passing |
+| validation | 67 | 6 | 0 | 61 | ✅ `validation-0102b` now passing |
+
+## This Session Fixes
+
+1. **`fn:element-available` default namespace** — XSLT specifies that the first argument of `element-available` is expanded using the XML default namespace of the element containing the expression, not the XPath `xpath-default-namespace`. Added `DefiningElementDefaultNamespace` to `EvaluationContext` / `CompileOptions` / `XPath31Expression`, populated it from the defining element's `xmlns="..."` declaration, and updated `ElementAvailable` to use it.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`, `src/Bosak.XPath.Api/CompileOptions.cs`, `src/Bosak.XPath.Api/XPath31Expression.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Runtime/KeyIndex.cs`.
+
+2. **`lax` validation on basic processors** — Non-schema-aware processors no longer raise `XTSE1660` for `validation="lax"` (or `default-validation="lax"`). Only `strict` is rejected. This aligns with XSLT 3.0 behavior and fixes `validation-0102b`.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+3. **Reverted XML-default-namespace fallback for XPath name tests** — An earlier change that fell back to the in-scope XML default namespace for all XPath expressions caused regressions (e.g. `type-0171`). The fallback is now used only for `element-available` via the separate `DefiningElementDefaultNamespace` mechanism.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
+
+## Notes
+
+- Unit-test suite: **883 passed / 0 failed** across 8 projects.
+- Full W3C XSLT 3.0 suite: **4,499 passed / 769 failed / 9,332 skipped** (85.4%), up from 4,490/778.
+- Remaining quick-sweep candidates: `unparsed-text-lines`, `innermost` (needs `fn:snapshot`), `extension-functions`, `initial-function`.
+- Next major target: `document` cluster (19 failures).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-24
 **Commit:** `1510f3f`
 **Current focus:** XSLT `copy` cluster now 128/128 runnable passing (100%). Full suite re-run clean.
 
@@ -1773,3 +1816,46 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 - Previous: `<uncommitted>` — copy cluster fixes (PI kind-test args, fn:copy-of sequence/context fixes, function context isolation)
 - Previous: `<uncommitted>` — match cluster fixes (241, 246a/b, 248-254), xsl:variable @as coercion, next-match position/last preservation
 - Previous: `0bb2e09` — attribute-set, use-when, copy-of atomic spacing, next-match fixes
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-24
+**Commit:** `<to be amended after commit>`
+**Current focus:** Quick sweep of small XSLT conformance failure clusters; fixed `function` and `validation` regressions.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,499
+- **Failed:** 769
+- **Skipped:** 9,332
+- **Pass rate:** 85.4% (+9 passes / −9 failures vs. previous 4,490/778)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| function | 84 | 82 | 0 | 2 | ✅ `function-0302b` now passing |
+| validation | 67 | 6 | 0 | 61 | ✅ `validation-0102b` now passing |
+
+## This Session Fixes
+
+1. **`fn:element-available` default namespace** — XSLT specifies that the first argument of `element-available` is expanded using the XML default namespace of the element containing the expression, not the XPath `xpath-default-namespace`. Added `DefiningElementDefaultNamespace` to `EvaluationContext` / `CompileOptions` / `XPath31Expression`, populated it from the defining element's `xmlns="..."` declaration, and updated `ElementAvailable` to use it.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`, `src/Bosak.XPath.Api/CompileOptions.cs`, `src/Bosak.XPath.Api/XPath31Expression.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Runtime/KeyIndex.cs`.
+
+2. **`lax` validation on basic processors** — Non-schema-aware processors no longer raise `XTSE1660` for `validation="lax"` (or `default-validation="lax"`). Only `strict` is rejected. This aligns with XSLT 3.0 behavior and fixes `validation-0102b`.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+3. **Reverted XML-default-namespace fallback for XPath name tests** — An earlier change that fell back to the in-scope XML default namespace for all XPath expressions caused regressions (e.g. `type-0171`). The fallback is now used only for `element-available` via the separate `DefiningElementDefaultNamespace` mechanism.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
+
+## Notes
+
+- Unit-test suite: **883 passed / 0 failed** across 8 projects.
+- Full W3C XSLT 3.0 suite: **4,499 passed / 769 failed / 9,332 skipped** (85.4%), up from 4,490/778.
+- Remaining quick-sweep candidates: `unparsed-text-lines`, `innermost` (needs `fn:snapshot`), `extension-functions`, `initial-function`.
+- Next major target: `document` cluster (19 failures).
+
+---
+

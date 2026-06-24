@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -32,13 +33,15 @@ public sealed class XPath31Expression
     private readonly IrModule _module;
     private readonly IReadOnlyDictionary<string, string>? _namespaces;
     private readonly string? _defaultElementNamespace;
+    private readonly string? _definingElementDefaultNamespace;
     private readonly string? _baseUri;
 
-    private XPath31Expression(IrModule module, IReadOnlyDictionary<string, string>? namespaces = null, string? defaultElementNamespace = null, string? baseUri = null)
+    private XPath31Expression(IrModule module, IReadOnlyDictionary<string, string>? namespaces = null, string? defaultElementNamespace = null, string? definingElementDefaultNamespace = null, string? baseUri = null)
     {
         _module = module;
         _namespaces = namespaces;
         _defaultElementNamespace = defaultElementNamespace;
+        _definingElementDefaultNamespace = definingElementDefaultNamespace;
         _baseUri = baseUri;
     }
 
@@ -67,7 +70,7 @@ public sealed class XPath31Expression
         var lowerer = new IrLowerer();
         var module = lowerer.Lower(optimized);
 
-        return new XPath31Expression(module, options.Namespaces, options.DefaultElementNamespace, options.BaseUri);
+        return new XPath31Expression(module, options.Namespaces, options.DefaultElementNamespace, options.DefiningElementDefaultNamespace, options.BaseUri);
     }
 
     /// <summary>
@@ -92,11 +95,14 @@ public sealed class XPath31Expression
             FunctionLibrary.Populate(context);
 
         var savedDefaultNs = context.DefaultElementNamespace;
+        var savedDefiningNs = context.DefiningElementDefaultNamespace;
         var savedBaseUri = context.BaseUri;
         try
         {
             if (_defaultElementNamespace != null)
                 context.DefaultElementNamespace = _defaultElementNamespace;
+            if (_definingElementDefaultNamespace != null)
+                context.DefiningElementDefaultNamespace = _definingElementDefaultNamespace;
             if (_baseUri != null)
                 context.BaseUri = _baseUri;
 
@@ -123,6 +129,7 @@ public sealed class XPath31Expression
         finally
         {
             context.DefaultElementNamespace = savedDefaultNs;
+            context.DefiningElementDefaultNamespace = savedDefiningNs;
             context.BaseUri = savedBaseUri;
         }
     }

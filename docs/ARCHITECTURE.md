@@ -309,6 +309,15 @@ var options = new CompileOptions
     DefaultElementNamespace = "http://example.com"
 };
 var expr3 = XPath31Expression.Compile("//book", options);
+
+// The XML default namespace of the element containing the expression is tracked
+// separately so that XSLT's fn:element-available() can expand unprefixed QNames
+// per the XSLT specification, independent of xpath-default-namespace.
+options = new CompileOptions
+{
+    DefaultElementNamespace = null,
+    DefiningElementDefaultNamespace = "http://www.w3.org/1999/XSL/Transform"
+};
 ```
 
 ---
