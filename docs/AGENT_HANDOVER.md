@@ -1,45 +1,41 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `d02513a`
-**Current focus:** Quick sweep of `unparsed-text-lines` and `extension-functions` clusters.
+**Commit:** `afabc43`
+**Current focus:** Implemented `fn:snapshot` and fixed `fn:innermost`/`fn:outermost`.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 4,520
-- **Failed:** 731
+- **Passed:** 4,527
+- **Failed:** 724
 - **Skipped:** 9,349
-- **Pass rate:** 86.1% (+7 passes / −7 failures vs. previous 4,513/738)
+- **Pass rate:** 86.2% (+7 passes / −7 failures vs. previous 4,520/731)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
-| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ All passing |
-| extension-functions | 7 | 7 | 0 | 0 | ✅ All passing |
+| innermost | 2 | 2 | 0 | 0 | ✅ All passing |
 
 ## This Session Fixes
 
-1. **`fn:unparsed-text-lines` spec compliance** — The function now drops a trailing line terminator (so a final newline does not create an empty trailing line) and validates that decoded text contains only XML-legal characters, raising `FOUT1190` for invalid characters such as NUL.
+1. **Implemented `fn:snapshot`** — Added `fn:snapshot#1` to the standard function library. The function creates a copy of a node together with shallow copies of its ancestors (preserving attributes and namespace declarations) and a deep copy of its descendants. Required by the `innermost` cluster.
    - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
 
-2. **`fn:function-available` QName validation** — The function now validates that its argument is a valid QName/EQName and that any prefix is in scope, raising `XTDE1400` when these rules are violated. `use-when` expressions propagate this error rather than treating it as a false result.
+2. **Fixed `fn:innermost`** — Corrected the node relationship check to use `IsSameNode` rather than reference equality, and changed the logic to exclude nodes that have descendants in the input sequence (true "innermost" semantics).
    - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
 
-3. **`extension-element-prefixes` reserved-namespace check** — The stylesheet loader now rejects `extension-element-prefixes` that map to the XSLT, XML, XML Schema, or XML Schema instance namespaces with `XTSE0800`.
-   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
-
-4. **`use-when` namespace context** — `use-when` expressions now collect namespace declarations from the full ancestor chain, not just the element carrying the attribute.
-   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+3. **Fixed `fn:outermost`** — Corrected the implementation to exclude nodes that have ancestors in the input sequence, matching the spec definition of "outermost".
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
 
 ## Notes
 
 - Unit-test suite: **883 passed / 0 failed** across 8 projects.
-- Full W3C XSLT 3.0 suite: **4,520 passed / 731 failed / 9,349 skipped** (86.1%), up from 4,513/738.
-- Remaining quick-sweep candidates: `innermost` (needs `fn:snapshot`), `initial-function` (needs harness/runtime support for function entry points).
+- Full W3C XSLT 3.0 suite: **4,527 passed / 724 failed / 9,349 skipped** (86.2%), up from 4,520/731.
+- Remaining quick-sweep candidate: `initial-function` (needs harness/runtime support for function entry points).
 
 ---
 
