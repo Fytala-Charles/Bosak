@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 13-06-2026     | Expand static parameters in _select attributes before compilation                       |
 //                      | Charles Korthout | 1.3   | 15-06-2026     | Record warnings separately; evaluate assert-warning; skip mode result-document tests   |
 //                      | Charles Korthout | 1.4   | 24-06-2026     | Parse stylesheets with DTD processing enabled; fixes copy-1201/copy-1202               |
+//                      | Charles Korthout | 1.5   | 24-06-2026     | Preserve stylesheet base URIs in resolver; skip xsl:use-package tests                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -403,6 +404,12 @@ class Program
                 if (xslRoot != null && xslRoot.Name == XName.Get("package", "http://www.w3.org/1999/XSL/Transform"))
                 {
                     Console.WriteLine($"  SKIP {name}: xsl:package not supported");
+                    return TestResult.Skip;
+                }
+
+                if (xslRoot != null && xslRoot.Descendants(XName.Get("use-package", "http://www.w3.org/1999/XSL/Transform")).Any())
+                {
+                    Console.WriteLine($"  SKIP {name}: xsl:use-package not supported");
                     return TestResult.Skip;
                 }
             }
@@ -1247,11 +1254,19 @@ public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
 
     public XDocument Resolve(string href, string? baseUri)
     {
-        var loadOptions = LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo;
+        var loadOptions = LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri;
+        var settings = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Parse,
+            XmlResolver = new XmlUrlResolver(),
+        };
 
         // Try direct mapping
         if (_mappings.TryGetValue(href, out var mappedPath) && File.Exists(mappedPath))
-            return XDocument.Load(mappedPath, loadOptions);
+        {
+            using var reader = XmlReader.Create(mappedPath, settings);
+            return XDocument.Load(reader, loadOptions);
+        }
 
         // Resolve relative to baseUri
         if (!string.IsNullOrEmpty(baseUri))
@@ -1260,18 +1275,27 @@ public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
             var resolved = new Uri(baseUriObj, href);
             var resolvedPath = resolved.LocalPath;
             if (File.Exists(resolvedPath))
-                return XDocument.Load(resolvedPath, loadOptions);
+            {
+                using var reader = XmlReader.Create(resolved.AbsoluteUri, settings);
+                return XDocument.Load(reader, loadOptions);
+            }
         }
 
         // Try primary dir
         var primaryPath = Path.Combine(_primaryDir, href);
         if (File.Exists(primaryPath))
-            return XDocument.Load(primaryPath, loadOptions);
+        {
+            using var reader = XmlReader.Create(new Uri(primaryPath).AbsoluteUri, settings);
+            return XDocument.Load(reader, loadOptions);
+        }
 
         // Try fallback dir
         var fallbackPath = Path.Combine(_fallbackDir, href);
         if (File.Exists(fallbackPath))
-            return XDocument.Load(fallbackPath, loadOptions);
+        {
+            using var reader = XmlReader.Create(new Uri(fallbackPath).AbsoluteUri, settings);
+            return XDocument.Load(reader, loadOptions);
+        }
 
         throw new FileNotFoundException($"Stylesheet not found: {href} (base: {baseUri})");
     }

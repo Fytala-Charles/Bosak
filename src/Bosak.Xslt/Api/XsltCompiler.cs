@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added IXsltUriResolver support for xsl:import/xsl:include                              |
 //                      | Charles Korthout | 0.3   | 31-05-2026     | Added IXsltMessageListener support for xsl:message                                      |
 //                      | Charles Korthout | 0.4   | 11-06-2026     | Resolve external DTDs when compiling stylesheets from strings                           |
+//                      | Charles Korthout | 0.5   | 24-06-2026     | Preserve XDocument base URI via LoadOptions.SetBaseUri for document() resolution       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -52,7 +53,7 @@ public sealed class XsltCompiler
             XmlResolver = new XmlUrlResolver(),
         };
         using var reader = XmlReader.Create(new StringReader(xsl), settings, baseUri ?? "");
-        var doc = XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+        var doc = XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
         return Compile(doc, baseUri);
     }
 

@@ -4981,10 +4981,7 @@ public static class FunctionLibrary
         if (uris.Count == 1)
             return LoadDocumentWithFragment(ctx, uris[0], ctx.BaseUri);
 
-        var docs = new List<XdmValue>(uris.Count);
-        foreach (var uri in uris)
-            docs.Add(LoadDocumentWithFragment(ctx, uri, ctx.BaseUri));
-        return XdmValue.FromSequence(MaterializedSequence.FromList(docs));
+        return LoadDocumentsDistinct(ctx, uris, ctx.BaseUri);
     }
 
     private static XdmValue Document_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -4999,10 +4996,7 @@ public static class FunctionLibrary
         if (uris.Count == 1)
             return LoadDocumentWithFragment(ctx, uris[0], baseUri);
 
-        var docs = new List<XdmValue>(uris.Count);
-        foreach (var uri in uris)
-            docs.Add(LoadDocumentWithFragment(ctx, uri, baseUri));
-        return XdmValue.FromSequence(MaterializedSequence.FromList(docs));
+        return LoadDocumentsDistinct(ctx, uris, baseUri);
     }
 
     private static string ResolveDocumentUri(string uri, string? baseUri)
@@ -5011,6 +5005,33 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(uri))
             uri = baseUri ?? string.Empty;
         return uri;
+    }
+
+    private static XdmValue LoadDocumentsDistinct(EvaluationContext ctx, List<string> uris, string? baseUri)
+    {
+        // XSLT document() returns the union of the node-sets, which eliminates
+        // duplicate document nodes (e.g. the same URI appearing more than once).
+        var seen = new HashSet<IXdmNode>();
+        var docs = new List<XdmValue>(uris.Count);
+        foreach (var uri in uris)
+        {
+            var loaded = LoadDocumentWithFragment(ctx, uri, baseUri);
+            if (loaded.IsNode)
+            {
+                if (seen.Add(loaded.NodeValue!))
+                    docs.Add(loaded);
+            }
+            else if (!loaded.IsUndefined)
+            {
+                docs.Add(loaded);
+            }
+        }
+
+        if (docs.Count == 0)
+            return XdmValue.Undefined;
+        if (docs.Count == 1)
+            return docs[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(docs));
     }
 
     private static XdmValue LoadDocumentWithFragment(EvaluationContext ctx, string uri, string? baseUri)
@@ -5088,12 +5109,13 @@ public static class FunctionLibrary
 
     private static XdmValue DocAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var arg = args[0];
-        if (IsEmptySequence(arg))
+        var uris = AtomizedUriStrings(args[0]);
+        if (uris.Count == 0)
             return XdmValue.FromBoolean(false);
-        if (arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
-            throw new InvalidOperationException("XPTY0004");
-        var uri = arg.ToString();
+        if (uris.Count > 1)
+            throw new InvalidOperationException("XPTY0004: fn:doc-available expects a single URI");
+
+        var uri = uris[0];
         if (string.IsNullOrEmpty(uri))
             return XdmValue.FromBoolean(false);
         try

@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 13-06-2026     | Added ImplicitTimezoneOffsetMinutes property (defaults to UTC)                          |
 //                      | Charles Korthout | 1.1   | 13-06-2026     | Added RegexGroups property for xsl:analyze-string / regex-group()                       |
 //                      | Charles Korthout | 1.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
+//                      | Charles Korthout | 1.3   | 24-06-2026     | Added DocumentPostProcessor for XSLT whitespace stripping on loaded documents          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -133,6 +134,13 @@ public sealed class EvaluationContext
     public Func<string, IXdmNode>? DocumentLoader { get; set; }
 
     /// <summary>
+    /// Optional post-processor applied to documents loaded through <see cref="DocumentLoader"/>.
+    /// Used by XSLT to apply xsl:strip-space / xsl:preserve-space rules to documents
+    /// returned by fn:doc and fn:document.
+    /// </summary>
+    public Func<IXdmNode, IXdmNode>? DocumentPostProcessor { get; set; }
+
+    /// <summary>
     /// When true, XPath comparisons use XSLT 1.0 / XPath 1.0 backwards-compatible
     /// coercion rules (e.g., string-to-boolean, number-to-boolean in general comparisons).
     /// </summary>
@@ -168,6 +176,8 @@ public sealed class EvaluationContext
             throw new InvalidOperationException($"No document loader configured. Cannot load document: {uri}");
 
         var node = DocumentLoader(uri);
+        if (DocumentPostProcessor != null)
+            node = DocumentPostProcessor(node);
         _documentCache[uri] = node;
         return node;
     }

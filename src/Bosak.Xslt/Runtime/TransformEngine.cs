@@ -110,6 +110,7 @@
 //                      | Charles Korthout | 5.39  | 24-06-2026     | Named-template entry point treats source tree as global context item for accumulators   |
 //                      | Charles Korthout | 5.40  | 24-06-2026     | XPath default namespace no longer falls back to xmlns declaration                     |
 //                      | Charles Korthout | 5.41  | 24-06-2026     | Pass DefiningElementDefaultNamespace through CompileXPath/AVT/xsl:evaluate             |
+//                      | Charles Korthout | 5.42  | 24-06-2026     | Apply xsl:strip-space to fn:doc/document loaded docs; skip stylesheet modules          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -313,6 +314,11 @@ public sealed class TransformEngine
         // before globals or key indices are evaluated.
         if (source != null)
             ApplyWhitespaceStripping(source);
+
+        // Documents loaded by fn:doc / fn:document during the transformation are also
+        // subject to the stylesheet's whitespace stripping rules, but the stylesheet
+        // document itself (returned by document('')) must not be mutated.
+        _context.DocumentPostProcessor = PostProcessLoadedDocument;
 
         // Initialize global parameters and variables before compiling match patterns
         // and building key indices, because both match-pattern predicate validation
@@ -3756,7 +3762,7 @@ public sealed class TransformEngine
                     var select = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(select))
                     {
-                        var compiled = XPath31Expression.Compile(select);
+                        var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
                         var copyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
                         ?? instruction.Attribute("_copy-namespaces")?.Value
@@ -9339,6 +9345,46 @@ public sealed class TransformEngine
     // ------------------------------------------------------------------
     // Whitespace stripping (xsl:strip-space / xsl:preserve-space)
     // ------------------------------------------------------------------
+
+    private IXdmNode PostProcessLoadedDocument(IXdmNode node)
+    {
+        // Never strip whitespace from the stylesheet modules themselves; they are
+        // not source documents and must remain intact for document('') and for
+        // execution of compiled instructions.
+        if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XDocument doc)
+        {
+            if (IsStylesheetDocument(doc))
+                return node;
+        }
+
+        ApplyWhitespaceStripping(node);
+        return node;
+    }
+
+    private bool IsStylesheetDocument(XDocument doc)
+    {
+        return doc == _stylesheet.Root.Document || IsStylesheetDocumentRecursive(doc, _stylesheet);
+    }
+
+    private static bool IsStylesheetDocumentRecursive(XDocument doc, Stylesheet.Stylesheet sheet)
+    {
+        if (doc == sheet.Root.Document)
+            return true;
+
+        foreach (var included in sheet.Includes)
+        {
+            if (IsStylesheetDocumentRecursive(doc, included))
+                return true;
+        }
+
+        foreach (var imported in sheet.Imports)
+        {
+            if (IsStylesheetDocumentRecursive(doc, imported))
+                return true;
+        }
+
+        return false;
+    }
 
     private void ApplyWhitespaceStripping(IXdmNode source)
     {

@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 11-06-2026     | Resolve external DTDs when loading stylesheets                                          |
+//                      | Charles Korthout | 0.3   | 24-06-2026     | Preserve XDocument base URI via LoadOptions.SetBaseUri for included modules            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -45,8 +46,11 @@ public sealed class FileSystemUriResolver : IXsltUriResolver
                 DtdProcessing = DtdProcessing.Parse,
                 XmlResolver = new XmlUrlResolver(),
             };
-            using var reader = XmlReader.Create(path, settings);
-            return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+            // Use the absolute URI as the reader input so the resulting XDocument
+            // BaseUri is a URI rather than a local file path. This preserves the
+            // correct base URI for xsl:include/xsl:import modules.
+            using var reader = XmlReader.Create(absoluteUri, settings);
+            return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
         }
 
         // For non-file URIs, attempt a web request

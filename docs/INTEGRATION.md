@@ -380,12 +380,15 @@ dotnet test Bosak.sln
 | `validation="lax"` is accepted on basic processors. | Non-schema-aware processors no longer raise `XTSE1660` for `lax` (or `default-validation="lax"`), matching XSLT 3.0 semantics. Fixes `validation-0102b`. | 2026-06-24 |
 | `fn:doc('')` resolves against the static base URI. | In XSLT, `fn:doc('')` now loads the stylesheet module; in pure XPath it still yields the empty sequence when no base URI is present. Fixes `document-0302`. | 2026-06-24 |
 | `fn:doc` atomizes and validates its argument. | Empty sequence returns empty sequence; more than one item raises `XPTY0004`; prevents literal `\(sequence\)` from being loaded as a URI. Fixes `document-0303/0307/0601/0901/1101`. | 2026-06-24 |
+| Stylesheet module base URIs are preserved. | `FileSystemUriResolver`, `XsltCompiler`, and the conformance `TestUriResolver` load stylesheet modules with `LoadOptions.SetBaseUri`, so `fn:doc('')` and `fn:document()` inside included/imported modules resolve relative URIs against the correct module base URI. Fixes `document-1003/1004/1901`. | 2026-06-24 |
+| `fn:doc`/`fn:document` loaded documents are subject to `xsl:strip-space`/`xsl:preserve-space`. | `EvaluationContext.DocumentPostProcessor` lets XSLT apply the stylesheet's whitespace-handling rules to documents loaded during transformation, while protecting stylesheet modules themselves from mutation. Fixes `document-0308`. | 2026-06-24 |
+| `xsl:use-package` tests are skipped by the conformance harness. | The compiler does not support XSLT 3.0 packages; the harness now detects `xsl:use-package` in the principal stylesheet and reports a skip instead of a null-reference failure. Moves `document-2402` to skipped. | 2026-06-24 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,509 | 759 | 9,332 | 85.6% | `document` cluster reduced from 19 to 10 failures |
+| XSLT 3.0 (W3C) | 4,513 | 738 | 9,349 | 85.9% | `document` cluster fully passing; `xsl:use-package` tests now skipped |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
