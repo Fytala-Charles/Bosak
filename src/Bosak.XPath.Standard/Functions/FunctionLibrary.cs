@@ -67,6 +67,7 @@
 //                      | Charles Korthout | 5.3   | 24-06-2026     | fn:doc('') resolves against static base URI; atomizes and validates sequence argument    |
 //                      | Charles Korthout | 5.4   | 24-06-2026     | fn:unparsed-text-lines drops trailing empty line; validates XML characters (FOUT1190)  |
 //                      | Charles Korthout | 5.5   | 24-06-2026     | fn:function-available validates QName and reports XTDE1400 for invalid/unbound names   |
+//                      | Charles Korthout | 5.6   | 24-06-2026     | Implemented fn:snapshot; fixed fn:innermost/fn:outermost descendant/ancestor checks    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2068,6 +2069,13 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = Outermost
             },
+            [(Namespaces.Fn, "snapshot", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "snapshot", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.Node,
+                Implementation = Snapshot
+            },
             [(Namespaces.Fn, "resolve-uri", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "resolve-uri", Arity = 1,
@@ -3113,33 +3121,10 @@ public static class FunctionLibrary
         var result = new List<XdmValue>();
         foreach (var node in nodes)
         {
-            bool hasAncestorInSet = false;
-            var current = node.Parent;
-            while (current is not null)
-            {
-                if (nodes.Any(n => n == current))
-                {
-                    hasAncestorInSet = true;
-                    break;
-                }
-                current = current.Parent;
-            }
-            if (!hasAncestorInSet)
-                result.Add(XdmValue.FromNode(node));
-        }
-        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
-    }
-
-    private static XdmValue Outermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-    {
-        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
-        var result = new List<XdmValue>();
-        foreach (var node in nodes)
-        {
             bool hasDescendantInSet = false;
             foreach (var other in nodes)
             {
-                if (other == node) continue;
+                if (other.IsSameNode(node)) continue;
                 if (IsDescendant(other, node))
                 {
                     hasDescendantInSet = true;
@@ -3152,16 +3137,200 @@ public static class FunctionLibrary
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
+    private static XdmValue Outermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var result = new List<XdmValue>();
+        foreach (var node in nodes)
+        {
+            bool hasAncestorInSet = false;
+            var current = node.Parent;
+            while (current is not null)
+            {
+                if (nodes.Any(n => n.IsSameNode(current)))
+                {
+                    hasAncestorInSet = true;
+                    break;
+                }
+                current = current.Parent;
+            }
+            if (!hasAncestorInSet)
+                result.Add(XdmValue.FromNode(node));
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
     private static bool IsDescendant(IXdmNode? descendant, IXdmNode ancestor)
     {
         var current = descendant?.Parent;
         while (current is not null)
         {
-            if (current == ancestor)
+            if (current.IsSameNode(ancestor))
                 return true;
             current = current.Parent;
         }
         return false;
+    }
+
+    private static XdmValue Snapshot(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var node = GetNodeFromValue(args[0]);
+        if (node == null)
+            return XdmValue.Undefined;
+
+        var copied = SnapshotNode(node);
+        if (copied == null)
+            throw new InvalidOperationException("FOTY0013");
+        return XdmValue.FromNode(copied);
+    }
+
+    private static IXdmNode? SnapshotNode(IXdmNode node)
+    {
+        if (node is not Providers.Xml.XDocumentNode xdocNode)
+            return null;
+
+        // Collect ancestor path from root to the target node.
+        var path = new List<IXdmNode>();
+        var current = node;
+        while (current != null)
+        {
+            path.Add(current);
+            current = current.Parent;
+        }
+        path.Reverse();
+
+        if (path.Count == 0)
+            return null;
+
+        XContainer? container = null;
+        XObject? targetCopy = null;
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            var original = path[i];
+            bool isLast = i == path.Count - 1;
+
+            switch (original.NodeKind)
+            {
+                case XdmNodeKind.Document:
+                    var docCopy = new XDocument();
+                    container = docCopy;
+                    targetCopy = docCopy;
+                    break;
+
+                case XdmNodeKind.Element:
+                    if (((Providers.Xml.XDocumentNode)original).UnderlyingObject is not XElement elem)
+                        continue;
+                    var elemCopy = ShallowCopyElement(elem);
+                    container?.Add(elemCopy);
+                    container = elemCopy;
+                    if (isLast)
+                        targetCopy = elemCopy;
+                    break;
+
+                case XdmNodeKind.Attribute:
+                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XAttribute attr)
+                    {
+                        var attrCopy = new XAttribute(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
+                        container?.Add(attrCopy);
+                        targetCopy = attrCopy;
+                    }
+                    break;
+
+                case XdmNodeKind.Text:
+                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XText text)
+                    {
+                        var textCopy = new XText(text.Value);
+                        container?.Add(textCopy);
+                        targetCopy = textCopy;
+                    }
+                    break;
+
+                case XdmNodeKind.Comment:
+                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XComment comment)
+                    {
+                        var commentCopy = new XComment(comment.Value);
+                        container?.Add(commentCopy);
+                        targetCopy = commentCopy;
+                    }
+                    break;
+
+                case XdmNodeKind.ProcessingInstruction:
+                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XProcessingInstruction pi)
+                    {
+                        var piCopy = new XProcessingInstruction(pi.Target, pi.Data);
+                        container?.Add(piCopy);
+                        targetCopy = piCopy;
+                    }
+                    break;
+
+                case XdmNodeKind.Namespace:
+                    // Namespace nodes are represented as attributes in the XDocument model.
+                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XAttribute nsAttr)
+                    {
+                        var nsCopy = new XAttribute(XName.Get(nsAttr.Name.LocalName, nsAttr.Name.NamespaceName), nsAttr.Value);
+                        container?.Add(nsCopy);
+                        targetCopy = nsCopy;
+                    }
+                    break;
+            }
+        }
+
+        // Deep-copy the descendants of the target element.
+        if (targetCopy is XElement targetElem && node.NodeKind == XdmNodeKind.Element)
+        {
+            if (((Providers.Xml.XDocumentNode)node).UnderlyingObject is XElement origElem)
+            {
+                foreach (var child in origElem.Nodes())
+                {
+                    targetElem.Add(DeepCopyXNode(child));
+                }
+            }
+        }
+
+        // Deep-copy children of a target document node.
+        if (targetCopy is XDocument targetDoc && node.NodeKind == XdmNodeKind.Document)
+        {
+            if (((Providers.Xml.XDocumentNode)node).UnderlyingObject is XDocument origDoc)
+            {
+                foreach (var child in origDoc.Nodes())
+                {
+                    targetDoc.Add(DeepCopyXNode(child));
+                }
+            }
+        }
+
+        if (targetCopy == null)
+            return null;
+
+        return new Providers.Xml.XDocumentNode(targetCopy);
+    }
+
+    private static XElement ShallowCopyElement(XElement element)
+    {
+        var copy = new XElement(XName.Get(element.Name.LocalName, element.Name.NamespaceName));
+        foreach (var attr in element.Attributes())
+        {
+            copy.SetAttributeValue(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
+        }
+        return copy;
+    }
+
+    private static XNode DeepCopyXNode(XNode node)
+    {
+        switch (node)
+        {
+            case XElement elem:
+                return DeepCopyElement(elem);
+            case XText text:
+                return new XText(text.Value);
+            case XComment comment:
+                return new XComment(comment.Value);
+            case XProcessingInstruction pi:
+                return new XProcessingInstruction(pi.Target, pi.Data);
+            default:
+                return new XText(node.ToString());
+        }
     }
 
     private static XdmValue ResolveUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

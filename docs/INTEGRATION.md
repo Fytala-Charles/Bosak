@@ -387,12 +387,14 @@ dotnet test Bosak.sln
 | `fn:function-available` validates its argument. | Invalid QName/EQName syntax or an unbound prefix now raises `XTDE1400`; the error is propagated through `use-when` expressions. Fixes `extension-functions-0103/0104`. | 2026-06-24 |
 | `extension-element-prefixes` bound to reserved namespaces is rejected. | The stylesheet loader reports `XTSE0800` when the XSLT, XML, XML Schema, or XML Schema instance namespace is declared as an extension namespace. Fixes `extension-functions-0105`. | 2026-06-24 |
 | `use-when` namespace context includes all ancestors. | Prefixes declared on any ancestor of the element carrying `use-when` are now in scope for the expression. Fixes `extension-functions-0101`. | 2026-06-24 |
+| `fn:snapshot` is implemented. | Creates a copy of a node with shallow ancestor copies (attributes/namespaces preserved) and deep-copied descendants. Required by the `innermost` cluster. | 2026-06-24 |
+| `fn:innermost` / `fn:outermost` relationship checks are correct. | Both functions now use `IsSameNode` instead of reference equality, and `innermost`/`outermost` apply the correct descendant/ancestor filtering semantics. Fixes `innermost-001/901`. | 2026-06-24 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,520 | 731 | 9,349 | 86.1% | `unparsed-text-lines` and `extension-functions` clusters fully passing |
+| XSLT 3.0 (W3C) | 4,527 | 724 | 9,349 | 86.2% | `innermost` cluster fully passing |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
