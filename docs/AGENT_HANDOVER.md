@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `3230f1d`
+**Commit:** `c4424f1`
 **Current focus:** Quick sweep of small XSLT conformance failure clusters; fixed `function` and `validation` regressions.
 
 ---
