@@ -35,6 +35,8 @@
 //                      | Charles Korthout | 2.3   | 13-06-2026     | XTSE1650 import-schema; merge-source validation/type and sort-before-merge checks      |
 //                      | Charles Korthout | 2.4   | 24-06-2026     | expand-text on xsl:message; package-version XTSE0090; XTSE1660 for strict/lax/type    |
 //                      | Charles Korthout | 2.5   | 24-06-2026     | Restrict XTSE1660 to strict validation; allow lax on basic processors                  |
+//                      | Charles Korthout | 2.6   | 24-06-2026     | Reject extension-element-prefixes bound to reserved namespaces (XTSE0800)              |
+//                      | Charles Korthout | 2.7   | 24-06-2026     | use-when walks ancestor namespace declarations; propagates XTDE1400/1410 errors        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -281,6 +283,29 @@ public sealed class Stylesheet
             }
         }
 
+        // Validate extension-element-prefixes: reserved namespaces are not permitted.
+        var extensionPrefixesAttr = root.Attribute("extension-element-prefixes")?.Value;
+        if (!string.IsNullOrWhiteSpace(extensionPrefixesAttr))
+        {
+            foreach (var token in extensionPrefixesAttr.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var prefix = token.Trim();
+                string nsUri;
+                if (prefix == "#default")
+                    nsUri = root.GetDefaultNamespace().NamespaceName;
+                else
+                    nsUri = root.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
+
+                if (nsUri == XslNamespace ||
+                    nsUri == System.Xml.Linq.XNamespace.Xml.NamespaceName ||
+                    nsUri == "http://www.w3.org/2001/XMLSchema" ||
+                    nsUri == "http://www.w3.org/2001/XMLSchema-instance")
+                {
+                    throw new InvalidOperationException("XTSE0800");
+                }
+            }
+        }
+
         // Helper to evaluate use-when on top-level elements
         bool UseWhen(XElement elem)
         {
@@ -293,17 +318,33 @@ public sealed class Stylesheet
                 var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext();
                 Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
                 // Add in-scope namespace declarations so prefixes in use-when resolve correctly
-                foreach (var attr in elem.Attributes().Where(a => a.IsNamespaceDeclaration))
+                var currentNs = elem;
+                while (currentNs != null)
                 {
-                    var prefix = attr.Name.LocalName;
-                    if (prefix == "xmlns") prefix = "";
-                    ctx.WithNamespace(prefix, attr.Value);
+                    foreach (var attr in currentNs.Attributes().Where(a => a.IsNamespaceDeclaration))
+                    {
+                        var prefix = attr.Name.LocalName;
+                        if (prefix == "xmlns") prefix = "";
+                        // Inner declarations take precedence; only add if not already present.
+                        if (!ctx.TryResolveNamespace(prefix, out _))
+                            ctx.WithNamespace(prefix, attr.Value);
+                    }
+                    currentNs = currentNs.Parent;
                 }
                 var result = compiled.Evaluate(ctx);
                 return result.EffectiveBooleanValue();
             }
-            catch
+            catch (Exception ex)
             {
+                // QName validation errors from fn:function-available / fn:element-available
+                // inside use-when must be reported as dynamic errors rather than silently
+                // treating the expression as true.
+                var message = ex.Message;
+                if (message == "XTDE1400" || message.StartsWith("XTDE1400:", StringComparison.Ordinal) ||
+                    message == "XTDE1410" || message.StartsWith("XTDE1410:", StringComparison.Ordinal))
+                {
+                    throw;
+                }
                 return true; // If evaluation fails, include the element (fail-safe)
             }
         }

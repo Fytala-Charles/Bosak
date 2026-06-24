@@ -65,6 +65,8 @@
 //                      | Charles Korthout | 5.1   | 13-06-2026     | Shared RegexHelper: XSD validation, backreference translation, and quote-preserving unquote |
 //                      | Charles Korthout | 5.2   | 24-06-2026     | element-available uses DefiningElementDefaultNamespace for unprefixed QNames             |
 //                      | Charles Korthout | 5.3   | 24-06-2026     | fn:doc('') resolves against static base URI; atomizes and validates sequence argument    |
+//                      | Charles Korthout | 5.4   | 24-06-2026     | fn:unparsed-text-lines drops trailing empty line; validates XML characters (FOUT1190)  |
+//                      | Charles Korthout | 5.5   | 24-06-2026     | fn:function-available validates QName and reports XTDE1400 for invalid/unbound names   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3605,7 +3607,7 @@ public static class FunctionLibrary
         string name = AtomizedString(args[0]);
         int arity = args.Length > 1 ? (int)ToIntegerValue(args[1]) : -1;
 
-        var (nsUri, localName) = ParseQNameArgument(ctx, name, defaultUri: Namespaces.Fn);
+        var (nsUri, localName) = ParseFunctionAvailableName(ctx, name);
 
         if (arity >= 0)
         {
@@ -3645,6 +3647,61 @@ public static class FunctionLibrary
             return XdmValue.FromBoolean(false);
 
         return XdmValue.FromBoolean(XsltInstructionNames.Contains(localName));
+    }
+
+    private static (string nsUri, string localName) ParseFunctionAvailableName(EvaluationContext ctx, string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            throw new InvalidOperationException("XTDE1400");
+
+        string nsUri;
+        string localName;
+
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int close = name.IndexOf('}');
+            if (close < 2 || close == name.Length - 1)
+                throw new InvalidOperationException("XTDE1400");
+            nsUri = name.Substring(2, close - 2);
+            localName = name.Substring(close + 1);
+        }
+        else if (name.StartsWith("{"))
+        {
+            throw new InvalidOperationException("XTDE1400");
+        }
+        else
+        {
+            int colon = name.IndexOf(':');
+            if (colon >= 0)
+            {
+                string prefix = name.Substring(0, colon);
+                localName = name.Substring(colon + 1);
+                if (prefix == "xml")
+                {
+                    nsUri = "http://www.w3.org/XML/1998/namespace";
+                }
+                else if (!ctx.TryResolveNamespace(prefix, out nsUri))
+                {
+                    throw new InvalidOperationException("XTDE1400");
+                }
+            }
+            else
+            {
+                nsUri = Namespaces.Fn;
+                localName = name;
+            }
+        }
+
+        try
+        {
+            System.Xml.XmlConvert.VerifyNCName(localName);
+        }
+        catch
+        {
+            throw new InvalidOperationException("XTDE1400");
+        }
+
+        return (nsUri, localName);
     }
 
     private static (string nsUri, string localName) ParseQNameArgument(EvaluationContext ctx, string name, string defaultUri)
@@ -5326,6 +5383,7 @@ public static class FunctionLibrary
             encoding ??= "UTF-8";
             var enc = System.Text.Encoding.GetEncoding(encoding);
             var content = File.ReadAllText(path, enc);
+            ValidateXmlCharacters(content);
             return XdmValue.FromString(content);
         }
         catch (InvalidOperationException)
@@ -5375,11 +5433,32 @@ public static class FunctionLibrary
         var text = textValue.StringValue;
         if (string.IsNullOrEmpty(text))
             return XdmValue.Undefined;
-        var lines = text.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
+        var normalized = text.Replace("\r\n", "\n").Replace('\r', '\n');
+        var lines = normalized.Split('\n');
+        // A final line terminator does not create an empty trailing line.
+        if (lines.Length > 0 && string.IsNullOrEmpty(lines[lines.Length - 1]) && normalized.EndsWith('\n'))
+            lines = lines[..^1];
         var items = new List<XdmValue>(lines.Length);
         foreach (var line in lines)
             items.Add(XdmValue.FromString(line));
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    private static void ValidateXmlCharacters(string text)
+    {
+        foreach (var rune in text.EnumerateRunes())
+        {
+            var c = rune.Value;
+            if (c == 0x09 || c == 0x0A || c == 0x0D)
+                continue;
+            if (c >= 0x20 && c <= 0xD7FF)
+                continue;
+            if (c >= 0xE000 && c <= 0xFFFD)
+                continue;
+            if (c >= 0x10000 && c <= 0x10FFFF)
+                continue;
+            throw new InvalidOperationException("FOUT1190");
+        }
     }
 
     private static string ResolveUri(string href)

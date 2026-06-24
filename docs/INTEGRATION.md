@@ -383,12 +383,16 @@ dotnet test Bosak.sln
 | Stylesheet module base URIs are preserved. | `FileSystemUriResolver`, `XsltCompiler`, and the conformance `TestUriResolver` load stylesheet modules with `LoadOptions.SetBaseUri`, so `fn:doc('')` and `fn:document()` inside included/imported modules resolve relative URIs against the correct module base URI. Fixes `document-1003/1004/1901`. | 2026-06-24 |
 | `fn:doc`/`fn:document` loaded documents are subject to `xsl:strip-space`/`xsl:preserve-space`. | `EvaluationContext.DocumentPostProcessor` lets XSLT apply the stylesheet's whitespace-handling rules to documents loaded during transformation, while protecting stylesheet modules themselves from mutation. Fixes `document-0308`. | 2026-06-24 |
 | `xsl:use-package` tests are skipped by the conformance harness. | The compiler does not support XSLT 3.0 packages; the harness now detects `xsl:use-package` in the principal stylesheet and reports a skip instead of a null-reference failure. Moves `document-2402` to skipped. | 2026-06-24 |
+| `fn:unparsed-text-lines` is fully spec compliant. | Trailing line terminators no longer produce an empty final line; decoded text is validated for XML-legal characters, raising `FOUT1190` for invalid characters such as NUL. Fixes `unparsed-text-lines-002/004`. | 2026-06-24 |
+| `fn:function-available` validates its argument. | Invalid QName/EQName syntax or an unbound prefix now raises `XTDE1400`; the error is propagated through `use-when` expressions. Fixes `extension-functions-0103/0104`. | 2026-06-24 |
+| `extension-element-prefixes` bound to reserved namespaces is rejected. | The stylesheet loader reports `XTSE0800` when the XSLT, XML, XML Schema, or XML Schema instance namespace is declared as an extension namespace. Fixes `extension-functions-0105`. | 2026-06-24 |
+| `use-when` namespace context includes all ancestors. | Prefixes declared on any ancestor of the element carrying `use-when` are now in scope for the expression. Fixes `extension-functions-0101`. | 2026-06-24 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,513 | 738 | 9,349 | 85.9% | `document` cluster fully passing; `xsl:use-package` tests now skipped |
+| XSLT 3.0 (W3C) | 4,520 | 731 | 9,349 | 86.1% | `unparsed-text-lines` and `extension-functions` clusters fully passing |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
