@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `6b48a49`
+**Commit:** `3e3a4f5`
 **Current focus:** Clearing regressions from in-progress named-template/raw-output and regex work; `analyze-string`, `initial-template`, and `call-template` clusters improved.
 
 ---
