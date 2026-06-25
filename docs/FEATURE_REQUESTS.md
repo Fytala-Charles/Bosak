@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-24 (format-date-en cluster completed)    
+> **Living Registry** — Last updated: 2026-06-25 (`xsl:try`/`xsl:catch` error-code matching and multiple catch clauses completed)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -854,7 +854,7 @@ Add a null-conditional guard (`sub?.Suffix` or an explicit null check) before ac
 
 **Requesting Application:** Customer A  
 **Submitted:** 2026-05-31  
-**Status:** `Pending`
+**Status:** `Implemented`
 
 #### Problem Statement
 Customer A's pure-XSLT helper functions in `DateFunctions.xsl` and `NumberFunctions.xsl` rely on `xsl:try`/`xsl:catch` for defensive parsing of dirty EDI data:
@@ -865,17 +865,19 @@ Customer A's pure-XSLT helper functions in `DateFunctions.xsl` and `NumberFuncti
 Without try/catch, any malformed date or numeric field causes a hard XPath error (e.g. `FORG0001`), aborting the entire transform. EDI data is inherently dirty — missing fields, wrong formats, and unexpected values are common.
 
 #### Proposed Solution
-Implement basic `xsl:try`/`xsl:catch` in `TransformEngine.ExecuteXsltInstruction`:
+Implement `xsl:try`/`xsl:catch` in `TransformEngine.ExecuteXsltInstruction` and `EvaluateFunctionBodyInstruction`:
 1. Parse `xsl:try` children (sequence constructor) and `xsl:catch` children (sequence constructor + optional `select`).
 2. Wrap try-body execution in a .NET `try` block.
-3. On any `XPathException` or `XsltException`, execute the catch body and return its result.
-4. Support `xsl:catch` without attributes first (catch-all). `errors` / `error-code` attributes are stretch goals.
+3. On a matching dynamic error, execute the first matching catch body and return its result.
+4. Support `xsl:catch` without attributes (catch-all), with `@errors` (`*`, plain local names, `*:local`, `Q{uri}local`, and `prefix:local` in the `err` namespace), and multiple catch clauses evaluated in document order.
 
 #### Acceptance Criteria
-- [ ] `xsl:try` with a single `xsl:catch` (no attributes) executes catch body on any error
-- [ ] `app:try-date` returns `()` for invalid dates instead of crashing
-- [ ] `app:to-number` returns `$fallback` for non-numeric input instead of crashing
-- [ ] Errors from the try body do not propagate outside the `xsl:try` instruction
+- [x] `xsl:try` with a single `xsl:catch` (no attributes) executes catch body on any error
+- [x] `app:try-date` returns `()` for invalid dates instead of crashing
+- [x] `app:to-number` returns `$fallback` for non-numeric input instead of crashing
+- [x] Errors from the try body do not propagate outside the `xsl:try` instruction when a catch matches
+- [x] Multiple `xsl:catch` clauses are evaluated in order
+- [x] `@errors` supports namespace wildcard and Clark notation
 
 #### Impact Analysis
 | Layer | Impact | Notes |
@@ -892,6 +894,7 @@ Implement basic `xsl:try`/`xsl:catch` in `TransformEngine.ExecuteXsltInstruction
 |------|-------|----------|-----------|
 | 2026-05-31 | Kimi | Pending | P0 blocker for Customer A production; dirty EDI data is normal |
 | 2026-05-31 | Kimi | Implemented | Basic try/catch in TransformEngine + EvaluateFunctionBodyInstruction; 4 unit tests pass; catches any Exception broadly |
+| 2026-06-25 | Kimi | Implemented | Multiple `xsl:catch` clauses, `@errors` matching (`*`, `*:local`, `Q{uri}local`, `prefix:local`), and rethrowing of unmatched errors. Fixes `call-template-0110`. |
 
 ---
 

@@ -8,18 +8,17 @@
 
 ## Commit
 
-`3e3a4f5`
+`<to be updated after commit>`
 
 ## What Was Built
 
 | # | Change | Files | Status |
 |---|--------|-------|--------|
-| 1 | Fixed `xsl:analyze-string` multiline flag regression by passing `RegexOptions` to `RegexHelper.ValidateAndTranslatePattern` | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 2 | Added raw XDM result support for initial named templates via `XsltExecutable.Transform(..., rawResult: true)` | `src/Bosak.Xslt/Api/XsltExecutable.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs` | Done |
-| 3 | Made `xsl:call-template` resolve named templates by expanded QName (different prefixes, same URI) | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 4 | Expanded initial-template names in the conformance harness using catalog namespace bindings; added `XTDE0040` for missing initial templates | `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs` | Done |
-| 5 | Normalized `xsl:template/@name` whitespace and added `XTSE0080` validation for reserved namespaces (except `xsl:initial-template`) | `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
-| 6 | Updated integration guide and agent handover with current changes | `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md` | Done |
+| 1 | Fixed `call-template-0110` by converting a `null` `IXdmNode` context into `XdmValue.Undefined` inside `ExecuteXsltInstruction`, so `xsl:try` inside `xsl:variable`/`xsl:call-template` sees a truly absent context item and `data(@status)` raises `XPDY0002` | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
+| 2 | Added support for multiple `xsl:catch` clauses evaluated in document order | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
+| 3 | Implemented proper `xsl:catch/@errors` matching for `*`, plain local names, `*:local`, `Q{uri}local`, and `prefix:local` bound to the `err` namespace | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
+| 4 | Made `xsl:try` rethrow errors that do not match any `xsl:catch` clause | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
+| 5 | Updated agent handover, integration guide, and feature request registry | `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` | Done |
 
 ## Current Branch
 
@@ -28,13 +27,15 @@
 ## Test Status
 
 - [x] All unit tests pass (894 tests across 8 projects — 0 failures)
-- [x] XSLT `analyze-string` cluster: **53/58 passing, 0 failed, 5 skipped** ✅ (was 49/4/5)
-- [x] XSLT `initial-template` cluster: **6/11 passing, 0 failed, 5 skipped** ✅ (was 5/1/5)
-- [x] XSLT `call-template` cluster: **37/42 passing, 1 failed, 4 skipped** ✅ (was 31/7/4)
-- [x] Full W3C XSLT 3.0 suite: **4,591 passed / 660 failed / 9,349 skipped** (~87.4%)
+- [x] XSLT `call-template` cluster: **38/42 passing, 0 failed, 4 skipped** ✅ (was 37/1/4)
+- [x] XSLT `try` cluster: **14/42 passing, 21 failed, 7 skipped** (net unchanged; distribution shifted due to correct multi-catch behavior)
+- [x] Full W3C XSLT 3.0 suite: **4,594 passed / 657 failed / 9,349 skipped** (~87.5%, was 4,591/660)
 
 ## Next Recommended Work
 
-1. Wait for the full conformance suite re-run to finish and record the final numbers.
-2. Investigate `call-template-0110` (remaining failure: `xsl:try` catching `XPDY0002` for absent context item).
-3. Commit the working set (the AGENT_HANDOVER and .kimi/HANDOVER files already reflect the final numbers; they will need their commit hash updated after the commit).
+1. Re-run the full conformance suite after the commit and verify the 4,594/657/9,349 numbers are stable.
+2. Pick the next small conformance cluster to clear. Candidates with the highest runnable pass-rate gaps include:
+   - `try` cluster (currently 14/21 failed) — many failures are static errors being caught dynamically due to lazy XPath compilation.
+   - `type` cluster (47/11 failed from the latest run) — type-related sequence construction and coercion issues.
+   - `as` cluster (type coercion / sequence-type matching) — related to the above.
+3. Consider a broader cleanup of `XdmValue.FromNode(null)` to return `XdmValue.Undefined` instead of a node-kind value with a null reference, which would prevent similar context-item bugs elsewhere.

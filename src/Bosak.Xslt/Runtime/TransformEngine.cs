@@ -113,6 +113,7 @@
 //                      | Charles Korthout | 5.42  | 24-06-2026     | Apply xsl:strip-space to fn:doc/document loaded docs; skip stylesheet modules          |
 //                      | Charles Korthout | 5.43  | 25-06-2026     | Pass regex options to ValidateAndTranslatePattern for xsl:analyze-string               |
 //                      | Charles Korthout | 5.44  | 25-06-2026     | Capture raw XDM result from initial named template with @as for output tree="no"        |
+//                      | Charles Korthout | 5.45  | 25-06-2026     | xsl:try multi-catch, @errors matching, null->Undefined context; fixes call-template-0110 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1877,42 +1878,53 @@ public sealed class TransformEngine
                     }
                 case "try":
                     {
-                        var catchElem = instruction.Element(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace));
+                        var catchElements = instruction.Elements(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace)).ToList();
                         try
                         {
-                            foreach (var child in instruction.Elements())
+                            var select = instruction.Attribute("select")?.Value;
+                            if (!string.IsNullOrEmpty(select))
                             {
-                                if (child.Name.LocalName == "catch" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                    continue;
-                                EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                var compiled = XPath31Expression.Compile(select);
+                                var result = compiled.Evaluate(_context);
+                                FlattenToList(result, results);
+                            }
+                            else
+                            {
+                                foreach (var child in instruction.Elements())
+                                {
+                                    if (child.Name.LocalName == "catch" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                        continue;
+                                    EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                }
                             }
                         }
                         catch (Exception ex)
                         {
-                            if (catchElem != null)
+                            var catchElem = FindMatchingCatch(catchElements, ex);
+                            if (catchElem == null)
+                                throw;
+
+                            var previous = BindCatchErrorVariables(ex);
+                            try
                             {
-                                var previous = BindCatchErrorVariables(ex);
-                                try
+                                var catchSelect = catchElem.Attribute("select")?.Value;
+                                if (!string.IsNullOrEmpty(catchSelect))
                                 {
-                                    var catchSelect = catchElem.Attribute("select")?.Value;
-                                    if (!string.IsNullOrEmpty(catchSelect))
+                                    var compiled = XPath31Expression.Compile(catchSelect);
+                                    var catchResult = compiled.Evaluate(_context);
+                                    FlattenToList(catchResult, results);
+                                }
+                                else
+                                {
+                                    foreach (var child in catchElem.Elements())
                                     {
-                                        var compiled = XPath31Expression.Compile(catchSelect);
-                                        var catchResult = compiled.Evaluate(_context);
-                                        FlattenToList(catchResult, results);
-                                    }
-                                    else
-                                    {
-                                        foreach (var child in catchElem.Elements())
-                                        {
-                                            EvaluateFunctionBodyInstruction(child, results, contextItem);
-                                        }
+                                        EvaluateFunctionBodyInstruction(child, results, contextItem);
                                     }
                                 }
-                                finally
-                                {
-                                    RestoreCatchErrorVariables(previous);
-                                }
+                            }
+                            finally
+                            {
+                                RestoreCatchErrorVariables(previous);
                             }
                         }
                         break;
@@ -2987,7 +2999,7 @@ public sealed class TransformEngine
     /// Executes a single XSLT instruction element.
     /// </summary>
     private void ExecuteXsltInstruction(XElement instruction, IXdmNode currentNode)
-        => ExecuteXsltInstruction(instruction, XdmValue.FromNode(currentNode));
+        => ExecuteXsltInstruction(instruction, currentNode != null ? XdmValue.FromNode(currentNode) : XdmValue.Undefined);
 
     private void ExecuteXsltInstruction(XElement instruction, XdmValue contextItem)
     {
@@ -4085,64 +4097,75 @@ public sealed class TransformEngine
 
             case "try":
                 {
-                    var catchElem = instruction.Element(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace));
+                    var catchElements = instruction.Elements(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace)).ToList();
                     try
                     {
-                        foreach (var childNode in instruction.Nodes())
+                        var select = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(select))
                         {
-                            if (childNode is XElement xe && xe.Name.LocalName == "catch" && xe.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                continue;
-                            switch (childNode)
+                            var compiled = XPath31Expression.Compile(select);
+                            var result = compiled.Evaluate(_context);
+                            CopyToResult(result);
+                        }
+                        else
+                        {
+                            foreach (var childNode in instruction.Nodes())
                             {
-                                case XText text:
-                                    ProcessSequenceText(text, instruction);
-                                    break;
-                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                    ExecuteXsltInstruction(elem, contextItem);
-                                    break;
-                                case XElement elem:
-                                    CopyLiteralElement(elem);
-                                    break;
+                                if (childNode is XElement xe && xe.Name.LocalName == "catch" && xe.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                    continue;
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        ProcessSequenceText(text, instruction);
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, contextItem);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        if (catchElem != null)
+                        var catchElem = FindMatchingCatch(catchElements, ex);
+                        if (catchElem == null)
+                            throw;
+
+                        var previous = BindCatchErrorVariables(ex);
+                        try
                         {
-                            var previous = BindCatchErrorVariables(ex);
-                            try
+                            var catchSelect = catchElem.Attribute("select")?.Value;
+                            if (!string.IsNullOrEmpty(catchSelect))
                             {
-                                var catchSelect = catchElem.Attribute("select")?.Value;
-                                if (!string.IsNullOrEmpty(catchSelect))
+                                var compiled = XPath31Expression.Compile(catchSelect);
+                                var catchResult = compiled.Evaluate(_context);
+                                CopyToResult(catchResult);
+                            }
+                            else
+                            {
+                                foreach (var childNode in catchElem.Nodes())
                                 {
-                                    var compiled = XPath31Expression.Compile(catchSelect);
-                                    var catchResult = compiled.Evaluate(_context);
-                                    CopyToResult(catchResult);
-                                }
-                                else
-                                {
-                                    foreach (var childNode in catchElem.Nodes())
+                                    switch (childNode)
                                     {
-                                        switch (childNode)
-                                        {
-                                            case XText text:
-                                                ProcessSequenceText(text, catchElem);
-                                                break;
-                                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                                ExecuteXsltInstruction(elem, contextItem);
-                                                break;
-                                            case XElement elem:
-                                                CopyLiteralElement(elem);
-                                                break;
-                                        }
+                                        case XText text:
+                                            ProcessSequenceText(text, catchElem);
+                                            break;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, contextItem);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
                                     }
                                 }
                             }
-                            finally
-                            {
-                                RestoreCatchErrorVariables(previous);
-                            }
+                        }
+                        finally
+                        {
+                            RestoreCatchErrorVariables(previous);
                         }
                     }
                     break;
@@ -7168,6 +7191,145 @@ public sealed class TransformEngine
         _context.WithVariable("code", previous.Code, ErrNs);
         _context.WithVariable("description", previous.Description, ErrNs);
         _context.WithVariable("value", previous.Value, ErrNs);
+    }
+
+    /// <summary>
+    /// Finds the first <c>xsl:catch</c> element in <paramref name="catchElements"/> that
+    /// matches the error raised by <paramref name="ex"/>, or <c>null</c> if none match.
+    /// </summary>
+    /// <param name="catchElements">The ordered list of <c>xsl:catch</c> elements.</param>
+    /// <param name="ex">The exception to test.</param>
+    /// <returns>The first matching catch element, or <c>null</c>.</returns>
+    private XElement? FindMatchingCatch(List<XElement> catchElements, Exception ex)
+    {
+        foreach (var catchElem in catchElements)
+        {
+            if (CatchMatchesError(catchElem, ex))
+                return catchElem;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Determines whether the given <c>xsl:catch</c> element matches the error raised by <paramref name="ex"/>.
+    /// </summary>
+    /// <param name="catchElem">The <c>xsl:catch</c> element.</param>
+    /// <param name="ex">The exception to test.</param>
+    /// <returns><c>true</c> if no <c>errors</c> attribute is specified or if the error code is listed; otherwise <c>false</c>.</returns>
+    private bool CatchMatchesError(XElement catchElem, Exception ex)
+    {
+        var errorsAttr = catchElem.Attribute("errors")?.Value;
+        if (string.IsNullOrWhiteSpace(errorsAttr))
+            return true;
+
+        string code = GetErrorCode(ex);
+
+        var patterns = errorsAttr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        foreach (var pattern in patterns)
+        {
+            var p = pattern.Trim();
+            if (p == "*")
+                return true;
+
+            var local = GetErrorLocalName(p, catchElem);
+            if (local == null)
+                continue;
+
+            if (local == "*")
+                return true;
+
+            // Wildcard prefix (e.g., "XPTY*") or suffix (e.g., "*0001").
+            if (local.Length == 7 && local[0] == '*' && code.Length >= 7 && code.EndsWith(local[1..], StringComparison.Ordinal))
+                return true;
+            if (local.Length == 7 && local[^1] == '*' && code.Length >= local.Length - 1 && code.AsSpan().StartsWith(local.AsSpan(0, local.Length - 1), StringComparison.Ordinal))
+                return true;
+
+            if (local.Equals(code, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Extracts the local error code from an exception.
+    /// </summary>
+    private string GetErrorCode(Exception ex)
+    {
+        if (ex is XsltRuntimeException xre)
+            return xre.ErrorCode;
+
+        if (ex is InvalidOperationException ioe)
+        {
+            var message = ioe.Message;
+
+            // fn:error() messages are formatted as "fn:error(Q{uri}local) ...".
+            // The error code is the local-name portion of the supplied QName.
+            if (message.StartsWith("fn:error(", StringComparison.Ordinal))
+            {
+                var qnameStart = "fn:error(".Length;
+                var qnameEnd = message.IndexOf(')', qnameStart);
+                if (qnameEnd > qnameStart)
+                {
+                    var qname = message[qnameStart..qnameEnd];
+                    var closeBrace = qname.IndexOf('}');
+                    if (closeBrace >= 0 && closeBrace < qname.Length - 1)
+                        return qname[(closeBrace + 1)..];
+                    var colon = qname.IndexOf(':');
+                    if (colon >= 0 && colon < qname.Length - 1)
+                        return qname[(colon + 1)..];
+                    return qname;
+                }
+            }
+
+            // Standard "CODE: description" format used for XPath/XSLT dynamic errors.
+            if (message.Contains(':'))
+                return message[..message.IndexOf(':')];
+        }
+
+        return ex.GetType().Name;
+    }
+
+    /// <summary>
+    /// Extracts the local-name portion of an <c>xsl:catch/@errors</c> token.
+    /// Supports <c>*</c>, plain local names, <c>prefix:local</c>, <c>Q{{uri}}local</c>,
+    /// and namespace-wildcard forms such as <c>*:local</c>.
+    /// </summary>
+    /// <param name="token">The error token.</param>
+    /// <param name="catchElem">The <c>xsl:catch</c> element, used for namespace resolution.</param>
+    /// <returns>The local-name part, or <c>null</c> if the token should be ignored.</returns>
+    private string? GetErrorLocalName(string token, XElement catchElem)
+    {
+        if (token == "*")
+            return "*";
+
+        // Clark notation Q{uri}local
+        if (token.Length > 2 && token[0] == 'Q' && token[1] == '{')
+        {
+            var close = token.IndexOf('}');
+            if (close > 2)
+                return token[(close + 1)..];
+            return null;
+        }
+
+        var colon = token.IndexOf(':');
+        if (colon < 0)
+            return token;
+
+        var prefix = token[..colon];
+        var local = token[(colon + 1)..];
+
+        // Namespace wildcard: accept any prefix, return the local name.
+        if (prefix == "*")
+            return local;
+
+        // Prefixed name: only match if the prefix is bound to the W3C error namespace.
+        const string ErrNs = "http://www.w3.org/2005/xqt-errors";
+        var ns = catchElem.GetNamespaceOfPrefix(prefix);
+        if (ns != null && ns.NamespaceName == ErrNs)
+            return local;
+
+        return null;
     }
 
     /// <summary>
