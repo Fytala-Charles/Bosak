@@ -1274,7 +1274,7 @@ public sealed class XPathParser
         or TokenKind.DecimalLiteral or TokenKind.DoubleLiteral
         or TokenKind.KeywordFunction or TokenKind.KeywordMap
         or TokenKind.KeywordArray or TokenKind.LBracket => true,
-        _ => false
+        _ => IsKeywordName(token.Kind)
     };
 
 

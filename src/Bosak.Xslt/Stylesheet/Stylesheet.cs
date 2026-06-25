@@ -733,6 +733,37 @@ public sealed class Stylesheet
                 }
             }
 
+            // XTSE0010: xsl:on-empty must be the last significant child of its sequence constructor
+            if (localName == "on-empty")
+            {
+                var parent = elem.Parent;
+                if (parent != null)
+                {
+                    bool hasSignificantFollowing = false;
+                    bool seen = false;
+                    foreach (var node in parent.Nodes())
+                    {
+                        if (!seen)
+                        {
+                            if (node == elem) seen = true;
+                            continue;
+                        }
+                        if (node is XElement || node is XComment || node is XProcessingInstruction)
+                        {
+                            hasSignificantFollowing = true;
+                            break;
+                        }
+                        if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                        {
+                            hasSignificantFollowing = true;
+                            break;
+                        }
+                    }
+                    if (hasSignificantFollowing)
+                        throw new InvalidOperationException("XTSE0010: xsl:on-empty must be the last child of its sequence constructor");
+                }
+            }
+
             // xsl:copy attribute validation
             if (localName == "copy")
             {

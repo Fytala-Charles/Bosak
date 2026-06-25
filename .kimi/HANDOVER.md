@@ -8,18 +8,17 @@
 
 ## Commit
 
-`a9084eb`
+`b807e32`
 
 ## What Was Built
 
 | # | Change | Files | Status |
 |---|--------|-------|--------|
-| 1 | Fixed `call-template-0110` by converting a `null` `IXdmNode` context into `XdmValue.Undefined` inside `ExecuteXsltInstruction`, so `xsl:try` inside `xsl:variable`/`xsl:call-template` sees a truly absent context item and `data(@status)` raises `XPDY0002` | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 2 | Added support for multiple `xsl:catch` clauses evaluated in document order | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 3 | Implemented proper `xsl:catch/@errors` matching for `*`, plain local names, `*:local`, `Q{uri}local`, and `prefix:local` bound to the `err` namespace | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 4 | Made `xsl:try` rethrow errors that do not match any `xsl:catch` clause | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 5 | Defensive cleanup: `XdmValue.FromNode(null)` now returns `XdmValue.Undefined` | `src/Bosak.XPath.Core/Xdm/XdmValue.cs` | Done |
-| 6 | Updated agent handover, integration guide, and feature request registry | `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` | Done |
+| 1 | Cleared the `on-empty` and `on-non-empty` conformance clusters by rewriting sequence-constructor evaluation as an item-based pipeline with deferred conditional instruction processing. | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
+| 2 | XPath parser fix: keyword tokens (`for`, `in`, `return`, etc.) can now act as names in variable-binding contexts. | `src/Bosak.XPath.Parser/Ast/XPathParser.cs` | Done |
+| 3 | Static validation: `xsl:on-empty` must be the last significant child of its sequence constructor (XTSE0010). | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
+| 4 | Conformance harness: assertions can now use `$result/child::...` because the harness binds `$result` to a document node. | `tests/Bosak.Xslt.Conformance/Program.cs` | Done |
+| 5 | Updated agent handover, integration guide, and feature request registry. | `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` | Done |
 
 ## Current Branch
 
@@ -28,13 +27,24 @@
 ## Test Status
 
 - [x] All unit tests pass (894 tests across 8 projects — 0 failures)
-- [x] XSLT `call-template` cluster: **38/42 passing, 0 failed, 4 skipped** ✅ (was 37/1/4)
-- [x] XSLT `try` cluster: **14/42 passing, 21 failed, 7 skipped** (net unchanged; distribution shifted due to correct multi-catch behavior)
-- [x] Full W3C XSLT 3.0 suite: **4,594 passed / 657 failed / 9,349 skipped** (~87.5%, was 4,591/660)
+- [x] Full W3C XSLT 3.0 suite: **4,666 passed / 585 failed / 9,349 skipped** (~88.9%)
+- [x] `on-empty` cluster: **72/72 passing** ✅
+- [x] `on-non-empty` cluster: **14/14 passing** ✅
 
 ## Next Recommended Work
 
-1. Pick the next small conformance cluster to clear. Candidates with the highest runnable pass-rate gaps include:
-   - **`try` cluster** (14/21 failed) — many failures are static errors being caught dynamically because XPaths inside `xsl:try` are compiled lazily. Fixing this requires either eager compilation of `xsl:try/@select` before execution or propagating static errors out of `xsl:try`.
-   - **`type` cluster** (47/11 failed) — type-related sequence construction and coercion issues.
-   - **`as` cluster** — sequence-type matching and `@as` enforcement problems related to the above.
+Top remaining XSLT conformance clusters by failure count:
+
+| Cluster | Failed | Runnable | Notes |
+|---------|--------|----------|-------|
+| `xml-version` | 27 | 42 | XML version serialization / parsing |
+| `use-when` | 26 | 99 | Static evaluation of `use-when` expressions |
+| `available-system-properties` | 26 | 26 | System-property availability and values |
+| `namespace-alias` | 25 | — | Namespace alias transformation |
+| `iterate` | 25 | — | `xsl:iterate` / `xsl:break` |
+| `collations` | 25 | — | Collation URI handling |
+| `tunnel` | 22 | 58 | Tunnel parameter propagation |
+| `static` | 22 | 49 | Static errors / `xsl:static-error` |
+| `try` | 21 | 35 | Many failures are static errors caught dynamically due to lazy compilation inside `xsl:try` |
+
+Recommended pick: **`use-when`** (static-evaluation infrastructure with broad payoff) or **`try`** (error-handling correctness).

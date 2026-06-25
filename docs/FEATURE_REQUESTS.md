@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-25 (`xsl:try`/`xsl:catch` error-code matching and multiple catch clauses completed)    
+> **Living Registry** — Last updated: 2026-06-25 (`on-empty` and `on-non-empty` conformance clusters cleared via item-based sequence-constructor rewrite)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -133,7 +133,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-026 | *(internal)* | Nested `xsl:use-when` evaluation | `use-when="false()"` on nested XSLT instructions and LREs was ignored; now stripped during stylesheet load | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1 and XSLT 3.0 development: syntax highlighting, realtime diagnostics, auto-completion | **Implemented** | 0.1.2 | Charles Korthout | 2026-06-08 |
-| REQ-029 | *(internal)* | `xsl:where-populated` and `xsl:on-empty` support | Required for copy-1213/1214/1215/1216/1217 conformance tests; where-populated filters empty nodes, on-empty provides fallback content | **Implemented** | TBD | Charles Korthout | 2026-06-10 |
+| REQ-029 | *(internal)* | `xsl:where-populated`, `xsl:on-empty`, and `xsl:on-non-empty` support | Required for copy-1213/1214/1215/1216/1217 conformance tests and full `on-empty`/`on-non-empty` clusters; where-populated filters empty nodes, on-empty provides fallback content, on-non-empty provides content when non-empty | **Implemented** | TBD | Charles Korthout | 2026-06-25 |
 | REQ-030 | *(internal)* | XSLT `@as` type coercion and atomization | Required for as-0101 through as-1602 conformance tests; `xsl:variable`, `xsl:param`, `xsl:function`, `xsl:with-param` `@as` attribute must coerce/atomize per XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 | REQ-031 | *(internal)* | XSLT `base-uri` cluster conformance | `document('')`, `fn:base-uri()`, `fn:static-base-uri()`, and `xml:base` propagation through copies must match XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 | REQ-032 | *(internal)* | XSLT 3.0 `xsl:merge` instruction | Required for `merge` conformance cluster: merge sources/keys/action, `current-merge-group()`, `current-merge-key()`, static/dynamic errors | **Implemented** | TBD | Charles Korthout | 2026-06-13 |
@@ -1079,6 +1079,8 @@ Additionally, the XPath parser incorrectly treated prefixed names like `my:node(
 - [x] `element-0607` (invalid copy-namespaces on xsl:copy-of raises XTSE0020) passes
 - [x] `element-0608` (invalid copy-namespaces on xsl:copy raises XTSE0020) passes
 - [x] `my:node()` function call works correctly in XPath expressions
+- [x] `on-empty` conformance cluster: 72/72 passing
+- [x] `on-non-empty` conformance cluster: 14/14 passing
 
 #### Impact Analysis
 | Layer | Impact | Notes |

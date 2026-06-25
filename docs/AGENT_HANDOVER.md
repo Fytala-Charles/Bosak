@@ -1,25 +1,27 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `06a2167`
-**Current focus:** Cleared the `axes` conformance cluster by fixing `following`/`preceding` axes from attributes and enforcing element principal node kind on named node tests.
+**Commit:** `b807e325`
+**Current focus:** Cleared the `on-empty` and `on-non-empty` conformance clusters by rewriting sequence-constructor evaluation as an item-based pipeline with deferred conditional instruction processing.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 4,630
-- **Failed:** 621
+- **Passed:** 4,666
+- **Failed:** 585
 - **Skipped:** 9,349
-- **Pass rate:** 88.2% (+15 passes / −15 failures vs. previous 4,615/636)
+- **Pass rate:** 88.9% (+36 passes / −36 failures vs. previous 4,630/621)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
+| on-empty | 72 | 72 | 0 | 0 | ✅ 100%; previously 48/72 |
+| on-non-empty | 14 | 14 | 0 | 0 | ✅ 100%; previously 9/14 |
 | accessor | 53 | 22 | 0 | 31 | ✅ 100% runnable |
-| axes | 202 | 190 | 0 | 12 | ✅ 100% runnable; all 15 previous failures now passing |
+| axes | 202 | 190 | 0 | 12 | ✅ 100% runnable |
 | analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
 | initial-template | 11 | 6 | 0 | 5 | ✅ 100% runnable |
 | call-template | 42 | 38 | 0 | 4 | ✅ 100% runnable |
@@ -38,25 +40,24 @@
 
 ## This Session Fixes
 
-1. **`following`/`preceding` axes from attributes/namespace nodes** — `XDocumentNode.GetFollowingAxis` now includes all descendants of the parent element when starting from an attribute or namespace node, and `GetPrecedingAxis` starts from the parent element so the element's children are not incorrectly treated as preceding siblings. `GetPrecedingSiblingAxis` now returns empty for attributes/namespaces.
-   - **File changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
+1. **Item-based `xsl:on-empty` / `xsl:on-non-empty` evaluation** — Rewrote sequence-constructor evaluation in `TransformEngine` to collect items first, recording markers for conditional instructions, then determining emptiness once before evaluating the matching conditionals in reverse order. This correctly handles spacing-sensitive cases (e.g., multiple atomic values produced inside `xsl:for-each`) and `xsl:on-non-empty`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+   - **New helpers**: `ContainsConditionalInstruction`, `IsSignificantContentItem`, `EvaluateOnEmptyOrNonEmptyInstructionToItems`, `EvaluateSequenceConstructorToItems`, `EvaluateSequenceConstructorIntoContainer`, `BuildResultFromNodesAndAccumulator`.
+   - **Modified call sites**: `CopyLiteralElement`, `xsl:for-each`, `xsl:copy` (element and document nodes), `EvaluateSequenceConstructor`.
 
-2. **Element principal node kind for named node tests** — `IrLowerer` now emits a `KindTest("element")` before `NameTest` for named node tests on axes whose principal node kind is element (child, descendant, self, following, preceding, etc.). This prevents `self::center-attr` from matching an attribute node.
-   - **File changed**: `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`.
-
-3. **Updated IR lowerer unit tests** — `IrLowererTests` now expect the new `KindTest("element")` instruction in path-step sequences.
-   - **File changed**: `tests/Bosak.XPath.Compiler.Tests/IrLowererTests.cs`.
+2. **Namespace-node handling in the item-based pipeline** — Namespace nodes produced by `xsl:namespace` are now applied as namespace declarations on the target element/container instead of being serialized as text.
 
 ## Notes
 
 - Unit-test suite: **894 passed / 0 failed** across 8 projects.
-- Full W3C XSLT 3.0 suite: **4,630 passed / 621 failed / 9,349 skipped** (88.2%).
-- The `axes` cluster is now **100% runnable**.
+- Full W3C XSLT 3.0 suite: **4,666 passed / 585 failed / 9,349 skipped** (88.9%).
+- The `on-empty` and `on-non-empty` clusters are now **100% passing**.
+- No changes to `AppendAtomicText` or `ConstructSimpleContentString`.
 
 ## Recommended Next Steps
 
-1. Pick the next medium cluster to attack (e.g., `math` (16 failures), `namespace` (20 failures), or `on-empty` (28 failures)).
-2. Continue driving down the remaining 621 failures in the full W3C XSLT 3.0 suite.
+1. Pick the next medium cluster to attack (e.g., `math` (16 failures), `namespace` (20 failures), or `try` (26 failures)).
+2. Continue driving down the remaining 585 failures in the full W3C XSLT 3.0 suite.
 
 ---
 

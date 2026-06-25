@@ -1371,7 +1371,9 @@ class Program
         try
         {
             var compiled = XPath31Expression.Compile(xpath);
-            var ctx = new EvaluationContext().WithFocus(XdmValue.FromNode(contextNode), 1, 1);
+            var contextValue = XdmValue.FromNode(contextNode);
+            var ctx = new EvaluationContext().WithFocus(contextValue, 1, 1);
+            ctx.WithVariable("result", contextValue);
             if (namespaces != null)
             {
                 foreach (var (prefix, uri) in namespaces)
@@ -1421,6 +1423,9 @@ class Program
                 foreach (var (prefix, uri) in namespaces)
                     ctx.WithNamespace(prefix, uri);
             }
+            // Bind $result to a document node so assertions such as
+            // $result/child::foo work for raw result values.
+            ctx.WithVariable("result", ResultAsDocument(actual));
             if (assertContext != null)
             {
                 foreach (var (key, value) in assertContext.SnapshotVariables())
@@ -1433,6 +1438,46 @@ class Program
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// Returns an XDM document-node value representing the supplied result value,
+    /// so that assertions can use $result/child::... regardless of whether the
+    /// raw result was returned as a document node or as an element.
+    /// </summary>
+    static XdmValue ResultAsDocument(XdmValue value)
+    {
+        if (value.IsNode && value.NodeValue != null && value.NodeValue.NodeKind == XdmNodeKind.Document)
+            return value;
+
+        if (value.IsNode && value.NodeValue is XDocumentNode xdn)
+        {
+            var xobj = xdn.UnderlyingObject;
+            if (xobj is XElement elem)
+                return XdmValue.FromNode(new XDocumentNode(new XDocument(new XElement(elem))));
+            if (xobj is XDocument srcDoc)
+            {
+                var copy = srcDoc.Root != null ? new XDocument(new XElement(srcDoc.Root)) : new XDocument();
+                return XdmValue.FromNode(new XDocumentNode(copy));
+            }
+        }
+
+        // Fallback: try to serialize and parse the value as XML.
+        try
+        {
+            var xml = value.ToString();
+            if (!string.IsNullOrEmpty(xml))
+            {
+                var doc = XDocument.Parse(xml, LoadOptions.PreserveWhitespace);
+                return XdmValue.FromNode(new XDocumentNode(doc));
+            }
+        }
+        catch
+        {
+            // Ignore parse failures; return the original value.
+        }
+
+        return value;
     }
 
     static bool EvaluateAssertEq(XdmValue actual, string xpath, string expected, Dictionary<string, string>? namespaces = null, EvaluationContext? assertContext = null)
