@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `TBD`
+**Commit:** `06a2167`
 **Current focus:** Cleared the `axes` conformance cluster by fixing `following`/`preceding` axes from attributes and enforcing element principal node kind on named node tests.
 
 ---
