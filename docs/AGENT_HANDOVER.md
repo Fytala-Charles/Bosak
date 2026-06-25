@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `<pending>`
-**Current focus:** Fixed `call-template-0110`, hardened `xsl:try`/`xsl:catch`, applied defensive `XdmValue.FromNode(null)` cleanup, and cleared the `type` cluster.
+**Commit:** `8e92420`
+**Current focus:** Fixed `call-template-0110`, hardened `xsl:try`/`xsl:catch`, cleared the `type` and `strip-space` clusters, and pushed the accumulated changes.
 
 ---
 
