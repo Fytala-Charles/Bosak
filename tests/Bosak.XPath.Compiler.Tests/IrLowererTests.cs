@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 30-05-2026     | Updated path-with-predicate tests for PathStepMap IR generation                        |
+//                      | Charles Korthout | 0.3   | 25-06-2026     | Updated path tests for element KindTest before named node tests                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -305,12 +306,14 @@ public class IrLowererTests
     {
         var module = Lower("child::foo");
         var instrs = module.Instructions.ToArray();
-        Assert.True(instrs.Length >= 4);
+        Assert.True(instrs.Length >= 5);
         Assert.Equal(IrOpCode.LoadContextItem, instrs[0].OpCode);
         Assert.Equal(IrOpCode.Child, instrs[1].OpCode);
         Assert.Equal(IrOpCode.NamespaceTest, instrs[2].OpCode);
-        Assert.Equal(IrOpCode.NameTest, instrs[3].OpCode);
-        Assert.Equal("foo", module.LiteralPool[instrs[3].Operand]);
+        Assert.Equal(IrOpCode.KindTest, instrs[3].OpCode);
+        Assert.Equal("element", module.LiteralPool[instrs[3].Operand]);
+        Assert.Equal(IrOpCode.NameTest, instrs[4].OpCode);
+        Assert.Equal("foo", module.LiteralPool[instrs[4].Operand]);
         Assert.Equal(IrOpCode.Return, instrs[^1].OpCode);
     }
 
@@ -319,24 +322,29 @@ public class IrLowererTests
     {
         var module = Lower("foo/bar");
         var instrs = module.Instructions.ToArray();
-        Assert.True(instrs.Length >= 7);
+        Assert.True(instrs.Length >= 9);
         Assert.Equal(IrOpCode.LoadContextItem, instrs[0].OpCode);
         Assert.Equal(IrOpCode.Child, instrs[1].OpCode);
         Assert.Equal(IrOpCode.NamespaceTest, instrs[2].OpCode);
-        Assert.Equal(IrOpCode.NameTest, instrs[3].OpCode);
-        Assert.Equal("foo", module.LiteralPool[instrs[3].Operand]);
+        Assert.Equal(IrOpCode.KindTest, instrs[3].OpCode);
+        Assert.Equal("element", module.LiteralPool[instrs[3].Operand]);
+        Assert.Equal(IrOpCode.NameTest, instrs[4].OpCode);
+        Assert.Equal("foo", module.LiteralPool[instrs[4].Operand]);
         // Each path step result is normalized into document order.
-        Assert.Equal(IrOpCode.Normalize, instrs[4].OpCode);
-        Assert.Equal(IrOpCode.Child, instrs[5].OpCode);
-        Assert.Equal(IrOpCode.NamespaceTest, instrs[6].OpCode);
-        Assert.Equal(IrOpCode.NameTest, instrs[7].OpCode);
-        Assert.Equal("bar", module.LiteralPool[instrs[7].Operand]);
+        Assert.Equal(IrOpCode.Normalize, instrs[5].OpCode);
+        Assert.Equal(IrOpCode.Child, instrs[6].OpCode);
+        Assert.Equal(IrOpCode.NamespaceTest, instrs[7].OpCode);
+        Assert.Equal(IrOpCode.KindTest, instrs[8].OpCode);
+        Assert.Equal("element", module.LiteralPool[instrs[8].Operand]);
+        Assert.Equal(IrOpCode.NameTest, instrs[9].OpCode);
+        Assert.Equal("bar", module.LiteralPool[instrs[9].Operand]);
     }
 
     [Fact]
     public void Lower_Path_WithPredicate()
     {
-        var instrs = Instructions("foo[1]");
+        var module = Lower("foo[1]");
+        var instrs = module.Instructions.ToArray();
         // Predicated steps are wrapped in PathStepMap.
         // LoadContextItem
         // PathStepMap (operand = inner block entry)
@@ -344,11 +352,12 @@ public class IrLowererTests
         // LoadContextItem (inner block)
         // Child axis
         // NamespaceTest
+        // KindTest element
         // NameTest foo
         // Subscript [1]
         // Return (inner block)
         // Return (main)
-        Assert.True(instrs.Length >= 9);
+        Assert.True(instrs.Length >= 10);
         Assert.Equal(IrOpCode.LoadContextItem, instrs[0].OpCode);
         Assert.Equal(IrOpCode.PathStepMap, instrs[1].OpCode);
         Assert.Equal(IrOpCode.Jump, instrs[2].OpCode);
@@ -357,22 +366,26 @@ public class IrLowererTests
         Assert.Equal(IrOpCode.LoadContextItem, instrs[blockEntry].OpCode);
         Assert.Equal(IrOpCode.Child, instrs[blockEntry + 1].OpCode);
         Assert.Equal(IrOpCode.NamespaceTest, instrs[blockEntry + 2].OpCode);
-        Assert.Equal(IrOpCode.NameTest, instrs[blockEntry + 3].OpCode);
-        Assert.Equal(IrOpCode.Subscript, instrs[blockEntry + 4].OpCode);
-        Assert.Equal(1, instrs[blockEntry + 4].Operand);
+        Assert.Equal(IrOpCode.KindTest, instrs[blockEntry + 3].OpCode);
+        Assert.Equal("element", module.LiteralPool[instrs[blockEntry + 3].Operand]);
+        Assert.Equal(IrOpCode.NameTest, instrs[blockEntry + 4].OpCode);
+        Assert.Equal(IrOpCode.Subscript, instrs[blockEntry + 5].OpCode);
+        Assert.Equal(1, instrs[blockEntry + 5].Operand);
         Assert.Equal(IrOpCode.Return, instrs[^1].OpCode);
     }
 
     [Fact]
     public void Lower_Path_WithGeneralPredicate()
     {
-        var instrs = Instructions("foo[bar]");
+        var module = Lower("foo[bar]");
+        var instrs = module.Instructions.ToArray();
         // LoadContextItem
         // PathStepMap (operand = inner block entry)
         // Jump (skip inner block)
         // LoadContextItem (inner block)
         // Child axis
         // NamespaceTest
+        // KindTest element
         // NameTest foo
         // Filter (with predicate code inline)
         // Jump (skip predicate)
@@ -380,11 +393,12 @@ public class IrLowererTests
         // LoadContextItem
         // Child axis
         // NamespaceTest
+        // KindTest element
         // NameTest bar
         // Return (predicate return)
         // Return (inner block)
         // Return (main)
-        Assert.True(instrs.Length >= 13);
+        Assert.True(instrs.Length >= 15);
         Assert.Equal(IrOpCode.LoadContextItem, instrs[0].OpCode);
         Assert.Equal(IrOpCode.PathStepMap, instrs[1].OpCode);
         Assert.Equal(IrOpCode.Jump, instrs[2].OpCode);
@@ -393,11 +407,13 @@ public class IrLowererTests
         Assert.Equal(IrOpCode.LoadContextItem, instrs[blockEntry].OpCode);
         Assert.Equal(IrOpCode.Child, instrs[blockEntry + 1].OpCode);
         Assert.Equal(IrOpCode.NamespaceTest, instrs[blockEntry + 2].OpCode);
-        Assert.Equal(IrOpCode.NameTest, instrs[blockEntry + 3].OpCode);
-        Assert.Equal(IrOpCode.Filter, instrs[blockEntry + 4].OpCode);
-        Assert.Equal(IrOpCode.Jump, instrs[blockEntry + 5].OpCode);
-        int predicateEntry = instrs[blockEntry + 4].Operand;
-        Assert.True(predicateEntry > blockEntry + 5);
+        Assert.Equal(IrOpCode.KindTest, instrs[blockEntry + 3].OpCode);
+        Assert.Equal("element", module.LiteralPool[instrs[blockEntry + 3].Operand]);
+        Assert.Equal(IrOpCode.NameTest, instrs[blockEntry + 4].OpCode);
+        Assert.Equal(IrOpCode.Filter, instrs[blockEntry + 5].OpCode);
+        Assert.Equal(IrOpCode.Jump, instrs[blockEntry + 6].OpCode);
+        int predicateEntry = instrs[blockEntry + 5].Operand;
+        Assert.True(predicateEntry > blockEntry + 6);
         Assert.Equal(IrOpCode.LoadContextItem, instrs[predicateEntry].OpCode);
         Assert.Equal(IrOpCode.Return, instrs[^1].OpCode);
     }

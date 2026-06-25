@@ -1,6 +1,68 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
+**Commit:** `TBD`
+**Current focus:** Cleared the `axes` conformance cluster by fixing `following`/`preceding` axes from attributes and enforcing element principal node kind on named node tests.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,630
+- **Failed:** 621
+- **Skipped:** 9,349
+- **Pass rate:** 88.2% (+15 passes / −15 failures vs. previous 4,615/636)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| accessor | 53 | 22 | 0 | 31 | ✅ 100% runnable |
+| axes | 202 | 190 | 0 | 12 | ✅ 100% runnable; all 15 previous failures now passing |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| initial-template | 11 | 6 | 0 | 5 | ✅ 100% runnable |
+| call-template | 42 | 38 | 0 | 4 | ✅ 100% runnable |
+| system-property | 27 | 14 | 0 | 13 | ✅ 100% runnable |
+| initial-mode | 5 | 5 | 0 | 0 | ✅ 100% |
+| function + initial-function | 350 | 220 | 0 | 130 | ✅ 100% runnable |
+| xpath-default-namespace | 26 | 22 | 0 | 4 | ✅ 100% runnable |
+| built-in-templates | 6 | 5 | 0 | 1 | ✅ 100% runnable |
+| regex (all clusters) | 2162 | 46 | 1 | 2115 | 97.9% runnable |
+| try | 42 | 14 | 21 | 7 | No change in net failures |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| strip-type-annotations | 27 | 3 | 0 | 24 | Only 023/024/025 runnable (non-schema-aware); those pass |
+| strip-space | 30 | 27 | 0 | 3 | ✅ 100% runnable |
+| base-uri | 55 | 50 | 0 | 5 | ✅ 100% runnable |
+| document | 64 | 46 | 0 | 18 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`following`/`preceding` axes from attributes/namespace nodes** — `XDocumentNode.GetFollowingAxis` now includes all descendants of the parent element when starting from an attribute or namespace node, and `GetPrecedingAxis` starts from the parent element so the element's children are not incorrectly treated as preceding siblings. `GetPrecedingSiblingAxis` now returns empty for attributes/namespaces.
+   - **File changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
+
+2. **Element principal node kind for named node tests** — `IrLowerer` now emits a `KindTest("element")` before `NameTest` for named node tests on axes whose principal node kind is element (child, descendant, self, following, preceding, etc.). This prevents `self::center-attr` from matching an attribute node.
+   - **File changed**: `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`.
+
+3. **Updated IR lowerer unit tests** — `IrLowererTests` now expect the new `KindTest("element")` instruction in path-step sequences.
+   - **File changed**: `tests/Bosak.XPath.Compiler.Tests/IrLowererTests.cs`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- Full W3C XSLT 3.0 suite: **4,630 passed / 621 failed / 9,349 skipped** (88.2%).
+- The `axes` cluster is now **100% runnable**.
+
+## Recommended Next Steps
+
+1. Pick the next medium cluster to attack (e.g., `math` (16 failures), `namespace` (20 failures), or `on-empty` (28 failures)).
+2. Continue driving down the remaining 621 failures in the full W3C XSLT 3.0 suite.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-25
 **Commit:** `f85fc4a`
 **Current focus:** Cleared the `accessor` conformance cluster by separating `document-uri` from `base-uri` and registering source documents for `fn:doc` identity.
 

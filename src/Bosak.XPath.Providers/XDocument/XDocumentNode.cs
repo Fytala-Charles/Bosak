@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 11-06-2026     | Override Equals/GetHashCode for IXdmNode identity-based equality                         |
 //                      | Charles Korthout | 1.2   | 13-06-2026     | Composite DocumentOrder includes global creation sequence for cross-document sorting    |
 //                      | Charles Korthout | 1.3   | 25-06-2026     | Added DocumentUri property/setter distinct from BaseUri                                |
+//                      | Charles Korthout | 1.4   | 25-06-2026     | Fixed following/preceding axes for attribute and namespace nodes                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -705,6 +706,11 @@ public sealed class XDocumentNode : IXdmNode
         if (parent is null)
             return XdmSequence.Empty;
 
+        // Attributes and namespace nodes are not children of their parent element,
+        // so they have no preceding siblings.
+        if (_node is XAttribute || _isNamespaceNode)
+            return XdmSequence.Empty;
+
         var items = new List<XdmValue>();
         foreach (var sibling in parent.Nodes())
         {
@@ -717,7 +723,29 @@ public sealed class XDocumentNode : IXdmNode
     private XdmSequence GetFollowingAxis()
     {
         var items = new List<XdmValue>();
+
+        // Attributes and namespace nodes are not children of their parent element,
+        // so the normal "siblings after current" walk would skip the element's children.
+        // Per XDM document order, attributes/namespaces precede the element's children,
+        // so the following axis from an attribute/namespace includes all descendants of
+        // the parent element, followed by the normal walk up from the parent element.
         var current = _node;
+        if (_node is XAttribute || _isNamespaceNode)
+        {
+            if (_node.Parent is XElement attrParent)
+            {
+                foreach (var child in attrParent.Nodes())
+                {
+                    items.Add(XdmValue.FromNode(new XDocumentNode(child)));
+                    AddDescendants(child, items);
+                }
+                current = attrParent;
+            }
+            else
+            {
+                return MaterializedSequence.FromList(items);
+            }
+        }
 
         while (true)
         {
@@ -743,7 +771,20 @@ public sealed class XDocumentNode : IXdmNode
     private XdmSequence GetPrecedingAxis()
     {
         var items = new List<XdmValue>();
+
+        // Attributes and namespace nodes are not children of their parent element.
+        // Per XDM document order they precede the element's children, so the preceding
+        // axis from an attribute/namespace must start from the parent element itself,
+        // not from the attribute/namespace (which would incorrectly include the
+        // element's children as "preceding" siblings).
         var current = _node;
+        if (_node is XAttribute || _isNamespaceNode)
+        {
+            if (_node.Parent is XElement attrParent)
+                current = attrParent;
+            else
+                return MaterializedSequence.FromList(items);
+        }
 
         while (true)
         {

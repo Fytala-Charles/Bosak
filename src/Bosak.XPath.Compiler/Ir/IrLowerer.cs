@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.3   | 01-06-2026     | Use SimpleMap for non-StepNode steps in path expressions (e.g. /a/b/number())        |
 //                      | Charles Korthout | 1.4   | 01-06-2026     | Expanded register encoding from byte to ushort; removed 255-register limit             |
 //                      | Charles Korthout | 1.5   | 25-06-2026     | Only emit LoadContextItem for path expressions that actually reference the focus       |
+//                      | Charles Korthout | 1.6   | 25-06-2026     | Named node tests on element-principal axes filter to element kind first                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -799,6 +800,20 @@ public sealed class IrLowerer
 
             if (node.NodeTest.Kind != NameTestKind.KindTest && node.NodeTest.Kind != NameTestKind.NamespaceAny)
             {
+                // Named tests on axes whose principal node kind is element (child, descendant,
+                // self, following, preceding, etc.) must only match element nodes. Without this
+                // filter, a name test such as self::center-attr on an attribute node incorrectly
+                // succeeds because the name matches.
+                if (node.Axis != XdmAxis.Attribute && node.Axis != XdmAxis.Namespace)
+                {
+                    int kindReg = AllocRegister();
+                    int kindPoolIdx = AddToLiteralPool("element");
+                    Emit(IrOpCode.KindTest, (ushort)kindReg, (ushort)axisReg, operand: kindPoolIdx);
+                    if (axisReg != afterTestReg)
+                        FreeRegister(axisReg);
+                    axisReg = kindReg;
+                }
+
                 Emit(IrOpCode.NameTest, (ushort)afterTestReg, (ushort)axisReg, operand: namePoolIdx);
             }
             if (axisReg != afterTestReg)
