@@ -1,6 +1,70 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
+**Commit:** `f85fc4a`
+**Current focus:** Cleared the `accessor` conformance cluster by separating `document-uri` from `base-uri` and registering source documents for `fn:doc` identity.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,615
+- **Failed:** 636
+- **Skipped:** 9,349
+- **Pass rate:** 87.9% (+4 passes / −4 failures vs. previous 4,611/640)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| accessor | 53 | 22 | 0 | 31 | ✅ 100% runnable; `accessor-007`, `accessor-008`, `accessor-026` now passing |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| initial-template | 11 | 6 | 0 | 5 | ✅ 100% runnable |
+| call-template | 42 | 38 | 0 | 4 | ✅ 100% runnable |
+| system-property | 27 | 14 | 0 | 13 | ✅ 100% runnable |
+| initial-mode | 5 | 5 | 0 | 0 | ✅ 100% |
+| function + initial-function | 350 | 220 | 0 | 130 | ✅ 100% runnable |
+| xpath-default-namespace | 26 | 22 | 0 | 4 | ✅ 100% runnable |
+| built-in-templates | 6 | 5 | 0 | 1 | ✅ 100% runnable |
+| regex (all clusters) | 2162 | 46 | 1 | 2115 | 97.9% runnable |
+| try | 42 | 14 | 21 | 7 | No change in net failures |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| strip-type-annotations | 27 | 3 | 0 | 24 | Only 023/024/025 runnable (non-schema-aware); those pass |
+| strip-space | 30 | 27 | 0 | 3 | ✅ 100% runnable |
+| base-uri | 55 | 50 | 0 | 5 | ✅ 100% runnable |
+| document | 64 | 46 | 0 | 18 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **Added `IXdmNode.DocumentUri` separate from `IXdmNode.BaseUri`** — `fn:document-uri` now returns the document URI for loaded source documents while returning an empty sequence for temporary-tree document nodes. `fn:base-uri` continues to report the effective base URI (e.g., `xml:base` on the constructing variable).
+   - **Files changed**: `src/Bosak.XPath.Core/Xdm/IXdmNode.cs`, `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
+
+2. **Set `DocumentUri` on loaded and source documents** — `XDocumentProvider.LoadXml`, the conformance harness source loader, and the harness `DocumentLoader` all annotate returned document nodes with their absolute URI. `fn:document-uri` now reports that URI.
+   - **Files changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+3. **Registered source document under its URI in `EvaluationContext`** — `TransformEngine.Transform` pre-registers the source document (or the document containing the selected source node) via `EvaluationContext.RegisterDocument`, so `fn:doc(document-uri($arg)) is $arg` resolves to the same node instance.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **`fn:document-uri` uses `IXdmNode.DocumentUri`** — Updated the zero- and one-argument implementations in the standard function library to read the new property.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- Full W3C XSLT 3.0 suite: **4,615 passed / 636 failed / 9,349 skipped** (87.9%).
+- The `accessor`, `base-uri`, and `document` clusters are now **100% runnable**.
+
+## Recommended Next Steps
+
+1. Pick the next medium cluster to attack (e.g., `whitespace` (3 failures), `math` (16 failures), or `axes` (15 failures)).
+2. Continue driving down the remaining 636 failures in the full W3C XSLT 3.0 suite.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-25
 **Commit:** `8e92420`
 **Current focus:** Fixed `call-template-0110`, hardened `xsl:try`/`xsl:catch`, cleared the `type` and `strip-space` clusters, and pushed the accumulated changes.
 
@@ -29,7 +93,7 @@
 | regex (all clusters) | 2162 | 46 | 1 | 2115 | 97.9% runnable |
 | try | 42 | 14 | 21 | 7 | Multiple `xsl:catch` clauses now evaluated in order; no change in net failures |
 | type | 79 | 58 | 0 | 21 | ✅ 100% runnable; `type-0165` now passing |
-| strip-type-annotations | 27 | 24 | 0 | 3 | ✅ 100% runnable |
+| strip-type-annotations | 27 | 3 | 0 | 24 | Only 023/024/025 runnable (non-schema-aware); those pass |
 | strip-space | 30 | 27 | 0 | 3 | ✅ 100% runnable; `strip-space-023` now passing |
 
 ## This Session Fixes
