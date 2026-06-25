@@ -111,6 +111,8 @@
 //                      | Charles Korthout | 5.40  | 24-06-2026     | XPath default namespace no longer falls back to xmlns declaration                     |
 //                      | Charles Korthout | 5.41  | 24-06-2026     | Pass DefiningElementDefaultNamespace through CompileXPath/AVT/xsl:evaluate             |
 //                      | Charles Korthout | 5.42  | 24-06-2026     | Apply xsl:strip-space to fn:doc/document loaded docs; skip stylesheet modules          |
+//                      | Charles Korthout | 5.43  | 25-06-2026     | Pass regex options to ValidateAndTranslatePattern for xsl:analyze-string               |
+//                      | Charles Korthout | 5.44  | 25-06-2026     | Capture raw XDM result from initial named template with @as for output tree="no"        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -192,6 +194,25 @@ public sealed class TransformEngine
 
     // Sequence accumulator for xsl:sequence inside variable bodies with @as
     private List<XdmValue>? _sequenceAccumulator;
+
+    // When true, atomic values produced in a sequence constructor are kept as separate
+    // items rather than merged into a single text node. Used for xsl:template/@as and
+    // other sequence-typed result construction.
+    private bool _preserveAtomicSequenceItems;
+
+    // Tracks nesting depth of literal result elements inside a sequence constructor.
+    // Used with _preserveAtomicSequenceItems so that atomics inside a constructed
+    // element are still merged with spaces, while top-level atomics remain separate.
+    private int _literalElementDepth;
+
+    // When an initial named template is invoked with a request for its raw XDM result
+    // (rather than the serialized result tree), the converted sequence is stored here.
+    private bool _returnRawInitialTemplateResult;
+    private XdmValue? _rawInitialTemplateResult;
+
+    // Set while the initial named template (the transformation entry point) is executing,
+    // so ExecuteTemplate can capture its typed result instead of copying it to the result tree.
+    private bool _isExecutingInitialTemplate;
 
     // Recursion depth guard for xsl:function and xsl:call-template calls
     private int _xsltFunctionCallDepth;
@@ -286,11 +307,13 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the stylesheet transformation.
     /// </summary>
-    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null)
+    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false)
     {
         _initialSource = source;
         _initialMode = initialMode ?? "";
         _startedWithNamedTemplate = false;
+        _returnRawInitialTemplateResult = rawResult;
+        _rawInitialTemplateResult = null;
 
         // A source document is required unless an initial template is supplied or the
         // stylesheet declares an xsl:initial-template (with any namespace prefix).
@@ -396,20 +419,31 @@ public sealed class TransformEngine
         RegisterGroupingFunctions();
 
         var effectiveInitialTemplate = initialTemplate ?? implicitInitialTemplate;
-        if (!string.IsNullOrEmpty(effectiveInitialTemplate) && _allNamedTemplates.TryGetValue(effectiveInitialTemplate, out var entryRule))
+        if (!string.IsNullOrEmpty(effectiveInitialTemplate))
         {
+            if (!TryFindNamedTemplate(effectiveInitialTemplate, out var templateKey, out var entryRule))
+                throw new InvalidOperationException($"XTDE0040: Named template '{effectiveInitialTemplate}' not found.");
+
             _startedWithNamedTemplate = true;
             // If the designated initial template has a match pattern, execute it as a
             // template rule against the source node so that xsl:next-match has a current
             // template rule and a context item. Otherwise invoke it as a plain named
             // template, which has no current template rule.
             var (initCallParams, initTunnelParams) = CollectExternalParameters(entryRule.Element);
-            if (entryRule.CompiledMatch != null && source != null)
-                ExecuteTemplate(entryRule, source, callParams: initCallParams, incomingTunnelParams: initTunnelParams, setCurrentRule: true);
-            else
+            _isExecutingInitialTemplate = true;
+            try
             {
-                var initialContextItem = source != null ? XdmValue.FromNode(source) : XdmValue.Undefined;
-                CallTemplate(effectiveInitialTemplate, initialContextItem, initCallParams, initTunnelParams);
+                if (entryRule.CompiledMatch != null && source != null)
+                    ExecuteTemplate(entryRule, source, callParams: initCallParams, incomingTunnelParams: initTunnelParams, setCurrentRule: true);
+                else
+                {
+                    var initialContextItem = source != null ? XdmValue.FromNode(source) : XdmValue.Undefined;
+                    CallTemplate(templateKey, initialContextItem, initCallParams, initTunnelParams);
+                }
+            }
+            finally
+            {
+                _isExecutingInitialTemplate = false;
             }
         }
         else if (!string.IsNullOrEmpty(initialMode))
@@ -471,6 +505,11 @@ public sealed class TransformEngine
                     ApplyTemplates(source!, mode: "", select: null);
                 }
             }
+
+        // If the entry point was an initial named template and the caller asked for
+        // the raw XDM result, return that instead of the serialized result tree.
+        if (_returnRawInitialTemplateResult && _rawInitialTemplateResult != null)
+            return _rawInitialTemplateResult.Value;
 
         // Return the result document, or document-level text if no root element was produced
         if (_documentLevelText.Length > 0 && _resultDocument.Root == null)
@@ -1815,7 +1854,11 @@ public sealed class TransformEngine
                             _lastAddedWasAtomic = false;
                             try
                             {
-                                CallTemplate(calledName, contextItem, withParams, tunnelParams);
+                                // Named templates are matched by expanded QName, so a call using
+                                // one prefix can resolve to a template declared with another prefix
+                                // bound to the same namespace URI.
+                                var resolvedName = ResolveNamedTemplateName(calledName, instruction);
+                                CallTemplate(resolvedName, contextItem, withParams, tunnelParams);
                             }
                             finally
                             {
@@ -2509,6 +2552,8 @@ public sealed class TransformEngine
         var savedContainer = _currentContainer;
         var savedLastAtomic = _lastAddedWasAtomic;
         var savedAccumulator = _sequenceAccumulator;
+        var savedPreserveAtomics = _preserveAtomicSequenceItems;
+        var savedLiteralDepth = _literalElementDepth;
         XElement? tempContainer = null;
 
         if (!string.IsNullOrEmpty(asType))
@@ -2517,6 +2562,8 @@ public sealed class TransformEngine
             _currentContainer = tempContainer;
             _lastAddedWasAtomic = false;
             _sequenceAccumulator = null;
+            _preserveAtomicSequenceItems = true;
+            _literalElementDepth = 0;
         }
 
         var savedTemplateRule = _currentTemplateRule;
@@ -2631,9 +2678,9 @@ public sealed class TransformEngine
                         }
                     }
 
-                    // Required tunnel parameters must be supplied explicitly through the tunnel.
-                    if (isTunnel && required == "yes" && !gotValue)
-                        throw new InvalidOperationException($"XTDE0700: No value supplied for required tunnel parameter '{paramName}'.");
+                    // Required parameters must be supplied explicitly.
+                    if (required == "yes" && !gotValue)
+                        throw new InvalidOperationException($"XTDE0700: No value supplied for required parameter '{paramName}'.");
 
                     paramValue = ConvertVariableValue(paramValue, paramAs, isParam: true);
                     _context.WithVariable(paramLocal, paramValue, paramNs);
@@ -2708,13 +2755,22 @@ public sealed class TransformEngine
                 _currentContainer = savedContainer;
                 _lastAddedWasAtomic = savedLastAtomic;
                 _sequenceAccumulator = savedAccumulator;
+                _preserveAtomicSequenceItems = savedPreserveAtomics;
+                _literalElementDepth = savedLiteralDepth;
 
                 if (items.Count > 0)
                 {
                     var result = items.Count == 1 ? items[0] :
                         XdmValue.FromSequence(MaterializedSequence.FromList(items));
                     result = ConvertVariableValue(result, asType);
-                    CopyToResult(result);
+                    if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
+                        _rawInitialTemplateResult = result;
+                    else
+                        CopyToResult(result);
+                }
+                else if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
+                {
+                    _rawInitialTemplateResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType);
                 }
             }
             else
@@ -2722,6 +2778,8 @@ public sealed class TransformEngine
                 _currentContainer = savedContainer;
                 _lastAddedWasAtomic = savedLastAtomic;
                 _sequenceAccumulator = savedAccumulator;
+                _preserveAtomicSequenceItems = savedPreserveAtomics;
+                _literalElementDepth = savedLiteralDepth;
             }
         }
     }
@@ -3737,7 +3795,8 @@ public sealed class TransformEngine
                     if (!string.IsNullOrEmpty(calledName))
                     {
                         var (withParams, tunnelParams) = CollectWithParams(instruction, contextItem);
-                        WithoutMergeContext(() => CallTemplate(calledName, contextItem, withParams, tunnelParams));
+                        var resolvedName = ResolveNamedTemplateName(calledName, instruction);
+                        WithoutMergeContext(() => CallTemplate(resolvedName, contextItem, withParams, tunnelParams));
                     }
                     break;
                 }
@@ -4222,6 +4281,8 @@ public sealed class TransformEngine
     /// </summary>
     private void CopyLiteralElement(XElement source)
     {
+        _literalElementDepth++;
+
         // Preserve the namespace prefix by using the original XName and adding
         // an explicit namespace declaration when the element uses a non-empty namespace.
         var copy = new XElement(source.Name);
@@ -4406,6 +4467,7 @@ public sealed class TransformEngine
                 _defaultModeStack.Pop();
             }
             _currentContainer = prev;
+            _literalElementDepth--;
         }
     }
 
@@ -4665,12 +4727,28 @@ public sealed class TransformEngine
                 {
                     // Atomic value: insert space only if previous item was also atomic
                     // and separateAtomicsWithSpace is true (complex content construction)
-                    if (separateAtomicsWithSpace && prevWasAtomic)
+                    if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
                     {
-                        sb.Append(' ');
+                        // For sequence-typed results (e.g. xsl:template/@as="xs:decimal*"),
+                        // keep each atomic value as a distinct item rather than merging
+                        // consecutive atomics into a single text node.
+                        if (sb.Length > 0)
+                        {
+                            AddTextNode(sb.ToString());
+                            sb.Clear();
+                        }
+                        AddTextNode(item.ToString());
+                        prevWasAtomic = false;
                     }
-                    sb.Append(item.ToString());
-                    prevWasAtomic = true;
+                    else
+                    {
+                        if (separateAtomicsWithSpace && prevWasAtomic)
+                        {
+                            sb.Append(' ');
+                        }
+                        sb.Append(item.ToString());
+                        prevWasAtomic = true;
+                    }
                 }
             }
 
@@ -4685,7 +4763,10 @@ public sealed class TransformEngine
         }
         else
         {
-            AppendAtomicText(value.ToString());
+            if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
+                AddTextNode(value.ToString());
+            else
+                AppendAtomicText(value.ToString());
         }
     }
 
@@ -8175,6 +8256,7 @@ public sealed class TransformEngine
     /// </summary>
     private static (string LocalName, string NamespaceUri) ExpandVariableName(XElement element, string name)
     {
+        name = name?.Trim() ?? "";
         if (string.IsNullOrEmpty(name))
             return ("", "");
 
@@ -8227,6 +8309,66 @@ public sealed class TransformEngine
             return (key[(end + 1)..], key[1..end]);
         }
         return (key, "");
+    }
+
+    /// <summary>
+    /// Resolves a lexical named-template name from a call-template instruction to the
+    /// lexical key stored in <see cref="_allNamedTemplates"/>, matching by expanded QName.
+    /// If no template matches by expanded name, the original lexical name is returned so
+    /// that <see cref="CallTemplate"/> raises the appropriate not-found error.
+    /// </summary>
+    private string ResolveNamedTemplateName(string calledName, XElement callElement)
+    {
+        var (calledLocal, calledNs) = ExpandVariableName(callElement, calledName);
+        foreach (var pair in _allNamedTemplates)
+        {
+            var rule = pair.Value;
+            if (string.IsNullOrEmpty(rule.Name))
+                continue;
+            var (tplLocal, tplNs) = ExpandVariableName(rule.Element, rule.Name);
+            if (tplLocal == calledLocal && tplNs == calledNs)
+                return pair.Key;
+        }
+        return calledName;
+    }
+
+    /// <summary>
+    /// Looks up a named template by lexical key or by Clark-notation expanded QName
+    /// (<c>{uri}local</c> or <c>local</c>). Returns both the stored dictionary key and
+    /// the matching template rule.
+    /// </summary>
+    private bool TryFindNamedTemplate(string name, out string key, out Stylesheet.TemplateRule rule)
+    {
+        // Direct lexical lookup (handles implicit xsl:initial-template and existing callers).
+        if (_allNamedTemplates.TryGetValue(name, out rule!))
+        {
+            key = name;
+            return true;
+        }
+
+        // Clark notation: {uri}local or local (no namespace).
+        if (name.StartsWith("{") && name.IndexOf('}') is int end && end > 0)
+        {
+            var local = name[(end + 1)..];
+            var ns = name[1..end];
+            foreach (var pair in _allNamedTemplates)
+            {
+                var candidate = pair.Value;
+                if (string.IsNullOrEmpty(candidate.Name))
+                    continue;
+                var (tplLocal, tplNs) = ExpandVariableName(candidate.Element, candidate.Name);
+                if (tplLocal == local && tplNs == ns)
+                {
+                    key = pair.Key;
+                    rule = candidate;
+                    return true;
+                }
+            }
+        }
+
+        key = name;
+        rule = null!;
+        return false;
     }
 
     /// <summary>
@@ -8435,13 +8577,16 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Collects values for the <c>xsl:param</c> children of <paramref name="templateElement"/>
-    /// from variables supplied on the evaluation context. This is used to pass external
-    /// parameters when invoking the initial template or initial mode.
+    /// from the initial-template/initial-mode parameter dictionaries supplied on the
+    /// evaluation context. Top-level stylesheet parameters are supplied as ordinary
+    /// variables and are handled by <see cref="InitializeGlobalParametersAndVariables"/>.
     /// </summary>
     private (Dictionary<string, XdmValue> CallParams, Dictionary<string, XdmValue> TunnelParams) CollectExternalParameters(XElement templateElement)
     {
         var callParams = new Dictionary<string, XdmValue>();
         var tunnelParams = new Dictionary<string, XdmValue>();
+        var externalCall = _context.InitialTemplateCallParameters;
+        var externalTunnel = _context.InitialTemplateTunnelParameters;
         foreach (var child in templateElement.Elements())
         {
             if (child.Name.LocalName != "param" || child.Name.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
@@ -8452,25 +8597,17 @@ public sealed class TransformEngine
                 continue;
 
             var (paramLocal, paramNs) = ExpandVariableName(child, paramName);
-            if (!_context.TryGetVariable(paramLocal, out var value, paramNs))
-            {
-                // Fallback: callers may store prefixed names (e.g. "my:b") as a single
-                // local name with an empty namespace URI.
-                if (paramName.Contains(':') && _context.TryGetVariable(paramName, out value, ""))
-                {
-                    // value found with raw prefixed name
-                }
-                else
-                {
-                    continue;
-                }
-            }
-
             var paramKey = VariableKey(paramLocal, paramNs);
             var paramAs = child.Attribute("as")?.Value;
+            var isTunnel = child.Attribute("tunnel")?.Value == "yes";
+
+            Dictionary<string, XdmValue>? source = isTunnel ? externalTunnel : externalCall;
+            if (source == null || !source.TryGetValue(paramKey, out var value))
+                continue;
+
             value = ConvertVariableValue(value, paramAs, isParam: true);
 
-            if (child.Attribute("tunnel")?.Value == "yes")
+            if (isTunnel)
                 tunnelParams[paramKey] = value;
             else
                 callParams[paramKey] = value;
@@ -8944,6 +9081,15 @@ public sealed class TransformEngine
                     results.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
                 }
             }
+
+            // Pre-assign document-order sequence numbers to parentless nodes so that
+            // subsequent sorts by document order preserve sequence-constructor order.
+            foreach (var item in results)
+            {
+                if (item.IsNode && item.NodeValue != null)
+                    _ = item.NodeValue.DocumentOrder;
+            }
+
             if (results.Count == 1)
                 return results[0];
             return XdmValue.FromSequence(MaterializedSequence.FromList(results));
@@ -9407,15 +9553,6 @@ public sealed class TransformEngine
 
     private IXdmNode PostProcessLoadedDocument(IXdmNode node)
     {
-        // Never strip whitespace from the stylesheet modules themselves; they are
-        // not source documents and must remain intact for document('') and for
-        // execution of compiled instructions.
-        if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XDocument doc)
-        {
-            if (IsStylesheetDocument(doc))
-                return node;
-        }
-
         ApplyWhitespaceStripping(node);
         return node;
     }
@@ -10968,7 +11105,7 @@ public sealed class TransformEngine
         if (isQuoteMode)
             pattern = Regex.Escape(pattern);
         else
-            pattern = RegexHelper.ValidateAndTranslatePattern(pattern);
+            pattern = RegexHelper.ValidateAndTranslatePattern(pattern, options);
 
         var matchingChild = instruction.Element(XName.Get("matching-substring", xsl));
         var nonMatchingChild = instruction.Element(XName.Get("non-matching-substring", xsl));

@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-06-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 25-06-2026     | Added flags-aware ValidateAndTranslatePattern; $ to \z in non-multiline mode             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -58,7 +59,18 @@ public static class RegexHelper
     public static string ValidateAndTranslatePattern(string pattern)
     {
         ValidateXsdRegex(pattern);
-        return TranslateBackreferences(pattern);
+        return TranslateEndAnchor(TranslateBackreferences(pattern), multiline: false);
+    }
+
+    /// <summary>
+    /// Validates and translates a pattern when the regex flags (and therefore the multiline
+    /// mode) are known. In non-multiline mode, <c>$</c> is translated to <c>\z</c> so that it
+    /// matches only the absolute end of the string, not the position before a final newline.
+    /// </summary>
+    public static string ValidateAndTranslatePattern(string pattern, RegexOptions options)
+    {
+        ValidateXsdRegex(pattern);
+        return TranslateEndAnchor(TranslateBackreferences(pattern), (options & RegexOptions.Multiline) != 0);
     }
 
     /// <summary>
@@ -123,9 +135,7 @@ public static class RegexHelper
 
                         if (prefixLength == 0)
                         {
-                            // No capturing group for any prefix; leave the dollars intact.
-                            sb.Append('$');
-                            sb.Append(digits);
+                            // No capturing group for any prefix; XPath treats the reference as empty.
                         }
                         else
                         {
@@ -262,6 +272,54 @@ public static class RegexHelper
     /// and otherwise be treated as the longest valid backreference prefix followed by literal
     /// digits (e.g. <c>\1</c> + literal <c>2</c> when only one group exists).
     /// </summary>
+    private static string TranslateEndAnchor(string pattern, bool multiline)
+    {
+        if (multiline)
+            return pattern;
+
+        var sb = new StringBuilder(pattern.Length + 2);
+        bool escaped = false;
+        bool inCharClass = false;
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+            if (escaped)
+            {
+                sb.Append('\\');
+                sb.Append(c);
+                escaped = false;
+                continue;
+            }
+            if (inCharClass)
+            {
+                sb.Append(c);
+                if (c == ']')
+                    inCharClass = false;
+                continue;
+            }
+            if (c == '\\')
+            {
+                escaped = true;
+                continue;
+            }
+            if (c == '[')
+            {
+                inCharClass = true;
+                sb.Append(c);
+                continue;
+            }
+            if (c == '$')
+            {
+                sb.Append(@"\z");
+                continue;
+            }
+            sb.Append(c);
+        }
+        if (escaped)
+            sb.Append('\\');
+        return sb.ToString();
+    }
+
     private static string TranslateBackreferences(string pattern)
     {
         int groupCount = CountCapturingGroups(pattern);

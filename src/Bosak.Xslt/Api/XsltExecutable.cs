@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 31-05-2026     | Added IXsltMessageListener pass-through to TransformEngine                              |
 //                      | Charles Korthout | 0.3   | 08-06-2026     | Added initialMode parameter to Transform/TransformToString                             |
 //                      | Charles Korthout | 0.4   | 24-06-2026     | Added TransformFunction/TransformFunctionToString for xsl:function entry points        |
+//                      | Charles Korthout | 0.5   | 25-06-2026     | Added rawResult parameter to Transform for initial-template raw XDM output             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -43,11 +44,12 @@ public sealed class XsltExecutable
     /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
     /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
     /// <param name="initialMode">Optional name of the initial mode to use.</param>
+    /// <param name="rawResult">When true and an initial template is used, returns the raw template result instead of wrapping it in a result document.</param>
     /// <returns>The result of the transformation as an XDM value.</returns>
-    public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
+    public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false)
     {
         var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener);
-        return engine.Transform(source, initialTemplate, initialMode);
+        return engine.Transform(source, initialTemplate, initialMode, rawResult);
     }
 
     /// <summary>

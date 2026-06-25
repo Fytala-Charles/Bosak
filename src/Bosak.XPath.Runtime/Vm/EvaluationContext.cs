@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 13-06-2026     | Added RegexGroups property for xsl:analyze-string / regex-group()                       |
 //                      | Charles Korthout | 1.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      | Charles Korthout | 1.3   | 24-06-2026     | Added DocumentPostProcessor for XSLT whitespace stripping on loaded documents          |
+//                      | Charles Korthout | 1.4   | 25-06-2026     | Added InitialTemplateCallParameters/TunnelParameters for named-template entry points   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -158,6 +159,20 @@ public sealed class EvaluationContext
     /// per the XSLT specification, which differs from the XPath default element namespace.
     /// </summary>
     public string? DefiningElementDefaultNamespace { get; set; }
+
+    /// <summary>
+    /// Optional call parameters supplied for the initial named-template entry point.
+    /// Keys are expanded QNames in Clark notation (<c>{uri}local</c> or <c>local</c>);
+    /// values are the corresponding XDM values.
+    /// </summary>
+    public Dictionary<string, XdmValue>? InitialTemplateCallParameters { get; set; }
+
+    /// <summary>
+    /// Optional tunnel parameters supplied for the initial named-template entry point.
+    /// Keys are expanded QNames in Clark notation (<c>{uri}local</c> or <c>local</c>);
+    /// values are the corresponding XDM values.
+    /// </summary>
+    public Dictionary<string, XdmValue>? InitialTemplateTunnelParameters { get; set; }
 
     /// <summary>
     /// Loads a document by URI, using the cache and <see cref="DocumentLoader"/>.

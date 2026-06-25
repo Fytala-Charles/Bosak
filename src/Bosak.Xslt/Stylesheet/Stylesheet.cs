@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 2.5   | 24-06-2026     | Restrict XTSE1660 to strict validation; allow lax on basic processors                  |
 //                      | Charles Korthout | 2.6   | 24-06-2026     | Reject extension-element-prefixes bound to reserved namespaces (XTSE0800)              |
 //                      | Charles Korthout | 2.7   | 24-06-2026     | use-when walks ancestor namespace declarations; propagates XTDE1400/1410 errors        |
+//                      | Charles Korthout | 2.8   | 25-06-2026     | XTSE0080 validation for xsl:template/@name; added xs/fn namespace constants             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -549,7 +550,11 @@ public sealed class Stylesheet
                 // Named templates: register only the first rule (all share the same body)
                 var firstNamed = rules.FirstOrDefault(r => !string.IsNullOrEmpty(r.Name));
                 if (firstNamed != null && firstNamed.Name != null)
+                {
+                    // XTSE0080: template names must not use a reserved namespace.
+                    ValidateNamedQName(firstNamed.Element, firstNamed.Name, "xsl:template");
                     _namedTemplates[firstNamed.Name] = firstNamed;
+                }
             }
         }
 
@@ -1734,8 +1739,51 @@ public sealed class Stylesheet
     /// <summary>The XSLT namespace URI.</summary>
     public const string XslNamespace = "http://www.w3.org/1999/XSL/Transform";
 
+    /// <summary>The XML Schema namespace URI.</summary>
+    public const string XsNamespace = "http://www.w3.org/2001/XMLSchema";
+
+    /// <summary>The XPath functions namespace URI.</summary>
+    public const string FnNamespace = "http://www.w3.org/2005/xpath-functions";
+
     /// <summary>The version attribute of the stylesheet root element.</summary>
     public string? Version { get; private set; }
+
+    /// <summary>
+    /// Throws <c>XTSE0080</c> if the given lexical QName, when expanded in the context of
+    /// <paramref name="element"/>, uses a reserved namespace (XSLT, XML Schema, or XPath
+    /// functions). Used for names of named templates, attribute sets, and similar constructs.
+    /// </summary>
+    internal static void ValidateNamedQName(XElement element, string name, string construct)
+    {
+        if (string.IsNullOrEmpty(name))
+            return;
+
+        string? nsUri = null;
+        var trimmed = name.Trim();
+        if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
+        {
+            int closeBrace = trimmed.IndexOf('}');
+            if (closeBrace >= 2)
+                nsUri = trimmed[2..closeBrace];
+        }
+        else
+        {
+            int colon = trimmed.IndexOf(':');
+            if (colon >= 0)
+            {
+                var prefix = trimmed[..colon];
+                if (prefix == "xml")
+                    nsUri = "http://www.w3.org/XML/1998/namespace";
+                else
+                    nsUri = element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
+            }
+        }
+
+        // xsl:initial-template is the one XSLT-namespace name permitted for a named template.
+        if ((nsUri == XsNamespace || nsUri == FnNamespace ||
+             (nsUri == XslNamespace && trimmed != "xsl:initial-template")))
+            throw new InvalidOperationException($"XTSE0080: The name '{name}' used in {construct} is in a reserved namespace.");
+    }
 
     /// <summary>
     /// Returns the effective xpath-default-namespace for the given element by walking

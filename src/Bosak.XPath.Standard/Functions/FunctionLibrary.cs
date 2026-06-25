@@ -68,6 +68,7 @@
 //                      | Charles Korthout | 5.4   | 24-06-2026     | fn:unparsed-text-lines drops trailing empty line; validates XML characters (FOUT1190)  |
 //                      | Charles Korthout | 5.5   | 24-06-2026     | fn:function-available validates QName and reports XTDE1400 for invalid/unbound names   |
 //                      | Charles Korthout | 5.6   | 24-06-2026     | Implemented fn:snapshot; fixed fn:innermost/fn:outermost descendant/ancestor checks    |
+//                      | Charles Korthout | 5.7   | 25-06-2026     | Added fn:nilled#0/#1; system-property namespace expansion; regex options in matches/replace/tokenize |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2653,6 +2654,22 @@ public static class FunctionLibrary
                 Implementation = DocumentUri_1
             },
 
+            // ----- fn:nilled --------------------------------------------------
+            [(Namespaces.Fn, "nilled", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "nilled", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Nilled_0
+            },
+            [(Namespaces.Fn, "nilled", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "nilled", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.Boolean,
+                Implementation = Nilled_1
+            },
+
             [(Namespaces.Fn, "error", 0)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 0,
@@ -3683,6 +3700,7 @@ public static class FunctionLibrary
     private static XdmValue SystemProperty(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string name = AtomizedString(args[0]);
+        name = ExpandXsltPropertyName(name, ctx);
         string value = name switch
         {
             "xsl:version" => "3.0",
@@ -3697,6 +3715,23 @@ public static class FunctionLibrary
             _ => ""
         };
         return XdmValue.FromString(value);
+    }
+
+    private static string ExpandXsltPropertyName(string name, EvaluationContext ctx)
+    {
+        // system-property accepts a lexical QName; expand any prefix bound to the
+        // XSLT namespace to the canonical "xsl:" form used by the implementation.
+        if (name.StartsWith("xsl:"))
+            return name;
+        int colon = name.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = name[..colon];
+            var local = name[(colon + 1)..];
+            if (ctx.TryResolveNamespace(prefix, out var nsUri) && nsUri == Namespaces.Xsl)
+                return $"xsl:{local}";
+        }
+        return name;
     }
 
     private static XdmValue AvailableSystemProperties(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -4879,7 +4914,7 @@ public static class FunctionLibrary
         if (isQuoteMode)
             pattern = Regex.Escape(pattern);
         else
-            pattern = RegexHelper.ValidateAndTranslatePattern(pattern);
+            pattern = RegexHelper.ValidateAndTranslatePattern(pattern, options);
         return XdmValue.FromBoolean(Regex.IsMatch(input, pattern, options));
     }
 
@@ -4911,7 +4946,7 @@ public static class FunctionLibrary
         }
         else
         {
-            pattern = RegexHelper.ValidateAndTranslatePattern(originalPattern);
+            pattern = RegexHelper.ValidateAndTranslatePattern(originalPattern, options);
             int groupCount = RegexHelper.CountCapturingGroups(originalPattern);
             netReplacement = RegexHelper.ValidateAndTranslateReplacement(replacement, groupCount);
         }
@@ -4950,7 +4985,7 @@ public static class FunctionLibrary
         if (isQuoteMode)
             pattern = Regex.Escape(pattern);
         else
-            pattern = RegexHelper.ValidateAndTranslatePattern(pattern);
+            pattern = RegexHelper.ValidateAndTranslatePattern(pattern, options);
 
         RegexHelper.CheckZeroLengthMatch(pattern, options);
 
@@ -5957,6 +5992,48 @@ public static class FunctionLibrary
             return XdmValue.Undefined;
         var uri = node.BaseUri;
         return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+    }
+
+    private static XdmValue Nilled_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined || IsEmptySequence(item))
+            throw new InvalidOperationException("XPDY0002: fn:nilled() called with no context item.");
+        if (!item.IsNode || item.NodeValue == null)
+            throw new InvalidOperationException("XPTY0004: fn:nilled() argument is not a node.");
+        return NilledOfNode(item.NodeValue);
+    }
+
+    private static XdmValue Nilled_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            return XdmValue.Undefined;
+        if (arg.IsSequence)
+        {
+            XdmValue? first = null;
+            int count = 0;
+            foreach (var x in XdmSequence.FromSource(arg.SequenceValue!))
+            {
+                first = x;
+                count++;
+                if (count > 1) break;
+            }
+            if (count == 0) return XdmValue.Undefined;
+            if (count > 1) throw new InvalidOperationException("XPTY0004");
+            arg = first!.Value;
+        }
+        if (!arg.IsNode)
+            throw new InvalidOperationException("XPTY0004: fn:nilled() argument is not a node.");
+        return NilledOfNode(arg.NodeValue!);
+    }
+
+    private static XdmValue NilledOfNode(IXdmNode node)
+    {
+        // fn:nilled is defined only for element nodes. For all other node kinds it
+        // returns the empty sequence; for elements it returns false unless the
+        // element is schema-validated with xsi:nil="true" (not supported here).
+        return node.NodeKind == XdmNodeKind.Element ? XdmValue.False : XdmValue.Undefined;
     }
 
     // ------------------------------------------------------------------

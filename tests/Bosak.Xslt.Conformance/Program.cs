@@ -25,6 +25,8 @@
 //                      | Charles Korthout | 1.3   | 15-06-2026     | Record warnings separately; evaluate assert-warning; skip mode result-document tests   |
 //                      | Charles Korthout | 1.4   | 24-06-2026     | Parse stylesheets with DTD processing enabled; fixes copy-1201/copy-1202               |
 //                      | Charles Korthout | 1.5   | 24-06-2026     | Preserve stylesheet base URIs in resolver; skip xsl:use-package tests                   |
+//                      | Charles Korthout | 1.6   | 25-06-2026     | Separate global params from initial-template/initial-mode local params; pass via context |
+//                      | Charles Korthout | 1.7   | 25-06-2026     | Pass rawResult=true for initial-template raw output; bind result-var for assertions      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -412,6 +414,7 @@ class Program
                     Console.WriteLine($"  SKIP {name}: xsl:use-package not supported");
                     return TestResult.Skip;
                 }
+
             }
             catch
             {
@@ -419,11 +422,14 @@ class Program
                 xslDoc = new XDocument();
             }
 
-            // Set test parameters on evaluation context (both direct children and inside initial-mode)
+            // Collect all <param> elements for static-parameter substitution.
             var paramElements = testElem.Elements(ns + "param").ToList();
             var initialModeElem = testElem.Element(ns + "initial-mode");
             if (initialModeElem != null)
                 paramElements.AddRange(initialModeElem.Elements(ns + "param"));
+            var initialTemplateElem = testElem.Element(ns + "initial-template");
+            if (initialTemplateElem != null)
+                paramElements.AddRange(initialTemplateElem.Elements(ns + "param"));
 
             // Evaluate static parameters supplied by the test case and substitute them into
             // stylesheet attributes such as _select before compilation. This is needed for
@@ -487,8 +493,9 @@ class Program
                 throw new FileNotFoundException($"Document not found: {uri}");
             };
 
-            // Set test parameters on evaluation context (both direct children and inside initial-mode)
-            foreach (var param in paramElements)
+            // Bind top-level test parameters as global stylesheet parameters.
+            var globalParamElements = testElem.Elements(ns + "param").ToList();
+            foreach (var param in globalParamElements)
             {
                 var paramName = param.Attribute("name")?.Value;
                 var paramSelect = param.Attribute("select")?.Value;
@@ -500,11 +507,15 @@ class Program
                 }
             }
 
+            // Collect initial-template/initial-mode parameters separately so they are
+            // passed as with-param values to the entry-point template, not as globals.
+            CollectEntryPointParameters(initialTemplateElem, evalContext, ns);
+            CollectEntryPointParameters(initialModeElem, evalContext, ns);
+
             // Check for initial-template (explicit in test catalog or implicit xsl:initial-template)
-            string? initialTemplate = null;
-            var initialTemplateElem = testElem.Element(ns + "initial-template");
-            if (initialTemplateElem != null)
-                initialTemplate = initialTemplateElem.Attribute("name")?.Value;
+            string? initialTemplate = initialTemplateElem?.Attribute("name")?.Value;
+            if (!string.IsNullOrEmpty(initialTemplate) && initialTemplateElem != null)
+                initialTemplate = ExpandTemplateNameToClark(initialTemplateElem, initialTemplate);
 
             bool hasImplicitInitialTemplate = xslDoc.Descendants()
                 .Any(e => e.Name.LocalName == "template" && IsInitialTemplateName(e));
@@ -517,7 +528,7 @@ class Program
             // Check for initial-function entry point
             var initialFunctionElem = testElem.Element(ns + "initial-function");
             bool isInitialFunction = initialFunctionElem != null;
-            bool rawOutput = isInitialFunction && testElem.Element(ns + "output")?.Attribute("tree")?.Value == "no";
+            bool rawOutput = (isInitialFunction || initialTemplateElem != null) && testElem.Element(ns + "output")?.Attribute("tree")?.Value == "no";
 
             string resultXml = string.Empty;
             XdmValue? resultValue = null;
@@ -542,12 +553,22 @@ class Program
             {
                 // Named-template entry points with no explicit source document have no
                 // initial context item (XSLT 3.0 §6.5 / §9.6).
-                resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode);
+                if (rawOutput)
+                    resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true);
+                else
+                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode);
             }
             else
             {
                 resultXml = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), evalContext, initialTemplate, initialMode);
             }
+
+            // Bind the raw result to the variable named by <output result-var="..."/>
+            // so that assertions such as <assert>deep-equal($result, ...)</assert> work.
+            var outputElem = testElem.Element(ns + "output");
+            var resultVarName = outputElem?.Attribute("result-var")?.Value;
+            if (!string.IsNullOrEmpty(resultVarName) && resultValue.HasValue)
+                evalContext.WithVariable(resultVarName, resultValue.Value);
 
             // Compare with expected result
             var resultElem = testCase.Element(ns + "result");
@@ -558,7 +579,7 @@ class Program
             bool compareOk;
             if (resultValue != null)
             {
-                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex);
+                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, evalContext);
             }
             else
             {
@@ -733,6 +754,84 @@ class Program
         return new XDocumentNode(doc);
     }
 
+    static void CollectEntryPointParameters(XElement? entryPointElem, EvaluationContext evalContext, XNamespace ns)
+    {
+        if (entryPointElem == null)
+            return;
+
+        var callParams = evalContext.InitialTemplateCallParameters ??= new Dictionary<string, XdmValue>();
+        var tunnelParams = evalContext.InitialTemplateTunnelParameters ??= new Dictionary<string, XdmValue>();
+
+        foreach (var param in entryPointElem.Elements(ns + "param"))
+        {
+            var name = param.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(name))
+                continue;
+
+            var select = param.Attribute("select")?.Value;
+            if (string.IsNullOrEmpty(select))
+                select = "()";
+
+            var nsMap = ExtractNamespaces(param);
+            var compiled = XPath31Expression.Compile(select, new Bosak.XPath.Api.CompileOptions { Namespaces = nsMap });
+            var value = compiled.Evaluate(evalContext);
+
+            string localName;
+            string namespaceUri;
+            int colon = name.IndexOf(':');
+            if (colon >= 0)
+            {
+                var prefix = name.Substring(0, colon);
+                localName = name.Substring(colon + 1);
+                var resolvedNs = param.GetNamespaceOfPrefix(prefix);
+                namespaceUri = resolvedNs?.NamespaceName ?? "";
+            }
+            else
+            {
+                localName = name;
+                namespaceUri = "";
+            }
+
+            var key = string.IsNullOrEmpty(namespaceUri) ? localName : $"{{{namespaceUri}}}{localName}";
+            if (param.Attribute("tunnel")?.Value == "yes")
+                tunnelParams[key] = value;
+            else
+                callParams[key] = value;
+        }
+    }
+
+    /// <summary>
+    /// Expands a lexical template name from a test-catalog entry point to Clark notation
+    /// (<c>{uri}local</c>), using the namespace declarations in scope on the catalog element.
+    /// EQName syntax is normalized to the same Clark notation.
+    /// </summary>
+    static string ExpandTemplateNameToClark(XElement element, string name)
+    {
+        name = name.Trim();
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int closeBrace = name.IndexOf('}');
+            if (closeBrace >= 2)
+            {
+                string uri = name[2..closeBrace];
+                string local = name[(closeBrace + 1)..].Trim();
+                return $"{{{uri}}}{local}";
+            }
+        }
+
+        int colon = name.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = name.Substring(0, colon);
+            var local = name.Substring(colon + 1);
+            var resolvedNs = element.GetNamespaceOfPrefix(prefix);
+            var uri = resolvedNs?.NamespaceName ?? "";
+            return $"{{{uri}}}{local}";
+        }
+
+        return $"{{}}{name}";
+    }
+
     static (string name, XdmValue[] args) ResolveInitialFunction(XElement initialFunctionElem, EvaluationContext evalContext, XNamespace ns)
     {
         var nameAttr = initialFunctionElem.Attribute("name")?.Value;
@@ -825,7 +924,7 @@ class Program
         return CompareResult(actual, resultElem, ns, testSetDir, catalogDir, messages, new List<string>(), ref messageIndex, ref warningIndex);
     }
 
-    static bool CompareResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
+    static bool CompareResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, EvaluationContext? assertContext = null)
     {
         // Handle <all-of>
         var allOf = resultElem.Element(ns + "all-of");
@@ -863,10 +962,10 @@ class Program
             return true;
         }
 
-        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex);
+        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext);
     }
 
-    static bool CompareSingleResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
+    static bool CompareSingleResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, EvaluationContext? assertContext = null)
     {
         // assert-message
         var assertMessage = resultElem.Name.LocalName == "assert-message" ? resultElem : resultElem.Element(ns + "assert-message");
@@ -913,14 +1012,14 @@ class Program
             var expected = assertEq.Attribute("expected")?.Value ?? assertEq.Value;
             var expr = assertEq.Attribute("select")?.Value ?? assertEq.Value;
             var nsDecls = ExtractNamespaces(assertEq);
-            return EvaluateAssertEq(actual, expr, expected, nsDecls);
+            return EvaluateAssertEq(actual, expr, expected, nsDecls, assertContext);
         }
 
         // assert-deep-eq
         var assertDeepEq = resultElem.Name.LocalName == "assert-deep-eq" ? resultElem : resultElem.Element(ns + "assert-deep-eq");
         if (assertDeepEq != null)
         {
-            return EvaluateAssertDeepEq(actual, assertDeepEq.Value, ExtractNamespaces(assertDeepEq));
+            return EvaluateAssertDeepEq(actual, assertDeepEq.Value, ExtractNamespaces(assertDeepEq), assertContext);
         }
 
         // assert-xml: serialize the value and compare
@@ -964,7 +1063,7 @@ class Program
         if (assertExpr != null)
         {
             var nsDecls = ExtractNamespaces(assertExpr);
-            return EvaluateAssert(actual, assertExpr.Value, nsDecls);
+            return EvaluateAssert(actual, assertExpr.Value, nsDecls, assertContext);
         }
 
         // error expected
@@ -1299,7 +1398,7 @@ class Program
         }
     }
 
-    static bool EvaluateAssert(XdmValue actual, string xpath, Dictionary<string, string>? namespaces = null)
+    static bool EvaluateAssert(XdmValue actual, string xpath, Dictionary<string, string>? namespaces = null, EvaluationContext? assertContext = null)
     {
         try
         {
@@ -1309,6 +1408,11 @@ class Program
             {
                 foreach (var (prefix, uri) in namespaces)
                     ctx.WithNamespace(prefix, uri);
+            }
+            if (assertContext != null)
+            {
+                foreach (var (key, value) in assertContext.SnapshotVariables())
+                    ctx.WithVariable(key.LocalName, value, key.NamespaceUri);
             }
             var result = compiled.Evaluate(ctx);
             return result.EffectiveBooleanValue();
@@ -1319,7 +1423,7 @@ class Program
         }
     }
 
-    static bool EvaluateAssertEq(XdmValue actual, string xpath, string expected, Dictionary<string, string>? namespaces = null)
+    static bool EvaluateAssertEq(XdmValue actual, string xpath, string expected, Dictionary<string, string>? namespaces = null, EvaluationContext? assertContext = null)
     {
         try
         {
@@ -1330,6 +1434,11 @@ class Program
                 foreach (var (prefix, uri) in namespaces)
                     ctx.WithNamespace(prefix, uri);
             }
+            if (assertContext != null)
+            {
+                foreach (var (key, value) in assertContext.SnapshotVariables())
+                    ctx.WithVariable(key.LocalName, value, key.NamespaceUri);
+            }
             var result = compiled.Evaluate(ctx);
             return result.ToString() == expected;
         }
@@ -1339,7 +1448,7 @@ class Program
         }
     }
 
-    static bool EvaluateAssertDeepEq(XdmValue actual, string expectedExpr, Dictionary<string, string>? namespaces = null)
+    static bool EvaluateAssertDeepEq(XdmValue actual, string expectedExpr, Dictionary<string, string>? namespaces = null, EvaluationContext? assertContext = null)
     {
         try
         {
@@ -1350,12 +1459,22 @@ class Program
                 foreach (var (prefix, uri) in namespaces)
                     expectedCtx.WithNamespace(prefix, uri);
             }
+            if (assertContext != null)
+            {
+                foreach (var (key, value) in assertContext.SnapshotVariables())
+                    expectedCtx.WithVariable(key.LocalName, value, key.NamespaceUri);
+            }
             var expected = expectedCompiled.Evaluate(expectedCtx);
 
             var deepEq = XPath31Expression.Compile("deep-equal($a, $b)");
             var ctx = new EvaluationContext()
                 .WithVariable("a", actual)
                 .WithVariable("b", expected);
+            if (assertContext != null)
+            {
+                foreach (var (key, value) in assertContext.SnapshotVariables())
+                    ctx.WithVariable(key.LocalName, value, key.NamespaceUri);
+            }
             return deepEq.Evaluate(ctx).EffectiveBooleanValue();
         }
         catch

@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 24 June 2026
+> **Last updated:** 25 June 2026
 > **Bosak baseline:** 894 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,550 passed / 701 failed / 9,349 skipped (~86.7%)
+> **XSLT baseline:** 4,591 passed / 660 failed / 9,349 skipped (~87.4%)
 
 ---
 
@@ -225,8 +225,8 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | Feature | Status | Notes |
 |---------|--------|-------|
 | `xsl:template match="…"` | ✅ Working | Pattern compiler: element names, `*`, `@*`, predicates, union (`\|`) |
-| `xsl:template name="…"` | ✅ Working | Named template dispatch |
-| `xsl:call-template` | ✅ Working | With `xsl:with-param` support |
+| `xsl:template name="…"` | ✅ Working | Named template dispatch; raw XDM result via `XsltExecutable.Transform(..., rawResult: true)`; whitespace/EQName names normalized; `xsl:initial-template` permitted in XSLT namespace |
+| `xsl:call-template` | ✅ Working | With `xsl:with-param` support; matches named templates by expanded QName (different prefixes bound to the same URI); rejects template names in reserved namespaces (`XTSE0080`) except `xsl:initial-template` |
 | `xsl:apply-templates` | ✅ Working | Default mode; `select` attribute supported |
 | `xsl:value-of` | ✅ Working | |
 | `xsl:for-each` | ✅ Working | Position / size context updated per item |
@@ -252,12 +252,12 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |
 | `xsl:mode` | ✅ Working | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks (`XTSE0545`), and `#unnamed` normalization |
-| `xsl:analyze-string` | ✅ Working | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics |
+| `xsl:analyze-string` | ✅ Working | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics; `@flags` including multiline (`m`) are passed to regex translation |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
 | `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
 | `xsl:use-when` | ⚠️ Partial | Top-level and nested elements; `true()`/`false()` evaluation works. Error cases (XTSE0090, XPST0003) not yet validated. |
-| `xsl:where-populated` | ✅ Working | Filters empty sequences, empty text nodes, empty PIs, empty comments, and empty elements |
+| `xsl:where-populated` | ✅ Working | Filters empty sequences, empty text nodes, empty PIs, empty comments, and empty elements; attributes and namespace nodes do not make a sequence populated; empty strings and empty arrays are treated as empty |
 | `xsl:on-empty` | ✅ Working | Evaluated by parent container (xsl:copy, xsl:document, literal result elements, general sequence constructors) when sequence constructor produces no nodes; supports `@select` and sequence constructor children |
 | `xsl:message` | ✅ Working | Evaluates `terminate` and `error-code`; emits serialized message text via `IXsltMessageListener`; terminating messages throw `XsltRuntimeException` carrying the XDM value. The listener also receives `OnWarning` callbacks for XSLT warnings (e.g. no-matching-template / multiple-template warnings). |
 | `xsl:try` / `xsl:catch` | ⚠️ Partial | Catches terminating `xsl:message` and binds `$err:code`, `$err:description`, `$err:value`; recovery of arbitrary dynamic errors is still being hardened |
@@ -283,7 +283,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 - `fn:serialize` — partial (no XML serialization options)
 - `fn:transform` options (`delivery-format`, etc.) — partial
 - Schema-aware operations — not supported
-- Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — XSD regex validation and some flag/edge-case behavior still being hardened; see conformance logs for current status
+- Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — XSD regex validation, backreferences, flags, and `$` end-anchor semantics are now spec-compliant; surrogate-pair handling in `.` is the remaining gap
 
 ---
 
@@ -334,6 +334,11 @@ dotnet test Bosak.sln
 
 | Change | Impact | When |
 |--------|--------|------|
+| `XsltExecutable.Transform` gained an optional `rawResult` parameter. | When `true` and an initial named template is used, returns the raw template result as an XDM value instead of wrapping it in a result document. Required for `initial-template-004` and similar raw-output tests. | 2026-06-25 |
+| `xsl:analyze-string` now passes regex flags to `RegexHelper.ValidateAndTranslatePattern`. | Fixes multiline-mode (`m`) tests `analyze-string-007/067/071/090b`; previously `$` was translated to `\z` even when multiline was requested. | 2026-06-25 |
+| `xsl:call-template` now resolves named templates by expanded QName. | A call using one prefix bound to a namespace URI finds a template declared with a different prefix bound to the same URI. Fixes `call-template-1701`. | 2026-06-25 |
+| Initial template names from the conformance harness are expanded using catalog namespace bindings. | Names are passed to `TransformEngine` in Clark notation, so a test-catalog prefix bound to a different URI than the stylesheet prefix correctly raises `XTDE0040`. Fixes `call-template-0104/0105/0107`. | 2026-06-25 |
+| `xsl:template/@name` values are whitespace-trimmed and validated against reserved namespaces. | Leading/trailing spaces and EQName forms such as ` Q{}temp ` are normalized; names in the XSD, XPath-functions, or XSLT namespaces raise `XTSE0080` (except the special `xsl:initial-template` name). Fixes `call-template-0106/0109`. | 2026-06-25 |
 | `xpath-default-namespace` fully wired through XSLT → XPath pipeline. | `CompileOptions.DefaultElementNamespace` controls unprefixed element/type names in XPath expressions. Threaded through `CompileXPath`, `PatternCompiler`, `TemplateRule.ResolveNamespacePrefixes`, `VmEngine.NamespaceTest`, and whitespace stripping (`SpaceHandlingRule`). Fixes xpath-default-namespace-0101 through 1102 (21/22 passing). | 2026-06-11 |
 | `xsl:attribute` with unprefixed name now uses empty namespace URI. | Previously inherited default namespace from parent; now correctly produces no-namespace attributes per XSLT spec. Fixes namespace-3306. | 2026-06-11 |
 | `xsl:call-template` evaluates default `xsl:param` values when no `with-param` is provided. | Previously omitted parameters fell back to empty sequence instead of evaluating the param's `select` or sequence constructor. Fixes namespace-3501/3503. | 2026-06-11 |

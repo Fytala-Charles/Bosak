@@ -1,5 +1,61 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-25
+**Commit:** `6b48a49`
+**Current focus:** Clearing regressions from in-progress named-template/raw-output and regex work; `analyze-string`, `initial-template`, and `call-template` clusters improved.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,591
+- **Failed:** 660
+- **Skipped:** 9,349
+- **Pass rate:** 87.4% (+41 passes / −41 failures vs. previous 4,550/701)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable (was 49/4/5) |
+| initial-template | 11 | 6 | 0 | 5 | ✅ 100% runnable (was 5/1/5) |
+| call-template | 42 | 37 | 1 | 4 | ✅ 97.6% runnable (was 31/7/4); only `call-template-0110` remains |
+| system-property | 27 | 14 | 0 | 13 | ✅ 100% runnable |
+| initial-mode | 5 | 5 | 0 | 0 | ✅ 100% |
+| function + initial-function | 350 | 220 | 0 | 130 | ✅ 100% runnable |
+| xpath-default-namespace | 26 | 22 | 0 | 4 | ✅ 100% runnable |
+| built-in-templates | 6 | 5 | 0 | 1 | ✅ 100% runnable |
+| regex (all clusters) | 2162 | 46 | 1 | 2115 | 97.9% runnable |
+
+## This Session Fixes
+
+1. **`xsl:analyze-string` multiline flag regression** — `RegexHelper.ValidateAndTranslatePattern` now receives the parsed `RegexOptions`, so `$` is no longer translated to `\z` when the `m` flag is present. Fixes `analyze-string-007/067/071/090b`.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **Raw XDM result for initial named templates** — `XsltExecutable.Transform` gained an optional `rawResult` parameter. When `true` and an initial named template with `@as` is used, the typed template result is captured and returned instead of being copied into the result document tree. The conformance harness binds the raw result to `result-var` for assertions such as `deep-equal($result, ...)`. Fixes `initial-template-004`.
+   - **Files changed**: `src/Bosak.Xslt/Api/XsltExecutable.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+3. **`xsl:call-template` expanded-QName matching** — `xsl:call-template` now resolves the called template by expanded QName, so a call using one prefix can find a template declared with a different prefix bound to the same namespace URI. Fixes `call-template-1701`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **Initial template name expansion and `XTDE0040`** — The conformance harness expands initial-template names from the test catalog using the catalog element's namespace bindings and passes them in Clark notation. `TransformEngine` looks up templates by either lexical key or Clark-notation expanded name, and raises `XTDE0040` when the specified initial template is not found. Fixes `call-template-0104/0105/0107`.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+5. **`xsl:template/@name` normalization and `XTSE0080`** — Template names are whitespace-trimmed (so ` Q{}temp ` works) and validated against reserved namespaces (`xsl`, `xs`, `fn`), raising `XTSE0080` except for the permitted `xsl:initial-template` name. Fixes `call-template-0106/0109`.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- Full W3C XSLT 3.0 suite: **4,591 passed / 660 failed / 9,349 skipped** (87.4%), up from 4,550/701.
+- Removed the erroneous `xsl:evaluate` blanket skip in the conformance harness, restoring the `evaluate` cluster to 40/0/17.
+- Remaining quick-sweep candidate from this set: `call-template-0110` (`xsl:try` dynamic error recovery for `XPDY0002`).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-24
 **Commit:** `09e53c5`
 **Current focus:** XSLT `initial-function` cluster now 35/35 passing.

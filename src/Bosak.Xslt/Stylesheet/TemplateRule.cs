@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 08-06-2026     | ParseModes expands QNames to Clark notation; fixes mode-0901 QName comparison          |
 //                      | Charles Korthout | 0.8   | 09-06-2026     | Trim default-mode attribute; use ModeDefinition.NormalizeModeName for empty URI       |
 //                      | Charles Korthout | 0.9   | 24-06-2026     | GetXPathDefaultNamespace no longer falls back to xmlns declaration                     |
+//                      | Charles Korthout | 1.0   | 25-06-2026     | Trim xsl:template/@name values to normalize whitespace/EQName forms                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -84,7 +85,7 @@ public sealed class TemplateRule
         var match = element.Attribute("match")?.Value;
         if (string.IsNullOrEmpty(match))
             match = element.Attribute("_match")?.Value;
-        var name = element.Attribute("name")?.Value;
+        var name = element.Attribute("name")?.Value?.Trim();
         var modeAttr = element.Attribute("mode")?.Value;
         var modes = ParseModes(modeAttr, element, stylesheet.DefaultMode);
 
