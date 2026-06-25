@@ -115,6 +115,7 @@
 //                      | Charles Korthout | 5.44  | 25-06-2026     | Capture raw XDM result from initial named template with @as for output tree="no"        |
 //                      | Charles Korthout | 5.45  | 25-06-2026     | xsl:try multi-catch, @errors matching, null->Undefined context; fixes call-template-0110 |
 //                      | Charles Korthout | 5.46  | 25-06-2026     | Global variables/parameters evaluated with absent focus; fixes strip-space-023        |
+//                      | Charles Korthout | 5.47  | 25-06-2026     | Register source document URI in evaluation context; fixes accessor-008                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -356,6 +357,15 @@ public sealed class TransformEngine
         // subject to the stylesheet's whitespace stripping rules, but the stylesheet
         // document itself (returned by document('')) must not be mutated.
         _context.DocumentPostProcessor = PostProcessLoadedDocument;
+
+        // Make the source document available to fn:doc via its document URI so that
+        // doc(document-uri($arg)) is $arg returns true for the initial source tree.
+        if (source != null)
+        {
+            var sourceDoc = source.NodeKind == XdmNodeKind.Document ? source : source.Document;
+            if (sourceDoc != null && !string.IsNullOrEmpty(sourceDoc.DocumentUri))
+                _context.RegisterDocument(sourceDoc.DocumentUri, sourceDoc);
+        }
 
         // Initialize global parameters and variables before compiling match patterns
         // and building key indices, because both match-pattern predicate validation

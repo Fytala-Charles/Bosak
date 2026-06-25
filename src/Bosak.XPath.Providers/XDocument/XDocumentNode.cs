@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 11-06-2026     | GetNamespaceAxis skips empty-URI declarations (xmlns="") and stops at inheritance barriers |
 //                      | Charles Korthout | 1.1   | 11-06-2026     | Override Equals/GetHashCode for IXdmNode identity-based equality                         |
 //                      | Charles Korthout | 1.2   | 13-06-2026     | Composite DocumentOrder includes global creation sequence for cross-document sorting    |
+//                      | Charles Korthout | 1.3   | 25-06-2026     | Added DocumentUri property/setter distinct from BaseUri                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -57,6 +58,30 @@ public sealed class XDocumentNode : IXdmNode
 
     /// <summary>Gets the underlying LINQ to XML node.</summary>
     public XObject UnderlyingObject => _node;
+
+    /// <summary>
+    /// Annotation stored on an <see cref="XDocument"/> to record its document URI
+    /// independently of its base URI. Temporary trees have no document URI.
+    /// </summary>
+    private sealed class DocumentUriAnnotation(string uri)
+    {
+        public string Uri { get; } = uri;
+    }
+
+    /// <summary>
+    /// Sets the document URI for this node when it represents a document node.
+    /// </summary>
+    /// <param name="uri">The absolute document URI, or empty string to clear it.</param>
+    public void SetDocumentUri(string uri)
+    {
+        if (_node is System.Xml.Linq.XDocument doc)
+        {
+            if (string.IsNullOrEmpty(uri))
+                doc.RemoveAnnotations<DocumentUriAnnotation>();
+            else
+                doc.AddAnnotation(new DocumentUriAnnotation(uri));
+        }
+    }
 
     private XDocumentNode(XAttribute declaration, XElement owner)
     {
@@ -281,6 +306,31 @@ public sealed class XDocumentNode : IXdmNode
     }
 
     public string BaseUri => ComputeBaseUri();
+
+    public string DocumentUri => ComputeDocumentUri();
+
+    private string ComputeDocumentUri()
+    {
+        if (_node is System.Xml.Linq.XDocument doc)
+        {
+            var annotation = doc.Annotation<DocumentUriAnnotation>();
+            if (annotation != null)
+                return annotation.Uri;
+            return doc.BaseUri ?? string.Empty;
+        }
+
+        // Fallback for non-document nodes: report the containing document's URI.
+        var containingDoc = _node.Document;
+        if (containingDoc != null)
+        {
+            var docAnnotation = containingDoc.Annotation<DocumentUriAnnotation>();
+            if (docAnnotation != null)
+                return docAnnotation.Uri;
+            return containingDoc.BaseUri ?? string.Empty;
+        }
+
+        return string.Empty;
+    }
 
     private string ComputeBaseUri()
     {

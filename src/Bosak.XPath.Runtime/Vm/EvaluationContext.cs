@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      | Charles Korthout | 1.3   | 24-06-2026     | Added DocumentPostProcessor for XSLT whitespace stripping on loaded documents          |
 //                      | Charles Korthout | 1.4   | 25-06-2026     | Added InitialTemplateCallParameters/TunnelParameters for named-template entry points   |
+//                      | Charles Korthout | 1.5   | 25-06-2026     | Added RegisterDocument to pre-cache source documents for fn:doc identity               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -195,6 +196,18 @@ public sealed class EvaluationContext
             node = DocumentPostProcessor(node);
         _documentCache[uri] = node;
         return node;
+    }
+
+    /// <summary>
+    /// Registers a document node under the supplied URI without invoking <see cref="DocumentLoader"/>.
+    /// Used by XSLT to make the source document available to <c>fn:doc</c> via its document URI.
+    /// </summary>
+    /// <param name="uri">The absolute URI to register.</param>
+    /// <param name="node">The document node to associate with the URI.</param>
+    public void RegisterDocument(string uri, IXdmNode node)
+    {
+        if (!string.IsNullOrEmpty(uri))
+            _documentCache[uri] = node;
     }
 
     // ------------------------------------------------------------------

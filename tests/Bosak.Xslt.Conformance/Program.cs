@@ -469,7 +469,11 @@ class Program
             evalContext.DocumentLoader = uri =>
             {
                 if (string.IsNullOrEmpty(uri) || uri == baseUri)
-                    return new XDocumentNode(xslDoc);
+                {
+                    var stylesheetNode = new XDocumentNode(xslDoc);
+                    stylesheetNode.SetDocumentUri(baseUri);
+                    return stylesheetNode;
+                }
                 var resolvedUri = uri;
                 if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(baseUri))
                     resolvedUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
@@ -479,7 +483,9 @@ class Program
                     var doc = LoadDocumentFromFile(localPath);
                     if (string.IsNullOrEmpty(doc.BaseUri))
                         doc.AddAnnotation(resolvedUri);
-                    return new XDocumentNode(doc);
+                    var node = new XDocumentNode(doc);
+                    node.SetDocumentUri(resolvedUri);
+                    return node;
                 }
                 // Try test set dir
                 var testPath = Path.Combine(testSetDir, uri);
@@ -488,7 +494,9 @@ class Program
                     var doc = LoadDocumentFromFile(testPath);
                     if (string.IsNullOrEmpty(doc.BaseUri))
                         doc.AddAnnotation(new Uri(testPath).AbsoluteUri);
-                    return new XDocumentNode(doc);
+                    var node = new XDocumentNode(doc);
+                    node.SetDocumentUri(new Uri(testPath).AbsoluteUri);
+                    return node;
                 }
                 throw new FileNotFoundException($"Document not found: {uri}");
             };
@@ -728,6 +736,10 @@ class Program
         if (string.IsNullOrEmpty(doc.BaseUri) && sourceUri != null)
             doc.AddAnnotation(sourceUri);
 
+        var sourceNode = new XDocumentNode(doc);
+        if (sourceUri != null)
+            sourceNode.SetDocumentUri(sourceUri);
+
         // Handle select="..." on source (e.g. role="." select="/doc")
         var select = source.Attribute("select")?.Value;
         if (!string.IsNullOrEmpty(select))
@@ -751,7 +763,7 @@ class Program
             }
         }
 
-        return new XDocumentNode(doc);
+        return sourceNode;
     }
 
     static void CollectEntryPointParameters(XElement? entryPointElem, EvaluationContext evalContext, XNamespace ns)

@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added ToXmlString for fn:serialize                                                     |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added BaseUri property for fn:base-uri and fn:document-uri                             |
+//                      | Charles Korthout | 0.4   | 25-06-2026     | Added DocumentUri property separate from BaseUri                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -65,6 +66,9 @@ public interface IXdmNode
 
     /// <summary>Gets the base URI of this node, or empty string if none.</summary>
     string BaseUri { get; }
+
+    /// <summary>Gets the document URI of this node, or empty string if none.</summary>
+    string DocumentUri { get; }
 
     /// <summary>Returns the XML serialization of this node.</summary>
     string ToXmlString();

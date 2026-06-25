@@ -5963,7 +5963,7 @@ public static class FunctionLibrary
         var node = item.NodeValue!;
         if (node.NodeKind != XdmNodeKind.Document)
             return XdmValue.Undefined;
-        var uri = node.BaseUri;
+        var uri = node.DocumentUri;
         return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
     }
 
@@ -5991,7 +5991,7 @@ public static class FunctionLibrary
         var node = arg.NodeValue!;
         if (node.NodeKind != XdmNodeKind.Document)
             return XdmValue.Undefined;
-        var uri = node.BaseUri;
+        var uri = node.DocumentUri;
         return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
     }
 
@@ -6791,7 +6791,15 @@ public static class FunctionLibrary
             return XdmValue.Undefined;
 
         if (value.IsNode)
-            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
+        {
+            // XDM §2.7.2: typed value of comments and PIs is xs:string;
+            // for elements, attributes, text, and document nodes in the untyped
+            // case it is xs:untypedAtomic.
+            var node = value.NodeValue;
+            if (node.NodeKind is XdmNodeKind.ProcessingInstruction or XdmNodeKind.Comment)
+                return XdmValue.FromString(node.StringValue);
+            return XdmValue.FromString(node.StringValue, "untypedAtomic");
+        }
 
         if (value.IsSequence)
         {
@@ -8164,7 +8172,15 @@ public static class FunctionLibrary
             throw new InvalidOperationException("FOTY0013");
 
         if (value.IsNode)
-            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
+        {
+            // XDM §2.7.2: typed value of comments and PIs is xs:string;
+            // for elements, attributes, text, and document nodes in the untyped
+            // case it is xs:untypedAtomic.
+            var node = value.NodeValue;
+            if (node.NodeKind is XdmNodeKind.ProcessingInstruction or XdmNodeKind.Comment)
+                return XdmValue.FromString(node.StringValue);
+            return XdmValue.FromString(node.StringValue, "untypedAtomic");
+        }
 
         if (value.IsArray)
         {

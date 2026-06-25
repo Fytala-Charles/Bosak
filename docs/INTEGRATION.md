@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 June 2026
 > **Bosak baseline:** 894 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,591 passed / 660 failed / 9,349 skipped (~87.4%)
+> **XSLT baseline:** 4,615 passed / 636 failed / 9,349 skipped (~87.9%)
 
 ---
 
@@ -95,6 +95,9 @@ var ctx = new EvaluationContext
     BaseUri = "file:///C:/Data/",
     DocumentLoader = uri => /* your IXdmNode loader */
 };
+
+// Pre-register a source document so fn:doc(document-uri($node)) returns the same node.
+ctx.RegisterDocument("file:///C:/Data/input.xml", sourceDocument);
 
 ctx.WithNamespace("edi", "http://example.org/edi")
    .WithVariable("docId", XdmValue.FromString("DOC-1234"));

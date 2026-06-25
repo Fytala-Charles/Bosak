@@ -126,11 +126,13 @@ public interface IXdmNode
     string NamespaceUri { get; }
     string Prefix { get; }
     string StringValue { get; }
-    
+    string BaseUri { get; }
+    string DocumentUri { get; }  // separate from BaseUri; empty for temporary trees
+
     IXdmNode? Parent { get; }
     XdmSequence Children(XdmNodeKind kind = XdmNodeKind.All);
     XdmSequence Attributes(string? localName = null, string? namespaceUri = null);
-    
+
     // Axis navigation returns lazy sequences
     XdmSequence Axis(XdmAxis axis);
 }
