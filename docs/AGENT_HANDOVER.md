@@ -43,6 +43,9 @@
 4. **`xsl:try` rethrows unmatched errors** — When no `xsl:catch` clause matches a thrown error, the exception is now rethrown rather than swallowed.
    - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
+5. **`XdmValue.FromNode(null)` returns `XdmValue.Undefined`** — Defensive cleanup so that a `null` `IXdmNode` is never represented as a node-kind value with a null reference. This prevents the class of context-item bug fixed in item 1 from recurring in other call sites.
+   - **Files changed**: `src/Bosak.XPath.Core/Xdm/XdmValue.cs`.
+
 ## Notes
 
 - Unit-test suite: **894 passed / 0 failed** across 8 projects.

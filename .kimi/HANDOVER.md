@@ -18,7 +18,8 @@
 | 2 | Added support for multiple `xsl:catch` clauses evaluated in document order | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
 | 3 | Implemented proper `xsl:catch/@errors` matching for `*`, plain local names, `*:local`, `Q{uri}local`, and `prefix:local` bound to the `err` namespace | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
 | 4 | Made `xsl:try` rethrow errors that do not match any `xsl:catch` clause | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 5 | Updated agent handover, integration guide, and feature request registry | `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` | Done |
+| 5 | Defensive cleanup: `XdmValue.FromNode(null)` now returns `XdmValue.Undefined` | `src/Bosak.XPath.Core/Xdm/XdmValue.cs` | Done |
+| 6 | Updated agent handover, integration guide, and feature request registry | `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` | Done |
 
 ## Current Branch
 
@@ -33,9 +34,7 @@
 
 ## Next Recommended Work
 
-1. Re-run the full conformance suite after the commit and verify the 4,594/657/9,349 numbers are stable.
-2. Pick the next small conformance cluster to clear. Candidates with the highest runnable pass-rate gaps include:
-   - `try` cluster (currently 14/21 failed) — many failures are static errors being caught dynamically due to lazy XPath compilation.
-   - `type` cluster (47/11 failed from the latest run) — type-related sequence construction and coercion issues.
-   - `as` cluster (type coercion / sequence-type matching) — related to the above.
-3. Consider a broader cleanup of `XdmValue.FromNode(null)` to return `XdmValue.Undefined` instead of a node-kind value with a null reference, which would prevent similar context-item bugs elsewhere.
+1. Pick the next small conformance cluster to clear. Candidates with the highest runnable pass-rate gaps include:
+   - **`try` cluster** (14/21 failed) — many failures are static errors being caught dynamically because XPaths inside `xsl:try` are compiled lazily. Fixing this requires either eager compilation of `xsl:try/@select` before execution or propagating static errors out of `xsl:try`.
+   - **`type` cluster** (47/11 failed) — type-related sequence construction and coercion issues.
+   - **`as` cluster** — sequence-type matching and `@as` enforcement problems related to the above.

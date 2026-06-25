@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 22-05-2026     | Added FormatXPathFloat, fixed FormatXPathDouble exponent and negative zero               |
 //                      | Charles Korthout | 0.6   | 23-05-2026     | Fixed decimal ToString invariant culture; added XPath canonical double formatting        |
 //                      | Charles Korthout | 0.7   | 08-06-2026     | Fixed FormatXPathDouble/Float stripping trailing zeros from whole numbers (e.g. 50→5)   |
+//                      | Charles Korthout | 0.8   | 25-06-2026     | FromNode(null) returns Undefined to prevent null-node context-item bugs                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -81,7 +82,7 @@ public readonly struct XdmValue
     public static XdmValue FromDuration(string value) => new(XdmValueKind.Duration, reference: value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromNode(IXdmNode node) => new(XdmValueKind.Node, reference: node);
+    public static XdmValue FromNode(IXdmNode node) => node != null ? new(XdmValueKind.Node, reference: node) : Undefined;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromSequence(XdmSequence sequence)
