@@ -66,8 +66,7 @@ public sealed class Stylesheet
     private readonly List<AccumulatorDefinition> _accumulators = new();
     private readonly List<XElement> _globalVariables = new();
     private readonly List<XElement> _globalParameters = new();
-    private readonly List<SpaceHandlingRule> _stripSpaceRules = new();
-    private readonly List<SpaceHandlingRule> _preserveSpaceRules = new();
+    private readonly List<SpaceHandlingRule> _spaceRules = new();
     private readonly Dictionary<string, ModeDefinition> _modeDefinitions = new();
     private readonly List<XsltFunctionDefinition> _functionDefinitions = new();
     private readonly List<DecimalFormatDefinition> _decimalFormats = new();
@@ -445,32 +444,23 @@ public sealed class Stylesheet
                 _accumulators.Add(def);
         }
 
-        // Parse xsl:strip-space and xsl:preserve-space declarations
-        foreach (var strip in root.Elements(XName.Get("strip-space", XslNamespace)))
+        // Parse xsl:strip-space and xsl:preserve-space declarations.
+        // Rules are collected in document order so that same-precedence conflicts
+        // are resolved by last-match-wins.
+        foreach (var decl in root.Elements()
+            .Where(e => e.Name.NamespaceName == XslNamespace
+                     && (e.Name.LocalName == "strip-space" || e.Name.LocalName == "preserve-space")))
         {
-            if (!UseWhen(strip)) continue;
-            var elements = strip.Attribute("elements")?.Value;
-            var stripDefaultNs = GetXPathDefaultNamespace(strip);
+            if (!UseWhen(decl)) continue;
+            bool isStrip = decl.Name.LocalName == "strip-space";
+            var elements = decl.Attribute("elements")?.Value;
+            var defaultNs = GetXPathDefaultNamespace(decl);
             if (!string.IsNullOrEmpty(elements))
             {
                 foreach (var nameTest in elements.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    var (resolvedName, nsUri) = ResolveNameTest(nameTest, stripDefaultNs);
-                    _stripSpaceRules.Add(new SpaceHandlingRule(resolvedName, isStrip: true, ImportPrecedence, nsUri));
-                }
-            }
-        }
-        foreach (var preserve in root.Elements(XName.Get("preserve-space", XslNamespace)))
-        {
-            if (!UseWhen(preserve)) continue;
-            var elements = preserve.Attribute("elements")?.Value;
-            var preserveDefaultNs = GetXPathDefaultNamespace(preserve);
-            if (!string.IsNullOrEmpty(elements))
-            {
-                foreach (var nameTest in elements.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    var (resolvedName, nsUri) = ResolveNameTest(nameTest, preserveDefaultNs);
-                    _preserveSpaceRules.Add(new SpaceHandlingRule(resolvedName, isStrip: false, ImportPrecedence, nsUri));
+                    var rule = SpaceHandlingRule.FromNameTest(nameTest, decl, this, defaultNs, isStrip, ImportPrecedence);
+                    _spaceRules.Add(rule);
                 }
             }
         }
@@ -1442,8 +1432,7 @@ public sealed class Stylesheet
         foreach (var included in _includes)
             result.AddRange(included.GetAllSpaceHandlingRules());
         // Local last (highest precedence)
-        result.AddRange(_stripSpaceRules);
-        result.AddRange(_preserveSpaceRules);
+        result.AddRange(_spaceRules);
         return result;
     }
 
@@ -1775,18 +1764,6 @@ public sealed class Stylesheet
         return null;
     }
 
-    /// <summary>
-    /// Resolves a name test string using the given default namespace.
-    /// Returns the resolved name test and the namespace URI (if any).
-    /// </summary>
-    private static (string ResolvedName, string? NamespaceUri) ResolveNameTest(string nameTest, string? defaultNamespace)
-    {
-        if (nameTest == "*" || nameTest.Contains(':'))
-            return (nameTest, null);
-        if (!string.IsNullOrEmpty(defaultNamespace))
-            return ($"Q{{{defaultNamespace}}}{nameTest}", defaultNamespace);
-        return (nameTest, null);
-    }
 }
 
 /// <summary>
@@ -1977,20 +1954,93 @@ public static class StylesheetExtensions
 }
 
 /// <summary>
+/// The kind of name test stored in an <see cref="SpaceHandlingRule"/>.
+/// </summary>
+public enum SpaceNameTestKind
+{
+    /// <summary>Matches any element name.</summary>
+    Any,
+    /// <summary>Matches an exact QName.</summary>
+    Exact,
+    /// <summary>Matches any element with a specific local name regardless of namespace.</summary>
+    WildcardLocal,
+    /// <summary>Matches any element within a specific namespace.</summary>
+    WildcardNamespace
+}
+
+/// <summary>
 /// Represents a single xsl:strip-space or xsl:preserve-space rule.
 /// </summary>
 public readonly struct SpaceHandlingRule
 {
-    public string NameTest { get; }
+    public SpaceNameTestKind Kind { get; }
+    public string? LocalName { get; }
     public string? NamespaceUri { get; }
     public bool IsStrip { get; }
     public int Precedence { get; }
 
-    public SpaceHandlingRule(string nameTest, bool isStrip, int precedence, string? namespaceUri = null)
+    private SpaceHandlingRule(SpaceNameTestKind kind, string? localName, string? namespaceUri, bool isStrip, int precedence)
     {
-        NameTest = nameTest;
+        Kind = kind;
+        LocalName = localName;
+        NamespaceUri = namespaceUri;
         IsStrip = isStrip;
         Precedence = precedence;
-        NamespaceUri = namespaceUri;
+    }
+
+    /// <summary>
+    /// Parses a name test from an <c>@elements</c> value into a <see cref="SpaceHandlingRule"/>.
+    /// </summary>
+    public static SpaceHandlingRule FromNameTest(string nameTest, XElement declaration, Stylesheet stylesheet, string? defaultNamespace, bool isStrip, int precedence)
+    {
+        var nt = nameTest.Trim();
+
+        // EQName syntax: Q{namespace-uri}local or Q{namespace-uri}*
+        if (nt.StartsWith("Q{"))
+        {
+            int closeBrace = nt.IndexOf('}');
+            if (closeBrace < 2)
+                throw new InvalidOperationException($"XTSE0270: Invalid name test '{nameTest}' in xsl:{(isStrip ? "strip" : "preserve")}-space/@elements");
+            var nsUri = nt[2..closeBrace];
+            var rest = nt[(closeBrace + 1)..];
+            if (rest == "*")
+                return new SpaceHandlingRule(SpaceNameTestKind.WildcardNamespace, null, nsUri, isStrip, precedence);
+            if (rest.Length == 0)
+                throw new InvalidOperationException($"XTSE0270: Invalid name test '{nameTest}' in xsl:{(isStrip ? "strip" : "preserve")}-space/@elements");
+            return new SpaceHandlingRule(SpaceNameTestKind.Exact, rest, nsUri, isStrip, precedence);
+        }
+
+        if (nt == "*")
+        {
+            return new SpaceHandlingRule(SpaceNameTestKind.Any, null, null, isStrip, precedence);
+        }
+
+        if (nt.StartsWith("*:"))
+        {
+            return new SpaceHandlingRule(SpaceNameTestKind.WildcardLocal, nt[2..], null, isStrip, precedence);
+        }
+
+        if (nt.EndsWith(":*"))
+        {
+            var prefix = nt[..^2];
+            var nsUri = declaration.ResolveNamespace(prefix) ?? stylesheet.ResolveNamespace(prefix);
+            if (string.IsNullOrEmpty(nsUri))
+                throw new InvalidOperationException($"XTSE0280: Undeclared prefix '{prefix}' in xsl:{(isStrip ? "strip" : "preserve")}-space/@elements");
+            return new SpaceHandlingRule(SpaceNameTestKind.WildcardNamespace, null, nsUri, isStrip, precedence);
+        }
+
+        int colon = nt.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = nt[..colon];
+            var localName = nt[(colon + 1)..];
+            var nsUri = declaration.ResolveNamespace(prefix) ?? stylesheet.ResolveNamespace(prefix);
+            if (string.IsNullOrEmpty(nsUri))
+                throw new InvalidOperationException($"XTSE0280: Undeclared prefix '{prefix}' in xsl:{(isStrip ? "strip" : "preserve")}-space/@elements");
+            return new SpaceHandlingRule(SpaceNameTestKind.Exact, localName, nsUri, isStrip, precedence);
+        }
+
+        // Unprefixed NCName: use the default namespace if one is in scope.
+        return new SpaceHandlingRule(SpaceNameTestKind.Exact, nt, defaultNamespace, isStrip, precedence);
     }
 }

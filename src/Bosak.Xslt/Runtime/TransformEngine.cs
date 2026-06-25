@@ -4692,16 +4692,27 @@ public sealed class TransformEngine
     /// <summary>
     /// Determines whether an XDM value is populated for the purposes of
     /// <c>xsl:where-populated</c>. A sequence is populated if it contains at
-    /// least one item that is not an "empty" node: document and element nodes
-    /// are empty when they have no children (and elements have no attributes);
-    /// text, comment, processing-instruction, and attribute nodes are empty
-    /// when their string value is zero-length. Atomic values are always
-    /// populated.
+    /// least one item that is not "empty": document and element nodes are empty
+    /// when they have no children (elements with only namespace declarations are
+    /// also empty); text, comment, and processing-instruction nodes are empty
+    /// when their string value is zero-length. Attribute and namespace nodes do
+    /// not make a sequence populated. Atomic values are populated, but arrays are
+    /// populated only if at least one member is populated.
     /// </summary>
     private bool IsPopulated(XdmValue value)
     {
         if (value.IsUndefined)
             return false;
+
+        if (value.IsArray && value.ArrayValue != null)
+        {
+            foreach (var item in value.ArrayValue.Values)
+            {
+                if (IsPopulated(item))
+                    return true;
+            }
+            return false;
+        }
 
         if (value.IsNode && value.NodeValue != null)
             return IsPopulatedNode(value.NodeValue);
@@ -4710,24 +4721,16 @@ public sealed class TransformEngine
         {
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
             {
-                if (item.IsUndefined)
-                    continue;
-                if (item.IsNode && item.NodeValue != null)
-                {
-                    if (IsPopulatedNode(item.NodeValue))
-                        return true;
-                }
-                else
-                {
-                    // Atomic value
+                if (IsPopulated(item))
                     return true;
-                }
             }
             return false;
         }
 
-        // Single atomic value
-        return true;
+        // Single atomic value. An empty string is treated as empty; all other
+        // atomic values are populated. Maps and function items other than arrays
+        // are considered populated.
+        return value.Kind != XdmValueKind.String || value.StringValue.Length > 0;
     }
 
     private static bool IsPopulatedNode(IXdmNode node)
@@ -4737,16 +4740,16 @@ public sealed class TransformEngine
             case XdmNodeKind.Document:
                 return node.Axis(XdmAxis.Child).GetEnumerator().MoveNext();
             case XdmNodeKind.Element:
-                if (node.Axis(XdmAxis.Attribute).GetEnumerator().MoveNext())
-                    return true;
+                // For xsl:where-populated, an element is empty unless it has children;
+                // attributes do not make it populated.
                 return node.Axis(XdmAxis.Child).GetEnumerator().MoveNext();
-            case XdmNodeKind.Attribute:
             case XdmNodeKind.Text:
             case XdmNodeKind.Comment:
             case XdmNodeKind.ProcessingInstruction:
                 return node.StringValue.Length > 0;
+            case XdmNodeKind.Attribute:
             case XdmNodeKind.Namespace:
-                return !string.IsNullOrEmpty(node.StringValue);
+                return false;
             default:
                 return true;
         }
@@ -9458,27 +9461,34 @@ public sealed class TransformEngine
                         textNode.Remove();
                 }
                 if (rules.Count > 0)
-                    StripWhitespaceInElement(doc.Root, rules);
+                    StripWhitespaceInElement(doc.Root, rules, preserveInherited: false);
             }
             else if (xdocNode.UnderlyingObject is XElement elem)
             {
                 if (rules.Count > 0)
-                    StripWhitespaceInElement(elem, rules);
+                    StripWhitespaceInElement(elem, rules, preserveInherited: false);
             }
         }
     }
 
-    private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules)
+    private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules, bool preserveInherited)
     {
         if (element == null)
             return;
 
+        bool preserve = preserveInherited;
+        var xmlSpace = element.Attribute(System.Xml.Linq.XNamespace.Xml + "space")?.Value;
+        if (xmlSpace == "preserve")
+            preserve = true;
+        else if (xmlSpace == "default")
+            preserve = false;
+
         foreach (var child in element.Elements().ToList())
         {
-            StripWhitespaceInElement(child, rules);
+            StripWhitespaceInElement(child, rules, preserve);
         }
 
-        if (ShouldStripWhitespace(element, rules))
+        if (!preserve && ShouldStripWhitespace(element, rules))
         {
             foreach (var textNode in element.Nodes().OfType<XText>().ToList())
             {
@@ -9500,6 +9510,15 @@ public sealed class TransformEngine
         return text.Length > 0;
     }
 
+    private static int NameTestSpecificity(SpaceHandlingRule rule)
+        => rule.Kind switch
+        {
+            SpaceNameTestKind.Exact => 3,
+            SpaceNameTestKind.WildcardLocal => 2,
+            SpaceNameTestKind.WildcardNamespace => 1,
+            _ => 0
+        };
+
     private static bool ShouldStripWhitespace(XElement element, List<SpaceHandlingRule> rules)
     {
         // xml:space="preserve" always preserves whitespace
@@ -9509,66 +9528,69 @@ public sealed class TransformEngine
 
         SpaceHandlingRule? bestStrip = null;
         SpaceHandlingRule? bestPreserve = null;
+        int bestStripSpec = -1;
+        int bestPreserveSpec = -1;
 
         foreach (var rule in rules)
         {
-            if (MatchesNameTest(rule, element))
+            if (!MatchesNameTest(rule, element))
+                continue;
+
+            int spec = NameTestSpecificity(rule);
+            if (rule.IsStrip)
             {
-                if (rule.IsStrip && (bestStrip == null || rule.Precedence > bestStrip.Value.Precedence))
+                if (bestStrip == null ||
+                    rule.Precedence > bestStrip.Value.Precedence ||
+                    (rule.Precedence == bestStrip.Value.Precedence && spec >= bestStripSpec))
+                {
                     bestStrip = rule;
-                if (!rule.IsStrip && (bestPreserve == null || rule.Precedence > bestPreserve.Value.Precedence))
+                    bestStripSpec = spec;
+                }
+            }
+            else
+            {
+                if (bestPreserve == null ||
+                    rule.Precedence > bestPreserve.Value.Precedence ||
+                    (rule.Precedence == bestPreserve.Value.Precedence && spec >= bestPreserveSpec))
+                {
                     bestPreserve = rule;
+                    bestPreserveSpec = spec;
+                }
             }
         }
 
-        if (bestPreserve == null && bestStrip == null)
-            return false;
-
-        if (bestPreserve == null)
-            return bestStrip != null;
-
         if (bestStrip == null)
             return false;
+        if (bestPreserve == null)
+            return true;
 
-        // Preserve wins at same or higher precedence; strip wins only at strictly higher precedence
-        return bestStrip.Value.Precedence > bestPreserve.Value.Precedence;
+        if (bestStrip.Value.Precedence > bestPreserve.Value.Precedence)
+            return true;
+        if (bestStrip.Value.Precedence < bestPreserve.Value.Precedence)
+            return false;
+
+        // Same precedence: the more specific name test wins.
+        if (bestStripSpec > bestPreserveSpec)
+            return true;
+        if (bestStripSpec < bestPreserveSpec)
+            return false;
+
+        // Same precedence and specificity: this is a conflict between strip and preserve
+        // rules (XTSE0270). The spec treats it as a recoverable static error.
+        throw new InvalidOperationException("XTSE0270: Conflicting xsl:strip-space and xsl:preserve-space rules");
     }
 
     private static bool MatchesNameTest(SpaceHandlingRule rule, XElement element)
     {
-        var nameTest = rule.NameTest;
-        if (nameTest == "*")
-            return true;
-
-        if (nameTest.StartsWith("Q{"))
+        return rule.Kind switch
         {
-            int closeBrace = nameTest.IndexOf('}');
-            if (closeBrace >= 2)
-            {
-                var nsUri = nameTest[2..closeBrace];
-                var localName = nameTest[(closeBrace + 1)..];
-                return element.Name.NamespaceName == nsUri && element.Name.LocalName == localName;
-            }
-        }
-
-        if (nameTest.EndsWith(":*"))
-        {
-            // prefix:* - would need prefix resolution; for now, match any element
-            return true;
-        }
-
-        if (nameTest.Contains(':'))
-        {
-            // QName with prefix - would need prefix resolution
-            var localName = nameTest.Contains(':') ? nameTest.Split(':')[1] : nameTest;
-            return element.Name.LocalName == localName;
-        }
-
-        // Unprefixed name: match local name and namespace
-        // If NamespaceUri is specified, match exactly that namespace.
-        // If NamespaceUri is null (no xpath-default-namespace), match no namespace.
-        var expectedNs = rule.NamespaceUri ?? "";
-        return element.Name.LocalName == nameTest && element.Name.NamespaceName == expectedNs;
+            SpaceNameTestKind.Any => true,
+            SpaceNameTestKind.WildcardLocal => element.Name.LocalName == rule.LocalName,
+            SpaceNameTestKind.WildcardNamespace => element.Name.NamespaceName == (rule.NamespaceUri ?? string.Empty),
+            SpaceNameTestKind.Exact => element.Name.LocalName == rule.LocalName
+                && element.Name.NamespaceName == (rule.NamespaceUri ?? string.Empty),
+            _ => false,
+        };
     }
 
     // ------------------------------------------------------------------
