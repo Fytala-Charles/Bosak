@@ -114,6 +114,7 @@
 //                      | Charles Korthout | 5.43  | 25-06-2026     | Pass regex options to ValidateAndTranslatePattern for xsl:analyze-string               |
 //                      | Charles Korthout | 5.44  | 25-06-2026     | Capture raw XDM result from initial named template with @as for output tree="no"        |
 //                      | Charles Korthout | 5.45  | 25-06-2026     | xsl:try multi-catch, @errors matching, null->Undefined context; fixes call-template-0110 |
+//                      | Charles Korthout | 5.46  | 25-06-2026     | Global variables/parameters evaluated with absent focus; fixes strip-space-023        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -254,7 +255,7 @@ public sealed class TransformEngine
     private readonly HashSet<(IXdmNode Root, string ClarkName)> _accumulatorsInProgress = new();
     private readonly Dictionary<IXdmNode, HashSet<string>> _accumulatorApplicability = new();
 
-    // Focus used for global variable/param evaluation (the source document node).
+    // The initial context item supplied to the transformation (the global context item).
     private XdmValue _globalContextItem = XdmValue.Undefined;
 
     /// <summary>The parsed xsl:output serialization properties.</summary>
@@ -335,9 +336,21 @@ public sealed class TransformEngine
         RegisterKeyFunction();
 
         // Apply whitespace stripping from xsl:strip-space / xsl:preserve-space
-        // before globals or key indices are evaluated.
+        // before globals or key indices are evaluated. Strip the document that
+        // contains the source node, not just the source node itself, so a selected
+        // whitespace text node can be removed.
         if (source != null)
-            ApplyWhitespaceStripping(source);
+        {
+            var stripTarget = source.Document ?? source;
+            ApplyWhitespaceStripping(stripTarget);
+            // If the selected source node was a whitespace text node that has been
+            // stripped from the tree, the initial context item is absent (XSLT 3.0 §5.4).
+            if (!IsNodeAttached(source))
+            {
+                source = null;
+                _initialSource = null;
+            }
+        }
 
         // Documents loaded by fn:doc / fn:document during the transformation are also
         // subject to the stylesheet's whitespace stripping rules, but the stylesheet
@@ -2770,20 +2783,22 @@ public sealed class TransformEngine
                 _preserveAtomicSequenceItems = savedPreserveAtomics;
                 _literalElementDepth = savedLiteralDepth;
 
+                XdmValue typedResult;
                 if (items.Count > 0)
                 {
                     var result = items.Count == 1 ? items[0] :
                         XdmValue.FromSequence(MaterializedSequence.FromList(items));
-                    result = ConvertVariableValue(result, asType);
-                    if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
-                        _rawInitialTemplateResult = result;
-                    else
-                        CopyToResult(result);
+                    typedResult = ConvertVariableValue(result, asType);
                 }
-                else if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
+                else
                 {
-                    _rawInitialTemplateResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType);
+                    typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType);
                 }
+
+                if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
+                    _rawInitialTemplateResult = typedResult;
+                else
+                    CopyToResult(typedResult);
             }
             else
             {
@@ -4327,8 +4342,11 @@ public sealed class TransformEngine
             {
                 copy.SetAttributeValue("xmlns", source.Name.NamespaceName);
             }
-            else if (!string.IsNullOrEmpty(prefix) && !_excludedResultPrefixes.Contains(prefix))
+            else if (!string.IsNullOrEmpty(prefix))
             {
+                // Always preserve the namespace binding on the constructed node.
+                // exclude-result-prefixes is a serialization-time concern; it must
+                // not change the node-name() of constructed nodes.
                 copy.SetAttributeValue(XNamespace.Xmlns + prefix, source.Name.NamespaceName);
             }
         }
@@ -6456,11 +6474,15 @@ public sealed class TransformEngine
         var focus = source != null ? XdmValue.FromNode(source) : XdmValue.Undefined;
         _globalContextItem = focus;
 
-        // Set the focus once for all global param/var evaluations.
-        // Sequence constructors inside global variables rely on _context.ContextItem
-        // being set when they evaluate XPath expressions (e.g. xsl:value-of/@select).
+        // Global variables/parameters are evaluated with a singleton focus based on the
+        // root node of the tree containing the initial context node (XSLT 3.0 §9.6).
+        // If no source node is supplied, the focus is absent and any reference to the
+        // context item raises XPDY0002.
         if (source != null)
-            _context.WithFocus(focus, 1, 1);
+        {
+            var root = GetRootNode(source);
+            _context.WithFocus(XdmValue.FromNode(root), 1, 1);
+        }
 
         // Capture externally-supplied parameter bindings before we add any globals.
         // This lets us distinguish caller-supplied values from default values when
@@ -6522,7 +6544,11 @@ public sealed class TransformEngine
                 _modeStack.Clear();
                 try
                 {
-                    _context.WithFocus(_globalContextItem, 1, 1);
+                    // Global variables/parameters are evaluated with a singleton focus based
+                    // on the root node of the tree containing the initial context node.
+                    var root = _globalContextItem.IsNode ? GetRootNode(_globalContextItem.NodeValue) : null;
+                    var focus = root != null ? XdmValue.FromNode(root) : XdmValue.Undefined;
+                    _context.WithFocus(focus, focus.IsUndefined ? 0 : 1, focus.IsUndefined ? 0 : 1);
                     if (_globalVariableSnapshot != null)
                         _context.RestoreVariables(_globalVariableSnapshot);
 
@@ -6541,7 +6567,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        value = EvaluateSequenceConstructor(info.Element, _globalContextItem, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                        value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
                     }
                     value = ConvertVariableValue(value, info.AsType);
                     _context.WithVariable(localName, value, namespaceUri);
@@ -6590,8 +6616,12 @@ public sealed class TransformEngine
                         _modeStack.Clear();
                         try
                         {
-                            _context.WithFocus(_globalContextItem, 1, 1);
-                            var value = EvaluateSequenceConstructor(info.Element, _globalContextItem, wrapInDocumentNode: true);
+                            // Global parameters are evaluated with a singleton focus based
+                            // on the root node of the tree containing the initial context node.
+                            var root = _globalContextItem.IsNode ? GetRootNode(_globalContextItem.NodeValue) : null;
+                            var globalFocus = root != null ? XdmValue.FromNode(root) : XdmValue.Undefined;
+                            _context.WithFocus(globalFocus, globalFocus.IsUndefined ? 0 : 1, globalFocus.IsUndefined ? 0 : 1);
+                            var value = EvaluateSequenceConstructor(info.Element, globalFocus, wrapInDocumentNode: true);
                             value = ConvertVariableValue(value, info.AsType);
                             _context.WithVariable(name.LocalName, value, name.NamespaceUri);
                         }
@@ -9807,6 +9837,22 @@ public sealed class TransformEngine
                 return false;
         }
         return text.Length > 0;
+    }
+
+    /// <summary>
+    /// Determines whether <paramref name="node"/> is still attached to its containing tree.
+    /// A whitespace text node removed by xsl:strip-space will report as detached.
+    /// </summary>
+    private static bool IsNodeAttached(IXdmNode node)
+    {
+        if (node is not XDocumentNode xn)
+            return true;
+
+        if (xn.UnderlyingObject is XDocument)
+            return true;
+        if (xn.UnderlyingObject is XObject xo)
+            return xo.Parent != null;
+        return true;
     }
 
     private static int NameTestSpecificity(SpaceHandlingRule rule)

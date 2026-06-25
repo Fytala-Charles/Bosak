@@ -69,6 +69,7 @@
 //                      | Charles Korthout | 5.5   | 24-06-2026     | fn:function-available validates QName and reports XTDE1400 for invalid/unbound names   |
 //                      | Charles Korthout | 5.6   | 24-06-2026     | Implemented fn:snapshot; fixed fn:innermost/fn:outermost descendant/ancestor checks    |
 //                      | Charles Korthout | 5.7   | 25-06-2026     | Added fn:nilled#0/#1; system-property namespace expansion; regex options in matches/replace/tokenize |
+//                      | Charles Korthout | 5.8   | 25-06-2026     | fn:resolve-QName validates lexical QName and raises FOCA0002; xs:boolean string cast is case-sensitive |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -8163,7 +8164,7 @@ public static class FunctionLibrary
             throw new InvalidOperationException("FOTY0013");
 
         if (value.IsNode)
-            return XdmValue.FromString(value.NodeValue.StringValue);
+            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
 
         if (value.IsArray)
         {
@@ -8972,11 +8973,18 @@ public static class FunctionLibrary
 
         string prefix;
         string local;
+        var colonCount = lexical.Count(c => c == ':');
+        if (colonCount > 1)
+        {
+            throw new InvalidOperationException("FOCA0002: Invalid lexical QName");
+        }
         if (lexical.Contains(':'))
         {
             var idx = lexical.IndexOf(':');
             prefix = lexical[..idx];
             local = lexical[(idx + 1)..];
+            if (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(local))
+                throw new InvalidOperationException("FOCA0002: Invalid lexical QName");
         }
         else
         {
@@ -8984,7 +8992,20 @@ public static class FunctionLibrary
             local = lexical;
         }
 
+        try
+        {
+            if (!string.IsNullOrEmpty(prefix))
+                System.Xml.XmlConvert.VerifyNCName(prefix);
+            System.Xml.XmlConvert.VerifyNCName(local);
+        }
+        catch (System.Xml.XmlException)
+        {
+            throw new InvalidOperationException("FOCA0002: Invalid lexical QName");
+        }
+
         var nsUri = ResolvePrefix(node, prefix);
+        if (!string.IsNullOrEmpty(prefix) && string.IsNullOrEmpty(nsUri))
+            throw new InvalidOperationException("FONS0004: No namespace binding for prefix '" + prefix + "'");
         return XdmValue.FromQName(new XsQName(local, nsUri, prefix));
     }
 

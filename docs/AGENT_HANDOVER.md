@@ -1,18 +1,18 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `a9084eb`
-**Current focus:** Fixed `call-template-0110`, hardened `xsl:try`/`xsl:catch`, and applied defensive `XdmValue.FromNode(null)` cleanup.
+**Commit:** `<pending>`
+**Current focus:** Fixed `call-template-0110`, hardened `xsl:try`/`xsl:catch`, applied defensive `XdmValue.FromNode(null)` cleanup, and cleared the `type` cluster.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 4,594
-- **Failed:** 657
+- **Passed:** 4,611
+- **Failed:** 640
 - **Skipped:** 9,349
-- **Pass rate:** 87.5% (+3 passes / −3 failures vs. previous 4,591/660)
+- **Pass rate:** 87.8% (+20 passes / −20 failures vs. previous 4,591/660)
 
 ## Cluster Status
 
@@ -28,6 +28,9 @@
 | built-in-templates | 6 | 5 | 0 | 1 | ✅ 100% runnable |
 | regex (all clusters) | 2162 | 46 | 1 | 2115 | 97.9% runnable |
 | try | 42 | 14 | 21 | 7 | Multiple `xsl:catch` clauses now evaluated in order; no change in net failures |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable; `type-0165` now passing |
+| strip-type-annotations | 27 | 24 | 0 | 3 | ✅ 100% runnable |
+| strip-space | 30 | 27 | 0 | 3 | ✅ 100% runnable; `strip-space-023` now passing |
 
 ## This Session Fixes
 
@@ -46,11 +49,48 @@
 5. **`XdmValue.FromNode(null)` returns `XdmValue.Undefined`** — Defensive cleanup so that a `null` `IXdmNode` is never represented as a node-kind value with a null reference. This prevents the class of context-item bug fixed in item 1 from recurring in other call sites.
    - **Files changed**: `src/Bosak.XPath.Core/Xdm/XdmValue.cs`.
 
+6. **QName equality ignores prefix** — `XsQName.Equals` now compares only namespace URI and local name, and the VM's value comparison path handles `xs:QName` operands directly. Fixes `type-0129`.
+   - **Files changed**: `src/Bosak.XPath.Core/Xdm/XsQName.cs`, `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+7. **`xs:boolean` string cast is case-sensitive** — String values 'TRUE'/'FALSE' are no longer accepted by `xs:boolean` / `castable as xs:boolean`. Fixes `type-0131`.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+8. **`fn:resolve-QName` validates lexical QNames and undeclared prefixes** — Raises `FOCA0002` for malformed lexical QNames and `FONS0004` for prefixes with no namespace binding. Fixes `type-0155` and `type-0157`.
+   - **Files changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+9. **Value comparisons require singleton operands** — `VmEngine.Compare` now raises `XPTY0004` when either operand atomizes to more than one item in a value comparison (`eq`, `ne`, `lt`, `gt`, etc.). Fixes `type-0162` and `type-0163`.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+10. **NameTest supports `*` and `prefix:*` wildcards from kind tests** — The VM `NameTest` opcode now matches any local name for `*` and any name in the resolved namespace for `prefix:*`. Fixes `type-0138`.
+    - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+11. **`exclude-result-prefixes` no longer strips prefixes during tree construction** — Literal result elements now always preserve their namespace binding; prefix exclusion is a serialization concern. Fixes `type-0143`.
+    - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+12. **`fn:data` on nodes returns `xs:untypedAtomic`** — Atomizing a node with `fn:data` now produces an `xs:untypedAtomic` value instead of a plain string, matching the XDM typed-value rules. Fixes `strip-type-annotations-023/024/025`.
+    - **Files changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+13. **Template `@as` validates empty-sequence results** — `ExecuteTemplate` now calls `ConvertVariableValue` for empty template results when `@as` is present, raising `XTTE0505` for types that do not allow an empty sequence. Fixes `type-0171`.
+    - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+14. **Value comparison casts `xs:untypedAtomic` to `xs:string`** — `VmEngine.Compare` now atomizes `xs:untypedAtomic` operands to plain strings before applying value-comparison semantics. This makes `xs:untypedAtomic('72') gt 70` raise `XPTY0004` while allowing `xs:untypedAtomic('') eq ''` to succeed. Fixes `type-0165`.
+    - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `tests/Bosak.XPath.Core.Tests/EndToEndTests.cs`.
+
+15. **`strip-space-023` — whitespace stripping on source document root and absent-focus globals** — When the initial context node is a whitespace text node that is stripped, the engine now detects the detached node and treats the initial context item as absent. Global variables/parameters are evaluated with a focus on the root of the source tree, so `select="."` raises `XPTY0002` when the context item is absent. Fixes `strip-space-023`.
+    - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`.
+
 ## Notes
 
 - Unit-test suite: **894 passed / 0 failed** across 8 projects.
-- Full W3C XSLT 3.0 suite: **4,594 passed / 657 failed / 9,349 skipped** (87.5%).
+- Full W3C XSLT 3.0 suite: **4,611 passed / 640 failed / 9,349 skipped** (87.8%).
+- The `type` and `strip-space` clusters are now **100% runnable**.
 - The `try` cluster net failure count is unchanged; the distribution shifted as several tests now pass thanks to proper multi-catch selection, while others expose long-standing lazy-compile/static-error behavior.
+
+## Recommended Next Steps
+
+1. Commit the accumulated `type`, `strip-space`, and `xsl:try` fixes.
+2. Pick the next medium cluster to attack (e.g., `accessor` (3 failures), `whitespace` (3 failures), or a larger cluster like `math` (16 failures) / `axes` (15 failures)).
+3. Continue driving down the remaining 640 failures in the full W3C XSLT 3.0 suite.
 
 ---
 

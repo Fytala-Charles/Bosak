@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 30-05-2026     | Wrap predicated path steps in PathStepMap for per-context-item predicate evaluation   |
 //                      | Charles Korthout | 1.3   | 01-06-2026     | Use SimpleMap for non-StepNode steps in path expressions (e.g. /a/b/number())        |
 //                      | Charles Korthout | 1.4   | 01-06-2026     | Expanded register encoding from byte to ushort; removed 255-register limit             |
+//                      | Charles Korthout | 1.5   | 25-06-2026     | Only emit LoadContextItem for path expressions that actually reference the focus       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -578,10 +579,16 @@ public sealed class IrLowerer
 
     private int LowerPathExpr(PathExprNode node, int? targetReg)
     {
-        int contextReg = AllocRegister();
-        Emit(IrOpCode.LoadContextItem, (ushort)contextReg);
+        // Only load the context item if the path expression actually uses it.
+        // A relative path whose first step is a non-axis expression (e.g. $x, parse-xml(...))
+        // does not need the focus; loading it would force an XPDY0002 error when the focus
+        // is absent and the context item is never referenced.
+        bool needsContext = node.IsAbsolute || (node.Steps.Count > 0 && node.Steps[0] is StepNode);
+        int contextReg = needsContext ? AllocRegister() : -1;
+        if (needsContext)
+            Emit(IrOpCode.LoadContextItem, (ushort)contextReg);
 
-        int currentReg = contextReg;
+        int currentReg = needsContext ? contextReg : -1;
         if (node.IsAbsolute)
         {
             int rootReg = AllocRegister();
@@ -601,8 +608,10 @@ public sealed class IrLowerer
             {
                 if (isFirstStep)
                 {
-                    // First step: evaluate once (e.g., $x, parse-xml(...))
-                    currentReg = LowerNode(step, currentReg);
+                    // First step: evaluate once (e.g., $x, parse-xml(...)).
+                    // If the path did not need the context item, let LowerNode allocate
+                    // a fresh register rather than passing the sentinel -1.
+                    currentReg = LowerNode(step, currentReg == -1 ? null : (int?)currentReg);
                 }
                 else
                 {

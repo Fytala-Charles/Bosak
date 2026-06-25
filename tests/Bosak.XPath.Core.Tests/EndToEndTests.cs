@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added tests for Intersect, Except, and SimpleMap operators                             |
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added tests for Map, Array, and Lookup                                                 |
 //                      | Charles Korthout | 0.5   | 13-06-2026     | Updated FunctionCall_Sum to expect xs:integer for all-integer input                    |
+//                      | Charles Korthout | 0.6   | 25-06-2026     | Use general comparison operators for untyped price nodes (aligns with value-comparison semantics) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -249,7 +250,7 @@ public class EndToEndTests
     [Fact]
     public void Predicate_ChildContentFilter()
     {
-        var result = EvaluateStrings("//book[price gt 10]/title", LoadDocument());
+        var result = EvaluateStrings("//book[price > 10]/title", LoadDocument());
         Assert.Equal(2, result.Length);
         Assert.Equal("The Great Gatsby", result[0]);
         Assert.Equal("Dune", result[1]);
@@ -376,7 +377,7 @@ public class EndToEndTests
     [Fact]
     public void Complex_MultiplePredicates()
     {
-        var result = EvaluateStrings("//book[@genre='fiction'][price lt 10]/title", LoadDocument());
+        var result = EvaluateStrings("//book[@genre='fiction'][price < 10]/title", LoadDocument());
         Assert.Single(result);
         Assert.Equal("1984", result[0]);
     }

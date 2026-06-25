@@ -398,12 +398,15 @@ dotnet test Bosak.sln
 | Conformance harness supports raw XDM comparison for `<initial-function>`. | Tests with `<output tree="no" serialize="no"/>` now compare the raw function result using `assert-type`, `assert-count`, `assert-deep-eq`, and `assert-eq` instead of serializing to a string. Fixes `initial-function-002` and `initial-function-100a..100i`. | 2026-06-24 |
 | `VmEngine.ValueMatchesType` respects sequence occurrence indicators. | Top-level sequence values are now matched against `?`, `*`, and `+` occurrence indicators by checking each item against the base type. Fixes `initial-function-100e` (`xs:string*`). | 2026-06-24 |
 | `xsl:function/@_name` AVTs are expanded to expanded QNames at parse time. | `XsltFunctionDefinition.FromElement` evaluates `_name` attribute value templates (including `xs:QName`-returning expressions) in the static context, so functions declared with dynamic names are registered under the correct expanded QName. Fixes `initial-function-101c..101e`. | 2026-06-24 |
+| XPath value comparison casts `xs:untypedAtomic` to `xs:string`. | In value comparisons (`eq`/`ne`/`lt`/`le`/`gt`/`ge`), an `xs:untypedAtomic` operand is atomized to `xs:string` before comparison, so `xs:untypedAtomic('72') gt 70` raises `XPTY0004` while `xs:untypedAtomic('') eq ''` succeeds. General comparisons continue to promote `xs:untypedAtomic` to the other operand's type. Fixes `type-0165`. | 2026-06-25 |
+| Whitespace stripping applies to the source document root, and stripped source nodes are treated as absent. | The engine strips whitespace from the document containing the initial context node, detects when the selected node has been removed, and evaluates globals with focus on the source-tree root. Fixes `strip-space-023`. | 2026-06-25 |
+| Path expressions only load the context item when the first step is an axis step. | Prevents `parse-xml(...)/root/item` from raising `XPDY0002` when the XPath focus is absent. Required by the `strip-space` fix. | 2026-06-25 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,550 | 701 | 9,349 | 86.7% | `initial-function` cluster fully passing |
+| XSLT 3.0 (W3C) | 4,611 | 640 | 9,349 | 87.8% | `type` and `strip-space` clusters fully runnable |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

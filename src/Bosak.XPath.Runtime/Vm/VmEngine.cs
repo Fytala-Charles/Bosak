@@ -44,6 +44,9 @@
 //                      | Charles Korthout | 2.11  | 13-06-2026     | Empty-URI EQName support in ResolveVariableName (Q{}local)                              |
 //                      | Charles Korthout | 2.12  | 13-06-2026     | Parameterized map(K,V) and array(T) matching in ValueMatchesType                         |
 //                      | Charles Korthout | 2.13  | 13-06-2026     | Date/time comparison uses implicit timezone; time constructor avoids DateTimeOffset       |
+//                      | Charles Korthout | 2.14  | 25-06-2026     | QName equality compares namespace URI + local name, ignoring prefix (fixes type-0129)   |
+//                      | Charles Korthout | 2.15  | 25-06-2026     | Value comparison casts xs:untypedAtomic operands to xs:string before comparing (fixes type-0165)            |
+//                      | Charles Korthout | 2.16  | 25-06-2026     | LoadContextItem raises XPDY0002 when the XPath context item is absent                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -161,6 +164,8 @@ public static class VmEngine
                 // Context
                 // ------------------------------------------------------------------
                 case IrOpCode.LoadContextItem:
+                    if (context.ContextItem.IsUndefined)
+                        throw new InvalidOperationException("XPDY0002: The context item is absent.");
                     registers[instr.RegisterA] = context.ContextItem;
                     ip++;
                     break;
@@ -690,6 +695,19 @@ public static class VmEngine
                         var input = registers[instr.RegisterB];
                         var filtered = FilterNodes(input, n =>
                         {
+                            // Wildcard: match any name (kind test already restricted node kind).
+                            if (name == "*")
+                                return true;
+
+                            // Namespace wildcard prefix:* — match any local name in the namespace.
+                            if (name.EndsWith(":*", StringComparison.Ordinal))
+                            {
+                                var wildcardPrefix = name[..^2];
+                                if (context.TryResolveNamespace(wildcardPrefix, out var wildcardNsUri))
+                                    return n.NamespaceUri == wildcardNsUri;
+                                return false;
+                            }
+
                             if (n.LocalName != name && !(name.Contains(':') && n.LocalName == name.Split(':')[1]))
                                 return false;
                             // Unprefixed attribute names always match no namespace
@@ -2862,6 +2880,11 @@ public static class VmEngine
         bool leftFromNode = IsNodeOrigin(left);
         bool rightFromNode = IsNodeOrigin(right);
 
+        // Value comparisons (eq/ne/lt/... and their value-comparison opcodes) require
+        // each operand to be a singleton after atomization.
+        if (strict && (SequenceLength(left) > 1 || SequenceLength(right) > 1))
+            throw new InvalidOperationException("XPTY0004: Value comparison requires singleton operands");
+
         left = Atomize(left);
         right = Atomize(right);
 
@@ -2869,7 +2892,36 @@ public static class VmEngine
         if (left.IsUndefined || right.IsUndefined)
             return XdmValue.Undefined;
 
+        // XPath 3.1 §17.2: in a value comparison, an xs:untypedAtomic operand is
+        // cast to xs:string before the comparison proceeds.
+        if (strict)
+        {
+            if (IsUntypedAtomic(left))
+            {
+                left = XdmValue.FromString(left.StringValue);
+                leftFromNode = false;
+            }
+            if (IsUntypedAtomic(right))
+            {
+                right = XdmValue.FromString(right.StringValue);
+                rightFromNode = false;
+            }
+        }
+
         return XdmValue.FromBoolean(CompareCore(op, left, right, strict, leftFromNode, rightFromNode, context));
+    }
+
+    /// <summary>
+    /// Returns the number of items in <paramref name="value"/> if it is a sequence,
+    /// or 1 for any other defined value, or 0 for undefined.
+    /// </summary>
+    private static int SequenceLength(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return 0;
+        if (!value.IsSequence)
+            return 1;
+        return MaterializeSequence(value).Length;
     }
 
     private static int CompareStrings(string left, string right, string collation, EvaluationContext context)
@@ -2954,6 +3006,26 @@ public static class VmEngine
                 IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => !l || r,
                 IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => l && !r,
                 IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => l || !r,
+                _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+            };
+        }
+
+        // QName comparison: prefix is ignored; only namespace URI and local name matter.
+        // Ordering comparisons are not defined for QNames.
+        if (left.Kind == XdmValueKind.QName && right.Kind == XdmValueKind.QName)
+        {
+            if (op is IrOpCode.LessThan or IrOpCode.ValueLessThan
+                or IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual
+                or IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan
+                or IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual)
+            {
+                throw new InvalidOperationException("XPTY0004: Ordering comparison is not defined for xs:QName values.");
+            }
+            bool eq = left.QNameValue.Equals(right.QNameValue);
+            return op switch
+            {
+                IrOpCode.Equal or IrOpCode.ValueEqual => eq,
+                IrOpCode.NotEqual or IrOpCode.ValueNotEqual => !eq,
                 _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
             };
         }
@@ -3476,7 +3548,8 @@ public static class VmEngine
                     return true;
                 if (value.Kind == XdmValueKind.String)
                 {
-                    var s = value.StringValue.Trim().ToLowerInvariant();
+                    // xs:boolean lexical values are case-sensitive: true, false, 0, 1.
+                    var s = CollapseWhitespace(value.StringValue);
                     if (s == "true" || s == "1")
                     {
                         result = XdmValue.True;
