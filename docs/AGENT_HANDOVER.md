@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `65be05a` (plus uncommitted changes)
+**Commit:** `9b5097d`
 **Current focus:** Fixed `call-template-0110`; `xsl:try`/`xsl:catch` now correctly matches dynamic `XPDY0002` errors and supports multiple catch clauses.
 
 ---
