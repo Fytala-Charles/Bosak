@@ -40,6 +40,7 @@
 //                      | Charles Korthout | 2.8   | 25-06-2026     | XTSE0080 validation for xsl:template/@name; added xs/fn namespace constants             |
 //                      | Charles Korthout | 2.9   | 25-06-2026     | Static function-available hides dynamic XSLT functions; skip descendants of false use-when |
 //                      | Charles Korthout | 2.10  | 26-06-2026     | Guard XTSE1660 check so it does not fire on literal result elements                     |
+//                      | Charles Korthout | 2.11  | 26-06-2026     | Static variable validation and default-value handling for static cluster              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -743,11 +744,33 @@ public sealed class Stylesheet
             if (!IsStaticBodyEmpty(elem))
                 throw new InvalidOperationException("XTSE0620: Static variable or parameter must not have a sequence constructor.");
 
-            var select = elem.Attribute("select")?.Value;
-            if (string.IsNullOrEmpty(select))
-                throw new InvalidOperationException("XTSE0010: Static variable or parameter must have a select attribute.");
+            // XTSE0090: tunnel is not permitted on static variables/parameters.
+            if (elem.Attribute("tunnel") != null)
+                throw new InvalidOperationException("XTSE0090: The tunnel attribute is not permitted on a static variable or parameter.");
 
-            var value = EvaluateStaticExpression(select, elem);
+            // XTSE0090: visibility is not permitted on xsl:param.
+            if (elem.Name.LocalName == "param" && elem.Attribute("visibility") != null)
+                throw new InvalidOperationException("XTSE0090: The visibility attribute is not permitted on a static parameter.");
+
+            var select = elem.Attribute("select")?.Value;
+            var requiredAttr = elem.Attribute("required")?.Value;
+            bool isRequired = requiredAttr != null && IsStaticYes(requiredAttr.Trim());
+
+            // XTSE0010: a required static parameter must not have a select attribute.
+            if (isRequired && !string.IsNullOrEmpty(select))
+                throw new InvalidOperationException("XTSE0010: A required static parameter must not have a select attribute.");
+
+            XdmValue value;
+            if (string.IsNullOrEmpty(select))
+            {
+                // No select attribute: required parameters have no default value;
+                // all other static declarations default to the empty sequence.
+                value = isRequired ? XdmValue.Undefined : XdmValue.FromSequence(XdmSequence.Empty);
+            }
+            else
+            {
+                value = EvaluateStaticExpression(select, elem);
+            }
             AddStaticVariable(elem, value, shadowing);
         }
         else if (IsStaticNo(trimmed))
@@ -764,13 +787,13 @@ public sealed class Stylesheet
     /// Returns true if the given static attribute value means "static".
     /// </summary>
     private static bool IsStaticYes(string value)
-        => value.Trim().ToLowerInvariant() is "yes" or "true" or "1";
+        => value.Trim() is "yes" or "true" or "1";
 
     /// <summary>
     /// Returns true if the given static attribute value means "non-static".
     /// </summary>
     private static bool IsStaticNo(string value)
-        => value.Trim().ToLowerInvariant() is "no" or "false" or "0";
+        => value.Trim() is "no" or "false" or "0";
 
     /// <summary>
     /// Evaluates an XPath expression in the current static context.

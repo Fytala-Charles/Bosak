@@ -117,6 +117,7 @@
 //                      | Charles Korthout | 5.46  | 25-06-2026     | Global variables/parameters evaluated with absent focus; fixes strip-space-023        |
 //                      | Charles Korthout | 5.47  | 25-06-2026     | Register source document URI in evaluation context; fixes accessor-008                 |
 //                      | Charles Korthout | 5.48  | 25-06-2026     | Item-based xsl:on-empty/on-non-empty handling for sequence constructors                |
+//                      | Charles Korthout | 5.49  | 26-06-2026     | Evaluate _select AVT on global variables/parameters                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -6467,6 +6468,13 @@ public sealed class TransformEngine
 
                     XdmValue value;
                     var select = info.Element.Attribute("select")?.Value;
+                    if (string.IsNullOrEmpty(select))
+                    {
+                        // Support the AVT form _select="{...}" on global variables/parameters.
+                        var underSelect = info.Element.Attribute("_select")?.Value;
+                        if (!string.IsNullOrEmpty(underSelect))
+                            select = EvaluateAvt(underSelect, info.Element);
+                    }
                     if (!string.IsNullOrEmpty(select))
                     {
                         // A global variable is out of scope within its own declaration.

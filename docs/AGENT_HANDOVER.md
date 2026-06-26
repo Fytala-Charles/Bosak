@@ -1,8 +1,57 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `712730a` (HEAD) + uncommitted WIP
-**Current focus:** Fixed regressions in an in-progress `use-when` / static-expression change set; `use-when` cluster is now clear and `type` cluster is restored to 100% runnable.
+**Commit:** `04e9f0f` + in-progress static fixes
+**Current focus:** Continued debugging the `static` cluster after committing the `use-when` clearance.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,655
+- **Failed:** 596
+- **Skipped:** 9,349
+- **Pass rate:** 88.6% (−11 passes / +11 failures vs. baseline 4,666/585)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 40 | 9 | 0 | +17 passes since use-when commit; 9 edge cases remain |
+
+## This Session Fixes
+
+1. **`_select` AVT support for global variables/parameters** — Runtime evaluation of global variables now evaluates the AVT form `_select="{...}"` when no plain `select` attribute is present. This clears static tests that reference static parameters via `_select`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **Static attribute validation refinements** — Static attribute values are now case-sensitive (`static="YES"` raises XTSE0020). Added XTSE0090 rejection of `tunnel` and `visibility` on static parameters, and XTSE0010 rejection of `required="yes"` combined with a `select` attribute.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+3. **Default values for static declarations without `select`** — Required static parameters default to undefined; other static variables/parameters default to the empty sequence when no `select` is supplied.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- The `use-when` and `type` clusters remain fully green.
+- Remaining `static` failures are concentrated in import-precedence conflict detection (XTSE3450), external static parameter wiring, and a few edge cases.
+
+## Recommended Next Steps
+
+1. Fix XTSE3450 conflict detection for static declarations at different import precedences.
+2. Wire externally supplied static parameters from the conformance harness into `Stylesheet` loading.
+3. Tackle the remaining edge cases: static-011 (empty-sequence general comparison in TVT), static-027 (static/non-static shadowing), static-030 (namespace-node static variable).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-26
+**Commit:** `04e9f0f`
+**Current focus:** Cleared the `use-when` conformance cluster and added static-expression infrastructure; `static` cluster is still being debugged.
 
 ---
 
