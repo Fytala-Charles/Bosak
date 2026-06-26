@@ -23,6 +23,7 @@
 | 7 | Conformance harness static parameters: evaluates `<param static="yes">` and passes values to `XsltCompiler.StaticParameters` instead of only substituting into `_select`. | `tests/Bosak.Xslt.Conformance/Program.cs` | Done |
 | 8 | General comparison empty-sequence fix: `VmEngine.CompareGeneral` now returns `false` (not empty sequence) when one operand is empty, per XPath 3.1 §17.3. | `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` | Done |
 | 9 | Namespace-axis coverage for implied namespaces: `XDocumentNode.GetNamespaceAxis` now includes namespaces implied by the element name (e.g. `json-to-xml` output with no explicit `xmlns` attribute on every element). | `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs` | Done |
+| 10 | Quick win: allow `xsl:use-attribute-sets` on literal result elements (XTSE0805 whitelist). Clears `attribute-set`, `xsl-document`, `analyze-string`, `next-match`, and `mode-1402`. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
 
 ## Current Branch
 
@@ -32,7 +33,7 @@
 
 - [x] All unit tests pass (894 tests across 8 projects — 0 failures)
 - [x] `static` cluster: **49/49 passing, 0 failed, 0 skipped** ✅
-- [x] Full W3C XSLT 3.0 suite: **4,599 passed / 652 failed / 9,349 skipped** (87.6%; +3 passed / −3 failed vs. baseline)
+- [x] Full W3C XSLT 3.0 suite: **4,638 passed / 613 failed / 9,349 skipped** (88.3%; +39 passed / −39 failed vs. previous run)
 
 ## Remaining `static` Cluster Failures
 
@@ -40,5 +41,5 @@ None — cluster is fully green.
 
 ## Next Recommended Work
 
-1. Commit and push the static-cluster fixes.
-2. Pick the next conformance cluster to attack (e.g. `math`, `namespace`, `try`, `whitespace`).
+1. Commit and push the use-attribute-sets quick win.
+2. Continue with remaining quick-win clusters (e.g. `whitespace`, `unparsed-text`, `lre`, `xml-to-json`, single-failure clusters).

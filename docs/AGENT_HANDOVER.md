@@ -1,18 +1,18 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `98d321f`
-**Current focus:** Cleared the `static` cluster (49/49) and fixed two cross-cutting bugs exposed by it: general comparison with an empty operand, and namespace-axis coverage for implied namespaces.
+**Commit:** `<pending>`
+**Current focus:** Cleared the `static` cluster (49/49), then picked off a quick win by whitelisting `xsl:use-attribute-sets` on literal result elements.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 4,599
-- **Failed:** 652
+- **Passed:** 4,638
+- **Failed:** 613
 - **Skipped:** 9,349
-- **Pass rate:** 87.6% (+3 passes / −3 failures vs. the pre-fix baseline of 4,596/655)
+- **Pass rate:** 88.3% (+39 passes / −39 failures vs. the previous 4,599/652; cumulative +42 / −42 vs. the pre-static-fix baseline)
 
 ## Cluster Status
 
@@ -21,6 +21,10 @@
 | use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable |
 | type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
 | static | 49 | 49 | 0 | 0 | ✅ 100%; was 44/49 at start of this push |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable; `xsl:use-attribute-sets` whitelist fix |
+| xsl-document | 25 | 25 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
 
 ## This Session Fixes
 
@@ -51,12 +55,16 @@
 9. **Namespace axis for implied namespaces** — `XDocumentNode.GetNamespaceAxis` now includes namespaces implied by the element name itself (e.g. `json-to-xml` output where child elements inherit a default namespace without explicit `xmlns` attributes). Fixes `static-030`.
    - **File changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
 
+10. **Quick win: `xsl:use-attribute-sets` on literal result elements** — Added `use-attribute-sets` to the XTSE0805 whitelist of XSLT-namespaced attributes permitted on LREs. Clears the entire `attribute-set` cluster (49/0/1), all `xsl-document` tests, all runnable `analyze-string` tests, all runnable `next-match` tests, and `mode-1402`.
+    - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
 ## Notes
 
 - Unit-test suite: **894 passed / 0 failed** across 8 projects.
 - The `static` cluster is now **49/49 passing**.
-- The `use-when` and `type` clusters remain fully green.
-- Full W3C suite re-run completed with no regressions: **4,599/652/9,349**.
+- The `attribute-set`, `xsl-document`, `analyze-string`, and `next-match` clusters are now **100% runnable**.
+- The `mode` cluster is down to **1 failure** (`mode-1105`).
+- Full W3C suite re-run: **4,638/613/9,349** (88.3%).
 
 ## Recommended Next Steps
 

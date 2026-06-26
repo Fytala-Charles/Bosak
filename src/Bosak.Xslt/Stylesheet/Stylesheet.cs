@@ -38,6 +38,7 @@
 //                      | Charles Korthout | 2.6   | 24-06-2026     | Reject extension-element-prefixes bound to reserved namespaces (XTSE0800)              |
 //                      | Charles Korthout | 2.7   | 24-06-2026     | use-when walks ancestor namespace declarations; propagates XTDE1400/1410 errors        |
 //                      | Charles Korthout | 2.8   | 25-06-2026     | XTSE0080 validation for xsl:template/@name; added xs/fn namespace constants             |
+//                      | Charles Korthout | 2.9   | 26-06-2026     | Whitelist use-attribute-sets on literal result elements (XTSE0805)                    |
 //                      | Charles Korthout | 2.9   | 25-06-2026     | Static function-available hides dynamic XSLT functions; skip descendants of false use-when |
 //                      | Charles Korthout | 2.10  | 26-06-2026     | Guard XTSE1660 check so it does not fire on literal result elements                     |
 //                      | Charles Korthout | 2.11  | 26-06-2026     | Static variable validation and default-value handling for static cluster              |
@@ -967,7 +968,8 @@ public sealed class Stylesheet
                     var allowed = attrLocal is "use-when" or "expand-text" or "type" or "validation"
                         or "default-mode" or "default-collation" or "default-validation"
                         or "exclude-result-prefixes" or "extension-element-prefixes"
-                        or "version" or "xpath-default-namespace";
+                        or "version" or "xpath-default-namespace"
+                        or "use-attribute-sets";
                     if (!allowed)
                         throw new InvalidOperationException("XTSE0805");
                 }

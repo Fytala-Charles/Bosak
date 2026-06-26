@@ -412,12 +412,13 @@ dotnet test Bosak.sln
 | General comparison with an empty operand returns `false`. | `VmEngine.CompareGeneral` now follows XPath 3.1 §17.3: one empty operand yields `false`, not an empty sequence. Fixes `static-011`. | 2026-06-26 |
 | Namespace axis includes implied default namespaces. | `XDocumentNode.GetNamespaceAxis` adds a default-namespace node when the element is in a non-empty namespace that is not declared explicitly as default or prefixed. Fixes `static-030` and `json-to-xml` namespace-axis coverage. | 2026-06-26 |
 | Static conformance cluster is fully passing. | All 49 `static` tests pass (was 47/49). Combined with the two cross-cutting fixes, the full W3C suite improves to 4,599/652/9,349. | 2026-06-26 |
+| `xsl:use-attribute-sets` is allowed on literal result elements. | Added `use-attribute-sets` to the XTSE0805 whitelist of XSLT-namespaced attributes permitted on LREs. Clears the `attribute-set`, `xsl-document`, `analyze-string`, and `next-match` clusters. | 2026-06-26 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,599 | 652 | 9,349 | 87.6% | `static` cluster fully passing (49/49); `use-when` and `type` clusters fully runnable |
+| XSLT 3.0 (W3C) | 4,638 | 613 | 9,349 | 88.3% | `static` cluster fully passing (49/49); `attribute-set`, `xsl-document`, `analyze-string`, `next-match` clusters fully runnable |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
