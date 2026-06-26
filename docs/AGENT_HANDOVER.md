@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `<to-be-filled-after-commit>`
+**Commit:** `18f53bd`
 **Current focus:** Cleared the remaining single-failure clusters (`attribute-0601`, `system-property-022`, `unparsed-text-lines-004`, `regex-026`); `call-template-0201` was already passing.
 
 ---
