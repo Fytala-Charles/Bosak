@@ -1,6 +1,56 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
+**Commit:** `defefde`
+**Current focus:** Fixed precedence-aware XTSE3450 conflict detection for static variables, clearing `use-when-0137` and `use-when-0138`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,640
+- **Failed:** 611
+- **Skipped:** 9,349
+- **Pass rate:** 88.4% (+2 passes / −2 failures vs. the previous 4,638/613)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable; `use-when-0137/0138` now raise XTSE3450 |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100%; remains green |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable; `xsl:use-attribute-sets` whitelist fix |
+| xsl-document | 25 | 25 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **Precedence-aware XTSE3450 conflict detection** — `Stylesheet.BuildStaticContext` now evaluates top-level `use-when` in document order and tracks import precedence. Same-precedence conflicting static values, and higher-precedence overrides that change the effective value, raise `XTSE3450`. A static variable vs static parameter with the same expanded name raises `XTSE3450` when the higher-precedence declaration is processed second; a higher-precedence declaration processed first shadows lower-precedence ones. Fixes `use-when-0137` and `use-when-0138`.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+2. **Documentation sync** — Updated `docs/FEATURE_REQUESTS.md` and `docs/INTEGRATION.md` with `use-when` cluster status and latest conformance baseline.
+   - **Files changed**: `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- The `static` cluster is **49/49 passing**.
+- The `use-when` cluster is **99/99 runnable passing**.
+- Full W3C suite re-run: **4,640/611/9,349** (88.4%).
+
+## Recommended Next Steps
+
+1. Push the current commit to `origin/main`.
+2. Continue with remaining quick-win clusters (e.g. `math`, `namespace`, `try`, `whitespace`).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-26
 **Commit:** `49a562a`
 **Current focus:** Cleared the `static` cluster (49/49), then picked off a quick win by whitelisting `xsl:use-attribute-sets` on literal result elements.
 
