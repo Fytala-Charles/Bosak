@@ -1,6 +1,70 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
+**Commit:** `<to-be-filled-after-commit>`
+**Current focus:** Cleared the remaining single-failure clusters (`attribute-0601`, `system-property-022`, `unparsed-text-lines-004`, `regex-026`); `call-template-0201` was already passing.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,647
+- **Failed:** 604
+- **Skipped:** 9,349
+- **Pass rate:** 88.5% (+5 passes / −5 failures vs. the previous 4,642/609)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| call-template | 44 | 38 | 0 | 6 | ✅ 100% runnable |
+| attribute | 125 | 67 | 0 | 58 | ✅ 100% runnable; root LRE namespace copying fixes `attribute-0601` |
+| system-property | 27 | 15 | 0 | 12 | ✅ 100% runnable; `xsl:evaluate` blocks `fn:system-property` |
+| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ 100%; bare error-code catch matching fixes `unparsed-text-lines-004` |
+| regex | 2,162 | 47 | 0 | 2,115 | ✅ 100% runnable; `.` now matches surrogate pairs |
+| mode | 188 | 122 | 0 | 66 | ✅ 100% runnable; `mode-1105` root-element detachment fix |
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable; `use-when-0137/0138` now raise XTSE3450 |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100%; remains green |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable; `xsl:use-attribute-sets` whitelist fix |
+| xsl-document | 25 | 25 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`regex-026` surrogate-pair fix** — `RegexHelper.TranslateDot` now replaces `.` with an alternation that matches a high+low surrogate pair before falling back to a single code unit, so the regex matches Unicode code points per XPath/XSD semantics instead of .NET 16-bit code units.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/RegexHelper.cs`.
+
+2. **`system-property-022` xsl:evaluate restriction** — `TransformEngine.RemoveXsltContextFunctions` now unregisters `fn:system-property#1` from the dynamic context used by `xsl:evaluate`. A call in the target expression raises `XPST0017`, which `IsXPathStaticError` maps to `XTDE3160`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`unparsed-text-lines-004` catch matching** — `TransformEngine.GetErrorCode` now recognizes bare 8-character error codes such as `FOUT1190` (no colon), so `xsl:catch errors="*:FOUT1190"` correctly matches the error thrown by `fn:unparsed-text-lines`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **`attribute-0601` root-level namespace copying** — `TransformEngine.CopyLiteralElement` now copies all in-scope stylesheet namespace declarations (except excluded prefixes and the XSLT namespace) onto root-level literal result elements. This satisfies assertions like `/root/namespace::ped` for prefixes declared only on `xsl:stylesheet`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+5. **Documentation sync** — Updated `docs/FEATURE_REQUESTS.md` and `docs/INTEGRATION.md` with the cleared cluster status and latest conformance baseline.
+   - **Files changed**: `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- All targeted single-failure clusters are now **100% runnable**.
+- Full W3C suite re-run: **4,647/604/9,349** (88.5%).
+
+## Recommended Next Steps
+
+1. Push the current commit to `origin/main`.
+2. Tackle larger remaining clusters (`date` 32 failures, `namespace` 22 failures, `maps` 36 failures) or pick off additional quick wins.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-26
 **Commit:** `4a9a568`
 **Current focus:** Cleared the last `mode` cluster failure (`mode-1105`) by fixing `TransformEngine.IsNodeAttached` so the root element of a source document is not treated as detached after whitespace stripping.
 

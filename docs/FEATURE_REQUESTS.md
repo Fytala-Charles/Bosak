@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-26 (`mode` cluster fully cleared; `static` and `use-when` conformance clusters cleared; `XsltCompiler.StaticParameters`, precedence-aware XTSE3450 conflict detection for static variables, general-comparison empty-sequence semantics, and namespace-axis implied default namespaces)    
+> **Living Registry** — Last updated: 2026-06-26 (`call-template`, `attribute`, `system-property`, `unparsed-text-lines`, and `regex` single-failure clusters cleared; `mode` cluster fully cleared; `static` and `use-when` conformance clusters cleared)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-06-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 25-06-2026     | Added flags-aware ValidateAndTranslatePattern; $ to \z in non-multiline mode             |
+//                      | Charles Korthout | 0.3   | 26-06-2026     | Translate '.' to match Unicode code points, including surrogate pairs                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -59,7 +60,7 @@ public static class RegexHelper
     public static string ValidateAndTranslatePattern(string pattern)
     {
         ValidateXsdRegex(pattern);
-        return TranslateEndAnchor(TranslateBackreferences(pattern), multiline: false);
+        return TranslateEndAnchor(TranslateDot(TranslateBackreferences(pattern), RegexOptions.None), multiline: false);
     }
 
     /// <summary>
@@ -70,7 +71,7 @@ public static class RegexHelper
     public static string ValidateAndTranslatePattern(string pattern, RegexOptions options)
     {
         ValidateXsdRegex(pattern);
-        return TranslateEndAnchor(TranslateBackreferences(pattern), (options & RegexOptions.Multiline) != 0);
+        return TranslateEndAnchor(TranslateDot(TranslateBackreferences(pattern), options), (options & RegexOptions.Multiline) != 0);
     }
 
     /// <summary>
@@ -311,6 +312,62 @@ public static class RegexHelper
             if (c == '$')
             {
                 sb.Append(@"\z");
+                continue;
+            }
+            sb.Append(c);
+        }
+        if (escaped)
+            sb.Append('\\');
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Translates XPath/XSD <c>.</c> so that it matches Unicode code points rather than
+    /// .NET 16-bit code units. Without this, a surrogate pair (e.g. U+20000) is treated as
+    /// two separate characters and <c>.</c> fails to match it. The resulting alternation
+    /// prefers a high+low surrogate pair over a single code unit.
+    /// </summary>
+    private static string TranslateDot(string pattern, RegexOptions options)
+    {
+        bool matchNewline = (options & RegexOptions.Singleline) != 0;
+        const string SurrogatePair = "[\\ud800-\\udbff][\\udc00-\\udfff]";
+        string single = matchNewline ? "[\\s\\S]" : "[^\\n]";
+        string replacement = $"(?:{SurrogatePair}|{single})";
+
+        var sb = new StringBuilder(pattern.Length + 16);
+        bool escaped = false;
+        bool inCharClass = false;
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+            if (escaped)
+            {
+                sb.Append('\\');
+                sb.Append(c);
+                escaped = false;
+                continue;
+            }
+            if (inCharClass)
+            {
+                sb.Append(c);
+                if (c == ']')
+                    inCharClass = false;
+                continue;
+            }
+            if (c == '\\')
+            {
+                escaped = true;
+                continue;
+            }
+            if (c == '[')
+            {
+                inCharClass = true;
+                sb.Append(c);
+                continue;
+            }
+            if (c == '.')
+            {
+                sb.Append(replacement);
                 continue;
             }
             sb.Append(c);

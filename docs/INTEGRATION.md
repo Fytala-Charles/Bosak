@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 26 June 2026
 > **Bosak baseline:** 894 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,642 passed / 609 failed / 9,349 skipped (~88.4%)
+> **XSLT baseline:** 4,647 passed / 604 failed / 9,349 skipped (~88.5%)
 
 ---
 
@@ -340,6 +340,10 @@ dotnet test Bosak.sln
 |--------|--------|------|
 | `XsltExecutable.Transform` gained an optional `rawResult` parameter. | When `true` and an initial named template is used, returns the raw template result as an XDM value instead of wrapping it in a result document. Required for `initial-template-004` and similar raw-output tests. | 2026-06-25 |
 | `TransformEngine.IsNodeAttached` now treats a document's root element as attached. | After whitespace stripping, the initial source node (`/doc`) was incorrectly considered detached because the root `XElement` has no `XObject.Parent`. The check now also verifies `XObject.Document != null`. Fixes `mode-1105`. | 2026-06-26 |
+| Regex `.` now matches Unicode code points including surrogate pairs. | `RegexHelper.TranslateDot` replaces `.` with an alternation that prefers a high+low surrogate pair over a single code unit. Fixes `regex-026` and aligns `fn:matches`/`replace`/`tokenize` with XPath/XSD semantics. | 2026-06-26 |
+| `xsl:evaluate` blocks `fn:system-property`. | XSLT-defined functions are removed from the dynamic context; calling `system-property` inside `xsl:evaluate` now raises `XTDE3160`. Fixes `system-property-022`. | 2026-06-26 |
+| `xsl:catch` now matches bare error codes. | `GetErrorCode` recognizes 8-character codes such as `FOUT1190` even without a trailing colon, so `xsl:catch errors="*:FOUT1190"` matches. Fixes `unparsed-text-lines-004`. | 2026-06-26 |
+| Root-level literal result elements copy in-scope stylesheet namespaces. | `CopyLiteralElement` copies namespace declarations from the stylesheet root onto the output root element (except excluded prefixes and the XSLT namespace). Fixes `attribute-0601`. | 2026-06-26 |
 | `xsl:analyze-string` now passes regex flags to `RegexHelper.ValidateAndTranslatePattern`. | Fixes multiline-mode (`m`) tests `analyze-string-007/067/071/090b`; previously `$` was translated to `\z` even when multiline was requested. | 2026-06-25 |
 | `xsl:call-template` now resolves named templates by expanded QName. | A call using one prefix bound to a namespace URI finds a template declared with a different prefix bound to the same URI. Fixes `call-template-1701`. | 2026-06-25 |
 | Initial template names from the conformance harness are expanded using catalog namespace bindings. | Names are passed to `TransformEngine` in Clark notation, so a test-catalog prefix bound to a different URI than the stylesheet prefix correctly raises `XTDE0040`. Fixes `call-template-0104/0105/0107`. | 2026-06-25 |

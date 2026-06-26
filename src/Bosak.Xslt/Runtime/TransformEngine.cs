@@ -119,6 +119,7 @@
 //                      | Charles Korthout | 5.48  | 25-06-2026     | Item-based xsl:on-empty/on-non-empty handling for sequence constructors                |
 //                      | Charles Korthout | 5.49  | 26-06-2026     | Evaluate _select AVT on global variables/parameters                                     |
 //                      | Charles Korthout | 5.50  | 26-06-2026     | IsNodeAttached now treats a document's root element as attached; fixes mode-1105        |
+//                      | Charles Korthout | 5.51  | 26-06-2026     | xsl:evaluate blocks fn:system-property; xsl:try catches bare error codes; root LRE namespaces |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -876,6 +877,7 @@ public sealed class TransformEngine
         context.UnregisterFunction(Fn, "current-merge-group", 0);
         context.UnregisterFunction(Fn, "current-merge-group", 1);
         context.UnregisterFunction(Fn, "current-merge-key", 0);
+        context.UnregisterFunction(Fn, "system-property", 1);
     }
 
     /// <summary>
@@ -4395,14 +4397,46 @@ public sealed class TransformEngine
             }
         }
 
-        // For root-level literal result elements, if an attribute's local name matches an
-        // in-scope namespace prefix in the stylesheet, copy that namespace binding to the
-        // result element. This handles cases such as attribute-1301 where the result tree
-        // is queried with namespace-uri-for-prefix() using a prefix that is otherwise only
-        // present in the stylesheet.
+        // For root-level literal result elements, copy all in-scope namespace bindings from
+        // the stylesheet (except excluded prefixes and the XSLT namespace) to the result
+        // element. This ensures namespace-uri-for-prefix() queries and assertions such as
+        // those in attribute-0601 see prefixes that are declared only on xsl:stylesheet.
         bool isRootLevelLiteral = _currentContainer is not XElement parent || parent.Name.LocalName == "__temp__";
         if (isRootLevelLiteral && !_excludedResultPrefixes.Contains("#all"))
         {
+            foreach (var (prefix, styleNs) in GetInScopeNamespaceDeclarations(source))
+            {
+                if (prefix == "xml" || prefix == "xmlns")
+                    continue;
+                if (string.IsNullOrEmpty(styleNs.NamespaceName))
+                    continue;
+                if (styleNs.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                    continue;
+                if (_excludedResultPrefixes.Contains(prefix))
+                    continue;
+
+                if (prefix == "")
+                {
+                    // Do not change the element's own default namespace.
+                    if (!string.IsNullOrEmpty(copy.Name.NamespaceName))
+                        continue;
+                    var existingDefault = copy.GetNamespaceOfPrefix("");
+                    if (existingDefault != null && existingDefault.NamespaceName == styleNs.NamespaceName)
+                        continue;
+                    copy.SetAttributeValue("xmlns", styleNs.NamespaceName);
+                }
+                else
+                {
+                    var existing = copy.GetNamespaceOfPrefix(prefix);
+                    if (existing != null && existing.NamespaceName == styleNs.NamespaceName)
+                        continue;
+                    copy.SetAttributeValue(XNamespace.Xmlns + prefix, styleNs.NamespaceName);
+                }
+            }
+
+            // Additionally, if an attribute's local name matches an in-scope namespace prefix
+            // in the stylesheet, ensure that prefix is bound. This handles cases such as
+            // attribute-1301 where the result tree is queried with namespace-uri-for-prefix().
             foreach (var attr in source.Attributes())
             {
                 if (attr.IsNamespaceDeclaration)
@@ -7264,6 +7298,10 @@ public sealed class TransformEngine
             // Standard "CODE: description" format used for XPath/XSLT dynamic errors.
             if (message.Contains(':'))
                 return message[..message.IndexOf(':')];
+
+            // Some functions throw a bare error code (e.g. "FOUT1190").
+            if (message.Length == 8 && char.IsUpper(message[0]) && char.IsUpper(message[1]) && char.IsUpper(message[2]) && char.IsUpper(message[3]) && char.IsDigit(message[4]) && char.IsDigit(message[5]) && char.IsDigit(message[6]) && char.IsDigit(message[7]))
+                return message;
         }
 
         return ex.GetType().Name;
@@ -10113,6 +10151,29 @@ public sealed class TransformEngine
         if (xn.UnderlyingObject is XObject xo)
             return xo.Parent != null || xo.Document != null;
         return true;
+    }
+
+    /// <summary>
+    /// Collects all namespace declarations that are in scope for <paramref name="element"/>,
+    /// walking up to the stylesheet root. The nearest declaration wins for each prefix.
+    /// </summary>
+    private static IEnumerable<(string Prefix, XNamespace Namespace)> GetInScopeNamespaceDeclarations(XElement element)
+    {
+        var declarations = new Dictionary<string, XNamespace>();
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (!attr.IsNamespaceDeclaration)
+                    continue;
+                string prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                if (!declarations.ContainsKey(prefix))
+                    declarations[prefix] = XNamespace.Get(attr.Value);
+            }
+            current = current.Parent;
+        }
+        return declarations.Select(kv => (kv.Key, kv.Value));
     }
 
     private static int NameTestSpecificity(SpaceHandlingRule rule)
