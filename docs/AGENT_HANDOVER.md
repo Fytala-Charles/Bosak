@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `<pending>`
+**Commit:** `234c359`
 **Current focus:** Cleared the `static` cluster (49/49) and fixed two cross-cutting bugs exposed by it: general comparison with an empty operand, and namespace-axis coverage for implied namespaces.
 
 ---
