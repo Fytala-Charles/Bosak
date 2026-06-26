@@ -6415,9 +6415,22 @@ public sealed class TransformEngine
 
         CollectGlobalsInDocumentOrder(_stylesheet, globals);
 
+        static bool IsStaticGlobal(XElement e)
+        {
+            var staticAttr = e.Attribute("static")?.Value;
+            if (string.IsNullOrEmpty(staticAttr))
+                return false;
+            var v = staticAttr.Trim();
+            return v is "yes" or "true" or "1";
+        }
+
         // Pre-register all globals (variables and parameters with defaults) so they
-        // can be resolved lazily on first reference. This handles forward references
-        // such as a variable declared before a parameter it references.
+        // can be resolved lazily on first reference. Processing in precedence order
+        // ensures the highest-precedence declaration wins when names collide.
+        // Static declarations are resolved from the pre-computed static context rather
+        // than re-evaluated at runtime, so a static $p is still visible to other static
+        // expressions even when a non-static declaration with the same name shadows it
+        // at runtime (static-027).
         foreach (var (name, elem, isParam) in globals)
         {
             // Skip parameters already supplied by the caller (e.g. fn:transform).
@@ -6438,6 +6451,20 @@ public sealed class TransformEngine
                 // Parameters supplied by the caller are already bound.
                 if (_context.TryGetVariable(localName, out var existing, namespaceUri))
                     return existing;
+
+                // Static variables/parameters were evaluated during stylesheet loading.
+                // Return the pre-computed value instead of re-evaluating at runtime.
+                if (IsStaticGlobal(info.Element))
+                {
+                    if (_stylesheet.StaticVariables.TryGetValue(key, out var staticValue))
+                    {
+                        if (staticValue.IsUndefined)
+                            throw new InvalidOperationException($"XTDE0050: No value supplied for required parameter '{localName}'.");
+                        var converted = ConvertVariableValue(staticValue, info.AsType, isParam: info.Element.Name.LocalName == "param");
+                        _context.WithVariable(localName, converted, namespaceUri);
+                        return converted;
+                    }
+                }
 
                 // Detect circular references (a global variable referencing itself).
                 if (!_evaluatingGlobals.Add(key))
@@ -8844,7 +8871,7 @@ public sealed class TransformEngine
         }
     }
 
-    private static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false)
+    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false)
     {
         if (string.IsNullOrEmpty(asType))
             return value;

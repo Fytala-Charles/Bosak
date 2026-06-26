@@ -431,10 +431,10 @@ class Program
             if (initialTemplateElem != null)
                 paramElements.AddRange(initialTemplateElem.Elements(ns + "param"));
 
-            // Evaluate static parameters supplied by the test case and substitute them into
-            // stylesheet attributes such as _select before compilation. This is needed for
-            // tests like date-094 / date-095 that parameterize the expression under test.
-            var staticParams = new Dictionary<string, string>();
+            // Evaluate static parameters supplied by the test case and pass them to the
+            // compiler so they are available during static evaluation. The optional @as
+            // attribute on the test param is honoured by casting the value to that type.
+            var staticParamValues = new Dictionary<(string LocalName, string NamespaceUri), XdmValue>();
             foreach (var param in paramElements)
             {
                 var staticAttr = param.Attribute("static")?.Value;
@@ -442,23 +442,36 @@ class Program
                     continue;
                 var paramName = param.Attribute("name")?.Value;
                 var paramSelect = param.Attribute("select")?.Value;
+                var paramAs = param.Attribute("as")?.Value;
                 if (string.IsNullOrEmpty(paramName) || string.IsNullOrEmpty(paramSelect))
                     continue;
                 try
                 {
                     var paramCompiled = XPath31Expression.Compile(paramSelect);
                     var paramValue = paramCompiled.Evaluate(new Bosak.XPath.Runtime.Vm.EvaluationContext());
-                    staticParams[paramName] = paramValue.ToString();
+                    if (!string.IsNullOrEmpty(paramAs))
+                    {
+                        var nsMap = ExtractNamespaces(param);
+                        var castExpr = "$__param cast as " + paramAs;
+                        var castCompiled = XPath31Expression.Compile(castExpr, new Bosak.XPath.Api.CompileOptions { Namespaces = nsMap });
+                        paramValue = castCompiled.Evaluate(new Bosak.XPath.Runtime.Vm.EvaluationContext().WithVariable("__param", paramValue));
+                    }
+                    var (local, nsUri) = ExpandParamName(param, paramName);
+                    staticParamValues[(local, nsUri)] = paramValue;
                 }
                 catch
                 {
-                    staticParams[paramName] = "";
+                    // Ignore malformed test parameters; the stylesheet will report any error.
                 }
             }
-            ExpandStaticAttributes(xslDoc.Root, staticParams);
 
             var messageListener = new RecordingMessageListener();
-            var compiler = new Bosak.Xslt.Api.XsltCompiler { UriResolver = resolver, MessageListener = messageListener };
+            var compiler = new Bosak.Xslt.Api.XsltCompiler
+            {
+                UriResolver = resolver,
+                MessageListener = messageListener,
+                StaticParameters = staticParamValues
+            };
             var executable = compiler.Compile(xslDoc, baseUri);
 
             // Set up document loader that handles document('') by returning the stylesheet
@@ -817,6 +830,33 @@ class Program
     /// (<c>{uri}local</c>), using the namespace declarations in scope on the catalog element.
     /// EQName syntax is normalized to the same Clark notation.
     /// </summary>
+    static (string LocalName, string NamespaceUri) ExpandParamName(XElement element, string name)
+    {
+        name = name.Trim();
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int closeBrace = name.IndexOf('}');
+            if (closeBrace >= 2)
+            {
+                string uri = name[2..closeBrace];
+                string local = name[(closeBrace + 1)..].Trim();
+                return (local, uri);
+            }
+        }
+
+        int colon = name.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = name.Substring(0, colon);
+            var local = name.Substring(colon + 1);
+            var resolvedNs = element.GetNamespaceOfPrefix(prefix);
+            var uri = resolvedNs?.NamespaceName ?? "";
+            return (local, uri);
+        }
+
+        return (name, "");
+    }
+
     static string ExpandTemplateNameToClark(XElement element, string name)
     {
         name = name.Trim();
@@ -1648,74 +1688,6 @@ class Program
         if (err != null) return $"error {err.Attribute("code")?.Value}";
         return "(complex assertion)";
     }
-
-    private static void ExpandStaticAttributes(XElement? element, Dictionary<string, string> staticParams)
-{
-    if (element == null) return;
-    foreach (var elem in element.DescendantsAndSelf())
-    {
-        var attrs = elem.Attributes().ToList();
-        foreach (var attr in attrs)
-        {
-            string name = attr.Name.LocalName;
-            string ns = attr.Name.NamespaceName;
-            if (!name.StartsWith('_')) continue;
-            string realName = name[1..];
-            string expanded = SubstituteAttributeValueTemplates(attr.Value, staticParams, out bool changed);
-            if (changed)
-            {
-                elem.SetAttributeValue(XName.Get(realName, ns), expanded);
-                attr.Remove();
-            }
-        }
-    }
-}
-
-private static string SubstituteAttributeValueTemplates(string value, Dictionary<string, string> staticParams, out bool changed)
-{
-    changed = false;
-    if (string.IsNullOrEmpty(value) || !value.Contains('{')) return value;
-    var sb = new System.Text.StringBuilder();
-    int i = 0;
-    while (i < value.Length)
-    {
-        if (i + 1 < value.Length && value[i] == '{' && value[i + 1] == '{')
-        {
-            sb.Append('{');
-            i += 2;
-        }
-        else if (value[i] == '{')
-        {
-            int end = value.IndexOf('}', i + 1);
-            if (end < 0)
-            {
-                sb.Append(value[i]);
-                i++;
-            }
-            else
-            {
-                var name = value.Substring(i + 1, end - i - 1).Trim();
-                if (name.StartsWith("$")) name = name[1..];
-                if (staticParams.TryGetValue(name, out var pv))
-                {
-                    sb.Append(pv);
-                    changed = true;
-                }
-                else
-                {
-                    sb.Append(value.Substring(i, end - i + 1));
-                }
-                i = end + 1;
-            }
-        }
-        else
-        {
-            sb.Append(value[i]);
-            i++;
-        }
-    }
-    return sb.ToString();
-}
 
 public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
 {

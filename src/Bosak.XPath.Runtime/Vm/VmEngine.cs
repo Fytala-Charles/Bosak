@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 2.16  | 25-06-2026     | LoadContextItem raises XPDY0002 when the XPath context item is absent                      |
 //                      | Charles Korthout | 2.17  | 25-06-2026     | InstanceOf applies default element namespace and reports unknown types (XPST0051)        |
 //                      | Charles Korthout | 2.18  | 26-06-2026     | InstanceOf recognises parameterised sequence type names and avoids spurious XPST0051   |
+//                      | Charles Korthout | 2.19  | 26-06-2026     | CompareGeneral returns false (not empty sequence) for empty general-comparison operands |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3221,9 +3222,9 @@ public static class VmEngine
     private static XdmValue CompareGeneral(IrOpCode op, XdmValue left, XdmValue right, EvaluationContext context)
     {
         // General comparisons use existential semantics over sequences.
-        // If either operand is an empty sequence, the result is an empty sequence.
+        // XPath 3.1 §17.3: if one operand is an empty sequence, the result is false.
         if (left.IsUndefined || right.IsUndefined)
-            return XdmValue.Undefined;
+            return XdmValue.FromBoolean(false);
 
         // For now, materialize both sides and compare pairwise.
         var leftItems = MaterializeSequence(left);

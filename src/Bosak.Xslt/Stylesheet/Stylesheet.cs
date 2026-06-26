@@ -52,6 +52,7 @@ using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.Xslt.Api;
+using Bosak.Xslt.Runtime;
 
 namespace Bosak.Xslt.Stylesheet;
 
@@ -82,6 +83,13 @@ public sealed class Stylesheet
     private OutputProperties? _outputProperties;
     private readonly bool _isRootStylesheet;
     private readonly StaticContext _staticContext = new();
+    private readonly IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> _externalStaticParameters;
+
+    /// <summary>
+    /// Empty dictionary used when no external static parameters are supplied.
+    /// </summary>
+    private static readonly IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> EmptyExternalStaticParameters =
+        new Dictionary<(string LocalName, string NamespaceUri), XdmValue>();
 
     /// <summary>
     /// Holds the static variables and parameters that are in scope for evaluating
@@ -193,7 +201,7 @@ public sealed class Stylesheet
         return include;
     }
 
-    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null)
+    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null)
     {
         _document = document;
         _baseUri = baseUri;
@@ -201,6 +209,7 @@ public sealed class Stylesheet
         ImportPrecedence = importPrecedence;
         _resolvedUris = resolvedUris ?? new HashSet<string>();
         _isRootStylesheet = _resolvedUris.Count == 0;
+        _externalStaticParameters = externalStaticParameters ?? EmptyExternalStaticParameters;
 
         // Add this stylesheet's own URI to the resolved set for circular-reference detection
         if (!string.IsNullOrEmpty(baseUri))
@@ -761,8 +770,21 @@ public sealed class Stylesheet
             if (isRequired && !string.IsNullOrEmpty(select))
                 throw new InvalidOperationException("XTSE0010: A required static parameter must not have a select attribute.");
 
+            bool isParam = elem.Name.LocalName == "param";
+
+            // Determine the effective value. Externally supplied parameter values override
+            // the default select expression, which avoids forward-reference errors when a
+            // static param is referenced before it is declared.
+            var name = elem.Attribute("name")?.Value;
+            var (local, ns) = string.IsNullOrEmpty(name) ? (string.Empty, string.Empty) : ExpandVariableName(elem, name);
+            var key = (local, ns);
+
             XdmValue value;
-            if (string.IsNullOrEmpty(select))
+            if (isParam && _externalStaticParameters.TryGetValue(key, out var externalValue))
+            {
+                value = externalValue;
+            }
+            else if (string.IsNullOrEmpty(select))
             {
                 // No select attribute: required parameters have no default value;
                 // all other static declarations default to the empty sequence.
@@ -772,6 +794,14 @@ public sealed class Stylesheet
             {
                 value = EvaluateStaticExpression(select, elem);
             }
+
+            // Validate externally supplied parameter values against the declared @as type
+            // at compile time (XTTE0590). Default values are validated at runtime so that
+            // empty-sequence defaults for optional types are preserved correctly.
+            var asType = elem.Attribute("as")?.Value;
+            if (isParam && _externalStaticParameters.ContainsKey(key) && !string.IsNullOrEmpty(asType))
+                value = TransformEngine.ConvertVariableValue(value, asType, isParam);
+
             AddStaticVariable(elem, value, shadowing);
         }
         else if (IsStaticNo(trimmed))
@@ -1587,7 +1617,7 @@ public sealed class Stylesheet
             // use-when on the root element of an imported module excludes the whole module.
             if (root != null && !UseWhen(root, resolvedUri))
                 return;
-            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris, null);
+            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters);
             _imports.Add(child);
             MergeChildStaticContext(child._staticContext);
         }
@@ -1621,7 +1651,7 @@ public sealed class Stylesheet
             // use-when on the root element of an included module excludes the whole module.
             if (root != null && !UseWhen(root, resolvedUri))
                 return;
-            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext);
+            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters);
             _includes.Add(child);
             MergeChildStaticContext(child._staticContext);
         }

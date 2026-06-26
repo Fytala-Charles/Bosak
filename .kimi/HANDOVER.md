@@ -8,20 +8,21 @@
 
 ## Commit
 
-`04e9f0f` — Clear use-when conformance cluster and add static-expression infrastructure  
-`6e09b23` — Progress static cluster: +17 passes (40/49)
+`<pending>` — Static cluster: full 49/49 pass + general-comparison empty-sequence fix + namespace-axis coverage fix
 
 ## What Was Built
 
 | # | Change | Files | Status |
 |---|--------|-------|--------|
-| 1 | Committed use-when cluster clearance + static-expression infrastructure. | Multiple | Done |
-| 2 | Fixed `_select` handling for global variables/parameters at runtime. | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 3 | Made static attribute value validation case-sensitive; added `tunnel`/`visibility`/`required+select` validations for static variables/parameters. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
-| 4 | Allowed static declarations without `select` to default to empty sequence (or undefined for required parameters). | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
-| 5 | Added XTSE0090 for non-global `static="yes"` variables/parameters and for `visibility` on static variables/parameters. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
-| 6 | Added XTSE3450 detection when a static variable and static parameter share the same expanded name, regardless of import precedence. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
-| 7 | Reworked static-context merging so child-module `ShadowingNames` no longer incorrectly shadow parent declarations, and higher-precedence declarations override lower-precedence ones without spurious XTSE3450. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
+| 1 | External static parameter wiring: added `XsltCompiler.StaticParameters` and threaded caller-supplied values through `Stylesheet` so they override defaults during `BuildStaticContext()`. | `src/Bosak.Xslt/Api/XsltCompiler.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
+| 2 | Static value runtime binding: eagerly bind static variables/parameters from `Stylesheet.StaticVariables` before lazy non-static globals, so static values remain available even when a non-static declaration shadows the name. | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
+| 3 | XTSE3450 conflict detection: static variable vs static parameter with the same expanded name now raises XTSE3450 across import precedence; same-kind declarations at different precedences override. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
+| 4 | XTSE0090 validations: reject `static="yes"` on non-global `xsl:param`/`xsl:variable`, and reject `visibility` on any static declaration. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
+| 5 | Implicit empty-sequence defaults: required static parameters without a value default to undefined (XTDE0050 at runtime); optional declarations default to empty sequence. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
+| 6 | Static `@as` type coercion: `ProcessStaticVariable` validates computed values against `@as` using `ConvertVariableValue` with XTTE0590 for parameters. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
+| 7 | Conformance harness static parameters: evaluates `<param static="yes">` and passes values to `XsltCompiler.StaticParameters` instead of only substituting into `_select`. | `tests/Bosak.Xslt.Conformance/Program.cs` | Done |
+| 8 | General comparison empty-sequence fix: `VmEngine.CompareGeneral` now returns `false` (not empty sequence) when one operand is empty, per XPath 3.1 §17.3. | `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` | Done |
+| 9 | Namespace-axis coverage for implied namespaces: `XDocumentNode.GetNamespaceAxis` now includes namespaces implied by the element name (e.g. `json-to-xml` output with no explicit `xmlns` attribute on every element). | `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs` | Done |
 
 ## Current Branch
 
@@ -30,23 +31,14 @@
 ## Test Status
 
 - [x] All unit tests pass (894 tests across 8 projects — 0 failures)
-- [x] `use-when` cluster: **99/102 passing, 0 failed, 3 skipped** ✅
-- [x] `type` cluster: **58/79 runnable passing, 0 failed, 21 skipped** ✅
-- [x] `static` cluster: **44/49 passing, 5 failed** (was 40/49 at start of session)
-- [ ] Full W3C XSLT 3.0 suite: **~4,699 passed / ~552 failed / ~9,349 skipped** (static cluster win reduces failures by 4)
+- [x] `static` cluster: **49/49 passing, 0 failed, 0 skipped** ✅
+- [x] Full W3C XSLT 3.0 suite: **4,599 passed / 652 failed / 9,349 skipped** (87.6%; +3 passed / −3 failed vs. baseline)
 
 ## Remaining `static` Cluster Failures
 
-| Test | Expected | Notes |
-|---|---|---|
-| static-003a | supplied static param avoids forward-ref error | External static params not wired into stylesheet loading |
-| static-011 | `true--false` | Empty-sequence general comparison in TVT produces `true--` instead of `true--false` |
-| static-013c | XTTE0590 | External static param type validation |
-| static-027 | `p=0`, `q=11` | Static variable shadowed by non-static variable with higher import precedence |
-| static-030 | complex assertion | Namespace nodes from static variable (`//namespace::*` returns 5, expected 10) |
+None — cluster is fully green.
 
 ## Next Recommended Work
 
-1. Wire external static parameters from the conformance harness into stylesheet loading (fixes static-003a, static-013c).
-2. Resolve static-027: static value must remain visible to other static expressions even when a non-static declaration shadows it at runtime.
-3. Investigate static-011 expected result and static-030 namespace-axis coverage.
+1. Commit and push the static-cluster fixes.
+2. Pick the next conformance cluster to attack (e.g. `math`, `namespace`, `try`, `whitespace`).

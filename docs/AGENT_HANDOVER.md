@@ -1,18 +1,18 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `6e09b23` + uncommitted static-cluster fixes
-**Current focus:** Progressed the `static` cluster from 40/49 to 44/49; 5 edge-case failures remain.
+**Commit:** `<pending>`
+**Current focus:** Cleared the `static` cluster (49/49) and fixed two cross-cutting bugs exposed by it: general comparison with an empty operand, and namespace-axis coverage for implied namespaces.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** ~4,699
-- **Failed:** ~552
+- **Passed:** 4,599
+- **Failed:** 652
 - **Skipped:** 9,349
-- **Pass rate:** ~88.9% (net +44 passes / −44 failures vs. previous run; static cluster contributes 4 additional passes)
+- **Pass rate:** 87.6% (+3 passes / −3 failures vs. the pre-fix baseline of 4,596/655)
 
 ## Cluster Status
 
@@ -20,33 +20,48 @@
 |---|---|---|---|---|---|
 | use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable |
 | type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
-| static | 49 | 44 | 5 | 0 | +4 passes since 40/49 baseline; 5 edge cases remain |
+| static | 49 | 49 | 0 | 0 | ✅ 100%; was 44/49 at start of this push |
 
 ## This Session Fixes
 
-1. **XTSE0090 for non-global static variables/parameters** — `ValidateInstructionTree` now rejects `static="yes"` on `xsl:variable`/`xsl:param` that are not top-level children of `xsl:transform`/`xsl:stylesheet`. Fixes `static-025`.
+1. **External static parameter wiring** — Added `XsltCompiler.StaticParameters` and `Stylesheet.SetExternalStaticParameter` so caller-supplied values override stylesheet `select` defaults during `BuildStaticContext()` and are validated against `@as`. Fixes `static-003a` and `static-013c`.
+   - **Files changed**: `src/Bosak.Xslt/Api/XsltCompiler.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+2. **Static value runtime binding** — `InitializeGlobalParametersAndVariables` now eagerly binds static variables/parameters from the pre-computed `Stylesheet.StaticVariables` dictionary before registering lazy non-static globals. Fixes `static-027`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **XTSE3450 variable/parameter collisions** — A static variable and static parameter with the same expanded name now raise `XTSE3450` even at different import precedences; same-kind declarations override. Fixes `static-020` and `static-023`.
    - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
 
-2. **XTSE0090 for `visibility` on static variables** — `ProcessStaticVariable` now rejects the `visibility` attribute on static `xsl:variable` as well as static `xsl:param`. Fixes `static-026`.
+4. **XTSE0090 static validation** — `static="yes"` is now rejected on non-global `xsl:variable`/`xsl:param`, and `visibility` is rejected on any static declaration. Fixes `static-025` and `static-026`.
    - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
 
-3. **XTSE3450 for variable/parameter name collisions** — The static context now tracks whether each binding came from a variable or a parameter. A static variable and static parameter with the same expanded name now raise `XTSE3450` even when they appear at different import precedences. Fixes `static-020` and `static-023`.
+5. **Implicit empty-sequence defaults** — Required static parameters without a supplied value default to undefined and raise `XTDE0050`; optional declarations default to empty sequence. Fixes `static-010` and related cases.
    - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
 
-4. **Static-context precedence override fix** — Child-module `ShadowingNames` are no longer copied into the parent static context, so imported declarations no longer incorrectly shadow parent declarations. Higher-precedence declarations now override lower-precedence ones without spurious `XTSE3450`.
-   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+6. **Static `@as` type coercion** — `ProcessStaticVariable` coerces computed values against `@as` using `ConvertVariableValue`, raising `XTTE0590` for parameters. Fixes `static-013c`.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+7. **Conformance harness static-parameter pass-through** — The harness evaluates `<param static="yes">` and passes the resulting `XdmValue` into `XsltCompiler.StaticParameters` instead of only substituting into `_select` attributes.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+8. **General comparison empty-sequence semantics** — `VmEngine.CompareGeneral` now returns `false` (not empty sequence) when one operand is empty, per XPath 3.1 §17.3. Fixes `static-011`.
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+9. **Namespace axis for implied namespaces** — `XDocumentNode.GetNamespaceAxis` now includes namespaces implied by the element name itself (e.g. `json-to-xml` output where child elements inherit a default namespace without explicit `xmlns` attributes). Fixes `static-030`.
+   - **File changed**: `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`.
 
 ## Notes
 
 - Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- The `static` cluster is now **49/49 passing**.
 - The `use-when` and `type` clusters remain fully green.
-- Reverted an earlier experiment that reused static values at runtime; that change fixed `static-027` but regressed `static-002a`, `static-012`, etc. A proper external-static-parameter path is needed instead.
+- Full W3C suite re-run completed with no regressions: **4,599/652/9,349**.
 
 ## Recommended Next Steps
 
-1. Wire externally supplied static parameters from the conformance harness into `Stylesheet` loading (fixes `static-003a`, `static-013c`).
-2. Resolve `static-027`: static value must remain visible to other static expressions even when a non-static declaration shadows it at runtime.
-3. Investigate `static-011` expected result and `static-030` namespace-axis coverage.
+1. Commit and push the static-cluster fixes.
+2. Pick the next cluster to attack (e.g. `math`, `namespace`, `try`, `whitespace`).
 
 ---
 

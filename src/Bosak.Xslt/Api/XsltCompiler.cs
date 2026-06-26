@@ -40,6 +40,13 @@ public sealed class XsltCompiler
     public IXsltMessageListener? MessageListener { get; set; }
 
     /// <summary>
+    /// Optional externally supplied values for static <c>xsl:param</c> declarations.
+    /// Keys are <c>(local-name, namespace-uri)</c> tuples; values are used during static
+    /// evaluation instead of the parameter's default <c>@select</c> expression.
+    /// </summary>
+    public Dictionary<(string LocalName, string NamespaceUri), XdmValue>? StaticParameters { get; set; }
+
+    /// <summary>
     /// Compiles an XSLT stylesheet from an XML string.
     /// </summary>
     /// <param name="xsl">The XSLT stylesheet as an XML string.</param>
@@ -66,7 +73,7 @@ public sealed class XsltCompiler
     public XsltExecutable Compile(XDocument document, string? baseUri = null)
     {
         var resolver = UriResolver ?? new FileSystemUriResolver();
-        var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver);
+        var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters);
         return new XsltExecutable(stylesheet, MessageListener);
     }
 

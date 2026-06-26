@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 13-06-2026     | Composite DocumentOrder includes global creation sequence for cross-document sorting    |
 //                      | Charles Korthout | 1.3   | 25-06-2026     | Added DocumentUri property/setter distinct from BaseUri                                |
 //                      | Charles Korthout | 1.4   | 25-06-2026     | Fixed following/preceding axes for attribute and namespace nodes                       |
+//                      | Charles Korthout | 1.5   | 26-06-2026     | GetNamespaceAxis adds implied default namespaces only when not explicitly declared     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -644,6 +645,11 @@ public sealed class XDocumentNode : IXdmNode
         var seen = new HashSet<string>();
         var current = element;
 
+        string elementNs = element.Name.NamespaceName;
+        bool elementNsIsNonEmpty = !string.IsNullOrEmpty(elementNs);
+        bool hasExplicitDefaultForElementNs = false;
+        bool hasPrefixDeclarationForElementNs = false;
+
         while (current is not null)
         {
             foreach (var attr in current.Attributes())
@@ -652,24 +658,33 @@ public sealed class XDocumentNode : IXdmNode
                     continue;
 
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
-                // An empty URI (xmlns="" or xmlns:prefix="") undeclares the namespace;
-                // it does not create a namespace node, but it stops inheritance.
-                if (attr.Value == string.Empty)
+                AddNamespaceNode(items, seen, prefix, attr.Value, element);
+
+                if (elementNsIsNonEmpty)
                 {
-                    seen.Add(prefix);
-                    continue;
-                }
-                if (seen.Add(prefix))
-                {
-                    items.Add(XdmValue.FromNode(new XDocumentNode(attr, element)));
+                    if (prefix == string.Empty && attr.Value == elementNs)
+                        hasExplicitDefaultForElementNs = true;
+                    else if (prefix != string.Empty && attr.Value == elementNs)
+                        hasPrefixDeclarationForElementNs = true;
                 }
             }
+
             current = current.Parent;
 
             // Stop walking up when we hit an element that was created with
             // inherit-namespaces="no" (XSLT 3.0 §11.9.2).
             if (current is XElement parent && parent.Annotation<NamespaceInheritanceBarrier>() != null)
                 break;
+        }
+
+        // Namespaces implied by the element name itself. LINQ to XML stores the
+        // namespace URI on the XName but does not materialize an xmlns attribute
+        // for every element (e.g. elements created by json-to-xml). Treat a
+        // non-empty element namespace as an implied default-namespace binding only
+        // when it is not already declared explicitly (either as default or prefixed).
+        if (elementNsIsNonEmpty && !hasExplicitDefaultForElementNs && !hasPrefixDeclarationForElementNs)
+        {
+            AddNamespaceNode(items, seen, string.Empty, elementNs, element);
         }
 
         // The xml namespace is always implicitly in scope
@@ -681,6 +696,28 @@ public sealed class XDocumentNode : IXdmNode
         }
 
         return MaterializedSequence.FromList(items);
+    }
+
+    /// <summary>
+    /// Adds a namespace node for <paramref name="prefix"/> -> <paramref name="uri"/>
+    /// if the prefix has not been seen yet. An empty <paramref name="uri"/>
+    /// undeclares the prefix and stops inheritance for it.
+    /// </summary>
+    private static void AddNamespaceNode(List<XdmValue> items, HashSet<string> seen, string prefix, string uri, XElement owner)
+    {
+        if (uri == string.Empty)
+        {
+            seen.Add(prefix);
+            return;
+        }
+
+        if (!seen.Add(prefix))
+            return;
+
+        XAttribute declaration = string.IsNullOrEmpty(prefix)
+            ? new XAttribute("xmlns", uri)
+            : new XAttribute(XNamespace.Xmlns + prefix, uri);
+        items.Add(XdmValue.FromNode(new XDocumentNode(declaration, owner)));
     }
 
     private XdmSequence GetFollowingSiblingAxis()
