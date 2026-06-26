@@ -41,6 +41,7 @@
 //                      | Charles Korthout | 2.9   | 25-06-2026     | Static function-available hides dynamic XSLT functions; skip descendants of false use-when |
 //                      | Charles Korthout | 2.10  | 26-06-2026     | Guard XTSE1660 check so it does not fire on literal result elements                     |
 //                      | Charles Korthout | 2.11  | 26-06-2026     | Static variable validation and default-value handling for static cluster              |
+//                      | Charles Korthout | 2.12  | 26-06-2026     | XTSE0090 for non-global static vars/params; XTSE0090 visibility; XTSE3450 var/param   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -89,7 +90,7 @@ public sealed class Stylesheet
     private sealed class StaticContext
     {
         /// <summary>Static variable bindings keyed by (local-name, namespace-uri).</summary>
-        public Dictionary<(string LocalName, string NamespaceUri), XdmValue> Variables { get; } = new();
+        public Dictionary<(string LocalName, string NamespaceUri), (XdmValue Value, bool IsParam)> Variables { get; } = new();
 
         /// <summary>Names of pre-module-reference variables that shadow imported/included declarations.</summary>
         public HashSet<(string LocalName, string NamespaceUri)> ShadowingNames { get; } = new();
@@ -129,7 +130,7 @@ public sealed class Stylesheet
             ctx.DefaultElementNamespace = defaultNs;
 
         // Make static variables/parameters visible to the expression.
-        foreach (var ((local, ns), value) in _staticContext.Variables)
+        foreach (var ((local, ns), (value, _)) in _staticContext.Variables)
             ctx.WithVariable(local, value, ns);
 
         return ctx;
@@ -209,7 +210,7 @@ public sealed class Stylesheet
         if (inheritedStaticContext is StaticContext inherited)
         {
             foreach (var kv in inherited.Variables)
-                _staticContext.Variables[kv.Key] = kv.Value;
+                _staticContext.Variables[kv.Key] = (kv.Value.Value, kv.Value.IsParam);
             foreach (var name in inherited.ShadowingNames)
                 _staticContext.ShadowingNames.Add(name);
         }
@@ -748,9 +749,9 @@ public sealed class Stylesheet
             if (elem.Attribute("tunnel") != null)
                 throw new InvalidOperationException("XTSE0090: The tunnel attribute is not permitted on a static variable or parameter.");
 
-            // XTSE0090: visibility is not permitted on xsl:param.
-            if (elem.Name.LocalName == "param" && elem.Attribute("visibility") != null)
-                throw new InvalidOperationException("XTSE0090: The visibility attribute is not permitted on a static parameter.");
+            // XTSE0090: visibility is not permitted on static variables/parameters.
+            if (elem.Attribute("visibility") != null)
+                throw new InvalidOperationException("XTSE0090: The visibility attribute is not permitted on a static variable or parameter.");
 
             var select = elem.Attribute("select")?.Value;
             var requiredAttr = elem.Attribute("required")?.Value;
@@ -841,19 +842,25 @@ public sealed class Stylesheet
 
         var (local, ns) = ExpandVariableName(elem, name);
         var key = (local, ns);
+        bool isParam = elem.Name.LocalName == "param";
 
         if (_staticContext.Variables.TryGetValue(key, out var existing))
         {
             if (_staticContext.ShadowingNames.Contains(key))
                 return; // existing pre-module declaration shadows this one
 
-            if (!XdmValueEqualityComparer.Instance.Equals(existing, value))
-                throw new InvalidOperationException("XTSE3450: Conflicting values for static variable or parameter.");
+            // XTSE3450: a static variable and static parameter with the same expanded
+            // name are always inconsistent, even at different import precedences.
+            if (existing.IsParam != isParam)
+                throw new InvalidOperationException("XTSE3450: Inconsistent static declarations: variable and parameter have the same name.");
 
+            // Same kind: higher import precedence (or a later local declaration) wins.
+            // Do not raise XTSE3450 for differing values across precedence levels.
+            _staticContext.Variables[key] = (value, isParam);
             return;
         }
 
-        _staticContext.Variables[key] = value;
+        _staticContext.Variables[key] = (value, isParam);
         if (shadowing)
             _staticContext.ShadowingNames.Add(key);
     }
@@ -864,22 +871,25 @@ public sealed class Stylesheet
     /// </summary>
     private void MergeChildStaticContext(StaticContext child)
     {
-        foreach (var (key, value) in child.Variables)
+        foreach (var (key, entry) in child.Variables)
         {
             if (_staticContext.Variables.TryGetValue(key, out var existing))
             {
                 if (_staticContext.ShadowingNames.Contains(key))
                     continue; // parent pre-module declaration shadows the child declaration
 
-                if (!XdmValueEqualityComparer.Instance.Equals(existing, value))
-                    throw new InvalidOperationException("XTSE3450: Conflicting values for static variable or parameter.");
+                // XTSE3450: a static variable and static parameter with the same expanded
+                // name are always inconsistent, even at different import precedences.
+                if (existing.IsParam != entry.IsParam)
+                    throw new InvalidOperationException("XTSE3450: Inconsistent static declarations: variable and parameter have the same name.");
 
+                // Same kind: a declaration at higher import precedence (or a later
+                // local declaration) overrides an earlier one without error.
+                _staticContext.Variables[key] = entry;
                 continue;
             }
 
-            _staticContext.Variables[key] = value;
-            if (child.ShadowingNames.Contains(key))
-                _staticContext.ShadowingNames.Add(key);
+            _staticContext.Variables[key] = entry;
         }
     }
 
@@ -893,6 +903,21 @@ public sealed class Stylesheet
         {
             bool isXsltElement = elem.Name.NamespaceName == XslNamespace;
             var localName = elem.Name.LocalName;
+
+            // XTSE0090: static variables and parameters must be declared at the top level.
+            if (isXsltElement && localName is "param" or "variable")
+            {
+                var staticAttr = elem.Attribute("static")?.Value;
+                if (!string.IsNullOrEmpty(staticAttr) && IsStaticYes(staticAttr.Trim()))
+                {
+                    var parent = elem.Parent;
+                    bool isTopLevel = parent != null &&
+                        parent.Name.NamespaceName == XslNamespace &&
+                        parent.Name.LocalName is "transform" or "stylesheet";
+                    if (!isTopLevel)
+                        throw new InvalidOperationException("XTSE0090: A static variable or parameter must be declared at the top level of the stylesheet.");
+                }
+            }
 
             // XTSE0805 / XTSE0090: validate attributes in the XSLT namespace.
             foreach (var attr in elem.Attributes())
@@ -1657,6 +1682,10 @@ public sealed class Stylesheet
 
     /// <summary>Top-level xsl:variable elements defined in this stylesheet.</summary>
     public IReadOnlyList<XElement> GlobalVariables => _globalVariables;
+
+    /// <summary>Static variables and parameters evaluated during stylesheet loading.</summary>
+    internal IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> StaticVariables =>
+        _staticContext.Variables.ToDictionary(kv => kv.Key, kv => kv.Value.Value);
 
     /// <summary>All key definitions defined in this stylesheet.</summary>
     public IReadOnlyList<KeyDefinition> KeyDefinitions => _keyDefinitions;
