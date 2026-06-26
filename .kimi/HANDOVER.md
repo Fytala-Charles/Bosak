@@ -8,7 +8,7 @@
 
 ## Commit
 
-`ad7d4f9` — Fixed `mode-1105` by correcting `IsNodeAttached` so a document's root element is still considered attached after whitespace stripping; full suite 4,642/609/9,349 (88.4%)
+`4a9a568` — Fixed `mode-1105` by correcting `IsNodeAttached` so a document's root element is still considered attached after whitespace stripping; full suite 4,642/609/9,349 (88.4%)
 
 ## What Was Built
 

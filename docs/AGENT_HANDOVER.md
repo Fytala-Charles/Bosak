@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `ad7d4f9`
+**Commit:** `4a9a568`
 **Current focus:** Cleared the last `mode` cluster failure (`mode-1105`) by fixing `TransformEngine.IsNodeAttached` so the root element of a source document is not treated as detached after whitespace stripping.
 
 ---
