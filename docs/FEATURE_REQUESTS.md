@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-25 (`on-empty` and `on-non-empty` conformance clusters cleared via item-based sequence-constructor rewrite)    
+> **Living Registry** — Last updated: 2026-06-26 (`static` conformance cluster cleared; `XsltCompiler.StaticParameters`, XTSE0090/XTSE3450 validations, general-comparison empty-sequence semantics, and namespace-axis implied default namespaces)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -138,6 +138,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-031 | *(internal)* | XSLT `base-uri` cluster conformance | `document('')`, `fn:base-uri()`, `fn:static-base-uri()`, and `xml:base` propagation through copies must match XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 | REQ-032 | *(internal)* | XSLT 3.0 `xsl:merge` instruction | Required for `merge` conformance cluster: merge sources/keys/action, `current-merge-group()`, `current-merge-key()`, static/dynamic errors | **Implemented** | TBD | Charles Korthout | 2026-06-13 |
 | REQ-033 | *(internal)* | XSLT `format-date-en` cluster — English number words and era-aware year formatting | Required for `format-date-en` conformance cluster: `[Ww]`, `[Wo]`, era-aware negative years, and ordinal-year width handling | **Implemented** | TBD | Charles Korthout | 2026-06-15 |
+| REQ-034 | *(internal)* | XSLT `static` cluster conformance | Required for `static` conformance cluster (49/49): external static parameters, static variable/parameter runtime binding, XTSE0090/XTSE3450 validations, implicit empty-sequence defaults, `@as` coercion, plus general-comparison empty-sequence and namespace-axis fixes exposed by the cluster | **Implemented** | TBD | Charles Korthout | 2026-06-26 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.

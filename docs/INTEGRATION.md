@@ -405,12 +405,19 @@ dotnet test Bosak.sln
 | XPath value comparison casts `xs:untypedAtomic` to `xs:string`. | In value comparisons (`eq`/`ne`/`lt`/`le`/`gt`/`ge`), an `xs:untypedAtomic` operand is atomized to `xs:string` before comparison, so `xs:untypedAtomic('72') gt 70` raises `XPTY0004` while `xs:untypedAtomic('') eq ''` succeeds. General comparisons continue to promote `xs:untypedAtomic` to the other operand's type. Fixes `type-0165`. | 2026-06-25 |
 | Whitespace stripping applies to the source document root, and stripped source nodes are treated as absent. | The engine strips whitespace from the document containing the initial context node, detects when the selected node has been removed, and evaluates globals with focus on the source-tree root. Fixes `strip-space-023`. | 2026-06-25 |
 | Path expressions only load the context item when the first step is an axis step. | Prevents `parse-xml(...)/root/item` from raising `XPDY0002` when the XPath focus is absent. Required by the `strip-space` fix. | 2026-06-25 |
+| `XsltCompiler.StaticParameters` supplies values for static `xsl:param` declarations. | Caller-supplied values override stylesheet `select` defaults and are coerced against `@as` during `BuildStaticContext()`. Required for parameterized static tests such as `static-003a/013c`. | 2026-06-26 |
+| Static variables and parameters are eagerly bound at runtime. | `InitializeGlobalParametersAndVariables` binds values from `Stylesheet.StaticVariables` before lazy non-static globals, so static values remain visible even when a non-static declaration shadows the name. Fixes `static-027`. | 2026-06-26 |
+| XTSE0090 and XTSE3450 validations for static declarations are implemented. | `static="yes"` is rejected on non-global `xsl:variable`/`xsl:param`; `visibility` is rejected on static declarations; a static variable and static parameter with the same expanded name raise `XTSE3450`. Fixes `static-020/023/025/026`. | 2026-06-26 |
+| Static declarations without a value default to empty sequence (or undefined for required parameters). | Optional static variables/parameters default to `()`; required static parameters without a supplied value raise `XTDE0050`. Fixes `static-010` and related cases. | 2026-06-26 |
+| General comparison with an empty operand returns `false`. | `VmEngine.CompareGeneral` now follows XPath 3.1 §17.3: one empty operand yields `false`, not an empty sequence. Fixes `static-011`. | 2026-06-26 |
+| Namespace axis includes implied default namespaces. | `XDocumentNode.GetNamespaceAxis` adds a default-namespace node when the element is in a non-empty namespace that is not declared explicitly as default or prefixed. Fixes `static-030` and `json-to-xml` namespace-axis coverage. | 2026-06-26 |
+| Static conformance cluster is fully passing. | All 49 `static` tests pass (was 47/49). Combined with the two cross-cutting fixes, the full W3C suite improves to 4,599/652/9,349. | 2026-06-26 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,611 | 640 | 9,349 | 87.8% | `type` and `strip-space` clusters fully runnable |
+| XSLT 3.0 (W3C) | 4,599 | 652 | 9,349 | 87.6% | `static` cluster fully passing (49/49); `use-when` and `type` clusters fully runnable |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

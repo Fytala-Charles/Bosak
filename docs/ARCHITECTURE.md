@@ -420,7 +420,7 @@ src/
 | `xsl:copy-of` | 🎯 Phase 1 | Deep copy to result tree |
 | `xsl:for-each` | 🎯 Phase 1 | Iteration over sequence |
 | `xsl:if` / `xsl:choose` | 🎯 Phase 1 | Conditional logic |
-| `xsl:variable` / `xsl:param` | 🎯 Phase 1 | Scoped variables and parameters |
+| `xsl:variable` / `xsl:param` | ✅ Implemented | Scoped variables and parameters; static variables/parameters supported with external override via `XsltCompiler.StaticParameters` |
 | `xsl:element` / `xsl:attribute` | 🎯 Phase 1 | Dynamic element/attribute construction |
 | `xsl:text` | 🎯 Phase 1 | Literal text output |
 | Built-in template rules | 🎯 Phase 1 | Default handling for text, attributes, elements |
