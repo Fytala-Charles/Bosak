@@ -8,7 +8,7 @@
 
 ## Commit
 
-`234c359` — Static cluster: full 49/49 pass + general-comparison empty-sequence fix + namespace-axis coverage fix
+`98d321f` — Static cluster: full 49/49 pass + general-comparison empty-sequence fix + namespace-axis coverage fix (includes doc sync)
 
 ## What Was Built
 
