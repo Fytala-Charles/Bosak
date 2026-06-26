@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `TBD`
+**Commit:** `8860b60`
 **Current focus:** Cleared the entire XSLT `date` conformance cluster (46 runnable failures across `date` constructor/serialization and `format-date`/`format-date-en` picture-string formatting).
 
 ---

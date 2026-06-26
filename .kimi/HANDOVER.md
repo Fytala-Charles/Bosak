@@ -8,7 +8,7 @@
 
 ## Commit
 
-`TBD` — Cleared the entire XSLT `date` conformance cluster: `date-094/095` constructor/serialization fixes, `format-date`/`format-date-en` picture-string fixes, and `adjust-dateTime-to-timezone` timezone preservation; full suite 4,695/556/9,349 (89.4%)
+`8860b60` — Cleared the entire XSLT `date` conformance cluster: `date-094/095` constructor/serialization fixes, `format-date`/`format-date-en` picture-string fixes, and `adjust-dateTime-to-timezone` timezone preservation; full suite 4,695/556/9,349 (89.4%)
 
 ## What Was Built
 
