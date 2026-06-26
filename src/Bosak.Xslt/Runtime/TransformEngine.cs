@@ -120,6 +120,7 @@
 //                      | Charles Korthout | 5.49  | 26-06-2026     | Evaluate _select AVT on global variables/parameters                                     |
 //                      | Charles Korthout | 5.50  | 26-06-2026     | IsNodeAttached now treats a document's root element as attached; fixes mode-1105        |
 //                      | Charles Korthout | 5.51  | 26-06-2026     | xsl:evaluate blocks fn:system-property; xsl:try catches bare error codes; root LRE namespaces |
+//                      | Charles Korthout | 5.52  | 26-06-2026     | Evaluate _select AVT on xsl:value-of; fixes date-094/095 static-param tests              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3151,6 +3152,14 @@ public sealed class TransformEngine
             case "value-of":
                 {
                     var select = instruction.Attribute("select")?.Value;
+                    if (string.IsNullOrEmpty(select))
+                    {
+                        // Support the AVT form _select="{...}" used by test suites for
+                        // static-parameter substitution.
+                        var underSelect = instruction.Attribute("_select")?.Value;
+                        if (!string.IsNullOrEmpty(underSelect))
+                            select = EvaluateAvt(underSelect, instruction);
+                    }
                     if (!string.IsNullOrEmpty(select))
                     {
                         var compiled = CompileXPath(select, instruction);

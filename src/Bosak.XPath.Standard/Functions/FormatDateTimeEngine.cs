@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 13-06-2026     | AM/PM marker width modifier truncates only; no zero padding                               |
 //                      | Charles Korthout | 0.4   | 13-06-2026     | Name width modifiers, default component widths, ordinal suffixes, fallback lang/cal   |
 //                      | Charles Korthout | 0.5   | 13-06-2026     | English number words, era-aware negative years, ordinal-year width handling          |
+//                      | Charles Korthout | 0.6   | 26-06-2026     | Bracket escapes, default widths, roman/alpha/timezone/week-of-month fixes             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -48,6 +49,14 @@ internal static class FormatDateTimeEngine
             if (bracket > pos)
             {
                 sb.Append(EscapeLiteral(picture[pos..bracket]));
+            }
+
+            // An unescaped '[[' is a literal '['.
+            if (bracket + 1 < picture.Length && picture[bracket + 1] == '[')
+            {
+                sb.Append('[');
+                pos = bracket + 2;
+                continue;
             }
 
             int close = FindClosingBracket(picture, bracket);
@@ -134,7 +143,7 @@ internal static class FormatDateTimeEngine
         }
 
         // Component-specific default minimum widths when no explicit width or digit pattern is given.
-        bool hasDigitPattern = presentation.Any(c => char.GetUnicodeCategory(c) == UnicodeCategory.DecimalDigitNumber);
+        bool hasDigitPattern = ContainsDecimalDigit(presentation);
         if (widthSpec is null && !hasDigitPattern)
         {
             int defaultMin = GetDefaultMinWidth(component);
@@ -183,10 +192,19 @@ internal static class FormatDateTimeEngine
         => component switch
         {
             'Y' => 4,
-            'M' or 'D' or 'H' or 'm' or 's' => 2,
             'd' => 3,
+            'm' => 2,
+            's' => 2,
             _ => 1
         };
+
+    private static bool ContainsDecimalDigit(string presentation)
+    {
+        foreach (var rune in presentation.EnumerateRunes())
+            if (Rune.GetUnicodeCategory(rune) == UnicodeCategory.DecimalDigitNumber)
+                return true;
+        return false;
+    }
 
     private static bool IsLanguageSupported(string? language)
         => string.IsNullOrEmpty(language) ||
@@ -259,63 +277,43 @@ internal static class FormatDateTimeEngine
     // Digit family helpers
     // ------------------------------------------------------------------
 
-    private static char? DetectZeroDigit(string presentation)
+    private static Rune? DetectZeroDigit(string presentation)
     {
-        foreach (char c in presentation)
+        for (int i = 0; i < presentation.Length;)
         {
-            if (char.GetUnicodeCategory(c) == UnicodeCategory.DecimalDigitNumber)
+            if (Rune.TryGetRuneAt(presentation, i, out var rune)
+                && Rune.GetUnicodeCategory(rune) == UnicodeCategory.DecimalDigitNumber)
             {
-                char zd = GetDigitZero(c);
-                int digitValue = c - zd;
+                int digitValue = CharUnicodeInfo.GetDigitValue(presentation, i);
                 if (digitValue >= 0 && digitValue <= 9)
-                    return zd;
+                    return new Rune(rune.Value - digitValue);
             }
+            i += rune.Utf16SequenceLength;
         }
         return null;
     }
 
-    private static char GetDigitZero(char digit)
+    private static Rune GetZeroDigit(Rune digit)
     {
-        int val = digit - '0';
-        if (val >= 0 && val <= 9)
-            return '0';
-
-        val = digit - '\u0660';
-        if (val >= 0 && val <= 9)
-            return '\u0660';
-
-        val = digit - '\u06F0';
-        if (val >= 0 && val <= 9)
-            return '\u06F0';
-
-        val = digit - '\u0E50';
-        if (val >= 0 && val <= 9)
-            return '\u0E50';
-
-        val = digit - '\u0966';
-        if (val >= 0 && val <= 9)
-            return '\u0966';
-
-        val = digit - '\u09E6';
-        if (val >= 0 && val <= 9)
-            return '\u09E6';
-
+        int digitValue = CharUnicodeInfo.GetDigitValue(digit.ToString(), 0);
+        if (digitValue >= 0 && digitValue <= 9)
+            return new Rune(digit.Value - digitValue);
         return digit;
     }
 
-    private static string MapDigit(char asciiDigit, char zeroDigit)
+    private static string MapDigit(char asciiDigit, Rune zeroDigit)
     {
-        if (zeroDigit == '0')
+        if (zeroDigit.Value == '0')
             return asciiDigit.ToString();
         int val = asciiDigit - '0';
         if (val < 0 || val > 9)
             return asciiDigit.ToString();
-        return ((char)(zeroDigit + val)).ToString();
+        return new Rune(zeroDigit.Value + val).ToString();
     }
 
-    private static string MapDigits(string asciiDigits, char zeroDigit)
+    private static string MapDigits(string asciiDigits, Rune zeroDigit)
     {
-        if (zeroDigit == '0')
+        if (zeroDigit.Value == '0')
             return asciiDigits;
         var sb = new StringBuilder(asciiDigits.Length);
         foreach (char c in asciiDigits)
@@ -330,15 +328,15 @@ internal static class FormatDateTimeEngine
     /// </summary>
     private static DigitInfo ParseDigitPresentation(string presentation, bool isFractional)
     {
-        char zeroDigit = '0';
+        Rune zeroDigit = new('0');
         int mandatoryCount = 0;
         int optionalCount = 0;
         bool seenMandatory = false;
-        char? firstZeroDigit = null;
+        Rune? firstZeroDigit = null;
 
-        foreach (char c in presentation)
+        foreach (var rune in presentation.EnumerateRunes())
         {
-            if (c == '#')
+            if (rune.Value == '#')
             {
                 if (isFractional)
                 {
@@ -353,9 +351,9 @@ internal static class FormatDateTimeEngine
                     optionalCount++;
                 }
             }
-            else if (char.GetUnicodeCategory(c) == UnicodeCategory.DecimalDigitNumber)
+            else if (Rune.GetUnicodeCategory(rune) == UnicodeCategory.DecimalDigitNumber)
             {
-                char zd = GetDigitZero(c);
+                Rune zd = GetZeroDigit(rune);
                 if (firstZeroDigit is null)
                     firstZeroDigit = zd;
                 else if (firstZeroDigit.Value != zd)
@@ -370,7 +368,7 @@ internal static class FormatDateTimeEngine
         return new DigitInfo(zeroDigit, mandatoryCount, optionalCount);
     }
 
-    private readonly record struct DigitInfo(char ZeroDigit, int Mandatory, int Optional)
+    private readonly record struct DigitInfo(Rune ZeroDigit, int Mandatory, int Optional)
     {
         public int TotalPositions => Mandatory + Optional;
     }
@@ -383,6 +381,35 @@ internal static class FormatDateTimeEngine
     {
         if (TryFormatWords(value, presentation, out string? wordsResult))
             return wordsResult;
+
+        // Alphabetic numbering (A, B, ... Z, AA, ...). Zero is formatted as "0".
+        if (presentation == "A" || presentation == "a")
+        {
+            if (value == 0)
+                return "0";
+            bool upper = presentation == "A";
+            var alphaSb = new StringBuilder();
+            long v = value;
+            while (v > 0)
+            {
+                v--;
+                char c = (char)(v % 26 + (upper ? 'A' : 'a'));
+                alphaSb.Insert(0, c);
+                v /= 26;
+            }
+            return alphaSb.ToString();
+        }
+
+        // Roman numerals (i/I). Values outside the representable range fall back to digits.
+        if (presentation == "i" || presentation == "I")
+        {
+            if (value is >= 1 and <= 3999)
+            {
+                int nonNumericMin = maxWidth == int.MaxValue ? 1 : minWidth;
+                return ApplyAlphabeticWidth(ToRoman(value, upper: presentation == "I"), nonNumericMin, int.MaxValue);
+            }
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
 
         bool ordinal = presentation.EndsWith("o") || presentation.EndsWith("O");
         string digitPresentation = ordinal ? presentation[..^1] : presentation;
@@ -608,26 +635,46 @@ internal static class FormatDateTimeEngine
     }
 
     private static string ApplyWidth(string value, int minWidth, int maxWidth, char zeroDigit)
+        => ApplyWidth(value, minWidth, maxWidth, new Rune(zeroDigit));
+
+    private static string ApplyWidth(string value, int minWidth, int maxWidth, Rune zeroDigit)
     {
         if (maxWidth != int.MaxValue && value.Length > maxWidth)
             return value[..maxWidth];
         if (value.Length < minWidth)
         {
-            char padChar = zeroDigit == '0' ? '0' : zeroDigit;
-            return value.PadLeft(minWidth, padChar);
+            string pad = zeroDigit.Value == '0' ? "0" : zeroDigit.ToString();
+            int padCount = minWidth - value.Length;
+            var sb = new StringBuilder(minWidth);
+            for (int i = 0; i < padCount; i++)
+                sb.Append(pad);
+            sb.Append(value);
+            return sb.ToString();
         }
         return value;
     }
 
     private static string ApplyWidthFractional(string value, int minWidth, int maxWidth, char zeroDigit)
+        => ApplyWidthFractional(value, minWidth, maxWidth, new Rune(zeroDigit));
+
+    private static string ApplyWidthFractional(string value, int minWidth, int maxWidth, Rune zeroDigit)
     {
         if (maxWidth != int.MaxValue && value.Length > maxWidth)
             return value[..maxWidth];
         if (value.Length < minWidth)
         {
-            char padChar = zeroDigit == '0' ? '0' : zeroDigit;
-            return value.PadRight(minWidth, padChar);
+            string pad = zeroDigit.Value == '0' ? "0" : zeroDigit.ToString();
+            return value.PadRight(minWidth, pad[0]);
         }
+        return value;
+    }
+
+    private static string ApplyAlphabeticWidth(string value, int minWidth, int maxWidth)
+    {
+        // Width modifiers on non-numeric presentations only pad to the minimum;
+        // they do not truncate content such as roman numerals or words.
+        if (value.Length < minWidth)
+            return value.PadRight(minWidth);
         return value;
     }
 
@@ -639,13 +686,16 @@ internal static class FormatDateTimeEngine
     {
         long year = value.Year;
 
+        // Non-numeric presentations (words, roman numerals) ignore the default numeric
+        // minimum width; an explicit width modifier (maxWidth constrained) is honoured.
+        int nonNumericMin = maxWidth == int.MaxValue ? 1 : minWidth;
         if (TryFormatWords(year, presentation, out string? wordsResult))
-            return wordsResult;
+            return ApplyAlphabeticWidth(wordsResult, nonNumericMin, int.MaxValue);
 
         if (presentation == "i")
-            return ToRoman(year, upper: false);
+            return ApplyAlphabeticWidth(ToRoman(year, upper: false), nonNumericMin, int.MaxValue);
         if (presentation == "I")
-            return ToRoman(year, upper: true);
+            return ApplyAlphabeticWidth(ToRoman(year, upper: true), nonNumericMin, int.MaxValue);
 
         var info = ParseDigitPresentation(presentation, isFractional: false);
         if (info.TotalPositions > 0)
@@ -659,7 +709,14 @@ internal static class FormatDateTimeEngine
         long displayYear2 = hasEra && year < 0 ? -year : year;
         bool negative = year < 0 && !hasEra;
         string digits = displayYear2.ToString(CultureInfo.InvariantCulture).TrimStart('-');
-        digits = ApplyWidth(digits, minWidth, maxWidth, '0');
+
+        // Width modifiers on a year truncate the least significant digits, not the most
+        // significant ones, and pad with leading zeros when necessary.
+        if (digits.Length < minWidth)
+            digits = digits.PadLeft(minWidth, '0');
+        if (maxWidth != int.MaxValue && digits.Length > maxWidth)
+            digits = digits[(digits.Length - maxWidth)..];
+
         if (negative)
             digits = "-" + digits;
         return digits;
@@ -702,9 +759,18 @@ internal static class FormatDateTimeEngine
 
     private static string FormatWeekOfMonth(XPathDateTime value, string presentation, int minWidth, int maxWidth)
     {
-        int week = GetIsoWeekOfYear(value)
-            - GetIsoWeekOfYear(new XPathDateTime(value.Year, value.Month, 1, 0, 0, 0, 0, value.TimezoneOffsetMinutes, value.HasTimezone))
-            + 1;
+        // The first week of the month is the ISO week that contains its first Thursday.
+        // This avoids negative week numbers around ISO year boundaries.
+        var firstOfMonth = new XPathDateTime(value.Year, value.Month, 1, 0, 0, 0, 0, value.TimezoneOffsetMinutes, value.HasTimezone);
+        int dowFirst = (int)GetDayOfWeek(firstOfMonth);
+        if (dowFirst == 0)
+            dowFirst = 7;
+        int daysToThursday = (4 - dowFirst + 7) % 7;
+        var (y, m, d) = XPathDateTimeHelper.AddDays(firstOfMonth.Year, firstOfMonth.Month, firstOfMonth.Day, daysToThursday);
+        var firstThursday = new XPathDateTime(y, m, d, 0, 0, 0, 0, value.TimezoneOffsetMinutes, value.HasTimezone);
+
+        int baseWeek = GetIsoWeekOfYear(firstThursday);
+        int week = GetIsoWeekOfYear(value) - baseWeek + 1;
         return FormatInteger(week, presentation, minWidth, maxWidth, allowTruncate: false);
     }
 
@@ -753,18 +819,37 @@ internal static class FormatDateTimeEngine
             return "";
 
         var offset = TimeSpan.FromMinutes(value.TimezoneOffsetMinutes);
-        if (offset == TimeSpan.Zero)
-            return "Z";
-
         string sign = offset < TimeSpan.Zero ? "-" : "+";
         var abs = offset < TimeSpan.Zero ? -offset : offset;
+        int hours = abs.Hours;
+        int minutes = abs.Minutes;
 
-        if (presentation == "z" || presentation == "0")
-            return $"{sign}{abs.Hours:00}";
-        if (presentation == "zz" || presentation == "00" || presentation.All(c => c == '0'))
-            return $"{sign}{abs.Hours:00}{abs.Minutes:00}";
+        // Explicit "Z" presentation requests the short "Z" form for a zero offset.
+        if (presentation == "Z" || presentation == "z")
+        {
+            if (offset == TimeSpan.Zero)
+                return "Z";
+        }
 
-        return $"{sign}{abs.Hours:00}:{abs.Minutes:00}";
+        // Hours only, no leading zeros; include minutes if they are non-zero.
+        if (presentation == "0")
+        {
+            string result = $"{sign}{hours}";
+            if (minutes != 0)
+                result += $":{minutes:00}";
+            return result;
+        }
+
+        // Hours only, two digits.
+        if (presentation == "00")
+            return $"{sign}{hours:00}";
+
+        // Hours and minutes without colon.
+        if (presentation == "0000")
+            return $"{sign}{hours:00}{minutes:00}";
+
+        // Default is the full ±HH:MM representation.
+        return $"{sign}{hours:00}:{minutes:00}";
     }
 
     private static string FormatTimezoneGmt(XPathDateTime value, string presentation, int minWidth, int maxWidth)
@@ -773,12 +858,31 @@ internal static class FormatDateTimeEngine
             return "";
 
         var offset = TimeSpan.FromMinutes(value.TimezoneOffsetMinutes);
-        if (offset == TimeSpan.Zero)
-            return "GMT";
-
         string sign = offset < TimeSpan.Zero ? "-" : "+";
         var abs = offset < TimeSpan.Zero ? -offset : offset;
-        return $"GMT{sign}{abs.Hours:00}:{abs.Minutes:00}";
+        int hours = abs.Hours;
+        int minutes = abs.Minutes;
+
+        // [z0] => hours only, no leading zero; minutes appended only when non-zero.
+        if (presentation == "0")
+        {
+            string result = $"GMT{sign}{hours}";
+            if (minutes != 0)
+                result += $":{minutes:00}";
+            return result;
+        }
+
+        // [z,2-2] (empty presentation, width 2-2) => two-digit hours, omit minutes when zero.
+        if (string.IsNullOrEmpty(presentation) && minWidth == 2 && maxWidth == 2)
+        {
+            string result = $"GMT{sign}{hours:00}";
+            if (minutes != 0)
+                result += $":{minutes:00}";
+            return result;
+        }
+
+        // Default [z] => GMT±HH:MM, even for a zero offset.
+        return $"GMT{sign}{hours:00}:{minutes:00}";
     }
 
     // ------------------------------------------------------------------

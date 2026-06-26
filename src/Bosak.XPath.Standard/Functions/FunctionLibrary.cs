@@ -8148,7 +8148,7 @@ public static class FunctionLibrary
         var normalized = XPathDateTimeHelper.NormalizeToUtc(xdt);
         var withTarget = new XPathDateTime(normalized.Year, normalized.Month, normalized.Day, normalized.Hour, normalized.Minute, normalized.Second, normalized.Millisecond, -targetOffset, true);
         var targetLocal = XPathDateTimeHelper.NormalizeToUtc(withTarget);
-        return XdmValue.FromDateTime(targetLocal, true);
+        return XdmValue.FromDateTime(new XPathDateTime(targetLocal.Year, targetLocal.Month, targetLocal.Day, targetLocal.Hour, targetLocal.Minute, targetLocal.Second, targetLocal.Millisecond, targetOffset, true), true);
     }
 
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

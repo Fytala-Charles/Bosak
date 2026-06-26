@@ -6,9 +6,16 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 26 June 2026
 > **Bosak baseline:** 894 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,647 passed / 604 failed / 9,349 skipped (~88.5%)
+> **XSLT baseline:** 4,695 passed / 556 failed / 9,349 skipped (~89.4%)
 
 ---
+
+## 0. Recent Changes
+
+- **2026-06-26** — Cleared the XSLT `date` conformance cluster (46 runnable failures).
+  - `xsl:value-of` now evaluates the `_select` AVT used by static-parameter test stylesheets.
+  - `fn:format-date`, `format-time`, and `format-dateTime` now support escaped brackets (`[[` / `]]`), roman/alphabetic presentations, ISO week-of-month around year boundaries, non-BMP digit families, correct default widths, and timezone semantics (`[Z]` / `[z]`).
+  - `fn:adjust-dateTime-to-timezone` now preserves the target timezone offset instead of returning a zero-offset value.
 
 ## 1. Consuming Bosak
 

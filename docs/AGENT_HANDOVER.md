@@ -1,6 +1,75 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
+**Commit:** `TBD`
+**Current focus:** Cleared the entire XSLT `date` conformance cluster (46 runnable failures across `date` constructor/serialization and `format-date`/`format-date-en` picture-string formatting).
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,695
+- **Failed:** 556
+- **Skipped:** 9,349
+- **Pass rate:** 89.4% (+48 passes / −48 failures vs. the previous 4,647/604)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| date | 211 | 200 | 0 | 11 | ✅ 100% runnable; `date-094/095` constructors, `format-date`, and `format-date-en` fixes |
+| call-template | 44 | 38 | 0 | 6 | ✅ 100% runnable |
+| attribute | 125 | 67 | 0 | 58 | ✅ 100% runnable; root LRE namespace copying fixes `attribute-0601` |
+| system-property | 27 | 15 | 0 | 12 | ✅ 100% runnable; `xsl:evaluate` blocks `fn:system-property` |
+| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ 100%; bare error-code catch matching fixes `unparsed-text-lines-004` |
+| regex | 2,162 | 47 | 0 | 2,115 | ✅ 100% runnable; `.` now matches surrogate pairs |
+| mode | 188 | 122 | 0 | 66 | ✅ 100% runnable; `mode-1105` root-element detachment fix |
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable; `use-when-0137/0138` now raise XTSE3450 |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100%; remains green |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable; `xsl:use-attribute-sets` whitelist fix |
+| xsl-document | 25 | 25 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`_select` AVT on `xsl:value-of`** — `TransformEngine` now evaluates a `_select="{...}"` attribute when no ordinary `select` is present. The W3C test suites use this form for static-parameter substitution in stylesheets such as `date-094.xsl`/`date-095.xsl`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **`format-date` picture-string fixes** — `FormatDateTimeEngine` now:
+   - treats `[[` and `]]` as escaped literal brackets;
+   - uses component-specific default widths (year 4, day-of-year 3, minute/second 2, others 1);
+   - pads roman numerals and words to explicit widths without truncating;
+   - supports alphabetic (`[A]`/`[a]`) and roman (`[I]`/`[i]`) presentations for any numeric component;
+   - handles non-BMP digit families (e.g. Osmanya) via `Rune`/`CharUnicodeInfo`;
+   - computes ISO week-of-month from the first Thursday of the month to avoid negative values across ISO year boundaries;
+   - formats timezone `[Z]` as `±HH:MM` by default and `[z]` as `GMT±HH:MM`, with `[z0]` and width-modifier forms that omit minutes when zero.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FormatDateTimeEngine.cs`.
+
+3. **`adjust-dateTime-to-timezone` timezone preservation** — The function now returns the local target time with the requested timezone offset, instead of losing the offset and returning a zero-offset value.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+4. **Documentation sync** — Updated `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, and `docs/AGENT_HANDOVER.md` with the cleared `date` cluster status and latest conformance baseline.
+   - **Files changed**: `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- The `date` cluster is now **200/211 passing, 0 runnable failures, 11 skipped**.
+- Full W3C suite re-run: **4,695/556/9,349** (89.4%).
+
+## Recommended Next Steps
+
+1. Push the current commit to `origin/main`.
+2. Continue with remaining clusters (`namespace` 22 failures, `maps` 36 failures) or pick off additional quick wins.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-26
 **Commit:** `18f53bd`
 **Current focus:** Cleared the remaining single-failure clusters (`attribute-0601`, `system-property-022`, `unparsed-text-lines-004`, `regex-026`); `call-template-0201` was already passing.
 
