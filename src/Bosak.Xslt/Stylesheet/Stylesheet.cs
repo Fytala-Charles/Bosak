@@ -43,6 +43,7 @@
 //                      | Charles Korthout | 2.10  | 26-06-2026     | Guard XTSE1660 check so it does not fire on literal result elements                     |
 //                      | Charles Korthout | 2.11  | 26-06-2026     | Static variable validation and default-value handling for static cluster              |
 //                      | Charles Korthout | 2.12  | 26-06-2026     | XTSE0090 for non-global static vars/params; XTSE0090 visibility; XTSE3450 var/param   |
+//                      | Charles Korthout | 2.13  | 26-06-2026     | Document-order use-when evaluation; precedence-aware static variable conflict detection |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -99,10 +100,13 @@ public sealed class Stylesheet
     private sealed class StaticContext
     {
         /// <summary>Static variable bindings keyed by (local-name, namespace-uri).</summary>
-        public Dictionary<(string LocalName, string NamespaceUri), (XdmValue Value, bool IsParam)> Variables { get; } = new();
+        public Dictionary<(string LocalName, string NamespaceUri), (XdmValue Value, bool IsParam, int Precedence)> Variables { get; } = new();
 
-        /// <summary>Names of pre-module-reference variables that shadow imported/included declarations.</summary>
-        public HashSet<(string LocalName, string NamespaceUri)> ShadowingNames { get; } = new();
+        /// <summary>
+        /// Same-precedence declarations with different values. A later higher-precedence
+        /// declaration resolves the conflict; otherwise it is reported as XTSE3450.
+        /// </summary>
+        public Dictionary<(string LocalName, string NamespaceUri), (XdmValue First, XdmValue Second)> PendingConflicts { get; } = new();
     }
 
     /// <summary>
@@ -139,8 +143,8 @@ public sealed class Stylesheet
             ctx.DefaultElementNamespace = defaultNs;
 
         // Make static variables/parameters visible to the expression.
-        foreach (var ((local, ns), (value, _)) in _staticContext.Variables)
-            ctx.WithVariable(local, value, ns);
+        foreach (var (key, entry) in _staticContext.Variables)
+            ctx.WithVariable(key.LocalName, entry.Value, key.NamespaceUri);
 
         return ctx;
     }
@@ -220,9 +224,7 @@ public sealed class Stylesheet
         if (inheritedStaticContext is StaticContext inherited)
         {
             foreach (var kv in inherited.Variables)
-                _staticContext.Variables[kv.Key] = (kv.Value.Value, kv.Value.IsParam);
-            foreach (var name in inherited.ShadowingNames)
-                _staticContext.ShadowingNames.Add(name);
+                _staticContext.Variables[kv.Key] = (kv.Value.Value, kv.Value.IsParam, kv.Value.Precedence);
         }
 
         // Handle literal result element stylesheets before loading
@@ -695,43 +697,65 @@ public sealed class Stylesheet
 
     /// <summary>
     /// Builds the static context for this module by resolving imports/includes and
-    /// evaluating static variables/parameters in document order.
+    /// evaluating static variables/parameters in document order. Top-level
+    /// <c>use-when</c> attributes are evaluated as each element is encountered so
+    /// that forward references to imported static variables are detected.
     /// </summary>
     private void BuildStaticContext()
     {
         var root = _document.Root;
         if (root == null) return;
 
-        bool moduleReferenceSeen = false;
-        foreach (var child in root.Elements())
+        foreach (var child in root.Elements().ToList())
         {
             var ns = child.Name.NamespaceName;
             var localName = child.Name.LocalName;
 
             if (ns == XslNamespace && localName == "import")
             {
-                moduleReferenceSeen = true;
                 if (UseWhen(child))
                 {
                     var href = child.Attribute("href")?.Value;
                     if (!string.IsNullOrEmpty(href))
                         ResolveImport(href);
                 }
+                else
+                {
+                    child.Remove();
+                }
             }
             else if (ns == XslNamespace && localName == "include")
             {
-                moduleReferenceSeen = true;
                 if (UseWhen(child))
                 {
                     var href = child.Attribute("href")?.Value;
                     if (!string.IsNullOrEmpty(href))
                         ResolveInclude(href);
                 }
+                else
+                {
+                    child.Remove();
+                }
             }
             else if (ns == XslNamespace && (localName == "variable" || localName == "param"))
             {
-                ProcessStaticVariable(child, !moduleReferenceSeen);
+                ProcessStaticVariable(child);
             }
+            else
+            {
+                // Evaluate use-when on all other top-level elements immediately, using
+                // only the static context established up to this point.
+                if (!UseWhen(child))
+                    child.Remove();
+            }
+        }
+
+        // Any same-precedence conflicts not resolved by a higher-precedence declaration
+        // are reported now.
+        if (_staticContext.PendingConflicts.Count > 0)
+        {
+            var first = _staticContext.PendingConflicts.First();
+            throw new InvalidOperationException($"XTSE3450: Inconsistent static declarations: conflicting values for '{{{first.Key.NamespaceUri}}}{first.Key.LocalName}' at the same import precedence.");
         }
     }
 
@@ -739,7 +763,7 @@ public sealed class Stylesheet
     /// Processes a single static variable or parameter declaration, validating its
     /// attributes, evaluating its select expression, and adding it to the static context.
     /// </summary>
-    private void ProcessStaticVariable(XElement elem, bool shadowing)
+    private void ProcessStaticVariable(XElement elem)
     {
         var staticAttr = elem.Attribute("static")?.Value;
         if (staticAttr is null)
@@ -803,7 +827,7 @@ public sealed class Stylesheet
             if (isParam && _externalStaticParameters.ContainsKey(key) && !string.IsNullOrEmpty(asType))
                 value = TransformEngine.ConvertVariableValue(value, asType, isParam);
 
-            AddStaticVariable(elem, value, shadowing);
+            AddStaticVariable(elem, value, ImportPrecedence);
         }
         else if (IsStaticNo(trimmed))
         {
@@ -865,35 +889,67 @@ public sealed class Stylesheet
     /// Adds a static variable or parameter to the static context, detecting conflicts
     /// with existing declarations (XTSE3450).
     /// </summary>
-    private void AddStaticVariable(XElement elem, XdmValue value, bool shadowing)
+    private void AddStaticVariable(XElement elem, XdmValue value, int precedence)
     {
         var name = elem.Attribute("name")?.Value;
         if (string.IsNullOrEmpty(name))
             return;
 
         var (local, ns) = ExpandVariableName(elem, name);
-        var key = (local, ns);
-        bool isParam = elem.Name.LocalName == "param";
+        AddStaticVariable((local, ns), value, elem.Name.LocalName == "param", precedence);
+    }
 
+    /// <summary>
+    /// Adds a static variable or parameter to the static context, detecting conflicts
+    /// with existing declarations (XTSE3450).
+    /// </summary>
+    private void AddStaticVariable((string LocalName, string NamespaceUri) key, XdmValue value, bool isParam, int precedence)
+    {
         if (_staticContext.Variables.TryGetValue(key, out var existing))
         {
-            if (_staticContext.ShadowingNames.Contains(key))
-                return; // existing pre-module declaration shadows this one
-
-            // XTSE3450: a static variable and static parameter with the same expanded
-            // name are always inconsistent, even at different import precedences.
             if (existing.IsParam != isParam)
-                throw new InvalidOperationException("XTSE3450: Inconsistent static declarations: variable and parameter have the same name.");
+            {
+                // XTSE3450: a static variable and static parameter with the same expanded
+                // name are inconsistent unless the lower-precedence declaration is
+                // overridden by a higher-precedence declaration that was processed first.
+                if (precedence > existing.Precedence)
+                    return; // new declaration has lower precedence: overridden
 
-            // Same kind: higher import precedence (or a later local declaration) wins.
-            // Do not raise XTSE3450 for differing values across precedence levels.
-            _staticContext.Variables[key] = (value, isParam);
+                // New declaration has same or higher precedence: conflicting kinds.
+                throw new InvalidOperationException($"XTSE3450: Inconsistent static declarations: variable and parameter have the same name '{{{key.NamespaceUri}}}{key.LocalName}'.");
+            }
+
+            if (precedence > existing.Precedence)
+            {
+                // New declaration has lower import precedence: it is overridden.
+                return;
+            }
+
+            if (precedence < existing.Precedence)
+            {
+                // New declaration has higher import precedence. If it resolves a
+                // pending same-precedence conflict, the conflict is settled. Otherwise
+                // a change in the effective value is inconsistent.
+                if (!_staticContext.PendingConflicts.ContainsKey(key) &&
+                    !XdmValueEqualityComparer.Instance.Equals(existing.Value, value))
+                {
+                    throw new InvalidOperationException($"XTSE3450: Inconsistent static declarations: conflicting values for '{{{key.NamespaceUri}}}{key.LocalName}'.");
+                }
+
+                _staticContext.Variables[key] = (value, isParam, precedence);
+                _staticContext.PendingConflicts.Remove(key);
+                return;
+            }
+
+            // Same import precedence: values must be identical.
+            if (XdmValueEqualityComparer.Instance.Equals(existing.Value, value))
+                return;
+
+            _staticContext.PendingConflicts[key] = (existing.Value, value);
             return;
         }
 
-        _staticContext.Variables[key] = (value, isParam);
-        if (shadowing)
-            _staticContext.ShadowingNames.Add(key);
+        _staticContext.Variables[key] = (value, isParam, precedence);
     }
 
     /// <summary>
@@ -903,25 +959,7 @@ public sealed class Stylesheet
     private void MergeChildStaticContext(StaticContext child)
     {
         foreach (var (key, entry) in child.Variables)
-        {
-            if (_staticContext.Variables.TryGetValue(key, out var existing))
-            {
-                if (_staticContext.ShadowingNames.Contains(key))
-                    continue; // parent pre-module declaration shadows the child declaration
-
-                // XTSE3450: a static variable and static parameter with the same expanded
-                // name are always inconsistent, even at different import precedences.
-                if (existing.IsParam != entry.IsParam)
-                    throw new InvalidOperationException("XTSE3450: Inconsistent static declarations: variable and parameter have the same name.");
-
-                // Same kind: a declaration at higher import precedence (or a later
-                // local declaration) overrides an earlier one without error.
-                _staticContext.Variables[key] = entry;
-                continue;
-            }
-
-            _staticContext.Variables[key] = entry;
-        }
+            AddStaticVariable(key, entry.Value, entry.IsParam, entry.Precedence);
     }
 
     /// <summary>

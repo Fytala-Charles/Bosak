@@ -259,7 +259,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
 | `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
-| `xsl:use-when` | ⚠️ Partial | Top-level and nested elements; `true()`/`false()` evaluation works. Error cases (XTSE0090, XPST0003) not yet validated. |
+| `xsl:use-when` | ✅ Working | Top-level and nested elements evaluated in document order; `true()`/`false()` and static-variable references work; XTSE0090 and XTSE3450 error cases validated. |
 | `xsl:where-populated` | ✅ Working | Filters empty sequences, empty text nodes, empty PIs, empty comments, and empty elements; attributes and namespace nodes do not make a sequence populated; empty strings and empty arrays are treated as empty |
 | `xsl:on-empty` | ✅ Working | Evaluated by parent container (xsl:copy, xsl:document, literal result elements, general sequence constructors) when sequence constructor produces no nodes; supports `@select` and sequence constructor children; `on-empty` conformance cluster 72/72 |
 | `xsl:on-non-empty` | ✅ Working | Evaluated by parent container when sequence constructor produces nodes; supports `@select` and sequence constructor children; `on-non-empty` conformance cluster 14/14 |
@@ -413,12 +413,14 @@ dotnet test Bosak.sln
 | Namespace axis includes implied default namespaces. | `XDocumentNode.GetNamespaceAxis` adds a default-namespace node when the element is in a non-empty namespace that is not declared explicitly as default or prefixed. Fixes `static-030` and `json-to-xml` namespace-axis coverage. | 2026-06-26 |
 | Static conformance cluster is fully passing. | All 49 `static` tests pass (was 47/49). Combined with the two cross-cutting fixes, the full W3C suite improves to 4,599/652/9,349. | 2026-06-26 |
 | `xsl:use-attribute-sets` is allowed on literal result elements. | Added `use-attribute-sets` to the XTSE0805 whitelist of XSLT-namespaced attributes permitted on LREs. Clears the `attribute-set`, `xsl-document`, `analyze-string`, and `next-match` clusters. | 2026-06-26 |
+| Precedence-aware XTSE3450 detection for static variables. | `Stylesheet.BuildStaticContext` evaluates top-level `use-when` in document order and tracks import precedence; same-precedence conflicting values and higher-precedence overrides that change the effective value raise `XTSE3450`. Fixes `use-when-0137/0138` and keeps `static` cluster at 49/49. | 2026-06-26 |
+| `use-when` conformance cluster is fully passing. | All 99 runnable `use-when` tests pass (was 97/99); `use-when-0137/0138` now raise `XTSE3450` correctly. | 2026-06-26 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,638 | 613 | 9,349 | 88.3% | `static` cluster fully passing (49/49); `attribute-set`, `xsl-document`, `analyze-string`, `next-match` clusters fully runnable |
+| XSLT 3.0 (W3C) | 4,640 | 611 | 9,349 | 88.4% | `static` cluster fully passing (49/49); `use-when` cluster fully passing (99/99 runnable); `attribute-set`, `xsl-document`, `analyze-string`, `next-match` clusters fully runnable |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
