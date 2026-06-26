@@ -4,21 +4,19 @@
 
 ## Session Date
 
-2026-06-25
+2026-06-26
 
 ## Commit
 
-`b807e32`
+`712730a` (HEAD) + uncommitted WIP on `use-when` / static-expression infrastructure
 
 ## What Was Built
 
 | # | Change | Files | Status |
 |---|--------|-------|--------|
-| 1 | Cleared the `on-empty` and `on-non-empty` conformance clusters by rewriting sequence-constructor evaluation as an item-based pipeline with deferred conditional instruction processing. | `src/Bosak.Xslt/Runtime/TransformEngine.cs` | Done |
-| 2 | XPath parser fix: keyword tokens (`for`, `in`, `return`, etc.) can now act as names in variable-binding contexts. | `src/Bosak.XPath.Parser/Ast/XPathParser.cs` | Done |
-| 3 | Static validation: `xsl:on-empty` must be the last significant child of its sequence constructor (XTSE0010). | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
-| 4 | Conformance harness: assertions can now use `$result/child::...` because the harness binds `$result` to a document node. | `tests/Bosak.Xslt.Conformance/Program.cs` | Done |
-| 5 | Updated agent handover, integration guide, and feature request registry. | `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` | Done |
+| 1 | Fixed unit-test regression: XTSE1660 check in `ValidateInstructionTree` now only applies to XSLT elements, not literal result elements with a normal `type` output attribute. | `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` | Done |
+| 2 | Fixed `type` cluster regressions: `InstanceOf` now recognizes parameterised and unprefixed sequence type names (`item()`, `element(*, xs:anyType)`, `attribute(*, T)`, etc.) without throwing XPST0051. | `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` | Done |
+| 3 | Verified `use-when` cluster remains clear and unit tests pass. | — | Done |
 
 ## Current Branch
 
@@ -27,24 +25,23 @@
 ## Test Status
 
 - [x] All unit tests pass (894 tests across 8 projects — 0 failures)
-- [x] Full W3C XSLT 3.0 suite: **4,666 passed / 585 failed / 9,349 skipped** (~88.9%)
-- [x] `on-empty` cluster: **72/72 passing** ✅
-- [x] `on-non-empty` cluster: **14/14 passing** ✅
+- [x] `use-when` cluster: **99/102 passing, 0 failed, 3 skipped** ✅
+- [x] `type` cluster: **58/79 runnable passing, 0 failed, 21 skipped** ✅
+- [ ] `static` cluster: **23/49 passing, 26 failed** — still work-in-progress
+- [ ] Full W3C XSLT 3.0 suite: **4,619 passed / 632 failed / 9,349 skipped** (88.0%)
+
+## Notes
+
+- The uncommitted WIP completely cleared the `use-when` cluster (was 73 passed / 26 failed on HEAD).
+- It also regressed the `static` cluster (was 27 passed / 22 failed on HEAD) and left the full suite ~47 passes below the committed baseline of 4,666/585.
+- The immediate regressions caused by the WIP have been fixed; the remaining `static` cluster failures are part of the original incomplete static-variable work.
 
 ## Next Recommended Work
 
-Top remaining XSLT conformance clusters by failure count:
+Choose one of the following:
 
-| Cluster | Failed | Runnable | Notes |
-|---------|--------|----------|-------|
-| `xml-version` | 27 | 42 | XML version serialization / parsing |
-| `use-when` | 26 | 99 | Static evaluation of `use-when` expressions |
-| `available-system-properties` | 26 | 26 | System-property availability and values |
-| `namespace-alias` | 25 | — | Namespace alias transformation |
-| `iterate` | 25 | — | `xsl:iterate` / `xsl:break` |
-| `collations` | 25 | — | Collation URI handling |
-| `tunnel` | 22 | 58 | Tunnel parameter propagation |
-| `static` | 22 | 49 | Static errors / `xsl:static-error` |
-| `try` | 21 | 35 | Many failures are static errors caught dynamically due to lazy compilation inside `xsl:try` |
+1. **Commit the `use-when` win separately** — tease apart the use-when improvements from the static-variable work, revert/disable the incomplete static processing, and commit a clean use-when-clearing change.
+2. **Continue the `static` cluster** — debug static variable / import-precedence propagation so the 26 remaining failures clear.
+3. **Pivot to a different cluster** — e.g. `available-system-properties` (26 failures) or `xml-version` (27 failures) — after stashing or reverting the current WIP.
 
-Recommended pick: **`use-when`** (static-evaluation infrastructure with broad payoff) or **`try`** (error-handling correctness).
+Recommended pick: **option 1** (use-when is already green and self-contained).

@@ -1,5 +1,52 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-26
+**Commit:** `712730a` (HEAD) + uncommitted WIP
+**Current focus:** Fixed regressions in an in-progress `use-when` / static-expression change set; `use-when` cluster is now clear and `type` cluster is restored to 100% runnable.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,619
+- **Failed:** 632
+- **Skipped:** 9,349
+- **Pass rate:** 88.0% (−47 passes / +47 failures vs. committed baseline 4,666/585)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable; was 73/26 on HEAD |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable; restored after XPST0051 regression fix |
+| static | 49 | 23 | 26 | 0 | Still WIP; static variable / import-precedence propagation incomplete |
+
+## This Session Fixes
+
+1. **Guarded XTSE1660 check for literal result elements** — `ValidateInstructionTree` no longer rejects LREs that carry an ordinary output `type` attribute (e.g. `<group type='{@type}'/>`).
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+2. **Restored `instance of` support for parameterised sequence types** — `VmEngine.InstanceOf` now recognizes unprefixed forms (`item()`, `element(*, xs:anyType)`, `attribute(*, T)`, etc.) and only treats a name as XSD-prefixed when it actually starts with `xs:` / `xsd:`, preventing spurious `XPST0051` errors.
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- The uncommitted WIP cleared the entire `use-when` cluster (+26 passes).
+- The same WIP regressed the `static` cluster and leaves the full suite ~47 passes below the committed baseline.
+- Remaining decision: separate and commit the `use-when` improvements, or continue debugging the `static` cluster.
+
+## Recommended Next Steps
+
+1. **Commit the `use-when` win separately** by isolating it from the incomplete static-variable work.
+2. **Continue the `static` cluster** if the static-variable propagation issues look tractable.
+3. **Pivot to another cluster** (e.g. `available-system-properties`, `xml-version`) after reverting the current WIP.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-25
 **Commit:** `b807e325`
 **Current focus:** Cleared the `on-empty` and `on-non-empty` conformance clusters by rewriting sequence-constructor evaluation as an item-based pipeline with deferred conditional instruction processing.

@@ -47,6 +47,8 @@
 //                      | Charles Korthout | 2.14  | 25-06-2026     | QName equality compares namespace URI + local name, ignoring prefix (fixes type-0129)   |
 //                      | Charles Korthout | 2.15  | 25-06-2026     | Value comparison casts xs:untypedAtomic operands to xs:string before comparing (fixes type-0165)            |
 //                      | Charles Korthout | 2.16  | 25-06-2026     | LoadContextItem raises XPDY0002 when the XPath context item is absent                      |
+//                      | Charles Korthout | 2.17  | 25-06-2026     | InstanceOf applies default element namespace and reports unknown types (XPST0051)        |
+//                      | Charles Korthout | 2.18  | 26-06-2026     | InstanceOf recognises parameterised sequence type names and avoids spurious XPST0051   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1264,7 +1266,7 @@ public static class VmEngine
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
-                        bool instance = InstanceOf(registers[instr.RegisterB], typeName, occurrence);
+                        bool instance = InstanceOf(registers[instr.RegisterB], typeName, occurrence, context.DefaultElementNamespace);
                         registers[instr.RegisterA] = XdmValue.FromBoolean(instance);
                         ip++;
                         break;
@@ -1275,7 +1277,7 @@ public static class VmEngine
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var value = registers[instr.RegisterB];
-                        if (!InstanceOf(value, typeName, occurrence))
+                        if (!InstanceOf(value, typeName, occurrence, context.DefaultElementNamespace))
                             throw new InvalidOperationException($"Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
                         registers[instr.RegisterA] = value;
                         ip++;
@@ -4404,11 +4406,11 @@ public static class VmEngine
         return true;
     }
 
-    private static bool InstanceOf(XdmValue value, string typeName, OccurrenceIndicator occurrence)
+    private static bool InstanceOf(XdmValue value, string typeName, OccurrenceIndicator occurrence, string? defaultElementNamespace)
     {
-        string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
+        string normalized = NormalizeTypeName(typeName);
 
-        if (normalized == "empty-sequence" || normalized == "empty-sequence()")
+        if (normalized is "empty-sequence" or "empty-sequence()")
             return value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
 
         // Check cardinality
@@ -4440,17 +4442,149 @@ public static class VmEngine
         if (count == 0)
             return true;
 
-        // Check each item's type
+        string effective;
+        if (typeName.StartsWith("xs:", StringComparison.OrdinalIgnoreCase))
+        {
+            effective = normalized.StartsWith("xs:") ? normalized[3..] : normalized;
+        }
+        else if (typeName.StartsWith("xsd:", StringComparison.OrdinalIgnoreCase))
+        {
+            effective = normalized.StartsWith("xsd:") ? normalized[4..] : normalized;
+        }
+        else if (typeName.Contains(':') && !typeName.Contains('('))
+        {
+            // A prefixed name that is not a node-kind test and not in the XML Schema
+            // namespace is not a valid sequence type name.
+            throw new InvalidOperationException("XPST0051");
+        }
+        else
+        {
+            if (defaultElementNamespace == "http://www.w3.org/2001/XMLSchema")
+            {
+                effective = normalized;
+            }
+            else
+            {
+                // No prefix and the default namespace is not XML Schema: only node kind
+                // and function/map/array/item tests are valid; bare atomic type names are not.
+                if (IsKnownSequenceTypeName(normalized))
+                    effective = normalized;
+                else
+                    throw new InvalidOperationException("XPST0051");
+            }
+        }
+
+        // Function, map, array and item tests are valid regardless of the default namespace.
+        if (effective is "function" or "function(*)" or "function()")
+        {
+            if (!value.IsSequence) return value.IsFunction;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                if (!item.IsFunction) return false;
+            return true;
+        }
+
+        if (effective is "map" or "map(*)" or "map()")
+        {
+            if (!value.IsSequence) return value.IsMap;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                if (!item.IsMap) return false;
+            return true;
+        }
+
+        if (effective is "array" or "array(*)" or "array()")
+        {
+            if (!value.IsSequence) return value.IsArray;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                if (!item.IsArray) return false;
+            return true;
+        }
+
+        if (effective is "item" or "item()")
+        {
+            if (!value.IsSequence) return !value.IsUndefined;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                if (item.IsUndefined) return false;
+            return true;
+        }
+
+        // Node kind tests (use the original typeName so that parameterised forms
+        // such as element(*, xs:anyType) are evaluated by ValueMatchesType).
+        if (IsKnownSequenceTypeName(effective))
+        {
+            if (!value.IsSequence) return ValueMatchesType(value, typeName);
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            {
+                if (!ValueMatchesType(item, typeName))
+                    return false;
+            }
+            return true;
+        }
+
+        // Atomic type names: must be in the XML Schema namespace (either via xs: prefix
+        // or via the default element/type namespace).
+        if (!IsKnownAtomicTypeName(effective))
+            throw new InvalidOperationException("XPST0051");
+
         if (!value.IsSequence)
-            return ValueMatchesType(value, normalized);
+            return ValueMatchesType(value, effective);
 
         foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
         {
-            if (!ValueMatchesType(item, normalized))
+            if (!ValueMatchesType(item, effective))
                 return false;
         }
         return true;
     }
+
+    private static string NormalizeTypeName(string typeName)
+    {
+        var s = typeName.Trim().ToLowerInvariant();
+        if (s.Length > 0 && (s[^1] is '?' or '*' or '+'))
+            s = s[..^1].TrimEnd();
+        // Strip any parenthesised parameters so that forms such as
+        // element(*, xs:anyType), attribute(*, T), and item() all reduce
+        // to their base kind name for the initial classification.
+        int paren = s.IndexOf('(');
+        if (paren >= 0)
+            s = s[..paren].TrimEnd();
+        return s;
+    }
+
+    private static string ResolveTypeName(string original, string normalized, string? defaultElementNamespace)
+    {
+        if (original.Contains(':'))
+        {
+            if (original.StartsWith("xs:", StringComparison.OrdinalIgnoreCase))
+                return normalized.StartsWith("xs:") ? normalized[3..] : normalized;
+            if (original.StartsWith("xsd:", StringComparison.OrdinalIgnoreCase))
+                return normalized.StartsWith("xsd:") ? normalized[4..] : normalized;
+            throw new InvalidOperationException("XPST0051");
+        }
+
+        if (defaultElementNamespace == "http://www.w3.org/2001/XMLSchema")
+            return normalized;
+
+        return normalized;
+    }
+
+    private static bool IsKnownSequenceTypeName(string name)
+        => name is "node" or "node()" or "element" or "element()" or "attribute" or "attribute()"
+            or "document-node" or "document-node()" or "text" or "text()" or "comment" or "comment()"
+            or "processing-instruction" or "processing-instruction()" or "namespace-node" or "namespace-node()"
+            or "item" or "item()"
+            or "function" or "function(*)" or "function()"
+            or "map" or "map(*)" or "map()"
+            or "array" or "array(*)" or "array()";
+
+    private static bool IsKnownAtomicTypeName(string name)
+        => name is "string" or "normalizedstring" or "token" or "language" or "nmtoken" or "name"
+            or "ncname" or "id" or "idref" or "entity" or "boolean" or "integer" or "int" or "long"
+            or "short" or "byte" or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
+            or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
+            or "decimal" or "double" or "float" or "numeric" or "datetime" or "date" or "time"
+            or "duration" or "daytimeduration" or "yearmonthduration" or "qname" or "anyuri"
+            or "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth"
+            or "hexbinary" or "base64binary" or "untypedatomic" or "anyatomictype";
 
     private static bool ItemInstanceOf(XdmValue value, string normalized)
     {
@@ -4491,6 +4625,8 @@ public static class VmEngine
             "idref" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("IDREF", StringComparison.OrdinalIgnoreCase) == true,
             "entity" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("ENTITY", StringComparison.OrdinalIgnoreCase) == true,
             "node" => value.IsNode,
+            "element" or "element()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Element,
+            "attribute" or "attribute()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Attribute,
             "document-node" or "document-node()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Document,
             "text" or "text()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Text,
             "comment" or "comment()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Comment,

@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.3   | 24-06-2026     | Added DocumentPostProcessor for XSLT whitespace stripping on loaded documents          |
 //                      | Charles Korthout | 1.4   | 25-06-2026     | Added InitialTemplateCallParameters/TunnelParameters for named-template entry points   |
 //                      | Charles Korthout | 1.5   | 25-06-2026     | Added RegisterDocument to pre-cache source documents for fn:doc identity               |
+//                      | Charles Korthout | 1.6   | 25-06-2026     | Added IsStaticEvaluation flag for use-when/static-expression function libraries        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -117,6 +118,14 @@ public sealed class EvaluationContext
     /// Optional base URI used to resolve relative document URIs.
     /// </summary>
     public string? BaseUri { get; set; }
+
+    /// <summary>
+    /// When true, the expression is being evaluated in a static context (e.g. a
+    /// <c>use-when</c> attribute or a static variable select expression). Function
+    /// availability checks restrict the function library to context-independent
+    /// functions.
+    /// </summary>
+    public bool IsStaticEvaluation { get; set; }
 
     /// <summary>
     /// The implicit timezone offset in minutes used when a date, time, or dateTime value

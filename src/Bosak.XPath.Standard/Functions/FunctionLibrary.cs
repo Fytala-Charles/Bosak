@@ -70,6 +70,7 @@
 //                      | Charles Korthout | 5.6   | 24-06-2026     | Implemented fn:snapshot; fixed fn:innermost/fn:outermost descendant/ancestor checks    |
 //                      | Charles Korthout | 5.7   | 25-06-2026     | Added fn:nilled#0/#1; system-property namespace expansion; regex options in matches/replace/tokenize |
 //                      | Charles Korthout | 5.8   | 25-06-2026     | fn:resolve-QName validates lexical QName and raises FOCA0002; xs:boolean string cast is case-sensitive |
+//                      | Charles Korthout | 5.9   | 25-06-2026     | function-available hides XSLT dynamic functions from static (use-when) evaluation        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3814,6 +3815,12 @@ public static class FunctionLibrary
 
         var (nsUri, localName) = ParseFunctionAvailableName(ctx, name);
 
+        // In a static (use-when) context, XSLT-defined functions that depend on the
+        // dynamic evaluation context are not available even though they use the fn
+        // namespace and are registered in the runtime function library.
+        if (ctx.IsStaticEvaluation && nsUri == Namespaces.Fn && XsltDynamicFunctions.Contains(localName))
+            return XdmValue.FromBoolean(false);
+
         if (arity >= 0)
         {
             // fn:concat is variadic: any arity >= 2 is valid.
@@ -3821,7 +3828,9 @@ public static class FunctionLibrary
                 return XdmValue.FromBoolean(true);
 
             // Some XSLT 3.0 functions are reported as available even when not fully implemented.
-            if (IsXslt30FunctionReportedAvailable(nsUri, localName, arity))
+            // These are not visible in a static (use-when) context because most of them depend
+            // on the dynamic evaluation context.
+            if (!ctx.IsStaticEvaluation && IsXslt30FunctionReportedAvailable(nsUri, localName, arity))
                 return XdmValue.FromBoolean(true);
 
             return XdmValue.FromBoolean(ctx.TryResolveFunction(nsUri, localName, arity, out _));
@@ -3831,7 +3840,7 @@ public static class FunctionLibrary
             // Check any arity
             for (int a = 0; a <= 20; a++)
             {
-                if (IsXslt30FunctionReportedAvailable(nsUri, localName, a))
+                if (!ctx.IsStaticEvaluation && IsXslt30FunctionReportedAvailable(nsUri, localName, a))
                     return XdmValue.FromBoolean(true);
                 if (ctx.TryResolveFunction(nsUri, localName, a, out _))
                     return XdmValue.FromBoolean(true);
@@ -3948,6 +3957,30 @@ public static class FunctionLibrary
 
         return (nsUri, localName);
     }
+
+    /// <summary>
+    /// XSLT-defined functions in the fn namespace that depend on the dynamic
+    /// evaluation context and are therefore not available during static evaluation
+    /// of <c>use-when</c> expressions.
+    /// </summary>
+    private static readonly HashSet<string> XsltDynamicFunctions = new(StringComparer.Ordinal)
+    {
+        "accumulator-after",
+        "accumulator-before",
+        "copy-of",
+        "current",
+        "current-group",
+        "current-grouping-key",
+        "current-merge-group",
+        "current-merge-key",
+        "current-output-uri",
+        "document",
+        "key",
+        "regex-group",
+        "stream-available",
+        "unparsed-entity-public-id",
+        "unparsed-entity-uri"
+    };
 
     private static bool IsXslt30FunctionReportedAvailable(string nsUri, string localName, int arity)
     {

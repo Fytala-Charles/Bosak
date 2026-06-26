@@ -38,12 +38,16 @@
 //                      | Charles Korthout | 2.6   | 24-06-2026     | Reject extension-element-prefixes bound to reserved namespaces (XTSE0800)              |
 //                      | Charles Korthout | 2.7   | 24-06-2026     | use-when walks ancestor namespace declarations; propagates XTDE1400/1410 errors        |
 //                      | Charles Korthout | 2.8   | 25-06-2026     | XTSE0080 validation for xsl:template/@name; added xs/fn namespace constants             |
+//                      | Charles Korthout | 2.9   | 25-06-2026     | Static function-available hides dynamic XSLT functions; skip descendants of false use-when |
+//                      | Charles Korthout | 2.10  | 26-06-2026     | Guard XTSE1660 check so it does not fire on literal result elements                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Globalization;
 using System.IO;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.Xslt.Api;
 
@@ -75,8 +79,119 @@ public sealed class Stylesheet
     private readonly HashSet<string> _excludedResultPrefixes = new();
     private OutputProperties? _outputProperties;
     private readonly bool _isRootStylesheet;
+    private readonly StaticContext _staticContext = new();
 
-    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null)
+    /// <summary>
+    /// Holds the static variables and parameters that are in scope for evaluating
+    /// <c>use-when</c> expressions in this stylesheet module.
+    /// </summary>
+    private sealed class StaticContext
+    {
+        /// <summary>Static variable bindings keyed by (local-name, namespace-uri).</summary>
+        public Dictionary<(string LocalName, string NamespaceUri), XdmValue> Variables { get; } = new();
+
+        /// <summary>Names of pre-module-reference variables that shadow imported/included declarations.</summary>
+        public HashSet<(string LocalName, string NamespaceUri)> ShadowingNames { get; } = new();
+    }
+
+    /// <summary>
+    /// Builds the evaluation context used for static <c>use-when</c> expressions.
+    /// </summary>
+    private EvaluationContext CreateUseWhenContext(XElement elem, string? explicitBaseUri = null)
+    {
+        var ctx = new EvaluationContext();
+        Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
+
+        // The static base URI for use-when is the base URI of the element's
+        // containing stylesheet module, taking xml:base into account.
+        ctx.BaseUri = explicitBaseUri ?? GetEffectiveBaseUri(elem);
+        ctx.IsStaticEvaluation = true;
+
+        // Add in-scope namespace declarations so prefixes in use-when resolve correctly.
+        var currentNs = elem;
+        while (currentNs != null)
+        {
+            foreach (var attr in currentNs.Attributes().Where(a => a.IsNamespaceDeclaration))
+            {
+                var prefix = attr.Name.LocalName;
+                if (prefix == "xmlns") prefix = "";
+                // Inner declarations take precedence; only add if not already present.
+                if (!ctx.TryResolveNamespace(prefix, out _))
+                    ctx.WithNamespace(prefix, attr.Value);
+            }
+            currentNs = currentNs.Parent;
+        }
+
+        // Apply the effective xpath-default-namespace for element/type names.
+        var defaultNs = GetXPathDefaultNamespace(elem);
+        if (!string.IsNullOrEmpty(defaultNs))
+            ctx.DefaultElementNamespace = defaultNs;
+
+        // Make static variables/parameters visible to the expression.
+        foreach (var ((local, ns), value) in _staticContext.Variables)
+            ctx.WithVariable(local, value, ns);
+
+        return ctx;
+    }
+
+    /// <summary>
+    /// Evaluates the <c>use-when</c> attribute on the given element.
+    /// Returns <c>true</c> if the attribute is absent or evaluates to true.
+    /// Any error while evaluating the expression is propagated as a static error.
+    /// </summary>
+    private bool UseWhen(XElement elem, string? explicitBaseUri = null)
+    {
+        string? useWhen = null;
+        bool isXsltElement = elem.Name.NamespaceName == XslNamespace;
+
+        if (isXsltElement)
+        {
+            // On XSLT elements the controlling use-when is the no-namespace attribute.
+            var noNsAttr = elem.Attribute("use-when");
+            if (noNsAttr != null)
+            {
+                useWhen = noNsAttr.Value;
+            }
+            else
+            {
+                // A use-when attribute in the XSLT namespace is never permitted on
+                // XSLT elements.
+                if (elem.Attribute(XName.Get("use-when", XslNamespace)) != null)
+                    throw new InvalidOperationException("XTSE0090: use-when must not be in the XSLT namespace on XSLT elements.");
+                return true;
+            }
+        }
+        else
+        {
+            // On literal result elements (and data elements) only the XSLT-namespace
+            // form is recognized; the no-namespace form is a normal output attribute.
+            var xslAttr = elem.Attribute(XName.Get("use-when", XslNamespace));
+            if (xslAttr != null)
+                useWhen = xslAttr.Value;
+            else
+                return true;
+        }
+
+        if (string.IsNullOrEmpty(useWhen))
+            return true;
+
+        var compiled = XPath31Expression.Compile(useWhen);
+        var ctx = CreateUseWhenContext(elem, explicitBaseUri);
+        var result = compiled.Evaluate(ctx);
+        bool include = result.EffectiveBooleanValue();
+
+        if (isXsltElement)
+        {
+            // If the no-namespace use-when excludes the element, the (erroneous)
+            // XSLT-namespace use-when attribute is ignored. Otherwise it is an error.
+            if (include && elem.Attribute(XName.Get("use-when", XslNamespace)) != null)
+                throw new InvalidOperationException("XTSE0090: use-when must not be in the XSLT namespace on XSLT elements.");
+        }
+
+        return include;
+    }
+
+    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null)
     {
         _document = document;
         _baseUri = baseUri;
@@ -88,6 +203,15 @@ public sealed class Stylesheet
         // Add this stylesheet's own URI to the resolved set for circular-reference detection
         if (!string.IsNullOrEmpty(baseUri))
             _resolvedUris.Add(baseUri);
+
+        // Initialise the static context from the including module (for xsl:include).
+        if (inheritedStaticContext is StaticContext inherited)
+        {
+            foreach (var kv in inherited.Variables)
+                _staticContext.Variables[kv.Key] = kv.Value;
+            foreach (var name in inherited.ShadowingNames)
+                _staticContext.ShadowingNames.Add(name);
+        }
 
         // Handle literal result element stylesheets before loading
         var root = _document.Root;
@@ -235,7 +359,11 @@ public sealed class Stylesheet
         if (versionAttr == null || string.IsNullOrWhiteSpace(versionAttr.Value))
             throw new InvalidOperationException("XTSE0010: The version attribute is required on xsl:stylesheet or xsl:transform.");
 
-        Version = versionAttr.Value;
+        var versionValue = versionAttr.Value.Trim();
+        if (!decimal.TryParse(versionValue, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out _))
+            throw new InvalidOperationException("XTSE0110: The version attribute must be a valid decimal number.");
+
+        Version = versionValue;
 
         // Parse xsl:declared-modes on stylesheet/package root
         var declaredModesAttr = root.Attribute("declared-modes")?.Value?.Trim()?.ToLowerInvariant();
@@ -306,109 +434,31 @@ public sealed class Stylesheet
             }
         }
 
-        // Helper to evaluate use-when on top-level elements
-        bool UseWhen(XElement elem)
-        {
-            var useWhen = GetUseWhenAttribute(elem);
-            if (string.IsNullOrEmpty(useWhen))
-                return true;
-            try
-            {
-                var compiled = XPath31Expression.Compile(useWhen);
-                var ctx = new Bosak.XPath.Runtime.Vm.EvaluationContext();
-                Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
-                // Add in-scope namespace declarations so prefixes in use-when resolve correctly
-                var currentNs = elem;
-                while (currentNs != null)
-                {
-                    foreach (var attr in currentNs.Attributes().Where(a => a.IsNamespaceDeclaration))
-                    {
-                        var prefix = attr.Name.LocalName;
-                        if (prefix == "xmlns") prefix = "";
-                        // Inner declarations take precedence; only add if not already present.
-                        if (!ctx.TryResolveNamespace(prefix, out _))
-                            ctx.WithNamespace(prefix, attr.Value);
-                    }
-                    currentNs = currentNs.Parent;
-                }
-                var result = compiled.Evaluate(ctx);
-                return result.EffectiveBooleanValue();
-            }
-            catch (Exception ex)
-            {
-                // QName validation errors from fn:function-available / fn:element-available
-                // inside use-when must be reported as dynamic errors rather than silently
-                // treating the expression as true.
-                var message = ex.Message;
-                if (message == "XTDE1400" || message.StartsWith("XTDE1400:", StringComparison.Ordinal) ||
-                    message == "XTDE1410" || message.StartsWith("XTDE1410:", StringComparison.Ordinal))
-                {
-                    throw;
-                }
-                return true; // If evaluation fails, include the element (fail-safe)
-            }
-        }
-
-        /// <summary>
-        /// Gets the value of the <c>use-when</c> attribute, checking both the no-namespace
-        /// form (used on XSLT elements) and the <c>xsl:use-when</c> form (used on LREs).
-        /// </summary>
-        static string? GetUseWhenAttribute(XElement elem)
-        {
-            // On XSLT elements, use-when has no namespace
-            var attr = elem.Attribute("use-when");
-            if (attr != null)
-                return attr.Value;
-            // On literal result elements, use-when must be in the XSLT namespace
-            attr = elem.Attribute(XName.Get("use-when", XslNamespace));
-            if (attr != null)
-                return attr.Value;
-            return null;
-        }
-
         /// <summary>
         /// Recursively strips elements whose <c>use-when</c> attribute evaluates to <c>false()</c>.
         /// This is applied to the entire stylesheet tree, including nested elements inside
         /// template bodies, so that <c>use-when</c> on instructions and LREs is respected.
+        /// Descendants of an excluded element are not evaluated.
         /// </summary>
         void StripUseWhenElements(XElement parent)
         {
-            // Process children first (depth-first) so we strip descendants before
-            // deciding whether to strip the parent. Then process the parent's children
-            // in a separate pass to avoid modifying a collection while iterating.
             var children = parent.Elements().ToList();
             foreach (var child in children)
             {
-                StripUseWhenElements(child);
-            }
-
-            // Now remove any direct children whose use-when is false
-            foreach (var child in children)
-            {
-                if (!UseWhen(child))
+                if (UseWhen(child))
+                {
+                    StripUseWhenElements(child);
+                }
+                else
                 {
                     child.Remove();
                 }
             }
         }
 
-        // Process xsl:import elements (must come first per spec)
-        foreach (var import in root.Elements(XName.Get("import", XslNamespace)))
-        {
-            if (!UseWhen(import)) continue;
-            var href = import.Attribute("href")?.Value;
-            if (!string.IsNullOrEmpty(href))
-                ResolveImport(href);
-        }
-
-        // Process xsl:include elements
-        foreach (var include in root.Elements(XName.Get("include", XslNamespace)))
-        {
-            if (!UseWhen(include)) continue;
-            var href = include.Attribute("href")?.Value;
-            if (!string.IsNullOrEmpty(href))
-                ResolveInclude(href);
-        }
+        // Build the static context (static variables/parameters, imports and includes)
+        // before evaluating any use-when expressions.
+        BuildStaticContext();
 
         // Apply use-when stripping to the entire tree (nested elements inside templates,
         // literal result elements, etc.) after imports/includes are resolved.
@@ -523,7 +573,7 @@ public sealed class Stylesheet
         }
 
         // Parse xsl:output (first one wins per spec)
-        var outputElem = root.Elements(XName.Get("output", XslNamespace)).FirstOrDefault(UseWhen);
+        var outputElem = root.Elements(XName.Get("output", XslNamespace)).FirstOrDefault(e => UseWhen(e));
         if (outputElem != null)
             _outputProperties = OutputProperties.FromElement(outputElem);
 
@@ -632,6 +682,185 @@ public sealed class Stylesheet
     }
 
     /// <summary>
+    /// Builds the static context for this module by resolving imports/includes and
+    /// evaluating static variables/parameters in document order.
+    /// </summary>
+    private void BuildStaticContext()
+    {
+        var root = _document.Root;
+        if (root == null) return;
+
+        bool moduleReferenceSeen = false;
+        foreach (var child in root.Elements())
+        {
+            var ns = child.Name.NamespaceName;
+            var localName = child.Name.LocalName;
+
+            if (ns == XslNamespace && localName == "import")
+            {
+                moduleReferenceSeen = true;
+                if (UseWhen(child))
+                {
+                    var href = child.Attribute("href")?.Value;
+                    if (!string.IsNullOrEmpty(href))
+                        ResolveImport(href);
+                }
+            }
+            else if (ns == XslNamespace && localName == "include")
+            {
+                moduleReferenceSeen = true;
+                if (UseWhen(child))
+                {
+                    var href = child.Attribute("href")?.Value;
+                    if (!string.IsNullOrEmpty(href))
+                        ResolveInclude(href);
+                }
+            }
+            else if (ns == XslNamespace && (localName == "variable" || localName == "param"))
+            {
+                ProcessStaticVariable(child, !moduleReferenceSeen);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Processes a single static variable or parameter declaration, validating its
+    /// attributes, evaluating its select expression, and adding it to the static context.
+    /// </summary>
+    private void ProcessStaticVariable(XElement elem, bool shadowing)
+    {
+        var staticAttr = elem.Attribute("static")?.Value;
+        if (staticAttr is null)
+            return;
+
+        var trimmed = staticAttr.Trim();
+        if (IsStaticYes(trimmed))
+        {
+            // Static declaration: evaluate if not excluded by its own use-when.
+            if (!UseWhen(elem))
+                return;
+
+            if (!IsStaticBodyEmpty(elem))
+                throw new InvalidOperationException("XTSE0620: Static variable or parameter must not have a sequence constructor.");
+
+            var select = elem.Attribute("select")?.Value;
+            if (string.IsNullOrEmpty(select))
+                throw new InvalidOperationException("XTSE0010: Static variable or parameter must have a select attribute.");
+
+            var value = EvaluateStaticExpression(select, elem);
+            AddStaticVariable(elem, value, shadowing);
+        }
+        else if (IsStaticNo(trimmed))
+        {
+            // Non-static declaration: not part of the static context.
+        }
+        else
+        {
+            throw new InvalidOperationException("XTSE0020: Invalid value for static attribute.");
+        }
+    }
+
+    /// <summary>
+    /// Returns true if the given static attribute value means "static".
+    /// </summary>
+    private static bool IsStaticYes(string value)
+        => value.Trim().ToLowerInvariant() is "yes" or "true" or "1";
+
+    /// <summary>
+    /// Returns true if the given static attribute value means "non-static".
+    /// </summary>
+    private static bool IsStaticNo(string value)
+        => value.Trim().ToLowerInvariant() is "no" or "false" or "0";
+
+    /// <summary>
+    /// Evaluates an XPath expression in the current static context.
+    /// </summary>
+    private XdmValue EvaluateStaticExpression(string expression, XElement elem)
+    {
+        var ctx = CreateUseWhenContext(elem);
+        var compiled = XPath31Expression.Compile(expression);
+        return compiled.Evaluate(ctx);
+    }
+
+    /// <summary>
+    /// Returns true if the content of a static variable or parameter is empty after
+    /// applying use-when to its children.
+    /// </summary>
+    private bool IsStaticBodyEmpty(XElement elem)
+    {
+        foreach (var node in elem.Nodes())
+        {
+            if (node is XText text && string.IsNullOrWhiteSpace(text.Value))
+                continue;
+            if (node is XComment or XProcessingInstruction)
+                continue;
+            if (node is XElement child)
+            {
+                // If the child is excluded by use-when, it contributes no content.
+                if (UseWhen(child))
+                    return false;
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Adds a static variable or parameter to the static context, detecting conflicts
+    /// with existing declarations (XTSE3450).
+    /// </summary>
+    private void AddStaticVariable(XElement elem, XdmValue value, bool shadowing)
+    {
+        var name = elem.Attribute("name")?.Value;
+        if (string.IsNullOrEmpty(name))
+            return;
+
+        var (local, ns) = ExpandVariableName(elem, name);
+        var key = (local, ns);
+
+        if (_staticContext.Variables.TryGetValue(key, out var existing))
+        {
+            if (_staticContext.ShadowingNames.Contains(key))
+                return; // existing pre-module declaration shadows this one
+
+            if (!XdmValueEqualityComparer.Instance.Equals(existing, value))
+                throw new InvalidOperationException("XTSE3450: Conflicting values for static variable or parameter.");
+
+            return;
+        }
+
+        _staticContext.Variables[key] = value;
+        if (shadowing)
+            _staticContext.ShadowingNames.Add(key);
+    }
+
+    /// <summary>
+    /// Merges the static context of an imported or included child module into this
+    /// module's static context.
+    /// </summary>
+    private void MergeChildStaticContext(StaticContext child)
+    {
+        foreach (var (key, value) in child.Variables)
+        {
+            if (_staticContext.Variables.TryGetValue(key, out var existing))
+            {
+                if (_staticContext.ShadowingNames.Contains(key))
+                    continue; // parent pre-module declaration shadows the child declaration
+
+                if (!XdmValueEqualityComparer.Instance.Equals(existing, value))
+                    throw new InvalidOperationException("XTSE3450: Conflicting values for static variable or parameter.");
+
+                continue;
+            }
+
+            _staticContext.Variables[key] = value;
+            if (child.ShadowingNames.Contains(key))
+                _staticContext.ShadowingNames.Add(key);
+        }
+    }
+
+    /// <summary>
     /// Performs static validation of the stylesheet tree, checking for disallowed
     /// attributes and children on XSLT instructions.
     /// </summary>
@@ -639,10 +868,36 @@ public sealed class Stylesheet
     {
         foreach (var elem in root.DescendantsAndSelf())
         {
-            if (elem.Name.NamespaceName != XslNamespace)
-                continue;
-
+            bool isXsltElement = elem.Name.NamespaceName == XslNamespace;
             var localName = elem.Name.LocalName;
+
+            // XTSE0805 / XTSE0090: validate attributes in the XSLT namespace.
+            foreach (var attr in elem.Attributes())
+            {
+                if (attr.Name.NamespaceName != XslNamespace)
+                    continue;
+
+                var attrLocal = attr.Name.LocalName;
+                if (isXsltElement)
+                {
+                    // XSLT-namespaced attributes are not permitted on XSLT elements.
+                    throw new InvalidOperationException("XTSE0090");
+                }
+                else
+                {
+                    // On literal result elements only the defined XSLT attributes are allowed.
+                    var allowed = attrLocal is "use-when" or "expand-text" or "type" or "validation"
+                        or "default-mode" or "default-collation" or "default-validation"
+                        or "exclude-result-prefixes" or "extension-element-prefixes"
+                        or "version" or "xpath-default-namespace";
+                    if (!allowed)
+                        throw new InvalidOperationException("XTSE0805");
+                }
+            }
+
+            // XTSE0010 / XTSE0090: xsl:element does not allow a select attribute.
+            if (isXsltElement && localName == "element" && elem.Attribute("select") != null)
+                throw new InvalidOperationException("XTSE0090");
 
             // XTSE0580: duplicate parameter names within a template or function
             if (localName is "template" or "function")
@@ -913,7 +1168,7 @@ public sealed class Stylesheet
                 }
             }
             var typeAttr = elem.Attribute("type") ?? elem.Attribute(XName.Get("type", XslNamespace));
-            if (typeAttr != null && localName != "merge-source")
+            if (isXsltElement && typeAttr != null && localName != "merge-source")
                 throw new InvalidOperationException("XTSE1660");
 
             // xsl:merge validation
@@ -1280,7 +1535,13 @@ public sealed class Stylesheet
         try
         {
             var doc = _resolver.Resolve(href, _baseUri);
-            _imports.Add(new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris));
+            var root = doc.Root;
+            // use-when on the root element of an imported module excludes the whole module.
+            if (root != null && !UseWhen(root, resolvedUri))
+                return;
+            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris, null);
+            _imports.Add(child);
+            MergeChildStaticContext(child._staticContext);
         }
         catch (FileNotFoundException ex)
         {
@@ -1308,7 +1569,13 @@ public sealed class Stylesheet
         try
         {
             var doc = _resolver.Resolve(href, _baseUri);
-            _includes.Add(new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris));
+            var root = doc.Root;
+            // use-when on the root element of an included module excludes the whole module.
+            if (root != null && !UseWhen(root, resolvedUri))
+                return;
+            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext);
+            _includes.Add(child);
+            MergeChildStaticContext(child._staticContext);
         }
         catch (FileNotFoundException ex)
         {
@@ -1332,6 +1599,31 @@ public sealed class Stylesheet
         var baseUriObj = new Uri(baseUri);
         var resolved = new Uri(baseUriObj, href);
         return resolved.AbsoluteUri;
+    }
+
+    /// <summary>
+    /// Returns the effective base URI for the given element, resolving any
+    /// <c>xml:base</c> attributes in the ancestor chain against the module base URI.
+    /// </summary>
+    private string? GetEffectiveBaseUri(XElement elem)
+    {
+        // Start from the document/entity base URI when available, otherwise the
+        // module URI supplied by the resolver.
+        var currentBase = !string.IsNullOrEmpty(elem.BaseUri) ? elem.BaseUri : _baseUri;
+
+        // Apply xml:base attributes from the root down to the element.
+        foreach (var ancestor in elem.AncestorsAndSelf().Reverse())
+        {
+            var xmlBase = ancestor.Attribute(XName.Get("base", "http://www.w3.org/XML/1998/namespace"))?.Value;
+            if (string.IsNullOrEmpty(xmlBase))
+                continue;
+
+            currentBase = string.IsNullOrEmpty(currentBase)
+                ? ResolveAbsoluteUri(xmlBase, null)
+                : ResolveAbsoluteUri(xmlBase, currentBase);
+        }
+
+        return currentBase;
     }
 
     /// <summary>The parsed xsl:output properties, or null if not specified.</summary>
@@ -1790,12 +2082,16 @@ public sealed class Stylesheet
             return;
 
         string? nsUri = null;
-        var trimmed = name.Trim();
+        string localName = name.Trim();
+        var trimmed = localName;
         if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
         {
             int closeBrace = trimmed.IndexOf('}');
             if (closeBrace >= 2)
+            {
                 nsUri = trimmed[2..closeBrace];
+                localName = trimmed[(closeBrace + 1)..];
+            }
         }
         else
         {
@@ -1803,6 +2099,7 @@ public sealed class Stylesheet
             if (colon >= 0)
             {
                 var prefix = trimmed[..colon];
+                localName = trimmed[(colon + 1)..];
                 if (prefix == "xml")
                     nsUri = "http://www.w3.org/XML/1998/namespace";
                 else
@@ -1812,7 +2109,7 @@ public sealed class Stylesheet
 
         // xsl:initial-template is the one XSLT-namespace name permitted for a named template.
         if ((nsUri == XsNamespace || nsUri == FnNamespace ||
-             (nsUri == XslNamespace && trimmed != "xsl:initial-template")))
+             (nsUri == XslNamespace && localName != "initial-template")))
             throw new InvalidOperationException($"XTSE0080: The name '{name}' used in {construct} is in a reserved namespace.");
     }
 

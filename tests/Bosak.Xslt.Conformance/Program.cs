@@ -690,7 +690,7 @@ class Program
             XmlResolver = new XmlUrlResolver(),
         };
         using var reader = XmlReader.Create(path, settings);
-        return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+        return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
     }
 
     static XDocument LoadDocumentFromText(string xml, string baseUri)
@@ -701,7 +701,7 @@ class Program
             XmlResolver = new XmlUrlResolver(),
         };
         using var reader = XmlReader.Create(new StringReader(xml), settings, baseUri);
-        return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+        return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
     }
 
     static IXdmNode? LoadEnvironment(XElement envElem, string testSetDir, string catalogDir, XNamespace ns)
