@@ -118,6 +118,7 @@
 //                      | Charles Korthout | 5.47  | 25-06-2026     | Register source document URI in evaluation context; fixes accessor-008                 |
 //                      | Charles Korthout | 5.48  | 25-06-2026     | Item-based xsl:on-empty/on-non-empty handling for sequence constructors                |
 //                      | Charles Korthout | 5.49  | 26-06-2026     | Evaluate _select AVT on global variables/parameters                                     |
+//                      | Charles Korthout | 5.50  | 26-06-2026     | IsNodeAttached now treats a document's root element as attached; fixes mode-1105        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -10110,7 +10111,7 @@ public sealed class TransformEngine
         if (xn.UnderlyingObject is XDocument)
             return true;
         if (xn.UnderlyingObject is XObject xo)
-            return xo.Parent != null;
+            return xo.Parent != null || xo.Document != null;
         return true;
     }
 

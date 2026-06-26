@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 25 June 2026
+> **Last updated:** 26 June 2026
 > **Bosak baseline:** 894 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,630 passed / 621 failed / 9,349 skipped (~88.2%)
+> **XSLT baseline:** 4,642 passed / 609 failed / 9,349 skipped (~88.4%)
 
 ---
 
@@ -339,6 +339,7 @@ dotnet test Bosak.sln
 | Change | Impact | When |
 |--------|--------|------|
 | `XsltExecutable.Transform` gained an optional `rawResult` parameter. | When `true` and an initial named template is used, returns the raw template result as an XDM value instead of wrapping it in a result document. Required for `initial-template-004` and similar raw-output tests. | 2026-06-25 |
+| `TransformEngine.IsNodeAttached` now treats a document's root element as attached. | After whitespace stripping, the initial source node (`/doc`) was incorrectly considered detached because the root `XElement` has no `XObject.Parent`. The check now also verifies `XObject.Document != null`. Fixes `mode-1105`. | 2026-06-26 |
 | `xsl:analyze-string` now passes regex flags to `RegexHelper.ValidateAndTranslatePattern`. | Fixes multiline-mode (`m`) tests `analyze-string-007/067/071/090b`; previously `$` was translated to `\z` even when multiline was requested. | 2026-06-25 |
 | `xsl:call-template` now resolves named templates by expanded QName. | A call using one prefix bound to a namespace URI finds a template declared with a different prefix bound to the same URI. Fixes `call-template-1701`. | 2026-06-25 |
 | Initial template names from the conformance harness are expanded using catalog namespace bindings. | Names are passed to `TransformEngine` in Clark notation, so a test-catalog prefix bound to a different URI than the stylesheet prefix correctly raises `XTDE0040`. Fixes `call-template-0104/0105/0107`. | 2026-06-25 |

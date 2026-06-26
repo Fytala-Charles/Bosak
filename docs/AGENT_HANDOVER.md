@@ -1,6 +1,58 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
+**Commit:** `ad7d4f9`
+**Current focus:** Cleared the last `mode` cluster failure (`mode-1105`) by fixing `TransformEngine.IsNodeAttached` so the root element of a source document is not treated as detached after whitespace stripping.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,642
+- **Failed:** 609
+- **Skipped:** 9,349
+- **Pass rate:** 88.4% (+2 passes / −2 failures vs. the previous 4,640/611)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| mode | 188 | 122 | 0 | 66 | ✅ 100% runnable; `mode-1105` root-element detachment fix |
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable; `use-when-0137/0138` now raise XTSE3450 |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100%; remains green |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable; `xsl:use-attribute-sets` whitelist fix |
+| xsl-document | 25 | 25 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`mode-1105` null-reference fix** — `TransformEngine.IsNodeAttached` now considers a node attached when its underlying `XObject` has a parent OR belongs to a document (`XObject.Document != null`). Previously the root element of a source document was incorrectly reported as detached after whitespace stripping, because its `Parent` is `null` even though it is still the root of an `XDocument`. This caused the initial source node to be nulled out before `ApplyBuiltInRules`, producing the `mode-1105` crash.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **Documentation sync** — Updated `docs/FEATURE_REQUESTS.md` and `docs/INTEGRATION.md` with the cleared `mode` cluster status and latest conformance baseline.
+   - **Files changed**: `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`.
+
+## Notes
+
+- Unit-test suite: **894 passed / 0 failed** across 8 projects.
+- The `mode` cluster is now **122/122 runnable passing**.
+- The `use-when` cluster is **99/99 runnable passing**.
+- The `static` cluster is **49/49 passing**.
+- Full W3C suite re-run: **4,642/609/9,349** (88.4%).
+
+## Recommended Next Steps
+
+1. Push the current commit to `origin/main`.
+2. Continue with remaining single-failure clusters (`call-template-0201`, `unparsed-text-lines-004`, `system-property-022`, `attribute-0601`, `regex-026`) and other quick-win clusters.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-26
 **Commit:** `defefde`
 **Current focus:** Fixed precedence-aware XTSE3450 conflict detection for static variables, clearing `use-when-0137` and `use-when-0138`.
 
