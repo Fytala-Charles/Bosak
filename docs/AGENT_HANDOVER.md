@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `<pending>`
+**Commit:** `49a562a`
 **Current focus:** Cleared the `static` cluster (49/49), then picked off a quick win by whitelisting `xsl:use-attribute-sets` on literal result elements.
 
 ---

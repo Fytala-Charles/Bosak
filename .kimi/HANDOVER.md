@@ -8,7 +8,7 @@
 
 ## Commit
 
-`98d321f` — Static cluster: full 49/49 pass + general-comparison empty-sequence fix + namespace-axis coverage fix (includes doc sync)
+`49a562a` — Static cluster cleared (49/49) + use-attribute-sets quick win; full suite 4,638/613/9,349 (88.3%)
 
 ## What Was Built
 
