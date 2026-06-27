@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
-**Commit:** `763e2e8`
+**Commit:** `bc93d1a`
 **Current focus:** Cleared the final XSLT `namespace` cluster failures (`namespace-0912`, `namespace-2611`) and the full `namespace-alias` cluster.
 
 ---
