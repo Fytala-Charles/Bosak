@@ -1,6 +1,77 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
+**Commit:** `TBD`
+**Current focus:** Cleared the medium `choose` cluster and committed the previously-uncommitted `data-manipulation` fix.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,831
+- **Failed:** 419
+- **Skipped:** 9,350
+- **Pass rate:** 92.0% (+14 passes / −14 failures vs. the previous 4,817/433)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| choose | 55 | 55 | 0 | 0 | ✅ 100% runnable; QName/untypedAtomic comparison, default-collation, xml:space, static validation |
+| data-manipulation | 28 | 28 | 0 | 0 | ✅ 100% runnable; `fn:format-number#2` accepts `xs:untypedAtomic` picture argument |
+| sort | 82 | 80 | 0 | 2 | ✅ 100% runnable (previous session) |
+| merge | 113 | 75 | 0 | 38 | ✅ 100% runnable (previous session) |
+| arrays | 62 | 6 | 0 | 56 | ✅ 100% runnable (previous session) |
+| math | 159 | 154 | 0 | 5 | ✅ 100% runnable (previous session) |
+| maps | 50 | 43 | 0 | 7 | ✅ 100% runnable (previous session) |
+| namespace | 224 | 200 | 0 | 24 | ✅ 100% runnable (previous session) |
+| namespace-alias | 26 | 26 | 0 | 0 | ✅ 100% runnable (previous session) |
+| date | 138 | 130 | 0 | 8 | ✅ 100% runnable (previous session) |
+| call-template | 44 | 38 | 0 | 6 | ✅ 100% runnable |
+| attribute | 107 | 17 | 0 | 90 | ✅ 100% runnable |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable |
+| system-property | 27 | 15 | 0 | 12 | ✅ 100% runnable |
+| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ 100% |
+| regex | 2,162 | 47 | 0 | 2,115 | ✅ 100% runnable |
+| mode | 188 | 122 | 0 | 66 | ✅ 100% runnable |
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`choose` cluster (8 runnable failures → 0)** — Several `xsl:choose`/`xsl:if` edge cases fixed:
+   - **untypedAtomic-to-QName comparison**: `VmEngine.CompareCore` now casts an `xs:untypedAtomic` operand to `xs:QName` (resolving prefixes via the static namespace context) when the other operand is a `xs:QName`. Fixes `choose-0106`.
+   - **`default-collation` on `xsl:when`/`xsl:choose`**: `TransformEngine` now applies an inherited `default-collation` attribute (including whitespace-separated fallback lists) to `xsl:if`/`xsl:when` test expressions and branch content. Fixes `choose-0107` and `choose-1204`.
+   - **`xml:space="preserve"` in sequence constructors**: whitespace text nodes are now preserved when any ancestor carries `xml:space="preserve"`. Fixes `choose-0604`.
+   - **Static validation of `xsl:if`/`xsl:when`/`xsl:choose`**: `ValidateStaticExpressions` now reports `XTSE0010` for missing `test` attributes, `xsl:otherwise` before `xsl:when`, multiple `xsl:otherwise`, and invalid children, even when the offending instruction is never executed. Fixes `choose-1801` through `choose-1804`.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **`data-manipulation` cluster (6 runnable failures → 0)** — `fn:format-number#2` now accepts an `xs:untypedAtomic` picture argument (e.g. a variable or parameter holding the picture string) in addition to a plain string.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+3. **Documentation sync** — Updated `docs/AGENT_HANDOVER.md` with the cleared `choose` and `data-manipulation` cluster status and the latest conformance baseline.
+   - **File changed**: `docs/AGENT_HANDOVER.md`.
+
+## Notes
+
+- Unit-test suite: **899 passed / 0 failed / 0 skipped** across 8 projects.
+- The `choose` and `data-manipulation` clusters are now **100% runnable**.
+- Full W3C suite re-run: **4,831/419/9,350** (92.0%).
+
+## Recommended Next Steps
+
+1. Commit and push the `choose` and `data-manipulation` fixes to `origin/main`.
+2. Continue with adjacent medium clusters: `number` (6 fails), `snapshot` (6), `resolve-uri` (8), `apply-templates` (11), or `param` (12).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-27
 **Commit:** `bf533fe`
 **Current focus:** Cleared the remaining single-failure clusters `arrays`, `merge`, and `sort`.
 

@@ -2896,15 +2896,16 @@ public static class VmEngine
             return XdmValue.Undefined;
 
         // XPath 3.1 §17.2: in a value comparison, an xs:untypedAtomic operand is
-        // cast to xs:string before the comparison proceeds.
+        // cast to xs:string before the comparison proceeds, unless the other operand
+        // is an xs:QName, in which case the untypedAtomic value is cast to xs:QName.
         if (strict)
         {
-            if (IsUntypedAtomic(left))
+            if (IsUntypedAtomic(left) && right.Kind != XdmValueKind.QName)
             {
                 left = XdmValue.FromString(left.StringValue);
                 leftFromNode = false;
             }
-            if (IsUntypedAtomic(right))
+            if (IsUntypedAtomic(right) && left.Kind != XdmValueKind.QName)
             {
                 right = XdmValue.FromString(right.StringValue);
                 rightFromNode = false;
@@ -3031,6 +3032,18 @@ public static class VmEngine
                 IrOpCode.NotEqual or IrOpCode.ValueNotEqual => !eq,
                 _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
             };
+        }
+
+        // General comparison promotion: an xs:untypedAtomic operand is cast to the
+        // type of the other operand. When that type is xs:QName, resolve the lexical
+        // QName using the static namespace context of the expression.
+        if (left.Kind == XdmValueKind.QName && IsUntypedAtomic(right))
+        {
+            return CompareCore(op, left, CastUntypedAtomicToQName(right, context), strict, leftFromNode, false, context);
+        }
+        if (IsUntypedAtomic(left) && right.Kind == XdmValueKind.QName)
+        {
+            return CompareCore(op, CastUntypedAtomicToQName(left, context), right, strict, false, rightFromNode, context);
         }
 
         // Duration comparison: normalize to total months and total seconds
@@ -3320,6 +3333,45 @@ public static class VmEngine
     private static bool IsUntypedAtomic(XdmValue value)
         => value.Kind == XdmValueKind.String &&
            string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Casts an xs:untypedAtomic value to xs:QName, resolving any prefix against
+    /// the static namespace context and using the default element namespace for
+    /// unprefixed lexical QNames.
+    /// </summary>
+    private static XdmValue CastUntypedAtomicToQName(XdmValue value, EvaluationContext context)
+    {
+        string lexical = value.StringValue.Trim();
+        if (string.IsNullOrEmpty(lexical))
+            throw new InvalidOperationException("XPTY0004: Cannot cast empty xs:untypedAtomic value to xs:QName.");
+
+        int colon = lexical.IndexOf(':');
+        string prefix = colon >= 0 ? lexical[..colon] : string.Empty;
+        string local = colon >= 0 ? lexical[(colon + 1)..] : lexical;
+
+        if (!IsValidNcName(prefix) || !IsValidNcName(local))
+            throw new InvalidOperationException("XPTY0004: Invalid lexical QName for cast to xs:QName.");
+
+        if (!context.TryResolveNamespace(prefix, out string? namespaceUri))
+            throw new InvalidOperationException($"XPTY0004: Namespace prefix '{prefix}' is not declared for xs:QName cast.");
+
+        return XdmValue.FromQName(new XsQName(local, namespaceUri, prefix));
+    }
+
+    private static bool IsValidNcName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return true; // empty prefix is allowed
+        if (!char.IsLetter(name[0]) && name[0] != '_')
+            return false;
+        for (int i = 1; i < name.Length; i++)
+        {
+            char c = name[i];
+            if (!char.IsLetterOrDigit(c) && c != '.' && c != '-' && c != '_')
+                return false;
+        }
+        return true;
+    }
 
     // ------------------------------------------------------------------
     // Type operations

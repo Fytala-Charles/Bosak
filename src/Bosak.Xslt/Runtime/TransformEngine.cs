@@ -325,9 +325,10 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// Eagerly compiles XPath <c>@select</c> expressions on <c>xsl:variable</c>,
-    /// <c>xsl:param</c> and <c>xsl:with-param</c> elements so that static errors are
-    /// reported before the transformation runs.
+    /// Eagerly validates XSLT structural constraints and compiles XPath
+    /// <c>@select</c> expressions so that static errors are reported before
+    /// the transformation runs, even when the offending instruction is never
+    /// executed.
     /// </summary>
     private void ValidateStaticExpressions()
     {
@@ -341,16 +342,62 @@ public sealed class TransformEngine
                 continue;
 
             var localName = elem.Name.LocalName;
-            if (localName is not "variable" and not "param" and not "with-param")
-                continue;
-
-            var select = elem.Attribute("select")?.Value;
-            if (string.IsNullOrEmpty(select))
-                continue;
-
-            // Compilation is context-independent; it only detects static errors.
-            _ = CompileXPath(select, elem);
+            if (localName is "variable" or "param" or "with-param")
+            {
+                var select = elem.Attribute("select")?.Value;
+                if (!string.IsNullOrEmpty(select))
+                {
+                    // Compilation is context-independent; it only detects static errors.
+                    _ = CompileXPath(select, elem);
+                }
+            }
+            else if (localName is "if" or "when")
+            {
+                if (string.IsNullOrEmpty(elem.Attribute("test")?.Value))
+                    throw new InvalidOperationException($"XTSE0010: xsl:{localName} requires a test attribute");
+            }
+            else if (localName == "choose")
+            {
+                ValidateChooseStructure(elem);
+            }
         }
+    }
+
+    /// <summary>
+    /// Validates the child structure of <c>xsl:choose</c>: it must contain one
+    /// or more <c>xsl:when</c> elements, followed by at most one <c>xsl:otherwise</c>.
+    /// </summary>
+    private static void ValidateChooseStructure(XElement choose)
+    {
+        bool seenOtherwise = false;
+        int whenCount = 0;
+        foreach (var child in choose.Elements())
+        {
+            if (child.Name.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
+                throw new InvalidOperationException("XTSE0010: xsl:choose may only contain xsl:when and xsl:otherwise elements");
+
+            if (child.Name.LocalName == "when")
+            {
+                if (seenOtherwise)
+                    throw new InvalidOperationException("XTSE0010: xsl:when must precede xsl:otherwise");
+                if (string.IsNullOrEmpty(child.Attribute("test")?.Value))
+                    throw new InvalidOperationException("XTSE0010: xsl:when requires a test attribute");
+                whenCount++;
+            }
+            else if (child.Name.LocalName == "otherwise")
+            {
+                if (seenOtherwise)
+                    throw new InvalidOperationException("XTSE0010: xsl:choose may contain at most one xsl:otherwise");
+                seenOtherwise = true;
+            }
+            else
+            {
+                throw new InvalidOperationException("XTSE0010: xsl:choose may only contain xsl:when and xsl:otherwise elements");
+            }
+        }
+
+        if (whenCount == 0)
+            throw new InvalidOperationException("XTSE0010: xsl:choose must contain at least one xsl:when");
     }
 
     /// <summary>
@@ -1023,7 +1070,8 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Computes the effective default collation at the given instruction by walking
-    /// the ancestor axis for a [xsl:]default-collation attribute.
+    /// the ancestor axis for a [xsl:]default-collation attribute. If the attribute
+    /// value is a whitespace-separated list, the first recognized URI is returned.
     /// </summary>
     private static string GetEffectiveDefaultCollation(XElement instruction)
     {
@@ -1031,19 +1079,64 @@ public sealed class TransformEngine
         while (current != null)
         {
             var attr = current.Attribute(XName.Get("default-collation", Stylesheet.Stylesheet.XslNamespace));
-            if (attr != null)
-                return attr.Value;
-
-            if (current.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-            {
+            if (attr == null && current.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                 attr = current.Attribute("default-collation");
-                if (attr != null)
-                    return attr.Value;
+
+            if (!string.IsNullOrEmpty(attr?.Value))
+            {
+                var candidates = attr.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var candidate in candidates)
+                {
+                    if (IsRecognizedCollationUri(candidate))
+                        return candidate;
+                }
+                if (candidates.Length > 0)
+                    return candidates[0];
             }
 
             current = current.Parent;
         }
         return string.Empty;
+    }
+
+    private static bool IsRecognizedCollationUri(string uri)
+    {
+        if (string.IsNullOrEmpty(uri))
+            return true;
+        if (uri == "http://www.w3.org/2005/xpath-functions/collation/codepoint")
+            return true;
+        if (uri == "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")
+            return true;
+        if (uri == "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind")
+            return true;
+        if (uri.StartsWith("http://www.w3.org/2013/collation/UCA", StringComparison.Ordinal))
+            return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Executes the supplied action with the effective <c>default-collation</c>
+    /// of <paramref name="element"/> temporarily installed on the context.
+    /// </summary>
+    private void WithDefaultCollation(XElement element, Action action)
+    {
+        var collation = GetEffectiveDefaultCollation(element);
+        if (string.IsNullOrEmpty(collation))
+        {
+            action();
+            return;
+        }
+
+        var previous = _context.DefaultCollation;
+        _context.DefaultCollation = collation;
+        try
+        {
+            action();
+        }
+        finally
+        {
+            _context.DefaultCollation = previous;
+        }
     }
 
     /// <summary>
@@ -1877,36 +1970,48 @@ public sealed class TransformEngine
                         var test = instruction.Attribute("test")?.Value;
                         if (!string.IsNullOrEmpty(test))
                         {
-                            var compiled = XPath31Expression.Compile(test);
-                            if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                            var compiled = CompileXPath(test, instruction);
+                            WithDefaultCollation(instruction, () =>
                             {
-                                foreach (var child in instruction.Elements())
-                                    EvaluateFunctionBodyInstruction(child, results, contextItem);
-                            }
+                                if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                                {
+                                    foreach (var child in instruction.Elements())
+                                        EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                }
+                            });
                         }
                         break;
                     }
                 case "choose":
                     {
+                        bool matched = false;
                         foreach (var when in instruction.Elements(XName.Get("when", Stylesheet.Stylesheet.XslNamespace)))
                         {
                             var whenTest = when.Attribute("test")?.Value;
                             if (!string.IsNullOrEmpty(whenTest))
                             {
-                                var compiled = XPath31Expression.Compile(whenTest);
-                                if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                                var compiled = CompileXPath(whenTest, when);
+                                WithDefaultCollation(when, () =>
                                 {
-                                    foreach (var child in when.Elements())
-                                        EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                    if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                                    {
+                                        foreach (var child in when.Elements())
+                                            EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                        matched = true;
+                                    }
+                                });
+                                if (matched)
                                     return;
-                                }
                             }
                         }
                         var otherwise = instruction.Element(XName.Get("otherwise", Stylesheet.Stylesheet.XslNamespace));
                         if (otherwise != null)
                         {
-                            foreach (var child in otherwise.Elements())
-                                EvaluateFunctionBodyInstruction(child, results, contextItem);
+                            WithDefaultCollation(otherwise, () =>
+                            {
+                                foreach (var child in otherwise.Elements())
+                                    EvaluateFunctionBodyInstruction(child, results, contextItem);
+                            });
                         }
                         break;
                     }
@@ -4006,25 +4111,28 @@ public sealed class TransformEngine
                     if (!string.IsNullOrEmpty(test))
                     {
                         var compiled = CompileXPath(test, instruction);
-                        var result = compiled.Evaluate(_context);
-                        if (result.EffectiveBooleanValue())
+                        WithDefaultCollation(instruction, () =>
                         {
-                            foreach (var childNode in instruction.Nodes())
+                            var result = compiled.Evaluate(_context);
+                            if (result.EffectiveBooleanValue())
                             {
-                                switch (childNode)
+                                foreach (var childNode in instruction.Nodes())
                                 {
-                                    case XText text:
-                                        ProcessSequenceText(text, instruction);
-                                        break;
-                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                        ExecuteXsltInstruction(elem, contextItem);
-                                        break;
-                                    case XElement elem:
-                                        CopyLiteralElement(elem);
-                                        break;
+                                    switch (childNode)
+                                    {
+                                        case XText text:
+                                            ProcessSequenceText(text, instruction);
+                                            break;
+                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                            ExecuteXsltInstruction(elem, contextItem);
+                                            break;
+                                        case XElement elem:
+                                            CopyLiteralElement(elem);
+                                            break;
+                                    }
                                 }
                             }
-                        }
+                        });
                     }
                     break;
                 }
@@ -4038,16 +4146,46 @@ public sealed class TransformEngine
                         if (!string.IsNullOrEmpty(test))
                         {
                             var compiled = CompileXPath(test, when);
-                            var result = compiled.Evaluate(_context);
-                            if (result.EffectiveBooleanValue())
+                            WithDefaultCollation(when, () =>
                             {
-                                matched = true;
-                                foreach (var childNode in when.Nodes())
+                                var result = compiled.Evaluate(_context);
+                                if (result.EffectiveBooleanValue())
+                                {
+                                    matched = true;
+                                    foreach (var childNode in when.Nodes())
+                                    {
+                                        switch (childNode)
+                                        {
+                                            case XText text:
+                                                ProcessSequenceText(text, when);
+                                                break;
+                                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                                ExecuteXsltInstruction(elem, contextItem);
+                                                break;
+                                            case XElement elem:
+                                                CopyLiteralElement(elem);
+                                                break;
+                                        }
+                                    }
+                                }
+                            });
+                            if (matched)
+                                break;
+                        }
+                    }
+                    if (!matched)
+                    {
+                        var otherwise = instruction.Element(XName.Get("otherwise", Stylesheet.Stylesheet.XslNamespace));
+                        if (otherwise != null)
+                        {
+                            WithDefaultCollation(otherwise, () =>
+                            {
+                                foreach (var childNode in otherwise.Nodes())
                                 {
                                     switch (childNode)
                                     {
                                         case XText text:
-                                            ProcessSequenceText(text, when);
+                                            ProcessSequenceText(text, otherwise);
                                             break;
                                         case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                             ExecuteXsltInstruction(elem, contextItem);
@@ -4057,30 +4195,7 @@ public sealed class TransformEngine
                                             break;
                                     }
                                 }
-                                break;
-                            }
-                        }
-                    }
-                    if (!matched)
-                    {
-                        var otherwise = instruction.Element(XName.Get("otherwise", Stylesheet.Stylesheet.XslNamespace));
-                        if (otherwise != null)
-                        {
-                            foreach (var childNode in otherwise.Nodes())
-                            {
-                                switch (childNode)
-                                {
-                                    case XText text:
-                                        ProcessSequenceText(text, otherwise);
-                                        break;
-                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                        ExecuteXsltInstruction(elem, contextItem);
-                                        break;
-                                    case XElement elem:
-                                        CopyLiteralElement(elem);
-                                        break;
-                                }
-                            }
+                            });
                         }
                     }
                     break;
@@ -10615,11 +10730,14 @@ public sealed class TransformEngine
                     var test = instruction.Attribute("test")?.Value;
                     if (!string.IsNullOrEmpty(test))
                     {
-                        var compiled = XPath31Expression.Compile(test);
-                        if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                        var compiled = CompileXPath(test, instruction);
+                        WithDefaultCollation(instruction, () =>
                         {
-                            CollectSimpleContentItems(instruction, contextItem, items);
-                        }
+                            if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                            {
+                                CollectSimpleContentItems(instruction, contextItem, items);
+                            }
+                        });
                     }
                     break;
                 }
@@ -10632,13 +10750,17 @@ public sealed class TransformEngine
                         var whenTest = when.Attribute("test")?.Value;
                         if (!string.IsNullOrEmpty(whenTest))
                         {
-                            var compiled = XPath31Expression.Compile(whenTest);
-                            if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                            var compiled = CompileXPath(whenTest, when);
+                            WithDefaultCollation(when, () =>
                             {
-                                CollectSimpleContentItems(when, contextItem, items);
-                                matched = true;
+                                if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                                {
+                                    CollectSimpleContentItems(when, contextItem, items);
+                                    matched = true;
+                                }
+                            });
+                            if (matched)
                                 break;
-                            }
                         }
                     }
                     if (!matched)
@@ -10646,7 +10768,7 @@ public sealed class TransformEngine
                         var otherwise = instruction.Element(XName.Get("otherwise", Stylesheet.Stylesheet.XslNamespace));
                         if (otherwise != null)
                         {
-                            CollectSimpleContentItems(otherwise, contextItem, items);
+                            WithDefaultCollation(otherwise, () => CollectSimpleContentItems(otherwise, contextItem, items));
                         }
                     }
                     break;
@@ -11139,26 +11261,26 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// XSLT elements whose whitespace text nodes are preserved (not stripped).
-    /// See XSLT 3.0 spec §3.3.1.1.
-    /// </summary>
-    /// <summary>
-    /// XSLT 3.0 §3.3.1.1: Whitespace text nodes are preserved only in xsl:text
-    /// and in elements with xml:space="preserve".
-    /// </summary>
-    private static readonly HashSet<string> WhitespacePreserveElements = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "text"
-    };
-
-    /// <summary>
-    /// Returns true if whitespace text nodes inside the given XSLT element should be preserved.
+    /// XSLT 3.0 §3.3.1.1: Whitespace text nodes are preserved in xsl:text
+    /// and in elements (or their ancestors) that carry xml:space="preserve".
     /// </summary>
     private static bool IsWhitespacePreserveContext(XElement parent)
     {
-        if (parent.Name.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
-            return false;
-        return WhitespacePreserveElements.Contains(parent.Name.LocalName);
+        if (parent.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+            && parent.Name.LocalName == "text")
+        {
+            return true;
+        }
+
+        var current = parent;
+        while (current != null)
+        {
+            if (current.Attribute(XNamespace.Xml + "space")?.Value == "preserve")
+                return true;
+            current = current.Parent;
+        }
+
+        return false;
     }
 
     /// <summary>

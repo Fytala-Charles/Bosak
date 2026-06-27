@@ -6921,6 +6921,9 @@ public static class FunctionLibrary
         if (value.Kind == XdmValueKind.String)
             return value.StringValue;
 
+        if (string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase))
+            return value.ToString();
+
         throw new InvalidOperationException("XPTY0004");
     }
 
@@ -7986,18 +7989,12 @@ public static class FunctionLibrary
 
     private static XdmValue FormatNumber_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[1].Kind != XdmValueKind.String)
-            throw new InvalidOperationException("XPTY0004");
-        return FormatNumber(ctx, args[0], AtomizedString(args[1]), null);
+        return FormatNumber(ctx, args[0], RequireString(args[1]), null);
     }
 
     private static XdmValue FormatNumber_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[1].Kind != XdmValueKind.String)
-            throw new InvalidOperationException("XPTY0004");
-        if (!args[2].IsUndefined && !args[2].IsSequence && args[2].Kind != XdmValueKind.String)
-            throw new InvalidOperationException("XPTY0004");
-        return FormatNumber(ctx, args[0], AtomizedString(args[1]), AtomizedString(args[2]));
+        return FormatNumber(ctx, args[0], RequireString(args[1]), RequireString(args[2]));
     }
 
     private static XdmValue FormatNumber(EvaluationContext ctx, XdmValue value, string picture, string? formatName)
