@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
-**Commit:** `TBD`
+**Commit:** `9b57cdf`
 **Current focus:** Cleared the medium `choose` cluster and committed the previously-uncommitted `data-manipulation` fix.
 
 ---
