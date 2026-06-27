@@ -1,6 +1,74 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
+**Commit:** `<PENDING>`
+**Current focus:** Cleared the remaining single-failure clusters `arrays`, `merge`, and `sort`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,817
+- **Failed:** 433
+- **Skipped:** 9,350
+- **Pass rate:** 91.8% (+3 passes / −3 failures vs. the previous 4,814/436)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| sort | 82 | 80 | 0 | 2 | ✅ 100% runnable; `sort-072` fixed |
+| merge | 113 | 75 | 0 | 38 | ✅ 100% runnable; `merge-066` fixed |
+| arrays | 62 | 6 | 0 | 56 | ✅ 100% runnable; `square-array-201` fixed |
+| math | 159 | 154 | 0 | 5 | ✅ 100% runnable (previous session) |
+| maps | 50 | 43 | 0 | 7 | ✅ 100% runnable (previous session) |
+| namespace | 224 | 200 | 0 | 24 | ✅ 100% runnable (previous session) |
+| namespace-alias | 26 | 26 | 0 | 0 | ✅ 100% runnable (previous session) |
+| date | 138 | 130 | 0 | 8 | ✅ 100% runnable (previous session) |
+| call-template | 44 | 38 | 0 | 6 | ✅ 100% runnable |
+| attribute | 107 | 17 | 0 | 90 | ✅ 100% runnable |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable |
+| system-property | 27 | 15 | 0 | 12 | ✅ 100% runnable |
+| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ 100% |
+| regex | 2,162 | 47 | 0 | 2,115 | ✅ 100% runnable |
+| mode | 188 | 122 | 0 | 66 | ✅ 100% runnable |
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`sort-072` — namespace preservation in `xsl:perform-sort`** — `EvaluatePerformSortContent` now copies in-scope prefixed namespaces onto its synthetic parent so that XPath expressions on relocated children (e.g. `xs:double(.)`) still resolve their prefixes.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **`merge-066` — integer map keys vs. QName validation** — `ValidateXPathPrefixes` now skips `prefix:local` patterns where the prefix is not a valid NCName (e.g. `map{1:xs:dateTime(...)}`). Integer keys in map constructors and lookup expressions are no longer mistaken for undeclared namespace prefixes.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`square-array-201` — non-streaming `xsl:source-document`** — `xsl:source-document` with `streamable="no"` is now implemented: it loads the referenced document via `EvaluationContext.LoadDocument`, evaluates its sequence-constructor children with the loaded document as the context item, and rejects streaming mode. The document is also registered so `fn:doc` resolves correctly inside the source document.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **Documentation sync** — Updated `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, and `docs/AGENT_HANDOVER.md` with the cleared cluster status and latest conformance baseline.
+   - **Files changed**: `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`.
+
+## Notes
+
+- Unit-test suite: **899 passed / 0 failed / 0 skipped** across 8 projects.
+- The `arrays`, `merge`, and `sort` clusters are now **100% runnable**.
+- Full W3C suite re-run: **4,817/433/9,350** (91.8%).
+
+## Recommended Next Steps
+
+1. Commit and push the quick-win fixes to `origin/main`.
+2. Continue with the next single-failure clusters or move to medium clusters: `number` (6 fails), `sequence` (13), `param` (12), `expand-text` (19), `import` (19), or `context-item` (21).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-27
 **Commit:** `87bfa33`
 **Current focus:** Cleared the entire XSLT `math` conformance cluster (the final runnable failure `math-3701`) by refining XPath `xs:double`/`xs:float` serialization and fixing numeric function edge cases.
 

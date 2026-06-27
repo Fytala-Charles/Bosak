@@ -6,11 +6,16 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 27 June 2026
 > **Bosak baseline:** 899 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,814 passed / 436 failed / 9,350 skipped (~91.7%)
+> **XSLT baseline:** 4,817 passed / 433 failed / 9,350 skipped (~91.8%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-27** — Cleared the remaining single-failure clusters `sort`, `merge`, and `arrays`.
+  - `sort-072`: `xsl:perform-sort` now preserves in-scope prefixed namespaces for relocated sequence-constructor children.
+  - `merge-066`: XPath prefix validation no longer treats integer map keys (e.g. `map{1:xs:dateTime(...)}`) as undeclared QName prefixes.
+  - `square-array-201`: `xsl:source-document` with `streamable="no"` now loads the document and evaluates its content with the loaded document as the context item.
 
 - **2026-06-27** — Cleared the entire XSLT `math` conformance cluster (15 runnable failures).
   - `fn:number` now parses XPath lexical forms `INF`, `-INF`, and `NaN`.
@@ -451,7 +456,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,814 | 436 | 9,350 | 91.7% | `math` cluster fully runnable (154/0/5); `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `type`, `analyze-string`, `next-match` clusters green |
+| XSLT 3.0 (W3C) | 4,817 | 433 | 9,350 | 91.8% | `sort`, `merge`, `arrays`, `math` clusters fully runnable; `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `type`, `analyze-string`, `next-match` clusters green |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

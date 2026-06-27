@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-27 (`math` cluster fully cleared; `maps` cluster fully cleared; `mode`, `static`, and `next-match` regressions fixed; `arrays-301`–`305` now pass; `namespace`, `namespace-alias`, `date`, `call-template`, `attribute`, `system-property`, `unparsed-text-lines`, `regex`, and `mode` clusters green; full W3C baseline 4,814/436/9,350)    
+> **Living Registry** — Last updated: 2026-06-27 (`sort`, `merge`, and `arrays` clusters fully cleared; `math` cluster fully cleared; `maps` cluster fully cleared; `mode`, `static`, and `next-match` regressions fixed; `arrays-301`–`305` now pass; `namespace`, `namespace-alias`, `date`, `call-template`, `attribute`, `system-property`, `unparsed-text-lines`, `regex`, and `mode` clusters green; full W3C baseline 4,817/433/9,350)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

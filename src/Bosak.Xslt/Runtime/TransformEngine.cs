@@ -885,6 +885,10 @@ public sealed class TransformEngine
             char next = expression[i + 1];
             if (!IsXPathNcNameStartChar(next))
                 continue;
+            // A valid QName prefix must itself be a valid NCName (starts with a letter or '_').
+            // Integer map keys such as "map{1:xs:dateTime(...)}" are not QNames and must be ignored.
+            if (!IsXPathNcNameStartChar(prefix[0]) || !prefix.All(IsXPathNcNameChar))
+                continue;
             if (prefix == "xml" || prefix == "xmlns" || XPathAxisNames.Contains(prefix))
                 continue;
             if (!nsMap.ContainsKey(prefix))
@@ -2387,6 +2391,7 @@ public sealed class TransformEngine
                         break;
                     }
                 case "document":
+                case "source-document":
                     {
                         var savedContainer = _currentContainer;
                         var savedLastAtomic = _lastAddedWasAtomic;
@@ -4211,6 +4216,47 @@ public sealed class TransformEngine
                                 CopyToResult(item);
                             }
                         }
+                    }
+                    break;
+                }
+
+            case "source-document":
+                {
+                    var sdHref = instruction.Attribute("href")?.Value;
+                    if (string.IsNullOrEmpty(sdHref))
+                        throw new InvalidOperationException("XTSE0010: xsl:source-document must have an @href");
+                    var resolvedHref = EvaluateAvt(sdHref, instruction);
+
+                    var streamableAttr = instruction.Attribute("streamable")?.Value ?? instruction.Attribute("_streamable")?.Value;
+                    if (!string.IsNullOrEmpty(streamableAttr))
+                    {
+                        var sv = EvaluateAvt(streamableAttr, instruction).Trim();
+                        if (sv == "yes" || sv == "true")
+                            throw new InvalidOperationException("Streaming is not supported");
+                    }
+
+                    var savedBaseUri = _context.BaseUri;
+                    try
+                    {
+                        var baseUri = GetEffectiveBaseUri(instruction) ?? _context.BaseUri;
+                        _context.BaseUri = baseUri;
+                        var docNode = _context.LoadDocument(resolvedHref);
+                        _context.RegisterDocument(resolvedHref, docNode);
+                        var content = EvaluateSequenceConstructor(instruction, XdmValue.FromNode(docNode), wrapInDocumentNode: false);
+                        if (_sequenceAccumulator != null)
+                        {
+                            foreach (var item in EnumerateItems(content))
+                                _sequenceAccumulator.Add(item);
+                        }
+                        else
+                        {
+                            foreach (var item in EnumerateItems(content))
+                                CopyToResult(item);
+                        }
+                    }
+                    finally
+                    {
+                        _context.BaseUri = savedBaseUri;
                     }
                     break;
                 }
@@ -8126,7 +8172,23 @@ public sealed class TransformEngine
             _context.WithFocus(contextItem, 1, 1);
 
             // Build a synthetic parent containing only the non-sort sequence-constructor children.
+            // Preserve the in-scope prefixed namespaces from the original instruction so that
+            // XPath expressions on relocated children (e.g. xs:double(.)) still resolve their prefixes.
             var seqParent = new XElement("__perform-sort-content__");
+            var nsMap = new Dictionary<string, string>();
+            foreach (var ancestor in instruction.AncestorsAndSelf())
+            {
+                foreach (var nsAttr in ancestor.Attributes().Where(a => a.IsNamespaceDeclaration))
+                {
+                    var prefix = nsAttr.Name.NamespaceName == XNamespace.Xmlns.NamespaceName ? nsAttr.Name.LocalName : "";
+                    if (!string.IsNullOrEmpty(prefix) && !nsMap.ContainsKey(prefix))
+                        nsMap[prefix] = nsAttr.Value;
+                }
+            }
+            foreach (var kv in nsMap)
+            {
+                seqParent.SetAttributeValue(XNamespace.Xmlns + kv.Key, kv.Value);
+            }
             foreach (var child in instruction.Elements())
             {
                 if (child.Name.LocalName == "sort" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
