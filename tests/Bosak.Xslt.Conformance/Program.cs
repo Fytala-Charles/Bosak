@@ -32,6 +32,7 @@
 
 using System.Xml.Linq;
 using System.Xml;
+using System.Text.RegularExpressions;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -1088,6 +1089,10 @@ class Program
                     expected = File.ReadAllText(filePath).Trim();
             }
             var actualXml = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual);
+            if (assertXml.Attribute("xml-version")?.Value == "1.1")
+            {
+                return NormalizeXml11(actualXml) == NormalizeXml11(expected);
+            }
             return NormalizeXml(actualXml) == NormalizeXml(expected) || actualXml.Trim() == expected || XmlEquals(actualXml, expected);
         }
 
@@ -1186,6 +1191,10 @@ class Program
                     expected = File.ReadAllText(filePath).Trim();
             }
             // Normalize whitespace for comparison
+            if (assertXml.Attribute("xml-version")?.Value == "1.1")
+            {
+                return NormalizeXml11(actual) == NormalizeXml11(expected);
+            }
             var normActual = NormalizeXml(actual);
             var normExpected = NormalizeXml(expected);
             return normActual == normExpected || actual.Trim() == expected || XmlEquals(actual, expected);
@@ -1591,6 +1600,19 @@ class Program
         {
             return xml.Trim();
         }
+    }
+
+    /// <summary>
+    /// Normalizes an XML 1.1 string for comparison when .NET cannot parse it
+    /// (for example because it contains prefixed namespace undeclarations).
+    /// The XML declaration and insignificant whitespace between tags are removed.
+    /// </summary>
+    static string NormalizeXml11(string xml)
+    {
+        var trimmed = xml.Trim();
+        var noDecl = Regex.Replace(trimmed, @"<\?xml[^?]*\?>", string.Empty);
+        var collapsed = Regex.Replace(noDecl.Trim(), @">\s+<", "><");
+        return collapsed.Replace(" />", "/>");
     }
 
     /// <summary>

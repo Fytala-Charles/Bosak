@@ -11,9 +11,11 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 26-06-2026     | Added sequence EBV tests                                                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Xunit;
 
 namespace Bosak.XPath.Core.Tests;
@@ -58,6 +60,39 @@ public class XdmValueTests
         Assert.False(XdmValue.FromString("").EffectiveBooleanValue());
         Assert.True(XdmValue.FromString("x").EffectiveBooleanValue());
         Assert.False(XdmValue.Undefined.EffectiveBooleanValue());
+    }
+
+    [Fact]
+    public void EffectiveBooleanValue_SingletonSequence_UnwrapsItem()
+    {
+        var falseSeq = XdmValue.FromSequence(MaterializedSequence.FromList(new[] { XdmValue.FromBoolean(false) }));
+        Assert.False(falseSeq.EffectiveBooleanValue());
+
+        var trueSeq = XdmValue.FromSequence(MaterializedSequence.FromList(new[] { XdmValue.FromBoolean(true) }));
+        Assert.True(trueSeq.EffectiveBooleanValue());
+
+        var zeroSeq = XdmValue.FromSequence(MaterializedSequence.FromList(new[] { XdmValue.FromInteger(0) }));
+        Assert.False(zeroSeq.EffectiveBooleanValue());
+    }
+
+    [Fact]
+    public void EffectiveBooleanValue_MultiNodeSequence_IsTrue()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<r><a/><b/></r>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new[] { XdmValue.FromNode(node), XdmValue.FromNode(node) }));
+        Assert.True(seq.EffectiveBooleanValue());
+    }
+
+    [Fact]
+    public void EffectiveBooleanValue_MultiAtomicSequence_Throws()
+    {
+        var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new[]
+        {
+            XdmValue.FromBoolean(false),
+            XdmValue.FromBoolean(true)
+        }));
+        Assert.Throws<System.InvalidOperationException>(() => seq.EffectiveBooleanValue());
     }
 
     [Fact]

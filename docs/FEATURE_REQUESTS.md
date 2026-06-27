@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-26 (`date` conformance cluster fully cleared: `date` constructor bounds/serialization and `format-date`/`format-date-en` picture-string fixes; `call-template`, `attribute`, `system-property`, `unparsed-text-lines`, `regex`, and `mode` clusters previously cleared; `static` and `use-when` remain green)    
+> **Living Registry** — Last updated: 2026-06-27 (`namespace` and `namespace-alias` conformance clusters fully cleared; `date` constructor bounds/serialization and `format-date`/`format-date-en` picture-string fixes; `call-template`, `attribute`, `system-property`, `unparsed-text-lines`, `regex`, and `mode` clusters previously cleared; `static` and `use-when` remain green)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

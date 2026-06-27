@@ -1,5 +1,70 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-27
+**Commit:** `763e2e8`
+**Current focus:** Cleared the final XSLT `namespace` cluster failures (`namespace-0912`, `namespace-2611`) and the full `namespace-alias` cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,746
+- **Failed:** 505
+- **Skipped:** 9,349
+- **Pass rate:** 90.4% (+51 passes / −51 failures vs. the previous 4,695/556)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| namespace | 276 | 248 | 0 | 28 | ✅ 100% runnable; shallow-copy accumulator fix and sequence EBV fix |
+| namespace-alias | 26 | 26 | 0 | 0 | ✅ 100% runnable |
+| date | 211 | 200 | 0 | 11 | ✅ 100% runnable (previous session) |
+| call-template | 44 | 38 | 0 | 6 | ✅ 100% runnable |
+| attribute | 125 | 67 | 0 | 58 | ✅ 100% runnable |
+| system-property | 27 | 15 | 0 | 12 | ✅ 100% runnable |
+| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ 100% |
+| regex | 2,162 | 47 | 0 | 2,115 | ✅ 100% runnable |
+| mode | 188 | 122 | 0 | 66 | ✅ 100% runnable |
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100% |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable |
+| xsl-document | 25 | 25 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`namespace-0912` shallow-copy accumulator leak** — `ApplyBuiltInRulesForElement` now suspends the outer `_sequenceAccumulator` while applying templates to the children of a shallow-copied element. This prevents child template results from escaping into an enclosing typed-variable sequence.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **`namespace-2611` sequence effective-boolean-value** — `XdmValue.EffectiveBooleanValue()` now follows XPath 3.1 EBV rules for sequences: empty → `false`, singleton → EBV of the item, multi-item node sequence → `true`, multi-item atomic sequence → `FORG0006`.
+   - **File changed**: `src/Bosak.XPath.Core/Xdm/XdmValue.cs`.
+
+3. **Tests** — Added regression tests for sequence EBV and typed-variable shallow-copy behavior.
+   - **Files changed**: `tests/Bosak.XPath.Core.Tests/XdmValueTests.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+4. **Documentation sync** — Updated `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/ARCHITECTURE.md`, and `docs/AGENT_HANDOVER.md` with the cleared cluster status and latest conformance baseline.
+   - **Files changed**: `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/ARCHITECTURE.md`, `docs/AGENT_HANDOVER.md`.
+
+## Notes
+
+- Unit-test suite: **895 passed / 0 failed / 0 skipped** across 8 projects.
+- The `namespace` cluster is now **248/276 passing, 0 runnable failures, 28 skipped**.
+- The `namespace-alias` cluster is **26/26 passing**.
+- Full W3C suite re-run: **4,746/505/9,349** (90.4%).
+
+## Recommended Next Steps
+
+1. Push the current commit to `origin/main`.
+2. Continue with remaining high-impact clusters: `maps` (36 runnable failures), `array`, `function`, or `node`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-26
 **Commit:** `8860b60`
 **Current focus:** Cleared the entire XSLT `date` conformance cluster (46 runnable failures across `date` constructor/serialization and `format-date`/`format-date-en` picture-string formatting).

@@ -146,4 +146,5 @@ public sealed class XPath31Expression
             return XdmSequence.Singleton(result);
         return XdmSequence.Empty;
     }
+
 }

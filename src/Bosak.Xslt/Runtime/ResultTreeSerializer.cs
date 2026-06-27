@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added OutputProperties support for xsl:output (method, indent, omit-declaration)       |
 //                      | Charles Korthout | 0.3   | 01-06-2026     | Encoding-aware serialization; hex-to-decimal entity conversion                         |
+//                      | Charles Korthout | 0.4   | 26-06-2026     | Raw XML 1.1 serializer for prefixed namespace undeclarations                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -151,6 +152,10 @@ public static class ResultTreeSerializer
             xmlWriter.Flush();
             return ConvertHexEntitiesToDecimal(writer.ToString());
         }
+
+        if (props.UndeclarePrefixes && props.Version == "1.1")
+            return SerializeRaw(element, props);
+
         return SerializeWithEncoding(element, props);
     }
 
@@ -171,6 +176,9 @@ public static class ResultTreeSerializer
             xmlWriter.Flush();
             return ConvertHexEntitiesToDecimal(writer.ToString());
         }
+
+        if (props.UndeclarePrefixes && props.Version == "1.1")
+            return SerializeRaw(document, props);
 
         return SerializeWithEncoding(document, props);
     }
@@ -340,6 +348,418 @@ public static class ResultTreeSerializer
         else
         {
             writer.WriteString(node.ToXmlString());
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Raw XML 1.1 serializer for prefixed namespace undeclarations
+    // ---------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// Returns <c>true</c> if the node tree contains any <see cref="PrefixedNamespaceUndeclarations"/>
+    /// annotations that require raw XML 1.1 serialization.
+    /// </summary>
+    private static bool HasUndeclarationAnnotations(XNode node)
+    {
+        if (node is XElement element)
+        {
+            if (element.Annotation<PrefixedNamespaceUndeclarations>() != null)
+                return true;
+            foreach (var child in element.Elements())
+            {
+                if (HasUndeclarationAnnotations(child))
+                    return true;
+            }
+        }
+        else if (node is XDocument doc)
+        {
+            foreach (var child in doc.Elements())
+            {
+                if (HasUndeclarationAnnotations(child))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Serializes a node tree using raw string output so that prefixed namespace
+    /// undeclarations (<c>xmlns:prefix=""</c>) required by <c>inherit-namespaces="no"</c>
+    /// can be emitted. The existing <see cref="XmlWriter"/> path cannot represent them.
+    /// </summary>
+    private static string SerializeRaw(XNode node, Stylesheet.OutputProperties props)
+    {
+        var sb = new System.Text.StringBuilder();
+        using var writer = new StringWriter(sb);
+
+        if (node is XDocument && !props.OmitXmlDeclaration)
+        {
+            writer.Write("<?xml version=\"");
+            writer.Write(props.Version);
+            writer.Write("\" encoding=\"");
+            writer.Write(props.Encoding);
+            writer.Write("\"");
+            if (props.Standalone != null)
+            {
+                writer.Write(" standalone=\"");
+                writer.Write(props.Standalone);
+                writer.Write("\"");
+            }
+            writer.Write("?>");
+        }
+
+        var inScope = new Dictionary<string, string>
+        {
+            ["xml"] = "http://www.w3.org/XML/1998/namespace"
+        };
+
+        if (node is XDocument doc)
+        {
+            foreach (var child in doc.Nodes())
+                SerializeRawNode(writer, child, props, 0, inScope);
+        }
+        else
+        {
+            SerializeRawNode(writer, node, props, 0, inScope);
+        }
+
+        writer.Flush();
+        return sb.ToString();
+    }
+
+    private static void SerializeRawNode(TextWriter writer, XNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
+    {
+        switch (node)
+        {
+            case XElement elem:
+                SerializeRawElement(writer, elem, props, depth, inScopeBindings);
+                break;
+            case XText text:
+                WriteEscaped(writer, text.Value, isAttribute: false);
+                break;
+            case XComment comment:
+                writer.Write("<!--");
+                writer.Write(comment.Value);
+                writer.Write("-->");
+                break;
+            case XProcessingInstruction pi:
+                writer.Write("<?");
+                writer.Write(pi.Target);
+                writer.Write(' ');
+                writer.Write(pi.Data);
+                writer.Write("?>");
+                break;
+        }
+    }
+
+    private static void SerializeRawElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
+    {
+        // Determine the namespace bindings that should be in scope on this element.
+        var targetContext = element.Annotation<NamespaceInheritanceContext>();
+        var targetBindings = targetContext?.Bindings ?? ComputeBindingsFromAttributes(element);
+
+        // Collect the declarations that must be emitted on this start tag so that
+        // the element name, attribute names, and required namespace nodes are bound.
+        var declarations = new Dictionary<string, string>();
+        var elemPrefix = string.IsNullOrEmpty(element.Name.NamespaceName)
+            ? ""
+            : FindOrDeclarePrefix(element.Name.NamespaceName, targetBindings, inScopeBindings, declarations, element);
+
+        var nonNsAttributes = element.Attributes().Where(a => !a.IsNamespaceDeclaration).ToList();
+        var attributePrefixes = new List<string>(nonNsAttributes.Count);
+        foreach (var attr in nonNsAttributes)
+        {
+            var attrPrefix = string.IsNullOrEmpty(attr.Name.NamespaceName)
+                ? ""
+                : FindOrDeclarePrefix(attr.Name.NamespaceName, targetBindings, inScopeBindings, declarations, element);
+            attributePrefixes.Add(attrPrefix);
+        }
+
+        writer.Write('<');
+        if (!string.IsNullOrEmpty(elemPrefix))
+        {
+            writer.Write(elemPrefix);
+            writer.Write(':');
+        }
+        writer.Write(element.Name.LocalName);
+
+        // Emit declarations for bindings that differ from those already in scope.
+        // When the parent had an explicit inherit-namespaces="yes", redeclare all inherited
+        // prefixes so that the inherited namespace nodes are visibly preserved on this element.
+        bool forceRedeclare = element.Parent?.Annotation<NamespaceInheritanceExplicitYes>() != null;
+
+        // The default namespace is written first to match conventional serialization.
+        if (targetBindings.TryGetValue("", out var defaultUri) &&
+            (forceRedeclare || !inScopeBindings.TryGetValue("", out _) || inScopeBindings[""] != defaultUri))
+        {
+            writer.Write(" xmlns=\"");
+            WriteEscaped(writer, defaultUri, isAttribute: true);
+            writer.Write('"');
+            inScopeBindings[""] = defaultUri;
+        }
+
+        // Emit prefixed namespace declarations in the order in which they entered scope.
+        var prefixOrder = targetContext?.PrefixOrder;
+        if (prefixOrder != null)
+        {
+            foreach (var prefix in prefixOrder)
+            {
+                if (prefix == "" || prefix == "xml" || prefix == "xmlns")
+                    continue;
+                if (!targetBindings.TryGetValue(prefix, out var uri))
+                    continue;
+                if (string.IsNullOrEmpty(uri))
+                    continue; // undeclarations handled separately
+                if (!forceRedeclare && inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri == uri)
+                    continue;
+                writer.Write(" xmlns:");
+                writer.Write(prefix);
+                writer.Write("=\"");
+                WriteEscaped(writer, uri, isAttribute: true);
+                writer.Write('"');
+                inScopeBindings[prefix] = uri;
+            }
+        }
+        else
+        {
+            // Fall back to explicit namespace attributes in document order.
+            foreach (var attr in element.Attributes().Where(a => a.IsNamespaceDeclaration))
+            {
+                var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                if (prefix == "" || prefix == "xml" || prefix == "xmlns")
+                    continue;
+                if (string.IsNullOrEmpty(attr.Value))
+                    continue;
+                if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri == attr.Value)
+                    continue;
+                writer.Write(" xmlns:");
+                writer.Write(prefix);
+                writer.Write("=\"");
+                WriteEscaped(writer, attr.Value, isAttribute: true);
+                writer.Write('"');
+                inScopeBindings[prefix] = attr.Value;
+            }
+        }
+
+        // Emit any generated prefixes that were needed but not covered above.
+        foreach (var (prefix, uri) in declarations)
+        {
+            if (prefix == "" || prefix == "xml" || prefix == "xmlns")
+                continue;
+            if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri == uri)
+                continue;
+            writer.Write(" xmlns:");
+            writer.Write(prefix);
+            writer.Write("=\"");
+            WriteEscaped(writer, uri, isAttribute: true);
+            writer.Write('"');
+            inScopeBindings[prefix] = uri;
+        }
+
+        // Prefixed namespace undeclarations required by inherit-namespaces="no".
+        var undecl = element.Annotation<PrefixedNamespaceUndeclarations>();
+        if (undecl != null)
+        {
+            foreach (var prefix in undecl.Prefixes)
+            {
+                if (prefix == "" || prefix == "xml" || prefix == "xmlns")
+                    continue;
+                if (targetBindings.ContainsKey(prefix))
+                    continue; // element redeclares this prefix itself
+                if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri != "")
+                {
+                    writer.Write(" xmlns:");
+                    writer.Write(prefix);
+                    writer.Write("=\"\"");
+                    inScopeBindings[prefix] = "";
+                }
+            }
+        }
+
+        // Explicit default/prefixed namespace undeclarations (xmlns="", xmlns:p="").
+        foreach (var attr in element.Attributes().Where(a => a.IsNamespaceDeclaration && string.IsNullOrEmpty(a.Value)))
+        {
+            var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+            if (prefix == "xml" || prefix == "xmlns")
+                continue;
+            if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri != "")
+            {
+                if (prefix == "")
+                {
+                    writer.Write(" xmlns=\"\"");
+                }
+                else
+                {
+                    writer.Write(" xmlns:");
+                    writer.Write(prefix);
+                    writer.Write("=\"\"");
+                }
+                inScopeBindings[prefix] = "";
+            }
+        }
+
+        // Non-namespace attributes.
+        for (int i = 0; i < nonNsAttributes.Count; i++)
+        {
+            var attr = nonNsAttributes[i];
+            var attrPrefix = attributePrefixes[i];
+
+            writer.Write(' ');
+            if (!string.IsNullOrEmpty(attrPrefix))
+            {
+                writer.Write(attrPrefix);
+                writer.Write(':');
+            }
+            writer.Write(attr.Name.LocalName);
+            writer.Write("=\"");
+            WriteEscaped(writer, attr.Value, isAttribute: true);
+            writer.Write('"');
+        }
+
+        var children = element.Nodes().ToList();
+        if (children.Count == 0)
+        {
+            if (props.Indent)
+                writer.Write(" />");
+            else
+                writer.Write("/>");
+            return;
+        }
+
+        writer.Write('>');
+
+        bool hasElementChildren = children.Any(c => c is XElement);
+        foreach (var child in children)
+        {
+            if (props.Indent && hasElementChildren && child is XElement)
+            {
+                writer.WriteLine();
+                writer.Write(new string(' ', (depth + 1) * 2));
+            }
+            // Each child gets a fresh copy of the in-scope bindings; namespace
+            // declarations do not leak from one sibling to the next.
+            SerializeRawNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings));
+        }
+
+        if (props.Indent && hasElementChildren)
+        {
+            writer.WriteLine();
+            writer.Write(new string(' ', depth * 2));
+        }
+
+        writer.Write("</");
+        if (!string.IsNullOrEmpty(elemPrefix))
+        {
+            writer.Write(elemPrefix);
+            writer.Write(':');
+        }
+        writer.Write(element.Name.LocalName);
+        writer.Write('>');
+    }
+
+    private static string FindOrDeclarePrefix(string uri, Dictionary<string, string> targetBindings, Dictionary<string, string> inScopeBindings, Dictionary<string, string> declarations, XElement element)
+    {
+        if (string.IsNullOrEmpty(uri))
+            return "";
+
+        // Prefer the default namespace if it is already bound to this URI.
+        if (targetBindings.TryGetValue("", out var defaultTargetUri) && defaultTargetUri == uri)
+            return "";
+        if (inScopeBindings.TryGetValue("", out var defaultScopeUri) && defaultScopeUri == uri)
+            return "";
+
+        // Prefer a non-empty prefix that is already targeted for this element.
+        foreach (var (prefix, boundUri) in targetBindings)
+        {
+            if (boundUri == uri && !string.IsNullOrEmpty(prefix))
+                return prefix;
+        }
+
+        // Prefer a non-empty prefix already in scope.
+        var scopePrefix = GetPrefixForUri(inScopeBindings, uri);
+        if (scopePrefix != null)
+            return scopePrefix;
+
+        // Prefer a prefix explicitly declared on the element.
+        foreach (var attr in element.Attributes().Where(a => a.IsNamespaceDeclaration))
+        {
+            if (attr.Value == uri)
+            {
+                var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                if (!inScopeBindings.ContainsKey(prefix) && !declarations.ContainsKey(prefix))
+                {
+                    declarations[prefix] = uri;
+                    return prefix;
+                }
+            }
+        }
+
+        // Generate a fresh prefix.
+        int index = 1;
+        string generated;
+        do
+        {
+            generated = $"p{index}";
+            index++;
+        } while (inScopeBindings.ContainsKey(generated) || declarations.ContainsKey(generated));
+
+        declarations[generated] = uri;
+        return generated;
+    }
+
+    private static Dictionary<string, string> ComputeBindingsFromAttributes(XElement element)
+    {
+        var bindings = new Dictionary<string, string>();
+        foreach (var attr in element.Attributes().Where(a => a.IsNamespaceDeclaration))
+        {
+            var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+            if (string.IsNullOrEmpty(attr.Value))
+                bindings.Remove(prefix);
+            else
+                bindings[prefix] = attr.Value;
+        }
+        return bindings;
+    }
+
+    private static string? GetPrefixForUri(Dictionary<string, string> inScopeBindings, string uri)
+    {
+        if (string.IsNullOrEmpty(uri))
+            return "";
+
+        foreach (var (prefix, boundUri) in inScopeBindings)
+        {
+            if (boundUri == uri)
+                return prefix;
+        }
+
+        return null;
+    }
+
+    private static void WriteEscaped(TextWriter writer, string value, bool isAttribute)
+    {
+        foreach (var ch in value)
+        {
+            switch (ch)
+            {
+                case '<':
+                    writer.Write("&lt;");
+                    break;
+                case '>':
+                    writer.Write("&gt;");
+                    break;
+                case '&':
+                    writer.Write("&amp;");
+                    break;
+                case '"' when isAttribute:
+                    writer.Write("&quot;");
+                    break;
+                case '\r':
+                    writer.Write("&#xD;");
+                    break;
+                default:
+                    writer.Write(ch);
+                    break;
+            }
         }
     }
 }

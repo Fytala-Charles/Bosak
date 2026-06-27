@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.6   | 23-05-2026     | Fixed decimal ToString invariant culture; added XPath canonical double formatting        |
 //                      | Charles Korthout | 0.7   | 08-06-2026     | Fixed FormatXPathDouble/Float stripping trailing zeros from whole numbers (e.g. 50→5)   |
 //                      | Charles Korthout | 0.8   | 25-06-2026     | FromNode(null) returns Undefined to prevent null-node context-item bugs                |
+//                      | Charles Korthout | 0.9   | 26-06-2026     | Fixed EffectiveBooleanValue for singleton/multi-item sequences                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -373,10 +374,51 @@ public readonly struct XdmValue
             XdmValueKind.Integer => _integer != 0,
             XdmValueKind.Decimal => (decimal)_reference! != 0m,
             XdmValueKind.Double or XdmValueKind.Float => _double != 0.0 && !double.IsNaN(_double),
-            XdmValueKind.Sequence => _reference is not null && ((IXdmSequence)_reference).TryGetLength(out var len) && len > 0,
+            XdmValueKind.Sequence => SequenceEffectiveBooleanValue(),
             XdmValueKind.Node => true,
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Computes the effective boolean value of a sequence per XPath 3.1 §2.4.3.
+    /// </summary>
+    private bool SequenceEffectiveBooleanValue()
+    {
+        if (_reference is not IXdmSequence seq)
+            return false;
+
+        int length = 0;
+        if (seq.TryGetLength(out var knownLength))
+        {
+            length = knownLength;
+        }
+        else
+        {
+            foreach (var _ in XdmSequence.FromSource(seq))
+                length++;
+        }
+
+        if (length == 0)
+            return false;
+
+        if (length == 1)
+        {
+            foreach (var item in XdmSequence.FromSource(seq))
+                return item.EffectiveBooleanValue();
+            return false;
+        }
+
+        // A sequence of more than one item has an effective boolean value of true
+        // if it contains at least one node; otherwise it is a type error.
+        foreach (var item in XdmSequence.FromSource(seq))
+        {
+            if (item.IsNode)
+                return true;
+        }
+
+        throw new InvalidOperationException(
+            "FORG0006: Invalid argument type for fn:boolean() / effective boolean value");
     }
 
     public override string ToString()

@@ -121,6 +121,7 @@
 //                      | Charles Korthout | 5.50  | 26-06-2026     | IsNodeAttached now treats a document's root element as attached; fixes mode-1105        |
 //                      | Charles Korthout | 5.51  | 26-06-2026     | xsl:evaluate blocks fn:system-property; xsl:try catches bare error codes; root LRE namespaces |
 //                      | Charles Korthout | 5.52  | 26-06-2026     | Evaluate _select AVT on xsl:value-of; fixes date-094/095 static-param tests              |
+//                      | Charles Korthout | 5.53  | 26-06-2026     | Suspend sequence accumulator in shallow-copy built-in rule; fixes namespace-0912       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -157,6 +158,7 @@ public sealed class TransformEngine
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
     private readonly Dictionary<string, Stylesheet.TemplateRule> _allNamedTemplates;
     private readonly HashSet<string> _excludedResultPrefixes;
+    private readonly Dictionary<string, Stylesheet.NamespaceAliasDefinition> _namespaceAliases;
     private readonly IXsltMessageListener? _messageListener;
 
     // Variable scope stack for proper lexical scoping across call-template
@@ -301,6 +303,9 @@ public sealed class TransformEngine
 
         // Collect excluded result prefixes for namespace filtering in literal result elements
         _excludedResultPrefixes = _stylesheet.GetAllExcludedResultPrefixes();
+
+        // Build the effective namespace-alias map (source URI -> definition)
+        _namespaceAliases = _stylesheet.GetEffectiveNamespaceAliases();
 
         // Register decimal-format declarations from the stylesheet
         RegisterDecimalFormats();
@@ -538,14 +543,19 @@ public sealed class TransformEngine
         // If the entry point was an initial named template and the caller asked for
         // the raw XDM result, return that instead of the serialized result tree.
         if (_returnRawInitialTemplateResult && _rawInitialTemplateResult != null)
+        {
+            FinalizeResultTreeNamespaces(_rawInitialTemplateResult.Value);
             return _rawInitialTemplateResult.Value;
+        }
 
         // Return the result document, or document-level text if no root element was produced
         if (_documentLevelText.Length > 0 && _resultDocument.Root == null)
         {
             return XdmValue.FromString(_documentLevelText.ToString());
         }
-        return XdmValue.FromNode(new XDocumentNode(_resultDocument));
+        var documentValue = XdmValue.FromNode(new XDocumentNode(_resultDocument));
+        FinalizeResultTreeNamespaces(documentValue);
+        return documentValue;
     }
 
     /// <summary>
@@ -564,7 +574,9 @@ public sealed class TransformEngine
         if (def == null || (def.Visibility != "public" && def.Visibility != "final"))
             throw new InvalidOperationException("XTDE0041");
 
-        return ExecuteXsltFunction(def, args);
+        var result = ExecuteXsltFunction(def, args);
+        FinalizeResultTreeNamespaces(result);
+        return result;
     }
 
     private (string nsUri, string localName) ParseExpandedFunctionName(string name)
@@ -769,6 +781,7 @@ public sealed class TransformEngine
     private XPath31Expression CompileXPath(string expression, XElement instruction)
     {
         var nsMap = GetInScopeNamespaces(instruction);
+        ValidateXPathPrefixes(expression, nsMap);
         var defaultNs = GetXPathDefaultNamespace(instruction);
         var definingNs = instruction.GetDefaultNamespace().NamespaceName;
         var baseUri = GetEffectiveBaseUri(instruction);
@@ -785,6 +798,69 @@ public sealed class TransformEngine
         }
         return XPath31Expression.Compile(expression);
     }
+
+    private static readonly HashSet<string> XPathAxisNames = new(StringComparer.Ordinal)
+    {
+        "ancestor", "ancestor-or-self", "attribute", "child", "descendant", "descendant-or-self",
+        "following", "following-sibling", "namespace", "parent", "preceding", "preceding-sibling", "self"
+    };
+
+    /// <summary>
+    /// Validates that all namespace prefixes used in an XPath expression are declared
+    /// in the supplied namespace map. Raises <c>XPST0081</c> for any undeclared prefix.
+    /// </summary>
+    private static void ValidateXPathPrefixes(string expression, Dictionary<string, string> nsMap)
+    {
+        bool inString = false;
+        char stringQuote = '\0';
+        for (int i = 0; i < expression.Length; i++)
+        {
+            char c = expression[i];
+            if (!inString && (c == '\'' || c == '"'))
+            {
+                inString = true;
+                stringQuote = c;
+                continue;
+            }
+            if (inString)
+            {
+                if (c == stringQuote)
+                {
+                    if (i + 1 < expression.Length && expression[i + 1] == stringQuote)
+                    {
+                        i++;
+                        continue;
+                    }
+                    inString = false;
+                }
+                continue;
+            }
+            if (c != ':')
+                continue;
+            int start = i - 1;
+            while (start >= 0 && IsXPathNcNameChar(expression[start]))
+                start--;
+            int length = i - start - 1;
+            if (length <= 0)
+                continue;
+            var prefix = expression.Substring(start + 1, length);
+            if (i + 1 >= expression.Length)
+                continue;
+            char next = expression[i + 1];
+            if (!IsXPathNcNameStartChar(next))
+                continue;
+            if (prefix == "xml" || prefix == "xmlns" || XPathAxisNames.Contains(prefix))
+                continue;
+            if (!nsMap.ContainsKey(prefix))
+                throw new InvalidOperationException($"XPST0081: Namespace prefix '{prefix}' has not been declared");
+        }
+    }
+
+    private static bool IsXPathNcNameChar(char c)
+        => char.IsLetterOrDigit(c) || c == '.' || c == '-' || c == '_';
+
+    private static bool IsXPathNcNameStartChar(char c)
+        => char.IsLetter(c) || c == '_';
 
     /// <summary>
     /// Computes the effective base URI of an XSLT instruction by walking up the
@@ -3057,13 +3133,18 @@ public sealed class TransformEngine
                     var (elemLocalName, elemNsUri) = ResolveElementName(instruction, elemName, elemNs, "XTDE0830");
                     var elem = new XElement(XName.Get(elemLocalName, elemNsUri));
 
-                    var elemInheritNsRaw = instruction.Attribute("inherit-namespaces")?.Value
+                    var elemInheritNsAttr = instruction.Attribute("inherit-namespaces");
+                    var elemInheritNsRaw = elemInheritNsAttr?.Value
                         ?? instruction.Attribute("_inherit-namespaces")?.Value
                         ?? "yes";
                     var elemInheritNs = EvaluateAvt(elemInheritNsRaw, instruction);
-                    if (elemInheritNs == "no" || elemInheritNs == "false")
+                    if (ParseInheritNamespaces(elemInheritNs) == false)
                     {
                         elem.AddAnnotation(new NamespaceInheritanceBarrier());
+                    }
+                    else if (elemInheritNsAttr != null && ParseInheritNamespaces(elemInheritNs) == true)
+                    {
+                        elem.AddAnnotation(new NamespaceInheritanceExplicitYes());
                     }
 
                     AddElementToContainer(elem, _currentContainer);
@@ -3124,7 +3205,14 @@ public sealed class TransformEngine
                                 && !string.IsNullOrEmpty(styleNs.NamespaceName)
                                 && styleNs.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
                             {
-                                attrTarget.SetAttributeValue(XNamespace.Xmlns + attrPrefixHint, styleNs.NamespaceName);
+                                if (styleNs.NamespaceName == attrNsUri)
+                                {
+                                    attrTarget.SetAttributeValue(XNamespace.Xmlns + attrPrefixHint, attrNsUri);
+                                }
+                            }
+                            else if (!string.IsNullOrEmpty(attrNsUri))
+                            {
+                                attrTarget.SetAttributeValue(XNamespace.Xmlns + attrPrefixHint, attrNsUri);
                             }
                         }
                     }
@@ -3270,13 +3358,30 @@ public sealed class TransformEngine
                     }
                     if (_currentContainer is XElement targetElem)
                     {
+                        var excludedUris = new HashSet<string>(GetExcludedNamespaceUris(targetElem));
+                        var excludedAnn = targetElem.Annotation<ExcludedNamespaceUris>();
+                        if (excludedAnn != null)
+                        {
+                            foreach (var uri in excludedAnn.Uris)
+                                excludedUris.Add(uri);
+                        }
                         if (string.IsNullOrEmpty(nsName))
                         {
+                            var existingDefault = targetElem.Attribute("xmlns");
+                            if (existingDefault != null &&
+                                existingDefault.Value != nsUri &&
+                                !excludedUris.Contains(existingDefault.Value))
+                                throw new InvalidOperationException($"XTDE0430: Conflicting namespace declaration for default prefix");
                             // Default namespace declaration
                             targetElem.SetAttributeValue("xmlns", nsUri);
                         }
                         else
                         {
+                            var existing = targetElem.Attribute(XNamespace.Xmlns + nsName);
+                            if (existing != null &&
+                                existing.Value != nsUri &&
+                                !excludedUris.Contains(existing.Value))
+                                throw new InvalidOperationException($"XTDE0430: Conflicting namespace declaration for prefix '{nsName}'");
                             targetElem.SetAttributeValue(XNamespace.Xmlns + nsName, nsUri);
                         }
                     }
@@ -4376,42 +4481,53 @@ public sealed class TransformEngine
     {
         _literalElementDepth++;
 
-        // Preserve the namespace prefix by using the original XName and adding
-        // an explicit namespace declaration when the element uses a non-empty namespace.
-        var copy = new XElement(source.Name);
+        // Apply namespace-alias mapping to the literal result element name.
+        var mappedElementName = MapAliasedName(source.Name, isElement: true, out var elementResultPrefix);
+        if (elementResultPrefix == null)
+            elementResultPrefix = source.GetPrefixOfNamespace(source.Name.Namespace);
+        var copy = new XElement(mappedElementName);
 
-        // Handle inherit-namespaces="no" on literal result elements.
-        var lreInheritNs = source.Attribute(XName.Get("inherit-namespaces", Stylesheet.Stylesheet.XslNamespace))?.Value ?? "yes";
-        if (lreInheritNs == "no" || lreInheritNs == "false")
+        // Handle inherit-namespaces on literal result elements.
+        var lreInheritNsAttr = source.Attribute(XName.Get("inherit-namespaces", Stylesheet.Stylesheet.XslNamespace));
+        var lreInheritNs = lreInheritNsAttr?.Value ?? "yes";
+        if (ParseInheritNamespaces(lreInheritNs) == false)
         {
             copy.AddAnnotation(new NamespaceInheritanceBarrier());
         }
-
-        // If the element has a non-empty namespace URI, ensure the namespace
-        // is declared on the copied element (either as xmlns or xmlns:prefix).
-        // The element's own namespace is always required and is never excluded.
-        if (!string.IsNullOrEmpty(source.Name.NamespaceName))
+        else if (lreInheritNsAttr != null && ParseInheritNamespaces(lreInheritNs) == true)
         {
-            var prefix = source.GetPrefixOfNamespace(source.Name.Namespace);
-            if (prefix == "")
-            {
-                copy.SetAttributeValue("xmlns", source.Name.NamespaceName);
-            }
-            else if (!string.IsNullOrEmpty(prefix))
-            {
-                // Always preserve the namespace binding on the constructed node.
-                // exclude-result-prefixes is a serialization-time concern; it must
-                // not change the node-name() of constructed nodes.
-                copy.SetAttributeValue(XNamespace.Xmlns + prefix, source.Name.NamespaceName);
-            }
+            copy.AddAnnotation(new NamespaceInheritanceExplicitYes());
+        }
+
+        // Ensure the element's own namespace is declared on the copied element.
+        // The element's own namespace is always required and is never excluded.
+        if (!string.IsNullOrEmpty(mappedElementName.NamespaceName))
+        {
+            EnsureNamespaceDeclaration(copy, mappedElementName, elementResultPrefix);
+        }
+
+        // Compute excluded namespace URIs in scope on this LRE. exclude-result-prefixes
+        // suppresses namespace nodes by URI, not by prefix.
+        var excludedNamespaceUris = GetExcludedNamespaceUris(source);
+        bool excludeAllNamespaces = excludedNamespaceUris.Contains("#all");
+
+        // Record the excluded URIs on the constructed element so that xsl:namespace can
+        // distinguish a real namespace conflict from an excluded declaration that will be
+        // removed later.
+        if (!excludeAllNamespaces && excludedNamespaceUris.Count > 0)
+        {
+            var excluded = new ExcludedNamespaceUris();
+            foreach (var uri in excludedNamespaceUris)
+                excluded.Uris.Add(uri);
+            copy.AddAnnotation(excluded);
         }
 
         // For root-level literal result elements, copy all in-scope namespace bindings from
-        // the stylesheet (except excluded prefixes and the XSLT namespace) to the result
-        // element. This ensures namespace-uri-for-prefix() queries and assertions such as
-        // those in attribute-0601 see prefixes that are declared only on xsl:stylesheet.
+        // the stylesheet (except excluded URIs, source-alias URIs, and the XSLT namespace)
+        // to the result element. This ensures namespace-uri-for-prefix() queries and
+        // assertions such as those in attribute-0601 see prefixes declared on xsl:stylesheet.
         bool isRootLevelLiteral = _currentContainer is not XElement parent || parent.Name.LocalName == "__temp__";
-        if (isRootLevelLiteral && !_excludedResultPrefixes.Contains("#all"))
+        if (isRootLevelLiteral && !excludeAllNamespaces)
         {
             foreach (var (prefix, styleNs) in GetInScopeNamespaceDeclarations(source))
             {
@@ -4421,7 +4537,9 @@ public sealed class TransformEngine
                     continue;
                 if (styleNs.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                     continue;
-                if (_excludedResultPrefixes.Contains(prefix))
+                if (TryGetNamespaceAlias(styleNs.NamespaceName, out _))
+                    continue;
+                if (excludedNamespaceUris.Contains(styleNs.NamespaceName))
                     continue;
 
                 if (prefix == "")
@@ -4453,12 +4571,14 @@ public sealed class TransformEngine
                 var local = attr.Name.LocalName;
                 if (string.IsNullOrEmpty(local) || local == "xml" || local == "xmlns")
                     continue;
-                if (_excludedResultPrefixes.Contains(local))
-                    continue;
                 var styleNs = source.GetNamespaceOfPrefix(local);
                 if (styleNs == null || string.IsNullOrEmpty(styleNs.NamespaceName))
                     continue;
                 if (styleNs.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                    continue;
+                if (excludedNamespaceUris.Contains(styleNs.NamespaceName))
+                    continue;
+                if (TryGetNamespaceAlias(styleNs.NamespaceName, out _))
                     continue;
                 var existing = copy.GetNamespaceOfPrefix(local);
                 if (existing != null && existing.NamespaceName == styleNs.NamespaceName)
@@ -4470,6 +4590,7 @@ public sealed class TransformEngine
         // Apply attribute sets first; literal attributes override them.
         ApplyAttributeSets(source, copy);
 
+        var literalAttributesAdded = new HashSet<XName>();
         foreach (var attr in source.Attributes())
         {
             // Skip namespace declarations that are inherited from ancestors
@@ -4481,14 +4602,23 @@ public sealed class TransformEngine
                 {
                     continue; // Already handled above
                 }
-                // Skip explicitly excluded prefixes (e.g. exclude-result-prefixes="xs").
-                // #all is not a prefix name and is handled at serialization time.
-                if (_excludedResultPrefixes.Contains(declaredPrefix))
+
+                var nsUri = attr.Value;
+                if (TryGetNamespaceAlias(nsUri, out var alias))
+                {
+                    if (alias.ResultPrefix == "#default" || string.IsNullOrEmpty(alias.ResultPrefix))
+                        copy.SetAttributeValue("xmlns", alias.ResultUri);
+                    else
+                        copy.SetAttributeValue(XNamespace.Xmlns + alias.ResultPrefix, alias.ResultUri);
+                    continue;
+                }
+
+                if (excludedNamespaceUris.Contains(nsUri))
                     continue;
                 // Skip XSLT namespace declaration — it is not copied to the result tree
-                if (attr.Value == Stylesheet.Stylesheet.XslNamespace)
+                if (nsUri == Stylesheet.Stylesheet.XslNamespace)
                     continue;
-                copy.SetAttributeValue(attr.Name, attr.Value);
+                copy.SetAttributeValue(attr.Name, nsUri);
                 continue;
             }
 
@@ -4497,9 +4627,32 @@ public sealed class TransformEngine
             if (attr.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                 continue;
 
-            var attrName = XName.Get(attr.Name.LocalName, attr.Name.NamespaceName);
+            // Unprefixed attributes are always in no namespace and are not affected by
+            // namespace-alias, even when the stylesheet declares a default-namespace alias.
+            XName mappedAttrName;
+            string? attrResultPrefix = null;
+            if (string.IsNullOrEmpty(attr.Name.NamespaceName))
+            {
+                mappedAttrName = attr.Name;
+            }
+            else
+            {
+                mappedAttrName = MapAliasedName(attr.Name, isElement: false, out attrResultPrefix);
+                if (attrResultPrefix == null)
+                    attrResultPrefix = source.GetPrefixOfNamespace(attr.Name.Namespace);
+                if (!string.IsNullOrEmpty(mappedAttrName.NamespaceName))
+                {
+                    EnsureNamespaceDeclaration(copy, mappedAttrName, attrResultPrefix);
+                }
+            }
+
+            if (!literalAttributesAdded.Add(mappedAttrName))
+            {
+                throw new InvalidOperationException("XTSE0813: Two attributes on a literal result element have the same expanded QName after namespace aliasing.");
+            }
+
             var attrValue = EvaluateAvt(attr.Value, source);
-            copy.SetAttributeValue(attrName, attrValue);
+            copy.SetAttributeValue(mappedAttrName, attrValue);
         }
 
         AddElementToContainer(copy, _currentContainer);
@@ -4608,6 +4761,7 @@ public sealed class TransformEngine
                     var expr = value.Substring(i + 1, end - i - 1);
                     if (!string.IsNullOrEmpty(expr))
                     {
+                        ValidateXPathPrefixes(expr, nsMap ?? new Dictionary<string, string>());
                         XPath31Expression compiled;
                         if (needsOptions)
                         {
@@ -5191,13 +5345,18 @@ public sealed class TransformEngine
                         }
                     }
 
-                    var inheritNamespacesAttrRaw = instruction.Attribute("inherit-namespaces")?.Value
+                    var inheritNamespacesAttrNode = instruction.Attribute("inherit-namespaces");
+                    var inheritNamespacesAttrRaw = inheritNamespacesAttrNode?.Value
                         ?? instruction.Attribute("_inherit-namespaces")?.Value
                         ?? "yes";
                     var inheritNamespacesAttr = EvaluateAvt(inheritNamespacesAttrRaw, instruction);
-                    if (inheritNamespacesAttr == "no" || inheritNamespacesAttr == "false")
+                    if (ParseInheritNamespaces(inheritNamespacesAttr) == false)
                     {
                         copy.AddAnnotation(new NamespaceInheritanceBarrier());
+                    }
+                    else if (inheritNamespacesAttrNode != null && ParseInheritNamespaces(inheritNamespacesAttr) == true)
+                    {
+                        copy.AddAnnotation(new NamespaceInheritanceExplicitYes());
                     }
                     AddElementToContainer(copy, _currentContainer);
                     var prev = _currentContainer;
@@ -5590,9 +5749,133 @@ public sealed class TransformEngine
                         }
                     }
                 }
+
+                // Prefixed namespace undeclarations are added later, in
+                // FinalizeElementNamespaces, once both the parent context and the
+                // child's explicit namespace declarations are known.
             }
         }
         container.Add(element);
+    }
+
+    /// <summary>
+    /// Finalizes namespace inheritance for an element and its descendants using a
+    /// top-down pass. Children of an element with <c>inherit-namespaces="no"</c> do not
+    /// inherit its namespace bindings; explicit namespace declarations that merely repeat
+    /// an inherited binding are removed so serialization does not emit them.
+    /// </summary>
+    private static void FinalizeNamespaceInheritance(XElement element, Dictionary<string, string> inheritedBindings, List<string> inheritedPrefixOrder, bool parentHasBarrier)
+    {
+        var bindings = parentHasBarrier
+            ? new Dictionary<string, string>()
+            : new Dictionary<string, string>(inheritedBindings);
+        var prefixOrder = parentHasBarrier
+            ? new List<string>()
+            : new List<string>(inheritedPrefixOrder);
+
+        // Suppress explicit namespace declarations that repeat a binding the element
+        // would already inherit from its parent. For barrier children such a duplicate
+        // declaration is not inherited, so it must be kept.
+        foreach (var attr in element.Attributes().Where(a => a.IsNamespaceDeclaration).ToList())
+        {
+            var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+            if (!parentHasBarrier &&
+                bindings.TryGetValue(prefix, out var inheritedUri) &&
+                inheritedUri == attr.Value)
+            {
+                attr.Remove();
+            }
+            else if (string.IsNullOrEmpty(attr.Value))
+            {
+                bindings.Remove(prefix);
+                prefixOrder.Remove(prefix);
+            }
+            else
+            {
+                bindings[prefix] = attr.Value;
+                if (!prefixOrder.Contains(prefix))
+                    prefixOrder.Add(prefix);
+            }
+        }
+
+        // Record the effective bindings so consumers such as the namespace axis can
+        // determine the namespace context of this element.
+        var context = element.Annotation<NamespaceInheritanceContext>();
+        if (context == null)
+        {
+            context = new NamespaceInheritanceContext();
+            element.AddAnnotation(context);
+        }
+        context.Bindings.Clear();
+        foreach (var kv in bindings)
+            context.Bindings[kv.Key] = kv.Value;
+        context.PrefixOrder.Clear();
+        context.PrefixOrder.AddRange(prefixOrder);
+
+        bool thisHasBarrier = element.Annotation<NamespaceInheritanceBarrier>() != null;
+        if (thisHasBarrier)
+        {
+            foreach (var child in element.Elements())
+            {
+                var childUndecl = child.Annotation<PrefixedNamespaceUndeclarations>() ?? new PrefixedNamespaceUndeclarations();
+                foreach (var prefix in prefixOrder)
+                {
+                    if (prefix == "" || prefix == "xml" || prefix == "xmlns")
+                        continue;
+                    if (!bindings.TryGetValue(prefix, out var uri) || string.IsNullOrEmpty(uri))
+                        continue;
+                    childUndecl.Prefixes.Add(prefix);
+                }
+                if (childUndecl.Prefixes.Count > 0)
+                    child.AddAnnotation(childUndecl);
+            }
+        }
+
+        foreach (var child in element.Elements())
+            FinalizeNamespaceInheritance(child, bindings, prefixOrder, thisHasBarrier);
+    }
+
+    /// <summary>
+    /// Runs a top-down namespace inheritance pass over every element tree that is
+    /// reachable from the supplied XDM value. This must be done once after the whole
+    /// result tree has been constructed, because the pass needs the parent context of
+    /// each element to be known before its children are processed.
+    /// </summary>
+    private static void FinalizeResultTreeNamespaces(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return;
+
+        if (value.IsNode)
+        {
+            FinalizeNodeNamespaces(value.NodeValue);
+            return;
+        }
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                FinalizeResultTreeNamespaces(item);
+        }
+    }
+
+    private static void FinalizeNodeNamespaces(IXdmNode? node)
+    {
+        if (node == null)
+            return;
+
+        if (node is XDocumentNode xdn)
+        {
+            switch (xdn.UnderlyingObject)
+            {
+                case XElement elem:
+                    FinalizeNamespaceInheritance(elem, new Dictionary<string, string>(), new List<string>(), parentHasBarrier: false);
+                    break;
+                case XDocument doc when doc.Root != null:
+                    FinalizeNamespaceInheritance(doc.Root, new Dictionary<string, string>(), new List<string>(), parentHasBarrier: false);
+                    break;
+            }
+        }
     }
 
     /// <summary>
@@ -5622,6 +5905,129 @@ public sealed class TransformEngine
             return element.Name.NamespaceName;
         }
         return null;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Namespace-alias support
+    // ---------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// Returns <c>true</c> if the given namespace URI is the source side of an active
+    /// <c>xsl:namespace-alias</c> declaration.
+    /// </summary>
+    private bool TryGetNamespaceAlias(string sourceUri, out Stylesheet.NamespaceAliasDefinition alias)
+    {
+        return _namespaceAliases.TryGetValue(sourceUri, out alias!);
+    }
+
+    /// <summary>
+    /// Maps a source expanded name through an active namespace-alias declaration and
+    /// reports the preferred result prefix. For attributes a result-prefix of
+    /// <c>#default</c> produces a no-namespace attribute.
+    /// </summary>
+    private XName MapAliasedName(XName sourceName, bool isElement, out string? resultPrefix)
+    {
+        if (!TryGetNamespaceAlias(sourceName.NamespaceName, out var alias))
+        {
+            resultPrefix = null;
+            return sourceName;
+        }
+
+        if (alias.ResultPrefix == "#default" || string.IsNullOrEmpty(alias.ResultPrefix))
+        {
+            resultPrefix = "";
+            if (isElement && !string.IsNullOrEmpty(alias.ResultUri))
+                return XName.Get(sourceName.LocalName, alias.ResultUri);
+            return XName.Get(sourceName.LocalName);
+        }
+
+        resultPrefix = alias.ResultPrefix;
+        return XName.Get(sourceName.LocalName, alias.ResultUri);
+    }
+
+    /// <summary>
+    /// Adds a namespace declaration for the given name/prefix if needed. When
+    /// <paramref name="prefix"/> is empty a default namespace declaration is added.
+    /// </summary>
+    private static void EnsureNamespaceDeclaration(XElement element, XName name, string? prefix)
+    {
+        if (string.IsNullOrEmpty(name.NamespaceName))
+            return;
+
+        // If the element already has a declaration for this URI, nothing to do.
+        foreach (var attr in element.Attributes())
+        {
+            if (attr.IsNamespaceDeclaration && attr.Value == name.NamespaceName)
+                return;
+        }
+
+        if (prefix == null || prefix == "")
+        {
+            // Use the default namespace when no prefix is known. This is valid for
+            // elements; attributes without a prefix are always in no namespace.
+            element.SetAttributeValue("xmlns", name.NamespaceName);
+        }
+        else if (prefix != "xml" && prefix != "xmlns")
+        {
+            var existing = element.GetNamespaceOfPrefix(prefix);
+            if (existing == null || existing.NamespaceName != name.NamespaceName)
+                element.SetAttributeValue(XNamespace.Xmlns + prefix, name.NamespaceName);
+        }
+    }
+
+    /// <summary>
+    /// Parses an <c>inherit-namespaces</c> attribute value. Returns <c>true</c> for
+    /// <c>yes</c>/<c>true</c>/<c>1</c>, <c>false</c> for <c>no</c>/<c>false</c>/<c>0</c>,
+    /// and throws <c>XTSE0020</c> for any other value.
+    /// </summary>
+    private static bool ParseInheritNamespaces(string? value)
+    {
+        var trimmed = value?.Trim() ?? "yes";
+        return trimmed switch
+        {
+            "yes" or "true" or "1" => true,
+            "no" or "false" or "0" => false,
+            _ => throw new InvalidOperationException($"XTSE0020: Invalid inherit-namespaces value '{trimmed}'.")
+        };
+    }
+
+    /// <summary>
+    /// Collects the namespace URIs that are excluded by <c>exclude-result-prefixes</c>
+    /// in scope on the given element. The special value <c>#all</c> is returned as the
+    /// literal string <c>#all</c> so callers can treat it as a wildcard.
+    /// </summary>
+    private HashSet<string> GetExcludedNamespaceUris(XElement element)
+    {
+        var result = new HashSet<string>();
+        var current = element;
+        while (current != null)
+        {
+            var attr = current.Attribute(XName.Get("exclude-result-prefixes", Stylesheet.Stylesheet.XslNamespace))
+                ?? current.Attribute("exclude-result-prefixes");
+            if (attr != null)
+            {
+                foreach (var token in attr.Value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var prefix = token.Trim();
+                    if (prefix == "#all")
+                    {
+                        result.Add("#all");
+                        return result;
+                    }
+
+                    string uri;
+                    if (prefix == "#default")
+                        uri = current.GetDefaultNamespace()?.NamespaceName ?? "";
+                    else
+                        uri = current.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+
+                    if (!string.IsNullOrEmpty(uri))
+                        result.Add(uri);
+                }
+            }
+            current = current.Parent;
+        }
+        return result;
     }
 
     private void CopyNodeToResult(IXdmNode node)
@@ -5968,8 +6374,20 @@ public sealed class TransformEngine
 
                     var previousContainer = _currentContainer;
                     _currentContainer = copy;
-                    ApplyTemplates(node, mode, select: "@* | node()", sortKeys: null, incomingTunnelParams, callParams);
-                    _currentContainer = previousContainer;
+                    // Suspend the outer sequence accumulator while constructing the content
+                    // of the shallow-copied element, so children are added to the copy rather
+                    // than escaping to an enclosing variable sequence accumulator.
+                    var savedSequenceAccumulator = _sequenceAccumulator;
+                    _sequenceAccumulator = null;
+                    try
+                    {
+                        ApplyTemplates(node, mode, select: "@* | node()", sortKeys: null, incomingTunnelParams, callParams);
+                    }
+                    finally
+                    {
+                        _sequenceAccumulator = savedSequenceAccumulator;
+                        _currentContainer = previousContainer;
+                    }
                 }
                 break;
 

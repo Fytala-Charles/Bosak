@@ -4,13 +4,17 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 26 June 2026
-> **Bosak baseline:** 894 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,695 passed / 556 failed / 9,349 skipped (~89.4%)
+> **Last updated:** 27 June 2026
+> **Bosak baseline:** 895 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 4,746 passed / 505 failed / 9,349 skipped (~90.4%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-27** — Cleared the remaining XSLT `namespace` cluster failures (`namespace-0912` and `namespace-2611`) and the full `namespace-alias` cluster.
+  - Built-in `shallow-copy` now suspends the outer sequence accumulator while applying templates to children, so typed variables containing shallow-copied elements keep child results nested instead of escaping as siblings.
+  - `XdmValue.EffectiveBooleanValue()` now follows XPath sequence EBV rules: empty sequence → `false`, singleton sequence → EBV of its item, multi-node sequence → `true`, multi-item atomic sequence → `FORG0006`.
 
 - **2026-06-26** — Cleared the XSLT `date` conformance cluster (46 runnable failures).
   - `xsl:value-of` now evaluates the `_select` AVT used by static-parameter test stylesheets.

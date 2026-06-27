@@ -39,6 +39,9 @@ public sealed class OutputProperties
     /// <summary>Standalone attribute for the XML declaration.</summary>
     public string? Standalone { get; set; }
 
+    /// <summary>Whether prefixed namespace undeclarations are permitted (XML 1.1).</summary>
+    public bool UndeclarePrefixes { get; set; } = false;
+
     /// <summary>Parses an xsl:output element into <see cref="OutputProperties"/>.</summary>
     public static OutputProperties FromElement(System.Xml.Linq.XElement element)
     {
@@ -67,6 +70,10 @@ public sealed class OutputProperties
         var standalone = element.Attribute("standalone")?.Value;
         if (!string.IsNullOrEmpty(standalone))
             props.Standalone = standalone;
+
+        var undeclare = element.Attribute("undeclare-prefixes")?.Value;
+        if (!string.IsNullOrEmpty(undeclare))
+            props.UndeclarePrefixes = ParseYesNo(undeclare, defaultValue: false);
 
         // Default for method="text": omit declaration
         if (props.Method == "text")

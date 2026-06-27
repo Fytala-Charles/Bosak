@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.10  | 13-06-2026     | Relaxed fn:transform assertions to tolerate copied in-scope namespaces                   |
 //                      | Charles Korthout | 0.11  | 15-06-2026     | TestMessageListener implements IXsltMessageListener.OnWarning                         |
 //                      | Charles Korthout | 0.12  | 24-06-2026     | Added xsl:function/@_name AVT expansion tests                                         |
+//                      | Charles Korthout | 0.13  | 26-06-2026     | Added shallow-copy variable and quantified EBV tests                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2392,5 +2393,71 @@ public class StylesheetTests
 
         Assert.Equal(XdmValueKind.Integer, result.Kind);
         Assert.Equal(144, result.IntegerValue);
+    }
+
+    [Fact]
+    public void Variable_As_Element_With_ShallowCopy_Children()
+    {
+        // Regression for namespace-0912: a variable typed as a single element whose
+        // value comes from a shallow-copy apply-templates must contain the copied
+        // element with its child results nested inside, not as separate siblings.
+        var xsl = @"<xsl:stylesheet version='3.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:w='w-uri'>
+            <xsl:mode on-no-match='shallow-copy'/>
+            <xsl:template match='/'>
+                <xsl:variable name='var' as='element(p)'>
+                    <xsl:apply-templates/>
+                </xsl:variable>
+                <report>
+                    <xsl:sequence select='$var'/>
+                </report>
+            </xsl:template>
+            <xsl:template match='q' as='element(w:s)'>
+                <xsl:element name='w:s' namespace='w-uri'/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("p", new XElement("q")));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        // The result must contain a single <p> element containing the <w:s> child.
+        Assert.Contains("<p", result);
+        Assert.Contains("<", result);
+        Assert.DoesNotContain("<p/>", result); // p is not empty
+    }
+
+    [Fact]
+    public void Quantified_Every_AttributeComparison_UsesBooleanResult()
+    {
+        // Regression for namespace-2611: the 'every' quantifier must coerce the
+        // satisfies expression through effective boolean value, so a singleton
+        // boolean sequence of false() makes the quantifier return false.
+        var xsl = @"<xsl:stylesheet version='2.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:variable name='t' as='element()'>
+                    <foo a='1' b='1'/>
+                </xsl:variable>
+                <xsl:variable name='d' as='element()'>
+                    <foo a='2' b='1'/>
+                </xsl:variable>
+                <result>
+                    <xsl:value-of select=""string(
+                        every $i in $t/@* satisfies
+                        for $j in $d/@*[local-name(.) = local-name($i)]
+                        return $i = $j
+                    )""/>
+                </result>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument()));
+
+        Assert.Contains("<result>false</result>", result);
     }
 }

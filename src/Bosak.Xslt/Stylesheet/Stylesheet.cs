@@ -44,6 +44,7 @@
 //                      | Charles Korthout | 2.11  | 26-06-2026     | Static variable validation and default-value handling for static cluster              |
 //                      | Charles Korthout | 2.12  | 26-06-2026     | XTSE0090 for non-global static vars/params; XTSE0090 visibility; XTSE3450 var/param   |
 //                      | Charles Korthout | 2.13  | 26-06-2026     | Document-order use-when evaluation; precedence-aware static variable conflict detection |
+//                      | Charles Korthout | 2.14  | 26-06-2026     | Added xsl:namespace-alias parsing and effective alias mapping                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -82,6 +83,7 @@ public sealed class Stylesheet
     private readonly List<DecimalFormatDefinition> _decimalFormats = new();
     private readonly List<AttributeSetDefinition> _attributeSets = new();
     private readonly HashSet<string> _excludedResultPrefixes = new();
+    private readonly List<NamespaceAliasDefinition> _namespaceAliases = new();
     private OutputProperties? _outputProperties;
     private readonly bool _isRootStylesheet;
     private readonly StaticContext _staticContext = new();
@@ -591,6 +593,13 @@ public sealed class Stylesheet
         if (outputElem != null)
             _outputProperties = OutputProperties.FromElement(outputElem);
 
+        // Parse xsl:namespace-alias declarations
+        foreach (var alias in root.Elements(XName.Get("namespace-alias", XslNamespace)))
+        {
+            if (!UseWhen(alias)) continue;
+            _namespaceAliases.Add(NamespaceAliasDefinition.FromElement(alias, this));
+        }
+
         // XTSE0130: top-level elements in no namespace are not permitted unless they are
         // XSLT instructions. Data elements in other namespaces are allowed.
         foreach (var topLevel in root.Elements())
@@ -1007,7 +1016,8 @@ public sealed class Stylesheet
                         or "default-mode" or "default-collation" or "default-validation"
                         or "exclude-result-prefixes" or "extension-element-prefixes"
                         or "version" or "xpath-default-namespace"
-                        or "use-attribute-sets";
+                        or "use-attribute-sets"
+                        or "inherit-namespaces";
                     if (!allowed)
                         throw new InvalidOperationException("XTSE0805");
                 }
@@ -2054,6 +2064,46 @@ public sealed class Stylesheet
         foreach (var prefix in _excludedResultPrefixes)
             result.Add(prefix);
         return result;
+    }
+
+    /// <summary>
+    /// Returns the effective <c>xsl:namespace-alias</c> mapping for this stylesheet.
+    /// Higher-precedence declarations override lower-precedence ones; conflicting
+    /// declarations at the same import precedence are reported as <c>XTSE0813</c>.
+    /// </summary>
+    public Dictionary<string, NamespaceAliasDefinition> GetEffectiveNamespaceAliases()
+    {
+        var all = new List<NamespaceAliasDefinition>();
+        foreach (var imported in _imports)
+            all.AddRange(imported.GetAllNamespaceAliases());
+        foreach (var included in _includes)
+            all.AddRange(included.GetAllNamespaceAliases());
+        all.AddRange(_namespaceAliases);
+
+        var result = new Dictionary<string, NamespaceAliasDefinition>();
+        foreach (var group in all.GroupBy(a => a.SourceUri))
+        {
+            var ordered = group.OrderBy(a => a.ImportPrecedence).ToList();
+            var best = ordered[0];
+            foreach (var other in ordered)
+            {
+                if (other.ImportPrecedence == best.ImportPrecedence &&
+                    (other.ResultPrefix != best.ResultPrefix || other.ResultUri != best.ResultUri))
+                {
+                    throw new InvalidOperationException("XTSE0813: Conflicting xsl:namespace-alias declarations for the same namespace URI at the same import precedence.");
+                }
+            }
+            result[group.Key] = best;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Collects the raw <c>xsl:namespace-alias</c> definitions from this stylesheet module only.
+    /// </summary>
+    public IReadOnlyList<NamespaceAliasDefinition> GetAllNamespaceAliases()
+    {
+        return _namespaceAliases;
     }
 
     /// <summary>

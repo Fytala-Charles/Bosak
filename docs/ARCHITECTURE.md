@@ -115,6 +115,8 @@ public readonly struct XdmValue
 - Strings and larger objects use the `_reference` field.
 - Sequences are **not** `List<XdmValue>`. They are lazy `IXdmSequence` objects.
 
+**Effective boolean value**: `XdmValue.EffectiveBooleanValue()` follows XPath 3.1 rules — empty sequence is `false`, a singleton sequence delegates to its item, a multi-item sequence is `true` only if it contains a node, and a multi-item purely atomic sequence raises `FORG0006`.
+
 #### `IXdmNode` (Interface)
 An abstraction over any XML node. Implementations are provided for `XDocument`, `XmlDocument`, streaming, etc.
 
