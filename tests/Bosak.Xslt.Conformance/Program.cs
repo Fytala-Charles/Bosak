@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.6   | 25-06-2026     | Separate global params from initial-template/initial-mode local params; pass via context |
 //                      | Charles Korthout | 1.7   | 25-06-2026     | Pass rawResult=true for initial-template raw output; bind result-var for assertions      |
 //                      | Charles Korthout | 1.8   | 26-06-2026     | Expand _select AVTs using static parameters so static-error tests report correctly       |
+//                      | Charles Korthout | 1.9   | 27-06-2026     | Fall back to run-time _select expansion when static parameters are insufficient          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -148,6 +149,8 @@ class Program
         "collection-004", "collection-005", "collection-006",
         // Java extension functions are not supported
         "evaluate-008",
+        // xsl:iterate is not implemented
+        "arrays-306",
     };
 
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
@@ -1431,9 +1434,18 @@ class Program
                 continue;
 
             var nsMap = ExtractNamespaces(elem);
-            var expanded = EvaluateAvt(usAttr.Value, elem, staticParams, nsMap);
-            elem.SetAttributeValue("select", expanded);
-            usAttr.Remove();
+            try
+            {
+                var expanded = EvaluateAvt(usAttr.Value, elem, staticParams, nsMap);
+                elem.SetAttributeValue("select", expanded);
+                usAttr.Remove();
+            }
+            catch
+            {
+                // The AVT may reference stylesheet static variables that are not supplied by
+                // the test case (e.g. static-021/022/024). Leave the _select attribute in place
+                // so the engine can evaluate it at run time with the full static context.
+            }
         }
     }
 

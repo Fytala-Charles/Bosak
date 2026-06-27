@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Compile-time namespace resolution and static errors for removed functions                |
+//                      | Charles Korthout | 0.4   | 27-06-2026     | Preserve explicit braced-URI namespace URIs in function calls and named function refs    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -146,7 +147,9 @@ public sealed class XPath31Expression
 
     private static FunctionCallNode ResolveFunctionCall(FunctionCallNode node, CompileOptions options)
     {
-        var nsUri = ResolvePrefix(node.Prefix, options);
+        var nsUri = string.IsNullOrEmpty(node.NamespaceUri)
+            ? ResolvePrefix(node.Prefix, options)
+            : node.NamespaceUri;
         var resolved = node with
         {
             Arguments = node.Arguments.Select(a => ResolveFunctionNamespaces(a, options)).ToList(),
@@ -158,7 +161,9 @@ public sealed class XPath31Expression
 
     private static NamedFunctionRefNode ResolveNamedFunctionRef(NamedFunctionRefNode node, CompileOptions options)
     {
-        var nsUri = ResolvePrefix(node.Prefix, options);
+        var nsUri = string.IsNullOrEmpty(node.NamespaceUri)
+            ? ResolvePrefix(node.Prefix, options)
+            : node.NamespaceUri;
         var resolved = node with { NamespaceUri = nsUri };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
         return resolved;

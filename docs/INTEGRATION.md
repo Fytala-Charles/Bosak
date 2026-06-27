@@ -5,12 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 27 June 2026
-> **Bosak baseline:** 895 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,746 passed / 505 failed / 9,349 skipped (~90.4%)
+> **Bosak baseline:** 899 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 4,799 passed / 451 failed / 9,350 skipped (~91.4%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-27** — Cleared the entire XSLT `maps` conformance cluster (35 runnable failures).
+  - Implemented `xsl:map` and `xsl:map-entry` instructions in `TransformEngine`, including duplicate-key (`XTDE3365`) and non-entry-content (`XTTE3365`) errors, and `XTDE0450` when a map is used as an element/document child.
+  - `fn:serialize` now supports `method=json` for maps, arrays, booleans, numbers, and strings.
+  - Map key equality now treats `xs:anyURI` as comparable to `xs:string` and handles `NaN` numeric keys safely.
+  - `XPath31Expression.Compile` resolves function-call namespaces from `CompileOptions` and reports static `XPST0017` for removed functions and the obsolete `http://www.w3.org/2011/xpath-functions/map` namespace.
+  - The conformance harness expands W3C test-suite `_select` AVT attributes using static parameters before compilation.
+  - Follow-up fixes: preserve explicit `Q{uri}local` namespace URIs in function calls/named function refs; fall back to run-time `_select` expansion when static parameters are insufficient; atomize/flatten arrays for `xsl:apply-templates`, `xsl:value-of`, AVTs, and complex content construction.
 
 - **2026-06-27** — Cleared the remaining XSLT `namespace` cluster failures (`namespace-0912` and `namespace-2611`) and the full `namespace-alias` cluster.
   - Built-in `shallow-copy` now suspends the outer sequence accumulator while applying templates to children, so typed variables containing shallow-copied elements keep child results nested instead of escaping as siblings.
@@ -275,7 +283,8 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:on-empty` | ✅ Working | Evaluated by parent container (xsl:copy, xsl:document, literal result elements, general sequence constructors) when sequence constructor produces no nodes; supports `@select` and sequence constructor children; `on-empty` conformance cluster 72/72 |
 | `xsl:on-non-empty` | ✅ Working | Evaluated by parent container when sequence constructor produces nodes; supports `@select` and sequence constructor children; `on-non-empty` conformance cluster 14/14 |
 | `xsl:message` | ✅ Working | Evaluates `terminate` and `error-code`; emits serialized message text via `IXsltMessageListener`; terminating messages throw `XsltRuntimeException` carrying the XDM value. The listener also receives `OnWarning` callbacks for XSLT warnings (e.g. no-matching-template / multiple-template warnings). |
-| `xsl:try` / `xsl:catch` | ✅ Working | Catches dynamic XPath/XSLT errors in both result-tree and function-body contexts; supports multiple `xsl:catch` clauses evaluated in document order; `@errors` supports `*`, plain local names, `prefix:local` (err namespace), `*:local`, and `Q{uri}local`; binds `$err:code`, `$err:description`, `$err:value`. Static errors that occur during lazy XPath compilation are still reported at runtime. |
+| `xsl:try` / `xsl:catch` | ✅ Working | Catches dynamic XPath/XSLT errors in both result-tree and function-body contexts; supports multiple `xsl:catch` clauses evaluated in document order; `@errors` supports `*`, plain local names, `prefix:local` (err namespace), `*:local`, and `Q{uri}local`; binds `$err:code`, `$err:description`, `$err:value`. Static errors in `xsl:variable`/`xsl:param`/`xsl:with-param` `@select` expressions are now reported at stylesheet compile time. |
+| `xsl:map` / `xsl:map-entry` | ✅ Working | `xsl:map` evaluates its content as map-entry-producing sequence constructor and merges entries; `xsl:map-entry` builds a single-entry map; duplicate keys raise `XTDE3365`; maps as element/document children raise `XTDE0450` |
 | `xsl:result-document` | 🔮 Phase 3 | Secondary result documents are not yet implemented |
 
 ---
@@ -295,7 +304,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 
 ### Known gaps
 - `fn:load-xquery-module` — not implemented
-- `fn:serialize` — partial (no XML serialization options)
+- `fn:serialize` — partial (JSON method supported for maps/arrays/atomics; XML serialization options still limited)
 - `fn:transform` options (`delivery-format`, etc.) — partial
 - Schema-aware operations — not supported
 - Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — XSD regex validation, backreferences, flags, and `$` end-anchor semantics are now spec-compliant; surrogate-pair handling in `.` is the remaining gap

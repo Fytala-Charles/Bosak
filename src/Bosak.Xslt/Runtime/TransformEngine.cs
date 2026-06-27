@@ -123,6 +123,7 @@
 //                      | Charles Korthout | 5.52  | 26-06-2026     | Evaluate _select AVT on xsl:value-of; fixes date-094/095 static-param tests              |
 //                      | Charles Korthout | 5.53  | 26-06-2026     | Suspend sequence accumulator in shallow-copy built-in rule; fixes namespace-0912       |
 //                      | Charles Korthout | 5.54  | 26-06-2026     | Implemented xsl:map/xsl:map-entry, JSON serialize, static XPath validation; clears maps |
+//                      | Charles Korthout | 5.55  | 27-06-2026     | Array flattening in apply-templates, value-of, and complex content; fixes regressions   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2562,7 +2563,7 @@ public sealed class TransformEngine
                 // Evaluate select expression
                 var compiled = instruction != null ? CompileXPath(select, instruction) : XPath31Expression.Compile(select);
                 var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
-                items = EnumerateItems(result).ToList();
+                items = FlattenSelectedItems(result);
             }
 
             bool allNodes = items.All(i => i.IsNode);
@@ -2654,7 +2655,7 @@ public sealed class TransformEngine
                 // Evaluate select expression with the given context item as focus
                 var compiled = instruction != null ? CompileXPath(select, instruction) : XPath31Expression.Compile(select);
                 var result = compiled.Evaluate(_context.WithFocus(contextItem, 1, 1));
-                items = EnumerateItems(result).ToList();
+                items = FlattenSelectedItems(result);
             }
 
             bool allNodes = items.All(i => i.IsNode);
@@ -5153,29 +5154,58 @@ public sealed class TransformEngine
                 }
                 else
                 {
-                    // Atomic value: insert space only if previous item was also atomic
-                    // and separateAtomicsWithSpace is true (complex content construction)
-                    if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
+                    // Array items are atomized to their member values; maps/functions remain an error.
+                    if (item.IsArray)
                     {
-                        // For sequence-typed results (e.g. xsl:template/@as="xs:decimal*"),
-                        // keep each atomic value as a distinct item rather than merging
-                        // consecutive atomics into a single text node.
-                        if (sb.Length > 0)
+                        foreach (var atom in AtomizeForString(item))
                         {
-                            AddTextNode(sb.ToString());
-                            sb.Clear();
+                            if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
+                            {
+                                if (sb.Length > 0)
+                                {
+                                    AddTextNode(sb.ToString());
+                                    sb.Clear();
+                                }
+                                AddTextNode(atom);
+                                prevWasAtomic = false;
+                            }
+                            else
+                            {
+                                if (separateAtomicsWithSpace && prevWasAtomic)
+                                {
+                                    sb.Append(' ');
+                                }
+                                sb.Append(atom);
+                                prevWasAtomic = true;
+                            }
                         }
-                        AddTextNode(item.ToString());
-                        prevWasAtomic = false;
                     }
                     else
                     {
-                        if (separateAtomicsWithSpace && prevWasAtomic)
+                        // Atomic value: insert space only if previous item was also atomic
+                        // and separateAtomicsWithSpace is true (complex content construction)
+                        if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
                         {
-                            sb.Append(' ');
+                            // For sequence-typed results (e.g. xsl:template/@as="xs:decimal*"),
+                            // keep each atomic value as a distinct item rather than merging
+                            // consecutive atomics into a single text node.
+                            if (sb.Length > 0)
+                            {
+                                AddTextNode(sb.ToString());
+                                sb.Clear();
+                            }
+                            AddTextNode(item.ToString());
+                            prevWasAtomic = false;
                         }
-                        sb.Append(item.ToString());
-                        prevWasAtomic = true;
+                        else
+                        {
+                            if (separateAtomicsWithSpace && prevWasAtomic)
+                            {
+                                sb.Append(' ');
+                            }
+                            sb.Append(item.ToString());
+                            prevWasAtomic = true;
+                        }
                     }
                 }
             }
@@ -5191,10 +5221,11 @@ public sealed class TransformEngine
         }
         else
         {
+            var text = value.IsArray ? XdmValueToString(value, " ") : value.ToString();
             if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
-                AddTextNode(value.ToString());
+                AddTextNode(text);
             else
-                AppendAtomicText(value.ToString());
+                AppendAtomicText(text);
         }
     }
 
@@ -7427,6 +7458,39 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Flattens sequences and arrays for <c>xsl:apply-templates</c> selection,
+    /// so arrays are processed member-by-member.
+    /// </summary>
+    private static List<XdmValue> FlattenSelectedItems(XdmValue value)
+    {
+        var result = new List<XdmValue>();
+        FlattenSelectedItemsCore(value, result);
+        return result;
+    }
+
+    private static void FlattenSelectedItemsCore(XdmValue value, List<XdmValue> result)
+    {
+        if (value.IsUndefined)
+            return;
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                FlattenSelectedItemsCore(item, result);
+            return;
+        }
+
+        if (value.IsArray && value.ArrayValue != null)
+        {
+            foreach (var member in value.ArrayValue.Values)
+                FlattenSelectedItemsCore(member, result);
+            return;
+        }
+
+        result.Add(value);
+    }
+
+    /// <summary>
     /// Sorts a sequence of nodes by document order, but keeps the relative order of
     /// nodes from different source trees as it appeared in the original sequence.
     /// </summary>
@@ -7535,37 +7599,62 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// Converts an XDM value to its string representation, concatenating sequence items
-    /// with the specified separator. Map, array and function items cannot be atomized
-    /// and raise <c>FOTY0013</c>.
+    /// Converts an XDM value to its string representation, concatenating atomized items
+    /// with the specified separator. Map and function items cannot be atomized and raise
+    /// <c>FOTY0013</c>. Arrays are atomized recursively to their member values.
     /// </summary>
     private static string XdmValueToString(XdmValue value, string separator)
     {
         if (value.IsUndefined)
             return string.Empty;
 
+        var sb = new System.Text.StringBuilder();
+        bool first = true;
+        foreach (var atom in AtomizeForString(value))
+        {
+            if (!first)
+                sb.Append(separator);
+            sb.Append(atom);
+            first = false;
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Atomizes an XDM value for string output, recursively expanding sequences and arrays.
+    /// Map and function items raise <c>FOTY0013</c>.
+    /// </summary>
+    private static IEnumerable<string> AtomizeForString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            yield break;
+
+        if (value.IsMap || value.IsFunction)
+            throw new InvalidOperationException("FOTY0013: Cannot atomize a map, array, or function item");
+
+        if (value.IsArray && value.ArrayValue != null)
+        {
+            foreach (var member in value.ArrayValue.Values)
+            {
+                foreach (var atom in AtomizeForString(member))
+                    yield return atom;
+            }
+            yield break;
+        }
+
         if (value.IsSequence && value.SequenceValue != null)
         {
-            var sb = new System.Text.StringBuilder();
-            bool first = true;
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
             {
                 if (item.IsUndefined)
                     continue;
-                if (item.IsMap || item.IsArray || item.IsFunction)
-                    throw new InvalidOperationException("FOTY0013: Cannot atomize a map, array, or function item");
-                if (!first)
-                    sb.Append(separator);
-                sb.Append(item.ToString());
-                first = false;
+                foreach (var atom in AtomizeForString(item))
+                    yield return atom;
             }
-            return sb.ToString();
+            yield break;
         }
 
-        if (value.IsMap || value.IsArray || value.IsFunction)
-            throw new InvalidOperationException("FOTY0013: Cannot atomize a map, array, or function item");
-
-        return value.ToString();
+        yield return value.ToString();
     }
 
     /// <summary>
