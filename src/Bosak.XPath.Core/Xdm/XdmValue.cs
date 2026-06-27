@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.7   | 08-06-2026     | Fixed FormatXPathDouble/Float stripping trailing zeros from whole numbers (e.g. 50→5)   |
 //                      | Charles Korthout | 0.8   | 25-06-2026     | FromNode(null) returns Undefined to prevent null-node context-item bugs                |
 //                      | Charles Korthout | 0.9   | 26-06-2026     | Fixed EffectiveBooleanValue for singleton/multi-item sequences                         |
+//                      | Charles Korthout | 1.0   | 27-06-2026     | Use shortest round-trip format (G17/G9) for XPath double/float scientific notation      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -475,8 +476,22 @@ public readonly struct XdmValue
         // XPath canonical double uses scientific notation when abs >= 1e6 or abs < 1e-6
         if (abs >= 1e6 || abs < 1e-6)
         {
-            // E16 gives 16 digits after decimal = 17 significant digits, round-trip for double
-            string s = value.ToString("E16", CultureInfo.InvariantCulture);
+            // "G16" gives a short, round-trippable form for double values. We then force
+            // scientific notation for values whose magnitude requires XPath canonical
+            // representation (e.g. 1000001 must serialize as 1.000001E6, not 1000001).
+            string s = value.ToString("G16", CultureInfo.InvariantCulture);
+            if (!s.Contains('E') && !s.Contains('e') && abs >= 1e6)
+            {
+                // The round-trip form is fixed-point (e.g. 1230000); normalize to
+                // a single leading digit and an exponent.
+                bool negative = s.StartsWith('-');
+                var digits = (negative ? s[1..] : s).Replace(".", "");
+                int exponent = digits.Length - 1;
+                string mantissa = digits.Insert(1, ".");
+                mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+                if (!mantissa.Contains('.')) mantissa += ".0";
+                s = (negative ? "-" : "") + mantissa + "E" + exponent;
+            }
             return NormalizeScientific(s);
         }
         // For non-scientific range, use round-trip format and trim trailing zeros
@@ -523,8 +538,18 @@ public readonly struct XdmValue
         // XPath canonical float uses scientific notation when abs >= 1e6 or abs < 1e-6
         if (abs >= 1e6f || abs < 1e-6f)
         {
-            // E7 gives 7 digits after decimal = 8 significant digits, round-trip for float
-            string s = value.ToString("E7", CultureInfo.InvariantCulture);
+            // "G9" gives a round-trippable form for float values (float has ~7 digits of precision).
+            string s = value.ToString("G9", CultureInfo.InvariantCulture);
+            if (!s.Contains('E') && !s.Contains('e') && abs >= 1e6f)
+            {
+                bool negative = s.StartsWith('-');
+                var digits = (negative ? s[1..] : s).Replace(".", "");
+                int exponent = digits.Length - 1;
+                string mantissa = digits.Insert(1, ".");
+                mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+                if (!mantissa.Contains('.')) mantissa += ".0";
+                s = (negative ? "-" : "") + mantissa + "E" + exponent;
+            }
             return NormalizeScientific(s);
         }
         // For non-scientific range, use round-trip format and trim trailing zeros

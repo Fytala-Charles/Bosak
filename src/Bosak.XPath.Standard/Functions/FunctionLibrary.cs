@@ -72,6 +72,7 @@
 //                      | Charles Korthout | 5.7   | 25-06-2026     | Added fn:nilled#0/#1; system-property namespace expansion; regex options in matches/replace/tokenize |
 //                      | Charles Korthout | 5.8   | 25-06-2026     | fn:resolve-QName validates lexical QName and raises FOCA0002; xs:boolean string cast is case-sensitive |
 //                      | Charles Korthout | 5.9   | 25-06-2026     | function-available hides XSLT dynamic functions from static (use-when) evaluation        |
+//                      | Charles Korthout | 5.10  | 27-06-2026     | XPath INF/NaN parsing, atomize floor/ceiling/round args, decimal rounding for ties      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -6996,7 +6997,7 @@ public static class FunctionLibrary
             XdmValueKind.Decimal => (double)value.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
             XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
-            _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : double.NaN
+            _ => ParseXPathDouble(value.ToString())
         };
     }
 
@@ -7248,7 +7249,7 @@ public static class FunctionLibrary
 
     private static XdmValue Floor(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        XdmValue arg = args[0];
+        XdmValue arg = AtomizeValue(args[0]);
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
@@ -7264,7 +7265,7 @@ public static class FunctionLibrary
 
     private static XdmValue Ceiling(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        XdmValue arg = args[0];
+        XdmValue arg = AtomizeValue(args[0]);
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
@@ -7290,8 +7291,19 @@ public static class FunctionLibrary
             XdmValueKind.Decimal => (double)value.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
             XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
-            _ => double.TryParse(value.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var d) ? d : double.NaN
+            _ => ParseXPathDouble(value.ToString())
         };
+    }
+
+    /// <summary>
+    /// Parses XPath lexical double forms including <c>INF</c>, <c>-INF</c>, and <c>NaN</c>.
+    /// </summary>
+    private static double ParseXPathDouble(string s)
+    {
+        if (s == "INF") return double.PositiveInfinity;
+        if (s == "-INF") return double.NegativeInfinity;
+        if (s == "NaN") return double.NaN;
+        return double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : double.NaN;
     }
 
     private static XdmValue Round_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7302,6 +7314,7 @@ public static class FunctionLibrary
 
     private static XdmValue Round(EvaluationContext ctx, XdmValue arg, long precision)
     {
+        arg = AtomizeValue(arg);
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
@@ -7331,17 +7344,16 @@ public static class FunctionLibrary
         }
         else
         {
-            double factor = Math.Pow(10.0, -precision);
             return arg.Kind switch
             {
                 XdmValueKind.Integer =>
-                    XdmValue.FromInteger((long)(RoundDouble(arg.IntegerValue / factor, 0) * factor)),
+                    XdmValue.FromInteger((long)RoundDecimal((decimal)arg.IntegerValue, (int)precision)),
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal((decimal)(RoundDouble((double)arg.DecimalValue / factor, 0) * factor)),
+                    XdmValue.FromDecimal(RoundDecimal(arg.DecimalValue, (int)precision)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(RoundDouble(arg.DoubleValue / factor, 0) * factor),
+                    XdmValue.FromDouble(RoundDouble(arg.DoubleValue, (int)precision)),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(RoundDouble(arg.DoubleValue / factor, 0) * factor)),
+                    XdmValue.FromFloat((float)RoundDouble(arg.DoubleValue, (int)precision)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
         }
@@ -7351,29 +7363,79 @@ public static class FunctionLibrary
     {
         if (double.IsNaN(value) || double.IsInfinity(value))
             return value;
-        double factor = Math.Pow(10.0, precision);
-        double scaled = value * factor;
+
+        // For values that fit in decimal, round via an exact decimal representation
+        // so ties reflect the true double value (e.g. -13.65e0 rounds to -13.7).
+        if (Math.Abs(value) is >= 1e-28 and <= (double)decimal.MaxValue)
+        {
+            try
+            {
+                var dec = DoubleToExactDecimal(value);
+                return (double)RoundDecimal(dec, precision);
+            }
+            catch { /* fall back to double arithmetic */ }
+        }
+
+        // fn:round rounds to nearest; ties are rounded toward positive infinity.
+        double factor = precision >= 0 ? Math.Pow(10.0, precision) : Math.Pow(10.0, -precision);
+        double scaled = precision >= 0 ? value * factor : value / factor;
+        if (double.IsInfinity(scaled))
+            return value;
+
         double floor = Math.Floor(scaled);
         double ceil = Math.Ceiling(scaled);
         double diffFloor = scaled - floor;
         double diffCeil = ceil - scaled;
-        if (diffFloor < diffCeil) return floor / factor;
-        if (diffCeil < diffFloor) return ceil / factor;
-        // Exactly halfway: round toward positive infinity
-        return ceil / factor;
+        if (diffFloor < diffCeil)
+            return precision >= 0 ? floor / factor : floor * factor;
+        if (diffCeil < diffFloor)
+            return precision >= 0 ? ceil / factor : ceil * factor;
+        // Exactly halfway: round toward positive infinity.
+        return precision >= 0 ? ceil / factor : ceil * factor;
     }
 
     private static decimal RoundDecimal(decimal value, int precision)
     {
-        decimal factor = (decimal)Math.Pow(10.0, precision);
-        decimal scaled = value * factor;
-        decimal floor = Math.Floor(scaled);
-        decimal ceil = Math.Ceiling(scaled);
-        decimal diffFloor = scaled - floor;
-        decimal diffCeil = ceil - scaled;
-        if (diffFloor < diffCeil) return floor / factor;
-        if (diffCeil < diffFloor) return ceil / factor;
-        return ceil / factor;
+        if (precision >= 0)
+        {
+            decimal factor = (decimal)Math.Pow(10.0, precision);
+            if (factor == 0m || Math.Abs(value) > decimal.MaxValue / factor)
+                return value;
+            decimal scaled = value * factor;
+            decimal floor = Math.Floor(scaled);
+            decimal ceil = Math.Ceiling(scaled);
+            decimal diffFloor = scaled - floor;
+            decimal diffCeil = ceil - scaled;
+            if (diffFloor < diffCeil) return floor / factor;
+            if (diffCeil < diffFloor) return ceil / factor;
+            return ceil / factor;
+        }
+        else
+        {
+            decimal factor = (decimal)Math.Pow(10.0, -precision);
+            if (factor == 0m)
+                return value;
+            decimal scaled = value / factor;
+            decimal floor = Math.Floor(scaled);
+            decimal ceil = Math.Ceiling(scaled);
+            decimal diffFloor = scaled - floor;
+            decimal diffCeil = ceil - scaled;
+            if (diffFloor < diffCeil) return floor * factor;
+            if (diffCeil < diffFloor) return ceil * factor;
+            return ceil * factor;
+        }
+    }
+
+    /// <summary>
+    /// Converts a double to a decimal using enough digits to preserve rounding decisions.
+    /// Values smaller than the decimal range underflow to zero; values larger overflow and throw.
+    /// </summary>
+    private static decimal DoubleToExactDecimal(double value)
+    {
+        var s = value.ToString("G30", CultureInfo.InvariantCulture);
+        if (decimal.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var d))
+            return d;
+        return (decimal)value;
     }
 
     private static XdmValue RoundHalfToEven_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7384,39 +7446,85 @@ public static class FunctionLibrary
 
     private static XdmValue RoundHalfToEven(EvaluationContext ctx, XdmValue arg, long precision)
     {
+        arg = AtomizeValue(arg);
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
         if (precision >= 0)
         {
-            double factor = Math.Pow(10.0, precision);
             return arg.Kind switch
             {
                 XdmValueKind.Integer => arg,
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal(Math.Round(arg.DecimalValue * (decimal)factor, MidpointRounding.ToEven) / (decimal)factor),
+                    XdmValue.FromDecimal(RoundHalfToEvenDecimal(arg.DecimalValue, (int)precision)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor),
+                    XdmValue.FromDouble(RoundHalfToEvenDouble(arg.DoubleValue, (int)precision)),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue * factor, MidpointRounding.ToEven) / factor)),
+                    XdmValue.FromFloat((float)RoundHalfToEvenDouble(arg.DoubleValue, (int)precision)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
         }
         else
         {
-            double factor = Math.Pow(10.0, -precision);
             return arg.Kind switch
             {
                 XdmValueKind.Integer =>
-                    XdmValue.FromInteger((long)(Math.Round(arg.IntegerValue / factor, MidpointRounding.ToEven) * factor)),
+                    XdmValue.FromInteger((long)RoundHalfToEvenDecimal((decimal)arg.IntegerValue, (int)precision)),
                 XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal(Math.Round(arg.DecimalValue / (decimal)factor, MidpointRounding.ToEven) * (decimal)factor),
+                    XdmValue.FromDecimal(RoundHalfToEvenDecimal(arg.DecimalValue, (int)precision)),
                 XdmValueKind.Double =>
-                    XdmValue.FromDouble(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor),
+                    XdmValue.FromDouble(RoundHalfToEvenDouble(arg.DoubleValue, (int)precision)),
                 XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)(Math.Round(arg.DoubleValue / factor, MidpointRounding.ToEven) * factor)),
+                    XdmValue.FromFloat((float)RoundHalfToEvenDouble(arg.DoubleValue, (int)precision)),
                 _ => throw new InvalidOperationException("XPTY0004")
             };
+        }
+    }
+
+    private static double RoundHalfToEvenDouble(double value, int precision)
+    {
+        if (double.IsNaN(value) || double.IsInfinity(value))
+            return value;
+
+        // Use the exact decimal representation of the double so rounding reflects the
+        // true double value (e.g. 150.015e0 -> 150.01, 250.025e0 -> 250.03).
+        if (Math.Abs(value) is >= 1e-28 and <= (double)decimal.MaxValue)
+        {
+            try
+            {
+                var dec = DoubleToExactDecimal(value);
+                return (double)RoundHalfToEvenDecimal(dec, precision);
+            }
+            catch { /* fall back to double arithmetic */ }
+        }
+
+        if (precision >= 0)
+        {
+            double factor = Math.Pow(10.0, precision);
+            return Math.Round(value * factor, MidpointRounding.ToEven) / factor;
+        }
+        else
+        {
+            double factor = Math.Pow(10.0, -precision);
+            return Math.Round(value / factor, MidpointRounding.ToEven) * factor;
+        }
+    }
+
+    private static decimal RoundHalfToEvenDecimal(decimal value, int precision)
+    {
+        if (precision >= 0)
+        {
+            decimal factor = (decimal)Math.Pow(10.0, precision);
+            if (factor == 0m || Math.Abs(value) > decimal.MaxValue / factor)
+                return value;
+            return Math.Round(value * factor, MidpointRounding.ToEven) / factor;
+        }
+        else
+        {
+            decimal factor = (decimal)Math.Pow(10.0, -precision);
+            if (factor == 0m)
+                return value;
+            return Math.Round(value / factor, MidpointRounding.ToEven) * factor;
         }
     }
 

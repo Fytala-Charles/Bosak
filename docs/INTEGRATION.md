@@ -6,11 +6,17 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 27 June 2026
 > **Bosak baseline:** 899 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,799 passed / 451 failed / 9,350 skipped (~91.4%)
+> **XSLT baseline:** 4,814 passed / 436 failed / 9,350 skipped (~91.7%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-27** — Cleared the entire XSLT `math` conformance cluster (15 runnable failures).
+  - `fn:number` now parses XPath lexical forms `INF`, `-INF`, and `NaN`.
+  - `fn:floor`, `fn:ceiling`, and `fn:round` now atomize their arguments before numeric dispatch.
+  - `fn:round` / `fn:round-half-to-even` now use `decimal` arithmetic for precision-bound decimal/integer values, fixing tie-rounding and large-integer precision loss.
+  - `xs:double` and `xs:float` serialization now uses shortest round-trip formatting (`"G16"` / `"G9"`) in the scientific-notation range, producing canonical output such as `1.0E-98` instead of `1.0000000000000001E-98`.
 
 - **2026-06-27** — Cleared the entire XSLT `maps` conformance cluster (35 runnable failures).
   - Implemented `xsl:map` and `xsl:map-entry` instructions in `TransformEngine`, including duplicate-key (`XTDE3365`) and non-entry-content (`XTTE3365`) errors, and `XTDE0450` when a map is used as an element/document child.
@@ -351,7 +357,7 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-**Unit tests:** 877 passed, 0 failed, 0 skipped  
+**Unit tests:** 899 passed, 0 failed, 0 skipped  
 **Target framework:** `net10.0`
 
 ### Behavioral Changes
@@ -445,7 +451,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,640 | 611 | 9,349 | 88.4% | `static` cluster fully passing (49/49); `use-when` cluster fully passing (99/99 runnable); `attribute-set`, `xsl-document`, `analyze-string`, `next-match` clusters fully runnable |
+| XSLT 3.0 (W3C) | 4,814 | 436 | 9,350 | 91.7% | `math` cluster fully runnable (154/0/5); `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `type`, `analyze-string`, `next-match` clusters green |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

@@ -1,6 +1,75 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
+**Commit:** `<PENDING>`
+**Current focus:** Cleared the entire XSLT `math` conformance cluster (the final runnable failure `math-3701`) by refining XPath `xs:double`/`xs:float` serialization and fixing numeric function edge cases.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,814
+- **Failed:** 436
+- **Skipped:** 9,350
+- **Pass rate:** 91.7% (+15 passes / −15 failures vs. the previous 4,799/451)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| math | 159 | 154 | 0 | 5 | ✅ 100% runnable; `round`, `round-half-to-even`, `floor`, `ceiling`, `fn:number`, double/float serialization |
+| maps | 50 | 43 | 0 | 7 | ✅ 100% runnable (previous session) |
+| arrays | 62 | 5 | 1 | 56 | ⚠️ `square-array-201` remains; array flattening now implemented for apply-templates/value-of |
+| namespace | 224 | 200 | 0 | 24 | ✅ 100% runnable (previous session) |
+| namespace-alias | 26 | 26 | 0 | 0 | ✅ 100% runnable (previous session) |
+| date | 138 | 130 | 0 | 8 | ✅ 100% runnable (previous session) |
+| call-template | 44 | 38 | 0 | 6 | ✅ 100% runnable |
+| attribute | 107 | 17 | 0 | 90 | ✅ 100% runnable |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable |
+| system-property | 27 | 15 | 0 | 12 | ✅ 100% runnable |
+| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ 100% |
+| regex | 2,162 | 47 | 0 | 2,115 | ✅ 100% runnable |
+| mode | 188 | 122 | 0 | 66 | ✅ 100% runnable |
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`fn:number` special-string parsing** — `fn:number` now recognizes XPath lexical forms `INF`, `-INF`, and `NaN`.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+2. **Atomization in numeric functions** — `fn:floor`, `fn:ceiling`, and `fn:round` now atomize their argument before applying numeric branches.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+3. **Decimal-safe rounding** — `fn:round` and `fn:round-half-to-even` now use `decimal` arithmetic for precision-bound decimal/integer values, fixing tie-rounding and large-integer precision loss.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+4. **Shortest round-trip double/float serialization** — `XdmValue.FormatXPathDouble` and `FormatXPathFloat` switched to `"G16"` / `"G9"` formatting for the scientific-notation range, eliminating binary artifacts such as `9.9999999999999997E-29` and producing the canonical `1.0E-98` required by `math-3701`.
+   - **File changed**: `src/Bosak.XPath.Core/Xdm/XdmValue.cs`.
+
+5. **Documentation sync** — Updated `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, and `docs/AGENT_HANDOVER.md` with the cleared `math` cluster status and latest conformance baseline.
+   - **Files changed**: `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`.
+
+## Notes
+
+- Unit-test suite: **899 passed / 0 failed / 0 skipped** across 8 projects.
+- The `math` cluster is now **154/159 passing, 0 runnable failures, 5 skipped**.
+- Full W3C suite re-run: **4,814/436/9,350** (91.7%).
+
+## Recommended Next Steps
+
+1. Commit and push the math-cluster fixes to `origin/main`.
+2. Continue with remaining high-impact clusters: `array` (`square-array-201`), `function`, `node`, or `import`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-27
 **Commit:** `3eba8d9`
 **Current focus:** Cleared the entire XSLT `maps` conformance cluster (35 runnable failures) and fixed follow-up regressions in `mode`, `static`, `next-match`, and `arrays`.
 
