@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
-**Commit:** `<PENDING>`
+**Commit:** `bf533fe`
 **Current focus:** Cleared the remaining single-failure clusters `arrays`, `merge`, and `sort`.
 
 ---
