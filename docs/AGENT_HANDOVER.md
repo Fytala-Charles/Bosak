@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
-**Commit:** `<PENDING>`
+**Commit:** `87bfa33`
 **Current focus:** Cleared the entire XSLT `math` conformance cluster (the final runnable failure `math-3701`) by refining XPath `xs:double`/`xs:float` serialization and fixing numeric function edge cases.
 
 ---
