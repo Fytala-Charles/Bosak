@@ -25,7 +25,8 @@
 //                      | Charles Korthout | 1.2   | 19-05-2026     | Added substring-before, substring-after, string-to-codepoints, codepoints-to-string, parse-xml |
 //                      | Charles Korthout | 1.3   | 19-05-2026     | Added fn:analyze-string with regex group extraction                                    |
 //                      | Charles Korthout | 1.4   | 19-05-2026     | Added fn:serialize                                                                     |
-//                      | Charles Korthout | 1.5   | 19-05-2026     | Added fn:trace, fn:boolean, fn:zero-or-one, fn:one-or-more, fn:exactly-one, fn:base-uri, fn:document-uri |
+//                      | Charles Korthout | 1.5   | 26-06-2026     | JSON serialization for maps, arrays and atomic values in fn:serialize                  |
+//                      | Charles Korthout | 1.6   | 19-05-2026     | Added fn:trace, fn:boolean, fn:zero-or-one, fn:one-or-more, fn:exactly-one, fn:base-uri, fn:document-uri |
 //                      | Charles Korthout | 1.6   | 21-05-2026     | Fixed fn:deep-equal numeric cross-type, NaN, sequence, map key comparison              |
 //                      | Charles Korthout | 1.7   | 21-05-2026     | Fixed fn:distinct-values to use deep-equal semantics; fixed xs:boolean string cast     |
 //                      | Charles Korthout | 1.8   | 22-05-2026     | Fixed fn:base-uri/fn:document-uri empty sequence, type errors, fn:id atomization        |
@@ -5800,21 +5801,125 @@ public static class FunctionLibrary
 
     private static string SerializeItem(XdmValue value, bool indent, string method)
     {
-        if (value.IsNode)
+        if (method == "json")
         {
-            if (method == "json" && value.NodeValue.NodeKind == XdmNodeKind.Document)
+            if (value.IsNode)
             {
-                // For JSON method on document, serialize the root element's content
-                var doc = value.NodeValue;
-                foreach (var child in doc.Axis(XdmAxis.Child))
+                if (value.NodeValue.NodeKind == XdmNodeKind.Document)
                 {
-                    if (child.NodeValue.NodeKind == XdmNodeKind.Element)
-                        return child.NodeValue.ToXmlString();
+                    // For JSON method on document, serialize the root element's content
+                    var doc = value.NodeValue;
+                    foreach (var child in doc.Axis(XdmAxis.Child))
+                    {
+                        if (child.NodeValue.NodeKind == XdmNodeKind.Element)
+                            return child.NodeValue.ToXmlString();
+                    }
                 }
+                return value.NodeValue.ToXmlString();
             }
-            return value.NodeValue.ToXmlString();
+            return SerializeJson(value);
         }
+
+        if (value.IsNode)
+            return value.NodeValue.ToXmlString();
         return value.ToString();
+    }
+
+    /// <summary>
+    /// Serializes an XDM value as JSON.
+    /// </summary>
+    private static string SerializeJson(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return "null";
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            var sb = new StringBuilder("[");
+            bool first = true;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!first)
+                    sb.Append(',');
+                sb.Append(SerializeJson(item));
+                first = false;
+            }
+            sb.Append(']');
+            return sb.ToString();
+        }
+
+        if (value.IsMap)
+        {
+            var sb = new StringBuilder("{");
+            bool first = true;
+            foreach (var kvp in value.MapValue.Entries)
+            {
+                if (!first)
+                    sb.Append(',');
+                sb.Append(EncodeJsonString(kvp.Key.ToString()));
+                sb.Append(':');
+                sb.Append(SerializeJson(kvp.Value));
+                first = false;
+            }
+            sb.Append('}');
+            return sb.ToString();
+        }
+
+        if (value.IsArray)
+        {
+            var arr = value.ArrayValue;
+            var sb = new StringBuilder("[");
+            for (int i = 1; i <= arr.Count; i++)
+            {
+                if (i > 1)
+                    sb.Append(',');
+                sb.Append(SerializeJson(arr.Get(i)));
+            }
+            sb.Append(']');
+            return sb.ToString();
+        }
+
+        if (value.Kind == XdmValueKind.Boolean)
+            return value.BooleanValue ? "true" : "false";
+
+        if (value.Kind == XdmValueKind.String)
+            return EncodeJsonString(value.StringValue);
+
+        if (IsNumeric(value))
+            return value.ToString();
+
+        return EncodeJsonString(value.ToString());
+    }
+
+    /// <summary>
+    /// Encodes a string as a JSON string literal, escaping quotes, backslashes and
+    /// control characters.
+    /// </summary>
+    private static string EncodeJsonString(string value)
+    {
+        var sb = new StringBuilder(value.Length + 2);
+        sb.Append('"');
+        foreach (var c in value)
+        {
+            switch (c)
+            {
+                case '"': sb.Append("\\\""); break;
+                case '\\': sb.Append("\\\\"); break;
+                case '\b': sb.Append("\\b"); break;
+                case '\f': sb.Append("\\f"); break;
+                case '\n': sb.Append("\\n"); break;
+                case '\r': sb.Append("\\r"); break;
+                case '\t': sb.Append("\\t"); break;
+                default:
+                    if (c < 0x20)
+                        sb.Append($"\\u{(int)c:X4}");
+                    else
+                        sb.Append(c);
+                    break;
+            }
+        }
+        sb.Append('"');
+        return sb.ToString();
     }
 
     private static XdmValue Error_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

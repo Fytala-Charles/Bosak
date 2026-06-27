@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 21-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 26-06-2026     | String/URI equality and NaN-safe hashing for map keys                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -29,26 +30,41 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
         if (IsNumeric(x) && IsNumeric(y))
             return NumericEquals(x, y);
 
-        if (x.Kind != y.Kind)
-            return false;
-
-        return x.Kind switch
+        if (x.Kind == y.Kind)
         {
-            XdmValueKind.Undefined => true,
-            XdmValueKind.Boolean => x.BooleanValue == y.BooleanValue,
-            XdmValueKind.String => x.StringValue == y.StringValue,
-            XdmValueKind.DateTime => x.DateTimeValue == y.DateTimeValue,
-            XdmValueKind.Date => x.DateValue == y.DateValue,
-            XdmValueKind.Time => x.TimeValue == y.TimeValue,
-            XdmValueKind.QName => x.QNameValue.Equals(y.QNameValue),
-            _ => false
-        };
+            return x.Kind switch
+            {
+                XdmValueKind.Undefined => true,
+                XdmValueKind.Boolean => x.BooleanValue == y.BooleanValue,
+                XdmValueKind.String => x.StringValue == y.StringValue,
+                XdmValueKind.Uri => x.StringValue == y.StringValue,
+                XdmValueKind.DateTime => x.DateTimeValue == y.DateTimeValue,
+                XdmValueKind.Date => x.DateValue == y.DateValue,
+                XdmValueKind.Time => x.TimeValue == y.TimeValue,
+                XdmValueKind.QName => x.QNameValue.Equals(y.QNameValue),
+                _ => false
+            };
+        }
+
+        // xs:anyURI values are comparable to xs:string values for map-key purposes.
+        if ((x.Kind == XdmValueKind.String && y.Kind == XdmValueKind.Uri)
+            || (x.Kind == XdmValueKind.Uri && y.Kind == XdmValueKind.String))
+        {
+            return x.StringValue == y.StringValue;
+        }
+
+        return false;
     }
 
     public int GetHashCode(XdmValue obj)
     {
         if (IsNumeric(obj))
         {
+            // NaN cannot be cast to decimal; all NaN values share a fixed hash so
+            // that NaN double and NaN float compare equal as map keys.
+            if ((obj.Kind == XdmValueKind.Double || obj.Kind == XdmValueKind.Float) && double.IsNaN(obj.DoubleValue))
+                return 0x7FC00000;
+
             // Normalize all numeric values to decimal for consistent hashing
             decimal d = obj.Kind switch
             {
@@ -65,6 +81,7 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
         {
             XdmValueKind.Boolean => obj.BooleanValue.GetHashCode(),
             XdmValueKind.String => obj.StringValue.GetHashCode(),
+            XdmValueKind.Uri => obj.StringValue.GetHashCode(),
             XdmValueKind.DateTime => obj.DateTimeValue.GetHashCode(),
             XdmValueKind.Date => obj.DateValue.GetHashCode(),
             XdmValueKind.Time => obj.TimeValue.GetHashCode(),

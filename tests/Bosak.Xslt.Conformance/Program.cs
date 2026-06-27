@@ -27,11 +27,13 @@
 //                      | Charles Korthout | 1.5   | 24-06-2026     | Preserve stylesheet base URIs in resolver; skip xsl:use-package tests                   |
 //                      | Charles Korthout | 1.6   | 25-06-2026     | Separate global params from initial-template/initial-mode local params; pass via context |
 //                      | Charles Korthout | 1.7   | 25-06-2026     | Pass rawResult=true for initial-template raw output; bind result-var for assertions      |
+//                      | Charles Korthout | 1.8   | 26-06-2026     | Expand _select AVTs using static parameters so static-error tests report correctly       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
 using System.Xml;
+using System.Text;
 using System.Text.RegularExpressions;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -465,6 +467,11 @@ class Program
                     // Ignore malformed test parameters; the stylesheet will report any error.
                 }
             }
+
+            // Expand test-suite _select AVT attributes into real select attributes using
+            // the supplied static-parameter values. This makes static XPath errors in
+            // otherwise unreferenced variables visible at compile time.
+            ExpandUnderscoreSelectAttributes(xslDoc.Root!, staticParamValues);
 
             var messageListener = new RecordingMessageListener();
             var compiler = new Bosak.Xslt.Api.XsltCompiler
@@ -1409,6 +1416,87 @@ class Program
             current = current.Parent;
         }
         return dict;
+    }
+
+    /// <summary>
+    /// Expands test-suite <c>_select</c> attributes (which contain simple AVTs using
+    /// static parameter values) into real <c>select</c> attributes before compilation.
+    /// </summary>
+    static void ExpandUnderscoreSelectAttributes(XElement root, Dictionary<(string LocalName, string NamespaceUri), XdmValue> staticParams)
+    {
+        foreach (var elem in root.DescendantsAndSelf().ToList())
+        {
+            var usAttr = elem.Attribute("_select");
+            if (usAttr == null)
+                continue;
+
+            var nsMap = ExtractNamespaces(elem);
+            var expanded = EvaluateAvt(usAttr.Value, elem, staticParams, nsMap);
+            elem.SetAttributeValue("select", expanded);
+            usAttr.Remove();
+        }
+    }
+
+    /// <summary>
+    /// Evaluates a simple attribute-value template using the supplied static parameters.
+    /// Supports <c>{expr}</c> expressions and <c>{{</c>/<c>}}</c> literal braces.
+    /// </summary>
+    static string EvaluateAvt(string avt, XElement contextElem, Dictionary<(string LocalName, string NamespaceUri), XdmValue> staticParams, Dictionary<string, string> nsMap)
+    {
+        var sb = new StringBuilder();
+        int i = 0;
+        while (i < avt.Length)
+        {
+            char c = avt[i];
+            if (c == '{')
+            {
+                if (i + 1 < avt.Length && avt[i + 1] == '{')
+                {
+                    sb.Append('{');
+                    i += 2;
+                    continue;
+                }
+                int close = avt.IndexOf('}', i + 1);
+                if (close < 0)
+                    throw new InvalidOperationException("XPST0003: Unclosed expression in AVT");
+                var expr = avt.Substring(i + 1, close - i - 1);
+                var value = EvaluateXPathInAvt(expr, staticParams, nsMap);
+                sb.Append(value);
+                i = close + 1;
+            }
+            else if (c == '}')
+            {
+                if (i + 1 < avt.Length && avt[i + 1] == '}')
+                {
+                    sb.Append('}');
+                    i += 2;
+                    continue;
+                }
+                throw new InvalidOperationException("XPST0003: Unexpected '}' in AVT");
+            }
+            else
+            {
+                sb.Append(c);
+                i++;
+            }
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Compiles and evaluates a single XPath expression occurring inside an AVT,
+    /// binding the static parameters as variables.
+    /// </summary>
+    static string EvaluateXPathInAvt(string expr, Dictionary<(string LocalName, string NamespaceUri), XdmValue> staticParams, Dictionary<string, string> nsMap)
+    {
+        var compiled = XPath31Expression.Compile(expr, new CompileOptions { Namespaces = nsMap });
+        var ctx = new EvaluationContext();
+        foreach (var ((local, nsUri), value) in staticParams)
+        {
+            ctx.WithVariable(local, value, nsUri);
+        }
+        var result = compiled.Evaluate(ctx);
+        return result.ToString();
     }
 
     static bool EvaluateAssert(string actual, string xpath, Dictionary<string, string>? namespaces = null)

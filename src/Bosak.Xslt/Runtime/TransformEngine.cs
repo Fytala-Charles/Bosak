@@ -122,6 +122,7 @@
 //                      | Charles Korthout | 5.51  | 26-06-2026     | xsl:evaluate blocks fn:system-property; xsl:try catches bare error codes; root LRE namespaces |
 //                      | Charles Korthout | 5.52  | 26-06-2026     | Evaluate _select AVT on xsl:value-of; fixes date-094/095 static-param tests              |
 //                      | Charles Korthout | 5.53  | 26-06-2026     | Suspend sequence accumulator in shallow-copy built-in rule; fixes namespace-0912       |
+//                      | Charles Korthout | 5.54  | 26-06-2026     | Implemented xsl:map/xsl:map-entry, JSON serialize, static XPath validation; clears maps |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -315,6 +316,40 @@ public sealed class TransformEngine
 
         // Register accumulator-before()/accumulator-after() when accumulators are declared
         RegisterAccumulatorFunctions(_context);
+
+        // Compile all xsl:variable/xsl:param/@select expressions up-front so that
+        // static XPath errors (including references to removed functions) are reported
+        // even when the variable is never referenced at run time.
+        ValidateStaticExpressions();
+    }
+
+    /// <summary>
+    /// Eagerly compiles XPath <c>@select</c> expressions on <c>xsl:variable</c>,
+    /// <c>xsl:param</c> and <c>xsl:with-param</c> elements so that static errors are
+    /// reported before the transformation runs.
+    /// </summary>
+    private void ValidateStaticExpressions()
+    {
+        var root = _stylesheet.Root;
+        if (root == null)
+            return;
+
+        foreach (var elem in root.DescendantsAndSelf())
+        {
+            if (elem.Name.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
+                continue;
+
+            var localName = elem.Name.LocalName;
+            if (localName is not "variable" and not "param" and not "with-param")
+                continue;
+
+            var select = elem.Attribute("select")?.Value;
+            if (string.IsNullOrEmpty(select))
+                continue;
+
+            // Compilation is context-independent; it only detects static errors.
+            _ = CompileXPath(select, elem);
+        }
     }
 
     /// <summary>
@@ -1629,6 +1664,116 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Builds an <see cref="XdmValue"/> from a flat list of items.
+    /// </summary>
+    private static XdmValue MaterializeItemList(List<XdmValue> items)
+    {
+        if (items.Count == 0)
+            return XdmValue.FromSequence(XdmSequence.Empty);
+        if (items.Count == 1)
+            return items[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    /// <summary>
+    /// Atomizes a value for use as a map key. Rejects function, map and array
+    /// keys and normalizes singleton sequences.
+    /// </summary>
+    private static XdmValue AtomizeMapKey(XdmValue value)
+    {
+        var items = EnumerateItems(value).ToList();
+        if (items.Count == 0)
+            throw new InvalidOperationException("XPTY0004: Map key cannot be an empty sequence");
+        if (items.Count > 1)
+            throw new InvalidOperationException("XPTY0004: Map key must be a single atomic value");
+
+        var item = items[0];
+        if (item.IsFunction || item.IsMap || item.IsArray)
+            throw new InvalidOperationException("FOTY0013: Map key cannot be a function item, map, or array");
+
+        if (item.IsNode)
+            return XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic");
+
+        return item;
+    }
+
+    /// <summary>
+    /// Evaluates the value of an <c>xsl:map-entry</c> instruction: either the
+    /// <c>@select</c> expression or the sequence-constructor content. It is a
+    /// static error to supply both <c>@select</c> and a sequence constructor.
+    /// </summary>
+    private XdmValue EvaluateMapEntryValue(XElement mapEntry, XdmValue contextItem)
+    {
+        var selectAttr = mapEntry.Attribute("select")?.Value;
+        var hasContent = mapEntry.Elements().Any()
+            || mapEntry.Nodes().OfType<XText>().Any(t => !IsWhitespaceOnly(t.Value));
+
+        if (!string.IsNullOrEmpty(selectAttr))
+        {
+            if (hasContent)
+                throw new InvalidOperationException("XTSE3280: xsl:map-entry must not have both a select attribute and sequence-constructor content");
+            return CompileXPath(selectAttr, mapEntry).Evaluate(_context);
+        }
+
+        var items = new List<XdmValue>();
+        foreach (var child in mapEntry.Elements())
+            EvaluateFunctionBodyInstruction(child, items, contextItem);
+        return MaterializeItemList(items);
+    }
+
+    /// <summary>
+    /// Builds a single-entry map from an <c>xsl:map-entry</c> instruction.
+    /// </summary>
+    private XdmValue BuildMapEntry(XElement mapEntry, XdmValue contextItem)
+    {
+        var keyAttr = mapEntry.Attribute("key")?.Value;
+        if (string.IsNullOrEmpty(keyAttr))
+            throw new InvalidOperationException("XTSE0010: xsl:map-entry requires a key attribute");
+
+        var key = AtomizeMapKey(CompileXPath(keyAttr, mapEntry).Evaluate(_context));
+        var value = EvaluateMapEntryValue(mapEntry, contextItem);
+
+        var map = new XdmMap();
+        map.Add(key, value);
+        return XdmValue.FromMap(map);
+    }
+
+    /// <summary>
+    /// Builds a map from an <c>xsl:map</c> instruction by evaluating its
+    /// sequence-constructor content and merging the resulting map entries.
+    /// Duplicate keys raise <c>XTDE3365</c>.
+    /// </summary>
+    private XdmValue BuildMapFromInstruction(XElement mapInstruction, XdmValue contextItem)
+    {
+        var entries = new List<XdmValue>();
+        foreach (var child in mapInstruction.Elements())
+            EvaluateFunctionBodyInstruction(child, entries, contextItem);
+
+        var map = new XdmMap();
+        foreach (var item in entries)
+        {
+            foreach (var entry in EnumerateItems(item))
+            {
+                if (!entry.IsMap)
+                    throw new InvalidOperationException("XTTE3365: xsl:map content must produce map entries");
+
+                var entryMap = entry.MapValue;
+                if (entryMap.Count != 1)
+                    throw new InvalidOperationException("XTTE3365: xsl:map content must produce map entries");
+
+                foreach (var kvp in entryMap.Entries)
+                {
+                    if (map.ContainsKey(kvp.Key))
+                        throw new InvalidOperationException("XTDE3365: Duplicate key in xsl:map");
+                    map.Add(kvp.Key, kvp.Value);
+                }
+            }
+        }
+
+        return XdmValue.FromMap(map);
+    }
+
+    /// <summary>
     /// Evaluates a single instruction inside an xsl:function body and appends
     /// the produced items to <paramref name="results"/>.
     /// </summary>
@@ -2292,6 +2437,16 @@ public sealed class TransformEngine
                 case "analyze-string":
                     {
                         ExecuteAnalyzeString(instruction, contextItem, (child, ctx) => EvaluateAnalyzeStringChild(child, results, ctx));
+                        break;
+                    }
+                case "map":
+                    {
+                        results.Add(BuildMapFromInstruction(instruction, contextItem));
+                        break;
+                    }
+                case "map-entry":
+                    {
+                        results.Add(BuildMapEntry(instruction, contextItem));
                         break;
                     }
                 default:
@@ -4379,6 +4534,34 @@ public sealed class TransformEngine
 
                     foreach (var item in psItems)
                         CopyToResult(item);
+                    break;
+                }
+
+            case "map":
+                {
+                    var mapValue = BuildMapFromInstruction(instruction, contextItem);
+                    if (_sequenceAccumulator != null)
+                    {
+                        _sequenceAccumulator.Add(mapValue);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("XTDE0450: A map cannot appear as a child of an element or document node");
+                    }
+                    break;
+                }
+
+            case "map-entry":
+                {
+                    var entryValue = BuildMapEntry(instruction, contextItem);
+                    if (_sequenceAccumulator != null)
+                    {
+                        _sequenceAccumulator.Add(entryValue);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("XTDE0450: A map cannot appear as a child of an element or document node");
+                    }
                     break;
                 }
 
@@ -7353,7 +7536,8 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Converts an XDM value to its string representation, concatenating sequence items
-    /// with the specified separator.
+    /// with the specified separator. Map, array and function items cannot be atomized
+    /// and raise <c>FOTY0013</c>.
     /// </summary>
     private static string XdmValueToString(XdmValue value, string separator)
     {
@@ -7368,6 +7552,8 @@ public sealed class TransformEngine
             {
                 if (item.IsUndefined)
                     continue;
+                if (item.IsMap || item.IsArray || item.IsFunction)
+                    throw new InvalidOperationException("FOTY0013: Cannot atomize a map, array, or function item");
                 if (!first)
                     sb.Append(separator);
                 sb.Append(item.ToString());
@@ -7375,6 +7561,9 @@ public sealed class TransformEngine
             }
             return sb.ToString();
         }
+
+        if (value.IsMap || value.IsArray || value.IsFunction)
+            throw new InvalidOperationException("FOTY0013: Cannot atomize a map, array, or function item");
 
         return value.ToString();
     }

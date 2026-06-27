@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 1.4   | 13-06-2026     | Empty-URI EQName support in SplitQName (Q{}local)                                       |
 //                      | Charles Korthout | 1.5   | 13-06-2026     | Resolve xml prefix in node tests to the XML namespace                                    |
 //                      | Charles Korthout | 1.6   | 13-06-2026     | Fixed Unquote to preserve doubled quotes that do not match the enclosing delimiter      |
+//                      | Charles Korthout | 1.7   | 26-06-2026     | Static errors for removed map functions and obsolete map namespace; XPST0003 for :=    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -54,6 +55,18 @@ public sealed class XPathParser
         _source = source;
         _position = 0;
     }
+
+    // Functions removed from the XPath / XSLT 3.0 specifications. Calls to these
+    // are reported as static errors (XPST0017) at parse time.
+    private static readonly HashSet<(string NamespaceUri, string LocalName)> RemovedFunctions = new()
+    {
+        ("http://www.w3.org/2005/xpath-functions/map", "new"),
+        ("http://www.w3.org/2005/xpath-functions/map", "for-each-entry"),
+        ("http://www.w3.org/2005/xpath-functions/map", "collation"),
+        ("http://www.w3.org/2005/xpath-functions", "deep-equal2"),
+    };
+
+    private const string OldMapNamespace = "http://www.w3.org/2011/xpath-functions/map";
 
     /// <summary>
     /// Convenience method: lexes and parses an XPath expression string.
@@ -1074,6 +1087,7 @@ public sealed class XPathParser
     {
         var name = GetString(Current);
         var (prefix, local, nsUri) = SplitQName(name);
+        ThrowIfRemovedFunction(nsUri, local, start);
         Advance();
         var args = ParseArgumentList();
         return WithSpan(new FunctionCallNode(local, args, prefix, nsUri), start, End);
@@ -1083,11 +1097,21 @@ public sealed class XPathParser
     {
         var name = GetString(Current);
         var (prefix, local, nsUri) = SplitQName(name);
+        ThrowIfRemovedFunction(nsUri, local, start);
         Advance(); // name
         Advance(); // #
         var arityTok = Expect(TokenKind.IntegerLiteral);
         var arity = int.Parse(GetString(arityTok), CultureInfo.InvariantCulture);
         return WithSpan(new NamedFunctionRefNode(local, arity, prefix, nsUri), start, End);
+    }
+
+    private static void ThrowIfRemovedFunction(string? nsUri, string localName, int position)
+    {
+        if (nsUri == OldMapNamespace)
+            throw new ParseException($"XPST0017: Function in obsolete map namespace '{nsUri}' is not available", position);
+
+        if (!string.IsNullOrEmpty(nsUri) && RemovedFunctions.Contains((nsUri, localName)))
+            throw new ParseException($"XPST0017: Function {{{nsUri}}}{localName} has been removed", position);
     }
 
     private List<XPathAstNode> ParseArgumentList()
@@ -1176,6 +1200,8 @@ public sealed class XPathParser
             do
             {
                 var key = ParseExprSingle();
+                if (Current.Kind == TokenKind.Assign)
+                    throw new ParseException("XPST0003: Invalid map constructor syntax (use ':' to separate key and value)", Current.Start);
                 Expect(TokenKind.Colon);
                 var value = ParseExprSingle();
                 entries.Add(new MapEntryNode(key, value));
@@ -1404,7 +1430,21 @@ public sealed class XPathParser
             throw new ParseException($"Expected sequence type but found {Current.Kind}", Current.Start);
         }
 
-        var (prefix, local, _) = SplitQName(name);
+        var (prefix, local, nsUri) = SplitQName(name);
+
+        // If the input was a braced URI literal (e.g. Q{http://www.w3.org/2001/XMLSchema}double),
+        // restore the conventional prefix so that downstream sequence-type processing can
+        // recognise standard type families (xs:*, map:*, array:*).
+        if (string.IsNullOrEmpty(prefix) && !string.IsNullOrEmpty(nsUri))
+        {
+            prefix = nsUri switch
+            {
+                "http://www.w3.org/2001/XMLSchema" => "xs",
+                "http://www.w3.org/2005/xpath-functions/map" => "map",
+                "http://www.w3.org/2005/xpath-functions/array" => "array",
+                _ => prefix
+            };
+        }
 
         // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), element(foo), etc.
         bool hasParens = false;
