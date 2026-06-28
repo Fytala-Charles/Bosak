@@ -124,6 +124,7 @@
 //                      | Charles Korthout | 5.53  | 26-06-2026     | Suspend sequence accumulator in shallow-copy built-in rule; fixes namespace-0912       |
 //                      | Charles Korthout | 5.54  | 26-06-2026     | Implemented xsl:map/xsl:map-entry, JSON serialize, static XPath validation; clears maps |
 //                      | Charles Korthout | 5.55  | 27-06-2026     | Array flattening in apply-templates, value-of, and complex content; fixes regressions   |
+//                      | Charles Korthout | 5.56  | 27-06-2026     | Top-level xsl:namespace no longer yields standalone namespace-node items               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1745,12 +1746,12 @@ public sealed class TransformEngine
     private XdmValue EvaluateFunctionBody(XElement functionElement, XdmValue contextItem)
     {
         var items = new List<XdmValue>();
-        foreach (var child in functionElement.Elements())
+        foreach (var childNode in functionElement.Nodes())
         {
-            if (child.Name.LocalName == "param" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+            if (childNode is XElement e && e.Name.LocalName == "param" && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                 continue;
 
-            EvaluateFunctionBodyInstruction(child, items, contextItem);
+            ProcessFunctionBodyNode(childNode, items, contextItem);
         }
 
         if (items.Count == 0)
@@ -1759,6 +1760,45 @@ public sealed class TransformEngine
             return items[0];
 
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    /// <summary>
+    /// Processes a single node in a function-body sequence constructor.
+    /// Literal text nodes become text-node items (subject to whitespace stripping),
+    /// XSLT instructions are dispatched, and literal result elements are copied.
+    /// </summary>
+    private void ProcessFunctionBodyNode(XNode node, List<XdmValue> results, XdmValue contextItem)
+    {
+        switch (node)
+        {
+            case XText text:
+                {
+                    var value = text.Value;
+                    if (string.IsNullOrWhiteSpace(value))
+                    {
+                        // Whitespace text nodes are stripped unless xml:space="preserve"
+                        // applies to the parent (or an ancestor).
+                        if (text.Parent is XElement parent && IsWhitespacePreserveContext(parent))
+                        {
+                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+                        }
+                    }
+                    else
+                    {
+                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+                    }
+                }
+                break;
+            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                EvaluateFunctionBodyInstruction(elem, results, contextItem);
+                break;
+            case XElement elem:
+                {
+                    var copy = CopyLiteralElementToXElement(elem);
+                    results.Add(XdmValue.FromNode(new XDocumentNode(copy)));
+                }
+                break;
+        }
     }
 
     /// <summary>
@@ -1995,8 +2035,8 @@ public sealed class TransformEngine
                                 {
                                     if (compiled.Evaluate(_context).EffectiveBooleanValue())
                                     {
-                                        foreach (var child in when.Elements())
-                                            EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                        foreach (var childNode in when.Nodes())
+                                            ProcessFunctionBodyNode(childNode, results, contextItem);
                                         matched = true;
                                     }
                                 });
@@ -2009,8 +2049,8 @@ public sealed class TransformEngine
                         {
                             WithDefaultCollation(otherwise, () =>
                             {
-                                foreach (var child in otherwise.Elements())
-                                    EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                foreach (var childNode in otherwise.Nodes())
+                                    ProcessFunctionBodyNode(childNode, results, contextItem);
                             });
                         }
                         break;
@@ -2043,11 +2083,11 @@ public sealed class TransformEngine
                                 var feSnapshot = _context.SnapshotVariables();
                                 try
                                 {
-                                    foreach (var child in instruction.Elements())
+                                    foreach (var childNode in instruction.Nodes())
                                     {
-                                        if (child.Name.LocalName == "sort")
+                                        if (childNode is XElement e && e.Name.LocalName == "sort" && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                                             continue;
-                                        EvaluateFunctionBodyInstruction(child, results, item);
+                                        ProcessFunctionBodyNode(childNode, results, item);
                                     }
                                 }
                                 finally
@@ -2131,11 +2171,11 @@ public sealed class TransformEngine
                                         _context.WithVariable(bkLocal, key.Value, bkNs);
                                     }
 
-                                    foreach (var child in instruction.Elements())
+                                    foreach (var childNode in instruction.Nodes())
                                     {
-                                        if (child.Name.LocalName == "sort" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                        if (childNode is XElement e && e.Name.LocalName == "sort" && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                                             continue;
-                                        EvaluateFunctionBodyInstruction(child, results, rep);
+                                        ProcessFunctionBodyNode(childNode, results, rep);
                                     }
                                 }
                                 finally
@@ -2250,11 +2290,11 @@ public sealed class TransformEngine
                             }
                             else
                             {
-                                foreach (var child in instruction.Elements())
+                                foreach (var childNode in instruction.Nodes())
                                 {
-                                    if (child.Name.LocalName == "catch" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                                    if (childNode is XElement e && e.Name.LocalName == "catch" && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                                         continue;
-                                    EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                    ProcessFunctionBodyNode(childNode, results, contextItem);
                                 }
                             }
                         }
@@ -2276,9 +2316,9 @@ public sealed class TransformEngine
                                 }
                                 else
                                 {
-                                    foreach (var child in catchElem.Elements())
+                                    foreach (var childNode in catchElem.Nodes())
                                     {
-                                        EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                        ProcessFunctionBodyNode(childNode, results, contextItem);
                                     }
                                 }
                             }
@@ -5629,7 +5669,9 @@ public sealed class TransformEngine
                     }
                     // Process children of xsl:copy into the copied element
                     var savedContainer = _currentContainer;
+                    var savedAccumulator = _sequenceAccumulator;
                     _currentContainer = copy;
+                    _sequenceAccumulator = null;
                     try
                     {
                         foreach (var child in copyInstruction.Elements())
@@ -5643,6 +5685,7 @@ public sealed class TransformEngine
                     finally
                     {
                         _currentContainer = savedContainer;
+                        _sequenceAccumulator = savedAccumulator;
                     }
                     NormalizeElementContent(copy);
                     return new XDocumentNode(copy);
@@ -5661,7 +5704,9 @@ public sealed class TransformEngine
                 {
                     var newDoc = new XDocument();
                     var savedContainer = _currentContainer;
+                    var savedAccumulator = _sequenceAccumulator;
                     _currentContainer = newDoc;
+                    _sequenceAccumulator = null;
                     try
                     {
                         foreach (var child in copyInstruction.Elements())
@@ -5675,6 +5720,7 @@ public sealed class TransformEngine
                     finally
                     {
                         _currentContainer = savedContainer;
+                        _sequenceAccumulator = savedAccumulator;
                     }
                     return new XDocumentNode(newDoc);
                 }
@@ -5811,6 +5857,7 @@ public sealed class TransformEngine
                         if (!string.IsNullOrEmpty(srcBaseUri))
                             newDoc.AddAnnotation(srcBaseUri);
 
+                        var savedDocAccumulator = _sequenceAccumulator;
                         if (ContainsConditionalInstruction(instruction))
                         {
                             EvaluateSequenceConstructorIntoContainer(instruction, newDoc, XdmValue.FromNode(nodeToCopy));
@@ -5819,6 +5866,7 @@ public sealed class TransformEngine
                         {
                             var savedContainer = _currentContainer;
                             _currentContainer = newDoc;
+                            _sequenceAccumulator = null;
                             try
                             {
                                 foreach (var childNode in instruction.Nodes())
@@ -5840,10 +5888,11 @@ public sealed class TransformEngine
                             finally
                             {
                                 _currentContainer = savedContainer;
+                                _sequenceAccumulator = savedDocAccumulator;
                             }
                         }
 
-                        _sequenceAccumulator.Add(XdmValue.FromNode(new XDocumentNode(newDoc)));
+                        _sequenceAccumulator!.Add(XdmValue.FromNode(new XDocumentNode(newDoc)));
                     }
                     else
                     {
@@ -10109,7 +10158,8 @@ public sealed class TransformEngine
 
         try
         {
-            if (ContainsConditionalInstruction(parent))
+            if (ContainsConditionalInstruction(parent)
+                || (!wrapInDocumentNode && ContainsTopLevelAttributeOrNamespaceInstruction(parent)))
             {
                 var items = EvaluateSequenceConstructorToItems(parent, contextItem);
                 if (wrapInDocumentNode)
@@ -10309,6 +10359,16 @@ public sealed class TransformEngine
             && (e.Name.LocalName == "on-empty" || e.Name.LocalName == "on-non-empty"));
 
     /// <summary>
+    /// Returns true when the sequence constructor contains a top-level
+    /// <c>xsl:attribute</c> or <c>xsl:namespace</c> instruction that must be
+    /// returned as a separate item in a raw node sequence rather than attached
+    /// to a wrapper element.
+    /// </summary>
+    private bool ContainsTopLevelAttributeOrNamespaceInstruction(XElement parent)
+        => parent.Elements().Any(e => e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+            && (e.Name.LocalName == "attribute" || e.Name.LocalName == "namespace"));
+
+    /// <summary>
     /// Returns whether an XDM item contributes significant content for the purposes
     /// of xsl:on-empty / xsl:on-non-empty evaluation.
     /// </summary>
@@ -10404,6 +10464,7 @@ public sealed class TransformEngine
 
         var resultItems = new List<XdmValue>();
         var markers = new List<(XElement Instruction, int Position, Dictionary<(string LocalName, string NamespaceUri), XdmValue> Variables)>();
+        var sequenceAs = parent.Attribute("as")?.Value;
 
         try
         {
@@ -10443,9 +10504,22 @@ public sealed class TransformEngine
                     if (!existingAttrs.Contains(attr))
                     {
                         attr.Remove();
-                        resultItems.Add(XdmValue.FromNode(attr.IsNamespaceDeclaration
-                            ? XDocumentNode.CreateNamespaceNode(attr, tempContainer)
-                            : new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                        if (attr.IsNamespaceDeclaration)
+                        {
+                            // A top-level xsl:namespace instruction creates a namespace node only
+                            // when the containing sequence constructor is explicitly typed to
+                            // return namespace nodes (e.g. as="namespace-node()"). In the more
+                            // common as="node()*" case the resulting parentless namespace node is
+                            // not a valid standalone item and is discarded.
+                            bool keepNamespaceNode = string.IsNullOrEmpty(sequenceAs)
+                                || sequenceAs.Contains("namespace-node", StringComparison.Ordinal);
+                            if (keepNamespaceNode)
+                            {
+                                resultItems.Add(XdmValue.FromNode(XDocumentNode.CreateNamespaceNode(attr, tempContainer)));
+                            }
+                            continue;
+                        }
+                        resultItems.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
                     }
                 }
                 foreach (var node in tempContainer.Nodes().ToList())

@@ -73,6 +73,7 @@
 //                      | Charles Korthout | 5.8   | 25-06-2026     | fn:resolve-QName validates lexical QName and raises FOCA0002; xs:boolean string cast is case-sensitive |
 //                      | Charles Korthout | 5.9   | 25-06-2026     | function-available hides XSLT dynamic functions from static (use-when) evaluation        |
 //                      | Charles Korthout | 5.10  | 27-06-2026     | XPath INF/NaN parsing, atomize floor/ceiling/round args, decimal rounding for ties      |
+//                      | Charles Korthout | 5.11  | 27-06-2026     | fn:snapshot copies in-scope namespace bindings to element copies                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3195,14 +3196,39 @@ public static class FunctionLibrary
 
     private static XdmValue Snapshot(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
-        if (node == null)
+        var arg = args[0];
+        if (arg.IsUndefined)
             return XdmValue.Undefined;
 
-        var copied = SnapshotNode(node);
-        if (copied == null)
-            throw new InvalidOperationException("FOTY0013");
-        return XdmValue.FromNode(copied);
+        var nodes = new List<IXdmNode>();
+        if (arg.IsNode && arg.NodeValue != null)
+        {
+            nodes.Add(arg.NodeValue);
+        }
+        else if (arg.IsSequence && arg.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(arg.SequenceValue))
+            {
+                if (item.IsNode && item.NodeValue != null)
+                    nodes.Add(item.NodeValue);
+            }
+        }
+
+        if (nodes.Count == 0)
+            return XdmValue.Undefined;
+
+        var copies = new List<XdmValue>();
+        foreach (var node in nodes)
+        {
+            var copied = SnapshotNode(node);
+            if (copied == null)
+                throw new InvalidOperationException("FOTY0013");
+            copies.Add(XdmValue.FromNode(copied));
+        }
+
+        if (copies.Count == 1)
+            return copies[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(copies));
     }
 
     private static IXdmNode? SnapshotNode(IXdmNode node)
@@ -3334,6 +3360,7 @@ public static class FunctionLibrary
         {
             copy.SetAttributeValue(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
         }
+        CopyInScopeNamespaces(element, copy);
         return copy;
     }
 
@@ -9763,6 +9790,7 @@ public static class FunctionLibrary
         {
             copy.SetAttributeValue(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
         }
+        CopyInScopeNamespaces(element, copy);
         foreach (var child in element.Nodes())
         {
             switch (child)
@@ -9782,6 +9810,52 @@ public static class FunctionLibrary
             }
         }
         return copy;
+    }
+
+    /// <summary>
+    /// Copies all namespace bindings that are in scope for <paramref name="source"/> to
+    /// <paramref name="target"/>, mirroring the behaviour of <c>xsl:copy-of</c> which
+    /// preserves namespace nodes on the copied element.
+    /// </summary>
+    private static void CopyInScopeNamespaces(XElement source, XElement target)
+    {
+        var seen = new HashSet<string>();
+        var current = source;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (!attr.IsNamespaceDeclaration)
+                    continue;
+
+                string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                if (prefix == "xml")
+                    continue;
+                if (!seen.Add(prefix))
+                    continue;
+                if (string.IsNullOrEmpty(attr.Value))
+                    continue;
+
+                if (string.IsNullOrEmpty(prefix))
+                {
+                    var existing = target.Attribute("xmlns");
+                    if (existing == null)
+                        target.SetAttributeValue("xmlns", attr.Value);
+                    else if (existing.Value != attr.Value)
+                        target.SetAttributeValue("xmlns", attr.Value);
+                }
+                else
+                {
+                    XName declName = XNamespace.Xmlns + prefix;
+                    var existing = target.Attribute(declName);
+                    if (existing == null)
+                        target.SetAttributeValue(declName, attr.Value);
+                    else if (existing.Value != attr.Value)
+                        target.SetAttributeValue(declName, attr.Value);
+                }
+            }
+            current = current.Parent;
+        }
     }
 
     private static XDocument DeepCopyDocument(XDocument document)

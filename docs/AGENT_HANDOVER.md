@@ -1,5 +1,73 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-28
+**Commit:** `376e916`
+**Current focus:** Cleared the `snapshot` cluster (6 runnable failures) by fixing `fn:snapshot` in-scope namespace copying and top-level `xsl:namespace` item extraction.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,837
+- **Failed:** 413
+- **Skipped:** 9,350
+- **Pass rate:** 92.1% (+6 passes / −6 failures vs. the previous 4,831/419)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| snapshot | 43 | 12 | 0 | 31 | ✅ 100% runnable; `fn:snapshot` in-scope namespace copying and parentless namespace-node handling |
+| choose | 55 | 55 | 0 | 0 | ✅ 100% runnable (previous session) |
+| data-manipulation | 28 | 28 | 0 | 0 | ✅ 100% runnable (previous session) |
+| sort | 82 | 80 | 0 | 2 | ✅ 100% runnable (previous session) |
+| merge | 113 | 75 | 0 | 38 | ✅ 100% runnable (previous session) |
+| arrays | 62 | 6 | 0 | 56 | ✅ 100% runnable (previous session) |
+| math | 159 | 154 | 0 | 5 | ✅ 100% runnable (previous session) |
+| maps | 50 | 43 | 0 | 7 | ✅ 100% runnable (previous session) |
+| namespace | 224 | 200 | 0 | 24 | ✅ 100% runnable (previous session) |
+| namespace-alias | 26 | 26 | 0 | 0 | ✅ 100% runnable (previous session) |
+| date | 138 | 130 | 0 | 8 | ✅ 100% runnable (previous session) |
+| call-template | 44 | 38 | 0 | 6 | ✅ 100% runnable |
+| attribute | 107 | 17 | 0 | 90 | ✅ 100% runnable |
+| attribute-set | 50 | 49 | 0 | 1 | ✅ 100% runnable |
+| system-property | 27 | 15 | 0 | 12 | ✅ 100% runnable |
+| unparsed-text-lines | 6 | 6 | 0 | 0 | ✅ 100% |
+| regex | 2,162 | 47 | 0 | 2,115 | ✅ 100% runnable |
+| mode | 188 | 122 | 0 | 66 | ✅ 100% runnable |
+| use-when | 102 | 99 | 0 | 3 | ✅ 100% runnable |
+| type | 79 | 58 | 0 | 21 | ✅ 100% runnable |
+| static | 49 | 49 | 0 | 0 | ✅ 100% |
+| analyze-string | 58 | 53 | 0 | 5 | ✅ 100% runnable |
+| next-match | 42 | 37 | 0 | 5 | ✅ 100% runnable |
+
+## This Session Fixes
+
+1. **`fn:snapshot` in-scope namespace copying** — `SnapshotNode` now copies all namespace bindings that are in scope for each copied element, mirroring `xsl:copy-of validation="preserve"`. Fixes `snapshot-0102/0106/0107`.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+2. **Top-level `xsl:namespace` item extraction** — `EvaluateSequenceConstructorToItems` only turns a top-level `xsl:namespace` declaration into a standalone namespace-node item when the containing sequence constructor is explicitly typed as `namespace-node()` (or `namespace-node()*`). In the more common `as="node()*"` case the resulting parentless namespace node is discarded, fixing `snapshot-0103/0103a/0104` while preserving `mode-0009/0013`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **Documentation sync** — Updated `docs/INTEGRATION.md` and `docs/AGENT_HANDOVER.md` with the cleared `snapshot` cluster status and latest conformance baseline.
+   - **Files changed**: `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md`.
+
+## Notes
+
+- Unit-test suite: **899 passed / 0 failed / 0 skipped** across 8 projects.
+- The `snapshot` cluster is now **12/43 passing, 0 runnable failures, 31 skipped**.
+- Full W3C suite re-run: **4,837/413/9,350** (92.1%).
+
+## Recommended Next Steps
+
+1. Commit and push the `snapshot` fixes to `origin/main`.
+2. Continue with adjacent medium clusters: `number` (6 fails), `resolve-uri` (8), `apply-templates` (11), or `param` (12).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-27
 **Commit:** `9b57cdf`
 **Current focus:** Cleared the medium `choose` cluster and committed the previously-uncommitted `data-manipulation` fix.
