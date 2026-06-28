@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
-**Commit:** `27ce6d7` (with uncommitted working changes)
+**Commit:** `e56b3e1`
 **Current focus:** Cleared the `number` cluster (6 runnable failures) by adding German/Italian word and ordinal formatting to `fn:format-integer` / `xsl:number`.
 
 ---
