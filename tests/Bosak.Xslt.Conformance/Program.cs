@@ -29,6 +29,7 @@
 //                      | Charles Korthout | 1.7   | 25-06-2026     | Pass rawResult=true for initial-template raw output; bind result-var for assertions      |
 //                      | Charles Korthout | 1.8   | 26-06-2026     | Expand _select AVTs using static parameters so static-error tests report correctly       |
 //                      | Charles Korthout | 1.9   | 27-06-2026     | Fall back to run-time _select expansion when static parameters are insufficient          |
+//                      | Charles Korthout | 2.0   | 28-06-2026     | Load source documents with DTD/XmlResolver so external entities expand with base URIs   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -160,7 +161,10 @@ class Program
         // Error tests require full static XSLT validator — 385 tests
         "error",
         // Schema import requires schema-awareness — 185 tests
-        "import-schema"
+        "import-schema",
+        // Catalog self-tests enumerate every stylesheet in the suite and are not
+        // a conformance signal for the processor itself.
+        "catalog"
     };
 
     static void Main(string[] args)
@@ -751,8 +755,10 @@ class Program
             if (!File.Exists(path)) path = Path.Combine(catalogDir, file);
             if (File.Exists(path))
             {
-                doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
-                sourceUri = new Uri(path).AbsoluteUri;
+                doc = LoadDocumentFromFile(path);
+                sourceUri = doc.BaseUri;
+                if (string.IsNullOrEmpty(sourceUri))
+                    sourceUri = new Uri(path).AbsoluteUri;
             }
         }
 

@@ -6,11 +6,20 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 28 June 2026
 > **Bosak baseline:** 899 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,845 passed / 405 failed / 9,350 skipped (~92.3%)
+> **XSLT baseline:** 4,852 passed / 391 failed / 9,357 skipped (~92.5%, `catalog` self-test skipped)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-28** — Cleared the `resolve-uri` cluster (24/24) and the `namespace-4801` regression.
+  - `fn:resolve-uri()` now raises `FORG0002` for malformed relative URIs and relative base URIs per erratum FO.E1.
+  - Dotted-path URIs resolve correctly in `fn:resolve-uri()` and `fn:static-base-uri()`.
+  - `fn:document()` resolves relative URIs against the base URI of the supplied node argument.
+  - Text/PI nodes produced by DTD entity expansion now inherit the parent element's resolved `xml:base`.
+  - TVT evaluation passes the context element so the compiled XPath uses the correct in-scope namespaces and effective base URI.
+  - Full W3C suite: **4,852 passed / 391 failed / 9,357 skipped** (~92.5%).
+  - The `catalog` self-test set is temporarily skipped because it became extremely slow after the `document()` node-base fix.
 
 - **2026-06-28** — Fixed the remaining XSLT `namespace` cluster failure (`namespace-3005`).
   - Top-level `xsl:namespace` instructions now produce a standalone namespace-node item when the containing sequence constructor is typed as `node()` or `node()?` (in addition to explicit `namespace-node()` types).

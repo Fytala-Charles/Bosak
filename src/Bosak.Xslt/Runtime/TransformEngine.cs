@@ -127,6 +127,8 @@
 //                      | Charles Korthout | 5.56  | 27-06-2026     | Top-level xsl:namespace no longer yields standalone namespace-node items               |
 //                      | Charles Korthout | 5.57  | 26-06-2026     | Pass ordinal suffix/scheme from xsl:number to format-integer for localized ordinals    |
 //                      | Charles Korthout | 5.58  | 28-06-2026     | Keep xsl:namespace nodes for as="node()"/"node()?"; fixes namespace-3005              |
+//                      | Charles Korthout | 5.59  | 28-06-2026     | TVTs compile with in-scope namespaces and effective base URI; fixes resolve-uri-022   |
+//                      | Charles Korthout | 5.60  | 28-06-2026     | Base-URI/TVT context fixes clear namespace-4801 regression                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1941,7 +1943,7 @@ public sealed class TransformEngine
                                     case XText text:
                                         if (GetExpandText(instruction) && ContainsTvtExpression(text.Value))
                                         {
-                                            var tvtResult = EvaluateTvt(text.Value);
+                                            var tvtResult = EvaluateTvt(text.Value, instruction);
                                             results.Add(XdmValue.FromNode(new XDocumentNode(new XText(tvtResult))));
                                         }
                                         else if (!IsWhitespaceOnly(text.Value))
@@ -1973,7 +1975,7 @@ public sealed class TransformEngine
                         else if (GetExpandText(instruction))
                         {
                             var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
-                            var tvtResult = EvaluateTvt(text);
+                            var tvtResult = EvaluateTvt(text, instruction);
                             results.Add(XdmValue.FromString(tvtResult, "untypedAtomic"));
                         }
                         else
@@ -2427,7 +2429,7 @@ public sealed class TransformEngine
                         var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
                         if (GetExpandText(instruction))
                         {
-                            text = EvaluateTvt(text);
+                            text = EvaluateTvt(text, instruction);
                         }
                         results.Add(XdmValue.FromNode(new XDocumentNode(new XText(text))));
                         break;
@@ -3601,7 +3603,7 @@ public sealed class TransformEngine
                     // is set on the xsl:text element or an ancestor.
                     if (GetExpandText(instruction))
                     {
-                        text = EvaluateTvt(text);
+                        text = EvaluateTvt(text, instruction);
                     }
                     _lastAddedWasAtomic = false;
                     AddTextNode(text, allowZeroLength: true);
@@ -10677,7 +10679,7 @@ public sealed class TransformEngine
         string value;
         if (GetExpandText(parent) && ContainsTvtExpression(text.Value))
         {
-            value = EvaluateTvt(text.Value);
+            value = EvaluateTvt(text.Value, parent);
         }
         else if (IsWhitespacePreserveContext(parent))
         {
@@ -11255,7 +11257,7 @@ public sealed class TransformEngine
     /// evaluates each XPath expression, and returns the concatenated result.
     /// Respects XPath string literals when finding matching }.
     /// </summary>
-    private string EvaluateTvt(string text)
+    private string EvaluateTvt(string text, XElement? contextElement = null)
     {
         if (string.IsNullOrEmpty(text))
             return text;
@@ -11316,7 +11318,7 @@ public sealed class TransformEngine
                     string expr = text.Substring(exprStart, j - exprStart - 1);
                     if (!string.IsNullOrEmpty(expr))
                     {
-                        var compiled = XPath31Expression.Compile(expr);
+                        var compiled = contextElement != null ? CompileXPath(expr, contextElement) : XPath31Expression.Compile(expr);
                         var value = compiled.Evaluate(_context);
                         // XSLT 3.0 §5.6.2: atomized TVT items are joined with a single space.
                         sb.Append(XdmValueToString(value, " "));
@@ -11395,7 +11397,7 @@ public sealed class TransformEngine
     {
         if (GetExpandText(parent) && ContainsTvtExpression(text.Value))
         {
-            var tvtResult = EvaluateTvt(text.Value);
+            var tvtResult = EvaluateTvt(text.Value, parent);
             _lastAddedWasAtomic = false;
             AddTextNode(tvtResult);
         }
@@ -12755,7 +12757,7 @@ public sealed class TransformEngine
                 case XText text:
                     if (GetExpandText(child) && ContainsTvtExpression(text.Value))
                     {
-                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(EvaluateTvt(text.Value)))));
+                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(EvaluateTvt(text.Value, child)))));
                     }
                     else if (!IsWhitespaceOnly(text.Value))
                     {

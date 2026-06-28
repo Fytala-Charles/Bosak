@@ -74,6 +74,8 @@
 //                      | Charles Korthout | 5.9   | 25-06-2026     | function-available hides XSLT dynamic functions from static (use-when) evaluation        |
 //                      | Charles Korthout | 5.10  | 27-06-2026     | XPath INF/NaN parsing, atomize floor/ceiling/round args, decimal rounding for ties      |
 //                      | Charles Korthout | 5.11  | 27-06-2026     | fn:snapshot copies in-scope namespace bindings to element copies                       |
+//                      | Charles Korthout | 5.12  | 28-06-2026     | fn:document#1 uses node base URIs; fn:resolve-uri validates base and relative URIs     |
+//                      | Charles Korthout | 5.13  | 28-06-2026     | FORG0002 for relative base/malformed relative URIs; dotted-path resolution             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3409,6 +3411,23 @@ public static class FunctionLibrary
             return XdmValue.FromString(relative, "anyURI");
         if (string.IsNullOrEmpty(baseUri))
             throw new InvalidOperationException("FODC0005: No base URI available");
+
+        // RFC 3986 / XPath FO.E1: the base URI must be absolute and syntactically valid.
+        if (!Uri.TryCreate(baseUri, UriKind.Absolute, out var baseUriObj)
+            || !baseUriObj.IsAbsoluteUri
+            || !Uri.IsWellFormedUriString(baseUri, UriKind.Absolute))
+        {
+            throw new InvalidOperationException("FORG0002: Invalid base URI");
+        }
+
+        // Validate the relative reference by attempting to resolve it against a well-formed
+        // dummy base. This catches malformed references such as "##some.uri".
+        if (!Uri.TryCreate(baseUriObj, relative, out var dummyResolved)
+            || !Uri.IsWellFormedUriString(dummyResolved.OriginalString, UriKind.Absolute))
+        {
+            throw new InvalidOperationException("FORG0002: Invalid relative URI");
+        }
+
         var resolved = ResolveRelativeUri(baseUri, relative);
         return XdmValue.FromString(resolved, "anyURI");
     }
@@ -5298,29 +5317,87 @@ public static class FunctionLibrary
 
     private static XdmValue Document_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var uris = AtomizedUriStrings(args[0]);
-        if (uris.Count == 0)
+        var pairs = GetDocumentUriPairs(ctx, args[0]);
+        if (pairs.Count == 0)
             return XdmValue.Undefined;
 
-        if (uris.Count == 1)
-            return LoadDocumentWithFragment(ctx, uris[0], ctx.BaseUri);
+        if (pairs.Count == 1)
+            return LoadDocumentWithFragment(ctx, pairs[0].uri, pairs[0].baseUri);
 
-        return LoadDocumentsDistinct(ctx, uris, ctx.BaseUri);
+        return LoadDocumentsDistinct(ctx, pairs);
     }
 
     private static XdmValue Document_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var uris = AtomizedUriStrings(args[0]);
-        if (uris.Count == 0)
+        var pairs = GetDocumentUriPairs(ctx, args[0], args[1]);
+        if (pairs.Count == 0)
             return XdmValue.Undefined;
 
-        var baseNode = args[1].IsNode ? args[1].NodeValue : null;
-        var baseUri = baseNode?.BaseUri ?? ctx.BaseUri;
+        if (pairs.Count == 1)
+            return LoadDocumentWithFragment(ctx, pairs[0].uri, pairs[0].baseUri);
 
-        if (uris.Count == 1)
-            return LoadDocumentWithFragment(ctx, uris[0], baseUri);
+        return LoadDocumentsDistinct(ctx, pairs);
+    }
 
-        return LoadDocumentsDistinct(ctx, uris, baseUri);
+    /// <summary>
+    /// Builds the list of (URI, base-URI) pairs for the XSLT <c>document()</c> function.
+    /// When no explicit base is supplied and the supplied value is a node (or sequence of nodes),
+    /// each URI is resolved against the base URI of the corresponding node.
+    /// </summary>
+    private static List<(string uri, string? baseUri)> GetDocumentUriPairs(EvaluationContext ctx, XdmValue value, XdmValue? explicitBase = null)
+    {
+        var pairs = new List<(string, string?)>();
+
+        var baseNodes = new List<IXdmNode?>();
+        if (explicitBase != null)
+        {
+            if (explicitBase.Value.IsNode)
+            {
+                baseNodes.Add(explicitBase.Value.NodeValue);
+            }
+            else if (explicitBase.Value.IsSequence && explicitBase.Value.SequenceValue != null)
+            {
+                foreach (var item in XdmSequence.FromSource(explicitBase.Value.SequenceValue))
+                    baseNodes.Add(item.IsNode ? item.NodeValue : null);
+            }
+            if (baseNodes.Count == 0)
+                baseNodes.Add(null);
+        }
+
+        var items = new List<XdmValue>();
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                items.Add(item);
+        }
+        else if (!value.IsUndefined)
+        {
+            items.Add(value);
+        }
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var uri = AtomizedString(items[i]);
+
+            string? baseUri;
+            if (explicitBase != null)
+            {
+                var bn = i < baseNodes.Count ? baseNodes[i] : baseNodes[^1];
+                baseUri = bn?.BaseUri ?? ctx.BaseUri;
+            }
+            else if (items[i].IsNode)
+            {
+                baseUri = items[i].NodeValue!.BaseUri ?? ctx.BaseUri;
+            }
+            else
+            {
+                baseUri = ctx.BaseUri;
+            }
+
+            pairs.Add((uri, baseUri));
+        }
+
+        return pairs;
     }
 
     private static string ResolveDocumentUri(string uri, string? baseUri)
@@ -5331,13 +5408,13 @@ public static class FunctionLibrary
         return uri;
     }
 
-    private static XdmValue LoadDocumentsDistinct(EvaluationContext ctx, List<string> uris, string? baseUri)
+    private static XdmValue LoadDocumentsDistinct(EvaluationContext ctx, List<(string uri, string? baseUri)> pairs)
     {
         // XSLT document() returns the union of the node-sets, which eliminates
         // duplicate document nodes (e.g. the same URI appearing more than once).
         var seen = new HashSet<IXdmNode>();
-        var docs = new List<XdmValue>(uris.Count);
-        foreach (var uri in uris)
+        var docs = new List<XdmValue>(pairs.Count);
+        foreach (var (uri, baseUri) in pairs)
         {
             var loaded = LoadDocumentWithFragment(ctx, uri, baseUri);
             if (loaded.IsNode)

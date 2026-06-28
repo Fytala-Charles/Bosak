@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-28 (`namespace` cluster fully cleared; `xsl:namespace` retained for `as="node()"` / `as="node()?"`; full W3C baseline 4,845/405/9,350)    
+> **Living Registry** — Last updated: 2026-06-28 (`resolve-uri` cluster cleared 24/24; `namespace-4801` regression cleared; `catalog` self-test skipped; full W3C baseline 4,852/391/9,357)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

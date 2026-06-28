@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.3   | 25-06-2026     | Added DocumentUri property/setter distinct from BaseUri                                |
 //                      | Charles Korthout | 1.4   | 25-06-2026     | Fixed following/preceding axes for attribute and namespace nodes                       |
 //                      | Charles Korthout | 1.5   | 26-06-2026     | GetNamespaceAxis adds implied default namespaces only when not explicitly declared     |
+//                      | Charles Korthout | 1.6   | 28-06-2026     | ResolveXmlBase honors external-entity node base URIs; fixes resolve-uri-021          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -349,7 +350,14 @@ public sealed class XDocumentNode : IXdmNode
         if (_node is XElement elem)
             return ResolveXmlBase(elem);
 
-        // For attributes, text, comments, PIs — use parent element's base URI
+        // For attributes, text, comments, and PIs, prefer the node's own base URI
+        // when it differs from the document base (e.g., nodes originating from an
+        // external parsed entity). Otherwise fall back to the parent element.
+        var nodeBase = _node.BaseUri;
+        var docBase = _node.Document?.BaseUri;
+        if (!string.IsNullOrEmpty(nodeBase) && nodeBase != docBase)
+            return nodeBase;
+
         var parent = _node.Parent;
         if (parent is XElement parentElem)
             return ResolveXmlBase(parentElem);
@@ -366,15 +374,31 @@ public sealed class XDocumentNode : IXdmNode
     /// Resolves the effective base URI of an element by walking up the ancestor
     /// chain and applying <c>xml:base</c> attributes per the XML Base specification.
     /// For constructed nodes, checks for a base URI annotation on the root element.
+    /// When an element originates from an external parsed entity, its own
+    /// <see cref="XObject.BaseUri"/> is used as the starting point and ancestor
+    /// elements outside that entity are ignored.
     /// </summary>
     private static string ResolveXmlBase(XElement element)
     {
-        // Collect xml:base attributes from this element up to the root
+        var nodeBase = element.BaseUri;
+        var docBase = element.Document?.BaseUri;
+        bool isEntityNode = !string.IsNullOrEmpty(nodeBase) && nodeBase != docBase;
+        return ResolveXmlBase(element, isEntityNode ? nodeBase : null);
+    }
+
+    private static string ResolveXmlBase(XElement element, string? initialBase)
+    {
+        // Collect xml:base attributes from this element up to the root.
+        // For an external-entity node, stop at the entity boundary so that
+        // xml:base attributes in the including document do not leak in.
         var chain = new List<string>();
         XElement? root = null;
         var current = element;
         while (current != null)
         {
+            if (initialBase != null && current.BaseUri != initialBase)
+                break;
+
             root = current;
             var xmlBase = current.Attribute(XNamespace.Xml + "base")?.Value;
             if (xmlBase != null)
@@ -385,9 +409,10 @@ public sealed class XDocumentNode : IXdmNode
         if (chain.Count == 0 && root == null)
             return element.BaseUri ?? string.Empty;
 
-        // Start with the document's base URI or annotation, or a base URI annotation on the root element
-        string baseUri = element.Document?.BaseUri ?? string.Empty;
-        if (string.IsNullOrEmpty(baseUri) && element.Document != null)
+        // Start with the supplied/entity base URI, the document's base URI,
+        // an annotation on the document, or an annotation on the root element.
+        string baseUri = initialBase ?? element.Document?.BaseUri ?? string.Empty;
+        if (string.IsNullOrEmpty(baseUri) && element.Document != null && initialBase == null)
         {
             var docAnnotatedBase = element.Document.Annotation<string>();
             if (!string.IsNullOrEmpty(docAnnotatedBase))
