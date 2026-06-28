@@ -50,6 +50,7 @@
 //                      | Charles Korthout | 2.17  | 25-06-2026     | InstanceOf applies default element namespace and reports unknown types (XPST0051)        |
 //                      | Charles Korthout | 2.18  | 26-06-2026     | InstanceOf recognises parameterised sequence type names and avoids spurious XPST0051   |
 //                      | Charles Korthout | 2.19  | 26-06-2026     | CompareGeneral returns false (not empty sequence) for empty general-comparison operands |
+//                      | Charles Korthout | 2.20  | 28-06-2026     | NormalizeSequence uses HashSet for duplicate removal; restores catalog self-test speed   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2082,50 +2083,40 @@ public static class VmEngine
         if (items.Length <= 1)
             return value;
 
-        // Remove duplicate nodes (keep first occurrence)
-        var unique = new List<XdmValue>(items.Length);
+        // Separate nodes from non-node items and remove duplicate nodes.
+        var nodes = new List<XdmValue>(items.Length);
+        var nonNodes = new List<XdmValue>();
+        var seen = new HashSet<IXdmNode>();
         bool hasNodes = false;
         foreach (var item in items)
         {
             if (!item.IsNode)
             {
-                unique.Add(item);
+                nonNodes.Add(item);
                 continue;
             }
 
             hasNodes = true;
-            bool isDup = false;
-            foreach (var existing in unique)
-            {
-                if (existing.IsNode && item.NodeValue.IsSameNode(existing.NodeValue))
-                {
-                    isDup = true;
-                    break;
-                }
-            }
-
-            if (!isDup)
-                unique.Add(item);
+            var node = item.NodeValue;
+            if (seen.Add(node))
+                nodes.Add(item);
         }
 
-        if (unique.Count <= 1 || !hasNodes)
-            return XdmValue.FromSequence(MaterializedSequence.FromList(unique));
+        if (!hasNodes)
+            return XdmValue.FromSequence(MaterializedSequence.FromList(nonNodes));
 
-        // Sort nodes by document order; keep non-nodes at the end in original order
-        unique.Sort((a, b) =>
+        if (nodes.Count > 1)
         {
-            bool aNode = a.IsNode;
-            bool bNode = b.IsNode;
+            nodes.Sort((a, b) => a.NodeValue!.DocumentOrder.CompareTo(b.NodeValue!.DocumentOrder));
+        }
 
-            if (aNode && bNode)
-                return a.NodeValue.DocumentOrder.CompareTo(b.NodeValue.DocumentOrder);
+        if (nonNodes.Count == 0)
+            return XdmValue.FromSequence(MaterializedSequence.FromList(nodes));
 
-            if (aNode) return -1;
-            if (bNode) return 1;
-            return 0;
-        });
-
-        return XdmValue.FromSequence(MaterializedSequence.FromList(unique));
+        var combined = new List<XdmValue>(nodes.Count + nonNodes.Count);
+        combined.AddRange(nodes);
+        combined.AddRange(nonNodes);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(combined));
     }
 
     private static XdmValue FilterNodes(XdmValue input, Func<IXdmNode, bool> predicate)

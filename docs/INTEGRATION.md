@@ -6,11 +6,16 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 28 June 2026
 > **Bosak baseline:** 899 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,852 passed / 391 failed / 9,357 skipped (~92.5%, `catalog` self-test skipped)
+> **XSLT baseline:** 4,855 passed / 395 failed / 9,350 skipped (~92.5%, `catalog` self-test restored)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-28** — Restored the W3C `catalog` self-test set and fixed the O(N²) slowness that made it hang.
+  - `NormalizeSequence` in the XPath VM now removes duplicate nodes with a `HashSet<IXdmNode>` instead of a nested loop, dropping large cross-document sequences from >10 minutes to seconds.
+  - The `catalog` cluster now completes in under a minute; remaining failures are XML 1.1 parser limitations and a `catalog-007` `element-available()` mismatch.
+  - Full W3C suite: **4,855 passed / 395 failed / 9,350 skipped** (~92.5%).
 
 - **2026-06-28** — Cleared the `resolve-uri` cluster (24/24) and the `namespace-4801` regression.
   - `fn:resolve-uri()` now raises `FORG0002` for malformed relative URIs and relative base URIs per erratum FO.E1.

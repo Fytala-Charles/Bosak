@@ -1,18 +1,18 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
-**Commit:** `9b8c1bc` (working tree contains uncommitted `resolve-uri` / `document()` base-URI fixes and `catalog` skip)
-**Current focus:** Cleared the `namespace-4801` regression introduced by the `resolve-uri` / `document()` base-URI changes.
+**Commit:** `5351425` (working tree: catalog restore + NormalizeSequence optimization)
+**Current focus:** Restored the W3C `catalog` self-test set and fixed the O(N²) slowness that made it hang after the `document()` base-URI changes.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 4,852
-- **Failed:** 391
-- **Skipped:** 9,357
-- **Pass rate:** 92.5% (+7 passed / −14 failures vs. previous 4,845/405 with `catalog` skipped)
+- **Passed:** 4,855
+- **Failed:** 395
+- **Skipped:** 9,350
+- **Pass rate:** 92.5% (+3 passed / +4 failed / −7 skipped vs. previous 4,852/391/9,357 with `catalog` skipped)
 
 ## Cluster Status
 
@@ -20,25 +20,31 @@
 |---|---|---|---|---|---|
 | namespace | 224 | 200 | 0 | 24 | ✅ 100% runnable; `namespace-4801` regression cleared |
 | resolve-uri | 24 | 24 | 0 | 0 | ✅ 100% runnable; dotted paths, FORG0002, node-base URI resolution |
+| catalog | 13 | 3 | 4 | 6 | Restored; failures are XML 1.1 / element-available limitations, not hangs |
 | number | 345 | 336 | 0 | 9 | ✅ 100% runnable; German/Italian word + ordinal support |
 
 ## This Session Fixes
 
-1. **`namespace-4801` regression** — The `document('')` call inside a stylesheet using `exclude-result-prefixes` now resolves correctly after the base-URI and TVT context fixes. The cluster is back to **200/200 runnable tests**.
-   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (TVT base URI / namespace context), `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (`document()` node-base URI resolution), `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs` (text/PI base URI from parent `xml:base`).
+1. **`catalog` self-test restore** — Re-enabled the `catalog` test set in the conformance harness. The previous hang/extreme slowness was caused by `NormalizeSequence` using an O(N²) nested-loop duplicate-node removal when the catalog stylesheets produced large cross-document node sequences.
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+2. **`NormalizeSequence` optimization** — Duplicate-node detection now uses a `HashSet<IXdmNode>` (relying on `Equals`/`GetHashCode`) instead of a nested loop. This drops the catalog outer-select from >10 minutes to ~4 seconds and lets the full suite complete in under 3 minutes.
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
 
 ## Notes
 
 - Unit-test suite: **899 passed / 0 failed / 0 skipped** across 8 projects.
 - The `namespace` cluster is now **200/224 passing, 0 runnable failures, 24 skipped**.
 - The `resolve-uri` cluster is **24/24 passing, 0 skipped**.
-- The `catalog` self-test set remains **skipped** in `tests/Bosak.Xslt.Conformance/Program.cs` because it became extremely slow/hung after the `document()` node-base fix.
-- Full W3C suite re-run (with `catalog` skipped): **4,852/391/9,357** (92.5%).
+- The `catalog` cluster is restored: **3/13 passing, 4 failed, 6 skipped**. The 4 failures are:
+  - `catalog-004`, `catalog-006`, `catalog-012` — XML 1.1 stylesheets are not supported by the .NET XML parser.
+  - `catalog-007` — `element-available()` reports spurious absences for some XSLT elements in loaded stylesheets.
+- Full W3C suite re-run (with `catalog` restored): **4,855/395/9,350** (92.5%).
 
 ## Recommended Next Steps
 
-1. Decide whether to commit the current working-tree changes as a single `resolve-uri/base-uri` patch or split the `document()` base-URI fix and the TVT context fix.
-2. Investigate and restore the skipped `catalog` self-test set.
+1. Commit the catalog-restore + NormalizeSequence optimization.
+2. Decide whether to fix `catalog-007` (`element-available` namespace context) or add the XML-1.1 catalog tests to `SkipTests`.
 3. Continue with adjacent medium clusters: `apply-templates` (11), `param` (12), or `copy-of` (14).
 
 ---

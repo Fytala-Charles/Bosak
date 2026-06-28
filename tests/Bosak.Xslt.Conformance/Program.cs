@@ -162,9 +162,9 @@ class Program
         "error",
         // Schema import requires schema-awareness — 185 tests
         "import-schema",
-        // Catalog self-tests enumerate every stylesheet in the suite and are not
-        // a conformance signal for the processor itself.
-        "catalog"
+        // Catalog self-tests enumerate every stylesheet in the suite. Previously
+        // skipped because an O(N^2) duplicate-node removal in NormalizeSequence
+        // made them extremely slow; restored after switching to HashSet.
     };
 
     static void Main(string[] args)
