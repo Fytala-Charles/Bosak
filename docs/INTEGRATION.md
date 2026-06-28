@@ -4,13 +4,17 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 27 June 2026
+> **Last updated:** 28 June 2026
 > **Bosak baseline:** 899 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,817 passed / 433 failed / 9,350 skipped (~91.8%)
+> **XSLT baseline:** 4,845 passed / 405 failed / 9,350 skipped (~92.3%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-28** — Fixed the remaining XSLT `namespace` cluster failure (`namespace-3005`).
+  - Top-level `xsl:namespace` instructions now produce a standalone namespace-node item when the containing sequence constructor is typed as `node()` or `node()?` (in addition to explicit `namespace-node()` types).
+  - Full W3C suite: **4,845 passed / 405 failed / 9,350 skipped** (~92.3%).
 
 - **2026-06-27** — Cleared the remaining single-failure clusters `sort`, `merge`, and `arrays`.
   - `sort-072`: `xsl:perform-sort` now preserves in-scope prefixed namespaces for relocated sequence-constructor children.

@@ -126,6 +126,7 @@
 //                      | Charles Korthout | 5.55  | 27-06-2026     | Array flattening in apply-templates, value-of, and complex content; fixes regressions   |
 //                      | Charles Korthout | 5.56  | 27-06-2026     | Top-level xsl:namespace no longer yields standalone namespace-node items               |
 //                      | Charles Korthout | 5.57  | 26-06-2026     | Pass ordinal suffix/scheme from xsl:number to format-integer for localized ordinals    |
+//                      | Charles Korthout | 5.58  | 28-06-2026     | Keep xsl:namespace nodes for as="node()"/"node()?"; fixes namespace-3005              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -10507,13 +10508,17 @@ public sealed class TransformEngine
                         attr.Remove();
                         if (attr.IsNamespaceDeclaration)
                         {
-                            // A top-level xsl:namespace instruction creates a namespace node only
-                            // when the containing sequence constructor is explicitly typed to
-                            // return namespace nodes (e.g. as="namespace-node()"). In the more
-                            // common as="node()*" case the resulting parentless namespace node is
-                            // not a valid standalone item and is discarded.
+                            // A top-level xsl:namespace instruction creates a namespace node when
+                            // the containing sequence constructor is explicitly typed to return
+                            // namespace nodes, or when it is typed as a single generic node (e.g.
+                            // as="node()"). In the more common as="node()*" case the resulting
+                            // parentless namespace node is not a valid standalone item and is
+                            // discarded to preserve snapshot/mode behaviour.
+                            var trimmedAs = sequenceAs?.Trim() ?? string.Empty;
                             bool keepNamespaceNode = string.IsNullOrEmpty(sequenceAs)
-                                || sequenceAs.Contains("namespace-node", StringComparison.Ordinal);
+                                || sequenceAs.Contains("namespace-node", StringComparison.Ordinal)
+                                || trimmedAs.Equals("node()", StringComparison.Ordinal)
+                                || trimmedAs.Equals("node()?", StringComparison.Ordinal);
                             if (keepNamespaceNode)
                             {
                                 resultItems.Add(XdmValue.FromNode(XDocumentNode.CreateNamespaceNode(attr, tempContainer)));
