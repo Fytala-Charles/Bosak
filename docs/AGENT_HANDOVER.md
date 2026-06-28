@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
-**Commit:** `58ecc04`
+**Commit:** `c40350d`
 **Current focus:** Restored the W3C `catalog` self-test set and fixed the O(N²) slowness that made it hang after the `document()` base-URI changes.
 
 ---
