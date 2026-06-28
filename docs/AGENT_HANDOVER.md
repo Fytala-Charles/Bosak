@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
-**Commit:** `376e916`
+**Commit:** `68bc099`
 **Current focus:** Cleared the `snapshot` cluster (6 runnable failures) by fixing `fn:snapshot` in-scope namespace copying and top-level `xsl:namespace` item extraction.
 
 ---
