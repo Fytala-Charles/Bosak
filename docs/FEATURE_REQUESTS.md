@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-27 (`sort`, `merge`, and `arrays` clusters fully cleared; `math` cluster fully cleared; `maps` cluster fully cleared; `mode`, `static`, and `next-match` regressions fixed; `arrays-301`–`305` now pass; `namespace`, `namespace-alias`, `date`, `call-template`, `attribute`, `system-property`, `unparsed-text-lines`, `regex`, and `mode` clusters green; full W3C baseline 4,817/433/9,350)    
+> **Living Registry** — Last updated: 2026-06-28 (`number` cluster fully cleared; German/Italian word + ordinal formatting implemented; full W3C baseline 4,843/407/9,350)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -139,6 +139,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-032 | *(internal)* | XSLT 3.0 `xsl:merge` instruction | Required for `merge` conformance cluster: merge sources/keys/action, `current-merge-group()`, `current-merge-key()`, static/dynamic errors | **Implemented** | TBD | Charles Korthout | 2026-06-13 |
 | REQ-033 | *(internal)* | XSLT `format-date-en` cluster — English number words and era-aware year formatting | Required for `format-date-en` conformance cluster: `[Ww]`, `[Wo]`, era-aware negative years, and ordinal-year width handling | **Implemented** | TBD | Charles Korthout | 2026-06-15 |
 | REQ-034 | *(internal)* | XSLT `static` cluster conformance | Required for `static` conformance cluster (49/49): external static parameters, static variable/parameter runtime binding, XTSE0090/XTSE3450 validations, implicit empty-sequence defaults, `@as` coercion, plus general-comparison empty-sequence and namespace-axis fixes exposed by the cluster | **Implemented** | TBD | Charles Korthout | 2026-06-26 |
+| REQ-035 | *(internal)* | XSLT `number` cluster — German/Italian word and ordinal formatting | Required for `number-0802/0812/0813/0828/0829/2506` and `format-integer-065/066`: German cardinal/ordinal words (`drei`, `dritte`, `zweihunderteinste`), Italian masculine/feminine ordinals (`primo`/`prima`), and CLDR `%spellout-ordinal` scheme support | **Implemented** | TBD | Charles Korthout | 2026-06-28 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.

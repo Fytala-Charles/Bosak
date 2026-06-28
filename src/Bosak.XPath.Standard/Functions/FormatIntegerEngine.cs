@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 01-06-2026     | Fixed contiguous block startValue; added multi-range sequences (circled 21-50, dingbat etc); extended block counts to 10 |
 //                      | Charles Korthout | 0.6   | 01-06-2026     | Special zero for full-stop block U+2488; XdmValueToLongArray returns long[] to prevent overflow |
 //                      | Charles Korthout | 0.7   | 03-06-2026     | Added BigInteger overload for formatting values > long.MaxValue (fixes number-0807)       |
+//                      | Charles Korthout | 0.8   | 26-06-2026     | German word/ordinal support for xsl:number and fn:format-integer                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -50,7 +51,7 @@ public static class FormatIntegerEngine
         // 3. Format based on primary token
         BigInteger absValue = BigInteger.Abs(value);
         string result;
-        if (TryFormatNamedToken(absValue, primaryToken, out result))
+        if (TryFormatNamedToken(absValue, primaryToken, language, out result))
         {
             // Named token handled
         }
@@ -153,11 +154,13 @@ public static class FormatIntegerEngine
 
         string remaining = modifier;
 
-        // Check for title case flag
-        if (remaining.Contains('t'))
+        // Check for title case flag ('t' outside any parenthesized suffix).
+        // This must run before ordinal detection so that ordinal scheme names
+        // such as "%spellout-ordinal" do not accidentally enable title case.
+        if (HasTitleCaseFlag(remaining))
         {
             titleCase = true;
-            remaining = remaining.Replace("t", "");
+            remaining = RemoveTitleCaseFlag(remaining);
         }
 
         // Check for cardinal
@@ -189,7 +192,50 @@ public static class FormatIntegerEngine
         throw new InvalidOperationException("FODF1310");
     }
 
+    private static bool HasTitleCaseFlag(string s)
+    {
+        int depth = 0;
+        foreach (char c in s)
+        {
+            if (c == '(') depth++;
+            else if (c == ')') depth--;
+            else if (c == 't' && depth == 0) return true;
+        }
+        return false;
+    }
+
+    private static string RemoveTitleCaseFlag(string s)
+    {
+        var sb = new StringBuilder();
+        int depth = 0;
+        foreach (char c in s)
+        {
+            if (c == '(')
+            {
+                depth++;
+                sb.Append(c);
+            }
+            else if (c == ')')
+            {
+                depth--;
+                sb.Append(c);
+            }
+            else if (c == 't' && depth == 0)
+            {
+                // skip title-case flag
+            }
+            else
+            {
+                sb.Append(c);
+            }
+        }
+        return sb.ToString();
+    }
+
     private static bool TryFormatNamedToken(BigInteger value, string primaryToken, out string result)
+        => TryFormatNamedToken(value, primaryToken, null, out result);
+
+    private static bool TryFormatNamedToken(BigInteger value, string primaryToken, string? language, out string result)
     {
         if (value > long.MaxValue || value < 0)
         {
@@ -203,9 +249,9 @@ public static class FormatIntegerEngine
             "A" => ToAlphabetic(v, true),
             "i" => ToRoman(v, false),
             "I" => ToRoman(v, true),
-            "w" => ToWords(v, false),
-            "W" => ToWords(v, true),
-            "Ww" => ToWordsTitle(v),
+            "w" => ToWords(v, false, language),
+            "W" => ToWords(v, true, language),
+            "Ww" => ToWordsTitle(v, language),
             _ => null!
         };
         return result is not null;
@@ -672,7 +718,9 @@ public static class FormatIntegerEngine
         
         if (isDigits)
         {
-            // For digits, append English ordinal suffix
+            if (!string.IsNullOrEmpty(suffix) && !suffix.StartsWith('%'))
+                return result + suffix;
+
             // Remove grouping separators for suffix determination
             string clean = new string(result.Where(char.IsDigit).ToArray());
             if (!string.IsNullOrEmpty(clean) && long.TryParse(clean, out long num))
@@ -685,7 +733,12 @@ public static class FormatIntegerEngine
         {
             // For words, convert to ordinal word
             if (value > long.MaxValue || value < 0)
-                return result + "th";
+                return result + (suffix ?? "th");
+            var lang = NormalizeLanguage(language);
+            if (lang == "de")
+                return GermanToOrdinalWords(result, suffix);
+            if (lang == "it")
+                return ItalianToOrdinal(value, suffix, result);
             return ToOrdinalWords(result, (long)value, language);
         }
     }
@@ -839,50 +892,168 @@ public static class FormatIntegerEngine
         return upper ? sb.ToString() : sb.ToString().ToLowerInvariant();
     }
 
-    private static string ToWords(long n, bool upper)
+    private static string ToWords(long n, bool upper, string? language)
     {
-        string s = NumberToWords(n);
-        return upper ? s.ToUpperInvariant() : s.ToLowerInvariant();
+        string s = NumberToWords(n, language);
+        if (!upper)
+            return s.ToLowerInvariant();
+        // Invariant uppercasing leaves German ß (U+00DF) unchanged; normalize to SS.
+        return s.ToUpperInvariant().Replace("ß", "SS");
     }
 
-    private static string ToWordsTitle(long n)
+    private static string ToWordsTitle(long n, string? language)
     {
-        string s = NumberToWords(n);
+        string s = NumberToWords(n, language);
         return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(s.ToLowerInvariant());
     }
 
-    private static string NumberToWords(long n)
+    private static string NumberToWords(long n, string? language)
+    {
+        var lang = NormalizeLanguage(language);
+        if (lang == "de")
+            return GermanNumberToWords(n);
+        return EnglishNumberToWords(n);
+    }
+
+    private static string EnglishNumberToWords(long n)
     {
         if (n == 0) return "zero";
-        if (n < 0) return "minus " + NumberToWords(-n);
+        if (n < 0) return "minus " + EnglishNumberToWords(-n);
         if (n <= 19) return new[] { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" }[n - 1];
         if (n < 100)
         {
             var tens = new[] { "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
             string r = tens[n / 10 - 2];
-            if (n % 10 > 0) r += "-" + NumberToWords(n % 10);
+            if (n % 10 > 0) r += "-" + EnglishNumberToWords(n % 10);
             return r;
         }
         if (n < 1000)
         {
-            string r = NumberToWords(n / 100) + " hundred";
-            if (n % 100 > 0) r += " and " + NumberToWords(n % 100);
+            string r = EnglishNumberToWords(n / 100) + " hundred";
+            if (n % 100 > 0) r += " and " + EnglishNumberToWords(n % 100);
             return r;
         }
         if (n < 1000000)
         {
-            string r = NumberToWords(n / 1000) + " thousand";
-            if (n % 1000 > 0) r += " " + NumberToWords(n % 1000);
+            string r = EnglishNumberToWords(n / 1000) + " thousand";
+            if (n % 1000 > 0) r += " " + EnglishNumberToWords(n % 1000);
             return r;
         }
         if (n < 1000000000)
         {
-            string r = NumberToWords(n / 1000000) + " million";
-            if (n % 1000000 > 0) r += " " + NumberToWords(n % 1000000);
+            string r = EnglishNumberToWords(n / 1000000) + " million";
+            if (n % 1000000 > 0) r += " " + EnglishNumberToWords(n % 1000000);
             return r;
         }
-        string rr = NumberToWords(n / 1000000000) + " billion";
-        if (n % 1000000000 > 0) rr += " " + NumberToWords(n % 1000000000);
+        string rr = EnglishNumberToWords(n / 1000000000) + " billion";
+        if (n % 1000000000 > 0) rr += " " + EnglishNumberToWords(n % 1000000000);
         return rr;
+    }
+
+    private static string NormalizeLanguage(string? language)
+    {
+        if (string.IsNullOrWhiteSpace(language))
+            return "en";
+        var trimmed = language.Trim();
+        if (trimmed.Length >= 2)
+            return trimmed.Substring(0, 2).ToLowerInvariant();
+        return trimmed.ToLowerInvariant();
+    }
+
+    private static string GermanNumberToWords(long n)
+    {
+        if (n == 0) return "null";
+        if (n < 0) return "minus " + GermanNumberToWords(-n);
+        if (n <= 19) return new[] { "eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn", "elf", "zwölf", "dreizehn", "vierzehn", "fünfzehn", "sechzehn", "siebzehn", "achtzehn", "neunzehn" }[n - 1];
+        if (n < 100)
+        {
+            var tens = new[] { "zwanzig", "dreißig", "vierzig", "fünfzig", "sechzig", "siebzig", "achtzig", "neunzig" };
+            long t = n / 10;
+            long u = n % 10;
+            if (u == 0) return tens[t - 2];
+            string unit = u == 1 ? "ein" : GermanNumberToWords(u);
+            return unit + "und" + tens[t - 2];
+        }
+        if (n < 1000)
+        {
+            long h = n / 100;
+            long r = n % 100;
+            string hw = h == 1 ? "einhundert" : GermanNumberToWords(h) + "hundert";
+            if (r == 0) return hw;
+            return hw + GermanNumberToWords(r);
+        }
+        if (n < 1_000_000)
+        {
+            long t = n / 1000;
+            long r = n % 1000;
+            string tw = t == 1 ? "eintausend" : GermanNumberToWords(t) + "tausend";
+            if (r == 0) return tw;
+            return tw + GermanNumberToWords(r);
+        }
+        if (n < 1_000_000_000)
+        {
+            long m = n / 1_000_000;
+            long r = n % 1_000_000;
+            string mw = m == 1 ? "eine Million" : GermanNumberToWords(m) + " Millionen";
+            if (r == 0) return mw;
+            return mw + " " + GermanNumberToWords(r);
+        }
+        return n.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private static string GermanToOrdinalWords(string cardinalWord, string? suffix)
+    {
+        string ending = string.IsNullOrEmpty(suffix) || suffix.StartsWith("%") ? "e" : suffix.TrimStart('-');
+        int lastSpace = cardinalWord.LastIndexOf(' ');
+        if (lastSpace < 0)
+            return MatchCase(cardinalWord, GermanMakeOrdinalLastWord(cardinalWord.ToLowerInvariant(), ending));
+
+        string prefix = cardinalWord.Substring(0, lastSpace + 1);
+        string last = cardinalWord.Substring(lastSpace + 1);
+        return prefix + MatchCase(last, GermanMakeOrdinalLastWord(last.ToLowerInvariant(), ending));
+    }
+
+    private static string GermanMakeOrdinalLastWord(string lowerLast, string ending)
+    {
+        // Units (including when they terminate a compound word)
+        if (lowerLast.EndsWith("eins")) return lowerLast.Substring(0, lowerLast.Length - 4) + "erst" + ending;
+        if (lowerLast.EndsWith("zwei")) return lowerLast.Substring(0, lowerLast.Length - 4) + "zweit" + ending;
+        if (lowerLast.EndsWith("drei")) return lowerLast.Substring(0, lowerLast.Length - 4) + "dritt" + ending;
+        if (lowerLast.EndsWith("vier")) return lowerLast.Substring(0, lowerLast.Length - 4) + "viert" + ending;
+        if (lowerLast.EndsWith("fünf")) return lowerLast.Substring(0, lowerLast.Length - 4) + "fünft" + ending;
+        if (lowerLast.EndsWith("sechs")) return lowerLast.Substring(0, lowerLast.Length - 5) + "sechst" + ending;
+        if (lowerLast.EndsWith("sieben")) return lowerLast.Substring(0, lowerLast.Length - 6) + "siebt" + ending;
+        if (lowerLast.EndsWith("acht")) return lowerLast.Substring(0, lowerLast.Length - 4) + "acht" + ending;
+        if (lowerLast.EndsWith("neun")) return lowerLast.Substring(0, lowerLast.Length - 4) + "neunt" + ending;
+        if (lowerLast.EndsWith("zehn")) return lowerLast.Substring(0, lowerLast.Length - 4) + "zehnt" + ending;
+        if (lowerLast.EndsWith("elf")) return lowerLast.Substring(0, lowerLast.Length - 3) + "elft" + ending;
+        if (lowerLast.EndsWith("zwölf")) return lowerLast.Substring(0, lowerLast.Length - 5) + "zwölft" + ending;
+        if (lowerLast.EndsWith("hundert")) return lowerLast.Substring(0, lowerLast.Length - 7) + "hundertst" + ending;
+        if (lowerLast.EndsWith("tausend")) return lowerLast.Substring(0, lowerLast.Length - 7) + "tausendst" + ending;
+        if (lowerLast.EndsWith("ig")) return lowerLast.Substring(0, lowerLast.Length - 2) + "igst" + ending;
+        return lowerLast + "t" + ending;
+    }
+
+    private static string ItalianToOrdinal(BigInteger value, string? suffix, string originalResult)
+    {
+        if (value > long.MaxValue || value < 0)
+            return originalResult + (suffix ?? "th");
+        long v = (long)value;
+        bool feminine = suffix != null && suffix.IndexOf("feminine", StringComparison.OrdinalIgnoreCase) >= 0;
+        string ordinal = v switch
+        {
+            1 => feminine ? "prima" : "primo",
+            2 => feminine ? "seconda" : "secondo",
+            3 => feminine ? "terza" : "terzo",
+            4 => feminine ? "quarta" : "quarto",
+            5 => feminine ? "quinta" : "quinto",
+            6 => feminine ? "sesta" : "sesto",
+            7 => feminine ? "settima" : "settimo",
+            8 => feminine ? "ottava" : "ottavo",
+            9 => feminine ? "nona" : "nono",
+            10 => feminine ? "decima" : "decimo",
+            _ => originalResult.ToLowerInvariant() + (feminine ? "a" : "o")
+        };
+        return MatchCase(originalResult, ordinal);
     }
 }

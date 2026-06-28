@@ -1,6 +1,56 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
+**Commit:** `27ce6d7` (with uncommitted working changes)
+**Current focus:** Cleared the `number` cluster (6 runnable failures) by adding German/Italian word and ordinal formatting to `fn:format-integer` / `xsl:number`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,843
+- **Failed:** 407
+- **Skipped:** 9,350
+- **Pass rate:** 92.2% (+6 passes / −6 failures vs. previous 4,837/413)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| number | 345 | 336 | 0 | 9 | ✅ 100% runnable; German/Italian word + ordinal support |
+| namespace | 224 | 199 | 1 | 24 | `namespace-3005` deep-equal failure observed, unrelated to number changes |
+
+## This Session Fixes
+
+1. **`xsl:number` ordinal suffix/scheme passthrough** — `ExecuteXsltNumber` now preserves values such as `ordinal="-e"` and `ordinal="%spellout-ordinal"` instead of treating every non-`no` value as `ordinal="yes"`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **German number words and ordinals** — `FormatIntegerEngine` now produces German cardinal words (`drei`, `zwanzig`, `einhundertvierunddreißig`) and localized ordinals with `-e`/`-er`/`-es`/`-en` suffixes and the `%spellout-ordinal` scheme.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs`.
+
+3. **Italian ordinal words** — `FormatIntegerEngine` recognizes `%spellout-ordinal-masculine` and `%spellout-ordinal-feminine` schemes for values 1–10 (`primo`/`prima`, …).
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs`.
+
+4. **Title-case flag parsing** — `ParseModifier` no longer treats the letter `t` inside an ordinal scheme suffix (e.g. `spellou*t*`) as a title-case request.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **899 passed / 0 failed / 0 skipped** across 8 projects.
+- The `number` cluster (including `format-number`) is now **336/345 passing, 0 runnable failures, 9 skipped**.
+- One unrelated conformance failure observed: `namespace-3005` (deep-equal namespace-node comparison) is not touched by the number changes.
+
+## Recommended Next Steps
+
+1. Commit the number-formatting changes to `origin/main`.
+2. Continue with adjacent medium clusters: `resolve-uri` (8), `apply-templates` (11), or `param` (12).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-28
 **Commit:** `68bc099`
 **Current focus:** Cleared the `snapshot` cluster (6 runnable failures) by fixing `fn:snapshot` in-scope namespace copying and top-level `xsl:namespace` item extraction.
 

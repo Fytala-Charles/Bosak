@@ -125,6 +125,7 @@
 //                      | Charles Korthout | 5.54  | 26-06-2026     | Implemented xsl:map/xsl:map-entry, JSON serialize, static XPath validation; clears maps |
 //                      | Charles Korthout | 5.55  | 27-06-2026     | Array flattening in apply-templates, value-of, and complex content; fixes regressions   |
 //                      | Charles Korthout | 5.56  | 27-06-2026     | Top-level xsl:namespace no longer yields standalone namespace-node items               |
+//                      | Charles Korthout | 5.57  | 26-06-2026     | Pass ordinal suffix/scheme from xsl:number to format-integer for localized ordinals    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -11504,11 +11505,14 @@ public sealed class TransformEngine
             int.TryParse(gsEval, out groupingSize);
         }
 
-        bool ordinal = false;
+        string? ordinal = null;
         if (!string.IsNullOrEmpty(ordinalAttr))
         {
             var ordEval = EvaluateAvt(ordinalAttr, instruction);
-            ordinal = ordEval.Equals("yes", StringComparison.OrdinalIgnoreCase);
+            if (ordEval.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                ordinal = string.Empty; // default ordinal for the language
+            else if (!ordEval.Equals("no", StringComparison.OrdinalIgnoreCase))
+                ordinal = ordEval;
         }
 
         // Evaluate start-at as AVT, then parse as space-separated integers (XSLT 3.0)
@@ -12043,7 +12047,7 @@ public sealed class TransformEngine
     /// <summary>
     /// Formats a sequence of integers according to an <c>xsl:number</c> format string.
     /// </summary>
-    private string FormatNumberSequence(BigInteger[] numbers, string format, bool ordinal, string? lang, string? groupingSeparator, int groupingSize)
+    private string FormatNumberSequence(BigInteger[] numbers, string format, string? ordinal, string? lang, string? groupingSeparator, int groupingSize)
     {
         var (prefix, tokens, separators, suffix) = ParseXslNumberFormat(format);
 
@@ -12057,8 +12061,8 @@ public sealed class TransformEngine
                 : "1";
 
             // Append ordinal modifier if requested
-            if (ordinal && !token.Contains(';'))
-                token += ";o";
+            if (ordinal != null && !token.Contains(';'))
+                token += string.IsNullOrEmpty(ordinal) ? ";o" : ";o(" + ordinal + ")";
 
             var formatted = FormatIntegerEngine.Format(_context, numbers[i], token, lang);
 
