@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `7df6bb4`
+**Commit:** `1d1a9ba`
 **Current focus:** Cleared the W3C `shadow` conformance cluster.
 
 ---
