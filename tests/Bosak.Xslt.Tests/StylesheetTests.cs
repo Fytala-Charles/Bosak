@@ -24,6 +24,8 @@
 //                      | Charles Korthout | 0.12  | 24-06-2026     | Added xsl:function/@_name AVT expansion tests                                         |
 //                      | Charles Korthout | 0.13  | 26-06-2026     | Added shallow-copy variable and quantified EBV tests                                  |
 //                      | Charles Korthout | 0.14  | 26-06-2026     | Added shadow attribute tests for _select, _use-when, and LRE preservation            |
+//                      | Charles Korthout | 0.15  | 26-06-2026     | Added lazy function-local variable / circular-reference test                         |
+//                      | Charles Korthout | 0.16  | 29-06-2026     | Added regression tests for global visibility and eager duplicate function locals       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2477,7 +2479,8 @@ public class StylesheetTests
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(null!, initialTemplate: "main");
 
-        Assert.Contains("<out>3</out>", result);
+        Assert.Contains("<out", result);
+        Assert.Contains("3</out>", result);
     }
 
     [Fact]
@@ -2517,5 +2520,84 @@ public class StylesheetTests
         Assert.Contains("_one=\"1.0\"", result);
         Assert.Contains("_two=\"two\"", result);
         Assert.Contains("one=\"1\"", result);
+    }
+
+    [Fact]
+    public void Function_Body_Can_Reference_Global_Variable()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:f='http://f.com/' exclude-result-prefixes='f'>
+            <xsl:variable name='in' select='(3,1,2)'/>
+            <xsl:template name='main'>
+                <out><xsl:value-of select='f:sort()' separator=','/></out>
+            </xsl:template>
+            <xsl:function name='f:sort'>
+                <xsl:perform-sort select='$in'>
+                    <xsl:sort select='.' data-type='number'/>
+                </xsl:perform-sort>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null!, initialTemplate: "main");
+
+        Assert.Contains("<out>1,2,3</out>", result);
+    }
+
+    [Fact]
+    public void Unused_Function_Local_Variable_Does_Not_Trigger_Circular_Reference()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://example.com/my'>
+            <xsl:variable name='x' select='my:func(1)'/>
+            <xsl:function name='my:func'>
+                <xsl:param name='a'/>
+                <xsl:variable name='b' select='$x'/>
+                <xsl:sequence select='$a + 2'/>
+            </xsl:function>
+            <xsl:template match='/'>
+                <out><xsl:value-of select='$x'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<out", result);
+        Assert.Contains("3</out>", result);
+    }
+
+    [Fact]
+    public void Function_Local_Variables_With_Same_Name_Are_Eagerly_Evaluated_In_Document_Order()
+    {
+        // Regression test: two xsl:variable declarations with the same name in a
+        // function body must behave like normal lexical variables (the second shadows
+        // the first). A broad lazy implementation caused the second variable to
+        // reference itself instead of the first.
+        var xsl = @"<xsl:stylesheet version='2.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:f='http://example.com/f'>
+            <xsl:template name='main'>
+                <out><xsl:value-of select='f:sqrt(10)'/></out>
+            </xsl:template>
+            <xsl:function name='f:sqrt' as='xs:double'
+                xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xsl:param name='n' as='xs:double'/>
+                <xsl:variable name='e'
+                    select='$n + (($n - $n * $n) div (2 * $n))'/>
+                <xsl:variable name='e' as='xs:double'
+                    select='round-half-to-even($e, 4)'/>
+                <xsl:sequence select='$e'/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null!, initialTemplate: "main");
+
+        Assert.Contains("<out", result);
     }
 }

@@ -131,6 +131,8 @@
 //                      | Charles Korthout | 5.60  | 28-06-2026     | Base-URI/TVT context fixes clear namespace-4801 regression                             |
 //                      | Charles Korthout | 5.61  | 26-06-2026     | Default-mode root template; #current via call-template; XTTE0510; param forwarding     |
 //                      | Charles Korthout | 5.62  | 29-06-2026     | Snapshot/restore variables around literal result element content; fixes param-0107    |
+//                      | Charles Korthout | 5.63  | 26-06-2026     | Lazy evaluation for xsl:variable inside xsl:function bodies; fixes param-0301         |
+//                      | Charles Korthout | 5.64  | 29-06-2026     | Targeted lazy locals + global resolver re-entry fix; clears regressions                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -240,6 +242,11 @@ public sealed class TransformEngine
 
     // Memoization cache for deterministic xsl:function declarations (new-each-time="no")
     private readonly Dictionary<XsltFunctionCacheKey, XdmValue> _xsltFunctionCache = new();
+
+    // Per-function-call lazy variable dictionary. xsl:variable declarations inside
+    // xsl:function bodies are registered here and evaluated only when referenced,
+    // so unused variables do not trigger false circular-reference errors.
+    private Dictionary<(string LocalName, string NamespaceUri), Lazy<XdmValue>>? _functionLocalLazyVariables;
 
     // Current group state for xsl:for-each-group / current-group() / current-grouping-key()
     private List<XdmValue>? _currentGroup;
@@ -1674,6 +1681,9 @@ public sealed class TransformEngine
         var savedNamedGroups = _currentNamedMergeGroups;
         var savedMergeSourceNames = _currentMergeSourceNames;
         var savedRegexGroups = _context.RegexGroups;
+        var savedLazyResolver = _context.LazyVariableResolver;
+        var savedSuppressCaching = _context.SuppressLazyGlobalCaching;
+        var savedFunctionLocals = _functionLocalLazyVariables;
         _sequenceAccumulator = null;
         _currentMergeGroup = null;
         _currentMergeKey = null;
@@ -1688,6 +1698,17 @@ public sealed class TransformEngine
             if (cacheKey.HasValue && _xsltFunctionCache.TryGetValue(cacheKey.Value, out var cached))
                 return cached;
 
+            // XSLT functions have no context item by default (XSLT 3.0 §9.6).
+            // xsl:sequence/@select and other XPath expressions must not see
+            // the caller's context item.
+            _context.WithFocus(XdmValue.Undefined, 0, 0);
+
+            // Function bodies run in their own variable scope. Remove caller/template
+            // variables so an outer function's local variables are not mistaken for
+            // inner-function locals. Parameters are bound into the fresh scope below;
+            // globals remain available via the lazy global resolver.
+            _context.RestoreVariables(new Dictionary<(string, string), XdmValue>());
+
             // Bind parameters, applying the XPath function conversion rules for each
             // xsl:param/@as type.
             var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
@@ -1699,10 +1720,25 @@ public sealed class TransformEngine
                 _context.WithVariable(fpLocal, converted, fpNs);
             }
 
-            // XSLT functions have no context item by default (XSLT 3.0 §9.6).
-            // xsl:sequence/@select and other XPath expressions must not see
-            // the caller's context item.
-            _context.WithFocus(XdmValue.Undefined, 0, 0);
+            // Function-local variables whose eager evaluation would trigger a circular
+            // reference to a global currently being evaluated are deferred and only
+            // computed if actually referenced. This avoids false circularity errors
+            // for unused variables that reference globals under evaluation (param-0301).
+            var functionLocals = new Dictionary<(string LocalName, string NamespaceUri), Lazy<XdmValue>>();
+            _functionLocalLazyVariables = functionLocals;
+            _context.LazyVariableResolver = (local, ns) =>
+            {
+                if (functionLocals.TryGetValue((local, ns), out var lazy))
+                {
+                    var value = lazy.Value;
+                    _context.WithVariable(local, value, ns);
+                    // Function-local values must not leak into the global lazy cache,
+                    // but globals resolved while evaluating the local should still cache.
+                    _context.SkipLazyGlobalCacheOnce = true;
+                    return value;
+                }
+                return savedLazyResolver?.Invoke(local, ns);
+            };
 
             // XSLT functions have no context item (XSLT 3.0 §9.6).
             // Evaluate the function body with an absent context item.
@@ -1724,6 +1760,9 @@ public sealed class TransformEngine
             _currentNamedMergeGroups = savedNamedGroups;
             _currentMergeSourceNames = savedMergeSourceNames;
             _context.RegexGroups = savedRegexGroups;
+            _context.LazyVariableResolver = savedLazyResolver;
+            _context.SuppressLazyGlobalCaching = savedSuppressCaching;
+            _functionLocalLazyVariables = savedFunctionLocals;
         }
     }
 
@@ -1744,6 +1783,26 @@ public sealed class TransformEngine
             "no" or "false" or "0" or "maybe" or "probably" => true,
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Evaluates a single xsl:variable declaration inside an xsl:function body.
+    /// Used by the lazy function-local variable resolver.
+    /// </summary>
+    private XdmValue EvaluateFunctionLocalVariable(XElement instruction, XdmValue contextItem)
+    {
+        var varSelect = instruction.Attribute("select")?.Value;
+        XdmValue varValue;
+        if (!string.IsNullOrEmpty(varSelect))
+        {
+            var compiled = CompileXPath(varSelect, instruction);
+            varValue = compiled.Evaluate(_context);
+        }
+        else
+        {
+            varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+        }
+        return ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
     }
 
     /// <summary>
@@ -1994,22 +2053,50 @@ public sealed class TransformEngine
                 case "variable":
                     {
                         var varName = instruction.Attribute("name")?.Value;
-                        var varSelect = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(varName))
                         {
                             var (varLocal, varNs) = ExpandVariableName(instruction, varName);
-                            XdmValue varValue;
-                            if (!string.IsNullOrEmpty(varSelect))
+                            if (_functionLocalLazyVariables != null)
                             {
-                                var compiled = CompileXPath(varSelect, instruction);
-                                varValue = compiled.Evaluate(_context);
+                                // Eagerly evaluate function-local variables. If doing so would
+                                // trigger a circular reference to a global variable that is
+                                // currently being evaluated (because this function was called
+                                // from that global's select expression), defer evaluation until
+                                // the variable is actually referenced. This avoids false
+                                // circularity errors for unused function-local variables
+                                // (XSLT 3.0 test param-0301).
+                                XdmValue eagerValue = XdmValue.Undefined;
+                                bool circular = false;
+                                try
+                                {
+                                    eagerValue = EvaluateFunctionLocalVariable(instruction, contextItem);
+                                }
+                                catch (InvalidOperationException ex)
+                                    when (ex.Message.Contains("Circular reference", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    circular = true;
+                                }
+
+                                if (circular)
+                                {
+                                    var capturedInstruction = instruction;
+                                    var capturedContextItem = contextItem;
+                                    _functionLocalLazyVariables[(varLocal, varNs)] = new Lazy<XdmValue>(
+                                        () => EvaluateFunctionLocalVariable(capturedInstruction, capturedContextItem),
+                                        isThreadSafe: false);
+                                }
+                                else
+                                {
+                                    _context.WithVariable(varLocal, eagerValue, varNs);
+                                }
                             }
                             else
                             {
-                                varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+                                // Fallback for variable declarations evaluated outside a function body
+                                // (should not normally reach this path).
+                                var varValue = EvaluateFunctionLocalVariable(instruction, contextItem);
+                                _context.WithVariable(varLocal, varValue, varNs);
                             }
-                            varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
-                            _context.WithVariable(varLocal, varValue, varNs);
                         }
                         break;
                     }
@@ -7407,12 +7494,17 @@ public sealed class TransformEngine
         _context.LazyVariableResolver = (localName, namespaceUri) =>
         {
             var key = (localName, namespaceUri);
+
+            // A reference to a global that is currently being evaluated is a circular
+            // dependency. Detect this before looking the variable up, so callers (e.g.
+            // function bodies) see a circularity rather than an "undefined variable" error.
+            if (_evaluatingGlobals.Contains(key))
+                throw new InvalidOperationException("XPST0008: Circular reference to global variable.");
+
             if (_lazyGlobals.TryGetValue(key, out var info))
             {
-                _lazyGlobals.Remove(key);
-
                 // Parameters supplied by the caller are already bound.
-                if (_context.TryGetVariable(localName, out var existing, namespaceUri))
+                if (_context.TryGetBoundVariable(localName, out var existing, namespaceUri))
                     return existing;
 
                 // Static variables/parameters were evaluated during stylesheet loading.
@@ -7482,6 +7574,7 @@ public sealed class TransformEngine
                     }
                     value = ConvertVariableValue(value, info.AsType);
                     _context.WithVariable(localName, value, namespaceUri);
+                    _lazyGlobals.Remove(key);
                     return value;
                 }
                 finally

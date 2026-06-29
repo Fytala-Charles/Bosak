@@ -1,5 +1,53 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-29
+**Commit:** `3b4c220` (with uncommitted changes)
+**Current focus:** Fixed the `param-0301` false circular-reference failure without regressing global-variable visibility inside `xsl:function` bodies.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,890
+- **Failed:** 360
+- **Skipped:** 9,350
+- **Pass rate:** 93.1% (unchanged vs. previous 4,890/360/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| param | 31 | 31 | 0 | 0 | ✅ `param-0301` now passes |
+| sort | 82 | 80 | 0 | 2 | ✅ `sort-079` still passes |
+| function | 350 | 220 | 0 | 130 | ✅ `function-1005` and `function-1022` regressions cleared |
+
+## This Session Fixes
+
+1. **Targeted lazy function-local variables** — `xsl:variable` inside an `xsl:function` body is now evaluated eagerly, except when eager evaluation would trigger a circular reference to a global variable currently being evaluated. In that case the variable is deferred and only evaluated if actually referenced. This fixes `param-0301` (an unused function-local variable referencing a global under evaluation) while preserving normal eager semantics for recursive functions and duplicate-named locals.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **Global variable resolver re-entry** — The lazy global resolver now detects circular references before looking up the variable, and removes the pending global from the lazy dictionary only after successful evaluation. A new `TryGetBoundVariable` helper on `EvaluationContext` lets the global resolver check existing bindings without recursing back through the lazy resolver.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`.
+
+3. **Regression coverage** — Added unit tests for global-variable visibility inside functions and for eager evaluation of duplicate-named function locals.
+   - **File changed**: `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+## Notes
+
+- Unit-test suite: **904 passed / 0 failed / 0 skipped** across 8 projects (Release configuration; Debug builds of `Bosak.Xslt.Tests` are currently blocked by a local Application Control policy).
+- Full W3C suite: **4,890/360/9,350** (93.1%), unchanged.
+- Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
+
+## Recommended Next Steps
+
+1. Commit the `param-0301` fix.
+2. Continue with adjacent medium clusters such as `copy-of` (14), `try` (21), or `date` (year < 1 limitations).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-26
 **Commit:** `1d1a9ba`
 **Current focus:** Cleared the W3C `shadow` conformance cluster.

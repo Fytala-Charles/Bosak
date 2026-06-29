@@ -26,6 +26,8 @@
 //                      | Charles Korthout | 1.4   | 25-06-2026     | Added InitialTemplateCallParameters/TunnelParameters for named-template entry points   |
 //                      | Charles Korthout | 1.5   | 25-06-2026     | Added RegisterDocument to pre-cache source documents for fn:doc identity               |
 //                      | Charles Korthout | 1.6   | 25-06-2026     | Added IsStaticEvaluation flag for use-when/static-expression function libraries        |
+//                      | Charles Korthout | 1.7   | 26-06-2026     | Added SnapshotLazyGlobals/RestoreLazyGlobals to isolate function-local lazy variables  |
+//                      | Charles Korthout | 1.8   | 29-06-2026     | Added SkipLazyGlobalCacheOnce and TryGetBoundVariable for deferred locals              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -61,6 +63,21 @@ public sealed class EvaluationContext
     /// variables with sequence constructors to be evaluated on first reference.
     /// </summary>
     public Func<string, string, XdmValue?>? LazyVariableResolver { get; set; }
+
+    /// <summary>
+    /// When true, values returned by <see cref="LazyVariableResolver"/> are not cached in
+    /// <see cref="_evaluatedLazyGlobals"/>. Used by XSLT function calls to keep function-local
+    /// lazy variables from leaking into the global cache.
+    /// </summary>
+    public bool SuppressLazyGlobalCaching { get; set; }
+
+    /// <summary>
+    /// When set to <c>true</c>, the next value returned by <see cref="LazyVariableResolver"/>
+    /// will not be cached in <see cref="_evaluatedLazyGlobals"/>, but the flag is then reset.
+    /// This allows a resolver to suppress caching for a specific resolution (e.g. a function-local
+    /// variable) while still letting globals cache normally.
+    /// </summary>
+    public bool SkipLazyGlobalCacheOnce { get; set; }
 
     /// <summary>
     /// When true, <see cref="Bosak.XPath.Standard.Functions.FunctionLibrary.Populate"/> will not
@@ -271,7 +288,8 @@ public sealed class EvaluationContext
             if (lazyValue != null)
             {
                 value = lazyValue.Value;
-                _evaluatedLazyGlobals[(localName, namespaceUri)] = value;
+                if (!SuppressLazyGlobalCaching)
+                    _evaluatedLazyGlobals[(localName, namespaceUri)] = value;
                 return true;
             }
         }
@@ -279,8 +297,53 @@ public sealed class EvaluationContext
         return false;
     }
 
+    /// <summary>
+    /// Captures the current lazy-global cache so it can be restored later. This lets
+    /// XSLT function calls isolate function-local lazy variables from the global cache.
+    /// </summary>
+    public IDisposable SnapshotLazyGlobals()
+    {
+        var saved = new Dictionary<(string LocalName, string NamespaceUri), XdmValue>(_evaluatedLazyGlobals);
+        return new LazyGlobalsRestorer(this, saved);
+    }
+
+    private sealed class LazyGlobalsRestorer : IDisposable
+    {
+        private readonly EvaluationContext _context;
+        private readonly Dictionary<(string LocalName, string NamespaceUri), XdmValue> _saved;
+
+        public LazyGlobalsRestorer(EvaluationContext context, Dictionary<(string LocalName, string NamespaceUri), XdmValue> saved)
+        {
+            _context = context;
+            _saved = saved;
+        }
+
+        public void Dispose()
+        {
+            _context._evaluatedLazyGlobals.Clear();
+            foreach (var kv in _saved)
+                _context._evaluatedLazyGlobals[kv.Key] = kv.Value;
+        }
+    }
+
     public bool RemoveVariable(string localName, string namespaceUri = "")
         => _variables.Remove((localName, namespaceUri));
+
+    /// <summary>
+    /// Looks up a variable in the direct variable dictionary and the evaluated lazy-global
+    /// cache without invoking <see cref="LazyVariableResolver"/>. Used by the XSLT global
+    /// variable resolver to avoid recursive re-entry through its own resolver.
+    /// </summary>
+    public bool TryGetBoundVariable(string localName, out XdmValue value, string namespaceUri = "")
+    {
+        if (_variables.TryGetValue((localName, namespaceUri), out value))
+            return true;
+
+        if (_evaluatedLazyGlobals.TryGetValue((localName, namespaceUri), out value))
+            return true;
+
+        return false;
+    }
 
     /// <summary>
     /// Creates a snapshot of all current variable bindings.
