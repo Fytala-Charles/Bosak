@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 1.8   | 26-06-2026     | Expand _select AVTs using static parameters so static-error tests report correctly       |
 //                      | Charles Korthout | 1.9   | 27-06-2026     | Fall back to run-time _select expansion when static parameters are insufficient          |
 //                      | Charles Korthout | 2.0   | 28-06-2026     | Load source documents with DTD/XmlResolver so external entities expand with base URIs   |
+//                      | Charles Korthout | 2.1   | 26-06-2026     | Set TreatRecoverableAmbiguousMatchAsError for on-multiple-match="error" tests          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -293,6 +294,7 @@ class Program
         try { File.WriteAllText("last_test.txt", name); }
         catch (IOException) { /* ignore file-lock races */ }
 
+        bool treatAmbiguousMatchAsError = false;
         try
         {
             // Check dependencies
@@ -314,6 +316,8 @@ class Program
                     // We treat ambiguous matches in XSLT 1.0/2.0 stylesheets as errors.
                     if (val == "recover" && isBackwardsCompatible)
                         return TestResult.Skip;
+                    if (val == "error")
+                        treatAmbiguousMatchAsError = true;
                 }
                 foreach (var feature in deps.Elements(ns + "feature"))
                 {
@@ -485,7 +489,8 @@ class Program
             {
                 UriResolver = resolver,
                 MessageListener = messageListener,
-                StaticParameters = staticParamValues
+                StaticParameters = staticParamValues,
+                TreatRecoverableAmbiguousMatchAsError = treatAmbiguousMatchAsError
             };
             var executable = compiler.Compile(xslDoc, baseUri);
 

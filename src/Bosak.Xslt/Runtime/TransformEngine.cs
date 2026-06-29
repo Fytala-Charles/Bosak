@@ -129,6 +129,7 @@
 //                      | Charles Korthout | 5.58  | 28-06-2026     | Keep xsl:namespace nodes for as="node()"/"node()?"; fixes namespace-3005              |
 //                      | Charles Korthout | 5.59  | 28-06-2026     | TVTs compile with in-scope namespaces and effective base URI; fixes resolve-uri-022   |
 //                      | Charles Korthout | 5.60  | 28-06-2026     | Base-URI/TVT context fixes clear namespace-4801 regression                             |
+//                      | Charles Korthout | 5.61  | 26-06-2026     | Default-mode root template; #current via call-template; XTTE0510; param forwarding     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -167,6 +168,7 @@ public sealed class TransformEngine
     private readonly HashSet<string> _excludedResultPrefixes;
     private readonly Dictionary<string, Stylesheet.NamespaceAliasDefinition> _namespaceAliases;
     private readonly IXsltMessageListener? _messageListener;
+    private readonly bool _treatRecoverableAmbiguousMatchAsError;
 
     // Variable scope stack for proper lexical scoping across call-template
     private readonly Stack<Dictionary<(string LocalName, string NamespaceUri), XdmValue?>> _varScopes = new();
@@ -276,11 +278,12 @@ public sealed class TransformEngine
     /// <summary>The parsed xsl:output serialization properties.</summary>
     public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
 
-    public TransformEngine(Stylesheet.Stylesheet stylesheet, EvaluationContext? context = null, IXsltMessageListener? messageListener = null)
+    public TransformEngine(Stylesheet.Stylesheet stylesheet, EvaluationContext? context = null, IXsltMessageListener? messageListener = null, bool treatRecoverableAmbiguousMatchAsError = false)
     {
         _stylesheet = stylesheet;
         _context = context ?? new EvaluationContext();
         _messageListener = messageListener;
+        _treatRecoverableAmbiguousMatchAsError = treatRecoverableAmbiguousMatchAsError;
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
         _context.BaseUri = stylesheet.BaseUri ?? string.Empty;
         FunctionLibrary.Populate(_context);
@@ -2663,23 +2666,76 @@ public sealed class TransformEngine
     /// </summary>
     private Stylesheet.TemplateRule? FindRootTemplate()
     {
+        Stylesheet.TemplateRule? best = null;
+        double bestPriority = double.NegativeInfinity;
+        int bestImportPrecedence = int.MaxValue;
+        bool hasConflict = false;
+
         foreach (var rule in _allTemplateRules)
         {
             if (rule.Match == null) continue;
+            // Only consider templates that participate in the default (unnamed) mode.
+            if (!MatchesMode(rule, ""))
+                continue;
             var stripped = Patterns.PatternCompiler.StripXPathComments(rule.Match).Trim();
             // Only match patterns that directly match the document node,
             // not path patterns like document-node()/child::element().
-            if (stripped == "/" ||
+            bool isRootPattern = stripped == "/" ||
                 stripped == "document-node()" ||
                 stripped.StartsWith("document-node()[") ||
+                stripped.StartsWith("document-node(element(") ||
+                stripped.StartsWith("document-node(schema-element(") ||
                 stripped == "root()" ||
                 stripped.StartsWith("doc(") ||
-                stripped.StartsWith("(/"))
+                stripped.StartsWith("(/");
+            if (!isRootPattern)
+                continue;
+            if (rule.CompiledMatch == null)
+                continue;
+            if (!rule.CompiledMatch(XdmValue.FromNode(_initialSource!), _context))
+                continue;
+
+            // XSLT spec §6.4: import precedence is checked BEFORE priority.
+            if (best == null || rule.ImportPrecedence < bestImportPrecedence)
             {
-                return rule;
+                best = rule;
+                bestPriority = rule.Priority;
+                bestImportPrecedence = rule.ImportPrecedence;
+                hasConflict = false;
+            }
+            else if (rule.ImportPrecedence == bestImportPrecedence)
+            {
+                if (rule.Priority > bestPriority)
+                {
+                    best = rule;
+                    bestPriority = rule.Priority;
+                    hasConflict = false;
+                }
+                else if (rule.Priority == bestPriority)
+                {
+                    if (best != null && best != rule && best.Element != rule.Element)
+                        hasConflict = true;
+                    // XSLT last-wins rule: when priority and import precedence are equal,
+                    // the template that appears later in the stylesheet wins.
+                    best = rule;
+                }
             }
         }
-        return null;
+
+        if (hasConflict && best != null)
+        {
+            var modeDef = _stylesheet.GetModeDefinition("");
+            if (modeDef?.OnMultipleMatch == Stylesheet.OnMultipleMatch.Fail)
+            {
+                throw new InvalidOperationException("XTDE0540: Multiple templates match with the same priority.");
+            }
+            if (_treatRecoverableAmbiguousMatchAsError)
+            {
+                throw new InvalidOperationException("XTRE0540: Multiple templates match with the same priority.");
+            }
+        }
+
+        return best;
     }
 
     /// <summary>
@@ -2801,6 +2857,12 @@ public sealed class TransformEngine
             List<XdmValue> items;
             if (string.IsNullOrEmpty(select))
             {
+                // xsl:apply-templates with no @select requires a node context item (XTTE0510)
+                if (!contextItem.IsNode)
+                {
+                    throw new InvalidOperationException("XTTE0510: The context item for xsl:apply-templates is not a node.");
+                }
+
                 // No select and no context node: empty sequence
                 items = new List<XdmValue>();
             }
@@ -3924,7 +3986,12 @@ public sealed class TransformEngine
                         // apply-templates with select but no context node (e.g. inside named template)
                         ApplyTemplates(contextItem, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams, instruction);
                     }
-                    // If node is null and select is empty, apply-templates has nothing to process
+                    else if (!contextItem.IsUndefined)
+                    {
+                        // xsl:apply-templates with no @select requires a node context item (XTTE0510)
+                        throw new InvalidOperationException("XTTE0510: The context item for xsl:apply-templates is not a node.");
+                    }
+                    // If there is no context item and no select, apply-templates has nothing to process
                     break;
                 }
 
@@ -4535,7 +4602,7 @@ public sealed class TransformEngine
                         }
                         else if (node != null)
                         {
-                            ApplyBuiltInRules(node, nextMatchMode, mergedTunnelParams);
+                            ApplyBuiltInRules(node, nextMatchMode, mergedTunnelParams, nextMatchParams);
                         }
                         else if (!contextItem.IsUndefined)
                         {
@@ -4591,7 +4658,7 @@ public sealed class TransformEngine
                         }
                         else if (node != null)
                         {
-                            ApplyBuiltInRules(node, applyImportsMode, currentTunnelParams);
+                            ApplyBuiltInRules(node, applyImportsMode, currentTunnelParams, applyImportsParams);
                         }
                         else if (!contextItem.IsUndefined)
                         {
@@ -7578,6 +7645,11 @@ public sealed class TransformEngine
             if (modeDef?.OnMultipleMatch == Stylesheet.OnMultipleMatch.Fail)
             {
                 throw new InvalidOperationException("XTDE0540: Multiple templates match with the same priority.");
+            }
+
+            if (_treatRecoverableAmbiguousMatchAsError)
+            {
+                throw new InvalidOperationException("XTRE0540: Multiple templates match with the same priority.");
             }
 
             if (modeDef?.WarningOnMultipleMatch == true)

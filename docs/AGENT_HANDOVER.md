@@ -1,6 +1,61 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
+**Commit:** `ea4a529`
+**Current focus:** Cleared the W3C `apply-templates` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,871
+- **Failed:** 379
+- **Skipped:** 9,350
+- **Pass rate:** 92.8% (+16 passed / −16 failed vs. previous 4,855/395/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| apply-templates | 50 | 47 | 0 | 3 | ✅ 100% runnable; 11 previous failures fixed |
+
+## This Session Fixes
+
+1. **Default priority for `match="/"`** — Changed from `0.5` to `-0.5` per the XSLT 2.0/3.0 spec.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
+
+2. **Default-mode root-template selection** — `FindRootTemplate` now filters to the unnamed mode and resolves conflicts by import precedence/priority, so `mode="#current"` works through `xsl:call-template`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`document-node(element(E))` patterns** — The pattern compiler now supports `document-node(element(name))` and `document-node(element(*))`; root-template selection recognizes them as valid document patterns.
+   - **Files changed**: `src/Bosak.Xslt/Patterns/PatternCompiler.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **`xsl:apply-templates` non-node context item** — Raises `XTTE0510` when `xsl:apply-templates` has no `@select` and the context item is not a node.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+5. **Parameter forwarding through built-in rule fallback** — `xsl:apply-imports` and `xsl:next-match` now pass ordinary parameters to the built-in rule when no lower-precedence template matches.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+6. **Ambiguous-match error mode for test harness** — Added `XsltCompiler.TreatRecoverableAmbiguousMatchAsError` so the conformance harness can raise `XTRE0540` for tests declaring `on-multiple-match="error"`.
+   - **Files changed**: `src/Bosak.Xslt/Api/XsltCompiler.cs`, `src/Bosak.Xslt/Api/XsltExecutable.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+## Notes
+
+- Unit-test suite: **899 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **4,871/379/9,350** (92.8%).
+- Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
+
+## Recommended Next Steps
+
+1. Commit the `apply-templates` cluster fixes.
+2. Continue with adjacent medium clusters: `param` (12), `copy-of` (14), or `try` (21).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-28
 **Commit:** `c40350d`
 **Current focus:** Restored the W3C `catalog` self-test set and fixed the O(N²) slowness that made it hang after the `document()` base-URI changes.
 

@@ -35,6 +35,7 @@
 //                      | Charles Korthout | 2.1   | 13-06-2026     | match="." matches atomic items as well as nodes                                         |
 //                      | Charles Korthout | 2.2   | 13-06-2026     | WrapWithCurrentItem clears regex-group state for pattern evaluation                     |
 //                      | Charles Korthout | 2.3   | 13-06-2026     | Route attribute patterns with predicates through CompilePredicatePattern               |
+//                      | Charles Korthout | 2.4   | 26-06-2026     | Support document-node(element(E)) match patterns                                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1580,13 +1581,32 @@ public sealed class PatternCompiler
             };
         }
 
-        if (name == "document-node()")
+        if (name.StartsWith("document-node(") && name.EndsWith(')'))
         {
+            var arg = ExtractFunctionArg(name);
+            if (string.IsNullOrEmpty(arg))
+            {
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null) return false;
+                    return node.NodeKind == XdmNodeKind.Document;
+                };
+            }
+
+            var elementTest = CompileElementPattern(arg);
             return (item, ctx) =>
             {
                 var node = AsNode(item);
-                if (node == null) return false;
-                return node.NodeKind == XdmNodeKind.Document;
+                if (node == null || node.NodeKind != XdmNodeKind.Document)
+                    return false;
+
+                var enumerator = node.Children(XdmNodeKind.Element).GetEnumerator();
+                if (!enumerator.MoveNext())
+                    return false;
+
+                var root = enumerator.Current;
+                return root.IsNode && elementTest(root, ctx);
             };
         }
 
@@ -1607,16 +1627,6 @@ public sealed class PatternCompiler
                 if (node == null) return false;
                 return node.NodeKind == XdmNodeKind.ProcessingInstruction &&
                 node.LocalName == piName.Trim('\'');
-            };
-        }
-
-        if (name == "document-node()")
-        {
-            return (item, ctx) =>
-            {
-                var node = AsNode(item);
-                if (node == null) return false;
-                return node.NodeKind == XdmNodeKind.Document;
             };
         }
 

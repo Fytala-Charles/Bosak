@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 09-06-2026     | Trim default-mode attribute; use ModeDefinition.NormalizeModeName for empty URI       |
 //                      | Charles Korthout | 0.9   | 24-06-2026     | GetXPathDefaultNamespace no longer falls back to xmlns declaration                     |
 //                      | Charles Korthout | 1.0   | 25-06-2026     | Trim xsl:template/@name values to normalize whitespace/EQName forms                    |
+//                      | Charles Korthout | 1.1   | 26-06-2026     | Default priority for match="/" is -0.5 per XSLT 2.0/3.0 spec                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -389,8 +390,12 @@ public sealed class TemplateRule
                 return ComputeSinglePatternPriority(trimmed[1..close].Trim());
         }
 
-        // Document patterns and root pattern
-        if (trimmed == "/" || trimmed.StartsWith("doc(") || trimmed.StartsWith("document("))
+        // Root pattern
+        if (trimmed == "/")
+            return -0.5;
+
+        // Document patterns
+        if (trimmed.StartsWith("doc(") || trimmed.StartsWith("document("))
             return 0.5;
 
         // Path patterns (contain / outside of Q{} braces)

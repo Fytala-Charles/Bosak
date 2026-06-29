@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 31-05-2026     | Added IXsltMessageListener support for xsl:message                                      |
 //                      | Charles Korthout | 0.4   | 11-06-2026     | Resolve external DTDs when compiling stylesheets from strings                           |
 //                      | Charles Korthout | 0.5   | 24-06-2026     | Preserve XDocument base URI via LoadOptions.SetBaseUri for document() resolution       |
+//                      | Charles Korthout | 0.6   | 26-06-2026     | Added TreatRecoverableAmbiguousMatchAsError for test-harness error dependencies        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -47,6 +48,13 @@ public sealed class XsltCompiler
     public Dictionary<(string LocalName, string NamespaceUri), XdmValue>? StaticParameters { get; set; }
 
     /// <summary>
+    /// When true, an ambiguous template match is treated as a fatal error (XTRE0540)
+    /// instead of being resolved by the last-wins recovery rule. This is used by test
+    /// harnesses that declare an <c>on-multiple-match="error"</c> dependency.
+    /// </summary>
+    public bool TreatRecoverableAmbiguousMatchAsError { get; set; }
+
+    /// <summary>
     /// Compiles an XSLT stylesheet from an XML string.
     /// </summary>
     /// <param name="xsl">The XSLT stylesheet as an XML string.</param>
@@ -74,7 +82,7 @@ public sealed class XsltCompiler
     {
         var resolver = UriResolver ?? new FileSystemUriResolver();
         var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters);
-        return new XsltExecutable(stylesheet, MessageListener);
+        return new XsltExecutable(stylesheet, MessageListener, TreatRecoverableAmbiguousMatchAsError);
     }
 
     /// <summary>

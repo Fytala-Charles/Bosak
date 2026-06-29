@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 08-06-2026     | Added initialMode parameter to Transform/TransformToString                             |
 //                      | Charles Korthout | 0.4   | 24-06-2026     | Added TransformFunction/TransformFunctionToString for xsl:function entry points        |
 //                      | Charles Korthout | 0.5   | 25-06-2026     | Added rawResult parameter to Transform for initial-template raw XDM output             |
+//                      | Charles Korthout | 0.6   | 26-06-2026     | Propagate TreatRecoverableAmbiguousMatchAsError to TransformEngine                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -30,11 +31,13 @@ public sealed class XsltExecutable
 {
     private readonly Stylesheet.Stylesheet _stylesheet;
     private readonly IXsltMessageListener? _messageListener;
+    private readonly bool _treatRecoverableAmbiguousMatchAsError;
 
-    internal XsltExecutable(Stylesheet.Stylesheet stylesheet, IXsltMessageListener? messageListener = null)
+    internal XsltExecutable(Stylesheet.Stylesheet stylesheet, IXsltMessageListener? messageListener = null, bool treatRecoverableAmbiguousMatchAsError = false)
     {
         _stylesheet = stylesheet;
         _messageListener = messageListener;
+        _treatRecoverableAmbiguousMatchAsError = treatRecoverableAmbiguousMatchAsError;
     }
 
     /// <summary>
@@ -48,7 +51,7 @@ public sealed class XsltExecutable
     /// <returns>The result of the transformation as an XDM value.</returns>
     public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false)
     {
-        var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener);
+        var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
         return engine.Transform(source, initialTemplate, initialMode, rawResult);
     }
 
@@ -75,7 +78,7 @@ public sealed class XsltExecutable
     /// <returns>The value returned by the function.</returns>
     public XdmValue TransformFunction(string name, XdmValue[] args, EvaluationContext? context = null)
     {
-        var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener);
+        var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
         return engine.TransformFunction(name, args);
     }
 
