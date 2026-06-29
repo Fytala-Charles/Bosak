@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 1.9   | 27-06-2026     | Fall back to run-time _select expansion when static parameters are insufficient          |
 //                      | Charles Korthout | 2.0   | 28-06-2026     | Load source documents with DTD/XmlResolver so external entities expand with base URIs   |
 //                      | Charles Korthout | 2.1   | 26-06-2026     | Set TreatRecoverableAmbiguousMatchAsError for on-multiple-match="error" tests          |
+//                      | Charles Korthout | 2.2   | 26-06-2026     | Evaluate assert-result-document assertions against secondary output files               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1096,6 +1097,29 @@ class Program
             return EvaluateAssertDeepEq(actual, assertDeepEq.Value, ExtractNamespaces(assertDeepEq), assertContext);
         }
 
+        // assert-result-document: read the secondary output file and evaluate nested assertions.
+        if (resultElem.Name.LocalName == "assert-result-document" || resultElem.Element(ns + "assert-result-document") != null)
+        {
+            var assertDoc = resultElem.Name.LocalName == "assert-result-document" ? resultElem : resultElem.Element(ns + "assert-result-document")!;
+            var uri = assertDoc.Attribute("uri")?.Value;
+            if (!string.IsNullOrEmpty(uri))
+            {
+                var path = Path.Combine(testSetDir, uri);
+                if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
+                if (File.Exists(path))
+                {
+                    var docContent = File.ReadAllText(path).Trim();
+                    foreach (var child in assertDoc.Elements())
+                    {
+                        if (!CompareSingleResult(docContent, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                            return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // assert-xml: serialize the value and compare
         var assertXml = resultElem.Name.LocalName == "assert-xml" ? resultElem : resultElem.Element(ns + "assert-xml");
         if (assertXml != null)
@@ -1194,6 +1218,29 @@ class Program
                 return false;
             warningIndex++;
             return true;
+        }
+
+        // assert-result-document: read the secondary output file and evaluate nested assertions.
+        if (resultElem.Name.LocalName == "assert-result-document" || resultElem.Element(ns + "assert-result-document") != null)
+        {
+            var assertDoc = resultElem.Name.LocalName == "assert-result-document" ? resultElem : resultElem.Element(ns + "assert-result-document")!;
+            var uri = assertDoc.Attribute("uri")?.Value;
+            if (!string.IsNullOrEmpty(uri))
+            {
+                var path = Path.Combine(testSetDir, uri);
+                if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
+                if (File.Exists(path))
+                {
+                    var docContent = File.ReadAllText(path).Trim();
+                    foreach (var child in assertDoc.Elements())
+                    {
+                        if (!CompareSingleResult(docContent, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                            return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
 
         // When called from all-of/any-of, resultElem itself may be the assertion.

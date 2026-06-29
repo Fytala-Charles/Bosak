@@ -51,6 +51,7 @@
 //                      | Charles Korthout | 2.18  | 26-06-2026     | InstanceOf recognises parameterised sequence type names and avoids spurious XPST0051   |
 //                      | Charles Korthout | 2.19  | 26-06-2026     | CompareGeneral returns false (not empty sequence) for empty general-comparison operands |
 //                      | Charles Korthout | 2.20  | 28-06-2026     | NormalizeSequence uses HashSet for duplicate removal; restores catalog self-test speed   |
+//                      | Charles Korthout | 2.21  | 26-06-2026     | Integer/decimal division and modulo by zero raise FOAR0001 DynamicException            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2781,7 +2782,10 @@ public static class VmEngine
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
             return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
 
-        return XdmValue.FromDecimal(ToDecimal(left) / ToDecimal(right));
+        var divisor = ToDecimal(right);
+        if (divisor == 0)
+            throw new InvalidOperationException("FOAR0001: Division by zero.");
+        return XdmValue.FromDecimal(ToDecimal(left) / divisor);
     }
 
     private static XdmValue IntegerDivide(XdmValue left, XdmValue right)
@@ -2790,17 +2794,35 @@ public static class VmEngine
             return XdmValue.Undefined;
 
         if (IsDouble(left) || IsDouble(right))
+        {
+            if (ToDouble(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromInteger((long)(ToDouble(left) / ToDouble(right)));
+        }
         if (IsFloat(left) || IsFloat(right))
+        {
+            if (ToFloat(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromInteger((long)(ToFloat(left) / ToFloat(right)));
+        }
         if (IsDecimal(left) || IsDecimal(right))
+        {
+            if (ToDecimal(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromInteger((long)(ToDecimal(left) / ToDecimal(right)));
+        }
 
         left = Atomize(left);
         right = Atomize(right);
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+        {
+            if (ToDouble(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromInteger((long)(ToDouble(left) / ToDouble(right)));
+        }
 
+        if (ToInteger(right) == 0)
+            throw new InvalidOperationException("FOAR0001: Division by zero.");
         return XdmValue.FromInteger(ToInteger(left) / ToInteger(right));
     }
 
@@ -2810,17 +2832,35 @@ public static class VmEngine
             return XdmValue.Undefined;
 
         if (IsDouble(left) || IsDouble(right))
+        {
+            if (ToDouble(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromDouble(ToDouble(left) % ToDouble(right));
+        }
         if (IsFloat(left) || IsFloat(right))
+        {
+            if (ToFloat(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromFloat(ToFloat(left) % ToFloat(right));
+        }
         if (IsDecimal(left) || IsDecimal(right))
+        {
+            if (ToDecimal(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromDecimal(ToDecimal(left) % ToDecimal(right));
+        }
 
         left = Atomize(left);
         right = Atomize(right);
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+        {
+            if (ToDouble(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromDouble(ToDouble(left) % ToDouble(right));
+        }
 
+        if (ToInteger(right) == 0)
+            throw new InvalidOperationException("FOAR0001: Division by zero.");
         return XdmValue.FromInteger(ToInteger(left) % ToInteger(right));
     }
 

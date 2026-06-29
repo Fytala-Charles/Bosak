@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.6   | 25-06-2026     | Added IsStaticEvaluation flag for use-when/static-expression function libraries        |
 //                      | Charles Korthout | 1.7   | 26-06-2026     | Added SnapshotLazyGlobals/RestoreLazyGlobals to isolate function-local lazy variables  |
 //                      | Charles Korthout | 1.8   | 29-06-2026     | Added SkipLazyGlobalCacheOnce and TryGetBoundVariable for deferred locals              |
+//                      | Charles Korthout | 1.9   | 26-06-2026     | File-not-found document loads report FODC0002 so xsl:catch can match                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -217,7 +218,20 @@ public sealed class EvaluationContext
         if (DocumentLoader is null)
             throw new InvalidOperationException($"No document loader configured. Cannot load document: {uri}");
 
-        var node = DocumentLoader(uri);
+        IXdmNode node;
+        try
+        {
+            node = DocumentLoader(uri);
+        }
+        catch (System.IO.FileNotFoundException)
+        {
+            throw new InvalidOperationException($"FODC0002: Document not available: {uri}");
+        }
+        catch (System.IO.DirectoryNotFoundException)
+        {
+            throw new InvalidOperationException($"FODC0002: Document not available: {uri}");
+        }
+
         if (DocumentPostProcessor != null)
             node = DocumentPostProcessor(node);
         _documentCache[uri] = node;

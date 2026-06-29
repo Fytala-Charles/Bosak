@@ -3097,3 +3097,76 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ---
 
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-29
+**Commit:** `e67eb9a` (with uncommitted changes)
+**Current focus:** Cleared the W3C `try` conformance cluster (35/35 runnable tests pass).
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,927
+- **Failed:** 323
+- **Skipped:** 9,350
+- **Pass rate:** 93.8% (+37 passed / −37 failed vs. previous 4,890/360/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| try | 42 | 35 | 0 | 7 | ✅ 100% runnable; division-by-zero, file-not-found, variable scoping, result-document, and rollback-output now handled |
+| param | 31 | 31 | 0 | 0 | ✅ still green after variable-scope changes |
+| sort | 82 | 80 | 0 | 2 | ✅ still green |
+| function | 350 | 220 | 0 | 130 | ✅ still green |
+
+## This Session Fixes
+
+1. **Mapped runtime errors to standard XPath/XSLT error codes**
+   - Integer/decimal `div` and `mod` by zero now raise `FOAR0001` instead of raw `DivideByZeroException`.
+   - Missing document resources now raise `FODC0002` instead of leaking `FileNotFoundException`.
+   - `xsl:catch/@errors` matching now respects the namespace of error-code QNames; unprefixed names resolve to the empty namespace (so `FOAR0001` does not match `err:FOAR0001`).
+   - `err:code` preserves the original namespace for `fn:error()` user-defined QNames.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **Isolated `xsl:try` variable scope**
+   - Variables declared inside `xsl:try` are no longer visible inside `xsl:catch`; the pre-try variable scope is snapshot and restored before evaluating the catch clause.
+   - The same snapshot logic is applied to function-local lazy-variable dictionaries in function-body `xsl:try`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **Improved `err:*` error-variable accuracy**
+   - `err:module`, `err:line-number`, and `err:column-number` now report the actual instruction that raised the error (tracked via `_currentInstruction`).
+   - `err:description` no longer includes the leading space after the error-code colon.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **Global-variable errors are not catchable by `xsl:try`**
+   - Dynamic errors raised while lazily evaluating a global variable are tagged with `Bosak.GlobalVariableError` and re-raised without changing their type, so `xsl:try` rethrows them while callers outside a try/catch still see the original exception.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+5. **Basic `xsl:result-document` support**
+   - `xsl:result-document` now executes its sequence constructor, writes secondary output files, detects duplicate URIs (`XTDE1490`), and treats `href=""` as the principal result tree.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+6. **`rollback-output="no"` handling**
+   - When `xsl:try/@rollback-output` is `"no"` and output has already been written to the current result container, the error is re-raised as `XTDE3530` instead of being caught.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+7. **Conformance harness `assert-result-document`**
+   - The harness now reads secondary result-document files and evaluates nested assertions against them.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+## Notes
+
+- Unit-test suite: **905 passed / 0 failed / 0 skipped** across 8 projects (Release configuration). `Bosak.Xslt.Tests` runs via `run-xslt-tests.ps1` because the local Application Control policy blocks the assembly in its normal `bin` directory.
+- Full W3C suite: **4,927/323/9,350** (93.8%), an improvement of +37 passed / −37 failed.
+- Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
+
+## Recommended Next Steps
+
+1. Commit the `try` cluster fixes.
+2. Continue with adjacent medium clusters such as `copy-of` (14) or `date` (year < 1 limitations).
+
+---
+

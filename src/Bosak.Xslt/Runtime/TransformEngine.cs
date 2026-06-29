@@ -133,6 +133,7 @@
 //                      | Charles Korthout | 5.62  | 29-06-2026     | Snapshot/restore variables around literal result element content; fixes param-0107    |
 //                      | Charles Korthout | 5.63  | 26-06-2026     | Lazy evaluation for xsl:variable inside xsl:function bodies; fixes param-0301         |
 //                      | Charles Korthout | 5.64  | 29-06-2026     | Targeted lazy locals + global resolver re-entry fix; clears regressions                |
+//                      | Charles Korthout | 5.65  | 26-06-2026     | xsl:try scope isolation, error QName namespace, result-document, FODC0002             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -247,6 +248,13 @@ public sealed class TransformEngine
     // xsl:function bodies are registered here and evaluated only when referenced,
     // so unused variables do not trigger false circular-reference errors.
     private Dictionary<(string LocalName, string NamespaceUri), Lazy<XdmValue>>? _functionLocalLazyVariables;
+
+    // Innermost XSLT instruction currently executing. Used by xsl:catch to report
+    // the line/module of the instruction that raised the error.
+    private XElement? _currentInstruction;
+
+    // Tracks URIs already used by xsl:result-document to detect XTDE1490 duplicates.
+    private readonly HashSet<string> _resultDocumentUris = new();
 
     // Current group state for xsl:for-each-group / current-group() / current-grouping-key()
     private List<XdmValue>? _currentGroup;
@@ -484,6 +492,9 @@ public sealed class TransformEngine
         // Capture the variable bindings that are visible before any template executes.
         // Attribute sets are evaluated with only these top-level bindings in scope.
         _attributeSetVariableSnapshot = _context.SnapshotVariables();
+
+        // Result-document URIs must be unique within a transformation.
+        _resultDocumentUris.Clear();
 
         // Compile all template match patterns before execution. The validation
         // dry-run for pattern predicates needs the lazy global resolver registered
@@ -1984,6 +1995,7 @@ public sealed class TransformEngine
     /// </summary>
     private void EvaluateFunctionBodyInstruction(XElement instruction, List<XdmValue> results, XdmValue contextItem)
     {
+        _currentInstruction = instruction;
         if (instruction.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
         {
             switch (instruction.Name.LocalName)
@@ -2374,6 +2386,8 @@ public sealed class TransformEngine
                 case "try":
                     {
                         var catchElements = instruction.Elements(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                        var tryScope = SnapshotTryScope();
+                        var outputBefore = results.Count;
                         try
                         {
                             var select = instruction.Attribute("select")?.Value;
@@ -2395,11 +2409,16 @@ public sealed class TransformEngine
                         }
                         catch (Exception ex)
                         {
+                            RestoreTryScope(tryScope);
+                            if (ex.Data.Contains("Bosak.GlobalVariableError"))
+                                throw;
+                            if (instruction.Attribute("rollback-output")?.Value == "no" && results.Count > outputBefore)
+                                throw new InvalidOperationException("XTDE3530: Recovery not possible because output has already been written.");
                             var catchElem = FindMatchingCatch(catchElements, ex);
                             if (catchElem == null)
                                 throw;
 
-                            var previous = BindCatchErrorVariables(ex);
+                            var previous = BindCatchErrorVariables(ex, catchElem, instruction);
                             try
                             {
                                 var catchSelect = catchElem.Attribute("select")?.Value;
@@ -2422,6 +2441,7 @@ public sealed class TransformEngine
                                 RestoreCatchErrorVariables(previous);
                             }
                         }
+                        RestoreTryScope(tryScope);
                         break;
                     }
                 case "evaluate":
@@ -3570,6 +3590,7 @@ public sealed class TransformEngine
 
     private void ExecuteXsltInstruction(XElement instruction, XdmValue contextItem)
     {
+        _currentInstruction = instruction;
         var node = contextItem.IsNode ? contextItem.NodeValue : null;
 
         // Push default-mode for this instruction scope
@@ -4789,6 +4810,8 @@ public sealed class TransformEngine
             case "try":
                 {
                     var catchElements = instruction.Elements(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                    var tryScope = SnapshotTryScope();
+                    var outputBefore = _currentContainer?.Nodes().Count() ?? 0;
                     try
                     {
                         var select = instruction.Attribute("select")?.Value;
@@ -4821,11 +4844,16 @@ public sealed class TransformEngine
                     }
                     catch (Exception ex)
                     {
+                        RestoreTryScope(tryScope);
+                        if (ex.Data.Contains("Bosak.GlobalVariableError"))
+                            throw;
+                        if (instruction.Attribute("rollback-output")?.Value == "no" && (_currentContainer?.Nodes().Count() ?? 0) > outputBefore)
+                            throw new InvalidOperationException("XTDE3530: Recovery not possible because output has already been written.");
                         var catchElem = FindMatchingCatch(catchElements, ex);
                         if (catchElem == null)
                             throw;
 
-                        var previous = BindCatchErrorVariables(ex);
+                        var previous = BindCatchErrorVariables(ex, catchElem, instruction);
                         try
                         {
                             var catchSelect = catchElem.Attribute("select")?.Value;
@@ -4859,6 +4887,7 @@ public sealed class TransformEngine
                             RestoreCatchErrorVariables(previous);
                         }
                     }
+                    RestoreTryScope(tryScope);
                     break;
                 }
 
@@ -4922,6 +4951,77 @@ public sealed class TransformEngine
                     else
                     {
                         throw new InvalidOperationException("XTDE0450: A map cannot appear as a child of an element or document node");
+                    }
+                    break;
+                }
+
+            case "result-document":
+                {
+                    var hrefRaw = instruction.Attribute("href")?.Value;
+                    if (string.IsNullOrEmpty(hrefRaw))
+                    {
+                        // An empty/missing href writes to the principal result tree.
+                        foreach (var childNode in instruction.Nodes())
+                        {
+                            switch (childNode)
+                            {
+                                case XText text:
+                                    ProcessSequenceText(text, instruction);
+                                    break;
+                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elem, contextItem);
+                                    break;
+                                case XElement elem:
+                                    CopyLiteralElement(elem);
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var href = EvaluateAvt(hrefRaw, instruction);
+                        var baseUri = instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
+                        string resolvedHref;
+                        if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
+                            resolvedHref = href;
+                        else if (!string.IsNullOrEmpty(baseUri))
+                            resolvedHref = new Uri(new Uri(baseUri), href).AbsoluteUri;
+                        else
+                            resolvedHref = href;
+
+                        if (!_resultDocumentUris.Add(resolvedHref))
+                            throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
+
+                        var savedContainer = _currentContainer;
+                        var savedLastAtomic = _lastAddedWasAtomic;
+                        var temp = new XElement("__result-document__");
+                        _currentContainer = temp;
+                        _lastAddedWasAtomic = false;
+                        try
+                        {
+                            foreach (var childNode in instruction.Nodes())
+                            {
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        ProcessSequenceText(text, instruction);
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, contextItem);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _lastAddedWasAtomic = savedLastAtomic;
+                        }
+
+                        WriteResultDocument(resolvedHref, temp);
                     }
                     break;
                 }
@@ -7557,22 +7657,42 @@ public sealed class TransformEngine
                         if (!string.IsNullOrEmpty(underSelect))
                             select = EvaluateAvt(underSelect, info.Element);
                     }
-                    if (!string.IsNullOrEmpty(select))
+                    try
                     {
-                        // A global variable is out of scope within its own declaration.
-                        // Detect direct self-reference in the select expression (including
-                        // references from inline function bodies) before evaluation.
-                        if (SelectReferencesVariable(select, info.Element, localName, namespaceUri))
-                            throw new InvalidOperationException($"XPST0008: Variable ${localName} is out of scope in its own declaration.");
+                        if (!string.IsNullOrEmpty(select))
+                        {
+                            // A global variable is out of scope within its own declaration.
+                            // Detect direct self-reference in the select expression (including
+                            // references from inline function bodies) before evaluation.
+                            if (SelectReferencesVariable(select, info.Element, localName, namespaceUri))
+                                throw new InvalidOperationException($"XPST0008: Variable ${localName} is out of scope in its own declaration.");
 
-                        var compiled = CompileXPath(select, info.Element);
-                        value = compiled.Evaluate(_context);
+                            var compiled = CompileXPath(select, info.Element);
+                            value = compiled.Evaluate(_context);
+                        }
+                        else
+                        {
+                            value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                        }
+                        value = ConvertVariableValue(value, info.AsType);
                     }
-                    else
+                    catch (Exception evalEx)
                     {
-                        value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                        // Circular-reference and out-of-scope errors are static errors raised
+                        // by the engine itself; leave them untouched so callers can recognise
+                        // them (e.g. function-local eager evaluation defers on circular refs).
+                        if (evalEx is InvalidOperationException ioe &&
+                            (ioe.Message.Contains("Circular reference", StringComparison.OrdinalIgnoreCase) ||
+                             ioe.Message.StartsWith("XPST0008:", StringComparison.Ordinal)))
+                        {
+                            throw;
+                        }
+                        // Mark dynamic errors from global-variable evaluation so that xsl:try
+                        // knows not to catch them, while preserving the original exception type
+                        // for callers outside a try/catch block.
+                        evalEx.Data["Bosak.GlobalVariableError"] = true;
+                        throw;
                     }
-                    value = ConvertVariableValue(value, info.AsType);
                     _context.WithVariable(localName, value, namespaceUri);
                     _lazyGlobals.Remove(key);
                     return value;
@@ -8247,53 +8367,177 @@ public sealed class TransformEngine
     /// Binds the <c>err:*</c> variables used by <c>xsl:catch</c> to the details of the
     /// caught exception. Returns the previous values so they can be restored.
     /// </summary>
-    private (XdmValue Code, XdmValue Description, XdmValue Value) BindCatchErrorVariables(Exception ex)
+    private (XdmValue Code, XdmValue Description, XdmValue Value, XdmValue Module, XdmValue Line, XdmValue Column) BindCatchErrorVariables(Exception ex, XElement catchElem, XElement instruction)
     {
         const string ErrNs = "http://www.w3.org/2005/xqt-errors";
 
-        string code;
-        string description;
-        XdmValue value;
-
-        if (ex is XsltRuntimeException xre)
-        {
-            code = xre.ErrorCode;
-            description = xre.Message;
-            value = xre.ErrorValue;
-        }
-        else if (ex is InvalidOperationException ioe && ioe.Message.Contains(':'))
-        {
-            code = ioe.Message[..ioe.Message.IndexOf(':')];
-            description = ioe.Message[(code.Length + 1)..];
-            value = XdmValue.Undefined;
-        }
-        else
-        {
-            code = ex.GetType().Name;
-            description = ex.Message;
-            value = XdmValue.Undefined;
-        }
+        var (codeQName, description, value) = GetErrorDetails(ex);
 
         _context.TryGetVariable("code", out var prevCode, ErrNs);
         _context.TryGetVariable("description", out var prevDesc, ErrNs);
         _context.TryGetVariable("value", out var prevValue, ErrNs);
+        _context.TryGetVariable("module", out var prevModule, ErrNs);
+        _context.TryGetVariable("line-number", out var prevLine, ErrNs);
+        _context.TryGetVariable("column-number", out var prevColumn, ErrNs);
 
-        _context.WithVariable("code", XdmValue.FromString(code), ErrNs);
+        var errPrefix = catchElem.GetPrefixOfNamespace(ErrNs) ?? "err";
+        var codePrefix = string.IsNullOrEmpty(codeQName.NamespaceUri)
+            ? string.Empty
+            : (catchElem.GetPrefixOfNamespace(codeQName.NamespaceUri) ?? errPrefix);
+        var boundCodeQName = new XsQName(codeQName.LocalName, codeQName.NamespaceUri, codePrefix);
+        _context.WithVariable("code", XdmValue.FromQName(boundCodeQName), ErrNs);
         _context.WithVariable("description", XdmValue.FromString(description), ErrNs);
         _context.WithVariable("value", value, ErrNs);
-        _context.WithVariable("module", XdmValue.FromString(string.Empty), ErrNs);
-        _context.WithVariable("line-number", XdmValue.FromInteger(0), ErrNs);
-        _context.WithVariable("column-number", XdmValue.FromInteger(0), ErrNs);
 
-        return (prevCode, prevDesc, prevValue);
+        // Report the line/module of the actual instruction that failed (e.g. the
+        // xsl:sequence that called doc()), falling back to the xsl:try instruction.
+        var offendingInstruction = _currentInstruction ?? instruction;
+        string module = string.Empty;
+        var moduleUri = offendingInstruction.BaseUri;
+        if (!string.IsNullOrEmpty(moduleUri))
+        {
+            try { module = System.IO.Path.GetFileName(moduleUri); }
+            catch { module = moduleUri; }
+        }
+        _context.WithVariable("module", XdmValue.FromString(module), ErrNs);
+
+        long line = 0;
+        long column = 0;
+        if (offendingInstruction is System.Xml.IXmlLineInfo lineInfo && lineInfo.HasLineInfo())
+        {
+            line = lineInfo.LineNumber;
+            column = lineInfo.LinePosition;
+        }
+        _context.WithVariable("line-number", XdmValue.FromInteger(line), ErrNs);
+        _context.WithVariable("column-number", XdmValue.FromInteger(column), ErrNs);
+
+        return (prevCode, prevDesc, prevValue, prevModule, prevLine, prevColumn);
     }
 
-    private void RestoreCatchErrorVariables((XdmValue Code, XdmValue Description, XdmValue Value) previous)
+    /// <summary>
+    /// Parses an exception into the error QName, description, and error value that
+    /// should be exposed through the <c>err:*</c> variables in <c>xsl:catch</c>.
+    /// </summary>
+    private static (XsQName Code, string Description, XdmValue Value) GetErrorDetails(Exception ex)
+    {
+        const string ErrNs = "http://www.w3.org/2005/xqt-errors";
+
+        if (ex is XsltRuntimeException xre)
+        {
+            return (new XsQName(xre.ErrorCode, ErrNs, string.Empty), xre.Message, xre.ErrorValue);
+        }
+
+        if (ex is InvalidOperationException ioe)
+        {
+            var message = ioe.Message;
+
+            // fn:error() messages are formatted as "fn:error(Q{uri}local): description".
+            if (message.StartsWith("fn:error(", StringComparison.Ordinal))
+            {
+                var qnameStart = "fn:error(".Length;
+                var qnameEnd = message.IndexOf(')', qnameStart);
+                if (qnameEnd > qnameStart)
+                {
+                    var qname = message[qnameStart..qnameEnd];
+                    string ns;
+                    string local;
+                    if (qname.Length > 2 && qname[0] == 'Q' && qname[1] == '{')
+                    {
+                        var close = qname.IndexOf('}');
+                        ns = close > 2 ? qname[2..close] : string.Empty;
+                        local = close >= 0 && close < qname.Length - 1 ? qname[(close + 1)..] : qname;
+                    }
+                    else
+                    {
+                        ns = string.Empty;
+                        local = qname;
+                    }
+
+                    var descriptionStart = qnameEnd + 1;
+                    if (descriptionStart < message.Length && message[descriptionStart] == ':')
+                        descriptionStart++;
+                    if (descriptionStart < message.Length && message[descriptionStart] == ' ')
+                        descriptionStart++;
+                    var description = descriptionStart < message.Length ? message[descriptionStart..] : string.Empty;
+
+                    return (new XsQName(local, ns, string.Empty), description, XdmValue.Undefined);
+                }
+            }
+
+            // Standard "CODE: description" format used for XPath/XSLT dynamic errors.
+            var colon = message.IndexOf(':');
+            if (colon > 0 && IsErrorCode(message[..colon]))
+            {
+                var code = message[..colon];
+                var descStart = colon + 1;
+                if (descStart < message.Length && message[descStart] == ' ')
+                    descStart++;
+                var description = descStart < message.Length ? message[descStart..] : string.Empty;
+                return (new XsQName(code, ErrNs, string.Empty), description, XdmValue.Undefined);
+            }
+
+            // Some functions throw a bare error code (e.g. "FOUT1190").
+            if (IsErrorCode(message))
+                return (new XsQName(message, ErrNs, string.Empty), message, XdmValue.Undefined);
+        }
+
+        return (new XsQName(ex.GetType().Name, string.Empty, string.Empty), ex.Message, XdmValue.Undefined);
+    }
+
+    private static bool IsErrorCode(string token)
+    {
+        if (token.Length != 8)
+            return false;
+        for (int i = 0; i < 4; i++)
+            if (!char.IsUpper(token[i]))
+                return false;
+        for (int i = 4; i < 8; i++)
+            if (!char.IsDigit(token[i]))
+                return false;
+        return true;
+    }
+
+    private void RestoreCatchErrorVariables((XdmValue Code, XdmValue Description, XdmValue Value, XdmValue Module, XdmValue Line, XdmValue Column) previous)
     {
         const string ErrNs = "http://www.w3.org/2005/xqt-errors";
         _context.WithVariable("code", previous.Code, ErrNs);
         _context.WithVariable("description", previous.Description, ErrNs);
         _context.WithVariable("value", previous.Value, ErrNs);
+        _context.WithVariable("module", previous.Module, ErrNs);
+        _context.WithVariable("line-number", previous.Line, ErrNs);
+        _context.WithVariable("column-number", previous.Column, ErrNs);
+    }
+
+    /// <summary>
+    /// Captures the current variable bindings and any function-local lazy-variable dictionary
+    /// so they can be restored after an <c>xsl:try</c> block. Variables declared inside the
+    /// <c>xsl:try</c> must not be visible to <c>xsl:catch</c>.
+    /// </summary>
+    private (Dictionary<(string LocalName, string NamespaceUri), XdmValue> Variables,
+             Dictionary<(string LocalName, string NamespaceUri), Lazy<XdmValue>>? FunctionLocals)
+        SnapshotTryScope()
+    {
+        var variables = _context.SnapshotVariables();
+        var functionLocals = _functionLocalLazyVariables != null
+            ? new Dictionary<(string LocalName, string NamespaceUri), Lazy<XdmValue>>(_functionLocalLazyVariables)
+            : null;
+        return (variables, functionLocals);
+    }
+
+    /// <summary>
+    /// Restores the variable scope captured by <see cref="SnapshotTryScope"/>.
+    /// </summary>
+    private void RestoreTryScope(
+        (Dictionary<(string LocalName, string NamespaceUri), XdmValue> Variables,
+         Dictionary<(string LocalName, string NamespaceUri), Lazy<XdmValue>>? FunctionLocals) snapshot)
+    {
+        _context.RestoreVariables(snapshot.Variables);
+        if (snapshot.FunctionLocals != null && _functionLocalLazyVariables != null)
+        {
+            _functionLocalLazyVariables.Clear();
+            foreach (var pair in snapshot.FunctionLocals)
+                _functionLocalLazyVariables[pair.Key] = pair.Value;
+        }
     }
 
     /// <summary>
@@ -8325,7 +8569,7 @@ public sealed class TransformEngine
         if (string.IsNullOrWhiteSpace(errorsAttr))
             return true;
 
-        string code = GetErrorCode(ex);
+        var errorCode = GetErrorCodeQName(ex);
 
         var patterns = errorsAttr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         foreach (var pattern in patterns)
@@ -8334,20 +8578,37 @@ public sealed class TransformEngine
             if (p == "*")
                 return true;
 
-            var local = GetErrorLocalName(p, catchElem);
-            if (local == null)
+            if (!TryExpandErrorToken(p, catchElem, out var tokenNs, out var tokenLocal))
                 continue;
 
-            if (local == "*")
+            if (tokenLocal == "*")
                 return true;
 
-            // Wildcard prefix (e.g., "XPTY*") or suffix (e.g., "*0001").
-            if (local.Length == 7 && local[0] == '*' && code.Length >= 7 && code.EndsWith(local[1..], StringComparison.Ordinal))
-                return true;
-            if (local.Length == 7 && local[^1] == '*' && code.Length >= local.Length - 1 && code.AsSpan().StartsWith(local.AsSpan(0, local.Length - 1), StringComparison.Ordinal))
-                return true;
+            // Namespace wildcard (*:local) matches any namespace with the given local name.
+            if (tokenNs == "*")
+            {
+                if (tokenLocal.Equals(errorCode.LocalName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                continue;
+            }
 
-            if (local.Equals(code, StringComparison.OrdinalIgnoreCase))
+            // Wildcard prefix (e.g. "XPTY*") or suffix (e.g. "*0001") on a plain local name.
+            // When no prefix is supplied, standard error codes are in the W3C error namespace.
+            if (tokenLocal.Length == 7 && (tokenLocal[0] == '*' || tokenLocal[^1] == '*'))
+            {
+                var effectiveNs = string.IsNullOrEmpty(tokenNs) ? "http://www.w3.org/2005/xqt-errors" : tokenNs;
+                if (!effectiveNs.Equals(errorCode.NamespaceUri, StringComparison.Ordinal))
+                    continue;
+
+                if (tokenLocal[0] == '*' && errorCode.LocalName.Length >= 7 && errorCode.LocalName.EndsWith(tokenLocal[1..], StringComparison.Ordinal))
+                    return true;
+                if (tokenLocal[^1] == '*' && errorCode.LocalName.Length >= 6 && errorCode.LocalName.AsSpan().StartsWith(tokenLocal.AsSpan(0, 6), StringComparison.Ordinal))
+                    return true;
+                continue;
+            }
+
+            if (tokenLocal.Equals(errorCode.LocalName, StringComparison.OrdinalIgnoreCase) &&
+                tokenNs.Equals(errorCode.NamespaceUri, StringComparison.Ordinal))
                 return true;
         }
 
@@ -8355,88 +8616,67 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// Extracts the local error code from an exception.
+    /// Returns the error code QName carried by an exception.
     /// </summary>
-    private string GetErrorCode(Exception ex)
-    {
-        if (ex is XsltRuntimeException xre)
-            return xre.ErrorCode;
-
-        if (ex is InvalidOperationException ioe)
-        {
-            var message = ioe.Message;
-
-            // fn:error() messages are formatted as "fn:error(Q{uri}local) ...".
-            // The error code is the local-name portion of the supplied QName.
-            if (message.StartsWith("fn:error(", StringComparison.Ordinal))
-            {
-                var qnameStart = "fn:error(".Length;
-                var qnameEnd = message.IndexOf(')', qnameStart);
-                if (qnameEnd > qnameStart)
-                {
-                    var qname = message[qnameStart..qnameEnd];
-                    var closeBrace = qname.IndexOf('}');
-                    if (closeBrace >= 0 && closeBrace < qname.Length - 1)
-                        return qname[(closeBrace + 1)..];
-                    var colon = qname.IndexOf(':');
-                    if (colon >= 0 && colon < qname.Length - 1)
-                        return qname[(colon + 1)..];
-                    return qname;
-                }
-            }
-
-            // Standard "CODE: description" format used for XPath/XSLT dynamic errors.
-            if (message.Contains(':'))
-                return message[..message.IndexOf(':')];
-
-            // Some functions throw a bare error code (e.g. "FOUT1190").
-            if (message.Length == 8 && char.IsUpper(message[0]) && char.IsUpper(message[1]) && char.IsUpper(message[2]) && char.IsUpper(message[3]) && char.IsDigit(message[4]) && char.IsDigit(message[5]) && char.IsDigit(message[6]) && char.IsDigit(message[7]))
-                return message;
-        }
-
-        return ex.GetType().Name;
-    }
+    private XsQName GetErrorCodeQName(Exception ex) => GetErrorDetails(ex).Code;
 
     /// <summary>
-    /// Extracts the local-name portion of an <c>xsl:catch/@errors</c> token.
+    /// Expands an <c>xsl:catch/@errors</c> token into namespace URI and local name.
     /// Supports <c>*</c>, plain local names, <c>prefix:local</c>, <c>Q{{uri}}local</c>,
-    /// and namespace-wildcard forms such as <c>*:local</c>.
+    /// and namespace-wildcard forms such as <c>*:local</c>. Plain unprefixed names
+    /// resolve to the empty namespace (the standard error namespace must be supplied
+    /// explicitly via the <c>err:</c> prefix).
     /// </summary>
     /// <param name="token">The error token.</param>
     /// <param name="catchElem">The <c>xsl:catch</c> element, used for namespace resolution.</param>
-    /// <returns>The local-name part, or <c>null</c> if the token should be ignored.</returns>
-    private string? GetErrorLocalName(string token, XElement catchElem)
+    /// <param name="namespaceUri">The resolved namespace URI, or <c>"*"</c> for a namespace wildcard.</param>
+    /// <param name="localName">The local-name part.</param>
+    /// <returns><c>true</c> if the token is a valid error name.</returns>
+    private static bool TryExpandErrorToken(string token, XElement catchElem, out string namespaceUri, out string localName)
     {
+        namespaceUri = string.Empty;
+        localName = string.Empty;
+
         if (token == "*")
-            return "*";
+        {
+            localName = "*";
+            return true;
+        }
 
         // Clark notation Q{uri}local
         if (token.Length > 2 && token[0] == 'Q' && token[1] == '{')
         {
             var close = token.IndexOf('}');
-            if (close > 2)
-                return token[(close + 1)..];
-            return null;
+            if (close <= 2)
+                return false;
+            namespaceUri = token[2..close];
+            localName = token[(close + 1)..];
+            return true;
         }
 
         var colon = token.IndexOf(':');
         if (colon < 0)
-            return token;
+        {
+            localName = token;
+            return true;
+        }
 
         var prefix = token[..colon];
-        var local = token[(colon + 1)..];
+        localName = token[(colon + 1)..];
 
-        // Namespace wildcard: accept any prefix, return the local name.
+        // Namespace wildcard: accept any prefix.
         if (prefix == "*")
-            return local;
+        {
+            namespaceUri = "*";
+            return true;
+        }
 
-        // Prefixed name: only match if the prefix is bound to the W3C error namespace.
-        const string ErrNs = "http://www.w3.org/2005/xqt-errors";
         var ns = catchElem.GetNamespaceOfPrefix(prefix);
-        if (ns != null && ns.NamespaceName == ErrNs)
-            return local;
+        if (ns == null)
+            return false;
 
-        return null;
+        namespaceUri = ns.NamespaceName;
+        return true;
     }
 
     /// <summary>
@@ -11184,6 +11424,24 @@ public sealed class TransformEngine
         }
     }
 
+    /// <summary>
+    /// Serializes a secondary result document to the file system.
+    /// </summary>
+    private static void WriteResultDocument(string uri, XElement content)
+    {
+        string path;
+        if (Uri.TryCreate(uri, UriKind.Absolute, out var u) && u.IsFile)
+            path = u.LocalPath;
+        else
+            path = uri;
+
+        var dir = System.IO.Path.GetDirectoryName(path);
+        if (!string.IsNullOrEmpty(dir))
+            System.IO.Directory.CreateDirectory(dir);
+
+        System.IO.File.WriteAllText(path, string.Concat(content.Nodes()));
+    }
+
     // ------------------------------------------------------------------
     // Whitespace stripping (xsl:strip-space / xsl:preserve-space)
     // ------------------------------------------------------------------
@@ -13218,5 +13476,31 @@ public sealed class XsltRuntimeException : InvalidOperationException
     {
         ErrorCode = errorCode;
         ErrorValue = errorValue;
+    }
+}
+
+/// <summary>
+/// Exception thrown when evaluation of a global variable or parameter fails. Errors
+/// from global variables are not catchable by <c>xsl:try</c> because the variable is
+/// evaluated outside the dynamic scope of the try block.
+/// </summary>
+public sealed class XsltGlobalVariableException : Exception
+{
+    /// <summary>The local name of the variable whose evaluation failed.</summary>
+    public string VariableName { get; }
+
+    /// <summary>The namespace URI of the variable whose evaluation failed.</summary>
+    public string NamespaceUri { get; }
+
+    /// <summary>The original exception raised while evaluating the variable.</summary>
+    public Exception OriginalException { get; }
+
+    /// <summary>Creates a new global-variable evaluation exception.</summary>
+    public XsltGlobalVariableException(string variableName, string namespaceUri, Exception originalException)
+        : base($"Error evaluating global variable ${variableName}: {originalException.Message}", originalException)
+    {
+        VariableName = variableName;
+        NamespaceUri = namespaceUri;
+        OriginalException = originalException;
     }
 }
