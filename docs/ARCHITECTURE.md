@@ -433,6 +433,7 @@ src/
 | `xsl:key` / `key()` | ✅ Implemented | Indexed lookup |
 | Modes (named) | ✅ Implemented | `mode="foo"`, `xsl:apply-templates mode` |
 | `xsl:function` | ✅ Implemented | User-defined XPath functions in XSLT; `@name` and `@_name` AVTs are resolved to expanded QNames at parse time using the stylesheet static context (including externally supplied static parameters), with duplicate-name and invalid-name validation |
+| Shadow attributes (`_{attr}` static AVTs) | ✅ Implemented | Underscore-prefixed XSLT attributes (e.g. `_version`, `_href`, `_use-when`, `_xpath-default-namespace`, `_static`, `_select`) are evaluated as AVTs at compile time in the current static context and replace the corresponding non-underscore attributes. Shadow attributes on literal result elements are ignored. |
 | `fn:transform()` | ✅ Implemented | XPath function invoking XSLT from expressions |
 | Tunnel parameters | ✅ Implemented | `tunnel="yes"` propagation |
 | `xsl:mode` | ✅ Implemented | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks, and `#unnamed` normalization |

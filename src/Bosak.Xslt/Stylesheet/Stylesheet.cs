@@ -46,11 +46,15 @@
 //                      | Charles Korthout | 2.13  | 26-06-2026     | Document-order use-when evaluation; precedence-aware static variable conflict detection |
 //                      | Charles Korthout | 2.14  | 26-06-2026     | Added xsl:namespace-alias parsing and effective alias mapping                           |
 //                      | Charles Korthout | 2.15  | 29-06-2026     | Static validation for xsl:variable/param/with-param attributes; forwards-compatible mode |
+//                      | Charles Korthout | 2.16  | 26-06-2026     | Shadow attribute support for version, href, use-when, and xpath-default-namespace        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -156,9 +160,13 @@ public sealed class Stylesheet
     /// Evaluates the <c>use-when</c> attribute on the given element.
     /// Returns <c>true</c> if the attribute is absent or evaluates to true.
     /// Any error while evaluating the expression is propagated as a static error.
+    /// A shadow attribute <c>_use-when</c> is expanded to <c>use-when</c> first.
     /// </summary>
     private bool UseWhen(XElement elem, string? explicitBaseUri = null)
     {
+        // Expand a shadow use-when attribute before evaluation.
+        ExpandShadowAttribute(elem, "use-when");
+
         string? useWhen = null;
         bool isXsltElement = elem.Name.NamespaceName == XslNamespace;
 
@@ -207,6 +215,194 @@ public sealed class Stylesheet
         }
 
         return include;
+    }
+
+    /// <summary>
+    /// Expands a single shadow attribute <c>_{baseName}</c> to <c>{baseName}</c> by
+    /// evaluating its value as an attribute value template in the current static context.
+    /// </summary>
+    private void ExpandShadowAttribute(XElement elem, string baseName)
+    {
+        var shadow = elem.Attribute("_" + baseName);
+        if (shadow == null)
+            return;
+
+        var expanded = EvaluateStaticAvt(shadow.Value, elem);
+        shadow.Remove();
+        elem.SetAttributeValue(baseName, expanded);
+    }
+
+    /// <summary>
+    /// Expands all shadow attributes on the given XSLT element and its XSLT descendants.
+    /// Shadow attributes on literal result elements and data elements are ignored.
+    /// </summary>
+    private void ExpandAllShadowAttributes(XElement root)
+    {
+        foreach (var elem in root.DescendantsAndSelf())
+        {
+            // Shadow attributes only apply to XSLT instructions.
+            if (elem.Name.NamespaceName != XslNamespace)
+                continue;
+
+            var shadows = elem.Attributes()
+                .Where(a => string.IsNullOrEmpty(a.Name.NamespaceName) && a.Name.LocalName.StartsWith("_"))
+                .ToList();
+
+            foreach (var attr in shadows)
+            {
+                var baseName = attr.Name.LocalName.Substring(1);
+                if (string.IsNullOrEmpty(baseName))
+                    continue;
+
+                var expanded = EvaluateStaticAvt(attr.Value, elem);
+                attr.Remove();
+                elem.SetAttributeValue(baseName, expanded);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Evaluates a static attribute value template using the current static context.
+    /// </summary>
+    private string EvaluateStaticAvt(string avt, XElement element)
+    {
+        if (string.IsNullOrEmpty(avt) || !avt.Contains('{'))
+            return avt;
+
+        var ctx = CreateUseWhenContext(element);
+        var nsMap = ExtractInScopeNamespaces(element);
+        var sb = new StringBuilder();
+
+        int i = 0;
+        while (i < avt.Length)
+        {
+            if (i + 1 < avt.Length && avt[i] == '{' && avt[i + 1] == '{')
+            {
+                sb.Append('{');
+                i += 2;
+                continue;
+            }
+            if (i + 1 < avt.Length && avt[i] == '}' && avt[i + 1] == '}')
+            {
+                sb.Append('}');
+                i += 2;
+                continue;
+            }
+            if (avt[i] == '{')
+            {
+                int end = FindMatchingAvtBrace(avt, i + 1);
+                if (end < 0)
+                {
+                    sb.Append(avt[i]);
+                    i++;
+                    continue;
+                }
+
+                var expr = avt.Substring(i + 1, end - i - 1);
+                if (!string.IsNullOrEmpty(expr))
+                {
+                    var compiled = XPath31Expression.Compile(expr, new CompileOptions { Namespaces = nsMap });
+                    var result = compiled.Evaluate(ctx);
+                    sb.Append(AtomizedAvtString(result));
+                }
+                i = end + 1;
+                continue;
+            }
+
+            sb.Append(avt[i]);
+            i++;
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Finds the matching closing brace for an AVT expression, skipping string literals.
+    /// </summary>
+    private static int FindMatchingAvtBrace(string value, int start)
+    {
+        char inString = '\0';
+        int braceDepth = 1;
+        for (int i = start; i < value.Length; i++)
+        {
+            char c = value[i];
+            if (inString != '\0')
+            {
+                if (c == inString)
+                {
+                    // Handle doubled quote characters inside string literals.
+                    if (i + 1 < value.Length && value[i + 1] == inString)
+                    {
+                        i++;
+                        continue;
+                    }
+                    inString = '\0';
+                }
+                continue;
+            }
+
+            if (c == '\'' || c == '"')
+            {
+                inString = c;
+                continue;
+            }
+
+            if (c == '{')
+            {
+                braceDepth++;
+                continue;
+            }
+
+            if (c == '}')
+            {
+                braceDepth--;
+                if (braceDepth == 0)
+                    return i;
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Atomizes a value for AVT concatenation, returning the string value of each item
+    /// without separators.
+    /// </summary>
+    private static string AtomizedAvtString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            var sb = new StringBuilder();
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                sb.Append(item.ToString());
+            return sb.ToString();
+        }
+
+        return value.ToString();
+    }
+
+    /// <summary>
+    /// Collects the in-scope namespace declarations for an element and its ancestors.
+    /// </summary>
+    private static Dictionary<string, string> ExtractInScopeNamespaces(XElement element)
+    {
+        var dict = new Dictionary<string, string>();
+        var current = element;
+        while (current != null)
+        {
+            foreach (var attr in current.Attributes().Where(a => a.IsNamespaceDeclaration))
+            {
+                var prefix = attr.Name.LocalName;
+                if (prefix == "xmlns")
+                    prefix = "";
+                if (!string.IsNullOrEmpty(prefix) && !dict.ContainsKey(prefix))
+                    dict[prefix] = attr.Value;
+            }
+            current = current.Parent;
+        }
+        return dict;
     }
 
     public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null)
@@ -371,6 +567,9 @@ public sealed class Stylesheet
         if (rootName.LocalName != "stylesheet" && rootName.LocalName != "transform")
             throw new InvalidOperationException($"Expected xsl:stylesheet or xsl:transform, got {rootName}.");
 
+        // Expand a shadow version attribute before the effective version is determined.
+        ExpandShadowAttribute(root, "version");
+
         // Required version attribute (XTSE0010)
         var versionAttr = root.Attribute("version");
         if (versionAttr == null || string.IsNullOrWhiteSpace(versionAttr.Value))
@@ -480,6 +679,10 @@ public sealed class Stylesheet
         // Apply use-when stripping to the entire tree (nested elements inside templates,
         // literal result elements, etc.) after imports/includes are resolved.
         StripUseWhenElements(root);
+
+        // Expand any remaining shadow attributes (e.g. _xpath-default-namespace on
+        // xsl:template) now that the static context is fully built.
+        ExpandAllShadowAttributes(root);
 
         // Parse top-level xsl:param declarations
         foreach (var param in root.Elements(XName.Get("param", XslNamespace)))
@@ -718,6 +921,12 @@ public sealed class Stylesheet
 
         foreach (var child in root.Elements().ToList())
         {
+            // Expand shadow attributes on XSLT elements before any of their real
+            // attribute values are consumed (e.g. _static on xsl:variable, _href on
+            // xsl:include, _use-when on any top-level element).
+            if (child.Name.NamespaceName == XslNamespace)
+                ExpandAllShadowAttributes(child);
+
             var ns = child.Name.NamespaceName;
             var localName = child.Name.LocalName;
 

@@ -317,6 +317,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
 | `xsl:use-when` | ✅ Working | Top-level and nested elements evaluated in document order; `true()`/`false()` and static-variable references work; XTSE0090 and XTSE3450 error cases validated. |
+| Shadow attributes (`_{attr}` static AVTs) | ✅ Working | `_version`, `_href`, `_use-when`, `_xpath-default-namespace`, `_static`, `_select`, and other underscore-prefixed XSLT attributes are evaluated at compile time in the current static context and replace their non-underscore counterparts. Shadow attributes on literal result elements are preserved as ordinary attributes. |
 | `xsl:where-populated` | ✅ Working | Filters empty sequences, empty text nodes, empty PIs, empty comments, and empty elements; attributes and namespace nodes do not make a sequence populated; empty strings and empty arrays are treated as empty |
 | `xsl:on-empty` | ✅ Working | Evaluated by parent container (xsl:copy, xsl:document, literal result elements, general sequence constructors) when sequence constructor produces no nodes; supports `@select` and sequence constructor children; `on-empty` conformance cluster 72/72 |
 | `xsl:on-non-empty` | ✅ Working | Evaluated by parent container when sequence constructor produces nodes; supports `@select` and sequence constructor children; `on-non-empty` conformance cluster 14/14 |
@@ -478,12 +479,13 @@ dotnet test Bosak.sln
 | `xsl:use-attribute-sets` is allowed on literal result elements. | Added `use-attribute-sets` to the XTSE0805 whitelist of XSLT-namespaced attributes permitted on LREs. Clears the `attribute-set`, `xsl-document`, `analyze-string`, and `next-match` clusters. | 2026-06-26 |
 | Precedence-aware XTSE3450 detection for static variables. | `Stylesheet.BuildStaticContext` evaluates top-level `use-when` in document order and tracks import precedence; same-precedence conflicting values and higher-precedence overrides that change the effective value raise `XTSE3450`. Fixes `use-when-0137/0138` and keeps `static` cluster at 49/49. | 2026-06-26 |
 | `use-when` conformance cluster is fully passing. | All 99 runnable `use-when` tests pass (was 97/99); `use-when-0137/0138` now raise `XTSE3450` correctly. | 2026-06-26 |
+| Shadow attributes (static AVTs) are implemented. | `_version`, `_href`, `_use-when`, `_xpath-default-namespace`, `_static`, `_select`, and other underscore-prefixed XSLT attributes are expanded at compile time using the current static context; shadow attributes on literal result elements are left untouched. Clears the `shadow` cluster. | 2026-06-26 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,817 | 433 | 9,350 | 91.8% | `sort`, `merge`, `arrays`, `math` clusters fully runnable; `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `type`, `analyze-string`, `next-match` clusters green |
+| XSLT 3.0 (W3C) | 4,890 | 360 | 9,350 | 93.1% | `sort`, `merge`, `arrays`, `math` clusters fully runnable; `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `shadow`, `type`, `analyze-string`, `next-match` clusters green |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 0.11  | 15-06-2026     | TestMessageListener implements IXsltMessageListener.OnWarning                         |
 //                      | Charles Korthout | 0.12  | 24-06-2026     | Added xsl:function/@_name AVT expansion tests                                         |
 //                      | Charles Korthout | 0.13  | 26-06-2026     | Added shallow-copy variable and quantified EBV tests                                  |
+//                      | Charles Korthout | 0.14  | 26-06-2026     | Added shadow attribute tests for _select, _use-when, and LRE preservation            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2459,5 +2460,62 @@ public class StylesheetTests
         var result = executable.TransformToString(new XDocumentNode(new XDocument()));
 
         Assert.Contains("<result>false</result>", result);
+    }
+
+    [Fact]
+    public void Shadow_Select_Resolves_Static_Variable()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='N' static='yes' select=""'x'""/>
+            <xsl:template name='main'>
+                <xsl:variable name='x' select='3'/>
+                <out><xsl:value-of _select=""${$N}""/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null!, initialTemplate: "main");
+
+        Assert.Contains("<out>3</out>", result);
+    }
+
+    [Fact]
+    public void Shadow_UseWhen_Excludes_Template()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:param name='include' static='yes' select='0'/>
+            <xsl:template name='main'>
+                <out/>
+            </xsl:template>
+            <xsl:template name='maybe' _use-when=""{$include} = 1"">
+                <in/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null!, initialTemplate: "main");
+
+        Assert.Contains("<out", result);
+        Assert.DoesNotContain("<in/>", result);
+    }
+
+    [Fact]
+    public void Shadow_Attributes_On_Literal_Result_Elements_Are_Preserved()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out one='1' _one='1.0' _two='two'/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null!, initialTemplate: "main");
+
+        Assert.Contains("_one=\"1.0\"", result);
+        Assert.Contains("_two=\"two\"", result);
+        Assert.Contains("one=\"1\"", result);
     }
 }
