@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 2.12  | 26-06-2026     | XTSE0090 for non-global static vars/params; XTSE0090 visibility; XTSE3450 var/param   |
 //                      | Charles Korthout | 2.13  | 26-06-2026     | Document-order use-when evaluation; precedence-aware static variable conflict detection |
 //                      | Charles Korthout | 2.14  | 26-06-2026     | Added xsl:namespace-alias parsing and effective alias mapping                           |
+//                      | Charles Korthout | 2.15  | 29-06-2026     | Static validation for xsl:variable/param/with-param attributes; forwards-compatible mode |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1026,6 +1027,77 @@ public sealed class Stylesheet
             // XTSE0010 / XTSE0090: xsl:element does not allow a select attribute.
             if (isXsltElement && localName == "element" && elem.Attribute("select") != null)
                 throw new InvalidOperationException("XTSE0090");
+
+            // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.
+            if (isXsltElement && localName is "variable" or "param" or "with-param")
+            {
+                var nameAttr = elem.Attribute("name") ?? elem.Attribute("_name");
+                if (nameAttr == null || string.IsNullOrWhiteSpace(nameAttr.Value))
+                    throw new InvalidOperationException($"XTSE0010: Missing name attribute on xsl:{localName}.");
+
+                var allowedAttributes = localName switch
+                {
+                    "variable" => new HashSet<string>(StringComparer.Ordinal)
+                    {
+                        "name", "select", "as", "static", "use-when", "visibility", "version", "expand-text"
+                    },
+                    "param" => new HashSet<string>(StringComparer.Ordinal)
+                    {
+                        "name", "select", "as", "required", "tunnel", "static", "use-when", "version", "expand-text"
+                    },
+                    "with-param" => new HashSet<string>(StringComparer.Ordinal)
+                    {
+                        "name", "select", "as", "tunnel", "use-when"
+                    },
+                    _ => new HashSet<string>(StringComparer.Ordinal)
+                };
+
+                // In forwards-compatible mode unknown attributes on XSLT elements are ignored.
+                if (!IsForwardsCompatible)
+                {
+                    foreach (var attr in elem.Attributes())
+                    {
+                        if (attr.IsNamespaceDeclaration)
+                            continue;
+                        if (!string.IsNullOrEmpty(attr.Name.NamespaceName))
+                            continue;
+
+                        var baseName = attr.Name.LocalName;
+                        if (baseName.StartsWith("_"))
+                            baseName = baseName.Substring(1);
+
+                        if (!allowedAttributes.Contains(baseName))
+                            throw new InvalidOperationException($"XTSE0090: Attribute '{attr.Name.LocalName}' is not permitted on xsl:{localName}.");
+                    }
+                }
+
+                if (localName == "param")
+                {
+                    if (elem.Attribute("visibility") != null || elem.Attribute("_visibility") != null)
+                        throw new InvalidOperationException("XTSE0090: visibility is not permitted on xsl:param.");
+
+                    var requiredAttr = elem.Attribute("required") ?? elem.Attribute("_required");
+                    if (requiredAttr != null)
+                    {
+                        var reqVal = requiredAttr.Value.Trim();
+                        if (reqVal != "yes" && reqVal != "no" &&
+                            reqVal != "true" && reqVal != "false" &&
+                            reqVal != "1" && reqVal != "0")
+                        {
+                            throw new InvalidOperationException("XTSE0020: Invalid value for required attribute on xsl:param.");
+                        }
+
+                        if (reqVal == "yes" && (elem.Attribute("select") != null || elem.Attribute("_select") != null))
+                            throw new InvalidOperationException("XTSE0010: A required xsl:param must not have a select attribute.");
+                    }
+                }
+
+                if (localName == "with-param")
+                {
+                    if (elem.Attribute("required") != null || elem.Attribute("_required") != null)
+                        throw new InvalidOperationException("XTSE0090: required is not permitted on xsl:with-param.");
+                }
+            }
 
             // XTSE0580: duplicate parameter names within a template or function
             if (localName is "template" or "function")
@@ -2242,6 +2314,16 @@ public sealed class Stylesheet
 
     /// <summary>The version attribute of the stylesheet root element.</summary>
     public string? Version { get; private set; }
+
+    /// <summary>
+    /// Whether the stylesheet is in forwards-compatible mode (declared version greater
+    /// than the implementation supports). In this mode unknown attributes on XSLT
+    /// elements are ignored rather than rejected.
+    /// </summary>
+    public bool IsForwardsCompatible =>
+        !string.IsNullOrEmpty(Version) &&
+        decimal.TryParse(Version, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out var v) &&
+        v > 3.0m;
 
     /// <summary>
     /// Throws <c>XTSE0080</c> if the given lexical QName, when expanded in the context of

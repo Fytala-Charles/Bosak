@@ -130,6 +130,7 @@
 //                      | Charles Korthout | 5.59  | 28-06-2026     | TVTs compile with in-scope namespaces and effective base URI; fixes resolve-uri-022   |
 //                      | Charles Korthout | 5.60  | 28-06-2026     | Base-URI/TVT context fixes clear namespace-4801 regression                             |
 //                      | Charles Korthout | 5.61  | 26-06-2026     | Default-mode root template; #current via call-template; XTTE0510; param forwarding     |
+//                      | Charles Korthout | 5.62  | 29-06-2026     | Snapshot/restore variables around literal result element content; fixes param-0107    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -5117,6 +5118,10 @@ public sealed class TransformEngine
         _currentContainer = copy;
         _lastAddedWasAtomic = false;
 
+        // Variables declared in the content of a literal result element are scoped to that
+        // element and must not leak to following siblings in the containing sequence.
+        var savedVariables = _context.SnapshotVariables();
+
         // Push xsl:default-mode for this literal result element scope
         var lreDefaultMode = source.Attribute(XName.Get("default-mode", Stylesheet.Stylesheet.XslNamespace))?.Value;
         if (!string.IsNullOrEmpty(lreDefaultMode))
@@ -5166,6 +5171,7 @@ public sealed class TransformEngine
             {
                 _defaultModeStack.Pop();
             }
+            _context.RestoreVariables(savedVariables);
             _currentContainer = prev;
             _literalElementDepth--;
         }
@@ -10231,6 +10237,11 @@ public sealed class TransformEngine
             _sequenceAccumulator = new List<XdmValue>();
         else
             _sequenceAccumulator = null; // When building a document node, all content goes into the wrapper
+
+        // Sequence constructors establish a new variable scope: bindings added while
+        // evaluating this constructor (e.g. xsl:variable inside a literal result element)
+        // are removed when the constructor finishes.
+        var savedVariables = _context.SnapshotVariables();
 
         try
         {

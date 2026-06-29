@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | EQName support and reserved namespace validation for xsl:function/@name                |
 //                      | Charles Korthout | 0.3   | 24-06-2026     | Evaluate _name AVTs to expanded QNames at parse time                                    |
+//                      | Charles Korthout | 0.4   | 29-06-2026     | _name AVTs now use the stylesheet static context (external static parameters)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
@@ -198,8 +199,9 @@ public sealed class XsltFunctionDefinition
         XElement element,
         Stylesheet stylesheet)
     {
-        var staticParams = EvaluateStaticParameters(stylesheet);
         var trimmed = avt.Trim();
+        var staticCtx = new EvaluationContext();
+        AddStaticVariables(staticCtx, stylesheet);
 
         // Single expression AVT: {expr}. If it evaluates to a QName, use it directly.
         if (trimmed.Length >= 2 &&
@@ -207,7 +209,7 @@ public sealed class XsltFunctionDefinition
             FindAvtExprEnd(trimmed, 1) == trimmed.Length - 1)
         {
             var expr = trimmed[1..^1];
-            var result = EvaluateXPath(expr, element, staticParams);
+            var result = EvaluateXPath(expr, element, staticCtx);
             if (result.Kind == XdmValueKind.QName)
             {
                 var qn = result.QNameValue;
@@ -217,7 +219,7 @@ public sealed class XsltFunctionDefinition
         }
 
         // General AVT: concatenate string values of each evaluated expression.
-        var expanded = EvaluateAvt(avt, element, staticParams);
+        var expanded = EvaluateAvt(avt, element, staticCtx);
         return ResolveQNameString(expanded, element);
     }
 
@@ -255,61 +257,27 @@ public sealed class XsltFunctionDefinition
     }
 
     /// <summary>
-    /// Evaluates the static parameters declared in the stylesheet so that <c>_name</c> AVTs
-    /// can reference them.
+    /// Adds the stylesheet's evaluated static variables and parameters to the supplied
+    /// evaluation context so that <c>_name</c> AVTs can reference them.
     /// </summary>
-    private static Dictionary<string, XdmValue> EvaluateStaticParameters(Stylesheet stylesheet)
+    private static void AddStaticVariables(EvaluationContext ctx, Stylesheet stylesheet)
     {
-        var result = new Dictionary<string, XdmValue>();
-        foreach (var param in stylesheet.GlobalParameters)
+        foreach (var kv in stylesheet.StaticVariables)
         {
-            if (param.Attribute("static")?.Value != "yes")
-                continue;
-
-            var name = param.Attribute("name")?.Value;
-            if (string.IsNullOrEmpty(name))
-                continue;
-
-            var (localName, _) = Stylesheet.ExpandVariableName(param, name);
-            var select = param.Attribute("select")?.Value ?? "";
-            if (string.IsNullOrEmpty(select))
-            {
-                result[localName] = XdmValue.Undefined;
-                continue;
-            }
-
-            var ctx = new EvaluationContext();
-            foreach (var kv in result)
-                ctx.WithVariable(kv.Key, kv.Value);
-
-            try
-            {
-                var nsMap = ExtractNamespaces(param);
-                var compiled = XPath31Expression.Compile(select, new CompileOptions { Namespaces = nsMap });
-                result[localName] = compiled.Evaluate(ctx);
-            }
-            catch
-            {
-                result[localName] = XdmValue.Undefined;
-            }
+            ctx.WithVariable(kv.Key.LocalName, kv.Value, kv.Key.NamespaceUri);
         }
-
-        return result;
     }
 
     /// <summary>
     /// Evaluates a general attribute value template by compiling each <c>{expr}</c> fragment
     /// as an XPath expression and concatenating the atomized results.
     /// </summary>
-    private static string EvaluateAvt(string avt, XElement element, Dictionary<string, XdmValue> staticParams)
+    private static string EvaluateAvt(string avt, XElement element, EvaluationContext staticCtx)
     {
         if (string.IsNullOrEmpty(avt) || !avt.Contains('{'))
             return avt;
 
         var nsMap = ExtractNamespaces(element);
-        var ctx = new EvaluationContext();
-        foreach (var kv in staticParams)
-            ctx.WithVariable(kv.Key, kv.Value);
 
         var sb = new StringBuilder();
         int i = 0;
@@ -339,7 +307,7 @@ public sealed class XsltFunctionDefinition
                     if (!string.IsNullOrEmpty(expr))
                     {
                         var compiled = XPath31Expression.Compile(expr, new CompileOptions { Namespaces = nsMap });
-                        var result = compiled.Evaluate(ctx);
+                        var result = compiled.Evaluate(staticCtx);
                         sb.Append(AtomizedAvtString(result));
                     }
                     i = end + 1;
@@ -378,14 +346,11 @@ public sealed class XsltFunctionDefinition
     /// <summary>
     /// Evaluates a single XPath expression in the static context of the function declaration.
     /// </summary>
-    private static XdmValue EvaluateXPath(string expr, XElement element, Dictionary<string, XdmValue> staticParams)
+    private static XdmValue EvaluateXPath(string expr, XElement element, EvaluationContext staticCtx)
     {
         var nsMap = ExtractNamespaces(element);
         var compiled = XPath31Expression.Compile(expr, new CompileOptions { Namespaces = nsMap });
-        var ctx = new EvaluationContext();
-        foreach (var kv in staticParams)
-            ctx.WithVariable(kv.Key, kv.Value);
-        return compiled.Evaluate(ctx);
+        return compiled.Evaluate(staticCtx);
     }
 
     /// <summary>

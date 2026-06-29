@@ -1,5 +1,56 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-29
+**Commit:** `2f40ea8` (work in progress)
+**Current focus:** Cleared the W3C `match`, `initial-function`, and almost all of the `param` conformance clusters.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,885
+- **Failed:** 365
+- **Skipped:** 9,350
+- **Pass rate:** 93.0% (+14 passed / −14 failed vs. previous 4,871/379/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| match | 336 | 216 | 0 | 120 | ✅ 100% runnable; `match-052`/`match-071` fixed |
+| initial-function | 35 | 35 | 0 | 0 | ✅ 100% runnable; dynamic `_name` AVTs now use external static params |
+| param | 31 | 30 | 1 | 0 | 7 of 8 previous failures fixed; remaining `param-0301` (global-variable visibility inside `xsl:function`) |
+
+## This Session Fixes
+
+1. **URI-aware matching for `doc()` / `document()` patterns** — Simple `doc('uri')` and `document('uri')` match patterns now resolve the literal URI against the stylesheet base URI and compare it to the candidate document node's `DocumentUri`, so they no longer match arbitrary document nodes.
+   - **File changed**: `src/Bosak.Xslt/Patterns/PatternCompiler.cs`.
+
+2. **`xsl:function` `_name` AVTs use the stylesheet static context** — `_name` attribute value templates on `xsl:function` now evaluate against the stylesheet's built static context, including externally supplied static parameters. This lets initial functions be defined by dynamic names, detects duplicate names, and reports invalid names statically.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/XsltFunctionDefinition.cs`.
+
+3. **`xsl:variable` / `xsl:param` / `xsl:with-param` static validation** — Added compile-time checks for missing names, disallowed attributes (`visibility` on `xsl:param`, `required` on `xsl:with-param`, unknown no-namespace attributes), invalid `required` values, and `required="yes"` combined with `@select`. Forwards-compatible stylesheets (`version > 3.0`) ignore unknown attributes as required by the spec.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+4. **Variable scoping inside literal result elements** — `CopyLiteralElement` now snapshots and restores variable bindings around the element's content, so variables declared inside an LRE no longer leak to following siblings in the containing sequence constructor.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **899 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **4,885/365/9,350** (93.0%).
+- Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
+
+## Recommended Next Steps
+
+1. Commit the `match` + `initial-function` + `param` fixes.
+2. Decide whether to tackle the remaining `param-0301` failure (global-variable visibility inside `xsl:function` / unused-variable optimization) or move on to the `as` cluster (2 failures, mostly year<1 limitations).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-28
 **Commit:** `ea4a529`
 **Current focus:** Cleared the W3C `apply-templates` conformance cluster.

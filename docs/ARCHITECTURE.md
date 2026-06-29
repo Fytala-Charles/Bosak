@@ -422,7 +422,7 @@ src/
 | `xsl:copy-of` | 🎯 Phase 1 | Deep copy to result tree |
 | `xsl:for-each` | 🎯 Phase 1 | Iteration over sequence |
 | `xsl:if` / `xsl:choose` | 🎯 Phase 1 | Conditional logic |
-| `xsl:variable` / `xsl:param` | ✅ Implemented | Scoped variables and parameters; static variables/parameters supported with external override via `XsltCompiler.StaticParameters` |
+| `xsl:variable` / `xsl:param` | ✅ Implemented | Scoped variables and parameters; static variables/parameters supported with external override; compile-time validation of required/disallowed attributes and `required`/`select` combinations |
 | `xsl:element` / `xsl:attribute` | 🎯 Phase 1 | Dynamic element/attribute construction |
 | `xsl:text` | 🎯 Phase 1 | Literal text output |
 | Built-in template rules | 🎯 Phase 1 | Default handling for text, attributes, elements |
@@ -432,7 +432,7 @@ src/
 | `xsl:number` | ✅ Implemented | Number formatting |
 | `xsl:key` / `key()` | ✅ Implemented | Indexed lookup |
 | Modes (named) | ✅ Implemented | `mode="foo"`, `xsl:apply-templates mode` |
-| `xsl:function` | ✅ Implemented | User-defined XPath functions in XSLT; `@name` and `@_name` AVTs are resolved to expanded QNames at parse time |
+| `xsl:function` | ✅ Implemented | User-defined XPath functions in XSLT; `@name` and `@_name` AVTs are resolved to expanded QNames at parse time using the stylesheet static context (including externally supplied static parameters), with duplicate-name and invalid-name validation |
 | `fn:transform()` | ✅ Implemented | XPath function invoking XSLT from expressions |
 | Tunnel parameters | ✅ Implemented | `tunnel="yes"` propagation |
 | `xsl:mode` | ✅ Implemented | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks, and `#unnamed` normalization |
@@ -453,6 +453,7 @@ The PatternCompiler transforms patterns into **XPath predicates** evaluated agai
 - `match="foo"` → compile to `self::foo` predicate
 - `match="foo[bar]"` → compile to `self::foo[child::bar]` predicate
 - Union patterns compile to a disjunction of predicates
+- `match="doc('uri')"` / `match="document('uri')"` → the literal URI is resolved against the stylesheet base URI and compared with the candidate document node's `DocumentUri`
 
 This lets us reuse the existing XPath compiler and VM for pattern matching.
 

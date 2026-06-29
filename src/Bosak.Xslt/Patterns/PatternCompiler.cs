@@ -36,6 +36,7 @@
 //                      | Charles Korthout | 2.2   | 13-06-2026     | WrapWithCurrentItem clears regex-group state for pattern evaluation                     |
 //                      | Charles Korthout | 2.3   | 13-06-2026     | Route attribute patterns with predicates through CompilePredicatePattern               |
 //                      | Charles Korthout | 2.4   | 26-06-2026     | Support document-node(element(E)) match patterns                                        |
+//                      | Charles Korthout | 2.5   | 26-06-2026     | Check URI for doc()/document() match patterns                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -735,6 +736,16 @@ public sealed class PatternCompiler
         // Simple document pattern: doc('uri') or document('uri')
         if (trimmed.StartsWith("doc(") && trimmed.EndsWith(')'))
         {
+            var docUri = TryGetStringLiteral(ExtractFunctionArg(trimmed));
+            if (!string.IsNullOrEmpty(docUri))
+            {
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null || node.NodeKind != XdmNodeKind.Document) return false;
+                    return MatchesDocumentUri(node, docUri, ctx);
+                };
+            }
             return (item, ctx) =>
             {
                 var node = AsNode(item);
@@ -744,6 +755,16 @@ public sealed class PatternCompiler
         }
         if (trimmed.StartsWith("document(") && trimmed.EndsWith(')'))
         {
+            var docUri = TryGetStringLiteral(ExtractFunctionArg(trimmed));
+            if (!string.IsNullOrEmpty(docUri))
+            {
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    if (node == null || node.NodeKind != XdmNodeKind.Document) return false;
+                    return MatchesDocumentUri(node, docUri, ctx);
+                };
+            }
             return (item, ctx) =>
             {
                 var node = AsNode(item);
@@ -2511,6 +2532,42 @@ public sealed class PatternCompiler
                 return i;
         }
         return -1;
+    }
+
+    /// <summary>
+    /// Returns the literal string value of a single-quoted or double-quoted XPath string literal.
+    /// </summary>
+    private static string? TryGetStringLiteral(string text)
+    {
+        var t = text.Trim();
+        if (t.Length >= 2)
+        {
+            char q = t[0];
+            if ((q == '\'' || q == '"') && t[^1] == q)
+                return t[1..^1];
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Resolves a relative URI from a doc()/document() pattern against the evaluation base URI
+    /// and checks whether the candidate document node has the same document URI.
+    /// </summary>
+    private static bool MatchesDocumentUri(IXdmNode node, string relativeUri, EvaluationContext ctx)
+    {
+        var baseUri = ctx.BaseUri;
+        if (string.IsNullOrEmpty(baseUri))
+            return false;
+        string absolute;
+        try
+        {
+            absolute = new Uri(new Uri(baseUri), relativeUri).AbsoluteUri;
+        }
+        catch
+        {
+            return false;
+        }
+        return string.Equals(node.DocumentUri, absolute, StringComparison.Ordinal);
     }
 
     /// <summary>
