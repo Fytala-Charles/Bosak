@@ -45,6 +45,16 @@ dotnet test Bosak.sln
 
 Target framework: `net10.0`. All tests must pass before considering a task complete.
 
+> **Note — Application Control workaround on the development machine**
+> Windows Application Control blocks the rebuilt `Bosak.Xslt.Tests` assembly in its
+> normal `bin\Release\net10.0` directory. If `dotnet test` fails with
+> `0x800711C7` for that project, use the provided script instead:
+> ```powershell
+> .\run-xslt-tests.ps1 -Configuration Release
+> ```
+> The script copies the build output to `%TEMP%` and runs `dotnet vstest` from there,
+> which bypasses the policy. Other test projects run normally with `dotnet test`.
+
 ## Architecture Overview
 
 This is a layered XPath 3.1 implementation:

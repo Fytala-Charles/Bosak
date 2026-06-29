@@ -35,7 +35,7 @@
 
 ## Notes
 
-- Unit-test suite: **904 passed / 0 failed / 0 skipped** across 8 projects (Release configuration; Debug builds of `Bosak.Xslt.Tests` are currently blocked by a local Application Control policy).
+- Unit-test suite: **905 passed / 0 failed / 0 skipped** across 8 projects (Release configuration). `Bosak.Xslt.Tests` runs via `run-xslt-tests.ps1` because the local Application Control policy blocks the assembly in its normal `bin` directory.
 - Full W3C suite: **4,890/360/9,350** (93.1%), unchanged.
 - Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
 
