@@ -1,5 +1,51 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-26
+**Commit:** `934dece` (with uncommitted changes)
+**Current focus:** Cleared the W3C `result-document` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,932
+- **Failed:** 318
+- **Skipped:** 9,350
+- **Pass rate:** 93.9% (+5 passed / −5 failed vs. previous 4,927/323/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| result-document | 154 | 18 | 0 | 136 | ✅ All runnable result-document tests now pass |
+
+## This Session Fixes
+
+1. **Nested principal `xsl:result-document` detection** — A nested `xsl:result-document` with no `href` is now allowed only when the enclosing secondary result document was opened at the top level of the principal result tree. This distinguishes `result-document-0205` (allowed) from `result-document-1005`/`1006` (error).
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **Secondary result-document base URI** — The W3C conformance harness now loads secondary output files with `XDocument.Load` and annotates the document with the absolute file URI. This makes `fn:base-uri()` assertions work against saved secondary result documents (`result-document-0102`).
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+3. **`xsl:iterate` in function bodies** — Added support for `xsl:iterate` inside `xsl:function` bodies, including `xsl:param` initial values, `xsl:next-iteration`/`xsl:with-param`, `xsl:break`, and `xsl:on-completion`. This lets dynamic errors such as division by zero inside an `xsl:iterate` propagate correctly (`result-document-1502`).
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **1,005 passed / 0 failed / 0 skipped** across 8 projects. `Bosak.Xslt.Tests` must be executed from a published/relocated output directory because the local Application Control policy blocks `Bosak.Xslt.dll` in its normal `bin` directory.
+- Full W3C suite: **4,932/318/9,350** (93.9%).
+- Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
+
+## Recommended Next Steps
+
+1. Commit the `result-document` cluster fix.
+2. Pick the next medium cluster, e.g. `copy-of` (14), `date` (year < 1 limitations), or `evaluate`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-29
 **Commit:** `3b4c220` (with uncommitted changes)
 **Current focus:** Fixed the `param-0301` false circular-reference failure without regressing global-variable visibility inside `xsl:function` bodies.

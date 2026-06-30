@@ -1108,13 +1108,23 @@ class Program
                 if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
                 if (File.Exists(path))
                 {
-                    var docContent = File.ReadAllText(path).Trim();
-                    foreach (var child in assertDoc.Elements())
+                    try
                     {
-                        if (!CompareSingleResult(docContent, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
-                            return false;
+                        var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
+                        var baseUri = new Uri(Path.GetFullPath(path)).AbsoluteUri;
+                        doc.AddAnnotation(baseUri);
+                        var docValue = XdmValue.FromNode(new XDocumentNode(doc));
+                        foreach (var child in assertDoc.Elements())
+                        {
+                            if (!CompareResult(docValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext))
+                                return false;
+                        }
+                        return true;
                     }
-                    return true;
+                    catch
+                    {
+                        return false;
+                    }
                 }
             }
             return false;
@@ -1231,13 +1241,23 @@ class Program
                 if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
                 if (File.Exists(path))
                 {
-                    var docContent = File.ReadAllText(path).Trim();
-                    foreach (var child in assertDoc.Elements())
+                    try
                     {
-                        if (!CompareSingleResult(docContent, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
-                            return false;
+                        var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
+                        var baseUri = new Uri(Path.GetFullPath(path)).AbsoluteUri;
+                        doc.AddAnnotation(baseUri);
+                        var docValue = XdmValue.FromNode(new XDocumentNode(doc));
+                        foreach (var child in assertDoc.Elements())
+                        {
+                            if (!CompareResult(docValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                                return false;
+                        }
+                        return true;
                     }
-                    return true;
+                    catch
+                    {
+                        return false;
+                    }
                 }
             }
             return false;

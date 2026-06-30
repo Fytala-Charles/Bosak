@@ -256,6 +256,24 @@ public sealed class TransformEngine
     // Tracks URIs already used by xsl:result-document to detect XTDE1490 duplicates.
     private readonly HashSet<string> _resultDocumentUris = new();
 
+    // Stack of open xsl:result-document contexts. Used to redirect nested result
+    // documents and to detect attempts to write to the principal output URI while
+    // a secondary result document is active.
+    private readonly Stack<ResultDocumentFrame> _resultDocumentStack = new();
+
+    // Set to true once a top-level xsl:result-document with no @href has closed the
+    // principal output; any further output to the principal result tree is an error.
+    private bool _principalOutputClosed;
+
+    /// <summary>
+    /// Records the state of an open <c>xsl:result-document</c> instruction.
+    /// </summary>
+    private readonly record struct ResultDocumentFrame(
+        string TargetUri,
+        XElement? RootContainer,
+        XContainer SavedContainer,
+        XContainer PrincipalContainer);
+
     // Current group state for xsl:for-each-group / current-group() / current-grouping-key()
     private List<XdmValue>? _currentGroup;
     private XdmValue? _currentGroupingKey;
@@ -495,6 +513,8 @@ public sealed class TransformEngine
 
         // Result-document URIs must be unique within a transformation.
         _resultDocumentUris.Clear();
+        _resultDocumentStack.Clear();
+        _principalOutputClosed = false;
 
         // Compile all template match patterns before execution. The validation
         // dry-run for pattern predicates needs the lazy global resolver registered
@@ -731,12 +751,23 @@ public sealed class TransformEngine
     /// functions on the EvaluationContext.
     /// </summary>
     /// <summary>
+    /// Throws <c>XTDE1490</c> if output is being written to the principal result tree
+    /// after it has been closed by an explicit <c>xsl:result-document</c> with no <c>@href</c>.
+    /// </summary>
+    private void EnsurePrincipalOutputOpen()
+    {
+        if (_principalOutputClosed && _resultDocumentStack.Count == 0)
+            throw new InvalidOperationException("XTDE1490: The principal result tree has already been closed by an xsl:result-document instruction.");
+    }
+
+    /// <summary>
     /// Adds a text node to the current result container.
     /// Falls back to a document-level text buffer when the container is an XDocument,
     /// because XDocument does not allow non-whitespace text nodes at the document level.
     /// </summary>
     private void AddTextNode(string text, bool allowZeroLength = false)
     {
+        EnsurePrincipalOutputOpen();
         if (text.Length == 0 && !allowZeroLength)
             return; // Zero-length text nodes are ignored in complex content
         if (_currentContainer is XDocument)
@@ -785,6 +816,7 @@ public sealed class TransformEngine
     /// </summary>
     private void AppendAtomicText(string text)
     {
+        EnsurePrincipalOutputOpen();
         if (_currentContainer is XDocument)
         {
             if (_lastAddedWasAtomic)
@@ -2713,6 +2745,121 @@ public sealed class TransformEngine
                 case "map-entry":
                     {
                         results.Add(BuildMapEntry(instruction, contextItem));
+                        break;
+                    }
+                case "iterate":
+                    {
+                        var iterSelect = instruction.Attribute("select")?.Value;
+                        if (string.IsNullOrEmpty(iterSelect))
+                            break;
+
+                        var iterItems = EnumerateItems(CompileXPath(iterSelect, instruction).Evaluate(_context)).ToList();
+                        var iterParamValues = new Dictionary<(string LocalName, string NamespaceUri), XdmValue>();
+                        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+                        foreach (var p in instruction.Elements(XName.Get("param", xslNs)))
+                        {
+                            var pname = p.Attribute("name")?.Value;
+                            if (string.IsNullOrEmpty(pname))
+                                continue;
+                            var (plocal, pns) = ExpandVariableName(p, pname);
+                            var pselect = p.Attribute("select")?.Value;
+                            iterParamValues[(plocal, pns)] = string.IsNullOrEmpty(pselect)
+                                ? XdmValue.Undefined
+                                : CompileXPath(pselect, p).Evaluate(_context);
+                        }
+
+                        XdmValue? iterCompletionResult = null;
+                        bool iterBroken = false;
+                        var savedIterFocus = _context.ContextItem;
+                        var savedIterPos = _context.ContextPosition;
+                        var savedIterSize = _context.ContextSize;
+                        var savedIterCurrent = _context.CurrentItem;
+                        var savedIterVars = _context.SnapshotVariables();
+                        try
+                        {
+                            int iterTotal = iterItems.Count;
+                            for (int i = 0; i < iterTotal; i++)
+                            {
+                                _context.WithFocus(iterItems[i], i + 1, iterTotal);
+                                _context.WithCurrentItem(iterItems[i]);
+                                foreach (var kv in iterParamValues)
+                                    _context.WithVariable(kv.Key.LocalName, kv.Value, kv.Key.NamespaceUri);
+
+                                bool iterNext = false;
+                                XdmValue? iterBreakResult = null;
+                                var iterBodyItems = new List<XdmValue>();
+                                foreach (var bodyChild in instruction.Elements())
+                                {
+                                    if (bodyChild.Name.LocalName == "param" || bodyChild.Name.LocalName == "on-completion")
+                                        continue;
+                                    if (bodyChild.Name.LocalName == "next-iteration")
+                                    {
+                                        foreach (var wp in bodyChild.Elements(XName.Get("with-param", xslNs)))
+                                        {
+                                            var wpName = wp.Attribute("name")?.Value;
+                                            if (string.IsNullOrEmpty(wpName))
+                                                continue;
+                                            var (wplocal, wpns) = ExpandVariableName(wp, wpName);
+                                            var wpSelect = wp.Attribute("select")?.Value;
+                                            iterParamValues[(wplocal, wpns)] = string.IsNullOrEmpty(wpSelect)
+                                                ? XdmValue.Undefined
+                                                : CompileXPath(wpSelect, wp).Evaluate(_context);
+                                        }
+                                        iterNext = true;
+                                        break;
+                                    }
+                                    if (bodyChild.Name.LocalName == "break")
+                                    {
+                                        var breakSelect = bodyChild.Attribute("select")?.Value;
+                                        iterBreakResult = string.IsNullOrEmpty(breakSelect)
+                                            ? EvaluateFunctionBody(bodyChild, XdmValue.Undefined)
+                                            : CompileXPath(breakSelect, bodyChild).Evaluate(_context);
+                                        iterBroken = true;
+                                        break;
+                                    }
+                                    ProcessFunctionBodyNode(bodyChild, iterBodyItems, iterItems[i]);
+                                }
+                                if (iterBroken)
+                                {
+                                    if (iterBreakResult.HasValue && !iterBreakResult.Value.IsUndefined)
+                                        results.Add(iterBreakResult.Value);
+                                    break;
+                                }
+                                foreach (var bi in iterBodyItems)
+                                    results.Add(bi);
+                                if (!iterNext)
+                                {
+                                    // No explicit next-iteration: parameters retain their values for the next round.
+                                }
+                            }
+
+                            if (!iterBroken)
+                            {
+                                if (iterTotal == 0)
+                                {
+                                    _context.WithFocus(XdmValue.Undefined, 0, 0);
+                                    foreach (var kv in iterParamValues)
+                                        _context.WithVariable(kv.Key.LocalName, kv.Value, kv.Key.NamespaceUri);
+                                }
+                                var onCompletion = instruction.Element(XName.Get("on-completion", xslNs));
+                                if (onCompletion != null)
+                                {
+                                    var ocSelect = onCompletion.Attribute("select")?.Value;
+                                    iterCompletionResult = string.IsNullOrEmpty(ocSelect)
+                                        ? EvaluateFunctionBody(onCompletion, XdmValue.Undefined)
+                                        : CompileXPath(ocSelect, onCompletion).Evaluate(_context);
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            _context.RestoreVariables(savedIterVars);
+                            _context.WithFocus(savedIterFocus, savedIterPos, savedIterSize);
+                            _context.WithCurrentItem(savedIterCurrent);
+                        }
+
+                        if (iterCompletionResult.HasValue && !iterCompletionResult.Value.IsUndefined)
+                            results.Add(iterCompletionResult.Value);
                         break;
                     }
                 default:
@@ -4958,38 +5105,72 @@ public sealed class TransformEngine
             case "result-document":
                 {
                     var hrefRaw = instruction.Attribute("href")?.Value;
-                    if (string.IsNullOrEmpty(hrefRaw))
+                    var href = EvaluateAvt(hrefRaw ?? string.Empty, instruction);
+                    var baseUri = instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
+                    string resolvedHref;
+                    if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
+                        resolvedHref = href;
+                    else if (!string.IsNullOrEmpty(baseUri))
+                        resolvedHref = new Uri(new Uri(baseUri), href).AbsoluteUri;
+                    else
+                        resolvedHref = href;
+
+                    bool isPrincipal = string.IsNullOrEmpty(href);
+                    var principalContainer = _resultDocumentStack.Count == 0
+                        ? _currentContainer
+                        : _resultDocumentStack.Peek().PrincipalContainer;
+
+                    if (isPrincipal)
                     {
-                        // An empty/missing href writes to the principal result tree.
-                        foreach (var childNode in instruction.Nodes())
+                        // Nested principal result document: allowed only when the enclosing
+                        // secondary result document was opened at the top level of the principal
+                        // result tree (XSLT 2.0 §9.4.2). If the principal output had already
+                        // descended into an element, switching back would leave it ill-formed.
+                        if (_resultDocumentStack.Count > 0)
                         {
-                            switch (childNode)
+                            var outerFrame = _resultDocumentStack.Peek();
+                            if (!ReferenceEquals(outerFrame.PrincipalContainer, _resultDocument))
+                                throw new InvalidOperationException("XTDE1490: A nested result document cannot be created while the principal result tree is inside an element.");
+                        }
+
+                        if (_principalOutputClosed || _resultDocumentStack.Any(f => f.TargetUri == string.Empty))
+                            throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
+
+                        var savedContainer = _currentContainer;
+                        var frame = new ResultDocumentFrame(string.Empty, null, savedContainer, principalContainer);
+                        _resultDocumentStack.Push(frame);
+                        _currentContainer = principalContainer;
+                        try
+                        {
+                            foreach (var childNode in instruction.Nodes())
                             {
-                                case XText text:
-                                    ProcessSequenceText(text, instruction);
-                                    break;
-                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                    ExecuteXsltInstruction(elem, contextItem);
-                                    break;
-                                case XElement elem:
-                                    CopyLiteralElement(elem);
-                                    break;
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        ProcessSequenceText(text, instruction);
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, contextItem);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
                             }
                         }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _resultDocumentStack.Pop();
+                        }
+
+                        // A top-level principal result document closes the principal output URI.
+                        if (_resultDocumentStack.Count == 0)
+                            _principalOutputClosed = true;
                     }
                     else
                     {
-                        var href = EvaluateAvt(hrefRaw, instruction);
-                        var baseUri = instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
-                        string resolvedHref;
-                        if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
-                            resolvedHref = href;
-                        else if (!string.IsNullOrEmpty(baseUri))
-                            resolvedHref = new Uri(new Uri(baseUri), href).AbsoluteUri;
-                        else
-                            resolvedHref = href;
-
-                        if (!_resultDocumentUris.Add(resolvedHref))
+                        if (_resultDocumentUris.Contains(resolvedHref))
                             throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
 
                         var savedContainer = _currentContainer;
@@ -4997,6 +5178,8 @@ public sealed class TransformEngine
                         var temp = new XElement("__result-document__");
                         _currentContainer = temp;
                         _lastAddedWasAtomic = false;
+                        var frame = new ResultDocumentFrame(resolvedHref, temp, savedContainer, principalContainer);
+                        _resultDocumentStack.Push(frame);
                         try
                         {
                             foreach (var childNode in instruction.Nodes())
@@ -5019,9 +5202,11 @@ public sealed class TransformEngine
                         {
                             _currentContainer = savedContainer;
                             _lastAddedWasAtomic = savedLastAtomic;
+                            _resultDocumentStack.Pop();
                         }
 
                         WriteResultDocument(resolvedHref, temp);
+                        _resultDocumentUris.Add(resolvedHref);
                     }
                     break;
                 }
@@ -6378,6 +6563,7 @@ public sealed class TransformEngine
     /// </summary>
     private void AddElementToContainer(XElement element, XContainer container)
     {
+        EnsurePrincipalOutputOpen();
         if (container is XElement parentElem)
         {
             if (string.IsNullOrEmpty(element.Name.NamespaceName))
