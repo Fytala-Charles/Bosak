@@ -77,6 +77,7 @@
 //                      | Charles Korthout | 5.11  | 27-06-2026     | fn:snapshot copies in-scope namespace bindings to element copies                       |
 //                      | Charles Korthout | 5.12  | 28-06-2026     | fn:document#1 uses node base URIs; fn:resolve-uri validates base and relative URIs     |
 //                      | Charles Korthout | 5.13  | 28-06-2026     | FORG0002 for relative base/malformed relative URIs; dotted-path resolution             |
+//                      | Charles Korthout | 5.14  | 26-06-2026     | Allow XML 1.1 C0 controls in codepoints-to-string; honor duplicates in json-to-xml     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3710,7 +3711,7 @@ public static class FunctionLibrary
         {
             int cp = (int)item.IntegerValue;
             if (cp < 0 || cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF) ||
-                (cp < 0x20 && cp != 0x09 && cp != 0x0A && cp != 0x0D) ||
+                cp == 0 ||
                 cp == 0xFFFE || cp == 0xFFFF || (cp >= 0xFDD0 && cp <= 0xFDEF) ||
                 (cp & 0xFFFE) == 0xFFFE && cp > 0xFFFF)
                 throw new InvalidOperationException("FOCH0001");
@@ -9454,7 +9455,12 @@ public static class FunctionLibrary
         if (map.TryGetValue(XdmValue.FromString("liberal"), out var liberal))
             result = result with { Liberal = liberal.BooleanValue };
         if (map.TryGetValue(XdmValue.FromString("duplicates"), out var dup))
-            result = result with { Duplicates = AtomizedString(dup) };
+        {
+            var dupStr = RequireString(dup);
+            if (dupStr != "use-first" && dupStr != "retain" && dupStr != "reject")
+                throw new InvalidOperationException("FOJS0005: Invalid duplicates option");
+            result = result with { Duplicates = dupStr };
+        }
         if (map.TryGetValue(XdmValue.FromString("escape"), out var escape))
             result = result with { Escape = escape.BooleanValue };
         if (map.TryGetValue(XdmValue.FromString("indent"), out var indent))
@@ -9616,9 +9622,17 @@ public static class FunctionLibrary
             case JsonValueKind.Object:
                 {
                     var mapEl = new XElement(XName.Get("map", JsonXmlNs));
+                    var seenKeys = new HashSet<string>();
                     foreach (var property in element.EnumerateObject())
                     {
                         var key = options.Escape ? JsonEscapeString(property.Name) : property.Name;
+                        if (!seenKeys.Add(key))
+                        {
+                            if (options.Duplicates == "reject")
+                                throw new InvalidOperationException("FOJS0003: Duplicate key in JSON object");
+                            if (options.Duplicates == "use-first")
+                                continue;
+                        }
                         var child = JsonElementToXml(ctx, property.Value, options);
                         child.SetAttributeValue(XName.Get("key"), key);
                         mapEl.Add(child);
