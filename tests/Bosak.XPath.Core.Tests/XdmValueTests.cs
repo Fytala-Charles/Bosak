@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 26-06-2026     | Added sequence EBV tests                                                                 |
+//                      | Charles Korthout | 0.3   | 26-06-2026     | Added xs:float canonical formatting regression tests                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -195,5 +196,37 @@ public class XdmValueTests
     {
         var v = XdmValue.FromDouble(1.23e-7);
         Assert.Equal("1.23E-7", v.ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-xxx: xs:float canonical formatting regression tests
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void FloatToString_LargeScientific_IsShortestRoundTrip()
+    {
+        var v = XdmValue.FromFloat(float.Parse("1.1234E30", System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture));
+        Assert.Equal("1.1234E30", v.ToString());
+    }
+
+    [Fact]
+    public void FloatToString_SmallScientific()
+    {
+        var v = XdmValue.FromFloat(1.23e-7f);
+        Assert.Equal("1.23E-7", v.ToString());
+    }
+
+    [Fact]
+    public void FloatToString_ZeroPointOne()
+    {
+        var v = XdmValue.FromFloat(0.1f);
+        Assert.Equal("0.1", v.ToString());
+    }
+
+    [Fact]
+    public void FloatToString_NegativeZero()
+    {
+        var v = XdmValue.FromFloat(-0.0f);
+        Assert.Equal("-0", v.ToString());
     }
 }

@@ -52,6 +52,7 @@
 //                      | Charles Korthout | 2.19  | 26-06-2026     | CompareGeneral returns false (not empty sequence) for empty general-comparison operands |
 //                      | Charles Korthout | 2.20  | 28-06-2026     | NormalizeSequence uses HashSet for duplicate removal; restores catalog self-test speed   |
 //                      | Charles Korthout | 2.21  | 26-06-2026     | Integer/decimal division and modulo by zero raise FOAR0001 DynamicException            |
+//                      | Charles Korthout | 2.22  | 30-06-2026     | Cast to xs:float parses via float.TryParse to preserve single-precision lexical form  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3622,9 +3623,9 @@ public static class VmEngine
                 if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
                     or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Node)
                     return false;
-                if (TryParseDouble(value.ToString(), out var flt))
+                if (TryParseFloat(value.ToString(), out var flt))
                 {
-                    result = XdmValue.FromFloat((float)flt);
+                    result = XdmValue.FromFloat(flt);
                     return true;
                 }
                 return false;
@@ -5574,6 +5575,34 @@ public static class VmEngine
             return false;
         }
         return double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+    }
+
+    private static bool TryParseFloat(string s, out float result)
+    {
+        s = s.Trim();
+        if (s == "INF" || s == "+INF")
+        {
+            result = float.PositiveInfinity;
+            return true;
+        }
+        if (s == "-INF")
+        {
+            result = float.NegativeInfinity;
+            return true;
+        }
+        if (s == "NaN")
+        {
+            result = float.NaN;
+            return true;
+        }
+        // Explicitly reject case variants that .NET's float.TryParse would accept
+        string upper = s.ToUpperInvariant();
+        if (upper is "NAN" or "INF" or "+INF" or "-INF" or "INFINITY" or "+INFINITY" or "-INFINITY")
+        {
+            result = 0;
+            return false;
+        }
+        return float.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
     }
 
     private static bool IsDouble(XdmValue value) =>

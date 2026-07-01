@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.8   | 25-06-2026     | FromNode(null) returns Undefined to prevent null-node context-item bugs                |
 //                      | Charles Korthout | 0.9   | 26-06-2026     | Fixed EffectiveBooleanValue for singleton/multi-item sequences                         |
 //                      | Charles Korthout | 1.0   | 27-06-2026     | Use shortest round-trip format (G17/G9) for XPath double/float scientific notation      |
+//                      | Charles Korthout | 1.1   | 26-06-2026     | Use shortest round-trip (\"R\") format for xs:float scientific notation                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -538,8 +539,8 @@ public readonly struct XdmValue
         // XPath canonical float uses scientific notation when abs >= 1e6 or abs < 1e-6
         if (abs >= 1e6f || abs < 1e-6f)
         {
-            // "G9" gives a round-trippable form for float values (float has ~7 digits of precision).
-            string s = value.ToString("G9", CultureInfo.InvariantCulture);
+            // "R" gives the shortest round-trippable form for float values.
+            string s = value.ToString("R", CultureInfo.InvariantCulture);
             if (!s.Contains('E') && !s.Contains('e') && abs >= 1e6f)
             {
                 bool negative = s.StartsWith('-');

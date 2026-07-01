@@ -2655,4 +2655,5 @@ public class StylesheetTests
         var result = executable.TransformFunction("f:start", System.Array.Empty<XdmValue>(), new EvaluationContext());
         Assert.Equal("||||||", result.StringValue);
     }
+
 }
