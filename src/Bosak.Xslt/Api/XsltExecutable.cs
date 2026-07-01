@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 08-06-2026     | Added initialMode parameter to Transform/TransformToString                             |
 //                      | Charles Korthout | 0.4   | 24-06-2026     | Added TransformFunction/TransformFunctionToString for xsl:function entry points        |
 //                      | Charles Korthout | 0.5   | 25-06-2026     | Added rawResult parameter to Transform for initial-template raw XDM output             |
+//                      | Charles Korthout | 0.7   | 26-06-2026     | Added baseOutputUri parameter to Transform/TransformToString                            |
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Propagate TreatRecoverableAmbiguousMatchAsError to TransformEngine                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -47,12 +48,13 @@ public sealed class XsltExecutable
     /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
     /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
     /// <param name="initialMode">Optional name of the initial mode to use.</param>
+    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
     /// <param name="rawResult">When true and an initial template is used, returns the raw template result instead of wrapping it in a result document.</param>
     /// <returns>The result of the transformation as an XDM value.</returns>
-    public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false)
+    public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
     {
         var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
-        return engine.Transform(source, initialTemplate, initialMode, rawResult);
+        return engine.Transform(source, initialTemplate, initialMode, rawResult, baseOutputUri);
     }
 
     /// <summary>
@@ -62,10 +64,11 @@ public sealed class XsltExecutable
     /// <param name="context">Optional evaluation context.</param>
     /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
     /// <param name="initialMode">Optional name of the initial mode to use.</param>
+    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
     /// <returns>The serialized result of the transformation.</returns>
-    public string TransformToString(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null)
+    public string TransformToString(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null)
     {
-        var result = Transform(source, context, initialTemplate, initialMode);
+        var result = Transform(source, context, initialTemplate, initialMode, baseOutputUri: baseOutputUri);
         return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);
     }
 

@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.6   | 25-06-2026     | Added IsStaticEvaluation flag for use-when/static-expression function libraries        |
 //                      | Charles Korthout | 1.7   | 26-06-2026     | Added SnapshotLazyGlobals/RestoreLazyGlobals to isolate function-local lazy variables  |
 //                      | Charles Korthout | 1.8   | 29-06-2026     | Added SkipLazyGlobalCacheOnce and TryGetBoundVariable for deferred locals              |
+//                      | Charles Korthout | 2.0   | 26-06-2026     | Added CurrentOutputUri for fn:current-output-uri                                       |
 //                      | Charles Korthout | 1.9   | 26-06-2026     | File-not-found document loads report FODC0002 so xsl:catch can match                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -136,6 +137,13 @@ public sealed class EvaluationContext
     /// Optional base URI used to resolve relative document URIs.
     /// </summary>
     public string? BaseUri { get; set; }
+
+    /// <summary>
+    /// The URI of the current output destination in XSLT. Empty or null when the
+    /// evaluation is in a temporary output state (e.g., inside xsl:variable, a
+    /// stylesheet function, a sort key, or a pattern predicate).
+    /// </summary>
+    public string? CurrentOutputUri { get; set; }
 
     /// <summary>
     /// When true, the expression is being evaluated in a static context (e.g. a

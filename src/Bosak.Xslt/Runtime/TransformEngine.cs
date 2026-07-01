@@ -134,6 +134,8 @@
 //                      | Charles Korthout | 5.63  | 26-06-2026     | Lazy evaluation for xsl:variable inside xsl:function bodies; fixes param-0301         |
 //                      | Charles Korthout | 5.64  | 29-06-2026     | Targeted lazy locals + global resolver re-entry fix; clears regressions                |
 //                      | Charles Korthout | 5.65  | 26-06-2026     | xsl:try scope isolation, error QName namespace, result-document, FODC0002             |
+//                      | Charles Korthout | 5.66  | 26-06-2026     | fn:current-output-uri support; base output URI propagation and temporary-output-state  |
+//                      | Charles Korthout | 5.67  | 30-06-2026     | Compile template match patterns for function entry points; fixes apply-templates in functions |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -264,6 +266,10 @@ public sealed class TransformEngine
     // Set to true once a top-level xsl:result-document with no @href has closed the
     // principal output; any further output to the principal result tree is an error.
     private bool _principalOutputClosed;
+
+    // The base output URI supplied for the transformation. Used as the principal
+    // output URI and as the value of fn:current-output-uri() at the top level.
+    private string? _baseOutputUri;
 
     /// <summary>
     /// Records the state of an open <c>xsl:result-document</c> instruction.
@@ -445,8 +451,10 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the stylesheet transformation.
     /// </summary>
-    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false)
+    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
     {
+        _baseOutputUri = baseOutputUri;
+        _context.CurrentOutputUri = baseOutputUri;
         _initialSource = source;
         _initialMode = initialMode ?? "";
         _startedWithNamedTemplate = false;
@@ -653,8 +661,7 @@ public sealed class TransformEngine
             {
                 // Look for a template matching "/" or other document-node-specific patterns
                 var rootTemplate = FindRootTemplate();
-                if (rootTemplate != null && rootTemplate.CompiledMatch != null &&
-                    rootTemplate.CompiledMatch(XdmValue.FromNode(source!), _context))
+                if (rootTemplate != null && EvaluatePatternMatch(rootTemplate, XdmValue.FromNode(source!)))
                 {
                     ExecuteTemplate(rootTemplate, source!);
                 }
@@ -693,11 +700,37 @@ public sealed class TransformEngine
     /// </summary>
     public XdmValue TransformFunction(string name, XdmValue[] args)
     {
+        _baseOutputUri = null;
+        _context.CurrentOutputUri = null;
         RegisterXsltFunctions();
         RegisterKeyFunction();
         _context.DocumentPostProcessor = PostProcessLoadedDocument;
         InitializeGlobalParametersAndVariables(null);
         _attributeSetVariableSnapshot = _context.SnapshotVariables();
+
+        // Result-document URIs must be unique within a transformation.
+        _resultDocumentUris.Clear();
+        _resultDocumentStack.Clear();
+        _principalOutputClosed = false;
+
+        // Compile template match patterns before execution, just as for a normal
+        // transformation. The function body may contain xsl:apply-templates that
+        // needs compiled patterns to match.
+        foreach (var rule in _allTemplateRules)
+        {
+            if (rule.Element.Attribute("match") == null && rule.Element.Attribute("_match") != null && rule.Match != null)
+            {
+                rule.Match = EvaluateAvt(rule.Match, rule.Element);
+            }
+        }
+
+        var patternCompiler = new Patterns.PatternCompiler(_context);
+        foreach (var rule in _allTemplateRules)
+        {
+            rule.CompileMatch(patternCompiler);
+        }
+
+        RegisterGroupingFunctions();
 
         var (nsUri, localName) = ParseExpandedFunctionName(name);
         var def = FindFunctionDefinition(nsUri, localName, args.Length);
@@ -1101,6 +1134,7 @@ public sealed class TransformEngine
         context.UnregisterFunction(Fn, "current-merge-group", 1);
         context.UnregisterFunction(Fn, "current-merge-key", 0);
         context.UnregisterFunction(Fn, "system-property", 1);
+        context.UnregisterFunction(Fn, "current-output-uri", 0);
     }
 
     /// <summary>
@@ -1727,6 +1761,7 @@ public sealed class TransformEngine
         var savedLazyResolver = _context.LazyVariableResolver;
         var savedSuppressCaching = _context.SuppressLazyGlobalCaching;
         var savedFunctionLocals = _functionLocalLazyVariables;
+        var savedOutputUri = _context.CurrentOutputUri;
         _sequenceAccumulator = null;
         _currentMergeGroup = null;
         _currentMergeKey = null;
@@ -1738,6 +1773,8 @@ public sealed class TransformEngine
         XsltFunctionCacheKey? cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
         try
         {
+            _context.CurrentOutputUri = null;
+
             if (cacheKey.HasValue && _xsltFunctionCache.TryGetValue(cacheKey.Value, out var cached))
                 return cached;
 
@@ -1805,6 +1842,7 @@ public sealed class TransformEngine
             _context.RegexGroups = savedRegexGroups;
             _context.LazyVariableResolver = savedLazyResolver;
             _context.SuppressLazyGlobalCaching = savedSuppressCaching;
+            _context.CurrentOutputUri = savedOutputUri;
             _functionLocalLazyVariables = savedFunctionLocals;
         }
     }
@@ -1843,7 +1881,17 @@ public sealed class TransformEngine
         }
         else
         {
-            varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+            // Function-local variable bodies are evaluated in a temporary output state.
+            var savedOutputUri = _context.CurrentOutputUri;
+            _context.CurrentOutputUri = null;
+            try
+            {
+                varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+            }
+            finally
+            {
+                _context.CurrentOutputUri = savedOutputUri;
+            }
         }
         return ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
     }
@@ -2947,7 +2995,7 @@ public sealed class TransformEngine
                 continue;
             if (rule.CompiledMatch == null)
                 continue;
-            if (!rule.CompiledMatch(XdmValue.FromNode(_initialSource!), _context))
+            if (!EvaluatePatternMatch(rule, XdmValue.FromNode(_initialSource!)))
                 continue;
 
             // XSLT spec §6.4: import precedence is checked BEFORE priority.
@@ -3042,12 +3090,21 @@ public sealed class TransformEngine
                 items = SortNodesByDocumentOrderPreservingTreeOrder(items);
             }
 
-            // Apply xsl:sort if present (only supported for all-node sequences currently)
-            if (sortKeys != null && sortKeys.Count > 0 && allNodes)
+            // Apply xsl:sort if present. Node sequences are sorted via SortNodes; mixed or
+            // atomic sequences use SortItems, which evaluates each sort key with the current
+            // output URI cleared.
+            if (sortKeys != null && sortKeys.Count > 0)
             {
-                var nodes = items.Select(i => i.NodeValue!).ToList();
-                nodes = SortNodes(nodes, sortKeys);
-                items = nodes.Select(XdmValue.FromNode).ToList();
+                if (allNodes)
+                {
+                    var nodes = items.Select(i => i.NodeValue!).ToList();
+                    nodes = SortNodes(nodes, sortKeys);
+                    items = nodes.Select(XdmValue.FromNode).ToList();
+                }
+                else
+                {
+                    items = SortItems(items, sortKeys);
+                }
             }
 
             int pos = 1;
@@ -3074,7 +3131,11 @@ public sealed class TransformEngine
                     {
                         ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: pos, last: last);
                     }
-                    // Built-in rule for atomic values does nothing (XSLT 3.0 §6.6)
+                    else
+                    {
+                        // Built-in rule for atomic values: output the string value.
+                        AddTextNode(item.ToString());
+                    }
                 }
                 pos++;
             }
@@ -3137,27 +3198,24 @@ public sealed class TransformEngine
             // §5.4). Within a single tree, document order is used.
             if (allNodes)
             {
-                var indexed = items.Select((item, idx) => (item, idx)).ToList();
-                indexed.Sort((a, b) =>
-                {
-                    var rootA = GetRootNode(a.item.NodeValue!);
-                    var rootB = GetRootNode(b.item.NodeValue!);
-                    if (rootA.IsSameNode(rootB))
-                    {
-                        int cmp = a.item.NodeValue!.DocumentOrder.CompareTo(b.item.NodeValue!.DocumentOrder);
-                        return cmp != 0 ? cmp : a.idx.CompareTo(b.idx);
-                    }
-                    return a.idx.CompareTo(b.idx);
-                });
-                items = indexed.Select(x => x.item).ToList();
+                items = SortNodesByDocumentOrderPreservingTreeOrder(items);
             }
 
-            // Apply xsl:sort if present (only supported for all-node sequences currently)
-            if (sortKeys != null && sortKeys.Count > 0 && allNodes)
+            // Apply xsl:sort if present. Node sequences are sorted via SortNodes; mixed or
+            // atomic sequences use SortItems, which evaluates each sort key with the current
+            // output URI cleared.
+            if (sortKeys != null && sortKeys.Count > 0)
             {
-                var nodes = items.Select(i => i.NodeValue!).ToList();
-                nodes = SortNodes(nodes, sortKeys);
-                items = nodes.Select(XdmValue.FromNode).ToList();
+                if (allNodes)
+                {
+                    var nodes = items.Select(i => i.NodeValue!).ToList();
+                    nodes = SortNodes(nodes, sortKeys);
+                    items = nodes.Select(XdmValue.FromNode).ToList();
+                }
+                else
+                {
+                    items = SortItems(items, sortKeys);
+                }
             }
 
             int pos = 1;
@@ -3184,7 +3242,11 @@ public sealed class TransformEngine
                     {
                         ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: pos, last: last);
                     }
-                    // Built-in rule for non-node items does nothing (XSLT 3.0 §6.6)
+                    else
+                    {
+                        // Built-in rule for atomic values: output the string value.
+                        AddTextNode(item.ToString());
+                    }
                 }
                 pos++;
             }
@@ -4583,8 +4645,18 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            // Build value from sequence constructor (text nodes + XSLT instructions)
-                            varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+                            // Build value from sequence constructor (text nodes + XSLT instructions).
+                            // Variable bodies are evaluated in a temporary output state.
+                            var savedOutputUri = _context.CurrentOutputUri;
+                            _context.CurrentOutputUri = null;
+                            try
+                            {
+                                varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+                            }
+                            finally
+                            {
+                                _context.CurrentOutputUri = savedOutputUri;
+                            }
                         }
                         varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
                         _context.WithVariable(varLocal, varValue, varNs);
@@ -4609,7 +4681,17 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+                            // Parameter default-value bodies are evaluated in a temporary output state.
+                            var savedOutputUri = _context.CurrentOutputUri;
+                            _context.CurrentOutputUri = null;
+                            try
+                            {
+                                varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
+                            }
+                            finally
+                            {
+                                _context.CurrentOutputUri = savedOutputUri;
+                            }
                         }
                         varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true);
                         _context.WithVariable(varLocal, varValue, varNs);
@@ -5106,12 +5188,14 @@ public sealed class TransformEngine
                 {
                     var hrefRaw = instruction.Attribute("href")?.Value;
                     var href = EvaluateAvt(hrefRaw ?? string.Empty, instruction);
-                    var baseUri = instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
+                    // xsl:result-document @href is resolved against the base output URI when one
+                    // is known; otherwise fall back to the static base URI of the instruction.
+                    var resolutionBase = _baseOutputUri ?? instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
                     string resolvedHref;
                     if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
                         resolvedHref = href;
-                    else if (!string.IsNullOrEmpty(baseUri))
-                        resolvedHref = new Uri(new Uri(baseUri), href).AbsoluteUri;
+                    else if (!string.IsNullOrEmpty(resolutionBase))
+                        resolvedHref = new Uri(new Uri(resolutionBase), href).AbsoluteUri;
                     else
                         resolvedHref = href;
 
@@ -5137,9 +5221,11 @@ public sealed class TransformEngine
                             throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
 
                         var savedContainer = _currentContainer;
+                        var savedOutputUri = _context.CurrentOutputUri;
                         var frame = new ResultDocumentFrame(string.Empty, null, savedContainer, principalContainer);
                         _resultDocumentStack.Push(frame);
                         _currentContainer = principalContainer;
+                        _context.CurrentOutputUri = _baseOutputUri ?? string.Empty;
                         try
                         {
                             foreach (var childNode in instruction.Nodes())
@@ -5160,6 +5246,7 @@ public sealed class TransformEngine
                         }
                         finally
                         {
+                            _context.CurrentOutputUri = savedOutputUri;
                             _currentContainer = savedContainer;
                             _resultDocumentStack.Pop();
                         }
@@ -5175,9 +5262,11 @@ public sealed class TransformEngine
 
                         var savedContainer = _currentContainer;
                         var savedLastAtomic = _lastAddedWasAtomic;
+                        var savedOutputUri = _context.CurrentOutputUri;
                         var temp = new XElement("__result-document__");
                         _currentContainer = temp;
                         _lastAddedWasAtomic = false;
+                        _context.CurrentOutputUri = resolvedHref;
                         var frame = new ResultDocumentFrame(resolvedHref, temp, savedContainer, principalContainer);
                         _resultDocumentStack.Push(frame);
                         try
@@ -5200,6 +5289,7 @@ public sealed class TransformEngine
                         }
                         finally
                         {
+                            _context.CurrentOutputUri = savedOutputUri;
                             _currentContainer = savedContainer;
                             _lastAddedWasAtomic = savedLastAtomic;
                             _resultDocumentStack.Pop();
@@ -7858,7 +7948,17 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                            // Global variable/parameter bodies are evaluated in a temporary output state.
+                            var savedOutputUri = _context.CurrentOutputUri;
+                            _context.CurrentOutputUri = null;
+                            try
+                            {
+                                value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                            }
+                            finally
+                            {
+                                _context.CurrentOutputUri = savedOutputUri;
+                            }
                         }
                         value = ConvertVariableValue(value, info.AsType);
                     }
@@ -7983,6 +8083,26 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Evaluates a compiled match pattern with the current output URI cleared, because
+    /// pattern predicates are evaluated in a temporary output state.
+    /// </summary>
+    private bool EvaluatePatternMatch(Stylesheet.TemplateRule rule, XdmValue item)
+    {
+        if (rule.CompiledMatch == null)
+            return false;
+        var savedOutputUri = _context.CurrentOutputUri;
+        _context.CurrentOutputUri = null;
+        try
+        {
+            return rule.CompiledMatch(item, _context);
+        }
+        finally
+        {
+            _context.CurrentOutputUri = savedOutputUri;
+        }
+    }
+
+    /// <summary>
     /// Finds the highest-priority template rule that matches the given node in the given mode.
     /// </summary>
     private Stylesheet.TemplateRule? FindBestTemplate(IXdmNode node, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null)
@@ -8012,7 +8132,7 @@ public sealed class TransformEngine
                 continue;
             if (rule.CompiledMatch == null)
                 continue;
-            if (!rule.CompiledMatch(item, _context))
+            if (!EvaluatePatternMatch(rule, item))
                 continue;
 
             // XSLT spec §6.4: import precedence is checked BEFORE priority.
@@ -8888,6 +9008,8 @@ public sealed class TransformEngine
         var savedFocus = _context.ContextItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
+        var savedOutputUri = _context.CurrentOutputUri;
+        _context.CurrentOutputUri = null;
         try
         {
             // Pre-compute all sort keys for every item, preserving original order for stability.
@@ -8920,6 +9042,7 @@ public sealed class TransformEngine
         finally
         {
             _context.WithFocus(savedFocus, savedPosition, savedSize);
+            _context.CurrentOutputUri = savedOutputUri;
         }
     }
 
@@ -9476,21 +9599,30 @@ public sealed class TransformEngine
             var patternCompiler = new Patterns.PatternCompiler();
             var pattern = patternCompiler.Compile(groupStarting, defaultNs);
             List<XdmValue>? currentItems = null;
-            for (int idx = 0; idx < items.Count; idx++)
+            var savedOutputUri = _context.CurrentOutputUri;
+            _context.CurrentOutputUri = null;
+            try
             {
-                var item = items[idx];
-                _context.WithFocus(item, idx + 1, items.Count);
-                if (pattern(item, _context))
+                for (int idx = 0; idx < items.Count; idx++)
                 {
-                    if (currentItems != null && currentItems.Count > 0)
-                        groups.Add((null, currentItems));
-                    currentItems = new List<XdmValue> { item };
+                    var item = items[idx];
+                    _context.WithFocus(item, idx + 1, items.Count);
+                    if (pattern(item, _context))
+                    {
+                        if (currentItems != null && currentItems.Count > 0)
+                            groups.Add((null, currentItems));
+                        currentItems = new List<XdmValue> { item };
+                    }
+                    else
+                    {
+                        currentItems ??= new List<XdmValue>();
+                        currentItems.Add(item);
+                    }
                 }
-                else
-                {
-                    currentItems ??= new List<XdmValue>();
-                    currentItems.Add(item);
-                }
+            }
+            finally
+            {
+                _context.CurrentOutputUri = savedOutputUri;
             }
             if (currentItems != null && currentItems.Count > 0)
                 groups.Add((null, currentItems));
@@ -9501,17 +9633,26 @@ public sealed class TransformEngine
             var patternCompiler = new Patterns.PatternCompiler();
             var pattern = patternCompiler.Compile(groupEnding, defaultNs);
             List<XdmValue>? currentItems = null;
-            for (int idx = 0; idx < items.Count; idx++)
+            var savedOutputUri = _context.CurrentOutputUri;
+            _context.CurrentOutputUri = null;
+            try
             {
-                var item = items[idx];
-                _context.WithFocus(item, idx + 1, items.Count);
-                currentItems ??= new List<XdmValue>();
-                currentItems.Add(item);
-                if (pattern(item, _context))
+                for (int idx = 0; idx < items.Count; idx++)
                 {
-                    groups.Add((null, currentItems));
-                    currentItems = null;
+                    var item = items[idx];
+                    _context.WithFocus(item, idx + 1, items.Count);
+                    currentItems ??= new List<XdmValue>();
+                    currentItems.Add(item);
+                    if (pattern(item, _context))
+                    {
+                        groups.Add((null, currentItems));
+                        currentItems = null;
+                    }
                 }
+            }
+            finally
+            {
+                _context.CurrentOutputUri = savedOutputUri;
             }
             if (currentItems != null && currentItems.Count > 0)
                 groups.Add((null, currentItems));
@@ -10275,7 +10416,17 @@ public sealed class TransformEngine
             }
             else
             {
-                wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
+                // xsl:with-param sequence-constructor content is evaluated in a temporary output state.
+                var savedOutputUri = _context.CurrentOutputUri;
+                _context.CurrentOutputUri = null;
+                try
+                {
+                    wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
+                }
+                finally
+                {
+                    _context.CurrentOutputUri = savedOutputUri;
+                }
             }
             wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value, isParam: true);
             if (wp.Attribute("tunnel")?.Value == "yes")
@@ -11496,6 +11647,66 @@ public sealed class TransformEngine
                         msgText = EvaluateSimpleContent(instruction, contextItem);
                     }
                     _messageListener?.OnMessage(msgText);
+                    break;
+                }
+
+            case "apply-templates":
+                {
+                    var atSelect = instruction.Attribute("select")?.Value;
+                    var atModeRaw = instruction.Attribute("mode")?.Value?.Trim();
+                    var atMode = string.IsNullOrEmpty(atModeRaw)
+                        ? CurrentDefaultMode
+                        : ExpandModeName(atModeRaw, instruction);
+                    var atSortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                    var (atWithParams, atTunnelParams) = CollectWithParams(instruction, contextItem);
+
+                    var savedAtContainer = _currentContainer;
+                    var savedAtAccumulator = _sequenceAccumulator;
+                    var savedAtLastAtomic = _lastAddedWasAtomic;
+                    var atTemp = new XElement("__apply-templates-content__");
+                    _currentContainer = atTemp;
+                    _sequenceAccumulator = null;
+                    _lastAddedWasAtomic = false;
+                    try
+                    {
+                        if (contextItem.IsNode)
+                        {
+                            ApplyTemplates(contextItem.NodeValue, atMode, atSelect, atSortElements.Count > 0 ? atSortElements : null, atTunnelParams, atWithParams, instruction);
+                        }
+                        else if (!string.IsNullOrEmpty(atSelect))
+                        {
+                            ApplyTemplates(contextItem, atMode, atSelect, atSortElements.Count > 0 ? atSortElements : null, atTunnelParams, atWithParams, instruction);
+                        }
+                        else if (!contextItem.IsUndefined)
+                        {
+                            throw new InvalidOperationException("XTTE0510: The context item for xsl:apply-templates is not a node.");
+                        }
+                    }
+                    finally
+                    {
+                        _currentContainer = savedAtContainer;
+                        _sequenceAccumulator = savedAtAccumulator;
+                        _lastAddedWasAtomic = savedAtLastAtomic;
+                    }
+
+                    foreach (var child in atTemp.Nodes())
+                    {
+                        switch (child)
+                        {
+                            case XText t:
+                                items.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                                break;
+                            case XElement e:
+                                items.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                break;
+                            case XComment c:
+                                items.Add(XdmValue.FromNode(new XDocumentNode(c)));
+                                break;
+                            case XProcessingInstruction pi:
+                                items.Add(XdmValue.FromNode(new XDocumentNode(pi)));
+                                break;
+                        }
+                    }
                     break;
                 }
 
@@ -13562,6 +13773,8 @@ public sealed class TransformEngine
         var savedFocus = _context.ContextItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
+        var savedOutputUri = _context.CurrentOutputUri;
+        _context.CurrentOutputUri = null;
         try
         {
             _context.WithFocus(item, 1, 1);
@@ -13591,6 +13804,7 @@ public sealed class TransformEngine
         finally
         {
             _context.WithFocus(savedFocus, savedPosition, savedSize);
+            _context.CurrentOutputUri = savedOutputUri;
         }
     }
 

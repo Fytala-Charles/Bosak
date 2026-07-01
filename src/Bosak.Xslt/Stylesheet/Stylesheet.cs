@@ -47,6 +47,7 @@
 //                      | Charles Korthout | 2.14  | 26-06-2026     | Added xsl:namespace-alias parsing and effective alias mapping                           |
 //                      | Charles Korthout | 2.15  | 29-06-2026     | Static validation for xsl:variable/param/with-param attributes; forwards-compatible mode |
 //                      | Charles Korthout | 2.16  | 26-06-2026     | Shadow attribute support for version, href, use-when, and xpath-default-namespace        |
+//                      | Charles Korthout | 2.17  | 26-06-2026     | Static context hides XSLT dynamic functions such as fn:current-output-uri               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -122,12 +123,12 @@ public sealed class Stylesheet
     private EvaluationContext CreateUseWhenContext(XElement elem, string? explicitBaseUri = null)
     {
         var ctx = new EvaluationContext();
-        Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
 
         // The static base URI for use-when is the base URI of the element's
         // containing stylesheet module, taking xml:base into account.
         ctx.BaseUri = explicitBaseUri ?? GetEffectiveBaseUri(elem);
         ctx.IsStaticEvaluation = true;
+        Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
 
         // Add in-scope namespace declarations so prefixes in use-when resolve correctly.
         var currentNs = elem;

@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 0.14  | 26-06-2026     | Added shadow attribute tests for _select, _use-when, and LRE preservation            |
 //                      | Charles Korthout | 0.15  | 26-06-2026     | Added lazy function-local variable / circular-reference test                         |
 //                      | Charles Korthout | 0.16  | 29-06-2026     | Added regression tests for global visibility and eager duplicate function locals       |
+//                      | Charles Korthout | 0.17  | 30-06-2026     | Added regression tests for xsl:apply-templates inside xsl:function bodies              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2599,5 +2600,59 @@ public class StylesheetTests
         var result = executable.TransformToString(null!, initialTemplate: "main");
 
         Assert.Contains("<out", result);
+    }
+
+    [Fact]
+    public void Function_ApplyTemplates_Inside_Function_Matches_Name_Pattern()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:f='urn:function' exclude-result-prefixes='xs f'>
+            <xsl:variable name='base' as='element()'><base/></xsl:variable>
+            <xsl:function name='f:start' visibility='public'>
+                <xsl:apply-templates select='$base' />
+            </xsl:function>
+            <xsl:template match='base'>
+                <xsl:text>A</xsl:text>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformFunction("f:start", System.Array.Empty<XdmValue>(), new EvaluationContext());
+        Assert.True(result.IsNode);
+        Assert.Equal("A", result.NodeValue!.StringValue);
+    }
+
+    [Fact]
+    public void Function_ApplyTemplates_Inside_Function_Matches_Variable_Reference_Pattern()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:f='urn:function' exclude-result-prefixes='xs f'>
+            <xsl:variable name='base' as='element()'><base/></xsl:variable>
+            <xsl:function name='f:start' visibility='public' as='xs:string'>
+                <xsl:value-of>
+                    <xsl:apply-templates select='$base' />
+                    <xsl:call-template name='named' />
+                </xsl:value-of>
+            </xsl:function>
+            <xsl:template match='$base'>
+                <xsl:text>|</xsl:text>
+                <xsl:value-of select='.' />
+                <xsl:text>|</xsl:text>
+                <xsl:text>|</xsl:text>
+                <xsl:sequence select='current-output-uri()' />
+                <xsl:text>|</xsl:text>
+            </xsl:template>
+            <xsl:template name='named'>
+                <xsl:text>|</xsl:text>
+                <xsl:sequence select='current-output-uri()' />
+                <xsl:text>|</xsl:text>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformFunction("f:start", System.Array.Empty<XdmValue>(), new EvaluationContext());
+        Assert.Equal("||||||", result.StringValue);
     }
 }

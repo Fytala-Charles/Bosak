@@ -1,5 +1,51 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-30
+**Commit:** `f475bdb` (with uncommitted changes)
+**Current focus:** Cleared the W3C `current-output-uri` conformance cluster and fixed `xsl:apply-templates` inside `xsl:function`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,943
+- **Failed:** 307
+- **Skipped:** 9,350
+- **Pass rate:** 94.2% (+11 passed / −11 failed vs. previous 4,932/318/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| current-output-uri | 17 | 15 | 0 | 2 | ✅ All runnable current-output-uri tests now pass |
+
+## This Session Fixes
+
+1. **`xsl:apply-templates` inside `xsl:function` returned an empty sequence** — `TransformEngine.TransformFunction` now compiles template match patterns, evaluates AVTs in `_match` attributes, resets result-document URI tracking, and registers grouping functions before executing a stylesheet function.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **`fn:current-output-uri()` cluster cleared** — With apply-templates working inside function bodies, `current-output-uri-007` now produces the expected `||||||` result.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+3. **Regression coverage** — Added unit tests for apply-templates inside function bodies, both for named-element patterns and variable-reference patterns.
+   - **File changed**: `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+## Notes
+
+- Unit-test suite: **907 passed / 0 failed / 0 skipped** across 8 projects. `Bosak.Xslt.Tests` can be executed via `dotnet test` or from a published/relocated output directory if local Application Control blocks the assembly in its normal `bin` directory.
+- Full W3C suite: **4,943/307/9,350** (94.2%).
+- Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
+
+## Recommended Next Steps
+
+1. Commit the `current-output-uri` / function-entry fix.
+2. Continue with adjacent medium clusters such as `copy-of` (14), `try` (21), or `date` (year < 1 limitations).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-26
 **Commit:** `934dece` (with uncommitted changes)
 **Current focus:** Cleared the W3C `result-document` conformance cluster.

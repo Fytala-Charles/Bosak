@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 2.0   | 28-06-2026     | Load source documents with DTD/XmlResolver so external entities expand with base URIs   |
 //                      | Charles Korthout | 2.1   | 26-06-2026     | Set TreatRecoverableAmbiguousMatchAsError for on-multiple-match="error" tests          |
 //                      | Charles Korthout | 2.2   | 26-06-2026     | Evaluate assert-result-document assertions against secondary output files               |
+//                      | Charles Korthout | 2.3   | 26-06-2026     | Pass base output URI from <output file="..."/> to the transformation engine            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -575,6 +576,21 @@ class Program
             string resultXml = string.Empty;
             XdmValue? resultValue = null;
 
+            // Determine the base output URI from the test's <output file="..."/> element.
+            string? baseOutputUri = null;
+            var outputFileAttr = testElem.Element(ns + "output")?.Attribute("file");
+            if (outputFileAttr != null)
+            {
+                var outputFile = outputFileAttr.Value;
+                if (outputFile != "#absent")
+                {
+                    if (string.IsNullOrEmpty(outputFile))
+                        baseOutputUri = new Uri(Path.GetFullPath(testSetDir) + "/").AbsoluteUri;
+                    else
+                        baseOutputUri = new Uri(Path.GetFullPath(Path.Combine(testSetDir, outputFile))).AbsoluteUri;
+                }
+            }
+
             if (isInitialFunction)
             {
                 var (funcName, args) = ResolveInitialFunction(initialFunctionElem!, evalContext, ns);
@@ -589,20 +605,20 @@ class Program
             }
             else if (sourceNode != null)
             {
-                resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode);
+                resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode, baseOutputUri);
             }
             else if (!string.IsNullOrEmpty(initialTemplate) || hasImplicitInitialTemplate)
             {
                 // Named-template entry points with no explicit source document have no
                 // initial context item (XSLT 3.0 §6.5 / §9.6).
                 if (rawOutput)
-                    resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true);
+                    resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
                 else
-                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode);
+                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri);
             }
             else
             {
-                resultXml = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), evalContext, initialTemplate, initialMode);
+                resultXml = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), evalContext, initialTemplate, initialMode, baseOutputUri);
             }
 
             // Bind the raw result to the variable named by <output result-var="..."/>
@@ -621,11 +637,11 @@ class Program
             bool compareOk;
             if (resultValue != null)
             {
-                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, evalContext);
+                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, evalContext, baseOutputUri);
             }
             else
             {
-                compareOk = CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex);
+                compareOk = CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, baseOutputUri);
             }
 
             if (compareOk)
@@ -951,7 +967,27 @@ class Program
         return (funcName, args.ToArray());
     }
 
-    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
+    /// <summary>
+    /// Resolves the absolute path for an &lt;assert-result-document&gt; @uri.
+    /// When the test supplies a base output URI, the URI is resolved relative to the
+    /// directory containing that output; otherwise it is resolved relative to the test
+    /// set directory.
+    /// </summary>
+    static string ResolveResultDocumentPath(string uri, string testSetDir, string? baseOutputUri)
+    {
+        if (!string.IsNullOrEmpty(baseOutputUri))
+        {
+            var localPath = new Uri(baseOutputUri).LocalPath;
+            if (Directory.Exists(localPath))
+                return Path.Combine(localPath, uri);
+            var dir = Path.GetDirectoryName(localPath);
+            if (!string.IsNullOrEmpty(dir))
+                return Path.Combine(dir, uri);
+        }
+        return Path.Combine(testSetDir, uri);
+    }
+
+    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, string? baseOutputUri = null)
     {
         // Handle <all-of>
         var allOf = resultElem.Element(ns + "all-of");
@@ -959,7 +995,7 @@ class Program
         {
             foreach (var option in allOf.Elements())
             {
-                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, baseOutputUri))
                     return false;
             }
             return true;
@@ -971,7 +1007,7 @@ class Program
         {
             foreach (var option in anyOf.Elements())
             {
-                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, baseOutputUri))
                     return true;
             }
             return false;
@@ -983,23 +1019,23 @@ class Program
         {
             foreach (var child in assertionChildren)
             {
-                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, baseOutputUri))
                     return false;
             }
             return true;
         }
 
-        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex);
+        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, baseOutputUri);
     }
 
-    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages)
+    static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, string? baseOutputUri = null)
     {
         int messageIndex = 0;
         int warningIndex = 0;
-        return CompareResult(actual, resultElem, ns, testSetDir, catalogDir, messages, new List<string>(), ref messageIndex, ref warningIndex);
+        return CompareResult(actual, resultElem, ns, testSetDir, catalogDir, messages, new List<string>(), ref messageIndex, ref warningIndex, baseOutputUri);
     }
 
-    static bool CompareResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, EvaluationContext? assertContext = null)
+    static bool CompareResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, EvaluationContext? assertContext = null, string? baseOutputUri = null)
     {
         // Handle <all-of>
         var allOf = resultElem.Element(ns + "all-of");
@@ -1007,7 +1043,7 @@ class Program
         {
             foreach (var option in allOf.Elements())
             {
-                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, baseOutputUri))
                     return false;
             }
             return true;
@@ -1019,7 +1055,7 @@ class Program
         {
             foreach (var option in anyOf.Elements())
             {
-                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, baseOutputUri))
                     return true;
             }
             return false;
@@ -1031,16 +1067,16 @@ class Program
         {
             foreach (var child in assertionChildren)
             {
-                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, baseOutputUri))
                     return false;
             }
             return true;
         }
 
-        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext);
+        return CompareSingleResult(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, baseOutputUri);
     }
 
-    static bool CompareSingleResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, EvaluationContext? assertContext = null)
+    static bool CompareSingleResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, EvaluationContext? assertContext = null, string? baseOutputUri = null)
     {
         // assert-message
         var assertMessage = resultElem.Name.LocalName == "assert-message" ? resultElem : resultElem.Element(ns + "assert-message");
@@ -1071,6 +1107,13 @@ class Program
         if (assertCount != null && int.TryParse(assertCount.Value.Trim(), out var expectedCount))
         {
             return CountItems(actual) == expectedCount;
+        }
+
+        // assert-empty
+        var assertEmpty = resultElem.Name.LocalName == "assert-empty" ? resultElem : resultElem.Element(ns + "assert-empty");
+        if (assertEmpty != null)
+        {
+            return actual.IsUndefined || CountItems(actual) == 0;
         }
 
         // assert-type
@@ -1104,7 +1147,7 @@ class Program
             var uri = assertDoc.Attribute("uri")?.Value;
             if (!string.IsNullOrEmpty(uri))
             {
-                var path = Path.Combine(testSetDir, uri);
+                var path = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
                 if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
                 if (File.Exists(path))
                 {
@@ -1116,7 +1159,7 @@ class Program
                         var docValue = XdmValue.FromNode(new XDocumentNode(doc));
                         foreach (var child in assertDoc.Elements())
                         {
-                            if (!CompareResult(docValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext))
+                            if (!CompareResult(docValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, baseOutputUri))
                                 return false;
                         }
                         return true;
@@ -1201,7 +1244,7 @@ class Program
         return 1;
     }
 
-    static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex)
+    static bool CompareSingleResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, string? baseOutputUri = null)
     {
         // assert-message must be checked before assert-xml because an assert-message
         // can contain an assert-xml child that should be evaluated against the message,
@@ -1237,7 +1280,7 @@ class Program
             var uri = assertDoc.Attribute("uri")?.Value;
             if (!string.IsNullOrEmpty(uri))
             {
-                var path = Path.Combine(testSetDir, uri);
+                var path = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
                 if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
                 if (File.Exists(path))
                 {
@@ -1249,7 +1292,7 @@ class Program
                         var docValue = XdmValue.FromNode(new XDocumentNode(doc));
                         foreach (var child in assertDoc.Elements())
                         {
-                            if (!CompareResult(docValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex))
+                            if (!CompareResult(docValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, null, baseOutputUri))
                                 return false;
                         }
                         return true;

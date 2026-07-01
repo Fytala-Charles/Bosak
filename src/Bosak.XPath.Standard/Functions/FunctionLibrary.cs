@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 1.8   | 22-05-2026     | Fixed fn:base-uri/fn:document-uri empty sequence, type errors, fn:id atomization        |
 //                      | Charles Korthout | 1.9   | 22-05-2026     | Added fn:format-number#2/#3 with grammar-based picture parser                           |
 //                      | Charles Korthout | 2.0   | 23-05-2026     | Registered missing xs: constructors; duration normalization in xs: constructors         |
+//                      | Charles Korthout | 2.2   | 26-06-2026     | Added fn:current-output-uri; hide XSLT dynamic functions in static context            |
 //                      | Charles Korthout | 2.1   | 23-05-2026     | Added math:log10, math:exp10, math:asin, math:acos, math:atan, math:atan2             |
 //                      | Charles Korthout | 2.2   | 23-05-2026     | Added fn:parse-xml-fragment, fn:has-children, fn:path, fn:unordered, map:put           |
 //                      | Charles Korthout | 2.3   | 24-05-2026     | Fixed fn:substring rounding, fn:round-half-to-even decimal, fn:subsequence lazy ranges  |
@@ -163,6 +164,15 @@ public static class FunctionLibrary
                 ParameterTypes = [],
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = Current
+            },
+            [(Namespaces.Fn, "current-output-uri", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "current-output-uri",
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = CurrentOutputUri
             },
 
             // ----- fn:exists --------------------------------------------------
@@ -2809,6 +2819,10 @@ public static class FunctionLibrary
     {
         foreach (var sig in StandardFunctions.Values)
         {
+            // XSLT-defined functions that depend on the dynamic evaluation context are
+            // not available in a static (use-when / shadow attribute) context.
+            if (context.IsStaticEvaluation && sig.NamespaceUri == Namespaces.Fn && XsltDynamicFunctions.Contains(sig.LocalName))
+                continue;
             context.RegisterFunction(sig);
         }
 
@@ -3514,6 +3528,13 @@ public static class FunctionLibrary
 
     private static XdmValue Current(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => ctx.CurrentItem;
+
+    private static XdmValue CurrentOutputUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (string.IsNullOrEmpty(ctx.CurrentOutputUri))
+            return XdmValue.Undefined;
+        return XdmValue.FromString(ctx.CurrentOutputUri, "anyURI");
+    }
 
     // ------------------------------------------------------------------
     // String functions

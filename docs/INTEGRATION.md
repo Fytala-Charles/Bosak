@@ -4,13 +4,18 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 28 June 2026
-> **Bosak baseline:** 899 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,871 passed / 379 failed / 9,350 skipped (~92.8%)
+> **Last updated:** 30 June 2026
+> **Bosak baseline:** 907 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 4,943 passed / 307 failed / 9,350 skipped (~94.2%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-30** — Cleared the W3C `current-output-uri` conformance cluster (1 remaining failure → 0).
+  - `TransformEngine.TransformFunction` now compiles template match patterns and registers grouping functions before executing a stylesheet function, so `xsl:apply-templates` inside `xsl:function` can match template rules.
+  - Result-document URI tracking is reset at function entry points.
+  - Full W3C suite: **4,943 passed / 307 failed / 9,350 skipped** (~94.2%).
 
 - **2026-06-28** — Cleared the W3C `apply-templates` conformance cluster (11 runnable failures → 0).
   - `match="/"` now uses the correct default priority of `-0.5` in XSLT 2.0/3.0.
