@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 08-06-2026     | FromElement expands mode name QNames to Clark notation                                 |
 //                      | Charles Korthout | 0.5   | 09-06-2026     | Added NormalizeModeName; trim whitespace from mode/on-no-match attribute values       |
 //                      | Charles Korthout | 0.6   | 11-06-2026     | Added use-accumulators parsing                                                          |
+//                      | Charles Korthout | 0.7   | 30-06-2026     | Default on-no-match is text-only-copy per XSLT 3.0 spec; fixes match-241               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -138,7 +139,7 @@ public sealed class ModeDefinition
             "deep-copy" => OnNoMatch.DeepCopy,
             "deep-skip" => OnNoMatch.DeepSkip,
             "fail" => OnNoMatch.Fail,
-            _ => OnNoMatch.ShallowSkip
+            _ => OnNoMatch.TextOnlyCopy
         };
         var onMultipleMatch = element.Attribute("on-multiple-match")?.Value?.Trim()?.ToLowerInvariant() switch
         {

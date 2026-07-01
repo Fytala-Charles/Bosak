@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-30 (`current-output-uri` cluster cleared 15/15 runnable; full W3C baseline 4,943/307/9,350)    
+> **Living Registry** — Last updated: 2026-06-30 (`match` cluster cleared 1/1; `current-output-uri` cluster cleared 15/15 runnable; full W3C baseline 4,944/306/9,350)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

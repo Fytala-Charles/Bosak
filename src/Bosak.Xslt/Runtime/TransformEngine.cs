@@ -136,6 +136,7 @@
 //                      | Charles Korthout | 5.65  | 26-06-2026     | xsl:try scope isolation, error QName namespace, result-document, FODC0002             |
 //                      | Charles Korthout | 5.66  | 26-06-2026     | fn:current-output-uri support; base output URI propagation and temporary-output-state  |
 //                      | Charles Korthout | 5.67  | 30-06-2026     | Compile template match patterns for function entry points; fixes apply-templates in functions |
+//                      | Charles Korthout | 5.68  | 30-06-2026     | Built-in atomic rule respects on-no-match; default xsl:mode is text-only-copy; fixes match-241 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3133,8 +3134,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        // Built-in rule for atomic values: output the string value.
-                        AddTextNode(item.ToString());
+                        ApplyBuiltInRulesForAtomic(item, resolvedMode);
                     }
                 }
                 pos++;
@@ -3244,8 +3244,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        // Built-in rule for atomic values: output the string value.
-                        AddTextNode(item.ToString());
+                        ApplyBuiltInRulesForAtomic(item, resolvedMode);
                     }
                 }
                 pos++;
@@ -4944,12 +4943,7 @@ public sealed class TransformEngine
                         }
                         else if (!contextItem.IsUndefined)
                         {
-                            // Built-in rule for atomic values: output string value
-                            var text = contextItem.ToString();
-                            if (!string.IsNullOrEmpty(text) && _currentContainer is XElement)
-                            {
-                                _currentContainer.Add(new XText(text));
-                            }
+                            ApplyBuiltInRulesForAtomic(contextItem, nextMatchMode);
                         }
                     }
                     finally
@@ -5000,12 +4994,7 @@ public sealed class TransformEngine
                         }
                         else if (!contextItem.IsUndefined)
                         {
-                            // Built-in rule for atomic values: output string value
-                            var text = contextItem.ToString();
-                            if (!string.IsNullOrEmpty(text) && _currentContainer is XElement)
-                            {
-                                _currentContainer.Add(new XText(text));
-                            }
+                            ApplyBuiltInRulesForAtomic(contextItem, applyImportsMode);
                         }
                     }
                     finally
@@ -7146,6 +7135,22 @@ public sealed class TransformEngine
         // XSLT 1.0/2.0/3.0 all default to the traditional text-only-copy built-in rule:
         // text and attribute nodes are copied, document/element nodes delegate to children.
         return Stylesheet.OnNoMatch.TextOnlyCopy;
+    }
+
+    /// <summary>
+    /// Applies the built-in rule for an atomic context item, respecting the
+    /// effective <c>on-no-match</c> behavior of the mode. Deep-skip and shallow-skip
+    /// modes suppress atomic output; other behaviors output the string value.
+    /// </summary>
+    private void ApplyBuiltInRulesForAtomic(XdmValue item, string mode)
+    {
+        var modeDef = _stylesheet.GetModeDefinition(mode);
+        if (modeDef == null && !string.IsNullOrEmpty(mode))
+            modeDef = _stylesheet.GetModeDefinition("");
+        var behavior = modeDef?.OnNoMatch ?? GetDefaultOnNoMatch();
+        if (behavior == Stylesheet.OnNoMatch.DeepSkip || behavior == Stylesheet.OnNoMatch.ShallowSkip)
+            return;
+        AddTextNode(item.ToString());
     }
 
     /// <summary>

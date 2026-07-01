@@ -1,6 +1,49 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-30
+**Commit:** `bf3da80` (with uncommitted changes)
+**Current focus:** Cleared the W3C `match` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,944
+- **Failed:** 306
+- **Skipped:** 9,350
+- **Pass rate:** 94.2% (+1 passed / −1 failed vs. previous 4,943/307/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| match | 336 | 216 | 0 | 120 | ✅ `match-241` now passes |
+
+## This Session Fixes
+
+1. **`xsl:mode` default `on-no-match` behavior** — `ModeDefinition.FromElement` now defaults to `text-only-copy` when `@on-no-match` is absent, matching the XSLT 3.0 specification. This fixes `match-241`, where atomic integers processed by `xsl:apply-templates` were incorrectly suppressed.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/ModeDefinition.cs`.
+
+2. **Atomic-value built-in rule respects `on-no-match`** — `ApplyBuiltInRulesForAtomic` now checks the effective mode behavior and suppresses output for `deep-skip` and `shallow-skip` modes. All other behaviors (including the default `text-only-copy`) continue to output the string value.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **907 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **4,944/306/9,350** (94.2%).
+- Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
+
+## Recommended Next Steps
+
+1. Commit the `match` cluster fix.
+2. Continue with the next target cluster: `as` (2 failures), `xml-to-json` / `json-to-xml` (7 runnable failures), or `sequence` (11 failures).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-30
 **Commit:** `f475bdb` (with uncommitted changes)
 **Current focus:** Cleared the W3C `current-output-uri` conformance cluster and fixed `xsl:apply-templates` inside `xsl:function`.
 

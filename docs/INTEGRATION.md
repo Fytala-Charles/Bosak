@@ -6,11 +6,16 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 30 June 2026
 > **Bosak baseline:** 907 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,943 passed / 307 failed / 9,350 skipped (~94.2%)
+> **XSLT baseline:** 4,944 passed / 306 failed / 9,350 skipped (~94.2%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-30** — Cleared the W3C `match` conformance cluster (1 failure → 0).
+  - `xsl:mode` declarations without an explicit `@on-no-match` now default to `text-only-copy` per the XSLT 3.0 spec, so atomic items processed by `xsl:apply-templates` produce their string value in the default mode.
+  - The built-in rule for atomic values now respects the effective mode's `on-no-match` behavior (deep-skip and shallow-skip suppress output).
+  - Full W3C suite: **4,944 passed / 306 failed / 9,350 skipped** (~94.2%).
 
 - **2026-06-30** — Cleared the W3C `current-output-uri` conformance cluster (1 remaining failure → 0).
   - `TransformEngine.TransformFunction` now compiles template match patterns and registers grouping functions before executing a stylesheet function, so `xsl:apply-templates` inside `xsl:function` can match template rules.
