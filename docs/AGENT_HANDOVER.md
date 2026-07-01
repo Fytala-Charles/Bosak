@@ -1,5 +1,52 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-06-26
+**Commit:** `fea9403`
+**Current focus:** Cleared the W3C `as`, `xml-to-json`, and `json-to-xml` conformance clusters.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,953
+- **Failed:** 297
+- **Skipped:** 9,350
+- **Pass rate:** 94.3% (+9 passed / −9 failed vs. previous 4,944/306/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| as | 204 | 99 | 0 | 105 | ✅ `as-0802` / `as-0802b` now pass |
+| xml-to-json | 153 | 3 | 0 | 150 | ✅ `xml-to-json-D015/017/018` now pass |
+| json-to-xml | 60 | 7 | 0 | 53 | ✅ `json-to-xml-duplicates-*` now pass |
+
+## This Session Fixes
+
+1. **`xs:float` canonical serialization** — `XdmValue.FormatXPathFloat` now uses .NET's round-trip `"R"` format in the scientific-notation range, producing the shortest round-trippable decimal such as `1.1234E30` instead of `1.12339998E30`.
+   - **Files changed**: `src/Bosak.XPath.Core/Xdm/XdmValue.cs`, `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+2. **`fn:json-to-xml` honors `duplicates` option** — `JsonElementToXml` now tracks object keys and implements `use-first`, `retain`, and `reject`. Option validation now raises **FOJS0005** for invalid string values and **XPTY0004** for non-string option values.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+3. **`fn:codepoints-to-string` allows XML 1.1 C0 controls** — Characters such as backspace, bell, and form feed are now accepted in XDM strings so that `xml-to-json` can emit them as JSON escapes (`\b`, `\u0007`, `\f`).
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+## Notes
+
+- Unit-test suite: **911 passed / 0 failed / 0 skipped** across 8 projects (added `xs:float` formatting regression tests).
+- Full W3C suite: **4,953/297/9,350** (94.3%).
+- Remaining catalog failures unchanged: `catalog-004`, `catalog-006`, `catalog-007`, `catalog-012`.
+
+## Recommended Next Steps
+
+1. Continue with the next target clusters: `sequence` (11 runnable failures), `copy-of` (14), or `try` (21).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-30
 **Commit:** `bf3da80` (with uncommitted changes)
 **Current focus:** Cleared the W3C `match` conformance cluster.

@@ -4,13 +4,19 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 30 June 2026
-> **Bosak baseline:** 907 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,944 passed / 306 failed / 9,350 skipped (~94.2%)
+> **Last updated:** 26 June 2026
+> **Bosak baseline:** 911 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 4,953 passed / 297 failed / 9,350 skipped (~94.3%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-26** — Cleared the W3C `as`, `xml-to-json`, and `json-to-xml` conformance clusters.
+  - `xs:float` serialization now uses the shortest round-trip `"R"` format in the scientific range, fixing `as-0802` / `as-0802b`.
+  - `fn:json-to-xml` now honors the `duplicates` option (`use-first`, `retain`, `reject`) and reports `FOJS0005` / `XPTY0004` for invalid option values.
+  - `fn:codepoints-to-string` now accepts XML 1.1 C0 control characters, allowing `xml-to-json` to serialize backspace/bell/form-feed as JSON escapes.
+  - Full W3C suite: **4,953 passed / 297 failed / 9,350 skipped** (~94.3%).
 
 - **2026-06-30** — Cleared the W3C `match` conformance cluster (1 failure → 0).
   - `xsl:mode` declarations without an explicit `@on-no-match` now default to `text-only-copy` per the XSLT 3.0 spec, so atomic items processed by `xsl:apply-templates` produce their string value in the default mode.

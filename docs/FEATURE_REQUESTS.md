@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-30 (`match` cluster cleared 1/1; `current-output-uri` cluster cleared 15/15 runnable; full W3C baseline 4,944/306/9,350)    
+> **Living Registry** — Last updated: 2026-06-26 (`as`, `xml-to-json`, and `json-to-xml` clusters cleared; full W3C baseline 4,953/297/9,350)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -524,13 +524,15 @@ Implemented the functions in `FunctionLibrary` using `System.Text.Json` for pars
 3. `xml-to-json($xml)` → JSON string (round-trips with `json-to-xml`)
 4. `json-doc($uri)` → loads JSON text and parses it
 
-Options supported: `liberal` (trailing commas), `duplicates` (use-first/use-last/reject), `escape` (JSON escaping).
+Options supported: `liberal` (trailing commas), `duplicates` (use-first/retain/reject), `escape` (JSON escaping).
 
 #### Acceptance Criteria
 - [x] `json-to-xml` produces correct XML representation for objects/arrays/primitives
 - [x] `parse-json` returns maps/arrays with correct XDM types
 - [x] `xml-to-json` round-trips correctly for simple cases
-- [x] Options parameter (`liberal`, `duplicates`, `escape`) supported
+- [x] Options parameter (`liberal`, `duplicates`, `escape`) supported, with `FOJS0003`/`FOJS0005`/`XPTY0004` error reporting
+- [x] `json-to-xml` conformance cluster: 7/7 runnable tests passing
+- [x] `xml-to-json` conformance cluster: 3/3 runnable tests passing
 
 #### Impact Analysis
 | Layer | Impact | Notes |
