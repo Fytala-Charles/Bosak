@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-02
-**Commit:** *(to be recorded after commit)*
+**Commit:** `28115da`
 **Current focus:** Cleared the W3C `seqtor` conformance cluster.
 
 ---
