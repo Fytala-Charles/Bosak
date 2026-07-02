@@ -137,6 +137,7 @@
 //                      | Charles Korthout | 5.66  | 26-06-2026     | fn:current-output-uri support; base output URI propagation and temporary-output-state  |
 //                      | Charles Korthout | 5.67  | 30-06-2026     | Compile template match patterns for function entry points; fixes apply-templates in functions |
 //                      | Charles Korthout | 5.68  | 30-06-2026     | Built-in atomic rule respects on-no-match; default xsl:mode is text-only-copy; fixes match-241 |
+//                      | Charles Korthout | 5.69  | 02-07-2026     | Sequence-constructor whitespace, empty atomics, xsl:document in simple content; clears seqtor |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -164,6 +165,12 @@ public sealed class TransformEngine
 {
     private readonly Stylesheet.Stylesheet _stylesheet;
     private readonly EvaluationContext _context;
+
+    /// <summary>
+    /// The XSLT version supported by this processor. Used when deciding whether
+    /// XSLT 1.0/2.0 static constraints are still enforced.
+    /// </summary>
+    private const double ProcessorXsltVersion = 3.1;
     private readonly XDocument _resultDocument;
     private XContainer _currentContainer;
     private readonly StringBuilder _documentLevelText = new();
@@ -218,13 +225,17 @@ public sealed class TransformEngine
     // is used to hide local template variables during attribute-set execution.
     private Dictionary<(string LocalName, string NamespaceUri), XdmValue> _attributeSetVariableSnapshot = new();
 
-    // Sequence accumulator for xsl:sequence inside variable bodies with @as
-    private List<XdmValue>? _sequenceAccumulator;
+    // Sequence accumulator for sequence-producing instructions inside variable/function bodies
+    // with @as. The placeholder implementation emits synthetic placeholder elements into the
+    // current container so that sequence contributions keep their source order relative to nodes
+    // produced by other instructions; the list implementation simply stores items in a flat list.
+    private ISequenceAccumulator? _sequenceAccumulator;
 
     // When true, atomic values produced in a sequence constructor are kept as separate
     // items rather than merged into a single text node. Used for xsl:template/@as and
     // other sequence-typed result construction.
     private bool _preserveAtomicSequenceItems;
+    private bool _preserveDocumentNodes;
 
     // Tracks nesting depth of literal result elements inside a sequence constructor.
     // Used with _preserveAtomicSequenceItems so that atomics inside a constructed
@@ -2397,7 +2408,7 @@ public sealed class TransformEngine
                         var temp = new XElement("__temp__");
                         _currentContainer = temp;
                         _lastAddedWasAtomic = false;
-                        _sequenceAccumulator = results;
+                        _sequenceAccumulator = new ListSequenceAccumulator(results);
                         try
                         {
                             // XSLT 2.0 erratum XT.E19: #current in a function refers to the unnamed mode.
@@ -2661,6 +2672,7 @@ public sealed class TransformEngine
                     }
                 case "perform-sort":
                     {
+                        ValidateSortComesFirst(instruction);
                         var psSelect = instruction.Attribute("select")?.Value;
                         List<XdmValue> psItems;
                         if (!string.IsNullOrEmpty(psSelect))
@@ -2740,7 +2752,7 @@ public sealed class TransformEngine
                         var temp = new XElement("__temp__");
                         _currentContainer = temp;
                         _lastAddedWasAtomic = false;
-                        _sequenceAccumulator = results;
+                        _sequenceAccumulator = new ListSequenceAccumulator(results);
                         try
                         {
                             ExecuteXsltInstruction(instruction, contextItem);
@@ -2761,7 +2773,7 @@ public sealed class TransformEngine
                         var temp = new XElement("__temp__");
                         _currentContainer = temp;
                         _lastAddedWasAtomic = false;
-                        _sequenceAccumulator = results;
+                        _sequenceAccumulator = new ListSequenceAccumulator(results);
                         try
                         {
                             ExecuteMergeInstruction(instruction, contextItem);
@@ -2947,8 +2959,15 @@ public sealed class TransformEngine
     /// <summary>
     /// Flattens an XDM value into a list, expanding sequences into their items.
     /// </summary>
-    private static void FlattenToList(XdmValue value, List<XdmValue> results)
+    private static void FlattenToList(XdmValue value, List<XdmValue> results, bool preserveUndefined = false)
     {
+        if (value.IsUndefined)
+        {
+            if (preserveUndefined)
+                results.Add(value);
+            return;
+        }
+
         if (value.IsSequence)
         {
             var seq = value.SequenceValue;
@@ -2956,7 +2975,7 @@ public sealed class TransformEngine
             {
                 var enumerator = seq.GetEnumerator();
                 while (enumerator.MoveNext())
-                    results.Add(enumerator.Current);
+                    FlattenToList(enumerator.Current, results, preserveUndefined);
             }
         }
         else
@@ -3082,15 +3101,6 @@ public sealed class TransformEngine
 
             bool allNodes = items.All(i => i.IsNode);
 
-            // Sort nodes by document order within each source tree; keep the relative
-            // order of nodes from different trees as it appeared in the selected sequence.
-            // Document order across trees is implementation-defined; preserving the input
-            // order matches the expectation of the conformance suite.
-            if (allNodes)
-            {
-                items = SortNodesByDocumentOrderPreservingTreeOrder(items);
-            }
-
             // Apply xsl:sort if present. Node sequences are sorted via SortNodes; mixed or
             // atomic sequences use SortItems, which evaluates each sort key with the current
             // output URI cleared.
@@ -3191,15 +3201,6 @@ public sealed class TransformEngine
             }
 
             bool allNodes = items.All(i => i.IsNode);
-
-            // Sort nodes by document order; non-node sequences keep original order.
-            // Nodes that belong to different trees are kept in select-expression order,
-            // because document order across trees is implementation-dependent (XSLT 3.0
-            // §5.4). Within a single tree, document order is used.
-            if (allNodes)
-            {
-                items = SortNodesByDocumentOrderPreservingTreeOrder(items);
-            }
 
             // Apply xsl:sort if present. Node sequences are sorted via SortNodes; mixed or
             // atomic sequences use SortItems, which evaluates each sort key with the current
@@ -3358,6 +3359,7 @@ public sealed class TransformEngine
         var savedLastAtomic = _lastAddedWasAtomic;
         var savedAccumulator = _sequenceAccumulator;
         var savedPreserveAtomics = _preserveAtomicSequenceItems;
+        var savedPreserveDocuments = _preserveDocumentNodes;
         var savedLiteralDepth = _literalElementDepth;
         XElement? tempContainer = null;
 
@@ -3368,6 +3370,7 @@ public sealed class TransformEngine
             _lastAddedWasAtomic = false;
             _sequenceAccumulator = null;
             _preserveAtomicSequenceItems = true;
+            _preserveDocumentNodes = true;
             _literalElementDepth = 0;
         }
 
@@ -3538,10 +3541,14 @@ public sealed class TransformEngine
                 {
                     items.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
                 }
-                foreach (var node in tempContainer.Nodes())
+                foreach (var node in tempContainer.Nodes().ToList())
                 {
                     switch (node)
                     {
+                        case XElement e when e.Name.LocalName == "__xdm_doc__":
+                            e.Remove();
+                            items.Add(XdmValue.FromNode(new XDocumentNode(new XDocument(e))));
+                            break;
                         case XElement e:
                             items.Add(XdmValue.FromNode(new XDocumentNode(e)));
                             break;
@@ -3561,6 +3568,7 @@ public sealed class TransformEngine
                 _lastAddedWasAtomic = savedLastAtomic;
                 _sequenceAccumulator = savedAccumulator;
                 _preserveAtomicSequenceItems = savedPreserveAtomics;
+                _preserveDocumentNodes = savedPreserveDocuments;
                 _literalElementDepth = savedLiteralDepth;
 
                 XdmValue typedResult;
@@ -3586,6 +3594,7 @@ public sealed class TransformEngine
                 _lastAddedWasAtomic = savedLastAtomic;
                 _sequenceAccumulator = savedAccumulator;
                 _preserveAtomicSequenceItems = savedPreserveAtomics;
+                _preserveDocumentNodes = savedPreserveDocuments;
                 _literalElementDepth = savedLiteralDepth;
             }
         }
@@ -3942,7 +3951,7 @@ public sealed class TransformEngine
                         var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
                         string textValue;
-                        if (_context.BackwardsCompatible)
+                        if (IsEffectiveBackwardsCompatible(instruction))
                         {
                             // XSLT 1.0: value-of outputs only the first item (like string())
                             if (result.IsSequence && result.SequenceValue != null)
@@ -4224,7 +4233,7 @@ public sealed class TransformEngine
                                         }
                                         if (localName == "sequence" || localName == "document")
                                         {
-                                            _sequenceAccumulator = wpAccumulator;
+                                            _sequenceAccumulator = new ListSequenceAccumulator(wpAccumulator);
                                             try
                                             {
                                                 ExecuteXsltInstruction(elem, contextItem);
@@ -4314,6 +4323,7 @@ public sealed class TransformEngine
 
             case "for-each":
                 {
+                    ValidateSortComesFirst(instruction);
                     var select = instruction.Attribute("select")?.Value;
                     if (string.IsNullOrEmpty(select))
                         throw new InvalidOperationException("XTSE0010: xsl:for-each requires a select attribute");
@@ -4715,14 +4725,28 @@ public sealed class TransformEngine
             case "sequence":
                 {
                     var select = instruction.Attribute("select")?.Value;
-                    if (!string.IsNullOrEmpty(select))
+                    bool hasSelect = !string.IsNullOrEmpty(select);
+                    bool hasNonFallbackContent = HasNonFallbackContent(instruction);
+                    double effectiveVersion = GetEffectiveVersion(instruction);
+
+                    if (hasSelect && hasNonFallbackContent)
+                        throw new InvalidOperationException("XTSE3185: xsl:sequence must not have both a 'select' attribute and sequence-constructor content");
+
+                    if (ProcessorXsltVersion < 3.0 && effectiveVersion < 3.0 && !hasSelect)
+                        throw new InvalidOperationException("XTSE0010: xsl:sequence requires a 'select' attribute");
+
+                    if (hasSelect)
                     {
                         var compiled = XPath31Expression.Compile(select);
                         var result = compiled.Evaluate(_context);
                         if (_sequenceAccumulator != null)
                         {
-                            // Inside a variable body with @as: add sequence items directly
-                            FlattenToList(result, _sequenceAccumulator);
+                            // Collecting a raw sequence: preserve the position of this
+                            // xsl:sequence contribution by inserting a placeholder that
+                            // is expanded when the sequence constructor is finalized.
+                            var items = new List<XdmValue>();
+                            FlattenToList(result, items, preserveUndefined: true);
+                            AddSequencePlaceholder(_currentContainer, items);
                         }
                         else
                         {
@@ -4731,21 +4755,75 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        // Sequence constructor children
-                        foreach (var childNode in instruction.Nodes())
+                        // XSLT 3.0: xsl:sequence with no @select evaluates its sequence
+                        // constructor and returns the resulting sequence. Evaluate each
+                        // top-level child separately so literal nodes and xsl:sequence
+                        // contributions stay in document order.
+                        var seqItems = new List<XdmValue>();
+                        var outerAccumulator = _sequenceAccumulator;
+                        _sequenceAccumulator = null;
+                        try
                         {
-                            switch (childNode)
+                            foreach (var childNode in instruction.Nodes())
                             {
-                                case XText text:
-                                    ProcessSequenceText(text, instruction);
-                                    break;
-                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                    ExecuteXsltInstruction(elem, contextItem);
-                                    break;
-                                case XElement elem:
-                                    CopyLiteralElement(elem);
-                                    break;
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        if (GetExpandText(instruction) && ContainsTvtExpression(text.Value))
+                                        {
+                                            var tvtResult = EvaluateTvt(text.Value, instruction);
+                                            // An empty TVT result still produces a zero-length text node that
+                                            // breaks adjacent atomic values (seqtor-016 and similar tests).
+                                            seqItems.Add(XdmValue.FromNode(new XDocumentNode(new XText(tvtResult))));
+                                        }
+                                        else if (!IsWhitespaceOnly(text.Value))
+                                        {
+                                            seqItems.Add(XdmValue.FromNode(new XDocumentNode(new XText(text.Value))));
+                                        }
+                                        break;
+                                    case XElement elem:
+                                        var wrapper = new XElement("__seq_child__");
+                                        // Preserve the in-scope namespaces of the original child
+                                        // so that TVT expressions inside it (e.g. xsl:text/@expand-text)
+                                        // can resolve prefixes such as xs:.
+                                        foreach (var ns in GetInScopeNamespaces(elem))
+                                        {
+                                            if (ns.Key.Length == 0)
+                                                wrapper.SetAttributeValue("xmlns", ns.Value);
+                                            else
+                                                wrapper.SetAttributeValue(XNamespace.Xmlns + ns.Key, ns.Value);
+                                        }
+                                        wrapper.Add(elem);
+                                        var childResult = EvaluateSequenceConstructor(wrapper, contextItem, wrapInDocumentNode: false, preserveEmptySequencePositions: true);
+                                        FlattenToList(childResult, seqItems, preserveUndefined: true);
+                                        break;
+                                }
                             }
+                        }
+                        finally
+                        {
+                            _sequenceAccumulator = outerAccumulator;
+                        }
+                        var resultSeq = seqItems.Count == 0
+                            ? XdmValue.FromSequence(XdmSequence.Empty)
+                            : seqItems.Count == 1
+                                ? seqItems[0]
+                                : XdmValue.FromSequence(MaterializedSequence.FromList(seqItems));
+                        if (_sequenceAccumulator != null)
+                        {
+                            var placeholderItems = new List<XdmValue>();
+                            FlattenToList(resultSeq, placeholderItems, preserveUndefined: true);
+                            AddSequencePlaceholder(_currentContainer, placeholderItems);
+                        }
+                        else
+                        {
+                            CopyToResult(resultSeq, separateAtomicsWithSpace: true);
+                            // A sequence consisting solely of empty atomic values produces a
+                            // text node that contains only separator spaces. The next atomic
+                            // value in the containing sequence constructor should merge with
+                            // that text node rather than adding another separator (seqtor-020).
+                            if (IsAllEmptyAtomics(resultSeq))
+                                _lastAddedWasAtomic = false;
                         }
                     }
                     break;
@@ -5121,6 +5199,7 @@ public sealed class TransformEngine
 
             case "perform-sort":
                 {
+                    ValidateSortComesFirst(instruction);
                     var psSelect2 = instruction.Attribute("select")?.Value;
                     List<XdmValue> psItems;
                     if (!string.IsNullOrEmpty(psSelect2))
@@ -5818,6 +5897,21 @@ public sealed class TransformEngine
             {
                 anyItemProcessed = true;
 
+                // An empty sequence item acts like a zero-length atomic value for the
+                // purpose of spacing: it contributes no characters, but a separator is
+                // still inserted before a following atomic value. This matches the
+                // expected spacing for sequences that intersperse empty results from
+                // constructor functions such as xs:language(()).
+                if (item.IsUndefined)
+                {
+                    if (separateAtomicsWithSpace && prevWasAtomic)
+                    {
+                        sb.Append(' ');
+                    }
+                    prevWasAtomic = true;
+                    continue;
+                }
+
                 // Discard zero-length text nodes, but they still break the atomic chain
                 if (item.IsNode && item.NodeValue != null &&
                     item.NodeValue.NodeKind == XdmNodeKind.Text &&
@@ -5948,7 +6042,7 @@ public sealed class TransformEngine
                 _lastAddedWasAtomic = prevWasAtomic;
             }
         }
-        else
+        else if (!value.IsUndefined)
         {
             var text = value.IsArray ? XdmValueToString(value, " ") : value.ToString();
             if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
@@ -6993,11 +7087,31 @@ public sealed class TransformEngine
                 if (child.NodeValue != null)
                     documentChildren.Add(child.NodeValue);
 
+            // In a sequence-returning context (e.g. named template with @as),
+            // preserve the document node by adding a synthetic __xdm_doc__ wrapper
+            // to the temporary element container. The wrapper is later converted back
+            // to a document node when the template result is assembled.
+            if (_preserveDocumentNodes && _currentContainer is XElement)
+            {
+                var wrapper = new XElement("__xdm_doc__");
+                var savedContainer = _currentContainer;
+                _currentContainer = wrapper;
+                try
+                {
+                    foreach (var child in documentChildren)
+                        CopyNodeToResult(child);
+                }
+                finally
+                {
+                    _currentContainer = savedContainer;
+                }
+                AddElementToContainer(wrapper, _currentContainer);
+            }
             // XDocument can only hold a single root element. When a document node
             // contains multiple children (or non-element children) and is being
             // copied into the result XDocument, wrap the children in the synthetic
             // __xdm_doc__ element; ResultTreeSerializer unwraps it again.
-            if (_currentContainer is XDocument &&
+            else if (_currentContainer is XDocument &&
                 !(documentChildren.Count == 1 && documentChildren[0].NodeKind == XdmNodeKind.Element))
             {
                 var wrapper = new XElement("__xdm_doc__");
@@ -10723,7 +10837,7 @@ public sealed class TransformEngine
     /// Builds the final XDM result from the nodes, attributes and accumulator items
     /// produced by a sequence constructor.
     /// </summary>
-    private XdmValue BuildResultFromNodesAndAccumulator(List<XNode> nodes, List<XAttribute> attributes, List<XdmValue> accumulatorItems, XElement wrapper, XElement parent, bool wrapInDocumentNode)
+    private XdmValue BuildResultFromNodesAndAccumulator(List<XNode> nodes, List<XAttribute> attributes, IList<XdmValue> accumulatorItems, XElement wrapper, XElement parent, bool wrapInDocumentNode, bool preserveEmptySequencePositions = false)
     {
         // Empty sequence constructor: when building a document node (no @as)
         // the result is an empty document node; with @as it is an empty sequence.
@@ -10837,6 +10951,42 @@ public sealed class TransformEngine
         {
             switch (child)
             {
+                case XElement e when e.Name.LocalName == "__xdm_seq__":
+                    // Expand a placeholder that preserves the source position of a
+                    // sequence-producing instruction in a raw sequence constructor.
+                    if (e.Annotation<SequencePlaceholderItems>() is { } holder)
+                    {
+                        foreach (var phItem in holder.Items)
+                        {
+                            // Empty-sequence placeholders are used only to preserve the
+                            // source position of sequence-producing instructions during
+                            // complex content construction. They are kept when explicitly
+                            // requested (e.g. a child sequence constructor evaluated for
+                            // an xsl:sequence in document-construction mode), but filtered
+                            // out of ordinary raw sequence results.
+                            if (!preserveEmptySequencePositions && phItem.IsUndefined)
+                                continue;
+
+                            // For single-item node-kind types (e.g. text()), zero-length
+                            // text nodes produced by xsl:sequence are dropped.
+                            if (asIsNodeKind && !allowsMultipleItems &&
+                                phItem.IsNode && phItem.NodeValue is { NodeKind: XdmNodeKind.Text } tn && tn.StringValue.Length == 0)
+                                continue;
+
+                            // Propagate the effective base URI to element nodes held in
+                            // the placeholder, mirroring the handling for accumulator items.
+                            if (!string.IsNullOrEmpty(effectiveBaseUriNoWrap) &&
+                                phItem.IsNode && phItem.NodeValue is XDocumentNode xdn &&
+                                xdn.UnderlyingObject is XElement accElem &&
+                                accElem.Annotation<string>() == null)
+                            {
+                                accElem.AddAnnotation(effectiveBaseUriNoWrap);
+                            }
+
+                            results.Add(phItem);
+                        }
+                    }
+                    break;
                 case XElement e:
                     // Return the element directly as a standalone node. It has already
                     // been detached from the temporary wrapper, so it is the root of
@@ -10891,7 +11041,7 @@ public sealed class TransformEngine
     /// Evaluates a sequence constructor (child nodes of an xsl:variable, xsl:param, etc.)
     /// and returns the resulting XDM value.
     /// </summary>
-    private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, bool wrapInDocumentNode = true)
+    private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, bool wrapInDocumentNode = true, bool preserveEmptySequencePositions = false)
     {
         // Ensure XPath evaluations inside the sequence constructor use the correct context item
         var savedContextItem = _context.ContextItem;
@@ -10909,7 +11059,7 @@ public sealed class TransformEngine
 
         var savedAccumulator = _sequenceAccumulator;
         if (!wrapInDocumentNode)
-            _sequenceAccumulator = new List<XdmValue>();
+            _sequenceAccumulator = new PlaceholderSequenceAccumulator(this);
         else
             _sequenceAccumulator = null; // When building a document node, all content goes into the wrapper
 
@@ -10979,10 +11129,25 @@ public sealed class TransformEngine
             ExecuteSequenceConstructorDirect(parent, contextItem, wrapper);
 
             var nodes = wrapper.Nodes().ToList();
+            if (parent.Name.LocalName == "__seq_child__")
+            {
+                Console.WriteLine($"DEBUG wrapper nodes ({nodes.Count}):");
+                foreach (var n in nodes)
+                {
+                    if (n is XElement xe)
+                        Console.WriteLine($"  elem {xe.Name.LocalName} placeholder={xe.Annotation<SequencePlaceholderItems>() != null}");
+                    else if (n is XText xt)
+                        Console.WriteLine($"  text '{xt.Value}'");
+                    else
+                        Console.WriteLine($"  {n.NodeType}");
+                }
+            }
             var attributes = wrapper.Attributes().ToList();
 
-            // Include items collected by xsl:sequence into the accumulator
-            var accumulatorItems = _sequenceAccumulator ?? new List<XdmValue>();
+            // Include items collected by xsl:sequence into the accumulator.
+            // Placeholder accumulators store their items as synthetic elements in
+            // the wrapper, so their underlying item list is empty.
+            var accumulatorItems = _sequenceAccumulator?.Items ?? new List<XdmValue>();
 
             // Handle xsl:on-empty: if sequence constructor is empty, evaluate on-empty fallback
             var onEmptyElements = parent.Elements(XName.Get("on-empty", Stylesheet.Stylesheet.XslNamespace)).ToList();
@@ -11023,16 +11188,173 @@ public sealed class TransformEngine
                 // Re-read nodes/attributes after on-empty evaluation
                 nodes = wrapper.Nodes().ToList();
                 attributes = wrapper.Attributes().ToList();
-                accumulatorItems = _sequenceAccumulator ?? new List<XdmValue>();
+                accumulatorItems = _sequenceAccumulator?.Items ?? new List<XdmValue>();
             }
 
-            return BuildResultFromNodesAndAccumulator(nodes, attributes, accumulatorItems, wrapper, parent, wrapInDocumentNode);
+            return BuildResultFromNodesAndAccumulator(nodes, attributes, accumulatorItems, wrapper, parent, wrapInDocumentNode, preserveEmptySequencePositions);
         }
         finally
         {
             _sequenceAccumulator = savedAccumulator;
             _context.WithFocus(savedContextItem, savedContextPosition, savedContextSize);
         }
+    }
+
+    /// <summary>
+    /// Annotation attached to a synthetic <c>__xdm_seq__</c> element that holds
+    /// the XDM items produced by an <c>xsl:sequence</c> instruction while a
+    /// sequence-constructor is being collected as a raw sequence.
+    /// </summary>
+    private sealed class SequencePlaceholderItems
+    {
+        public List<XdmValue> Items { get; } = new();
+    }
+
+    /// <summary>
+    /// Abstraction used to collect items produced by sequence-producing instructions
+    /// (e.g. <c>xsl:sequence</c>, <c>xsl:document</c>, <c>xsl:copy-of</c>) while a
+    /// sequence constructor is being evaluated.
+    /// </summary>
+    private interface ISequenceAccumulator
+    {
+        /// <summary>
+        /// Adds an item to the accumulator, flattening sequences recursively.
+        /// </summary>
+        void Add(XdmValue item);
+
+        /// <summary>
+        /// The underlying item list. For placeholder accumulators this is empty;
+        /// for list accumulators it contains the collected items.
+        /// </summary>
+        IList<XdmValue> Items { get; }
+    }
+
+    /// <summary>
+    /// Accumulates sequence items produced inside a sequence constructor that is
+    /// being evaluated for its raw sequence (e.g. an <c>xsl:variable</c> with an
+    /// <c>@as</c> attribute). Instead of storing the items directly, each item is
+    /// wrapped in a synthetic placeholder element that is added to the current
+    /// result container, preserving source order relative to ordinary nodes.
+    /// </summary>
+    private sealed class PlaceholderSequenceAccumulator : ISequenceAccumulator
+    {
+        private readonly TransformEngine _engine;
+
+        public PlaceholderSequenceAccumulator(TransformEngine engine)
+        {
+            _engine = engine;
+        }
+
+        public IList<XdmValue> Items => Array.Empty<XdmValue>();
+
+        public void Add(XdmValue item)
+        {
+            // Sequences are flattened so that each XDM item occupies its own
+            // placeholder and keeps its relative position in the result sequence.
+            // Empty-sequence items (e.g. xs:language(())) are preserved here as
+            // placeholders so that their source position is retained for complex
+            // content construction; they are filtered out when a raw sequence is
+            // materialized by BuildResultFromNodesAndAccumulator.
+            if (item.IsSequence && item.SequenceValue != null)
+            {
+                foreach (var sub in XdmSequence.FromSource(item.SequenceValue))
+                    Add(sub);
+                return;
+            }
+
+            AddSequencePlaceholder(_engine._currentContainer, new List<XdmValue> { item });
+        }
+    }
+
+    /// <summary>
+    /// Simple list-based accumulator used when a sequence constructor must be
+    /// evaluated to a flat list of XDM items (e.g. an <c>xsl:function</c> body or
+    /// the <c>EvaluateSequenceConstructorToItems</c> helper).
+    /// </summary>
+    private sealed class ListSequenceAccumulator : ISequenceAccumulator
+    {
+        private readonly List<XdmValue> _items;
+
+        public ListSequenceAccumulator(List<XdmValue> items)
+        {
+            _items = items;
+        }
+
+        public IList<XdmValue> Items => _items;
+
+        public void Add(XdmValue item)
+        {
+            if (item.IsUndefined)
+                return;
+
+            if (item.IsSequence && item.SequenceValue != null)
+            {
+                foreach (var sub in XdmSequence.FromSource(item.SequenceValue))
+                    Add(sub);
+                return;
+            }
+
+            _items.Add(item);
+        }
+    }
+
+    /// <summary>
+    /// Adds a synthetic placeholder element to the current container. The
+    /// placeholder carries the items produced by an <c>xsl:sequence</c> (or
+    /// similar sequence-producing instruction) so that they can be expanded
+    /// back into the result sequence in source order.
+    /// </summary>
+    private static void AddSequencePlaceholder(XContainer container, List<XdmValue> items)
+    {
+        var placeholder = new XElement("__xdm_seq__");
+        var holder = new SequencePlaceholderItems();
+        foreach (var item in items)
+            holder.Items.Add(item);
+        placeholder.AddAnnotation(holder);
+        container.Add(placeholder);
+    }
+
+    /// <summary>
+    /// Returns true if the value is a sequence (or a single item) containing only
+    /// atomic values whose string value is empty. Text nodes and non-empty atomics
+    /// make the result false.
+    /// </summary>
+    private static bool IsAllEmptyAtomics(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return true;
+
+        bool anyAtomic = false;
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (item.IsUndefined)
+                    continue;
+                if (item.IsNode)
+                    return false;
+                if (item.IsSequence)
+                {
+                    if (!IsAllEmptyAtomics(item))
+                        return false;
+                    continue;
+                }
+                anyAtomic = true;
+                if (item.ToString().Length > 0)
+                    return false;
+            }
+        }
+        else
+        {
+            if (value.IsNode)
+                return false;
+            anyAtomic = true;
+            if (value.ToString().Length > 0)
+                return false;
+        }
+
+        return anyAtomic;
     }
 
     /// <summary>
@@ -11212,7 +11534,7 @@ public sealed class TransformEngine
         _currentContainer = tempContainer;
         _lastAddedWasAtomic = false;
         var localAccumulator = new List<XdmValue>();
-        _sequenceAccumulator = localAccumulator;
+        _sequenceAccumulator = new ListSequenceAccumulator(localAccumulator);
 
         var savedContextItem = _context.ContextItem;
         var savedContextPosition = _context.ContextPosition;
@@ -11762,11 +12084,30 @@ public sealed class TransformEngine
     /// </summary>
     private static string ConstructSimpleContentString(List<XdmValue> items, string separator)
     {
-        var strings = new List<string>();
+        var groups = new List<List<string>>();
+        var currentGroup = new List<string>();
         string? pendingText = null;
 
         foreach (var item in items)
         {
+            // Empty sequences (e.g. xs:language(())) separate adjacent atomic items:
+            // they do not contribute characters and do not cause a separator to be
+            // inserted between the atomics on either side of them.
+            if (item.IsUndefined || IsEmptySequence(item))
+            {
+                if (pendingText != null)
+                {
+                    currentGroup.Add(pendingText);
+                    pendingText = null;
+                }
+                if (currentGroup.Count > 0)
+                {
+                    groups.Add(currentGroup);
+                    currentGroup = new List<string>();
+                }
+                continue;
+            }
+
             bool isTextNode = item.IsNode && item.NodeValue != null &&
                               item.NodeValue.NodeKind == XdmNodeKind.Text;
 
@@ -11790,20 +12131,39 @@ public sealed class TransformEngine
             {
                 if (pendingText != null)
                 {
-                    strings.Add(pendingText);
+                    currentGroup.Add(pendingText);
                     pendingText = null;
                 }
                 // Atomize and cast to string
-                strings.Add(item.ToString());
+                currentGroup.Add(item.ToString());
             }
         }
 
         if (pendingText != null)
         {
-            strings.Add(pendingText);
+            currentGroup.Add(pendingText);
+        }
+        if (currentGroup.Count > 0)
+        {
+            groups.Add(currentGroup);
         }
 
-        return string.Join(separator, strings);
+        var sb = new StringBuilder();
+        for (int i = 0; i < groups.Count; i++)
+        {
+            sb.Append(string.Join(separator, groups[i]));
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Returns true if the value represents an empty sequence.
+    /// </summary>
+    private static bool IsEmptySequence(XdmValue value)
+    {
+        if (!value.IsSequence || value.SequenceValue == null)
+            return false;
+        return !value.SequenceValue.GetEnumerator().MoveNext();
     }
 
     /// <summary>
@@ -12290,12 +12650,23 @@ public sealed class TransformEngine
     // ------------------------------------------------------------------
 
     /// <summary>
-    /// Executes an <c>xsl:number</c> instruction.
+    /// Determines whether the effective version for the given instruction is
+    /// XSLT 1.0 (backwards-compatible), walking ancestor elements for an
+    /// explicit <c>xsl:version</c> attribute and falling back to the global
+    /// stylesheet version.
     /// </summary>
-    private void ExecuteXsltNumber(XElement instruction, IXdmNode currentNode)
+    private bool IsEffectiveBackwardsCompatible(XElement instruction)
     {
-        // Determine effective backwards-compatibility: walk ancestor chain for xsl:version.
-        bool backwardsCompatible = _context.BackwardsCompatible;
+        return GetEffectiveVersion(instruction) < 2.0;
+    }
+
+    /// <summary>
+    /// Returns the effective XSLT version for the given instruction, walking
+    /// ancestor elements for an explicit <c>xsl:version</c> attribute and
+    /// falling back to the global stylesheet version.
+    /// </summary>
+    private double GetEffectiveVersion(XElement instruction)
+    {
         var xslNs = XNamespace.Get("http://www.w3.org/1999/XSL/Transform");
         var ancestor = instruction;
         while (ancestor != null)
@@ -12303,15 +12674,62 @@ public sealed class TransformEngine
             var versionAttr = ancestor.Attribute(xslNs + "version");
             if (versionAttr != null)
             {
-                if (double.TryParse(versionAttr.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v) && v < 2.0)
-                    backwardsCompatible = true;
-                else
-                    backwardsCompatible = false;
+                if (double.TryParse(versionAttr.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v))
+                    return v;
                 break;
             }
             ancestor = ancestor.Parent;
         }
+        if (double.TryParse(_stylesheet.Version, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var sv))
+            return sv;
+        return _context.BackwardsCompatible ? 1.0 : 3.0;
+    }
 
+    /// <summary>
+    /// Validates that all <c>xsl:sort</c> children of <c>xsl:for-each</c> or
+    /// <c>xsl:perform-sort</c> appear before any other instruction content.
+    /// </summary>
+    private void ValidateSortComesFirst(XElement instruction)
+    {
+        bool seenNonSort = false;
+        foreach (var child in instruction.Elements())
+        {
+            if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace && child.Name.LocalName == "sort")
+            {
+                if (seenNonSort)
+                    throw new InvalidOperationException("XTSE0010: xsl:sort elements must appear before other sequence-constructor children");
+            }
+            else
+            {
+                seenNonSort = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Determines whether an instruction has content other than whitespace text
+    /// and <c>xsl:fallback</c> elements.
+    /// </summary>
+    private bool HasNonFallbackContent(XElement instruction)
+    {
+        foreach (var node in instruction.Nodes())
+        {
+            if (node is XText t && string.IsNullOrWhiteSpace(t.Value))
+                continue;
+            if (node is XElement e && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace && e.Name.LocalName == "fallback")
+                continue;
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Executes an <c>xsl:number</c> instruction.
+    /// </summary>
+    private void ExecuteXsltNumber(XElement instruction, IXdmNode currentNode)
+    {
+        // Determine effective backwards-compatibility: walk ancestor chain for xsl:version.
+        bool backwardsCompatible = IsEffectiveBackwardsCompatible(instruction);
         var level = instruction.Attribute("level")?.Value ?? "single";
         var countPattern = instruction.Attribute("count")?.Value;
         var fromPattern = instruction.Attribute("from")?.Value;

@@ -53,6 +53,7 @@
 //                      | Charles Korthout | 2.20  | 28-06-2026     | NormalizeSequence uses HashSet for duplicate removal; restores catalog self-test speed   |
 //                      | Charles Korthout | 2.21  | 26-06-2026     | Integer/decimal division and modulo by zero raise FOAR0001 DynamicException            |
 //                      | Charles Korthout | 2.22  | 30-06-2026     | Cast to xs:float parses via float.TryParse to preserve single-precision lexical form  |
+//                      | Charles Korthout | 2.23  | 02-07-2026     | Root opcode handles parentless nodes and raises XPDY0050; Range atomizes operands       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -679,10 +680,18 @@ public static class VmEngine
                         var input = registers[instr.RegisterB];
                         if (input.IsNode && input.NodeValue != null)
                         {
-                            var doc = input.NodeValue.Document;
-                            registers[instr.RegisterA] = doc != null
-                                ? XdmValue.FromNode(doc)
-                                : XdmValue.FromNode(input.NodeValue);
+                            var node = input.NodeValue;
+                            var root = node.Document;
+                            if (root == null)
+                            {
+                                // Parentless node: the root of its tree is the node itself.
+                                root = node;
+                            }
+                            if (root.NodeKind != XdmNodeKind.Document)
+                            {
+                                throw new InvalidOperationException("XPDY0050: The root of the tree containing the context item is not a document node.");
+                            }
+                            registers[instr.RegisterA] = XdmValue.FromNode(root);
                         }
                         else
                         {

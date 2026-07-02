@@ -1,5 +1,59 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-02
+**Commit:** *(to be recorded after commit)*
+**Current focus:** Cleared the W3C `seqtor` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,964
+- **Failed:** 286
+- **Skipped:** 9,350
+- **Pass rate:** 94.6% (+374 passed / −374 failed vs. previous 4,590/660/9,349)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| seqtor | 72 | 54 | 0 | 18 | ✅ All runnable `seqtor` tests now pass |
+
+## This Session Fixes
+
+1. **Sequence-constructor whitespace and empty atomics** — `TransformEngine.CopyToResult` now treats empty sequence items as atomic separators, merges adjacent text and atomic values, and discards zero-length text nodes while preserving correct spacing. Fixes many `seqtor-*` tests.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **`xsl:document` inside simple content** — Comment, processing-instruction, and attribute constructors now preserve empty-sequence positions so document nodes inside their sequence constructors contribute children correctly.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`xsl:sequence` without `@select`** — Now returns raw sequence-constructor content instead of wrapping it as a single text value.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **XPath `Range` atomization** — The VM `Range` opcode atomizes operands before converting to integers, so attribute and element nodes can supply range bounds.
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+5. **`fn:remove` and QName-from functions** — `fn:remove` now accepts empty/NaN positions; `local-name-from-QName`, `namespace-uri-from-QName`, and `prefix-from-QName` atomize their arguments.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+6. **`ToDoubleValueStrict` for `xs:untypedAtomic`** — Numeric strings supplied as `xs:untypedAtomic` now parse correctly, fixing `fn:subsequence` with node arguments.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+## Notes
+
+- Unit-test suite: **911 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **4,964/286/9,350** (94.6%).
+- Previous `sequence` and `try` clusters remain fully passing.
+
+## Recommended Next Steps
+
+1. Pick the next target cluster from the remaining 286 failures (e.g., `copy-of`, `document`, `number`, `error`, `function`).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-26
 **Commit:** `fea9403`
 **Current focus:** Cleared the W3C `as`, `xml-to-json`, and `json-to-xml` conformance clusters.

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-06-26 (`as`, `xml-to-json`, and `json-to-xml` clusters cleared; full W3C baseline 4,953/297/9,350)    
+> **Living Registry** — Last updated: 2026-07-02 (`seqtor` cluster cleared; full W3C baseline 4,964/286/9,350)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

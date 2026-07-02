@@ -78,6 +78,7 @@
 //                      | Charles Korthout | 5.12  | 28-06-2026     | fn:document#1 uses node base URIs; fn:resolve-uri validates base and relative URIs     |
 //                      | Charles Korthout | 5.13  | 28-06-2026     | FORG0002 for relative base/malformed relative URIs; dotted-path resolution             |
 //                      | Charles Korthout | 5.14  | 26-06-2026     | Allow XML 1.1 C0 controls in codepoints-to-string; honor duplicates in json-to-xml     |
+//                      | Charles Korthout | 5.15  | 02-07-2026     | ToDoubleValueStrict parses xs:untypedAtomic; fn:remove and QName-from functions atomize  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -6320,9 +6321,13 @@ public static class FunctionLibrary
     private static XdmValue Remove(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var target = Materialize(args[0]);
-        long pos = args[1].IntegerValue;
-        if (pos >= 1 && pos <= target.Count)
-            target.RemoveAt((int)pos - 1);
+        var posValue = AtomizeValue(args[1]);
+        if (posValue.IsUndefined || IsEmptySequence(posValue))
+            return XdmValue.FromSequence(MaterializedSequence.FromList(target));
+        double posD = ToDoubleValueStrict(posValue);
+        if (double.IsNaN(posD) || posD < 1 || posD > target.Count)
+            return XdmValue.FromSequence(MaterializedSequence.FromList(target));
+        target.RemoveAt((int)posD - 1);
         return XdmValue.FromSequence(MaterializedSequence.FromList(target));
     }
 
@@ -9409,25 +9414,28 @@ public static class FunctionLibrary
 
     private static XdmValue LocalNameFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[0].Kind == XdmValueKind.Undefined || IsEmptySequence(args[0]))
+        var atomized = AtomizeValue(args[0]);
+        if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
-        var qn = args[0].QNameValue;
+        var qn = atomized.QNameValue;
         return XdmValue.FromString(qn.LocalName);
     }
 
     private static XdmValue NamespaceUriFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[0].Kind == XdmValueKind.Undefined || IsEmptySequence(args[0]))
+        var atomized = AtomizeValue(args[0]);
+        if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
-        var qn = args[0].QNameValue;
+        var qn = atomized.QNameValue;
         return XdmValue.FromString(qn.NamespaceUri);
     }
 
     private static XdmValue PrefixFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (args[0].Kind == XdmValueKind.Undefined || IsEmptySequence(args[0]))
+        var atomized = AtomizeValue(args[0]);
+        if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
-        var qn = args[0].QNameValue;
+        var qn = atomized.QNameValue;
         return XdmValue.FromString(qn.Prefix);
     }
 

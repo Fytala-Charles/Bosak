@@ -4,13 +4,22 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 26 June 2026
+> **Last updated:** 2 July 2026
 > **Bosak baseline:** 911 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,953 passed / 297 failed / 9,350 skipped (~94.3%)
+> **XSLT baseline:** 4,964 passed / 286 failed / 9,350 skipped (~94.6%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-02** — Cleared the W3C `seqtor` conformance cluster (54 runnable tests pass; 18 skipped).
+  - Sequence-constructor whitespace and empty atomic items now produce correct spacing in complex content.
+  - Empty sequence items act as atomic separators; text-node/atomic merging and adjacent-text concatenation match the XSLT 3.0 serialization rules.
+  - `xsl:sequence` without `@select` now returns its raw sequence-constructor content.
+  - `xsl:document` inside `xsl:comment`, `xsl:processing-instruction`, and `xsl:attribute` simple content is handled correctly.
+  - Namespace prefix `xs` is now declared when evaluating Text Value Templates.
+  - Mixed atomics and text nodes produced by `xsl:function` are serialized correctly.
+  - Full W3C suite: **4,964 passed / 286 failed / 9,350 skipped** (~94.6%).
 
 - **2026-06-26** — Cleared the W3C `as`, `xml-to-json`, and `json-to-xml` conformance clusters.
   - `xs:float` serialization now uses the shortest round-trip `"R"` format in the scientific range, fixing `as-0802` / `as-0802b`.
