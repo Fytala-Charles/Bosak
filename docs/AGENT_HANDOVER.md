@@ -1,6 +1,60 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-03
+**Commit:** `c813a2a`
+**Current focus:** Cleared the W3C XSLT 3.0 `import` conformance cluster and `apply-imports`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,027
+- **Failed:** 223
+- **Skipped:** 9,350
+- **Pass rate:** 95.8% (+28 passed / −28 failed vs. previous 4,999/251)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| import | 42 | 42 | 0 | 0 | ✅ Import precedence, apply-imports context, duplicate includes |
+| apply-imports | 1 | 1 | 0 | 0 | ✅ Atomic-value apply-imports chain |
+
+## This Session Fixes
+
+1. **Import-precedence total ordering** — `Stylesheet.AssignImportPrecedences` computes a correct total order: the main stylesheet is highest, each imported module is lower than its importer, and later sibling imports win over earlier ones. `TemplateRule.ImportPrecedence` now reads from its stylesheet so the precedence is set after the whole import tree is built.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
+
+2. **Document-order flattening** — `Stylesheet.GetAllTemplateRules` and `CollectGlobalsInDocumentOrder` traverse `xsl:import` / `xsl:include` elements in true document order (using annotations that map each element to its resolved child module), so same-precedence collisions resolve by last-wins and globals from nested imports are visible.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`xsl:apply-imports` module context** — `Stylesheet.ApplyImportsContextModule` tracks whether a module was reached via import (uses its own import tree) or include (uses the including module's tree). `TransformEngine` restricts apply-imports candidates to that module's transitive imports.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **Duplicate `xsl:include`** — Removed silent deduplication so the same module can be included multiple times, producing multiple same-precedence template rules for `xsl:next-match` chains.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+5. **Static error coverage** — Missing `href` on `xsl:import`/`xsl:include` now raises `XTSE0010`, and invalid attributes on `xsl:element` raise `XTSE0090`.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+## Notes
+
+- Unit-test suite: **911 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,027/223/9,350** (95.8%).
+
+## Recommended Next Steps
+
+1. Continue clearing remaining failures from the 223-failure baseline, e.g.:
+   - `context-item` (21 failures)
+   - `namespace` (22 failures)
+   - `maps` (36 failures)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-03
 **Commit:** `b34baed`
 **Current focus:** Cleared the W3C XSLT 3.0 `expand-text` / `cvt` conformance cluster.
 
