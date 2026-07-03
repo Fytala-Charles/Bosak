@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 24-06-2026     | GetXPathDefaultNamespace no longer falls back to xmlns declaration                     |
 //                      | Charles Korthout | 1.0   | 25-06-2026     | Trim xsl:template/@name values to normalize whitespace/EQName forms                    |
 //                      | Charles Korthout | 1.1   | 26-06-2026     | Default priority for match="/" is -0.5 per XSLT 2.0/3.0 spec                            |
+//                      | Charles Korthout | 1.2   | 03-07-2026     | ImportPrecedence now reads from Stylesheet for dynamic precedence assignment            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -56,7 +57,7 @@ public sealed class TemplateRule
     public double Priority { get; }
 
     /// <summary>The import precedence (0 = main stylesheet, higher = deeper import).</summary>
-    public int ImportPrecedence { get; }
+    public int ImportPrecedence => Stylesheet.ImportPrecedence;
 
     /// <summary>The compiled match predicate, or null for named-only templates.</summary>
     public Patterns.PatternPredicate? CompiledMatch { get; private set; }
@@ -73,7 +74,6 @@ public sealed class TemplateRule
         MatchesAllModes = modes.Contains("#all");
         Priority = priority;
         Stylesheet = stylesheet;
-        ImportPrecedence = stylesheet.ImportPrecedence;
     }
 
     /// <summary>

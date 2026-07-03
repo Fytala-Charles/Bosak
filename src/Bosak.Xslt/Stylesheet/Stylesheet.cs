@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 2.16  | 26-06-2026     | Shadow attribute support for version, href, use-when, and xpath-default-namespace        |
 //                      | Charles Korthout | 2.17  | 26-06-2026     | Static context hides XSLT dynamic functions such as fn:current-output-uri               |
 //                      | Charles Korthout | 2.18  | 03-07-2026     | Validate expand-text values (XTSE0020); allow expand-text on xsl:function               |
+//                      | Charles Korthout | 2.19  | 03-07-2026     | Import/include precedence, apply-imports context, and duplicate includes; clears import |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -75,7 +76,7 @@ public sealed class Stylesheet
     private readonly string? _baseUri;
     private readonly IXsltUriResolver _resolver;
     private readonly HashSet<string> _resolvedUris;
-    private readonly HashSet<string> _includedUris = new();
+
     private readonly List<TemplateRule> _templateRules = new();
     private readonly Dictionary<string, TemplateRule> _namedTemplates = new();
     private readonly List<Stylesheet> _imports = new();
@@ -413,6 +414,7 @@ public sealed class Stylesheet
         _baseUri = baseUri;
         _resolver = resolver;
         ImportPrecedence = importPrecedence;
+        ApplyImportsContextModule = this;
         _resolvedUris = resolvedUris ?? new HashSet<string>();
         _isRootStylesheet = _resolvedUris.Count == 0;
         _externalStaticParameters = externalStaticParameters ?? EmptyExternalStaticParameters;
@@ -465,7 +467,15 @@ public sealed class Stylesheet
     public IReadOnlyList<Stylesheet> Includes => _includes;
 
     /// <summary>The import precedence of this stylesheet (0 = main, higher = deeper import).</summary>
-    public int ImportPrecedence { get; }
+    public int ImportPrecedence { get; private set; }
+
+    /// <summary>
+    /// The stylesheet module whose import tree is used by <c>xsl:apply-imports</c>
+    /// inside templates in this module. For the root and imported modules this is
+    /// the module itself; for included modules it is the module that included it
+    /// (propagated through nested includes).
+    /// </summary>
+    public Stylesheet ApplyImportsContextModule { get; private set; } = null!;
 
     /// <summary>The default mode for xsl:apply-templates within this stylesheet (empty string = unnamed mode).</summary>
     public string DefaultMode { get; private set; } = "";
@@ -489,19 +499,45 @@ public sealed class Stylesheet
     /// </summary>
     public IEnumerable<TemplateRule> GetAllTemplateRules()
     {
+        // Group local template rules by their source element so we can emit them
+        // in true document order while interleaving imported/included modules.
+        var rulesByElement = new Dictionary<XElement, List<TemplateRule>>();
         foreach (var rule in _templateRules)
-            yield return rule;
-
-        foreach (var included in _includes)
         {
-            foreach (var rule in included.GetAllTemplateRules())
-                yield return rule;
+            if (!rulesByElement.TryGetValue(rule.Element, out var list))
+            {
+                list = new List<TemplateRule>();
+                rulesByElement[rule.Element] = list;
+            }
+            list.Add(rule);
         }
 
-        foreach (var imported in _imports)
+        foreach (var element in Root.Elements())
         {
-            foreach (var rule in imported.GetAllTemplateRules())
-                yield return rule;
+            var ns = element.Name.NamespaceName;
+            var localName = element.Name.LocalName;
+
+            if (ns == XslNamespace && localName == "import")
+            {
+                if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } imported })
+                {
+                    foreach (var rule in imported.GetAllTemplateRules())
+                        yield return rule;
+                }
+            }
+            else if (ns == XslNamespace && localName == "include")
+            {
+                if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } included })
+                {
+                    foreach (var rule in included.GetAllTemplateRules())
+                        yield return rule;
+                }
+            }
+            else if (ns == XslNamespace && localName == "template" && rulesByElement.TryGetValue(element, out var rules))
+            {
+                foreach (var rule in rules)
+                    yield return rule;
+            }
         }
     }
 
@@ -937,8 +973,9 @@ public sealed class Stylesheet
                 if (UseWhen(child))
                 {
                     var href = child.Attribute("href")?.Value;
-                    if (!string.IsNullOrEmpty(href))
-                        ResolveImport(href);
+                    if (string.IsNullOrEmpty(href))
+                        throw new InvalidOperationException("XTSE0010: Missing required href attribute on xsl:import.");
+                    ResolveImport(child, href);
                 }
                 else
                 {
@@ -950,8 +987,9 @@ public sealed class Stylesheet
                 if (UseWhen(child))
                 {
                     var href = child.Attribute("href")?.Value;
-                    if (!string.IsNullOrEmpty(href))
-                        ResolveInclude(href);
+                    if (string.IsNullOrEmpty(href))
+                        throw new InvalidOperationException("XTSE0010: Missing required href attribute on xsl:include.");
+                    ResolveInclude(child, href);
                 }
                 else
                 {
@@ -978,6 +1016,11 @@ public sealed class Stylesheet
             var first = _staticContext.PendingConflicts.First();
             throw new InvalidOperationException($"XTSE3450: Inconsistent static declarations: conflicting values for '{{{first.Key.NamespaceUri}}}{first.Key.LocalName}' at the same import precedence.");
         }
+
+        // Recompute import precedence numbers so that later sibling imports have higher
+        // precedence than earlier ones, and imported modules are always lower than their
+        // importer. This produces the total order required by XSLT §6.4.
+        AssignImportPrecedences();
     }
 
     /// <summary>
@@ -1252,6 +1295,27 @@ public sealed class Stylesheet
             // XTSE0010 / XTSE0090: xsl:element does not allow a select attribute.
             if (isXsltElement && localName == "element" && elem.Attribute("select") != null)
                 throw new InvalidOperationException("XTSE0090");
+
+            if (isXsltElement && localName == "element")
+            {
+                var allowedElementAttributes = new HashSet<string>(StringComparer.Ordinal)
+                {
+                    "name", "namespace", "inherit-namespaces", "use-attribute-sets",
+                    "type", "validation", "select", "use-when"
+                };
+                foreach (var attr in elem.Attributes())
+                {
+                    if (attr.IsNamespaceDeclaration)
+                        continue;
+                    if (!string.IsNullOrEmpty(attr.Name.NamespaceName))
+                        continue;
+                    var baseName = attr.Name.LocalName;
+                    if (baseName.StartsWith("_"))
+                        baseName = baseName.Substring(1);
+                    if (!allowedElementAttributes.Contains(baseName))
+                        throw new InvalidOperationException($"XTSE0090: Attribute '{attr.Name.LocalName}' is not permitted on xsl:element.");
+                }
+            }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.
             if (isXsltElement && localName is "variable" or "param" or "with-param")
@@ -1949,7 +2013,17 @@ public sealed class Stylesheet
         return version is "1.0" or "1";
     }
 
-    private void ResolveImport(string href)
+    /// <summary>
+    /// Annotation attached to an <c>xsl:import</c> or <c>xsl:include</c> element
+    /// so that document-order flattening methods can locate the resolved child
+    /// stylesheet (if any).
+    /// </summary>
+    private sealed class ResolvedModuleAnnotation
+    {
+        public Stylesheet? Module { get; init; }
+    }
+
+    private void ResolveImport(XElement importElement, string href)
     {
         var resolvedUri = ResolveAbsoluteUri(href, _baseUri);
 
@@ -1966,7 +2040,9 @@ public sealed class Stylesheet
             if (root != null && !UseWhen(root, resolvedUri))
                 return;
             var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters);
+            child.ApplyImportsContextModule = child;
             _imports.Add(child);
+            importElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
             MergeChildStaticContext(child._staticContext);
         }
         catch (FileNotFoundException ex)
@@ -1975,21 +2051,15 @@ public sealed class Stylesheet
         }
     }
 
-    private void ResolveInclude(string href)
+    private void ResolveInclude(XElement includeElement, string href)
     {
         var resolvedUri = ResolveAbsoluteUri(href, _baseUri);
-
-        // XSLT allows the same stylesheet to be included multiple times;
-        // subsequent includes are silently ignored.
-        if (_includedUris.Contains(resolvedUri))
-            return;
 
         // Circular reference detection: if this URI is already in the ancestor chain,
         // including it would create a cycle.
         if (_resolvedUris.Contains(resolvedUri))
             throw new InvalidOperationException($"Circular stylesheet reference detected: {resolvedUri}");
 
-        _includedUris.Add(resolvedUri);
         var childResolvedUris = new HashSet<string>(_resolvedUris) { resolvedUri };
 
         try
@@ -2000,12 +2070,13 @@ public sealed class Stylesheet
             if (root != null && !UseWhen(root, resolvedUri))
                 return;
             var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters);
+            child.ApplyImportsContextModule = ApplyImportsContextModule;
             _includes.Add(child);
+            includeElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
             MergeChildStaticContext(child._staticContext);
         }
         catch (FileNotFoundException ex)
         {
-            _includedUris.Remove(resolvedUri);
             throw new InvalidOperationException($"XTSE0165: Failed to resolve xsl:include href '{href}'.", ex);
         }
     }
@@ -2067,6 +2138,107 @@ public sealed class Stylesheet
 
     /// <summary>All key definitions defined in this stylesheet.</summary>
     public IReadOnlyList<KeyDefinition> KeyDefinitions => _keyDefinitions;
+
+    private HashSet<Stylesheet>? _transitiveImports;
+
+    /// <summary>
+    /// All modules that are imported (directly or indirectly, including via includes)
+    /// by this stylesheet. Used by <c>xsl:apply-imports</c> to restrict the search
+    /// to rules imported into the stylesheet containing the current template rule.
+    /// </summary>
+    public IReadOnlySet<Stylesheet> TransitiveImports
+        => _transitiveImports ??= ComputeTransitiveImports();
+
+    private HashSet<Stylesheet> ComputeTransitiveImports()
+    {
+        var set = new HashSet<Stylesheet>();
+        foreach (var imported in _imports)
+        {
+            set.Add(imported);
+            set.UnionWith(imported.TransitiveImports);
+        }
+        foreach (var included in _includes)
+        {
+            set.UnionWith(included.TransitiveImports);
+        }
+        return set;
+    }
+
+    /// <summary>
+    /// Assigns import-precedence values to all imported modules. The main stylesheet
+    /// has precedence 0; imported modules are numbered so that later sibling imports
+    /// have lower numbers (higher XSLT precedence) than earlier ones. Includes keep
+    /// the same precedence as their parent.
+    /// </summary>
+    private void AssignImportPrecedences()
+    {
+        var order = new List<Stylesheet>();
+        CollectImportedModulesHighToLow(this, order);
+        int rank = 1;
+        foreach (var module in order)
+            module.ImportPrecedence = rank++;
+    }
+
+    private static void CollectImportedModulesHighToLow(Stylesheet module, List<Stylesheet> order)
+    {
+        // Traverse top-level elements in reverse document order so that later
+        // imports (which have higher XSLT precedence) are emitted first.
+        foreach (var element in module.Root.Elements().Reverse())
+        {
+            if (element.Name.NamespaceName != XslNamespace)
+                continue;
+
+            if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } child })
+            {
+                if (element.Name.LocalName == "import")
+                {
+                    // The imported module itself is higher than its own imports.
+                    order.Add(child);
+                }
+                // Includes share the parent's precedence; their local content is not
+                // added, but their imports are still lower than the parent.
+                CollectImportedModulesHighToLow(child, order);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Collects global parameters and variables in document order, recursing into
+    /// imported and included modules at the point where their <c>xsl:import</c> or
+    /// <c>xsl:include</c> element occurs. Each declaration is tagged with its
+    /// import precedence and a monotonic document-order index so callers can sort
+    /// by precedence (lower first) and then by document order, matching XSLT
+    /// import-precedence / last-wins semantics.
+    /// </summary>
+    public void CollectGlobalsInDocumentOrder(List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam)> globals, ref int order)
+    {
+        foreach (var element in Root.Elements())
+        {
+            var ns = element.Name.NamespaceName;
+            var localName = element.Name.LocalName;
+
+            if (ns == XslNamespace && localName == "import")
+            {
+                if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } imported })
+                    imported.CollectGlobalsInDocumentOrder(globals, ref order);
+            }
+            else if (ns == XslNamespace && localName == "include")
+            {
+                if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } included })
+                    included.CollectGlobalsInDocumentOrder(globals, ref order);
+            }
+            else if (ns == XslNamespace && localName == "param")
+            {
+                var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
+                globals.Add((ImportPrecedence, order++, name, element, true));
+            }
+            else if (ns == XslNamespace && localName == "variable")
+            {
+                var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
+                globals.Add((ImportPrecedence, order++, name, element, false));
+            }
+        }
+    }
 
     /// <summary>
     /// Recursively collects all global parameters from this stylesheet, its includes, and its imports.

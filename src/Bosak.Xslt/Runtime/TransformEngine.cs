@@ -142,6 +142,7 @@
 //                      | Charles Korthout | 5.71  | 02-07-2026     | Expand sequence placeholders in xsl:where-populated temp; remove leftover debug output    |
 //                      | Charles Korthout | 5.72  | 03-07-2026     | TVT: xsl:expand-text inheritance, XPath comments, merged text across comments/PIs        |
 //                      | Charles Korthout | 5.73  | 03-07-2026     | TVT expansion and whitespace stripping in xsl:function bodies; fixes cvt-029/030         |
+//                      | Charles Korthout | 5.74  | 03-07-2026     | Document-order global/template flattening; apply-imports context; clears import cluster |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -5078,8 +5079,13 @@ public sealed class TransformEngine
                     var applyImportsMode = _modeStack.Count > 0 ? _modeStack.Peek() : "";
 
                     // Find the best matching template with higher import precedence
-                    // (i.e., deeper in the import chain). Main stylesheet = 0, direct imports = 1, etc.
-                    var importedRule = FindBestTemplate(contextItem, applyImportsMode, minImportPrecedence: _currentTemplateRule.ImportPrecedence);
+                    // (i.e., deeper in the import chain). The search is restricted to
+                    // template rules in modules that were imported into the stylesheet
+                    // module whose import tree governs the current template rule
+                    // (the current module for imported modules, the including module
+                    // for included modules).
+                    var contextModule = _currentTemplateRule.Stylesheet.ApplyImportsContextModule;
+                    var importedRule = FindBestTemplate(contextItem, applyImportsMode, minImportPrecedence: _currentTemplateRule.ImportPrecedence, allowedStylesheets: contextModule.TransitiveImports);
 
                     var (applyImportsParams, applyImportsTunnelParams) = CollectWithParams(instruction, contextItem);
 
@@ -7996,17 +8002,23 @@ public sealed class TransformEngine
         // checking required="yes" parameters.
         var externallySupplied = _context.SnapshotVariables();
 
-        // Collect globals in precedence order: imports first, then includes, then local.
-        // Within each stylesheet module, params and vars are evaluated in document order.
-        var globals = new List<((string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam)>();
-
-        foreach (var imported in _stylesheet.Imports)
-            CollectGlobalsInDocumentOrder(imported, globals);
-
-        foreach (var included in _stylesheet.Includes)
-            CollectGlobalsInDocumentOrder(included, globals);
-
-        CollectGlobalsInDocumentOrder(_stylesheet, globals);
+        // Collect globals in document order, recursing into imported and included
+        // modules at the position of their xsl:import / xsl:include element. This
+        // ensures globals from nested imports/includes are visible to the importer
+        // and that collisions resolve first by import precedence (higher wins) and
+        // then by document order within the same precedence (last wins).
+        var globals = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam)>();
+        int documentOrder = 0;
+        _stylesheet.CollectGlobalsInDocumentOrder(globals, ref documentOrder);
+        // Lower numeric precedence means higher XSLT import precedence and must win,
+        // so process higher-numeric (lower-precedence) declarations first and let
+        // lower-numeric (higher-precedence) declarations overwrite them. Within the
+        // same precedence, document order governs last-wins behaviour.
+        globals.Sort((a, b) =>
+        {
+            int precedenceComparison = b.Precedence.CompareTo(a.Precedence);
+            return precedenceComparison != 0 ? precedenceComparison : a.Order.CompareTo(b.Order);
+        });
 
         static bool IsStaticGlobal(XElement e)
         {
@@ -8024,7 +8036,7 @@ public sealed class TransformEngine
         // than re-evaluated at runtime, so a static $p is still visible to other static
         // expressions even when a non-static declaration with the same name shadows it
         // at runtime (static-027).
-        foreach (var (name, elem, isParam) in globals)
+        foreach (var (_, _, name, elem, isParam) in globals)
         {
             // Skip parameters already supplied by the caller (e.g. fn:transform).
             if (isParam && externallySupplied.ContainsKey(name))
@@ -8166,7 +8178,7 @@ public sealed class TransformEngine
         // Check required parameters and eagerly bind parameters whose default value
         // is an empty sequence constructor without @as, so they produce a document node
         // even if never explicitly referenced.
-        foreach (var (name, elem, isParam) in globals)
+        foreach (var (_, _, name, elem, isParam) in globals)
         {
             if (isParam)
             {
@@ -8219,36 +8231,6 @@ public sealed class TransformEngine
         _globalVariableSnapshot = _context.SnapshotVariables();
     }
 
-    private static void CollectGlobalsInDocumentOrder(Stylesheet.Stylesheet stylesheet, List<((string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam)> globals)
-    {
-        var paramList = stylesheet.GlobalParameters;
-        var varList = stylesheet.GlobalVariables;
-
-        int i = 0, j = 0;
-        while (i < paramList.Count || j < varList.Count)
-        {
-            XElement? nextParam = i < paramList.Count ? paramList[i] : null;
-            XElement? nextVar = j < varList.Count ? varList[j] : null;
-
-            if (nextParam != null && (nextVar == null || nextParam.NodesBeforeSelf().Count() <= nextVar.NodesBeforeSelf().Count()))
-            {
-                var name = ExpandVariableName(nextParam, nextParam.Attribute("name")?.Value ?? "");
-                globals.Add((name, nextParam, true));
-                i++;
-            }
-            else if (nextVar != null)
-            {
-                var name = ExpandVariableName(nextVar, nextVar.Attribute("name")?.Value ?? "");
-                globals.Add((name, nextVar, false));
-                j++;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-
     /// <summary>
     /// Evaluates a compiled match pattern with the current output URI cleared, because
     /// pattern predicates are evaluated in a temporary output state.
@@ -8282,7 +8264,7 @@ public sealed class TransformEngine
     /// <param name="mode">The mode to match in.</param>
     /// <param name="excludedRules">Rules to exclude (used by xsl:next-match).</param>
     /// <param name="minImportPrecedence">If set, only rules with import precedence greater than this value are considered (used by xsl:apply-imports).</param>
-    private Stylesheet.TemplateRule? FindBestTemplate(XdmValue item, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null, int? minImportPrecedence = null)
+    private Stylesheet.TemplateRule? FindBestTemplate(XdmValue item, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null, int? minImportPrecedence = null, IReadOnlySet<Stylesheet.Stylesheet>? allowedStylesheets = null)
     {
         Stylesheet.TemplateRule? best = null;
         double bestPriority = double.NegativeInfinity;
@@ -8292,6 +8274,8 @@ public sealed class TransformEngine
         foreach (var rule in _allTemplateRules)
         {
             if (excludedRules != null && excludedRules.Contains(rule))
+                continue;
+            if (allowedStylesheets != null && !allowedStylesheets.Contains(rule.Stylesheet))
                 continue;
             if (minImportPrecedence.HasValue && rule.ImportPrecedence <= minImportPrecedence.Value)
                 continue;
