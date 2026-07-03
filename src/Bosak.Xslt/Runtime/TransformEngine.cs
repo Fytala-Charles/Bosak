@@ -140,6 +140,8 @@
 //                      | Charles Korthout | 5.69  | 02-07-2026     | Sequence-constructor whitespace, empty atomics, xsl:document in simple content; clears seqtor |
 //                      | Charles Korthout | 5.70  | 02-07-2026     | Sequence placeholders are not significant content; fixes on-empty cluster regressions       |
 //                      | Charles Korthout | 5.71  | 02-07-2026     | Expand sequence placeholders in xsl:where-populated temp; remove leftover debug output    |
+//                      | Charles Korthout | 5.72  | 03-07-2026     | TVT: xsl:expand-text inheritance, XPath comments, merged text across comments/PIs        |
+//                      | Charles Korthout | 5.73  | 03-07-2026     | TVT expansion and whitespace stripping in xsl:function bodies; fixes cvt-029/030         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1945,19 +1947,52 @@ public sealed class TransformEngine
         {
             case XText text:
                 {
-                    var value = text.Value;
-                    if (string.IsNullOrWhiteSpace(value))
+                    var parent = text.Parent as XElement;
+                    bool expandText = parent != null && GetExpandText(parent);
+                    bool hasTvtExpression = expandText && ContainsTvtExpression(text.Value);
+                    bool hasEscapedBraces = expandText &&
+                        (text.Value.Contains("{{", StringComparison.Ordinal) || text.Value.Contains("}}", StringComparison.Ordinal));
+
+                    if (hasTvtExpression || hasEscapedBraces)
                     {
-                        // Whitespace text nodes are stripped unless xml:space="preserve"
-                        // applies to the parent (or an ancestor).
-                        if (text.Parent is XElement parent && IsWhitespacePreserveContext(parent))
+                        // Expand the TVT in-place. Whitespace-only literal segments are
+                        // stripped, matching the default whitespace stripping rules for
+                        // sequence constructors in an xsl:function body.
+                        var parts = EvaluateTvtParts(text.Value, parent);
+                        var sb = new StringBuilder();
+                        for (int pi = 0; pi < parts.Count; pi++)
                         {
-                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+                            bool isLiteral = pi % 2 == 0;
+                            string part = parts[pi];
+                            if (isLiteral)
+                            {
+                                if (string.IsNullOrWhiteSpace(part) && !IsWhitespacePreserveContext(parent!))
+                                    continue;
+                            }
+                            sb.Append(part);
+                        }
+
+                        if (sb.Length > 0)
+                        {
+                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(sb.ToString()))));
                         }
                     }
                     else
                     {
-                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+                        var value = text.Value;
+                        if (string.IsNullOrWhiteSpace(value))
+                        {
+                            // Whitespace text nodes are stripped unless xml:space="preserve"
+                            // applies to the parent (or an ancestor).
+                            if (parent != null && IsWhitespacePreserveContext(parent))
+                            {
+                                results.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+                            }
+                        }
+                        else
+                        {
+                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+                        }
                     }
                 }
                 break;
@@ -2110,7 +2145,7 @@ public sealed class TransformEngine
                                 switch (child)
                                 {
                                     case XText text:
-                                        if (GetExpandText(instruction) && ContainsTvtExpression(text.Value))
+                                        if (GetExpandText(instruction))
                                         {
                                             var tvtResult = EvaluateTvt(text.Value, instruction);
                                             results.Add(XdmValue.FromNode(new XDocumentNode(new XText(tvtResult))));
@@ -4771,7 +4806,7 @@ public sealed class TransformEngine
                                 switch (childNode)
                                 {
                                     case XText text:
-                                        if (GetExpandText(instruction) && ContainsTvtExpression(text.Value))
+                                        if (GetExpandText(instruction))
                                         {
                                             var tvtResult = EvaluateTvt(text.Value, instruction);
                                             // An empty TVT result still produces a zero-length text node that
@@ -11800,7 +11835,7 @@ public sealed class TransformEngine
     private void CollectSimpleContentText(XText text, XElement parent, List<XdmValue> items)
     {
         string value;
-        if (GetExpandText(parent) && ContainsTvtExpression(text.Value))
+        if (GetExpandText(parent))
         {
             value = EvaluateTvt(text.Value, parent);
         }
@@ -12483,23 +12518,36 @@ public sealed class TransformEngine
         XElement? current = element;
         while (current != null)
         {
-            var attr = current.Attribute("expand-text");
+            // expand-text may appear as a no-namespace attribute on XSLT elements
+            // (e.g. xsl:template) or as an xsl:expand-text attribute on literal
+            // result elements.
+            var attr = current.Attribute("expand-text")
+                ?? current.Attribute(XName.Get("expand-text", Stylesheet.Stylesheet.XslNamespace));
             if (attr != null)
-                return attr.Value is "yes" or "true" or "1";
+            {
+                var v = attr.Value.Trim();
+                return v is "yes" or "true" or "1";
+            }
             current = current.Parent;
         }
         return false;
     }
 
     /// <summary>
-    /// Evaluates a Text Value Template (TVT): parses {expr} and {{ escapes,
-    /// evaluates each XPath expression, and returns the concatenated result.
-    /// Respects XPath string literals when finding matching }.
+    /// Evaluates a Text Value Template (TVT) and returns the parts as a list of
+    /// literal/evaluation segments. The list alternates literal text (even indexes)
+    /// and expression results (odd indexes). Empty leading or trailing literal
+    /// segments are represented by empty strings so callers can apply whitespace
+    /// stripping independently of concatenation.
     /// </summary>
-    private string EvaluateTvt(string text, XElement? contextElement = null)
+    private List<string> EvaluateTvtParts(string text, XElement? contextElement = null)
     {
+        var parts = new List<string>();
         if (string.IsNullOrEmpty(text))
-            return text;
+        {
+            parts.Add(text);
+            return parts;
+        }
 
         var sb = new StringBuilder();
         int i = 0;
@@ -12525,15 +12573,39 @@ public sealed class TransformEngine
             // {expr} — evaluate XPath expression
             if (text[i] == '{')
             {
+                // Flush the literal part that precedes this expression.
+                parts.Add(sb.ToString());
+                sb.Clear();
+
                 int exprStart = i + 1;
                 int j = exprStart;
                 int braceDepth = 1;
                 bool inSingleQuote = false;
                 bool inDoubleQuote = false;
+                int commentDepth = 0;
 
                 while (j < text.Length && braceDepth > 0)
                 {
                     char c = text[j];
+                    if (commentDepth > 0)
+                    {
+                        // Inside an XPath comment; (: opens a nested comment and :) closes one.
+                        if (j + 1 < text.Length && c == '(' && text[j + 1] == ':')
+                        {
+                            commentDepth++;
+                            j += 2;
+                            continue;
+                        }
+                        if (j + 1 < text.Length && c == ':' && text[j + 1] == ')')
+                        {
+                            commentDepth--;
+                            j += 2;
+                            continue;
+                        }
+                        j++;
+                        continue;
+                    }
+
                     if (inSingleQuote)
                     {
                         if (c == '\'') inSingleQuote = false;
@@ -12546,6 +12618,12 @@ public sealed class TransformEngine
                     {
                         if (c == '\'') inSingleQuote = true;
                         else if (c == '"') inDoubleQuote = true;
+                        else if (j + 1 < text.Length && c == '(' && text[j + 1] == ':')
+                        {
+                            commentDepth++;
+                            j += 2;
+                            continue;
+                        }
                         else if (c == '{') braceDepth++;
                         else if (c == '}') braceDepth--;
                     }
@@ -12555,22 +12633,26 @@ public sealed class TransformEngine
                 if (braceDepth == 0)
                 {
                     string expr = text.Substring(exprStart, j - exprStart - 1);
-                    if (!string.IsNullOrEmpty(expr))
+                    expr = RemoveXPathComments(expr);
+                    if (!string.IsNullOrWhiteSpace(expr))
                     {
                         var compiled = contextElement != null ? CompileXPath(expr, contextElement) : XPath31Expression.Compile(expr);
                         var value = compiled.Evaluate(_context);
                         // XSLT 3.0 §5.6.2: atomized TVT items are joined with a single space.
-                        sb.Append(XdmValueToString(value, " "));
+                        parts.Add(XdmValueToString(value, " "));
+                    }
+                    else
+                    {
+                        parts.Add(string.Empty);
                     }
                     i = j;
                     continue;
                 }
                 else
                 {
-                    // Unmatched { — treat as literal
-                    sb.Append('{');
-                    i++;
-                    continue;
+                    // Unmatched { in a TVT context is an error (the expression may span
+                    // an XML element boundary or simply be malformed).
+                    throw new InvalidOperationException("XTSE0350: Unmatched '{' in text value template");
                 }
             }
 
@@ -12578,7 +12660,23 @@ public sealed class TransformEngine
             i++;
         }
 
-        return sb.ToString();
+        if (sb.Length > 0 || parts.Count > 0)
+        {
+            parts.Add(sb.ToString());
+        }
+
+        return parts;
+    }
+
+    /// <summary>
+    /// Evaluates a Text Value Template (TVT): parses {expr} and {{ escapes,
+    /// evaluates each XPath expression, and returns the concatenated result.
+    /// Respects XPath string literals when finding matching }.
+    /// </summary>
+    private string EvaluateTvt(string text, XElement? contextElement = null)
+    {
+        var parts = EvaluateTvtParts(text, contextElement);
+        return string.Concat(parts);
     }
 
     /// <summary>
@@ -12632,9 +12730,126 @@ public sealed class TransformEngine
         return false;
     }
 
+    /// <summary>
+    /// Strips XPath comments (<c>(: ... :)</c>) from an expression, including nested
+    /// comments, while preserving comments inside string literals.
+    /// </summary>
+    private static string RemoveXPathComments(string expression)
+    {
+        if (string.IsNullOrEmpty(expression))
+            return expression;
+
+        var sb = new StringBuilder(expression.Length);
+        int i = 0;
+        bool inSingleQuote = false;
+        bool inDoubleQuote = false;
+        int commentDepth = 0;
+
+        while (i < expression.Length)
+        {
+            char c = expression[i];
+            if (commentDepth > 0)
+            {
+                if (i + 1 < expression.Length && c == '(' && expression[i + 1] == ':')
+                {
+                    commentDepth++;
+                    i += 2;
+                    continue;
+                }
+                if (i + 1 < expression.Length && c == ':' && expression[i + 1] == ')')
+                {
+                    commentDepth--;
+                    i += 2;
+                    continue;
+                }
+                i++;
+                continue;
+            }
+
+            if (inSingleQuote)
+            {
+                if (c == '\'') inSingleQuote = false;
+                sb.Append(c);
+            }
+            else if (inDoubleQuote)
+            {
+                if (c == '"') inDoubleQuote = false;
+                sb.Append(c);
+            }
+            else
+            {
+                if (i + 1 < expression.Length && c == '(' && expression[i + 1] == ':')
+                {
+                    commentDepth++;
+                    i += 2;
+                    continue;
+                }
+                if (c == '\'') inSingleQuote = true;
+                else if (c == '"') inDoubleQuote = true;
+                sb.Append(c);
+            }
+            i++;
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Marker attached to text nodes that have been merged into a preceding
+    /// sibling's Text Value Template evaluation.
+    /// </summary>
+    private sealed class TvtConsumedMarker
+    {
+        public static readonly TvtConsumedMarker Instance = new();
+        private TvtConsumedMarker() { }
+    }
+
+    /// <summary>
+    /// Merges a text node that starts a TVT expression with following text nodes
+    /// that are separated only by XML comments or processing instructions.
+    /// </summary>
+    private static string MergeTvtText(XText start, out List<XText> consumed)
+    {
+        var sb = new StringBuilder(start.Value);
+        consumed = new List<XText>();
+        var next = start.NextNode;
+        while (next != null && (next is XText || next is XComment || next is XProcessingInstruction))
+        {
+            if (next is XText t)
+            {
+                sb.Append(t.Value);
+                consumed.Add(t);
+            }
+            next = next.NextNode;
+        }
+        return sb.ToString();
+    }
+
     private void ProcessSequenceText(XText text, XElement parent)
     {
-        if (GetExpandText(parent) && ContainsTvtExpression(text.Value))
+        // A text node that was consumed as the continuation of a preceding TVT
+        // expression (e.g. after an XML comment or PI) must not be processed again.
+        if (text.Annotation<TvtConsumedMarker>() != null)
+            return;
+
+        bool expandText = GetExpandText(parent);
+        bool hasTvtExpression = expandText && ContainsTvtExpression(text.Value);
+        bool hasEscapedBraces = expandText && (text.Value.Contains("{{", StringComparison.Ordinal) || text.Value.Contains("}}", StringComparison.Ordinal));
+
+        if (hasTvtExpression)
+        {
+            // A TVT expression may span XML comments or PIs. Merge this text node
+            // with all following text/comment/PI siblings, evaluate the combined
+            // template, and mark the consumed text nodes so they are skipped.
+            var mergedText = MergeTvtText(text, out var consumedNodes);
+            foreach (var consumed in consumedNodes)
+                consumed.AddAnnotation(TvtConsumedMarker.Instance);
+
+            var tvtResult = EvaluateTvt(mergedText, parent);
+            _lastAddedWasAtomic = false;
+            AddTextNode(tvtResult);
+        }
+        else if (hasEscapedBraces)
         {
             var tvtResult = EvaluateTvt(text.Value, parent);
             _lastAddedWasAtomic = false;
@@ -14052,7 +14267,7 @@ public sealed class TransformEngine
             switch (node)
             {
                 case XText text:
-                    if (GetExpandText(child) && ContainsTvtExpression(text.Value))
+                    if (GetExpandText(child))
                     {
                         results.Add(XdmValue.FromNode(new XDocumentNode(new XText(EvaluateTvt(text.Value, child)))));
                     }

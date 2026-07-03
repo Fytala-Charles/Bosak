@@ -1,6 +1,56 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-03
+**Commit:** `419cd29` + working-tree changes
+**Current focus:** Cleared the W3C XSLT 3.0 `expand-text` / `cvt` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,999
+- **Failed:** 251
+- **Skipped:** 9,350
+- **Pass rate:** 95.2% (baseline from previous full run; full suite not re-run this step)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| expand-text / cvt | 62 | 58 | 0 | 4 | ✅ All runnable tests pass |
+
+## This Session Fixes
+
+1. **TVT expansion in `xsl:function` bodies** — `ProcessFunctionBodyNode` now recognizes `expand-text="yes"` on `xsl:function`, evaluates text-value templates, and strips whitespace-only literal segments so a TVT result can be coerced to a typed return type (e.g. `as="xs:integer"`).
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+2. **`EvaluateTvtParts` helper** — Refactored `EvaluateTvt` into a parts-based implementation so callers can distinguish literal text segments from expression results, enabling whitespace stripping inside function bodies without affecting literal result element output.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **Whitespace-tolerant integer casting** — `VmEngine.TryCast` trims whitespace when casting strings/`xs:untypedAtomic` to `xs:integer` (and related subtypes), matching TVT and coercion behavior.
+   - **File changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+4. **`expand-text` allowed on `xsl:function`** — Static validation whitelists `expand-text` on `xsl:function` and validates its value as a yes/no token.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+## Notes
+
+- Unit-test suite: **911 passed / 0 failed / 0 skipped** across 8 projects.
+- `expand-text` cluster previously 57/62; now 58/62 runnable tests pass (the remaining 4 are intentionally skipped).
+- Full W3C suite baseline remains **4,999/251/9,350** (95.2%).
+
+## Recommended Next Steps
+
+1. Continue clearing remaining failures from the 251-failure baseline, e.g.:
+   - `import` (17 failures, parameter visibility across imports)
+   - `context-item` (21 failures, initial context item / global params)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-03
 **Commit:** `04f348f`
 **Current focus:** Cleared the quick-win conformance clusters `available-system-properties`, `on-empty`, `copy`, and `where-populated`.
 

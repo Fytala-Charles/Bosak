@@ -48,6 +48,7 @@
 //                      | Charles Korthout | 2.15  | 29-06-2026     | Static validation for xsl:variable/param/with-param attributes; forwards-compatible mode |
 //                      | Charles Korthout | 2.16  | 26-06-2026     | Shadow attribute support for version, href, use-when, and xpath-default-namespace        |
 //                      | Charles Korthout | 2.17  | 26-06-2026     | Static context hides XSLT dynamic functions such as fn:current-output-uri               |
+//                      | Charles Korthout | 2.18  | 03-07-2026     | Validate expand-text values (XTSE0020); allow expand-text on xsl:function               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1234,6 +1235,20 @@ public sealed class Stylesheet
                 }
             }
 
+            // XTSE0020: validate expand-text attribute values. The attribute may
+            // appear as no-namespace expand-text on XSLT elements or as
+            // xsl:expand-text on literal result elements; it must not be an AVT.
+            foreach (var attr in elem.Attributes())
+            {
+                if (attr.Name.LocalName != "expand-text")
+                    continue;
+                if (attr.IsNamespaceDeclaration)
+                    continue;
+                var val = attr.Value;
+                if (IsAvtValue(val) || !IsYesNoValue(val))
+                    throw new InvalidOperationException("XTSE0020");
+            }
+
             // XTSE0010 / XTSE0090: xsl:element does not allow a select attribute.
             if (isXsltElement && localName == "element" && elem.Attribute("select") != null)
                 throw new InvalidOperationException("XTSE0090");
@@ -1475,7 +1490,8 @@ public sealed class Stylesheet
                         baseName != "override" &&
                         baseName != "override-extension-function" &&
                         baseName != "new-each-time" &&
-                        baseName != "identity-sensitive")
+                        baseName != "identity-sensitive" &&
+                        baseName != "expand-text")
                     {
                         throw new InvalidOperationException("XTSE0090");
                     }
@@ -1483,7 +1499,7 @@ public sealed class Stylesheet
                     if (!attrName.StartsWith("_"))
                     {
                         if (baseName == "override" || baseName == "override-extension-function" ||
-                            baseName == "identity-sensitive")
+                            baseName == "identity-sensitive" || baseName == "expand-text")
                         {
                             if (!IsYesNoValue(attr.Value))
                                 throw new InvalidOperationException("XTSE0020");

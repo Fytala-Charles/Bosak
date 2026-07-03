@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 2.21  | 26-06-2026     | Integer/decimal division and modulo by zero raise FOAR0001 DynamicException            |
 //                      | Charles Korthout | 2.22  | 30-06-2026     | Cast to xs:float parses via float.TryParse to preserve single-precision lexical form  |
 //                      | Charles Korthout | 2.23  | 02-07-2026     | Root opcode handles parentless nodes and raises XPDY0050; Range atomizes operands       |
+//                      | Charles Korthout | 2.24  | 03-07-2026     | Trim whitespace when casting strings to xs:integer (TVT function results)              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3527,7 +3528,7 @@ public static class VmEngine
                 if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
                     or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Node)
                     return false;
-                if (long.TryParse(value.ToString(), out var lInt))
+                if (long.TryParse(value.ToString().Trim(), out var lInt))
                 {
                     if (!IsIntegerInRange(lInt, normalized))
                         return false;
