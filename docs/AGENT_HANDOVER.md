@@ -1,5 +1,59 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-03
+**Commit:** *(to be recorded after commit)*
+**Current focus:** Cleared the quick-win conformance clusters `available-system-properties`, `on-empty`, `copy`, and `where-populated`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 4,999
+- **Failed:** 251
+- **Skipped:** 9,350
+- **Pass rate:** 95.2% (+35 passed / −35 failed vs. previous 4,964/286/9,350)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| available-system-properties | 29 | 27 | 0 | 2 | ✅ Now returns `xs:QName` values |
+| on-empty | 72 | 72 | 0 | 0 | ✅ All runnable tests pass |
+| copy | 148 | 128 | 0 | 20 | ✅ All runnable tests pass |
+| where-populated | 27 | 4 | 0 | 23 | ✅ Array-valued `xsl:sequence` preserved |
+
+## This Session Fixes
+
+1. **`fn:available-system-properties` returns `xs:QName` values** — `AvailableSystemProperties` now builds `XsQName` items in the XSLT namespace and adds the missing required properties (`supports-streaming`, `supports-dynamic-evaluation`, `xpath-version`, `xsd-version`).
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+2. **Sequence placeholders are not significant content** — `IsSignificantContentItem` ignores synthetic `__xdm_seq__` elements, and `EvaluateSequenceConstructorToItems` expands placeholders before applying `xsl:on-empty`. Empty `xsl:sequence` results no longer block `xsl:on-empty`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`xsl:where-populated` expands sequence placeholders** — `FlushWherePopulatedTemp` expands `__xdm_seq__` placeholders so that array-valued `xsl:sequence` instructions are preserved for the populated check.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **Removed leftover debug output** — Deleted the `__seq_child__` debug print block in `EvaluateSequenceConstructor`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **911 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **4,999/251/9,350** (95.2%).
+- `sequence`, `try`, and `seqtor` clusters remain fully passing.
+
+## Recommended Next Steps
+
+1. Continue with the next target clusters from the remaining 251 failures, e.g.:
+   - `expand-text` / `cvt` (19 failures, TVT-related)
+   - `import` (17 failures, parameter visibility across imports)
+   - `context-item` (21 failures, initial context item / global params)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-02
 **Commit:** `28115da`
 **Current focus:** Cleared the W3C `seqtor` conformance cluster.

@@ -79,6 +79,7 @@
 //                      | Charles Korthout | 5.13  | 28-06-2026     | FORG0002 for relative base/malformed relative URIs; dotted-path resolution             |
 //                      | Charles Korthout | 5.14  | 26-06-2026     | Allow XML 1.1 C0 controls in codepoints-to-string; honor duplicates in json-to-xml     |
 //                      | Charles Korthout | 5.15  | 02-07-2026     | ToDoubleValueStrict parses xs:untypedAtomic; fn:remove and QName-from functions atomize  |
+//                      | Charles Korthout | 5.16  | 02-07-2026     | available-system-properties returns xs:QName values; added missing XSLT system properties |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3767,7 +3768,9 @@ public static class FunctionLibrary
         "xsl:version", "xsl:vendor", "xsl:vendor-url",
         "xsl:product-name", "xsl:product-version",
         "xsl:is-schema-aware", "xsl:supports-serialization",
-        "xsl:supports-backwards-compatibility", "xsl:supports-namespace-axis"
+        "xsl:supports-backwards-compatibility", "xsl:supports-namespace-axis",
+        "xsl:supports-streaming", "xsl:supports-dynamic-evaluation",
+        "xsl:xpath-version", "xsl:xsd-version"
     ];
 
     private static XdmValue SystemProperty(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -3785,6 +3788,10 @@ public static class FunctionLibrary
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
             "xsl:supports-namespace-axis" => "yes",
+            "xsl:supports-streaming" => "no",
+            "xsl:supports-dynamic-evaluation" => "yes",
+            "xsl:xpath-version" => "3.1",
+            "xsl:xsd-version" => "1.1",
             _ => ""
         };
         return XdmValue.FromString(value);
@@ -3811,7 +3818,10 @@ public static class FunctionLibrary
     {
         var items = new List<XdmValue>();
         foreach (var prop in SystemProperties)
-            items.Add(XdmValue.FromString(prop));
+        {
+            var local = prop.StartsWith("xsl:") ? prop[4..] : prop;
+            items.Add(XdmValue.FromQName(new XsQName(local, Namespaces.Xsl, "xsl")));
+        }
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
 

@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 2 July 2026
+> **Last updated:** 3 July 2026
 > **Bosak baseline:** 911 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,964 passed / 286 failed / 9,350 skipped (~94.6%)
+> **XSLT baseline:** 4,999 passed / 251 failed / 9,350 skipped (~95.2%)
 
 ---
 
@@ -20,6 +20,12 @@
   - Namespace prefix `xs` is now declared when evaluating Text Value Templates.
   - Mixed atomics and text nodes produced by `xsl:function` are serialized correctly.
   - Full W3C suite: **4,964 passed / 286 failed / 9,350 skipped** (~94.6%).
+
+- **2026-07-03** — Cleared the quick-win conformance clusters `available-system-properties`, `on-empty`, `copy`, and `where-populated`.
+  - `fn:available-system-properties` now returns `xs:QName` values and includes all required XSLT system properties.
+  - Sequence-constructor placeholders no longer count as significant content, so `xsl:on-empty` fires correctly for empty `xsl:sequence` results.
+  - `xsl:where-populated` now expands sequence placeholders produced by `xsl:sequence`, preserving arrays and other sequence values.
+  - Full W3C suite: **4,999 passed / 251 failed / 9,350 skipped** (~95.2%).
 
 - **2026-06-26** — Cleared the W3C `as`, `xml-to-json`, and `json-to-xml` conformance clusters.
   - `xs:float` serialization now uses the shortest round-trip `"R"` format in the scientific range, fixing `as-0802` / `as-0802b`.

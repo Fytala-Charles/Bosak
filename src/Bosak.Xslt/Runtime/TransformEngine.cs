@@ -138,6 +138,8 @@
 //                      | Charles Korthout | 5.67  | 30-06-2026     | Compile template match patterns for function entry points; fixes apply-templates in functions |
 //                      | Charles Korthout | 5.68  | 30-06-2026     | Built-in atomic rule respects on-no-match; default xsl:mode is text-only-copy; fixes match-241 |
 //                      | Charles Korthout | 5.69  | 02-07-2026     | Sequence-constructor whitespace, empty atomics, xsl:document in simple content; clears seqtor |
+//                      | Charles Korthout | 5.70  | 02-07-2026     | Sequence placeholders are not significant content; fixes on-empty cluster regressions       |
+//                      | Charles Korthout | 5.71  | 02-07-2026     | Expand sequence placeholders in xsl:where-populated temp; remove leftover debug output    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -6133,11 +6135,22 @@ public sealed class TransformEngine
             result.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
         }
 
-        // Child nodes are detached and wrapped as XDM nodes.
+        // Child nodes are detached and wrapped as XDM nodes. Synthetic sequence
+        // placeholders (created by xsl:sequence in an accumulator context) are
+        // expanded back to their constituent items so that arrays and other
+        // sequence values are preserved for the populated check.
         foreach (var node in temp.Nodes().ToList())
         {
             node.Remove();
-            result.Add(XdmValue.FromNode(new XDocumentNode(node)));
+            if (node is XElement placeholder && placeholder.Name.LocalName == "__xdm_seq__" &&
+                placeholder.Annotation<SequencePlaceholderItems>() is { } holder)
+            {
+                result.AddRange(holder.Items);
+            }
+            else
+            {
+                result.Add(XdmValue.FromNode(new XDocumentNode(node)));
+            }
         }
     }
 
@@ -11129,19 +11142,6 @@ public sealed class TransformEngine
             ExecuteSequenceConstructorDirect(parent, contextItem, wrapper);
 
             var nodes = wrapper.Nodes().ToList();
-            if (parent.Name.LocalName == "__seq_child__")
-            {
-                Console.WriteLine($"DEBUG wrapper nodes ({nodes.Count}):");
-                foreach (var n in nodes)
-                {
-                    if (n is XElement xe)
-                        Console.WriteLine($"  elem {xe.Name.LocalName} placeholder={xe.Annotation<SequencePlaceholderItems>() != null}");
-                    else if (n is XText xt)
-                        Console.WriteLine($"  text '{xt.Value}'");
-                    else
-                        Console.WriteLine($"  {n.NodeType}");
-                }
-            }
             var attributes = wrapper.Attributes().ToList();
 
             // Include items collected by xsl:sequence into the accumulator.
@@ -11472,7 +11472,8 @@ public sealed class TransformEngine
                 case XdmNodeKind.Attribute:
                 case XdmNodeKind.Namespace:
                 case XdmNodeKind.Element:
-                    return true;
+                    // Synthetic sequence placeholders are not content.
+                    return item.NodeValue.LocalName != "__xdm_seq__" || item.NodeValue.NamespaceUri != "";
                 case XdmNodeKind.Document:
                     return item.NodeValue.Axis(XdmAxis.Child).GetEnumerator().MoveNext();
                 default:
@@ -11615,7 +11616,18 @@ public sealed class TransformEngine
                     if (!existingNodes.Contains(node))
                     {
                         node.Remove();
-                        resultItems.Add(XdmValue.FromNode(new XDocumentNode(node)));
+                        if (node is XElement placeholder && placeholder.Name.LocalName == "__xdm_seq__")
+                        {
+                            if (placeholder.Annotation<SequencePlaceholderItems>() is { } holder)
+                            {
+                                foreach (var phItem in holder.Items)
+                                    resultItems.Add(phItem);
+                            }
+                        }
+                        else
+                        {
+                            resultItems.Add(XdmValue.FromNode(new XDocumentNode(node)));
+                        }
                     }
                 }
                 for (int i = accumulatorCountBefore; i < localAccumulator.Count; i++)
@@ -11625,13 +11637,18 @@ public sealed class TransformEngine
             }
 
             bool hasContent = resultItems.Any(IsSignificantContentItem);
+            bool anyOnEmptyFired = false;
 
             for (int i = markers.Count - 1; i >= 0; i--)
             {
                 var (instruction, position, markerVars) = markers[i];
-                bool shouldEvaluate = instruction.Name.LocalName == "on-empty" ? !hasContent : hasContent;
+                bool isOnEmpty = instruction.Name.LocalName == "on-empty";
+                bool shouldEvaluate = isOnEmpty ? !hasContent : hasContent;
                 if (!shouldEvaluate)
                     continue;
+
+                if (isOnEmpty)
+                    anyOnEmptyFired = true;
 
                 var currentVars = _context.SnapshotVariables();
                 try
@@ -11645,6 +11662,32 @@ public sealed class TransformEngine
                     _context.RestoreVariables(currentVars);
                 }
             }
+
+            // Expand any remaining sequence placeholders into their items. If an
+            // xsl:on-empty fired, the sequence constructor was empty, so discard
+            // non-significant items (empty placeholders / zero-length text) and
+            // keep only the on-empty contributions and any real content.
+            var expanded = new List<XdmValue>(resultItems.Count);
+            foreach (var item in resultItems)
+            {
+                if (item.IsNode && item.NodeValue != null &&
+                    item.NodeValue.NodeKind == XdmNodeKind.Element &&
+                    item.NodeValue.LocalName == "__xdm_seq__")
+                {
+                    if (item.NodeValue is XDocumentNode xdn && xdn.UnderlyingObject is XElement placeholder &&
+                        placeholder.Annotation<SequencePlaceholderItems>() is { } holder)
+                    {
+                        expanded.AddRange(holder.Items);
+                    }
+                }
+                else
+                {
+                    expanded.Add(item);
+                }
+            }
+            resultItems = anyOnEmptyFired
+                ? expanded.Where(IsSignificantContentItem).ToList()
+                : expanded;
         }
         finally
         {
