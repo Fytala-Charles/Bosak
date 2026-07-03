@@ -8,7 +8,7 @@
 
 ## Commit
 
-`419cd29` + working-tree changes — Cleared the W3C XSLT 3.0 `expand-text` / `cvt` conformance cluster.
+`7b1731f` — Cleared the W3C XSLT 3.0 `expand-text` / `cvt` conformance cluster.
 
 ## What Was Built
 
