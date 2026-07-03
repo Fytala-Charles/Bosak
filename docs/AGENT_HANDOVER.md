@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-03
-**Commit:** `7b1731f`
+**Commit:** `b34baed`
 **Current focus:** Cleared the W3C XSLT 3.0 `expand-text` / `cvt` conformance cluster.
 
 ---
