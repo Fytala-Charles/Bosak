@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-03
-**Commit:** *(to be recorded after commit)*
+**Commit:** `04f348f`
 **Current focus:** Cleared the quick-win conformance clusters `available-system-properties`, `on-empty`, `copy`, and `where-populated`.
 
 ---
