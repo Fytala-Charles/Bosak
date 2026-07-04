@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-04
-**Commit:** `76da6a4` (working tree contains uncommitted context-item changes)
+**Commit:** `4ebe44b`
 **Current focus:** Cleared the W3C XSLT 3.0 `context-item` conformance cluster.
 
 ---
