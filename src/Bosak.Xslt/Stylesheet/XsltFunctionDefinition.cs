@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 13-06-2026     | EQName support and reserved namespace validation for xsl:function/@name                |
 //                      | Charles Korthout | 0.3   | 24-06-2026     | Evaluate _name AVTs to expanded QNames at parse time                                    |
 //                      | Charles Korthout | 0.4   | 29-06-2026     | _name AVTs now use the stylesheet static context (external static parameters)         |
+//                      | Charles Korthout | 0.5   | 26-06-2026     | Reject xsl:context-item inside xsl:function                                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
@@ -143,6 +144,10 @@ public sealed class XsltFunctionDefinition
             if (!string.IsNullOrEmpty(paramName))
                 paramNames.Add(paramName);
         }
+
+        // xsl:context-item is not permitted inside xsl:function.
+        if (element.Elements(XName.Get("context-item", Stylesheet.XslNamespace)).Any())
+            throw new InvalidOperationException("XTSE0010: xsl:context-item is not permitted inside xsl:function.");
 
         var returnType = element.Attribute("as")?.Value;
         var visibility = element.Attribute("visibility")?.Value?.ToLowerInvariant() switch

@@ -143,6 +143,8 @@
 //                      | Charles Korthout | 5.72  | 03-07-2026     | TVT: xsl:expand-text inheritance, XPath comments, merged text across comments/PIs        |
 //                      | Charles Korthout | 5.73  | 03-07-2026     | TVT expansion and whitespace stripping in xsl:function bodies; fixes cvt-029/030         |
 //                      | Charles Korthout | 5.74  | 03-07-2026     | Document-order global/template flattening; apply-imports context; clears import cluster |
+//                      | Charles Korthout | 5.75  | 26-06-2026     | Enforce xsl:context-item use and @as type at template invocation                       |
+//                      | Charles Korthout | 5.76  | 26-06-2026     | Strip whitespace before xsl:context-item; preserve atomic spacing across templates       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3394,7 +3396,6 @@ public sealed class TransformEngine
     {
         var asType = rule.Element.Attribute("as")?.Value;
         var savedContainer = _currentContainer;
-        var savedLastAtomic = _lastAddedWasAtomic;
         var savedAccumulator = _sequenceAccumulator;
         var savedPreserveAtomics = _preserveAtomicSequenceItems;
         var savedPreserveDocuments = _preserveDocumentNodes;
@@ -3430,16 +3431,30 @@ public sealed class TransformEngine
         _currentNamedMergeGroups = null;
         _currentMergeSourceNames = null;
 
-        // Handle xsl:context-item use="absent" in named templates
-        var contextItemAbsent = rule.Element.Elements()
-            .Any(e => e.Name.LocalName == "context-item"
-                   && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
-                   && e.Attribute("use")?.Value == "absent");
-
-        if (contextItemAbsent)
+        // Apply the xsl:context-item declaration, if present.
+        var contextItemDecl = rule.ContextItem;
+        if (contextItemDecl != null && contextItemDecl.Use == Stylesheet.ContextItemUse.Absent)
         {
             _context.WithFocus(XdmValue.Undefined, position, last);
             _context.WithCurrentItem(XdmValue.Undefined);
+        }
+        else if (contextItemDecl != null)
+        {
+            if (contextItem.IsUndefined)
+            {
+                if (contextItemDecl.Use == Stylesheet.ContextItemUse.Required)
+                    throw new InvalidOperationException("XTTE3090: A required context item was not supplied for the template.");
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(contextItemDecl.AsType)
+                    && !VmEngine.ValueMatchesType(contextItem, contextItemDecl.AsType))
+                    throw new InvalidOperationException($"XTTE0590: Supplied context item does not match required type '{contextItemDecl.AsType}'.");
+            }
+
+            // The focus reflects the (possibly absent) supplied context item.
+            _context.WithFocus(contextItem, position, last);
+            _context.WithCurrentItem(contextItem);
         }
         else
         {
@@ -3473,9 +3488,12 @@ public sealed class TransformEngine
 
         try
         {
-            // Process xsl:param declarations first (must be first children per spec)
+            // Process xsl:context-item (already validated) and xsl:param declarations first.
             foreach (var child in rule.Element.Elements())
             {
+                if (child.Name.LocalName == "context-item" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+                    continue; // validated and enforced above
+
                 if (child.Name.LocalName == "param" && child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
                 {
                     var paramName = child.Attribute("name")?.Value;
@@ -3545,6 +3563,8 @@ public sealed class TransformEngine
                     case XText text:
                         ProcessSequenceText(text, rule.Element);
                         break;
+                    case XElement elem when elem.Name.LocalName == "context-item" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                        continue; // xsl:context-item is a declaration, not part of the sequence constructor
                     case XElement elem when elem.Name.LocalName == "param" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                         continue; // Already processed above
                     case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
@@ -3603,7 +3623,6 @@ public sealed class TransformEngine
                 }
 
                 _currentContainer = savedContainer;
-                _lastAddedWasAtomic = savedLastAtomic;
                 _sequenceAccumulator = savedAccumulator;
                 _preserveAtomicSequenceItems = savedPreserveAtomics;
                 _preserveDocumentNodes = savedPreserveDocuments;
@@ -3629,7 +3648,6 @@ public sealed class TransformEngine
             else
             {
                 _currentContainer = savedContainer;
-                _lastAddedWasAtomic = savedLastAtomic;
                 _sequenceAccumulator = savedAccumulator;
                 _preserveAtomicSequenceItems = savedPreserveAtomics;
                 _preserveDocumentNodes = savedPreserveDocuments;
@@ -12815,6 +12833,25 @@ public sealed class TransformEngine
         // expression (e.g. after an XML comment or PI) must not be processed again.
         if (text.Annotation<TvtConsumedMarker>() != null)
             return;
+
+        // XSLT 3.0 §4.3: whitespace text nodes immediately preceding an
+        // xsl:param, xsl:sort, or xsl:context-item element are stripped from the
+        // stylesheet regardless of any xml:space="preserve" attribute.
+        if (IsWhitespaceOnly(text.Value)
+            && parent.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+        {
+            var next = text.NextNode;
+            while (next is XComment || next is XProcessingInstruction)
+                next = next.NextNode;
+            if (next is XElement nextElem
+                && nextElem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                && (nextElem.Name.LocalName == "param"
+                    || nextElem.Name.LocalName == "sort"
+                    || nextElem.Name.LocalName == "context-item"))
+            {
+                return;
+            }
+        }
 
         bool expandText = GetExpandText(parent);
         bool hasTvtExpression = expandText && ContainsTvtExpression(text.Value);

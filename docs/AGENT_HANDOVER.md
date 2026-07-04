@@ -1,5 +1,58 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-04
+**Commit:** `76da6a4` (working tree contains uncommitted context-item changes)
+**Current focus:** Cleared the W3C XSLT 3.0 `context-item` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,048
+- **Failed:** 202
+- **Skipped:** 9,350
+- **Pass rate:** 96.2% (+21 passed / −21 failed vs. previous 5,027/223)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| context-item | 31 | 31 | 0 | 0 | ✅ `xsl:context-item` parsing, validation, and runtime enforcement |
+
+## This Session Fixes
+
+1. **`xsl:context-item` parsing and static validation** — New `ContextItemDeclaration` parses the optional `xsl:context-item` child of `xsl:template`, validates `@use` (`required`/`optional`/`absent`), rejects occurrence indicators and unknown types in `@as`, enforces the required first-child position, and reports `XTSE0010`/`XTSE0020`/`XTSE0090`/`XTTE0590` as appropriate.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/ContextItemDeclaration.cs` (new), `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
+
+2. **Runtime context-item enforcement** — `TransformEngine.ExecuteTemplate` now honors the declared `use` value: `absent` clears the focus; `required` raises `XTTE3090` when no item is supplied; `@as` is checked with `VmEngine.ValueMatchesType` and raises `XTTE0590` on mismatch. `xsl:context-item` is skipped during sequence-constructor evaluation so it no longer breaks `xsl:param` processing.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+3. **`xsl:context-item` rejected inside `xsl:function`** — `XsltFunctionDefinition.FromElement` now reports `XTSE0010` when `xsl:context-item` appears inside `xsl:function`.
+   - **File changed**: `src/Bosak.Xslt/Stylesheet/XsltFunctionDefinition.cs`.
+
+4. **Stylesheet whitespace stripping before declarations** — `ProcessSequenceText` strips whitespace text nodes immediately preceding `xsl:param`, `xsl:sort`, or `xsl:context-item`, matching XSLT 3.0 §4.3 regardless of `xml:space="preserve"`. This fixes `context-item-019`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+5. **Atomic spacing across template boundaries** — `ExecuteTemplate` no longer restores `_lastAddedWasAtomic` to its previous value, so consecutive atomic results from `xsl:call-template`/`xsl:apply-templates` are separated by a space in complex content. This fixes `context-item-001` and `context-item-011`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **911 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,048/202/9,350** (96.2%).
+- `square-array-201` remains a pre-existing failure (unrelated `xsl:source-document` / array path issue).
+
+## Recommended Next Steps
+
+1. Continue clearing remaining failures from the 202-failure baseline, e.g.:
+   - `namespace` (22 failures)
+   - `maps` (36 failures)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-03
 **Commit:** `c813a2a`
 **Current focus:** Cleared the W3C XSLT 3.0 `import` conformance cluster and `apply-imports`.

@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 25-06-2026     | Trim xsl:template/@name values to normalize whitespace/EQName forms                    |
 //                      | Charles Korthout | 1.1   | 26-06-2026     | Default priority for match="/" is -0.5 per XSLT 2.0/3.0 spec                            |
 //                      | Charles Korthout | 1.2   | 03-07-2026     | ImportPrecedence now reads from Stylesheet for dynamic precedence assignment            |
+//                      | Charles Korthout | 1.3   | 26-06-2026     | Added xsl:context-item parsing and static validation                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -65,7 +66,10 @@ public sealed class TemplateRule
     /// <summary>The parent stylesheet.</summary>
     public Stylesheet Stylesheet { get; }
 
-    private TemplateRule(XElement element, string? match, string? name, IReadOnlyList<string> modes, double priority, Stylesheet stylesheet)
+    /// <summary>The optional xsl:context-item declaration for this template.</summary>
+    public ContextItemDeclaration? ContextItem { get; }
+
+    private TemplateRule(XElement element, string? match, string? name, IReadOnlyList<string> modes, double priority, Stylesheet stylesheet, ContextItemDeclaration? contextItem = null)
     {
         Element = element;
         Match = match;
@@ -74,6 +78,7 @@ public sealed class TemplateRule
         MatchesAllModes = modes.Contains("#all");
         Priority = priority;
         Stylesheet = stylesheet;
+        ContextItem = contextItem;
     }
 
     /// <summary>
@@ -83,6 +88,9 @@ public sealed class TemplateRule
     /// </summary>
     public static IReadOnlyList<TemplateRule> FromElement(XElement element, Stylesheet stylesheet)
     {
+        var contextItem = ContextItemDeclaration.FromTemplate(element);
+        ValidateContextItemAgainstMatch(element, contextItem);
+
         var match = element.Attribute("match")?.Value;
         if (string.IsNullOrEmpty(match))
             match = element.Attribute("_match")?.Value;
@@ -100,7 +108,7 @@ public sealed class TemplateRule
         if (string.IsNullOrEmpty(match))
         {
             // Named template only
-            return new[] { new TemplateRule(element, match, name, modes, 0.5, stylesheet) };
+            return new[] { new TemplateRule(element, match, name, modes, 0.5, stylesheet, contextItem) };
         }
 
         // When an explicit priority is given, the entire union is a single template rule.
@@ -108,7 +116,7 @@ public sealed class TemplateRule
         // xsl:next-match can continue to other branches with different priorities.
         if (hasExplicitPriority)
         {
-            return new[] { new TemplateRule(element, match, name, modes, explicitPriority, stylesheet) };
+            return new[] { new TemplateRule(element, match, name, modes, explicitPriority, stylesheet, contextItem) };
         }
 
         var trimmed = StripXPathComments(match).Trim();
@@ -128,7 +136,7 @@ public sealed class TemplateRule
         if (branches.Length <= 1)
         {
             double priority = ComputeDefaultPriority(match);
-            return new[] { new TemplateRule(element, match, name, modes, priority, stylesheet) };
+            return new[] { new TemplateRule(element, match, name, modes, priority, stylesheet, contextItem) };
         }
 
         // Create a separate TemplateRule for each branch of the union
@@ -136,9 +144,50 @@ public sealed class TemplateRule
         foreach (var branch in branches)
         {
             double priority = ComputeSinglePatternPriority(branch);
-            rules.Add(new TemplateRule(element, branch, name, modes, priority, stylesheet));
+            rules.Add(new TemplateRule(element, branch, name, modes, priority, stylesheet, contextItem));
         }
         return rules;
+    }
+
+    /// <summary>
+    /// Detects the static type error described in XSLT 3.0 §10.1.1: if the required
+    /// context item type is an atomic/item type that cannot match any node selected
+    /// by the match pattern, the processor may (and does) report XTTE0590 at compile time.
+    /// </summary>
+    private static void ValidateContextItemAgainstMatch(XElement element, ContextItemDeclaration? contextItem)
+    {
+        if (contextItem == null || string.IsNullOrEmpty(contextItem.AsType))
+            return;
+
+        var match = element.Attribute("match")?.Value;
+        if (string.IsNullOrEmpty(match))
+            return;
+
+        var asType = contextItem.AsType.Trim().ToLowerInvariant();
+        if (asType.StartsWith("xs:"))
+            asType = asType[3..];
+        else if (asType.StartsWith("xsd:"))
+            asType = asType[4..];
+
+        // Node tests, item(), and function/map/array types can potentially match nodes/functions.
+        if (asType is "item()" or "item" or "node()" or "node" or "text()" or "text"
+            or "comment()" or "comment" or "processing-instruction()" or "processing-instruction"
+            or "namespace-node()" or "namespace-node" or "element" or "element()" or "attribute" or "attribute()"
+            or "document-node" or "document-node()")
+            return;
+
+        if (asType.Contains('('))
+        {
+            // element(...), attribute(...), document-node(...), schema-*, function(*), map(*), array(*)
+            if (asType.StartsWith("element(") || asType.StartsWith("attribute(")
+                || asType.StartsWith("document-node(") || asType.StartsWith("schema-element(")
+                || asType.StartsWith("schema-attribute(") || asType.StartsWith("function(")
+                || asType.StartsWith("map(") || asType.StartsWith("array("))
+                return;
+        }
+
+        // Any other type is atomic; no node can satisfy an atomic required type.
+        throw new InvalidOperationException($"XTTE0590: Required context item type '{contextItem.AsType}' is incompatible with match pattern '{match}'.");
     }
 
     private static IReadOnlyList<string> ParseModes(string? modeAttr, XElement element, string stylesheetDefaultMode)
