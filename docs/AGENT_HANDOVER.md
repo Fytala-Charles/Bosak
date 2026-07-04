@@ -41,13 +41,19 @@
 
 - Unit-test suite: **911 passed / 0 failed / 0 skipped** across 8 projects.
 - Full W3C suite: **5,048/202/9,350** (96.2%).
+- `namespace` and `maps` clusters are now fully passing (verified after the context-item changes).
 - `square-array-201` remains a pre-existing failure (unrelated `xsl:source-document` / array path issue).
 
 ## Recommended Next Steps
 
-1. Continue clearing remaining failures from the 202-failure baseline, e.g.:
-   - `namespace` (22 failures)
-   - `maps` (36 failures)
+1. Continue clearing remaining failures from the 202-failure baseline. Largest remaining clusters:
+   - `iterate` (25 failures)
+   - `collations` (25 failures)
+   - `xml-version` (23 failures)
+   - `tunnel` (22 failures)
+   - `normalize-unicode` (14 failures)
+   - `version` / `backwards` (13 failures each)
+   - `avt` (10 failures)
 
 ---
 

@@ -35,10 +35,17 @@
 
 | Cluster | Failures | Notes |
 |---------|----------|-------|
-| `namespace` | 22 | deferred |
-| `maps` | 36 | deferred |
+| `iterate` | 25 | deferred |
+| `collations` | 25 | deferred |
+| `xml-version` | 23 | deferred |
+| `tunnel` | 22 | deferred |
+| `normalize-unicode` | 14 | deferred |
+| `version` | 13 | deferred |
+| `backwards` | 13 | deferred |
+| `avt` | 10 | deferred |
 
 ## Next Recommended Work
 
-1. Commit and push the context-item changes to `origin/main`.
-2. Tackle the `namespace` or `maps` clusters, or pick off additional quick wins from the 202-failure baseline.
+1. Tackle the largest remaining clusters, or pick off quick wins from the 202-failure baseline:
+   - `iterate` / `collations` / `xml-version` / `tunnel` are the biggest remaining blocks.
+   - `avt` (10 failures) may be a smaller quick win.
