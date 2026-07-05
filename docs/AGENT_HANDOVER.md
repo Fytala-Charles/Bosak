@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-05
-**Commit:** `9bafea0`
+**Commit:** `24cbb68`
 **Current focus:** Cleared the W3C XSLT 3.0 `avt` and `tunnel` conformance clusters; fixed `call-template` regression tests.
 
 ---
