@@ -145,6 +145,8 @@
 //                      | Charles Korthout | 5.74  | 03-07-2026     | Document-order global/template flattening; apply-imports context; clears import cluster |
 //                      | Charles Korthout | 5.75  | 26-06-2026     | Enforce xsl:context-item use and @as type at template invocation                       |
 //                      | Charles Korthout | 5.76  | 26-06-2026     | Strip whitespace before xsl:context-item; preserve atomic spacing across templates       |
+//                      | Charles Korthout | 5.77  | 26-06-2026     | Implemented xsl:iterate, xsl:break, and xsl:next-iteration in result tree              |
+//                      | Charles Korthout | 5.78  | 26-06-2026     | xsl:next-iteration with-param conversion to xsl:param @as; fixes iterate-042/027       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2542,6 +2544,8 @@ public sealed class TransformEngine
                         catch (Exception ex)
                         {
                             RestoreTryScope(tryScope);
+                            if (ex is IterateControlException)
+                                throw;
                             if (ex.Data.Contains("Bosak.GlobalVariableError"))
                                 throw;
                             if (instruction.Attribute("rollback-output")?.Value == "no" && results.Count > outputBefore)
@@ -4163,6 +4167,9 @@ public sealed class TransformEngine
                     }
                     catch (Exception ex)
                     {
+                        if (ex is IterateControlException)
+                            throw;
+
                         // A dynamic error evaluating the message content is recoverable when
                         // terminate="no" (XSLT 3.0). Continue without emitting a message.
                         if (!terminate)
@@ -5169,6 +5176,10 @@ public sealed class TransformEngine
                     var catchElements = instruction.Elements(XName.Get("catch", Stylesheet.Stylesheet.XslNamespace)).ToList();
                     var tryScope = SnapshotTryScope();
                     var outputBefore = _currentContainer?.Nodes().Count() ?? 0;
+                    var attrsBefore = (_currentContainer as XElement)?.Attributes().Count() ?? 0;
+                    var savedLastNode = _currentContainer?.LastNode;
+                    var savedLastAttr = (_currentContainer as XElement)?.LastAttribute;
+                    var lastAtomicBefore = _lastAddedWasAtomic;
                     try
                     {
                         var select = instruction.Attribute("select")?.Value;
@@ -5202,13 +5213,20 @@ public sealed class TransformEngine
                     catch (Exception ex)
                     {
                         RestoreTryScope(tryScope);
+                        if (ex is IterateControlException)
+                            throw;
                         if (ex.Data.Contains("Bosak.GlobalVariableError"))
                             throw;
-                        if (instruction.Attribute("rollback-output")?.Value == "no" && (_currentContainer?.Nodes().Count() ?? 0) > outputBefore)
+                        var currentNodeCount = _currentContainer?.Nodes().Count() ?? 0;
+                        var currentAttrCount = (_currentContainer as XElement)?.Attributes().Count() ?? 0;
+                        if (instruction.Attribute("rollback-output")?.Value == "no" && (currentNodeCount > outputBefore || currentAttrCount > attrsBefore))
                             throw new InvalidOperationException("XTDE3530: Recovery not possible because output has already been written.");
                         var catchElem = FindMatchingCatch(catchElements, ex);
                         if (catchElem == null)
                             throw;
+
+                        RollbackOutputToNode(savedLastNode, savedLastAttr);
+                        _lastAddedWasAtomic = lastAtomicBefore;
 
                         var previous = BindCatchErrorVariables(ex, catchElem, instruction);
                         try
@@ -5256,7 +5274,16 @@ public sealed class TransformEngine
                 }
 
             case "iterate":
-                throw new InvalidOperationException("XTDE1450: xsl:iterate is not supported.");
+                ExecuteXslIterate(instruction, contextItem);
+                break;
+
+            case "break":
+                ExecuteXslBreak(instruction);
+                break;
+
+            case "next-iteration":
+                ExecuteXslNextIteration(instruction);
+                break;
 
             case "perform-sort":
                 {
@@ -9012,6 +9039,26 @@ public sealed class TransformEngine
             _functionLocalLazyVariables.Clear();
             foreach (var pair in snapshot.FunctionLocals)
                 _functionLocalLazyVariables[pair.Key] = pair.Value;
+        }
+    }
+
+    /// <summary>
+    /// Removes any nodes or attributes added to the current output container after the
+    /// snapshot nodes were recorded. Used by <c>xsl:try</c> to roll back output written
+    /// in the try block before evaluating <c>xsl:catch</c>.
+    /// </summary>
+    private void RollbackOutputToNode(XNode? lastNodeBefore, XAttribute? lastAttributeBefore)
+    {
+        if (_currentContainer == null)
+            return;
+
+        while (_currentContainer.LastNode != lastNodeBefore && _currentContainer.LastNode != null)
+            _currentContainer.LastNode.Remove();
+
+        if (_currentContainer is XElement element)
+        {
+            while (element.LastAttribute != lastAttributeBefore && element.LastAttribute != null)
+                element.LastAttribute.Remove();
         }
     }
 
@@ -14553,6 +14600,397 @@ public sealed class TransformEngine
         /// Used to raise XTDE3362 when one of them is requested.
         /// </summary>
         public HashSet<string> InapplicableNames { get; } = new();
+    }
+
+    /// <summary>
+    /// Base class for control exceptions used to implement <c>xsl:break</c> and
+    /// <c>xsl:next-iteration</c> inside <c>xsl:iterate</c>. These must not be
+    /// caught by <c>xsl:try</c> or <c>xsl:message</c>.
+    /// </summary>
+    private abstract class IterateControlException : Exception
+    {
+        protected IterateControlException(string message)
+            : base(message)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Control exception raised by <c>xsl:break</c> to terminate the innermost
+    /// <c>xsl:iterate</c> loop.
+    /// </summary>
+    private sealed class BreakSignal : IterateControlException
+    {
+        /// <summary>The value produced by the <c>xsl:break</c> instruction.</summary>
+        public XdmValue? Value { get; }
+
+        public BreakSignal(XdmValue? value)
+            : base("xsl:break")
+        {
+            Value = value;
+        }
+    }
+
+    /// <summary>
+    /// Control exception raised by <c>xsl:next-iteration</c> to advance the
+    /// innermost <c>xsl:iterate</c> loop with updated parameter values.
+    /// </summary>
+    private sealed class NextIterationSignal : IterateControlException
+    {
+        /// <summary>New values for the iteration parameters.</summary>
+        public Dictionary<(string LocalName, string NamespaceUri), XdmValue> NewParamValues { get; }
+
+        public NextIterationSignal(Dictionary<(string LocalName, string NamespaceUri), XdmValue> newParamValues)
+            : base("xsl:next-iteration")
+        {
+            NewParamValues = newParamValues;
+        }
+    }
+
+    /// <summary>
+    /// Executes an <c>xsl:iterate</c> instruction in the result-tree path.
+    /// </summary>
+    private void ExecuteXslIterate(XElement instruction, XdmValue contextItem)
+    {
+        var select = instruction.Attribute("select")?.Value;
+        if (string.IsNullOrEmpty(select))
+            throw new InvalidOperationException("XTSE0010: xsl:iterate must have a select attribute.");
+
+        var items = EnumerateItems(CompileXPath(select, instruction).Evaluate(_context)).ToList();
+        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+
+        ValidateIterateDescendants(instruction);
+
+        // Validate ordering of xsl:param and xsl:on-completion, and detect xsl:param after body instructions.
+        bool bodyStarted = false;
+        foreach (var child in instruction.Elements())
+        {
+            if (child.Name.NamespaceName != xslNs)
+            {
+                bodyStarted = true;
+                continue;
+            }
+
+            var localName = child.Name.LocalName;
+            if (localName == "param")
+            {
+                if (bodyStarted)
+                    throw new InvalidOperationException("XTSE0010: xsl:param must appear first in xsl:iterate.");
+            }
+            else if (localName == "on-completion")
+            {
+                if (bodyStarted)
+                    throw new InvalidOperationException("XTSE0010: xsl:on-completion must appear before the body of xsl:iterate.");
+            }
+            else
+            {
+                bodyStarted = true;
+            }
+        }
+
+        var paramValues = new Dictionary<(string LocalName, string NamespaceUri), XdmValue>();
+        foreach (var p in instruction.Elements(XName.Get("param", xslNs)))
+        {
+            var pname = p.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(pname))
+                continue;
+
+            var (plocal, pns) = ExpandVariableName(p, pname);
+            var pselect = p.Attribute("select")?.Value;
+            var pas = p.Attribute("as")?.Value;
+            XdmValue pvalue;
+            if (!string.IsNullOrEmpty(pselect))
+            {
+                pvalue = CompileXPath(pselect, p).Evaluate(_context);
+            }
+            else
+            {
+                var savedOutputUri = _context.CurrentOutputUri;
+                _context.CurrentOutputUri = null;
+                try
+                {
+                    pvalue = EvaluateSequenceConstructor(p, _context.ContextItem, wrapInDocumentNode: string.IsNullOrEmpty(pas));
+                }
+                finally
+                {
+                    _context.CurrentOutputUri = savedOutputUri;
+                }
+            }
+            pvalue = ConvertVariableValue(pvalue, pas, isParam: true);
+
+            var paramKey = (plocal, pns);
+            if (paramValues.ContainsKey(paramKey))
+                throw new InvalidOperationException("XTSE0580: duplicate xsl:param name in xsl:iterate.");
+            paramValues[paramKey] = pvalue;
+        }
+
+        XdmValue? completionResult = null;
+        bool broken = false;
+        var savedFocus = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        var savedCurrent = _context.CurrentItem;
+        var savedVariables = _context.SnapshotVariables();
+        try
+        {
+            int total = items.Count;
+            for (int i = 0; i < total; i++)
+            {
+                var item = items[i];
+                _context.WithFocus(item, i + 1, total);
+                _context.WithCurrentItem(item);
+                foreach (var kv in paramValues)
+                    _context.WithVariable(kv.Key.LocalName, kv.Value, kv.Key.NamespaceUri);
+
+                var iterationVariables = _context.SnapshotVariables();
+                try
+                {
+                    foreach (var child in instruction.Elements())
+                    {
+                        if (child.Name.LocalName == "param" || child.Name.LocalName == "on-completion")
+                            continue;
+                        if (child.Name.NamespaceName == xslNs)
+                            ExecuteXsltInstruction(child, item);
+                        else
+                            CopyLiteralElement(child);
+                    }
+                }
+                catch (NextIterationSignal next)
+                {
+                    foreach (var kv in next.NewParamValues)
+                        paramValues[kv.Key] = kv.Value;
+                    continue;
+                }
+                catch (BreakSignal br)
+                {
+                    if (br.Value.HasValue && !br.Value.Value.IsUndefined)
+                        CopyToResult(br.Value.Value);
+                    broken = true;
+                    break;
+                }
+                finally
+                {
+                    _context.RestoreVariables(iterationVariables);
+                }
+            }
+
+            if (!broken)
+            {
+                // xsl:on-completion is evaluated with an absent focus and the final parameter values.
+                _context.WithFocus(XdmValue.Undefined, 0, 0);
+                foreach (var kv in paramValues)
+                    _context.WithVariable(kv.Key.LocalName, kv.Value, kv.Key.NamespaceUri);
+
+                var onCompletion = instruction.Element(XName.Get("on-completion", xslNs));
+                if (onCompletion != null)
+                {
+                    var ocSelect = onCompletion.Attribute("select")?.Value;
+                    var ocHasContent = onCompletion.Elements().Any();
+                    if (!string.IsNullOrEmpty(ocSelect) && ocHasContent)
+                        throw new InvalidOperationException("XTSE3125: xsl:on-completion must not have both a select attribute and sequence constructor content.");
+
+                    if (!string.IsNullOrEmpty(ocSelect))
+                    {
+                        completionResult = CompileXPath(ocSelect, onCompletion).Evaluate(_context);
+                    }
+                    else if (ocHasContent)
+                    {
+                        completionResult = EvaluateSequenceConstructor(onCompletion, _context.ContextItem, wrapInDocumentNode: true);
+                    }
+                }
+            }
+        }
+        finally
+        {
+            _context.RestoreVariables(savedVariables);
+            _context.WithFocus(savedFocus, savedPosition, savedSize);
+            _context.WithCurrentItem(savedCurrent);
+        }
+
+        if (completionResult.HasValue && !completionResult.Value.IsUndefined)
+            CopyToResult(completionResult.Value);
+    }
+
+    /// <summary>
+    /// Validates the lexical placement of <c>xsl:param</c>, <c>xsl:on-completion</c>,
+    /// <c>xsl:break</c>, and <c>xsl:next-iteration</c> descendants of an
+    /// <c>xsl:iterate</c> instruction, raising static errors when they are misplaced.
+    /// </summary>
+    private void ValidateIterateDescendants(XElement instruction)
+    {
+        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+        foreach (var descendant in instruction.Descendants())
+        {
+            if (descendant.Name.NamespaceName != xslNs)
+                continue;
+
+            // Instructions inside a nested xsl:iterate are validated by that nested instruction.
+            bool insideNestedIterate = descendant.Ancestors().TakeWhile(a => a != instruction).Any(a =>
+                a.Name.LocalName == "iterate" && a.Name.NamespaceName == xslNs);
+            if (insideNestedIterate)
+                continue;
+
+            var local = descendant.Name.LocalName;
+            if (local == "param" || local == "on-completion")
+            {
+                // xsl:param and xsl:on-completion must be direct children of xsl:iterate.
+                if (descendant.Parent != instruction)
+                    throw new InvalidOperationException("XTSE0010: xsl:param and xsl:on-completion must be direct children of xsl:iterate.");
+                continue;
+            }
+
+            if (local != "break" && local != "next-iteration")
+                continue;
+
+            var parent = descendant.Parent;
+            if (parent == null)
+                continue;
+
+            bool parentAllowed;
+            if (parent == instruction)
+            {
+                parentAllowed = true;
+            }
+            else if (parent.Name.NamespaceName == xslNs)
+            {
+                var parentLocal = parent.Name.LocalName;
+                if (parentLocal == "try")
+                {
+                    // Within xsl:try the instruction must precede any xsl:catch siblings.
+                    parentAllowed = !descendant.ElementsAfterSelf().Any(e =>
+                        !(e.Name.NamespaceName == xslNs && e.Name.LocalName == "catch"));
+                }
+                else
+                {
+                    parentAllowed = parentLocal == "when" || parentLocal == "otherwise" || parentLocal == "catch";
+                }
+            }
+            else
+            {
+                parentAllowed = false;
+            }
+
+            if (!parentAllowed)
+                throw new InvalidOperationException("XTSE3120: xsl:break and xsl:next-iteration must appear in the body of xsl:iterate.");
+
+            bool hasFollowingSibling;
+            if (parent == instruction)
+            {
+                // Direct children of xsl:iterate must be the last body instruction.
+                hasFollowingSibling = descendant.ElementsAfterSelf().Any(e =>
+                    e.Name.NamespaceName == xslNs
+                    && e.Name.LocalName != "on-completion"
+                    && e.Name.LocalName != "param");
+            }
+            else if (parent.Name.LocalName == "try" && parent.Name.NamespaceName == xslNs)
+            {
+                hasFollowingSibling = descendant.ElementsAfterSelf().Any(e =>
+                    !(e.Name.NamespaceName == xslNs && e.Name.LocalName == "catch"));
+            }
+            else
+            {
+                hasFollowingSibling = descendant.ElementsAfterSelf().Any();
+            }
+
+            if (hasFollowingSibling)
+                throw new InvalidOperationException("XTSE3120: xsl:break and xsl:next-iteration must be the last instruction in their sequence constructor.");
+        }
+    }
+
+    /// <summary>
+    /// Executes an <c>xsl:break</c> instruction inside <c>xsl:iterate</c>.
+    /// </summary>
+    private void ExecuteXslBreak(XElement instruction)
+    {
+        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+        if (!instruction.Ancestors().Any(a => a.Name.LocalName == "iterate" && a.Name.NamespaceName == xslNs))
+            throw new InvalidOperationException("XTSE0010: xsl:break must be lexically inside xsl:iterate.");
+
+        var select = instruction.Attribute("select")?.Value;
+        var hasContent = instruction.Elements().Any();
+        if (!string.IsNullOrEmpty(select) && hasContent)
+            throw new InvalidOperationException("XTSE3125: xsl:break must not have both a select attribute and sequence constructor content.");
+
+        XdmValue? value = null;
+        if (!string.IsNullOrEmpty(select))
+        {
+            value = CompileXPath(select, instruction).Evaluate(_context);
+        }
+        else if (hasContent)
+        {
+            value = EvaluateSequenceConstructor(instruction, _context.ContextItem, wrapInDocumentNode: true);
+        }
+
+        throw new BreakSignal(value);
+    }
+
+    /// <summary>
+    /// Executes an <c>xsl:next-iteration</c> instruction inside <c>xsl:iterate</c>.
+    /// </summary>
+    private void ExecuteXslNextIteration(XElement instruction)
+    {
+        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+        if (!instruction.Ancestors().Any(a => a.Name.LocalName == "iterate" && a.Name.NamespaceName == xslNs))
+            throw new InvalidOperationException("XTSE0010: xsl:next-iteration must be lexically inside xsl:iterate.");
+
+        var newValues = new Dictionary<(string LocalName, string NamespaceUri), XdmValue>();
+
+        // The iteration parameters are the ones declared on the innermost enclosing xsl:iterate.
+        var iterateAncestor = instruction.Ancestors().First(a =>
+            a.Name.LocalName == "iterate" && a.Name.NamespaceName == xslNs);
+        var validParamNames = new HashSet<(string LocalName, string NamespaceUri)>();
+        var paramTypeByName = new Dictionary<(string LocalName, string NamespaceUri), string?>();
+        foreach (var p in iterateAncestor.Elements(XName.Get("param", xslNs)))
+        {
+            var pname = p.Attribute("name")?.Value;
+            if (!string.IsNullOrEmpty(pname))
+            {
+                var (plocal, pns) = ExpandVariableName(p, pname);
+                validParamNames.Add((plocal, pns));
+                paramTypeByName[(plocal, pns)] = p.Attribute("as")?.Value;
+            }
+        }
+
+        foreach (var wp in instruction.Elements(XName.Get("with-param", xslNs)))
+        {
+            var wpName = wp.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(wpName))
+                continue;
+
+            var (wplocal, wpns) = ExpandVariableName(wp, wpName);
+            var wpKey = (wplocal, wpns);
+            if (!validParamNames.Contains(wpKey))
+                throw new InvalidOperationException("XTSE3130: xsl:with-param name does not match an xsl:iterate parameter.");
+            if (newValues.ContainsKey(wpKey))
+                throw new InvalidOperationException("XTSE0670: duplicate xsl:with-param name in xsl:next-iteration.");
+
+            var wpSelect = wp.Attribute("select")?.Value;
+            var wpAs = wp.Attribute("as")?.Value;
+            XdmValue wpValue;
+            if (!string.IsNullOrEmpty(wpSelect))
+            {
+                wpValue = CompileXPath(wpSelect, wp).Evaluate(_context);
+            }
+            else
+            {
+                var savedOutputUri = _context.CurrentOutputUri;
+                _context.CurrentOutputUri = null;
+                try
+                {
+                    wpValue = EvaluateSequenceConstructor(wp, _context.ContextItem, wrapInDocumentNode: string.IsNullOrEmpty(wpAs));
+                }
+                finally
+                {
+                    _context.CurrentOutputUri = savedOutputUri;
+                }
+            }
+            wpValue = ConvertVariableValue(wpValue, wpAs, isParam: false);
+            if (paramTypeByName.TryGetValue(wpKey, out var paramAs))
+                wpValue = ConvertVariableValue(wpValue, paramAs, isParam: true);
+            newValues[wpKey] = wpValue;
+        }
+
+        throw new NextIterationSignal(newValues);
     }
 }
 

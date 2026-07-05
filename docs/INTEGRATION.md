@@ -4,13 +4,20 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 3 July 2026
-> **Bosak baseline:** 911 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 4,999 passed / 251 failed / 9,350 skipped (~95.2%)
+> **Last updated:** 4 July 2026
+> **Bosak baseline:** 913 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 5,073 passed / 177 failed / 9,350 skipped (~96.6%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-04** — Cleared the W3C `iterate` conformance cluster (44 runnable tests pass; 0 failed; 35 streaming tests skipped).
+  - `xsl:iterate` now works in the result-tree path with `xsl:param`, `xsl:next-iteration`, `xsl:break`, and `xsl:on-completion`.
+  - `xsl:next-iteration`/`xsl:with-param` values are coerced to the declared `xsl:param` type, so atomization happens when required.
+  - `xsl:on-completion` and `xsl:break` sequence-constructor content are evaluated as document-producing constructors, so nested `xsl:copy-of` inside literal elements contributes correctly.
+  - `xsl:try` now rolls back output written in the try block before executing `xsl:catch`, using efficient last-node/last-attribute snapshots. This fixes `iterate-036` and prevents the `catalog` self-tests from hanging.
+  - Full W3C suite: **5,073 passed / 177 failed / 9,350 skipped** (~96.6%).
 
 - **2026-07-02** — Cleared the W3C `seqtor` conformance cluster (54 runnable tests pass; 18 skipped).
   - Sequence-constructor whitespace and empty atomic items now produce correct spacing in complex content.
@@ -353,8 +360,9 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:on-empty` | ✅ Working | Evaluated by parent container (xsl:copy, xsl:document, literal result elements, general sequence constructors) when sequence constructor produces no nodes; supports `@select` and sequence constructor children; `on-empty` conformance cluster 72/72 |
 | `xsl:on-non-empty` | ✅ Working | Evaluated by parent container when sequence constructor produces nodes; supports `@select` and sequence constructor children; `on-non-empty` conformance cluster 14/14 |
 | `xsl:context-item` | ✅ Working | Declares required/optional/absent context item and type for templates; raises `XTTE0590`/`XTTE3090` at runtime and `XTSE0010`/`XTSE0020`/`XTSE0090` statically. `context-item` conformance cluster 31/31. |
+| `xsl:iterate` | ✅ Working | Stateful iteration in result-tree and function-body contexts with `xsl:param`, `xsl:next-iteration`, `xsl:break`, and `xsl:on-completion`. `iterate` conformance cluster 44/44. |
 | `xsl:message` | ✅ Working | Evaluates `terminate` and `error-code`; emits serialized message text via `IXsltMessageListener`; terminating messages throw `XsltRuntimeException` carrying the XDM value. The listener also receives `OnWarning` callbacks for XSLT warnings (e.g. no-matching-template / multiple-template warnings). |
-| `xsl:try` / `xsl:catch` | ✅ Working | Catches dynamic XPath/XSLT errors in both result-tree and function-body contexts; supports multiple `xsl:catch` clauses evaluated in document order; `@errors` supports `*`, plain local names, `prefix:local` (err namespace), `*:local`, and `Q{uri}local`; binds `$err:code`, `$err:description`, `$err:value`. Static errors in `xsl:variable`/`xsl:param`/`xsl:with-param` `@select` expressions are now reported at stylesheet compile time. |
+| `xsl:try` / `xsl:catch` | ✅ Working | Catches dynamic XPath/XSLT errors in both result-tree and function-body contexts; rolls back output written in the try block before executing a matching catch (unless `rollback-output="no"`). Supports multiple `xsl:catch` clauses evaluated in document order; `@errors` supports `*`, plain local names, `prefix:local` (err namespace), `*:local`, and `Q{uri}local`; binds `$err:code`, `$err:description`, `$err:value`. Static errors in `xsl:variable`/`xsl:param`/`xsl:with-param` `@select` expressions are now reported at stylesheet compile time. |
 | `xsl:map` / `xsl:map-entry` | ✅ Working | `xsl:map` evaluates its content as map-entry-producing sequence constructor and merges entries; `xsl:map-entry` builds a single-entry map; duplicate keys raise `XTDE3365`; maps as element/document children raise `XTDE0450` |
 | `xsl:result-document` | 🔮 Phase 3 | Secondary result documents are not yet implemented |
 
@@ -422,7 +430,7 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-**Unit tests:** 911 passed, 0 failed, 0 skipped  
+**Unit tests:** 913 passed, 0 failed, 0 skipped  
 **Target framework:** `net10.0`
 
 ### Behavioral Changes
@@ -517,7 +525,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 4,890 | 360 | 9,350 | 93.1% | `sort`, `merge`, `arrays`, `math` clusters fully runnable; `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `shadow`, `type`, `analyze-string`, `next-match` clusters green |
+| XSLT 3.0 (W3C) | 5,073 | 177 | 9,350 | 96.6% | `iterate`, `sort`, `merge`, `arrays`, `math` clusters fully runnable; `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `shadow`, `type`, `analyze-string`, `next-match`, `context-item` clusters green |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

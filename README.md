@@ -32,7 +32,7 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 - **Zero-Allocation Sequences** — Lazy struct enumerators avoid `IEnumerable<T>` boxing on hot paths
 - **Pluggable Backends** — Works with `XDocument`, `XmlDocument`, streaming readers, or custom `IXdmNode` providers
 - **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), FLWOR, JSON functions
-- **XSLT 3.0 Transform Engine** — Template matching, sequence constructors, `xsl:copy`/`xsl:copy-of`, `xsl:for-each-group`, `xsl:analyze-string`, `xsl:where-populated`, `xsl:on-empty`, `fn:transform()`
+- **XSLT 3.0 Transform Engine** — Template matching, sequence constructors, `xsl:copy`/`xsl:copy-of`, `xsl:for-each-group`, `xsl:analyze-string`, `xsl:where-populated`, `xsl:on-empty`, `xsl:iterate`/`xsl:break`, `fn:transform()`
 
 ---
 
@@ -177,7 +177,7 @@ dotnet test Bosak.sln
 
 Target framework: **.NET 10**.
 
-All 877 unit tests pass (0 failures).
+All 913 unit tests pass (0 failures).
 
 ---
 
@@ -209,7 +209,7 @@ The harness:
 | **XPath (QT3)** | 428 test sets, ~32,000 tests |
 | Pass Rate (XPath) | **~59.0%** (18,785 passed / 3,085 failed / 9,951 skipped) |
 | **XSLT 3.0** | 234 test sets, ~14,600 tests |
-| Pass Rate (XSLT) | **~92.5%** (4,855 passed / 395 failed / 9,350 skipped) |
+| Pass Rate (XSLT) | **~96.6%** (5,073 passed / 177 failed / 9,350 skipped) |
 | Unsupported Features | Schema awareness, XQuery-only, XML 1.1, serialization, streaming, higher-order functions |
 
 ### Known Limitations
