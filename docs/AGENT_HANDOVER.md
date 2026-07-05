@@ -1,54 +1,60 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-07-04
-**Commit:** `91fd631` (with uncommitted changes)
-**Current focus:** Cleared the W3C XSLT 3.0 `iterate` conformance cluster.
+**Date:** 2026-07-05
+**Commit:** `7b71fcd`
+**Current focus:** Cleared the W3C XSLT 3.0 `collations` conformance cluster.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 5,073
-- **Failed:** 177
+- **Passed:** 5,097
+- **Failed:** 153
 - **Skipped:** 9,350
-- **Pass rate:** 96.6% (+25 passed / −25 failed vs. previous 5,048/202)
+- **Pass rate:** 97.1% (+24 passed / −24 failed vs. previous 5,073/177)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
+| collations | 43 | 43 | 0 | 0 | ✅ Default-collation propagation through XPath, `xsl:sort`, `xsl:for-each-group`, and `xsl:key` |
 | iterate | 44 | 44 | 0 | 0 | ✅ `xsl:iterate`, `xsl:break`, `xsl:next-iteration`, and `xsl:on-completion` in the result tree |
 
 ## This Session Fixes
 
-1. **`xsl:next-iteration` with-param conversion to `xsl:param` @as** — `ExecuteXslNextIteration` now converts each `xsl:with-param` value using the declared type of the corresponding `xsl:param`, not the (usually absent) `xsl:with-param/@as`. This atomizes element-node values to `xs:string` when the parameter is typed as `xs:string`, fixing `iterate-042`.
+1. **Default-collation propagation** — `EvaluationContext.DefaultCollation` now flows through every XPath/XSLT path that uses a collation. `fn:compare`, `fn:contains`, `fn:starts-with`, `fn:ends-with`, `fn:substring-before`, `fn:substring-after`, `fn:index-of`, `fn:distinct-values`, `fn:min`, `fn:max`, `fn:deep-equal`, and `fn:default-collation` all honor the in-scope default collation.
+   - **File changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+2. **`xsl:for-each-group` default collation** — Grouping now falls back to the effective default collation when no explicit `@collation` is supplied.
    - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
-2. **`xsl:on-completion` and `xsl:break` sequence-constructor wrapping** — Both instructions now evaluate their sequence-constructor content with `wrapInDocumentNode=true`, so nested sequence-producing instructions (e.g. `xsl:copy-of` inside a literal result element) contribute correctly to the result. Fixes `iterate-040` and `iterate-041`.
+3. **`xsl:key` collation support and XTSE1220** — Each key name has an effective collation (explicit `@collation` or default). Key-value comparison uses that collation, and conflicting collations for the same expanded key name raise XTSE1220.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Runtime/KeyIndex.cs`, `src/Bosak.Xslt/Stylesheet/KeyDefinition.cs`.
+
+4. **`xsl:sort` `case-order` tie-breaker** — `case-order="upper-first"`/`"lower-first"` is now applied after the primary collation comparison, fixing UCA secondary-strength sorting.
    - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
-3. **`xsl:try` output rollback** — `xsl:try` now rolls back nodes and attributes written to the current output container before evaluating `xsl:catch`. The rollback tracks the last node/attribute before the try block and removes only appended items, avoiding the O(N²) enumeration that caused the `catalog` self-tests to hang. Also fixes `iterate-036` (break inside `xsl:catch`).
-   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
-
-4. **Iterate unit-test coverage** — Added `IterateTests.cs` with basic literal-element and value-of iteration tests.
-   - **File changed**: `tests/Bosak.Xslt.Tests/IterateTests.cs`.
+5. **Conformance harness environment collation** — The harness reads the environment `<collation>` URI and assigns it to `EvaluationContext.DefaultCollation`.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
 
 ## Notes
 
 - Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
-- Full W3C suite: **5,073/177/9,350** (96.6%).
-- No regressions in `catalog`, `try`, `seqtor`, or other previously-green clusters.
+- Full W3C suite: **5,097/153/9,350** (97.1%).
+- No `collations` failures remain.
+- No regressions in `iterate`, `catalog`, `try`, `seqtor`, or other previously-green clusters.
 
 ## Recommended Next Steps
 
-1. Continue clearing remaining failures from the 177-failure baseline. Largest remaining clusters:
-   - `collations` (25 failures)
+1. Continue clearing remaining failures from the 153-failure baseline. Largest remaining clusters:
    - `xml-version` (23 failures)
    - `tunnel` (22 failures)
    - `normalize-unicode` (14 failures)
    - `version` / `backwards` (13 failures each)
    - `avt` (10 failures)
+   - `xpath-compat` (9 failures)
+   - `seqtor` (8 failures)
 
 ---
 
