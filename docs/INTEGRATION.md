@@ -12,6 +12,13 @@
 
 ## 0. Recent Changes
 
+- **2026-07-05** — Cleared the W3C `tunnel` conformance cluster (58 runnable tests pass; 0 failed).
+  - `xsl:with-param/@tunnel` and `xsl:param/@tunnel` now accept `yes`/`no` (XSLT 2.0) and `true`/`false`/`1`/`0` (XSLT 3.0); invalid/empty values raise `XTSE0020`.
+  - `xsl:call-template` enforces `XTSE0680` when an ordinary `xsl:with-param` matches a tunnel `xsl:param` (or vice versa) and when no matching parameter is declared.
+  - `xsl:call-template` parameter validation now skips `xsl:context-item` children and is suppressed in XSLT 1.0 backwards-compatible mode, so extra parameters are silently ignored.
+  - Tunnel parameters are correctly isolated from `xsl:function` bodies and pass through intermediate named templates, `xsl:apply-templates`, `xsl:apply-imports`, and `xsl:next-match`.
+  - Tunnel parameters now bind only to tunnel-declared `xsl:param`s; non-tunnel `xsl:with-param`s no longer shadow tunnel parameters.
+
 - **2026-07-05** — Cleared the W3C `avt` conformance cluster (35 runnable tests pass; 0 failed).
   - AVT expressions now correctly handle XPath comments (`(: ... :)`), empty expressions, escaped `}}`, and `{{` even when no `{` expression is present.
   - `xsl:attribute/@separator`, `xsl:value-of/@separator`, and `xsl:sort/@stable` are now evaluated as attribute value templates.

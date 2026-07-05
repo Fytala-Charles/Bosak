@@ -1,6 +1,52 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-05
+**Commit:** `9bafea0`
+**Current focus:** Cleared the W3C XSLT 3.0 `avt` and `tunnel` conformance clusters; fixed `call-template` regression tests.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,128
+- **Failed:** 122
+- **Skipped:** 9,350
+- **Pass rate:** 97.7% (+31 passed / −31 failed vs. previous 5,097/153)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| avt | 35 | 35 | 0 | 0 | ✅ AVT evaluation, separators, escaped braces, XPath comments, XTSE0340 |
+| tunnel | 58 | 58 | 0 | 0 | ✅ Tunnel parameter binding, pass-through, `apply-imports`/`next-match` merge |
+
+## This Session Fixes
+
+1. **AVT conformance cluster (`avt`)** — `xsl:value-of` and `xsl:attribute` `@separator` are now evaluated as AVTs; AVT expressions in XSLT 1.0 BC return only the first item; `FindAvtExprEnd` skips XPath comments inside AVT expressions; `xsl:sort/@stable` AVT accepts XSLT 2.0 and 3.0 boolean lexical forms; escaped `{{`/`}}` are handled correctly; AVTs in `xsl:template/@match` are rejected with `XTSE0340`.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
+
+2. **Conformance harness `assert-eq`** — Expected values that are XPath string literals are unwrapped before comparison.
+   - **File changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+3. **Tunnel parameter conformance cluster (`tunnel`)** — Tunnel parameters bind only to `xsl:param` declarations with `tunnel="yes"`; non-tunnel `xsl:with-param` no longer raises `XTSE0680` against tunnel params; tunnel parameters pass through `xsl:call-template`, `xsl:apply-templates`, `xsl:apply-imports`, and `xsl:next-match`; tunnel frames merge correctly with newly supplied tunnel parameters.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+4. **`call-template` regression fixes** — `call-template` parameter validation now skips `xsl:context-item` children when collecting declared `xsl:param`s, and is suppressed entirely in XSLT 1.0 backwards-compatible mode so extra parameters are silently ignored. This restores `backwards-013`, `context-item-008/009/011`, and `variable-2201`.
+   - **File changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,128/122/9,350** (97.7%).
+- No regressions in previously-green clusters.
+- Largest remaining failure clusters: `xml-version` (23), `normalize-unicode` (14), `version` / `backwards` (13 each), `xpath-compat` (9), `seqtor` (8).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-05
 **Commit:** `7b71fcd`
 **Current focus:** Cleared the W3C XSLT 3.0 `collations` conformance cluster.
 

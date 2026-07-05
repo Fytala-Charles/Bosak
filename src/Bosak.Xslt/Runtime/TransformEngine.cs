@@ -149,6 +149,8 @@
 //                      | Charles Korthout | 5.78  | 26-06-2026     | xsl:next-iteration with-param conversion to xsl:param @as; fixes iterate-042/027       |
 //                      | Charles Korthout | 5.79  | 26-06-2026     | Propagate default-collation through templates, sort, groups, keys; clears collations cluster |
 //                      | Charles Korthout | 5.80  | 05-07-2026     | AVT fixes: XPath comments, empty expressions, BC first-item, escapes, separator/stable, function text nodes |
+//                      | Charles Korthout | 5.81  | 05-07-2026     | Tunnel parameter fixes: boolean values, XTSE0020/XTSE0680, pass-through, function isolation |
+//                      | Charles Korthout | 5.82  | 05-07-2026     | call-template validation skips xsl:context-item and XSLT 1.0 BC mode                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1755,6 +1757,7 @@ public sealed class TransformEngine
         var savedSize = _context.ContextSize;
         var savedCurrent = _context.CurrentItem;
         var savedAccumulator = _sequenceAccumulator;
+        var savedTunnelStack = _tunnelParamStack.ToArray();
         var savedMergeGroup = _currentMergeGroup;
         var savedMergeKey = _currentMergeKey;
         var savedNamedGroups = _currentNamedMergeGroups;
@@ -1765,6 +1768,7 @@ public sealed class TransformEngine
         var savedFunctionLocals = _functionLocalLazyVariables;
         var savedOutputUri = _context.CurrentOutputUri;
         _sequenceAccumulator = null;
+        _tunnelParamStack.Clear();
         _currentMergeGroup = null;
         _currentMergeKey = null;
         _currentNamedMergeGroups = null;
@@ -1834,6 +1838,9 @@ public sealed class TransformEngine
         {
             _xsltFunctionCallDepth--;
             _sequenceAccumulator = savedAccumulator;
+            _tunnelParamStack.Clear();
+            foreach (var frame in savedTunnelStack.Reverse())
+                _tunnelParamStack.Push(frame);
             _context.RestoreVariables(snapshot);
             _context.WithFocus(savedFocus, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
@@ -3526,25 +3533,37 @@ public sealed class TransformEngine
 
                     var (paramLocal, paramNs) = ExpandVariableName(child, paramName);
                     var paramKey = VariableKey(paramLocal, paramNs);
-                    var isTunnel = child.Attribute("tunnel")?.Value == "yes";
+                    var isTunnel = IsTunnelParameter(child);
                     var required = child.Attribute("required")?.Value?.Trim();
                     var paramAs = child.Attribute("as")?.Value;
 
-                    XdmValue paramValue;
+                    XdmValue paramValue = XdmValue.Undefined;
                     bool gotValue;
-                    if (callParams != null && callParams.TryGetValue(paramKey, out var provided))
+                    if (isTunnel)
+                    {
+                        // Tunnel parameters bind only to the tunnel parameter stack.
+                        if (_tunnelParamStack.Count > 0 && _tunnelParamStack.Peek().TryGetValue(paramKey, out var tunnelValue))
+                        {
+                            paramValue = tunnelValue;
+                            gotValue = true;
+                        }
+                        else
+                        {
+                            gotValue = false;
+                        }
+                    }
+                    else if (callParams != null && callParams.TryGetValue(paramKey, out var provided))
                     {
                         paramValue = provided;
-                        gotValue = true;
-                    }
-                    else if (isTunnel && _tunnelParamStack.Count > 0 && _tunnelParamStack.Peek().TryGetValue(paramKey, out var tunnelValue))
-                    {
-                        paramValue = tunnelValue;
                         gotValue = true;
                     }
                     else
                     {
                         gotValue = false;
+                    }
+
+                    if (!gotValue)
+                    {
                         var paramSelect = child.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(paramSelect))
                         {
@@ -3701,6 +3720,53 @@ public sealed class TransformEngine
         {
             if (!_allNamedTemplates.TryGetValue(name, out var rule))
                 throw new InvalidOperationException($"Named template '{name}' not found.");
+
+            // Static validation of call-template parameters: every with-param must match a
+            // declared xsl:param, and its tunnel status must match the declaration.
+            // This check applies only in XSLT 2.0 and later; XSLT 1.0 backwards-compatible
+            // mode silently ignores parameters that are not declared by the target template.
+            var xslNs = Stylesheet.Stylesheet.XslNamespace;
+            var declaredParams = new Dictionary<string, bool>();
+            var declaredParamNames = new Dictionary<string, string>();
+            foreach (var child in rule.Element.Elements())
+            {
+                if (child.Name.LocalName == "context-item" && child.Name.NamespaceName == xslNs)
+                    continue;
+                if (child.Name.LocalName != "param" || child.Name.NamespaceName != xslNs)
+                    break;
+                var paramName = child.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(paramName))
+                    continue;
+                var (pLocal, pNs) = ExpandVariableName(child, paramName);
+                var pKey = VariableKey(pLocal, pNs);
+                declaredParams[pKey] = IsTunnelParameter(child);
+                declaredParamNames[pKey] = paramName;
+            }
+
+            void ValidateCallParams(Dictionary<string, XdmValue>? supplied, bool suppliedAsTunnel)
+            {
+                if (supplied == null) return;
+                foreach (var kvp in supplied)
+                {
+                    if (!declaredParams.TryGetValue(kvp.Key, out var declaredTunnel))
+                    {
+                        var suppliedName = declaredParamNames.TryGetValue(kvp.Key, out var n) ? n : kvp.Key;
+                        throw new InvalidOperationException($"XTSE0680: Parameter '{suppliedName}' is not declared by template '{name}'.");
+                    }
+                    if (declaredTunnel != suppliedAsTunnel)
+                    {
+                        var suppliedName = declaredParamNames.TryGetValue(kvp.Key, out var n) ? n : kvp.Key;
+                        throw new InvalidOperationException($"XTSE0680: Parameter '{suppliedName}' is not declared by template '{name}'.");
+                    }
+                }
+            }
+
+            // Only ordinary (non-tunnel) parameters are validated against the target
+            // template's declared parameters. Tunnel parameters are allowed to pass through
+            // named templates that do not declare them. In XSLT 1.0 BC, extra parameters
+            // are ignored rather than raising XTSE0680.
+            if (!IsEffectiveBackwardsCompatible(rule.Element))
+                ValidateCallParams(withParams, suppliedAsTunnel: false);
 
             ExecuteTemplate(rule, contextItem, withParams, incomingTunnelParams, _context.ContextPosition, _context.ContextSize, setCurrentRule: false);
         }
@@ -10825,12 +10891,41 @@ public sealed class TransformEngine
                 }
             }
             wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value, isParam: true);
-            if (wp.Attribute("tunnel")?.Value == "yes")
+            if (IsTunnelParameter(wp))
                 tunnelParams[wpKey] = wpValue;
             else
                 withParams[wpKey] = wpValue;
         }
         return (withParams, tunnelParams);
+    }
+
+    /// <summary>
+    /// Parses the <c>tunnel</c> attribute of an <c>xsl:param</c> or <c>xsl:with-param</c>
+    /// element. Returns true for tunneling parameters, false for ordinary parameters, and
+    /// throws <c>XTSE0020</c> for invalid values such as an empty string.
+    /// </summary>
+    private bool IsTunnelParameter(XElement paramElement)
+    {
+        var tunnelAttr = paramElement.Attribute("tunnel")?.Value;
+        if (tunnelAttr == null)
+            return false;
+
+        var v = tunnelAttr.Trim();
+        if (string.IsNullOrEmpty(v))
+            throw new InvalidOperationException("XTSE0020: invalid value for @tunnel");
+        bool xslt30 = GetEffectiveVersion(paramElement) >= 3.0;
+        if (v.Equals("yes", StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (v.Equals("no", StringComparison.OrdinalIgnoreCase))
+            return false;
+        if (xslt30)
+        {
+            if (v.Equals("true", StringComparison.OrdinalIgnoreCase) || v == "1")
+                return true;
+            if (v.Equals("false", StringComparison.OrdinalIgnoreCase) || v == "0")
+                return false;
+        }
+        throw new InvalidOperationException("XTSE0020: invalid value for @tunnel");
     }
 
     /// <summary>
@@ -10857,7 +10952,7 @@ public sealed class TransformEngine
             var (paramLocal, paramNs) = ExpandVariableName(child, paramName);
             var paramKey = VariableKey(paramLocal, paramNs);
             var paramAs = child.Attribute("as")?.Value;
-            var isTunnel = child.Attribute("tunnel")?.Value == "yes";
+            var isTunnel = IsTunnelParameter(child);
 
             Dictionary<string, XdmValue>? source = isTunnel ? externalTunnel : externalCall;
             if (source == null || !source.TryGetValue(paramKey, out var value))
