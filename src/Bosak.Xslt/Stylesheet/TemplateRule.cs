@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 26-06-2026     | Default priority for match="/" is -0.5 per XSLT 2.0/3.0 spec                            |
 //                      | Charles Korthout | 1.2   | 03-07-2026     | ImportPrecedence now reads from Stylesheet for dynamic precedence assignment            |
 //                      | Charles Korthout | 1.3   | 26-06-2026     | Added xsl:context-item parsing and static validation                                     |
+//                      | Charles Korthout | 1.4   | 05-07-2026     | Reject AVT syntax in xsl:template/@match with XTSE0340                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -92,6 +93,8 @@ public sealed class TemplateRule
         ValidateContextItemAgainstMatch(element, contextItem);
 
         var match = element.Attribute("match")?.Value;
+        if (!string.IsNullOrEmpty(match) && ContainsAvtExpression(match))
+            throw new InvalidOperationException("XTSE0340: The match attribute of xsl:template must not contain an attribute value template");
         if (string.IsNullOrEmpty(match))
             match = element.Attribute("_match")?.Value;
         var name = element.Attribute("name")?.Value?.Trim();
@@ -757,5 +760,27 @@ public sealed class TemplateRule
             if (depth == 0) return i;
         }
         return -1;
+    }
+
+    /// <summary>
+    /// Returns true if the attribute value contains an unescaped AVT expression delimiter.
+    /// </summary>
+    private static bool ContainsAvtExpression(string value)
+    {
+        for (int i = 0; i < value.Length; i++)
+        {
+            if (value[i] == '{')
+            {
+                if (i + 1 < value.Length && value[i + 1] == '{')
+                {
+                    i++; // escaped brace
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

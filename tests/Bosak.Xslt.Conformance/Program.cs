@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 2.2   | 26-06-2026     | Evaluate assert-result-document assertions against secondary output files               |
 //                      | Charles Korthout | 2.3   | 26-06-2026     | Pass base output URI from <output file="..."/> to the transformation engine            |
 //                      | Charles Korthout | 2.4   | 26-06-2026     | Read environment <collation> and set EvaluationContext.DefaultCollation               |
+//                      | Charles Korthout | 2.5   | 05-07-2026     | Fix assert-eq for string-literal assertions on text-only messages                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1684,7 +1685,11 @@ class Program
                     ctx.WithNamespace(prefix, uri);
             }
             var result = compiled.Evaluate(ctx);
-            return result.ToString() == expected;
+            // Compare the value produced by the XPath expression against the string
+            // value of the actual result. This correctly handles string literals such as
+            // "AVT with value 'no' in @terminate of xsl:message" (the expression text
+            // includes the quotes, but its value does not).
+            return result.ToString() == GetStringValue(actual);
         }
         catch
         {

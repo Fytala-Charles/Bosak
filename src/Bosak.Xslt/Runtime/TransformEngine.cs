@@ -148,6 +148,7 @@
 //                      | Charles Korthout | 5.77  | 26-06-2026     | Implemented xsl:iterate, xsl:break, and xsl:next-iteration in result tree              |
 //                      | Charles Korthout | 5.78  | 26-06-2026     | xsl:next-iteration with-param conversion to xsl:param @as; fixes iterate-042/027       |
 //                      | Charles Korthout | 5.79  | 26-06-2026     | Propagate default-collation through templates, sort, groups, keys; clears collations cluster |
+//                      | Charles Korthout | 5.80  | 05-07-2026     | AVT fixes: XPath comments, empty expressions, BC first-item, escapes, separator/stable, function text nodes |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1913,12 +1914,45 @@ public sealed class TransformEngine
             ProcessFunctionBodyNode(childNode, items, contextItem);
         }
 
+        items = NormalizeSequenceConstructorItems(items);
+
         if (items.Count == 0)
             return XdmValue.FromSequence(XdmSequence.Empty);
         if (items.Count == 1)
             return items[0];
 
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    /// <summary>
+    /// Normalizes the items produced by a sequence constructor: adjacent text nodes are
+    /// merged and zero-length text nodes are removed. This mirrors the sequence
+    /// normalization applied to xsl:function results and raw sequence constructors.
+    /// </summary>
+    private static List<XdmValue> NormalizeSequenceConstructorItems(List<XdmValue> items)
+    {
+        var normalized = new List<XdmValue>();
+        string? pendingText = null;
+        foreach (var item in items)
+        {
+            if (item.IsNode && item.NodeValue is { NodeKind: XdmNodeKind.Text } node)
+            {
+                pendingText = pendingText == null ? node.StringValue : pendingText + node.StringValue;
+            }
+            else
+            {
+                if (pendingText != null)
+                {
+                    if (pendingText.Length > 0)
+                        normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText))));
+                    pendingText = null;
+                }
+                normalized.Add(item);
+            }
+        }
+        if (pendingText != null && pendingText.Length > 0)
+            normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText))));
+        return normalized;
     }
 
     /// <summary>
@@ -2154,26 +2188,28 @@ public sealed class TransformEngine
                 case "value-of":
                     {
                         var select = instruction.Attribute("select")?.Value;
+                        string textValue;
                         if (!string.IsNullOrEmpty(select))
                         {
                             var compiled = XPath31Expression.Compile(select);
                             var result = compiled.Evaluate(_context);
-                            var sep = instruction.Attribute("separator")?.Value ?? " ";
-                            results.Add(XdmValue.FromString(XdmValueToString(result, sep), "untypedAtomic"));
+                            var sep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
+                            textValue = XdmValueToString(result, sep);
                         }
                         else if (GetExpandText(instruction))
                         {
                             var text = string.Concat(instruction.Nodes().OfType<XText>().Select(t => t.Value));
-                            var tvtResult = EvaluateTvt(text, instruction);
-                            results.Add(XdmValue.FromString(tvtResult, "untypedAtomic"));
+                            textValue = EvaluateTvt(text, instruction);
                         }
                         else
                         {
                             // xsl:value-of with sequence-constructor content (no @select)
-                            var voSep = instruction.Attribute("separator")?.Value ?? "";
-                            var textValue = EvaluateSimpleContent(instruction, contextItem, voSep);
-                            results.Add(XdmValue.FromString(textValue, "untypedAtomic"));
+                            var voSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? "", instruction);
+                            textValue = EvaluateSimpleContent(instruction, contextItem, voSep);
                         }
+                        // xsl:value-of constructs a text node, even when contributing to a
+                        // raw sequence such as an xsl:function result.
+                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(textValue))));
                         break;
                     }
                 case "variable":
@@ -2354,7 +2390,7 @@ public sealed class TransformEngine
                             var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
                             for (int sortIdx = 0; sortIdx < sortElements.Count; sortIdx++)
                             {
-                                var stableAttr = sortElements[sortIdx].Attribute("stable")?.Value;
+                                var stableAttr = EvaluateAvt(sortElements[sortIdx].Attribute("stable")?.Value ?? "", sortElements[sortIdx]);
                                 if (sortIdx > 0 && !string.IsNullOrEmpty(stableAttr))
                                     throw new InvalidOperationException("XTSE1017: @stable is allowed only on the first xsl:sort");
                                 if (!string.IsNullOrEmpty(stableAttr))
@@ -3969,12 +4005,12 @@ public sealed class TransformEngine
                     {
                         var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
-                        var attrSep = instruction.Attribute("separator")?.Value ?? " ";
+                        var attrSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
                         value = XdmValueToString(result, attrSep);
                     }
                     else
                     {
-                        var attrSep = instruction.Attribute("separator")?.Value ?? "";
+                        var attrSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? "", instruction);
                         value = EvaluateSimpleContent(instruction, contextItem, attrSep);
                     }
                     if (attrTarget.Nodes().Any())
@@ -4014,7 +4050,7 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            var sep = instruction.Attribute("separator")?.Value ?? " ";
+                            var sep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
                             textValue = XdmValueToString(result, sep);
                         }
                         _lastAddedWasAtomic = false;
@@ -4022,7 +4058,7 @@ public sealed class TransformEngine
                     }
                     else
                     {
-                        var voSep = instruction.Attribute("separator")?.Value ?? "";
+                        var voSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? "", instruction);
                         var textValue = EvaluateSimpleContent(instruction, contextItem, voSep);
                         _lastAddedWasAtomic = false;
                         AddTextNode(textValue, allowZeroLength: true);
@@ -4507,7 +4543,7 @@ public sealed class TransformEngine
                         var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
                         for (int sortIdx = 0; sortIdx < sortElements.Count; sortIdx++)
                         {
-                            var stableAttr = sortElements[sortIdx].Attribute("stable")?.Value;
+                            var stableAttr = EvaluateAvt(sortElements[sortIdx].Attribute("stable")?.Value ?? "", sortElements[sortIdx]);
                             if (sortIdx > 0 && !string.IsNullOrEmpty(stableAttr))
                                 throw new InvalidOperationException("XTSE1017: @stable is allowed only on the first xsl:sort");
                             if (!string.IsNullOrEmpty(stableAttr))
@@ -5791,7 +5827,7 @@ public sealed class TransformEngine
     /// </summary>
     private string EvaluateAvt(string value, XElement? contextElement = null)
     {
-        if (string.IsNullOrEmpty(value) || !value.Contains('{'))
+        if (string.IsNullOrEmpty(value))
             return value;
 
         var sb = new System.Text.StringBuilder();
@@ -5828,7 +5864,7 @@ public sealed class TransformEngine
                 else
                 {
                     var expr = value.Substring(i + 1, end - i - 1);
-                    if (!string.IsNullOrEmpty(expr))
+                    if (!string.IsNullOrEmpty(expr) && !IsOnlyWhitespaceAndComments(expr))
                     {
                         ValidateXPathPrefixes(expr, nsMap ?? new Dictionary<string, string>());
                         XPath31Expression compiled;
@@ -5848,7 +5884,30 @@ public sealed class TransformEngine
                             compiled = XPath31Expression.Compile(expr);
                         }
                         var result = compiled.Evaluate(_context);
-                        sb.Append(XdmValueToString(result));
+                        string exprValue;
+                        if (contextElement != null && IsEffectiveBackwardsCompatible(contextElement))
+                        {
+                            // XSLT 1.0 backwards compatibility: AVT expression value is the
+                            // string value of the first item, or empty for an empty sequence.
+                            if (result.IsUndefined)
+                            {
+                                exprValue = string.Empty;
+                            }
+                            else if (result.IsSequence && result.SequenceValue != null)
+                            {
+                                var en = XdmSequence.FromSource(result.SequenceValue).GetEnumerator();
+                                exprValue = en.MoveNext() ? en.Current.ToString() : string.Empty;
+                            }
+                            else
+                            {
+                                exprValue = result.ToString();
+                            }
+                        }
+                        else
+                        {
+                            exprValue = XdmValueToString(result);
+                        }
+                        sb.Append(exprValue);
                     }
                     i = end + 1;
                 }
@@ -5869,15 +5928,60 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Returns true if the extracted AVT expression contains only whitespace and/or
+    /// XPath comments. Such an expression evaluates to an empty sequence and contributes
+    /// nothing to the attribute value.
+    /// </summary>
+    private static bool IsOnlyWhitespaceAndComments(string expr)
+    {
+        int i = 0;
+        while (i < expr.Length)
+        {
+            char c = expr[i];
+            if (char.IsWhiteSpace(c))
+            {
+                i++;
+                continue;
+            }
+            if (c == '(' && i + 1 < expr.Length && expr[i + 1] == ':')
+            {
+                i += 2;
+                int depth = 1;
+                while (i < expr.Length && depth > 0)
+                {
+                    if (expr[i] == ':' && i + 1 < expr.Length && expr[i + 1] == ')')
+                    {
+                        depth--;
+                        i += 2;
+                    }
+                    else if (expr[i] == '(' && i + 1 < expr.Length && expr[i + 1] == ':')
+                    {
+                        depth++;
+                        i += 2;
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
     /// Finds the closing <c>}</c> of an AVT expression, skipping <c>}</c> inside
-    /// XPath string literals (both single- and double-quoted) and respecting
-    /// nested braces from EQNames (<c>Q{uri}local</c>) and map constructors.
+    /// XPath string literals (both single- and double-quoted), XPath comments
+    /// <c>(: ... :)</c>, and respecting nested braces from EQNames and map constructors.
     /// </summary>
     private static int FindAvtExprEnd(string value, int start)
     {
         char inString = '\0';
         int braceDepth = 1; // we are already inside the opening '{'
-        for (int i = start; i < value.Length; i++)
+        int i = start;
+        while (i < value.Length)
         {
             char c = value[i];
             if (inString != '\0')
@@ -5887,23 +5991,54 @@ public sealed class TransformEngine
                     // Check for escaped quote (doubled)
                     if (i + 1 < value.Length && value[i + 1] == inString)
                     {
-                        i++; // skip the pair
+                        i += 2; // skip the pair
                     }
                     else
                     {
                         inString = '\0';
+                        i++;
                     }
+                }
+                else
+                {
+                    i++;
                 }
                 continue;
             }
             if (c == '\'' || c == '"')
             {
                 inString = c;
+                i++;
+                continue;
+            }
+            // XPath comment inside the expression
+            if (c == '(' && i + 1 < value.Length && value[i + 1] == ':')
+            {
+                i += 2;
+                int commentDepth = 1;
+                while (i < value.Length && commentDepth > 0)
+                {
+                    if (value[i] == ':' && i + 1 < value.Length && value[i + 1] == ')')
+                    {
+                        commentDepth--;
+                        i += 2;
+                    }
+                    else if (value[i] == '(' && i + 1 < value.Length && value[i + 1] == ':')
+                    {
+                        commentDepth++;
+                        i += 2;
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
                 continue;
             }
             if (c == '{')
             {
                 braceDepth++;
+                i++;
                 continue;
             }
             if (c == '}')
@@ -5911,7 +6046,10 @@ public sealed class TransformEngine
                 braceDepth--;
                 if (braceDepth == 0)
                     return i;
+                i++;
+                continue;
             }
+            i++;
         }
         return -1;
     }
@@ -9335,7 +9473,7 @@ public sealed class TransformEngine
         for (int i = 0; i < sortSpecs.Count; i++)
         {
             var spec = sortSpecs[i];
-            var stableAttr = spec.Attribute("stable")?.Value;
+            var stableAttr = EvaluateAvt(spec.Attribute("stable")?.Value ?? "", spec);
             if (!string.IsNullOrEmpty(stableAttr))
             {
                 if (i > 0)

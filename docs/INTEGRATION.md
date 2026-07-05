@@ -12,6 +12,13 @@
 
 ## 0. Recent Changes
 
+- **2026-07-05** — Cleared the W3C `avt` conformance cluster (35 runnable tests pass; 0 failed).
+  - AVT expressions now correctly handle XPath comments (`(: ... :)`), empty expressions, escaped `}}`, and `{{` even when no `{` expression is present.
+  - `xsl:attribute/@separator`, `xsl:value-of/@separator`, and `xsl:sort/@stable` are now evaluated as attribute value templates.
+  - AVTs in XSLT 1.0 backwards-compatibility mode take only the first item of the expression value, matching `string()` semantics.
+  - `xsl:value-of` inside `xsl:function` bodies constructs real text nodes, so functions declared `as="text()*"` return the expected node kind.
+  - `xsl:template/@match` now rejects AVT syntax with `XTSE0340`.
+
 - **2026-07-05** — Cleared the W3C `collations` conformance cluster (43 runnable tests pass; 0 failed).
   - `xsl:stylesheet`/`xsl:template`/`xsl:*` `default-collation` attributes now flow into the XPath evaluation context, so `eq`, `=`, `fn:compare`, `fn:starts-with`, `fn:contains`, `fn:ends-with`, etc. use the correct collation without an explicit argument.
   - `xsl:for-each-group` and `xsl:key` use the effective default collation when no explicit `@collation` is supplied.
