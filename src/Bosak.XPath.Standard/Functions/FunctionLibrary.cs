@@ -80,6 +80,8 @@
 //                      | Charles Korthout | 5.14  | 26-06-2026     | Allow XML 1.1 C0 controls in codepoints-to-string; honor duplicates in json-to-xml     |
 //                      | Charles Korthout | 5.15  | 02-07-2026     | ToDoubleValueStrict parses xs:untypedAtomic; fn:remove and QName-from functions atomize  |
 //                      | Charles Korthout | 5.16  | 02-07-2026     | available-system-properties returns xs:QName values; added missing XSLT system properties |
+//                      | Charles Korthout | 5.17  | 26-06-2026     | Default-collation aware default-collation(), deep-equal, max/min, index-of, distinct-values |
+//                      | Charles Korthout | 5.18  | 05-07-2026     | Default-collation aware fn:compare, contains, starts-with, ends-with, substring-before/after |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3761,7 +3763,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue DefaultCollation(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(CodepointCollation);
+        => XdmValue.FromString(string.IsNullOrEmpty(ctx.DefaultCollation) ? CodepointCollation : ctx.DefaultCollation);
 
     private static readonly string[] SystemProperties =
     [
@@ -4488,7 +4490,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue ContainsToken_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ContainsToken(args[0], AtomizedString(args[1]), string.Empty);
+        => ContainsToken(args[0], AtomizedString(args[1]), ctx.DefaultCollation);
 
     private static XdmValue ContainsToken_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => ContainsToken(args[0], AtomizedString(args[1]), AtomizedString(args[2]));
@@ -4731,6 +4733,9 @@ public static class FunctionLibrary
                 strength = val;
             else if (key == "alternate" && val == "blanked")
                 alternateBlanked = true;
+            else if (string.Equals(key, "fallback", StringComparison.OrdinalIgnoreCase) &&
+                     string.Equals(val, "no", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException("FOCH0002: Unsupported UCA collation (fallback=no)");
         }
 
         var culture = CultureInfo.GetCultureInfo(lang);
@@ -6460,8 +6465,11 @@ public static class FunctionLibrary
     }
 
     private static XdmValue DistinctValues_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => DistinctValuesImpl(args[0], ctx.DefaultCollation);
+
+    private static XdmValue DistinctValuesImpl(XdmValue sequence, string collation)
     {
-        var items = Materialize(args[0]);
+        var items = Materialize(sequence);
         var seen = new List<XdmValue>();
         var result = new List<XdmValue>();
         foreach (var item in items)
@@ -6470,7 +6478,7 @@ public static class FunctionLibrary
             bool isDistinct = true;
             foreach (var s in seen)
             {
-                if (DeepEqualItem(atomized, s))
+                if (AtomicValuesEqual(atomized, s, collation))
                 {
                     isDistinct = false;
                     break;
@@ -6486,23 +6494,98 @@ public static class FunctionLibrary
     }
 
     private static XdmValue DistinctValues_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => DistinctValues_1(ctx, args);
+    {
+        string collation = AtomizedString(args[1]);
+        ValidateCollation(collation);
+        return DistinctValuesImpl(args[0], collation);
+    }
+
+    /// <summary>
+    /// Compares two atomized XDM values using XPath <c>eq</c> semantics and the
+    /// supplied collation for string comparisons.
+    /// </summary>
+    private static bool AtomicValuesEqual(XdmValue a, XdmValue b, string collation)
+    {
+        if (a.IsUndefined || b.IsUndefined)
+            return false;
+
+        if (IsNumericValue(a) && IsNumericValue(b))
+        {
+            bool aIsNaN = (a.Kind is XdmValueKind.Double or XdmValueKind.Float) && double.IsNaN(a.DoubleValue);
+            bool bIsNaN = (b.Kind is XdmValueKind.Double or XdmValueKind.Float) && double.IsNaN(b.DoubleValue);
+            if (aIsNaN || bIsNaN)
+                return false;
+
+            if (a.Kind == XdmValueKind.Double || b.Kind == XdmValueKind.Double)
+                return ToDoubleValue(a) == ToDoubleValue(b);
+            if (a.Kind == XdmValueKind.Float || b.Kind == XdmValueKind.Float)
+                return (float)ToDoubleValue(a) == (float)ToDoubleValue(b);
+            if (a.Kind == XdmValueKind.Decimal || b.Kind == XdmValueKind.Decimal)
+                return ToDecimalValue(a) == ToDecimalValue(b);
+            return a.IntegerValue == b.IntegerValue;
+        }
+
+        if (a.Kind != b.Kind)
+        {
+            // Untyped atomic is cast to the other operand's type for comparison.
+            if (IsUntypedAtomic(a))
+                return UntypedAtomicEqualsOther(a, b, collation);
+            if (IsUntypedAtomic(b))
+                return UntypedAtomicEqualsOther(b, a, collation);
+            return false;
+        }
+
+        return a.Kind switch
+        {
+            XdmValueKind.String => CompareStrings(a.StringValue, b.StringValue, collation) == 0,
+            XdmValueKind.Boolean => a.BooleanValue == b.BooleanValue,
+            XdmValueKind.Integer => a.IntegerValue == b.IntegerValue,
+            XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,
+            XdmValueKind.Double or XdmValueKind.Float => a.DoubleValue == b.DoubleValue,
+            XdmValueKind.DateTime => a.DateTimeValue == b.DateTimeValue,
+            XdmValueKind.Date => a.DateValue == b.DateValue,
+            XdmValueKind.Time => a.TimeValue == b.TimeValue,
+            XdmValueKind.QName => a.QNameValue.Equals(b.QNameValue),
+            XdmValueKind.Uri => CompareStrings(a.StringValue, b.StringValue, collation) == 0,
+            _ => false
+        };
+    }
+
+    private static bool IsUntypedAtomic(XdmValue value)
+        => value.Kind == XdmValueKind.String &&
+           string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
+
+    private static bool UntypedAtomicEqualsOther(XdmValue untyped, XdmValue other, string collation)
+    {
+        if (other.Kind is XdmValueKind.String or XdmValueKind.Uri)
+            return CompareStrings(untyped.StringValue, other.StringValue, collation) == 0;
+        return false;
+    }
+
+    private static bool IsNumericValue(XdmValue value)
+        => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double;
 
     private static XdmValue IndexOf_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => IndexOfImpl(args[0], AtomizedString(args[1]), ctx.DefaultCollation);
+
+    private static XdmValue IndexOfImpl(XdmValue sequence, string search, string collation)
     {
-        var seq = Materialize(args[0]);
-        string search = AtomizedString(args[1]);
+        var seq = Materialize(sequence);
         var result = new List<XdmValue>();
         for (int i = 0; i < seq.Count; i++)
         {
-            if (AtomizedString(seq[i]) == search)
+            if (CompareStrings(AtomizedString(seq[i]), search, collation) == 0)
                 result.Add(XdmValue.FromInteger(i + 1));
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     private static XdmValue IndexOf_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => IndexOf_2(ctx, args);
+    {
+        string collation = AtomizedString(args[2]);
+        ValidateCollation(collation);
+        return IndexOfImpl(args[0], AtomizedString(args[1]), collation);
+    }
 
     // ------------------------------------------------------------------
     // Aggregate functions
@@ -6600,21 +6683,33 @@ public static class FunctionLibrary
     {
         var items = Materialize(args[0]);
         if (items.Count == 0) return XdmValue.Undefined;
-        return MinMax(items, true);
+        return MinMax(items, true, ctx.DefaultCollation);
     }
 
     private static XdmValue Min_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => Min_1(ctx, args);
+    {
+        var items = Materialize(args[0]);
+        if (items.Count == 0) return XdmValue.Undefined;
+        string collation = AtomizedString(args[1]);
+        ValidateCollation(collation);
+        return MinMax(items, true, collation);
+    }
 
     private static XdmValue Max_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var items = Materialize(args[0]);
         if (items.Count == 0) return XdmValue.Undefined;
-        return MinMax(items, false);
+        return MinMax(items, false, ctx.DefaultCollation);
     }
 
     private static XdmValue Max_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => Max_1(ctx, args);
+    {
+        var items = Materialize(args[0]);
+        if (items.Count == 0) return XdmValue.Undefined;
+        string collation = AtomizedString(args[1]);
+        ValidateCollation(collation);
+        return MinMax(items, false, collation);
+    }
 
     private static XdmValue StringJoin_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => StringJoin(ctx, new[] { args[0], XdmValue.FromString("") }.AsSpan());
@@ -7264,7 +7359,7 @@ public static class FunctionLibrary
         return XdmValue.FromDouble(sumD);
     }
 
-    private static XdmValue MinMax(List<XdmValue> items, bool min)
+    private static XdmValue MinMax(List<XdmValue> items, bool min, string collation)
     {
         var atomized = items.Select(AtomizeValue).ToList();
 
@@ -7309,7 +7404,8 @@ public static class FunctionLibrary
             for (int i = 1; i < atomized.Count; i++)
             {
                 var s = atomized[i].StringValue;
-                if (min ? string.Compare(s, result, StringComparison.Ordinal) < 0 : string.Compare(s, result, StringComparison.Ordinal) > 0)
+                int cmp = CompareStrings(s, result, collation);
+                if (min ? cmp < 0 : cmp > 0)
                 {
                     result = s;
                     resultVal = atomized[i];
@@ -9004,12 +9100,16 @@ public static class FunctionLibrary
     // ------------------------------------------------------------------
 
     private static XdmValue DeepEqual_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => DeepEqual(args[0], args[1]);
+        => DeepEqual(args[0], args[1], ctx.DefaultCollation);
 
     private static XdmValue DeepEqual_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => DeepEqual(args[0], args[1]);
+    {
+        string collation = AtomizedString(args[2]);
+        ValidateCollation(collation);
+        return DeepEqual(args[0], args[1], collation);
+    }
 
-    private static XdmValue DeepEqual(XdmValue a, XdmValue b)
+    private static XdmValue DeepEqual(XdmValue a, XdmValue b, string collation)
     {
         var itemsA = ToItemList(a);
         var itemsB = ToItemList(b);
@@ -9017,7 +9117,7 @@ public static class FunctionLibrary
             return XdmValue.False;
         for (int i = 0; i < itemsA.Count; i++)
         {
-            if (!DeepEqualItem(itemsA[i], itemsB[i]))
+            if (!DeepEqualItem(itemsA[i], itemsB[i], collation))
                 return XdmValue.False;
         }
         return XdmValue.True;
@@ -9038,7 +9138,7 @@ public static class FunctionLibrary
         return list;
     }
 
-    private static bool DeepEqualItem(XdmValue a, XdmValue b)
+    private static bool DeepEqualItem(XdmValue a, XdmValue b, string collation)
     {
         // Numeric cross-type comparison: integer, decimal, float, double are all comparable
         if (IsNumeric(a) && IsNumeric(b))
@@ -9099,15 +9199,15 @@ public static class FunctionLibrary
             XdmValueKind.Integer => a.IntegerValue == b.IntegerValue,
             XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => a.DoubleValue == b.DoubleValue,
-            XdmValueKind.String => a.StringValue == b.StringValue,
+            XdmValueKind.String => CompareStrings(a.StringValue, b.StringValue, collation) == 0,
             XdmValueKind.DateTime => a.DateTimeValue == b.DateTimeValue,
             XdmValueKind.Date => a.DateValue == b.DateValue,
             XdmValueKind.Time => a.TimeValue == b.TimeValue,
             XdmValueKind.QName => a.QNameValue.Equals(b.QNameValue),
-            XdmValueKind.Node => DeepEqualNode(a.NodeValue, b.NodeValue),
-            XdmValueKind.Sequence => DeepEqual(a, b).BooleanValue,
-            XdmValueKind.Map => DeepEqualMap(a.MapValue, b.MapValue),
-            XdmValueKind.Array => DeepEqualArray(a.ArrayValue, b.ArrayValue),
+            XdmValueKind.Node => DeepEqualNode(a.NodeValue, b.NodeValue, collation),
+            XdmValueKind.Sequence => DeepEqual(a, b, collation).BooleanValue,
+            XdmValueKind.Map => DeepEqualMap(a.MapValue, b.MapValue, collation),
+            XdmValueKind.Array => DeepEqualArray(a.ArrayValue, b.ArrayValue, collation),
             _ => false
         };
     }
@@ -9115,7 +9215,7 @@ public static class FunctionLibrary
     private static bool IsNumeric(XdmValue value)
         => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double;
 
-    private static bool DeepEqualNode(IXdmNode a, IXdmNode b)
+    private static bool DeepEqualNode(IXdmNode a, IXdmNode b, string collation)
     {
         if (a.NodeKind != b.NodeKind)
             return false;
@@ -9123,7 +9223,7 @@ public static class FunctionLibrary
             return false;
         if (a.NamespaceUri != b.NamespaceUri)
             return false;
-        if (a.StringValue != b.StringValue)
+        if (CompareStrings(a.StringValue, b.StringValue, collation) != 0)
             return false;
 
         if (a.NodeKind == XdmNodeKind.Element)
@@ -9134,7 +9234,7 @@ public static class FunctionLibrary
                 return false;
             for (int i = 0; i < attrsA.Count; i++)
             {
-                if (!DeepEqualNode(attrsA[i].NodeValue, attrsB[i].NodeValue))
+                if (!DeepEqualNode(attrsA[i].NodeValue, attrsB[i].NodeValue, collation))
                     return false;
             }
 
@@ -9144,7 +9244,7 @@ public static class FunctionLibrary
                 return false;
             for (int i = 0; i < childrenA.Count; i++)
             {
-                if (!DeepEqualNode(childrenA[i], childrenB[i]))
+                if (!DeepEqualNode(childrenA[i], childrenB[i], collation))
                     return false;
             }
         }
@@ -9174,7 +9274,7 @@ public static class FunctionLibrary
         return list;
     }
 
-    private static bool DeepEqualMap(XdmMap a, XdmMap b)
+    private static bool DeepEqualMap(XdmMap a, XdmMap b, string collation)
     {
         if (a.Count != b.Count)
             return false;
@@ -9185,7 +9285,7 @@ public static class FunctionLibrary
             bool found = false;
             foreach (var (keyB, valB) in entriesB)
             {
-                if (DeepEqualItem(keyA, keyB) && DeepEqualItem(valA, valB))
+                if (DeepEqualItem(keyA, keyB, collation) && DeepEqualItem(valA, valB, collation))
                 {
                     found = true;
                     break;
@@ -9197,7 +9297,7 @@ public static class FunctionLibrary
         return true;
     }
 
-    private static bool DeepEqualArray(XdmArray a, XdmArray b)
+    private static bool DeepEqualArray(XdmArray a, XdmArray b, string collation)
     {
         if (a.Count != b.Count)
             return false;
@@ -9205,7 +9305,7 @@ public static class FunctionLibrary
         var bv = b.Values.ToList();
         for (int i = 0; i < av.Count; i++)
         {
-            if (!DeepEqualItem(av[i], bv[i]))
+            if (!DeepEqualItem(av[i], bv[i], collation))
                 return false;
         }
         return true;

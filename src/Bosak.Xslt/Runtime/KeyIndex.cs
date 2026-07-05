@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 11-06-2026     | Store typed key values; attribute nodes indexed; dedupe entries                         |
 //                      | Charles Korthout | 0.5   | 11-06-2026     | Document-order lookup results; composite key support                                     |
 //                      | Charles Korthout | 0.6   | 24-06-2026     | Pass DefiningElementDefaultNamespace when compiling key use expressions                |
+//                      | Charles Korthout | 0.7   | 26-06-2026     | Per-key-name effective collation for key-value comparison; XTSE1220 detection           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -24,6 +25,7 @@ using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Standard.Functions;
 
 namespace Bosak.Xslt.Runtime;
 
@@ -36,6 +38,9 @@ public sealed class KeyIndex
 
     // key name → entries
     private readonly Dictionary<string, List<KeyEntry>> _index = new();
+
+    // key name → effective collation URI used for key-value comparison
+    private readonly Dictionary<string, string> _keyCollations = new();
 
     /// <summary>
     /// Returns the total number of (keyName, keyValue, node) entries in the index.
@@ -89,7 +94,7 @@ public sealed class KeyIndex
             bool same = true;
             for (int i = 0; i < keyValues.Length; i++)
             {
-                if (!KeyValuesEqual(entry.KeyValues[i], keyValues[i]))
+                if (!KeyValuesEqual(entry.KeyValues[i], keyValues[i], GetCollation(keyName)))
                 {
                     same = false;
                     break;
@@ -114,6 +119,17 @@ public sealed class KeyIndex
     }
 
     /// <summary>
+    /// Records the effective collation URI used for comparisons of the specified key name.
+    /// </summary>
+    public void SetCollation(string keyName, string collation)
+    {
+        _keyCollations[keyName] = collation;
+    }
+
+    private string GetCollation(string keyName)
+        => _keyCollations.TryGetValue(keyName, out var collation) ? collation : string.Empty;
+
+    /// <summary>
     /// Looks up nodes by key name and typed key value using XPath <c>eq</c>-style comparison.
     /// Results are returned in document order and deduplicated.
     /// </summary>
@@ -127,7 +143,7 @@ public sealed class KeyIndex
         {
             if (entry.IsComposite)
                 continue;
-            if (KeyValuesEqual(entry.KeyValues[0], keyValue))
+            if (KeyValuesEqual(entry.KeyValues[0], keyValue, GetCollation(keyName)))
                 matches.Add(entry);
         }
 
@@ -162,7 +178,7 @@ public sealed class KeyIndex
             bool same = true;
             for (int i = 0; i < keyValues.Length; i++)
             {
-                if (!KeyValuesEqual(entry.KeyValues[i], keyValues[i]))
+                if (!KeyValuesEqual(entry.KeyValues[i], keyValues[i], GetCollation(keyName)))
                 {
                     same = false;
                     break;
@@ -183,9 +199,10 @@ public sealed class KeyIndex
 
     /// <summary>
     /// Compares two key values using the same rules as the XPath <c>eq</c> operator,
-    /// including untyped-atomic casting and numeric promotion.
+    /// including untyped-atomic casting, numeric promotion, and the supplied collation
+    /// for string comparisons.
     /// </summary>
-    private static bool KeyValuesEqual(XdmValue a, XdmValue b)
+    private static bool KeyValuesEqual(XdmValue a, XdmValue b, string collation)
     {
         if (a.IsUndefined || b.IsUndefined)
             return false;
@@ -219,7 +236,7 @@ public sealed class KeyIndex
             switch (aKind)
             {
                 case XdmValueKind.String:
-                    return string.Equals(a.ToString(), b.ToString(), StringComparison.Ordinal);
+                    return FunctionLibrary.CompareStrings(a.ToString(), b.ToString(), collation) == 0;
                 case XdmValueKind.Boolean:
                     return a.ToString() == b.ToString();
                 case XdmValueKind.DateTime:
@@ -233,21 +250,21 @@ public sealed class KeyIndex
                     var qb = b.QNameValue;
                     return qa.LocalName == qb.LocalName && qa.NamespaceUri == qb.NamespaceUri;
                 case XdmValueKind.Uri:
-                    return string.Equals(a.ToString(), b.ToString(), StringComparison.Ordinal);
+                    return FunctionLibrary.CompareStrings(a.ToString(), b.ToString(), collation) == 0;
             }
         }
 
         // untypedAtomic on either side: cast to the other operand's type.
         if (IsUntypedAtomic(a))
-            return UntypedAtomicEqualsOther(a, b);
+            return UntypedAtomicEqualsOther(a, b, collation);
         if (IsUntypedAtomic(b))
-            return UntypedAtomicEqualsOther(b, a);
+            return UntypedAtomicEqualsOther(b, a, collation);
 
         // String / URI cross-comparison.
         if ((aKind == XdmValueKind.String || aKind == XdmValueKind.Uri) &&
             (bKind == XdmValueKind.String || bKind == XdmValueKind.Uri))
         {
-            return string.Equals(a.ToString(), b.ToString(), StringComparison.Ordinal);
+            return FunctionLibrary.CompareStrings(a.ToString(), b.ToString(), collation) == 0;
         }
 
         return false;
@@ -272,13 +289,13 @@ public sealed class KeyIndex
         return dt.ToUniversalTime();
     }
 
-    private static bool UntypedAtomicEqualsOther(XdmValue untyped, XdmValue other)
+    private static bool UntypedAtomicEqualsOther(XdmValue untyped, XdmValue other, string collation)
     {
         // XSLT key() treats xs:untypedAtomic values as strings for comparison purposes:
         // they match string lookups but do not cast to numeric, boolean, or date/time types.
         var s = untyped.ToString();
         if (other.Kind is XdmValueKind.String or XdmValueKind.Uri)
-            return string.Equals(s, other.ToString(), StringComparison.Ordinal);
+            return FunctionLibrary.CompareStrings(s, other.ToString(), collation) == 0;
         return false;
     }
 

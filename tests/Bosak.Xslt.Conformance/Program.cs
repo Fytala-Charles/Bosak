@@ -33,6 +33,7 @@
 //                      | Charles Korthout | 2.1   | 26-06-2026     | Set TreatRecoverableAmbiguousMatchAsError for on-multiple-match="error" tests          |
 //                      | Charles Korthout | 2.2   | 26-06-2026     | Evaluate assert-result-document assertions against secondary output files               |
 //                      | Charles Korthout | 2.3   | 26-06-2026     | Pass base output URI from <output file="..."/> to the transformation engine            |
+//                      | Charles Korthout | 2.4   | 26-06-2026     | Read environment <collation> and set EvaluationContext.DefaultCollation               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -351,6 +352,7 @@ class Program
 
             // Load environment (source XML)
             IXdmNode? sourceNode = null;
+            string? envDefaultCollation = null;
             var envRef = testCase.Element(ns + "environment")?.Attribute("ref")?.Value;
             if (envRef == null)
                 envRef = testCase.Attribute("ref")?.Value;
@@ -368,7 +370,11 @@ class Program
             }
 
             if (envToLoad != null)
-                sourceNode = LoadEnvironment(envToLoad, testSetDir, catalogDir, ns);
+            {
+                var loadedEnv = LoadEnvironment(envToLoad, testSetDir, catalogDir, ns);
+                sourceNode = loadedEnv.SourceNode;
+                envDefaultCollation = loadedEnv.DefaultCollation;
+            }
 
             // Load test (stylesheet(s))
             var testElem = testCase.Element(ns + "test");
@@ -500,6 +506,8 @@ class Program
             if (string.IsNullOrEmpty(xslDoc.BaseUri))
                 xslDoc.AddAnnotation(baseUri);
             var evalContext = new Bosak.XPath.Runtime.Vm.EvaluationContext();
+            if (!string.IsNullOrEmpty(envDefaultCollation))
+                evalContext.DefaultCollation = envDefaultCollation;
             evalContext.BaseUri = baseUri;
             evalContext.DocumentLoader = uri =>
             {
@@ -754,10 +762,10 @@ class Program
         return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
     }
 
-    static IXdmNode? LoadEnvironment(XElement envElem, string testSetDir, string catalogDir, XNamespace ns)
+    static (IXdmNode? SourceNode, string? DefaultCollation) LoadEnvironment(XElement envElem, string testSetDir, string catalogDir, XNamespace ns)
     {
         var source = envElem.Element(ns + "source");
-        if (source == null) return null;
+        if (source == null) return (null, null);
 
         XDocument? doc = null;
         var content = source.Element(ns + "content");
@@ -784,13 +792,15 @@ class Program
             }
         }
 
-        if (doc == null) return null;
+        if (doc == null) return (null, null);
         if (string.IsNullOrEmpty(doc.BaseUri) && sourceUri != null)
             doc.AddAnnotation(sourceUri);
 
         var sourceNode = new XDocumentNode(doc);
         if (sourceUri != null)
             sourceNode.SetDocumentUri(sourceUri);
+
+        var defaultCollation = envElem.Element(ns + "collation")?.Attribute("uri")?.Value;
 
         // Handle select="..." on source (e.g. role="." select="/doc")
         var select = source.Attribute("select")?.Value;
@@ -803,19 +813,19 @@ class Program
             var result = compiled.Evaluate(evalContext);
             if (result.IsNode && result.NodeValue != null)
             {
-                return result.NodeValue;
+                return (result.NodeValue, defaultCollation);
             }
             if (result.IsSequence && result.SequenceValue != null)
             {
                 foreach (var item in XdmSequence.FromSource(result.SequenceValue))
                 {
                     if (item.IsNode && item.NodeValue != null)
-                        return item.NodeValue;
+                        return (item.NodeValue, defaultCollation);
                 }
             }
         }
 
-        return sourceNode;
+        return (sourceNode, defaultCollation);
     }
 
     static void CollectEntryPointParameters(XElement? entryPointElem, EvaluationContext evalContext, XNamespace ns)

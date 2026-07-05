@@ -4,13 +4,20 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 4 July 2026
+> **Last updated:** 5 July 2026
 > **Bosak baseline:** 913 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,073 passed / 177 failed / 9,350 skipped (~96.6%)
+> **XSLT baseline:** 5,097 passed / 153 failed / 9,350 skipped (97.1%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-05** — Cleared the W3C `collations` conformance cluster (43 runnable tests pass; 0 failed).
+  - `xsl:stylesheet`/`xsl:template`/`xsl:*` `default-collation` attributes now flow into the XPath evaluation context, so `eq`, `=`, `fn:compare`, `fn:starts-with`, `fn:contains`, `fn:ends-with`, etc. use the correct collation without an explicit argument.
+  - `xsl:for-each-group` and `xsl:key` use the effective default collation when no explicit `@collation` is supplied.
+  - `xsl:sort` with `case-order="upper-first"`/`"lower-first"` works even when no `@lang` or `@collation` is present (primary comparison is case-insensitive, with case as the tie-breaker).
+  - Collation-aware aggregate functions (`fn:max`, `fn:min`, `fn:index-of`, `fn:distinct-values`, `fn:deep-equal`) now honor the in-scope default collation.
+  - UCA collations with `fallback=no` raise `FOCH0002`, matching the implementation-defined fallback behavior expected by the test suite.
 
 - **2026-07-04** — Cleared the W3C `iterate` conformance cluster (44 runnable tests pass; 0 failed; 35 streaming tests skipped).
   - `xsl:iterate` now works in the result-tree path with `xsl:param`, `xsl:next-iteration`, `xsl:break`, and `xsl:on-completion`.
@@ -343,9 +350,9 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | Literal result elements | ✅ Working | Namespace preservation, AVT evaluation |
 | `xsl:import` / `xsl:include` | ✅ Working | URI resolution with correct precedence rules |
 | Modes | ✅ Working | Named modes, `#current`, `#default`, `#all`, multi-mode templates |
-| `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable`, AVTs for `lang`/`case-order`/`collation`; recognized collations including UCA `alternate=non-ignorable`, `blanked`, and `shifted`. |
+| `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable`, AVTs for `lang`/`case-order`/`collation`; recognized collations including UCA `alternate=non-ignorable`, `blanked`, and `shifted`. Default collation is respected; `case-order` works without an explicit collation. |
 | `xsl:number` | ✅ Working | `single`, `any`, `multiple` levels; format tokens |
-| `xsl:key` / `key()` | ✅ Working | Indexed lookup; composite keys; content-constructor keys preserve typed atomic values; results returned in document order; `key()` allowed in match patterns with XTSE0340 validation |
+| `xsl:key` / `key()` | ✅ Working | Indexed lookup; composite keys; content-constructor keys preserve typed atomic values; results returned in document order; `key()` allowed in match patterns with XTSE0340 validation. Key-value comparison respects the effective default or explicit `@collation`; conflicting collations for the same key name raise XTSE1220. |
 | `xsl:output` | ✅ Working | `method`, `indent`, `omit-xml-declaration`, `encoding` |
 | `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |

@@ -147,6 +147,7 @@
 //                      | Charles Korthout | 5.76  | 26-06-2026     | Strip whitespace before xsl:context-item; preserve atomic spacing across templates       |
 //                      | Charles Korthout | 5.77  | 26-06-2026     | Implemented xsl:iterate, xsl:break, and xsl:next-iteration in result tree              |
 //                      | Charles Korthout | 5.78  | 26-06-2026     | xsl:next-iteration with-param conversion to xsl:param @as; fixes iterate-042/027       |
+//                      | Charles Korthout | 5.79  | 26-06-2026     | Propagate default-collation through templates, sort, groups, keys; clears collations cluster |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -585,28 +586,7 @@ public sealed class TransformEngine
             // xsl:key/@use or match can query the partially-built index.
             _keyIndices.Add((source, sourceIndex));
 
-            int maxIterations = allKeyDefs.Count + 1;
-            int previousTotal = -1;
-            for (int i = 0; i < maxIterations; i++)
-            {
-                int currentTotal = sourceIndex.TotalEntryCount;
-                if (currentTotal == previousTotal)
-                    break;
-                previousTotal = currentTotal;
-
-                // Clear each key name once per iteration so multiple definitions
-                // with the same name accumulate, rather than overwriting each other.
-                var cleared = new HashSet<string>();
-                foreach (var keyDef in allKeyDefs)
-                {
-                    if (cleared.Add(keyDef.Name))
-                        sourceIndex.ClearKey(keyDef.Name);
-                    if (keyDef.HasUseContent)
-                        KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex, n => EvaluateSequenceConstructor(keyDef.Element!, XdmValue.FromNode(n), wrapInDocumentNode: false));
-                    else
-                        KeyIndex.BuildSingleKey(source, keyDef, _context, sourceIndex);
-                }
-            }
+            BuildKeyIndex(source, sourceIndex, allKeyDefs);
         }
 
         RegisterGroupingFunctions();
@@ -2353,7 +2333,7 @@ public sealed class TransformEngine
                         if (feItems.Count == 0) break;
 
                         var collationAttr = instruction.Attribute("collation")?.Value;
-                        var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? null : EvaluateAvt(collationAttr, instruction);
+                        var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? _context.DefaultCollation : EvaluateAvt(collationAttr, instruction);
 
                         ValidateForEachGroupAttributes(instruction);
 
@@ -3490,6 +3470,10 @@ public sealed class TransformEngine
             _defaultModeStack.Push(ExpandModeName(templateDefaultMode, rule.Element));
         }
 
+        var templateCollation = GetEffectiveDefaultCollation(rule.Element);
+        var savedDefaultCollation = _context.DefaultCollation;
+        _context.DefaultCollation = templateCollation;
+
         try
         {
             // Process xsl:context-item (already validated) and xsl:param declarations first.
@@ -3582,6 +3566,7 @@ public sealed class TransformEngine
         }
         finally
         {
+            _context.DefaultCollation = savedDefaultCollation;
             _context.RestoreVariables(snapshot);
             _context.WithFocus(savedItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
@@ -3869,6 +3854,9 @@ public sealed class TransformEngine
     {
         _currentInstruction = instruction;
         var node = contextItem.IsNode ? contextItem.NodeValue : null;
+
+        WithDefaultCollation(instruction, () =>
+        {
 
         // Push default-mode for this instruction scope
         var instructionDefaultMode = instruction.Attribute("default-mode")?.Value;
@@ -4505,7 +4493,7 @@ public sealed class TransformEngine
                         if (items.Count == 0) break;
 
                         var collationAttr = instruction.Attribute("collation")?.Value;
-                        var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? null : EvaluateAvt(collationAttr, instruction);
+                        var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? _context.DefaultCollation : EvaluateAvt(collationAttr, instruction);
 
                         ValidateForEachGroupAttributes(instruction);
 
@@ -5469,6 +5457,7 @@ public sealed class TransformEngine
                 _defaultModeStack.Pop();
             }
         }
+        });
     }
 
     /// <summary>
@@ -7808,6 +7797,29 @@ public sealed class TransformEngine
         // recursive key() calls inside xsl:key/@use or match can query it.
         var keyIndex = new KeyIndex();
         _keyIndices!.Add((docRoot, keyIndex));
+        BuildKeyIndex(docRoot, keyIndex, allKeyDefs);
+        return keyIndex;
+    }
+
+    /// <summary>
+    /// Builds a <see cref="KeyIndex"/> for the supplied document using all stylesheet
+    /// key definitions, respecting each key's effective collation and detecting
+    /// conflicting collations for the same key name (XTSE1220).
+    /// </summary>
+    private void BuildKeyIndex(IXdmNode docRoot, KeyIndex keyIndex, IReadOnlyList<Stylesheet.KeyDefinition> allKeyDefs)
+    {
+        // Determine the effective collation for each key name.
+        var keyCollationMap = new Dictionary<string, string>();
+        foreach (var keyDef in allKeyDefs)
+        {
+            var effectiveCollation = string.IsNullOrEmpty(keyDef.Collation)
+                ? GetEffectiveDefaultCollation(keyDef.Element!)
+                : keyDef.Collation;
+            if (keyCollationMap.TryGetValue(keyDef.Name, out var existing) && existing != effectiveCollation)
+                throw new InvalidOperationException($"XTSE1220: xsl:key definitions for '{keyDef.Name}' have different effective collations.");
+            keyCollationMap[keyDef.Name] = effectiveCollation;
+            keyIndex.SetCollation(keyDef.Name, effectiveCollation);
+        }
 
         // KeyIndex.BuildSingleKey mutates the context focus; save and restore to avoid
         // corrupting the currently executing template's focus.
@@ -7832,13 +7844,22 @@ public sealed class TransformEngine
                 {
                     if (cleared.Add(keyDef.Name))
                         keyIndex.ClearKey(keyDef.Name);
-                    if (keyDef.HasUseContent)
-                        KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex, n => EvaluateSequenceConstructor(keyDef.Element, XdmValue.FromNode(n), wrapInDocumentNode: false));
-                    else
-                        KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
+                    var keyCollation = keyCollationMap[keyDef.Name];
+                    var savedKeyCollation = _context.DefaultCollation;
+                    _context.DefaultCollation = keyCollation;
+                    try
+                    {
+                        if (keyDef.HasUseContent)
+                            KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex, n => EvaluateSequenceConstructor(keyDef.Element!, XdmValue.FromNode(n), wrapInDocumentNode: false));
+                        else
+                            KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
+                    }
+                    finally
+                    {
+                        _context.DefaultCollation = savedKeyCollation;
+                    }
                 }
             }
-            return keyIndex;
         }
         finally
         {
@@ -9499,8 +9520,10 @@ public sealed class TransformEngine
             cmp = CompareNumericSortKey(a.Value, b.Value);
         else if (a.Control.DataType == SortDataType.Text ||
                  !string.IsNullOrEmpty(a.Control.Collation) ||
-                 !string.IsNullOrEmpty(a.Control.Lang))
-            cmp = CompareTextSortKey(a.Value, b.Value, a.Control.Collation, a.Control.Lang, a.Control.CaseOrder);
+                 !string.IsNullOrEmpty(a.Control.Lang) ||
+                 !string.IsNullOrEmpty(a.Control.CaseOrder) ||
+                 !string.IsNullOrEmpty(_context.DefaultCollation))
+            cmp = CompareTextSortKey(a.Value, b.Value, a.Control.Collation ?? _context.DefaultCollation, a.Control.Lang, a.Control.CaseOrder);
         else
             cmp = XdmValueComparer.Instance.Compare(a.Value, b.Value);
 
@@ -9546,37 +9569,51 @@ public sealed class TransformEngine
 
     private static int CompareStrings(string a, string b, string? collation, string? lang, string? caseOrder)
     {
+        int cmp;
         if (!string.IsNullOrEmpty(collation))
-            return CompareStringCollation(a, b, collation);
-
-        if (!string.IsNullOrEmpty(lang))
+            cmp = CompareStringCollation(a, b, collation, caseOrder);
+        else if (!string.IsNullOrEmpty(lang))
         {
             var culture = CultureInfo.GetCultureInfo(lang);
-            int cmp = culture.CompareInfo.Compare(a, b, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace);
-            if (cmp != 0)
-                return cmp;
-            return CompareCaseOrder(a, b, caseOrder);
+            cmp = culture.CompareInfo.Compare(a, b, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace);
+        }
+        else if (!string.IsNullOrEmpty(caseOrder))
+        {
+            cmp = string.Compare(a, b, StringComparison.OrdinalIgnoreCase);
+        }
+        else
+        {
+            cmp = string.CompareOrdinal(a, b);
         }
 
-        return string.CompareOrdinal(a, b);
+        if (cmp != 0 || string.IsNullOrEmpty(caseOrder))
+            return cmp;
+
+        return CompareCaseOrder(a, b, caseOrder);
     }
 
-    private static int CompareStringCollation(string a, string b, string collation)
+    private static int CompareStringCollation(string a, string b, string collation, string? caseOrder = null)
     {
+        int cmp;
         if (collation == CodepointCollation)
-            return string.CompareOrdinal(a, b);
-        if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
-            return string.Compare(a, b, StringComparison.OrdinalIgnoreCase);
-        if (TryParseUcaCollation(collation, out var uca))
+            cmp = string.CompareOrdinal(a, b);
+        else if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
+            cmp = string.Compare(a, b, StringComparison.OrdinalIgnoreCase);
+        else if (TryParseUcaCollation(collation, out var uca))
         {
-            int cmp = uca.CompareInfo.Compare(a, b, uca.Options);
-            if (cmp != 0)
-                return cmp;
-            if (uca.Alternate is UcaAlternate.Blanked or UcaAlternate.Shifted)
-                return CompareShiftedVariableTieBreaker(a, b);
-            return 0;
+            cmp = uca.CompareInfo.Compare(a, b, uca.Options);
+            if (cmp == 0 && uca.Alternate is UcaAlternate.Blanked or UcaAlternate.Shifted)
+                cmp = CompareShiftedVariableTieBreaker(a, b);
         }
-        throw new InvalidOperationException("XTDE1035: unknown collation");
+        else
+        {
+            throw new InvalidOperationException("XTDE1035: unknown collation");
+        }
+
+        if (cmp != 0 || string.IsNullOrEmpty(caseOrder))
+            return cmp;
+
+        return CompareCaseOrder(a, b, caseOrder);
     }
 
     private static int CompareCaseOrder(string a, string b, string? caseOrder)
@@ -10240,6 +10277,11 @@ public sealed class TransformEngine
                     "shifted" or "shift-trimmed" => UcaAlternate.Shifted,
                     _ => UcaAlternate.NonIgnorable,
                 };
+            }
+            else if (string.Equals(key, "fallback", StringComparison.OrdinalIgnoreCase) &&
+                     string.Equals(val, "no", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("FOCH0002: Unsupported UCA collation (fallback=no)");
             }
         }
 

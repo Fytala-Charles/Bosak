@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 11-06-2026     | Expand key name to Clark notation; capture @composite; validate required attrs/content   |
+//                      | Charles Korthout | 0.3   | 26-06-2026     | Capture xsl:key @collation for effective collation resolution                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -40,13 +41,16 @@ public sealed class KeyDefinition
     /// <summary>Whether this is a composite key (XSLT 3.0).</summary>
     public bool Composite { get; }
 
+    /// <summary>The explicit collation URI for comparing key values, if any.</summary>
+    public string? Collation { get; }
+
     /// <summary>The parent stylesheet.</summary>
     public Stylesheet Stylesheet { get; }
 
     /// <summary>The original xsl:key element (for namespace resolution).</summary>
     public XElement? Element { get; }
 
-    public KeyDefinition(string name, string match, string? use, bool hasUseContent, bool composite, Stylesheet stylesheet, XElement? element = null)
+    public KeyDefinition(string name, string match, string? use, bool hasUseContent, bool composite, Stylesheet stylesheet, XElement? element = null, string? collation = null)
     {
         Name = name;
         Match = match;
@@ -55,6 +59,7 @@ public sealed class KeyDefinition
         Composite = composite;
         Stylesheet = stylesheet;
         Element = element;
+        Collation = collation;
     }
 
     /// <summary>
@@ -85,8 +90,10 @@ public sealed class KeyDefinition
                         (compositeAttr.Value == "yes" || compositeAttr.Value == "true" || compositeAttr.Value == "1");
 
         bool hasUseContent = useAttr == null && element.Elements().Any(e => e.Name != XName.Get("fallback", Stylesheet.XslNamespace));
+        var collationAttr = element.Attribute("collation");
+        var collation = collationAttr != null ? collationAttr.Value : null;
 
-        return new KeyDefinition(expandedName, matchAttr.Value, useAttr?.Value, hasUseContent, composite, stylesheet, element);
+        return new KeyDefinition(expandedName, matchAttr.Value, useAttr?.Value, hasUseContent, composite, stylesheet, element, collation);
     }
 
     /// <summary>
