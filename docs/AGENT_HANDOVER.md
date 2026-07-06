@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-06
-**Commit:** `ec1fb10` (+ uncommitted normalize-unicode cluster fixes)
+**Commit:** `5ff3335`
 **Current focus:** Cleared the W3C XSLT 3.0 `normalize-unicode` conformance cluster.
 
 ---
