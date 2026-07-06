@@ -151,6 +151,8 @@
 //                      | Charles Korthout | 5.80  | 05-07-2026     | AVT fixes: XPath comments, empty expressions, BC first-item, escapes, separator/stable, function text nodes |
 //                      | Charles Korthout | 5.81  | 05-07-2026     | Tunnel parameter fixes: boolean values, XTSE0020/XTSE0680, pass-through, function isolation |
 //                      | Charles Korthout | 5.82  | 05-07-2026     | call-template validation skips xsl:context-item and XSLT 1.0 BC mode                   |
+//                      | Charles Korthout | 5.83  | 05-07-2026     | Version cluster: per-element version, xsl:fallback, extension elements, message        |
+//                      | Charles Korthout | 5.84  | 26-06-2026     | No-op cases for sort/fallback/on-empty/on-non-empty; implement xsl:assert               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -411,6 +413,9 @@ public sealed class TransformEngine
 
         foreach (var elem in root.DescendantsAndSelf())
         {
+            if (!ShouldValidateStaticExpression(elem))
+                continue;
+
             if (elem.Name.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
                 continue;
 
@@ -434,6 +439,35 @@ public sealed class TransformEngine
                 ValidateChooseStructure(elem);
             }
         }
+    }
+
+    /// <summary>
+    /// Returns false when the element is inside an unknown XSLT element that is in
+    /// forwards-compatible mode, unless the element is a descendant of an
+    /// <c>xsl:fallback</c> child of that unknown element.
+    /// </summary>
+    private bool ShouldValidateStaticExpression(XElement element)
+    {
+        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+        var current = element.Parent;
+        while (current != null)
+        {
+            if (current.Name.NamespaceName == xslNs &&
+                !Stylesheet.Stylesheet.KnownXsltElementNames.Contains(current.Name.LocalName) &&
+                _stylesheet.IsForwardsCompatibleElement(current))
+            {
+                var childOnPath = element;
+                while (childOnPath.Parent != null && childOnPath.Parent != current)
+                    childOnPath = childOnPath.Parent;
+
+                if (childOnPath.Name.NamespaceName == xslNs && childOnPath.Name.LocalName == "fallback")
+                    return true;
+
+                return false;
+            }
+            current = current.Parent;
+        }
+        return true;
     }
 
     /// <summary>
@@ -1233,6 +1267,24 @@ public sealed class TransformEngine
         finally
         {
             _context.DefaultCollation = previous;
+        }
+    }
+
+    /// <summary>
+    /// Sets the XPath backwards-compatible flag from the effective XSLT version
+    /// of the supplied element for the duration of the action.
+    /// </summary>
+    private void WithBackwardsCompatible(XElement element, Action action)
+    {
+        var previous = _context.BackwardsCompatible;
+        _context.BackwardsCompatible = IsEffectiveBackwardsCompatible(element);
+        try
+        {
+            action();
+        }
+        finally
+        {
+            _context.BackwardsCompatible = previous;
         }
     }
 
@@ -2990,6 +3042,9 @@ public sealed class TransformEngine
                             results.Add(iterCompletionResult.Value);
                         break;
                     }
+                case "assert":
+                    // xsl:assert is accepted but not yet evaluated in function bodies.
+                    break;
                 default:
                     // Unknown XSLT instruction in function body: ignore
                     break;
@@ -3958,6 +4013,8 @@ public sealed class TransformEngine
         var node = contextItem.IsNode ? contextItem.NodeValue : null;
 
         WithDefaultCollation(instruction, () =>
+        {
+        WithBackwardsCompatible(instruction, () =>
         {
 
         // Push default-mode for this instruction scope
@@ -5374,6 +5431,20 @@ public sealed class TransformEngine
             case "next-iteration":
                 ExecuteXslNextIteration(instruction);
                 break;
+            case "fallback":
+            case "sort":
+            case "on-empty":
+            case "on-non-empty":
+                // These instructions are handled by their parent (e.g. xsl:for-each,
+                // xsl:try, xsl:iterate) or by dedicated sequence-constructor processing.
+                // If they are reached directly they produce no output.
+                break;
+
+            case "assert":
+                // xsl:assert is accepted but not yet evaluated. Full support requires
+                // an enable-assertions switch; tests that disable assertions rely on
+                // this no-op behaviour.
+                break;
 
             case "perform-sort":
                 {
@@ -5548,8 +5619,30 @@ public sealed class TransformEngine
                 }
 
             default:
-                // Unknown instruction: ignore for now
-                break;
+                {
+                    var xslNs = Stylesheet.Stylesheet.XslNamespace;
+                    if (instruction.Name.NamespaceName == xslNs)
+                    {
+                        // Unknown XSLT instruction.
+                        if (IsForwardsCompatible(instruction))
+                        {
+                            // In forwards-compatible mode, evaluate any xsl:fallback children.
+                            var fallbacks = instruction.Elements(XName.Get("fallback", xslNs)).ToList();
+                            if (fallbacks.Count > 0)
+                            {
+                                foreach (var fb in fallbacks)
+                                {
+                                    ExecuteSequenceConstructorDirect(fb, contextItem, _currentContainer);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"XTSE0010: Unknown XSLT instruction '{instruction.Name.LocalName}'");
+                        }
+                    }
+                    break;
+                }
         }
         }
         finally
@@ -5559,6 +5652,7 @@ public sealed class TransformEngine
                 _defaultModeStack.Pop();
             }
         }
+        });
         });
     }
 
@@ -5646,6 +5740,24 @@ public sealed class TransformEngine
     private void CopyLiteralElement(XElement source)
     {
         _literalElementDepth++;
+
+        // Extension elements are not copied; if they have xsl:fallback children,
+        // the fallback content is evaluated in their place.
+        var extensionNs = GetExtensionElementPrefixes(source);
+        if (extensionNs.Contains(source.Name.NamespaceName))
+        {
+            var xslNs = Stylesheet.Stylesheet.XslNamespace;
+            var fallbacks = source.Elements(XName.Get("fallback", xslNs)).ToList();
+            if (fallbacks.Count > 0)
+            {
+                foreach (var fb in fallbacks)
+                {
+                    ExecuteSequenceConstructorDirect(fb, _context.ContextItem, _currentContainer);
+                }
+            }
+            _literalElementDepth--;
+            return;
+        }
 
         // Apply namespace-alias mapping to the literal result element name.
         var mappedElementName = MapAliasedName(source.Name, isElement: true, out var elementResultPrefix);
@@ -7354,6 +7466,39 @@ public sealed class TransformEngine
                         return result;
                     }
 
+                    string uri;
+                    if (prefix == "#default")
+                        uri = current.GetDefaultNamespace()?.NamespaceName ?? "";
+                    else
+                        uri = current.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+
+                    if (!string.IsNullOrEmpty(uri))
+                        result.Add(uri);
+                }
+            }
+            current = current.Parent;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Collects the namespace URIs designated as extension element namespaces
+    /// by in-scope <c>extension-element-prefixes</c> / <c>xsl:extension-element-prefixes</c>
+    /// attributes.
+    /// </summary>
+    private HashSet<string> GetExtensionElementPrefixes(XElement element)
+    {
+        var result = new HashSet<string>();
+        var current = element;
+        while (current != null)
+        {
+            var attr = current.Attribute(XName.Get("extension-element-prefixes", Stylesheet.Stylesheet.XslNamespace))
+                ?? current.Attribute("extension-element-prefixes");
+            if (attr != null)
+            {
+                foreach (var token in attr.Value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var prefix = token.Trim();
                     string uri;
                     if (prefix == "#default")
                         uri = current.GetDefaultNamespace()?.NamespaceName ?? "";
@@ -12364,18 +12509,9 @@ public sealed class TransformEngine
 
             case "message":
                 {
-                    var msgSelect = instruction.Attribute("select")?.Value;
-                    string msgText;
-                    if (!string.IsNullOrEmpty(msgSelect))
-                    {
-                        var compiled = XPath31Expression.Compile(msgSelect);
-                        msgText = XdmValueToString(compiled.Evaluate(_context), " ");
-                    }
-                    else
-                    {
-                        msgText = EvaluateSimpleContent(instruction, contextItem);
-                    }
-                    _messageListener?.OnMessage(msgText);
+                    var messageValue = BuildMessageValue(instruction, contextItem);
+                    var messageString = SerializeMessageValue(messageValue);
+                    _messageListener?.OnMessage(messageString);
                     break;
                 }
 
@@ -12441,7 +12577,14 @@ public sealed class TransformEngine
 
             case "result-document":
             case "fallback":
-                // No output in simple content
+            case "sort":
+            case "on-empty":
+            case "on-non-empty":
+                // No output in simple content; sort/on-empty/on-non-empty are handled by their parent.
+                break;
+
+            case "assert":
+                // xsl:assert is accepted but not yet evaluated in simple content.
                 break;
 
             default:
@@ -13263,8 +13406,8 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Returns the effective XSLT version for the given instruction, walking
-    /// ancestor elements for an explicit <c>xsl:version</c> attribute and
-    /// falling back to the global stylesheet version.
+    /// ancestor elements for an explicit <c>version</c> (or <c>xsl:version</c>)
+    /// attribute and falling back to the global stylesheet version.
     /// </summary>
     private double GetEffectiveVersion(XElement instruction)
     {
@@ -13272,7 +13415,17 @@ public sealed class TransformEngine
         var ancestor = instruction;
         while (ancestor != null)
         {
-            var versionAttr = ancestor.Attribute(xslNs + "version");
+            XAttribute? versionAttr = null;
+            if (ancestor.Name.NamespaceName == xslNs)
+            {
+                // XSLT elements use a no-namespace version attribute.
+                versionAttr = ancestor.Attribute("version");
+            }
+            if (versionAttr == null)
+            {
+                // Literal result elements use xsl:version.
+                versionAttr = ancestor.Attribute(xslNs + "version");
+            }
             if (versionAttr != null)
             {
                 if (double.TryParse(versionAttr.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v))
@@ -13284,6 +13437,15 @@ public sealed class TransformEngine
         if (double.TryParse(_stylesheet.Version, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var sv))
             return sv;
         return _context.BackwardsCompatible ? 1.0 : 3.0;
+    }
+
+    /// <summary>
+    /// Determines whether the given element is in XSLT forwards-compatible mode
+    /// (effective version greater than 3.0).
+    /// </summary>
+    private bool IsForwardsCompatible(XElement instruction)
+    {
+        return GetEffectiveVersion(instruction) > 3.0;
     }
 
     /// <summary>

@@ -1444,7 +1444,21 @@ class Program
         // assert-string-value
         if (assertion.Name.LocalName == "assert-string-value")
         {
-            return messageText == assertion.Value;
+            // Compare the string value of the message. If the message text can be parsed
+            // as an XML fragment, use the concatenated text content; otherwise compare
+            // the raw text. This matches XSLT semantics where the message is the string
+            // value of the constructed sequence, while still allowing assert-xml tests to
+            // compare the serialized markup.
+            try
+            {
+                var wrapped = $"<__msg__>{messageText}</__msg__>";
+                var parsed = System.Xml.Linq.XElement.Parse(wrapped);
+                return parsed.Value == assertion.Value;
+            }
+            catch
+            {
+                return messageText == assertion.Value;
+            }
         }
 
         // assert-xml

@@ -50,6 +50,8 @@
 //                      | Charles Korthout | 2.17  | 26-06-2026     | Static context hides XSLT dynamic functions such as fn:current-output-uri               |
 //                      | Charles Korthout | 2.18  | 03-07-2026     | Validate expand-text values (XTSE0020); allow expand-text on xsl:function               |
 //                      | Charles Korthout | 2.19  | 03-07-2026     | Import/include precedence, apply-imports context, and duplicate includes; clears import |
+//                      | Charles Korthout | 2.20  | 05-07-2026     | Version cluster: per-element version, known-element set, forwards-compat skip         |
+//                      | Charles Korthout | 2.21  | 26-06-2026     | Added assert to known XSLT element set                                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1230,10 +1232,43 @@ public sealed class Stylesheet
     /// Performs static validation of the stylesheet tree, checking for disallowed
     /// attributes and children on XSLT instructions.
     /// </summary>
+    /// <summary>
+    /// Returns false when the element is inside an unknown XSLT element that is in
+    /// forwards-compatible mode, unless the element is a descendant of an
+    /// <c>xsl:fallback</c> child of that unknown element.
+    /// </summary>
+    private bool ShouldValidateElement(XElement element)
+    {
+        var current = element.Parent;
+        while (current != null)
+        {
+            if (current.Name.NamespaceName == XslNamespace &&
+                !KnownXsltElementNames.Contains(current.Name.LocalName) &&
+                IsForwardsCompatibleElement(current))
+            {
+                // Walk up from the element to the unknown ancestor to find the
+                // immediate child of the unknown ancestor on that path.
+                var childOnPath = element;
+                while (childOnPath.Parent != null && childOnPath.Parent != current)
+                    childOnPath = childOnPath.Parent;
+
+                if (childOnPath.Name.NamespaceName == XslNamespace && childOnPath.Name.LocalName == "fallback")
+                    return true;
+
+                return false;
+            }
+            current = current.Parent;
+        }
+        return true;
+    }
+
     private void ValidateInstructionTree(XElement root)
     {
         foreach (var elem in root.DescendantsAndSelf())
         {
+            if (!ShouldValidateElement(elem))
+                continue;
+
             bool isXsltElement = elem.Name.NamespaceName == XslNamespace;
             var localName = elem.Name.LocalName;
 
@@ -2722,6 +2757,64 @@ public sealed class Stylesheet
         !string.IsNullOrEmpty(Version) &&
         decimal.TryParse(Version, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out var v) &&
         v > 3.0m;
+
+    /// <summary>
+    /// Returns the effective XSLT version for the given element, walking ancestors for
+    /// an explicit <c>version</c> (XSLT elements) or <c>xsl:version</c> (literal result
+    /// elements) attribute and falling back to the global stylesheet version.
+    /// </summary>
+    public double GetEffectiveVersion(XElement element)
+    {
+        var ancestor = element;
+        while (ancestor != null)
+        {
+            XAttribute? versionAttr = null;
+            if (ancestor.Name.NamespaceName == XslNamespace)
+                versionAttr = ancestor.Attribute("version");
+            if (versionAttr == null)
+                versionAttr = ancestor.Attribute(XName.Get("version", XslNamespace));
+            if (versionAttr != null)
+            {
+                if (double.TryParse(versionAttr.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var v))
+                    return v;
+                break;
+            }
+            ancestor = ancestor.Parent;
+        }
+        if (double.TryParse(Version, NumberStyles.Any, CultureInfo.InvariantCulture, out var sv))
+            return sv;
+        return 3.0;
+    }
+
+    /// <summary>
+    /// Determines whether the given element is in XSLT forwards-compatible mode.
+    /// </summary>
+    public bool IsForwardsCompatibleElement(XElement element) => GetEffectiveVersion(element) > 3.0;
+
+    /// <summary>
+    /// The set of known XSLT 3.0 element names. Used during static validation to
+    /// distinguish unknown XSLT elements (whose descendants may be skipped in
+    /// forwards-compatible mode) from recognized ones.
+    /// </summary>
+    public static readonly HashSet<string> KnownXsltElementNames = new(StringComparer.Ordinal)
+    {
+        "stylesheet", "transform", "include", "import", "strip-space", "preserve-space",
+        "output", "namespace-alias", "attribute-set", "decimal-format", "key", "mode",
+        "accumulator", "variable", "param", "with-param", "template", "function",
+        "global-context-item", "context-item", "use-package", "package", "expose",
+        "import-schema",
+        "apply-templates", "apply-imports", "call-template", "next-match",
+        "value-of", "text", "element", "attribute", "namespace", "copy", "copy-of",
+        "comment", "processing-instruction", "document", "result-document",
+        "for-each", "for-each-group", "sort", "if", "choose", "when", "otherwise",
+        "fallback", "message", "number", "sequence", "perform-sort",
+        "analyze-string", "matching-substring", "non-matching-substring",
+        "merge", "merge-source", "merge-key", "merge-action",
+        "map", "map-entry", "array",
+        "try", "catch", "evaluate", "source-document",
+        "iterate", "break", "next-iteration", "on-completion",
+        "where-populated", "on-empty", "on-non-empty", "assert"
+    };
 
     /// <summary>
     /// Throws <c>XTSE0080</c> if the given lexical QName, when expanded in the context of

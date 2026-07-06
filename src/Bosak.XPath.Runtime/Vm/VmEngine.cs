@@ -213,11 +213,22 @@ public static class VmEngine
 
                         if (!context.TryGetVariable(localName, out var value, nsUri))
                         {
-                            string displayName = string.IsNullOrEmpty(nsUri) ? localName : $"Q{{{nsUri}}}{localName}";
-                            throw new InvalidOperationException($"XPST0008: Variable ${displayName} is not defined.");
+                            if (context.BackwardsCompatible)
+                            {
+                                // XPath 1.0 compatibility: an undefined variable is treated
+                                // as an empty sequence.
+                                registers[instr.RegisterA] = XdmValue.Undefined;
+                            }
+                            else
+                            {
+                                string displayName = string.IsNullOrEmpty(nsUri) ? localName : $"Q{{{nsUri}}}{localName}";
+                                throw new InvalidOperationException($"XPST0008: Variable ${displayName} is not defined.");
+                            }
                         }
-
-                        registers[instr.RegisterA] = value;
+                        else
+                        {
+                            registers[instr.RegisterA] = value;
+                        }
                         ip++;
                         break;
                     }

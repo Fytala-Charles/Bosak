@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 2.3   | 13-06-2026     | Route attribute patterns with predicates through CompilePredicatePattern               |
 //                      | Charles Korthout | 2.4   | 26-06-2026     | Support document-node(element(E)) match patterns                                        |
 //                      | Charles Korthout | 2.5   | 26-06-2026     | Check URI for doc()/document() match patterns                                           |
+//                      | Charles Korthout | 2.6   | 05-07-2026     | Disallow reverse axes in match patterns (XTSE0340); fixes version-023a                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -217,13 +218,60 @@ public sealed class PatternCompiler
         if (ContainsFunctionCall(trimmed, "current-merge-key"))
             throw new InvalidOperationException("XTSE1070: current-merge-key() is not allowed in a match pattern");
 
-        // 7.  Undeclared function in predicate (XPST0017).
+        // 7.  Disallow reverse axes at the top level of a step (XTSE0340).
+        //     Allowed axes in match patterns are child, attribute, descendant,
+        //     descendant-or-self, self, and namespace.
+        ValidatePatternAxes(trimmed);
+
+        // 8.  Undeclared function in predicate (XPST0017).
         //     NOTE: Accurate detection requires stylesheet context (declared functions,
         //     namespace prefixes). The XPath compiler currently does not validate
         //     function existence at compile time, so this check is deferred to runtime.
         //     When the XPath compiler gains static function resolution, this should be
         //     re-enabled with proper context.
 
+    }
+
+    /// <summary>
+    /// Scans a pattern for disallowed axes that appear outside predicates at the
+    /// top level of a step and throws <c>XTSE0340</c> if one is found.
+    /// </summary>
+    private static void ValidatePatternAxes(string pattern)
+    {
+        var disallowedAxes = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "preceding-sibling", "following-sibling", "preceding", "following",
+            "ancestor", "ancestor-or-self", "parent"
+        };
+
+        int depth = 0;
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+            if (c == '[' || c == '(')
+            {
+                depth++;
+                continue;
+            }
+            if (c == ']' || c == ')')
+            {
+                depth--;
+                continue;
+            }
+            if (depth != 0)
+                continue;
+            if (c == ':' && i + 1 < pattern.Length && pattern[i + 1] == ':')
+            {
+                // Scan backwards for the axis name (letters and hyphen).
+                int start = i - 1;
+                while (start >= 0 && (char.IsLetter(pattern[start]) || pattern[start] == '-'))
+                    start--;
+                start++;
+                var axis = pattern[start..i];
+                if (disallowedAxes.Contains(axis))
+                    throw new InvalidOperationException($"XTSE0340: The '{axis}' axis is not allowed in a match pattern");
+            }
+        }
     }
 
     /// <summary>

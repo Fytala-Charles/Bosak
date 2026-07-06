@@ -1,5 +1,51 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-06
+**Commit:** `e66e895` (+ uncommitted version-cluster and regression-fix changes)
+**Current focus:** Cleared the W3C XSLT 3.0 `version` conformance cluster; fixed full-suite regressions in `copy`, `iterate`, `on-empty`, `on-non-empty`, `seqtor`, `try`, `assert`, and `xslt-compat`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,153
+- **Failed:** 97
+- **Skipped:** 9,350
+- **Pass rate:** 98.2% (+25 passed / −25 failed vs. previous 5,128/122)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| version | 35 | 33 | 0 | 2 | ✅ Forwards/backwards compatibility, `xsl:fallback`, extension elements, `xsl:message` select+content |
+| copy | 148 | 128 | 0 | 20 | ✅ Regression cleared (`xsl:sort` no longer treated as unknown in simple content) |
+| iterate | 44 | 44 | 0 | 0 | ✅ Regression cleared (`xsl:fallback` inside `xsl:iterate` ignored) |
+| on-empty | 56 | 47 | 0 | 9 | ✅ Regression cleared (`xsl:on-empty` no longer treated as unknown) |
+| on-non-empty | 14 | 14 | 0 | 0 | ✅ Regression cleared (`xsl:on-non-empty` no longer treated as unknown) |
+| seqtor | 72 | 46 | 8 | 18 | ✅ Regression cleared (`seqtor-101`); remaining 8 failures pre-existing |
+| try | 42 | 35 | 0 | 7 | ✅ Regression cleared (`xsl:fallback` inside `xsl:try` ignored) |
+| assert | 10 | 1 | 0 | 9 | ✅ Regression cleared (`assert-007`; `xsl:assert` accepted as no-op pending enable-assertions switch) |
+| xslt-compat | 13 | 12 | 1 | 0 | ✅ `xslt-compat-003` regression cleared; `xslt-compat-012` pre-existing failure |
+
+## This Session Fixes
+
+1. **Version conformance cluster (`version`)** — Implemented per-element forwards/backwards compatibility, `xsl:fallback` dispatch for unknown XSLT instructions and extension elements, effective `version`/`xsl:version` detection, backwards-compatible XPath snapshot in `ExecuteXsltInstruction`, empty-sequence `NaN` for `fn:floor`/`ceiling`/`round` in BC mode, undefined-variable empty sequence in BC mode, `xsl:message` with both `@select` and content, reverse-axis rejection at the top of match patterns (`XTSE0340`), and forwards-compatible static validation skipping.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `src/Bosak.Xslt/Patterns/PatternCompiler.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+2. **Full-suite regression fixes** — Added no-op cases in `ExecuteXsltInstruction` and `CollectSimpleContentXsltInstruction` for `xsl:fallback`, `xsl:sort`, `xsl:on-empty`, and `xsl:on-non-empty` so they are not misclassified as unknown instructions. `xsl:assert` is accepted but treated as a no-op (matching pre-version behaviour until an enable-assertions switch is added).
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,153/97/9,350** (98.2%).
+- Largest remaining failure clusters: `xml-version` (23), `normalize-unicode` (14), `backwards` (13), `xpath-compat` (9), `seqtor` (8).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-05
 **Commit:** `24cbb68`
 **Current focus:** Cleared the W3C XSLT 3.0 `avt` and `tunnel` conformance clusters; fixed `call-template` regression tests.

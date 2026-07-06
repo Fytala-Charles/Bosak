@@ -7491,7 +7491,7 @@ public static class FunctionLibrary
     {
         XdmValue arg = AtomizeValue(args[0]);
         if (arg.IsUndefined || IsEmptySequence(arg))
-            return XdmValue.Undefined;
+            return ctx.BackwardsCompatible ? XdmValue.FromDouble(double.NaN) : XdmValue.Undefined;
 
         return arg.Kind switch
         {
@@ -7507,7 +7507,7 @@ public static class FunctionLibrary
     {
         XdmValue arg = AtomizeValue(args[0]);
         if (arg.IsUndefined || IsEmptySequence(arg))
-            return XdmValue.Undefined;
+            return ctx.BackwardsCompatible ? XdmValue.FromDouble(double.NaN) : XdmValue.Undefined;
 
         return arg.Kind switch
         {
@@ -7556,7 +7556,7 @@ public static class FunctionLibrary
     {
         arg = AtomizeValue(arg);
         if (arg.IsUndefined || IsEmptySequence(arg))
-            return XdmValue.Undefined;
+            return ctx.BackwardsCompatible ? XdmValue.FromDouble(double.NaN) : XdmValue.Undefined;
 
         // For non-numeric types (string, untypedAtomic, etc.), convert to double first.
         bool isNumeric = arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;

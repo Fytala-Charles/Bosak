@@ -444,6 +444,8 @@ src/
 | XSLT 3.0 packages | 🔮 Phase 3 | `xsl:package`, `xsl:use-package` |
 | Streaming | 🔮 Phase 3 | `streamable="yes"` (skeletal support only) |
 
+> **Implementation note:** `TransformEngine.ExecuteXsltInstruction` treats `xsl:fallback`, `xsl:sort`, `xsl:on-empty`, `xsl:on-non-empty`, and `xsl:assert` as no-ops when reached directly. `xsl:sort` is consumed by its parent sorting instruction; `xsl:on-empty`/`xsl:on-non-empty` are handled by dedicated sequence-constructor processing; `xsl:fallback` is processed only as a child of an unrecognized/extension instruction; `xsl:assert` is accepted but not yet evaluated (pending an enable-assertions switch).
+
 #### Pattern Compilation Strategy
 
 XSLT **patterns** (`match` attributes) are *not* XPath expressions. They use a restricted syntax:
