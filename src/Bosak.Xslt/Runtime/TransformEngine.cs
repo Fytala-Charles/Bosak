@@ -154,6 +154,7 @@
 //                      | Charles Korthout | 5.83  | 05-07-2026     | Version cluster: per-element version, xsl:fallback, extension elements, message        |
 //                      | Charles Korthout | 5.84  | 26-06-2026     | No-op cases for sort/fallback/on-empty/on-non-empty; implement xsl:assert               |
 //                      | Charles Korthout | 5.85  | 06-07-2026     | Capture principal xsl:result-document output properties for serialization               |
+//                      | Charles Korthout | 5.86  | 06-07-2026     | xsl:sequence without @select uses standard item collector; clears seqtor cluster       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1990,8 +1991,9 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Normalizes the items produced by a sequence constructor: adjacent text nodes are
-    /// merged and zero-length text nodes are removed. This mirrors the sequence
-    /// normalization applied to xsl:function results and raw sequence constructors.
+    /// merged. Zero-length text nodes are preserved as items because they affect atomic
+    /// spacing in complex content construction; they are removed only when the result is
+    /// eventually copied to a result tree.
     /// </summary>
     private static List<XdmValue> NormalizeSequenceConstructorItems(List<XdmValue> items)
     {
@@ -2007,14 +2009,13 @@ public sealed class TransformEngine
             {
                 if (pendingText != null)
                 {
-                    if (pendingText.Length > 0)
-                        normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText))));
+                    normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText))));
                     pendingText = null;
                 }
                 normalized.Add(item);
             }
         }
-        if (pendingText != null && pendingText.Length > 0)
+        if (pendingText != null)
             normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText))));
         return normalized;
     }
@@ -4971,74 +4972,28 @@ public sealed class TransformEngine
                     else
                     {
                         // XSLT 3.0: xsl:sequence with no @select evaluates its sequence
-                        // constructor and returns the resulting sequence. Evaluate each
-                        // top-level child separately so literal nodes and xsl:sequence
-                        // contributions stay in document order.
-                        var seqItems = new List<XdmValue>();
-                        var outerAccumulator = _sequenceAccumulator;
-                        _sequenceAccumulator = null;
-                        try
+                        // constructor and returns the resulting sequence. Use the standard
+                        // item collector so whitespace stripping, TVT expansion, and nested
+                        // sequence-producing instructions are handled consistently.
+                        var seqItems = EvaluateSequenceConstructorToItems(instruction, contextItem);
+                        if (seqItems.Count == 0)
                         {
-                            foreach (var childNode in instruction.Nodes())
-                            {
-                                switch (childNode)
-                                {
-                                    case XText text:
-                                        if (GetExpandText(instruction))
-                                        {
-                                            var tvtResult = EvaluateTvt(text.Value, instruction);
-                                            // An empty TVT result still produces a zero-length text node that
-                                            // breaks adjacent atomic values (seqtor-016 and similar tests).
-                                            seqItems.Add(XdmValue.FromNode(new XDocumentNode(new XText(tvtResult))));
-                                        }
-                                        else if (!IsWhitespaceOnly(text.Value))
-                                        {
-                                            seqItems.Add(XdmValue.FromNode(new XDocumentNode(new XText(text.Value))));
-                                        }
-                                        break;
-                                    case XElement elem:
-                                        var wrapper = new XElement("__seq_child__");
-                                        // Preserve the in-scope namespaces of the original child
-                                        // so that TVT expressions inside it (e.g. xsl:text/@expand-text)
-                                        // can resolve prefixes such as xs:.
-                                        foreach (var ns in GetInScopeNamespaces(elem))
-                                        {
-                                            if (ns.Key.Length == 0)
-                                                wrapper.SetAttributeValue("xmlns", ns.Value);
-                                            else
-                                                wrapper.SetAttributeValue(XNamespace.Xmlns + ns.Key, ns.Value);
-                                        }
-                                        wrapper.Add(elem);
-                                        var childResult = EvaluateSequenceConstructor(wrapper, contextItem, wrapInDocumentNode: false, preserveEmptySequencePositions: true);
-                                        FlattenToList(childResult, seqItems, preserveUndefined: true);
-                                        break;
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            _sequenceAccumulator = outerAccumulator;
-                        }
-                        var resultSeq = seqItems.Count == 0
-                            ? XdmValue.FromSequence(XdmSequence.Empty)
-                            : seqItems.Count == 1
-                                ? seqItems[0]
-                                : XdmValue.FromSequence(MaterializedSequence.FromList(seqItems));
-                        if (_sequenceAccumulator != null)
-                        {
-                            var placeholderItems = new List<XdmValue>();
-                            FlattenToList(resultSeq, placeholderItems, preserveUndefined: true);
-                            AddSequencePlaceholder(_currentContainer, placeholderItems);
+                            if (_sequenceAccumulator != null)
+                                AddSequencePlaceholder(_currentContainer, new List<XdmValue>());
                         }
                         else
                         {
-                            CopyToResult(resultSeq, separateAtomicsWithSpace: true);
-                            // A sequence consisting solely of empty atomic values produces a
-                            // text node that contains only separator spaces. The next atomic
-                            // value in the containing sequence constructor should merge with
-                            // that text node rather than adding another separator (seqtor-020).
-                            if (IsAllEmptyAtomics(resultSeq))
-                                _lastAddedWasAtomic = false;
+                            var resultSeq = seqItems.Count == 1
+                                ? seqItems[0]
+                                : XdmValue.FromSequence(MaterializedSequence.FromList(seqItems));
+                            if (_sequenceAccumulator != null)
+                            {
+                                AddSequencePlaceholder(_currentContainer, seqItems);
+                            }
+                            else
+                            {
+                                CopyToResult(resultSeq, separateAtomicsWithSpace: true);
+                            }
                         }
                     }
                     break;
@@ -6299,7 +6254,9 @@ public sealed class TransformEngine
             // - Consecutive atomic values are joined with a single space (#x20) (unless copy-of).
             // - Text nodes and atomics in a contiguous run are merged into one text node.
             var sb = new StringBuilder();
-            bool prevWasAtomic = false;
+            // Carry over the atomic-state from the containing sequence constructor so that
+            // the first atomic in this sequence is separated from a preceding atomic value.
+            bool prevWasAtomic = _lastAddedWasAtomic;
             bool anyItemProcessed = false;
 
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
@@ -12054,8 +12011,9 @@ public sealed class TransformEngine
         var tempContainer = new XElement("__seq_temp__");
         _currentContainer = tempContainer;
         _lastAddedWasAtomic = false;
-        var localAccumulator = new List<XdmValue>();
-        _sequenceAccumulator = new ListSequenceAccumulator(localAccumulator);
+        // Use a placeholder accumulator so sequence-producing instructions keep their
+        // position relative to ordinary nodes in the temporary container.
+        _sequenceAccumulator = new PlaceholderSequenceAccumulator(this);
 
         var savedContextItem = _context.ContextItem;
         var savedContextPosition = _context.ContextPosition;
@@ -12089,7 +12047,6 @@ public sealed class TransformEngine
 
                 var existingNodes = new HashSet<XNode>(tempContainer.Nodes());
                 var existingAttrs = new HashSet<XAttribute>(tempContainer.Attributes());
-                int accumulatorCountBefore = localAccumulator.Count;
 
                 switch (childNode)
                 {
@@ -12141,7 +12098,11 @@ public sealed class TransformEngine
                             if (placeholder.Annotation<SequencePlaceholderItems>() is { } holder)
                             {
                                 foreach (var phItem in holder.Items)
+                                {
+                                    if (phItem.IsUndefined)
+                                        continue;
                                     resultItems.Add(phItem);
+                                }
                             }
                         }
                         else
@@ -12149,10 +12110,6 @@ public sealed class TransformEngine
                             resultItems.Add(XdmValue.FromNode(new XDocumentNode(node)));
                         }
                     }
-                }
-                for (int i = accumulatorCountBefore; i < localAccumulator.Count; i++)
-                {
-                    resultItems.Add(localAccumulator[i]);
                 }
             }
 
@@ -12197,7 +12154,12 @@ public sealed class TransformEngine
                     if (item.NodeValue is XDocumentNode xdn && xdn.UnderlyingObject is XElement placeholder &&
                         placeholder.Annotation<SequencePlaceholderItems>() is { } holder)
                     {
-                        expanded.AddRange(holder.Items);
+                        foreach (var phItem in holder.Items)
+                        {
+                            if (phItem.IsUndefined)
+                                continue;
+                            expanded.Add(phItem);
+                        }
                     }
                 }
                 else
@@ -13349,13 +13311,15 @@ public sealed class TransformEngine
 
             var tvtResult = EvaluateTvt(mergedText, parent);
             _lastAddedWasAtomic = false;
-            AddTextNode(tvtResult);
+            // Preserve zero-length TVT results: they are valid zero-length text nodes
+            // that break adjacent atomic values in complex content construction.
+            AddTextNode(tvtResult, allowZeroLength: true);
         }
         else if (hasEscapedBraces)
         {
             var tvtResult = EvaluateTvt(text.Value, parent);
             _lastAddedWasAtomic = false;
-            AddTextNode(tvtResult);
+            AddTextNode(tvtResult, allowZeroLength: true);
         }
         else if (IsWhitespacePreserveContext(parent))
         {
