@@ -1,35 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-06
-**Commit:** `5ff3335`
-**Current focus:** Cleared the W3C XSLT 3.0 `normalize-unicode` conformance cluster.
+**Commit:** `0af53ac`
+**Current focus:** Cleared the W3C XSLT 3.0 `seqtor` conformance cluster.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 5,167
-- **Failed:** 83
+- **Passed:** 5,175
+- **Failed:** 75
 - **Skipped:** 9,350
-- **Pass rate:** 98.4% (+14 passed / −14 failed vs. previous 5,153/97)
+- **Pass rate:** 98.6% (+8 passed / −8 failed vs. previous 5,167/83)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
-| normalize-unicode | 18 | 18 | 0 | 0 | ✅ Output encoding, Unicode normalization-form, serialization-matches assertions |
+| seqtor | 72 | 54 | 0 | 18 | ✅ Sequence-constructor whitespace, empty atomics, zero-length text nodes, xsl:text/TVT spacing |
 
 ## This Session Fixes
 
-1. **Normalize-unicode conformance cluster** — Stylesheet loading now honours the XML encoding declaration (e.g. `iso-8859-1`). `xsl:output`/`xsl:result-document` support `normalization-form` (NFC/NFD/NFKC/NFKD/none), multiple `xsl:output` declarations are merged, and a principal `xsl:result-document`'s serialization properties are used by `TransformToString`. The conformance harness now evaluates `serialization-matches` assertions against the serialized result.
-   - **Files changed**: `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Api/XsltExecutable.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+1. **Sequence-constructor (`seqtor`) conformance cluster** — `xsl:sequence` without `@select` now uses the standard sequence-constructor item collector. `EvaluateSequenceConstructorToItems` uses a placeholder accumulator so node-producing instructions keep document order relative to text nodes and literal elements. Zero-length text nodes from `xsl:text` and empty text-value templates are preserved as sequence items and correctly break adjacent atomic-value spacing in complex content. `NormalizeSequenceConstructorItems` preserves zero-length text nodes for `xsl:function` results, and `CopyToResult` carries over the previous atomic state when processing a sequence.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
 
 ## Notes
 
 - Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
-- Full W3C suite: **5,167/83/9,350** (98.4%).
-- Largest remaining failure clusters: `xml-version` (23), `backwards` (11), `seqtor` (8), `xpath-compat` (9), `normalize-unicode` cleared.
+- Full W3C suite: **5,175/75/9,350** (98.6%).
+- Largest remaining failure clusters: `xml-version` (23), `backwards` (11), `xpath-compat` (5), `bug` (6).
 
 ---
 
