@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-06
-**Commit:** `e66e895` (+ uncommitted version-cluster and regression-fix changes)
+**Commit:** `d37424d`
 **Current focus:** Cleared the W3C XSLT 3.0 `version` conformance cluster; fixed full-suite regressions in `copy`, `iterate`, `on-empty`, `on-non-empty`, `seqtor`, `try`, `assert`, and `xslt-compat`.
 
 ---
