@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added OutputProperties support for xsl:output (method, indent, omit-declaration)       |
 //                      | Charles Korthout | 0.3   | 01-06-2026     | Encoding-aware serialization; hex-to-decimal entity conversion                         |
 //                      | Charles Korthout | 0.4   | 26-06-2026     | Raw XML 1.1 serializer for prefixed namespace undeclarations                          |
+//                      | Charles Korthout | 0.5   | 06-07-2026     | Apply xsl:output normalization-form during serialization                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -185,6 +186,10 @@ public static class ResultTreeSerializer
 
     private static string SerializeWithEncoding(XNode node, Stylesheet.OutputProperties props)
     {
+        // Apply Unicode normalization if requested before encoding-aware writing.
+        if (TryGetNormalizationForm(props) is { } normForm)
+            node = NormalizeXNode(node, normForm);
+
         // Use the specified output encoding so XmlWriter emits numeric character
         // references for characters that cannot be represented in that encoding.
         System.Text.Encoding encoding;
@@ -276,6 +281,57 @@ public static class ResultTreeSerializer
         }
 
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Maps the XSLT <c>normalization-form</c> output property to a .NET
+    /// <see cref="NormalizationForm"/> value, or <c>null</c> when no normalization
+    /// is requested.
+    /// </summary>
+    private static System.Text.NormalizationForm? TryGetNormalizationForm(Stylesheet.OutputProperties props)
+    {
+        return props.NormalizationForm?.Trim().ToUpperInvariant() switch
+        {
+            "NFC" => System.Text.NormalizationForm.FormC,
+            "NFD" => System.Text.NormalizationForm.FormD,
+            "NFKC" => System.Text.NormalizationForm.FormKC,
+            "NFKD" => System.Text.NormalizationForm.FormKD,
+            "NONE" or null or "" => null,
+            _ => null
+        };
+    }
+
+    /// <summary>
+    /// Returns a deep clone of the supplied node with all text, attribute, comment,
+    /// and processing-instruction values normalized to the given Unicode form.
+    /// </summary>
+    private static XNode NormalizeXNode(XNode node, System.Text.NormalizationForm form)
+    {
+        switch (node)
+        {
+            case XDocument doc:
+                var clonedDoc = new XDocument(doc.Declaration);
+                foreach (var child in doc.Nodes())
+                    clonedDoc.Add(NormalizeXNode(child, form));
+                return clonedDoc;
+            case XElement element:
+                var clonedElem = new XElement(element.Name);
+                foreach (var attr in element.Attributes())
+                    clonedElem.SetAttributeValue(attr.Name, attr.Value.Normalize(form));
+                foreach (var child in element.Nodes())
+                    clonedElem.Add(NormalizeXNode(child, form));
+                return clonedElem;
+            case XText text:
+                return new XText(text.Value.Normalize(form));
+            case XComment comment:
+                return new XComment(comment.Value.Normalize(form));
+            case XProcessingInstruction pi:
+                return new XProcessingInstruction(pi.Target, pi.Data.Normalize(form));
+            case XDocumentType docType:
+                return new XDocumentType(docType.Name, docType.PublicId, docType.SystemId, docType.InternalSubset);
+            default:
+                return node;
+        }
     }
 
     private static string SerializeSequence(IXdmSequence sequence, Stylesheet.OutputProperties props)

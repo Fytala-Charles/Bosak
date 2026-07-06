@@ -52,6 +52,7 @@
 //                      | Charles Korthout | 2.19  | 03-07-2026     | Import/include precedence, apply-imports context, and duplicate includes; clears import |
 //                      | Charles Korthout | 2.20  | 05-07-2026     | Version cluster: per-element version, known-element set, forwards-compat skip         |
 //                      | Charles Korthout | 2.21  | 26-06-2026     | Added assert to known XSLT element set                                                  |
+//                      | Charles Korthout | 2.22  | 06-07-2026     | Merge multiple xsl:output declarations instead of using only the first                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -832,10 +833,15 @@ public sealed class Stylesheet
             GlobalContextItemAs = asType;
         }
 
-        // Parse xsl:output (first one wins per spec)
-        var outputElem = root.Elements(XName.Get("output", XslNamespace)).FirstOrDefault(e => UseWhen(e));
-        if (outputElem != null)
-            _outputProperties = OutputProperties.FromElement(outputElem);
+        // Parse xsl:output properties. Multiple xsl:output declarations are merged,
+        // with later declarations overriding earlier ones for the same property.
+        var outputElems = root.Elements(XName.Get("output", XslNamespace)).Where(e => UseWhen(e)).ToList();
+        if (outputElems.Count > 0)
+        {
+            _outputProperties = new OutputProperties();
+            foreach (var oe in outputElems)
+                OutputProperties.Merge(_outputProperties, OutputProperties.FromElement(oe));
+        }
 
         // Parse xsl:namespace-alias declarations
         foreach (var alias in root.Elements(XName.Get("namespace-alias", XslNamespace)))

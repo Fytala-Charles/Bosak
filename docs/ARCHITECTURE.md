@@ -445,6 +445,8 @@ src/
 | Streaming | 🔮 Phase 3 | `streamable="yes"` (skeletal support only) |
 
 > **Implementation note:** `TransformEngine.ExecuteXsltInstruction` treats `xsl:fallback`, `xsl:sort`, `xsl:on-empty`, `xsl:on-non-empty`, and `xsl:assert` as no-ops when reached directly. `xsl:sort` is consumed by its parent sorting instruction; `xsl:on-empty`/`xsl:on-non-empty` are handled by dedicated sequence-constructor processing; `xsl:fallback` is processed only as a child of an unrecognized/extension instruction; `xsl:assert` is accepted but not yet evaluated (pending an enable-assertions switch).
+>
+> **Serialization:** `ResultTreeSerializer` honours `xsl:output`/`xsl:result-document` properties including `method`, `encoding`, `indent`, `omit-xml-declaration`, and `normalization-form`. Multiple `xsl:output` declarations are merged (later values override earlier ones), and a principal `xsl:result-document`'s properties are captured so `TransformToString` serializes with the correct encoding and Unicode normalization. The W3C conformance harness also supports the `serialization-matches` assertion by matching the serialized result against a regular expression.
 
 #### Pattern Compilation Strategy
 

@@ -17,10 +17,13 @@
 //                      | Charles Korthout | 0.5   | 25-06-2026     | Added rawResult parameter to Transform for initial-template raw XDM output             |
 //                      | Charles Korthout | 0.7   | 26-06-2026     | Added baseOutputUri parameter to Transform/TransformToString                            |
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Propagate TreatRecoverableAmbiguousMatchAsError to TransformEngine                      |
+//                      | Charles Korthout | 0.8   | 06-07-2026     | Use xsl:result-document output properties in TransformToString                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.Xslt.Api;
@@ -40,6 +43,11 @@ public sealed class XsltExecutable
         _messageListener = messageListener;
         _treatRecoverableAmbiguousMatchAsError = treatRecoverableAmbiguousMatchAsError;
     }
+
+    /// <summary>
+    /// Gets the effective stylesheet-level output properties.
+    /// </summary>
+    public Stylesheet.OutputProperties OutputProperties => _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
 
     /// <summary>
     /// Transforms the supplied source document using this stylesheet.
@@ -69,7 +77,14 @@ public sealed class XsltExecutable
     public string TransformToString(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null)
     {
         var result = Transform(source, context, initialTemplate, initialMode, baseOutputUri: baseOutputUri);
-        return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);
+        var outputProperties = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+        if (result.IsNode && result.NodeValue is XDocumentNode xdn && xdn.UnderlyingObject is XDocument doc)
+        {
+            var rdProps = doc.Annotation<Stylesheet.OutputProperties>();
+            if (rdProps != null)
+                outputProperties = rdProps;
+        }
+        return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
     }
 
     /// <summary>

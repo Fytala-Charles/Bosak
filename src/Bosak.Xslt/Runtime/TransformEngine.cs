@@ -153,6 +153,7 @@
 //                      | Charles Korthout | 5.82  | 05-07-2026     | call-template validation skips xsl:context-item and XSLT 1.0 BC mode                   |
 //                      | Charles Korthout | 5.83  | 05-07-2026     | Version cluster: per-element version, xsl:fallback, extension elements, message        |
 //                      | Charles Korthout | 5.84  | 26-06-2026     | No-op cases for sort/fallback/on-empty/on-non-empty; implement xsl:assert               |
+//                      | Charles Korthout | 5.85  | 06-07-2026     | Capture principal xsl:result-document output properties for serialization               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -190,6 +191,9 @@ public sealed class TransformEngine
     private XContainer _currentContainer;
     private readonly StringBuilder _documentLevelText = new();
     private bool _lastAddedWasAtomic;
+
+    // Effective output properties for a principal xsl:result-document, if one was produced.
+    private Stylesheet.OutputProperties? _principalResultDocumentProperties;
 
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
@@ -582,6 +586,7 @@ public sealed class TransformEngine
         _resultDocumentUris.Clear();
         _resultDocumentStack.Clear();
         _principalOutputClosed = false;
+        _principalResultDocumentProperties = null;
 
         // Compile all template match patterns before execution. The validation
         // dry-run for pattern predicates needs the lazy global resolver registered
@@ -5523,6 +5528,13 @@ public sealed class TransformEngine
 
                     if (isPrincipal)
                     {
+                        // Capture the effective output properties for this principal result
+                        // document, merging any xsl:result-document attributes with the
+                        // stylesheet-level xsl:output properties.
+                        var baseProps = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+                        _principalResultDocumentProperties = new Stylesheet.OutputProperties();
+                        Stylesheet.OutputProperties.Merge(_principalResultDocumentProperties, baseProps);
+                        Stylesheet.OutputProperties.Merge(_principalResultDocumentProperties, Stylesheet.OutputProperties.FromElement(instruction));
                         // Nested principal result document: allowed only when the enclosing
                         // secondary result document was opened at the top level of the principal
                         // result tree (XSLT 2.0 §9.4.2). If the principal output had already
@@ -5570,7 +5582,11 @@ public sealed class TransformEngine
 
                         // A top-level principal result document closes the principal output URI.
                         if (_resultDocumentStack.Count == 0)
+                        {
                             _principalOutputClosed = true;
+                            if (_principalResultDocumentProperties != null && principalContainer is XDocument principalDoc)
+                                principalDoc.AddAnnotation(_principalResultDocumentProperties);
+                        }
                     }
                     else
                     {

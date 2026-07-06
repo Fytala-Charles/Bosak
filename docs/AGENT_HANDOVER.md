@@ -1,6 +1,41 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-06
+**Commit:** `ec1fb10` (+ uncommitted normalize-unicode cluster fixes)
+**Current focus:** Cleared the W3C XSLT 3.0 `normalize-unicode` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,167
+- **Failed:** 83
+- **Skipped:** 9,350
+- **Pass rate:** 98.4% (+14 passed / −14 failed vs. previous 5,153/97)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| normalize-unicode | 18 | 18 | 0 | 0 | ✅ Output encoding, Unicode normalization-form, serialization-matches assertions |
+
+## This Session Fixes
+
+1. **Normalize-unicode conformance cluster** — Stylesheet loading now honours the XML encoding declaration (e.g. `iso-8859-1`). `xsl:output`/`xsl:result-document` support `normalization-form` (NFC/NFD/NFKC/NFKD/none), multiple `xsl:output` declarations are merged, and a principal `xsl:result-document`'s serialization properties are used by `TransformToString`. The conformance harness now evaluates `serialization-matches` assertions against the serialized result.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Api/XsltExecutable.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,167/83/9,350** (98.4%).
+- Largest remaining failure clusters: `xml-version` (23), `backwards` (11), `seqtor` (8), `xpath-compat` (9), `normalize-unicode` cleared.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-06
 **Commit:** `d37424d`
 **Current focus:** Cleared the W3C XSLT 3.0 `version` conformance cluster; fixed full-suite regressions in `copy`, `iterate`, `on-empty`, `on-non-empty`, `seqtor`, `try`, `assert`, and `xslt-compat`.
 

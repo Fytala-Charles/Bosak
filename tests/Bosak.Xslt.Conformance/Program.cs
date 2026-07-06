@@ -415,16 +415,17 @@ class Program
             }
 
             // Compile and run
-            var xslText = File.ReadAllText(mainStylesheetPath);
             var baseUri = new Uri(mainStylesheetPath).AbsoluteUri;
 
             // Skip xsl:package based tests; the compiler only supports xsl:stylesheet/xsl:transform.
             XDocument xslDoc;
             try
             {
-                // Parse with DTD processing enabled so stylesheets that reference external
-                // entity definitions (e.g. copy-1201 / copy-1202) load correctly.
-                xslDoc = LoadDocumentFromText(xslText, baseUri);
+                // Load the stylesheet file directly via XmlReader so the encoding
+                // declaration in the XML prolog (e.g. iso-8859-1) is honored.
+                xslDoc = LoadDocumentFromFile(mainStylesheetPath);
+                if (string.IsNullOrEmpty(xslDoc.BaseUri))
+                    xslDoc.AddAnnotation(baseUri);
                 var xslRoot = xslDoc.Root;
                 if (xslRoot != null && xslRoot.Name == XName.Get("package", "http://www.w3.org/1999/XSL/Transform"))
                 {
@@ -1224,6 +1225,17 @@ class Program
             return !actual.EffectiveBooleanValue();
         }
 
+        // serialization-matches: serialize the result and match against a regex.
+        var serializationMatches = resultElem.Name.LocalName == "serialization-matches"
+            ? resultElem
+            : resultElem.Element(ns + "serialization-matches");
+        if (serializationMatches != null)
+        {
+            var serialized = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual);
+            var pattern = serializationMatches.Value;
+            return Regex.IsMatch(serialized, pattern);
+        }
+
         // assert: evaluate XPath expression against the value
         var assertExpr = resultElem.Name.LocalName == "assert" ? resultElem : resultElem.Element(ns + "assert");
         if (assertExpr != null)
@@ -1386,6 +1398,16 @@ class Program
         {
             var expected = assertSer.Value.Trim();
             return NormalizeXml(actual) == NormalizeXml(expected);
+        }
+
+        // serialization-matches: match the serialized markup against a regex.
+        var serializationMatches = resultElem.Name.LocalName == "serialization-matches"
+            ? resultElem
+            : resultElem.Element(ns + "serialization-matches");
+        if (serializationMatches != null)
+        {
+            var pattern = serializationMatches.Value;
+            return Regex.IsMatch(actual, pattern);
         }
 
         // error expected
