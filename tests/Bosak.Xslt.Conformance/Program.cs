@@ -36,6 +36,7 @@
 //                      | Charles Korthout | 2.4   | 26-06-2026     | Read environment <collation> and set EvaluationContext.DefaultCollation               |
 //                      | Charles Korthout | 2.5   | 05-07-2026     | Fix assert-eq for string-literal assertions on text-only messages                     |
 //                      | Charles Korthout | 2.6   | 26-06-2026     | Inline source content inherits the test-set file base URI                             |
+//                      | Charles Korthout | 2.7   | 07-07-2026     | Load assert-serialization expected value from @file; fixes bug-0701                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1400,6 +1401,14 @@ class Program
         if (assertSer != null)
         {
             var expected = assertSer.Value.Trim();
+            var fileAttr = assertSer.Attribute("file")?.Value;
+            if (string.IsNullOrEmpty(expected) && !string.IsNullOrEmpty(fileAttr))
+            {
+                var filePath = Path.Combine(testSetDir, fileAttr);
+                if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
+                if (File.Exists(filePath))
+                    expected = File.ReadAllText(filePath).Trim();
+            }
             return NormalizeXml(actual) == NormalizeXml(expected);
         }
 

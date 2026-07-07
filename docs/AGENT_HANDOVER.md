@@ -1,6 +1,41 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-07
+**Commit:** `TBD`
+**Current focus:** Cleared the W3C XSLT 3.0 `bug` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,196
+- **Failed:** 54
+- **Skipped:** 9,350
+- **Pass rate:** 99.0% (+6 passed / −6 failed vs. previous 5,190/60)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| bug | 86 | 69 | 0 | 17 | ✅ Imported-template call-template parameter validation; assert-serialization file loading; copied-attribute namespace fixup; current() in xsl:sort |
+
+## This Session Fixes
+
+1. **`bug` conformance cluster** — `bug-0601` now passes because XTSE0680 validation uses the root stylesheet's named-template set, so an imported module can call a named template that is overridden by its importer. `bug-0701` passes because the harness now loads the expected value for `<assert-serialization>` from its `@file` attribute. `bug-1501` and `bug-1601` pass because copied attributes in non-default namespaces now get explicit namespace declarations on their parent element, so `name()` returns distinct prefixed names when two attributes share a local name but have different namespace URIs. `bug-2501` passes because `current()` inside an `xsl:sort/@select` expression now refers to the item being sorted.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`, `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,196/54/9,350** (99.0%).
+- Largest remaining failure clusters: `xml-version` (23), `package` (4), `catalog` (4), `unparsed-text` (4), `docbook` (3), `forwards` (3), `xpath-compat` (2), `match` (2), `function` (2), `accumulator` (1), `choose` (1), `for-each-group` (1), `lre` (1), `whitespace` (1), `arrays` (1), `xslt-compat` (1).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-07
 **Commit:** `cc4f81f`
 **Current focus:** Cleared the W3C XSLT 3.0 `backwards` conformance cluster.
 

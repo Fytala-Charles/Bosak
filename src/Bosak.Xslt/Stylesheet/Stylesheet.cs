@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 2.12  | 26-06-2026     | XTSE0090 for non-global static vars/params; XTSE0090 visibility; XTSE3450 var/param   |
 //                      | Charles Korthout | 2.13  | 26-06-2026     | Document-order use-when evaluation; precedence-aware static variable conflict detection |
 //                      | Charles Korthout | 2.14  | 26-06-2026     | Added xsl:namespace-alias parsing and effective alias mapping                           |
+//                      | Charles Korthout | 2.16  | 07-07-2026     | XTSE0680 validation uses the root stylesheet's named-template set so imports see overrides |
 //                      | Charles Korthout | 2.15  | 29-06-2026     | Static validation for xsl:variable/param/with-param attributes; forwards-compatible mode |
 //                      | Charles Korthout | 2.16  | 26-06-2026     | Shadow attribute support for version, href, use-when, and xpath-default-namespace        |
 //                      | Charles Korthout | 2.17  | 26-06-2026     | Static context hides XSLT dynamic functions such as fn:current-output-uri               |
@@ -97,6 +98,7 @@ public sealed class Stylesheet
     private readonly List<NamespaceAliasDefinition> _namespaceAliases = new();
     private OutputProperties? _outputProperties;
     private readonly bool _isRootStylesheet;
+    private readonly Stylesheet _rootStylesheet;
     private readonly StaticContext _staticContext = new();
     private readonly IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> _externalStaticParameters;
 
@@ -411,7 +413,7 @@ public sealed class Stylesheet
         return dict;
     }
 
-    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null)
+    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null)
     {
         _document = document;
         _baseUri = baseUri;
@@ -421,6 +423,7 @@ public sealed class Stylesheet
         _resolvedUris = resolvedUris ?? new HashSet<string>();
         _isRootStylesheet = _resolvedUris.Count == 0;
         _externalStaticParameters = externalStaticParameters ?? EmptyExternalStaticParameters;
+        _rootStylesheet = rootStylesheet ?? this;
 
         // Add this stylesheet's own URI to the resolved set for circular-reference detection
         if (!string.IsNullOrEmpty(baseUri))
@@ -1453,7 +1456,7 @@ public sealed class Stylesheet
                 var calledName = elem.Attribute("name")?.Value;
                 if (!string.IsNullOrEmpty(calledName))
                 {
-                    var allNamed = GetAllNamedTemplates();
+                    var allNamed = _rootStylesheet.GetAllNamedTemplates();
                     if (allNamed.TryGetValue(calledName, out var rule))
                     {
                         var declaredParams = new HashSet<string>();
@@ -2080,7 +2083,7 @@ public sealed class Stylesheet
             // use-when on the root element of an imported module excludes the whole module.
             if (root != null && !UseWhen(root, resolvedUri))
                 return;
-            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters);
+            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet);
             child.ApplyImportsContextModule = child;
             _imports.Add(child);
             importElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -2110,7 +2113,7 @@ public sealed class Stylesheet
             // use-when on the root element of an included module excludes the whole module.
             if (root != null && !UseWhen(root, resolvedUri))
                 return;
-            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters);
+            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet);
             child.ApplyImportsContextModule = ApplyImportsContextModule;
             _includes.Add(child);
             includeElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });

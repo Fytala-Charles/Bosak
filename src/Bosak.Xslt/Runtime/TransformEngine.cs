@@ -156,6 +156,8 @@
 //                      | Charles Korthout | 5.85  | 06-07-2026     | Capture principal xsl:result-document output properties for serialization               |
 //                      | Charles Korthout | 5.86  | 06-07-2026     | xsl:sequence without @select uses standard item collector; clears seqtor cluster       |
 //                      | Charles Korthout | 5.87  | 26-06-2026     | Backwards-compatible value-of, number, key(), and function argument coercion           |
+//                      | Charles Korthout | 5.88  | 07-07-2026     | Suspend sequence accumulator inside literal result elements; fixes bug-1501/1601       |
+//                      | Charles Korthout | 5.89  | 07-07-2026     | Set current item during xsl:sort key evaluation; fixes bug-2501                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -5904,6 +5906,11 @@ public sealed class TransformEngine
         var prev = _currentContainer;
         _currentContainer = copy;
         _lastAddedWasAtomic = false;
+        // Inside a literal result element, sequence items (especially attributes and
+        // namespace nodes) attach to the element being constructed, so the placeholder
+        // accumulator used for raw sequence constructors must be suspended.
+        var savedAccumulator = _sequenceAccumulator;
+        _sequenceAccumulator = null;
 
         // Variables declared in the content of a literal result element are scoped to that
         // element and must not leak to following siblings in the containing sequence.
@@ -5960,6 +5967,7 @@ public sealed class TransformEngine
             }
             _context.RestoreVariables(savedVariables);
             _currentContainer = prev;
+            _sequenceAccumulator = savedAccumulator;
             _literalElementDepth--;
         }
     }
@@ -6827,9 +6835,16 @@ public sealed class TransformEngine
                     throw new InvalidOperationException("XTDE0420");
                 if (attrTarget.Nodes().Any())
                     throw new InvalidOperationException("XTDE0410");
-                attrTarget.SetAttributeValue(
-                    XName.Get(nodeToCopy.LocalName, nodeToCopy.NamespaceUri),
-                    nodeToCopy.StringValue);
+                {
+                    var attrNs = nodeToCopy.NamespaceUri;
+                    if (!string.IsNullOrEmpty(attrNs))
+                    {
+                        EnsureNamespaceDeclarationForAttribute(attrTarget, attrNs, nodeToCopy.Prefix);
+                    }
+                    attrTarget.SetAttributeValue(
+                        XName.Get(nodeToCopy.LocalName, attrNs),
+                        nodeToCopy.StringValue);
+                }
                 break;
             case XdmNodeKind.Comment:
                 _currentContainer.Add(new XComment(nodeToCopy.StringValue));
@@ -7638,10 +7653,52 @@ public sealed class TransformEngine
                 throw new InvalidOperationException("XTDE0420");
             if (attrParent.Nodes().Any())
                 throw new InvalidOperationException("XTDE0410");
+            var attrNs = node.NamespaceUri;
+            if (!string.IsNullOrEmpty(attrNs))
+            {
+                EnsureNamespaceDeclarationForAttribute(attrParent, attrNs, node.Prefix);
+            }
             attrParent.SetAttributeValue(
-                XName.Get(node.LocalName, node.NamespaceUri),
+                XName.Get(node.LocalName, attrNs),
                 node.StringValue);
         }
+    }
+
+    /// <summary>
+    /// Ensures that the supplied namespace URI is explicitly declared on <paramref name="element"/>
+    /// with a non-conflicting prefix. This is needed when attributes are added programmatically:
+    /// LINQ to XML does not materialize namespace declarations, so <see cref="IXdmNode.Prefix"/>
+    /// and <c>name()</c> would return an unprefixed local name even for namespaced attributes.
+    /// </summary>
+    private static void EnsureNamespaceDeclarationForAttribute(XElement element, string namespaceUri, string? preferredPrefix)
+    {
+        if (string.IsNullOrEmpty(namespaceUri))
+            return;
+
+        var ns = XNamespace.Get(namespaceUri);
+        var existingPrefix = element.GetPrefixOfNamespace(ns);
+        if (!string.IsNullOrEmpty(existingPrefix))
+            return;
+
+        if (!string.IsNullOrEmpty(preferredPrefix))
+        {
+            var existingNs = element.GetNamespaceOfPrefix(preferredPrefix);
+            if (existingNs == null)
+            {
+                element.SetAttributeValue(XNamespace.Xmlns + preferredPrefix, namespaceUri);
+                return;
+            }
+        }
+
+        int i = 1;
+        string prefix;
+        do
+        {
+            prefix = "p" + i.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            i++;
+        } while (element.GetNamespaceOfPrefix(prefix) != null);
+
+        element.SetAttributeValue(XNamespace.Xmlns + prefix, namespaceUri);
     }
 
     /// <summary>
@@ -9655,6 +9712,7 @@ public sealed class TransformEngine
         var savedFocus = _context.ContextItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
+        var savedCurrent = _context.CurrentItem;
         var savedOutputUri = _context.CurrentOutputUri;
         _context.CurrentOutputUri = null;
         try
@@ -9665,6 +9723,7 @@ public sealed class TransformEngine
             {
                 var item = items[idx];
                 _context.WithFocus(item, idx + 1, items.Count);
+                _context.WithCurrentItem(item);
                 var keys = new List<SortKey>();
                 for (int i = 0; i < sortSpecs.Count; i++)
                 {
@@ -9689,6 +9748,7 @@ public sealed class TransformEngine
         finally
         {
             _context.WithFocus(savedFocus, savedPosition, savedSize);
+            _context.WithCurrentItem(savedCurrent);
             _context.CurrentOutputUri = savedOutputUri;
         }
     }
