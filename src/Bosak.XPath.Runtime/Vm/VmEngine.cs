@@ -55,6 +55,7 @@
 //                      | Charles Korthout | 2.22  | 30-06-2026     | Cast to xs:float parses via float.TryParse to preserve single-precision lexical form  |
 //                      | Charles Korthout | 2.23  | 02-07-2026     | Root opcode handles parentless nodes and raises XPDY0050; Range atomizes operands       |
 //                      | Charles Korthout | 2.24  | 03-07-2026     | Trim whitespace when casting strings to xs:integer (TVT function results)              |
+//                      | Charles Korthout | 2.25  | 26-06-2026     | Backwards-compatible arithmetic, comparisons, and range expressions                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -346,6 +347,15 @@ public static class VmEngine
                     {
                         var left = registers[instr.RegisterB];
                         var right = registers[instr.RegisterC];
+
+                        // XPath 1.0 backwards compatibility: the operands of "to" are
+                        // converted to integers by taking the first item of a sequence.
+                        if (context.BackwardsCompatible)
+                        {
+                            left = FirstItemOrUndefined(left);
+                            right = FirstItemOrUndefined(right);
+                        }
+
                         if (left.IsUndefined || IsEmptySeq(left) || right.IsUndefined || IsEmptySeq(right))
                         {
                             registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
@@ -1011,32 +1021,32 @@ public static class VmEngine
                 // Arithmetic
                 // ------------------------------------------------------------------
                 case IrOpCode.Add:
-                    registers[instr.RegisterA] = Add(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    registers[instr.RegisterA] = Add(registers[instr.RegisterB], registers[instr.RegisterC], context);
                     ip++;
                     break;
 
                 case IrOpCode.Subtract:
-                    registers[instr.RegisterA] = Subtract(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    registers[instr.RegisterA] = Subtract(registers[instr.RegisterB], registers[instr.RegisterC], context);
                     ip++;
                     break;
 
                 case IrOpCode.Multiply:
-                    registers[instr.RegisterA] = Multiply(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    registers[instr.RegisterA] = Multiply(registers[instr.RegisterB], registers[instr.RegisterC], context);
                     ip++;
                     break;
 
                 case IrOpCode.Divide:
-                    registers[instr.RegisterA] = Divide(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    registers[instr.RegisterA] = Divide(registers[instr.RegisterB], registers[instr.RegisterC], context);
                     ip++;
                     break;
 
                 case IrOpCode.IntegerDivide:
-                    registers[instr.RegisterA] = IntegerDivide(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    registers[instr.RegisterA] = IntegerDivide(registers[instr.RegisterB], registers[instr.RegisterC], context);
                     ip++;
                     break;
 
                 case IrOpCode.Modulo:
-                    registers[instr.RegisterA] = Modulo(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    registers[instr.RegisterA] = Modulo(registers[instr.RegisterB], registers[instr.RegisterC], context);
                     ip++;
                     break;
 
@@ -1046,7 +1056,7 @@ public static class VmEngine
                     break;
 
                 case IrOpCode.UnaryMinus:
-                    registers[instr.RegisterA] = Negate(registers[instr.RegisterB]);
+                    registers[instr.RegisterA] = Negate(registers[instr.RegisterB], context);
                     ip++;
                     break;
 
@@ -2187,10 +2197,18 @@ public static class VmEngine
         return false;
     }
 
-    private static XdmValue Add(XdmValue left, XdmValue right)
+    private static XdmValue Add(XdmValue left, XdmValue right, EvaluationContext context)
     {
         if (IsEmptySequence(left) || IsEmptySequence(right))
+        {
+            if (context.BackwardsCompatible)
+                return XdmValue.FromDouble(double.NaN);
             return XdmValue.Undefined;
+        }
+
+        // XPath 1.0 backwards compatibility: arithmetic always returns an xs:double.
+        if (context.BackwardsCompatible)
+            return XdmValue.FromDouble(ToDoubleOrNaN(left) + ToDoubleOrNaN(right));
 
         // Date/Time + Duration
         if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
@@ -2299,10 +2317,18 @@ public static class VmEngine
         return new XPathDateTime(year, month, day, hour, minute, second, ms, tzMinutes, hasTz);
     }
 
-    private static XdmValue Subtract(XdmValue left, XdmValue right)
+    private static XdmValue Subtract(XdmValue left, XdmValue right, EvaluationContext context)
     {
         if (IsEmptySequence(left) || IsEmptySequence(right))
+        {
+            if (context.BackwardsCompatible)
+                return XdmValue.FromDouble(double.NaN);
             return XdmValue.Undefined;
+        }
+
+        // XPath 1.0 backwards compatibility: arithmetic always returns an xs:double.
+        if (context.BackwardsCompatible)
+            return XdmValue.FromDouble(ToDoubleOrNaN(left) - ToDoubleOrNaN(right));
 
         if (left.Kind == XdmValueKind.Date && right.Kind == XdmValueKind.Date)
             return XdmValue.FromDuration(FormatDurationFromDateTimeDiff(left.DateXPathValue, right.DateXPathValue));
@@ -2755,10 +2781,18 @@ public static class VmEngine
         throw new InvalidOperationException("XPTY0004");
     }
 
-    private static XdmValue Multiply(XdmValue left, XdmValue right)
+    private static XdmValue Multiply(XdmValue left, XdmValue right, EvaluationContext context)
     {
         if (IsEmptySequence(left) || IsEmptySequence(right))
+        {
+            if (context.BackwardsCompatible)
+                return XdmValue.FromDouble(double.NaN);
             return XdmValue.Undefined;
+        }
+
+        // XPath 1.0 backwards compatibility: arithmetic always returns an xs:double.
+        if (context.BackwardsCompatible)
+            return XdmValue.FromDouble(ToDoubleOrNaN(left) * ToDoubleOrNaN(right));
 
         // Duration * number or number * Duration
         if (left.Kind == XdmValueKind.Duration)
@@ -2781,10 +2815,18 @@ public static class VmEngine
         return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), true);
     }
 
-    private static XdmValue Divide(XdmValue left, XdmValue right)
+    private static XdmValue Divide(XdmValue left, XdmValue right, EvaluationContext context)
     {
         if (IsEmptySequence(left) || IsEmptySequence(right))
+        {
+            if (context.BackwardsCompatible)
+                return XdmValue.FromDouble(double.NaN);
             return XdmValue.Undefined;
+        }
+
+        // XPath 1.0 backwards compatibility: arithmetic always returns an xs:double.
+        if (context.BackwardsCompatible)
+            return XdmValue.FromDouble(ToDoubleOrNaN(left) / ToDoubleOrNaN(right));
 
         // Duration div number
         if (left.Kind == XdmValueKind.Duration && !IsDuration(right))
@@ -2810,10 +2852,18 @@ public static class VmEngine
         return XdmValue.FromDecimal(ToDecimal(left) / divisor);
     }
 
-    private static XdmValue IntegerDivide(XdmValue left, XdmValue right)
+    private static XdmValue IntegerDivide(XdmValue left, XdmValue right, EvaluationContext context)
     {
         if (IsEmptySequence(left) || IsEmptySequence(right))
+        {
+            if (context.BackwardsCompatible)
+                return XdmValue.FromDouble(double.NaN);
             return XdmValue.Undefined;
+        }
+
+        // XPath 1.0 backwards compatibility: integer division returns xs:integer.
+        if (context.BackwardsCompatible)
+            return XdmValue.FromInteger((long)(ToDoubleOrNaN(left) / ToDoubleOrNaN(right)));
 
         if (IsDouble(left) || IsDouble(right))
         {
@@ -2848,10 +2898,18 @@ public static class VmEngine
         return XdmValue.FromInteger(ToInteger(left) / ToInteger(right));
     }
 
-    private static XdmValue Modulo(XdmValue left, XdmValue right)
+    private static XdmValue Modulo(XdmValue left, XdmValue right, EvaluationContext context)
     {
         if (IsEmptySequence(left) || IsEmptySequence(right))
+        {
+            if (context.BackwardsCompatible)
+                return XdmValue.FromDouble(double.NaN);
             return XdmValue.Undefined;
+        }
+
+        // XPath 1.0 backwards compatibility: arithmetic always returns an xs:double.
+        if (context.BackwardsCompatible)
+            return XdmValue.FromDouble(ToDoubleOrNaN(left) % ToDoubleOrNaN(right));
 
         if (IsDouble(left) || IsDouble(right))
         {
@@ -2886,10 +2944,17 @@ public static class VmEngine
         return XdmValue.FromInteger(ToInteger(left) % ToInteger(right));
     }
 
-    private static XdmValue Negate(XdmValue value)
+    private static XdmValue Negate(XdmValue value, EvaluationContext context)
     {
         if (IsEmptySequence(value))
+        {
+            if (context.BackwardsCompatible)
+                return XdmValue.FromDouble(double.NaN);
             return XdmValue.Undefined;
+        }
+
+        if (context.BackwardsCompatible)
+            return XdmValue.FromDouble(-ToDoubleOrNaN(value));
 
         if (value.Kind == XdmValueKind.Duration)
         {
@@ -3288,13 +3353,32 @@ public static class VmEngine
     private static XdmValue CompareGeneral(IrOpCode op, XdmValue left, XdmValue right, EvaluationContext context)
     {
         // General comparisons use existential semantics over sequences.
+        // For now, materialize both sides and compare pairwise.
+        var leftItems = MaterializeSequence(left);
+        var rightItems = MaterializeSequence(right);
+
+        // XPath 1.0 backwards compatibility: when a node-set (or any sequence) is
+        // compared to a boolean, both operands are converted to booleans using the
+        // effective boolean value of the whole operand.
+        if (context.BackwardsCompatible &&
+            (HasBooleanItem(leftItems) || HasBooleanItem(rightItems) ||
+             (left.IsUndefined && HasBooleanItem(rightItems)) ||
+             (right.IsUndefined && HasBooleanItem(leftItems))))
+        {
+            int li = left.EffectiveBooleanValue() ? 1 : 0;
+            int ri = right.EffectiveBooleanValue() ? 1 : 0;
+            bool match = CompareCore(
+                MapGeneralToStrictOp(op),
+                XdmValue.FromInteger(li), XdmValue.FromInteger(ri), strict: false,
+                false, false, context);
+            return XdmValue.FromBoolean(match);
+        }
+
         // XPath 3.1 §17.3: if one operand is an empty sequence, the result is false.
         if (left.IsUndefined || right.IsUndefined)
             return XdmValue.FromBoolean(false);
 
-        // For now, materialize both sides and compare pairwise.
-        var leftItems = MaterializeSequence(left);
-        var rightItems = MaterializeSequence(right);
+        bool relational = IsRelationalGeneralComparison(op);
 
         foreach (var l in leftItems)
         {
@@ -3309,20 +3393,22 @@ public static class VmEngine
                 // XPath 1.0 backwards compatibility coercion rules
                 if (context.BackwardsCompatible)
                 {
-                    ApplyBackwardsCompatibleCoercion(ref atomizedL, ref atomizedR);
+                    if (relational)
+                    {
+                        // Relational operators convert both operands to numbers.
+                        if (atomizedL.Kind != XdmValueKind.Boolean)
+                            atomizedL = XdmValue.FromDouble(ToDoubleOrNaN(atomizedL));
+                        if (atomizedR.Kind != XdmValueKind.Boolean)
+                            atomizedR = XdmValue.FromDouble(ToDoubleOrNaN(atomizedR));
+                    }
+                    else
+                    {
+                        ApplyBackwardsCompatibleCoercion(ref atomizedL, ref atomizedR);
+                    }
                 }
 
                 bool match = CompareCore(
-                    op switch
-                    {
-                        IrOpCode.GeneralEqual => IrOpCode.Equal,
-                        IrOpCode.GeneralNotEqual => IrOpCode.NotEqual,
-                        IrOpCode.GeneralLessThan => IrOpCode.LessThan,
-                        IrOpCode.GeneralLessThanOrEqual => IrOpCode.LessThanOrEqual,
-                        IrOpCode.GeneralGreaterThan => IrOpCode.GreaterThan,
-                        IrOpCode.GeneralGreaterThanOrEqual => IrOpCode.GreaterThanOrEqual,
-                        _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
-                    },
+                    MapGeneralToStrictOp(op),
                     atomizedL, atomizedR, strict: !context.BackwardsCompatible,
                     IsNodeOrigin(l), IsNodeOrigin(r), context);
 
@@ -3332,6 +3418,33 @@ public static class VmEngine
         }
 
         return XdmValue.FromBoolean(false);
+    }
+
+    private static IrOpCode MapGeneralToStrictOp(IrOpCode op)
+        => op switch
+        {
+            IrOpCode.GeneralEqual => IrOpCode.Equal,
+            IrOpCode.GeneralNotEqual => IrOpCode.NotEqual,
+            IrOpCode.GeneralLessThan => IrOpCode.LessThan,
+            IrOpCode.GeneralLessThanOrEqual => IrOpCode.LessThanOrEqual,
+            IrOpCode.GeneralGreaterThan => IrOpCode.GreaterThan,
+            IrOpCode.GeneralGreaterThanOrEqual => IrOpCode.GreaterThanOrEqual,
+            _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+        };
+
+    private static bool IsRelationalGeneralComparison(IrOpCode op)
+        => op is IrOpCode.GeneralLessThan or IrOpCode.GeneralLessThanOrEqual
+                or IrOpCode.GeneralGreaterThan or IrOpCode.GeneralGreaterThanOrEqual;
+
+    private static bool HasBooleanItem(ReadOnlySpan<XdmValue> items)
+    {
+        foreach (var item in items)
+        {
+            var atomized = Atomize(item);
+            if (!atomized.IsUndefined && atomized.Kind == XdmValueKind.Boolean)
+                return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -5642,6 +5755,24 @@ public static class VmEngine
         foreach (var _ in XdmSequence.FromSource(value.SequenceValue))
             return false;
         return true;
+    }
+
+    /// <summary>
+    /// Returns the first item of a sequence, or an undefined value for an empty sequence
+    /// or a non-sequence input. Used for XPath 1.0 backwards-compatible first-item rules.
+    /// </summary>
+    private static XdmValue FirstItemOrUndefined(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+        if (!value.IsSequence || value.SequenceValue is null)
+            return value;
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+        {
+            if (!item.IsUndefined)
+                return item;
+        }
+        return XdmValue.Undefined;
     }
 
     private static bool IsDecimal(XdmValue value) =>

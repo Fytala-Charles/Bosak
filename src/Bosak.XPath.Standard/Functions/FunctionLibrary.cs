@@ -82,6 +82,7 @@
 //                      | Charles Korthout | 5.16  | 02-07-2026     | available-system-properties returns xs:QName values; added missing XSLT system properties |
 //                      | Charles Korthout | 5.17  | 26-06-2026     | Default-collation aware default-collation(), deep-equal, max/min, index-of, distinct-values |
 //                      | Charles Korthout | 5.18  | 05-07-2026     | Default-collation aware fn:compare, contains, starts-with, ends-with, substring-before/after |
+//                      | Charles Korthout | 5.19  | 26-06-2026     | Backwards-compatible argument coercion for string and node functions                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4454,36 +4455,36 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Contains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(StringContains(RequireString(args[0]), RequireString(args[1]), ctx.DefaultCollation));
+        => XdmValue.FromBoolean(StringContains(RequireString(args[0], ctx.BackwardsCompatible), RequireString(args[1], ctx.BackwardsCompatible), ctx.DefaultCollation));
 
     private static XdmValue Contains_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string s = RequireString(args[0]);
-        string search = RequireString(args[1]);
+        string s = RequireString(args[0], ctx.BackwardsCompatible);
+        string search = RequireString(args[1], ctx.BackwardsCompatible);
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
         return XdmValue.FromBoolean(StringContains(s, search, collation));
     }
 
     private static XdmValue StartsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(StringStartsWith(RequireString(args[0]), RequireString(args[1]), ctx.DefaultCollation));
+        => XdmValue.FromBoolean(StringStartsWith(RequireString(args[0], ctx.BackwardsCompatible), RequireString(args[1], ctx.BackwardsCompatible), ctx.DefaultCollation));
 
     private static XdmValue StartsWith_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string s = RequireString(args[0]);
-        string search = RequireString(args[1]);
+        string s = RequireString(args[0], ctx.BackwardsCompatible);
+        string search = RequireString(args[1], ctx.BackwardsCompatible);
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
         return XdmValue.FromBoolean(StringStartsWith(s, search, collation));
     }
 
     private static XdmValue EndsWith(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(StringEndsWith(RequireString(args[0]), RequireString(args[1]), ctx.DefaultCollation));
+        => XdmValue.FromBoolean(StringEndsWith(RequireString(args[0], ctx.BackwardsCompatible), RequireString(args[1], ctx.BackwardsCompatible), ctx.DefaultCollation));
 
     private static XdmValue EndsWith_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string s = RequireString(args[0]);
-        string search = RequireString(args[1]);
+        string s = RequireString(args[0], ctx.BackwardsCompatible);
+        string search = RequireString(args[1], ctx.BackwardsCompatible);
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
         return XdmValue.FromBoolean(StringEndsWith(s, search, collation));
@@ -4837,10 +4838,10 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UpperCase(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(ApplyUnicodeCaseMapping(RequireString(args[0]), toUpper: true));
+        => XdmValue.FromString(ApplyUnicodeCaseMapping(RequireString(args[0], ctx.BackwardsCompatible), toUpper: true));
 
     private static XdmValue LowerCase(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(ApplyUnicodeCaseMapping(RequireString(args[0]), toUpper: false));
+        => XdmValue.FromString(ApplyUnicodeCaseMapping(RequireString(args[0], ctx.BackwardsCompatible), toUpper: false));
 
     /// <summary>
     /// Applies Unicode full case mapping, handling one-to-many mappings
@@ -6220,12 +6221,14 @@ public static class FunctionLibrary
             int count = 0;
             foreach (var x in XdmSequence.FromSource(arg.SequenceValue!))
             {
-                first = x;
+                if (first == null)
+                    first = x;
                 count++;
-                if (count > 1) break;
+                if (!ctx.BackwardsCompatible && count > 1)
+                    break;
             }
             if (count == 0) return XdmValue.Undefined;
-            if (count > 1) throw new InvalidOperationException("XPTY0004");
+            if (!ctx.BackwardsCompatible && count > 1) throw new InvalidOperationException("XPTY0004");
             arg = first!.Value;
         }
         if (!arg.IsNode)
@@ -7136,7 +7139,7 @@ public static class FunctionLibrary
     /// Nodes are atomized; empty sequence becomes "".
     /// Non-string atomic types (integer, date, boolean, etc.) raise XPTY0004.
     /// </summary>
-    private static string RequireString(XdmValue value)
+    private static string RequireString(XdmValue value, bool backwardsCompatible = false)
     {
         if (value.IsUndefined)
             return string.Empty;
@@ -7149,9 +7152,21 @@ public static class FunctionLibrary
 
         if (value.IsSequence)
         {
+            XdmValue? first = null;
+            int count = 0;
             foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
-                return RequireString(item);
-            return string.Empty;
+            {
+                if (first == null)
+                    first = item;
+                count++;
+                if (!backwardsCompatible && count > 1)
+                    break;
+            }
+            if (count == 0)
+                return string.Empty;
+            if (!backwardsCompatible && count > 1)
+                throw new InvalidOperationException("XPTY0004");
+            return RequireString(first!.Value, backwardsCompatible);
         }
 
         if (value.Kind == XdmValueKind.String)
@@ -8226,12 +8241,12 @@ public static class FunctionLibrary
 
     private static XdmValue FormatNumber_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        return FormatNumber(ctx, args[0], RequireString(args[1]), null);
+        return FormatNumber(ctx, args[0], RequireString(args[1], ctx.BackwardsCompatible), null);
     }
 
     private static XdmValue FormatNumber_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        return FormatNumber(ctx, args[0], RequireString(args[1]), RequireString(args[2]));
+        return FormatNumber(ctx, args[0], RequireString(args[1], ctx.BackwardsCompatible), RequireString(args[2], ctx.BackwardsCompatible));
     }
 
     private static XdmValue FormatNumber(EvaluationContext ctx, XdmValue value, string picture, string? formatName)

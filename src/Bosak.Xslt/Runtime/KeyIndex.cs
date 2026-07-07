@@ -415,7 +415,7 @@ public sealed class KeyIndex
             var keyValues = useExpr != null
                 ? useExpr.Evaluate(context.WithFocus(XdmValue.FromNode(node), 1, 1))
                 : XdmValue.Undefined;
-            AddKeyValues(index, keyName, keyValues, node, composite);
+            AddKeyValues(index, keyName, keyValues, node, composite, context.BackwardsCompatible);
         }
     }
 
@@ -424,11 +424,11 @@ public sealed class KeyIndex
         if (match(XdmValue.FromNode(node), context))
         {
             var keyValues = useEvaluator(node);
-            AddKeyValues(index, keyName, keyValues, node, composite);
+            AddKeyValues(index, keyName, keyValues, node, composite, context.BackwardsCompatible);
         }
     }
 
-    private static void AddKeyValues(KeyIndex index, string keyName, XdmValue keyValues, IXdmNode node, bool composite)
+    private static void AddKeyValues(KeyIndex index, string keyName, XdmValue keyValues, IXdmNode node, bool composite, bool backwardsCompatible = false)
     {
         if (keyValues.IsUndefined)
             return;
@@ -439,12 +439,12 @@ public sealed class KeyIndex
             foreach (var item in XdmSequence.FromSource(keyValues.SequenceValue))
             {
                 if (!item.IsUndefined)
-                    items.Add(AtomizeKeyValue(item));
+                    items.Add(AtomizeKeyValue(item, backwardsCompatible));
             }
         }
         else
         {
-            items.Add(AtomizeKeyValue(keyValues));
+            items.Add(AtomizeKeyValue(keyValues, backwardsCompatible));
         }
 
         if (items.Count == 0)
@@ -461,9 +461,12 @@ public sealed class KeyIndex
         }
     }
 
-    private static XdmValue AtomizeKeyValue(XdmValue value)
+    private static XdmValue AtomizeKeyValue(XdmValue value, bool backwardsCompatible)
     {
         if (value.IsNode)
+            return XdmValue.FromString(value.ToString(), "untypedAtomic");
+        // XPath 1.0 backwards compatibility: key values are strings.
+        if (backwardsCompatible)
             return XdmValue.FromString(value.ToString(), "untypedAtomic");
         return value;
     }

@@ -1,5 +1,40 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-07
+**Commit:** `cf62815`
+**Current focus:** Cleared the W3C XSLT 3.0 `backwards` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,190
+- **Failed:** 60
+- **Skipped:** 9,350
+- **Pass rate:** 98.9% (+15 passed / −15 failed vs. previous 5,175/75)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| backwards | 47 | 43 | 0 | 4 | ✅ XSLT 1.0 backwards-compatible mode: first-item rules, arithmetic/comparison coercion, function arguments, `key()` string lookups |
+
+## This Session Fixes
+
+1. **Backwards-compatible (`backwards`) conformance cluster** — `CompileOptions.BackwardsCompatible` now flows from the XSLT compiler into the XPath optimizer and IR lowerer, so integer arithmetic is promoted to `xs:double` and constant-folding is disabled for expressions that differ in XPath 1.0 mode. The VM applies first-item rules to arithmetic operands, general comparisons, and the `to` operator; empty sequences become `NaN`; booleans and untyped atomics coerce to numbers. Standard function argument conversion (`fn:string`, `fn:number`, `fn:count`, etc.) accepts sequences and applies first-item/empty rules in BC mode. `xsl:value-of` without an explicit `separator` outputs only the first item; `xsl:number/@value` uses the first item and emits `NaN` for empty/non-numeric values. `key()` lookups use string-valued keys under BC so numeric `key('k', 1.0)` matches integer-indexed nodes. Mixed-version stylesheets correctly thread the per-expression BC flag. The conformance harness now propagates inline source base URIs from the test-set file.
+   - **Files changed**: `src/Bosak.XPath.Api/CompileOptions.cs`, `src/Bosak.XPath.Api/XPath31Expression.cs`, `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`, `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `src/Bosak.Xslt/Runtime/KeyIndex.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`, `docs/ARCHITECTURE.md`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,190/60/9,350** (98.9%).
+- Largest remaining failure clusters: `xml-version` (23), `bug` (5), `package` (4), `forwards` (3), `xpath-compat` (2), `match` (2), `function` (2), `lre` (2), `accumulator` (1), `choose` (1), `for-each-group` (1), `whitespace` (1), `arrays` (1), `unparsed-text` (4), `catalog` (4), `docbook` (3), `xslt-compat` (1).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-06
 **Commit:** `0af53ac`
 **Current focus:** Cleared the W3C XSLT 3.0 `seqtor` conformance cluster.

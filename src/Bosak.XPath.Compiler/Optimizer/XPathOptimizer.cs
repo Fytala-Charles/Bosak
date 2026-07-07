@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added OptimizeLookupWildcard                                                           |
 //                      | Charles Korthout | 0.3   | 21-05-2026     | Integer div constant fold produces DecimalLiteralNode (XPath div semantics)            |
+//                      | Charles Korthout | 0.4   | 26-06-2026     | Backwards-compatible mode promotes integer arithmetic folding to xs:double            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -25,11 +26,21 @@ namespace Bosak.XPath.Compiler.Optimizer;
 /// </summary>
 public sealed class XPathOptimizer
 {
+    private bool _backwardsCompatible;
+
     /// <summary>
     /// Optimizes an AST node. Runs multiple passes until no further changes are made.
     /// </summary>
     public XPathAstNode Optimize(XPathAstNode node)
+        => Optimize(node, backwardsCompatible: false);
+
+    /// <summary>
+    /// Optimizes an AST node, optionally applying XPath 1.0 backwards-compatible
+    /// constant-folding rules.
+    /// </summary>
+    public XPathAstNode Optimize(XPathAstNode node, bool backwardsCompatible)
     {
+        _backwardsCompatible = backwardsCompatible;
         bool changed;
         do
         {
@@ -94,12 +105,24 @@ public sealed class XPathOptimizer
             {
                 XPathAstNode? result = node.Operator switch
                 {
-                    BinaryOperator.Plus => new IntegerLiteralNode(li.Value + ri.Value),
-                    BinaryOperator.Minus => new IntegerLiteralNode(li.Value - ri.Value),
-                    BinaryOperator.Multiply => new IntegerLiteralNode(li.Value * ri.Value),
-                    BinaryOperator.Divide => new DecimalLiteralNode((decimal)li.Value / (decimal)ri.Value),
-                    BinaryOperator.Idiv => new IntegerLiteralNode(li.Value / ri.Value),
-                    BinaryOperator.Mod => new IntegerLiteralNode(li.Value % ri.Value),
+                    BinaryOperator.Plus => _backwardsCompatible
+                        ? new DoubleLiteralNode((double)li.Value + (double)ri.Value)
+                        : new IntegerLiteralNode(li.Value + ri.Value),
+                    BinaryOperator.Minus => _backwardsCompatible
+                        ? new DoubleLiteralNode((double)li.Value - (double)ri.Value)
+                        : new IntegerLiteralNode(li.Value - ri.Value),
+                    BinaryOperator.Multiply => _backwardsCompatible
+                        ? new DoubleLiteralNode((double)li.Value * (double)ri.Value)
+                        : new IntegerLiteralNode(li.Value * ri.Value),
+                    BinaryOperator.Divide => _backwardsCompatible
+                        ? new DoubleLiteralNode((double)li.Value / (double)ri.Value)
+                        : new DecimalLiteralNode((decimal)li.Value / (decimal)ri.Value),
+                    BinaryOperator.Idiv => _backwardsCompatible
+                        ? new DoubleLiteralNode((double)(li.Value / ri.Value))
+                        : new IntegerLiteralNode(li.Value / ri.Value),
+                    BinaryOperator.Mod => _backwardsCompatible
+                        ? new DoubleLiteralNode((double)li.Value % (double)ri.Value)
+                        : new IntegerLiteralNode(li.Value % ri.Value),
                     BinaryOperator.Eq => new BooleanLiteralNode(li.Value == ri.Value),
                     BinaryOperator.Ne => new BooleanLiteralNode(li.Value != ri.Value),
                     BinaryOperator.Lt => new BooleanLiteralNode(li.Value < ri.Value),

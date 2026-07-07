@@ -70,7 +70,7 @@ public sealed class XPath31Expression
 
         // 3. Optimize AST
         var optimizer = new XPathOptimizer();
-        var optimized = optimizer.Optimize(ast);
+        var optimized = optimizer.Optimize(ast, options.BackwardsCompatible);
 
         // 4. Lower to IR
         var lowerer = new IrLowerer();

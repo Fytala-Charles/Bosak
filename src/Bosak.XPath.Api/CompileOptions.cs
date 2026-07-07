@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
+//                      | Charles Korthout | 0.3   | 26-06-2026     | Added BackwardsCompatible for XSLT 1.0 static constant folding                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Api;
@@ -74,4 +75,11 @@ public sealed class CompileOptions
     /// a threshold of executions. Defaults to false (register VM only).
     /// </summary>
     public bool EnableJit { get; init; }
+
+    /// <summary>
+    /// If true, the expression is compiled in XPath 1.0 backwards-compatible
+    /// mode. This affects static type folding (e.g. integer arithmetic is
+    /// promoted to <c>xs:double</c>) and may influence parser diagnostics.
+    /// </summary>
+    public bool BackwardsCompatible { get; init; }
 }

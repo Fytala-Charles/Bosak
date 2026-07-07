@@ -35,6 +35,7 @@
 //                      | Charles Korthout | 2.3   | 26-06-2026     | Pass base output URI from <output file="..."/> to the transformation engine            |
 //                      | Charles Korthout | 2.4   | 26-06-2026     | Read environment <collation> and set EvaluationContext.DefaultCollation               |
 //                      | Charles Korthout | 2.5   | 05-07-2026     | Fix assert-eq for string-literal assertions on text-only messages                     |
+//                      | Charles Korthout | 2.6   | 26-06-2026     | Inline source content inherits the test-set file base URI                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -270,7 +271,7 @@ class Program
 
         foreach (var testCase in testCases)
         {
-            var result = RunTestCase(testCase, environments, testSetDir, catalogDir, ns);
+            var result = RunTestCase(testCase, environments, testSetDir, testSetPath, catalogDir, ns);
             if (result == TestResult.Pass) setPassed++;
             else if (result == TestResult.Fail) setFailed++;
             else setSkipped++;
@@ -284,7 +285,7 @@ class Program
 
     enum TestResult { Pass, Fail, Skip }
 
-    static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string catalogDir, XNamespace ns)
+    static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
     {
         var name = testCase.Attribute("name")?.Value ?? "unknown";
 
@@ -372,7 +373,7 @@ class Program
 
             if (envToLoad != null)
             {
-                var loadedEnv = LoadEnvironment(envToLoad, testSetDir, catalogDir, ns);
+                var loadedEnv = LoadEnvironment(envToLoad, testSetDir, testSetPath, catalogDir, ns);
                 sourceNode = loadedEnv.SourceNode;
                 envDefaultCollation = loadedEnv.DefaultCollation;
             }
@@ -764,12 +765,13 @@ class Program
         return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
     }
 
-    static (IXdmNode? SourceNode, string? DefaultCollation) LoadEnvironment(XElement envElem, string testSetDir, string catalogDir, XNamespace ns)
+    static (IXdmNode? SourceNode, string? DefaultCollation) LoadEnvironment(XElement envElem, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
     {
         var source = envElem.Element(ns + "source");
         if (source == null) return (null, null);
 
         XDocument? doc = null;
+        string? sourceUri = null;
         var content = source.Element(ns + "content");
         if (content != null)
         {
@@ -777,10 +779,11 @@ class Program
             // sections (nested CDATA escaping). Concatenate all text nodes.
             var xmlText = string.Concat(content.Nodes().OfType<XText>().Select(t => t.Value));
             doc = XDocument.Parse(xmlText, LoadOptions.PreserveWhitespace);
+            // Inline content inherits the base URI of the test-set file.
+            sourceUri = new Uri(testSetPath).AbsoluteUri;
         }
 
         var file = source.Attribute("file")?.Value;
-        string? sourceUri = null;
         if (file != null && doc == null)
         {
             var path = Path.Combine(testSetDir, file);

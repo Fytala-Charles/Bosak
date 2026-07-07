@@ -155,6 +155,7 @@
 //                      | Charles Korthout | 5.84  | 26-06-2026     | No-op cases for sort/fallback/on-empty/on-non-empty; implement xsl:assert               |
 //                      | Charles Korthout | 5.85  | 06-07-2026     | Capture principal xsl:result-document output properties for serialization               |
 //                      | Charles Korthout | 5.86  | 06-07-2026     | xsl:sequence without @select uses standard item collector; clears seqtor cluster       |
+//                      | Charles Korthout | 5.87  | 26-06-2026     | Backwards-compatible value-of, number, key(), and function argument coercion           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1011,7 +1012,8 @@ public sealed class TransformEngine
                 Namespaces = nsMap,
                 DefaultElementNamespace = defaultNs,
                 DefiningElementDefaultNamespace = definingNs,
-                BaseUri = baseUri
+                BaseUri = baseUri,
+                BackwardsCompatible = IsEffectiveBackwardsCompatible(instruction)
             };
             return XPath31Expression.Compile(expression, options);
         }
@@ -4164,18 +4166,11 @@ public sealed class TransformEngine
                         var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
                         string textValue;
-                        if (IsEffectiveBackwardsCompatible(instruction))
+                        bool hasSeparator = instruction.Attribute("separator") != null;
+                        if (IsEffectiveBackwardsCompatible(instruction) && !hasSeparator)
                         {
-                            // XSLT 1.0: value-of outputs only the first item (like string())
-                            if (result.IsSequence && result.SequenceValue != null)
-                            {
-                                var en = XdmSequence.FromSource(result.SequenceValue).GetEnumerator();
-                                textValue = en.MoveNext() ? en.Current.ToString() : string.Empty;
-                            }
-                            else
-                            {
-                                textValue = result.ToString();
-                            }
+                            // XSLT 1.0: value-of without an explicit separator outputs only the first item.
+                            textValue = FirstItemString(result);
                         }
                         else
                         {
@@ -7945,6 +7940,11 @@ public sealed class TransformEngine
         var keyName = ExpandKeyName(rawKeyName, ctx);
         var keyValueArg = args[1];
 
+        // XPath 1.0 backwards compatibility: key() treats its second argument as a
+        // string (or a node-set whose string values are used).
+        if (ctx.BackwardsCompatible)
+            keyValueArg = ConvertKeyValueToStringSequence(keyValueArg);
+
         // XTDE1260: the expanded key name must match at least one xsl:key definition.
         var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
         if (!allKeyDefs.Any(k => k.Name == keyName))
@@ -8229,6 +8229,38 @@ public sealed class TransformEngine
 
     private bool IsCompositeKey(string keyName)
         => _stylesheet.GetAllKeyDefinitions().Any(k => k.Name == keyName && k.Composite);
+
+    /// <summary>
+    /// Converts a key-value argument to a sequence of strings using XPath 1.0
+    /// backwards-compatible semantics: node-sets are atomized to their string values,
+    /// and any other value is converted via <c>string()</c>.
+    /// </summary>
+    private static XdmValue ConvertKeyValueToStringSequence(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+
+        var strings = new List<XdmValue>();
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (item.IsUndefined)
+                    continue;
+                strings.Add(XdmValue.FromString(item.ToString()));
+            }
+        }
+        else
+        {
+            strings.Add(XdmValue.FromString(value.ToString()));
+        }
+
+        if (strings.Count == 0)
+            return XdmValue.Undefined;
+        if (strings.Count == 1)
+            return strings[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(strings));
+    }
 
     /// <summary>
     /// Extracts typed atomic values from a key-value argument (either a single value or a sequence).
@@ -8805,6 +8837,62 @@ public sealed class TransformEngine
                     yield return item;
             }
         }
+    }
+
+    /// <summary>
+    /// Returns true if the value is a sequence containing at least one node.
+    /// </summary>
+    private static bool ContainsNode(XdmValue value)
+    {
+        if (!value.IsSequence || value.SequenceValue == null)
+            return false;
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+        {
+            if (item.IsNode)
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Returns the first item of a sequence, or the value itself if it is not a
+    /// sequence. Empty sequences yield an undefined value.
+    /// </summary>
+    private static XdmValue FirstItemOrUndefined(XdmValue value)
+    {
+        if (value.IsUndefined || !value.IsSequence || value.SequenceValue == null)
+            return value;
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+        {
+            if (!item.IsUndefined)
+                return item;
+        }
+        return XdmValue.Undefined;
+    }
+
+    /// <summary>
+    /// Returns the string value of the first item in a sequence, or the string
+    /// value of the value itself if it is a singleton. Empty sequences produce
+    /// an empty string.
+    /// </summary>
+    private static string FirstItemString(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        if (!value.IsSequence)
+            return value.ToString();
+
+        if (value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!item.IsUndefined)
+                    return item.ToString();
+            }
+        }
+
+        return string.Empty;
     }
 
     /// <summary>
@@ -13558,6 +13646,10 @@ public sealed class TransformEngine
         {
             var compiled = XPath31Expression.Compile(valueAttr);
             var result = compiled.Evaluate(_context);
+
+            // XSLT 1.0 backwards compatibility: xsl:number/@value uses only the first item.
+            if (backwardsCompatible)
+                result = FirstItemOrUndefined(result);
 
             // Determine whether the raw result is an empty sequence
             bool isEmptySequence = false;
