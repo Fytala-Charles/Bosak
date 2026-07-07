@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-07
-**Commit:** `cf62815`
+**Commit:** `cc4f81f`
 **Current focus:** Cleared the W3C XSLT 3.0 `backwards` conformance cluster.
 
 ---
