@@ -1,6 +1,41 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-07
+**Commit:** `4c0591e`
+**Current focus:** Cleared the W3C XSLT 3.0 `xpath-compat` conformance cluster.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,198
+- **Failed:** 52
+- **Skipped:** 9,350
+- **Pass rate:** 99.0% (+2 passed / −2 failed vs. previous 5,196/54)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| xpath-compat | 18 | 17 | 0 | 1 | ✅ XPath 1.0 BC negative-zero semantics and `fn:subsequence` numeric argument coercion |
+
+## This Session Fixes
+
+1. **`xpath-compat` conformance cluster** — `xpath-compat-0101` now passes because the XPath optimizer no longer constant-folds `-(IntegerLiteral(0))` to a positive zero in backwards-compatible mode; the runtime unary-minus operator then produces a negative-zero double, so `string(xs:float(-0))` returns `-0`. `xpath-compat-0401` now passes because `fn:subsequence` applies XPath 1.0 numeric coercion to its starting-position and length arguments when `EvaluationContext.BackwardsCompatible` is true, accepting strings, untyped atomics, and node arguments that would otherwise raise `XPTY0004`.
+   - **Files changed**: `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,198/52/9,350** (99.0%).
+- Largest remaining failure clusters: `xml-version` (23), `package` (4), `catalog` (4), `unparsed-text` (4), `docbook` (3), `forwards` (3), `match` (2), `function` (2), `xpath-compat` skipped (1), `accumulator` (1), `choose` (1), `for-each-group` (1), `lre` (1), `whitespace` (1), `arrays` (1), `xslt-compat` (1).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-07
 **Commit:** `b46dbf6`
 **Current focus:** Cleared the W3C XSLT 3.0 `bug` conformance cluster.
 

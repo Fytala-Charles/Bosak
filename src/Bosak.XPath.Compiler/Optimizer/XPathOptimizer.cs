@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added OptimizeLookupWildcard                                                           |
 //                      | Charles Korthout | 0.3   | 21-05-2026     | Integer div constant fold produces DecimalLiteralNode (XPath div semantics)            |
 //                      | Charles Korthout | 0.4   | 26-06-2026     | Backwards-compatible mode promotes integer arithmetic folding to xs:double            |
+//                      | Charles Korthout | 0.5   | 07-07-2026     | Preserve negative-zero unary minus in BC mode; fixes xpath-compat-0101               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -247,9 +248,12 @@ public sealed class XPathOptimizer
             return inner.Operand;
         }
 
-        // -(IntegerLiteral) => negated literal
+        // -(IntegerLiteral) => negated literal. In XPath 1.0 BC mode, -0 must produce
+        // a negative zero double, so do not fold the unary minus on integer zero.
         if (node.Operator == UnaryOperator.Minus && operand is IntegerLiteralNode i)
         {
+            if (_backwardsCompatible && i.Value == 0)
+                return node;
             changed = true;
             return new IntegerLiteralNode(-i.Value);
         }

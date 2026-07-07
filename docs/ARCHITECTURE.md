@@ -185,7 +185,7 @@ A hand-written, recursive-descent parser using `ReadOnlySpan<char>` for zero-all
 Transforms the AST into an executable form.
 
 #### Phase 1: AST Optimizer
-- Constant folding (`1 + 2` → `3`)
+- Constant folding (`1 + 2` → `3`), preserving XPath 1.0 negative-zero semantics for unary minus on integer zero
 - Predicate analysis (`[1]` → `First()`, `[last()]` → `Last()`)
 - Axis merging (`child::foo` + `child::bar` where possible)
 - Dead code elimination
@@ -269,7 +269,7 @@ Each function is implemented as a static method conforming to a delegate signatu
 public delegate XdmValue XPathFunction(EvaluationContext context, ReadOnlySpan<XdmValue> arguments);
 ```
 
-Functions are registered in a `FunctionLibrary` that supports runtime extensibility.
+Functions are registered in a `FunctionLibrary` that supports runtime extensibility. Functions that accept numeric arguments in XPath 1.0 backwards-compatible mode (e.g. `fn:subsequence`) coerce strings, untyped atomics, and nodes to `xs:double` instead of raising `XPTY0004`.
 
 #### Regular-expression support
 

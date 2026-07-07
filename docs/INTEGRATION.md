@@ -543,12 +543,13 @@ dotnet test Bosak.sln
 | Shadow attributes (static AVTs) are implemented. | `_version`, `_href`, `_use-when`, `_xpath-default-namespace`, `_static`, `_select`, and other underscore-prefixed XSLT attributes are expanded at compile time using the current static context; shadow attributes on literal result elements are left untouched. Clears the `shadow` cluster. | 2026-06-26 |
 | XSLT 1.0 backwards-compatible mode is fully implemented. | `CompileOptions.BackwardsCompatible` flows into the XPath optimizer, IR lowerer, VM arithmetic/comparisons, standard-function argument conversion, `xsl:value-of`, `xsl:number`, and `key()` string-valued lookups. Clears the `backwards` cluster (43/43 runnable). | 2026-07-07 |
 | The `bug` conformance cluster is fully passing. | Imported-template XTSE0680 validation, `<assert-serialization>` file loading in the harness, namespace fixup for copied attributes, and `current()` inside `xsl:sort`. Clears the `bug` cluster (69/69 runnable). | 2026-07-07 |
+| The `xpath-compat` conformance cluster is fully passing. | Backwards-compatible negative-zero constant folding and `fn:subsequence` numeric argument coercion for strings/untyped atoms. Clears the `xpath-compat` cluster (17/17 runnable). | 2026-07-07 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 5,196 | 54 | 9,350 | 99.0% | `iterate`, `sort`, `merge`, `arrays`, `math` clusters fully runnable; `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `shadow`, `type`, `analyze-string`, `next-match`, `context-item`, `backwards`, `bug` clusters green |
+| XSLT 3.0 (W3C) | 5,198 | 52 | 9,350 | 99.0% | `iterate`, `sort`, `merge`, `arrays`, `math` clusters fully runnable; `maps`, `namespace`, `namespace-alias`, `date`, `mode`, `static`, `use-when`, `shadow`, `type`, `analyze-string`, `next-match`, `context-item`, `backwards`, `bug`, `xpath-compat` clusters green |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

@@ -83,6 +83,7 @@
 //                      | Charles Korthout | 5.17  | 26-06-2026     | Default-collation aware default-collation(), deep-equal, max/min, index-of, distinct-values |
 //                      | Charles Korthout | 5.18  | 05-07-2026     | Default-collation aware fn:compare, contains, starts-with, ends-with, substring-before/after |
 //                      | Charles Korthout | 5.19  | 26-06-2026     | Backwards-compatible argument coercion for string and node functions                   |
+//                      | Charles Korthout | 5.20  | 07-07-2026     | fn:subsequence uses BC numeric coercion for start/length; fixes xpath-compat-0401     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -6358,7 +6359,7 @@ public static class FunctionLibrary
 
     private static XdmValue Subsequence_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        double startD = ToDoubleValueStrict(args[1]);
+        double startD = ctx.BackwardsCompatible ? ToDoubleValue(args[1]) : ToDoubleValueStrict(args[1]);
         if (double.IsNaN(startD)) return XdmValue.Undefined;
         double startRounded = Math.Floor(startD + 0.5);
         if (double.IsPositiveInfinity(startRounded)) return XdmValue.Undefined;
@@ -6400,8 +6401,8 @@ public static class FunctionLibrary
 
     private static XdmValue Subsequence_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        double startD = ToDoubleValueStrict(args[1]);
-        double lenD = ToDoubleValueStrict(args[2]);
+        double startD = ctx.BackwardsCompatible ? ToDoubleValue(args[1]) : ToDoubleValueStrict(args[1]);
+        double lenD = ctx.BackwardsCompatible ? ToDoubleValue(args[2]) : ToDoubleValueStrict(args[2]);
         if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.Undefined;
         double startRounded = Math.Floor(startD + 0.5);
         double lenRounded = Math.Floor(lenD + 0.5);
