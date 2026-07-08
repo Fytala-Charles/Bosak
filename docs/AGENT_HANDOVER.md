@@ -1,5 +1,43 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-08
+**Commit:** `25081df`
+**Current focus:** Cleared the W3C XSLT 3.0 `normalize-unicode` conformance cluster and fixed encoding/BOM handling in `Xml11Loader`.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,222
+- **Failed:** 28
+- **Skipped:** 9,350
+- **Pass rate:** 99.5% (+19 passed / −19 failed vs. previous 5,203/47)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| normalize-unicode | 18 | 18 | 0 | 0 | ✅ `fn:normalize-unicode()` and serialization normalization-form now work because ISO-8859-1 source files are decoded correctly |
+
+## This Session Fixes
+
+1. **`normalize-unicode` conformance cluster** — `Xml11Loader.Load` now honors the encoding declared in the XML declaration (e.g., `encoding="iso-8859-1"`) instead of always using UTF-8. It also strips byte-order marks before handing the text to `XmlReader`, and the encoding regex is scoped to the XML declaration so later `encoding` attributes (e.g., `xsl:output`) are not misread.
+   - **Files changed**: `src/Bosak.XPath.Providers/Xml11/Xml11Loader.cs`.
+
+2. **Encoding/BOM regression cleanup** — The same fix cleared spurious failures in `id`, `xml-version`, `copy`, `catalog`, `conflict-resolution`, and `date` clusters that were introduced when `Xml11Loader` started reading raw bytes.
+   - **Files changed**: `src/Bosak.XPath.Providers/Xml11/Xml11Loader.cs`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,222/28/9,350** (99.5%).
+- Largest remaining failure clusters: `package` (4), `unparsed-text` (4), `docbook` (3), `forwards` (3), `match` (2), `function` (2), `accumulator` (1), `choose` (1), `for-each-group` (1), `lre` (1), `bug` (1), `catalog` (2), `whitespace` (1), `xslt-compat` (1), `square-array` (1).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-07
 **Commit:** `c9bc188`
 **Current focus:** XML 1.1 node-provider layer implemented; `xml-version`, `namespace`, `document`, and `base-uri` conformance clusters cleared.
