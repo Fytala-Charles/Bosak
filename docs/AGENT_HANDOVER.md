@@ -1,6 +1,43 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-08
+**Commit:** `aeb9473`
+**Current focus:** Corrected harness principal-module selection; `package` cluster now cleanly skipped.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,219
+- **Failed:** 24
+- **Skipped:** 9,357
+- **Pass rate:** 99.5% (+6 passed / −12 failed vs. previous 5,213/36)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| package | 72 | 0 | 0 | 72 | ✅ Principal `xsl:package` tests are now correctly skipped instead of mis-loading secondary stylesheets |
+| use-package | 54 | 0 | 0 | 54 | ✅ Already skipped; harness selection logic now consistent |
+| package-version | 37 | 2 | 0 | 35 | ✅ Principal-stylesheet package-version tests still run; package principals skipped |
+
+## This Session Fixes
+
+1. **Conformance harness principal-module selection** — The harness previously picked the first `<stylesheet>` child regardless of `@role`, so package tests that listed a secondary stylesheet before the principal package loaded the wrong module and failed with unrelated errors. It now prefers `<stylesheet role="principal">` / `<package role="principal">`, falls back only when no principal is declared, and skips tests whose principal module is an `xsl:package`.
+   - **Files changed**: `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,219/24/9,357** (99.5%).
+- Largest remaining failure clusters: `unparsed-text` (4), `docbook` (3), `forwards` (3), `match` (2), `function` (2), `accumulator` (1), `choose` (1), `for-each-group` (1), `lre` (1), `bug` (1), `catalog` (2), `whitespace` (1), `xslt-compat` (1), `square-array` (1).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-08
 **Commit:** `25081df`
 **Current focus:** Cleared the W3C XSLT 3.0 `normalize-unicode` conformance cluster and fixed encoding/BOM handling in `Xml11Loader`.
 
