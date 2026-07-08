@@ -1,6 +1,50 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-07
+**Commit:** `c9bc188`
+**Current focus:** XML 1.1 node-provider layer implemented; `xml-version`, `namespace`, `document`, and `base-uri` conformance clusters cleared.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,203
+- **Failed:** 47
+- **Skipped:** 9,350
+- **Pass rate:** 99.1% (+5 passed / −5 failed vs. previous 5,198/52)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| xml-version | 42 | 42 | 0 | 0 | ✅ XML 1.1 names, C0/C1 controls, prefixed namespace undeclarations, `xsl:result-document` output properties |
+| namespace | 224 | 200 | 0 | 24 | ✅ Namespace inheritance, default/prefixed undeclarations, XML 1.1 serialization |
+| document | 64 | 46 | 0 | 18 | ✅ `doc()` / `doc-available()` with valid absolute base URIs |
+| base-uri | 55 | 50 | 0 | 5 | ✅ `static-base-uri()` / `resolve-uri()` now receive valid `file:///` URIs |
+
+## This Session Fixes
+
+1. **XML 1.1 node-provider layer** — Added `Xml11Loader`, `Xml11NameCodec`, `Xml11Attribute`, and `Xml11Annotation` in `Bosak.XPath.Providers/Xml11/`. XML declarations are rewritten to 1.0 for .NET parsing; XML 1.1-only name characters are escaped with private-use sentinel characters and stored in `XName`; text values are decoded after loading. C0/C1/NEL/LSEP characters are emitted as numeric character references by the raw XML 1.1 serializer, while XML 1.0 serialization raises `SERE0005`/`SERE0006` for invalid content. Prefixed namespace undeclarations are preserved via a placeholder URI and a `PrefixedNamespaceUndeclarations` annotation, then re-emitted by the raw serializer.
+   - **Files changed**: `src/Bosak.XPath.Providers/Xml11/*.cs`, `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`, `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`, `src/Bosak.XPath.Core/Xdm/IXdmNode.cs`.
+
+2. **Namespace serialization and inheritance fixes** — Default namespace undeclarations (`xmlns=""`) are now preserved in XML 1.0 output instead of being moved to the deepest descendant. Prefixed empty undeclarations are still suppressed in XML 1.0 because they are not valid there. `xsl:element` once again binds the hinted prefix when no child `xsl:namespace` overrides it. The conformance harness falls back to semantic `XmlEquals` comparison for XML 1.1 `assert-xml` assertions after stripping the XML declaration.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Conformance/Program.cs`.
+
+3. **Base URI handling** — `Xml11Loader.Load` converts file paths to absolute `file:///` URIs before passing them to `XmlReader`, so `static-base-uri()`, `resolve-uri()`, `doc()`, `document()`, and `unparsed-text()` receive valid absolute base URIs on Windows.
+   - **Files changed**: `src/Bosak.XPath.Providers/Xml11/Xml11Loader.cs`, `src/Bosak.Xslt/Api/XsltCompiler.cs`, `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs`, `src/Bosak.Xslt/Api/FileSystemUriResolver.cs`, `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`, `src/Bosak.Xslt/Stylesheet/XsltFunctionDefinition.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,203/47/9,350** (99.1%).
+- Largest remaining failure clusters: `normalize-unicode` (18), `package` (4), `unparsed-text` (4), `docbook` (3), `forwards` (3), `match` (2), `function` (2), `accumulator` (1), `choose` (1), `for-each-group` (1), `lre` (1), `sort` (1), `bug` (1), `catalog` (2), `whitespace` (1), `xslt-compat` (1), `square-array` (1).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-07
 **Commit:** `4c0591e`
 **Current focus:** Cleared the W3C XSLT 3.0 `xpath-compat` conformance cluster.
 

@@ -72,6 +72,7 @@ flowchart TB
     subgraph NP["🌐 Node Providers"]
         XD["XDocument"]
         XMLD["XmlDocument"]
+        X11["XML 1.1 loader"]
         STR["Streaming"]
         CUST["Custom"]
     end
@@ -324,6 +325,16 @@ options = new CompileOptions
 };
 ```
 
+### 7. Node Providers (`Bosak.XPath.Providers`)
+
+The provider layer adapts external XML object models to the XDM `IXdmNode` interface.
+
+- **`XDocumentNode`** – adapter for `System.Xml.Linq.XDocument`. This is the default provider used by the API, the XSLT compiler, and the test harness.
+- **`Xml11Loader` / `Xml11NameCodec`** – because .NET's `System.Xml` stack only accepts XML 1.0 names, the XML 1.1 provider rewrites XML 1.1 declarations, encodes XML 1.1-only name characters as private-use sentinel sequences, and stores them in `XName`. On output, names are decoded again and C0/C1 controls are serialized as numeric references. Prefixed namespace undeclarations (`xmlns:prefix=""`) are preserved via a placeholder URI and a `PrefixedNamespaceUndeclarations` annotation.
+- **Planned providers** – `XmlDocument` adapter, streaming `XmlReader` adapter, and database-backed nodes.
+
+All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `parse-xml()`, `parse-xml-fragment()`, `fn:transform()`, and the conformance harness) now routes through `Xml11Loader` so XML 1.1 constructs are accepted everywhere.
+
 ---
 
 ## Performance Strategy
@@ -493,7 +504,7 @@ src/
   Bosak.XPath.Runtime/      Register VM, execution context, function dispatch
   Bosak.XPath.Api/          Public API, expression compilation, navigator
   Bosak.XPath.Standard/     Standard function library (fn, math, map, array, xs, JSON)
-  Bosak.XPath.Providers/    XDocument adapter (XDocumentNode); XmlDocument and streaming adapters planned
+  Bosak.XPath.Providers/    XDocument adapter (XDocumentNode), XML 1.1 loader/codec; XmlDocument and streaming adapters planned
   Bosak.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
   Bosak.XQuery/       XQuery 3.1 processor skeleton (query compiler, FLWOR engine)
   Bosak.LanguageServer/   LSP server for XPath / XSLT diagnostics & completions (OmniSharp 0.19.9)
