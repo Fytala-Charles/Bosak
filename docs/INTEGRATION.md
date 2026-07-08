@@ -4,13 +4,24 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 5 July 2026
+> **Last updated:** 8 July 2026
 > **Bosak baseline:** 913 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,097 passed / 153 failed / 9,350 skipped (97.1%)
+> **XSLT baseline:** 5,233 passed / 10 failed / 9,357 skipped (99.8%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-08** — Cleared the W3C `unparsed-text`, `match`, `forwards`, `lre`, `whitespace`, `xslt-compat`, and `for-each-group` conformance clusters.
+  - `fn:unparsed-text()` one-argument form detects encoding from BOM, XML declaration, and HTTP `Content-Type`; `unparsed-text-available()` works for HTTP resources; sequence arguments are atomized.
+  - `xsl:template/@match` no longer rejects `Q{uri}*` / `except` patterns as AVTs.
+  - Forward-compatibility mode ignores unknown XSLT elements/attributes and unresolvable `use-when` expressions when the effective version is > 3.0.
+  - Maps and functions raise `XTDE0450` when serialized directly to element content.
+  - QName names in `xsl:element`/`xsl:attribute` are whitespace-normalized before validation.
+  - Backwards-compatible mode converts atomic values to strings for string functions.
+  - `fn:distinct-values` treats NaN as equal.
+  - `xsl:function` bodies follow XSLT text-node merging rules while preserving consecutive zero-length text nodes.
+  - Full W3C suite: **5,233 passed / 10 failed / 9,357 skipped** (99.8%).
 
 - **2026-07-05** — Cleared the W3C `tunnel` conformance cluster (58 runnable tests pass; 0 failed).
   - `xsl:with-param/@tunnel` and `xsl:param/@tunnel` now accept `yes`/`no` (XSLT 2.0) and `true`/`false`/`1`/`0` (XSLT 3.0); invalid/empty values raise `XTSE0020`.

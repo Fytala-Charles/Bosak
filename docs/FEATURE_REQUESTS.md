@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-05 (`collations` cluster cleared; full W3C baseline 5,097/153/9,350)    
+> **Living Registry** — Last updated: 2026-07-08 (`unparsed-text`/`match`/`forwards`/`lre`/`whitespace`/`xslt-compat`/`for-each-group` clusters cleared; full W3C baseline 5,233/10/9,357)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

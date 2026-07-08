@@ -84,12 +84,14 @@
 //                      | Charles Korthout | 5.18  | 05-07-2026     | Default-collation aware fn:compare, contains, starts-with, ends-with, substring-before/after |
 //                      | Charles Korthout | 5.19  | 26-06-2026     | Backwards-compatible argument coercion for string and node functions                   |
 //                      | Charles Korthout | 5.20  | 07-07-2026     | fn:subsequence uses BC numeric coercion for start/length; fixes xpath-compat-0401     |
+//                      | Charles Korthout | 5.21  | 08-07-2026     | unparsed-text encoding detection and HTTP fetch; distinct-values NaN; BC string coercion |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -5746,10 +5748,12 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedText_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedText(args[0].ToString(), null, ctx.BaseUri);
+        => UnparsedText(AtomizedString(args[0]), null, ctx.BaseUri);
 
     private static XdmValue UnparsedText_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedText(args[0].ToString(), args[1].ToString(), ctx.BaseUri);
+        => UnparsedText(AtomizedString(args[0]), AtomizedString(args[1]), ctx.BaseUri);
+
+    private static readonly HttpClient _httpClient = new HttpClient();
 
     private static XdmValue UnparsedText(string href, string? encoding, string? baseUri = null)
     {
@@ -5758,11 +5762,33 @@ public static class FunctionLibrary
         try
         {
             var path = ResolveUriAgainstBase(href, baseUri);
-            if (!File.Exists(path))
+
+            string content;
+            if (File.Exists(path))
+            {
+                content = string.IsNullOrEmpty(encoding)
+                    ? ReadTextWithDetectedEncoding(path)
+                    : File.ReadAllText(path, Encoding.GetEncoding(encoding));
+            }
+            else if (Uri.TryCreate(path, UriKind.Absolute, out var uri) &&
+                     (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            {
+                if (string.IsNullOrEmpty(encoding))
+                {
+                    // Let HttpClient honor the response's Content-Type charset.
+                    content = _httpClient.GetStringAsync(uri).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    var bytes = _httpClient.GetByteArrayAsync(uri).GetAwaiter().GetResult();
+                    content = DecodeBytes(bytes, encoding);
+                }
+            }
+            else
+            {
                 throw new InvalidOperationException("FOUT1170");
-            encoding ??= "UTF-8";
-            var enc = System.Text.Encoding.GetEncoding(encoding);
-            var content = File.ReadAllText(path, enc);
+            }
+
             ValidateXmlCharacters(content);
             return XdmValue.FromString(content);
         }
@@ -5776,11 +5802,105 @@ public static class FunctionLibrary
         }
     }
 
+    private static string ReadTextWithDetectedEncoding(string path)
+    {
+        var bytes = File.ReadAllBytes(path);
+        return DecodeBytes(bytes, null);
+    }
+
+    private static string DecodeBytes(byte[] bytes, string? encoding)
+    {
+        var bomLength = GetBomLength(bytes);
+        var enc = DetectEncodingFromBytes(bytes);
+
+        if (!string.IsNullOrEmpty(encoding))
+        {
+            enc = Encoding.GetEncoding(encoding);
+        }
+        else if (bomLength == 0)
+        {
+            // Only consult the text declaration when there is no BOM; a BOM overrides
+            // any encoding declaration for endianness-sensitive UTF-16/32 encodings.
+            var headerLength = Math.Min(bytes.Length - bomLength, 512);
+            var header = enc.GetString(bytes, bomLength, headerLength);
+            var declaredEncoding = ExtractDeclaredEncoding(header);
+            if (!string.IsNullOrEmpty(declaredEncoding))
+            {
+                try { enc = Encoding.GetEncoding(declaredEncoding); } catch { }
+            }
+        }
+
+        return enc.GetString(bytes, bomLength, bytes.Length - bomLength);
+    }
+
+    private static int GetBomLength(byte[] bytes)
+    {
+        if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+            return 3;
+        if (bytes.Length >= 4 && bytes[0] == 0xFF && bytes[1] == 0xFE && bytes[2] == 0x00 && bytes[3] == 0x00)
+            return 4;
+        if (bytes.Length >= 4 && bytes[0] == 0x00 && bytes[1] == 0x00 && bytes[2] == 0xFE && bytes[3] == 0xFF)
+            return 4;
+        if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
+            return 2;
+        if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
+            return 2;
+        return 0;
+    }
+
+    private static Encoding DetectEncodingFromBytes(byte[] bytes)
+    {
+        // BOM-based detection.
+        if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+            return new UTF8Encoding(false, false);
+        if (bytes.Length >= 4 && bytes[0] == 0xFF && bytes[1] == 0xFE && bytes[2] == 0x00 && bytes[3] == 0x00)
+            return new UTF32Encoding(false, false, false);
+        if (bytes.Length >= 4 && bytes[0] == 0x00 && bytes[1] == 0x00 && bytes[2] == 0xFE && bytes[3] == 0xFF)
+            return new UTF32Encoding(true, false, false);
+        if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
+            return new UnicodeEncoding(false, false, false);
+        if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
+            return new UnicodeEncoding(true, false, false);
+
+        // BOM-less XML declaration detection (UTF-16/32 declarations are self-describing).
+        if (bytes.Length >= 4)
+        {
+            if (bytes[0] == 0x00 && bytes[1] == 0x3C && bytes[2] == 0x00 && bytes[3] == 0x3F)
+                return new UnicodeEncoding(true, false, false);  // UTF-16 BE
+            if (bytes[0] == 0x3C && bytes[1] == 0x00 && bytes[2] == 0x3F && bytes[3] == 0x00)
+                return new UnicodeEncoding(false, false, false); // UTF-16 LE
+            if (bytes[0] == 0x00 && bytes[1] == 0x00 && bytes[2] == 0x00 && bytes[3] == 0x3C)
+                return new UTF32Encoding(true, false, false);    // UTF-32 BE
+            if (bytes[0] == 0x3C && bytes[1] == 0x00 && bytes[2] == 0x00 && bytes[3] == 0x00)
+                return new UTF32Encoding(false, false, false);   // UTF-32 LE
+        }
+
+        return new UTF8Encoding(false, false);
+    }
+
+    private static readonly Regex EncodingDeclarationRegex = new(
+        @"encoding\s*=\s*[""']([^""']+)[""']",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled,
+        TimeSpan.FromSeconds(1));
+
+    private static string? ExtractDeclaredEncoding(string header)
+    {
+        var trimmed = header.TrimStart();
+        if (!trimmed.StartsWith("<?xml", StringComparison.Ordinal))
+            return null;
+        int declEnd = trimmed.IndexOf("?>", StringComparison.Ordinal);
+        if (declEnd < 0)
+            return null;
+        var decl = trimmed.Substring(0, declEnd + 2);
+        var match = EncodingDeclarationRegex.Match(decl);
+        return match.Success ? match.Groups[1].Value : null;
+    }
+
     private static XdmValue UnparsedTextAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextAvailable(args[0].ToString(), null, ctx.BaseUri);
+        => UnparsedTextAvailable(AtomizedString(args[0]), null, ctx.BaseUri);
 
     private static XdmValue UnparsedTextAvailable_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextAvailable(args[0].ToString(), args[1].ToString(), ctx.BaseUri);
+        => UnparsedTextAvailable(AtomizedString(args[0]), AtomizedString(args[1]), ctx.BaseUri);
 
     private static XdmValue UnparsedTextAvailable(string href, string? encoding, string? baseUri = null)
     {
@@ -5789,11 +5909,29 @@ public static class FunctionLibrary
         try
         {
             var path = ResolveUriAgainstBase(href, baseUri);
-            if (!File.Exists(path))
-                return XdmValue.False;
-            if (encoding is not null)
-                _ = System.Text.Encoding.GetEncoding(encoding);
-            return XdmValue.True;
+            if (File.Exists(path))
+            {
+                if (encoding is not null)
+                    _ = Encoding.GetEncoding(encoding);
+                return XdmValue.True;
+            }
+
+            if (Uri.TryCreate(path, UriKind.Absolute, out var uri) &&
+                (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            {
+                try
+                {
+                    using var response = _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, uri), HttpCompletionOption.ResponseHeadersRead)
+                        .GetAwaiter().GetResult();
+                    return response.IsSuccessStatusCode ? XdmValue.True : XdmValue.False;
+                }
+                catch
+                {
+                    return XdmValue.False;
+                }
+            }
+
+            return XdmValue.False;
         }
         catch
         {
@@ -6478,7 +6616,7 @@ public static class FunctionLibrary
             bool isDistinct = true;
             foreach (var s in seen)
             {
-                if (AtomicValuesEqual(atomized, s, collation))
+                if (AtomicValuesEqual(atomized, s, collation) || BothNaN(atomized, s))
                 {
                     isDistinct = false;
                     break;
@@ -6491,6 +6629,15 @@ public static class FunctionLibrary
             }
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static bool BothNaN(XdmValue a, XdmValue b)
+    {
+        if (!IsNumericValue(a) || !IsNumericValue(b))
+            return false;
+        bool aIsNaN = (a.Kind is XdmValueKind.Double or XdmValueKind.Float) && double.IsNaN(a.DoubleValue);
+        bool bIsNaN = (b.Kind is XdmValueKind.Double or XdmValueKind.Float) && double.IsNaN(b.DoubleValue);
+        return aIsNaN && bIsNaN;
     }
 
     private static XdmValue DistinctValues_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7170,6 +7317,9 @@ public static class FunctionLibrary
             return value.StringValue;
 
         if (string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase))
+            return value.ToString();
+
+        if (backwardsCompatible && value.IsAtomic)
             return value.ToString();
 
         throw new InvalidOperationException("XPTY0004");

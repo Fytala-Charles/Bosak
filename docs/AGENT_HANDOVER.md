@@ -1,6 +1,68 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-08
+**Commit:** `2e3c9d3` (working tree with uncommitted fixes)
+**Current focus:** Cleared the `unparsed-text`, `match`, `forwards`, `lre`, `whitespace`, `xslt-compat`, and `for-each-group` conformance clusters; down to 10 remaining W3C failures.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,233
+- **Failed:** 10
+- **Skipped:** 9,357
+- **Pass rate:** 99.8% (+14 passed / −14 failed vs. previous 5,219/24)
+
+## Cluster Status
+
+| Cluster | Total | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|---|
+| unparsed-text | 6 | 6 | 0 | 0 | ✅ Encoding detection for one-argument `unparsed-text()`; HTTP fetch for `unparsed-text-available()` |
+| match | 336 | 216 | 0 | 120 | ✅ `Q{uri}*` and `except`/`intersect` patterns no longer mis-detected as AVTs |
+| forwards | 23 | 20 | 0 | 3 | ✅ Forward-compatible unknown elements/attributes/use-when handled |
+| lre | 35 | 34 | 0 | 1 | ✅ Maps raise `XTDE0450` when serialized to element content |
+| whitespace | 28 | 26 | 0 | 2 | ✅ QName whitespace normalization in `xsl:element`/`xsl:attribute` names |
+| xslt-compat | 13 | 13 | 0 | 0 | ✅ Backwards-compatible string coercion in `RequireString` |
+| for-each-group | 85 | 78 | 0 | 7 | ✅ `distinct-values` treats NaN as equal |
+
+## This Session Fixes
+
+1. **`unparsed-text()` encoding and HTTP support** — The one-argument form now detects encoding from BOM, XML declaration, and HTTP `Content-Type` charset. `unparsed-text-available()` reports `true` for reachable HTTP resources. Sequence arguments are atomized.
+   - **Files changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+2. **`match` cluster AVT false-positive** — `Q{uri}` braces in `xsl:template/@match` were mis-detected as attribute-value templates. The AVT guard now skips `Q{` EQName braces.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/TemplateRule.cs`.
+
+3. **`forwards` cluster forward-compatibility** — Unknown XSLT elements with unresolvable `use-when` expressions, unknown XSLT attributes on literal result elements, and `package-version` on `xsl:stylesheet`/`xsl:transform` are now ignored when the effective version is > 3.0.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`.
+
+4. **`lre` map serialization error** — `CopyToResult` now raises `XTDE0450` when a map or function item would be serialized directly to element content.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+5. **`whitespace` QName normalization** — `xsl:element`/`xsl:attribute` names produced by AVTs with surrounding whitespace are whitespace-normalized before QName validation.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+6. **`xslt-compat` string coercion** — `RequireString` now converts any atomic value to its string value in backwards-compatible mode.
+   - **Files changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+7. **`for-each-group` NaN equality** — `fn:distinct-values` treats two NaN values as equal.
+   - **Files changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+8. **Function-body text-node normalization** — Restored XSLT sequence-constructor text-merging rules inside `xsl:function` bodies while preserving consecutive zero-length text nodes.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
+## Notes
+
+- Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,233/10/9,357** (99.8%).
+- Remaining failure clusters: `accumulator` (1), `bug` (1), `catalog` (2), `choose` (1), `docbook` (3), `function` (1), `square-array` (1).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-08
 **Commit:** `aeb9473`
 **Current focus:** Corrected harness principal-module selection; `package` cluster now cleanly skipped.
 

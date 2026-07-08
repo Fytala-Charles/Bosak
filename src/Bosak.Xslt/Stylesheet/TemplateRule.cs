@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 03-07-2026     | ImportPrecedence now reads from Stylesheet for dynamic precedence assignment            |
 //                      | Charles Korthout | 1.3   | 26-06-2026     | Added xsl:context-item parsing and static validation                                     |
 //                      | Charles Korthout | 1.4   | 05-07-2026     | Reject AVT syntax in xsl:template/@match with XTSE0340                                 |
+//                      | Charles Korthout | 1.5   | 08-07-2026     | Allow Q{uri} EQName braces in xsl:template/@match AVT check                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -764,6 +765,7 @@ public sealed class TemplateRule
 
     /// <summary>
     /// Returns true if the attribute value contains an unescaped AVT expression delimiter.
+    /// Curly braces that are part of an XPath 3.1 EQName (<c>Q{uri}</c>) are not AVTs.
     /// </summary>
     private static bool ContainsAvtExpression(string value)
     {
@@ -774,6 +776,11 @@ public sealed class TemplateRule
                 if (i + 1 < value.Length && value[i + 1] == '{')
                 {
                     i++; // escaped brace
+                }
+                else if (i > 0 && value[i - 1] == 'Q')
+                {
+                    // EQName syntax: Q{namespace-uri}local-name
+                    continue;
                 }
                 else
                 {

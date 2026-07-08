@@ -158,6 +158,7 @@
 //                      | Charles Korthout | 5.87  | 26-06-2026     | Backwards-compatible value-of, number, key(), and function argument coercion           |
 //                      | Charles Korthout | 5.88  | 07-07-2026     | Suspend sequence accumulator inside literal result elements; fixes bug-1501/1601       |
 //                      | Charles Korthout | 5.89  | 07-07-2026     | Set current item during xsl:sort key evaluation; fixes bug-2501                        |
+//                      | Charles Korthout | 5.90  | 08-07-2026     | QName whitespace normalization; function-body text-node merging; XTDE0450 for maps     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1994,33 +1995,58 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// Normalizes the items produced by a sequence constructor: adjacent text nodes are
-    /// merged. Zero-length text nodes are preserved as items because they affect atomic
-    /// spacing in complex content construction; they are removed only when the result is
-    /// eventually copied to a result tree.
+    /// Normalizes the items produced by a sequence constructor according to XSLT rules:
+    /// adjacent non-empty text nodes are merged, and empty text nodes adjacent to
+    /// non-empty text nodes are absorbed into the merge. Consecutive empty text nodes
+    /// are preserved as separate items because zero-length text nodes created by
+    /// xsl:text/xsl:value-of are significant in an xsl:function result.
     /// </summary>
     private static List<XdmValue> NormalizeSequenceConstructorItems(List<XdmValue> items)
     {
         var normalized = new List<XdmValue>();
-        string? pendingText = null;
+        var pendingText = new StringBuilder();
+        var pendingEmptyTextNodes = new List<XdmValue>();
+
+        void FlushText()
+        {
+            if (pendingText.Length > 0)
+            {
+                normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText.ToString()))));
+                pendingText.Clear();
+            }
+        }
+
         foreach (var item in items)
         {
             if (item.IsNode && item.NodeValue is { NodeKind: XdmNodeKind.Text } node)
             {
-                pendingText = pendingText == null ? node.StringValue : pendingText + node.StringValue;
+                var text = node.StringValue;
+                if (text.Length == 0)
+                {
+                    // An empty text node merges with any preceding non-empty run.
+                    if (pendingText.Length > 0)
+                        continue;
+                    // Consecutive empty text nodes are kept as separate items.
+                    pendingEmptyTextNodes.Add(item);
+                }
+                else
+                {
+                    // A non-empty text node absorbs any preceding empty text nodes.
+                    pendingEmptyTextNodes.Clear();
+                    pendingText.Append(text);
+                }
             }
             else
             {
-                if (pendingText != null)
-                {
-                    normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText))));
-                    pendingText = null;
-                }
+                FlushText();
+                normalized.AddRange(pendingEmptyTextNodes);
+                pendingEmptyTextNodes.Clear();
                 normalized.Add(item);
             }
         }
-        if (pendingText != null)
-            normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText))));
+
+        FlushText();
+        normalized.AddRange(pendingEmptyTextNodes);
         return normalized;
     }
 
@@ -6408,6 +6434,9 @@ public sealed class TransformEngine
                     }
                     else
                     {
+                        if (item.IsMap || item.IsFunction)
+                            throw new InvalidOperationException("XTDE0450: Maps and functions cannot be serialized directly to element content.");
+
                         // Atomic value: insert space only if previous item was also atomic
                         // and separateAtomicsWithSpace is true (complex content construction)
                         if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
@@ -6447,6 +6476,9 @@ public sealed class TransformEngine
         }
         else if (!value.IsUndefined)
         {
+            if (value.IsMap || value.IsFunction)
+                throw new InvalidOperationException("XTDE0450: Maps and functions cannot be serialized directly to element content.");
+
             var text = value.IsArray ? XdmValueToString(value, " ") : value.ToString();
             if (_preserveAtomicSequenceItems && _literalElementDepth == 0)
                 AddTextNode(text);
@@ -14551,8 +14583,12 @@ public sealed class TransformEngine
     private static (string LocalName, string NamespaceUri) ResolveAttributeName(XElement instruction, string name, string? explicitNamespace, string errorCode)
         => ResolveName(instruction, name, explicitNamespace, errorCode, useDefaultNamespace: false);
 
+    private static string NormalizeQNameWhitespace(string name)
+        => Regex.Replace(name.Trim(), @"\s+", " ");
+
     private static (string LocalName, string NamespaceUri) ResolveName(XElement instruction, string name, string? explicitNamespace, string errorCode, bool useDefaultNamespace)
     {
+        name = NormalizeQNameWhitespace(name);
         int colon = name.IndexOf(':');
         if (colon >= 0)
         {

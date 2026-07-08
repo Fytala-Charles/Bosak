@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 2.20  | 05-07-2026     | Version cluster: per-element version, known-element set, forwards-compat skip         |
 //                      | Charles Korthout | 2.21  | 26-06-2026     | Added assert to known XSLT element set                                                  |
 //                      | Charles Korthout | 2.22  | 06-07-2026     | Merge multiple xsl:output declarations instead of using only the first                 |
+//                      | Charles Korthout | 2.23  | 08-07-2026     | Forward-compatible handling for unknown elements, attributes, and use-when             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -172,6 +173,17 @@ public sealed class Stylesheet
     /// </summary>
     private bool UseWhen(XElement elem, string? explicitBaseUri = null)
     {
+        // In forward-compatible mode, an unknown XSLT element whose use-when expression
+        // references a future function is treated as excluded; elements without use-when
+        // are kept so that their xsl:fallback children can be processed.
+        if (elem.Name.NamespaceName == XslNamespace &&
+            !KnownXsltElementNames.Contains(elem.Name.LocalName) &&
+            IsForwardsCompatibleElement(elem) &&
+            elem.Attribute("use-when") != null)
+        {
+            return false;
+        }
+
         // Expand a shadow use-when attribute before evaluation.
         ExpandShadowAttribute(elem, "use-when");
 
@@ -1317,7 +1329,7 @@ public sealed class Stylesheet
                         or "version" or "xpath-default-namespace"
                         or "use-attribute-sets"
                         or "inherit-namespaces";
-                    if (!allowed)
+                    if (!allowed && !IsForwardsCompatibleElement(elem))
                         throw new InvalidOperationException("XTSE0805");
                 }
             }
@@ -1678,7 +1690,7 @@ public sealed class Stylesheet
                 throw new InvalidOperationException("XTSE1650: xsl:import-schema requires a schema-aware processor");
 
             // XTSE0090: package-version is only permitted on xsl:package
-            if ((localName == "stylesheet" || localName == "transform") && elem.Attribute("package-version") != null)
+            if ((localName == "stylesheet" || localName == "transform") && elem.Attribute("package-version") != null && !IsForwardsCompatibleElement(elem))
                 throw new InvalidOperationException("XTSE0090");
 
             // XTSE1660: non-schema-aware processors do not support validation/type attributes
