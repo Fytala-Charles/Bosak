@@ -16,8 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
-using System.Xml;
 using System.Xml.Linq;
+using Bosak.XPath.Providers.Xml;
 
 namespace Bosak.Xslt.Api;
 
@@ -41,16 +41,8 @@ public sealed class FileSystemUriResolver : IXsltUriResolver
             var path = uri.LocalPath;
             if (!File.Exists(path))
                 throw new FileNotFoundException($"Stylesheet file not found: {path}", path);
-            var settings = new XmlReaderSettings
-            {
-                DtdProcessing = DtdProcessing.Parse,
-                XmlResolver = new XmlUrlResolver(),
-            };
-            // Use the absolute URI as the reader input so the resulting XDocument
-            // BaseUri is a URI rather than a local file path. This preserves the
-            // correct base URI for xsl:include/xsl:import modules.
-            using var reader = XmlReader.Create(absoluteUri, settings);
-            return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
+            // XML 1.1 stylesheets are accepted by encoding name characters that .NET rejects.
+            return Xml11Loader.Load(path, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
         }
 
         // For non-file URIs, attempt a web request

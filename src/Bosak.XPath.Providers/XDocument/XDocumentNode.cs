@@ -109,7 +109,43 @@ public sealed class XDocumentNode : IXdmNode
 
     public XdmNodeKind NodeKind => _isNamespaceNode ? XdmNodeKind.Namespace : GetNodeKind(_node);
 
+    /// <summary>
+    /// Returns <c>true</c> when the containing document was loaded as XML 1.1 and
+    /// therefore stores encoded names.
+    /// </summary>
+    private bool IsXml11Document
+    {
+        get
+        {
+            if (_node is System.Xml.Linq.XDocument doc)
+                return doc.Annotation<Xml11Annotation>() != null;
+            return _node.Document?.Annotation<Xml11Annotation>() != null;
+        }
+    }
+
+    private string Decode(string name) => IsXml11Document ? Xml11NameCodec.DecodeName(name) : name;
+
     public string LocalName
+    {
+        get
+        {
+            if (_isNamespaceNode)
+            {
+                return _node is XAttribute attr && attr.Name.LocalName != "xmlns"
+                    ? Decode(attr.Name.LocalName)
+                    : string.Empty;
+            }
+            return _node switch
+            {
+                XElement e => Decode(e.Name.LocalName),
+                XAttribute a => Decode(a.Name.LocalName),
+                XProcessingInstruction pi => pi.Target,
+                _ => string.Empty
+            };
+        }
+    }
+
+    public string EncodedLocalName
     {
         get
         {
@@ -138,14 +174,35 @@ public sealed class XDocumentNode : IXdmNode
             _ => string.Empty
         };
 
-    public string Prefix => _isNamespaceNode
-        ? string.Empty
-        : _node switch
+    public string Prefix
+    {
+        get
         {
-            XElement e => e.GetPrefixOfNamespace(e.Name.Namespace) ?? string.Empty,
-            XAttribute a => (a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty,
-            _ => string.Empty
-        };
+            if (_isNamespaceNode)
+                return string.Empty;
+            return _node switch
+            {
+                XElement e => Decode(e.GetPrefixOfNamespace(e.Name.Namespace) ?? string.Empty),
+                XAttribute a => Decode((a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty),
+                _ => string.Empty
+            };
+        }
+    }
+
+    public string EncodedPrefix
+    {
+        get
+        {
+            if (_isNamespaceNode)
+                return string.Empty;
+            return _node switch
+            {
+                XElement e => e.GetPrefixOfNamespace(e.Name.Namespace) ?? string.Empty,
+                XAttribute a => (a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty,
+                _ => string.Empty
+            };
+        }
+    }
 
     public string StringValue
     {
@@ -156,7 +213,7 @@ public sealed class XDocumentNode : IXdmNode
             return _node switch
             {
                 XElement e => e.Value,
-                XAttribute a => a.Value,
+                XAttribute a => IsXml11Document ? Xml11NameCodec.DecodeValue(a.Value) : a.Value,
                 XText t => t.Value,
                 XComment c => c.Value,
                 XProcessingInstruction pi => pi.Data,
@@ -505,10 +562,13 @@ public sealed class XDocumentNode : IXdmNode
         if (_node is not XElement element)
             return XdmSequence.Empty;
 
+        bool xml11 = IsXml11Document;
+        string? encodedLocalName = localName is not null && xml11 ? Xml11NameCodec.EncodeName(localName) : localName;
+
         var items = new List<XdmValue>();
         foreach (var attr in element.Attributes())
         {
-            if (localName is not null && attr.Name.LocalName != localName)
+            if (encodedLocalName is not null && attr.Name.LocalName != encodedLocalName)
                 continue;
             if (namespaceUri is not null && attr.Name.NamespaceName != namespaceUri)
                 continue;
@@ -739,9 +799,11 @@ public sealed class XDocumentNode : IXdmNode
         if (!seen.Add(prefix))
             return;
 
-        XAttribute declaration = string.IsNullOrEmpty(prefix)
+        bool xml11 = owner.Document?.Annotation<Xml11Annotation>() != null;
+        string storagePrefix = xml11 ? Xml11NameCodec.EncodeName(prefix) : prefix;
+        XAttribute declaration = string.IsNullOrEmpty(storagePrefix)
             ? new XAttribute("xmlns", uri)
-            : new XAttribute(XNamespace.Xmlns + prefix, uri);
+            : new XAttribute(XNamespace.Xmlns + storagePrefix, uri);
         items.Add(XdmValue.FromNode(new XDocumentNode(declaration, owner)));
     }
 

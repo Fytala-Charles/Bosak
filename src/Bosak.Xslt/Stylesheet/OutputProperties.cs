@@ -96,6 +96,13 @@ public sealed class OutputProperties
             props.VersionSpecified = true;
         }
 
+        var outputVersion = element.Attribute("output-version")?.Value;
+        if (!string.IsNullOrEmpty(outputVersion))
+        {
+            props.Version = outputVersion;
+            props.VersionSpecified = true;
+        }
+
         var standalone = element.Attribute("standalone")?.Value;
         if (!string.IsNullOrEmpty(standalone))
         {
@@ -117,9 +124,19 @@ public sealed class OutputProperties
             props.NormalizationFormSpecified = true;
         }
 
-        // Default for method="text": omit declaration
+        // XSLT default for omit-xml-declaration is "no" unless the serialization
+        // method is "text". The property-object default is "yes" for ad-hoc
+        // serialization that has no xsl:output instruction.
         if (props.Method == "text")
+        {
             props.OmitXmlDeclaration = true;
+            props.OmitXmlDeclarationSpecified = true;
+        }
+        else if (!props.OmitXmlDeclarationSpecified)
+        {
+            props.OmitXmlDeclaration = false;
+            props.OmitXmlDeclarationSpecified = true;
+        }
 
         return props;
     }
@@ -144,8 +161,8 @@ public sealed class OutputProperties
     {
         return value.Trim().ToLowerInvariant() switch
         {
-            "yes" => true,
-            "no" => false,
+            "yes" or "true" or "1" => true,
+            "no" or "false" or "0" => false,
             _ => defaultValue
         };
     }

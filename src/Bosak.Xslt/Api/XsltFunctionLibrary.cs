@@ -14,8 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
-using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
@@ -70,7 +70,7 @@ public static class XsltFunctionLibrary
         XDocument stylesheetDoc;
         try
         {
-            stylesheetDoc = XDocument.Load(resolvedUri);
+            stylesheetDoc = Xml11Loader.Load(resolvedUri, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
         }
         catch (Exception ex)
         {

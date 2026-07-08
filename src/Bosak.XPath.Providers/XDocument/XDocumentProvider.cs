@@ -55,10 +55,22 @@ public static class XDocumentProvider
 
     /// <summary>
     /// Parses an XML string and returns the root as an <see cref="IXdmNode"/>.
+    /// XML 1.1 declarations are accepted by encoding name characters that .NET rejects.
     /// </summary>
     public static IXdmNode ParseXml(string xml)
     {
-        var document = System.Xml.Linq.XDocument.Parse(xml);
+        var document = Xml11Loader.Parse(xml, LoadOptions.PreserveWhitespace);
+        var map = ComputeDocumentOrder(document);
+        XDocumentNode.RegisterOrderMap(document, map);
+        return new XDocumentNode(document);
+    }
+
+    /// <summary>
+    /// Parses an XML string that is known to be XML 1.1 and returns the root as an <see cref="IXdmNode"/>.
+    /// </summary>
+    public static IXdmNode ParseXml11(string xml, string? baseUri = null)
+    {
+        var document = Xml11Loader.ParseXml11(xml, LoadOptions.PreserveWhitespace, baseUri);
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
         return new XDocumentNode(document);
@@ -67,10 +79,11 @@ public static class XDocumentProvider
     /// <summary>
     /// Loads an XML file and returns the root as an <see cref="IXdmNode"/>.
     /// The file path is preserved as the document's base URI.
+    /// XML 1.1 declarations are accepted by encoding name characters that .NET rejects.
     /// </summary>
     public static IXdmNode LoadXml(string filePath)
     {
-        var document = System.Xml.Linq.XDocument.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
+        var document = Xml11Loader.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
         StripDocumentLevelWhitespace(document);
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);

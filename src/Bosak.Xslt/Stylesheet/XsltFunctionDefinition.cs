@@ -121,11 +121,7 @@ public sealed class XsltFunctionDefinition
         if (string.IsNullOrEmpty(localName))
             return null;
 
-        try
-        {
-            XmlConvert.VerifyNCName(localName);
-        }
-        catch (XmlException)
+        if (!Bosak.XPath.Providers.Xml.Xml11NameCodec.IsValidXml11NCName(localName))
         {
             throw new InvalidOperationException($"XTSE0020: '{displayName}' is not a valid QName in xsl:function/@name.");
         }

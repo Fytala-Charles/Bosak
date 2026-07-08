@@ -2836,11 +2836,7 @@ public static class FunctionLibrary
         // Set up default document loader if not already configured
         if (context.DocumentLoader is null)
         {
-            context.DocumentLoader = uri =>
-            {
-                var doc = XDocument.Load(uri);
-                return doc.ToXdmNode();
-            };
+            context.DocumentLoader = XDocumentProvider.LoadXml;
         }
     }
 
@@ -4163,7 +4159,7 @@ public static class FunctionLibrary
         string xml = AtomizedString(args[0]);
         if (string.IsNullOrEmpty(xml))
             throw new InvalidOperationException("fn:parse-xml argument must not be empty.");
-        var doc = XDocument.Parse(xml, LoadOptions.PreserveWhitespace);
+        var doc = Xml11Loader.Parse(xml, LoadOptions.PreserveWhitespace);
         XDocumentProvider.StripDocumentLevelWhitespace(doc);
         return XdmValue.FromNode(doc.ToXdmNode());
     }

@@ -19,9 +19,9 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
-using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 
 namespace Bosak.Xslt.Api;
 
@@ -62,13 +62,9 @@ public sealed class XsltCompiler
     /// <returns>An executable stylesheet.</returns>
     public XsltExecutable Compile(string xsl, string? baseUri = null)
     {
-        var settings = new XmlReaderSettings
-        {
-            DtdProcessing = DtdProcessing.Parse,
-            XmlResolver = new XmlUrlResolver(),
-        };
-        using var reader = XmlReader.Create(new StringReader(xsl), settings, baseUri ?? "");
-        var doc = XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
+        var doc = Xml11Loader.Parse(xsl,
+            LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri,
+            baseUri ?? "");
         return Compile(doc, baseUri);
     }
 

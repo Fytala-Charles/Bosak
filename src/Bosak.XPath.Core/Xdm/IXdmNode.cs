@@ -31,11 +31,23 @@ public interface IXdmNode
     /// <summary>Gets the local name of this node, or empty string if unnamed.</summary>
     string LocalName { get; }
 
+    /// <summary>
+    /// Gets the local name in the form used for internal storage.
+    /// For XML 1.1 documents this may be an encoded representation of <see cref="LocalName"/>.
+    /// </summary>
+    string EncodedLocalName => LocalName;
+
     /// <summary>Gets the namespace URI of this node, or empty string if none.</summary>
     string NamespaceUri { get; }
 
     /// <summary>Gets the namespace prefix of this node, or empty string if none.</summary>
     string Prefix { get; }
+
+    /// <summary>
+    /// Gets the prefix in the form used for internal storage.
+    /// For XML 1.1 documents this may be an encoded representation of <see cref="Prefix"/>.
+    /// </summary>
+    string EncodedPrefix => Prefix;
 
     /// <summary>Gets the string value of this node per XDM rules.</summary>
     string StringValue { get; }

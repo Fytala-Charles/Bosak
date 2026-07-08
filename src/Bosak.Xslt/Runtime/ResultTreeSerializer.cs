@@ -140,47 +140,19 @@ public static class ResultTreeSerializer
 
     private static string SerializeXElement(XElement element, Stylesheet.OutputProperties props)
     {
-        // Unwrap synthetic document wrappers created for document nodes that
-        // contain multiple root elements (XDocument cannot represent those).
-        if (element.Name.LocalName == "__xdm_doc__" && element.Name.NamespaceName == "")
-        {
-            using var writer = new StringWriter();
-            var settings = CreateXmlWriterSettings(props);
-            settings.ConformanceLevel = ConformanceLevel.Fragment;
-            using var xmlWriter = XmlWriter.Create(writer, settings);
-            foreach (var child in element.Nodes())
-                child.WriteTo(xmlWriter);
-            xmlWriter.Flush();
-            return ConvertHexEntitiesToDecimal(writer.ToString());
-        }
-
-        if (props.UndeclarePrefixes && props.Version == "1.1")
+        if (props.Version == "1.1")
             return SerializeRaw(element, props);
 
+        ValidateXml10(element);
         return SerializeWithEncoding(element, props);
     }
 
     private static string SerializeXDocument(XDocument document, Stylesheet.OutputProperties props)
     {
-        // Unwrap synthetic document wrappers at the top level so fragments with
-        // multiple root elements serialize correctly.
-        if (document.Root is { } root &&
-            root.Name.LocalName == "__xdm_doc__" &&
-            root.Name.NamespaceName == "")
-        {
-            using var writer = new StringWriter();
-            var settings = CreateXmlWriterSettings(props);
-            settings.ConformanceLevel = ConformanceLevel.Fragment;
-            using var xmlWriter = XmlWriter.Create(writer, settings);
-            foreach (var child in root.Nodes())
-                child.WriteTo(xmlWriter);
-            xmlWriter.Flush();
-            return ConvertHexEntitiesToDecimal(writer.ToString());
-        }
-
-        if (props.UndeclarePrefixes && props.Version == "1.1")
+        if (props.Version == "1.1")
             return SerializeRaw(document, props);
 
+        ValidateXml10(document);
         return SerializeWithEncoding(document, props);
     }
 
@@ -189,6 +161,10 @@ public static class ResultTreeSerializer
         // Apply Unicode normalization if requested before encoding-aware writing.
         if (TryGetNormalizationForm(props) is { } normForm)
             node = NormalizeXNode(node, normForm);
+
+        // Namespace undeclarations are only permitted in XML 1.1 output when
+        // undeclare-prefixes="yes" is in effect. Remove them for other cases.
+        node = NormalizeForXmlWriter(node, props);
 
         // Use the specified output encoding so XmlWriter emits numeric character
         // references for characters that cannot be represented in that encoding.
@@ -448,7 +424,7 @@ public static class ResultTreeSerializer
         var sb = new System.Text.StringBuilder();
         using var writer = new StringWriter(sb);
 
-        if (node is XDocument && !props.OmitXmlDeclaration)
+        if (!props.OmitXmlDeclaration && props.Version == "1.1")
         {
             writer.Write("<?xml version=\"");
             writer.Write(props.Version);
@@ -474,6 +450,13 @@ public static class ResultTreeSerializer
             foreach (var child in doc.Nodes())
                 SerializeRawNode(writer, child, props, 0, inScope);
         }
+        else if (node is XElement wrapper &&
+                 wrapper.Name.LocalName == "__xdm_doc__" &&
+                 wrapper.Name.NamespaceName == "")
+        {
+            foreach (var child in wrapper.Nodes())
+                SerializeRawNode(writer, child, props, 0, inScope);
+        }
         else
         {
             SerializeRawNode(writer, node, props, 0, inScope);
@@ -491,7 +474,7 @@ public static class ResultTreeSerializer
                 SerializeRawElement(writer, elem, props, depth, inScopeBindings);
                 break;
             case XText text:
-                WriteEscaped(writer, text.Value, isAttribute: false);
+                WriteEscaped(writer, text.Value, isAttribute: false, props);
                 break;
             case XComment comment:
                 writer.Write("<!--");
@@ -537,19 +520,16 @@ public static class ResultTreeSerializer
             writer.Write(elemPrefix);
             writer.Write(':');
         }
-        writer.Write(element.Name.LocalName);
+        writer.Write(Xml11NameCodec.DecodeName(element.Name.LocalName));
 
         // Emit declarations for bindings that differ from those already in scope.
-        // When the parent had an explicit inherit-namespaces="yes", redeclare all inherited
-        // prefixes so that the inherited namespace nodes are visibly preserved on this element.
-        bool forceRedeclare = element.Parent?.Annotation<NamespaceInheritanceExplicitYes>() != null;
 
         // The default namespace is written first to match conventional serialization.
         if (targetBindings.TryGetValue("", out var defaultUri) &&
-            (forceRedeclare || !inScopeBindings.TryGetValue("", out _) || inScopeBindings[""] != defaultUri))
+            (!inScopeBindings.TryGetValue("", out _) || inScopeBindings[""] != defaultUri))
         {
             writer.Write(" xmlns=\"");
-            WriteEscaped(writer, defaultUri, isAttribute: true);
+            WriteEscaped(writer, defaultUri, isAttribute: true, props);
             writer.Write('"');
             inScopeBindings[""] = defaultUri;
         }
@@ -566,12 +546,12 @@ public static class ResultTreeSerializer
                     continue;
                 if (string.IsNullOrEmpty(uri))
                     continue; // undeclarations handled separately
-                if (!forceRedeclare && inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri == uri)
+                if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri == uri)
                     continue;
                 writer.Write(" xmlns:");
                 writer.Write(prefix);
                 writer.Write("=\"");
-                WriteEscaped(writer, uri, isAttribute: true);
+                WriteEscaped(writer, uri, isAttribute: true, props);
                 writer.Write('"');
                 inScopeBindings[prefix] = uri;
             }
@@ -591,7 +571,7 @@ public static class ResultTreeSerializer
                 writer.Write(" xmlns:");
                 writer.Write(prefix);
                 writer.Write("=\"");
-                WriteEscaped(writer, attr.Value, isAttribute: true);
+                WriteEscaped(writer, attr.Value, isAttribute: true, props);
                 writer.Write('"');
                 inScopeBindings[prefix] = attr.Value;
             }
@@ -607,50 +587,54 @@ public static class ResultTreeSerializer
             writer.Write(" xmlns:");
             writer.Write(prefix);
             writer.Write("=\"");
-            WriteEscaped(writer, uri, isAttribute: true);
+            WriteEscaped(writer, uri, isAttribute: true, props);
             writer.Write('"');
             inScopeBindings[prefix] = uri;
         }
 
         // Prefixed namespace undeclarations required by inherit-namespaces="no".
-        var undecl = element.Annotation<PrefixedNamespaceUndeclarations>();
-        if (undecl != null)
+        // These are only legal in XML 1.1 output and only when undeclare-prefixes="yes".
+        if (CanUndeclarePrefixes(props))
         {
-            foreach (var prefix in undecl.Prefixes)
+            var undecl = element.Annotation<PrefixedNamespaceUndeclarations>();
+            if (undecl != null)
             {
-                if (prefix == "" || prefix == "xml" || prefix == "xmlns")
-                    continue;
-                if (targetBindings.ContainsKey(prefix))
-                    continue; // element redeclares this prefix itself
-                if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri != "")
+                foreach (var prefix in undecl.Prefixes)
                 {
-                    writer.Write(" xmlns:");
-                    writer.Write(prefix);
-                    writer.Write("=\"\"");
-                    inScopeBindings[prefix] = "";
+                    if (prefix == "" || prefix == "xml" || prefix == "xmlns")
+                        continue;
+                    if (targetBindings.ContainsKey(prefix))
+                        continue; // element redeclares this prefix itself
+                    if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri != "")
+                    {
+                        writer.Write(" xmlns:");
+                        writer.Write(prefix);
+                        writer.Write("=\"\"");
+                        inScopeBindings[prefix] = "";
+                    }
                 }
             }
-        }
 
-        // Explicit default/prefixed namespace undeclarations (xmlns="", xmlns:p="").
-        foreach (var attr in element.Attributes().Where(a => a.IsNamespaceDeclaration && string.IsNullOrEmpty(a.Value)))
-        {
-            var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
-            if (prefix == "xml" || prefix == "xmlns")
-                continue;
-            if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri != "")
+            // Explicit default/prefixed namespace undeclarations (xmlns="", xmlns:p="").
+            foreach (var attr in element.Attributes().Where(a => a.IsNamespaceDeclaration && string.IsNullOrEmpty(a.Value)))
             {
-                if (prefix == "")
+                var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                if (prefix == "xml" || prefix == "xmlns")
+                    continue;
+                if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri != "")
                 {
-                    writer.Write(" xmlns=\"\"");
+                    if (prefix == "")
+                    {
+                        writer.Write(" xmlns=\"\"");
+                    }
+                    else
+                    {
+                        writer.Write(" xmlns:");
+                        writer.Write(prefix);
+                        writer.Write("=\"\"");
+                    }
+                    inScopeBindings[prefix] = "";
                 }
-                else
-                {
-                    writer.Write(" xmlns:");
-                    writer.Write(prefix);
-                    writer.Write("=\"\"");
-                }
-                inScopeBindings[prefix] = "";
             }
         }
 
@@ -666,9 +650,9 @@ public static class ResultTreeSerializer
                 writer.Write(attrPrefix);
                 writer.Write(':');
             }
-            writer.Write(attr.Name.LocalName);
+            writer.Write(Xml11NameCodec.DecodeName(attr.Name.LocalName));
             writer.Write("=\"");
-            WriteEscaped(writer, attr.Value, isAttribute: true);
+            WriteEscaped(writer, Xml11NameCodec.DecodeValue(attr.Value), isAttribute: true, props);
             writer.Write('"');
         }
 
@@ -709,7 +693,7 @@ public static class ResultTreeSerializer
             writer.Write(elemPrefix);
             writer.Write(':');
         }
-        writer.Write(element.Name.LocalName);
+        writer.Write(Xml11NameCodec.DecodeName(element.Name.LocalName));
         writer.Write('>');
     }
 
@@ -755,7 +739,7 @@ public static class ResultTreeSerializer
         string generated;
         do
         {
-            generated = $"p{index}";
+            generated = $"ns{index - 1}";
             index++;
         } while (inScopeBindings.ContainsKey(generated) || declarations.ContainsKey(generated));
 
@@ -791,7 +775,134 @@ public static class ResultTreeSerializer
         return null;
     }
 
-    private static void WriteEscaped(TextWriter writer, string value, bool isAttribute)
+    /// <summary>
+    /// Validates that the node tree can be serialized as XML 1.0. Throws a
+    /// serialization error (SERE0005/SERE0006) when it contains XML 1.1-only
+    /// names or characters.
+    /// </summary>
+    private static void ValidateXml10(XNode node)
+    {
+        switch (node)
+        {
+            case XDocument document:
+                foreach (var child in document.Nodes())
+                    ValidateXml10(child);
+                break;
+
+            case XElement element:
+                if (Xml11NameCodec.IsEncoded(element.Name.LocalName))
+                    throw new InvalidOperationException("SERE0005: The result contains an element name that is not valid in XML 1.0.");
+                foreach (var attr in element.Attributes())
+                {
+                    if (attr.IsNamespaceDeclaration)
+                    {
+                        if (ContainsInvalidXml10AttributeValue(Xml11NameCodec.DecodeValue(attr.Value)))
+                            throw new InvalidOperationException("SERE0006: The result contains a character that is not valid in XML 1.0.");
+                        continue;
+                    }
+                    if (Xml11NameCodec.IsEncoded(attr.Name.LocalName))
+                        throw new InvalidOperationException("SERE0005: The result contains an attribute name that is not valid in XML 1.0.");
+                    var decodedValue = Xml11NameCodec.DecodeValue(attr.Value);
+                    if (ContainsInvalidXml10AttributeValue(decodedValue))
+                        throw new InvalidOperationException("SERE0006: The result contains a character that is not valid in XML 1.0.");
+                }
+                foreach (var child in element.Nodes())
+                    ValidateXml10(child);
+                break;
+
+            case XText text:
+                if (ContainsInvalidXml10TextValue(Xml11NameCodec.DecodeValue(text.Value)))
+                    throw new InvalidOperationException("SERE0006: The result contains a character that is not valid in XML 1.0.");
+                break;
+
+            case XComment comment:
+                if (ContainsInvalidXml10TextValue(Xml11NameCodec.DecodeValue(comment.Value)))
+                    throw new InvalidOperationException("SERE0006: The result contains a character that is not valid in XML 1.0.");
+                break;
+
+            case XProcessingInstruction pi:
+                if (ContainsInvalidXml10TextValue(Xml11NameCodec.DecodeValue(pi.Data)))
+                    throw new InvalidOperationException("SERE0006: The result contains a character that is not valid in XML 1.0.");
+                break;
+        }
+    }
+
+    private static bool CanUndeclarePrefixes(Stylesheet.OutputProperties props)
+        => props.Version == "1.1" && props.UndeclarePrefixes;
+
+    /// <summary>
+    /// Returns a clone of the node tree with namespace undeclarations removed when
+    /// they are not permitted by the effective output properties.
+    /// </summary>
+    private static XNode NormalizeForXmlWriter(XNode node, Stylesheet.OutputProperties props)
+    {
+        var allowUndeclare = CanUndeclarePrefixes(props);
+        switch (node)
+        {
+            case XDocument doc:
+                var clonedDoc = new XDocument(doc.Declaration);
+                foreach (var child in doc.Nodes())
+                    clonedDoc.Add(NormalizeForXmlWriter(child, props));
+                return clonedDoc;
+
+            case XElement element:
+                var cloned = new XElement(element.Name);
+                foreach (var attr in element.Attributes())
+                {
+                    // Prefixed namespace undeclarations (xmlns:prefix="") are only
+                    // allowed in XML 1.1 output with undeclare-prefixes="yes".
+                    // Default namespace undeclarations (xmlns="") are valid in XML 1.0
+                    // and must be preserved so the namespace axis survives serialization.
+                    if (!allowUndeclare && attr.IsNamespaceDeclaration && string.IsNullOrEmpty(attr.Value) && attr.Name.LocalName != "xmlns")
+                        continue;
+                    cloned.SetAttributeValue(attr.Name, attr.Value);
+                }
+                if (!allowUndeclare)
+                    cloned.RemoveAnnotations<PrefixedNamespaceUndeclarations>();
+                foreach (var child in element.Nodes())
+                    cloned.Add(NormalizeForXmlWriter(child, props));
+                return cloned;
+
+            case XText text:
+                return new XText(text.Value);
+            case XComment comment:
+                return new XComment(comment.Value);
+            case XProcessingInstruction pi:
+                return new XProcessingInstruction(pi.Target, pi.Data);
+            case XDocumentType docType:
+                return new XDocumentType(docType.Name, docType.PublicId, docType.SystemId, docType.InternalSubset);
+            default:
+                return node;
+        }
+    }
+
+    private static bool ContainsInvalidXml10TextValue(string value)
+    {
+        foreach (char ch in value)
+        {
+            int cp = ch;
+            if (cp is >= 0x01 and <= 0x08 or 0x0B or 0x0C or 0x0E or 0x0F or >= 0x10 and <= 0x1F)
+                return true;
+            if (cp is >= 0x7F and <= 0x9F)
+                return true;
+        }
+        return false;
+    }
+
+    private static bool ContainsInvalidXml10AttributeValue(string value)
+    {
+        foreach (char ch in value)
+        {
+            int cp = ch;
+            if (cp is >= 0x01 and <= 0x08 or 0x0B or 0x0C or 0x0E or 0x0F or >= 0x10 and <= 0x1F)
+                return true;
+            if (cp is >= 0x7F and <= 0x9F)
+                return true;
+        }
+        return false;
+    }
+
+    private static void WriteEscaped(TextWriter writer, string value, bool isAttribute, Stylesheet.OutputProperties props)
     {
         foreach (var ch in value)
         {
@@ -810,12 +921,39 @@ public static class ResultTreeSerializer
                     writer.Write("&quot;");
                     break;
                 case '\r':
-                    writer.Write("&#xD;");
+                    writer.Write("&#13;");
                     break;
                 default:
-                    writer.Write(ch);
+                    if (props.Version == "1.1" && MustEscapeInXml11(ch, isAttribute))
+                    {
+                        writer.Write("&#");
+                        writer.Write((int)ch);
+                        writer.Write(';');
+                    }
+                    else
+                    {
+                        writer.Write(ch);
+                    }
                     break;
             }
         }
+    }
+
+    private static bool MustEscapeInXml11(char ch, bool isAttribute)
+    {
+        int cp = ch;
+        // C0 controls (except tab, line feed, carriage return).
+        if (cp is >= 0x01 and <= 0x1F && cp is not 0x09 and not 0x0A and not 0x0D)
+            return true;
+        // C1 controls and NEL (U+0085).
+        if (cp is >= 0x7F and <= 0x9F)
+            return true;
+        // Line separator (U+2028).
+        if (cp == 0x2028)
+            return true;
+        // Tab must be escaped in attribute values for XML 1.1 validity.
+        if (isAttribute && cp == 0x09)
+            return true;
+        return false;
     }
 }
