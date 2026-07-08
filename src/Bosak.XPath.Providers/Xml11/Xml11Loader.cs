@@ -16,6 +16,7 @@
 
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -78,7 +79,7 @@ public static class Xml11Loader
             baseUri = new Uri(resolvedPath).AbsoluteUri;
         }
 
-        var text = File.ReadAllText(resolvedPath);
+        var text = ReadAllTextWithDeclaredEncoding(resolvedPath);
         var (rewritten, isXml11) = PrepareXml11Text(text);
         var settings = CreateSettings();
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri);
@@ -139,6 +140,85 @@ public static class Xml11Loader
             return false;
         var decl = trimmed.Substring(0, end);
         return decl.Contains("version=\"1.1\"") || decl.Contains("version='1.1'");
+    }
+
+    /// <summary>
+    /// Reads a file honoring the encoding declared in its XML declaration.
+    /// This is necessary because <see cref="File.ReadAllText(string)"/> always
+    /// uses UTF-8 and would corrupt legacy files such as ISO-8859-1 test cases.
+    /// </summary>
+    private static string ReadAllTextWithDeclaredEncoding(string path)
+    {
+        var bytes = File.ReadAllBytes(path);
+        var bomLength = GetBomLength(bytes);
+        var encoding = DetectEncodingFromBom(bytes);
+
+        // Decode enough of the start to read the XML declaration.
+        var headerLength = Math.Min(bytes.Length - bomLength, 512);
+        var header = encoding.GetString(bytes, bomLength, headerLength);
+
+        var declaredEncoding = ExtractDeclaredEncoding(header);
+        if (!string.IsNullOrEmpty(declaredEncoding))
+        {
+            try
+            {
+                encoding = Encoding.GetEncoding(declaredEncoding);
+            }
+            catch
+            {
+                // Fall back to the BOM/default encoding.
+            }
+        }
+
+        return encoding.GetString(bytes, bomLength, bytes.Length - bomLength);
+    }
+
+    private static int GetBomLength(byte[] bytes)
+    {
+        if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+            return 3;
+        if (bytes.Length >= 4 && bytes[0] == 0xFF && bytes[1] == 0xFE && bytes[2] == 0x00 && bytes[3] == 0x00)
+            return 4;
+        if (bytes.Length >= 4 && bytes[0] == 0x00 && bytes[1] == 0x00 && bytes[2] == 0xFE && bytes[3] == 0xFF)
+            return 4;
+        if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
+            return 2;
+        if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
+            return 2;
+        return 0;
+    }
+
+    private static Encoding DetectEncodingFromBom(byte[] bytes)
+    {
+        if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+            return new UTF8Encoding(false, false);
+        if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
+            return new UnicodeEncoding(false, false, false);
+        if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
+            return new UnicodeEncoding(true, false, false);
+        if (bytes.Length >= 4 && bytes[0] == 0xFF && bytes[1] == 0xFE && bytes[2] == 0x00 && bytes[3] == 0x00)
+            return new UTF32Encoding(false, false, false);
+        if (bytes.Length >= 4 && bytes[0] == 0x00 && bytes[1] == 0x00 && bytes[2] == 0xFE && bytes[3] == 0xFF)
+            return new UTF32Encoding(true, false, false);
+        return new UTF8Encoding(false, false);
+    }
+
+    private static readonly Regex EncodingDeclarationRegex = new(
+        @"encoding\s*=\s*[""']([^""']+)[""']",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled,
+        TimeSpan.FromSeconds(1));
+
+    private static string? ExtractDeclaredEncoding(string header)
+    {
+        var trimmed = header.TrimStart();
+        if (!trimmed.StartsWith("<?xml", StringComparison.Ordinal))
+            return null;
+        int declEnd = trimmed.IndexOf("?>", StringComparison.Ordinal);
+        if (declEnd < 0)
+            return null;
+        var decl = trimmed.Substring(0, declEnd + 2);
+        var match = EncodingDeclarationRegex.Match(decl);
+        return match.Success ? match.Groups[1].Value : null;
     }
 
     private static XmlReaderSettings CreateSettings()
