@@ -383,10 +383,27 @@ class Program
             var testElem = testCase.Element(ns + "test");
             if (testElem == null) return TestResult.Skip;
 
-            var stylesheetElem = testElem.Element(ns + "stylesheet");
-            if (stylesheetElem == null) return TestResult.Skip;
+            // Determine the principal stylesheet or package. Prefer an element with
+            // role="principal"; fall back to the first stylesheet/package element.
+            var principalElem = testElem.Elements(ns + "stylesheet")
+                .FirstOrDefault(e => e.Attribute("role")?.Value == "principal")
+                ?? testElem.Elements(ns + "package")
+                    .FirstOrDefault(e => e.Attribute("role")?.Value == "principal");
+            if (principalElem == null)
+            {
+                principalElem = testElem.Element(ns + "stylesheet")
+                    ?? testElem.Element(ns + "package");
+            }
+            if (principalElem == null) return TestResult.Skip;
 
-            var mainStylesheetFile = stylesheetElem.Attribute("file")?.Value;
+            // xsl:package is not supported by this compiler.
+            if (principalElem.Name.LocalName == "package")
+            {
+                Console.WriteLine($"  SKIP {name}: xsl:package not supported");
+                return TestResult.Skip;
+            }
+
+            var mainStylesheetFile = principalElem.Attribute("file")?.Value;
             if (mainStylesheetFile == null) return TestResult.Skip;
 
             var mainStylesheetPath = Path.Combine(testSetDir, mainStylesheetFile);
