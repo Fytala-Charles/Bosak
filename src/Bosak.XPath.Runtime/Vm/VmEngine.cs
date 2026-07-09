@@ -56,6 +56,8 @@
 //                      | Charles Korthout | 2.23  | 02-07-2026     | Root opcode handles parentless nodes and raises XPDY0050; Range atomizes operands       |
 //                      | Charles Korthout | 2.24  | 03-07-2026     | Trim whitespace when casting strings to xs:integer (TVT function results)              |
 //                      | Charles Korthout | 2.25  | 26-06-2026     | Backwards-compatible arithmetic, comparisons, and range expressions                    |
+//                      | Charles Korthout | 2.26  | 26-06-2026     | LookupWildcard flattens map values and array members                                   |
+//                      | Charles Korthout | 2.27  | 26-06-2026     | NormalizeSequence places document-rooted nodes before parentless nodes                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1629,15 +1631,28 @@ public static class VmEngine
                         var container = registers[instr.RegisterB];
                         var result = new List<XdmValue>();
 
+                        void AddFlattened(XdmValue v)
+                        {
+                            if (v.IsSequence && v.SequenceValue is not null)
+                            {
+                                foreach (var item in XdmSequence.FromSource(v.SequenceValue))
+                                    result.Add(item);
+                            }
+                            else if (!v.IsUndefined)
+                            {
+                                result.Add(v);
+                            }
+                        }
+
                         if (container.Kind == XdmValueKind.Map)
                         {
                             foreach (var v in container.MapValue.Values)
-                                result.Add(v);
+                                AddFlattened(v);
                         }
                         else if (container.Kind == XdmValueKind.Array)
                         {
                             foreach (var v in container.ArrayValue.Values)
-                                result.Add(v);
+                                AddFlattened(v);
                         }
                         else if (container.IsSequence && container.SequenceValue is not null)
                         {
@@ -1646,12 +1661,12 @@ public static class VmEngine
                                 if (item.Kind == XdmValueKind.Map)
                                 {
                                     foreach (var v in item.MapValue.Values)
-                                        result.Add(v);
+                                        AddFlattened(v);
                                 }
                                 else if (item.Kind == XdmValueKind.Array)
                                 {
                                     foreach (var v in item.ArrayValue.Values)
-                                        result.Add(v);
+                                        AddFlattened(v);
                                 }
                             }
                         }
@@ -2140,7 +2155,14 @@ public static class VmEngine
 
         if (nodes.Count > 1)
         {
-            nodes.Sort((a, b) => a.NodeValue!.DocumentOrder.CompareTo(b.NodeValue!.DocumentOrder));
+            nodes.Sort((a, b) =>
+            {
+                bool aDoc = a.NodeValue!.Document is not null;
+                bool bDoc = b.NodeValue!.Document is not null;
+                if (aDoc != bDoc)
+                    return aDoc ? -1 : 1;
+                return a.NodeValue.DocumentOrder.CompareTo(b.NodeValue.DocumentOrder);
+            });
         }
 
         if (nonNodes.Count == 0)
