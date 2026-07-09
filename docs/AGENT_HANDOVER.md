@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `e199443`
+**Commit:** `2b33928`
 **Current focus:** Fixed `accumulator-090` false circular-dependency error for global variables referencing `accumulator-after()`. Down to 6 remaining W3C failures.
 
 ---
