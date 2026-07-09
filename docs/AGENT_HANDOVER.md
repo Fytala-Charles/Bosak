@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `05b85ce` (with uncommitted changes)
+**Commit:** `e624a9b`
 **Current focus:** Fixed `function-1014` (FXSL higher-order recursion) by expanding `__xdm_seq__` placeholders produced by `xsl:apply-templates` and `xsl:call-template` inside `xsl:function` bodies. Down to 7 remaining W3C failures.
 
 ---
