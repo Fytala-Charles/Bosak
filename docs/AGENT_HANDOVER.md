@@ -1,35 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `2b33928`
-**Current focus:** Fixed `accumulator-090` false circular-dependency error for global variables referencing `accumulator-after()`. Down to 6 remaining W3C failures.
+**Commit:** `3e8db6f` (with uncommitted changes)
+**Current focus:** Fixed `normalize-unicode-014` by applying `xsl:output/@normalization-form` to HTML result-tree serialization. Down to 5 remaining W3C failures.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 5,237
-- **Failed:** 6
+- **Passed:** 5,238
+- **Failed:** 5
 - **Skipped:** 9,357
-- **Pass rate:** 99.9% (+1 passed / −1 failed vs. previous 5,236/7)
+- **Pass rate:** 99.9% (+1 passed / −1 failed vs. previous 5,237/6)
 
 ## Cluster Status
 
 | Cluster | Total | Passed | Failed | Skipped | Notes |
 |---|---|---|---|---|---|
-| accumulator | 107 | 17 | 0 | 90 | ✅ Global variable calling `accumulator-after()` no longer falsely triggers `XPST0008` circular reference |
+| normalize-unicode | 18 | 18 | 0 | 0 | ✅ HTML output now honors `normalization-form` (e.g., NFKD) |
 
 ## This Session Fixes
 
-1. **`accumulator-090` lazy-global circularity** — `CreateAccumulatorEvaluationContext` now copies globals into the accumulator context lazily, but skips any variable currently being initialized. This fixes the false `XPST0008` for globals that use `accumulator-after()` while preserving access to globals referenced by accumulators (e.g., `merge-066`).
-   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+1. **`normalize-unicode-014` HTML normalization** — `ResultTreeSerializer.SerializeAsHtml` now normalizes text nodes, attribute values, comments, and processing instructions according to `xsl:output/@normalization-form` before writing the HTML result.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
 
 ## Notes
 
-- Unit-test suite: **916 passed / 0 failed / 0 skipped** across 8 projects (1 new regression test added).
-- Full W3C suite: **5,237/6/9,357** (99.9%).
-- Remaining failures: `normalize-unicode-014`, `catalog-006/007`, `docbook-001/002/004`.
+- Unit-test suite: **917 passed / 0 failed / 0 skipped** across 8 projects (1 new regression test added).
+- Full W3C suite: **5,238/5/9,357** (99.9%).
+- Remaining failures: `catalog-006/007`, `docbook-001/002/004`.
 
 ---
 

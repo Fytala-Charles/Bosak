@@ -29,9 +29,11 @@
 //                      | Charles Korthout | 0.17  | 30-06-2026     | Added regression tests for xsl:apply-templates inside xsl:function bodies              |
 //                      | Charles Korthout | 0.18  | 26-06-2026     | Added regression test for atomic values returned by apply-templates/call-template in functions |
 //                      | Charles Korthout | 0.19  | 26-06-2026     | Added regression test for global variable referencing accumulator-after()                |
+//                      | Charles Korthout | 0.20  | 26-06-2026     | Added regression test for HTML output normalization-form                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -2728,6 +2730,25 @@ public class StylesheetTests
         var executable = compiler.Compile(xsl);
         var result = executable.TransformFunction("f:start", System.Array.Empty<XdmValue>(), new EvaluationContext());
         Assert.Equal("||||||", result.StringValue);
+    }
+
+    [Fact]
+    public void Html_Normalization_Form_NFKD_Decomposes_Text()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='html' normalization-form='NFKD' encoding='utf-8'/>
+            <xsl:template match='/'>
+                <html><body><xsl:value-of select='/doc'/></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(XDocument.Parse("<doc>\u00FC</doc>"));
+        var result = executable.TransformToString(source, new EvaluationContext());
+        // U+00FC (u with diaeresis) in NFKD becomes U+0075 U+0308.
+        Assert.Contains("\u0075\u0308", result, StringComparison.Ordinal);
+        Assert.DoesNotContain("\u00FC", result, StringComparison.Ordinal);
     }
 
 }

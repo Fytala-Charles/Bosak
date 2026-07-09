@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 26-06-2026     | Raw XML 1.1 serializer for prefixed namespace undeclarations                          |
 //                      | Charles Korthout | 0.5   | 06-07-2026     | Apply xsl:output normalization-form during serialization                                  |
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Basic method=\"html\" serialization unwraps __xdm_doc__ and omits XML declaration        |
+//                      | Charles Korthout | 0.7   | 26-06-2026     | Apply normalization-form to HTML output and atomic values                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -86,15 +87,20 @@ public static class ResultTreeSerializer
         settings.OmitXmlDeclaration = true;
         settings.ConformanceLevel = ConformanceLevel.Fragment;
         using var xmlWriter = XmlWriter.Create(writer, settings);
+        var normForm = TryGetNormalizationForm(props);
         foreach (var item in FlattenHtmlItems(value))
         {
             if (item.IsNode && item.NodeValue != null)
             {
-                WriteNode(xmlWriter, item.NodeValue);
+                var node = normForm.HasValue ? NormalizeXdmNode(item.NodeValue, normForm.Value) : item.NodeValue;
+                WriteNode(xmlWriter, node);
             }
             else if (!item.IsUndefined)
             {
-                xmlWriter.WriteString(item.ToString());
+                var text = item.ToString();
+                if (normForm.HasValue)
+                    text = text.Normalize(normForm.Value);
+                xmlWriter.WriteString(text);
             }
         }
         xmlWriter.Flush();
@@ -341,6 +347,17 @@ public static class ResultTreeSerializer
             "NONE" or null or "" => null,
             _ => null
         };
+    }
+
+    /// <summary>
+    /// Returns a wrapped XDM node whose underlying XML tree has all text, attribute,
+    /// comment, and processing-instruction values normalized to the given Unicode form.
+    /// </summary>
+    private static IXdmNode NormalizeXdmNode(IXdmNode node, System.Text.NormalizationForm form)
+    {
+        if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XNode xnode)
+            return new XDocumentNode(NormalizeXNode(xnode, form));
+        return node;
     }
 
     /// <summary>
