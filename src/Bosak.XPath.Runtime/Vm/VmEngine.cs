@@ -58,6 +58,7 @@
 //                      | Charles Korthout | 2.25  | 26-06-2026     | Backwards-compatible arithmetic, comparisons, and range expressions                    |
 //                      | Charles Korthout | 2.26  | 26-06-2026     | LookupWildcard flattens map values and array members                                   |
 //                      | Charles Korthout | 2.27  | 26-06-2026     | NormalizeSequence places document-rooted nodes before parentless nodes                 |
+//                      | Charles Korthout | 2.28  | 26-06-2026     | Removed leftover debug output from CompareCore                                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;

@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 01-06-2026     | Encoding-aware serialization; hex-to-decimal entity conversion                         |
 //                      | Charles Korthout | 0.4   | 26-06-2026     | Raw XML 1.1 serializer for prefixed namespace undeclarations                          |
 //                      | Charles Korthout | 0.5   | 06-07-2026     | Apply xsl:output normalization-form during serialization                                  |
+//                      | Charles Korthout | 0.6   | 26-06-2026     | Basic method=\"html\" serialization unwraps __xdm_doc__ and omits XML declaration        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -51,6 +52,11 @@ public static class ResultTreeSerializer
             return SerializeAsText(value);
         }
 
+        if (props.Method == "html")
+        {
+            return SerializeAsHtml(value, props);
+        }
+
         // method="xml" (default)
         if (value.IsNode)
         {
@@ -71,6 +77,66 @@ public static class ResultTreeSerializer
         var sb = new System.Text.StringBuilder();
         CollectText(value, sb);
         return sb.ToString();
+    }
+
+    private static string SerializeAsHtml(XdmValue value, Stylesheet.OutputProperties props)
+    {
+        using var writer = new StringWriter();
+        var settings = CreateXmlWriterSettings(props);
+        settings.OmitXmlDeclaration = true;
+        settings.ConformanceLevel = ConformanceLevel.Fragment;
+        using var xmlWriter = XmlWriter.Create(writer, settings);
+        foreach (var item in FlattenHtmlItems(value))
+        {
+            if (item.IsNode && item.NodeValue != null)
+            {
+                WriteNode(xmlWriter, item.NodeValue);
+            }
+            else if (!item.IsUndefined)
+            {
+                xmlWriter.WriteString(item.ToString());
+            }
+        }
+        xmlWriter.Flush();
+        return writer.ToString();
+    }
+
+    private static IEnumerable<XdmValue> FlattenHtmlItems(XdmValue value)
+    {
+        if (value.IsUndefined)
+            yield break;
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                foreach (var flat in FlattenHtmlItems(item))
+                    yield return flat;
+        }
+        else if (value.IsNode && value.NodeValue != null)
+        {
+            var node = value.NodeValue;
+            if (node.NodeKind == XdmNodeKind.Document &&
+                node is XDocumentNode xdn &&
+                xdn.UnderlyingObject is XDocument doc)
+            {
+                foreach (var child in doc.Nodes())
+                    yield return XdmValue.FromNode(new XDocumentNode(child));
+            }
+            else if (node is XDocumentNode xdn2 &&
+                     xdn2.UnderlyingObject is XElement elem &&
+                     elem.Name.LocalName == "__xdm_doc__")
+            {
+                foreach (var child in elem.Nodes())
+                    yield return XdmValue.FromNode(new XDocumentNode(child));
+            }
+            else
+            {
+                yield return value;
+            }
+        }
+        else
+        {
+            yield return value;
+        }
     }
 
     private static void CollectText(XdmValue value, System.Text.StringBuilder sb)

@@ -160,6 +160,7 @@
 //                      | Charles Korthout | 5.89  | 07-07-2026     | Set current item during xsl:sort key evaluation; fixes bug-2501                        |
 //                      | Charles Korthout | 5.90  | 08-07-2026     | QName whitespace normalization; function-body text-node merging; XTDE0450 for maps     |
 //                      | Charles Korthout | 5.91  | 26-06-2026     | Preserve atomic-spacing state when a template with @as returns its typed result        |
+//                      | Charles Korthout | 5.92  | 26-06-2026     | Expand sequence placeholders for apply-templates/call-template inside function bodies  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2589,7 +2590,20 @@ public sealed class TransformEngine
                         foreach (var node in temp.Nodes())
                         {
                             if (node is XElement e)
-                                results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                            {
+                                if (e.Name.LocalName == "__xdm_seq__" && e.Name.NamespaceName == "")
+                                {
+                                    if (e.Annotation<SequencePlaceholderItems>() is { } holder)
+                                    {
+                                        foreach (var phItem in holder.Items)
+                                            results.Add(phItem);
+                                    }
+                                }
+                                else
+                                {
+                                    results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                }
+                            }
                             else if (node is XText t)
                                 results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
                         }
@@ -2603,9 +2617,11 @@ public sealed class TransformEngine
                             var (withParams, tunnelParams) = CollectWithParams(instruction, contextItem);
                             var savedContainer = _currentContainer;
                             var savedLastAtomic = _lastAddedWasAtomic;
+                            var savedAccumulator = _sequenceAccumulator;
                             var temp = new XElement("__temp__");
                             _currentContainer = temp;
                             _lastAddedWasAtomic = false;
+                            _sequenceAccumulator = new ListSequenceAccumulator(results);
                             try
                             {
                                 // Named templates are matched by expanded QName, so a call using
@@ -2618,11 +2634,25 @@ public sealed class TransformEngine
                             {
                                 _currentContainer = savedContainer;
                                 _lastAddedWasAtomic = savedLastAtomic;
+                                _sequenceAccumulator = savedAccumulator;
                             }
                             foreach (var node in temp.Nodes())
                             {
                                 if (node is XElement e)
-                                    results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                {
+                                    if (e.Name.LocalName == "__xdm_seq__" && e.Name.NamespaceName == "")
+                                    {
+                                        if (e.Annotation<SequencePlaceholderItems>() is { } holder)
+                                        {
+                                            foreach (var phItem in holder.Items)
+                                                results.Add(phItem);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                    }
+                                }
                                 else if (node is XText t && !string.IsNullOrEmpty(t.Value))
                                     results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
                             }

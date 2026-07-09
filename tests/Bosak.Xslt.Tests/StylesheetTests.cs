@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 0.15  | 26-06-2026     | Added lazy function-local variable / circular-reference test                         |
 //                      | Charles Korthout | 0.16  | 29-06-2026     | Added regression tests for global visibility and eager duplicate function locals       |
 //                      | Charles Korthout | 0.17  | 30-06-2026     | Added regression tests for xsl:apply-templates inside xsl:function bodies              |
+//                      | Charles Korthout | 0.18  | 26-06-2026     | Added regression test for atomic values returned by apply-templates/call-template in functions |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2621,6 +2622,56 @@ public class StylesheetTests
         var result = executable.TransformFunction("f:start", System.Array.Empty<XdmValue>(), new EvaluationContext());
         Assert.True(result.IsNode);
         Assert.Equal("A", result.NodeValue!.StringValue);
+    }
+
+    [Fact]
+    public void Function_ApplyTemplates_Returns_Atomic_Sequence()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:f='urn:function' exclude-result-prefixes='xs f'>
+            <xsl:function name='f:inc' as='xs:integer'>
+                <xsl:param name='n' as='xs:integer'/>
+                <xsl:apply-templates select='$n' mode='m'>
+                    <xsl:with-param name='n' select='$n'/>
+                </xsl:apply-templates>
+            </xsl:function>
+            <xsl:template match='.' mode='m'>
+                <xsl:param name='n'/>
+                <xsl:sequence select='$n + 1'/>
+            </xsl:template>
+            <xsl:template match='/'>
+                <out><xsl:value-of select='f:inc(5)'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(XDocument.Parse("<root/>"));
+        var result = executable.TransformToString(source, new EvaluationContext());
+        Assert.Contains("<out>6</out>", result);
+    }
+
+    [Fact]
+    public void Function_CallTemplate_Returns_Atomic_Sequence()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:f='urn:function' exclude-result-prefixes='xs f'>
+            <xsl:function name='f:answer' as='xs:integer'>
+                <xsl:call-template name='t'/>
+            </xsl:function>
+            <xsl:template name='t'>
+                <xsl:sequence select='42'/>
+            </xsl:template>
+            <xsl:template match='/'>
+                <out><xsl:value-of select='f:answer()'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(XDocument.Parse("<root/>"));
+        var result = executable.TransformToString(source, new EvaluationContext());
+        Assert.Contains("<out>42</out>", result);
     }
 
     [Fact]

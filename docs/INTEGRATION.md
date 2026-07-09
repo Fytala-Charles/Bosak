@@ -4,13 +4,17 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 8 July 2026
-> **Bosak baseline:** 913 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,233 passed / 10 failed / 9,357 skipped (99.8%)
+> **Last updated:** 26 June 2026
+> **Bosak baseline:** 915 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 5,236 passed / 7 failed / 9,357 skipped (99.9%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-26** — Fixed `function-1014` (FXSL higher-order recursion): `xsl:apply-templates` and `xsl:call-template` inside `xsl:function` bodies now expand `__xdm_seq__` placeholders so atomic values returned by `xsl:sequence` reach the function result instead of being dropped.
+  - Full W3C suite: **5,236 passed / 7 failed / 9,357 skipped** (99.9%).
+  - Remaining failures: `accumulator-090`, `normalize-unicode-014`, `catalog-006/007`, `docbook-001/002/004`.
 
 - **2026-07-08** — Cleared the W3C `unparsed-text`, `match`, `forwards`, `lre`, `whitespace`, `xslt-compat`, and `for-each-group` conformance clusters.
   - `fn:unparsed-text()` one-argument form detects encoding from BOM, XML declaration, and HTTP `Content-Type`; `unparsed-text-available()` works for HTTP resources; sequence arguments are atomized.

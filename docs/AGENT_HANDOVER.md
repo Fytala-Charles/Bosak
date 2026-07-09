@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
+**Commit:** `05b85ce` (with uncommitted changes)
+**Current focus:** Fixed `function-1014` (FXSL higher-order recursion) by expanding `__xdm_seq__` placeholders produced by `xsl:apply-templates` and `xsl:call-template` inside `xsl:function` bodies. Down to 7 remaining W3C failures.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,236
+- **Failed:** 7
+- **Skipped:** 9,357
+- **Pass rate:** 99.9% (+1 passed / −1 failed vs. previous 5,235/8)
+
+## This Session Fixes
+
+1. **`function-1014` placeholder expansion** — In function bodies, `xsl:apply-templates` and `xsl:call-template` now correctly return atomic values produced by `xsl:sequence` instead of dropping them as synthetic placeholder elements.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+## Notes
+
+- Unit-test suite: **915 passed / 0 failed / 0 skipped** across 8 projects (2 new regression tests added).
+- Full W3C suite: **5,236/7/9,357** (99.9%).
+- Remaining failures: `accumulator-090`, `normalize-unicode-014`, `catalog-006/007`, `docbook-001/002/004`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-06-26
 **Commit:** `751853b`
 **Current focus:** Cleared the `unparsed-text`, `match`, `forwards`, `lre`, `whitespace`, `xslt-compat`, `for-each-group`, `square-array`, and `choose` conformance clusters; down to 8 remaining W3C failures.
 
