@@ -159,6 +159,7 @@
 //                      | Charles Korthout | 5.88  | 07-07-2026     | Suspend sequence accumulator inside literal result elements; fixes bug-1501/1601       |
 //                      | Charles Korthout | 5.89  | 07-07-2026     | Set current item during xsl:sort key evaluation; fixes bug-2501                        |
 //                      | Charles Korthout | 5.90  | 08-07-2026     | QName whitespace normalization; function-body text-node merging; XTDE0450 for maps     |
+//                      | Charles Korthout | 5.91  | 26-06-2026     | Preserve atomic-spacing state when a template with @as returns its typed result        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3518,6 +3519,7 @@ public sealed class TransformEngine
         var savedPreserveAtomics = _preserveAtomicSequenceItems;
         var savedPreserveDocuments = _preserveDocumentNodes;
         var savedLiteralDepth = _literalElementDepth;
+        var savedLastAtomic = _lastAddedWasAtomic;
         XElement? tempContainer = null;
 
         if (!string.IsNullOrEmpty(asType))
@@ -3762,6 +3764,7 @@ public sealed class TransformEngine
                 _preserveAtomicSequenceItems = savedPreserveAtomics;
                 _preserveDocumentNodes = savedPreserveDocuments;
                 _literalElementDepth = savedLiteralDepth;
+                _lastAddedWasAtomic = savedLastAtomic;
 
                 XdmValue typedResult;
                 if (items.Count > 0)

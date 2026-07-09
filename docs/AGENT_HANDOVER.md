@@ -1,18 +1,18 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `74705bd`
-**Current focus:** Cleared the `unparsed-text`, `match`, `forwards`, `lre`, `whitespace`, `xslt-compat`, `for-each-group`, and `square-array` conformance clusters; down to 9 remaining W3C failures.
+**Commit:** `751853b`
+**Current focus:** Cleared the `unparsed-text`, `match`, `forwards`, `lre`, `whitespace`, `xslt-compat`, `for-each-group`, `square-array`, and `choose` conformance clusters; down to 8 remaining W3C failures.
 
 ---
 
 ## Full Suite Results
 
 - **Total:** 14,600
-- **Passed:** 5,234
-- **Failed:** 9
+- **Passed:** 5,235
+- **Failed:** 8
 - **Skipped:** 9,357
-- **Pass rate:** 99.8% (+1 passed / −1 failed vs. previous 5,233/10)
+- **Pass rate:** 99.8% (+2 passed / −2 failed vs. previous 5,233/10)
 
 ## Cluster Status
 
@@ -26,6 +26,7 @@
 | xslt-compat | 13 | 13 | 0 | 0 | ✅ Backwards-compatible string coercion in `RequireString` |
 | for-each-group | 85 | 78 | 0 | 7 | ✅ `distinct-values` treats NaN as equal |
 | square-array | 1 | 1 | 0 | 0 | ✅ `?*` flattens array members; path results sort document-rooted nodes before parentless nodes |
+| choose | 55 | 55 | 0 | 0 | ✅ Templates with `@as` preserve atomic-spacing state when returning typed results |
 
 ## This Session Fixes
 
@@ -56,11 +57,14 @@
 9. **`square-array` array member semantics** — `LookupWildcard` now flattens map values and array members, and `NormalizeSequence` sorts document-rooted nodes before parentless nodes so `[$extraItem, //ITEM]?*/PRICE` returns source nodes before the parentless extra item.
    - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
 
+10. **`choose` atomic spacing** — `ExecuteTemplate` now preserves `_lastAddedWasAtomic` when a template with `@as` returns its typed result, so consecutive atomic values produced by `xsl:apply-templates` are separated by a space.
+    - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`.
+
 ## Notes
 
 - Unit-test suite: **913 passed / 0 failed / 0 skipped** across 8 projects.
-- Full W3C suite: **5,234/9/9,357** (99.8%).
-- Remaining failure clusters: `accumulator` (1), `bug` (1), `catalog` (2), `choose` (1), `docbook` (3), `function` (1).
+- Full W3C suite: **5,235/8/9,357** (99.8%).
+- Remaining failure clusters: `accumulator` (1), `bug` (1), `catalog` (2), `docbook` (3), `function` (1).
 
 ---
 
