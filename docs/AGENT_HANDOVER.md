@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `3e8db6f` (with uncommitted changes)
+**Commit:** `e72addd`
 **Current focus:** Fixed `normalize-unicode-014` by applying `xsl:output/@normalization-form` to HTML result-tree serialization. Down to 5 remaining W3C failures.
 
 ---
