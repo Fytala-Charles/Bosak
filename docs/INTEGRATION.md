@@ -5,12 +5,16 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 26 June 2026
-> **Bosak baseline:** 915 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,236 passed / 7 failed / 9,357 skipped (99.9%)
+> **Bosak baseline:** 916 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 5,237 passed / 6 failed / 9,357 skipped (99.9%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-06-26** — Fixed `accumulator-090`: global variables that call `accumulator-after()` no longer trigger a false `XPST0008` circular-reference error. The accumulator evaluation context now copies only already-bound globals instead of forcing lazy evaluation of the global currently being computed.
+  - Full W3C suite: **5,237 passed / 6 failed / 9,357 skipped** (99.9%).
+  - Remaining failures: `normalize-unicode-014`, `catalog-006/007`, `docbook-001/002/004`.
 
 - **2026-06-26** — Fixed `function-1014` (FXSL higher-order recursion): `xsl:apply-templates` and `xsl:call-template` inside `xsl:function` bodies now expand `__xdm_seq__` placeholders so atomic values returned by `xsl:sequence` reach the function result instead of being dropped.
   - Full W3C suite: **5,236 passed / 7 failed / 9,357 skipped** (99.9%).

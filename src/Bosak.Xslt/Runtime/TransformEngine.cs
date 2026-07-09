@@ -161,6 +161,7 @@
 //                      | Charles Korthout | 5.90  | 08-07-2026     | QName whitespace normalization; function-body text-node merging; XTDE0450 for maps     |
 //                      | Charles Korthout | 5.91  | 26-06-2026     | Preserve atomic-spacing state when a template with @as returns its typed result        |
 //                      | Charles Korthout | 5.92  | 26-06-2026     | Expand sequence placeholders for apply-templates/call-template inside function bodies  |
+//                      | Charles Korthout | 5.93  | 26-06-2026     | Avoid forcing lazy globals when building accumulator evaluation context                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1575,10 +1576,17 @@ public sealed class TransformEngine
         RegisterAccumulatorFunctions(ctx);
 
         // Accumulator expressions may reference global variables/parameters.
+        // Copy all globals into the accumulator context, but skip any variable that
+        // is currently being initialized. Forcing evaluation of the initializing
+        // variable would make a global whose value uses accumulator-after() look
+        // like a circular reference (accumulator-090); other globals are still
+        // lazily resolved as usual (merge-066).
         ctx.LazyVariableResolver = _context.LazyVariableResolver;
         foreach (var (name, _) in _stylesheet.GetAllGlobalVariables())
         {
             var (localName, ns) = ExpandVariableName(_stylesheet.Root, name);
+            if (_evaluatingGlobals.Contains((localName, ns)))
+                continue;
             if (_context.TryGetVariable(localName, out var varValue, ns))
                 ctx.WithVariable(localName, varValue, ns);
         }

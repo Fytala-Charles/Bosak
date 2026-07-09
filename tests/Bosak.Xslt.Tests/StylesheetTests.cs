@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 0.16  | 29-06-2026     | Added regression tests for global visibility and eager duplicate function locals       |
 //                      | Charles Korthout | 0.17  | 30-06-2026     | Added regression tests for xsl:apply-templates inside xsl:function bodies              |
 //                      | Charles Korthout | 0.18  | 26-06-2026     | Added regression test for atomic values returned by apply-templates/call-template in functions |
+//                      | Charles Korthout | 0.19  | 26-06-2026     | Added regression test for global variable referencing accumulator-after()                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2672,6 +2673,28 @@ public class StylesheetTests
         var source = new XDocumentNode(XDocument.Parse("<root/>"));
         var result = executable.TransformToString(source, new EvaluationContext());
         Assert.Contains("<out>42</out>", result);
+    }
+
+    [Fact]
+    public void Global_Variable_Accumulator_After_Does_Not_Falsely_Circular()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:accumulator name='minDate' initial-value='/*/block[1]/@date' as='xs:date'>
+                <xsl:accumulator-rule match='block' select='if(@date &lt; $value) then @date else $value'/>
+            </xsl:accumulator>
+            <xsl:mode use-accumulators='#all'/>
+            <xsl:variable name='minDate' select='accumulator-after(&quot;minDate&quot;)'/>
+            <xsl:template match='/'>
+                <out><xsl:value-of select='$minDate'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(XDocument.Parse("<root><block date='2020-01-01'/><block date='2019-06-15'/></root>"));
+        var result = executable.TransformToString(source, new EvaluationContext());
+        Assert.Contains("2019-06-15", result);
     }
 
     [Fact]
