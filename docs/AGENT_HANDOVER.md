@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `1f6f687` (with uncommitted changes)
+**Commit:** `e199443`
 **Current focus:** Fixed `accumulator-090` false circular-dependency error for global variables referencing `accumulator-after()`. Down to 6 remaining W3C failures.
 
 ---
@@ -22,7 +22,7 @@
 
 ## This Session Fixes
 
-1. **`accumulator-090` lazy-global circularity** — `CreateAccumulatorEvaluationContext` now copies only already-bound globals into the accumulator context; it no longer forces lazy evaluation of the global currently being evaluated.
+1. **`accumulator-090` lazy-global circularity** — `CreateAccumulatorEvaluationContext` now copies globals into the accumulator context lazily, but skips any variable currently being initialized. This fixes the false `XPST0008` for globals that use `accumulator-after()` while preserving access to globals referenced by accumulators (e.g., `merge-066`).
    - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
 
 ## Notes

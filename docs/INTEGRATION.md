@@ -12,7 +12,7 @@
 
 ## 0. Recent Changes
 
-- **2026-06-26** — Fixed `accumulator-090`: global variables that call `accumulator-after()` no longer trigger a false `XPST0008` circular-reference error. The accumulator evaluation context now copies only already-bound globals instead of forcing lazy evaluation of the global currently being computed.
+- **2026-06-26** — Fixed `accumulator-090`: global variables that call `accumulator-after()` no longer trigger a false `XPST0008` circular-reference error. The accumulator evaluation context now copies globals lazily but skips the variable currently being initialized, preserving access to globals referenced by accumulators (e.g., `merge-066`).
   - Full W3C suite: **5,237 passed / 6 failed / 9,357 skipped** (99.9%).
   - Remaining failures: `normalize-unicode-014`, `catalog-006/007`, `docbook-001/002/004`.
 
