@@ -85,6 +85,7 @@
 //                      | Charles Korthout | 5.19  | 26-06-2026     | Backwards-compatible argument coercion for string and node functions                   |
 //                      | Charles Korthout | 5.20  | 07-07-2026     | fn:subsequence uses BC numeric coercion for start/length; fixes xpath-compat-0401     |
 //                      | Charles Korthout | 5.21  | 08-07-2026     | unparsed-text encoding detection and HTTP fetch; distinct-values NaN; BC string coercion |
+//                      | Charles Korthout | 5.22  | 26-06-2026     | Added xsl:accept, accumulator, accumulator-rule, fork, next-iteration, override, use-package |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2816,6 +2817,17 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.String,
                 Implementation = NamespaceUriForPrefix
             },
+
+            // ----- EXSLT common ------------------------------------------------
+            [(Namespaces.ExsltCommon, "node-set", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltCommon,
+                LocalName = "node-set",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Sequence,
+                Implementation = ExsltNodeSet
+            },
         };
 
         StandardFunctions = functions.ToFrozenDictionary();
@@ -3940,10 +3952,46 @@ public static class FunctionLibrary
         var defaultUri = ctx.DefiningElementDefaultNamespace ?? ctx.DefaultElementNamespace ?? string.Empty;
         var (nsUri, localName) = ParseQNameArgument(ctx, name, defaultUri: defaultUri);
 
+        if (nsUri == Namespaces.ExsltCommon && localName == "document")
+            return XdmValue.FromBoolean(true);
+
         if (nsUri != Namespaces.Xsl)
             return XdmValue.FromBoolean(false);
 
         return XdmValue.FromBoolean(XsltInstructionNames.Contains(localName));
+    }
+
+    /// <summary>
+    /// Implements the EXSLT common <c>node-set</c> extension function. In XSLT 1.0
+    /// this converts a result-tree-fragment to a node-set. A result tree fragment is
+    /// represented internally as a document node, so this function returns the
+    /// document's children (typically the single root element) rather than the
+    /// document node itself, matching the behaviour expected by XSLT 1.0 stylesheets
+    /// such as DocBook.
+    /// </summary>
+    private static XdmValue ExsltNodeSet(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (arg.IsNode)
+        {
+            var node = arg.NodeValue;
+            if (node.NodeKind == XdmNodeKind.Document)
+            {
+                var children = new List<XdmValue>();
+                foreach (var child in node.Axis(XdmAxis.Child))
+                {
+                    if (child.IsNode)
+                        children.Add(child);
+                }
+                if (children.Count == 0)
+                    return XdmValue.FromSequence(XdmSequence.Empty);
+                return XdmValue.FromSequence(MaterializedSequence.FromList(children));
+            }
+            return arg;
+        }
+        if (arg.IsSequence)
+            return arg;
+        return XdmValue.FromSequence(XdmSequence.Empty);
     }
 
     private static (string nsUri, string localName) ParseFunctionAvailableName(EvaluationContext ctx, string name)
@@ -4099,18 +4147,18 @@ public static class FunctionLibrary
 
     private static readonly HashSet<string> XsltInstructionNames = new(StringComparer.Ordinal)
     {
-        "analyze-string", "apply-imports", "apply-templates", "assert", "attribute",
+        "accept", "accumulator", "accumulator-rule", "analyze-string", "apply-imports", "apply-templates", "assert", "attribute",
         "attribute-set", "break", "call-template", "catch", "character-map", "choose",
         "comment", "context-item", "copy", "copy-of", "decimal-format", "document",
-        "element", "evaluate", "expose", "fallback", "for-each", "for-each-group",
+        "element", "evaluate", "expose", "fallback", "for-each", "for-each-group", "fork",
         "function", "global-context-item", "if", "import", "import-schema", "include",
         "iterate", "key", "map", "map-entry", "matching-substring", "merge",
         "merge-action", "merge-key", "merge-source", "message", "mode", "namespace",
-        "namespace-alias", "next-match", "non-matching-substring", "number", "on-completion",
-        "on-empty", "on-non-empty", "otherwise", "output", "output-character", "package",
+        "namespace-alias", "next-match", "next-iteration", "non-matching-substring", "number", "on-completion",
+        "on-empty", "on-non-empty", "otherwise", "output", "output-character", "override", "package",
         "param", "perform-sort", "preserve-space", "processing-instruction", "result-document",
         "sequence", "sort", "source-document", "strip-space", "stylesheet", "template",
-        "text", "transform", "try", "value-of", "variable", "when", "where-populated",
+        "text", "transform", "try", "use-package", "value-of", "variable", "when", "where-populated",
         "with-param"
     };
 
@@ -10372,6 +10420,7 @@ file static class Namespaces
     public const string Math = "http://www.w3.org/2005/xpath-functions/math";
     public const string Map = "http://www.w3.org/2005/xpath-functions/map";
     public const string Array = "http://www.w3.org/2005/xpath-functions/array";
+    public const string ExsltCommon = "http://exslt.org/common";
     public const string Xs = "http://www.w3.org/2001/XMLSchema";
     public const string Xsl = "http://www.w3.org/1999/XSL/Transform";
 }

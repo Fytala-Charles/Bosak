@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Trailing dot in number is DecimalLiteral (fixes select-3501/3502)                        |
+//                      | Charles Korthout | 0.3   | 26-06-2026     | Lex Q{uri}* URI-qualified wildcards                                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
@@ -263,6 +264,13 @@ public ref struct XPathLexer
                 _position++;
             if (_position < _source.Length)
                 _position++; // consume '}'
+
+            // URI-qualified wildcard: Q{uri}*
+            if (_position < _source.Length && _source[_position] == '*')
+            {
+                _position++; // consume '*'
+                return new Token(TokenKind.Name, start, _position - start);
+            }
 
             // Read local name or prefix:local
             if (_position < _source.Length && IsNameStartChar(_source[_position]))

@@ -55,6 +55,7 @@
 //                      | Charles Korthout | 2.21  | 26-06-2026     | Added assert to known XSLT element set                                                  |
 //                      | Charles Korthout | 2.22  | 06-07-2026     | Merge multiple xsl:output declarations instead of using only the first                 |
 //                      | Charles Korthout | 2.23  | 08-07-2026     | Forward-compatible handling for unknown elements, attributes, and use-when             |
+//                      | Charles Korthout | 2.24  | 26-06-2026     | TransitiveImports now includes modules included by imported modules (apply-imports)   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2209,15 +2210,26 @@ public sealed class Stylesheet
     {
         var set = new HashSet<Stylesheet>();
         foreach (var imported in _imports)
-        {
-            set.Add(imported);
-            set.UnionWith(imported.TransitiveImports);
-        }
+            CollectReachableImportsAndIncludes(imported, set);
         foreach (var included in _includes)
-        {
-            set.UnionWith(included.TransitiveImports);
-        }
+            CollectReachableImportsAndIncludes(included, set);
         return set;
+    }
+
+    /// <summary>
+    /// Recursively collects a module and every module reachable from it through
+    /// <c>xsl:import</c> or <c>xsl:include</c> edges. Included modules are transparent
+    /// for <c>xsl:apply-imports</c>, so rules declared in modules included by an imported
+    /// module must be visible to the importer.
+    /// </summary>
+    private static void CollectReachableImportsAndIncludes(Stylesheet module, HashSet<Stylesheet> set)
+    {
+        if (!set.Add(module))
+            return;
+        foreach (var imported in module._imports)
+            CollectReachableImportsAndIncludes(imported, set);
+        foreach (var included in module._includes)
+            CollectReachableImportsAndIncludes(included, set);
     }
 
     /// <summary>

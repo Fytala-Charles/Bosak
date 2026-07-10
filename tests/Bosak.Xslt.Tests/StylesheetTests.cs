@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 0.18  | 26-06-2026     | Added regression test for atomic values returned by apply-templates/call-template in functions |
 //                      | Charles Korthout | 0.19  | 26-06-2026     | Added regression test for global variable referencing accumulator-after()                |
 //                      | Charles Korthout | 0.20  | 26-06-2026     | Added regression test for HTML output normalization-form                                 |
+//                      | Charles Korthout | 0.21  | 10-07-2026     | Added regression test for apply-imports into included modules of an import               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -311,6 +312,36 @@ public class StylesheetTests
         var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
 
         Assert.Contains("formatted", result);
+    }
+
+    [Fact]
+    public void ApplyImports_Sees_Templates_In_Included_Module_Of_Import()
+    {
+        var resolver = new InMemoryResolver();
+        resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:import href='base.xsl'/>
+            <xsl:include href='overlay.xsl'/>
+            <xsl:template match='/'><out><xsl:apply-templates select='root/item'/></out></xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///base.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:include href='specific.xsl'/>
+            <xsl:template match='*'><fallback/></xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///specific.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='item'><specific/></xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///overlay.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='item'><wrap><xsl:apply-imports/></wrap></xsl:template>
+        </xsl:stylesheet>");
+
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
+        var source = new XDocument(new XElement("root", new XElement("item")));
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<wrap>", result);
+        Assert.Contains("<specific", result);
+        Assert.DoesNotContain("<fallback", result);
     }
 
     [Fact]

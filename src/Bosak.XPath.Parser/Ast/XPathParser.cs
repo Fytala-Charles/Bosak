@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.5   | 13-06-2026     | Resolve xml prefix in node tests to the XML namespace                                    |
 //                      | Charles Korthout | 1.6   | 13-06-2026     | Fixed Unquote to preserve doubled quotes that do not match the enclosing delimiter      |
 //                      | Charles Korthout | 1.7   | 26-06-2026     | Static errors for removed map functions and obsolete map namespace; XPST0003 for :=    |
+//                      | Charles Korthout | 1.8   | 26-06-2026     | Parse Q{uri}* URI-qualified wildcards                                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -791,6 +792,17 @@ public sealed class XPathParser
         {
             var name = GetString(Current);
             var (prefix, local, nsUri) = SplitQName(name);
+
+            // URI-qualified wildcard: Q{uri}* (including empty URI Q{}*).
+            if (name.Length > 3 && name[0] == 'Q' && name[1] == '{' && name[^1] == '*')
+            {
+                int closeBrace = name.IndexOf('}');
+                if (closeBrace >= 2)
+                {
+                    Advance();
+                    return new NodeTest(NameTestKind.NamespaceAny, null, name[2..closeBrace]);
+                }
+            }
 
             // Kind test: node(), text(), etc.
             // Prefixed names are always function calls, never kind tests.

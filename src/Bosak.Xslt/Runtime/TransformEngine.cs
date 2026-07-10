@@ -162,6 +162,7 @@
 //                      | Charles Korthout | 5.91  | 26-06-2026     | Preserve atomic-spacing state when a template with @as returns its typed result        |
 //                      | Charles Korthout | 5.92  | 26-06-2026     | Expand sequence placeholders for apply-templates/call-template inside function bodies  |
 //                      | Charles Korthout | 5.93  | 26-06-2026     | Avoid forcing lazy globals when building accumulator evaluation context                  |
+//                      | Charles Korthout | 5.94  | 09-07-2026     | xsl:source-document resolves fragment identifiers to xml:id elements                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -195,6 +196,7 @@ public sealed class TransformEngine
     /// XSLT 1.0/2.0 static constraints are still enforced.
     /// </summary>
     private const double ProcessorXsltVersion = 3.1;
+    private const string ExsltCommonNamespace = "http://exslt.org/common";
     private readonly XDocument _resultDocument;
     private XContainer _currentContainer;
     private readonly StringBuilder _documentLevelText = new();
@@ -4089,10 +4091,12 @@ public sealed class TransformEngine
         _currentInstruction = instruction;
         var node = contextItem.IsNode ? contextItem.NodeValue : null;
 
-        WithDefaultCollation(instruction, () =>
-        {
-        WithBackwardsCompatible(instruction, () =>
-        {
+        var savedDefaultCollation = _context.DefaultCollation;
+        var savedBackwardsCompatible = _context.BackwardsCompatible;
+        var instructionCollation = GetEffectiveDefaultCollation(instruction);
+        if (!string.IsNullOrEmpty(instructionCollation))
+            _context.DefaultCollation = instructionCollation;
+        _context.BackwardsCompatible = IsEffectiveBackwardsCompatible(instruction);
 
         // Push default-mode for this instruction scope
         var instructionDefaultMode = instruction.Attribute("default-mode")?.Value;
@@ -5087,6 +5091,12 @@ public sealed class TransformEngine
 
             case "document":
                 {
+                    if (instruction.Name.NamespaceName == ExsltCommonNamespace)
+                    {
+                        ExecuteResultDocument(instruction, contextItem, isPrincipal: false);
+                        break;
+                    }
+
                     var docContent = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: true);
                     if (docContent.IsNode && docContent.NodeValue != null)
                     {
@@ -5137,9 +5147,28 @@ public sealed class TransformEngine
                     {
                         var baseUri = GetEffectiveBaseUri(instruction) ?? _context.BaseUri;
                         _context.BaseUri = baseUri;
-                        var docNode = _context.LoadDocument(resolvedHref);
-                        _context.RegisterDocument(resolvedHref, docNode);
-                        var content = EvaluateSequenceConstructor(instruction, XdmValue.FromNode(docNode), wrapInDocumentNode: false);
+
+                        // A fragment identifier identifies the element used as the context item.
+                        string? fragment = null;
+                        var documentHref = resolvedHref;
+                        var hashIndex = resolvedHref.IndexOf('#');
+                        if (hashIndex >= 0)
+                        {
+                            fragment = resolvedHref[(hashIndex + 1)..];
+                            documentHref = resolvedHref[..hashIndex];
+                        }
+
+                        var docNode = _context.LoadDocument(documentHref);
+                        _context.RegisterDocument(documentHref, docNode);
+
+                        IXdmNode contextNode = docNode;
+                        if (!string.IsNullOrEmpty(fragment))
+                        {
+                            contextNode = FindElementByXmlId(docNode, fragment)
+                                ?? throw new InvalidOperationException($"XTDE1160: No element with xml:id '{fragment}' found in {documentHref}");
+                        }
+
+                        var content = EvaluateSequenceConstructor(instruction, XdmValue.FromNode(contextNode), wrapInDocumentNode: false);
                         if (_sequenceAccumulator != null)
                         {
                             foreach (var item in EnumerateItems(content))
@@ -5551,131 +5580,8 @@ public sealed class TransformEngine
                 {
                     var hrefRaw = instruction.Attribute("href")?.Value;
                     var href = EvaluateAvt(hrefRaw ?? string.Empty, instruction);
-                    // xsl:result-document @href is resolved against the base output URI when one
-                    // is known; otherwise fall back to the static base URI of the instruction.
-                    var resolutionBase = _baseOutputUri ?? instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
-                    string resolvedHref;
-                    if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
-                        resolvedHref = href;
-                    else if (!string.IsNullOrEmpty(resolutionBase))
-                        resolvedHref = new Uri(new Uri(resolutionBase), href).AbsoluteUri;
-                    else
-                        resolvedHref = href;
-
                     bool isPrincipal = string.IsNullOrEmpty(href);
-                    var principalContainer = _resultDocumentStack.Count == 0
-                        ? _currentContainer
-                        : _resultDocumentStack.Peek().PrincipalContainer;
-
-                    // Capture the effective output properties for this result document,
-                    // merging any xsl:result-document attributes with the stylesheet-level
-                    // xsl:output properties. Attribute value templates are evaluated for the
-                    // serialization properties that may contain AVTs.
-                    var baseProps = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
-                    var evaluatedInstruction = EvaluateResultDocumentInstruction(instruction);
-                    var resultDocumentProps = new Stylesheet.OutputProperties();
-                    Stylesheet.OutputProperties.Merge(resultDocumentProps, baseProps);
-                    Stylesheet.OutputProperties.Merge(resultDocumentProps, Stylesheet.OutputProperties.FromElement(evaluatedInstruction));
-
-                    if (isPrincipal)
-                    {
-                        _principalResultDocumentProperties = resultDocumentProps;
-                        // Nested principal result document: allowed only when the enclosing
-                        // secondary result document was opened at the top level of the principal
-                        // result tree (XSLT 2.0 §9.4.2). If the principal output had already
-                        // descended into an element, switching back would leave it ill-formed.
-                        if (_resultDocumentStack.Count > 0)
-                        {
-                            var outerFrame = _resultDocumentStack.Peek();
-                            if (!ReferenceEquals(outerFrame.PrincipalContainer, _resultDocument))
-                                throw new InvalidOperationException("XTDE1490: A nested result document cannot be created while the principal result tree is inside an element.");
-                        }
-
-                        if (_principalOutputClosed || _resultDocumentStack.Any(f => f.TargetUri == string.Empty))
-                            throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
-
-                        var savedContainer = _currentContainer;
-                        var savedOutputUri = _context.CurrentOutputUri;
-                        var frame = new ResultDocumentFrame(string.Empty, null, savedContainer, principalContainer);
-                        _resultDocumentStack.Push(frame);
-                        _currentContainer = principalContainer;
-                        _context.CurrentOutputUri = _baseOutputUri ?? string.Empty;
-                        try
-                        {
-                            foreach (var childNode in instruction.Nodes())
-                            {
-                                switch (childNode)
-                                {
-                                    case XText text:
-                                        ProcessSequenceText(text, instruction);
-                                        break;
-                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                        ExecuteXsltInstruction(elem, contextItem);
-                                        break;
-                                    case XElement elem:
-                                        CopyLiteralElement(elem);
-                                        break;
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            _context.CurrentOutputUri = savedOutputUri;
-                            _currentContainer = savedContainer;
-                            _resultDocumentStack.Pop();
-                        }
-
-                        // A top-level principal result document closes the principal output URI.
-                        if (_resultDocumentStack.Count == 0)
-                        {
-                            _principalOutputClosed = true;
-                            if (_principalResultDocumentProperties != null && principalContainer is XDocument principalDoc)
-                                principalDoc.AddAnnotation(_principalResultDocumentProperties);
-                        }
-                    }
-                    else
-                    {
-                        if (_resultDocumentUris.Contains(resolvedHref))
-                            throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
-
-                        var savedContainer = _currentContainer;
-                        var savedLastAtomic = _lastAddedWasAtomic;
-                        var savedOutputUri = _context.CurrentOutputUri;
-                        var temp = new XElement("__result-document__");
-                        _currentContainer = temp;
-                        _lastAddedWasAtomic = false;
-                        _context.CurrentOutputUri = resolvedHref;
-                        var frame = new ResultDocumentFrame(resolvedHref, temp, savedContainer, principalContainer);
-                        _resultDocumentStack.Push(frame);
-                        try
-                        {
-                            foreach (var childNode in instruction.Nodes())
-                            {
-                                switch (childNode)
-                                {
-                                    case XText text:
-                                        ProcessSequenceText(text, instruction);
-                                        break;
-                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                        ExecuteXsltInstruction(elem, contextItem);
-                                        break;
-                                    case XElement elem:
-                                        CopyLiteralElement(elem);
-                                        break;
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            _context.CurrentOutputUri = savedOutputUri;
-                            _currentContainer = savedContainer;
-                            _lastAddedWasAtomic = savedLastAtomic;
-                            _resultDocumentStack.Pop();
-                        }
-
-                        WriteResultDocument(resolvedHref, temp, resultDocumentProps);
-                        _resultDocumentUris.Add(resolvedHref);
-                    }
+                    ExecuteResultDocument(instruction, contextItem, isPrincipal);
                     break;
                 }
 
@@ -5712,9 +5618,9 @@ public sealed class TransformEngine
             {
                 _defaultModeStack.Pop();
             }
+            _context.DefaultCollation = savedDefaultCollation;
+            _context.BackwardsCompatible = savedBackwardsCompatible;
         }
-        });
-        });
     }
 
     /// <summary>
@@ -8922,6 +8828,11 @@ public sealed class TransformEngine
             // Otherwise default to last-wins / recovery.
         }
 
+        if (item.IsNode && item.NodeValue?.LocalName == "footnote")
+        {
+            try { System.IO.File.AppendAllText("D:/Development/Bosak/tmpdebug/docbookcheck/docbookcheck/footnote.log", $"FindBest mode={mode} node={item.NodeValue.LocalName} ns={item.NodeValue.NamespaceUri} rule={best?.Element.Attribute("match")?.Value} prio={best?.Priority} imp={best?.ImportPrecedence}\n"); } catch { }
+        }
+
         return best;
     }
 
@@ -9127,6 +9038,27 @@ public sealed class TransformEngine
                 sorted.Add(x.item);
         }
         return sorted;
+    }
+
+    /// <summary>
+    /// Finds the element with the specified <c>xml:id</c> value within the given node.
+    /// </summary>
+    private static IXdmNode? FindElementByXmlId(IXdmNode node, string id)
+    {
+        foreach (var item in node.Axis(XdmAxis.DescendantOrSelf))
+        {
+            if (!item.IsNode || item.NodeValue!.NodeKind != XdmNodeKind.Element)
+                continue;
+            foreach (var attrItem in item.NodeValue.Axis(XdmAxis.Attribute))
+            {
+                if (!attrItem.IsNode)
+                    continue;
+                var attr = attrItem.NodeValue!;
+                if (attr.LocalName == "id" && attr.NamespaceUri == "http://www.w3.org/XML/1998/namespace" && attr.StringValue == id)
+                    return item.NodeValue;
+            }
+        }
+        return null;
     }
 
     /// <summary>
@@ -13026,6 +12958,142 @@ public sealed class TransformEngine
         }
 
         return evaluated;
+    }
+
+    /// <summary>
+    /// Executes an <c>xsl:result-document</c> or EXSLT <c>exsl:document</c> instruction.
+    /// The content is evaluated into a separate result tree and either becomes the
+    /// principal output (when <paramref name="isPrincipal"/> is true) or is serialized
+    /// to a secondary URI.
+    /// </summary>
+    private void ExecuteResultDocument(XElement instruction, XdmValue contextItem, bool isPrincipal)
+    {
+        var hrefRaw = instruction.Attribute("href")?.Value;
+        var href = EvaluateAvt(hrefRaw ?? string.Empty, instruction);
+        // @href is resolved against the base output URI when one is known; otherwise
+        // fall back to the static base URI of the instruction.
+        var resolutionBase = _baseOutputUri ?? instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
+        string resolvedHref;
+        if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
+            resolvedHref = href;
+        else if (!string.IsNullOrEmpty(resolutionBase))
+            resolvedHref = new Uri(new Uri(resolutionBase), href).AbsoluteUri;
+        else
+            resolvedHref = href;
+
+        var principalContainer = _resultDocumentStack.Count == 0
+            ? _currentContainer
+            : _resultDocumentStack.Peek().PrincipalContainer;
+
+        // Capture the effective output properties for this result document,
+        // merging any instruction attributes with the stylesheet-level xsl:output
+        // properties. Attribute value templates are evaluated for the serialization
+        // properties that may contain AVTs.
+        var baseProps = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+        var evaluatedInstruction = EvaluateResultDocumentInstruction(instruction);
+        var resultDocumentProps = new Stylesheet.OutputProperties();
+        Stylesheet.OutputProperties.Merge(resultDocumentProps, baseProps);
+        Stylesheet.OutputProperties.Merge(resultDocumentProps, Stylesheet.OutputProperties.FromElement(evaluatedInstruction));
+
+        if (isPrincipal)
+        {
+            _principalResultDocumentProperties = resultDocumentProps;
+            // Nested principal result document: allowed only when the enclosing
+            // secondary result document was opened at the top level of the principal
+            // result tree (XSLT 2.0 §9.4.2). If the principal output had already
+            // descended into an element, switching back would leave it ill-formed.
+            if (_resultDocumentStack.Count > 0)
+            {
+                var outerFrame = _resultDocumentStack.Peek();
+                if (!ReferenceEquals(outerFrame.PrincipalContainer, _resultDocument))
+                    throw new InvalidOperationException("XTDE1490: A nested result document cannot be created while the principal result tree is inside an element.");
+            }
+
+            if (_principalOutputClosed || _resultDocumentStack.Any(f => f.TargetUri == string.Empty))
+                throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
+
+            var savedContainer = _currentContainer;
+            var savedOutputUri = _context.CurrentOutputUri;
+            var frame = new ResultDocumentFrame(string.Empty, null, savedContainer, principalContainer);
+            _resultDocumentStack.Push(frame);
+            _currentContainer = principalContainer;
+            _context.CurrentOutputUri = _baseOutputUri ?? string.Empty;
+            try
+            {
+                foreach (var childNode in instruction.Nodes())
+                {
+                    switch (childNode)
+                    {
+                        case XText text:
+                            ProcessSequenceText(text, instruction);
+                            break;
+                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                            ExecuteXsltInstruction(elem, contextItem);
+                            break;
+                        case XElement elem:
+                            CopyLiteralElement(elem);
+                            break;
+                    }
+                }
+            }
+            finally
+            {
+                _context.CurrentOutputUri = savedOutputUri;
+                _currentContainer = savedContainer;
+                _resultDocumentStack.Pop();
+            }
+
+            // A top-level principal result document closes the principal output URI.
+            if (_resultDocumentStack.Count == 0)
+            {
+                _principalOutputClosed = true;
+                if (_principalResultDocumentProperties != null && principalContainer is XDocument principalDoc)
+                    principalDoc.AddAnnotation(_principalResultDocumentProperties);
+            }
+        }
+        else
+        {
+            if (_resultDocumentUris.Contains(resolvedHref))
+                throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
+
+            var savedContainer = _currentContainer;
+            var savedLastAtomic = _lastAddedWasAtomic;
+            var savedOutputUri = _context.CurrentOutputUri;
+            var temp = new XElement("__result-document__");
+            _currentContainer = temp;
+            _lastAddedWasAtomic = false;
+            _context.CurrentOutputUri = resolvedHref;
+            var frame = new ResultDocumentFrame(resolvedHref, temp, savedContainer, principalContainer);
+            _resultDocumentStack.Push(frame);
+            try
+            {
+                foreach (var childNode in instruction.Nodes())
+                {
+                    switch (childNode)
+                    {
+                        case XText text:
+                            ProcessSequenceText(text, instruction);
+                            break;
+                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                            ExecuteXsltInstruction(elem, contextItem);
+                            break;
+                        case XElement elem:
+                            CopyLiteralElement(elem);
+                            break;
+                    }
+                }
+            }
+            finally
+            {
+                _context.CurrentOutputUri = savedOutputUri;
+                _currentContainer = savedContainer;
+                _lastAddedWasAtomic = savedLastAtomic;
+                _resultDocumentStack.Pop();
+            }
+
+            WriteResultDocument(resolvedHref, temp, resultDocumentProps);
+            _resultDocumentUris.Add(resolvedHref);
+        }
     }
 
     // ------------------------------------------------------------------

@@ -22,6 +22,7 @@
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
+using System.Threading;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
@@ -59,10 +60,20 @@ public sealed class XsltExecutable
     /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
     /// <param name="rawResult">When true and an initial template is used, returns the raw template result instead of wrapping it in a result document.</param>
     /// <returns>The result of the transformation as an XDM value.</returns>
+    /// <summary>
+    /// Default stack size (bytes) allocated for the transformation thread.  A larger
+    /// stack is required for stylesheets that rely on deep xsl:call-template recursion
+    /// (for example the DocBook XSLT 1.0 stylesheets).
+    /// </summary>
+    private const int DefaultTransformStackSize = 4 * 1024 * 1024;
+
     public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
     {
-        var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
-        return engine.Transform(source, initialTemplate, initialMode, rawResult, baseOutputUri);
+        return RunWithStack(() =>
+        {
+            var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
+            return engine.Transform(source, initialTemplate, initialMode, rawResult, baseOutputUri);
+        }, DefaultTransformStackSize);
     }
 
     /// <summary>
@@ -96,8 +107,11 @@ public sealed class XsltExecutable
     /// <returns>The value returned by the function.</returns>
     public XdmValue TransformFunction(string name, XdmValue[] args, EvaluationContext? context = null)
     {
-        var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
-        return engine.TransformFunction(name, args);
+        return RunWithStack(() =>
+        {
+            var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
+            return engine.TransformFunction(name, args);
+        }, DefaultTransformStackSize);
     }
 
     /// <summary>
@@ -111,5 +125,32 @@ public sealed class XsltExecutable
     {
         var result = TransformFunction(name, args, context);
         return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);
+    }
+
+    /// <summary>
+    /// Runs the supplied transformation action on a dedicated thread with an enlarged
+    /// stack.  This gives deep call-template recursion (such as the DocBook lookup.key
+    /// template) enough stack space without requiring tail-call optimisations.
+    /// </summary>
+    private static T RunWithStack<T>(Func<T> action, int stackSize)
+    {
+        T? result = default;
+        Exception? exception = null;
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                result = action();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+        }, stackSize);
+        thread.Start();
+        thread.Join();
+        if (exception != null)
+            throw exception;
+        return result!;
     }
 }

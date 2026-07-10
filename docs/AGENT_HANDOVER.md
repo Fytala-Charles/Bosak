@@ -1,5 +1,69 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-10
+**Commit:** `197d3d3`
+**Current focus:** Cleared the final W3C DocBook conformance failure (`docbook-001`). The full W3C XSLT 3.0 conformance suite now passes with 0 failures.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,243
+- **Failed:** 0
+- **Skipped:** 9,357
+- **Pass rate:** 100.0% (+3 passed / −3 failed vs. previous 5,240/3)
+
+## This Session Fixes
+
+1. **`docbook-001` XHTML5 footnote rendering / `xsl:apply-imports` visibility** — `Stylesheet.TransitiveImports` now follows both `xsl:import` and `xsl:include` edges, so `xsl:apply-imports` from an overriding template can see rules declared in modules that are *included* by an imported module. This fixes the DocBook HTML5 stylesheets, where `html5-element-mods.xsl` intercepts `footnote` and calls `apply-imports`; the call now correctly dispatches to the specific `match="footnote"` template in `xhtml/footnote.xsl` instead of falling back to a generic `match="*"` rule.
+   - **Files changed**: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+## Notes
+
+- Unit-test suite: **920 passed / 0 failed / 0 skipped** across 8 projects (1 new regression test added).
+- Full W3C suite: **5,243/0/9,357** (100.0%).
+- Remaining failures: none.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-09
+**Commit:** `197d3d3`
+**Current focus:** Cleared the W3C `catalog-006` and `catalog-007` self-tests. Down to 3 remaining W3C failures.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,240
+- **Failed:** 3
+- **Skipped:** 9,357
+- **Pass rate:** 99.9% (+2 passed / −2 failed vs. previous 5,238/5)
+
+## This Session Fixes
+
+1. **`catalog-007` XPath `||` atomization** — The VM `StringConcat` opcode now atomizes sequence-valued operands before string conversion, so `xsl:value-of select="$local || '/@' || @name"` produces real element/attribute pair strings instead of `(sequence)/@(sequence)`.
+   - **Files changed**: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+
+2. **`Q{uri}*` URI-qualified wildcard node tests** — The XPath parser/lexer now recognizes `Q{uri}*` (including the empty-URI `Q{}*` form used by the W3C catalog stylesheet). The IR lowerer emits a `NamespaceTest` using the URI directly.
+   - **Files changed**: `src/Bosak.XPath.Parser/Lexer/XPathLexer.cs`, `src/Bosak.XPath.Parser/Ast/XPathParser.cs`, `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`, `tests/Bosak.XPath.Parser.Tests/ParserTests.cs`.
+
+3. **`catalog-006` missing XSLT instruction names** — `element-available()` now reports `true` for `xsl:accumulator`, `xsl:accumulator-rule`, `xsl:accept`, `xsl:fork`, `xsl:next-iteration`, `xsl:override`, and `xsl:use-package`.
+   - **Files changed**: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+
+## Notes
+
+- Unit-test suite: **919 passed / 0 failed / 0 skipped** across 8 projects (2 new parser tests added).
+- Full W3C suite: **5,240/3/9,357** (99.9%).
+- Remaining failures: `docbook-001/002/004`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-06-26
 **Commit:** `e72addd`
 **Current focus:** Fixed `normalize-unicode-014` by applying `xsl:output/@normalization-form` to HTML result-tree serialization. Down to 5 remaining W3C failures.

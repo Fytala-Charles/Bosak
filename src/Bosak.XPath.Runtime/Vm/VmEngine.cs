@@ -48,6 +48,8 @@
 //                      | Charles Korthout | 2.15  | 25-06-2026     | Value comparison casts xs:untypedAtomic operands to xs:string before comparing (fixes type-0165)            |
 //                      | Charles Korthout | 2.16  | 25-06-2026     | LoadContextItem raises XPDY0002 when the XPath context item is absent                      |
 //                      | Charles Korthout | 2.17  | 25-06-2026     | InstanceOf applies default element namespace and reports unknown types (XPST0051)        |
+//                      | Charles Korthout | 2.18  | 26-06-2026     | Subscript/First/Last return empty sequence instead of Undefined for out-of-range/missing items |
+//                      | Charles Korthout | 2.29  | 09-07-2026     | StringConcat atomizes operands instead of using XdmValue.ToString()                    |
 //                      | Charles Korthout | 2.18  | 26-06-2026     | InstanceOf recognises parameterised sequence type names and avoids spurious XPST0051   |
 //                      | Charles Korthout | 2.19  | 26-06-2026     | CompareGeneral returns false (not empty sequence) for empty general-comparison operands |
 //                      | Charles Korthout | 2.20  | 28-06-2026     | NormalizeSequence uses HashSet for duplicate removal; restores catalog self-test speed   |
@@ -843,20 +845,20 @@ public static class VmEngine
                         var sequence = registers[instr.RegisterB];
                         int index = instr.Operand; // 1-based
 
-                        if (sequence.IsUndefined)
+                        if (sequence.IsUndefined || index < 1)
                         {
-                            registers[instr.RegisterA] = XdmValue.Undefined;
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
                         }
                         else if (!sequence.IsSequence)
                         {
-                            registers[instr.RegisterA] = index == 1 ? sequence : XdmValue.Undefined;
+                            registers[instr.RegisterA] = index == 1 ? sequence : XdmValue.FromSequence(XdmSequence.Empty);
                         }
                         else
                         {
                             var seq = sequence.SequenceValue;
                             if (seq is null)
                             {
-                                registers[instr.RegisterA] = XdmValue.Undefined;
+                                registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
                             }
                             else
                             {
@@ -871,7 +873,7 @@ public static class VmEngine
                                     }
                                     result = en.Current;
                                 }
-                                registers[instr.RegisterA] = result ?? XdmValue.Undefined;
+                                registers[instr.RegisterA] = result ?? XdmValue.FromSequence(XdmSequence.Empty);
                             }
                         }
                         ip++;
@@ -883,7 +885,7 @@ public static class VmEngine
                         var sequence = registers[instr.RegisterB];
                         if (sequence.IsUndefined)
                         {
-                            registers[instr.RegisterA] = XdmValue.Undefined;
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
                         }
                         else if (!sequence.IsSequence)
                         {
@@ -893,11 +895,11 @@ public static class VmEngine
                         {
                             var seq = sequence.SequenceValue;
                             if (seq is null)
-                                registers[instr.RegisterA] = XdmValue.Undefined;
+                                registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
                             else
                             {
                                 var en = XdmSequence.FromSource(seq).GetEnumerator();
-                                registers[instr.RegisterA] = en.MoveNext() ? en.Current : XdmValue.Undefined;
+                                registers[instr.RegisterA] = en.MoveNext() ? en.Current : XdmValue.FromSequence(XdmSequence.Empty);
                             }
                         }
                         ip++;
@@ -909,7 +911,7 @@ public static class VmEngine
                         var sequence = registers[instr.RegisterB];
                         if (sequence.IsUndefined)
                         {
-                            registers[instr.RegisterA] = XdmValue.Undefined;
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
                         }
                         else if (!sequence.IsSequence)
                         {
@@ -919,14 +921,14 @@ public static class VmEngine
                         {
                             var seq = sequence.SequenceValue;
                             if (seq is null)
-                                registers[instr.RegisterA] = XdmValue.Undefined;
+                                registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
                             else
                             {
                                 var en = XdmSequence.FromSource(seq).GetEnumerator();
-                                XdmValue last = XdmValue.Undefined;
+                                XdmValue? last = null;
                                 while (en.MoveNext())
                                     last = en.Current;
-                                registers[instr.RegisterA] = last;
+                                registers[instr.RegisterA] = last ?? XdmValue.FromSequence(XdmSequence.Empty);
                             }
                         }
                         ip++;
@@ -1094,7 +1096,7 @@ public static class VmEngine
                 // ------------------------------------------------------------------
                 case IrOpCode.StringConcat:
                     registers[instr.RegisterA] = XdmValue.FromString(
-                        registers[instr.RegisterB].ToString() + registers[instr.RegisterC].ToString());
+                        AtomizedStringValue(registers[instr.RegisterB]) + AtomizedStringValue(registers[instr.RegisterC]));
                     ip++;
                     break;
 
@@ -1374,7 +1376,7 @@ public static class VmEngine
                                 first = item;
                                 break;
                             }
-                            registers[instr.RegisterA] = first ?? XdmValue.Undefined;
+                            registers[instr.RegisterA] = first ?? XdmValue.FromSequence(XdmSequence.Empty);
                         }
                         ip++;
                         break;
@@ -2081,6 +2083,21 @@ public static class VmEngine
         }
 
         return value;
+    }
+
+    private static string AtomizedStringValue(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            throw new InvalidOperationException("FOTY0013: Argument to string concatenation is a function, map, or array");
+
+        var atomized = Atomize(value);
+        if (atomized.IsUndefined)
+            return string.Empty;
+
+        return atomized.ToString();
     }
 
     /// <summary>

@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 1.4   | 01-06-2026     | Expanded register encoding from byte to ushort; removed 255-register limit             |
 //                      | Charles Korthout | 1.5   | 25-06-2026     | Only emit LoadContextItem for path expressions that actually reference the focus       |
 //                      | Charles Korthout | 1.6   | 25-06-2026     | Named node tests on element-principal axes filter to element kind first                |
+//                      | Charles Korthout | 1.7   | 26-06-2026     | Lower Q{uri}* URI-qualified wildcards to NamespaceTest                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -773,7 +774,7 @@ public sealed class IrLowerer
                 FreeRegister(axisReg);
                 axisReg = afterTestReg;
 
-                int nsPoolIdx = AddToLiteralPool(node.NodeTest.Name ?? ""); // prefix
+                int nsPoolIdx = AddToLiteralPool(node.NodeTest.NamespaceUri ?? node.NodeTest.Name ?? ""); // URI or prefix
                 afterTestReg = AllocRegister();
                 Emit(IrOpCode.NamespaceTest, (ushort)afterTestReg, (ushort)axisReg, operand: nsPoolIdx);
                 FreeRegister(axisReg);

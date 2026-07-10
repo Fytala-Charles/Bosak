@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 26-06-2026     | Added URI-qualified wildcard node-test parsing tests                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -514,5 +515,23 @@ public class ParserTests
     {
         var node = AssertParse<PostfixPredicateNode>("$x[if (@y) then @y else 'default']");
         Assert.IsType<VariableReferenceNode>(node.Expression);
+    }
+
+    [Fact]
+    public void UriQualifiedNameWildcard_EmptyUri()
+    {
+        var step = AssertParse<StepNode>("@Q{}*");
+        Assert.Equal(XdmAxis.Attribute, step.Axis);
+        Assert.Equal(NameTestKind.NamespaceAny, step.NodeTest.Kind);
+        Assert.Equal("", step.NodeTest.NamespaceUri);
+    }
+
+    [Fact]
+    public void UriQualifiedNameWildcard_NonEmptyUri()
+    {
+        var step = AssertParse<StepNode>("Q{http://example.com}*");
+        Assert.Equal(XdmAxis.Child, step.Axis);
+        Assert.Equal(NameTestKind.NamespaceAny, step.NodeTest.Kind);
+        Assert.Equal("http://example.com", step.NodeTest.NamespaceUri);
     }
 }
