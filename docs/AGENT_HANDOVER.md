@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-10
-**Commit:** `197d3d3`
+**Commit:** `c66c77c`
 **Current focus:** Cleared the final W3C DocBook conformance failure (`docbook-001`). The full W3C XSLT 3.0 conformance suite now passes with 0 failures.
 
 ---

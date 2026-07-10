@@ -8,7 +8,7 @@
 
 ## Commit
 
-`197d3d3` — final W3C XSLT 3.0 conformance failures cleared; full suite at 100% pass rate.
+`c66c77c` — final W3C XSLT 3.0 conformance failures cleared; full suite at 100% pass rate.
 
 ## What Was Built
 
