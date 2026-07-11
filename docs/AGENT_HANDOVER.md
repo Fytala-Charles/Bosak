@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `819c16c`
+**Commit:** `8184ea3`
 **Current focus:** Phase 1 XSLT serialization core — fixed `output-0131` (XHTML fragment with multiple top-level elements).
 
 ---
