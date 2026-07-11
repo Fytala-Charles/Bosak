@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `8c920d5`
+**Commit:** `cc29815`
 **Current focus:** Phase 2 XSLT serialization — `xsl:character-map` support and remaining character-map edge cases.
 
 ---
