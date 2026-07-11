@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `(uncommitted — work in progress)`
+**Commit:** `208afca`
 **Current focus:** Phase 1 XSLT serialization core — XHTML5 DOCTYPE formatting, `html-version` validation, case-folding, namespace prefix stripping, and HTML void-element handling.
 
 ---
