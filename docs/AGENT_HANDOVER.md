@@ -1,6 +1,46 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
+**Commit:** `99137f9`
+**Current focus:** Phase 3 XSLT serialization — encoding-aware output for unrepresentable characters and CDATA section splitting.
+
+---
+
+## This Session Fixes
+
+1. **Encoding-aware serialization**
+   - `ResultTreeSerializer` now uses an `EncoderExceptionFallback` encoding to detect characters that cannot be represented in the output encoding.
+   - Unrepresentable characters are emitted as decimal numeric character references in XML, HTML, and XHTML text and attribute values.
+   - CDATA sections are split around unrepresentable characters: representable runs stay inside CDATA, and unrepresentable characters are emitted as numeric references.
+
+2. **XHTML cdata-section-elements**
+   - `SerializeAsXhtml` now pre-wraps `cdata-section-elements` so the raw XHTML writer can emit split CDATA sections.
+   - `WriteXhtmlNode` and `WriteXhtmlElement` handle `XCData` nodes produced by the wrapper.
+
+3. **Character-map / CDATA interaction**
+   - Character maps are no longer applied to unrepresentable characters, preserving the rule that maps do not affect CDATA section content.
+
+4. **Conformance harness composite assertions**
+   - `CompareResult` now recursively evaluates nested `<all-of>` / `<any-of>` assertions and recognizes an assertion element that is itself an `<all-of>` or `<any-of>`.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- W3C `output` conformance set: **146 passed / 57 failed / 29 skipped** (was 142/61/29).
+- All output-named test sets combined: **162 passed / 59 failed / 60 skipped** (was 158/63/60).
+
+## Files Changed
+
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
+- `tests/Bosak.Xslt.Conformance/Program.cs`
+- `docs/ARCHITECTURE.md`
+- `docs/INTEGRATION.md`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-11
 **Commit:** `cc29815`
 **Current focus:** Phase 2 XSLT serialization — `xsl:character-map` support and remaining character-map edge cases.
 
