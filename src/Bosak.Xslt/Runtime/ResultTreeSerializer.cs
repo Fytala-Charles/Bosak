@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 1.4   | 11-07-2026     | Added xsl:character-map application to XML, HTML, XHTML, and text output.              |
 //                      | Charles Korthout | 1.5   | 11-07-2026     | Encoding-aware output: escape unrepresentable characters and split CDATA sections.     |
 //                      | Charles Korthout | 1.6   | 11-07-2026     | XHTML 1.0 empty elements, DOCTYPE quote/namespace rules, alien-namespace meta guard.   |
+//                      | Charles Korthout | 1.7   | 11-07-2026     | Added method="json" serialization, HTML namespace declaration output, and JSON char maps.|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -36,6 +37,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Standard.Json;
 
 namespace Bosak.Xslt.Runtime;
 
@@ -77,6 +79,11 @@ public static class ResultTreeSerializer
         if (props.Method == "xhtml")
         {
             return SerializeAsXhtml(value, props);
+        }
+
+        if (props.Method == "json")
+        {
+            return SerializeAsJson(value, props);
         }
 
         // method="xml" (default)
@@ -135,7 +142,7 @@ public static class ResultTreeSerializer
             // xsl:output declaration at all, the implementation default (omit) is preserved.
             props.OmitXmlDeclaration = method switch
             {
-                "html" or "text" => true,
+                "html" or "text" or "json" => true,
                 "xhtml" => props.HtmlVersion == "5.0",
                 _ => false
             };
@@ -150,6 +157,7 @@ public static class ResultTreeSerializer
                 "html" => "text/html",
                 "xhtml" => "text/html",
                 "text" => "text/plain",
+                "json" => "application/json",
                 _ => "text/xml"
             };
         }
@@ -159,6 +167,13 @@ public static class ResultTreeSerializer
             // Default is yes for UTF-16 and UTF-32, no for UTF-8 and others.
             var enc = props.Encoding.Trim().ToUpperInvariant();
             props.ByteOrderMark = enc is "UTF-16" or "UTF-16LE" or "UTF-16BE" or "UTF-32" or "UTF-32LE" or "UTF-32BE";
+        }
+
+        if (method == "json" && !props.EscapeSolidusSpecified)
+        {
+            // XSLT/XQuery Serialization 3.1 defaults to escaping solidus for JSON.
+            props.EscapeSolidus = true;
+            props.EscapeSolidusSpecified = true;
         }
     }
 
@@ -185,7 +200,10 @@ public static class ResultTreeSerializer
                props.MediaTypeSpecified ||
                props.ByteOrderMarkSpecified ||
                props.UseCharacterMapsSpecified ||
-               props.IndentSpecified;
+               props.IndentSpecified ||
+               props.JsonNodeOutputMethodSpecified ||
+               props.AllowDuplicateNamesSpecified ||
+               props.EscapeSolidusSpecified;
     }
 
     /// <summary>
@@ -348,6 +366,40 @@ public static class ResultTreeSerializer
         var sb = new System.Text.StringBuilder();
         CollectText(value, sb, props);
         return sb.ToString();
+    }
+
+    private static string SerializeAsJson(XdmValue value, Stylesheet.OutputProperties props)
+    {
+        using var writer = new StringWriter();
+        WriteByteOrderMark(writer, props);
+
+        var options = new XdmJsonOptions
+        {
+            Indent = props.Indent,
+            AllowDuplicateNames = props.AllowDuplicateNames,
+            EscapeSolidus = props.EscapeSolidus,
+            NodeSerializer = node => SerializeNodeForJson(node, props)
+        };
+        var json = XdmJsonSerializer.Serialize(value, options);
+        writer.Write(MapCharacters(json, props));
+        writer.Flush();
+        return writer.ToString();
+    }
+
+    private static string SerializeNodeForJson(XdmValue nodeValue, Stylesheet.OutputProperties props)
+    {
+        var nodeMethod = props.JsonNodeOutputMethod.Trim().ToLowerInvariant();
+        if (string.IsNullOrEmpty(nodeMethod) || nodeMethod == "json")
+            nodeMethod = "xml";
+
+        var nodeProps = props.Clone();
+        nodeProps.Method = nodeMethod;
+        nodeProps.MethodSpecified = true;
+        nodeProps.OmitXmlDeclaration = true;
+        nodeProps.OmitXmlDeclarationSpecified = true;
+        nodeProps.JsonNodeOutputMethod = "xml";
+        ApplyMethodDefaults(nodeProps);
+        return Serialize(nodeValue, nodeProps);
     }
 
     private static string SerializeAsHtml(XdmValue value, Stylesheet.OutputProperties props)
@@ -1280,8 +1332,10 @@ public static class ResultTreeSerializer
     // HTML serialization
     // ---------------------------------------------------------------------------------------------
 
-    private static void WriteHtmlNode(TextWriter writer, IXdmNode node, Stylesheet.OutputProperties props, int depth)
+    private static void WriteHtmlNode(TextWriter writer, IXdmNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string>? inScopeBindings = null)
     {
+        inScopeBindings ??= new Dictionary<string, string> { ["xml"] = "http://www.w3.org/XML/1998/namespace" };
+
         if (node is not XDocumentNode xdn)
         {
             writer.Write(node.ToXmlString());
@@ -1293,14 +1347,14 @@ public static class ResultTreeSerializer
         {
             case XDocument doc:
                 foreach (var child in doc.Nodes())
-                    WriteHtmlNode(writer, new XDocumentNode(child), props, depth);
+                    WriteHtmlNode(writer, new XDocumentNode(child), props, depth, inScopeBindings);
                 break;
             case XElement elem when elem.Name.LocalName == "__xdm_doc__" && elem.Name.NamespaceName == "":
                 foreach (var child in elem.Nodes())
-                    WriteHtmlNode(writer, new XDocumentNode(child), props, depth);
+                    WriteHtmlNode(writer, new XDocumentNode(child), props, depth, inScopeBindings);
                 break;
             case XElement elem:
-                WriteHtmlElement(writer, elem, props, depth);
+                WriteHtmlElement(writer, elem, props, depth, inScopeBindings);
                 break;
             case XText text:
                 WriteHtmlEscaped(writer, text.Value, props);
@@ -1333,16 +1387,18 @@ public static class ResultTreeSerializer
         }
     }
 
-    private static void WriteHtmlNode(TextWriter writer, XNode node, Stylesheet.OutputProperties props, int depth)
+    private static void WriteHtmlNode(TextWriter writer, XNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string>? inScopeBindings = null)
     {
+        inScopeBindings ??= new Dictionary<string, string> { ["xml"] = "http://www.w3.org/XML/1998/namespace" };
+
         switch (node)
         {
             case XElement elem when elem.Name.LocalName == "__xdm_doc__" && elem.Name.NamespaceName == "":
                 foreach (var child in elem.Nodes())
-                    WriteHtmlNode(writer, child, props, depth);
+                    WriteHtmlNode(writer, child, props, depth, inScopeBindings);
                 break;
             case XElement elem:
-                WriteHtmlElement(writer, elem, props, depth);
+                WriteHtmlElement(writer, elem, props, depth, inScopeBindings);
                 break;
             case XText text:
                 WriteHtmlEscaped(writer, text.Value, props);
@@ -1363,7 +1419,7 @@ public static class ResultTreeSerializer
         }
     }
 
-    private static void WriteHtmlElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth)
+    private static void WriteHtmlElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
     {
         var localName = element.Name.LocalName;
         var isEmpty = !element.Nodes().Any();
@@ -1371,6 +1427,15 @@ public static class ResultTreeSerializer
 
         writer.Write('<');
         writer.Write(localName);
+
+        var elemNs = element.Name.NamespaceName;
+        if (!string.IsNullOrEmpty(elemNs) && inScopeBindings.GetValueOrDefault("") != elemNs)
+        {
+            writer.Write(" xmlns=\"");
+            writer.Write(elemNs);
+            writer.Write('"');
+            inScopeBindings[""] = elemNs;
+        }
 
         foreach (var attr in element.Attributes().Where(a => !a.IsNamespaceDeclaration))
         {
@@ -1402,6 +1467,7 @@ public static class ResultTreeSerializer
 
         writer.Write('>');
 
+        var childBindings = new Dictionary<string, string>(inScopeBindings);
         if (isRawContent)
         {
             foreach (var child in element.Nodes())
@@ -1409,9 +1475,9 @@ public static class ResultTreeSerializer
                 if (child is XText text)
                     writer.Write(MapCharacters(text.Value, props));
                 else if (child is XElement childElem)
-                    WriteHtmlElement(writer, childElem, props, depth + 1);
+                    WriteHtmlElement(writer, childElem, props, depth + 1, childBindings);
                 else
-                    WriteHtmlNode(writer, child, props, depth + 1);
+                    WriteHtmlNode(writer, child, props, depth + 1, childBindings);
             }
         }
         else
@@ -1424,7 +1490,7 @@ public static class ResultTreeSerializer
                     writer.WriteLine();
                     writer.Write(new string(' ', (depth + 1) * 2));
                 }
-                WriteHtmlNode(writer, child, props, depth + 1);
+                WriteHtmlNode(writer, child, props, depth + 1, childBindings);
             }
             if (props.Indent && hasElementChildren)
             {

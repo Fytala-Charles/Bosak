@@ -59,6 +59,7 @@
 //                      | Charles Korthout | 2.25  | 11-07-2026     | Parse xsl:character-map declarations and resolve effective character maps.             |
 //                      | Charles Korthout | 2.26  | 11-07-2026     | Character-map resolution now uses first-wins across the effective map list.            |
 //                      | Charles Korthout | 2.27  | 11-07-2026     | Named-output import-precedence merge now puts the importing stylesheet last            |
+//                      | Charles Korthout | 2.28  | 11-07-2026     | Load xsl:output parameter-document defaults and merge them with explicit attributes.    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -862,6 +863,19 @@ public sealed class Stylesheet
         foreach (var oe in outputElems)
         {
             var props = OutputProperties.FromElement(oe);
+
+            // A parameter document supplies default values; explicit xsl:output attributes
+            // override values from the parameter document.
+            var paramDocAttr = oe.Attribute("parameter-document")?.Value;
+            if (!string.IsNullOrEmpty(paramDocAttr))
+            {
+                var paramDoc = _resolver.Resolve(paramDocAttr, _baseUri);
+                var paramProps = OutputProperties.FromSerializationParameters(paramDoc);
+                var merged = paramProps.Clone();
+                OutputProperties.Merge(merged, props);
+                props = merged;
+            }
+
             var nameAttr = oe.Attribute("name")?.Value;
             if (!string.IsNullOrEmpty(nameAttr))
             {

@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 06-07-2026     | Use xsl:result-document output properties in TransformToString                          |
 //                      | Charles Korthout | 0.9   | 11-07-2026     | Read xsl:result-document output properties from fragment wrapper elements too.          |
 //                      | Charles Korthout | 1.0   | 11-07-2026     | Resolve named character maps for principal and function output before serialization.    |
+//                      | Charles Korthout | 1.1   | 11-07-2026     | Merge parameter-document character maps with named character-map resolutions.          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -103,11 +104,21 @@ public sealed class XsltExecutable
         }
 
         // Resolve named character maps for the principal output if not already done.
-        if (outputProperties.CharacterMap == null && outputProperties.UseCharacterMaps.Count > 0)
+        if (outputProperties.UseCharacterMaps.Count > 0)
         {
             outputProperties = outputProperties.Clone();
-            outputProperties.CharacterMap = _stylesheet.ResolveCharacterMap(
+            var resolved = _stylesheet.ResolveCharacterMap(
                 outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
+            if (outputProperties.CharacterMap != null)
+            {
+                // Explicit named character maps override parameter-document defaults.
+                foreach (var kvp in outputProperties.CharacterMap)
+                {
+                    if (!resolved.ContainsKey(kvp.Key))
+                        resolved[kvp.Key] = kvp.Value;
+                }
+            }
+            outputProperties.CharacterMap = resolved;
         }
 
         return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
@@ -140,11 +151,20 @@ public sealed class XsltExecutable
     {
         var result = TransformFunction(name, args, context);
         var outputProperties = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
-        if (outputProperties.CharacterMap == null && outputProperties.UseCharacterMaps.Count > 0)
+        if (outputProperties.UseCharacterMaps.Count > 0)
         {
             outputProperties = outputProperties.Clone();
-            outputProperties.CharacterMap = _stylesheet.ResolveCharacterMap(
+            var resolved = _stylesheet.ResolveCharacterMap(
                 outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
+            if (outputProperties.CharacterMap != null)
+            {
+                foreach (var kvp in outputProperties.CharacterMap)
+                {
+                    if (!resolved.ContainsKey(kvp.Key))
+                        resolved[kvp.Key] = kvp.Value;
+                }
+            }
+            outputProperties.CharacterMap = resolved;
         }
         return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
     }

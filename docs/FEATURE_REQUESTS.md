@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-11 (Phase 1 serialization core: XHTML5 DOCTYPE formatting, html-version validation, XHTML namespace prefix stripping, and HTML void-element handling)    
+> **Living Registry** — Last updated: 2026-07-11 (Phase 5 JSON output method: method="json", json-node-output-method, allow-duplicate-names, escape-solidus, parameter-document)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -140,6 +140,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-033 | *(internal)* | XSLT `format-date-en` cluster — English number words and era-aware year formatting | Required for `format-date-en` conformance cluster: `[Ww]`, `[Wo]`, era-aware negative years, and ordinal-year width handling | **Implemented** | TBD | Charles Korthout | 2026-06-15 |
 | REQ-034 | *(internal)* | XSLT `static` cluster conformance | Required for `static` conformance cluster (49/49): external static parameters, static variable/parameter runtime binding, XTSE0090/XTSE3450 validations, implicit empty-sequence defaults, `@as` coercion, plus general-comparison empty-sequence and namespace-axis fixes exposed by the cluster | **Implemented** | TBD | Charles Korthout | 2026-06-26 |
 | REQ-035 | *(internal)* | XSLT `number` cluster — German/Italian word and ordinal formatting | Required for `number-0802/0812/0813/0828/0829/2506` and `format-integer-065/066`: German cardinal/ordinal words (`drei`, `dritte`, `zweihunderteinste`), Italian masculine/feminine ordinals (`primo`/`prima`), and CLDR `%spellout-ordinal` scheme support | **Implemented** | TBD | Charles Korthout | 2026-06-28 |
+| REQ-036 | *(internal)* | XSLT `method="json"` output serialization | Required for W3C `output-0701` through `output-0706a`: JSON output method, node serialization via `json-node-output-method`, duplicate-key control, solidus escaping, and `xsl:output parameter-document` defaults | **Implemented** | Phase 5 | Charles Korthout | 2026-07-11 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1567,6 +1568,47 @@ Extend `FormatDateTimeEngine` to:
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-06-15 | Kimi | Implemented | `format-date-en` cluster now 33/0/0; full suite +30 passes / −30 failures |
+
+---
+
+### REQ-036: XSLT `method="json"` output serialization
+
+**Requesting Application:** *(internal — conformance)*  
+**Submitted:** 2026-07-11  
+**Status:** Implemented
+
+#### Problem Statement
+XSLT 3.0 adds a JSON output method controlled by `xsl:output method="json"` (and `xsl:result-document`). Bosak already supported `fn:serialize(..., map{'method':'json'})` for XDM values, but the XSLT result-tree builder rejected top-level `xsl:map`/`xsl:map-entry` results because they could not become children of the synthetic XML wrapper. This caused W3C `output-0702`, `output-0704`, `output-0706`, and `output-0706a` to fail, blocking the JSON output conformance sweep.
+
+#### Proposed Solution
+1. Preserve raw XDM items (maps, arrays, and other values) produced at the top level of a JSON output instead of forcing them into the XML result tree.
+2. Extend `OutputProperties` with JSON-specific parameters: `json-node-output-method`, `allow-duplicate-names`, `escape-solidus`, and `parameter-document`.
+3. Reuse `XdmJsonSerializer` from `Bosak.XPath.Standard` in `ResultTreeSerializer`, applying character maps after JSON escaping and honoring `json-node-output-method` for nested nodes.
+4. Implement namespace-declaration output for the HTML `json-node-output-method` so XHTML-rooted nodes round-trip correctly.
+
+#### Acceptance Criteria
+- [x] `output-0701` passes: basic map/array JSON serialization.
+- [x] `output-0702` passes: nested HTML nodes inside JSON strings with XHTML namespace declarations.
+- [x] `output-0704` passes: `allow-duplicate-names="yes"` permits duplicate JSON keys.
+- [x] `output-0705` passes: `allow-duplicate-names="no"` raises `SERE0022`.
+- [x] `output-0706`/`output-0706a` pass: `xsl:output parameter-document` supplies `method="json"` and inline character maps.
+- [x] `output` conformance cluster improves from 168/35/29 to 175/28/29.
+- [x] Full W3C suite improves from 5,473/132 to 5,477/128.
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `OutputProperties.FromElement` parses JSON attributes and `parameter-document`. |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine` collects raw JSON items; `ResultTreeSerializer` dispatches to JSON serializer. |
+| Standard | None | Reuses existing `XdmJsonSerializer`. |
+| XSLT | Modified | `xsl:output`/`xsl:result-document` now support `method="json"`. |
+| API | None | No public surface change. |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-11 | Kimi | Implemented | Raw-item collection, JSON parameter parsing, parameter-document support, and HTML namespace output clear the remaining JSON output failures. |
 
 ---
 

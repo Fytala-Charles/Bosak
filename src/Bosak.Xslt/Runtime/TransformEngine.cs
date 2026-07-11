@@ -167,6 +167,7 @@
 //                      | Charles Korthout | 5.96  | 11-07-2026     | Resolve xsl:result-document use-character-maps in original instruction context.        |
 //                      | Charles Korthout | 5.97  | 11-07-2026     | Result-document character maps now supplement named/unnamed output definitions.        |
 //                      | Charles Korthout | 5.98  | 11-07-2026     | Evaluate doctype-public/system AVTs; current-output-uri empty outside result-document  |
+//                      | Charles Korthout | 5.99  | 11-07-2026     | Collect top-level maps/arrays for JSON output and route xsl:map/map-entry to them.     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -214,6 +215,10 @@ public sealed class TransformEngine
 
     // Effective output properties for a principal xsl:result-document, if one was produced.
     private Stylesheet.OutputProperties? _principalResultDocumentProperties;
+
+    // Raw top-level items collected when the output method is JSON (build-tree="no").
+    private bool _jsonOutputMode;
+    private readonly List<XdmValue> _jsonResultItems = new();
 
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
@@ -607,6 +612,8 @@ public sealed class TransformEngine
         _resultDocumentStack.Clear();
         _principalOutputClosed = false;
         _principalResultDocumentProperties = null;
+        _jsonOutputMode = (_stylesheet.OutputProperties?.Method ?? "xml") == "json";
+        _jsonResultItems.Clear();
 
         // Compile all template match patterns before execution. The validation
         // dry-run for pattern predicates needs the lazy global resolver registered
@@ -746,6 +753,16 @@ public sealed class TransformEngine
         {
             FinalizeResultTreeNamespaces(_rawInitialTemplateResult.Value);
             return _rawInitialTemplateResult.Value;
+        }
+
+        // For JSON output, return the collected raw top-level items as a sequence.
+        if (_jsonOutputMode)
+        {
+            if (_jsonResultItems.Count == 0)
+                return XdmValue.Undefined;
+            var jsonResult = XdmValue.FromSequence(MaterializedSequence.FromList(_jsonResultItems));
+            FinalizeResultTreeNamespaces(jsonResult);
+            return jsonResult;
         }
 
         // Return the result document, or document-level text if no root element was produced
@@ -5584,6 +5601,10 @@ public sealed class TransformEngine
                     {
                         _sequenceAccumulator.Add(mapValue);
                     }
+                    else if (TryCollectJsonResultItem(mapValue))
+                    {
+                        // Collected as a raw top-level JSON item.
+                    }
                     else
                     {
                         throw new InvalidOperationException("XTDE0450: A map cannot appear as a child of an element or document node");
@@ -5597,6 +5618,10 @@ public sealed class TransformEngine
                     if (_sequenceAccumulator != null)
                     {
                         _sequenceAccumulator.Add(entryValue);
+                    }
+                    else if (TryCollectJsonResultItem(entryValue))
+                    {
+                        // Collected as a raw top-level JSON item.
                     }
                     else
                     {
@@ -6247,9 +6272,39 @@ public sealed class TransformEngine
     /// </summary>
     /// <param name="value">The value to copy.</param>
     /// <param name="separateAtomicsWithSpace">If true, consecutive atomic values are separated by a space (complex content construction). If false, they are concatenated directly (xsl:copy-of behavior).</param>
+    /// <summary>
+    /// Returns whether the current result position is the top level of a JSON
+    /// (build-tree="no") output, where items should be collected as raw XDM values
+    /// instead of being added to the result document tree.
+    /// </summary>
+    private bool IsJsonTopLevelCollection =>
+        _jsonOutputMode &&
+        _resultDocumentStack.Count == 0 &&
+        ReferenceEquals(_currentContainer, _resultDocument);
+
+    /// <summary>
+    /// If we are producing a JSON output, stores the supplied value as a raw top-level
+    /// item and returns <c>true</c>. Otherwise returns <c>false</c> so normal tree
+    /// construction proceeds.
+    /// </summary>
+    private bool TryCollectJsonResultItem(XdmValue value)
+    {
+        if (!IsJsonTopLevelCollection)
+            return false;
+        if (value.IsUndefined)
+            return true;
+
+        _jsonResultItems.Add(value);
+        _lastAddedWasAtomic = false;
+        return true;
+    }
+
     private void CopyToResult(XdmValue value, bool separateAtomicsWithSpace = true)
     {
         if (value.IsUndefined)
+            return;
+
+        if (TryCollectJsonResultItem(value))
             return;
 
         // When collecting a raw sequence (e.g. xsl:variable/@as, xsl:key content,
@@ -6325,6 +6380,10 @@ public sealed class TransformEngine
                     prevWasAtomic = false;
                     continue;
                 }
+
+                // For JSON output, each top-level item is preserved as a raw XDM value.
+                if (TryCollectJsonResultItem(item))
+                    continue;
 
                 if (item.IsNode && item.NodeValue != null &&
                     (item.NodeValue.NodeKind == XdmNodeKind.Element ||
