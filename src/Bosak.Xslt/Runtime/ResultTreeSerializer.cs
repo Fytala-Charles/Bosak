@@ -25,9 +25,12 @@
 //                      | Charles Korthout | 1.2   | 11-07-2026     | Validate encoding (SESU0007) and standalone+omit-declaration (SEPM0009) during serialize. |
 //                      | Charles Korthout | 1.3   | 11-07-2026     | XHTML5 DOCTYPE formatting, html-version 5.0 default, prefix stripping, void elements.  |
 //                      | Charles Korthout | 1.4   | 11-07-2026     | Added xsl:character-map application to XML, HTML, XHTML, and text output.              |
+//                      | Charles Korthout | 1.5   | 11-07-2026     | Encoding-aware output: escape unrepresentable characters and split CDATA sections.     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Concurrent;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
@@ -453,6 +456,18 @@ public static class ResultTreeSerializer
                 for (int i = 0; i < fragmentNodes.Count; i++)
                     fragmentNodes[i] = NormalizeXNode(fragmentNodes[i], normForm);
             }
+        }
+
+        // Wrap CDATA section elements and split around characters that cannot be
+        // represented in the requested encoding.
+        if (rootDocument != null)
+            rootDocument = (XDocument)WrapCdataSections(rootDocument, props);
+        else if (isDocumentMode && rootElement != null)
+            rootElement = (XElement)WrapCdataSections(rootElement, props);
+        else
+        {
+            for (int i = 0; i < fragmentNodes.Count; i++)
+                fragmentNodes[i] = WrapCdataSections(fragmentNodes[i], props);
         }
 
         // XML declaration.
@@ -1022,11 +1037,15 @@ public static class ResultTreeSerializer
 
     /// <summary>
     /// Returns a deep clone with text children of cdata-section-elements wrapped as CDATA nodes.
+    /// Characters that cannot be represented in the output encoding are left as ordinary text
+    /// nodes so they are serialized as numeric character references outside the CDATA section.
     /// </summary>
     private static XNode WrapCdataSections(XNode node, Stylesheet.OutputProperties props)
     {
         if (props.CdataSectionElements.Count == 0)
             return node;
+
+        var encoding = GetEncodingWithExceptionFallback(props.Encoding);
 
         switch (node)
         {
@@ -1044,7 +1063,8 @@ public static class ResultTreeSerializer
                 {
                     if (wrapChildren && child is XText text && !(child is XCData))
                     {
-                        cloned.Add(new XCData(text.Value));
+                        foreach (var piece in SplitTextForCdata(text.Value, encoding))
+                            cloned.Add(piece);
                     }
                     else
                     {
@@ -1055,6 +1075,40 @@ public static class ResultTreeSerializer
             default:
                 return node;
         }
+    }
+
+    /// <summary>
+    /// Splits a text value into representable CDATA runs and unrepresentable single-character
+    /// text nodes. The unrepresentable characters are emitted later as numeric character references.
+    /// </summary>
+    private static IEnumerable<XNode> SplitTextForCdata(string text, Encoding? encoding)
+    {
+        if (encoding == null)
+        {
+            yield return new XCData(text);
+            yield break;
+        }
+
+        var run = new StringBuilder();
+        foreach (var ch in text)
+        {
+            if (CanEncode(ch, encoding))
+            {
+                run.Append(ch);
+            }
+            else
+            {
+                if (run.Length > 0)
+                {
+                    yield return new XCData(run.ToString());
+                    run.Clear();
+                }
+                yield return new XText(ch.ToString());
+            }
+        }
+
+        if (run.Length > 0)
+            yield return new XCData(run.ToString());
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -1210,12 +1264,6 @@ public static class ResultTreeSerializer
         var map = applyCharacterMap ? props.CharacterMap : null;
         foreach (var ch in value)
         {
-            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
-            {
-                writer.Write(replacement);
-                continue;
-            }
-
             switch (ch)
             {
                 case '<':
@@ -1234,7 +1282,20 @@ public static class ResultTreeSerializer
                     writer.Write("&#13;");
                     break;
                 default:
-                    writer.Write(ch);
+                    if (!IsRepresentable(ch, props.Encoding))
+                    {
+                        writer.Write("&#");
+                        writer.Write((int)ch);
+                        writer.Write(';');
+                    }
+                    else if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+                    {
+                        writer.Write(replacement);
+                    }
+                    else
+                    {
+                        writer.Write(ch);
+                    }
                     break;
             }
         }
@@ -1265,6 +1326,9 @@ public static class ResultTreeSerializer
                 break;
             case XElement elem:
                 WriteXhtmlElement(writer, elem, props, depth, inScopeBindings);
+                break;
+            case XCData cdata:
+                WriteCdataText(writer, cdata.Value);
                 break;
             case XText text:
                 WriteXmlEscaped(writer, text.Value, props);
@@ -1442,9 +1506,15 @@ public static class ResultTreeSerializer
         {
             foreach (var child in element.Nodes())
             {
-                if (child is XText text)
+                if (child is XCData cdata)
                 {
-                    WriteCdataText(writer, text.Value);
+                    WriteCdataText(writer, cdata.Value);
+                }
+                else if (child is XText text)
+                {
+                    // Unrepresentable characters are emitted as ordinary text and escaped
+                    // as numeric character references by WriteXmlEscaped.
+                    WriteXmlEscaped(writer, text.Value, props);
                 }
                 else if (child is XElement childElem)
                 {
@@ -1490,12 +1560,6 @@ public static class ResultTreeSerializer
         var map = applyCharacterMap ? props.CharacterMap : null;
         foreach (var ch in value)
         {
-            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
-            {
-                writer.Write(replacement);
-                continue;
-            }
-
             switch (ch)
             {
                 case '<':
@@ -1519,6 +1583,19 @@ public static class ResultTreeSerializer
                         writer.Write("&#");
                         writer.Write((int)ch);
                         writer.Write(';');
+                    }
+                    else if (!IsRepresentable(ch, props.Encoding))
+                    {
+                        // Characters that cannot be represented in the output encoding are
+                        // emitted as numeric character references. Character maps do not apply
+                        // to such characters because the reference uses the original codepoint.
+                        writer.Write("&#");
+                        writer.Write((int)ch);
+                        writer.Write(';');
+                    }
+                    else if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+                    {
+                        writer.Write(replacement);
                     }
                     else
                     {
@@ -1632,6 +1709,60 @@ public static class ResultTreeSerializer
             "UTF-32BE" or "UTF32BE" => new System.Text.UTF32Encoding(true, includeBom),
             _ => System.Text.Encoding.GetEncoding(encodingName)
         };
+    }
+
+    private static readonly ConcurrentDictionary<string, System.Text.Encoding> _exceptionFallbackEncodings = new();
+
+    /// <summary>
+    /// Returns an <see cref="System.Text.Encoding"/> that throws on unrepresentable characters,
+    /// or <c>null</c> if the encoding name is not supported. Results are cached.
+    /// </summary>
+    private static System.Text.Encoding? GetEncodingWithExceptionFallback(string encodingName)
+    {
+        var key = encodingName.Trim().ToUpperInvariant();
+        if (_exceptionFallbackEncodings.TryGetValue(key, out var cached))
+            return cached;
+
+        try
+        {
+            var encoding = System.Text.Encoding.GetEncoding(encodingName,
+                new System.Text.EncoderExceptionFallback(),
+                new System.Text.DecoderExceptionFallback());
+            _exceptionFallbackEncodings[key] = encoding;
+            return encoding;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Determines whether a single character can be represented in the specified encoding.
+    /// </summary>
+    private static bool CanEncode(char ch, System.Text.Encoding encoding)
+    {
+        try
+        {
+            _ = encoding.GetBytes(new[] { ch });
+            return true;
+        }
+        catch (System.Text.EncoderFallbackException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Determines whether a character can be represented in the output encoding.
+    /// Unknown encodings are treated as representable so validation errors take precedence.
+    /// </summary>
+    private static bool IsRepresentable(char ch, string encodingName)
+    {
+        var encoding = GetEncodingWithExceptionFallback(encodingName);
+        if (encoding == null)
+            return true;
+        return CanEncode(ch, encoding);
     }
 
     private static void WriteDoctype(TextWriter writer, XElement? rootElement, Stylesheet.OutputProperties props)
@@ -2469,12 +2600,6 @@ public static class ResultTreeSerializer
         var map = applyCharacterMap ? props.CharacterMap : null;
         foreach (var ch in value)
         {
-            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
-            {
-                writer.Write(replacement);
-                continue;
-            }
-
             switch (ch)
             {
                 case '<':
@@ -2498,6 +2623,16 @@ public static class ResultTreeSerializer
                         writer.Write("&#");
                         writer.Write((int)ch);
                         writer.Write(';');
+                    }
+                    else if (!IsRepresentable(ch, props.Encoding))
+                    {
+                        writer.Write("&#");
+                        writer.Write((int)ch);
+                        writer.Write(';');
+                    }
+                    else if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+                    {
+                        writer.Write(replacement);
                     }
                     else
                     {

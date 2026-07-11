@@ -38,6 +38,7 @@
 //                      | Charles Korthout | 2.6   | 26-06-2026     | Inline source content inherits the test-set file base URI                             |
 //                      | Charles Korthout | 2.7   | 07-07-2026     | Load assert-serialization expected value from @file; fixes bug-0701                    |
 //                      | Charles Korthout | 2.8   | 11-07-2026     | Normalize CRLF line endings in non-XML serialization comparisons.                      |
+//                      | Charles Korthout | 2.9   | 11-07-2026     | Recursively evaluate nested <all-of> / <any-of> result assertions.                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1031,24 +1032,24 @@ class Program
     static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, Bosak.Xslt.Stylesheet.OutputProperties? outputProperties = null, string? baseOutputUri = null)
     {
         // Handle <all-of>
-        var allOf = resultElem.Element(ns + "all-of");
+        var allOf = resultElem.Name.LocalName == "all-of" ? resultElem : resultElem.Element(ns + "all-of");
         if (allOf != null)
         {
             foreach (var option in allOf.Elements())
             {
-                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri))
+                if (!CompareResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri))
                     return false;
             }
             return true;
         }
 
         // Handle <any-of>
-        var anyOf = resultElem.Element(ns + "any-of");
+        var anyOf = resultElem.Name.LocalName == "any-of" ? resultElem : resultElem.Element(ns + "any-of");
         if (anyOf != null)
         {
             foreach (var option in anyOf.Elements())
             {
-                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri))
+                if (CompareResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri))
                     return true;
             }
             return false;
@@ -1060,7 +1061,7 @@ class Program
         {
             foreach (var child in assertionChildren)
             {
-                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri))
+                if (!CompareResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri))
                     return false;
             }
             return true;
@@ -1079,24 +1080,24 @@ class Program
     static bool CompareResult(XdmValue actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, EvaluationContext? assertContext = null, Bosak.Xslt.Stylesheet.OutputProperties? outputProperties = null, string? baseOutputUri = null)
     {
         // Handle <all-of>
-        var allOf = resultElem.Element(ns + "all-of");
+        var allOf = resultElem.Name.LocalName == "all-of" ? resultElem : resultElem.Element(ns + "all-of");
         if (allOf != null)
         {
             foreach (var option in allOf.Elements())
             {
-                if (!CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, outputProperties, baseOutputUri))
+                if (!CompareResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, outputProperties, baseOutputUri))
                     return false;
             }
             return true;
         }
 
         // Handle <any-of>
-        var anyOf = resultElem.Element(ns + "any-of");
+        var anyOf = resultElem.Name.LocalName == "any-of" ? resultElem : resultElem.Element(ns + "any-of");
         if (anyOf != null)
         {
             foreach (var option in anyOf.Elements())
             {
-                if (CompareSingleResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, outputProperties, baseOutputUri))
+                if (CompareResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, outputProperties, baseOutputUri))
                     return true;
             }
             return false;
@@ -1108,7 +1109,7 @@ class Program
         {
             foreach (var child in assertionChildren)
             {
-                if (!CompareSingleResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, outputProperties, baseOutputUri))
+                if (!CompareResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, outputProperties, baseOutputUri))
                     return false;
             }
             return true;
