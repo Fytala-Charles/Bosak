@@ -1,6 +1,55 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
+**Commit:** `0c473b1`
+**Current focus:** Phase 4 XSLT serialization fixes — named-output import precedence, XHTML empty-element handling, DOCTYPE quote/case rules, and `fn:current-output-uri()` scoping.
+
+---
+
+## This Session Fixes
+
+1. **Named-output import precedence and merging**
+   - `Stylesheet.GetEffectiveNamedOutput` now merges named `xsl:output` definitions in descending import-precedence order so the importing stylesheet overrides imported definitions (`output-0308`).
+   - Empty `doctype-public` / `doctype-system` attributes are treated as explicit values and override inherited ones (`output-0313`).
+
+2. **DOCTYPE formatting**
+   - `ResultTreeSerializer.FormatDoctype` chooses single or double quotes per literal value so public/system identifiers containing quotes serialize correctly (`output-0311`).
+   - XHTML `doctype-public`-only is ignored for all XHTML versions, not just 5.0 (`output-0112`, `output-0119`).
+   - The default `<!DOCTYPE html>` is emitted only for `html` roots in the HTML/XHTML namespace or no namespace (`output-0214`, `output-0215`).
+
+3. **XHTML empty-element handling**
+   - XHTML 1.0 uses the HTML 4 empty-element list for self-closing tags (`output-0116`, `output-0116a`, `output-0116b`).
+   - XHTML 5.0 continues to use the HTML5 void-element list.
+   - Non-XHTML-namespace elements in XHTML output use XML empty-element syntax (`output-0217`).
+
+4. **`xsl:result-document` AVT evaluation**
+   - `TransformEngine.EvaluateResultDocumentInstruction` now evaluates AVTs for `doctype-public` and `doctype-system` before validation (`output-0313`).
+
+5. **`fn:current-output-uri()` scoping**
+   - The function now returns empty-sequence outside of an `xsl:result-document`; the principal/base output URI is no longer exposed (`current-output-uri-009`).
+
+6. **Harness `assert-string-value`**
+   - `GetStringValue` strips the XML declaration before parsing, so atomic-only results compare correctly against plain-text expected values.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- W3C `output` conformance set: **168 passed / 35 failed / 29 skipped** (was 155/48/29).
+- Full W3C suite: **5,473 passed / 132 failed / 8,995 skipped** (97.6%).
+
+## Files Changed
+
+- `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`
+- `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs`
+- `tests/Bosak.Xslt.Conformance/Program.cs`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-11
 **Commit:** `99137f9`
 **Current focus:** Phase 3 XSLT serialization — encoding-aware output for unrepresentable characters and CDATA section splitting.
 

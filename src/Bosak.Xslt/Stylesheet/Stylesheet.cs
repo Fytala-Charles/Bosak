@@ -58,6 +58,7 @@
 //                      | Charles Korthout | 2.24  | 26-06-2026     | TransitiveImports now includes modules included by imported modules (apply-imports)   |
 //                      | Charles Korthout | 2.25  | 11-07-2026     | Parse xsl:character-map declarations and resolve effective character maps.             |
 //                      | Charles Korthout | 2.26  | 11-07-2026     | Character-map resolution now uses first-wins across the effective map list.            |
+//                      | Charles Korthout | 2.27  | 11-07-2026     | Named-output import-precedence merge now puts the importing stylesheet last            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2212,6 +2213,41 @@ public sealed class Stylesheet
 
     /// <summary>Named xsl:output definitions keyed by expanded QName (Clark notation).</summary>
     public IReadOnlyDictionary<string, OutputProperties> NamedOutputProperties => _namedOutputProperties;
+
+    /// <summary>
+    /// Returns the effective xsl:output properties for a named output declaration,
+    /// merging definitions from imported, included, and local modules in ascending
+    /// order of import precedence. Scalar attributes are overridden by higher-precedence
+    /// declarations; list-valued attributes (cdata-section-elements, etc.) are combined.
+    /// </summary>
+    public OutputProperties? GetEffectiveNamedOutput(string expandedName)
+    {
+        var definitions = new List<(int Precedence, OutputProperties Props)>();
+        CollectNamedOutputDefinitions(this, expandedName, definitions);
+        if (definitions.Count == 0)
+            return null;
+
+        // Lower numeric precedence means higher XSLT import precedence, so merge
+        // lowest-precedence (imported) definitions first and the main stylesheet last.
+        definitions.Sort((a, b) => b.Precedence.CompareTo(a.Precedence));
+
+        var result = new OutputProperties();
+        foreach (var (_, props) in definitions)
+            OutputProperties.Merge(result, props);
+
+        return result;
+    }
+
+    private static void CollectNamedOutputDefinitions(Stylesheet sheet, string expandedName, List<(int, OutputProperties)> definitions)
+    {
+        foreach (var imported in sheet._imports)
+            CollectNamedOutputDefinitions(imported, expandedName, definitions);
+        foreach (var included in sheet._includes)
+            CollectNamedOutputDefinitions(included, expandedName, definitions);
+
+        if (sheet._namedOutputProperties.TryGetValue(expandedName, out var props))
+            definitions.Add((sheet.ImportPrecedence, props));
+    }
 
     /// <summary>
     /// Looks up a character-map definition by expanded QName, searching this stylesheet

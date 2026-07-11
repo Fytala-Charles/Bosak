@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.4   | 11-07-2026     | Parse html-version as decimal; accept 5.00/+5.0 and reject invalid values (XTSE0020).   |
 //                      | Charles Korthout | 0.5   | 11-07-2026     | Added use-character-maps parsing/merge and resolved CharacterMap storage.               |
 //                      | Charles Korthout | 0.6   | 11-07-2026     | Use-character-maps merge now prepends source lists so later declarations take precedence. |
+//                      | Charles Korthout | 0.7   | 11-07-2026     | Empty doctype-public/doctype-system attributes are treated as explicit values           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -211,17 +212,18 @@ public sealed class OutputProperties
             props.NormalizationFormSpecified = true;
         }
 
-        var doctypeSystem = element.Attribute("doctype-system")?.Value;
-        if (!string.IsNullOrEmpty(doctypeSystem))
+        // An explicitly empty doctype-public/doctype-system overrides any inherited value.
+        var doctypeSystemAttr = element.Attribute("doctype-system");
+        if (doctypeSystemAttr != null)
         {
-            props.DoctypeSystem = doctypeSystem;
+            props.DoctypeSystem = doctypeSystemAttr.Value;
             props.DoctypeSystemSpecified = true;
         }
 
-        var doctypePublic = element.Attribute("doctype-public")?.Value;
-        if (!string.IsNullOrEmpty(doctypePublic))
+        var doctypePublicAttr = element.Attribute("doctype-public");
+        if (doctypePublicAttr != null)
         {
-            props.DoctypePublic = doctypePublic;
+            props.DoctypePublic = doctypePublicAttr.Value;
             props.DoctypePublicSpecified = true;
         }
 
@@ -276,21 +278,41 @@ public sealed class OutputProperties
             props.UseCharacterMapsSpecified = true;
         }
 
-        // XSLT default for omit-xml-declaration is "no" unless the serialization
-        // method is "text". The property-object default is "yes" for ad-hoc
-        // serialization that has no xsl:output instruction.
-        if (props.Method == "text")
-        {
-            props.OmitXmlDeclaration = true;
-            props.OmitXmlDeclarationSpecified = true;
-        }
-        else if (!props.OmitXmlDeclarationSpecified)
-        {
-            props.OmitXmlDeclaration = false;
-            props.OmitXmlDeclarationSpecified = true;
-        }
+        // The default for omit-xml-declaration depends on the output method and is
+        // applied by ResultTreeSerializer.ApplyMethodDefaults. This keeps parsed
+        // declarations independent so that named output definitions can be merged
+        // across import precedence without leaking method-specific defaults.
+
+        ValidateDoctypePublic(props);
 
         return props;
+    }
+
+    /// <summary>
+    /// Validates that a public identifier contains only pubid characters.
+    /// Raises XTSE0020 for invalid public identifiers.
+    /// </summary>
+    private static void ValidateDoctypePublic(OutputProperties props)
+    {
+        if (string.IsNullOrEmpty(props.DoctypePublic))
+            return;
+
+        foreach (var ch in props.DoctypePublic)
+        {
+            if (!IsPubidChar(ch))
+            {
+                throw new InvalidOperationException(
+                    $"XTSE0020: Invalid character '{ch}' in doctype-public value.");
+            }
+        }
+    }
+
+    private static bool IsPubidChar(char ch)
+    {
+        if (ch is >= 'a' and <= 'z' or >= 'A' and <= 'Z' or >= '0' and <= '9')
+            return true;
+        return ch is ' ' or '\r' or '\n' or '-' or '\'' or '(' or ')' or '+' or ',' or '.' or
+            '/' or ':' or '=' or '?' or ';' or '!' or '*' or '#' or '@' or '$' or '_' or '%';
     }
 
     /// <summary>
@@ -396,11 +418,13 @@ public sealed class OutputProperties
 
     private static bool ParseYesNo(string value, bool defaultValue)
     {
-        return value.Trim().ToLowerInvariant() switch
+        var trimmed = value.Trim();
+        return trimmed.ToLowerInvariant() switch
         {
             "yes" or "true" or "1" => true,
             "no" or "false" or "0" => false,
-            _ => defaultValue
+            _ => throw new InvalidOperationException(
+                $"XTSE0020: Invalid value '{trimmed}' for yes/no attribute.")
         };
     }
 

@@ -166,6 +166,7 @@
 //                      | Charles Korthout | 5.95  | 11-07-2026     | Build principal result tree in synthetic __xdm_doc__ wrapper to support fragments.     |
 //                      | Charles Korthout | 5.96  | 11-07-2026     | Resolve xsl:result-document use-character-maps in original instruction context.        |
 //                      | Charles Korthout | 5.97  | 11-07-2026     | Result-document character maps now supplement named/unnamed output definitions.        |
+//                      | Charles Korthout | 5.98  | 11-07-2026     | Evaluate doctype-public/system AVTs; current-output-uri empty outside result-document  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -536,7 +537,7 @@ public sealed class TransformEngine
     public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
     {
         _baseOutputUri = baseOutputUri;
-        _context.CurrentOutputUri = baseOutputUri;
+        _context.CurrentOutputUri = null;
         _initialSource = source;
         _initialMode = initialMode ?? "";
         _startedWithNamedTemplate = false;
@@ -12979,7 +12980,8 @@ public sealed class TransformEngine
                 continue;
             var value = attr.Value;
             if (localName is "method" or "output-version" or "encoding" or "indent"
-                or "omit-xml-declaration" or "standalone" or "undeclare-prefixes")
+                or "omit-xml-declaration" or "standalone" or "undeclare-prefixes"
+                or "doctype-public" or "doctype-system")
             {
                 value = EvaluateAvt(value, instruction);
             }
@@ -13034,7 +13036,8 @@ public sealed class TransformEngine
         if (!string.IsNullOrEmpty(formatLexical))
         {
             var expandedName = Stylesheet.Stylesheet.ExpandQName(instruction, formatLexical);
-            if (!_stylesheet.NamedOutputProperties.TryGetValue(expandedName, out namedProps))
+            namedProps = _stylesheet.GetEffectiveNamedOutput(expandedName);
+            if (namedProps == null)
                 throw new XsltRuntimeException("XTDE1460",
                     $"No xsl:output definition named '{formatLexical}' exists.",
                     contextItem);
@@ -13043,9 +13046,14 @@ public sealed class TransformEngine
         var baseProps = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
         var evaluatedInstruction = EvaluateResultDocumentInstruction(instruction);
         var resultDocumentProps = new Stylesheet.OutputProperties();
-        Stylesheet.OutputProperties.Merge(resultDocumentProps, baseProps);
+
+        // A named output definition replaces the unnamed default; the unnamed default
+        // is only used when no format attribute is present. Instruction-level attributes
+        // override either source.
         if (namedProps != null)
             Stylesheet.OutputProperties.Merge(resultDocumentProps, namedProps);
+        else
+            Stylesheet.OutputProperties.Merge(resultDocumentProps, baseProps);
         Stylesheet.OutputProperties.Merge(resultDocumentProps, Stylesheet.OutputProperties.FromElement(evaluatedInstruction));
 
         // Resolve any named character maps into a concrete character-to-string table.

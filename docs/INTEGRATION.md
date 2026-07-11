@@ -4,13 +4,17 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 26 June 2026
-> **Bosak baseline:** 917 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,238 passed / 5 failed / 9,357 skipped (99.9%)
+> **Last updated:** 11 July 2026
+> **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
+> **XSLT baseline:** 5,473 passed / 132 failed / 8,995 skipped (97.6%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-11** — Phase 4 serialization fixes: named-output import precedence, XHTML 1.0 empty-element handling, DOCTYPE quote/namespace rules, and `fn:current-output-uri()` scoping.
+  - W3C `output` conformance set: **168 passed / 35 failed / 29 skipped** (was 155/48/29).
+  - Full W3C suite: **5,473 passed / 132 failed / 8,995 skipped** (97.6%).
 
 - **2026-06-26** — Fixed `normalize-unicode-014`: HTML result-tree serialization now applies `xsl:output/@normalization-form` (NFC/NFD/NFKC/NFKD) to text, attribute values, comments, and processing instructions.
   - Full W3C suite: **5,238 passed / 5 failed / 9,357 skipped** (99.9%).
@@ -390,7 +394,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable`, AVTs for `lang`/`case-order`/`collation`; recognized collations including UCA `alternate=non-ignorable`, `blanked`, and `shifted`. Default collation is respected; `case-order` works without an explicit collation. |
 | `xsl:number` | ✅ Working | `single`, `any`, `multiple` levels; format tokens |
 | `xsl:key` / `key()` | ✅ Working | Indexed lookup; composite keys; content-constructor keys preserve typed atomic values; results returned in document order; `key()` allowed in match patterns with XTSE0340 validation. Key-value comparison respects the effective default or explicit `@collation`; conflicting collations for the same key name raise XTSE1220. |
-| `xsl:output` | ✅ Working | `method` (`xml`, `html`, `xhtml`, `text`), `indent`, `omit-xml-declaration`, `encoding`, `version`, `standalone`, `doctype-system`, `doctype-public`, `cdata-section-elements`, `escape-uri-attributes`, `include-content-type`, `media-type`, `byte-order-mark`, `html-version`, `suppress-indentation`, `normalization-form`, `use-character-maps`. Encoding-aware output escapes unrepresentable characters as numeric character references and splits CDATA sections around them. XHTML5 output strips the XHTML namespace prefix, serializes HTML void elements as empty tags, and ignores `doctype-public` when no `doctype-system` is supplied. |
+| `xsl:output` | ✅ Working | `method` (`xml`, `html`, `xhtml`, `text`), `indent`, `omit-xml-declaration`, `encoding`, `version`, `standalone`, `doctype-system`, `doctype-public`, `cdata-section-elements`, `escape-uri-attributes`, `include-content-type`, `media-type`, `byte-order-mark`, `html-version`, `suppress-indentation`, `normalization-form`, `use-character-maps`. Encoding-aware output escapes unrepresentable characters as numeric character references and splits CDATA sections around them. Named `xsl:output` definitions are resolved by import precedence; `xsl:result-document` attributes override the effective output definition. XHTML 1.0 uses the HTML 4 empty-element list; XHTML5 strips the XHTML namespace prefix, serializes HTML5 void elements as empty tags, ignores `doctype-public` when no `doctype-system` is supplied, and preserves root-element case in the DOCTYPE. DOCTYPE literal values are quoted with the delimiter that does not occur in the value. |
 | `xsl:character-map` | ✅ Working | `name`, `use-character-maps`, and `xsl:output-character/@character` / `@string`; merged in declaration order, first definition wins for duplicate characters; applied to text, attribute, comment, PI, and raw-XML output in all methods |
 | `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |
@@ -409,7 +413,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:message` | ✅ Working | Evaluates `terminate` and `error-code`; emits serialized message text via `IXsltMessageListener`; terminating messages throw `XsltRuntimeException` carrying the XDM value. The listener also receives `OnWarning` callbacks for XSLT warnings (e.g. no-matching-template / multiple-template warnings). |
 | `xsl:try` / `xsl:catch` | ✅ Working | Catches dynamic XPath/XSLT errors in both result-tree and function-body contexts; rolls back output written in the try block before executing a matching catch (unless `rollback-output="no"`). Supports multiple `xsl:catch` clauses evaluated in document order; `@errors` supports `*`, plain local names, `prefix:local` (err namespace), `*:local`, and `Q{uri}local`; binds `$err:code`, `$err:description`, `$err:value`. Static errors in `xsl:variable`/`xsl:param`/`xsl:with-param` `@select` expressions are now reported at stylesheet compile time. |
 | `xsl:map` / `xsl:map-entry` | ✅ Working | `xsl:map` evaluates its content as map-entry-producing sequence constructor and merges entries; `xsl:map-entry` builds a single-entry map; duplicate keys raise `XTDE3365`; maps as element/document children raise `XTDE0450` |
-| `xsl:result-document` | 🔮 Phase 3 | Secondary result documents are not yet implemented |
+| `xsl:result-document` | ✅ Working | Secondary result documents with `format`, `href`, and serialization attributes; principal `xsl:result-document` captured for `TransformToString`; `current-output-uri()` reflects the active result-document URI and is empty outside any result document |
 
 ---
 
