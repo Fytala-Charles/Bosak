@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-11 (Phase 1 serialization core: xsl:output extended with doctype, CDATA, URI escaping, content-type meta, byte-order-mark, html-version, suppress-indentation; CDATA merge bug fixed)    
+> **Living Registry** — Last updated: 2026-07-11 (Phase 1 serialization core: XHTML5 DOCTYPE formatting, html-version validation, XHTML namespace prefix stripping, and HTML void-element handling)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -401,6 +401,7 @@ Customer A produces XML that is consumed by external systems (Infor, EDI gateway
 | 2026-07-11 | Kimi | Implemented | Fragment result trees (multiple top-level nodes) serialize correctly for xml/html/xhtml. |
 | 2026-07-11 | Kimi | Implemented | Default serialization method inferred from result root element (xhtml for XHTML html, html for no-namespace html). |
 | 2026-07-11 | Kimi | Implemented | Serialization validation: SESU0007 for unsupported encodings, SEPM0009 for standalone with omitted declaration. |
+| 2026-07-11 | Kimi | Implemented | XHTML5 DOCTYPE formatting (public-only ignored), html-version accepts decimal forms (5.00, +5.0), XHTML namespace prefix stripping, HTML void-element handling, and root-element case preservation. |
 
 ---
 

@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.0   | 11-07-2026     | Added SerializeXmlFragment to serialize __xdm_doc__ wrapper children for XML method.   |
 //                      | Charles Korthout | 1.1   | 11-07-2026     | Infer xhtml/html serialization method from result root element when not specified.     |
 //                      | Charles Korthout | 1.2   | 11-07-2026     | Validate encoding (SESU0007) and standalone+omit-declaration (SEPM0009) during serialize. |
+//                      | Charles Korthout | 1.3   | 11-07-2026     | XHTML5 DOCTYPE formatting, html-version 5.0 default, prefix stripping, void elements.  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -127,9 +128,8 @@ public static class ResultTreeSerializer
 
         if (!props.HtmlVersionSpecified)
         {
-            // Default to 1.0 for XHTML so legacy XSLT 2.0 tests pass without
-            // an explicit html-version attribute. HTML defaults to 5.0.
-            props.HtmlVersion = method == "xhtml" ? "1.0" : "5.0";
+            // XSLT 3.0 defaults to HTML 5 for both html and xhtml methods.
+            props.HtmlVersion = "5.0";
         }
     }
 
@@ -393,6 +393,25 @@ public static class ResultTreeSerializer
                 .FirstOrDefault(e => string.Equals(e.Name.LocalName, "html", StringComparison.OrdinalIgnoreCase));
         }
 
+        // HTML5 XHTML serialization requires the XHTML namespace to use the default
+        // namespace rather than a prefix.
+        if (props.Method == "xhtml" && props.HtmlVersion == "5.0")
+        {
+            if (rootDocument != null)
+                rootDocument = (XDocument)NormalizeXhtmlNamespacesForHtml5(rootDocument);
+            else if (isDocumentMode && rootElement != null)
+                rootElement = (XElement)NormalizeXhtmlNamespacesForHtml5(rootElement);
+            else
+            {
+                for (int i = 0; i < fragmentNodes.Count; i++)
+                    fragmentNodes[i] = NormalizeXhtmlNamespacesForHtml5(fragmentNodes[i]);
+            }
+
+            rootElement = rootDocument?.Root
+                ?? (isDocumentMode ? rootElement : fragmentNodes.OfType<XElement>()
+                    .FirstOrDefault(e => string.Equals(e.Name.LocalName, "html", StringComparison.OrdinalIgnoreCase)));
+        }
+
         // Apply content-type meta injection if enabled.
         if (props.IncludeContentType && rootElement != null)
         {
@@ -461,6 +480,12 @@ public static class ResultTreeSerializer
         {
             WriteDoctype(writer, fragmentNodes.OfType<XElement>().FirstOrDefault(), props);
         }
+        else if (props.Method == "xhtml" && props.HtmlVersion == "5.0")
+        {
+            var htmlRoot = fragmentNodes.OfType<XElement>()
+                .FirstOrDefault(e => string.Equals(e.Name.LocalName, "html", StringComparison.OrdinalIgnoreCase));
+            WriteDoctype(writer, htmlRoot, props);
+        }
 
         var initialBindings = new Dictionary<string, string> { ["xml"] = "http://www.w3.org/XML/1998/namespace" };
         if (rootDocument != null)
@@ -524,6 +549,69 @@ public static class ResultTreeSerializer
         else
         {
             yield return value;
+        }
+    }
+
+    /// <summary>
+    /// Strips prefixes from elements in the XHTML namespace for HTML5 serialization,
+    /// replacing them with the default namespace declaration. Other namespaces are
+    /// left untouched.
+    /// </summary>
+    private static XNode NormalizeXhtmlNamespacesForHtml5(XNode node)
+    {
+        const string xhtmlNs = "http://www.w3.org/1999/xhtml";
+
+        switch (node)
+        {
+            case XDocument doc:
+                var newDoc = new XDocument();
+                if (doc.Declaration != null)
+                {
+                    newDoc.Declaration = new XDeclaration(
+                        doc.Declaration.Version,
+                        doc.Declaration.Encoding,
+                        doc.Declaration.Standalone);
+                }
+                foreach (var child in doc.Nodes())
+                    newDoc.Add(NormalizeXhtmlNamespacesForHtml5(child));
+                return newDoc;
+
+            case XElement elem:
+                var newElem = new XElement(elem.Name);
+                if (elem.Name.NamespaceName == xhtmlNs)
+                {
+                    newElem.Name = XName.Get(elem.Name.LocalName, xhtmlNs);
+                    var existingDefault = elem.Attribute("xmlns");
+                    if (existingDefault == null || existingDefault.Value != xhtmlNs)
+                        newElem.SetAttributeValue("xmlns", xhtmlNs);
+                }
+
+                foreach (var attr in elem.Attributes().Where(a => !a.IsNamespaceDeclaration))
+                    newElem.SetAttributeValue(attr.Name, attr.Value);
+
+                foreach (var nsAttr in elem.Attributes().Where(a => a.IsNamespaceDeclaration))
+                {
+                    if (nsAttr.Name.LocalName != "xmlns" && nsAttr.Value == xhtmlNs)
+                        continue;
+                    newElem.SetAttributeValue(nsAttr.Name, nsAttr.Value);
+                }
+
+                foreach (var child in elem.Nodes())
+                    newElem.Add(NormalizeXhtmlNamespacesForHtml5(child));
+
+                return newElem;
+
+            case XComment comment:
+                return new XComment(comment.Value);
+
+            case XProcessingInstruction pi:
+                return new XProcessingInstruction(pi.Target, pi.Data);
+
+            case XText text:
+                return new XText(text.Value);
+
+            default:
+                return node;
         }
     }
 
@@ -1130,7 +1218,8 @@ public static class ResultTreeSerializer
         var nsUri = element.Name.NamespaceName;
         var isInXhtmlNs = nsUri == "http://www.w3.org/1999/xhtml";
         var isEmpty = !element.Nodes().Any();
-        var isVoid = isInXhtmlNs && IsHtmlVoidElement(localName);
+        var isVoid = (isInXhtmlNs && IsHtmlVoidElement(localName))
+            || (props.Method == "xhtml" && props.HtmlVersion == "5.0" && IsHtmlVoidElement(localName));
         // XHTML method treats script/style content as PCDATA, so it is escaped.
         var isRawContent = false;
         var wrapCdata = IsCdataSectionElement(element.Name, props);
@@ -1443,8 +1532,19 @@ public static class ResultTreeSerializer
         if (string.IsNullOrEmpty(rootName))
             return;
 
+        bool isHtmlRoot = string.Equals(rootName, "html", StringComparison.OrdinalIgnoreCase);
+        bool isXhtml5 = props.Method == "xhtml" && props.HtmlVersion == "5.0";
+
         if (!string.IsNullOrEmpty(props.DoctypePublic))
         {
+            // XHTML 5.0 ignores a public identifier when no system identifier is supplied.
+            if (isXhtml5 && string.IsNullOrEmpty(props.DoctypeSystem))
+            {
+                if (isHtmlRoot)
+                    writer.Write($"<!DOCTYPE {rootName}>");
+                return;
+            }
+
             writer.Write("<!DOCTYPE ");
             writer.Write(rootName);
             writer.Write(" PUBLIC \"");
@@ -1466,15 +1566,10 @@ public static class ResultTreeSerializer
             writer.Write(props.DoctypeSystem);
             writer.Write("\">");
         }
-        else if (props.Method == "xhtml")
+        else if (isXhtml5 && isHtmlRoot)
         {
-            // Default DOCTYPE for XHTML is only emitted for html-version 5.0.
-            // Legacy XHTML 1.0/1.1 tests expect no DOCTYPE unless explicitly specified.
-            var htmlVersion = props.HtmlVersion;
-            if (htmlVersion == "5.0" && rootName == "html")
-            {
-                writer.Write("<!DOCTYPE html>");
-            }
+            // Default HTML5 DOCTYPE for XHTML, preserving the root element's case.
+            writer.Write($"<!DOCTYPE {rootName}>");
         }
     }
 
@@ -1484,21 +1579,29 @@ public static class ResultTreeSerializer
         if (string.IsNullOrEmpty(rootName))
             return;
 
+        bool isHtmlRoot = string.Equals(rootName, "html", StringComparison.OrdinalIgnoreCase);
+        bool isXhtml5 = props.Method == "xhtml" && props.HtmlVersion == "5.0";
+
         if (!string.IsNullOrEmpty(props.DoctypePublic))
         {
+            // XHTML 5.0 ignores a public identifier when no system identifier is supplied.
+            if (isXhtml5 && string.IsNullOrEmpty(props.DoctypeSystem))
+            {
+                if (isHtmlRoot)
+                    writer.WriteDocType(rootName, null, null, null);
+                return;
+            }
+
             writer.WriteDocType(rootName, props.DoctypePublic, props.DoctypeSystem, null);
         }
         else if (!string.IsNullOrEmpty(props.DoctypeSystem))
         {
             writer.WriteDocType(rootName, null, props.DoctypeSystem, null);
         }
-        else if (props.Method == "xhtml")
+        else if (isXhtml5 && isHtmlRoot)
         {
-            var htmlVersion = props.HtmlVersion;
-            if (htmlVersion == "5.0" && rootName == "html")
-            {
-                writer.WriteDocType("html", null, null, null);
-            }
+            // Default HTML5 DOCTYPE for XHTML, preserving the root element's case.
+            writer.WriteDocType(rootName, null, null, null);
         }
     }
 

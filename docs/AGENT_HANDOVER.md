@@ -1,6 +1,48 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
+**Commit:** `(uncommitted — work in progress)`
+**Current focus:** Phase 1 XSLT serialization core — XHTML5 DOCTYPE formatting, `html-version` validation, case-folding, namespace prefix stripping, and HTML void-element handling.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,243
+- **Failed:** 0
+- **Skipped:** 9,357
+- **Pass rate:** 100.0% (unchanged vs. previous)
+
+## This Session Fixes
+
+1. **XHTML5 DOCTYPE formatting** — `ResultTreeSerializer.WriteDoctype` now follows XSLT 3.0 serialization rules for `html-version="5.0"`:
+   - A `doctype-public` with no `doctype-system` is ignored and emits `<!DOCTYPE {root}>`.
+   - A `doctype-system` (with or without `doctype-public`) is preserved.
+   - The default DOCTYPE uses the root element's case (e.g., `<!DOCTYPE HTML>` for `<HTML>`).
+
+2. **`html-version` validation** — `OutputProperties.FromElement` now parses the attribute as a decimal, accepting forms such as `"5"`, `"5.0"`, `"5.00"`, and `"+5.0"`, and rejects non-numeric values like `"five"` with `XTSE0020`.
+
+3. **XHTML namespace normalization** — For XHTML5 output, prefixed XHTML namespace bindings (`h:html`, etc.) are stripped and replaced with the default namespace declaration.
+
+4. **HTML void-element handling** — XHTML5 serialization now uses empty-element tag syntax for HTML void elements even when they are in no namespace, and non-void empty elements continue to emit explicit start/end tags.
+
+5. **Default XHTML `html-version`** — The serializer now defaults `html-version` to `5.0` for `method="xhtml"`, matching the XSLT 3.0 default.
+
+   - **Files changed**: `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`.
+
+## Notes
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,243/0/9,357** (100.0%).
+- `output` conformance set: **119 passed / 84 failed / 29 skipped** (`output-0112`, `output-0119`, `output-0209`, `output-0210`, `output-0212`, `output-0217`, `output-0221`–`output-0224`, `output-0228`, `output-0229`, `output-0230` now pass; was 109/94 before this change).
+- Several remaining failures in the `output` set are due to harness limitations (e.g., `<not>` assertions not implemented) or out-of-scope features (named outputs/result-document formats, SVG/MathML namespace rewriting, character maps, disable-output-escaping).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-11
 **Commit:** `c600423`
 **Current focus:** Phase 1 XSLT serialization core — implemented serialization error validation (SESU0007 / SEPM0009) for the encoding batch.
 

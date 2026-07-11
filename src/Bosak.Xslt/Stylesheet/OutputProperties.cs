@@ -14,9 +14,11 @@
 //                      | Charles Korthout | 0.2   | 06-07-2026     | Added normalization-form output property and merge support for multiple xsl:output      |
 //                      | Charles Korthout | 0.3   | 11-07-2026     | Added doctype, cdata-section-elements, escape-uri-attributes, include-content-type,     |
 //                      |                  |       |                | media-type, byte-order-mark, html-version, and suppress-indentation properties.        |
+//                      | Charles Korthout | 0.4   | 11-07-2026     | Parse html-version as decimal; accept 5.00/+5.0 and reject invalid values (XTSE0020).   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Globalization;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 
@@ -105,7 +107,7 @@ public sealed class OutputProperties
         var method = element.Attribute("method")?.Value;
         if (!string.IsNullOrEmpty(method))
         {
-            props.Method = method;
+            props.Method = method.Trim();
             props.MethodSpecified = true;
         }
 
@@ -147,7 +149,32 @@ public sealed class OutputProperties
         var htmlVersion = element.Attribute("html-version")?.Value;
         if (!string.IsNullOrEmpty(htmlVersion))
         {
-            props.HtmlVersion = htmlVersion;
+            var trimmed = htmlVersion.Trim();
+            if (!decimal.TryParse(trimmed, NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var parsed))
+            {
+                throw new InvalidOperationException(
+                    $"XTSE0020: Invalid value for html-version attribute: '{htmlVersion}'.");
+            }
+
+            // Canonicalize the most common values; otherwise keep the parsed decimal form.
+            var canonical = parsed switch
+            {
+                1.0m => "1.0",
+                1.1m => "1.1",
+                4.0m => "4.0",
+                5.0m => "5.0",
+                _ => parsed.ToString(CultureInfo.InvariantCulture)
+            };
+
+            // For xhtml, only 1.0 and 5.0 are defined by the serialization spec.
+            var effectiveMethod = props.Method;
+            if (effectiveMethod == "xhtml" && parsed != 1.0m && parsed != 5.0m)
+            {
+                throw new InvalidOperationException(
+                    $"XTSE0020: Invalid value for html-version attribute: '{htmlVersion}'.");
+            }
+
+            props.HtmlVersion = canonical;
             props.HtmlVersionSpecified = true;
         }
 
