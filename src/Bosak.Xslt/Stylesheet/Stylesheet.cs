@@ -56,6 +56,8 @@
 //                      | Charles Korthout | 2.22  | 06-07-2026     | Merge multiple xsl:output declarations instead of using only the first                 |
 //                      | Charles Korthout | 2.23  | 08-07-2026     | Forward-compatible handling for unknown elements, attributes, and use-when             |
 //                      | Charles Korthout | 2.24  | 26-06-2026     | TransitiveImports now includes modules included by imported modules (apply-imports)   |
+//                      | Charles Korthout | 2.25  | 11-07-2026     | Parse xsl:character-map declarations and resolve effective character maps.             |
+//                      | Charles Korthout | 2.26  | 11-07-2026     | Character-map resolution now uses first-wins across the effective map list.            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -99,6 +101,8 @@ public sealed class Stylesheet
     private readonly HashSet<string> _excludedResultPrefixes = new();
     private readonly List<NamespaceAliasDefinition> _namespaceAliases = new();
     private OutputProperties? _outputProperties;
+    private readonly Dictionary<string, OutputProperties> _namedOutputProperties = new();
+    private readonly Dictionary<string, CharacterMapDefinition> _characterMaps = new();
     private readonly bool _isRootStylesheet;
     private readonly Stylesheet _rootStylesheet;
     private readonly StaticContext _staticContext = new();
@@ -851,12 +855,35 @@ public sealed class Stylesheet
 
         // Parse xsl:output properties. Multiple xsl:output declarations are merged,
         // with later declarations overriding earlier ones for the same property.
+        // Named outputs are stored separately by expanded QName and are used by
+        // xsl:result-document via its @format attribute.
         var outputElems = root.Elements(XName.Get("output", XslNamespace)).Where(e => UseWhen(e)).ToList();
-        if (outputElems.Count > 0)
+        foreach (var oe in outputElems)
         {
-            _outputProperties = new OutputProperties();
-            foreach (var oe in outputElems)
-                OutputProperties.Merge(_outputProperties, OutputProperties.FromElement(oe));
+            var props = OutputProperties.FromElement(oe);
+            var nameAttr = oe.Attribute("name")?.Value;
+            if (!string.IsNullOrEmpty(nameAttr))
+            {
+                var expandedName = ExpandQName(oe, nameAttr);
+                if (_namedOutputProperties.TryGetValue(expandedName, out var existing))
+                    OutputProperties.Merge(existing, props);
+                else
+                    _namedOutputProperties[expandedName] = props.Clone();
+            }
+            else
+            {
+                if (_outputProperties == null)
+                    _outputProperties = new OutputProperties();
+                OutputProperties.Merge(_outputProperties, props);
+            }
+        }
+
+        // Parse xsl:character-map declarations.
+        foreach (var cm in root.Elements(XName.Get("character-map", XslNamespace)))
+        {
+            if (!UseWhen(cm)) continue;
+            var def = CharacterMapDefinition.FromElement(cm, this);
+            _characterMaps[def.ExpandedName] = def;
         }
 
         // Parse xsl:namespace-alias declarations
@@ -2183,6 +2210,91 @@ public sealed class Stylesheet
     /// <summary>The parsed xsl:output properties, or null if not specified.</summary>
     public OutputProperties? OutputProperties => _outputProperties;
 
+    /// <summary>Named xsl:output definitions keyed by expanded QName (Clark notation).</summary>
+    public IReadOnlyDictionary<string, OutputProperties> NamedOutputProperties => _namedOutputProperties;
+
+    /// <summary>
+    /// Looks up a character-map definition by expanded QName, searching this stylesheet
+    /// module and its imports/includes.
+    /// </summary>
+    public CharacterMapDefinition? GetCharacterMap(string expandedName)
+    {
+        if (_characterMaps.TryGetValue(expandedName, out var def))
+            return def;
+
+        foreach (var import in _imports)
+        {
+            var imported = import.GetCharacterMap(expandedName);
+            if (imported != null)
+                return imported;
+        }
+
+        foreach (var include in _includes)
+        {
+            var included = include.GetCharacterMap(expandedName);
+            if (included != null)
+                return included;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Resolves a list of character-map names into an effective character-to-string map.
+    /// The maps are processed in the order supplied; for duplicate characters, the first
+    /// map in the list wins. Within a single character map, explicit
+    /// <c>xsl:output-character</c> mappings override mappings inherited via
+    /// <c>use-character-maps</c>.
+    /// </summary>
+    public Dictionary<char, string> ResolveCharacterMap(IEnumerable<string> expandedNames)
+    {
+        var result = new Dictionary<char, string>();
+        var expanded = new Dictionary<string, Dictionary<char, string>>();
+        foreach (var name in expandedNames)
+        {
+            var map = ExpandCharacterMap(name, expanded);
+            foreach (var (ch, str) in map)
+            {
+                if (!result.ContainsKey(ch))
+                    result[ch] = str;
+            }
+        }
+        return result;
+    }
+
+    private Dictionary<char, string> ExpandCharacterMap(string expandedName, Dictionary<string, Dictionary<char, string>> expanded)
+    {
+        if (string.IsNullOrEmpty(expandedName))
+            return new Dictionary<char, string>();
+
+        if (expanded.TryGetValue(expandedName, out var cached))
+            return cached;
+
+        var result = new Dictionary<char, string>();
+        var def = GetCharacterMap(expandedName);
+        if (def == null)
+        {
+            expanded[expandedName] = result;
+            return result;
+        }
+
+        // Place an empty entry before recursing so cycles terminate without revisiting.
+        expanded[expandedName] = result;
+
+        foreach (var used in def.UseCharacterMaps)
+        {
+            var usedMap = ExpandCharacterMap(used, expanded);
+            foreach (var (ch, str) in usedMap)
+                result[ch] = str;
+        }
+
+        // Explicit mappings in this character map override its used maps.
+        foreach (var (ch, str) in def.Mappings)
+            result[ch] = str;
+
+        return result;
+    }
+
     /// <summary>Top-level xsl:param elements defined in this stylesheet.</summary>
     public IReadOnlyList<XElement> GlobalParameters => _globalParameters;
 
@@ -2889,6 +3001,49 @@ public sealed class Stylesheet
         if ((nsUri == XsNamespace || nsUri == FnNamespace ||
              (nsUri == XslNamespace && localName != "initial-template")))
             throw new InvalidOperationException($"XTSE0080: The name '{name}' used in {construct} is in a reserved namespace.");
+    }
+
+    /// <summary>
+    /// Expands an <see cref="XsQName"/> into Clark notation (<c>Q{namespace}local</c>).
+    /// </summary>
+    public static string ExpandQName(XsQName qname)
+        => $"Q{{{qname.NamespaceUri}}}{qname.LocalName}";
+
+    /// <summary>
+    /// Expands a lexical QName in the context of <paramref name="element"/> and returns
+    /// it in Clark notation (<c>Q{namespace}local</c>). Supports <c>Q{{uri}}local</c>,
+    /// <c>prefix:local</c>, and unprefixed names.
+    /// </summary>
+    internal static string ExpandQName(XElement element, string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return string.Empty;
+
+        var trimmed = name.Trim();
+        if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
+        {
+            int closeBrace = trimmed.IndexOf('}');
+            if (closeBrace >= 2)
+            {
+                var nsUri = trimmed[2..closeBrace];
+                var localName = trimmed[(closeBrace + 1)..];
+                return $"Q{{{nsUri}}}{localName}";
+            }
+        }
+
+        int colon = trimmed.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = trimmed[..colon];
+            var localName = trimmed[(colon + 1)..];
+            if (prefix == "xml")
+                return $"Q{{http://www.w3.org/XML/1998/namespace}}{localName}";
+
+            var nsUri = element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
+            return $"Q{{{nsUri}}}{localName}";
+        }
+
+        return $"Q{{}}{trimmed}";
     }
 
     /// <summary>

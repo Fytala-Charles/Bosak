@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Propagate TreatRecoverableAmbiguousMatchAsError to TransformEngine                      |
 //                      | Charles Korthout | 0.8   | 06-07-2026     | Use xsl:result-document output properties in TransformToString                          |
 //                      | Charles Korthout | 0.9   | 11-07-2026     | Read xsl:result-document output properties from fragment wrapper elements too.          |
+//                      | Charles Korthout | 1.0   | 11-07-2026     | Resolve named character maps for principal and function output before serialization.    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -100,6 +101,15 @@ public sealed class XsltExecutable
             if (rdProps != null)
                 outputProperties = rdProps;
         }
+
+        // Resolve named character maps for the principal output if not already done.
+        if (outputProperties.CharacterMap == null && outputProperties.UseCharacterMaps.Count > 0)
+        {
+            outputProperties = outputProperties.Clone();
+            outputProperties.CharacterMap = _stylesheet.ResolveCharacterMap(
+                outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
+        }
+
         return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
     }
 
@@ -129,7 +139,14 @@ public sealed class XsltExecutable
     public string TransformFunctionToString(string name, XdmValue[] args, EvaluationContext? context = null)
     {
         var result = TransformFunction(name, args, context);
-        return Runtime.ResultTreeSerializer.Serialize(result, _stylesheet.OutputProperties);
+        var outputProperties = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+        if (outputProperties.CharacterMap == null && outputProperties.UseCharacterMaps.Count > 0)
+        {
+            outputProperties = outputProperties.Clone();
+            outputProperties.CharacterMap = _stylesheet.ResolveCharacterMap(
+                outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
+        }
+        return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
     }
 
     /// <summary>

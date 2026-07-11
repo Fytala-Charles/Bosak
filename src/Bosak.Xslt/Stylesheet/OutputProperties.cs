@@ -15,6 +15,8 @@
 //                      | Charles Korthout | 0.3   | 11-07-2026     | Added doctype, cdata-section-elements, escape-uri-attributes, include-content-type,     |
 //                      |                  |       |                | media-type, byte-order-mark, html-version, and suppress-indentation properties.        |
 //                      | Charles Korthout | 0.4   | 11-07-2026     | Parse html-version as decimal; accept 5.00/+5.0 and reject invalid values (XTSE0020).   |
+//                      | Charles Korthout | 0.5   | 11-07-2026     | Added use-character-maps parsing/merge and resolved CharacterMap storage.               |
+//                      | Charles Korthout | 0.6   | 11-07-2026     | Use-character-maps merge now prepends source lists so later declarations take precedence. |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -80,6 +82,15 @@ public sealed class OutputProperties
     /// <summary>Whether to emit a byte-order mark for supported encodings.</summary>
     public bool ByteOrderMark { get; set; } = false;
 
+    /// <summary>Named character maps used by this output definition.</summary>
+    public IReadOnlyList<XsQName> UseCharacterMaps { get; set; } = Array.Empty<XsQName>();
+
+    /// <summary>
+    /// Resolved effective character map for this output definition. Populated by the
+    /// stylesheet when the output properties are prepared for serialization.
+    /// </summary>
+    public Dictionary<char, string>? CharacterMap { get; set; }
+
     // Internal flags tracking which properties were explicitly set on the parsed xsl:output element.
     internal bool MethodSpecified { get; set; }
     internal bool OmitXmlDeclarationSpecified { get; set; }
@@ -98,6 +109,7 @@ public sealed class OutputProperties
     internal bool IncludeContentTypeSpecified { get; set; }
     internal bool MediaTypeSpecified { get; set; }
     internal bool ByteOrderMarkSpecified { get; set; }
+    internal bool UseCharacterMapsSpecified { get; set; }
 
     /// <summary>Parses an xsl:output element into <see cref="OutputProperties"/>.</summary>
     public static OutputProperties FromElement(XElement element)
@@ -255,6 +267,15 @@ public sealed class OutputProperties
             props.ByteOrderMarkSpecified = true;
         }
 
+        var useCharacterMaps = element.Attribute("use-character-maps")?.Value;
+        if (!string.IsNullOrEmpty(useCharacterMaps))
+        {
+            // Character-map names are QNames, but unprefixed names are in no namespace
+            // (they name stylesheet objects, not result elements).
+            props.UseCharacterMaps = ParseCharacterMapList(element, useCharacterMaps);
+            props.UseCharacterMapsSpecified = true;
+        }
+
         // XSLT default for omit-xml-declaration is "no" unless the serialization
         // method is "text". The property-object default is "yes" for ad-hoc
         // serialization that has no xsl:output instruction.
@@ -311,6 +332,66 @@ public sealed class OutputProperties
         if (source.IncludeContentTypeSpecified) { target.IncludeContentType = source.IncludeContentType; target.IncludeContentTypeSpecified = true; }
         if (source.MediaTypeSpecified) { target.MediaType = source.MediaType; target.MediaTypeSpecified = true; }
         if (source.ByteOrderMarkSpecified) { target.ByteOrderMark = source.ByteOrderMark; target.ByteOrderMarkSpecified = true; }
+        if (source.UseCharacterMapsSpecified)
+        {
+            // Later xsl:output declarations and xsl:result-document instruction-level
+            // references take precedence over earlier ones. Prepend the source list so
+            // that the first occurrence of a character-map name wins during resolution.
+            var merged = new List<XsQName>(source.UseCharacterMaps);
+            foreach (var q in target.UseCharacterMaps)
+                if (!merged.Any(existing => existing.LocalName == q.LocalName && existing.NamespaceUri == q.NamespaceUri))
+                    merged.Add(q);
+            target.UseCharacterMaps = merged;
+            target.UseCharacterMapsSpecified = true;
+        }
+    }
+
+    /// <summary>
+    /// Creates a shallow copy of these output properties.
+    /// </summary>
+    public OutputProperties Clone()
+    {
+        var clone = new OutputProperties
+        {
+            Method = Method,
+            MethodSpecified = MethodSpecified,
+            OmitXmlDeclaration = OmitXmlDeclaration,
+            OmitXmlDeclarationSpecified = OmitXmlDeclarationSpecified,
+            Indent = Indent,
+            IndentSpecified = IndentSpecified,
+            Encoding = Encoding,
+            EncodingSpecified = EncodingSpecified,
+            Version = Version,
+            VersionSpecified = VersionSpecified,
+            HtmlVersion = HtmlVersion,
+            HtmlVersionSpecified = HtmlVersionSpecified,
+            Standalone = Standalone,
+            StandaloneSpecified = StandaloneSpecified,
+            UndeclarePrefixes = UndeclarePrefixes,
+            UndeclarePrefixesSpecified = UndeclarePrefixesSpecified,
+            NormalizationForm = NormalizationForm,
+            NormalizationFormSpecified = NormalizationFormSpecified,
+            DoctypeSystem = DoctypeSystem,
+            DoctypeSystemSpecified = DoctypeSystemSpecified,
+            DoctypePublic = DoctypePublic,
+            DoctypePublicSpecified = DoctypePublicSpecified,
+            CdataSectionElements = CdataSectionElements,
+            CdataSectionElementsSpecified = CdataSectionElementsSpecified,
+            SuppressIndentation = SuppressIndentation,
+            SuppressIndentationSpecified = SuppressIndentationSpecified,
+            EscapeUriAttributes = EscapeUriAttributes,
+            EscapeUriAttributesSpecified = EscapeUriAttributesSpecified,
+            IncludeContentType = IncludeContentType,
+            IncludeContentTypeSpecified = IncludeContentTypeSpecified,
+            MediaType = MediaType,
+            MediaTypeSpecified = MediaTypeSpecified,
+            ByteOrderMark = ByteOrderMark,
+            ByteOrderMarkSpecified = ByteOrderMarkSpecified,
+            UseCharacterMaps = UseCharacterMaps,
+            UseCharacterMapsSpecified = UseCharacterMapsSpecified,
+            CharacterMap = CharacterMap
+        };
+        return clone;
     }
 
     private static bool ParseYesNo(string value, bool defaultValue)
@@ -362,6 +443,57 @@ public sealed class OutputProperties
                 prefix = "";
                 localName = name;
                 namespaceUri = context.GetDefaultNamespace()?.NamespaceName ?? "";
+            }
+
+            list.Add(new XsQName(localName, namespaceUri, prefix));
+        }
+
+        return list;
+    }
+
+    /// <summary>
+    /// Parses a space-separated list of character-map names. Prefixed names are resolved
+    /// using in-scope namespace declarations; unprefixed names are always in no namespace.
+    /// </summary>
+    private static IReadOnlyList<XsQName> ParseCharacterMapList(XElement context, string value)
+    {
+        var list = new List<XsQName>();
+        foreach (var token in value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var name = token.Trim();
+            if (string.IsNullOrEmpty(name))
+                continue;
+
+            string localName;
+            string namespaceUri;
+            string prefix;
+
+            if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+            {
+                int closeBrace = name.IndexOf('}');
+                if (closeBrace >= 2)
+                {
+                    namespaceUri = name[2..closeBrace];
+                    localName = name[(closeBrace + 1)..];
+                    prefix = "";
+                    list.Add(new XsQName(localName, namespaceUri, prefix));
+                    continue;
+                }
+            }
+
+            int colon = name.IndexOf(':');
+            if (colon >= 0)
+            {
+                prefix = name[..colon];
+                localName = name[(colon + 1)..];
+                var resolvedNs = context.GetNamespaceOfPrefix(prefix);
+                namespaceUri = resolvedNs?.NamespaceName ?? "";
+            }
+            else
+            {
+                prefix = "";
+                localName = name;
+                namespaceUri = "";
             }
 
             list.Add(new XsQName(localName, namespaceUri, prefix));

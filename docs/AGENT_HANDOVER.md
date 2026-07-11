@@ -1,6 +1,51 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
+**Commit:** `8c920d5`
+**Current focus:** Phase 2 XSLT serialization — `xsl:character-map` support and remaining character-map edge cases.
+
+---
+
+## This Session Fixes
+
+1. **`xsl:character-map` precedence and merging**
+   - `OutputProperties.Merge` now prepends `use-character-maps` references so later `xsl:output` declarations and `xsl:result-document` instructions take precedence.
+   - `Stylesheet.ResolveCharacterMap` resolves each map into a standalone expansion (explicit `xsl:output-character` mappings override referenced maps) and then merges maps in effective-list order with **first-wins** semantics for duplicate characters.
+
+2. **`xsl:result-document @use-character-maps`**
+   - Instruction-level character-map names are resolved in the original instruction context (preserving ancestor namespace declarations) and then supplement named/unnamed output-definition references.
+
+3. **Conformance harness line-ending normalization**
+   - `NormalizeXml` fallback now converts `\r\n` to `\n` before comparing non-XML/text serialization output, so CRLF-packed expected files compare correctly.
+
+4. **Documentation**
+   - `docs/ARCHITECTURE.md` and `docs/INTEGRATION.md` updated to mark `xsl:output` and `xsl:character-map` as implemented.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- W3C `output` conformance set: **142 passed / 61 failed / 29 skipped** (was 137/66/29).
+- All output-named test sets combined: **158 passed / 63 failed / 60 skipped** (was 153/68/60).
+
+## Files Changed
+
+- `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`
+- `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`
+- `src/Bosak.Xslt/Stylesheet/CharacterMapDefinition.cs`
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs`
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
+- `src/Bosak.Xslt/Api/XsltExecutable.cs`
+- `tests/Bosak.Xslt.Conformance/Program.cs`
+- `tests/Bosak.Xslt.Tests/Copy4301Tests.cs`
+- `tests/Bosak.Xslt.Tests/StylesheetTests.cs`
+- `docs/ARCHITECTURE.md`
+- `docs/INTEGRATION.md`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-11
 **Commit:** `208afca`
 **Current focus:** Phase 1 XSLT serialization core — XHTML5 DOCTYPE formatting, `html-version` validation, case-folding, namespace prefix stripping, and HTML void-element handling.
 

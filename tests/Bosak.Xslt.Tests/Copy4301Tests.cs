@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-06-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 11-07-2026     | Updated expected XML empty-element tag to no-space form.                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -45,6 +46,6 @@ public class Copy4301Tests
         var executable = compiler.Compile(xsl, "file:///test.xsl");
         var source = new XDocumentNode(new XDocument(new XElement("dummy")));
         var result = executable.TransformToString(source);
-        Assert.Equal("<root><a-root /></root>", result.Trim());
+        Assert.Equal("<root><a-root/></root>", result.Trim());
     }
 }

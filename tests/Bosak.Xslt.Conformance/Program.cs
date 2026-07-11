@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 2.5   | 05-07-2026     | Fix assert-eq for string-literal assertions on text-only messages                     |
 //                      | Charles Korthout | 2.6   | 26-06-2026     | Inline source content inherits the test-set file base URI                             |
 //                      | Charles Korthout | 2.7   | 07-07-2026     | Load assert-serialization expected value from @file; fixes bug-0701                    |
+//                      | Charles Korthout | 2.8   | 11-07-2026     | Normalize CRLF line endings in non-XML serialization comparisons.                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1261,7 +1262,7 @@ class Program
             : resultElem.Element(ns + "serialization-matches");
         if (serializationMatches != null)
         {
-            var serialized = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties).Replace(" />", "/>");
+            var serialized = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties);
             var pattern = serializationMatches.Value;
             return Regex.IsMatch(serialized, pattern);
         }
@@ -1450,7 +1451,7 @@ class Program
         if (serializationMatches != null)
         {
             var pattern = serializationMatches.Value;
-            return Regex.IsMatch(actual.Replace(" />", "/>"), pattern);
+            return Regex.IsMatch(actual, pattern);
         }
 
         // error expected
@@ -1915,7 +1916,9 @@ class Program
         }
         catch
         {
-            return StripXmlDeclaration(xml.Trim());
+            // For non-XML output (e.g. method="text”) or output containing characters
+            // that an XML parser would escape, normalize line endings before comparing.
+            return StripXmlDeclaration(xml.Trim().Replace("\r\n", "\n"));
         }
     }
 

@@ -164,6 +164,8 @@
 //                      | Charles Korthout | 5.93  | 26-06-2026     | Avoid forcing lazy globals when building accumulator evaluation context                  |
 //                      | Charles Korthout | 5.94  | 09-07-2026     | xsl:source-document resolves fragment identifiers to xml:id elements                   |
 //                      | Charles Korthout | 5.95  | 11-07-2026     | Build principal result tree in synthetic __xdm_doc__ wrapper to support fragments.     |
+//                      | Charles Korthout | 5.96  | 11-07-2026     | Resolve xsl:result-document use-character-maps in original instruction context.        |
+//                      | Charles Korthout | 5.97  | 11-07-2026     | Result-document character maps now supplement named/unnamed output definitions.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -12963,9 +12965,18 @@ public sealed class TransformEngine
     private XElement EvaluateResultDocumentInstruction(XElement instruction)
     {
         var evaluated = new XElement(instruction.Name);
+        // Preserve the namespace declarations from the original instruction so that
+        // QName-valued attributes such as use-character-maps can be resolved correctly.
+        foreach (var nsAttr in instruction.Attributes().Where(a => a.IsNamespaceDeclaration))
+            evaluated.SetAttributeValue(nsAttr.Name, nsAttr.Value);
+
         foreach (var attr in instruction.Attributes())
         {
             var localName = attr.Name.LocalName;
+            // @use-character-maps is not an AVT and its prefixes must be resolved in the
+            // context of the original instruction, so do not copy it to the evaluated stub.
+            if (localName == "use-character-maps")
+                continue;
             var value = attr.Value;
             if (localName is "method" or "output-version" or "encoding" or "indent"
                 or "omit-xml-declaration" or "standalone" or "undeclare-prefixes")
@@ -13014,12 +13025,51 @@ public sealed class TransformEngine
         // Capture the effective output properties for this result document,
         // merging any instruction attributes with the stylesheet-level xsl:output
         // properties. Attribute value templates are evaluated for the serialization
-        // properties that may contain AVTs.
+        // properties that may contain AVTs. If @format is present, the named output
+        // definition is looked up and merged between the unnamed defaults and the
+        // instruction-level overrides.
+        var formatRaw = instruction.Attribute("format")?.Value;
+        var formatLexical = string.IsNullOrEmpty(formatRaw) ? string.Empty : EvaluateAvt(formatRaw, instruction);
+        Stylesheet.OutputProperties? namedProps = null;
+        if (!string.IsNullOrEmpty(formatLexical))
+        {
+            var expandedName = Stylesheet.Stylesheet.ExpandQName(instruction, formatLexical);
+            if (!_stylesheet.NamedOutputProperties.TryGetValue(expandedName, out namedProps))
+                throw new XsltRuntimeException("XTDE1460",
+                    $"No xsl:output definition named '{formatLexical}' exists.",
+                    contextItem);
+        }
+
         var baseProps = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
         var evaluatedInstruction = EvaluateResultDocumentInstruction(instruction);
         var resultDocumentProps = new Stylesheet.OutputProperties();
         Stylesheet.OutputProperties.Merge(resultDocumentProps, baseProps);
+        if (namedProps != null)
+            Stylesheet.OutputProperties.Merge(resultDocumentProps, namedProps);
         Stylesheet.OutputProperties.Merge(resultDocumentProps, Stylesheet.OutputProperties.FromElement(evaluatedInstruction));
+
+        // Resolve any named character maps into a concrete character-to-string table.
+        // Instruction-level references are resolved in the original instruction context
+        // and take precedence over stylesheet-level xsl:output references.
+        var useCharacterMapsAttr = instruction.Attribute("use-character-maps")?.Value;
+        var expandedNames = new List<string>();
+        if (!string.IsNullOrWhiteSpace(useCharacterMapsAttr))
+        {
+            foreach (var name in useCharacterMapsAttr.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var expanded = Stylesheet.Stylesheet.ExpandQName(instruction, name.Trim());
+                if (!string.IsNullOrEmpty(expanded) && !expandedNames.Contains(expanded))
+                    expandedNames.Add(expanded);
+            }
+        }
+        foreach (var q in resultDocumentProps.UseCharacterMaps)
+        {
+            var expanded = Stylesheet.Stylesheet.ExpandQName(q);
+            if (!expandedNames.Contains(expanded))
+                expandedNames.Add(expanded);
+        }
+        if (expandedNames.Count > 0)
+            resultDocumentProps.CharacterMap = _stylesheet.ResolveCharacterMap(expandedNames);
 
         if (isPrincipal)
         {

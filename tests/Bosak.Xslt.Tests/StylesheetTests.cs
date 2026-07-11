@@ -35,6 +35,7 @@
 //                      | Charles Korthout | 0.23  | 11-07-2026     | Added fragment serialization tests for xml/html/xhtml multiple top-level nodes.        |
 //                      | Charles Korthout | 0.24  | 11-07-2026     | Added default method inference tests for html in XHTML namespace and no namespace.     |
 //                      | Charles Korthout | 0.25  | 11-07-2026     | Added SESU0007 unsupported-encoding and SEPM0009 standalone/omit-declaration tests.    |
+//                      | Charles Korthout | 0.26  | 11-07-2026     | Updated expected XML empty-element tag to no-space form.                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -872,7 +873,7 @@ Welcome to this document on XHTML.
         var result = executable.TransformToString(new XDocumentNode(source));
 
         // XSLT 2.0 built-in rules apply templates to children, not shallow-copy
-        Assert.Equal("<output />", result.Trim());
+        Assert.Equal("<output/>", result.Trim());
     }
 
     [Fact]
