@@ -163,6 +163,7 @@
 //                      | Charles Korthout | 5.92  | 26-06-2026     | Expand sequence placeholders for apply-templates/call-template inside function bodies  |
 //                      | Charles Korthout | 5.93  | 26-06-2026     | Avoid forcing lazy globals when building accumulator evaluation context                  |
 //                      | Charles Korthout | 5.94  | 09-07-2026     | xsl:source-document resolves fragment identifiers to xml:id elements                   |
+//                      | Charles Korthout | 5.95  | 11-07-2026     | Build principal result tree in synthetic __xdm_doc__ wrapper to support fragments.     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -197,7 +198,13 @@ public sealed class TransformEngine
     /// </summary>
     private const double ProcessorXsltVersion = 3.1;
     private const string ExsltCommonNamespace = "http://exslt.org/common";
-    private readonly XDocument _resultDocument;
+    // The principal result tree is built inside a synthetic wrapper element.
+    // This allows templates to produce multiple top-level nodes (fragments)
+    // without the structural constraints of an XDocument. At the end of the
+    // transformation the wrapper is unwrapped into a real XDocument when the
+    // result is a single clean root element, otherwise it is returned as a
+    // fragment wrapper that the serializers know how to expand.
+    private readonly XElement _resultDocument;
     private XContainer _currentContainer;
     private readonly StringBuilder _documentLevelText = new();
     private bool _lastAddedWasAtomic;
@@ -371,7 +378,7 @@ public sealed class TransformEngine
         _context.CollationComparer = FunctionLibrary.CompareStrings;
         XsltFunctionLibrary.Populate(_context);
 
-        _resultDocument = new XDocument();
+        _resultDocument = new XElement("__xdm_doc__");
         _currentContainer = _resultDocument;
 
         _allTemplateRules = _stylesheet.GetAllTemplateRules().ToList();
@@ -739,13 +746,32 @@ public sealed class TransformEngine
         }
 
         // Return the result document, or document-level text if no root element was produced
-        if (_documentLevelText.Length > 0 && _resultDocument.Root == null)
+        if (_documentLevelText.Length > 0 && !_resultDocument.Elements().Any())
         {
             return XdmValue.FromString(_documentLevelText.ToString());
         }
-        var documentValue = XdmValue.FromNode(new XDocumentNode(_resultDocument));
-        FinalizeResultTreeNamespaces(documentValue);
-        return documentValue;
+
+        // Unwrap a single clean root element into a real XDocument so that
+        // existing single-document consumers and the XML serializer behave
+        // exactly as before. If there are multiple top-level nodes (or text
+        // alongside an element), return the synthetic wrapper as a fragment.
+        XdmValue resultValue;
+        var rootElements = _resultDocument.Elements().ToList();
+        if (rootElements.Count == 1 && _resultDocument.Nodes().Count() == 1)
+        {
+            var doc = new XDocument(rootElements[0]);
+            var rdProps = _resultDocument.Annotation<Stylesheet.OutputProperties>();
+            if (rdProps != null)
+                doc.AddAnnotation(rdProps);
+            resultValue = XdmValue.FromNode(new XDocumentNode(doc));
+        }
+        else
+        {
+            resultValue = XdmValue.FromNode(new XDocumentNode(_resultDocument));
+        }
+
+        FinalizeResultTreeNamespaces(resultValue);
+        return resultValue;
     }
 
     /// <summary>
@@ -13047,8 +13073,8 @@ public sealed class TransformEngine
             if (_resultDocumentStack.Count == 0)
             {
                 _principalOutputClosed = true;
-                if (_principalResultDocumentProperties != null && principalContainer is XDocument principalDoc)
-                    principalDoc.AddAnnotation(_principalResultDocumentProperties);
+                if (_principalResultDocumentProperties != null && principalContainer is XElement principalElem)
+                    principalElem.AddAnnotation(_principalResultDocumentProperties);
             }
         }
         else

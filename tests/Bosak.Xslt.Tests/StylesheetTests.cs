@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 0.20  | 26-06-2026     | Added regression test for HTML output normalization-form                                 |
 //                      | Charles Korthout | 0.21  | 10-07-2026     | Added regression test for apply-imports into included modules of an import               |
 //                      | Charles Korthout | 0.22  | 11-07-2026     | Added xsl:output serialization tests for XHTML, DOCTYPE, CDATA, URI escaping, meta     |
+//                      | Charles Korthout | 0.23  | 11-07-2026     | Added fragment serialization tests for xml/html/xhtml multiple top-level nodes.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -681,6 +682,35 @@ public class StylesheetTests
 
         Assert.Contains("<a><![CDATA[text]]></a>", result);
         Assert.Contains("<b><![CDATA[text]]></b>", result);
+    }
+
+    [Theory]
+    [InlineData("xhtml")]
+    [InlineData("xml")]
+    [InlineData("html")]
+    public void Output_Fragment_Multiple_Top_Level(string method)
+    {
+        var xsl = $@"<t:transform xmlns='http://www.w3.org/1999/xhtml'
+             xmlns:t='http://www.w3.org/1999/XSL/Transform'
+             version='2.0'>
+   <t:output method='{method}' indent='no'/>
+   <t:template match='/'>
+      <html>
+         <h1>Introduction</h1>
+Welcome to this document on XHTML.
+ </html>
+      <h1>Introduction</h1>
+Welcome to this document on XHTML.
+</t:template>
+</t:transform>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<html", result);
+        Assert.Contains("<h1>Introduction</h1>", result);
     }
 
     // ------------------------------------------------------------------

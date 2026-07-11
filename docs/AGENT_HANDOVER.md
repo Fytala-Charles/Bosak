@@ -1,6 +1,36 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
+**Commit:** `819c16c`
+**Current focus:** Phase 1 XSLT serialization core — fixed `output-0131` (XHTML fragment with multiple top-level elements).
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,243
+- **Failed:** 0
+- **Skipped:** 9,357
+- **Pass rate:** 100.0% (unchanged vs. previous)
+
+## This Session Fixes
+
+1. **`output-0131` fragment serialization** — The transform engine previously built the principal result tree directly inside an `XDocument`, which throws when a template produces multiple top-level elements. The engine now builds into a synthetic `__xdm_doc__` wrapper element and unwraps it to a real `XDocument` only when the result is a single clean root element. Fragments are returned as the wrapper and serialized correctly by XML, HTML, and XHTML serializers.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `src/Bosak.Xslt/Api/XsltExecutable.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+## Notes
+
+- Unit-test suite: **934 passed / 0 failed / 0 skipped** across 8 projects (3 new regression tests added).
+- Full W3C suite: **5,243/0/9,357** (100.0%).
+- `output` conformance set: **104 passed / 99 failed / 29 skipped** (was 103 failures reported in previous handover; `output-0131` now passes).
+- Remaining `output` failures are mostly around named outputs, default method inference, encoding errors, and HTML/XHTML edge-case rules.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-11
 **Commit:** `c1f2a89`
 **Current focus:** Phase 1 XSLT serialization core — fixed the final failing unit test for `cdata-section-elements` merging across multiple `xsl:output` declarations.
 

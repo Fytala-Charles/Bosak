@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 11-07-2026     | Added method="xhtml", doctype, cdata-section-elements, escape-uri-attributes,          |
 //                      |                  |       |                | include-content-type, byte-order-mark, and html-version support.                       |
 //                      | Charles Korthout | 0.9   | 11-07-2026     | Preserve CDATA nodes during namespace-normalization so cdata-section-elements works. |
+//                      | Charles Korthout | 1.0   | 11-07-2026     | Added SerializeXmlFragment to serialize __xdm_doc__ wrapper children for XML method.   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -502,11 +503,57 @@ public static class ResultTreeSerializer
 
     private static string SerializeXElement(XElement element, Stylesheet.OutputProperties props)
     {
+        if (element.Name.LocalName == "__xdm_doc__" && element.Name.NamespaceName == "")
+            return SerializeXmlFragment(element, props);
+
         if (props.Version == "1.1")
             return SerializeRaw(element, props);
 
         ValidateXml10(element);
         return SerializeWithEncoding(element, props);
+    }
+
+    private static string SerializeXmlFragment(XElement wrapper, Stylesheet.OutputProperties props)
+    {
+        var node = (XNode)wrapper;
+
+        // Apply Unicode normalization if requested before encoding-aware writing.
+        if (TryGetNormalizationForm(props) is { } normForm)
+            node = NormalizeXNode(node, normForm);
+
+        // Wrap CDATA section elements.
+        node = WrapCdataSections(node, props);
+
+        // Namespace undeclarations are only permitted in XML 1.1 output when
+        // undeclare-prefixes="yes" is in effect. Remove them for other cases.
+        node = NormalizeForXmlWriter(node, props);
+
+        var fragment = (XElement)node;
+
+        var encoding = GetEncodingWithBom(props.Encoding, props.ByteOrderMark);
+
+        using var stream = new System.IO.MemoryStream();
+        var settings = CreateXmlWriterSettings(props, encoding);
+        settings.ConformanceLevel = ConformanceLevel.Fragment;
+        using (var xmlWriter = XmlWriter.Create(stream, settings))
+        {
+            if (!props.OmitXmlDeclaration)
+            {
+                xmlWriter.WriteProcessingInstruction("xml",
+                    $"version=\"{props.Version}\" encoding=\"{props.Encoding}\"" +
+                    (props.Standalone is "yes" or "no" ? $" standalone=\"{props.Standalone}\"" : ""));
+            }
+
+            WriteDoctype(xmlWriter, fragment.Elements().FirstOrDefault(), props);
+
+            foreach (var child in fragment.Nodes())
+                child.WriteTo(xmlWriter);
+
+            xmlWriter.Flush();
+        }
+
+        var result = encoding.GetString(stream.ToArray());
+        return ConvertHexEntitiesToDecimal(result);
     }
 
     private static string SerializeXDocument(XDocument document, Stylesheet.OutputProperties props)

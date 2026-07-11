@@ -398,6 +398,7 @@ Customer A produces XML that is consumed by external systems (Infor, EDI gateway
 |------|-------|----------|-----------|
 | 2026-05-24 | Kimi | Pending | Phase 2 item |
 | 2026-07-11 | Kimi | Implemented | Core serialization properties for XML/HTML/XHTML added; CDATA merge bug fixed |
+| 2026-07-11 | Kimi | Implemented | Fragment result trees (multiple top-level nodes) serialize correctly for xml/html/xhtml. |
 
 ---
 

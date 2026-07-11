@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.7   | 26-06-2026     | Added baseOutputUri parameter to Transform/TransformToString                            |
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Propagate TreatRecoverableAmbiguousMatchAsError to TransformEngine                      |
 //                      | Charles Korthout | 0.8   | 06-07-2026     | Use xsl:result-document output properties in TransformToString                          |
+//                      | Charles Korthout | 0.9   | 11-07-2026     | Read xsl:result-document output properties from fragment wrapper elements too.          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -89,9 +90,13 @@ public sealed class XsltExecutable
     {
         var result = Transform(source, context, initialTemplate, initialMode, baseOutputUri: baseOutputUri);
         var outputProperties = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
-        if (result.IsNode && result.NodeValue is XDocumentNode xdn && xdn.UnderlyingObject is XDocument doc)
+        if (result.IsNode && result.NodeValue is XDocumentNode xdn)
         {
-            var rdProps = doc.Annotation<Stylesheet.OutputProperties>();
+            Stylesheet.OutputProperties? rdProps = null;
+            if (xdn.UnderlyingObject is XDocument doc)
+                rdProps = doc.Annotation<Stylesheet.OutputProperties>();
+            else if (xdn.UnderlyingObject is XElement elem)
+                rdProps = elem.Annotation<Stylesheet.OutputProperties>();
             if (rdProps != null)
                 outputProperties = rdProps;
         }
