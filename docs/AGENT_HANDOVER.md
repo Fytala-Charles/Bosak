@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `d805c88`
+**Commit:** `c1f2a89`
 **Current focus:** Phase 1 XSLT serialization core — fixed the final failing unit test for `cdata-section-elements` merging across multiple `xsl:output` declarations.
 
 ---
