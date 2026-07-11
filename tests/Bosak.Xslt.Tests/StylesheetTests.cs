@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 0.19  | 26-06-2026     | Added regression test for global variable referencing accumulator-after()                |
 //                      | Charles Korthout | 0.20  | 26-06-2026     | Added regression test for HTML output normalization-form                                 |
 //                      | Charles Korthout | 0.21  | 10-07-2026     | Added regression test for apply-imports into included modules of an import               |
+//                      | Charles Korthout | 0.22  | 11-07-2026     | Added xsl:output serialization tests for XHTML, DOCTYPE, CDATA, URI escaping, meta     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -476,6 +477,210 @@ public class StylesheetTests
 
         Assert.DoesNotContain("<?xml", result);
         Assert.DoesNotContain("\n", result);
+    }
+
+    [Fact]
+    public void Output_Xhtml_Method_Emits_Xml_Syntax()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xhtml' omit-xml-declaration='no' indent='no'/>
+            <xsl:template match='/'>
+                <html xmlns='http://www.w3.org/1999/xhtml'><head><title>t</title></head><body><p>hello</p></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<?xml", result);
+        Assert.Contains("<html xmlns=\"http://www.w3.org/1999/xhtml\">", result);
+        Assert.Contains("<p>hello</p>", result);
+    }
+
+    [Fact]
+    public void Output_Xhtml_Void_Element_Is_Self_Closed()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xhtml' omit-xml-declaration='yes' indent='no'/>
+            <xsl:template match='/'>
+                <html xmlns='http://www.w3.org/1999/xhtml'><body><br /></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<br />", result);
+    }
+
+    [Fact]
+    public void Output_Xhtml_Non_Void_Empty_Element_Has_End_Tag()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xhtml' omit-xml-declaration='yes' indent='no'/>
+            <xsl:template match='/'>
+                <html xmlns='http://www.w3.org/1999/xhtml'><body><custom></custom></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<custom></custom>", result);
+    }
+
+    [Fact]
+    public void Output_Xhtml_Doctype_System_Is_Emitted()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xhtml' omit-xml-declaration='yes' indent='no' doctype-system='out.dtd'/>
+            <xsl:template match='/'>
+                <html xmlns='http://www.w3.org/1999/xhtml'><body><p>hello</p></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<!DOCTYPE html SYSTEM \"out.dtd\">", result);
+    }
+
+    [Fact]
+    public void Output_Xhtml_Cdata_Section_Elements_Wraps_Text()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xhtml' omit-xml-declaration='yes' indent='no' cdata-section-elements='Q{http://www.w3.org/1999/xhtml}example'/>
+            <xsl:template match='/'>
+                <html xmlns='http://www.w3.org/1999/xhtml'><body><example>a &lt; b</example></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<example><![CDATA[a < b]]></example>", result);
+    }
+
+    [Fact]
+    public void Output_Html_Escape_Uri_Attributes_Percent_Encodes_Non_Ascii()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='html' escape-uri-attributes='yes' indent='no'/>
+            <xsl:template match='/'>
+                <html><body><a href='http://example.org/årsrapport/'>link</a></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("%C3%A5rsrapport", result);
+    }
+
+    [Fact]
+    public void Output_Xhtml_Escape_Uri_Attributes_Leaves_Non_Uri_Attributes_Unchanged()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xhtml' escape-uri-attributes='yes' indent='no'/>
+            <xsl:template match='/'>
+                <html xmlns='http://www.w3.org/1999/xhtml'><body><a href='http://example.org/å' accesskey='å'>link</a></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("href=\"http://example.org/%C3%A5\"", result);
+        Assert.Contains("accesskey=\"å\"", result);
+    }
+
+    [Fact]
+    public void Output_Html_Include_Content_Type_Inserts_Meta()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='html' indent='no'/>
+            <xsl:template match='/'>
+                <html><head><title>t</title></head><body><p>hello</p></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">", result);
+    }
+
+    [Fact]
+    public void Output_Xhtml_Include_Content_Type_Inserts_Meta()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xhtml' indent='no' omit-xml-declaration='yes'/>
+            <xsl:template match='/'>
+                <html xmlns='http://www.w3.org/1999/xhtml'><head><title>t</title></head><body><p>hello</p></body></html>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />", result);
+    }
+
+    [Fact]
+    public void Output_Xml_Standalone_Omit_Suppresses_Attribute()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xml' omit-xml-declaration='no' standalone='omit'/>
+            <xsl:template match='/'>
+                <root>hello</root>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<?xml", result);
+        Assert.DoesNotContain("standalone", result);
+    }
+
+    [Fact]
+    public void Output_Multiple_Declarations_Merge_Cdata_Section_Elements()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xml' cdata-section-elements='a'/>
+            <xsl:output method='xml' cdata-section-elements='b'/>
+            <xsl:template match='/'>
+                <root><a>text</a><b>text</b></root>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<a><![CDATA[text]]></a>", result);
+        Assert.Contains("<b><![CDATA[text]]></b>", result);
     }
 
     // ------------------------------------------------------------------

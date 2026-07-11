@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-10 (`docbook-001` cleared; full W3C baseline 5,243/0/9,357)    
+> **Living Registry** — Last updated: 2026-07-11 (Phase 1 serialization core: xsl:output extended with doctype, CDATA, URI escaping, content-type meta, byte-order-mark, html-version, suppress-indentation; CDATA merge bug fixed)    
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -363,21 +363,25 @@ Customer A transforms often need to look up reference data (e.g., convert a prod
 
 **Requesting Application:** Customer A  
 **Submitted:** 2026-05-24  
-**Status:** Pending
+**Status:** Implemented
 
 #### Problem Statement
 Customer A produces XML that is consumed by external systems (Infor, EDI gateways, customer APIs). These systems often have strict formatting requirements: UTF-8 encoding, no XML declaration, indented for debugging, or compact for size. Today Bosak always serializes with default `XDocument` settings.
 
 #### Proposed Solution
-1. Parse `xsl:output` attributes (`method`, `encoding`, `indent`, `omit-xml-declaration`, `standalone`, `version`).
+1. Parse `xsl:output` attributes (`method`, `encoding`, `indent`, `omit-xml-declaration`, `standalone`, `version`, `doctype-system`, `doctype-public`, `cdata-section-elements`, `escape-uri-attributes`, `include-content-type`, `media-type`, `byte-order-mark`, `html-version`, `suppress-indentation`, `normalization-form`).
 2. Pass output properties to `ResultTreeSerializer`.
-3. Support `method="xml"` first; `method="text"` and `method="html"` as stretch goals.
+3. Support `method="xml"`, `method="text"`, `method="html"`, and `method="xhtml"`.
 
 #### Acceptance Criteria
-- [ ] `<xsl:output method="xml" encoding="UTF-8" indent="yes"/>` produces indented XML
-- [ ] `<xsl:output omit-xml-declaration="yes"/>` suppresses `<?xml …?>`
-- [ ] `method="text"` serializes only text nodes (no markup)
-- [ ] Invalid combinations are ignored gracefully (not fatal)
+- [x] `<xsl:output method="xml" encoding="UTF-8" indent="yes"/>` produces indented XML
+- [x] `<xsl:output omit-xml-declaration="yes"/>` suppresses `<?xml …?>`
+- [x] `method="text"` serializes only text nodes (no markup)
+- [x] `method="html"` and `method="xhtml"` produce HTML/XHTML serialization with DOCTYPE, void elements, and Content-Type meta
+- [x] `doctype-system` / `doctype-public` emit a DOCTYPE declaration
+- [x] `cdata-section-elements` wraps text children of named elements in CDATA sections
+- [x] Multiple `xsl:output` declarations merge, unioning `cdata-section-elements` and `suppress-indentation`
+- [x] Invalid combinations are ignored gracefully (not fatal)
 
 #### Impact Analysis
 | Layer | Impact | Notes |
@@ -393,6 +397,7 @@ Customer A produces XML that is consumed by external systems (Infor, EDI gateway
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-24 | Kimi | Pending | Phase 2 item |
+| 2026-07-11 | Kimi | Implemented | Core serialization properties for XML/HTML/XHTML added; CDATA merge bug fixed |
 
 ---
 

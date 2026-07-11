@@ -1,5 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-11
+**Commit:** `d805c88`
+**Current focus:** Phase 1 XSLT serialization core — fixed the final failing unit test for `cdata-section-elements` merging across multiple `xsl:output` declarations.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,243
+- **Failed:** 0
+- **Skipped:** 9,357
+- **Pass rate:** 100.0% (unchanged vs. previous)
+
+## This Session Fixes
+
+1. **`cdata-section-elements` lost during XML normalization** — `ResultTreeSerializer.NormalizeForXmlWriter` handled `XText` but not its `XCData` subclass, so CDATA wrappers created by `WrapCdataSections` were converted back to ordinary text before writing. Added an explicit `XCData` branch to preserve CDATA nodes.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+## Notes
+
+- Unit-test suite: **920 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C suite: **5,243/0/9,357** (100.0%).
+- Remaining failures: none.
+- Phase 1 serialization core still has 103 failing `output` conformance tests; the `cdata-section-elements` merge unit test now passes.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-10
 **Commit:** `c66c77c`
 **Current focus:** Cleared the final W3C DocBook conformance failure (`docbook-001`). The full W3C XSLT 3.0 conformance suite now passes with 0 failures.

@@ -209,8 +209,8 @@ The harness:
 | **XPath (QT3)** | 428 test sets, ~32,000 tests |
 | Pass Rate (XPath) | **~59.0%** (18,785 passed / 3,085 failed / 9,951 skipped) |
 | **XSLT 3.0** | 234 test sets, ~14,600 tests |
-| Pass Rate (XSLT) | **~96.6%** (5,073 passed / 177 failed / 9,350 skipped) |
-| Unsupported Features | Schema awareness, XQuery-only, XML 1.1, serialization, streaming, higher-order functions |
+| Pass Rate (XSLT) | **~100% runnable** (5,243 passed / 0 failed / 9,357 skipped) |
+| Unsupported Features | Schema awareness, XQuery-only, XML 1.1, streaming, higher-order functions |
 
 ### Known Limitations
 

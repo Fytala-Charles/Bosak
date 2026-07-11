@@ -82,7 +82,6 @@ class Program
 
     static readonly HashSet<string> SkipFeatures = new(StringComparer.OrdinalIgnoreCase)
     {
-        "serialization",
         "schema_aware",
         "schema-import",
         "streaming",
