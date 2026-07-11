@@ -2,6 +2,35 @@
 
 **Date:** 2026-07-11
 **Commit:** `8184ea3`
+**Current focus:** Phase 1 XSLT serialization core — implemented default serialization method inference (output-0130).
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,243
+- **Failed:** 0
+- **Skipped:** 9,357
+- **Pass rate:** 100.0% (unchanged vs. previous)
+
+## This Session Fixes
+
+1. **Default serialization method inference** — When `xsl:output` has no `method` attribute, Bosak now inspects the result tree root element. A root `html` in the XHTML namespace defaults to `method="xhtml"`; a root `html` in no namespace defaults to `method="html"`. For inferred `xhtml`, `omit-xml-declaration` defaults to `no` so the XML declaration is emitted.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+## Notes
+
+- Unit-test suite: **939 passed / 0 failed / 0 skipped** across 8 projects (2 new regression tests added).
+- Full W3C suite: **5,243/0/9,357** (100.0%).
+- `output` conformance set: **105 passed / 98 failed / 29 skipped** (`output-0130` now passes; was 104/99 before this change).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-11
+**Commit:** `8184ea3`
 **Current focus:** Phase 1 XSLT serialization core — fixed `output-0131` (XHTML fragment with multiple top-level elements).
 
 ---

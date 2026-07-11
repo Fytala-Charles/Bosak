@@ -33,6 +33,7 @@
 //                      | Charles Korthout | 0.21  | 10-07-2026     | Added regression test for apply-imports into included modules of an import               |
 //                      | Charles Korthout | 0.22  | 11-07-2026     | Added xsl:output serialization tests for XHTML, DOCTYPE, CDATA, URI escaping, meta     |
 //                      | Charles Korthout | 0.23  | 11-07-2026     | Added fragment serialization tests for xml/html/xhtml multiple top-level nodes.        |
+//                      | Charles Korthout | 0.24  | 11-07-2026     | Added default method inference tests for html in XHTML namespace and no namespace.     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -711,6 +712,59 @@ Welcome to this document on XHTML.
 
         Assert.Contains("<html", result);
         Assert.Contains("<h1>Introduction</h1>", result);
+    }
+
+    [Fact]
+    public void Output_Default_Method_Infers_Xhtml_For_Html_In_Xhtml_Namespace()
+    {
+        var xsl = @"<t:transform xmlns='http://www.w3.org/1999/xhtml'
+             xmlns:t='http://www.w3.org/1999/XSL/Transform'
+             version='2.0'>
+   <t:template match='/'>
+      <html>
+         <head>
+            <title>Default output method</title>
+         </head>
+         <body>
+            <p>Verify<a href='http://exampleÇ.org/Â'> this is XHTML</a>.</p>
+         </body>
+      </html>
+   </t:template>
+</t:transform>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        // XHTML serialization emits an XML declaration and includes a Content-Type meta.
+        Assert.Contains("<?xml", result);
+        Assert.Contains("<html xmlns=\"http://www.w3.org/1999/xhtml\">", result);
+        Assert.Contains("http-equiv=\"Content-Type\"", result);
+    }
+
+    [Fact]
+    public void Output_Default_Method_Infers_Html_For_Html_In_No_Namespace()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+   <xsl:template match='/'>
+      <html>
+         <head><title>HTML</title></head>
+         <body><p>Hello<br/>world</p></body>
+      </html>
+   </xsl:template>
+</xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        // HTML serialization omits XML declaration and uses unclosed void elements.
+        Assert.DoesNotContain("<?xml", result);
+        Assert.Contains("<html>", result);
+        Assert.Contains("<br>", result);
+        Assert.DoesNotContain("<br />", result);
     }
 
     // ------------------------------------------------------------------

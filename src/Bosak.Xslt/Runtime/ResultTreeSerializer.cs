@@ -21,6 +21,7 @@
 //                      |                  |       |                | include-content-type, byte-order-mark, and html-version support.                       |
 //                      | Charles Korthout | 0.9   | 11-07-2026     | Preserve CDATA nodes during namespace-normalization so cdata-section-elements works. |
 //                      | Charles Korthout | 1.0   | 11-07-2026     | Added SerializeXmlFragment to serialize __xdm_doc__ wrapper children for XML method.   |
+//                      | Charles Korthout | 1.1   | 11-07-2026     | Infer xhtml/html serialization method from result root element when not specified.     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -51,6 +52,7 @@ public static class ResultTreeSerializer
             return string.Empty;
 
         var props = output ?? new Stylesheet.OutputProperties();
+        InferMethod(props, value);
         ApplyMethodDefaults(props);
 
         if (props.Method == "text")
@@ -127,6 +129,62 @@ public static class ResultTreeSerializer
             // an explicit html-version attribute. HTML defaults to 5.0.
             props.HtmlVersion = method == "xhtml" ? "1.0" : "5.0";
         }
+    }
+
+    /// <summary>
+    /// Infers the serialization method from the result tree when no method
+    /// was explicitly specified on xsl:output.
+    /// </summary>
+    private static void InferMethod(Stylesheet.OutputProperties props, XdmValue value)
+    {
+        if (props.MethodSpecified)
+            return;
+
+        var rootElement = GetResultRootElement(value);
+        if (rootElement == null)
+            return;
+
+        if (rootElement.Name.LocalName == "html" &&
+            rootElement.Name.NamespaceName == "http://www.w3.org/1999/xhtml")
+        {
+            props.Method = "xhtml";
+            props.MethodSpecified = true;
+            if (!props.OmitXmlDeclarationSpecified)
+                props.OmitXmlDeclaration = false;
+        }
+        else if (rootElement.Name.LocalName == "html" &&
+                 rootElement.Name.NamespaceName == "")
+        {
+            props.Method = "html";
+            props.MethodSpecified = true;
+            if (!props.OmitXmlDeclarationSpecified)
+                props.OmitXmlDeclaration = true;
+        }
+    }
+
+    /// <summary>
+    /// Returns the single root element of a result value, or the first child
+    /// element of a fragment wrapper, for method inference.
+    /// </summary>
+    private static XElement? GetResultRootElement(XdmValue value)
+    {
+        if (!value.IsNode || value.NodeValue == null)
+            return null;
+
+        if (value.NodeValue is not XDocumentNode xdn)
+            return null;
+
+        if (xdn.UnderlyingObject is XDocument doc)
+            return doc.Root;
+
+        if (xdn.UnderlyingObject is XElement elem)
+        {
+            if (elem.Name.LocalName == "__xdm_doc__" && elem.Name.NamespaceName == "")
+                return elem.Elements().FirstOrDefault();
+            return elem;
+        }
+
+        return null;
     }
 
     private static string SerializeAsText(XdmValue value)
