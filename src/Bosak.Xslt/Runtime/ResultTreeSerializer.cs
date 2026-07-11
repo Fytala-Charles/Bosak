@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.9   | 11-07-2026     | Preserve CDATA nodes during namespace-normalization so cdata-section-elements works. |
 //                      | Charles Korthout | 1.0   | 11-07-2026     | Added SerializeXmlFragment to serialize __xdm_doc__ wrapper children for XML method.   |
 //                      | Charles Korthout | 1.1   | 11-07-2026     | Infer xhtml/html serialization method from result root element when not specified.     |
+//                      | Charles Korthout | 1.2   | 11-07-2026     | Validate encoding (SESU0007) and standalone+omit-declaration (SEPM0009) during serialize. |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -54,6 +55,7 @@ public static class ResultTreeSerializer
         var props = output ?? new Stylesheet.OutputProperties();
         InferMethod(props, value);
         ApplyMethodDefaults(props);
+        ValidateOutputProperties(props);
 
         if (props.Method == "text")
         {
@@ -128,6 +130,62 @@ public static class ResultTreeSerializer
             // Default to 1.0 for XHTML so legacy XSLT 2.0 tests pass without
             // an explicit html-version attribute. HTML defaults to 5.0.
             props.HtmlVersion = method == "xhtml" ? "1.0" : "5.0";
+        }
+    }
+
+    /// <summary>
+    /// Validates serialization properties that have cross-attribute constraints
+    /// or require a supported encoding. Raises XSLT serialization errors.
+    /// </summary>
+    private static void ValidateOutputProperties(Stylesheet.OutputProperties props)
+    {
+        ValidateEncoding(props.Encoding);
+
+        // SEPM0009: standalone pseudo-attribute is not allowed when the XML
+        // declaration is omitted.
+        if (props.OmitXmlDeclaration && props.Standalone is "yes" or "no")
+        {
+            throw new XsltRuntimeException("SEPM0009",
+                "The standalone pseudo-attribute is not allowed when the XML declaration is omitted.",
+                XdmValue.Undefined);
+        }
+    }
+
+    /// <summary>
+    /// Validates that the requested encoding name is supported by the runtime.
+    /// Raises SESU0007 for unsupported encodings.
+    /// </summary>
+    private static void ValidateEncoding(string encodingName)
+    {
+        var enc = encodingName.Trim().ToUpperInvariant();
+        switch (enc)
+        {
+            case "UTF-8":
+            case "UTF8":
+            case "UTF-16":
+            case "UTF-16LE":
+            case "UTF16":
+            case "UTF16LE":
+            case "UTF-16BE":
+            case "UTF16BE":
+            case "UTF-32":
+            case "UTF-32LE":
+            case "UTF32":
+            case "UTF32LE":
+            case "UTF-32BE":
+            case "UTF32BE":
+                return;
+        }
+
+        try
+        {
+            _ = System.Text.Encoding.GetEncoding(encodingName);
+        }
+        catch
+        {
+            throw new XsltRuntimeException("SESU0007",
+                $"Unsupported encoding '{encodingName}'.",
+                XdmValue.Undefined);
         }
     }
 

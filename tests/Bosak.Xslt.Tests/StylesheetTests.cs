@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 0.22  | 11-07-2026     | Added xsl:output serialization tests for XHTML, DOCTYPE, CDATA, URI escaping, meta     |
 //                      | Charles Korthout | 0.23  | 11-07-2026     | Added fragment serialization tests for xml/html/xhtml multiple top-level nodes.        |
 //                      | Charles Korthout | 0.24  | 11-07-2026     | Added default method inference tests for html in XHTML namespace and no namespace.     |
+//                      | Charles Korthout | 0.25  | 11-07-2026     | Added SESU0007 unsupported-encoding and SEPM0009 standalone/omit-declaration tests.    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -765,6 +766,45 @@ Welcome to this document on XHTML.
         Assert.Contains("<html>", result);
         Assert.Contains("<br>", result);
         Assert.DoesNotContain("<br />", result);
+    }
+
+    [Theory]
+    [InlineData("xml")]
+    [InlineData("html")]
+    [InlineData("text")]
+    public void Output_Unsupported_Encoding_Raises_Sesu0007(string method)
+    {
+        var xsl = $@"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+   <xsl:output method='{method}' encoding='XXX-xx' indent='no'/>
+   <xsl:template match='/'><doc>hello</doc></xsl:template>
+</xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+
+        var ex = Assert.Throws<Runtime.XsltRuntimeException>(() =>
+            executable.TransformToString(new XDocumentNode(source)));
+
+        Assert.Equal("SESU0007", ex.ErrorCode);
+    }
+
+    [Fact]
+    public void Output_Omit_Declaration_With_Standalone_Raises_Sepm0009()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+   <xsl:output method='xml' encoding='UTF-8' indent='no' omit-xml-declaration='yes' standalone='yes'/>
+   <xsl:template match='/'><doc>hello</doc></xsl:template>
+</xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+
+        var ex = Assert.Throws<Runtime.XsltRuntimeException>(() =>
+            executable.TransformToString(new XDocumentNode(source)));
+
+        Assert.Equal("SEPM0009", ex.ErrorCode);
     }
 
     // ------------------------------------------------------------------

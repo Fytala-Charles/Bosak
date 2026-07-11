@@ -400,6 +400,7 @@ Customer A produces XML that is consumed by external systems (Infor, EDI gateway
 | 2026-07-11 | Kimi | Implemented | Core serialization properties for XML/HTML/XHTML added; CDATA merge bug fixed |
 | 2026-07-11 | Kimi | Implemented | Fragment result trees (multiple top-level nodes) serialize correctly for xml/html/xhtml. |
 | 2026-07-11 | Kimi | Implemented | Default serialization method inferred from result root element (xhtml for XHTML html, html for no-namespace html). |
+| 2026-07-11 | Kimi | Implemented | Serialization validation: SESU0007 for unsupported encodings, SEPM0009 for standalone with omitted declaration. |
 
 ---
 

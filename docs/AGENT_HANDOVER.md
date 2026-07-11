@@ -2,6 +2,37 @@
 
 **Date:** 2026-07-11
 **Commit:** `fb63ac4`
+**Current focus:** Phase 1 XSLT serialization core — implemented serialization error validation (SESU0007 / SEPM0009) for the encoding batch.
+
+---
+
+## Full Suite Results
+
+- **Total:** 14,600
+- **Passed:** 5,243
+- **Failed:** 0
+- **Skipped:** 9,357
+- **Pass rate:** 100.0% (unchanged vs. previous)
+
+## This Session Fixes
+
+1. **Serialization error validation** — `ResultTreeSerializer` now validates output properties before serializing:
+   - Unsupported `@encoding` values raise `SESU0007` for `xml`, `html`, and `text` methods.
+   - `omit-xml-declaration="yes"` combined with `standalone="yes|no"` raises `SEPM0009`.
+   - **Files changed**: `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`, `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+
+## Notes
+
+- Unit-test suite: **943 passed / 0 failed / 0 skipped** across 8 projects (4 new regression tests added).
+- Full W3C suite: **5,243/0/9,357** (100.0%).
+- `output` conformance set: **109 passed / 94 failed / 29 skipped** (`output-0180`, `output-0184`–`0186` now pass; was 105/94 before this change).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-11
+**Commit:** `fb63ac4`
 **Current focus:** Phase 1 XSLT serialization core — implemented default serialization method inference (output-0130).
 
 ---
