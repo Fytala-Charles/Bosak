@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-12
-**Commit:** Working tree on top of `5cf5462`
+**Commit:** `5ccf24d`
 **Current focus:** Phase 5d `xsl:result-document` serialization — stabilizing XML declaration defaults and eliminating a catalog-run hang.
 
 ---
