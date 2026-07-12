@@ -1,45 +1,38 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** Working tree on top of `0c473b1`
-**Current focus:** Phase 5 XSLT JSON output method — `method="json"`, JSON-specific parameters, and parameter-document parsing.
+**Commit:** Working tree on top of `9941012`
+**Current focus:** Phase 5b XSLT JSON/text output edge cases — `item-separator` and `SENR0001` validation.
 
 ---
 
 ## This Session Fixes
 
-1. **JSON output method**
-   - `OutputProperties.Method` now accepts `"json"` and parses `json-node-output-method`, `allow-duplicate-names`, `escape-solidus`, and `parameter-document`.
-   - `TransformEngine` preserves top-level maps/arrays/raw XDM items in a JSON output instead of forcing them into the XML result tree (`output-0701`, `output-0704`).
-   - `ResultTreeSerializer.SerializeAsJson` delegates to `XdmJsonSerializer`, serializes nested nodes via the configured `json-node-output-method`, and applies character maps to the final JSON text (`output-0706`, `output-0706a`).
+1. **`item-separator` for `method="text"`**
+   - `OutputProperties` parses `item-separator` and exposes it to the transform engine.
+   - `TransformEngine.AppendAtomicText` and the sequence-constructor loop use the configured separator instead of a hard-wired space.
+   - Clears `output-0703`, `output-0709`, `output-0718`, and `output-0719`.
 
-2. **HTML namespace declarations for JSON node serialization**
-   - The HTML serializer now emits namespace declarations such as `xmlns="http://www.w3.org/1999/xhtml"`, so XHTML-rooted nodes serialized inside JSON strings round-trip correctly (`output-0702`).
-
-3. **Parameter-document defaults**
-   - `Stylesheet.LoadOutputProperties` loads and merges an `xsl:output/@parameter-document` (`output:serialization-parameters`) before applying explicit `xsl:output` attributes.
-
-4. **Harness raw-XDM output comparison**
-   - `Program.cs` returns the raw XDM result for `initial-template`/`initial-function` tests with `output/@tree="no"` and serializes with the effective output properties for `serialization-matches` assertions.
+2. **`SENR0001` for non-JSON serialization of maps/arrays/functions**
+   - `TransformEngine` raises `SENR0001` when a map, array, or function reaches the principal output level with a non-JSON output method.
+   - `ResultTreeSerializer.ValidateSerializableItems` performs the same check for XML, HTML, XHTML, and text output, covering attribute and namespace nodes as well.
+   - Clears `output-0710`, `output-0711`, and `output-0712`.
 
 ## Results
 
 - Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
-- W3C `output` conformance set: **175 passed / 28 failed / 29 skipped** (was 168/35/29).
-- Full W3C suite: **5,477 passed / 128 failed / 8,995 skipped** (97.7%).
+- W3C `output` conformance set: **179 passed / 24 failed / 29 skipped** (was 175/28/29).
+- Full W3C suite: **5,481 passed / 124 failed / 8,995 skipped** (97.8%).
 
 ## Files Changed
 
-- `src/Bosak.XPath.Standard/Json/XdmJsonSerializer.cs`
 - `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`
-- `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`
 - `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
 - `src/Bosak.Xslt/Runtime/TransformEngine.cs`
-- `src/Bosak.Xslt/Api/XsltExecutable.cs`
-- `tests/Bosak.Xslt.Conformance/Program.cs`
 - `docs/ARCHITECTURE.md`
 - `docs/FEATURE_REQUESTS.md`
 - `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
 
 ---
 

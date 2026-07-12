@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.7   | 11-07-2026     | Empty doctype-public/doctype-system attributes are treated as explicit values           |
 //                      | Charles Korthout | 0.8   | 11-07-2026     | Added method="json", json-node-output-method, allow-duplicate-names, escape-solidus,  |
 //                      |                  |       |                | and parameter-document parsing with inline character maps.                              |
+//                      | Charles Korthout | 0.9   | 11-07-2026     | Added item-separator output property for text serialization.                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -98,6 +99,12 @@ public sealed class OutputProperties
     public bool EscapeSolidus { get; set; } = false;
 
     /// <summary>
+    /// String inserted between top-level items when serializing with <c>method="text"</c>.
+    /// When unspecified, adjacent atomic values are separated by a single space.
+    /// </summary>
+    public string ItemSeparator { get; set; } = " ";
+
+    /// <summary>
     /// Resolved effective character map for this output definition. Populated by the
     /// stylesheet when the output properties are prepared for serialization.
     /// </summary>
@@ -125,6 +132,7 @@ public sealed class OutputProperties
     internal bool JsonNodeOutputMethodSpecified { get; set; }
     internal bool AllowDuplicateNamesSpecified { get; set; }
     internal bool EscapeSolidusSpecified { get; set; }
+    internal bool ItemSeparatorSpecified { get; set; }
     internal bool CharacterMapSpecified { get; set; }
 
     /// <summary>Parses an xsl:output element into <see cref="OutputProperties"/>.</summary>
@@ -305,6 +313,13 @@ public sealed class OutputProperties
             props.EscapeSolidusSpecified = true;
         }
 
+        var itemSeparator = element.Attribute("item-separator")?.Value;
+        if (itemSeparator != null)
+        {
+            props.ItemSeparator = itemSeparator;
+            props.ItemSeparatorSpecified = true;
+        }
+
         var useCharacterMaps = element.Attribute("use-character-maps")?.Value;
         if (!string.IsNullOrEmpty(useCharacterMaps))
         {
@@ -455,6 +470,10 @@ public sealed class OutputProperties
                     props.EscapeSolidus = parsed.EscapeSolidus;
                     props.EscapeSolidusSpecified = true;
                     break;
+                case "item-separator":
+                    props.ItemSeparator = parsed.ItemSeparator;
+                    props.ItemSeparatorSpecified = true;
+                    break;
                 case "use-character-maps":
                     props.UseCharacterMaps = parsed.UseCharacterMaps;
                     props.UseCharacterMapsSpecified = true;
@@ -536,6 +555,7 @@ public sealed class OutputProperties
         if (source.JsonNodeOutputMethodSpecified) { target.JsonNodeOutputMethod = source.JsonNodeOutputMethod; target.JsonNodeOutputMethodSpecified = true; }
         if (source.AllowDuplicateNamesSpecified) { target.AllowDuplicateNames = source.AllowDuplicateNames; target.AllowDuplicateNamesSpecified = true; }
         if (source.EscapeSolidusSpecified) { target.EscapeSolidus = source.EscapeSolidus; target.EscapeSolidusSpecified = true; }
+        if (source.ItemSeparatorSpecified) { target.ItemSeparator = source.ItemSeparator; target.ItemSeparatorSpecified = true; }
         if (source.UseCharacterMapsSpecified)
         {
             // Later xsl:output declarations and xsl:result-document instruction-level
@@ -606,6 +626,8 @@ public sealed class OutputProperties
             AllowDuplicateNamesSpecified = AllowDuplicateNamesSpecified,
             EscapeSolidus = EscapeSolidus,
             EscapeSolidusSpecified = EscapeSolidusSpecified,
+            ItemSeparator = ItemSeparator,
+            ItemSeparatorSpecified = ItemSeparatorSpecified,
             UseCharacterMaps = UseCharacterMaps,
             UseCharacterMapsSpecified = UseCharacterMapsSpecified,
             CharacterMap = CharacterMap,

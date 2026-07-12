@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 11 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,477 passed / 128 failed / 8,995 skipped (97.7%)
+> **XSLT baseline:** 5,481 passed / 124 failed / 8,995 skipped (97.8%)
 
 ---
 
@@ -17,6 +17,12 @@
   - HTML node serialization inside JSON strings now emits XHTML namespace declarations and escapes solidus characters per XSLT/XQuery Serialization 3.1 defaults.
   - W3C `output` conformance set: **175 passed / 28 failed / 29 skipped** (was 168/35/29). Remaining JSON/text failures include `output-0703` (item-separator) and `output-0710`/`0711` (unescaped keys).
   - Full W3C suite: **5,477 passed / 128 failed / 8,995 skipped** (97.7%).
+
+- **2026-07-11** — Phase 5b JSON/text output edge cases: `item-separator` and `SENR0001` validation.
+  - `item-separator` is now honored for `method="text"`, fixing `output-0703`, `output-0709`, `output-0718`, and `output-0719`.
+  - Maps, arrays, and functions at the top level of XML, HTML, XHTML, or text output now raise `SENR0001`, fixing `output-0710`, `output-0711`, and `output-0712`.
+  - W3C `output` conformance set: **179 passed / 24 failed / 29 skipped** (was 175/28/29).
+  - Full W3C suite: **5,481 passed / 124 failed / 8,995 skipped** (97.8%).
 
 - **2026-07-11** — Phase 4 serialization fixes: named-output import precedence, XHTML 1.0 empty-element handling, DOCTYPE quote/namespace rules, and `fn:current-output-uri()` scoping.
   - W3C `output` conformance set: **168 passed / 35 failed / 29 skipped** (was 155/48/29).
@@ -400,7 +406,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable`, AVTs for `lang`/`case-order`/`collation`; recognized collations including UCA `alternate=non-ignorable`, `blanked`, and `shifted`. Default collation is respected; `case-order` works without an explicit collation. |
 | `xsl:number` | ✅ Working | `single`, `any`, `multiple` levels; format tokens |
 | `xsl:key` / `key()` | ✅ Working | Indexed lookup; composite keys; content-constructor keys preserve typed atomic values; results returned in document order; `key()` allowed in match patterns with XTSE0340 validation. Key-value comparison respects the effective default or explicit `@collation`; conflicting collations for the same key name raise XTSE1220. |
-| `xsl:output` | ✅ Working | `method` (`xml`, `html`, `xhtml`, `text`, `json`), `indent`, `omit-xml-declaration`, `encoding`, `version`, `standalone`, `doctype-system`, `doctype-public`, `cdata-section-elements`, `escape-uri-attributes`, `include-content-type`, `media-type`, `byte-order-mark`, `html-version`, `suppress-indentation`, `normalization-form`, `use-character-maps`, `json-node-output-method`, `allow-duplicate-names`, `escape-solidus`, `parameter-document`. Encoding-aware output escapes unrepresentable characters as numeric character references and splits CDATA sections around them. Named `xsl:output` definitions are resolved by import precedence; `xsl:result-document` attributes override the effective output definition. XHTML 1.0 uses the HTML 4 empty-element list; XHTML5 strips the XHTML namespace prefix, serializes HTML5 void elements as empty tags, ignores `doctype-public` when no `doctype-system` is supplied, and preserves root-element case in the DOCTYPE. DOCTYPE literal values are quoted with the delimiter that does not occur in the value. JSON output serializes maps, arrays, booleans, numbers, strings, and nodes; `json-node-output-method` controls node serialization; `escape-solidus` defaults to `yes`; character maps are applied to the final JSON text. |
+| `xsl:output` | ✅ Working | `method` (`xml`, `html`, `xhtml`, `text`, `json`), `indent`, `omit-xml-declaration`, `encoding`, `version`, `standalone`, `doctype-system`, `doctype-public`, `cdata-section-elements`, `escape-uri-attributes`, `include-content-type`, `media-type`, `byte-order-mark`, `html-version`, `suppress-indentation`, `normalization-form`, `use-character-maps`, `json-node-output-method`, `allow-duplicate-names`, `escape-solidus`, `item-separator`, `parameter-document`. Encoding-aware output escapes unrepresentable characters as numeric character references and splits CDATA sections around them. Named `xsl:output` definitions are resolved by import precedence; `xsl:result-document` attributes override the effective output definition. XHTML 1.0 uses the HTML 4 empty-element list; XHTML5 strips the XHTML namespace prefix, serializes HTML5 void elements as empty tags, ignores `doctype-public` when no `doctype-system` is supplied, and preserves root-element case in the DOCTYPE. DOCTYPE literal values are quoted with the delimiter that does not occur in the value. JSON output serializes maps, arrays, booleans, numbers, strings, and nodes; `json-node-output-method` controls node serialization; `escape-solidus` defaults to `yes`; character maps are applied to the final JSON text. Maps/arrays/functions at the top level of a non-JSON output raise `SENR0001`. |
 | `xsl:character-map` | ✅ Working | `name`, `use-character-maps`, and `xsl:output-character/@character` / `@string`; merged in declaration order, first definition wins for duplicate characters; applied to text, attribute, comment, PI, and raw-XML output in all methods |
 | `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |
@@ -583,7 +589,7 @@ dotnet test Bosak.sln
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
-| XSLT 3.0 (W3C) | 5,477 | 128 | 8,995 | 97.7% | `output` cluster now 175/28/29; remaining failures include `output-0703` (item-separator), `output-0710`/`0711` (unescaped JSON keys), and pre-existing non-output failures |
+| XSLT 3.0 (W3C) | 5,481 | 124 | 8,995 | 97.8% | `output` cluster now 179/24/29; remaining failures are pre-existing non-output issues |
 | XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:

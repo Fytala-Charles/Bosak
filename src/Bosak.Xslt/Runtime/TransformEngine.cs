@@ -168,6 +168,7 @@
 //                      | Charles Korthout | 5.97  | 11-07-2026     | Result-document character maps now supplement named/unnamed output definitions.        |
 //                      | Charles Korthout | 5.98  | 11-07-2026     | Evaluate doctype-public/system AVTs; current-output-uri empty outside result-document  |
 //                      | Charles Korthout | 5.99  | 11-07-2026     | Collect top-level maps/arrays for JSON output and route xsl:map/map-entry to them.     |
+//                      | Charles Korthout | 6.00  | 11-07-2026     | Support item-separator for text output; raise SENR0001 for top-level maps/arrays.      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -942,17 +943,20 @@ public sealed class TransformEngine
     }
 
     /// <summary>
-    /// Appends a space and the given text to the last text node in the current container,
+    /// Appends a separator and the given text to the last text node in the current container,
     /// or creates a new text node if there is no last text node. Used to join adjacent
-    /// atomic values with a single space in complex content construction.
+    /// atomic values in complex content construction. For <c>method="text"</c> with an
+    /// explicit <c>item-separator</c>, the configured separator is used; otherwise a
+    /// single space is inserted.
     /// </summary>
     private void AppendAtomicText(string text)
     {
         EnsurePrincipalOutputOpen();
+        var separator = GetAtomicSeparator();
         if (_currentContainer is XDocument)
         {
             if (_lastAddedWasAtomic)
-                _documentLevelText.Append(' ');
+                _documentLevelText.Append(separator);
             _documentLevelText.Append(text);
         }
         else
@@ -962,16 +966,36 @@ public sealed class TransformEngine
                 var lastText = _currentContainer.Nodes().LastOrDefault() as XText;
                 if (lastText != null)
                 {
-                    lastText.Value = lastText.Value + " " + text;
+                    lastText.Value = lastText.Value + separator + text;
                     _lastAddedWasAtomic = true;
                     return;
                 }
-                text = " " + text;
+                text = separator + text;
             }
             _currentContainer.Add(new XText(text));
         }
         _lastAddedWasAtomic = true;
     }
+
+    /// <summary>
+    /// Returns the separator to use between adjacent atomic values for text output.
+    /// When <c>item-separator</c> is explicitly specified and the output method is
+    /// <c>text</c>, that value is returned; otherwise a single space is used.
+    /// </summary>
+    private string GetAtomicSeparator()
+    {
+        var props = _stylesheet.OutputProperties;
+        if (props?.ItemSeparatorSpecified == true && props.Method == "text")
+            return props.ItemSeparator;
+        return " ";
+    }
+
+    /// <summary>
+    /// Returns whether output is currently being written directly to the principal
+    /// result document, as opposed to inside a constructed element or secondary result.
+    /// </summary>
+    private bool IsPrincipalTopLevel =>
+        _resultDocumentStack.Count == 0 && ReferenceEquals(_currentContainer, _resultDocument);
 
     private void RegisterDecimalFormats()
     {
@@ -6348,6 +6372,9 @@ public sealed class TransformEngine
             // - Consecutive atomic values are joined with a single space (#x20) (unless copy-of).
             // - Text nodes and atomics in a contiguous run are merged into one text node.
             var sb = new StringBuilder();
+            // For method="text" with an explicit item-separator, use that separator
+            // instead of the default single space between adjacent atomic values.
+            var atomicSeparator = GetAtomicSeparator();
             // Carry over the atomic-state from the containing sequence constructor so that
             // the first atomic in this sequence is separated from a preceding atomic value.
             bool prevWasAtomic = _lastAddedWasAtomic;
@@ -6366,7 +6393,7 @@ public sealed class TransformEngine
                 {
                     if (separateAtomicsWithSpace && prevWasAtomic)
                     {
-                        sb.Append(' ');
+                        sb.Append(atomicSeparator);
                     }
                     prevWasAtomic = true;
                     continue;
@@ -6460,7 +6487,7 @@ public sealed class TransformEngine
                             {
                                 if (separateAtomicsWithSpace && prevWasAtomic)
                                 {
-                                    sb.Append(' ');
+                                    sb.Append(atomicSeparator);
                                 }
                                 sb.Append(atom);
                                 prevWasAtomic = true;
@@ -6470,7 +6497,12 @@ public sealed class TransformEngine
                     else
                     {
                         if (item.IsMap || item.IsFunction)
+                        {
+                            if (IsPrincipalTopLevel)
+                                throw new XsltRuntimeException("SENR0001",
+                                    "Cannot serialize a map, array, or function using this output method.", XdmValue.Undefined);
                             throw new InvalidOperationException("XTDE0450: Maps and functions cannot be serialized directly to element content.");
+                        }
 
                         // Atomic value: insert space only if previous item was also atomic
                         // and separateAtomicsWithSpace is true (complex content construction)
@@ -6491,7 +6523,7 @@ public sealed class TransformEngine
                         {
                             if (separateAtomicsWithSpace && prevWasAtomic)
                             {
-                                sb.Append(' ');
+                                sb.Append(atomicSeparator);
                             }
                             sb.Append(item.ToString());
                             prevWasAtomic = true;
@@ -6512,7 +6544,12 @@ public sealed class TransformEngine
         else if (!value.IsUndefined)
         {
             if (value.IsMap || value.IsFunction)
+            {
+                if (IsPrincipalTopLevel)
+                    throw new XsltRuntimeException("SENR0001",
+                        "Cannot serialize a map, array, or function using this output method.", XdmValue.Undefined);
                 throw new InvalidOperationException("XTDE0450: Maps and functions cannot be serialized directly to element content.");
+            }
 
             var text = value.IsArray ? XdmValueToString(value, " ") : value.ToString();
             if (_preserveAtomicSequenceItems && _literalElementDepth == 0)

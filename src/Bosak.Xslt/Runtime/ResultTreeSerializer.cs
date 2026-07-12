@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.5   | 11-07-2026     | Encoding-aware output: escape unrepresentable characters and split CDATA sections.     |
 //                      | Charles Korthout | 1.6   | 11-07-2026     | XHTML 1.0 empty elements, DOCTYPE quote/namespace rules, alien-namespace meta guard.   |
 //                      | Charles Korthout | 1.7   | 11-07-2026     | Added method="json" serialization, HTML namespace declaration output, and JSON char maps.|
+//                      | Charles Korthout | 1.8   | 11-07-2026     | Added item-separator awareness and SENR0001 validation for maps/arrays/functions.       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -65,6 +66,7 @@ public static class ResultTreeSerializer
         ApplyMethodDefaults(props);
         ValidateOutputProperties(props);
         ValidateResultTree(value, props);
+        ValidateSerializableItems(value, props);
 
         if (props.Method == "text")
         {
@@ -203,7 +205,8 @@ public static class ResultTreeSerializer
                props.IndentSpecified ||
                props.JsonNodeOutputMethodSpecified ||
                props.AllowDuplicateNamesSpecified ||
-               props.EscapeSolidusSpecified;
+               props.EscapeSolidusSpecified ||
+               props.ItemSeparatorSpecified;
     }
 
     /// <summary>
@@ -297,6 +300,39 @@ public static class ResultTreeSerializer
             throw new XsltRuntimeException("SESU0007",
                 $"Unsupported encoding '{encodingName}'.",
                 XdmValue.Undefined);
+        }
+    }
+
+    /// <summary>
+    /// Validates that the result value can be serialized with the requested method.
+    /// Raises SENR0001 if the normalized sequence contains maps, arrays, functions,
+    /// attribute nodes, or namespace nodes for XML, HTML, XHTML, or text output.
+    /// </summary>
+    private static void ValidateSerializableItems(XdmValue value, Stylesheet.OutputProperties props)
+    {
+        var method = props.Method;
+        if (method == "json" || method == "adaptive")
+            return;
+
+        foreach (var item in FlattenItems(value))
+        {
+            if (item.IsMap || item.IsArray || item.IsFunction)
+            {
+                throw new XsltRuntimeException("SENR0001",
+                    $"Cannot serialize a {(item.IsMap ? "map" : item.IsArray ? "array" : "function")} using method '{method}'.",
+                    XdmValue.Undefined);
+            }
+
+            if (item.IsNode && item.NodeValue != null)
+            {
+                var kind = item.NodeValue.NodeKind;
+                if (kind == XdmNodeKind.Attribute || kind == XdmNodeKind.Namespace)
+                {
+                    throw new XsltRuntimeException("SENR0001",
+                        $"Cannot serialize a {kind} node using method '{method}'.",
+                        XdmValue.Undefined);
+                }
+            }
         }
     }
 
