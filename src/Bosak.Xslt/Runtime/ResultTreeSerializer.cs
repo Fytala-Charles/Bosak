@@ -29,6 +29,8 @@
 //                      | Charles Korthout | 1.6   | 11-07-2026     | XHTML 1.0 empty elements, DOCTYPE quote/namespace rules, alien-namespace meta guard.   |
 //                      | Charles Korthout | 1.7   | 11-07-2026     | Added method="json" serialization, HTML namespace declaration output, and JSON char maps.|
 //                      | Charles Korthout | 1.8   | 11-07-2026     | Added item-separator awareness and SENR0001 validation for maps/arrays/functions.       |
+//                      | Charles Korthout | 1.9   | 12-07-2026     | Restrict SEPM0009 to XML/XHTML methods; support standalone value normalization.         |
+//                      | Charles Korthout | 1.10  | 12-07-2026     | Added SENR0001 validation for maps/arrays/functions and attribute/namespace nodes.      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -206,7 +208,8 @@ public static class ResultTreeSerializer
                props.JsonNodeOutputMethodSpecified ||
                props.AllowDuplicateNamesSpecified ||
                props.EscapeSolidusSpecified ||
-               props.ItemSeparatorSpecified;
+               props.ItemSeparatorSpecified ||
+               props.BuildTreeSpecified;
     }
 
     /// <summary>
@@ -220,8 +223,9 @@ public static class ResultTreeSerializer
         ValidateHtmlVersion(props);
 
         // SEPM0009: standalone pseudo-attribute is not allowed when the XML
-        // declaration is omitted.
-        if (props.OmitXmlDeclaration && props.Standalone is "yes" or "no")
+        // declaration is omitted. This only applies to methods that emit an XML
+        // declaration (XML and XHTML); text, HTML, and JSON have no XML declaration.
+        if (props.OmitXmlDeclaration && props.Standalone is "yes" or "no" && props.Method is "xml" or "xhtml")
         {
             throw new XsltRuntimeException("SEPM0009",
                 "The standalone pseudo-attribute is not allowed when the XML declaration is omitted.",

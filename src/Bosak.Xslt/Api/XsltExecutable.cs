@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.9   | 11-07-2026     | Read xsl:result-document output properties from fragment wrapper elements too.          |
 //                      | Charles Korthout | 1.0   | 11-07-2026     | Resolve named character maps for principal and function output before serialization.    |
 //                      | Charles Korthout | 1.1   | 11-07-2026     | Merge parameter-document character maps with named character-map resolutions.          |
+//                      | Charles Korthout | 1.2   | 12-07-2026     | Use principal xsl:result-document output properties (including JSON) in TransformToString. |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -90,38 +91,50 @@ public sealed class XsltExecutable
     /// <returns>The serialized result of the transformation.</returns>
     public string TransformToString(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null)
     {
-        var result = Transform(source, context, initialTemplate, initialMode, baseOutputUri: baseOutputUri);
-        var outputProperties = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
-        if (result.IsNode && result.NodeValue is XDocumentNode xdn)
+        return RunWithStack(() =>
         {
-            Stylesheet.OutputProperties? rdProps = null;
-            if (xdn.UnderlyingObject is XDocument doc)
-                rdProps = doc.Annotation<Stylesheet.OutputProperties>();
-            else if (xdn.UnderlyingObject is XElement elem)
-                rdProps = elem.Annotation<Stylesheet.OutputProperties>();
-            if (rdProps != null)
-                outputProperties = rdProps;
-        }
+            var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
+            var result = engine.Transform(source, initialTemplate, initialMode, false, baseOutputUri);
 
-        // Resolve named character maps for the principal output if not already done.
-        if (outputProperties.UseCharacterMaps.Count > 0)
-        {
-            outputProperties = outputProperties.Clone();
-            var resolved = _stylesheet.ResolveCharacterMap(
-                outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
-            if (outputProperties.CharacterMap != null)
+            // A principal xsl:result-document (no href) supplies the effective output
+            // properties, overriding the stylesheet-level xsl:output defaults.
+            var outputProperties = engine.PrincipalResultDocumentProperties
+                ?? _stylesheet.OutputProperties
+                ?? new Stylesheet.OutputProperties();
+
+            // Fall back to annotation-based output properties for backward compatibility
+            // when the result tree is a wrapper element produced by the legacy path.
+            if (engine.PrincipalResultDocumentProperties == null && result.IsNode && result.NodeValue is XDocumentNode xdn)
             {
-                // Explicit named character maps override parameter-document defaults.
-                foreach (var kvp in outputProperties.CharacterMap)
-                {
-                    if (!resolved.ContainsKey(kvp.Key))
-                        resolved[kvp.Key] = kvp.Value;
-                }
+                Stylesheet.OutputProperties? rdProps = null;
+                if (xdn.UnderlyingObject is XDocument doc)
+                    rdProps = doc.Annotation<Stylesheet.OutputProperties>();
+                else if (xdn.UnderlyingObject is XElement elem)
+                    rdProps = elem.Annotation<Stylesheet.OutputProperties>();
+                if (rdProps != null)
+                    outputProperties = rdProps;
             }
-            outputProperties.CharacterMap = resolved;
-        }
 
-        return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
+            // Resolve named character maps for the principal output if not already done.
+            if (outputProperties.UseCharacterMaps.Count > 0)
+            {
+                outputProperties = outputProperties.Clone();
+                var resolved = _stylesheet.ResolveCharacterMap(
+                    outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
+                if (outputProperties.CharacterMap != null)
+                {
+                    // Explicit named character maps override parameter-document defaults.
+                    foreach (var kvp in outputProperties.CharacterMap)
+                    {
+                        if (!resolved.ContainsKey(kvp.Key))
+                            resolved[kvp.Key] = kvp.Value;
+                    }
+                }
+                outputProperties.CharacterMap = resolved;
+            }
+
+            return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
+        }, DefaultTransformStackSize);
     }
 
     /// <summary>

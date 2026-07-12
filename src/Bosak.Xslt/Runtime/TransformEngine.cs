@@ -169,6 +169,8 @@
 //                      | Charles Korthout | 5.98  | 11-07-2026     | Evaluate doctype-public/system AVTs; current-output-uri empty outside result-document  |
 //                      | Charles Korthout | 5.99  | 11-07-2026     | Collect top-level maps/arrays for JSON output and route xsl:map/map-entry to them.     |
 //                      | Charles Korthout | 6.00  | 11-07-2026     | Support item-separator for text output; raise SENR0001 for top-level maps/arrays.      |
+//                      | Charles Korthout | 6.01  | 12-07-2026     | Evaluate AVTs on all xsl:result-document serialization attributes.                     |
+//                      | Charles Korthout | 6.02  | 12-07-2026     | Raw-item collection for xsl:result-document method=json/adaptive and build-tree="no".  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -217,9 +219,18 @@ public sealed class TransformEngine
     // Effective output properties for a principal xsl:result-document, if one was produced.
     private Stylesheet.OutputProperties? _principalResultDocumentProperties;
 
+    // Raw XDM value produced by a principal xsl:result-document with method="json"
+    // or build-tree="no". When set, this becomes the final transformation result.
+    private XdmValue? _principalRawResultDocument;
+
     // Raw top-level items collected when the output method is JSON (build-tree="no").
     private bool _jsonOutputMode;
-    private readonly List<XdmValue> _jsonResultItems = new();
+    private List<XdmValue> _jsonResultItems = new();
+
+    // Raw top-level items collected for a secondary xsl:result-document with
+    // method="json"/"adaptive" or build-tree="no".
+    private bool _collectRawItems;
+    private List<XdmValue> _resultDocumentRawItems = new();
 
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
@@ -374,6 +385,12 @@ public sealed class TransformEngine
 
     /// <summary>The parsed xsl:output serialization properties.</summary>
     public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
+
+    /// <summary>
+    /// The effective output properties of a principal <c>xsl:result-document</c>, if one
+    /// was produced during the transformation.
+    /// </summary>
+    public Stylesheet.OutputProperties? PrincipalResultDocumentProperties => _principalResultDocumentProperties;
 
     public TransformEngine(Stylesheet.Stylesheet stylesheet, EvaluationContext? context = null, IXsltMessageListener? messageListener = null, bool treatRecoverableAmbiguousMatchAsError = false)
     {
@@ -615,6 +632,9 @@ public sealed class TransformEngine
         _principalResultDocumentProperties = null;
         _jsonOutputMode = (_stylesheet.OutputProperties?.Method ?? "xml") == "json";
         _jsonResultItems.Clear();
+        _collectRawItems = false;
+        _resultDocumentRawItems.Clear();
+        _principalRawResultDocument = null;
 
         // Compile all template match patterns before execution. The validation
         // dry-run for pattern predicates needs the lazy global resolver registered
@@ -755,6 +775,11 @@ public sealed class TransformEngine
             FinalizeResultTreeNamespaces(_rawInitialTemplateResult.Value);
             return _rawInitialTemplateResult.Value;
         }
+
+        // A principal xsl:result-document with method="json" or build-tree="no" takes
+        // precedence over the normal principal result tree.
+        if (_principalRawResultDocument != null)
+            return _principalRawResultDocument.Value;
 
         // For JSON output, return the collected raw top-level items as a sequence.
         if (_jsonOutputMode)
@@ -5625,12 +5650,15 @@ public sealed class TransformEngine
                     {
                         _sequenceAccumulator.Add(mapValue);
                     }
-                    else if (TryCollectJsonResultItem(mapValue))
+                    else if (TryCollectRawResultItem(mapValue))
                     {
                         // Collected as a raw top-level JSON item.
                     }
                     else
                     {
+                        if (IsPrincipalTopLevel)
+                            throw new XsltRuntimeException("SENR0001",
+                                "Cannot serialize a map using this output method.", XdmValue.Undefined);
                         throw new InvalidOperationException("XTDE0450: A map cannot appear as a child of an element or document node");
                     }
                     break;
@@ -5643,12 +5671,15 @@ public sealed class TransformEngine
                     {
                         _sequenceAccumulator.Add(entryValue);
                     }
-                    else if (TryCollectJsonResultItem(entryValue))
+                    else if (TryCollectRawResultItem(entryValue))
                     {
                         // Collected as a raw top-level JSON item.
                     }
                     else
                     {
+                        if (IsPrincipalTopLevel)
+                            throw new XsltRuntimeException("SENR0001",
+                                "Cannot serialize a map using this output method.", XdmValue.Undefined);
                         throw new InvalidOperationException("XTDE0450: A map cannot appear as a child of an element or document node");
                     }
                     break;
@@ -6297,28 +6328,49 @@ public sealed class TransformEngine
     /// <param name="value">The value to copy.</param>
     /// <param name="separateAtomicsWithSpace">If true, consecutive atomic values are separated by a space (complex content construction). If false, they are concatenated directly (xsl:copy-of behavior).</param>
     /// <summary>
-    /// Returns whether the current result position is the top level of a JSON
-    /// (build-tree="no") output, where items should be collected as raw XDM values
-    /// instead of being added to the result document tree.
+    /// Returns whether the current result position is the top level of a raw-item
+    /// output (JSON output method or build-tree="no"), where items should be collected
+    /// as raw XDM values instead of being added to the result document tree.
     /// </summary>
-    private bool IsJsonTopLevelCollection =>
-        _jsonOutputMode &&
-        _resultDocumentStack.Count == 0 &&
-        ReferenceEquals(_currentContainer, _resultDocument);
+    private bool IsRawCollectionTopLevel
+    {
+        get
+        {
+            if (_resultDocumentStack.Count == 0)
+            {
+                return _jsonOutputMode && ReferenceEquals(_currentContainer, _resultDocument);
+            }
+
+            if (!_collectRawItems)
+                return false;
+
+            var frame = _resultDocumentStack.Peek();
+            var root = frame.RootContainer ?? frame.PrincipalContainer;
+            return ReferenceEquals(_currentContainer, root);
+        }
+    }
 
     /// <summary>
-    /// If we are producing a JSON output, stores the supplied value as a raw top-level
-    /// item and returns <c>true</c>. Otherwise returns <c>false</c> so normal tree
-    /// construction proceeds.
+    /// If we are producing a raw-item output, stores the supplied value as a raw
+    /// top-level item and returns <c>true</c>. Otherwise returns <c>false</c> so normal
+    /// tree construction proceeds.
     /// </summary>
-    private bool TryCollectJsonResultItem(XdmValue value)
+    private bool TryCollectRawResultItem(XdmValue value)
     {
-        if (!IsJsonTopLevelCollection)
+        if (!IsRawCollectionTopLevel)
             return false;
         if (value.IsUndefined)
             return true;
 
-        _jsonResultItems.Add(value);
+        if (_resultDocumentStack.Count == 0)
+        {
+            _jsonResultItems.Add(value);
+        }
+        else
+        {
+            _resultDocumentRawItems.Add(value);
+        }
+
         _lastAddedWasAtomic = false;
         return true;
     }
@@ -6328,7 +6380,7 @@ public sealed class TransformEngine
         if (value.IsUndefined)
             return;
 
-        if (TryCollectJsonResultItem(value))
+        if (TryCollectRawResultItem(value))
             return;
 
         // When collecting a raw sequence (e.g. xsl:variable/@as, xsl:key content,
@@ -6408,8 +6460,8 @@ public sealed class TransformEngine
                     continue;
                 }
 
-                // For JSON output, each top-level item is preserved as a raw XDM value.
-                if (TryCollectJsonResultItem(item))
+                // For raw-item output, each top-level item is preserved as a raw XDM value.
+                if (TryCollectRawResultItem(item))
                     continue;
 
                 if (item.IsNode && item.NodeValue != null &&
@@ -13055,6 +13107,27 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Serializes a raw XDM value to a secondary result document file.
+    /// Used for <c>method="json"</c>, <c>method="adaptive"</c>, or
+    /// <c>build-tree="no"</c> result documents.
+    /// </summary>
+    private void WriteResultDocument(string uri, XdmValue value, Stylesheet.OutputProperties props)
+    {
+        string path;
+        if (Uri.TryCreate(uri, UriKind.Absolute, out var u) && u.IsFile)
+            path = u.LocalPath;
+        else
+            path = uri;
+
+        var dir = System.IO.Path.GetDirectoryName(path);
+        if (!string.IsNullOrEmpty(dir))
+            System.IO.Directory.CreateDirectory(dir);
+
+        var serialized = ResultTreeSerializer.Serialize(value, props);
+        System.IO.File.WriteAllText(path, serialized);
+    }
+
+    /// <summary>
     /// Evaluates attribute value templates on the serialization attributes of an
     /// <c>xsl:result-document</c> instruction and returns an element whose attributes
     /// contain the evaluated values.
@@ -13077,7 +13150,10 @@ public sealed class TransformEngine
             var value = attr.Value;
             if (localName is "method" or "output-version" or "encoding" or "indent"
                 or "omit-xml-declaration" or "standalone" or "undeclare-prefixes"
-                or "doctype-public" or "doctype-system")
+                or "doctype-public" or "doctype-system" or "html-version" or "normalization-form"
+                or "escape-uri-attributes" or "include-content-type" or "media-type"
+                or "byte-order-mark" or "json-node-output-method" or "allow-duplicate-names"
+                or "escape-solidus" or "item-separator")
             {
                 value = EvaluateAvt(value, instruction);
             }
@@ -13175,6 +13251,10 @@ public sealed class TransformEngine
         if (expandedNames.Count > 0)
             resultDocumentProps.CharacterMap = _stylesheet.ResolveCharacterMap(expandedNames);
 
+        // Determine whether this result document should preserve top-level items as raw
+        // XDM values rather than building a result tree.
+        var collectRaw = resultDocumentProps.Method is "json" or "adaptive" || !resultDocumentProps.BuildTree;
+
         if (isPrincipal)
         {
             _principalResultDocumentProperties = resultDocumentProps;
@@ -13194,10 +13274,34 @@ public sealed class TransformEngine
 
             var savedContainer = _currentContainer;
             var savedOutputUri = _context.CurrentOutputUri;
-            var frame = new ResultDocumentFrame(string.Empty, null, savedContainer, principalContainer);
+            XElement? principalTemp = null;
+            if (collectRaw)
+            {
+                // For raw output we still need a distinct root container so that the
+                // raw-collection top-level check can distinguish result-document content
+                // from the enclosing principal tree.
+                principalTemp = new XElement("__result-document__");
+                _currentContainer = principalTemp;
+            }
+            else
+            {
+                _currentContainer = principalContainer;
+            }
+
+            var frame = new ResultDocumentFrame(string.Empty, principalTemp, savedContainer, principalContainer);
             _resultDocumentStack.Push(frame);
-            _currentContainer = principalContainer;
             _context.CurrentOutputUri = _baseOutputUri ?? string.Empty;
+
+            // For raw output, enable raw-item collection and capture the result so that
+            // an enclosing non-JSON result document is not affected.
+            var savedCollectRaw = _collectRawItems;
+            var savedRawItems = _resultDocumentRawItems;
+            if (collectRaw)
+            {
+                _collectRawItems = true;
+                _resultDocumentRawItems = new List<XdmValue>();
+            }
+
             try
             {
                 foreach (var childNode in instruction.Nodes())
@@ -13218,6 +13322,15 @@ public sealed class TransformEngine
             }
             finally
             {
+                if (collectRaw)
+                {
+                    _principalRawResultDocument = _resultDocumentRawItems.Count == 0
+                        ? XdmValue.Undefined
+                        : XdmValue.FromSequence(MaterializedSequence.FromList(_resultDocumentRawItems));
+                    _collectRawItems = savedCollectRaw;
+                    _resultDocumentRawItems = savedRawItems;
+                }
+
                 _context.CurrentOutputUri = savedOutputUri;
                 _currentContainer = savedContainer;
                 _resultDocumentStack.Pop();
@@ -13227,7 +13340,7 @@ public sealed class TransformEngine
             if (_resultDocumentStack.Count == 0)
             {
                 _principalOutputClosed = true;
-                if (_principalResultDocumentProperties != null && principalContainer is XElement principalElem)
+                if (!collectRaw && _principalResultDocumentProperties != null && principalContainer is XElement principalElem)
                     principalElem.AddAnnotation(_principalResultDocumentProperties);
             }
         }
@@ -13239,8 +13352,20 @@ public sealed class TransformEngine
             var savedContainer = _currentContainer;
             var savedLastAtomic = _lastAddedWasAtomic;
             var savedOutputUri = _context.CurrentOutputUri;
-            var temp = new XElement("__result-document__");
+            var savedCollectRaw = _collectRawItems;
+            var savedRawItems = _resultDocumentRawItems;
+            XElement? temp = null;
+            List<XdmValue>? rawItems = null;
+
+            temp = new XElement("__result-document__");
             _currentContainer = temp;
+            if (collectRaw)
+            {
+                _collectRawItems = true;
+                _resultDocumentRawItems = new List<XdmValue>();
+                rawItems = _resultDocumentRawItems;
+            }
+
             _lastAddedWasAtomic = false;
             _context.CurrentOutputUri = resolvedHref;
             var frame = new ResultDocumentFrame(resolvedHref, temp, savedContainer, principalContainer);
@@ -13269,9 +13394,22 @@ public sealed class TransformEngine
                 _currentContainer = savedContainer;
                 _lastAddedWasAtomic = savedLastAtomic;
                 _resultDocumentStack.Pop();
+                _collectRawItems = savedCollectRaw;
+                _resultDocumentRawItems = savedRawItems;
             }
 
-            WriteResultDocument(resolvedHref, temp, resultDocumentProps);
+            if (rawItems != null)
+            {
+                var rawValue = rawItems.Count == 0
+                    ? XdmValue.Undefined
+                    : XdmValue.FromSequence(MaterializedSequence.FromList(rawItems));
+                WriteResultDocument(resolvedHref, rawValue, resultDocumentProps);
+            }
+            else
+            {
+                WriteResultDocument(resolvedHref, temp!, resultDocumentProps);
+            }
+
             _resultDocumentUris.Add(resolvedHref);
         }
     }

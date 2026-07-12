@@ -1,34 +1,44 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** Working tree on top of `9941012`
-**Current focus:** Phase 5b XSLT JSON/text output edge cases — `item-separator` and `SENR0001` validation.
+**Commit:** Working tree on top of `d852996`
+**Current focus:** Phase 5c `xsl:result-document` serialization — AVT evaluation, raw JSON output, and yes/no normalization.
 
 ---
 
 ## This Session Fixes
 
-1. **`item-separator` for `method="text"`**
-   - `OutputProperties` parses `item-separator` and exposes it to the transform engine.
-   - `TransformEngine.AppendAtomicText` and the sequence-constructor loop use the configured separator instead of a hard-wired space.
-   - Clears `output-0703`, `output-0709`, `output-0718`, and `output-0719`.
+1. **Expanded AVT evaluation for `xsl:result-document`**
+   - `TransformEngine.EvaluateResultDocumentInstruction` now evaluates AVTs for `html-version`, `escape-uri-attributes`, `include-content-type`, `media-type`, `byte-order-mark`, `json-node-output-method`, `allow-duplicate-names`, `escape-solidus`, `item-separator`, and `normalization-form`.
+   - Clears `result-document-0244`, `0245`, `0701`, `1203`, `1204`, `1205`, and `1404`.
 
-2. **`SENR0001` for non-JSON serialization of maps/arrays/functions**
-   - `TransformEngine` raises `SENR0001` when a map, array, or function reaches the principal output level with a non-JSON output method.
-   - `ResultTreeSerializer.ValidateSerializableItems` performs the same check for XML, HTML, XHTML, and text output, covering attribute and namespace nodes as well.
-   - Clears `output-0710`, `output-0711`, and `output-0712`.
+2. **`yes`/`no` attribute value normalization**
+   - `OutputProperties.ParseYesNo` is now case-sensitive: `yes`/`no`/`true`/`false`/`1`/`0` are accepted, but uppercase variants such as `TRUE`/`NO` raise `XTSE0020`.
+   - `standalone` values are normalized to `yes`/`no`/`omit` and reject uppercase forms.
+   - Clears `result-document-0246`–`0249`, `0250`, `0276`, and `0283`, plus the corresponding `output-*` invalid-value tests.
+
+3. **`SEPM0009` scoped to XML/XHTML**
+   - `ResultTreeSerializer` only reports `SEPM0009` when the effective method actually emits an XML declaration.
+   - Clears `result-document-0239`.
+
+4. **Raw-item collection for `xsl:result-document`**
+   - `OutputProperties` parses `build-tree`.
+   - `TransformEngine` collects raw top-level XDM items for result documents with `method="json"`, `method="adaptive"`, or `build-tree="no"`.
+   - `XsltExecutable.TransformToString` serializes using the principal `xsl:result-document` output properties, so JSON result documents are serialized with the correct method.
+   - Clears `result-document-0303`, `1401`, `1404`, `1411`, and several JSON/text edge cases.
 
 ## Results
 
 - Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
-- W3C `output` conformance set: **179 passed / 24 failed / 29 skipped** (was 175/28/29).
-- Full W3C suite: **5,481 passed / 124 failed / 8,995 skipped** (97.8%).
+- W3C `result-document` conformance set: **104 passed / 21 failed / 29 skipped** (was 86/39/29).
+- Full W3C suite: **5,506 passed / 99 failed / 8,995 skipped** (98.2%).
 
 ## Files Changed
 
 - `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`
 - `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
 - `src/Bosak.Xslt/Runtime/TransformEngine.cs`
+- `src/Bosak.Xslt/Api/XsltExecutable.cs`
 - `docs/ARCHITECTURE.md`
 - `docs/FEATURE_REQUESTS.md`
 - `docs/INTEGRATION.md`

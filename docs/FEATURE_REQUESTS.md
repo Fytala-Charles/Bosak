@@ -141,6 +141,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-034 | *(internal)* | XSLT `static` cluster conformance | Required for `static` conformance cluster (49/49): external static parameters, static variable/parameter runtime binding, XTSE0090/XTSE3450 validations, implicit empty-sequence defaults, `@as` coercion, plus general-comparison empty-sequence and namespace-axis fixes exposed by the cluster | **Implemented** | TBD | Charles Korthout | 2026-06-26 |
 | REQ-035 | *(internal)* | XSLT `number` cluster — German/Italian word and ordinal formatting | Required for `number-0802/0812/0813/0828/0829/2506` and `format-integer-065/066`: German cardinal/ordinal words (`drei`, `dritte`, `zweihunderteinste`), Italian masculine/feminine ordinals (`primo`/`prima`), and CLDR `%spellout-ordinal` scheme support | **Implemented** | TBD | Charles Korthout | 2026-06-28 |
 | REQ-036 | *(internal)* | XSLT `method="json"` output serialization | Required for W3C `output-0701` through `output-0719`: JSON output method, node serialization via `json-node-output-method`, duplicate-key control, solidus escaping, `item-separator` for text output, `SENR0001` validation, and `xsl:output parameter-document` defaults | **Implemented** | Phase 5 | Charles Korthout | 2026-07-11 |
+| REQ-037 | *(internal)* | XSLT `xsl:result-document` serialization completeness | Required for W3C `result-document` cluster: AVT evaluation on all serialization attributes, case-sensitive yes/no values, `SEPM0009` scoping, `build-tree="no"`, and raw-item collection for `method="json"`/`adaptive` | **Implemented** | Phase 5 | Charles Korthout | 2026-07-11 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1612,6 +1613,48 @@ XSLT 3.0 adds a JSON output method controlled by `xsl:output method="json"` (and
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-07-11 | Kimi | Implemented | Raw-item collection, JSON parameter parsing, parameter-document support, and HTML namespace output clear the remaining JSON output failures. |
+
+---
+
+### REQ-037: XSLT `xsl:result-document` serialization completeness
+
+**Requesting Application:** *(internal — conformance)*  
+**Submitted:** 2026-07-11  
+**Status:** Implemented
+
+#### Problem Statement
+After clearing the principal `output` cluster, the W3C `result-document` cluster still had 39 failures. Many were caused by `xsl:result-document` serialization attributes being validated as static values before AVT evaluation, by case-insensitive yes/no parsing accepting invalid uppercase values, by `SEPM0009` being raised for methods with no XML declaration, and by the engine lacking raw-item collection for JSON/adaptive/build-tree="no" secondary outputs.
+
+#### Proposed Solution
+1. Evaluate AVTs for all serialization attributes in `TransformEngine.EvaluateResultDocumentInstruction` before passing the stub to `OutputProperties.FromElement`.
+2. Make yes/no parsing case-sensitive while retaining `true`/`false`/`1`/`0` synonyms, and normalize `standalone` to `yes`/`no`/`omit`.
+3. Restrict `SEPM0009` to `xml` and `xhtml` methods.
+4. Parse `build-tree` and collect raw XDM items for `method="json"`, `method="adaptive"`, and `build-tree="no"` in both principal and secondary result documents.
+5. Use the principal `xsl:result-document` output properties in `XsltExecutable.TransformToString`.
+
+#### Acceptance Criteria
+- [x] `result-document-0244`/`0245` pass: AVT `html-version="{$param}"`.
+- [x] `result-document-0701`/`1203`–`1205` pass: AVT yes/no attributes (`include-content-type`, `byte-order-mark`, `escape-uri-attributes`).
+- [x] `result-document-0246`–`0250`/`0276`/`0283` pass: invalid uppercase yes/no values raise `XTSE0020`.
+- [x] `result-document-0239` passes: `SEPM0009` not raised for text output method.
+- [x] `result-document-0303`/`1401`/`1404`/`1411` pass: maps serialized as JSON from `xsl:result-document`.
+- [x] `result-document` conformance set improves from 86/39/29 to 104/21/29.
+- [x] Full W3C suite improves from 5,481/124 to 5,506/99.
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `OutputProperties` parses `build-tree` and normalizes `standalone`; yes/no parsing case-sensitive. |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine` evaluates result-document AVTs, collects raw items, and writes secondary JSON documents. |
+| Standard | None | |
+| XSLT | Modified | `xsl:result-document` now supports JSON/adaptive/raw output. |
+| API | Modified | `XsltExecutable.TransformToString` uses principal result-document properties. |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-11 | Kimi | Implemented | AVT evaluation, value normalization, SEPM0009 scoping, and raw-item collection clear 18 result-document failures and push the full suite to 98.2%. |
 
 ---
 

@@ -21,6 +21,9 @@
 //                      | Charles Korthout | 0.8   | 11-07-2026     | Added method="json", json-node-output-method, allow-duplicate-names, escape-solidus,  |
 //                      |                  |       |                | and parameter-document parsing with inline character maps.                              |
 //                      | Charles Korthout | 0.9   | 11-07-2026     | Added item-separator output property for text serialization.                            |
+//                      | Charles Korthout | 1.0   | 12-07-2026     | Normalize standalone values (yes/no/omit) and restrict SEPM0009 to XML/XHTML.          |
+//                      | Charles Korthout | 1.1   | 12-07-2026     | Added build-tree output property for raw result-document collection.                    |
+//                      | Charles Korthout | 1.2   | 12-07-2026     | Made yes/no parsing case-sensitive while still accepting true/false/1/0.                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -105,6 +108,12 @@ public sealed class OutputProperties
     public string ItemSeparator { get; set; } = " ";
 
     /// <summary>
+    /// Whether the result tree should be built for this output definition. When
+    /// <c>false</c>, top-level items are preserved as raw XDM values for serialization.
+    /// </summary>
+    public bool BuildTree { get; set; } = true;
+
+    /// <summary>
     /// Resolved effective character map for this output definition. Populated by the
     /// stylesheet when the output properties are prepared for serialization.
     /// </summary>
@@ -133,6 +142,7 @@ public sealed class OutputProperties
     internal bool AllowDuplicateNamesSpecified { get; set; }
     internal bool EscapeSolidusSpecified { get; set; }
     internal bool ItemSeparatorSpecified { get; set; }
+    internal bool BuildTreeSpecified { get; set; }
     internal bool CharacterMapSpecified { get; set; }
 
     /// <summary>Parses an xsl:output element into <see cref="OutputProperties"/>.</summary>
@@ -217,7 +227,15 @@ public sealed class OutputProperties
         var standalone = element.Attribute("standalone")?.Value;
         if (!string.IsNullOrEmpty(standalone))
         {
-            props.Standalone = standalone;
+            var trimmed = standalone.Trim();
+            var normalized = trimmed switch
+            {
+                "yes" or "true" or "1" => "yes",
+                "no" or "false" or "0" => "no",
+                "omit" => "omit",
+                _ => throw new InvalidOperationException($"XTSE0020: Invalid value '{trimmed}' for standalone attribute.")
+            };
+            props.Standalone = normalized;
             props.StandaloneSpecified = true;
         }
 
@@ -318,6 +336,13 @@ public sealed class OutputProperties
         {
             props.ItemSeparator = itemSeparator;
             props.ItemSeparatorSpecified = true;
+        }
+
+        var buildTree = element.Attribute("build-tree")?.Value;
+        if (!string.IsNullOrEmpty(buildTree))
+        {
+            props.BuildTree = ParseYesNo(buildTree, defaultValue: true);
+            props.BuildTreeSpecified = true;
         }
 
         var useCharacterMaps = element.Attribute("use-character-maps")?.Value;
@@ -474,6 +499,10 @@ public sealed class OutputProperties
                     props.ItemSeparator = parsed.ItemSeparator;
                     props.ItemSeparatorSpecified = true;
                     break;
+                case "build-tree":
+                    props.BuildTree = parsed.BuildTree;
+                    props.BuildTreeSpecified = true;
+                    break;
                 case "use-character-maps":
                     props.UseCharacterMaps = parsed.UseCharacterMaps;
                     props.UseCharacterMapsSpecified = true;
@@ -556,6 +585,7 @@ public sealed class OutputProperties
         if (source.AllowDuplicateNamesSpecified) { target.AllowDuplicateNames = source.AllowDuplicateNames; target.AllowDuplicateNamesSpecified = true; }
         if (source.EscapeSolidusSpecified) { target.EscapeSolidus = source.EscapeSolidus; target.EscapeSolidusSpecified = true; }
         if (source.ItemSeparatorSpecified) { target.ItemSeparator = source.ItemSeparator; target.ItemSeparatorSpecified = true; }
+        if (source.BuildTreeSpecified) { target.BuildTree = source.BuildTree; target.BuildTreeSpecified = true; }
         if (source.UseCharacterMapsSpecified)
         {
             // Later xsl:output declarations and xsl:result-document instruction-level
@@ -628,6 +658,8 @@ public sealed class OutputProperties
             EscapeSolidusSpecified = EscapeSolidusSpecified,
             ItemSeparator = ItemSeparator,
             ItemSeparatorSpecified = ItemSeparatorSpecified,
+            BuildTree = BuildTree,
+            BuildTreeSpecified = BuildTreeSpecified,
             UseCharacterMaps = UseCharacterMaps,
             UseCharacterMapsSpecified = UseCharacterMapsSpecified,
             CharacterMap = CharacterMap,
@@ -639,7 +671,7 @@ public sealed class OutputProperties
     private static bool ParseYesNo(string value, bool defaultValue)
     {
         var trimmed = value.Trim();
-        return trimmed.ToLowerInvariant() switch
+        return trimmed switch
         {
             "yes" or "true" or "1" => true,
             "no" or "false" or "0" => false,
