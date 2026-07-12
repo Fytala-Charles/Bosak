@@ -40,6 +40,7 @@
 //                      | Charles Korthout | 2.8   | 11-07-2026     | Normalize CRLF line endings in non-XML serialization comparisons.                      |
 //                      | Charles Korthout | 2.9   | 11-07-2026     | Recursively evaluate nested <all-of> / <any-of> result assertions.                     |
 //                      | Charles Korthout | 3.0   | 11-07-2026     | Strip XML declaration in assert-string-value for atomic-only results                   |
+//                      | Charles Korthout | 3.1   | 12-07-2026     | Detect serialization errors for raw XDM results and assert-serialization-error.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1308,6 +1309,24 @@ class Program
             return Regex.IsMatch(serialized, pattern, ParseRegexFlags(flags));
         }
 
+        // assert-serialization-error: serialize the value and check the error code.
+        var assertSerError = resultElem.Name.LocalName == "assert-serialization-error"
+            ? resultElem
+            : resultElem.Element(ns + "assert-serialization-error");
+        if (assertSerError != null)
+        {
+            try
+            {
+                Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                var code = assertSerError.Attribute("code")?.Value;
+                return code != null && ex.Message.Contains(code);
+            }
+        }
+
         // assert: evaluate XPath expression against the value
         var assertExpr = resultElem.Name.LocalName == "assert" ? resultElem : resultElem.Element(ns + "assert");
         if (assertExpr != null)
@@ -1316,9 +1335,21 @@ class Program
             return EvaluateAssert(actual, assertExpr.Value, nsDecls, assertContext);
         }
 
-        // error expected
+        // error expected. For raw XDM results this typically means a serialization error,
+        // so attempt serialization and match the error code.
         if (resultElem.Name.LocalName == "error" || resultElem.Element(ns + "error") != null)
         {
+            var error = resultElem.Name.LocalName == "error" ? resultElem : resultElem.Element(ns + "error")!;
+            var code = error.Attribute("code")?.Value;
+            try
+            {
+                Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties);
+            }
+            catch (Exception ex)
+            {
+                if (code != null && ex.Message.Contains(code))
+                    return true;
+            }
             return false;
         }
 

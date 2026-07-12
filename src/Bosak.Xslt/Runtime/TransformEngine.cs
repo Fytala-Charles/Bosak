@@ -172,6 +172,8 @@
 //                      | Charles Korthout | 6.01  | 12-07-2026     | Evaluate AVTs on all xsl:result-document serialization attributes.                     |
 //                      | Charles Korthout | 6.02  | 12-07-2026     | Raw-item collection for xsl:result-document method=json/adaptive and build-tree="no".  |
 //                      | Charles Korthout | 6.03  | 12-07-2026     | Added null-forgiving operators to silence three compiler null-reference warnings.       |
+//                      | Charles Korthout | 6.04  | 12-07-2026     | Flatten arrays in sequence constructors; result-document character-map precedence.     |
+//                      | Charles Korthout | 6.05  | 12-07-2026     | Preserve original namespace prefixes for LREs; initialize current-output-uri to base.  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -565,7 +567,7 @@ public sealed class TransformEngine
     public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
     {
         _baseOutputUri = baseOutputUri;
-        _context.CurrentOutputUri = null;
+        _context.CurrentOutputUri = baseOutputUri;
         _initialSource = source;
         _initialMode = initialMode ?? "";
         _startedWithNamedTemplate = false;
@@ -3332,6 +3334,32 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Flattens array items recursively so that each member becomes a separate item in
+    /// the sequence being processed by a sequence constructor. Empty sequences inside
+    /// arrays are discarded; nested arrays are flattened in turn.
+    /// </summary>
+    private static void FlattenArrayMembers(XdmValue value, List<XdmValue> results)
+    {
+        if (value.IsUndefined)
+            return;
+
+        if (value.IsArray && value.ArrayValue != null)
+        {
+            foreach (var member in value.ArrayValue.Values)
+                FlattenArrayMembers(member, results);
+        }
+        else if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                FlattenArrayMembers(item, results);
+        }
+        else
+        {
+            results.Add(value);
+        }
+    }
+
+    /// <summary>
     /// Finds a template with match="/" (document root pattern).
     /// </summary>
     private Stylesheet.TemplateRule? FindRootTemplate()
@@ -4270,15 +4298,18 @@ public sealed class TransformEngine
                     // If the element has a namespace URI but no prefix hint, bind it via the
                     // default namespace. Prefixed names keep their prefix unless an
                     // xsl:namespace child would override that prefix binding.
+                    string? elemPrefixHint = null;
                     if (!string.IsNullOrEmpty(elemNsUri))
                     {
                         if (!elemName.Contains(':'))
                         {
                             elem.SetAttributeValue("xmlns", elemNsUri);
+                            elemPrefixHint = "";
                         }
                         else
                         {
                             var prefixHint = elemName[..elemName.IndexOf(':')];
+                            elemPrefixHint = prefixHint;
                             if (prefixHint != "xml" && prefixHint != "xmlns")
                             {
                                 bool overridden = instruction.Elements(XName.Get("namespace", Stylesheet.Stylesheet.XslNamespace))
@@ -4288,6 +4319,9 @@ public sealed class TransformEngine
                             }
                         }
                     }
+
+                    if (elemPrefixHint != null)
+                        elem.AddAnnotation(new ElementPrefixHint { Prefix = elemPrefixHint });
 
                     var elemInheritNsAttr = instruction.Attribute("inherit-namespaces");
                     var elemInheritNsRaw = elemInheritNsAttr?.Value
@@ -5920,13 +5954,23 @@ public sealed class TransformEngine
         var mappedElementName = MapAliasedName(source.Name, isElement: true, out var elementResultPrefix);
         if (elementResultPrefix == null)
         {
-            // Prefer the source element's default namespace when the element is in no-prefix
-            // form, even if another in-scope prefix happens to be bound to the same URI.
-            var defaultNs = source.GetDefaultNamespace();
-            if (!string.IsNullOrEmpty(defaultNs.NamespaceName) && defaultNs.NamespaceName == source.Name.NamespaceName)
-                elementResultPrefix = "";
+            // Prefer the prefix used in the original XML source. This preserves sibling
+            // prefixes that map to the same namespace URI (e.g. one:h3 and my:h3).
+            var originalPrefix = source.Annotation<OriginalPrefixAnnotation>()?.Prefix;
+            if (originalPrefix != null)
+            {
+                elementResultPrefix = originalPrefix;
+            }
             else
-                elementResultPrefix = source.GetPrefixOfNamespace(source.Name.Namespace);
+            {
+                // Prefer the source element's default namespace when the element is in no-prefix
+                // form, even if another in-scope prefix happens to be bound to the same URI.
+                var defaultNs = source.GetDefaultNamespace();
+                if (!string.IsNullOrEmpty(defaultNs.NamespaceName) && defaultNs.NamespaceName == source.Name.NamespaceName)
+                    elementResultPrefix = "";
+                else
+                    elementResultPrefix = source.GetPrefixOfNamespace(source.Name.Namespace);
+            }
         }
         var copy = new XElement(mappedElementName);
 
@@ -5956,6 +6000,11 @@ public sealed class TransformEngine
         {
             EnsureNamespaceDeclaration(copy, mappedElementName, elementResultPrefix);
         }
+
+        // Record the prefix chosen for this element so that the serializer can
+        // preserve it even when sibling elements use a different prefix for the
+        // same namespace URI.
+        copy.AddAnnotation(new ElementPrefixHint { Prefix = elementResultPrefix });
 
         // Compute excluded namespace URIs in scope on this LRE. exclude-result-prefixes
         // suppresses namespace nodes by URI, not by prefix.
@@ -6493,7 +6542,24 @@ public sealed class TransformEngine
         {
             if (value.IsSequence && value.SequenceValue != null)
             {
+                var flattenedItems = new List<XdmValue>();
                 foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                    FlattenArrayMembers(item, flattenedItems);
+                foreach (var item in flattenedItems)
+                {
+                    if (item.IsUndefined)
+                        continue;
+                    if (item.IsNode && item.NodeValue != null)
+                        _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue)));
+                    else
+                        _sequenceAccumulator.Add(item);
+                }
+            }
+            else if (value.IsArray && value.ArrayValue != null)
+            {
+                var flattenedItems = new List<XdmValue>();
+                FlattenArrayMembers(value, flattenedItems);
+                foreach (var item in flattenedItems)
                 {
                     if (item.IsUndefined)
                         continue;
@@ -6511,6 +6577,15 @@ public sealed class TransformEngine
             {
                 _sequenceAccumulator.Add(value);
             }
+            return;
+        }
+
+        // Arrays in a sequence constructor are flattened to their members (XSLT 3.0 §5.7.1).
+        if (value.IsArray && value.ArrayValue != null)
+        {
+            var items = new List<XdmValue>();
+            FlattenArrayMembers(value, items);
+            CopyToResult(XdmValue.FromSequence(MaterializedSequence.FromList(items)), separateAtomicsWithSpace);
             return;
         }
 
@@ -6535,7 +6610,11 @@ public sealed class TransformEngine
             bool prevWasAtomic = _lastAddedWasAtomic;
             bool anyItemProcessed = false;
 
+            var flattenedItems = new List<XdmValue>();
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                FlattenArrayMembers(item, flattenedItems);
+
+            foreach (var item in flattenedItems)
             {
                 anyItemProcessed = true;
 
@@ -13356,10 +13435,17 @@ public sealed class TransformEngine
         Stylesheet.OutputProperties.Merge(resultDocumentProps, Stylesheet.OutputProperties.FromElement(evaluatedInstruction));
 
         // Resolve any named character maps into a concrete character-to-string table.
-        // Instruction-level references are resolved in the original instruction context
-        // and take precedence over stylesheet-level xsl:output references.
+        // Stylesheet-level references are added first in declaration order; instruction-
+        // level references are appended so that they take precedence over stylesheet-level
+        // maps with conflicting character entries.
         var useCharacterMapsAttr = instruction.Attribute("use-character-maps")?.Value;
         var expandedNames = new List<string>();
+        foreach (var q in resultDocumentProps.UseCharacterMaps)
+        {
+            var expanded = Stylesheet.Stylesheet.ExpandQName(q);
+            if (!expandedNames.Contains(expanded))
+                expandedNames.Add(expanded);
+        }
         if (!string.IsNullOrWhiteSpace(useCharacterMapsAttr))
         {
             foreach (var name in useCharacterMapsAttr.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
@@ -13368,12 +13454,6 @@ public sealed class TransformEngine
                 if (!string.IsNullOrEmpty(expanded) && !expandedNames.Contains(expanded))
                     expandedNames.Add(expanded);
             }
-        }
-        foreach (var q in resultDocumentProps.UseCharacterMaps)
-        {
-            var expanded = Stylesheet.Stylesheet.ExpandQName(q);
-            if (!expandedNames.Contains(expanded))
-                expandedNames.Add(expanded);
         }
         if (expandedNames.Count > 0)
             resultDocumentProps.CharacterMap = _stylesheet.ResolveCharacterMap(expandedNames);

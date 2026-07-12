@@ -33,6 +33,9 @@
 //                      | Charles Korthout | 1.10  | 12-07-2026     | Added SENR0001 validation for maps/arrays/functions and attribute/namespace nodes.      |
 //                      | Charles Korthout | 1.11  | 12-07-2026     | XML declaration defaults: include for XML/XHTML 1.0, omit for XHTML 5.0/HTML/text/JSON. |
 //                      | Charles Korthout | 1.12  | 12-07-2026     | Apply character maps before escaping; combine XML surrogate-pair NCRs.                  |
+//                      | Charles Korthout | 1.13  | 12-07-2026     | Text-output normalization/BOM; SEPM0009/SEPM0010; HTML doctype-before-first-element.    |
+//                      | Charles Korthout | 1.14  | 12-07-2026     | Preserve CR in XML comments; JSON node method defaults; adaptive XML declaration.       |
+//                      | Charles Korthout | 1.15  | 12-07-2026     | Preserve original namespace prefixes via annotation; copy annotations through normalizers.|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -149,12 +152,12 @@ public static class ResultTreeSerializer
         bool omitXmlDeclarationWasSpecified = props.OmitXmlDeclarationSpecified;
         if (!omitXmlDeclarationWasSpecified)
         {
-            // XML declaration defaults: omitted for HTML, text, JSON, and adaptive; included
-            // for XML and XHTML 1.0. When standalone is specified the declaration must be
-            // present to avoid SEPM0009.
+            // XML declaration defaults: omitted for HTML, text, and JSON; included for XML
+            // and XHTML 1.0. The adaptive method delegates node serialization to the XML
+            // method, so an XML declaration is emitted for each serialized node by default.
             props.OmitXmlDeclaration = method switch
             {
-                "html" or "text" or "json" or "adaptive" => true,
+                "html" or "text" or "json" => true,
                 "xhtml" => props.HtmlVersion == "5.0" && !props.StandaloneSpecified,
                 _ => false
             };
@@ -202,13 +205,27 @@ public static class ResultTreeSerializer
         ValidateNormalizationForm(props);
         ValidateHtmlVersion(props);
 
-        // SEPM0009: standalone pseudo-attribute is not allowed when the XML
-        // declaration is omitted. This only applies to methods that emit an XML
-        // declaration (XML and XHTML); text, HTML, and JSON have no XML declaration.
-        if (props.OmitXmlDeclaration && props.Standalone is "yes" or "no" && props.Method is "xml" or "xhtml")
+        // SEPM0009: standalone or a non-default version together with doctype-system
+        // is not allowed when the XML declaration is omitted. This only applies to
+        // methods that emit an XML declaration (XML and XHTML).
+        if (props.OmitXmlDeclaration && props.Method is "xml" or "xhtml")
         {
-            throw new XsltRuntimeException("SEPM0009",
-                "The standalone pseudo-attribute is not allowed when the XML declaration is omitted.",
+            bool hasStandalone = props.Standalone is "yes" or "no";
+            bool nonDefaultVersionWithDoctype = props.VersionSpecified && props.Version != "1.0" &&
+                !string.IsNullOrEmpty(props.DoctypeSystem);
+            if (hasStandalone || nonDefaultVersionWithDoctype)
+            {
+                throw new XsltRuntimeException("SEPM0009",
+                    "The XML declaration is omitted but a serialization property requires it.",
+                    XdmValue.Undefined);
+            }
+        }
+
+        // SEPM0010: undeclare-prefixes is only permitted with XML 1.1.
+        if (props.UndeclarePrefixes && props.Method is "xml" or "xhtml" && props.Version != "1.1")
+        {
+            throw new XsltRuntimeException("SEPM0010",
+                "undeclare-prefixes is only allowed with XML version 1.1.",
                 XdmValue.Undefined);
         }
     }
@@ -223,7 +240,7 @@ public static class ResultTreeSerializer
         if (string.IsNullOrEmpty(form) || form == "NONE")
             return;
 
-        if (form is not "NFC" and not "NFD" and not "NFKC" and not "NFKD" and not "FULLY-NORMALIZED")
+        if (form is not "NFC" and not "NFD" and not "NFKC" and not "NFKD")
         {
             throw new XsltRuntimeException("SESU0011",
                 $"Unsupported normalization form '{props.NormalizationForm}'.",
@@ -383,21 +400,31 @@ public static class ResultTreeSerializer
 
     private static string SerializeAsText(XdmValue value, Stylesheet.OutputProperties props)
     {
-        var sb = new System.Text.StringBuilder();
+        using var writer = new StringWriter();
+        WriteByteOrderMark(writer, props);
+
         bool separatorAbsent = !props.ItemSeparatorSpecified || props.ItemSeparator == "#absent";
         var normalized = NormalizeRawSequence(value, separatorAbsent ? null : props.ItemSeparator);
         foreach (var obj in normalized)
         {
             if (obj is string s)
             {
-                sb.Append(MapCharacters(s, props));
+                writer.Write(MapCharacters(s, props));
             }
             else if (obj is XdmValue xdm && xdm.IsNode && xdm.NodeValue != null)
             {
-                sb.Append(TextMethodNodeString(xdm.NodeValue, props));
+                writer.Write(TextMethodNodeString(xdm.NodeValue, props));
             }
         }
-        return sb.ToString();
+
+        writer.Flush();
+        var result = writer.ToString();
+
+        // Apply Unicode normalization after character mapping.
+        if (TryGetNormalizationForm(props) is { } normForm)
+            result = result.Normalize(normForm);
+
+        return result;
     }
 
     private static string TextMethodNodeString(IXdmNode node, Stylesheet.OutputProperties props)
@@ -451,6 +478,12 @@ public static class ResultTreeSerializer
         nodeProps.OmitXmlDeclaration = true;
         nodeProps.OmitXmlDeclarationSpecified = true;
         nodeProps.JsonNodeOutputMethod = "xml";
+        // Re-apply method-dependent defaults (include-content-type, media-type, byte-order-mark)
+        // for the chosen node output method rather than inheriting JSON-specific defaults.
+        nodeProps.IncludeContentTypeSpecified = false;
+        nodeProps.MediaTypeSpecified = false;
+        nodeProps.ByteOrderMarkSpecified = false;
+        nodeProps.EscapeSolidusSpecified = false;
         ApplyMethodDefaults(nodeProps);
         return Serialize(nodeValue, nodeProps);
     }
@@ -547,7 +580,9 @@ public static class ResultTreeSerializer
                         var nodeProps = props.Clone();
                         nodeProps.Method = "xml";
                         nodeProps.MethodSpecified = true;
-                        nodeProps.OmitXmlDeclaration = true;
+                        // Adaptive serialization delegates element/document nodes to the XML
+                        // output method, preserving the effective omit-xml-declaration setting.
+                        nodeProps.OmitXmlDeclaration = props.OmitXmlDeclaration;
                         nodeProps.OmitXmlDeclarationSpecified = true;
                         writer.Write(Serialize(item, nodeProps));
                         break;
@@ -635,6 +670,11 @@ public static class ResultTreeSerializer
             }
         }
 
+        // Remember the original root element reference so that we can locate it in
+        // the flattened item list after it has been cloned for meta/normalization.
+        XElement? originalRootElement = rootElement;
+
+
         // Apply content-type meta injection if enabled.
         if (props.IncludeContentType && rootElement != null)
         {
@@ -675,20 +715,35 @@ public static class ResultTreeSerializer
         }
         else if (rootElement != null)
         {
-            WriteDoctype(writer, rootElement, props);
-            WriteHtmlNode(writer, rootElement, props, 0);
+            // Fragment containing a root element plus possible other top-level nodes.
+            // The DOCTYPE must be output immediately before the root element, so we
+            // iterate the original items rather than forcing the root element first.
+            foreach (var item in items)
+            {
+                if (item.IsNode && item.NodeValue != null &&
+                    item.NodeValue is XDocumentNode xdn && xdn.UnderlyingObject == originalRootElement)
+                {
+                    if (!doctypeWritten)
+                    {
+                        WriteDoctype(writer, rootElement, props);
+                        doctypeWritten = true;
+                    }
+                    WriteHtmlNode(writer, rootElement, props, 0);
+                }
+                else if (item.IsNode && item.NodeValue != null)
+                {
+                    WriteHtmlNode(writer, item.NodeValue, props, 0);
+                }
+                else if (!item.IsUndefined)
+                {
+                    WriteHtmlEscaped(writer, item.ToString(), props);
+                }
+            }
         }
         else
         {
             foreach (var item in items)
             {
-                if (!doctypeWritten && item.IsNode && item.NodeValue != null &&
-                    item.NodeValue is XDocumentNode xdn && xdn.UnderlyingObject == rootElement)
-                {
-                    WriteDoctype(writer, rootElement, props);
-                    doctypeWritten = true;
-                }
-
                 if (item.IsNode && item.NodeValue != null)
                     WriteHtmlNode(writer, item.NodeValue, props, 0);
                 else if (!item.IsUndefined)
@@ -1074,6 +1129,11 @@ public static class ResultTreeSerializer
 
                 foreach (var child in elem.Nodes())
                     newElem.Add(NormalizeXhtmlNamespacesForHtml5(child));
+
+                // Preserve any annotations attached by the XSLT processor (e.g. the
+                // preferred namespace prefix chosen for a literal result element).
+                foreach (var annotation in elem.Annotations<object>())
+                    newElem.AddAnnotation(annotation);
 
                 return newElem;
 
@@ -1538,6 +1598,8 @@ public static class ResultTreeSerializer
                     clonedElem.SetAttributeValue(attr.Name, attr.Value.Normalize(form));
                 foreach (var child in element.Nodes())
                     clonedElem.Add(NormalizeXNode(child, form));
+                foreach (var annotation in element.Annotations<object>())
+                    clonedElem.AddAnnotation(annotation);
                 return clonedElem;
             case XText text:
                 return new XText(text.Value.Normalize(form));
@@ -1588,6 +1650,8 @@ public static class ResultTreeSerializer
                         cloned.Add(WrapCdataSections(child, props));
                     }
                 }
+                foreach (var annotation in element.Annotations<object>())
+                    cloned.AddAnnotation(annotation);
                 return cloned;
             default:
                 return node;
@@ -2398,16 +2462,28 @@ public static class ResultTreeSerializer
 
     private static XElement InsertContentTypeMeta(XElement rootElement, Stylesheet.OutputProperties props)
     {
-        // Only insert for html root element in the XHTML/HTML namespace.
+        // Only insert for html/head root element in the XHTML/HTML namespace.
         const string xhtmlNs = "http://www.w3.org/1999/xhtml";
-        if (!string.Equals(rootElement.Name.LocalName, "html", StringComparison.OrdinalIgnoreCase))
+        var localName = rootElement.Name.LocalName;
+        if (!string.Equals(localName, "html", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(localName, "head", StringComparison.OrdinalIgnoreCase))
             return rootElement;
         if (rootElement.Name.NamespaceName != xhtmlNs && !string.IsNullOrEmpty(rootElement.Name.NamespaceName))
             return rootElement;
 
-        var head = rootElement.Elements().FirstOrDefault(e => string.Equals(e.Name.LocalName, "head", StringComparison.OrdinalIgnoreCase));
-        if (head == null)
-            return rootElement;
+        XElement? head;
+        XElement? html = null;
+        if (string.Equals(localName, "head", StringComparison.OrdinalIgnoreCase))
+        {
+            head = rootElement;
+        }
+        else
+        {
+            html = rootElement;
+            head = rootElement.Elements().FirstOrDefault(e => string.Equals(e.Name.LocalName, "head", StringComparison.OrdinalIgnoreCase));
+            if (head == null)
+                return rootElement;
+        }
 
         // Check if a meta http-equiv Content-Type already exists. HTML is case-insensitive,
         // so both the attribute name and value are compared ignoring case.
@@ -2443,7 +2519,7 @@ public static class ResultTreeSerializer
         }
         else
         {
-            newMeta = new XElement(XName.Get("meta", rootElement.Name.NamespaceName),
+            newMeta = new XElement(XName.Get("meta", head.Name.NamespaceName),
                 new XAttribute("http-equiv", "Content-Type"),
                 new XAttribute("content", content));
         }
@@ -2464,6 +2540,9 @@ public static class ResultTreeSerializer
             else
                 newHead.Add(child);
         }
+
+        if (html == null)
+            return newHead;
 
         var newRoot = new XElement(rootElement.Name);
         foreach (var attr in rootElement.Attributes())
@@ -2594,7 +2673,8 @@ public static class ResultTreeSerializer
             OmitXmlDeclaration = props.OmitXmlDeclaration,
             Indent = props.Indent,
             Encoding = encoding ?? System.Text.Encoding.UTF8,
-            ConformanceLevel = ConformanceLevel.Document
+            ConformanceLevel = ConformanceLevel.Document,
+            NewLineHandling = NewLineHandling.None
         };
     }
 
@@ -2974,6 +3054,21 @@ public static class ResultTreeSerializer
         if (inScopeBindings.TryGetValue("", out var defaultScopeUri) && defaultScopeUri == uri)
             return "";
 
+        // Prefer the prefix chosen by the XSLT processor for this element's own
+        // namespace URI. This preserves sibling prefixes that map to the same URI
+        // (e.g. one:h3 and my:h3 both bound to the same namespace).
+        var preferredPrefix = element.Annotation<ElementPrefixHint>()?.Prefix;
+        if (!string.IsNullOrEmpty(preferredPrefix) && uri == element.Name.NamespaceName)
+        {
+            if (inScopeBindings.TryGetValue(preferredPrefix, out var scopeUri) && scopeUri == uri)
+                return preferredPrefix;
+            if (!inScopeBindings.ContainsKey(preferredPrefix) && !declarations.ContainsKey(preferredPrefix))
+            {
+                declarations[preferredPrefix] = uri;
+                return preferredPrefix;
+            }
+        }
+
         // Prefer a non-empty prefix that is already targeted for this element.
         foreach (var (prefix, boundUri) in targetBindings)
         {
@@ -2981,17 +3076,17 @@ public static class ResultTreeSerializer
                 return prefix;
         }
 
-        // Prefer a non-empty prefix already in scope.
-        var scopePrefix = GetPrefixForUri(inScopeBindings, uri);
-        if (scopePrefix != null)
-            return scopePrefix;
-
-        // Prefer a prefix explicitly declared on the element.
+        // Prefer a prefix explicitly declared on this element, even if another
+        // prefix for the same URI is already in scope. This preserves the
+        // original prefixes chosen by the stylesheet for sibling elements that
+        // share a namespace URI but use different prefixes.
         foreach (var attr in element.Attributes().Where(a => a.IsNamespaceDeclaration))
         {
             if (attr.Value == uri)
             {
                 var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                if (inScopeBindings.TryGetValue(prefix, out var scopeUri) && scopeUri == uri)
+                    return prefix;
                 if (!inScopeBindings.ContainsKey(prefix) && !declarations.ContainsKey(prefix))
                 {
                     declarations[prefix] = uri;
@@ -2999,6 +3094,11 @@ public static class ResultTreeSerializer
                 }
             }
         }
+
+        // Prefer a non-empty prefix already in scope.
+        var scopePrefix = GetPrefixForUri(inScopeBindings, uri);
+        if (scopePrefix != null)
+            return scopePrefix;
 
         // Generate a fresh prefix.
         int index = 1;
@@ -3123,10 +3223,12 @@ public static class ResultTreeSerializer
                         continue;
                     cloned.SetAttributeValue(attr.Name, attr.Value);
                 }
-                if (!allowUndeclare)
-                    cloned.RemoveAnnotations<PrefixedNamespaceUndeclarations>();
                 foreach (var child in element.Nodes())
                     cloned.Add(NormalizeForXmlWriter(child, props));
+                foreach (var annotation in element.Annotations<object>())
+                    cloned.AddAnnotation(annotation);
+                if (!allowUndeclare)
+                    cloned.RemoveAnnotations<PrefixedNamespaceUndeclarations>();
                 return cloned;
 
             case XCData cdata:

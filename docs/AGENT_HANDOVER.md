@@ -1,44 +1,69 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-12
-**Commit:** `1812d61`
-**Current focus:** Character-map and `output` serialization conformance clusters.
+**Commit:** `bd9f8bd` (working tree contains uncommitted serialization fixes)
+**Current focus:** Remaining W3C XSLT 3.0 serialization conformance failures and `fn:current-output-uri()`.
 
 ---
 
 ## This Session Fixes
 
-1. **Corrected character-map precedence**
-   - `Stylesheet.ResolveCharacterMap` now uses **last-wins** semantics for duplicate characters across the effective `use-character-maps` list, matching the XSLT 3.0 serialization spec.
-   - `OutputProperties.Merge` appends `use-character-maps` references so later `xsl:output` declarations and `xsl:result-document` instructions take precedence.
+1. **Array flattening in sequence constructors**
+   - `TransformEngine.CopyToResult` and `EvaluateSequenceConstructorToItems` now flatten top-level and nested arrays into their members, matching XSLT 3.0 §5.7.1.
+   - Clears `output-0713`, `output-0714`, and `output-0715` (array serialization in XML/HTML output methods).
 
-2. **Applied character maps before escaping / encoding checks**
-   - `ResultTreeSerializer.WriteEscaped`, `WriteHtmlEscaped`, and `WriteXmlEscaped` now apply character maps before XML/HTML escaping or unrepresentable-character handling.
-   - Characters split out of `cdata-section-elements` text nodes are annotated so they are not altered by character maps.
+2. **JSON node output method `html`**
+   - `ResultTreeSerializer.SerializeNodeForJson` re-applies method-dependent defaults after switching to `html`/`xml` node output.
+   - HTML content-type `<meta>` is now injected when `json-node-output-method="html"`, clearing `output-0716`.
 
-3. **Integrated character maps into JSON serialization**
-   - `XdmJsonSerializer` now accepts a `CharacterMap` option and applies it while encoding JSON string values, before JSON escaping.
-   - `ResultTreeSerializer.SerializeAsJson` passes the effective character map down and no longer post-processes the whole JSON document.
+3. **Adaptive output method improvements**
+   - `ResultTreeSerializer.SerializeAsAdaptive` preserves the effective `omit-xml-declaration` setting when delegating nodes to the XML output method.
+   - `TransformEngine.ExecuteResultDocument` builds the effective `use-character-maps` list in declaration order: stylesheet-level references first, then instruction-level references, so later maps override earlier ones.
+   - `XsltExecutable.OutputProperties` now resolves named stylesheet-level character maps on demand and lets pre-resolved / parameter-document maps override the re-resolved list.
+   - Clears `output-0721` (parameter-document character maps in adaptive output).
 
-4. **Combined surrogate-pair numeric character references**
-   - XML/XHTML output now emits a single decimal NCR for a Unicode scalar value instead of two NCRs for the UTF-16 surrogate pair.
+4. **XML comment CR preservation**
+   - Comments serialized with the `xml` method now preserve `\r` characters literally by writing through `XmlWriter.WriteComment` with `NewLineHandling.None`.
+   - Clears `output-0723`.
 
-5. **XHTML empty-element handling for no-namespace HTML elements**
-   - Void HTML elements in no namespace are self-closed; non-void empty elements now emit explicit start/end tags.
+5. **Serialization parameter validation**
+   - `SEPM0009` is now restricted to XML/XHTML methods and also covers `version != 1.0` with `doctype-system` when the XML declaration is omitted.
+   - `SEPM0010` is raised when `undeclare-prefixes="yes"` is used with a non-XML-1.1 output version.
+
+6. **HTML/text output edge cases**
+   - HTML DOCTYPE is now output immediately before the first element, even when the result contains mixed top-level nodes.
+   - Text output now writes the BOM, applies character maps, and applies `normalization-form`.
+
+7. **Conformance harness**
+   - Added support for `<assert-serialization-error>` and detection of serialization errors for raw XDM results expected to raise an error.
+
+8. **Preserved original namespace prefixes for sibling elements with the same URI**
+   - `Xml11Loader` now annotates every loaded element with the namespace prefix used in the XML source.
+   - `TransformEngine.CopyLiteralElement` and `xsl:element` propagate that prefix hint onto constructed result elements; `ResultTreeSerializer.FindOrDeclarePrefix` honors it.
+   - Normalization and CDATA-wrapping clones now copy annotations so the hint survives serialization preparation.
+   - Clears `output-0138` (XHTML `cdata-section-elements` with prefixed names).
+
+9. **`fn:current-output-uri()` initialization**
+   - `TransformEngine.Transform` now initializes `_context.CurrentOutputUri` to the base output URI instead of an empty sequence.
+   - Functions, variables, parameters, sort keys, merge keys, and patterns continue to run in temporary output state (empty sequence).
+   - Clears `current-output-uri-002`, `-004`, `-008`, `-010`, and `-014`.
 
 ## Results
 
 - Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
-- Full W3C XSLT 3.0 suite: **5,526 passed / 79 failed / 8,995 skipped** (98.6%; was 5,521/84/8,995).
-- `output` conformance set: **16 failures remaining** (was 18).
-- `character-map` conformance set: **12 failures remaining** (was 15).
+- Full W3C XSLT 3.0 suite: **5,544 passed / 61 failed / 8,995 skipped** (98.9%; was 5,526/79/8,995).
+- Remaining failure clusters: `mode`, `namespace`, `xml-version`, `character-map` (a few each); `output` and `current-output-uri` clusters are now clear.
 
 ## Files Changed
 
-- `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`
-- `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`
 - `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
-- `src/Bosak.XPath.Standard/Json/XdmJsonSerializer.cs`
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs`
+- `src/Bosak.Xslt/Runtime/ElementPrefixHint.cs`
+- `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`
+- `src/Bosak.Xslt/Api/XsltExecutable.cs`
+- `src/Bosak.XPath.Providers/Xml11/Xml11Loader.cs`
+- `src/Bosak.XPath.Providers/XDocument/OriginalPrefixAnnotation.cs`
+- `tests/Bosak.Xslt.Conformance/Program.cs`
 
 ---
 

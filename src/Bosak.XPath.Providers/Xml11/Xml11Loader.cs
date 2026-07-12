@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 07-07-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 12-07-2026     | Avoid infinite loop when malformed markup yields an empty attribute name                 |
+//                      | Charles Korthout | 0.3   | 12-07-2026     | Annotate loaded elements with the original namespace prefix from the XML source.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -85,6 +86,7 @@ public static class Xml11Loader
         var settings = CreateSettings();
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri);
         var doc = XDocument.Load(reader, loadOptions);
+        AnnotateOriginalPrefixes(doc, rewritten, baseUri);
         if (isXml11)
         {
             doc.AddAnnotation(Xml11Annotation.Instance);
@@ -103,6 +105,7 @@ public static class Xml11Loader
         var settings = CreateSettings();
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri ?? "");
         var doc = XDocument.Load(reader, loadOptions);
+        AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
         if (isXml11)
         {
             doc.AddAnnotation(Xml11Annotation.Instance);
@@ -121,6 +124,7 @@ public static class Xml11Loader
         var settings = CreateSettings();
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri ?? "");
         var doc = XDocument.Load(reader, loadOptions);
+        AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
         doc.AddAnnotation(Xml11Annotation.Instance);
         FinalizeXml11Document(doc);
         return doc;
@@ -187,6 +191,48 @@ public static class Xml11Loader
         if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
             return 2;
         return 0;
+    }
+
+    /// <summary>
+    /// Walks the freshly loaded document in parallel with an <see cref="XmlReader"/> over
+    /// the same XML text and records the original namespace prefix used for each element.
+    /// </summary>
+    private static void AnnotateOriginalPrefixes(XDocument doc, string xmlText, string baseUri)
+    {
+        var settings = CreateSettings();
+        using var reader = XmlReader.Create(new StringReader(xmlText), settings, baseUri);
+        AnnotateElementPrefixes(reader, doc);
+    }
+
+    private static void AnnotateElementPrefixes(XmlReader reader, XContainer container)
+    {
+        foreach (var node in container.Nodes())
+        {
+            if (node is XElement element)
+            {
+                while (reader.Read())
+                {
+                    if (reader.NodeType == XmlNodeType.Element)
+                        break;
+                }
+
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    element.AddAnnotation(new OriginalPrefixAnnotation { Prefix = reader.Prefix ?? string.Empty });
+                }
+
+                if (!reader.IsEmptyElement)
+                {
+                    AnnotateElementPrefixes(reader, element);
+
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.EndElement)
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     private static Encoding DetectEncodingFromBom(byte[] bytes)

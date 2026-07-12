@@ -4,13 +4,28 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 11 July 2026
+> **Last updated:** 12 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,506 passed / 99 failed / 8,995 skipped (98.2%)
+> **XSLT baseline:** 5,544 passed / 61 failed / 8,995 skipped (98.9%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-12** — Phase 5f final serialization clusters cleared.
+  - `fn:current-output-uri()` now returns the base output URI at the top level and remains empty in temporary output state (functions, variables, sort/merge keys, patterns), clearing the `current-output-uri` cluster.
+  - Original namespace prefixes are preserved for sibling elements that map to the same URI, clearing `output-0138`.
+  - The `output` conformance cluster now has **0 failures** (203 passed / 0 failed / 29 skipped); the `current-output-uri` cluster has **0 failures** (15 passed / 0 failed / 2 skipped).
+  - Full W3C suite: **5,544 passed / 61 failed / 8,995 skipped** (98.9%).
+
+- **2026-07-12** — Phase 5e remaining `output` serialization edge cases.
+  - Arrays are now flattened in sequence constructors, fixing `output-0713`–`output-0715`.
+  - `json-node-output-method="html"` now injects the HTML content-type `<meta>` element (`output-0716`).
+  - Adaptive output preserves `omit-xml-declaration` and applies parameter-document character maps (`output-0721`).
+  - XML comments preserve `\r` characters literally (`output-0723`).
+  - `SEPM0009` is restricted to XML/XHTML and now covers `version != 1.0` with `doctype-system`; `SEPM0010` validates `undeclare-prefixes` for XML 1.1.
+  - Text output now writes the BOM, applies character maps, and honors `normalization-form`; HTML DOCTYPE is emitted immediately before the first element.
+  - Full W3C suite: **5,538 passed / 67 failed / 8,995 skipped** (98.8%).
 
 - **2026-07-11** — Phase 5 JSON output method: `xsl:output method="json"`, `json-node-output-method`, `allow-duplicate-names`, `escape-solidus`, and `xsl:output parameter-document` with inline character maps.
   - Top-level `xsl:map`/`xsl:map-entry` results are preserved for JSON serialization instead of being rejected as element/document children.
@@ -414,8 +429,8 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:sort` | ✅ Working | Single and multi-key; `data-type`, `order`, `stable`, AVTs for `lang`/`case-order`/`collation`; recognized collations including UCA `alternate=non-ignorable`, `blanked`, and `shifted`. Default collation is respected; `case-order` works without an explicit collation. |
 | `xsl:number` | ✅ Working | `single`, `any`, `multiple` levels; format tokens |
 | `xsl:key` / `key()` | ✅ Working | Indexed lookup; composite keys; content-constructor keys preserve typed atomic values; results returned in document order; `key()` allowed in match patterns with XTSE0340 validation. Key-value comparison respects the effective default or explicit `@collation`; conflicting collations for the same key name raise XTSE1220. |
-| `xsl:output` | ✅ Working | `method` (`xml`, `html`, `xhtml`, `text`, `json`), `indent`, `omit-xml-declaration`, `encoding`, `version`, `standalone`, `doctype-system`, `doctype-public`, `cdata-section-elements`, `escape-uri-attributes`, `include-content-type`, `media-type`, `byte-order-mark`, `html-version`, `suppress-indentation`, `normalization-form`, `use-character-maps`, `json-node-output-method`, `allow-duplicate-names`, `escape-solidus`, `item-separator`, `parameter-document`. Encoding-aware output escapes unrepresentable characters as numeric character references and splits CDATA sections around them. Named `xsl:output` definitions are resolved by import precedence; `xsl:result-document` attributes override the effective output definition. XHTML 1.0 uses the HTML 4 empty-element list; XHTML5 strips the XHTML namespace prefix, serializes HTML5 void elements as empty tags, ignores `doctype-public` when no `doctype-system` is supplied, and preserves root-element case in the DOCTYPE. DOCTYPE literal values are quoted with the delimiter that does not occur in the value. JSON output serializes maps, arrays, booleans, numbers, strings, and nodes; `json-node-output-method` controls node serialization; `escape-solidus` defaults to `yes`; character maps are applied to the final JSON text. Maps/arrays/functions at the top level of a non-JSON output raise `SENR0001`. `xsl:result-document` supports `method="json"`, `method="adaptive"`, and `build-tree="no"` with raw-item collection. |
-| `xsl:character-map` | ✅ Working | `name`, `use-character-maps`, and `xsl:output-character/@character` / `@string`; merged in declaration order, first definition wins for duplicate characters; applied to text, attribute, comment, PI, and raw-XML output in all methods |
+| `xsl:output` | ✅ Working | `method` (`xml`, `html`, `xhtml`, `text`, `json`, `adaptive`), `indent`, `omit-xml-declaration`, `encoding`, `version`, `standalone`, `doctype-system`, `doctype-public`, `cdata-section-elements`, `escape-uri-attributes`, `include-content-type`, `media-type`, `byte-order-mark`, `html-version`, `suppress-indentation`, `normalization-form`, `use-character-maps`, `json-node-output-method`, `allow-duplicate-names`, `escape-solidus`, `item-separator`, `parameter-document`, `undeclare-prefixes`, `build-tree`. Encoding-aware output escapes unrepresentable characters as numeric character references and splits CDATA sections around them. Named `xsl:output` definitions are resolved by import precedence; `xsl:result-document` attributes override the effective output definition. XHTML 1.0 uses the HTML 4 empty-element list; XHTML5 strips the XHTML namespace prefix, serializes HTML5 void elements as empty tags, ignores `doctype-public` when no `doctype-system` is supplied, and preserves root-element case in the DOCTYPE. DOCTYPE literal values are quoted with the delimiter that does not occur in the value. JSON output serializes maps, arrays, booleans, numbers, strings, and nodes; `json-node-output-method` controls node serialization; `escape-solidus` defaults to `yes`; character maps are applied to the final JSON text. Maps/arrays/functions at the top level of a non-JSON output raise `SENR0001`. `xsl:result-document` supports `method="json"`, `method="adaptive"`, and `build-tree="no"` with raw-item collection. `SEPM0009` and `SEPM0010` are enforced for XML/XHTML output properties. |
+| `xsl:character-map` | ✅ Working | `name`, `use-character-maps`, and `xsl:output-character/@character` / `@string`; merged in declaration order, later maps override earlier ones (last-wins) for duplicate characters; explicit mappings override referenced maps within a single character map; applied to text, attribute, comment, PI, raw-XML, JSON, and adaptive output in all methods |
 | `xsl:function` | ✅ Working | User-defined XPath functions in XSLT; `@as` return type enforced via `ConvertVariableValue` |
 | `xsl:sequence` | ✅ Working | Returns sequences from functions |
 | `xsl:mode` | ✅ Working | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks (`XTSE0545`), and `#unnamed` normalization |

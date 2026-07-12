@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.1   | 12-07-2026     | Added build-tree output property for raw result-document collection.                    |
 //                      | Charles Korthout | 1.2   | 12-07-2026     | Made yes/no parsing case-sensitive while still accepting true/false/1/0.                |
 //                      | Charles Korthout | 1.3   | 12-07-2026     | Append use-character-maps during merge so last-wins resolution is correct.              |
+//                      | Charles Korthout | 1.4   | 12-07-2026     | Merge multiple xsl:output use-character-maps lists in declaration order.                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 

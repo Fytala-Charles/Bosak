@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 1.0   | 11-07-2026     | Resolve named character maps for principal and function output before serialization.    |
 //                      | Charles Korthout | 1.1   | 11-07-2026     | Merge parameter-document character maps with named character-map resolutions.          |
 //                      | Charles Korthout | 1.2   | 12-07-2026     | Use principal xsl:result-document output properties (including JSON) in TransformToString. |
+//                      | Charles Korthout | 1.3   | 12-07-2026     | Resolve stylesheet-level character maps in OutputProperties; pre-resolved maps win.     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -50,9 +51,23 @@ public sealed class XsltExecutable
     }
 
     /// <summary>
-    /// Gets the effective stylesheet-level output properties.
+    /// Gets the effective stylesheet-level output properties, with named character maps
+    /// resolved to a concrete character-to-string table.
     /// </summary>
-    public Stylesheet.OutputProperties OutputProperties => _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+    public Stylesheet.OutputProperties OutputProperties
+    {
+        get
+        {
+            var props = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+            if (props.UseCharacterMaps.Count > 0 && props.CharacterMap == null)
+            {
+                props = props.Clone();
+                props.CharacterMap = _stylesheet.ResolveCharacterMap(
+                    props.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
+            }
+            return props;
+        }
+    }
 
     /// <summary>
     /// Gets the output properties of the principal <c>xsl:result-document</c> produced
@@ -132,12 +147,9 @@ public sealed class XsltExecutable
                     outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
                 if (outputProperties.CharacterMap != null)
                 {
-                    // Explicit named character maps override parameter-document defaults.
+                    // Explicit or pre-resolved character maps override the re-resolved list.
                     foreach (var kvp in outputProperties.CharacterMap)
-                    {
-                        if (!resolved.ContainsKey(kvp.Key))
-                            resolved[kvp.Key] = kvp.Value;
-                    }
+                        resolved[kvp.Key] = kvp.Value;
                 }
                 outputProperties.CharacterMap = resolved;
             }
@@ -181,10 +193,7 @@ public sealed class XsltExecutable
             if (outputProperties.CharacterMap != null)
             {
                 foreach (var kvp in outputProperties.CharacterMap)
-                {
-                    if (!resolved.ContainsKey(kvp.Key))
-                        resolved[kvp.Key] = kvp.Value;
-                }
+                    resolved[kvp.Key] = kvp.Value;
             }
             outputProperties.CharacterMap = resolved;
         }
