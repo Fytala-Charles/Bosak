@@ -11,9 +11,11 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-07-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 12-07-2026     | Added CharacterMap option and apply it during JSON string encoding.                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Generic;
 using System.Text;
 using Bosak.XPath.Core.Xdm;
 
@@ -38,6 +40,12 @@ public sealed class XdmJsonOptions
     /// If null, nodes are serialized using their XML string value.
     /// </summary>
     public Func<XdmValue, string>? NodeSerializer { get; set; }
+
+    /// <summary>
+    /// Optional character map applied while serializing JSON string values.
+    /// Mapped characters are replaced before JSON escaping is applied.
+    /// </summary>
+    public Dictionary<char, string>? CharacterMap { get; set; }
 }
 
 /// <summary>
@@ -124,7 +132,7 @@ public static class XdmJsonSerializer
 
         if (value.Kind == XdmValueKind.String)
         {
-            sb.Append(EncodeJsonString(value.StringValue, options.EscapeSolidus));
+            sb.Append(EncodeJsonString(value.StringValue, options.EscapeSolidus, options.CharacterMap));
             return;
         }
 
@@ -134,7 +142,7 @@ public static class XdmJsonSerializer
             return;
         }
 
-        sb.Append(EncodeJsonString(value.ToString(), options.EscapeSolidus));
+        sb.Append(EncodeJsonString(value.ToString(), options.EscapeSolidus, options.CharacterMap));
     }
 
     private static void SerializeMap(XdmMap map, StringBuilder sb, XdmJsonOptions options, int indent)
@@ -164,7 +172,7 @@ public static class XdmJsonSerializer
                 sb.AppendLine();
                 AppendIndent(sb, childIndent);
             }
-            sb.Append(EncodeJsonString(entry.Key.ToString(), options.EscapeSolidus));
+            sb.Append(EncodeJsonString(entry.Key.ToString(), options.EscapeSolidus, options.CharacterMap));
             sb.Append(':');
             if (options.Indent)
                 sb.Append(' ');
@@ -223,10 +231,27 @@ public static class XdmJsonSerializer
     /// </summary>
     public static string EncodeJsonString(string value, bool escapeSolidus = false)
     {
+        return EncodeJsonString(value, escapeSolidus, null);
+    }
+
+    /// <summary>
+    /// Encodes a string as a JSON string literal, applying any character map before
+    /// escaping quotes, backslashes, control characters and (optionally) forward slashes.
+    /// </summary>
+    public static string EncodeJsonString(string value, bool escapeSolidus, Dictionary<char, string>? characterMap)
+    {
         var sb = new StringBuilder();
         sb.Append('"');
         foreach (var ch in value)
         {
+            // Character maps are applied before JSON escaping. The replacement string is
+            // output as-is and is not itself JSON-escaped or subject to further mapping.
+            if (characterMap != null && characterMap.Count > 0 && characterMap.TryGetValue(ch, out var replacement))
+            {
+                sb.Append(replacement);
+                continue;
+            }
+
             switch (ch)
             {
                 case '"':

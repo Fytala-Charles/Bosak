@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 1.9   | 12-07-2026     | Restrict SEPM0009 to XML/XHTML methods; support standalone value normalization.         |
 //                      | Charles Korthout | 1.10  | 12-07-2026     | Added SENR0001 validation for maps/arrays/functions and attribute/namespace nodes.      |
 //                      | Charles Korthout | 1.11  | 12-07-2026     | XML declaration defaults: include for XML/XHTML 1.0, omit for XHTML 5.0/HTML/text/JSON. |
+//                      | Charles Korthout | 1.12  | 12-07-2026     | Apply character maps before escaping; combine XML surrogate-pair NCRs.                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -429,10 +430,11 @@ public static class ResultTreeSerializer
             Indent = props.Indent,
             AllowDuplicateNames = props.AllowDuplicateNames,
             EscapeSolidus = props.EscapeSolidus,
-            NodeSerializer = node => SerializeNodeForJson(node, props)
+            NodeSerializer = node => SerializeNodeForJson(node, props),
+            CharacterMap = props.CharacterMap
         };
         var json = XdmJsonSerializer.Serialize(value, options);
-        writer.Write(MapCharacters(json, props));
+        writer.Write(json);
         writer.Flush();
         return writer.ToString();
     }
@@ -918,7 +920,7 @@ public static class ResultTreeSerializer
         }
 
         writer.Flush();
-        return writer.ToString();
+        return NormalizeSurrogatePairEntities(writer.ToString());
     }
 
     private static IEnumerable<XdmValue> FlattenItems(XdmValue value)
@@ -1159,7 +1161,7 @@ public static class ResultTreeSerializer
         }
 
         xmlWriter.Flush();
-        return NormalizeXmlEmptyElements(writer.ToString());
+        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(writer.ToString()));
     }
 
     private static string SerializeXElement(XElement element, Stylesheet.OutputProperties props)
@@ -1228,7 +1230,7 @@ public static class ResultTreeSerializer
         }
 
         var result = encoding.GetString(stream.ToArray());
-        return NormalizeXmlEmptyElements(ConvertHexEntitiesToDecimal(result));
+        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(ConvertHexEntitiesToDecimal(result)));
     }
 
     private static string SerializeXDocument(XDocument document, Stylesheet.OutputProperties props)
@@ -1302,7 +1304,7 @@ public static class ResultTreeSerializer
         var result = encoding.GetString(stream.ToArray());
         // XmlWriter emits hexadecimal character references by default;
         // the XSLT test suite expects decimal references.
-        return NormalizeXmlEmptyElements(ConvertHexEntitiesToDecimal(result));
+        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(ConvertHexEntitiesToDecimal(result)));
     }
 
     /// <summary>
@@ -1353,6 +1355,64 @@ public static class ResultTreeSerializer
                 sb.Append(xml, start, end - start + 1);
             }
 
+            i = end + 1;
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Combines adjacent decimal numeric character references that represent a UTF-16
+    /// surrogate pair into a single reference for the Unicode scalar value.
+    /// </summary>
+    private static string NormalizeSurrogatePairEntities(string xml)
+    {
+        // Fast path: no numeric entities at all.
+        if (xml.IndexOf("&#", StringComparison.Ordinal) < 0)
+            return xml;
+
+        var sb = new System.Text.StringBuilder(xml.Length);
+        int i = 0;
+        while (i < xml.Length)
+        {
+            int start = xml.IndexOf("&#", i, StringComparison.Ordinal);
+            if (start < 0)
+            {
+                sb.Append(xml, i, xml.Length - i);
+                break;
+            }
+
+            sb.Append(xml, i, start - i);
+
+            int end = xml.IndexOf(';', start + 2);
+            if (end < 0 || !int.TryParse(xml.AsSpan(start + 2, end - start - 2), out int firstCp))
+            {
+                sb.Append(xml, start, 1);
+                i = start + 1;
+                continue;
+            }
+
+            // Look for a following decimal NCR that forms a surrogate pair.
+            int nextStart = end + 1;
+            if (char.IsHighSurrogate((char)firstCp) &&
+                nextStart + 2 < xml.Length &&
+                xml[nextStart] == '&' && xml[nextStart + 1] == '#')
+            {
+                int nextEnd = xml.IndexOf(';', nextStart + 2);
+                if (nextEnd > 0 &&
+                    int.TryParse(xml.AsSpan(nextStart + 2, nextEnd - nextStart - 2), out int secondCp) &&
+                    char.IsLowSurrogate((char)secondCp))
+                {
+                    int scalar = char.ConvertToUtf32((char)firstCp, (char)secondCp);
+                    sb.Append("&#");
+                    sb.Append(scalar);
+                    sb.Append(';');
+                    i = nextEnd + 1;
+                    continue;
+                }
+            }
+
+            sb.Append(xml, start, end - start + 1);
             i = end + 1;
         }
 
@@ -1535,6 +1595,13 @@ public static class ResultTreeSerializer
     }
 
     /// <summary>
+    /// Marker annotation placed on text nodes produced by <see cref="SplitTextForCdata"/>
+    /// so that character maps are not applied to characters that were split out of a
+    /// cdata-section-element text node.
+    /// </summary>
+    private sealed class CdataSplitAnnotation { }
+
+    /// <summary>
     /// Splits a text value into representable CDATA runs and unrepresentable single-character
     /// text nodes. The unrepresentable characters are emitted later as numeric character references.
     /// </summary>
@@ -1560,7 +1627,9 @@ public static class ResultTreeSerializer
                     yield return new XCData(run.ToString());
                     run.Clear();
                 }
-                yield return new XText(ch.ToString());
+                var splitText = new XText(ch.ToString());
+                splitText.AddAnnotation(new CdataSplitAnnotation());
+                yield return splitText;
             }
         }
 
@@ -1683,9 +1752,11 @@ public static class ResultTreeSerializer
             writer.Write(attr.Name.LocalName);
             writer.Write("=\"");
             var value = attr.Value;
-            if (props.EscapeUriAttributes && IsUriAttribute(attr.Name))
+            bool isUri = props.EscapeUriAttributes && IsUriAttribute(attr.Name);
+            if (isUri)
                 value = EscapeUriAttribute(value);
-            WriteHtmlEscaped(writer, value, props);
+            // Character maps do not apply to URI-valued attributes when URI escaping is enabled.
+            WriteHtmlEscaped(writer, value, props, applyCharacterMap: !isUri);
             writer.Write('"');
         }
 
@@ -1749,6 +1820,13 @@ public static class ResultTreeSerializer
         var map = applyCharacterMap ? props.CharacterMap : null;
         foreach (var ch in value)
         {
+            // Character maps are applied before any HTML escaping or encoding checks.
+            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+            {
+                WriteEncodingOnly(writer, replacement, props);
+                continue;
+            }
+
             switch (ch)
             {
                 case '<':
@@ -1772,10 +1850,6 @@ public static class ResultTreeSerializer
                         writer.Write("&#");
                         writer.Write((int)ch);
                         writer.Write(';');
-                    }
-                    else if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
-                    {
-                        writer.Write(replacement);
                     }
                     else
                     {
@@ -1816,7 +1890,7 @@ public static class ResultTreeSerializer
                 WriteCdataText(writer, cdata.Value);
                 break;
             case XText text:
-                WriteXmlEscaped(writer, text.Value, props);
+                WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null);
                 break;
             case XComment comment:
                 writer.Write("<!--");
@@ -1845,7 +1919,7 @@ public static class ResultTreeSerializer
                 WriteXhtmlElement(writer, elem, props, depth, inScopeBindings);
                 break;
             case XText text:
-                WriteXmlEscaped(writer, text.Value, props);
+                WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null);
                 break;
             case XComment comment:
                 writer.Write("<!--");
@@ -1951,13 +2025,19 @@ public static class ResultTreeSerializer
             writer.Write(attrLocalName);
             writer.Write("=\"");
             var value = Xml11NameCodec.DecodeValue(attr.Value);
-            if (props.EscapeUriAttributes && IsUriAttribute(attr.Name))
+            bool isUri = props.EscapeUriAttributes && IsUriAttribute(attr.Name);
+            if (isUri)
                 value = EscapeUriAttribute(value);
-            WriteXmlEscaped(writer, value, props);
+            // Character maps do not apply to URI-valued attributes when URI escaping is enabled.
+            WriteXmlEscaped(writer, value, props, applyCharacterMap: !isUri);
             writer.Write('"');
         }
 
-        if (isVoid || (!isInXhtmlNs && isEmpty))
+        // Void elements are self-closed even when they appear in no namespace, because
+        // the XHTML output method recognizes the standard HTML/XHTML element names.
+        bool isKnownVoid = IsHtmlVoidElement(localName) ||
+            (props.HtmlVersion == "1.0" && IsHtmlEmptyElement(localName));
+        if (isVoid || (isEmpty && isKnownVoid))
         {
             writer.Write(" />");
             return;
@@ -1997,8 +2077,9 @@ public static class ResultTreeSerializer
                 else if (child is XText text)
                 {
                     // Unrepresentable characters are emitted as ordinary text and escaped
-                    // as numeric character references by WriteXmlEscaped.
-                    WriteXmlEscaped(writer, text.Value, props);
+                    // as numeric character references by WriteXmlEscaped. Such split-out text
+                    // nodes must not be altered by character maps.
+                    WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null);
                 }
                 else if (child is XElement childElem)
                 {
@@ -2044,6 +2125,13 @@ public static class ResultTreeSerializer
         var map = applyCharacterMap ? props.CharacterMap : null;
         foreach (var ch in value)
         {
+            // Character maps are applied before any XML escaping or encoding checks.
+            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+            {
+                WriteEncodingOnly(writer, replacement, props);
+                continue;
+            }
+
             switch (ch)
             {
                 case '<':
@@ -2070,16 +2158,9 @@ public static class ResultTreeSerializer
                     }
                     else if (!IsRepresentable(ch, props.Encoding))
                     {
-                        // Characters that cannot be represented in the output encoding are
-                        // emitted as numeric character references. Character maps do not apply
-                        // to such characters because the reference uses the original codepoint.
                         writer.Write("&#");
                         writer.Write((int)ch);
                         writer.Write(';');
-                    }
-                    else if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
-                    {
-                        writer.Write(replacement);
                     }
                     else
                     {
@@ -2645,7 +2726,7 @@ public static class ResultTreeSerializer
         }
 
         writer.Flush();
-        return sb.ToString();
+        return NormalizeSurrogatePairEntities(sb.ToString());
     }
 
     private static void SerializeRawNode(TextWriter writer, XNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
@@ -2659,7 +2740,7 @@ public static class ResultTreeSerializer
                 WriteCdataText(writer, cdata.Value);
                 break;
             case XText text:
-                WriteEscaped(writer, text.Value, isAttribute: false, props);
+                WriteEscaped(writer, text.Value, isAttribute: false, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null);
                 break;
             case XComment comment:
                 writer.Write("<!--");
@@ -3094,6 +3175,16 @@ public static class ResultTreeSerializer
         var map = applyCharacterMap ? props.CharacterMap : null;
         foreach (var ch in value)
         {
+            // Character maps are applied before any XML/HTML escaping or encoding checks.
+            // The replacement string is output as-is (it is not itself subject to escaping
+            // or further character mapping, but unrepresentable characters in the replacement
+            // string are still emitted as numeric character references).
+            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+            {
+                WriteEncodingOnly(writer, replacement, props);
+                continue;
+            }
+
             switch (ch)
             {
                 case '<':
@@ -3124,15 +3215,33 @@ public static class ResultTreeSerializer
                         writer.Write((int)ch);
                         writer.Write(';');
                     }
-                    else if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
-                    {
-                        writer.Write(replacement);
-                    }
                     else
                     {
                         writer.Write(ch);
                     }
                     break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Writes a replacement string emitted by a character map, translating any characters
+    /// that cannot be represented in the target encoding to numeric character references
+    /// without applying XML/HTML escaping or further character mapping.
+    /// </summary>
+    private static void WriteEncodingOnly(TextWriter writer, string value, Stylesheet.OutputProperties props)
+    {
+        foreach (var ch in value)
+        {
+            if (!IsRepresentable(ch, props.Encoding))
+            {
+                writer.Write("&#");
+                writer.Write((int)ch);
+                writer.Write(';');
+            }
+            else
+            {
+                writer.Write(ch);
             }
         }
     }

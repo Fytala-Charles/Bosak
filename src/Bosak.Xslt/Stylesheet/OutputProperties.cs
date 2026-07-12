@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.0   | 12-07-2026     | Normalize standalone values (yes/no/omit) and restrict SEPM0009 to XML/XHTML.          |
 //                      | Charles Korthout | 1.1   | 12-07-2026     | Added build-tree output property for raw result-document collection.                    |
 //                      | Charles Korthout | 1.2   | 12-07-2026     | Made yes/no parsing case-sensitive while still accepting true/false/1/0.                |
+//                      | Charles Korthout | 1.3   | 12-07-2026     | Append use-character-maps during merge so last-wins resolution is correct.              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -591,10 +592,10 @@ public sealed class OutputProperties
         if (source.UseCharacterMapsSpecified)
         {
             // Later xsl:output declarations and xsl:result-document instruction-level
-            // references take precedence over earlier ones. Prepend the source list so
-            // that the first occurrence of a character-map name wins during resolution.
-            var merged = new List<XsQName>(source.UseCharacterMaps);
-            foreach (var q in target.UseCharacterMaps)
+            // references take precedence over earlier ones. Append the source list so that
+            // the last occurrence of a character-map name wins during resolution.
+            var merged = new List<XsQName>(target.UseCharacterMaps);
+            foreach (var q in source.UseCharacterMaps)
                 if (!merged.Any(existing => existing.LocalName == q.LocalName && existing.NamespaceUri == q.NamespaceUri))
                     merged.Add(q);
             target.UseCharacterMaps = merged;
