@@ -1,6 +1,50 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-12
+**Commit:** `1812d61`
+**Current focus:** Character-map and `output` serialization conformance clusters.
+
+---
+
+## This Session Fixes
+
+1. **Corrected character-map precedence**
+   - `Stylesheet.ResolveCharacterMap` now uses **last-wins** semantics for duplicate characters across the effective `use-character-maps` list, matching the XSLT 3.0 serialization spec.
+   - `OutputProperties.Merge` appends `use-character-maps` references so later `xsl:output` declarations and `xsl:result-document` instructions take precedence.
+
+2. **Applied character maps before escaping / encoding checks**
+   - `ResultTreeSerializer.WriteEscaped`, `WriteHtmlEscaped`, and `WriteXmlEscaped` now apply character maps before XML/HTML escaping or unrepresentable-character handling.
+   - Characters split out of `cdata-section-elements` text nodes are annotated so they are not altered by character maps.
+
+3. **Integrated character maps into JSON serialization**
+   - `XdmJsonSerializer` now accepts a `CharacterMap` option and applies it while encoding JSON string values, before JSON escaping.
+   - `ResultTreeSerializer.SerializeAsJson` passes the effective character map down and no longer post-processes the whole JSON document.
+
+4. **Combined surrogate-pair numeric character references**
+   - XML/XHTML output now emits a single decimal NCR for a Unicode scalar value instead of two NCRs for the UTF-16 surrogate pair.
+
+5. **XHTML empty-element handling for no-namespace HTML elements**
+   - Void HTML elements in no namespace are self-closed; non-void empty elements now emit explicit start/end tags.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,526 passed / 79 failed / 8,995 skipped** (98.6%; was 5,521/84/8,995).
+- `output` conformance set: **16 failures remaining** (was 18).
+- `character-map` conformance set: **12 failures remaining** (was 15).
+
+## Files Changed
+
+- `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`
+- `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
+- `src/Bosak.XPath.Standard/Json/XdmJsonSerializer.cs`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-12
 **Commit:** `5ccf24d`
 **Current focus:** Phase 5d `xsl:result-document` serialization — stabilizing XML declaration defaults and eliminating a catalog-run hang.
 
