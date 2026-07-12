@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 1.8   | 11-07-2026     | Added item-separator awareness and SENR0001 validation for maps/arrays/functions.       |
 //                      | Charles Korthout | 1.9   | 12-07-2026     | Restrict SEPM0009 to XML/XHTML methods; support standalone value normalization.         |
 //                      | Charles Korthout | 1.10  | 12-07-2026     | Added SENR0001 validation for maps/arrays/functions and attribute/namespace nodes.      |
+//                      | Charles Korthout | 1.11  | 12-07-2026     | XML declaration defaults: include for XML/XHTML 1.0, omit for XHTML 5.0/HTML/text/JSON. |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -90,6 +91,11 @@ public static class ResultTreeSerializer
             return SerializeAsJson(value, props);
         }
 
+        if (props.Method == "adaptive")
+        {
+            return SerializeAsAdaptive(value, props);
+        }
+
         // method="xml" (default)
         if (value.IsNode)
         {
@@ -139,15 +145,16 @@ public static class ResultTreeSerializer
             props.HtmlVersion = method == "xhtml" ? "1.0" : "5.0";
         }
 
-        if (!props.OmitXmlDeclarationSpecified && HasAnyExplicitOutputProperty(props))
+        bool omitXmlDeclarationWasSpecified = props.OmitXmlDeclarationSpecified;
+        if (!omitXmlDeclarationWasSpecified)
         {
-            // XML declaration defaults: omitted for HTML and text, included for XML,
-            // and included for XHTML 1.0 but omitted for XHTML 5.0. When there is no
-            // xsl:output declaration at all, the implementation default (omit) is preserved.
+            // XML declaration defaults: omitted for HTML, text, JSON, and adaptive; included
+            // for XML and XHTML 1.0. When standalone is specified the declaration must be
+            // present to avoid SEPM0009.
             props.OmitXmlDeclaration = method switch
             {
-                "html" or "text" or "json" => true,
-                "xhtml" => props.HtmlVersion == "5.0",
+                "html" or "text" or "json" or "adaptive" => true,
+                "xhtml" => props.HtmlVersion == "5.0" && !props.StandaloneSpecified,
                 _ => false
             };
             props.OmitXmlDeclarationSpecified = true;
@@ -162,6 +169,7 @@ public static class ResultTreeSerializer
                 "xhtml" => "text/html",
                 "text" => "text/plain",
                 "json" => "application/json",
+                "adaptive" => "text/plain",
                 _ => "text/xml"
             };
         }
@@ -183,35 +191,6 @@ public static class ResultTreeSerializer
 
     /// <summary>
     /// Returns <c>true</c> if any output property was explicitly supplied by an
-    /// <c>xsl:output</c> declaration or <c>xsl:result-document</c> instruction.
-    /// This distinguishes parsed declarations from the ad-hoc default properties.
-    /// </summary>
-    private static bool HasAnyExplicitOutputProperty(Stylesheet.OutputProperties props)
-    {
-        return props.MethodSpecified ||
-               props.EncodingSpecified ||
-               props.VersionSpecified ||
-               props.HtmlVersionSpecified ||
-               props.StandaloneSpecified ||
-               props.UndeclarePrefixesSpecified ||
-               props.NormalizationFormSpecified ||
-               props.DoctypeSystemSpecified ||
-               props.DoctypePublicSpecified ||
-               props.CdataSectionElementsSpecified ||
-               props.SuppressIndentationSpecified ||
-               props.EscapeUriAttributesSpecified ||
-               props.IncludeContentTypeSpecified ||
-               props.MediaTypeSpecified ||
-               props.ByteOrderMarkSpecified ||
-               props.UseCharacterMapsSpecified ||
-               props.IndentSpecified ||
-               props.JsonNodeOutputMethodSpecified ||
-               props.AllowDuplicateNamesSpecified ||
-               props.EscapeSolidusSpecified ||
-               props.ItemSeparatorSpecified ||
-               props.BuildTreeSpecified;
-    }
-
     /// <summary>
     /// Validates serialization properties that have cross-attribute constraints
     /// or require a supported encoding. Raises XSLT serialization errors.
@@ -404,8 +383,40 @@ public static class ResultTreeSerializer
     private static string SerializeAsText(XdmValue value, Stylesheet.OutputProperties props)
     {
         var sb = new System.Text.StringBuilder();
-        CollectText(value, sb, props);
+        bool separatorAbsent = !props.ItemSeparatorSpecified || props.ItemSeparator == "#absent";
+        var normalized = NormalizeRawSequence(value, separatorAbsent ? null : props.ItemSeparator);
+        foreach (var obj in normalized)
+        {
+            if (obj is string s)
+            {
+                sb.Append(MapCharacters(s, props));
+            }
+            else if (obj is XdmValue xdm && xdm.IsNode && xdm.NodeValue != null)
+            {
+                sb.Append(TextMethodNodeString(xdm.NodeValue, props));
+            }
+        }
         return sb.ToString();
+    }
+
+    private static string TextMethodNodeString(IXdmNode node, Stylesheet.OutputProperties props)
+    {
+        switch (node.NodeKind)
+        {
+            case XdmNodeKind.Comment:
+                return $"<!--{node.StringValue}-->";
+            case XdmNodeKind.ProcessingInstruction:
+                return $"<?{node.LocalName} {node.StringValue}?>";
+            case XdmNodeKind.Text:
+                return MapCharacters(node.StringValue, props);
+            case XdmNodeKind.Element:
+            case XdmNodeKind.Document:
+                var elementSb = new System.Text.StringBuilder();
+                CollectTextFromNode(node, elementSb, props);
+                return elementSb.ToString();
+            default:
+                return MapCharacters(node.StringValue, props);
+        }
     }
 
     private static string SerializeAsJson(XdmValue value, Stylesheet.OutputProperties props)
@@ -440,6 +451,153 @@ public static class ResultTreeSerializer
         nodeProps.JsonNodeOutputMethod = "xml";
         ApplyMethodDefaults(nodeProps);
         return Serialize(nodeValue, nodeProps);
+    }
+
+    private static string SerializeAsAdaptive(XdmValue value, Stylesheet.OutputProperties props)
+    {
+        using var writer = new StringWriter();
+        WriteByteOrderMark(writer, props);
+
+        var items = FlattenItems(value).ToList();
+        string separator = (!props.ItemSeparatorSpecified || props.ItemSeparator == "#absent")
+            ? "\n"
+            : props.ItemSeparator;
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (i > 0)
+                writer.Write(separator);
+            SerializeAdaptiveItem(writer, items[i], props);
+        }
+
+        writer.Flush();
+        return writer.ToString();
+    }
+
+    private static void SerializeAdaptiveItem(TextWriter writer, XdmValue item, Stylesheet.OutputProperties props)
+    {
+        if (item.IsUndefined)
+            return;
+
+        if (item.IsMap)
+        {
+            writer.Write("map{");
+            bool first = true;
+            foreach (var kv in item.MapValue.Entries)
+            {
+                if (!first)
+                    writer.Write(',');
+                first = false;
+                SerializeAdaptiveItem(writer, kv.Key, props);
+                writer.Write(':');
+                SerializeAdaptiveItem(writer, kv.Value, props);
+            }
+            writer.Write('}');
+            return;
+        }
+
+        if (item.IsArray)
+        {
+            writer.Write('[');
+            bool first = true;
+            foreach (var arrItem in item.ArrayValue.Values)
+            {
+                if (!first)
+                    writer.Write(',');
+                first = false;
+                SerializeAdaptiveItem(writer, arrItem, props);
+            }
+            writer.Write(']');
+            return;
+        }
+
+        if (item.IsNode && item.NodeValue != null)
+        {
+            var node = item.NodeValue;
+            switch (node.NodeKind)
+            {
+                case XdmNodeKind.Attribute:
+                    writer.Write(Xml11NameCodec.EncodeName(node.LocalName));
+                    writer.Write("=\"");
+                    writer.Write(EscapeAdaptiveString(node.StringValue, isAttribute: true));
+                    writer.Write('"');
+                    break;
+
+                case XdmNodeKind.Text:
+                    writer.Write(EscapeAdaptiveString(node.StringValue, isAttribute: false));
+                    break;
+
+                case XdmNodeKind.Comment:
+                    writer.Write("<!--");
+                    writer.Write(node.StringValue);
+                    writer.Write("-->");
+                    break;
+
+                case XdmNodeKind.ProcessingInstruction:
+                    writer.Write("<?");
+                    writer.Write(node.LocalName);
+                    writer.Write(' ');
+                    writer.Write(node.StringValue);
+                    writer.Write("?>");
+                    break;
+
+                default:
+                    {
+                        var nodeProps = props.Clone();
+                        nodeProps.Method = "xml";
+                        nodeProps.MethodSpecified = true;
+                        nodeProps.OmitXmlDeclaration = true;
+                        nodeProps.OmitXmlDeclarationSpecified = true;
+                        writer.Write(Serialize(item, nodeProps));
+                        break;
+                    }
+            }
+            return;
+        }
+
+        // Atomic value
+        if (item.Kind == XdmValueKind.String)
+        {
+            writer.Write('"');
+            writer.Write(EscapeAdaptiveString(item.StringValue, isAttribute: false));
+            writer.Write('"');
+        }
+        else
+        {
+            writer.Write(item.ToString());
+        }
+    }
+
+    private static string EscapeAdaptiveString(string value, bool isAttribute)
+    {
+        var sb = new StringBuilder(value.Length);
+        foreach (var ch in value)
+        {
+            switch (ch)
+            {
+                case '"':
+                    sb.Append("\\\"");
+                    break;
+                case '\\':
+                    sb.Append("\\\\");
+                    break;
+                case '\n':
+                    sb.Append("\\n");
+                    break;
+                case '\r':
+                    sb.Append("\\r");
+                    break;
+                case '\t':
+                    sb.Append("\\t");
+                    break;
+                default:
+                    if (char.IsControl(ch))
+                        sb.Append($"\\u{(int)ch:X4}");
+                    else
+                        sb.Append(ch);
+                    break;
+            }
+        }
+        return sb.ToString();
     }
 
     private static string SerializeAsHtml(XdmValue value, Stylesheet.OutputProperties props)
@@ -803,6 +961,65 @@ public static class ResultTreeSerializer
     }
 
     /// <summary>
+    /// Performs sequence normalization for the text and XML output methods.
+    /// Atomic items are converted to strings; adjacent strings are merged with a single
+    /// space when no item-separator is supplied, otherwise the supplied separator is
+    /// inserted between every pair of items.
+    /// </summary>
+    private static List<object> NormalizeRawSequence(XdmValue value, string? itemSeparator)
+    {
+        var items = FlattenItems(value).ToList();
+        var normalized = new List<object>(items.Count);
+        foreach (var item in items)
+        {
+            if (item.IsUndefined)
+                continue;
+            if (item.IsNode && item.NodeValue != null)
+                normalized.Add(item);
+            else
+                normalized.Add(item.ToString());
+        }
+
+        if (itemSeparator == null)
+        {
+            // Absent item-separator: merge each maximal subsequence of adjacent strings
+            // into a single string with a single space between the original values.
+            var merged = new List<object>();
+            for (int i = 0; i < normalized.Count; i++)
+            {
+                if (normalized[i] is string s)
+                {
+                    var sb = new StringBuilder(s);
+                    while (i + 1 < normalized.Count && normalized[i + 1] is string next)
+                    {
+                        sb.Append(' ');
+                        sb.Append(next);
+                        i++;
+                    }
+                    merged.Add(sb.ToString());
+                }
+                else
+                {
+                    merged.Add(normalized[i]);
+                }
+            }
+            return merged;
+        }
+        else
+        {
+            // Explicit item-separator (which may be empty): insert between every pair.
+            var merged = new List<object>();
+            for (int i = 0; i < normalized.Count; i++)
+            {
+                if (i > 0)
+                    merged.Add(itemSeparator);
+                merged.Add(normalized[i]);
+            }
+            return merged;
+        }
+    }
+
+    /// <summary>
     /// Strips prefixes from elements in the XHTML namespace for HTML5 serialization,
     /// replacing them with the default namespace declaration. Other namespaces are
     /// left untouched.
@@ -872,26 +1089,6 @@ public static class ResultTreeSerializer
         }
     }
 
-    private static void CollectText(XdmValue value, System.Text.StringBuilder sb, Stylesheet.OutputProperties props)
-    {
-        if (value.IsUndefined)
-            return;
-
-        if (value.IsNode && value.NodeValue != null)
-        {
-            CollectTextFromNode(value.NodeValue, sb, props);
-        }
-        else if (value.IsSequence && value.SequenceValue != null)
-        {
-            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
-                CollectText(item, sb, props);
-        }
-        else
-        {
-            sb.Append(MapCharacters(value.ToString(), props));
-        }
-    }
-
     private static void CollectTextFromNode(IXdmNode node, System.Text.StringBuilder sb, Stylesheet.OutputProperties props)
     {
         switch (node.NodeKind)
@@ -944,17 +1141,20 @@ public static class ResultTreeSerializer
         WriteByteOrderMark(writer, props);
         var settings = CreateXmlWriterSettings(props);
         settings.ConformanceLevel = ConformanceLevel.Fragment;
+        settings.OmitXmlDeclaration = true;
         using var xmlWriter = XmlWriter.Create(writer, settings);
 
-        foreach (var item in XdmSequence.FromSource(sequence))
+        bool separatorAbsent = !props.ItemSeparatorSpecified || props.ItemSeparator == "#absent";
+        var normalized = NormalizeRawSequence(XdmValue.FromSequence(XdmSequence.FromSource(sequence)), separatorAbsent ? null : props.ItemSeparator);
+        foreach (var obj in normalized)
         {
-            if (item.IsNode && item.NodeValue != null)
+            if (obj is string s)
             {
-                WriteNode(xmlWriter, item.NodeValue);
+                xmlWriter.WriteString(s);
             }
-            else if (!item.IsUndefined)
+            else if (obj is XdmValue xdm && xdm.IsNode && xdm.NodeValue != null)
             {
-                xmlWriter.WriteString(item.ToString());
+                WriteNode(xmlWriter, xdm.NodeValue);
             }
         }
 
@@ -2065,8 +2265,8 @@ public static class ResultTreeSerializer
 
         if (!string.IsNullOrEmpty(props.DoctypePublic))
         {
-            // XHTML ignores a public identifier when no system identifier is supplied.
-            if (props.Method == "xhtml" && string.IsNullOrEmpty(props.DoctypeSystem))
+            // XML and XHTML ignore a public identifier when no system identifier is supplied.
+            if (props.Method is "xml" or "xhtml" && string.IsNullOrEmpty(props.DoctypeSystem))
             {
                 if (isHtmlRoot)
                     return $"<!DOCTYPE {rootName}>";

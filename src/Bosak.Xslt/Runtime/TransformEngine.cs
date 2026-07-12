@@ -171,6 +171,7 @@
 //                      | Charles Korthout | 6.00  | 11-07-2026     | Support item-separator for text output; raise SENR0001 for top-level maps/arrays.      |
 //                      | Charles Korthout | 6.01  | 12-07-2026     | Evaluate AVTs on all xsl:result-document serialization attributes.                     |
 //                      | Charles Korthout | 6.02  | 12-07-2026     | Raw-item collection for xsl:result-document method=json/adaptive and build-tree="no".  |
+//                      | Charles Korthout | 6.03  | 12-07-2026     | Added null-forgiving operators to silence three compiler null-reference warnings.       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -334,6 +335,10 @@ public sealed class TransformEngine
     // Set to true once a top-level xsl:result-document with no @href has closed the
     // principal output; any further output to the principal result tree is an error.
     private bool _principalOutputClosed;
+
+    // Set to true when content has been written to the implicit principal result tree.
+    // An explicit xsl:result-document writing to the principal URI is then a duplicate.
+    private bool _principalOutputHasContent;
 
     // The base output URI supplied for the transformation. Used as the principal
     // output URI and as the value of fn:current-output-uri() at the top level.
@@ -629,6 +634,7 @@ public sealed class TransformEngine
         _resultDocumentUris.Clear();
         _resultDocumentStack.Clear();
         _principalOutputClosed = false;
+        _principalOutputHasContent = false;
         _principalResultDocumentProperties = null;
         _jsonOutputMode = (_stylesheet.OutputProperties?.Method ?? "xml") == "json";
         _jsonResultItems.Clear();
@@ -837,6 +843,7 @@ public sealed class TransformEngine
         _resultDocumentUris.Clear();
         _resultDocumentStack.Clear();
         _principalOutputClosed = false;
+        _principalOutputHasContent = false;
 
         // Compile template match patterns before execution, just as for a normal
         // transformation. The function body may contain xsl:apply-templates that
@@ -918,6 +925,12 @@ public sealed class TransformEngine
             throw new InvalidOperationException("XTDE1490: The principal result tree has already been closed by an xsl:result-document instruction.");
     }
 
+    private void MarkPrincipalOutputContent()
+    {
+        if (_resultDocumentStack.Count == 0)
+            _principalOutputHasContent = true;
+    }
+
     /// <summary>
     /// Adds a text node to the current result container.
     /// Falls back to a document-level text buffer when the container is an XDocument,
@@ -928,6 +941,7 @@ public sealed class TransformEngine
         EnsurePrincipalOutputOpen();
         if (text.Length == 0 && !allowZeroLength)
             return; // Zero-length text nodes are ignored in complex content
+        MarkPrincipalOutputContent();
         if (_currentContainer is XDocument)
         {
             _documentLevelText.Append(text);
@@ -977,6 +991,7 @@ public sealed class TransformEngine
     private void AppendAtomicText(string text)
     {
         EnsurePrincipalOutputOpen();
+        MarkPrincipalOutputContent();
         var separator = GetAtomicSeparator();
         if (_currentContainer is XDocument)
         {
@@ -1061,6 +1076,44 @@ public sealed class TransformEngine
         }
         result["xml"] = "http://www.w3.org/XML/1998/namespace";
         return result;
+    }
+
+    /// <summary>
+    /// Resolves a <c>parameter-document</c> URI relative to the stylesheet base URI
+    /// and returns the parsed serialization-parameters document.
+    /// </summary>
+    private XDocument? ResolveParameterDocument(string uri, string? baseUri)
+    {
+        string resolvedUri;
+        if (Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+            resolvedUri = uri;
+        else if (!string.IsNullOrEmpty(baseUri))
+            resolvedUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
+        else
+            resolvedUri = uri;
+
+        try
+        {
+            if (_context.DocumentLoader != null)
+            {
+                var node = _context.DocumentLoader(resolvedUri);
+                if (node is XDocumentNode xdn)
+                {
+                    if (xdn.UnderlyingObject is XDocument doc)
+                        return doc;
+                    if (xdn.UnderlyingObject is XElement elem)
+                        return new XDocument(elem);
+                }
+                return null;
+            }
+
+            var resolver = new Api.FileSystemUriResolver();
+            return resolver.Resolve(resolvedUri, baseUri);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>
@@ -2355,7 +2408,7 @@ public sealed class TransformEngine
                         var select = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = XPath31Expression.Compile(select);
+                            var compiled = XPath31Expression.Compile(select!);
                             var result = compiled.Evaluate(_context);
                             FlattenToList(result, results);
                         }
@@ -4287,6 +4340,32 @@ public sealed class TransformEngine
                     var attrNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
                     var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw, instruction) : null;
                     var (attrLocalName, attrNsUri) = ResolveAttributeName(instruction, attrName, attrNs, "XTDE0860");
+
+                    var select = instruction.Attribute("select")?.Value;
+                    string value;
+                    if (!string.IsNullOrEmpty(select))
+                    {
+                        var compiled = CompileXPath(select, instruction);
+                        var result = compiled.Evaluate(_context);
+                        var attrSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
+                        value = XdmValueToString(result, attrSep);
+                    }
+                    else
+                    {
+                        var attrSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? "", instruction);
+                        value = EvaluateSimpleContent(instruction, contextItem, attrSep);
+                    }
+
+                    // When building a raw-item sequence (JSON/adaptive/build-tree=no),
+                    // a top-level xsl:attribute produces a free-standing attribute node.
+                    if (IsRawCollectionTopLevel)
+                    {
+                        var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
+                        rawList.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(
+                            XName.Get(Xml11NameCodec.EncodeName(attrLocalName), attrNsUri), value))));
+                        break;
+                    }
+
                     if (_currentContainer is not XElement attrTarget)
                         throw new InvalidOperationException("XTDE0420");
 
@@ -4320,20 +4399,6 @@ public sealed class TransformEngine
                         }
                     }
 
-                    var select = instruction.Attribute("select")?.Value;
-                    string value;
-                    if (!string.IsNullOrEmpty(select))
-                    {
-                        var compiled = CompileXPath(select, instruction);
-                        var result = compiled.Evaluate(_context);
-                        var attrSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
-                        value = XdmValueToString(result, attrSep);
-                    }
-                    else
-                    {
-                        var attrSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? "", instruction);
-                        value = EvaluateSimpleContent(instruction, contextItem, attrSep);
-                    }
                     if (attrTarget.Nodes().Any())
                         throw new InvalidOperationException("XTDE0410");
                     Xml11Attribute.SetValue(attrTarget, XName.Get(Xml11NameCodec.EncodeName(attrLocalName), attrNsUri), value);
@@ -4410,7 +4475,15 @@ public sealed class TransformEngine
                     {
                         commentText = EvaluateSimpleContent(instruction, contextItem, " ");
                     }
-                    _currentContainer.Add(new XComment(commentText));
+                    if (IsRawCollectionTopLevel)
+                    {
+                        var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
+                        rawList.Add(XdmValue.FromNode(new XDocumentNode(new XComment(commentText))));
+                    }
+                    else
+                    {
+                        _currentContainer.Add(new XComment(commentText));
+                    }
                     break;
                 }
 
@@ -4432,7 +4505,15 @@ public sealed class TransformEngine
                     }
                     // XSLT 3.0 §11.4.4: leading spaces in PI data are removed
                     piData = piData.TrimStart();
-                    _currentContainer.Add(new XProcessingInstruction(piName, piData));
+                    if (IsRawCollectionTopLevel)
+                    {
+                        var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
+                        rawList.Add(XdmValue.FromNode(new XDocumentNode(new XProcessingInstruction(piName, piData))));
+                    }
+                    else
+                    {
+                        _currentContainer.Add(new XProcessingInstruction(piName, piData));
+                    }
                     break;
                 }
 
@@ -4538,7 +4619,7 @@ public sealed class TransformEngine
                     {
                         _currentTemplateRule = null;
                         _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
-                        var compiled = CompileXPath(copySelect, instruction);
+                        var compiled = CompileXPath(copySelect!, instruction);
                         var result = compiled.Evaluate(_context);
 
                         if (result.IsSequence && result.SequenceValue != null)
@@ -5138,7 +5219,7 @@ public sealed class TransformEngine
 
                     if (hasSelect)
                     {
-                        var compiled = XPath31Expression.Compile(select);
+                        var compiled = XPath31Expression.Compile(select!);
                         var result = compiled.Evaluate(_context);
                         if (_sequenceAccumulator != null)
                         {
@@ -5838,7 +5919,15 @@ public sealed class TransformEngine
         // Apply namespace-alias mapping to the literal result element name.
         var mappedElementName = MapAliasedName(source.Name, isElement: true, out var elementResultPrefix);
         if (elementResultPrefix == null)
-            elementResultPrefix = source.GetPrefixOfNamespace(source.Name.Namespace);
+        {
+            // Prefer the source element's default namespace when the element is in no-prefix
+            // form, even if another in-scope prefix happens to be bound to the same URI.
+            var defaultNs = source.GetDefaultNamespace();
+            if (!string.IsNullOrEmpty(defaultNs.NamespaceName) && defaultNs.NamespaceName == source.Name.NamespaceName)
+                elementResultPrefix = "";
+            else
+                elementResultPrefix = source.GetPrefixOfNamespace(source.Name.Namespace);
+        }
         var copy = new XElement(mappedElementName);
 
         // Handle inherit-namespaces on literal result elements.
@@ -5888,7 +5977,10 @@ public sealed class TransformEngine
         // the stylesheet (except excluded URIs, source-alias URIs, and the XSLT namespace)
         // to the result element. This ensures namespace-uri-for-prefix() queries and
         // assertions such as those in attribute-0601 see prefixes declared on xsl:stylesheet.
-        bool isRootLevelLiteral = _currentContainer is not XElement parent || parent.Name.LocalName == "__temp__";
+        bool isRootLevelLiteral = _currentContainer is XElement currentElem &&
+            (currentElem.Name.LocalName == "__xdm_doc__" ||
+             currentElem.Name.LocalName == "__temp__" ||
+             currentElem.Name.LocalName == "__result-document__");
         if (isRootLevelLiteral && !excludeAllNamespaces)
         {
             foreach (var (prefix, styleNs) in GetInScopeNamespaceDeclarations(source))
@@ -6017,7 +6109,9 @@ public sealed class TransformEngine
             Xml11Attribute.SetValue(copy, mappedAttrName, attrValue);
         }
 
-        AddElementToContainer(copy, _currentContainer);
+        var collectAsRawItem = IsRawCollectionTopLevel;
+        if (!collectAsRawItem)
+            AddElementToContainer(copy, _currentContainer);
 
         var prev = _currentContainer;
         _currentContainer = copy;
@@ -6074,6 +6168,12 @@ public sealed class TransformEngine
             }
 
             NormalizeElementContent(copy);
+
+            if (collectAsRawItem)
+            {
+                var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
+                rawList.Add(XdmValue.FromNode(new XDocumentNode(copy)));
+            }
         }
         finally
         {
@@ -6338,7 +6438,10 @@ public sealed class TransformEngine
         {
             if (_resultDocumentStack.Count == 0)
             {
-                return _jsonOutputMode && ReferenceEquals(_currentContainer, _resultDocument);
+                // Principal output can collect raw items either because the stylesheet-level
+                // method is JSON, or because an explicit xsl:result-document instruction has
+                // requested raw-item collection (method=json/adaptive or build-tree=no).
+                return _collectRawItems || (_jsonOutputMode && ReferenceEquals(_currentContainer, _resultDocument));
             }
 
             if (!_collectRawItems)
@@ -6362,14 +6465,14 @@ public sealed class TransformEngine
         if (value.IsUndefined)
             return true;
 
-        if (_resultDocumentStack.Count == 0)
-        {
-            _jsonResultItems.Add(value);
-        }
-        else
-        {
-            _resultDocumentRawItems.Add(value);
-        }
+        // Flatten nested sequences so that each top-level item is serialized separately
+        // (e.g. item-separator for text output, or one JSON array element per item).
+        var items = new List<XdmValue>();
+        FlattenToList(value, items);
+
+        var target = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
+        foreach (var item in items)
+            target.Add(item);
 
         _lastAddedWasAtomic = false;
         return true;
@@ -7315,6 +7418,7 @@ public sealed class TransformEngine
     private void AddElementToContainer(XElement element, XContainer container)
     {
         EnsurePrincipalOutputOpen();
+        MarkPrincipalOutputContent();
         if (container is XElement parentElem)
         {
             if (string.IsNullOrEmpty(element.Name.NamespaceName))
@@ -8224,7 +8328,7 @@ public sealed class TransformEngine
             }
             else if (args[2].IsSequence && args[2].SequenceValue != null)
             {
-                foreach (var item in XdmSequence.FromSource(args[2].SequenceValue))
+                foreach (var item in XdmSequence.FromSource(args[2].SequenceValue!))
                 {
                     if (item.IsNode && item.NodeValue != null)
                         candidates.Add(item.NodeValue);
@@ -13135,10 +13239,16 @@ public sealed class TransformEngine
     private XElement EvaluateResultDocumentInstruction(XElement instruction)
     {
         var evaluated = new XElement(instruction.Name);
-        // Preserve the namespace declarations from the original instruction so that
-        // QName-valued attributes such as use-character-maps can be resolved correctly.
-        foreach (var nsAttr in instruction.Attributes().Where(a => a.IsNamespaceDeclaration))
-            evaluated.SetAttributeValue(nsAttr.Name, nsAttr.Value);
+        // Preserve all in-scope namespace declarations from the original instruction so
+        // that QName-valued serialization attributes (cdata-section-elements,
+        // suppress-indentation, use-character-maps) can be resolved correctly.
+        foreach (var ns in GetInScopeNamespaces(instruction))
+        {
+            var attrName = string.IsNullOrEmpty(ns.Key)
+                ? (XNamespace.None + "xmlns")
+                : (XNamespace.Xmlns + ns.Key);
+            evaluated.SetAttributeValue(attrName, ns.Value);
+        }
 
         foreach (var attr in instruction.Attributes())
         {
@@ -13153,7 +13263,8 @@ public sealed class TransformEngine
                 or "doctype-public" or "doctype-system" or "html-version" or "normalization-form"
                 or "escape-uri-attributes" or "include-content-type" or "media-type"
                 or "byte-order-mark" or "json-node-output-method" or "allow-duplicate-names"
-                or "escape-solidus" or "item-separator")
+                or "escape-solidus" or "item-separator" or "cdata-section-elements"
+                or "suppress-indentation" or "parameter-document")
             {
                 value = EvaluateAvt(value, instruction);
             }
@@ -13183,7 +13294,9 @@ public sealed class TransformEngine
         var href = EvaluateAvt(hrefRaw ?? string.Empty, instruction);
         // @href is resolved against the base output URI when one is known; otherwise
         // fall back to the static base URI of the instruction.
-        var resolutionBase = _baseOutputUri ?? instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
+        // Resolve @href relative to the current output URI when inside a secondary result
+        // document, otherwise relative to the base output URI or the stylesheet base URI.
+        var resolutionBase = _context.CurrentOutputUri ?? _baseOutputUri ?? instruction.BaseUri ?? _context.BaseUri ?? string.Empty;
         string resolvedHref;
         if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
             resolvedHref = href;
@@ -13226,6 +13339,20 @@ public sealed class TransformEngine
             Stylesheet.OutputProperties.Merge(resultDocumentProps, namedProps);
         else
             Stylesheet.OutputProperties.Merge(resultDocumentProps, baseProps);
+
+        // A parameter document supplies defaults that are overridden by explicit attributes
+        // on xsl:result-document.
+        var parameterDocumentUri = evaluatedInstruction.Attribute("parameter-document")?.Value;
+        if (!string.IsNullOrEmpty(parameterDocumentUri))
+        {
+            var paramDoc = ResolveParameterDocument(parameterDocumentUri, instruction.BaseUri);
+            if (paramDoc != null)
+            {
+                var paramProps = Stylesheet.OutputProperties.FromSerializationParameters(paramDoc);
+                Stylesheet.OutputProperties.Merge(resultDocumentProps, paramProps);
+            }
+        }
+
         Stylesheet.OutputProperties.Merge(resultDocumentProps, Stylesheet.OutputProperties.FromElement(evaluatedInstruction));
 
         // Resolve any named character maps into a concrete character-to-string table.
@@ -13255,13 +13382,19 @@ public sealed class TransformEngine
         // XDM values rather than building a result tree.
         var collectRaw = resultDocumentProps.Method is "json" or "adaptive" || !resultDocumentProps.BuildTree;
 
+        // When the caller requested the raw initial-template result, force raw-item
+        // collection for the principal result document so that item-separator etc.
+        // are applied to the produced sequence.
+        if (isPrincipal && _returnRawInitialTemplateResult)
+            collectRaw = true;
+
         if (isPrincipal)
         {
             _principalResultDocumentProperties = resultDocumentProps;
-            // Nested principal result document: allowed only when the enclosing
+            // A nested principal result document is allowed only when the enclosing
             // secondary result document was opened at the top level of the principal
-            // result tree (XSLT 2.0 §9.4.2). If the principal output had already
-            // descended into an element, switching back would leave it ill-formed.
+            // result tree. If the principal output had already descended into an element,
+            // switching back would leave it ill-formed.
             if (_resultDocumentStack.Count > 0)
             {
                 var outerFrame = _resultDocumentStack.Peek();
@@ -13269,7 +13402,7 @@ public sealed class TransformEngine
                     throw new InvalidOperationException("XTDE1490: A nested result document cannot be created while the principal result tree is inside an element.");
             }
 
-            if (_principalOutputClosed || _resultDocumentStack.Any(f => f.TargetUri == string.Empty))
+            if (_principalOutputClosed || _principalOutputHasContent || _resultDocumentStack.Any(f => f.TargetUri == string.Empty))
                 throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
 
             var savedContainer = _currentContainer;
@@ -13347,6 +13480,11 @@ public sealed class TransformEngine
         else
         {
             if (_resultDocumentUris.Contains(resolvedHref))
+                throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
+
+            // A secondary result document must not target the principal output URI.
+            var principalOutputUri = _baseOutputUri ?? string.Empty;
+            if (resolvedHref == principalOutputUri)
                 throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
 
             var savedContainer = _currentContainer;

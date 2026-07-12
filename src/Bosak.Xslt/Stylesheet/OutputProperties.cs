@@ -334,6 +334,8 @@ public sealed class OutputProperties
         var itemSeparator = element.Attribute("item-separator")?.Value;
         if (itemSeparator != null)
         {
+            // The special value #absent is preserved so serialization can apply the
+            // method-specific default rules for absent item separators.
             props.ItemSeparator = itemSeparator;
             props.ItemSeparatorSpecified = true;
         }

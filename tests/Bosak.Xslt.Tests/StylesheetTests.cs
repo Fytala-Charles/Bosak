@@ -36,6 +36,7 @@
 //                      | Charles Korthout | 0.24  | 11-07-2026     | Added default method inference tests for html in XHTML namespace and no namespace.     |
 //                      | Charles Korthout | 0.25  | 11-07-2026     | Added SESU0007 unsupported-encoding and SEPM0009 standalone/omit-declaration tests.    |
 //                      | Charles Korthout | 0.26  | 11-07-2026     | Updated expected XML empty-element tag to no-space form.                               |
+//                      | Charles Korthout | 0.27  | 12-07-2026     | Updated default-output tests to expect the XML declaration.                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -466,7 +467,7 @@ public class StylesheetTests
     }
 
     [Fact]
-    public void Output_Default_Has_No_Declaration_And_No_Indent()
+    public void Output_Default_Has_Declaration_And_No_Indent()
     {
         var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
             <xsl:template match='/'>
@@ -479,7 +480,7 @@ public class StylesheetTests
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(new XDocumentNode(source));
 
-        Assert.DoesNotContain("<?xml", result);
+        Assert.Contains("<?xml", result);
         Assert.DoesNotContain("\n", result);
     }
 
@@ -873,7 +874,8 @@ Welcome to this document on XHTML.
         var result = executable.TransformToString(new XDocumentNode(source));
 
         // XSLT 2.0 built-in rules apply templates to children, not shallow-copy
-        Assert.Equal("<output/>", result.Trim());
+        Assert.Contains("<output/>", result);
+        Assert.Contains("<?xml", result);
     }
 
     [Fact]

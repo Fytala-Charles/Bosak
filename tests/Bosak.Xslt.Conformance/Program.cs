@@ -77,6 +77,7 @@ class Program
     static int Passed = 0;
     static int Failed = 0;
     static int Skipped = 0;
+    static string _debugName = "";
 
     static readonly HashSet<string> SupportedSpecs = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -291,6 +292,7 @@ class Program
     static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
     {
         var name = testCase.Attribute("name")?.Value ?? "unknown";
+        _debugName = name;
 
         if (SkipTests.Contains(name))
         {
@@ -603,7 +605,7 @@ class Program
             // Check for initial-function entry point
             var initialFunctionElem = testElem.Element(ns + "initial-function");
             bool isInitialFunction = initialFunctionElem != null;
-            bool rawOutput = (isInitialFunction || initialTemplateElem != null) && testElem.Element(ns + "output")?.Attribute("tree")?.Value == "no";
+            bool rawOutput = (isInitialFunction || initialTemplateElem != null || hasImplicitInitialTemplate) && testElem.Element(ns + "output")?.Attribute("tree")?.Value == "no";
 
             string resultXml = string.Empty;
             XdmValue? resultValue = null;
@@ -669,11 +671,11 @@ class Program
             bool compareOk;
             if (resultValue != null)
             {
-                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, evalContext, executable.OutputProperties, baseOutputUri);
+                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, evalContext, executable.LastResultDocumentProperties ?? executable.OutputProperties, baseOutputUri);
             }
             else
             {
-                compareOk = CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, executable.OutputProperties, baseOutputUri);
+                compareOk = CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, executable.LastResultDocumentProperties ?? executable.OutputProperties, baseOutputUri);
             }
 
             if (compareOk)
@@ -1041,20 +1043,29 @@ class Program
             return !CompareResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri);
         }
 
-        // Handle <all-of>
-        var allOf = resultElem.Name.LocalName == "all-of" ? resultElem : resultElem.Element(ns + "all-of");
+        // Handle <all-of>. Only search for a nested <all-of> when the current element
+        // is a generic container; a wrapper such as <assert-result-document> that
+        // happens to contain an <all-of> must be processed by CompareSingleResult.
+        var allOf = resultElem.Name.LocalName == "all-of"
+            ? resultElem
+            : (CanContainAllOfAnyOf(resultElem.Name.LocalName) ? resultElem.Element(ns + "all-of") : null);
         if (allOf != null)
         {
             foreach (var option in allOf.Elements())
             {
-                if (!CompareResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri))
+                bool ok = CompareResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri);
+                if (_debugName == "result-document-0212")
+                    Console.Error.WriteLine("DEBUG 0212 all-of child " + option.Name.LocalName + " ok=" + ok);
+                if (!ok)
                     return false;
             }
             return true;
         }
 
         // Handle <any-of>
-        var anyOf = resultElem.Name.LocalName == "any-of" ? resultElem : resultElem.Element(ns + "any-of");
+        var anyOf = resultElem.Name.LocalName == "any-of"
+            ? resultElem
+            : (CanContainAllOfAnyOf(resultElem.Name.LocalName) ? resultElem.Element(ns + "any-of") : null);
         if (anyOf != null)
         {
             foreach (var option in anyOf.Elements())
@@ -1098,8 +1109,12 @@ class Program
             return !CompareResult(actual, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, outputProperties, baseOutputUri);
         }
 
-        // Handle <all-of>
-        var allOf = resultElem.Name.LocalName == "all-of" ? resultElem : resultElem.Element(ns + "all-of");
+        // Handle <all-of>. Only search for a nested <all-of> when the current element
+        // is a generic container; a wrapper such as <assert-result-document> that
+        // happens to contain an <all-of> must be processed by CompareSingleResult.
+        var allOf = resultElem.Name.LocalName == "all-of"
+            ? resultElem
+            : (CanContainAllOfAnyOf(resultElem.Name.LocalName) ? resultElem.Element(ns + "all-of") : null);
         if (allOf != null)
         {
             foreach (var option in allOf.Elements())
@@ -1111,7 +1126,9 @@ class Program
         }
 
         // Handle <any-of>
-        var anyOf = resultElem.Name.LocalName == "any-of" ? resultElem : resultElem.Element(ns + "any-of");
+        var anyOf = resultElem.Name.LocalName == "any-of"
+            ? resultElem
+            : (CanContainAllOfAnyOf(resultElem.Name.LocalName) ? resultElem.Element(ns + "any-of") : null);
         if (anyOf != null)
         {
             foreach (var option in anyOf.Elements())
@@ -1209,9 +1226,11 @@ class Program
             if (!string.IsNullOrEmpty(uri))
             {
                 var path = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
+                Console.Error.WriteLine("DEBUG ARD trying uri=" + uri + " path=" + path + " exists=" + File.Exists(path));
                 if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
                 if (File.Exists(path))
                 {
+                    Console.Error.WriteLine("DEBUG ARD path: " + path);
                     try
                     {
                         var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
@@ -1282,9 +1301,11 @@ class Program
             : resultElem.Element(ns + "serialization-matches");
         if (serializationMatches != null)
         {
-            var serialized = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties);
+            var serialized = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties)
+                .Replace("\r\n", "\n");
             var pattern = serializationMatches.Value;
-            return Regex.IsMatch(serialized, pattern);
+            var flags = serializationMatches.Attribute("flags")?.Value;
+            return Regex.IsMatch(serialized, pattern, ParseRegexFlags(flags));
         }
 
         // assert: evaluate XPath expression against the value
@@ -1360,6 +1381,22 @@ class Program
                 {
                     try
                     {
+                        // Text result documents (method="text") are compared as strings;
+                        // everything else is loaded as XML so that base-uri and node
+                        // assertions work correctly.
+                        var childNames = assertDoc.Elements().Select(e => e.Name.LocalName).ToHashSet();
+                        bool isText = childNames.All(n => n is "assert-serialization" or "assert-string-value" or "serialization-matches");
+                        if (isText)
+                        {
+                            var text = File.ReadAllText(path);
+                            foreach (var child in assertDoc.Elements())
+                            {
+                                if (!CompareResult(text, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, null, baseOutputUri))
+                                    return false;
+                            }
+                            return true;
+                        }
+
                         var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
                         var baseUri = new Uri(Path.GetFullPath(path)).AbsoluteUri;
                         doc.AddAnnotation(baseUri);
@@ -1471,7 +1508,8 @@ class Program
         if (serializationMatches != null)
         {
             var pattern = serializationMatches.Value;
-            return Regex.IsMatch(actual, pattern);
+            var flags = serializationMatches.Attribute("flags")?.Value;
+            return Regex.IsMatch(actual, pattern, ParseRegexFlags(flags));
         }
 
         // error expected
@@ -1587,6 +1625,41 @@ class Program
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Returns true for container elements that may hold nested <c>all-of</c> or
+    /// <c>any-of</c> assertions. Single-purpose wrappers such as
+    /// <c>assert-result-document</c> are processed by <see cref="CompareSingleResult"/>.
+    /// </summary>
+    static bool CanContainAllOfAnyOf(string localName)
+    {
+        return localName is "result" or "not" or "all-of" or "any-of";
+    }
+
+    /// <summary>
+    /// Parses the W3C test-catalog regex flags attribute into <see cref="RegexOptions"/>.
+    /// Supported flags: i (ignore case), s (single line), m (multi line), x (ignore
+    /// pattern whitespace).
+    /// </summary>
+    static RegexOptions ParseRegexFlags(string? flags)
+    {
+        if (string.IsNullOrEmpty(flags))
+            return RegexOptions.None;
+
+        var options = RegexOptions.None;
+        foreach (var c in flags)
+        {
+            options |= char.ToLowerInvariant(c) switch
+            {
+                'i' => RegexOptions.IgnoreCase,
+                's' => RegexOptions.Singleline,
+                'm' => RegexOptions.Multiline,
+                'x' => RegexOptions.IgnorePatternWhitespace,
+                _ => RegexOptions.None
+            };
+        }
+        return options;
     }
 
     /// <summary>

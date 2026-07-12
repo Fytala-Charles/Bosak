@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 07-07-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 12-07-2026     | Avoid infinite loop when malformed markup yields an empty attribute name                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -367,6 +368,14 @@ public static class Xml11Loader
                     while (i < text.Length && !IsNameTerminator(text[i]) && text[i] != '=' && !char.IsWhiteSpace(text[i]))
                         i++;
                     string attrName = text.Substring(attrNameStart, i - attrNameStart);
+                    if (attrName.Length == 0)
+                    {
+                        // Malformed markup (for example a backslash before the end-tag slash
+                        // in a JSON string literal). Stop parsing attributes so the tag-close
+                        // loop can copy the remaining characters and the parser can reject the
+                        // document normally instead of looping forever.
+                        break;
+                    }
                     var decodedAttrName = Xml11NameCodec.DecodeName(attrName);
                     sb.Append(Xml11NameCodec.EncodeName(attrName));
 

@@ -1,8 +1,40 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-07-11
-**Commit:** Working tree on top of `d852996`
-**Current focus:** Phase 5c `xsl:result-document` serialization — AVT evaluation, raw JSON output, and yes/no normalization.
+**Date:** 2026-07-12
+**Commit:** Working tree on top of `5cf5462`
+**Current focus:** Phase 5d `xsl:result-document` serialization — stabilizing XML declaration defaults and eliminating a catalog-run hang.
+
+---
+
+## This Session Fixes
+
+1. **Eliminated hang in XML 1.1 loader on malformed markup**
+   - `Xml11Loader.RewriteDeclarationAndEncodeNames` could loop forever when an empty attribute name was encountered (e.g., a backslash before an end-tag slash in a JSON string literal).
+   - Added an early break when no attribute name characters are consumed, letting the XML parser reject the document normally.
+   - Clears the hang in `maps-017` and any other test whose serialized result is not well-formed XML.
+
+2. **Corrected XML declaration defaults**
+   - `ResultTreeSerializer.ApplyMethodDefaults` now includes the XML declaration by default for the `xml` output method and for `xhtml` with `html-version="1.0"`, and omits it for `html`, `text`, `json`, `adaptive`, and `xhtml` with `html-version="5.0"`.
+   - When `standalone` is specified, the declaration is forced on to avoid `SEPM0009`.
+   - Restores `result-document` cluster to **125 passed / 0 failed** (was regressing after the JSON/raw-item work).
+
+3. **Updated unit-test expectations for spec-compliant defaults**
+   - `Copy4301Tests.Copy4301_DocumentNodeInCopyOf`, `StylesheetTests.Unrecognized_Mode_Falls_Back_To_Built_In_Rules`, and `StylesheetTests.Output_Default_Has_Declaration_And_No_Indent` now expect the default XML declaration.
+
+## Results
+
+- Unit-test suite: **1,140 passed / 0 failed / 0 skipped** across 8 projects.
+- W3C `result-document` conformance set: **125 passed / 0 failed / 29 skipped**.
+- W3C `maps` conformance set: **42 passed / 1 failed / 7 skipped** (`maps-017` now fails because `method="json"` serializes the result tree as a JSON string literal instead of the XML the test asserts).
+- Full W3C XSLT 3.0 suite: **5,521 passed / 84 failed / 8,995 skipped** (98.5%, baseline was 5,506/99/8,995).
+
+## Files Changed
+
+- `src/Bosak.XPath.Providers/Xml11/Xml11Loader.cs`
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
+- `tests/Bosak.Xslt.Tests/Copy4301Tests.cs`
+- `tests/Bosak.Xslt.Tests/StylesheetTests.cs`
+- `docs/AGENT_HANDOVER.md`
 
 ---
 

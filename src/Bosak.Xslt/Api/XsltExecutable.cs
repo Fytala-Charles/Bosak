@@ -55,6 +55,12 @@ public sealed class XsltExecutable
     public Stylesheet.OutputProperties OutputProperties => _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
 
     /// <summary>
+    /// Gets the output properties of the principal <c>xsl:result-document</c> produced
+    /// during the last transformation, if any.
+    /// </summary>
+    public Stylesheet.OutputProperties? LastResultDocumentProperties { get; private set; }
+
+    /// <summary>
     /// Transforms the supplied source document using this stylesheet.
     /// </summary>
     /// <param name="source">The source document or node to transform. May be null for named-template entry points with no initial context item.</param>
@@ -76,7 +82,9 @@ public sealed class XsltExecutable
         return RunWithStack(() =>
         {
             var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
-            return engine.Transform(source, initialTemplate, initialMode, rawResult, baseOutputUri);
+            var result = engine.Transform(source, initialTemplate, initialMode, rawResult, baseOutputUri);
+            LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
+            return result;
         }, DefaultTransformStackSize);
     }
 
@@ -95,6 +103,7 @@ public sealed class XsltExecutable
         {
             var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
             var result = engine.Transform(source, initialTemplate, initialMode, false, baseOutputUri);
+            LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
 
             // A principal xsl:result-document (no href) supplies the effective output
             // properties, overriding the stylesheet-level xsl:output defaults.
