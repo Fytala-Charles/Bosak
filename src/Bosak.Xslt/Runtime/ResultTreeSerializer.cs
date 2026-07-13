@@ -39,6 +39,7 @@
 //                      | Charles Korthout | 1.16  | 12-07-2026     | Route prefixed namespace undeclarations to raw XML serializer.                         |
 //                      | Charles Korthout | 1.17  | 12-07-2026     | Adaptive string literals use XPath escaping (double quotes) instead of JSON escapes.   |
 //                      | Charles Korthout | 1.18  | 13-07-2026     | Escape tab and line-feed as numeric references in XML attribute values.                |
+//                      | Charles Korthout | 1.19  | 13-07-2026     | Text output method skips comment and processing-instruction nodes (bug-1405).          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -434,10 +435,11 @@ public static class ResultTreeSerializer
     {
         switch (node.NodeKind)
         {
+            // The text output method writes only the string-value of text nodes;
+            // comment and processing-instruction nodes contribute nothing.
             case XdmNodeKind.Comment:
-                return $"<!--{node.StringValue}-->";
             case XdmNodeKind.ProcessingInstruction:
-                return $"<?{node.LocalName} {node.StringValue}?>";
+                return string.Empty;
             case XdmNodeKind.Text:
                 return MapCharacters(node.StringValue, props);
             case XdmNodeKind.Element:

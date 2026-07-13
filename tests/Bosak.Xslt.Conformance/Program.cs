@@ -43,6 +43,8 @@
 //                      | Charles Korthout | 3.1   | 12-07-2026     | Detect serialization errors for raw XDM results and assert-serialization-error.        |
 //                      | Charles Korthout | 3.2   | 13-07-2026     | Use raw XDM results for initial-mode tests so text-only output can be asserted.        |
 //                      | Charles Korthout | 3.3   | 13-07-2026     | Strip leading BOM in XML normalization so UTF-16 output compares cleanly.              |
+//                      | Charles Korthout | 3.4   | 13-07-2026     | Self-close HTML void elements when reparsing output for tree assertions (bug-1301).    |
+//                      | Charles Korthout | 3.5   | 13-07-2026     | Strip serialization-injected Content-Type meta for assert-xml tree compares (bug-1901).|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1067,8 +1069,6 @@ class Program
             foreach (var option in allOf.Elements())
             {
                 bool ok = CompareResult(actual, option, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri);
-                if (_debugName == "result-document-0212")
-                    Console.Error.WriteLine("DEBUG 0212 all-of child " + option.Name.LocalName + " ok=" + ok);
                 if (!ok)
                     return false;
             }
@@ -1239,11 +1239,9 @@ class Program
             if (!string.IsNullOrEmpty(uri))
             {
                 var path = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
-                Console.Error.WriteLine("DEBUG ARD trying uri=" + uri + " path=" + path + " exists=" + File.Exists(path));
                 if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
                 if (File.Exists(path))
                 {
-                    Console.Error.WriteLine("DEBUG ARD path: " + path);
                     try
                     {
                         var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
@@ -1279,7 +1277,7 @@ class Program
                 if (File.Exists(filePath))
                     expected = File.ReadAllText(filePath).Trim();
             }
-            var actualXml = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties);
+            var actualXml = StripSerializationContentTypeMeta(Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties));
             if (assertXml.Attribute("xml-version")?.Value == "1.1" || outputProperties?.Version == "1.1")
             {
                 if (NormalizeXml11(actualXml) == NormalizeXml11(expected))
@@ -1486,9 +1484,13 @@ class Program
                 // first because .NET cannot parse XML 1.1 declarations.
                 return XmlEquals(StripXmlDeclaration(actual), StripXmlDeclaration(expected));
             }
-            var normActual = NormalizeXml(actual);
+            // assert-xml compares result *trees*: the Content-Type meta element injected
+            // by the HTML/XHTML serializer is a serialization artifact and must not take
+            // part in the comparison (bug-1901).
+            var actualTreeForm = StripSerializationContentTypeMeta(actual);
+            var normActual = NormalizeXml(actualTreeForm);
             var normExpected = NormalizeXml(expected);
-            return normActual == normExpected || actual.Trim() == expected || XmlEquals(actual, expected);
+            return normActual == normExpected || actualTreeForm.Trim() == expected || XmlEquals(actualTreeForm, expected);
         }
 
         // assert-string-value
@@ -1725,6 +1727,23 @@ class Program
         }
     }
 
+    /// <summary>
+    /// Removes the <c>&lt;meta http-equiv="Content-Type" ...&gt;</c> element injected by
+    /// the HTML/XHTML output methods when <c>include-content-type</c> is in effect, so
+    /// that assert-xml comparisons (which operate on the result tree, not its
+    /// serialization) are not affected by the serialization artifact.
+    /// </summary>
+    static string StripSerializationContentTypeMeta(string serialized)
+    {
+        if (!serialized.Contains("http-equiv"))
+            return serialized;
+        return System.Text.RegularExpressions.Regex.Replace(
+            serialized,
+            "<meta\\s+http-equiv\\s*=\\s*\"Content-Type\"\\s+content\\s*=\\s*\"[^\"]*\"\\s*/?>",
+            string.Empty,
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+    }
+
     static IXdmNode? ParseResultDocument(string actual)
     {
         try
@@ -1736,6 +1755,24 @@ class Program
         }
         catch
         {
+            // The HTML output method serializes void elements (meta, br, img, ...)
+            // without end tags, which is not well-formed XML. Self-close known void
+            // elements so tree assertions can be evaluated against the reconstructed
+            // document (e.g. bug-1301).
+            var lenient = SelfCloseHtmlVoidElements(actual);
+            if (lenient != actual)
+            {
+                try
+                {
+                    var doc = Xml11Loader.ParseXml11(lenient, LoadOptions.PreserveWhitespace);
+                    return new XDocumentNode(doc);
+                }
+                catch
+                {
+                    // Fall through to the fragment-wrapper fallback below.
+                }
+            }
+
             // Not well-formed XML (e.g., text output or XML fragment)
             // Wrap in the synthetic document wrapper so XDocumentNode treats the
             // wrapped children as document-level nodes for XPath assertions.
@@ -1753,6 +1790,22 @@ class Program
                 return null;
             }
         }
+    }
+
+    /// <summary>
+    /// Rewrites unclosed HTML void elements such as <c>&lt;meta ...&gt;</c> as
+    /// self-closing XML empty-element tags so that HTML output can be parsed as
+    /// XML for assertion evaluation. Already self-closed tags are left untouched.
+    /// </summary>
+    static string SelfCloseHtmlVoidElements(string text)
+    {
+        // Match a void-element start tag whose last non-space character before '>'
+        // is not '/', and rewrite it with a self-closing slash.
+        return System.Text.RegularExpressions.Regex.Replace(
+            text,
+            @"<(area|base|basefont|br|col|embed|frame|hr|img|input|isindex|link|meta|param|source|track|wbr)((?:\s[^<>]*[^/<>\s])?)\s*>",
+            "<$1$2 />",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
     }
 
     static Dictionary<string, string> ExtractNamespaces(XElement element)

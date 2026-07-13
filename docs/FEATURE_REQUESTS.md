@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-13 (`for-each-group` cluster cleared; dynamic calls on XSLT context-dependent functions now raise XTDE errors)
+> **Living Registry** — Last updated: 2026-07-13 (`bug` cluster cleared; text-method comment/PI handling, HTML void-element reparse, assert-xml meta stripping)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

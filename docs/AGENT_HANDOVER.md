@@ -1,7 +1,43 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** *(working tree contains uncommitted for-each-group dynamic-call fix)*
+**Commit:** *(working tree contains uncommitted bug-cluster fixes)*
+**Current focus:** Continue clearing the remaining 6 W3C XSLT 3.0 conformance regressions; next recommended targets are the `select` singleton (`select-6101`) or `attribute-0701`.
+
+---
+
+## This Session Fixes
+
+1. **`bug` conformance cluster cleared (3 failures + 1 side effect)**
+   - `bug-1405`: `ResultTreeSerializer.TextMethodNodeString` no longer renders comment/PI markup for `method="text"`; these nodes contribute nothing to text output per Serialization 3.1 §9.
+   - `bug-1301`: the conformance harness `ParseResultDocument` now self-closes HTML void elements (`meta`, `br`, `img`, ...) before reparsing HTML output for tree assertions. The HTML5 serializer legitimately emits `<meta ...>` unclosed, which previously made the XML reparse fail and all `<assert>` XPath checks return false.
+   - `bug-1901`: `assert-xml` comparisons (both string and XdmValue paths) now strip the serialization-injected `<meta http-equiv="Content-Type" ...>` element before comparing. `assert-xml` compares result *trees*; the meta is injected at serialization time and is not part of the tree. The serializer still always injects it when `include-content-type` is in effect — required by `output-0123`, `backwards-018`, and others (an attempted serializer-side fix regressed 13 tests and was reverted).
+   - Side effect: `select-6201` (HTML table serialization) now passes.
+   - Also removed leftover `DEBUG` `Console.Error.WriteLine` statements from the conformance harness.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,599 passed / 6 failed / 8,995 skipped** (99.9%; was 5,595/10/8,995).
+- Remaining failures: `attribute-0701`, `backwards-019b`, `include-0101` (DTD external-entity base-URI resolution), `maps-017` (`xpath-default-namespace` in `xsl:map-entry/@key`), `merge-021`, `select-6101` (ISO-8859-1 output).
+- Clusters now clear: `character-map`, `mode`, `xml-version`, `normalize-unicode`, `copy`, `output`, `arrays`, `for-each-group`, `bug`.
+
+## Files Changed
+
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs` (text method comment/PI handling)
+- `tests/Bosak.Xslt.Conformance/Program.cs` (void-element self-closing reparse; assert-xml meta stripping; debug cleanup)
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/ARCHITECTURE.md`
+- `README.md`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-13
+**Commit:** `6f8864b` (for-each-group dynamic-call fix)
 **Current focus:** Continue clearing the remaining 10 W3C XSLT 3.0 conformance regressions; next recommended targets are the `bug` cluster (3 failures) or the `select` pair.
 
 ---

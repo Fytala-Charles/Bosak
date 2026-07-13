@@ -6,11 +6,20 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,595 passed / 10 failed / 8,995 skipped (99.8%)
+> **XSLT baseline:** 5,599 passed / 6 failed / 8,995 skipped (99.9%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-13** — Phase 5l `bug` conformance cluster cleared.
+  - `ResultTreeSerializer`'s text output method no longer emits comment/PI markup — comment and processing-instruction nodes contribute nothing to `method="text"` output (`bug-1405`).
+  - The conformance harness now self-closes HTML void elements (`meta`, `br`, `img`, ...) when reparsing HTML output for tree assertions, so the HTML5-mandated unclosed `<meta ...>` no longer breaks XPath assertions (`bug-1301`).
+  - `assert-xml` comparisons now strip the serialization-injected `meta http-equiv="Content-Type"` element: assert-xml compares result trees, and the meta is a serialization artifact (`bug-1901`). The serializer still injects it whenever `include-content-type` is in effect, as required by `output-0123` and `backwards-018`.
+  - Also clears `select-6201` (HTML table serialization).
+  - W3C `bug` conformance set: **75 passed / 0 failed / 11 skipped**.
+  - Full W3C suite: **5,599 passed / 6 failed / 8,995 skipped** (99.9%).
+  - Remaining failures: `attribute-0701`, `backwards-019b`, `include-0101`, `maps-017`, `merge-021`, `select-6101`.
 
 - **2026-07-13** — Phase 5k `for-each-group` conformance cluster cleared.
   - `FunctionSignature` gains an optional `DynamicImplementation`; `VmEngine.InvokeFunctionItem` uses it for dynamic calls through function items (named references and partial application) while static calls keep using `Implementation`.
