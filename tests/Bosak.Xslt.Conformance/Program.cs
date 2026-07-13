@@ -42,6 +42,7 @@
 //                      | Charles Korthout | 3.0   | 11-07-2026     | Strip XML declaration in assert-string-value for atomic-only results                   |
 //                      | Charles Korthout | 3.1   | 12-07-2026     | Detect serialization errors for raw XDM results and assert-serialization-error.        |
 //                      | Charles Korthout | 3.2   | 13-07-2026     | Use raw XDM results for initial-mode tests so text-only output can be asserted.        |
+//                      | Charles Korthout | 3.3   | 13-07-2026     | Strip leading BOM in XML normalization so UTF-16 output compares cleanly.              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2071,7 +2072,7 @@ class Program
     {
         if (string.IsNullOrEmpty(xml))
             return xml;
-        return Regex.Replace(xml, @"<\?xml[^?]*\?>", string.Empty).TrimStart();
+        return Regex.Replace(xml, @"<\?xml[^?]*\?>", string.Empty).TrimStart('\uFEFF').TrimStart();
     }
 
     /// <summary>
@@ -2081,8 +2082,7 @@ class Program
     /// </summary>
     static string NormalizeXml11(string xml)
     {
-        var trimmed = xml.Trim();
-        var noDecl = Regex.Replace(trimmed, @"<\?xml[^?]*\?>", string.Empty);
+        var noDecl = StripXmlDeclaration(xml);
         var decoded = DecodeNumericCharacterReferences(noDecl);
         var collapsed = Regex.Replace(decoded.Trim(), @">\s+<", "><");
         return collapsed.Replace(" />", "/>");

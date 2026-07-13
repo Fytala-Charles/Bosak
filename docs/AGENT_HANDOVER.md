@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
+**Commit:** `1085aab` (working tree contains uncommitted xml-version harness fix)
+**Current focus:** Remaining scattered W3C XSLT 3.0 conformance regressions.
+
+---
+
+## This Session Fixes
+
+1. **Conformance harness: strip leading BOM in XML normalization**
+   - `StripXmlDeclaration` and `NormalizeXml11` now remove a leading U+FEFF byte-order mark, so UTF-16 serialized output can be compared with expected XML that omits the declaration.
+   - Clears `xml-version-023` (XML 1.1 output with UTF-16 encoding); the entire `xml-version` cluster now passes.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,581 passed / 24 failed / 8,995 skipped** (99.7%; was 5,580/25/8,995).
+- Remaining failures: scattered regressions in `attribute`, `backwards`, `bug`, `copy`, `docbook`, `for-each-group`, `maps`, `merge`, `message`, `normalize-unicode`, `select`, `whitespace`, and `xsl-document`. The `character-map`, `mode`, and `xml-version` clusters are now clear.
+
+## Files Changed
+
+- `tests/Bosak.Xslt.Conformance/Program.cs`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-13
 **Commit:** `5ec7130` (working tree contains uncommitted mode-cluster harness fixes)
 **Current focus:** Remaining W3C XSLT 3.0 conformance failures in `xml-version` cluster and scattered regressions.
 
