@@ -6,11 +6,17 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,599 passed / 6 failed / 8,995 skipped (99.9%)
+> **XSLT baseline:** 5,600 passed / 5 failed / 8,995 skipped (99.9%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-13** — Phase 5m `select` conformance cluster cleared.
+  - The conformance harness now honors the `encoding` attribute on assertion elements (`assert-serialization`, `assert-xml`) when reading expected-result files, so ISO-8859-1 expected outputs decode correctly (`select-6101`).
+  - W3C `select` conformance set: **157 passed / 0 failed / 1 skipped**.
+  - Full W3C suite: **5,600 passed / 5 failed / 8,995 skipped** (99.9%).
+  - Remaining failures: `attribute-0701`, `backwards-019b`, `include-0101`, `maps-017`, `merge-021`.
 
 - **2026-07-13** — Phase 5l `bug` conformance cluster cleared.
   - `ResultTreeSerializer`'s text output method no longer emits comment/PI markup — comment and processing-instruction nodes contribute nothing to `method="text"` output (`bug-1405`).
@@ -19,7 +25,7 @@
   - Also clears `select-6201` (HTML table serialization).
   - W3C `bug` conformance set: **75 passed / 0 failed / 11 skipped**.
   - Full W3C suite: **5,599 passed / 6 failed / 8,995 skipped** (99.9%).
-  - Remaining failures: `attribute-0701`, `backwards-019b`, `include-0101`, `maps-017`, `merge-021`, `select-6101`.
+  - Remaining failures: `attribute-0701`, `backwards-019b`, `include-0101`, `maps-017`, `merge-021`, `select-6101` (since cleared).
 
 - **2026-07-13** — Phase 5k `for-each-group` conformance cluster cleared.
   - `FunctionSignature` gains an optional `DynamicImplementation`; `VmEngine.InvokeFunctionItem` uses it for dynamic calls through function items (named references and partial application) while static calls keep using `Implementation`.

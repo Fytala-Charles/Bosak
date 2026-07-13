@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-13 (`bug` cluster cleared; text-method comment/PI handling, HTML void-element reparse, assert-xml meta stripping)
+> **Living Registry** — Last updated: 2026-07-13 (`select` cluster cleared; assertion expected-file reads honor the `encoding` attribute)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

@@ -1,7 +1,38 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** *(working tree contains uncommitted bug-cluster fixes)*
+**Commit:** *(working tree contains uncommitted select-cluster fix)*
+**Current focus:** Continue clearing the remaining 5 W3C XSLT 3.0 conformance regressions: `attribute-0701`, `backwards-019b`, `include-0101`, `maps-017`, `merge-021`.
+
+---
+
+## This Session Fixes
+
+1. **`select` conformance cluster cleared**
+   - `select-6101`: the conformance harness now honors the `encoding` attribute on assertion elements (`assert-serialization`, `assert-xml`, and nested message assertions) when reading expected-result files. The expected output is ISO-8859-1 bytes (é = 0xE9); reading it as UTF-8 produced U+FFFD and a mismatch. The serializer itself was already correct (emits é literally for ISO-8859-1).
+   - New helper `ReadAssertionFile(filePath, encodingName)` with UTF-8/BOM-detection fallback.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,600 passed / 5 failed / 8,995 skipped** (99.9%; was 5,599/6/8,995).
+- Remaining failures: `attribute-0701`, `backwards-019b`, `include-0101` (DTD external-entity base-URI resolution), `maps-017` (`xpath-default-namespace` in `xsl:map-entry/@key`), `merge-021`.
+- Clusters now clear: `character-map`, `mode`, `xml-version`, `normalize-unicode`, `copy`, `output`, `arrays`, `for-each-group`, `bug`, `select`.
+
+## Files Changed
+
+- `tests/Bosak.Xslt.Conformance/Program.cs` (`ReadAssertionFile` encoding support)
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `docs/FEATURE_REQUESTS.md`
+- `README.md`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-13
+**Commit:** `5278c7a` (bug-cluster fixes)
 **Current focus:** Continue clearing the remaining 6 W3C XSLT 3.0 conformance regressions; next recommended targets are the `select` singleton (`select-6101`) or `attribute-0701`.
 
 ---

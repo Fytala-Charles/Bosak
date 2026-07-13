@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 3.3   | 13-07-2026     | Strip leading BOM in XML normalization so UTF-16 output compares cleanly.              |
 //                      | Charles Korthout | 3.4   | 13-07-2026     | Self-close HTML void elements when reparsing output for tree assertions (bug-1301).    |
 //                      | Charles Korthout | 3.5   | 13-07-2026     | Strip serialization-injected Content-Type meta for assert-xml tree compares (bug-1901).|
+//                      | Charles Korthout | 3.6   | 13-07-2026     | Honor @encoding when reading expected-result files (select-6101, ISO-8859-1).          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1275,7 +1276,7 @@ class Program
                 var filePath = Path.Combine(testSetDir, fileAttr);
                 if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
                 if (File.Exists(filePath))
-                    expected = File.ReadAllText(filePath).Trim();
+                    expected = ReadAssertionFile(filePath, assertXml.Attribute("encoding")?.Value).Trim();
             }
             var actualXml = StripSerializationContentTypeMeta(Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties));
             if (assertXml.Attribute("xml-version")?.Value == "1.1" || outputProperties?.Version == "1.1")
@@ -1472,7 +1473,7 @@ class Program
                 var filePath = Path.Combine(testSetDir, fileAttr);
                 if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
                 if (File.Exists(filePath))
-                    expected = File.ReadAllText(filePath).Trim();
+                    expected = ReadAssertionFile(filePath, assertXml.Attribute("encoding")?.Value).Trim();
             }
             // Normalize whitespace for comparison
             if (assertXml.Attribute("xml-version")?.Value == "1.1" || outputProperties?.Version == "1.1")
@@ -1542,7 +1543,7 @@ class Program
                 var filePath = Path.Combine(testSetDir, fileAttr);
                 if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
                 if (File.Exists(filePath))
-                    expected = File.ReadAllText(filePath).Trim();
+                    expected = ReadAssertionFile(filePath, assertSer.Attribute("encoding")?.Value).Trim();
             }
             return NormalizeXml(actual) == NormalizeXml(expected);
         }
@@ -1642,7 +1643,7 @@ class Program
                 var filePath = Path.Combine(testSetDir, fileAttr);
                 if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
                 if (File.Exists(filePath))
-                    expected = File.ReadAllText(filePath).Trim();
+                    expected = ReadAssertionFile(filePath, assertion.Attribute("encoding")?.Value).Trim();
             }
             var normActual = NormalizeXml(messageText);
             var normExpected = NormalizeXml(expected);
@@ -1724,6 +1725,26 @@ class Program
         catch
         {
             return stripped.Trim();
+        }
+    }
+
+    /// <summary>
+    /// Reads an expected-result file, honoring an optional <c>encoding</c> attribute
+    /// (e.g. <c>assert-serialization encoding="ISO-8859-1"</c>). Falls back to the
+    /// default UTF-8-with-BOM-detection behavior when the encoding is absent or
+    /// unknown.
+    /// </summary>
+    static string ReadAssertionFile(string filePath, string? encodingName)
+    {
+        if (string.IsNullOrEmpty(encodingName))
+            return File.ReadAllText(filePath);
+        try
+        {
+            return File.ReadAllText(filePath, System.Text.Encoding.GetEncoding(encodingName));
+        }
+        catch
+        {
+            return File.ReadAllText(filePath);
         }
     }
 
