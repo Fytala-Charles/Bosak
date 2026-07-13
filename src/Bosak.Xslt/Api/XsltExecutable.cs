@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 12-07-2026     | Use principal xsl:result-document output properties (including JSON) in TransformToString. |
 //                      | Charles Korthout | 1.3   | 12-07-2026     | Resolve stylesheet-level character maps in OutputProperties; pre-resolved maps win.     |
 //                      | Charles Korthout | 1.4   | 13-07-2026     | Stamp EffectiveVersion and ImplicitResultTree for default output-method inference.      |
+//                      | Charles Korthout | 1.5   | 13-07-2026     | Raised transform stack to 16MB for deep continuation-style recursion (HOF-068).         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -91,7 +92,7 @@ public sealed class XsltExecutable
     /// stack is required for stylesheets that rely on deep xsl:call-template recursion
     /// (for example the DocBook XSLT 1.0 stylesheets).
     /// </summary>
-    private const int DefaultTransformStackSize = 4 * 1024 * 1024;
+    private const int DefaultTransformStackSize = 16 * 1024 * 1024;
 
     public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
     {

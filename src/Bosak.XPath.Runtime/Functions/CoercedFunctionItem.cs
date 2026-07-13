@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
-// CREATE DATE          : 19 mei 2026
-// PURPOSE              : Runtime representation of an inline function for the VM.
+// CREATE DATE          : 13 juli 2026
+// PURPOSE              : Function item wrapper applying XPath 3.1 function conversion rules at invocation time.
 // SPECIAL NOTES        : Part of the register-based virtual machine execution engine.
 //
 // COPYRIGHT            : Fytala
@@ -10,32 +10,27 @@
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
-//                      | Charles Korthout | 0.2   | 22-05-2026     | Added parameter/return type metadata for runtime validation                              |
-//                      | Charles Korthout | 0.3   | 13-07-2026     | Added CapturedVariables for closure semantics (higher-order-functions-029/041/042)     |
+//                      | Charles Korthout | 0.1   | 13-07-2026     | Creation (higher-order-functions-038/060)                                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
-using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
 
 namespace Bosak.XPath.Runtime.Functions;
 
 /// <summary>
-/// An inline function with parameter names, optional type declarations, and a compiled body module.
+/// A function item coerced to a declared function type. Per the XPath 3.1 function
+/// conversion rules, invoking the wrapper converts each argument to the declared
+/// parameter type, invokes the inner function, and validates the result against the
+/// declared return type, raising XPTY0004 when the conversion is not possible.
 /// </summary>
-public sealed record InlineFunctionItem(
-    IReadOnlyList<string> Parameters,
-    IrModule Body,
-    IReadOnlyList<string?> ParameterTypes,
+/// <param name="Inner">The wrapped function item.</param>
+/// <param name="ParamTypes">Declared parameter sequence types from the coercion target.</param>
+/// <param name="ReturnType">Declared return sequence type from the coercion target, or null.</param>
+public sealed record CoercedFunctionItem(
+    FunctionItem Inner,
+    IReadOnlyList<string?> ParamTypes,
     string? ReturnType) : FunctionItem
 {
-    public override int Arity => Parameters.Count;
-
-    /// <summary>
-    /// Variables in scope where the inline function was created. These implement closure
-    /// semantics: when the function is invoked after the defining frame has exited (e.g.
-    /// an XSLT function returning an inline function referencing its parameters), the
-    /// captured values are restored into the evaluation context for the duration of the call.
-    /// </summary>
-    public IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? CapturedVariables { get; init; }
+    /// <inheritdoc/>
+    public override int Arity => ParamTypes.Count;
 }

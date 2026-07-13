@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 1.5   | 25-06-2026     | Only emit LoadContextItem for path expressions that actually reference the focus       |
 //                      | Charles Korthout | 1.6   | 25-06-2026     | Named node tests on element-principal axes filter to element kind first                |
 //                      | Charles Korthout | 1.7   | 26-06-2026     | Lower Q{uri}* URI-qualified wildcards to NamespaceTest                                  |
+//                      | Charles Korthout | 1.8   | 13-07-2026     | Partial application (placeholders) for dynamic function calls (higher-order-func-045)   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -1331,6 +1332,35 @@ public sealed class IrLowerer
         int funcReg = LowerNode(node.Function);
 
         int argCount = node.Arguments.Count;
+
+        // Partial application: f(?, arg) produces a curried function item instead of
+        // invoking the function.
+        bool hasPlaceholders = node.Arguments.Any(a => a is ArgumentPlaceholderNode);
+        if (hasPlaceholders)
+        {
+            var descriptor = new int[argCount];
+            var argRegs = new List<int>();
+            for (int i = 0; i < argCount; i++)
+            {
+                if (node.Arguments[i] is ArgumentPlaceholderNode)
+                {
+                    descriptor[i] = -1;
+                }
+                else
+                {
+                    int argReg = LowerNode(node.Arguments[i]);
+                    descriptor[i] = argReg;
+                    argRegs.Add(argReg);
+                }
+            }
+
+            int descPoolIdx = AddToLiteralPool(descriptor);
+            Emit(IrOpCode.Curry, (ushort)resultReg, (ushort)funcReg, operand: descPoolIdx);
+            FreeRegister(funcReg);
+            foreach (var r in argRegs) FreeRegister(r);
+            return resultReg;
+        }
+
         int firstArgReg = 0;
 
         if (argCount > 0)

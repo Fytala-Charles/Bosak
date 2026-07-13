@@ -38,6 +38,7 @@
 //                      | Charles Korthout | 2.4   | 26-06-2026     | Support document-node(element(E)) match patterns                                        |
 //                      | Charles Korthout | 2.5   | 26-06-2026     | Check URI for doc()/document() match patterns                                           |
 //                      | Charles Korthout | 2.6   | 05-07-2026     | Disallow reverse axes in match patterns (XTSE0340); fixes version-023a                |
+//                      | Charles Korthout | 2.7   | 14-07-2026     | namespace-node() match pattern support; fixes snapshot-0102a                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1611,6 +1612,18 @@ public sealed class PatternCompiler
                 return node.NodeKind is not XdmNodeKind.Document
                     and not XdmNodeKind.Attribute
                     and not XdmNodeKind.Namespace;
+            };
+        }
+
+        if (name == "namespace-node()")
+        {
+            // A namespace-node() pattern is equivalent to the axis step
+            // namespace::namespace-node(): it matches any namespace node.
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return node.NodeKind == XdmNodeKind.Namespace;
             };
         }
 

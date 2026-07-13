@@ -93,6 +93,9 @@ public sealed class XsltFunctionDefinition
         "http://www.w3.org/2001/XMLSchema",
         "http://www.w3.org/1999/XSL/Transform",
         "http://www.w3.org/2005/xpath-functions",
+        "http://www.w3.org/2005/xpath-functions/map",
+        "http://www.w3.org/2005/xpath-functions/array",
+        "http://www.w3.org/2005/xpath-functions/math",
         "http://www.w3.org/XML/1998/namespace"
     };
 

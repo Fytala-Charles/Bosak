@@ -179,6 +179,8 @@
 //                      | Charles Korthout | 6.08  | 13-07-2026     | Dynamic calls on current-group/current-grouping-key/current-merge-* raise XTDE errors. |
 //                      | Charles Korthout | 6.09  | 13-07-2026     | XTDE2210 also raised when a merge-key attribute is present on one source only.         |
 //                      | Charles Korthout | 6.10  | 13-07-2026     | Stamp EffectiveVersion/ImplicitResultTree on result-document output properties.        |
+//                      | Charles Korthout | 6.11  | 13-07-2026     | HOF: function-type coercion, raw map/function items in typed templates, sig metadata   |
+//                      | Charles Korthout | 6.12  | 14-07-2026     | Typed templates keep node identity/parentage; single text nodes not cloned; fn:snapshot |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -300,6 +302,12 @@ public sealed class TransformEngine
     // items rather than merged into a single text node. Used for xsl:template/@as and
     // other sequence-typed result construction.
     private bool _preserveAtomicSequenceItems;
+
+    // Side channel for map and function items produced in a typed (xsl:template/@as)
+    // sequence constructor: they cannot be represented as nodes in the temporary
+    // container, so CopyToResult stores them here and ExecuteTemplate merges them into
+    // the collected result items. Null outside typed-template result construction.
+    private List<XdmValue>? _typedResultRawItems;
     private bool _preserveDocumentNodes;
 
     // Tracks nesting depth of literal result elements inside a sequence constructor.
@@ -1305,6 +1313,7 @@ public sealed class TransformEngine
         var allFuncs = _stylesheet.GetAllFunctionDefinitions();
         foreach (var (key, def) in allFuncs)
         {
+            var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
             var sig = new FunctionSignature
             {
                 NamespaceUri = def.NamespaceUri,
@@ -1312,6 +1321,10 @@ public sealed class TransformEngine
                 Arity = def.Arity,
                 ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
+                ParameterTypeNames = Enumerable.Range(0, def.Arity)
+                    .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
+                    .ToList(),
+                ReturnTypeName = def.ReturnType,
                 Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
             };
             _context.RegisterFunction(sig);
@@ -1974,7 +1987,7 @@ public sealed class TransformEngine
     /// Executes the body of an xsl:function declaration, binding parameters and
     /// returning the sequence produced by the function body.
     /// </summary>
-    private const int MaxXsltFunctionCallDepth = 64;
+    private const int MaxXsltFunctionCallDepth = 256;
 
     private XdmValue ExecuteXsltFunction(Stylesheet.XsltFunctionDefinition def, ReadOnlySpan<XdmValue> args)
     {
@@ -2176,13 +2189,23 @@ public sealed class TransformEngine
         var normalized = new List<XdmValue>();
         var pendingText = new StringBuilder();
         var pendingEmptyTextNodes = new List<XdmValue>();
+        XdmValue pendingSingleTextItem = default;
+        bool pendingTextIsSingleNode = false;
 
         void FlushText()
         {
             if (pendingText.Length > 0)
             {
-                normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText.ToString()))));
+                // When the pending text comes from exactly one text node (no merging with
+                // adjacent text nodes occurred), keep the original node so its identity
+                // and parentage survive (fn:snapshot equivalence, snapshot-0102a).
+                if (pendingTextIsSingleNode)
+                    normalized.Add(pendingSingleTextItem);
+                else
+                    normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText.ToString()))));
                 pendingText.Clear();
+                pendingTextIsSingleNode = false;
+                pendingSingleTextItem = default;
             }
         }
 
@@ -2203,7 +2226,17 @@ public sealed class TransformEngine
                 {
                     // A non-empty text node absorbs any preceding empty text nodes.
                     pendingEmptyTextNodes.Clear();
+                    bool startsFresh = pendingText.Length == 0;
                     pendingText.Append(text);
+                    if (startsFresh)
+                    {
+                        pendingTextIsSingleNode = true;
+                        pendingSingleTextItem = item;
+                    }
+                    else
+                    {
+                        pendingTextIsSingleNode = false;
+                    }
                 }
             }
             else
@@ -3097,6 +3130,30 @@ public sealed class TransformEngine
                         }
                         break;
                     }
+                case "namespace":
+                    {
+                        // xsl:namespace in a raw sequence (e.g. an xsl:function body) creates
+                        // a namespace-node item instead of attaching to a result element.
+                        var savedContainer = _currentContainer;
+                        var savedLastAtomic = _lastAddedWasAtomic;
+                        var temp = new XElement("__temp__");
+                        _currentContainer = temp;
+                        _lastAddedWasAtomic = false;
+                        try
+                        {
+                            ExecuteXsltInstruction(instruction, contextItem);
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _lastAddedWasAtomic = savedLastAtomic;
+                        }
+                        foreach (var nsAttr in temp.Attributes().Where(a => a.IsNamespaceDeclaration))
+                        {
+                            results.Add(XdmValue.FromNode(XDocumentNode.CreateNamespaceNode(nsAttr, temp)));
+                        }
+                        break;
+                    }
                 case "document":
                 case "source-document":
                     {
@@ -3744,6 +3801,7 @@ public sealed class TransformEngine
         var savedPreserveDocuments = _preserveDocumentNodes;
         var savedLiteralDepth = _literalElementDepth;
         var savedLastAtomic = _lastAddedWasAtomic;
+        var savedTypedRawItems = _typedResultRawItems;
         XElement? tempContainer = null;
 
         if (!string.IsNullOrEmpty(asType))
@@ -3751,10 +3809,15 @@ public sealed class TransformEngine
             tempContainer = new XElement("__temp__");
             _currentContainer = tempContainer;
             _lastAddedWasAtomic = false;
-            _sequenceAccumulator = null;
+            // Use a placeholder accumulator so xsl:sequence results keep their node
+            // identity (and parentage) instead of being deep-copied into the temporary
+            // container. Per XSLT 3.0 §5.7.1, nodes produced by a sequence constructor
+            // that forms the result of a template are added to the result sequence as-is.
+            _sequenceAccumulator = new PlaceholderSequenceAccumulator(this);
             _preserveAtomicSequenceItems = true;
             _preserveDocumentNodes = true;
             _literalElementDepth = 0;
+            _typedResultRawItems = new List<XdmValue>();
         }
 
         var savedTemplateRule = _currentTemplateRule;
@@ -3956,16 +4019,35 @@ public sealed class TransformEngine
             if (tempContainer != null)
             {
                 var items = new List<XdmValue>();
+                // Map and function items cannot be represented as container nodes; they were
+                // captured in source order into _typedResultRawItems by CopyToResult.
+                if (_typedResultRawItems is { Count: > 0 } rawItems)
+                    items.AddRange(rawItems);
                 foreach (var attr in tempContainer.Attributes())
                 {
                     items.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
                 }
                 foreach (var node in tempContainer.Nodes().ToList())
                 {
+                    // Detach the node from the temporary container so result nodes are
+                    // parentless (or keep the parent they were constructed with) rather
+                    // than being rooted at the synthetic __temp__ element.
+                    node.Remove();
                     switch (node)
                     {
+                        case XElement seq when seq.Name.LocalName == "__xdm_seq__" && seq.Name.NamespaceName == "":
+                            // Placeholder produced by xsl:sequence: expand the captured
+                            // items in source order, preserving node identity.
+                            if (seq.Annotation<SequencePlaceholderItems>() is { } holder)
+                            {
+                                foreach (var phItem in holder.Items)
+                                {
+                                    if (!phItem.IsUndefined)
+                                        items.Add(phItem);
+                                }
+                            }
+                            break;
                         case XElement e when e.Name.LocalName == "__xdm_doc__":
-                            e.Remove();
                             items.Add(XdmValue.FromNode(new XDocumentNode(new XDocument(e))));
                             break;
                         case XElement e:
@@ -3989,6 +4071,7 @@ public sealed class TransformEngine
                 _preserveDocumentNodes = savedPreserveDocuments;
                 _literalElementDepth = savedLiteralDepth;
                 _lastAddedWasAtomic = savedLastAtomic;
+                _typedResultRawItems = savedTypedRawItems;
 
                 XdmValue typedResult;
                 if (items.Count > 0)
@@ -4004,6 +4087,13 @@ public sealed class TransformEngine
 
                 if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
                     _rawInitialTemplateResult = typedResult;
+                else if (_sequenceAccumulator != null)
+                {
+                    // An outer sequence-returning context (function body, typed variable,
+                    // apply-templates in a function) collects raw items: add the template
+                    // result without copying so node identity and parentage survive.
+                    _sequenceAccumulator.Add(typedResult);
+                }
                 else
                     CopyToResult(typedResult);
             }
@@ -4014,6 +4104,7 @@ public sealed class TransformEngine
                 _preserveAtomicSequenceItems = savedPreserveAtomics;
                 _preserveDocumentNodes = savedPreserveDocuments;
                 _literalElementDepth = savedLiteralDepth;
+                _typedResultRawItems = savedTypedRawItems;
             }
         }
     }
@@ -4349,27 +4440,39 @@ public sealed class TransformEngine
                     var prev = _currentContainer;
                     _currentContainer = elem;
                     _lastAddedWasAtomic = false;
+                    // Suspend the outer sequence accumulator while constructing the content
+                    // of the element, so xsl:sequence items attach to the element being
+                    // constructed rather than escaping as placeholders into it.
+                    var savedElemAccumulator = _sequenceAccumulator;
+                    _sequenceAccumulator = null;
 
                     // Apply attribute sets; xsl:attribute children in the element body override them.
                     ApplyAttributeSets(instruction, elem);
 
-                    foreach (var childNode in instruction.Nodes())
+                    try
                     {
-                        switch (childNode)
+                        foreach (var childNode in instruction.Nodes())
                         {
-                            case XText text:
-                                ProcessSequenceText(text, instruction);
-                                break;
-                            case XElement elemChild when elemChild.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                ExecuteXsltInstruction(elemChild, contextItem);
-                                break;
-                            case XElement elemChild:
-                                CopyLiteralElement(elemChild);
-                                break;
+                            switch (childNode)
+                            {
+                                case XText text:
+                                    ProcessSequenceText(text, instruction);
+                                    break;
+                                case XElement elemChild when elemChild.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elemChild, contextItem);
+                                    break;
+                                case XElement elemChild:
+                                    CopyLiteralElement(elemChild);
+                                    break;
+                            }
                         }
+                        NormalizeElementContent(elem);
                     }
-                    NormalizeElementContent(elem);
-                    _currentContainer = prev;
+                    finally
+                    {
+                        _sequenceAccumulator = savedElemAccumulator;
+                        _currentContainer = prev;
+                    }
                     break;
                 }
 
@@ -6743,6 +6846,19 @@ public sealed class TransformEngine
                     {
                         if (item.IsMap || item.IsFunction)
                         {
+                            // Typed result construction (xsl:template/@as): preserve map and
+                            // function items via the raw-item side channel instead of failing.
+                            if (_typedResultRawItems != null)
+                            {
+                                if (sb.Length > 0)
+                                {
+                                    AddTextNode(sb.ToString());
+                                    sb.Clear();
+                                }
+                                prevWasAtomic = false;
+                                _typedResultRawItems.Add(item);
+                                continue;
+                            }
                             if (IsPrincipalTopLevel && !_adaptiveOutputMode && !_jsonOutputMode)
                                 throw new XsltRuntimeException("SENR0001",
                                     "Cannot serialize a map, array, or function using this output method.", XdmValue.Undefined);
@@ -6791,6 +6907,13 @@ public sealed class TransformEngine
         {
             if (value.IsMap || value.IsFunction)
             {
+                // Typed result construction (xsl:template/@as): preserve map and function
+                // items via the raw-item side channel instead of failing or stringifying.
+                if (_typedResultRawItems != null)
+                {
+                    _typedResultRawItems.Add(value);
+                    return;
+                }
                 if (IsPrincipalTopLevel && !_adaptiveOutputMode && !_jsonOutputMode)
                     throw new XsltRuntimeException("SENR0001",
                         "Cannot serialize a map, array, or function using this output method.", XdmValue.Undefined);
@@ -11780,6 +11903,25 @@ public sealed class TransformEngine
         }
     }
 
+    /// <summary>
+    /// Finds the index of the closing parenthesis matching the opening parenthesis at
+    /// <paramref name="openIdx"/>, or -1 if there is none.
+    /// </summary>
+    private static int FindMatchingParenIndex(string s, int openIdx)
+    {
+        int depth = 0;
+        for (int i = openIdx; i < s.Length; i++)
+        {
+            if (s[i] == '(') depth++;
+            else if (s[i] == ')')
+            {
+                depth--;
+                if (depth == 0) return i;
+            }
+        }
+        return -1;
+    }
+
     internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false)
     {
         if (string.IsNullOrEmpty(asType))
@@ -11793,6 +11935,10 @@ public sealed class TransformEngine
         bool allowsEmpty = type.EndsWith("?") || type.EndsWith("*");
         if (type.EndsWith("?") || type.EndsWith("*") || type.EndsWith("+"))
             type = type[..^1].Trim();
+
+        // Unwrap redundant outer parentheses, e.g. (function(xs:integer) as xs:integer)*
+        while (type.Length > 1 && type[0] == '(' && FindMatchingParenIndex(type, 0) == type.Length - 1)
+            type = type[1..^1].Trim();
 
         // Collect sequence items
         var items = new List<XdmValue>();
@@ -11832,6 +11978,41 @@ public sealed class TransformEngine
         }
         if (items.Count > 1 && !allowsMultiple)
             throw new InvalidOperationException($"{errorCode}: Sequence of more than one item not allowed for type {originalType}");
+
+        // Function types: XPath 3.1 function conversion rules — a function item is
+        // coercible to any function type of the same arity; parameter/return type
+        // mismatches are raised when the coerced function is invoked.
+        if (type.StartsWith("function(", StringComparison.OrdinalIgnoreCase))
+        {
+            foreach (var item in items)
+            {
+                if (!VmEngine.FunctionItemCoercibleTo(item, type))
+                    throw new InvalidOperationException($"{errorCode}: Value does not match type {originalType}");
+            }
+
+            // Wrap items in CoercedFunctionItem so dynamic invocation converts arguments
+            // and validates the result against the declared types.
+            if (!type.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
+                && VmEngine.TryParseFunctionType(type, out var coercedParamTypes, out var coercedReturnType)
+                && !(coercedParamTypes.Length == 1 && coercedParamTypes[0] == "*"))
+            {
+                var wrapped = new List<XdmValue>(items.Count);
+                foreach (var item in items)
+                {
+                    if (item.FunctionValue is FunctionItem funcItem)
+                        wrapped.Add(XdmValue.FromFunction(new CoercedFunctionItem(funcItem, coercedParamTypes, coercedReturnType)));
+                    else
+                        wrapped.Add(item);
+                }
+                if (wrapped.Count == 0)
+                    return XdmValue.Undefined;
+                if (wrapped.Count == 1)
+                    return wrapped[0];
+                return XdmValue.FromSequence(MaterializedSequence.FromList(wrapped));
+            }
+
+            return value;
+        }
 
         // Node types, maps, arrays, and item(): no atomization or casting needed, but validate
         if (type is "node()" or "text()" or "comment()" or "processing-instruction()" or "namespace-node()" or "item()"
@@ -12837,22 +13018,55 @@ public sealed class TransformEngine
     /// </summary>
     private void CollectSimpleContentItems(XElement parent, XdmValue contextItem, List<XdmValue> items)
     {
+        // XSLT 3.0 §4.3: stylesheet preprocessing removes comments/PIs and merges
+        // adjacent text nodes BEFORE whitespace stripping and TVT processing. Under
+        // expand-text="yes" a whitespace-only (merged) text node is still stripped
+        // (unless preserved); whitespace fixed parts inside a surviving text value
+        // template remain significant (seqtor-043h).
+        bool expandText = GetExpandText(parent);
+        StringBuilder? pendingTvt = null;
+
+        void FlushPendingTvt()
+        {
+            if (pendingTvt == null)
+                return;
+            var merged = pendingTvt.ToString();
+            pendingTvt = null;
+            if (IsWhitespaceOnly(merged))
+            {
+                if (IsWhitespacePreserveContext(parent))
+                    items.Add(XdmValue.FromNode(new XDocumentNode(new XText(merged))));
+                return;
+            }
+            items.Add(XdmValue.FromNode(new XDocumentNode(new XText(EvaluateTvt(merged, parent)))));
+        }
+
         foreach (var node in parent.Nodes())
         {
             switch (node)
             {
+                case XText text when expandText:
+                    pendingTvt ??= new StringBuilder();
+                    pendingTvt.Append(text.Value);
+                    break;
+                case XComment or XProcessingInstruction when expandText:
+                    // Removed during stylesheet preprocessing; adjacent text merges across them.
+                    break;
                 case XText text:
                     CollectSimpleContentText(text, parent, items);
                     break;
                 case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                    FlushPendingTvt();
                     CollectSimpleContentXsltInstruction(elem, contextItem, items);
                     break;
                 case XElement elem:
+                    FlushPendingTvt();
                     var copy = CopyLiteralElementToXElement(elem);
                     items.Add(XdmValue.FromNode(new XDocumentNode(copy)));
                     break;
             }
         }
+        FlushPendingTvt();
     }
 
     /// <summary>
@@ -14026,8 +14240,11 @@ public sealed class TransformEngine
                     {
                         var compiled = contextElement != null ? CompileXPath(expr, contextElement) : XPath31Expression.Compile(expr);
                         var value = compiled.Evaluate(_context);
-                        // XSLT 3.0 §5.6.2: atomized TVT items are joined with a single space.
-                        parts.Add(XdmValueToString(value, " "));
+                        // XSLT 3.0 §5.6.2/§5.7.2: the expression value is converted to a
+                        // string using the simple content construction rules with a single
+                        // space separator; adjacent text nodes are merged before atomization
+                        // so they contribute no separator (e.g. seqtor-043d).
+                        parts.Add(ConstructSimpleContentString(FlattenSelectedItems(value), " "));
                     }
                     else
                     {
@@ -15610,9 +15827,11 @@ public sealed class TransformEngine
             }
         }
 
+        // XSLT 3.0 §17.1: the XSLT 2.0 dynamic error XTDE1150 (regex matches a
+        // zero-length string) was removed; zero-length matches are handled by the
+        // position-based algorithm below. A 3.0 processor uses the 3.0 algorithm even
+        // for stylesheets declaring version="2.0" (see W3C test regex-090/091).
         bool xslt20 = decimal.TryParse(_stylesheet.Version, out var version) && version < 3.0m;
-        if (xslt20 && Regex.IsMatch(string.Empty, pattern, options))
-            throw new InvalidOperationException("XTDE1150: regex matches zero-length string");
 
         // Precompute the sequence of matching and non-matching substrings using the
         // XSLT 3.0 position-based algorithm (§17.1). This correctly handles regexes

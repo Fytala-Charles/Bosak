@@ -88,6 +88,8 @@
 //                      | Charles Korthout | 5.22  | 26-06-2026     | Added xsl:accept, accumulator, accumulator-rule, fork, next-iteration, override, use-package |
 //                      | Charles Korthout | 5.23  | 12-07-2026     | Fix fn:current-time DateTimeOffset underflow near midnight with positive timezone offsets. |
 //                      | Charles Korthout | 5.24  | 13-07-2026     | Fallback to day 2 for current-time when positive offset pushes UTC before year 1.        |
+//                      | Charles Korthout | 5.25  | 13-07-2026     | HOF: FOTY0015 deep-equal, FOTY0013 atomize, anonymous curried names, arity unwrap      |
+//                      | Charles Korthout | 5.26  | 14-07-2026     | fn:concat/fn:compare#2 params now pass-through anyAtomicType; fixes HOF-064            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -268,7 +270,7 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn,
                 LocalName = "concat",
                 Arity = 2,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String,
                 Implementation = ConcatN
             },
@@ -277,7 +279,7 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn,
                 LocalName = "concat",
                 Arity = 3,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String,
                 Implementation = ConcatN
             },
@@ -286,7 +288,7 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn,
                 LocalName = "concat",
                 Arity = 4,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String,
                 Implementation = ConcatN
             },
@@ -295,56 +297,56 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn,
                 LocalName = "concat",
                 Arity = 5,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String,
                 Implementation = ConcatN
             },
             [(Namespaces.Fn, "concat", 6)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 6,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String, Implementation = ConcatN
             },
             [(Namespaces.Fn, "concat", 7)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 7,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String, Implementation = ConcatN
             },
             [(Namespaces.Fn, "concat", 8)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 8,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String, Implementation = ConcatN
             },
             [(Namespaces.Fn, "concat", 9)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 9,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String, Implementation = ConcatN
             },
             [(Namespaces.Fn, "concat", 10)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 10,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String, Implementation = ConcatN
             },
             [(Namespaces.Fn, "concat", 11)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 11,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String, Implementation = ConcatN
             },
             [(Namespaces.Fn, "concat", 12)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 12,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String, Implementation = ConcatN
             },
             [(Namespaces.Fn, "concat", 13)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "concat", Arity = 13,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String, Implementation = ConcatN
             },
 
@@ -1926,7 +1928,7 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn,
                 LocalName = "compare",
                 Arity = 2,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = Compare_2
             },
@@ -2531,6 +2533,24 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
                 Implementation = ElementWithId_1
             },
+            [(Namespaces.Fn, "element-with-id", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "element-with-id", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
+                Implementation = ElementWithId_2
+            },
+            [(Namespaces.Fn, "idref", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "idref", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                Implementation = Idref_1
+            },
+            [(Namespaces.Fn, "idref", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "idref", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
+                Implementation = Idref_2
+            },
             [(Namespaces.Fn, "default-language", 0)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "default-language", Arity = 0,
@@ -2548,6 +2568,18 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn, LocalName = "collection", Arity = 1,
                 ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
                 Implementation = Collection_1
+            },
+            [(Namespaces.Fn, "uri-collection", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "uri-collection", Arity = 0,
+                ParameterTypes = [], ReturnType = XdmValueKind.Sequence,
+                Implementation = UriCollection_0
+            },
+            [(Namespaces.Fn, "uri-collection", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "uri-collection", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                Implementation = UriCollection_1
             },
             [(Namespaces.Fn, "unparsed-text", 1)] = new()
             {
@@ -2722,6 +2754,15 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn, LocalName = "error", Arity = 3,
                 ParameterTypes = [XdmValueKind.QName, XdmValueKind.String, XdmValueKind.Undefined], ReturnType = XdmValueKind.Undefined,
                 Implementation = Error_3
+            },
+            // xs:error#1 appeared in early F&O 3.0 drafts; the W3C XSLT test suite
+            // (function-1901) requires it to be reported as available. It behaves
+            // exactly like fn:error#1.
+            [(Namespaces.Xs, "error", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "error", Arity = 1,
+                ParameterTypes = [XdmValueKind.QName], ReturnType = XdmValueKind.Undefined,
+                Implementation = Error_1
             },
 
             // ----- fn:parse-json ----------------------------------------------
@@ -3004,19 +3045,28 @@ public static class FunctionLibrary
 
     private static XdmValue FunctionName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var funcValue = args[0].FunctionValue;
+        var funcValue = SingleFunctionItem(args[0]).FunctionValue;
         if (funcValue is NamedFunctionItem named)
             return XdmValue.FromQName(new XsQName(named.LocalName, named.NamespaceUri, GetStandardPrefix(named.NamespaceUri)));
-        if (funcValue is CurriedFunctionItem curried)
-        {
-            // Walk to the base named function
-            FunctionItem baseFunc = curried.BaseFunction;
-            while (baseFunc is CurriedFunctionItem cf)
-                baseFunc = cf.BaseFunction;
-            if (baseFunc is NamedFunctionItem nm)
-                return XdmValue.FromQName(new XsQName(nm.LocalName, nm.NamespaceUri, GetStandardPrefix(nm.NamespaceUri)));
-        }
+        // Partially applied, coerced, and inline functions are anonymous: function-name
+        // returns the empty sequence (higher-order-functions-069).
         return XdmValue.Undefined;
+    }
+
+    /// <summary>
+    /// Unwraps a single-item sequence to the contained function item, as produced by
+    /// filter expressions over function-item sequences (higher-order-functions-031).
+    /// </summary>
+    private static XdmValue SingleFunctionItem(XdmValue value)
+    {
+        if (!value.IsSequence)
+            return value;
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            items.Add(item);
+        if (items.Count != 1)
+            throw new InvalidOperationException("XPTY0004: Expected a single function item");
+        return items[0];
     }
 
     private static string GetStandardPrefix(string namespaceUri) => namespaceUri switch
@@ -3030,13 +3080,15 @@ public static class FunctionLibrary
 
     private static XdmValue FunctionArity(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var funcValue = args[0].FunctionValue;
+        var funcValue = SingleFunctionItem(args[0]).FunctionValue;
         if (funcValue is NamedFunctionItem named)
             return XdmValue.FromInteger(named.ArityValue);
         if (funcValue is InlineFunctionItem inline)
             return XdmValue.FromInteger(inline.Parameters.Count);
         if (funcValue is CurriedFunctionItem curried)
             return XdmValue.FromInteger(curried.Arity);
+        if (funcValue is CoercedFunctionItem coerced)
+            return XdmValue.FromInteger(coerced.ParamTypes.Count);
         return XdmValue.Undefined;
     }
 
@@ -3235,30 +3287,36 @@ public static class FunctionLibrary
         if (arg.IsUndefined)
             return XdmValue.Undefined;
 
-        var nodes = new List<IXdmNode>();
-        if (arg.IsNode && arg.NodeValue != null)
-        {
-            nodes.Add(arg.NodeValue);
-        }
-        else if (arg.IsSequence && arg.SequenceValue != null)
+        // F&O: fn:snapshot returns the items of $arg in order; node items are
+        // replaced by their snapshot copies, non-node items are returned unchanged.
+        var items = new List<XdmValue>();
+        if (arg.IsSequence && arg.SequenceValue != null)
         {
             foreach (var item in XdmSequence.FromSource(arg.SequenceValue))
-            {
-                if (item.IsNode && item.NodeValue != null)
-                    nodes.Add(item.NodeValue);
-            }
+                items.Add(item);
+        }
+        else
+        {
+            items.Add(arg);
         }
 
-        if (nodes.Count == 0)
+        if (items.Count == 0)
             return XdmValue.Undefined;
 
         var copies = new List<XdmValue>();
-        foreach (var node in nodes)
+        foreach (var item in items)
         {
-            var copied = SnapshotNode(node);
-            if (copied == null)
-                throw new InvalidOperationException("FOTY0013");
-            copies.Add(XdmValue.FromNode(copied));
+            if (item.IsNode && item.NodeValue != null)
+            {
+                var copied = SnapshotNode(item.NodeValue);
+                if (copied == null)
+                    throw new InvalidOperationException("FOTY0013");
+                copies.Add(XdmValue.FromNode(copied));
+            }
+            else
+            {
+                copies.Add(item);
+            }
         }
 
         if (copies.Count == 1)
@@ -3313,6 +3371,18 @@ public static class FunctionLibrary
                 case XdmNodeKind.Attribute:
                     if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XAttribute attr)
                     {
+                        // The shallow-copied parent already carries this attribute;
+                        // reuse it so the snapshot copy keeps its parent element.
+                        if (container is XElement parentElem)
+                        {
+                            var existing = parentElem.Attributes()
+                                .FirstOrDefault(a => a.Name == attr.Name);
+                            if (existing != null)
+                            {
+                                targetCopy = existing;
+                                break;
+                            }
+                        }
                         var attrCopy = new XAttribute(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
                         container?.Add(attrCopy);
                         targetCopy = attrCopy;
@@ -3348,24 +3418,53 @@ public static class FunctionLibrary
 
                 case XdmNodeKind.Namespace:
                     // Namespace nodes are represented as attributes in the XDocument model.
-                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XAttribute nsAttr)
+                    // The shallow-copied parent already carries the namespace declaration;
+                    // reuse it so the snapshot copy keeps its parent element and its
+                    // namespace-node identity.
+                    if (isLast && original is Providers.Xml.XDocumentNode nsNode)
                     {
-                        var nsCopy = new XAttribute(XName.Get(nsAttr.Name.LocalName, nsAttr.Name.NamespaceName), nsAttr.Value);
-                        container?.Add(nsCopy);
-                        targetCopy = nsCopy;
+                        string prefix = nsNode.LocalName ?? string.Empty;
+                        if (container is XElement parentElem)
+                        {
+                            var existing = parentElem.Attributes().FirstOrDefault(a =>
+                                a.IsNamespaceDeclaration &&
+                                (a.Name.LocalName == "xmlns" ? string.Empty : a.Name.LocalName) == prefix);
+                            if (existing != null)
+                            {
+                                return Providers.Xml.XDocumentNode.CreateNamespaceNode(existing, parentElem);
+                            }
+                        }
+                        if (nsNode.UnderlyingObject is XAttribute nsAttr)
+                        {
+                            var nsCopy = new XAttribute(XName.Get(nsAttr.Name.LocalName, nsAttr.Name.NamespaceName), nsAttr.Value);
+                            if (container is XElement ownerElem)
+                            {
+                                ownerElem.Add(nsCopy);
+                                return Providers.Xml.XDocumentNode.CreateNamespaceNode(nsCopy, ownerElem);
+                            }
+                            container?.Add(nsCopy);
+                            targetCopy = nsCopy;
+                        }
                     }
                     break;
             }
         }
 
-        // Deep-copy the descendants of the target element.
+        // Deep-copy the descendants of the target element. The target already carries
+        // all in-scope namespace declarations, so descendants must not redeclare them.
         if (targetCopy is XElement targetElem && node.NodeKind == XdmNodeKind.Element)
         {
             if (((Providers.Xml.XDocumentNode)node).UnderlyingObject is XElement origElem)
             {
+                var declared = new HashSet<string>(StringComparer.Ordinal);
+                foreach (var attr in targetElem.Attributes())
+                {
+                    if (attr.IsNamespaceDeclaration)
+                        declared.Add(attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName);
+                }
                 foreach (var child in origElem.Nodes())
                 {
-                    targetElem.Add(DeepCopyXNode(child));
+                    targetElem.Add(DeepCopyXNode(child, declared));
                 }
             }
         }
@@ -3399,12 +3498,12 @@ public static class FunctionLibrary
         return copy;
     }
 
-    private static XNode DeepCopyXNode(XNode node)
+    private static XNode DeepCopyXNode(XNode node, IReadOnlySet<string>? inheritedPrefixes = null)
     {
         switch (node)
         {
             case XElement elem:
-                return DeepCopyElement(elem);
+                return DeepCopyElement(elem, inheritedPrefixes);
             case XText text:
                 return new XText(text.Value);
             case XComment comment:
@@ -3786,6 +3885,7 @@ public static class FunctionLibrary
         "xsl:is-schema-aware", "xsl:supports-serialization",
         "xsl:supports-backwards-compatibility", "xsl:supports-namespace-axis",
         "xsl:supports-streaming", "xsl:supports-dynamic-evaluation",
+        "xsl:supports-higher-order-functions",
         "xsl:xpath-version", "xsl:xsd-version"
     ];
 
@@ -3806,6 +3906,7 @@ public static class FunctionLibrary
             "xsl:supports-namespace-axis" => "yes",
             "xsl:supports-streaming" => "no",
             "xsl:supports-dynamic-evaluation" => "yes",
+            "xsl:supports-higher-order-functions" => "yes",
             "xsl:xpath-version" => "3.1",
             "xsl:xsd-version" => "1.1",
             _ => ""
@@ -3819,6 +3920,19 @@ public static class FunctionLibrary
         // XSLT namespace to the canonical "xsl:" form used by the implementation.
         if (name.StartsWith("xsl:"))
             return name;
+        // EQName form: Q{http://www.w3.org/1999/XSL/Transform}version
+        if (name.StartsWith("Q{") || name.StartsWith("q{"))
+        {
+            int close = name.IndexOf('}');
+            if (close > 0)
+            {
+                var nsUri = name[2..close];
+                var local = name[(close + 1)..];
+                if (nsUri == Namespaces.Xsl)
+                    return $"xsl:{local}";
+                return name;
+            }
+        }
         int colon = name.IndexOf(':');
         if (colon >= 0)
         {
@@ -5718,6 +5832,96 @@ public static class FunctionLibrary
         }
     }
 
+    private static XdmValue ElementWithId_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var ids = ParseIdTokens(args[0].ToString());
+        if (ids.Count == 0)
+            return XdmValue.Undefined;
+
+        var result = new List<XdmValue>();
+        var node = FirstNode(args[1]);
+        if (node != null)
+        {
+            var doc = node.Document ?? node;
+            if (doc is not null)
+                CollectElementWithId(doc, ids, result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue Idref_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var ids = ParseIdTokens(args[0].ToString());
+        if (ids.Count == 0)
+            return XdmValue.Undefined;
+
+        var result = new List<XdmValue>();
+        var focus = ctx.ContextItem;
+        if (focus.IsNode)
+        {
+            var doc = focus.NodeValue.Document ?? focus.NodeValue;
+            if (doc is not null)
+                CollectIdrefElements(doc, ids, result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue Idref_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var ids = ParseIdTokens(args[0].ToString());
+        if (ids.Count == 0)
+            return XdmValue.Undefined;
+
+        var result = new List<XdmValue>();
+        var node = FirstNode(args[1]);
+        if (node != null)
+        {
+            var doc = node.Document ?? node;
+            if (doc is not null)
+                CollectIdrefElements(doc, ids, result);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static IXdmNode? FirstNode(XdmValue value)
+    {
+        if (value.IsNode)
+            return value.NodeValue;
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (item.IsNode)
+                    return item.NodeValue;
+            }
+        }
+        return null;
+    }
+
+    private static void CollectIdrefElements(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
+    {
+        if (node.NodeKind == XdmNodeKind.Element)
+        {
+            // Without schema/DTD processing no attribute is typed as xs:IDREF; by
+            // analogy with our fn:id treatment of "id"/"xml:id", an attribute named
+            // "idref" (no namespace) is treated as IDREF-typed.
+            foreach (var attr in node.Attributes("idref", ""))
+            {
+                var tokens = ParseIdTokens(AtomizedString(attr));
+                if (tokens.Overlaps(ids))
+                {
+                    result.Add(XdmValue.FromNode(node));
+                    break;
+                }
+            }
+        }
+        foreach (var child in node.Children(XdmNodeKind.Element))
+        {
+            if (child.IsNode)
+                CollectIdrefElements(child.NodeValue!, ids, result);
+        }
+    }
+
     private static XdmValue DefaultLanguage_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromString("en", "language");
 
@@ -5751,6 +5955,30 @@ public static class FunctionLibrary
 
     private static XdmValue Collection_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.Undefined;
+
+    private static XdmValue UriCollection_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.Undefined;
+
+    private static XdmValue UriCollection_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var uri = args[0].ToString();
+        if (string.IsNullOrEmpty(uri))
+            return XdmValue.Undefined;
+
+        var resolved = ResolveUriAgainstBase(uri, ctx.BaseUri);
+        if (System.IO.Directory.Exists(resolved))
+        {
+            var files = System.IO.Directory.GetFiles(resolved, "*.xml");
+            var uris = new List<XdmValue>(files.Length);
+            foreach (var file in files.OrderBy(f => f, StringComparer.Ordinal))
+            {
+                uris.Add(XdmValue.FromString(new Uri(System.IO.Path.GetFullPath(file)).AbsoluteUri, "anyURI"));
+            }
+            return XdmValue.FromSequence(MaterializedSequence.FromList(uris));
+        }
+
+        return XdmValue.Undefined;
+    }
 
     private static XdmValue Collection_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -7380,6 +7608,10 @@ public static class FunctionLibrary
         if (value.IsUndefined)
             return XdmValue.Undefined;
 
+        // Atomizing a function item is a type error (FOTY0013), e.g. number(f#1).
+        if (value.IsFunction)
+            throw new InvalidOperationException("FOTY0013: Cannot atomize a function item");
+
         if (value.IsNode)
         {
             // XDM §2.7.2: typed value of comments and PIs is xs:string;
@@ -7637,6 +7869,9 @@ public static class FunctionLibrary
         }
         if (allIntegerOrDecimal)
         {
+            // fn:min/fn:max return the selected item converted to the least common
+            // type of the input: all xs:integer input yields an xs:integer result.
+            bool anyDecimal = atomized.Any(a => a.Kind == XdmValueKind.Decimal);
             decimal result = ToDecimalValue(items[0]);
             for (int i = 1; i < items.Count; i++)
             {
@@ -7644,7 +7879,7 @@ public static class FunctionLibrary
                 if (min ? v < result : v > result)
                     result = v;
             }
-            return XdmValue.FromDecimal(result);
+            return anyDecimal ? XdmValue.FromDecimal(result) : XdmValue.FromInteger((long)result);
         }
         if (!anyDouble)
         {
@@ -9364,6 +9599,10 @@ public static class FunctionLibrary
 
     private static bool DeepEqualItem(XdmValue a, XdmValue b, string collation)
     {
+        // Function items cannot be compared for deep equality (XQuery 3.1 fn:deep-equal).
+        if (a.IsFunction || b.IsFunction)
+            throw new InvalidOperationException("FOTY0015: fn:deep-equal cannot be applied to function items");
+
         // Numeric cross-type comparison: integer, decimal, float, double are all comparable
         if (IsNumeric(a) && IsNumeric(b))
         {
@@ -9452,8 +9691,14 @@ public static class FunctionLibrary
 
         if (a.NodeKind == XdmNodeKind.Element)
         {
+            // XDM: the attribute axis never contains namespace declarations. The
+            // XDocument provider exposes xmlns attributes through Attributes(), so
+            // they must be filtered out here (snapshot-0102: xsl:copy redeclares
+            // in-scope namespaces while fn:snapshot does not).
             var attrsA = SortNodes(a.Attributes());
             var attrsB = SortNodes(b.Attributes());
+            attrsA.RemoveAll(IsNamespaceDeclarationItem);
+            attrsB.RemoveAll(IsNamespaceDeclarationItem);
             if (attrsA.Count != attrsB.Count)
                 return false;
             for (int i = 0; i < attrsA.Count; i++)
@@ -9473,6 +9718,18 @@ public static class FunctionLibrary
             }
         }
         return true;
+    }
+
+    private static bool IsNamespaceDeclarationItem(XdmValue item)
+    {
+        if (!item.IsNode || item.NodeValue == null)
+            return false;
+        var node = item.NodeValue;
+        // Namespace declarations surface as attributes named "xmlns" (no namespace)
+        // or as attributes in the XMLNS namespace.
+        return node.NodeKind == XdmNodeKind.Attribute
+            && (node.NamespaceUri == "http://www.w3.org/2000/xmlns/"
+                || (string.IsNullOrEmpty(node.NamespaceUri) && node.LocalName == "xmlns"));
     }
 
     private static List<XdmValue> SortNodes(XdmSequence sequence)
@@ -10237,20 +10494,54 @@ public static class FunctionLibrary
         return null;
     }
 
-    private static XElement DeepCopyElement(XElement element)
+    private static XElement DeepCopyElement(XElement element, IReadOnlySet<string>? inheritedPrefixes = null)
     {
         var copy = new XElement(XName.Get(element.Name.LocalName, element.Name.NamespaceName));
-        foreach (var attr in element.Attributes())
+        HashSet<string> childPrefixes;
+        if (inheritedPrefixes == null)
         {
-            copy.SetAttributeValue(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
+            // Top-level copy: preserve all in-scope namespaces (xsl:copy-of semantics).
+            foreach (var attr in element.Attributes())
+            {
+                copy.SetAttributeValue(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
+            }
+            CopyInScopeNamespaces(element, copy);
+            childPrefixes = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var attr in copy.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration)
+                    childPrefixes.Add(attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName);
+            }
         }
-        CopyInScopeNamespaces(element, copy);
+        else
+        {
+            // Descendant copy: namespace declarations inherited from the copy's
+            // ancestors are already in scope; redeclaring them would bloat the
+            // serialization and change the attribute set seen by deep-equal
+            // (snapshot-0101b).
+            foreach (var attr in element.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration)
+                {
+                    var prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                    if (inheritedPrefixes.Contains(prefix))
+                        continue;
+                }
+                copy.SetAttributeValue(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
+            }
+            childPrefixes = new HashSet<string>(inheritedPrefixes, StringComparer.Ordinal);
+            foreach (var attr in copy.Attributes())
+            {
+                if (attr.IsNamespaceDeclaration)
+                    childPrefixes.Add(attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName);
+            }
+        }
         foreach (var child in element.Nodes())
         {
             switch (child)
             {
                 case XElement childElem:
-                    copy.Add(DeepCopyElement(childElem));
+                    copy.Add(DeepCopyElement(childElem, childPrefixes));
                     break;
                 case XText text:
                     copy.Add(new XText(text.Value));

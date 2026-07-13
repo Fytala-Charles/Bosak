@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.3   | 26-06-2026     | Added xsl:context-item parsing and static validation                                     |
 //                      | Charles Korthout | 1.4   | 05-07-2026     | Reject AVT syntax in xsl:template/@match with XTSE0340                                 |
 //                      | Charles Korthout | 1.5   | 08-07-2026     | Allow Q{uri} EQName braces in xsl:template/@match AVT check                            |
+//                      | Charles Korthout | 1.6   | 14-07-2026     | namespace-node() default priority -0.5 (kind test)                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -603,7 +604,7 @@ public sealed class TemplateRule
         {
             "node()" or "text()" or "comment()" or "processing-instruction()"
             or "element()" or "attribute()" or "schema-element()" or "schema-attribute()"
-            or "document-node()" => true,
+            or "namespace-node()" or "document-node()" => true,
             _ => false
         };
     }

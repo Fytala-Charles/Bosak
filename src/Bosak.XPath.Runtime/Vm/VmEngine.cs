@@ -62,6 +62,8 @@
 //                      | Charles Korthout | 2.27  | 26-06-2026     | NormalizeSequence places document-rooted nodes before parentless nodes                 |
 //                      | Charles Korthout | 2.28  | 26-06-2026     | Removed leftover debug output from CompareCore                                         |
 //                      | Charles Korthout | 2.29  | 13-07-2026     | Honor FunctionSignature.DynamicImplementation for dynamic named-function calls         |
+//                      | Charles Korthout | 2.30  | 13-07-2026     | HOF: closure capture, dynamic-call arity/conversion, coerced items, instance-of types  |
+//                      | Charles Korthout | 2.31  | 14-07-2026     | Dynamic-call String conversion back to spec (untypedAtomic cast + URI promotion only)  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1307,7 +1309,21 @@ public static class VmEngine
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
-                        bool instance = InstanceOf(registers[instr.RegisterB], typeName, occurrence, context.DefaultElementNamespace);
+                        var instanceValue = registers[instr.RegisterB];
+                        bool instance;
+                        if (typeName.TrimStart().StartsWith("function(", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Function type tests on named function items need the
+                            // registered signature, which requires the evaluation context.
+                            if (instanceValue.IsUndefined)
+                                instance = occurrence is OccurrenceIndicator.ZeroOrOne or OccurrenceIndicator.ZeroOrMore;
+                            else
+                                instance = FunctionItemInstanceOf(instanceValue, typeName, context);
+                        }
+                        else
+                        {
+                            instance = InstanceOf(instanceValue, typeName, occurrence, context.DefaultElementNamespace);
+                        }
                         registers[instr.RegisterA] = XdmValue.FromBoolean(instance);
                         ip++;
                         break;
@@ -1689,7 +1705,11 @@ public static class VmEngine
                             NamedFunctionItem named => named,
                             CurriedFunctionItem curried => curried,
                             InlineFunctionItem inline => inline,
-                            CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body, cif.ParameterTypes, cif.ReturnType),
+                            CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body, cif.ParameterTypes, cif.ReturnType)
+                            {
+                                // Capture the defining variable environment for closure semantics.
+                                CapturedVariables = context.SnapshotVariables()
+                            },
                             ValueTuple<string, int> namedTuple => ResolveNamedFunctionTuple(namedTuple, context),
                             _ => throw new InvalidOperationException($"Unknown function item type: {raw.GetType().Name}")
                         };
@@ -1904,20 +1924,82 @@ public static class VmEngine
 
     public static XdmValue InvokeFunctionItem(FunctionItem func, EvaluationContext context, ReadOnlySpan<XdmValue> args)
     {
+        // XSLT 3.0 §5.3.4: dynamic function calls clear the current captured substrings
+        // (regex groups) and the current output URI for the duration of the call.
+        var savedRegexGroups = context.RegexGroups;
+        var savedOutputUri = context.CurrentOutputUri;
+        context.RegexGroups = null;
+        context.CurrentOutputUri = null;
+        try
+        {
+            return InvokeFunctionItemCore(func, context, args);
+        }
+        finally
+        {
+            context.RegexGroups = savedRegexGroups;
+            context.CurrentOutputUri = savedOutputUri;
+        }
+    }
+
+    private static XdmValue InvokeFunctionItemCore(FunctionItem func, EvaluationContext context, ReadOnlySpan<XdmValue> args)
+    {
         switch (func)
         {
             case NamedFunctionItem named:
+                // The function item has a fixed arity; a dynamic call must supply exactly
+                // that many arguments (higher-order-functions-049/050).
+                if (args.Length != named.ArityValue)
+                    throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.ArityValue} cannot be called with {args.Length} argument(s).");
                 if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out var sig))
                     throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
                 // XSLT context-dependent functions (e.g. current-group) supply a separate
                 // implementation for dynamic invocation through a function item.
-                return (sig.DynamicImplementation ?? sig.Implementation)(context, args);
+                return (sig.DynamicImplementation ?? sig.Implementation)(context, ConvertDynamicCallArgs(sig, args));
 
             case DelegateFunctionItem del:
+                if (args.Length != del.ArityValue)
+                    throw new InvalidOperationException("XPTY0004: Wrong number of arguments for dynamic function call.");
                 return del.Implementation(context, args);
+
+            case CoercedFunctionItem coerced:
+                {
+                    // XPath 3.1 function conversion rules: convert each argument to the
+                    // declared parameter type, invoke the inner function, and validate the
+                    // result against the declared return type (higher-order-functions-038/060).
+                    if (args.Length != coerced.ParamTypes.Count)
+                        throw new InvalidOperationException("XPTY0004: Wrong number of arguments for dynamic function call.");
+                    var convertedArgs = new XdmValue[args.Length];
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        var paramType = coerced.ParamTypes[i];
+                        convertedArgs[i] = string.IsNullOrEmpty(paramType)
+                            ? args[i]
+                            : ApplyFunctionConversion(args[i], paramType!);
+                    }
+                    var coercedResult = InvokeFunctionItem(coerced.Inner, context, convertedArgs);
+                    return string.IsNullOrEmpty(coerced.ReturnType)
+                        ? coercedResult
+                        : ApplyFunctionConversion(coercedResult, coerced.ReturnType!);
+                }
 
             case InlineFunctionItem inline:
                 {
+                    if (args.Length != inline.Parameters.Count)
+                        throw new InvalidOperationException("XPTY0004: Wrong number of arguments for dynamic call of an inline function.");
+                    // Restore captured closure variables (the defining environment) so the
+                    // body can reference outer variables after the defining frame exited.
+                    List<(string LocalName, string NamespaceUri, bool Had, XdmValue Value)>? savedCaptured = null;
+                    if (inline.CapturedVariables is { Count: > 0 } captured)
+                    {
+                        savedCaptured = new List<(string, string, bool, XdmValue)>(captured.Count);
+                        foreach (var (key, capturedValue) in captured)
+                        {
+                            bool had = context.TryGetBoundVariable(key.LocalName, out var oldVal, key.NamespaceUri);
+                            savedCaptured.Add((key.LocalName, key.NamespaceUri, had, oldVal));
+                            context.WithVariable(key.LocalName, capturedValue, key.NamespaceUri);
+                        }
+                    }
+
                     // Validate parameter types
                     for (int i = 0; i < inline.Parameters.Count; i++)
                     {
@@ -2013,11 +2095,24 @@ public static class VmEngine
                             else
                                 context.RemoveVariable(saved[i].LocalName, saved[i].NamespaceUri);
                         }
+                        if (savedCaptured != null)
+                        {
+                            foreach (var (localName, nsUri, had, value) in savedCaptured)
+                            {
+                                if (had)
+                                    context.WithVariable(localName, value, nsUri);
+                                else
+                                    context.RemoveVariable(localName, nsUri);
+                            }
+                        }
                     }
                 }
 
             case CurriedFunctionItem curried:
                 {
+                    int placeholderCount = curried.FixedArgs.Count(a => a is null);
+                    if (args.Length != placeholderCount)
+                        throw new InvalidOperationException("XPTY0004: Wrong number of arguments for dynamic call of a partially applied function.");
                     var merged = new XdmValue[curried.FixedArgs.Length];
                     int argIdx = 0;
                     for (int i = 0; i < curried.FixedArgs.Length; i++)
@@ -2037,6 +2132,17 @@ public static class VmEngine
 
     public static XdmValue InvokeFunctionItem(XdmValue funcValue, EvaluationContext context, ReadOnlySpan<XdmValue> args)
     {
+        // A dynamic call target may arrive as a single-item sequence wrapping a
+        // function item (e.g. the result of a let expression); unwrap it.
+        if (funcValue.IsSequence)
+        {
+            var items = MaterializeSequence(funcValue);
+            if (items.Length == 1)
+                funcValue = items[0];
+            else
+                throw new InvalidOperationException("XPTY0004");
+        }
+
         if (funcValue.IsFunction)
             return InvokeFunctionItem((FunctionItem)funcValue.FunctionValue, context, args);
 
@@ -5035,6 +5141,11 @@ public static class VmEngine
 
         string normalized = typeName.Trim().ToLowerInvariant();
 
+        // Unwrap one layer of redundant outer parentheses: (function(...) as T) is
+        // equivalent to function(...) as T.
+        if (normalized.Length > 1 && normalized[0] == '(' && FindMatchingParen(normalized, 0) == normalized.Length - 1)
+            return ValueMatchesType(value, typeName.Trim()[1..^1]);
+
         // Strip occurrence indicator for non-sequence values.
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
             normalized = normalized[..^1].TrimEnd();
@@ -5176,7 +5287,11 @@ public static class VmEngine
                             return false;
                         return true;
                     }
-                    return false;
+                    // Named, curried, or delegate function items: the declared parameter and
+                    // return types are not available without an evaluation context, so match
+                    // on arity only. Argument types are re-checked against the target
+                    // function's own signature when the item is invoked.
+                    return TryGetFunctionArity(value, out var arity) && arity == testParamTypes.Length;
                 }
             }
         }
@@ -5249,7 +5364,16 @@ public static class VmEngine
     /// <summary>
     /// Parses a function type string such as <c>function(item()*, xs:double) as xs:double</c>.
     /// </summary>
-    private static bool TryParseFunctionType(string typeName, out string[] paramTypes, out string returnType)
+    /// <summary>
+    /// Parses a function type string such as <c>function(item()*, xs:double) as xs:double</c>.
+    /// Returns false for malformed types; a typed function test must include the
+    /// <c>as</c> return clause (only <c>function(*)</c> may omit it).
+    /// </summary>
+    /// <param name="typeName">The function type string.</param>
+    /// <param name="paramTypes">The declared parameter sequence types.</param>
+    /// <param name="returnType">The declared return sequence type.</param>
+    /// <returns>True if the type string is well-formed.</returns>
+    public static bool TryParseFunctionType(string typeName, out string[] paramTypes, out string returnType)
     {
         paramTypes = [];
         returnType = "item()*";
@@ -5280,13 +5404,14 @@ public static class VmEngine
         if (after.StartsWith("as ", StringComparison.OrdinalIgnoreCase))
         {
             returnType = after.Substring(3).Trim();
-        }
-        else
-        {
-            returnType = "item()*";
+            return true;
         }
 
-        return true;
+        // function(*) is the only form that may omit the 'as' return clause; a typed
+        // function test without 'as' is malformed (XPST0003).
+        if (paramList == "*" && string.IsNullOrEmpty(after))
+            return true;
+        return false;
     }
 
     /// <summary>
@@ -5345,6 +5470,259 @@ public static class VmEngine
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// XPath 3.1 function conversion rules: a function item is coercible to a function
+    /// type with the same arity. Parameter and return type mismatches surface as dynamic
+    /// errors when the coerced function is invoked, not at coercion time.
+    /// </summary>
+    /// <param name="value">The value to test.</param>
+    /// <param name="functionType">The target function type, e.g. <c>function(xs:string) as xs:string</c>.</param>
+    /// <returns>True if <paramref name="value"/> is a function item coercible to <paramref name="functionType"/>.</returns>
+    public static bool FunctionItemCoercibleTo(XdmValue value, string functionType)
+    {
+        var t = functionType.Trim();
+        while (t.Length > 1 && t[0] == '(' && FindMatchingParen(t, 0) == t.Length - 1)
+            t = t[1..^1].Trim();
+        if (!t.StartsWith("function(", StringComparison.OrdinalIgnoreCase))
+            return false;
+        if (!value.IsFunction)
+            return false;
+        if (!TryParseFunctionType(t, out var paramTypes, out _))
+            throw new InvalidOperationException($"XPST0003: Malformed function type '{functionType}'");
+        if (paramTypes.Length == 1 && paramTypes[0] == "*")
+            return true; // function(*)
+        return TryGetFunctionArity(value, out var arity) && arity == paramTypes.Length;
+    }
+
+    /// <summary>
+    /// Returns the effective arity of a function item (the number of arguments a dynamic
+    /// call must supply). For curried items this is the number of unbound placeholders.
+    /// </summary>
+    private static bool TryGetFunctionArity(XdmValue value, out int arity)
+    {
+        arity = 0;
+        if (!value.IsFunction) return false;
+        switch (value.FunctionValue as FunctionItem)
+        {
+            case InlineFunctionItem inline:
+                arity = inline.Parameters.Count;
+                return true;
+            case NamedFunctionItem named:
+                arity = named.ArityValue;
+                return true;
+            case DelegateFunctionItem del:
+                arity = del.ArityValue;
+                return true;
+            case CurriedFunctionItem curried:
+                arity = curried.FixedArgs.Count(a => a is null);
+                return true;
+            case CoercedFunctionItem coerced:
+                arity = coerced.ParamTypes.Count;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Context-aware function type test (<c>instance of function(...) as ...</c>):
+    /// named function items are matched against their registered declared signature
+    /// using XPath 3.1 function subtyping (contravariant parameters, covariant result);
+    /// all other function items use the static matching rules.
+    /// </summary>
+    private static bool FunctionItemInstanceOf(XdmValue value, string typeName, EvaluationContext context)
+    {
+        if (!TryParseFunctionType(typeName.Trim(), out var testParamTypes, out var testReturnType))
+            return false;
+        if (testParamTypes.Length == 1 && testParamTypes[0] == "*")
+            return value.IsFunction;
+        if (value.FunctionValue is not FunctionItem func)
+            return false;
+
+        if (func is NamedFunctionItem named
+            && context.TryResolveFunction(named.NamespaceUri, named.LocalName, named.ArityValue, out var sig)
+            && sig.ParameterTypeNames != null)
+        {
+            if (sig.ParameterTypeNames.Count != testParamTypes.Length)
+                return false;
+            // Parameter types are contravariant: test param must be a subtype of the actual param.
+            for (int i = 0; i < testParamTypes.Length; i++)
+            {
+                var actualParam = sig.ParameterTypeNames[i] ?? "item()*";
+                if (!IsSequenceTypeSubtype(testParamTypes[i], actualParam))
+                    return false;
+            }
+            // Return type is covariant: actual return must be a subtype of the test return.
+            var actualReturn = sig.ReturnTypeName ?? "item()*";
+            return IsSequenceTypeSubtype(actualReturn, testReturnType);
+        }
+
+        return ValueMatchesType(value, typeName);
+    }
+
+    /// <summary>
+    /// Applies kind-level function conversion to the arguments of a dynamically invoked
+    /// named function: node atomization, untypedAtomic casting, numeric promotion, and
+    /// URI promotion; anything else raises XPTY0004 (higher-order-functions-064).
+    /// </summary>
+    private static XdmValue[] ConvertDynamicCallArgs(FunctionSignature sig, ReadOnlySpan<XdmValue> args)
+    {
+        var converted = new XdmValue[args.Length];
+        for (int i = 0; i < args.Length; i++)
+        {
+            var expected = i < sig.ParameterTypes.Count ? sig.ParameterTypes[i] : XdmValueKind.Sequence;
+            converted[i] = expected is XdmValueKind.Undefined or XdmValueKind.Sequence or XdmValueKind.Node or XdmValueKind.Function
+                or XdmValueKind.Map or XdmValueKind.Array
+                ? args[i]
+                : ConvertArgToKind(args[i], expected);
+        }
+        return converted;
+    }
+
+    private static XdmValue ConvertArgToKind(XdmValue arg, XdmValueKind expected)
+    {
+        if (arg.Kind == expected || arg.IsUndefined)
+            return arg;
+
+        // Function conversion atomizes nodes to xs:untypedAtomic before casting.
+        var atomic = arg.IsNode ? XdmValue.FromString(arg.NodeValue.StringValue, "untypedAtomic") : arg;
+        if (atomic.Kind == expected)
+            return atomic;
+
+        bool untyped = IsUntypedAtomicValue(atomic);
+        switch (expected)
+        {
+            case XdmValueKind.Double:
+                if ((atomic.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float || untyped)
+                    && TryCast(atomic, "xs:double", out var d))
+                    return d;
+                break;
+            case XdmValueKind.Float:
+                if ((atomic.Kind is XdmValueKind.Integer or XdmValueKind.Decimal || untyped)
+                    && TryCast(atomic, "xs:float", out var f))
+                    return f;
+                break;
+            case XdmValueKind.Decimal:
+                if (atomic.Kind == XdmValueKind.Integer)
+                    return atomic; // xs:integer is a subtype of xs:decimal
+                if (untyped && TryCast(atomic, "xs:decimal", out var dec))
+                    return dec;
+                break;
+            case XdmValueKind.Integer:
+                if (untyped && TryCast(atomic, "xs:integer", out var n))
+                    return n;
+                break;
+            case XdmValueKind.String:
+                if (untyped)
+                    return atomic;
+                // URI promotion: xs:anyURI may be promoted to xs:string.
+                if (atomic.Kind == XdmValueKind.Uri && TryCast(atomic, "xs:string", out var s))
+                    return s;
+                break;
+            case XdmValueKind.Boolean:
+                if (untyped && TryCast(atomic, "xs:boolean", out var b))
+                    return b;
+                break;
+            case XdmValueKind.Uri:
+                if (untyped && TryCast(atomic, "xs:anyURI", out var u))
+                    return u;
+                break;
+        }
+
+        throw new InvalidOperationException($"XPTY0004: Cannot convert argument of kind {arg.Kind} to {expected}");
+    }
+
+    private static bool IsUntypedAtomicValue(XdmValue value)
+        => value.Kind == XdmValueKind.String
+           && string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Applies the XPath 3.1 function conversion rules to convert a value to a target
+    /// sequence type: subtype substitution, node atomization, untypedAtomic casting,
+    /// numeric promotion, and URI promotion. Raises XPTY0004 when no rule applies.
+    /// </summary>
+    internal static XdmValue ApplyFunctionConversion(XdmValue value, string targetType)
+    {
+        if (ValueMatchesType(value, targetType))
+            return value;
+
+        var type = targetType.Trim();
+        bool allowsMultiple = type.EndsWith('*') || type.EndsWith('+');
+        bool allowsEmpty = type.EndsWith('?') || type.EndsWith('*');
+        if (type.EndsWith('?') || type.EndsWith('*') || type.EndsWith('+'))
+            type = type[..^1].Trim();
+        while (type.Length > 1 && type[0] == '(' && FindMatchingParen(type, 0) == type.Length - 1)
+            type = type[1..^1].Trim();
+
+        var items = new List<XdmValue>();
+        if (!value.IsUndefined)
+        {
+            if (value.IsSequence && value.SequenceValue != null)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                    items.Add(item);
+            }
+            else
+            {
+                items.Add(value);
+            }
+        }
+
+        if (items.Count == 0)
+        {
+            if (allowsEmpty)
+                return XdmValue.Undefined;
+            throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
+        }
+        if (items.Count > 1 && !allowsMultiple)
+            throw new InvalidOperationException($"XPTY0004: Sequence of more than one item not allowed for type {targetType}");
+
+        var converted = new List<XdmValue>(items.Count);
+        foreach (var item in items)
+        {
+            var atomic = item.IsNode ? XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic") : item;
+            if (ValueMatchesType(atomic, type))
+            {
+                converted.Add(atomic);
+            }
+            else if (IsUntypedAtomicValue(atomic) && TryCast(atomic, type, out var casted))
+            {
+                converted.Add(casted);
+            }
+            else if (TryPromoteNumericOrUri(atomic, type, out var promoted))
+            {
+                converted.Add(promoted);
+            }
+            else
+            {
+                throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
+            }
+        }
+
+        if (converted.Count == 0)
+            return XdmValue.Undefined;
+        if (converted.Count == 1)
+            return converted[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(converted));
+    }
+
+    private static bool TryPromoteNumericOrUri(XdmValue value, string type, out XdmValue result)
+    {
+        result = XdmValue.Undefined;
+        var t = type.Trim().ToLowerInvariant();
+        if (t.StartsWith("xs:"))
+            t = t[3..];
+
+        bool promotable = t switch
+        {
+            "double" => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float,
+            "float" => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal,
+            "string" => value.Kind == XdmValueKind.Uri,
+            _ => false
+        };
+        return promotable && TryCast(value, type, out result);
     }
 
     /// <summary>
@@ -5422,14 +5800,41 @@ public static class VmEngine
     /// </summary>
     private static IEnumerable<string> GetDirectSupertypes(string type)
     {
+        // Named element/attribute tests are subtypes of the generic node-kind tests.
+        if (type.StartsWith("element(") && type != "element()")
+            return ["element()"];
+        if (type.StartsWith("attribute(") && type != "attribute()")
+            return ["attribute()"];
+
         return type switch
         {
+            "byte" => ["short"],
+            "short" => ["int"],
+            "int" => ["long"],
+            "long" => ["integer"],
+            "unsignedbyte" => ["unsignedshort"],
+            "unsignedshort" => ["unsignedint"],
+            "unsignedint" => ["unsignedlong"],
+            "unsignedlong" => ["nonnegativeinteger"],
+            "positiveinteger" => ["nonnegativeinteger"],
+            "nonnegativeinteger" => ["integer"],
+            "negativeinteger" => ["nonpositiveinteger"],
+            "nonpositiveinteger" => ["integer"],
             "integer" => ["decimal"],
             "decimal" => ["numeric"],
             "double" => ["numeric"],
             "float" => ["numeric"],
             "numeric" => ["anyatomictype"],
+            "ncname" => ["name"],
+            "name" => ["token"],
+            "language" => ["token"],
+            "id" => ["ncname"],
+            "idref" => ["ncname"],
+            "entity" => ["ncname"],
+            "token" => ["normalizedstring"],
+            "normalizedstring" => ["string"],
             "string" => ["anyatomictype"],
+            "untypedatomic" => ["anyatomictype"],
             "boolean" => ["anyatomictype"],
             "date" => ["anyatomictype"],
             "time" => ["anyatomictype"],

@@ -4,13 +4,22 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 13 July 2026
+> **Last updated:** 14 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,607 passed / 0 failed / 8,993 skipped (100% of runnable tests)
+> **XSLT baseline:** 5,737 passed / 7 failed / 8,856 skipped (only `fn:transform` tests fail)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-14** — HOF unskip + snapshot cluster: higher-order functions fully enabled; snapshot set 19/0/24; seqtor/static/regex/system-property/current-output-uri sets green.
+  - `fn:snapshot` now matches the spec-equivalent stylesheet implementation (`snapshot-equivalent.xsl`) node-for-node: non-node items pass through unchanged, ancestor grafting preserves parentage, namespace declarations are excluded from attribute comparisons in `fn:deep-equal`, and in-scope namespaces are not redeclared on copied descendants.
+  - Typed templates (`xsl:template/@as`) now collect results through the placeholder sequence accumulator, so node identity and parentage survive template boundaries; `xsl:element` suspends the accumulator while constructing content (fixes `__xdm_seq__` placeholder leak, `namespace-0912`).
+  - Function-body results no longer clone a single text node (`NormalizeSequenceConstructorItems`), preserving text-node parentage through `xsl:function` results (`snapshot-0102a`).
+  - `namespace-node()` is now a valid match pattern (priority −0.5) matching namespace-axis nodes.
+  - `fn:concat` / `fn:compare#2` register their `xs:anyAtomicType?` parameters as pass-through; dynamic-call argument conversion no longer stringifies arbitrary atomics to `xs:string` (`higher-order-functions-064` raises XPTY0004 again).
+  - Other fixes: `fn:min`/`fn:max` return `xs:integer` for all-integer input; `system-property()` expands `Q{uri}local` and reports `xsl:supports-higher-order-functions`; `xsl:function` accepts `cache`; user functions in map/math/array reserved namespaces raise XTSE0080; TVT/§4.3 whitespace handling; missing F&O registrations (`element-with-id#2`, `idref`, `uri-collection`, `xs:error`).
+  - Full W3C suite: **5,737 passed / 7 failed / 8,856 skipped** — remaining failures are the `fn:transform` set (transform-002..009), which awaits `fn:transform` implementation.
 
 - **2026-07-13** — Skip-pool audit: unskipped `position-0103` (xsl:merge) and `position-2201` (xsl:result-document); both pass now that the features they gate on are implemented. Full W3C suite: **5,607 passed / 0 failed / 8,993 skipped**.
 
@@ -498,7 +507,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:mode` | ✅ Working | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks (`XTSE0545`), and `#unnamed` normalization |
 | `xsl:analyze-string` | ✅ Working | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics; `@flags` including multiline (`m`) are passed to regex translation |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
-| `fn:transform()` | ✅ Working | XPath-level XSLT invocation |
+| `fn:transform()` | ⚠️ Partial | Basic XPath-level XSLT invocation works; `transform#1` unregistered, `stylesheet-location` edge cases and several result mismatches remain (W3C transform-002..009) |
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
 | `xsl:use-when` | ✅ Working | Top-level and nested elements evaluated in document order; `true()`/`false()` and static-variable references work; XTSE0090 and XTSE3450 error cases validated. |
 | Shadow attributes (`_{attr}` static AVTs) | ✅ Working | `_version`, `_href`, `_use-when`, `_xpath-default-namespace`, `_static`, `_select`, and other underscore-prefixed XSLT attributes are evaluated at compile time in the current static context and replace their non-underscore counterparts. Shadow attributes on literal result elements are preserved as ordinary attributes. |

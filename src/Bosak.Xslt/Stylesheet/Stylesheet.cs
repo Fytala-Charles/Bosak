@@ -1657,6 +1657,7 @@ public sealed class Stylesheet
                         baseName != "override" &&
                         baseName != "override-extension-function" &&
                         baseName != "new-each-time" &&
+                        baseName != "cache" &&
                         baseName != "identity-sensitive" &&
                         baseName != "expand-text")
                     {
@@ -1666,7 +1667,7 @@ public sealed class Stylesheet
                     if (!attrName.StartsWith("_"))
                     {
                         if (baseName == "override" || baseName == "override-extension-function" ||
-                            baseName == "identity-sensitive" || baseName == "expand-text")
+                            baseName == "cache" || baseName == "identity-sensitive" || baseName == "expand-text")
                         {
                             if (!IsYesNoValue(attr.Value))
                                 throw new InvalidOperationException("XTSE0020");

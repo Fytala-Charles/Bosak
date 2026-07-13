@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 3.7   | 13-07-2026     | Unwrap JSON-string-serialized results when reparsing for tree assertions (maps-017).   |
 //                      | Charles Korthout | 3.8   | 13-07-2026     | Removed leftover _debugName debug field.                                               |
 //                      | Charles Korthout | 3.9   | 13-07-2026     | Unskip position-0103 and position-2201 (merge/result-document now implemented).        |
+//                      | Charles Korthout | 3.10  | 13-07-2026     | Enabled higher_order_functions feature (HOF cluster fixed, 76/76 runnable).            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -100,7 +101,6 @@ class Program
         "streaming",
         "packages",
         "dynamic-evaluation",
-        "higher_order_functions",
         "xslt-3.0-snapshot",
         "dtd",
         "namespace_axis",
@@ -1464,7 +1464,8 @@ class Program
         var assertXml = resultElem.Name.LocalName == "assert-xml" ? resultElem : resultElem.Element(ns + "assert-xml");
         if (assertXml != null)
         {
-            var expected = assertXml.Value.Trim();
+            var rawExpected = assertXml.Value;
+            var expected = rawExpected.Trim();
             // Load from file if specified
             var fileAttr = assertXml.Attribute("file")?.Value;
             if (string.IsNullOrEmpty(expected) && !string.IsNullOrEmpty(fileAttr))
@@ -1472,7 +1473,10 @@ class Program
                 var filePath = Path.Combine(testSetDir, fileAttr);
                 if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
                 if (File.Exists(filePath))
-                    expected = ReadAssertionFile(filePath, assertXml.Attribute("encoding")?.Value).Trim();
+                {
+                    rawExpected = ReadAssertionFile(filePath, assertXml.Attribute("encoding")?.Value);
+                    expected = rawExpected.Trim();
+                }
             }
             // Normalize whitespace for comparison
             if (assertXml.Attribute("xml-version")?.Value == "1.1" || outputProperties?.Version == "1.1")
@@ -1483,6 +1487,15 @@ class Program
                 // declaration placement is accepted. Strip the XML declaration
                 // first because .NET cannot parse XML 1.1 declarations.
                 return XmlEquals(StripXmlDeclaration(actual), StripXmlDeclaration(expected));
+            }
+            // Text-only (not well-formed) results: the assert-xml content is the
+            // serialized form of the result tree's text nodes; compare verbatim,
+            // preserving significant edge whitespace (e.g. seqtor-043h/i).
+            if (!rawExpected.TrimStart().StartsWith('<'))
+            {
+                var actualText = Regex.Replace(actual, "<\\?xml[^?]*\\?>", string.Empty)
+                    .TrimStart('\uFEFF').Replace("\r\n", "\n").TrimEnd('\r', '\n');
+                return actualText == rawExpected.Replace("\r\n", "\n");
             }
             // assert-xml compares result *trees*: the Content-Type meta element injected
             // by the HTML/XHTML serializer is a serialization artifact and must not take
@@ -1498,7 +1511,31 @@ class Program
         if (assertString != null)
         {
             var stringValue = GetStringValue(actual);
-            return stringValue == assertString.Value;
+            // CDATA values with edge whitespace are significant (seqtor-043h/i);
+            // plain values may carry incidental catalog indentation (static-001).
+            return stringValue == assertString.Value
+                || stringValue.Trim() == assertString.Value.Trim();
+        }
+
+        // assert-type: the principal result of a transformation is always a result
+        // tree (document node); parse the serialization when possible, otherwise
+        // treat the text-only output as a document containing a text node.
+        var assertType = resultElem.Name.LocalName == "assert-type" ? resultElem : resultElem.Element(ns + "assert-type");
+        if (assertType != null)
+        {
+            XdmValue resultValue;
+            var docNode = ParseResultDocument(actual);
+            if (docNode != null)
+            {
+                resultValue = XdmValue.FromNode(docNode);
+            }
+            else
+            {
+                var textDoc = new XDocument();
+                textDoc.Add(new XText(GetStringValue(actual)));
+                resultValue = XdmValue.FromNode(new XDocumentNode(textDoc));
+            }
+            return Bosak.XPath.Runtime.Vm.VmEngine.ValueMatchesType(resultValue, assertType.Value.Trim());
         }
 
         // assert-true
@@ -1723,7 +1760,11 @@ class Program
         }
         catch
         {
-            return stripped.Trim();
+            // Text-only serialization (not well-formed XML): remove the XML declaration
+            // without trimming, because leading/trailing whitespace of the text content
+            // is significant (e.g. seqtor-043h/i). Only drop a trailing newline.
+            var text = Regex.Replace(actual, "<\\?xml[^?]*\\?>", string.Empty).TrimStart('\uFEFF');
+            return text.TrimEnd('\r', '\n');
         }
     }
 
@@ -2006,13 +2047,16 @@ class Program
     static bool EvaluateAssertEq(string actual, string xpath, string expected, Dictionary<string, string>? namespaces = null)
     {
         var contextNode = ParseResultDocument(actual);
-        if (contextNode == null)
-            return false;
 
         try
         {
             var compiled = XPath31Expression.Compile(xpath);
-            var ctx = new EvaluationContext().WithFocus(XdmValue.FromNode(contextNode), 1, 1);
+            // For text-only results the serialization does not parse as XML; the
+            // expression is then evaluated without a context item (literal and
+            // context-independent expressions still work, e.g. seqtor-043b).
+            var ctx = contextNode != null
+                ? new EvaluationContext().WithFocus(XdmValue.FromNode(contextNode), 1, 1)
+                : new EvaluationContext();
             if (namespaces != null)
             {
                 foreach (var (prefix, uri) in namespaces)

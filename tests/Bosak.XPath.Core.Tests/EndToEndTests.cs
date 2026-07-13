@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 19-05-2026     | Added tests for Map, Array, and Lookup                                                 |
 //                      | Charles Korthout | 0.5   | 13-06-2026     | Updated FunctionCall_Sum to expect xs:integer for all-integer input                    |
 //                      | Charles Korthout | 0.6   | 25-06-2026     | Use general comparison operators for untyped price nodes (aligns with value-comparison semantics) |
+//                      | Charles Korthout | 0.7   | 14-07-2026     | FunctionCall_Min/Max assert xs:integer (spec-correct after MinMax integer preservation) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -645,15 +646,17 @@ public class EndToEndTests
     [Fact]
     public void FunctionCall_Min()
     {
+        // F&O: fn:min over all-integer input returns xs:integer (least common type).
         var result = Evaluate("min((3, 1, 2))", LoadDocument());
-        Assert.Equal(1m, result.DecimalValue);
+        Assert.Equal(1L, result.IntegerValue);
     }
 
     [Fact]
     public void FunctionCall_Max()
     {
+        // F&O: fn:max over all-integer input returns xs:integer (least common type).
         var result = Evaluate("max((3, 1, 2))", LoadDocument());
-        Assert.Equal(3m, result.DecimalValue);
+        Assert.Equal(3L, result.IntegerValue);
     }
 
     [Fact]
