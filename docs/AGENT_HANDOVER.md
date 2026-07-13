@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-14
-**Commit:** `d7bc84d` (HOF unskip + snapshot cluster)
+**Commit:** `ee4bfb7` (HOF unskip + snapshot cluster)
 **Current focus:** All W3C XSLT 3.0 failures cleared except the `fn:transform` set (transform-002..009). Next: implement `fn:transform` properly, or attack the big skip pools (unicode-90 collation 1,460; error test-set 385; import-schema 185; streaming; packages).
 
 ---
