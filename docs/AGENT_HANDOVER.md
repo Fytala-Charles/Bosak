@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** *(singleton cluster fixes — committing after this handover)*
+**Commit:** `a6b45ce` (singleton cluster fixes — 100% of runnable tests pass)
 **Current focus:** All runnable W3C XSLT 3.0 conformance tests pass (5,605 / 0 failed). Next: optional hardening (e.g. route remaining `@select` compile sites through `CompileXPath`) or new feature work.
 
 ---
