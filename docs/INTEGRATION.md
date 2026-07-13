@@ -6,11 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,581 passed / 24 failed / 8,995 skipped (99.7%)
+> **XSLT baseline:** 5,588 passed / 17 failed / 8,995 skipped (99.7%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-13** — Phase 5i `normalize-unicode` conformance cluster cleared.
+  - `ResultTreeSerializer` now escapes tab, line-feed, and carriage-return characters inside XML attribute values as decimal numeric character references (`&#9;`, `&#10;`, `&#13;`) after `XmlWriter` emits them literally. This aligns the `xml` output method with XSLT/XQuery Serialization 3.1.
+  - Also clears `copy-3801` and `attribute-1101` (attribute-value whitespace regressions).
+  - W3C `normalize-unicode` conformance set: **18 passed / 0 failed / 0 skipped**.
+  - Full W3C suite: **5,588 passed / 17 failed / 8,995 skipped** (99.7%).
+  - Remaining clusters: `output` (4), `bug` (3), `select` (2), `for-each-group` (2), `attribute` (1), and singleton regressions in `arrays`, `backwards`, `include`, `maps`, and `merge`.
 
 - **2026-07-13** — Phase 5h `character-map` conformance cluster cleared.
   - Adaptive output now uses XPath/XQuery string-literal escaping (double quotes) instead of JSON escaping, so character-map replacements in strings and maps are serialized correctly.

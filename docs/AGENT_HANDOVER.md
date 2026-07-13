@@ -1,6 +1,38 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
+**Commit:** *(working tree contains uncommitted normalize-unicode serializer fix)*
+**Current focus:** Continue clearing remaining W3C XSLT 3.0 conformance regressions; next target is the `output` cluster.
+
+---
+
+## This Session Fixes
+
+1. **XML attribute whitespace escaping (`normalize-unicode` cluster)**
+   - `ResultTreeSerializer.EscapeAttributeWhitespace` post-processes `XmlWriter` output to replace literal tab, line-feed, and carriage-return characters inside XML attribute values with decimal numeric character references (`&#9;`, `&#10;`, `&#13;`).
+   - `WriteEscaped` and `WriteXmlEscaped` (raw/fragment path) also escape tab and line-feed when `isAttribute` is true.
+   - Clears the entire W3C `normalize-unicode` conformance set (`normalize-unicode-001`–`005`).
+   - Also clears `copy-3801` and `attribute-1101`, which were failing for the same whitespace-in-attribute reason.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,588 passed / 17 failed / 8,995 skipped** (99.7%; was 5,581/24/8,995).
+- Remaining failures: `output` (4), `bug` (3), `select` (2), `for-each-group` (2), `attribute` (`attribute-0701`), and singleton regressions in `arrays-304`, `backwards-019b`, `include-0101`, `maps-017`, and `merge-021`.
+- Clusters now clear: `character-map`, `mode`, `xml-version`, `normalize-unicode`, `copy`.
+
+## Files Changed
+
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-13
 **Commit:** `1085aab` (working tree contains uncommitted xml-version harness fix)
 **Current focus:** Remaining scattered W3C XSLT 3.0 conformance regressions.
 

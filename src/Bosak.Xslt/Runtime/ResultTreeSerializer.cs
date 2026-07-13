@@ -38,6 +38,7 @@
 //                      | Charles Korthout | 1.15  | 12-07-2026     | Preserve original namespace prefixes via annotation; copy annotations through normalizers.|
 //                      | Charles Korthout | 1.16  | 12-07-2026     | Route prefixed namespace undeclarations to raw XML serializer.                         |
 //                      | Charles Korthout | 1.17  | 12-07-2026     | Adaptive string literals use XPath escaping (double quotes) instead of JSON escapes.   |
+//                      | Charles Korthout | 1.18  | 13-07-2026     | Escape tab and line-feed as numeric references in XML attribute values.                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1216,7 +1217,7 @@ public static class ResultTreeSerializer
         }
 
         xmlWriter.Flush();
-        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(writer.ToString()));
+        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(EscapeAttributeWhitespace(writer.ToString())));
     }
 
     private static string SerializeXElement(XElement element, Stylesheet.OutputProperties props)
@@ -1290,7 +1291,7 @@ public static class ResultTreeSerializer
         }
 
         var result = encoding.GetString(stream.ToArray());
-        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(ConvertHexEntitiesToDecimal(result)));
+        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(ConvertHexEntitiesToDecimal(EscapeAttributeWhitespace(result))));
     }
 
     private static string SerializeXDocument(XDocument document, Stylesheet.OutputProperties props)
@@ -1364,7 +1365,7 @@ public static class ResultTreeSerializer
         var result = encoding.GetString(stream.ToArray());
         // XmlWriter emits hexadecimal character references by default;
         // the XSLT test suite expects decimal references.
-        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(ConvertHexEntitiesToDecimal(result)));
+        return NormalizeSurrogatePairEntities(NormalizeXmlEmptyElements(ConvertHexEntitiesToDecimal(EscapeAttributeWhitespace(result))));
     }
 
     /// <summary>
@@ -1375,6 +1376,88 @@ public static class ResultTreeSerializer
     private static string NormalizeXmlEmptyElements(string xml)
     {
         return xml.Replace(" />", "/>");
+    }
+
+    /// <summary>
+    /// Escapes tab, line-feed and carriage-return characters that appear inside XML
+    /// attribute values, because <see cref="XmlWriter"/> emits them literally while
+    /// XSLT serialization requires numeric character references.
+    /// </summary>
+    private static string EscapeAttributeWhitespace(string xml)
+    {
+        // Fast path: none of the characters that need escaping are present.
+        if (xml.IndexOfAny(new[] { '\t', '\n', '\r' }) < 0)
+            return xml;
+
+        var sb = new StringBuilder(xml.Length);
+        int i = 0;
+        while (i < xml.Length)
+        {
+            char c = xml[i];
+            if (c == '<')
+            {
+                // Enter a tag / processing instruction / DOCTYPE declaration.
+                sb.Append(c);
+                i++;
+                while (i < xml.Length && xml[i] != '>')
+                {
+                    if (xml[i] == '=')
+                    {
+                        sb.Append('=');
+                        i++;
+                        while (i < xml.Length && char.IsWhiteSpace(xml[i]))
+                        {
+                            sb.Append(xml[i]);
+                            i++;
+                        }
+
+                        if (i < xml.Length && (xml[i] == '\"' || xml[i] == '\''))
+                        {
+                            char quote = xml[i];
+                            sb.Append(quote);
+                            i++;
+                            while (i < xml.Length && xml[i] != quote)
+                            {
+                                switch (xml[i])
+                                {
+                                    case '\t':
+                                        sb.Append("&#9;");
+                                        break;
+                                    case '\n':
+                                        sb.Append("&#10;");
+                                        break;
+                                    case '\r':
+                                        sb.Append("&#13;");
+                                        break;
+                                    default:
+                                        sb.Append(xml[i]);
+                                        break;
+                                }
+                                i++;
+                            }
+
+                            if (i < xml.Length)
+                            {
+                                sb.Append(quote);
+                                i++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        sb.Append(xml[i]);
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                sb.Append(c);
+                i++;
+            }
+        }
+
+        return sb.ToString();
     }
 
     private static string ConvertHexEntitiesToDecimal(string xml)
@@ -2127,7 +2210,7 @@ public static class ResultTreeSerializer
             (!inScopeBindings.TryGetValue("", out _) || inScopeBindings[""] != defaultUri))
         {
             writer.Write(" xmlns=\"");
-            WriteXmlEscaped(writer, defaultUri, props, applyCharacterMap: false);
+            WriteXmlEscaped(writer, defaultUri, props, isAttribute: true, applyCharacterMap: false);
             writer.Write('"');
             inScopeBindings[""] = defaultUri;
         }
@@ -2178,7 +2261,7 @@ public static class ResultTreeSerializer
             if (isUri)
                 value = EscapeUriAttribute(value);
             // Character maps do not apply to URI-valued attributes when URI escaping is enabled.
-            WriteXmlEscaped(writer, value, props, applyCharacterMap: !isUri);
+            WriteXmlEscaped(writer, value, props, isAttribute: true, applyCharacterMap: !isUri);
             writer.Write('"');
         }
 
@@ -2269,7 +2352,7 @@ public static class ResultTreeSerializer
         writer.Write('>');
     }
 
-    private static void WriteXmlEscaped(TextWriter writer, string value, Stylesheet.OutputProperties props, bool applyCharacterMap = true)
+    private static void WriteXmlEscaped(TextWriter writer, string value, Stylesheet.OutputProperties props, bool isAttribute = false, bool applyCharacterMap = true)
     {
         var map = applyCharacterMap ? props.CharacterMap : null;
         var form = applyCharacterMap ? TryGetNormalizationForm(props) : null;
@@ -2299,11 +2382,17 @@ public static class ResultTreeSerializer
                     case '"':
                         writer.Write("&quot;");
                         break;
+                    case '\t':
+                        writer.Write(isAttribute ? "&#9;" : rune.ToString());
+                        break;
+                    case '\n':
+                        writer.Write(isAttribute ? "&#10;" : rune.ToString());
+                        break;
                     case '\r':
                         writer.Write("&#13;");
                         break;
                     default:
-                        if (props.Version == "1.1" && MustEscapeInXml11(cp, isAttribute: false))
+                        if (props.Version == "1.1" && MustEscapeInXml11(cp, isAttribute))
                         {
                             writer.Write("&#");
                             writer.Write(cp);
@@ -2350,7 +2439,7 @@ public static class ResultTreeSerializer
                 writer.Write(" xmlns:");
                 writer.Write(prefix);
                 writer.Write("=\"");
-                WriteXmlEscaped(writer, uri, props, applyCharacterMap: false);
+                WriteXmlEscaped(writer, uri, props, isAttribute: true, applyCharacterMap: false);
                 writer.Write('"');
                 inScopeBindings[prefix] = uri;
             }
@@ -2369,7 +2458,7 @@ public static class ResultTreeSerializer
                 writer.Write(" xmlns:");
                 writer.Write(prefix);
                 writer.Write("=\"");
-                WriteXmlEscaped(writer, attr.Value, props, applyCharacterMap: false);
+                WriteXmlEscaped(writer, attr.Value, props, isAttribute: true, applyCharacterMap: false);
                 writer.Write('"');
                 inScopeBindings[prefix] = attr.Value;
             }
@@ -2385,7 +2474,7 @@ public static class ResultTreeSerializer
             writer.Write(" xmlns:");
             writer.Write(prefix);
             writer.Write("=\"");
-            WriteXmlEscaped(writer, uri, props, applyCharacterMap: false);
+            WriteXmlEscaped(writer, uri, props, isAttribute: true, applyCharacterMap: false);
             writer.Write('"');
             inScopeBindings[prefix] = uri;
         }
@@ -3414,6 +3503,12 @@ public static class ResultTreeSerializer
                         break;
                     case '"' when isAttribute:
                         writer.Write("&quot;");
+                        break;
+                    case '\t':
+                        writer.Write(isAttribute ? "&#9;" : rune.ToString());
+                        break;
+                    case '\n':
+                        writer.Write(isAttribute ? "&#10;" : rune.ToString());
                         break;
                     case '\r':
                         writer.Write("&#13;");
