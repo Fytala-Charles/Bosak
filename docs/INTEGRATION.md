@@ -6,11 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,593 passed / 12 failed / 8,995 skipped (99.8%)
+> **XSLT baseline:** 5,595 passed / 10 failed / 8,995 skipped (99.8%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-13** — Phase 5k `for-each-group` conformance cluster cleared.
+  - `FunctionSignature` gains an optional `DynamicImplementation`; `VmEngine.InvokeFunctionItem` uses it for dynamic calls through function items (named references and partial application) while static calls keep using `Implementation`.
+  - `TransformEngine.RegisterGroupingFunctions` now supplies dynamic implementations that raise `XTDE1061` (`current-group`), `XTDE1071` (`current-grouping-key`), `XTDE3480` (`current-merge-group`), and `XTDE3510` (`current-merge-key`), per XSLT 3.0: these context components are not retained in the closure of a function item.
+  - W3C `for-each-group` conformance set: **78 passed / 0 failed / 7 skipped** (plus 114 streaming tests skipped).
+  - Full W3C suite: **5,595 passed / 10 failed / 8,995 skipped** (99.8%).
+  - Remaining failures: `bug` (3), `select` (2), `attribute-0701`, `include-0101`, `maps-017`, `merge-021`, `backwards-019b`.
 
 - **2026-07-13** — Phase 5j `output` conformance cluster cleared.
   - `ResultTreeSerializer.SerializeAsXhtml` now normalizes text/attribute values before CDATA wrapping, so `cdata-section-elements` combined with `normalization-form` split unrepresentable normalized characters correctly (`output-0115d`).

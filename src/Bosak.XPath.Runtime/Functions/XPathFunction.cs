@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-07-2026     | Added DynamicImplementation for context-dependent dynamic calls                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -49,4 +50,12 @@ public sealed class FunctionSignature
     public required IReadOnlyList<XdmValueKind> ParameterTypes { get; init; }
     public required XdmValueKind ReturnType { get; init; }
     public required XPathFunction Implementation { get; init; }
+
+    /// <summary>
+    /// Optional implementation used when the function is invoked through a function item
+    /// (named function reference or partial application) rather than a static call.
+    /// XSLT context-dependent functions such as <c>current-group</c> must raise a dynamic
+    /// error on dynamic invocation even when a static call would succeed.
+    /// </summary>
+    public XPathFunction? DynamicImplementation { get; init; }
 }

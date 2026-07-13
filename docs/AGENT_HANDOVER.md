@@ -1,6 +1,40 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
+**Commit:** *(working tree contains uncommitted for-each-group dynamic-call fix)*
+**Current focus:** Continue clearing the remaining 10 W3C XSLT 3.0 conformance regressions; next recommended targets are the `bug` cluster (3 failures) or the `select` pair.
+
+---
+
+## This Session Fixes
+
+1. **`for-each-group` conformance cluster cleared (dynamic calls on context-dependent functions)**
+   - `FunctionSignature` gains an optional `DynamicImplementation` property; `VmEngine.InvokeFunctionItem` dispatches to it for `NamedFunctionItem` invocations (dynamic calls via function items, including curried/partially applied forms which route through the same path). Static calls (`IrOpCode.Call`) still use `Implementation`.
+   - `TransformEngine.RegisterGroupingFunctions` now registers `DynamicImplementation` handlers that always raise the XSLT 3.0 dynamic errors: `XTDE1061` (`current-group#0`), `XTDE1071` (`current-grouping-key#0`), `XTDE3480` (`current-merge-group#0/#1`), `XTDE3510` (`current-merge-key#0`) — these context components are not retained in the closure of a function item.
+   - Clears `for-each-group-078b` and `for-each-group-079b`.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,595 passed / 10 failed / 8,995 skipped** (99.8%; was 5,593/12/8,995).
+- Remaining failures: `bug` (3), `select` (2), `attribute-0701`, `include-0101`, `maps-017`, `merge-021`, `backwards-019b`.
+- Clusters now clear: `character-map`, `mode`, `xml-version`, `normalize-unicode`, `copy`, `output`, `arrays`, `for-each-group`.
+
+## Files Changed
+
+- `src/Bosak.XPath.Runtime/Functions/XPathFunction.cs` (`FunctionSignature.DynamicImplementation`)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (`InvokeFunctionItem` dispatch)
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs` (`RegisterGroupingFunctions` dynamic handlers)
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `docs/FEATURE_REQUESTS.md`
+- `README.md`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-13
 **Commit:** *(working tree contains uncommitted output-cluster fixes)*
 **Current focus:** Continue clearing the remaining 12 W3C XSLT 3.0 conformance regressions; next recommended targets are the `bug` cluster (3 failures) or the `select`/`for-each-group` pairs.
 

@@ -247,6 +247,7 @@ flowchart TD
 - Instruction pointer walks the bytecode.
 - Axis instructions delegate to the `IXdmNode` provider.
 - Function calls dispatch through a vtable in `EvaluationContext`.
+- `FunctionSignature` may supply a `DynamicImplementation` used only when the function is invoked through a function item (named reference or partial application) rather than a static call. The XSLT layer uses this to raise the spec-mandated dynamic errors (`XTDE1061`/`XTDE1071`/`XTDE3480`/`XTDE3510`) for dynamic calls on `current-group`, `current-grouping-key`, `current-merge-group`, and `current-merge-key`, whose context components are not retained in function-item closures.
 - `EvaluationContext.ImplicitTimezoneOffsetMinutes` supplies the dynamic context's implicit timezone (default UTC) for date/time comparisons and `adjust-*-to-timezone#1`.
 
 **Performance features**:

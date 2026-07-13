@@ -176,6 +176,7 @@
 //                      | Charles Korthout | 6.05  | 12-07-2026     | Preserve original namespace prefixes for LREs; initialize current-output-uri to base.  |
 //                      | Charles Korthout | 6.06  | 12-07-2026     | Fix inherit-namespaces="no" undeclarations; detach root before document unwrap.        |
 //                      | Charles Korthout | 6.07  | 13-07-2026     | Scope raw-item collection to the actual result document; fix typed variable bodies.    |
+//                      | Charles Korthout | 6.08  | 13-07-2026     | Dynamic calls on current-group/current-grouping-key/current-merge-* raise XTDE errors. |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -8747,7 +8748,11 @@ public sealed class TransformEngine
                 if (_currentGroup.Count == 0)
                     return XdmValue.Undefined;
                 return XdmValue.FromSequence(MaterializedSequence.FromList(_currentGroup));
-            }
+            },
+            // A dynamic call on current-group() is a dynamic error (XTDE1061) even when a
+            // group is being processed, because the current group is not part of the closure.
+            DynamicImplementation = (ctx, args) =>
+                throw new InvalidOperationException("XTDE1061: dynamic call on current-group() is not allowed")
         });
 
         _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
@@ -8762,7 +8767,10 @@ public sealed class TransformEngine
                 if (_currentGroupingKey == null)
                     throw new InvalidOperationException("XTDE1071: current-grouping-key() is not defined in the current context");
                 return _currentGroupingKey.Value;
-            }
+            },
+            // A dynamic call on current-grouping-key() is a dynamic error (XTDE1071).
+            DynamicImplementation = (ctx, args) =>
+                throw new InvalidOperationException("XTDE1071: dynamic call on current-grouping-key() is not allowed")
         });
 
         _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
@@ -8779,7 +8787,10 @@ public sealed class TransformEngine
                 if (_currentMergeGroup.Count == 0)
                     return XdmValue.Undefined;
                 return XdmValue.FromSequence(MaterializedSequence.FromList(_currentMergeGroup));
-            }
+            },
+            // A dynamic call on current-merge-group() is a dynamic error (XTDE3480).
+            DynamicImplementation = (ctx, args) =>
+                throw new InvalidOperationException("XTDE3480: dynamic call on current-merge-group() is not allowed")
         });
 
         _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
@@ -8800,7 +8811,10 @@ public sealed class TransformEngine
                 if (!_currentNamedMergeGroups.TryGetValue(name, out var group) || group.Count == 0)
                     return XdmValue.Undefined;
                 return XdmValue.FromSequence(MaterializedSequence.FromList(group));
-            }
+            },
+            // A dynamic call on current-merge-group#1 is a dynamic error (XTDE3480).
+            DynamicImplementation = (ctx, args) =>
+                throw new InvalidOperationException("XTDE3480: dynamic call on current-merge-group() is not allowed")
         });
 
         _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature
@@ -8815,7 +8829,10 @@ public sealed class TransformEngine
                 if (_currentMergeKey == null)
                     throw new InvalidOperationException("XTDE3510: current-merge-key() is not defined in the current context");
                 return _currentMergeKey.Value;
-            }
+            },
+            // A dynamic call on current-merge-key() is a dynamic error (XTDE3510).
+            DynamicImplementation = (ctx, args) =>
+                throw new InvalidOperationException("XTDE3510: dynamic call on current-merge-key() is not allowed")
         });
 
         _context.RegisterFunction(new Bosak.XPath.Runtime.Functions.FunctionSignature

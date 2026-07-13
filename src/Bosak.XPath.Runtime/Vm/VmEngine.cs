@@ -61,6 +61,7 @@
 //                      | Charles Korthout | 2.26  | 26-06-2026     | LookupWildcard flattens map values and array members                                   |
 //                      | Charles Korthout | 2.27  | 26-06-2026     | NormalizeSequence places document-rooted nodes before parentless nodes                 |
 //                      | Charles Korthout | 2.28  | 26-06-2026     | Removed leftover debug output from CompareCore                                         |
+//                      | Charles Korthout | 2.29  | 13-07-2026     | Honor FunctionSignature.DynamicImplementation for dynamic named-function calls         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1908,7 +1909,9 @@ public static class VmEngine
             case NamedFunctionItem named:
                 if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out var sig))
                     throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
-                return sig.Implementation(context, args);
+                // XSLT context-dependent functions (e.g. current-group) supply a separate
+                // implementation for dynamic invocation through a function item.
+                return (sig.DynamicImplementation ?? sig.Implementation)(context, args);
 
             case DelegateFunctionItem del:
                 return del.Implementation(context, args);
