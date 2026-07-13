@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,565 passed / 40 failed / 8,995 skipped (99.3%)
+> **XSLT baseline:** 5,580 passed / 25 failed / 8,995 skipped (99.6%)
 
 ---
 

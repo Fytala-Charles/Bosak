@@ -1,8 +1,8 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** `7b67f27` (working tree contains uncommitted character-map and current-time fixes)
-**Current focus:** Remaining W3C XSLT 3.0 conformance failures in `mode` and `xml-version` clusters, plus scattered regressions.
+**Commit:** `5ec7130` (working tree contains uncommitted mode-cluster harness fixes)
+**Current focus:** Remaining W3C XSLT 3.0 conformance failures in `xml-version` cluster and scattered regressions.
 
 ---
 
@@ -19,11 +19,16 @@
 3. **Conformance harness cleanup**
    - Removed temporary `character-map-026` debug output from `Program.cs`.
 
+4. **Conformance harness: initial-mode and text-only assertions**
+   - Initial-mode tests now return a raw XDM result instead of a serialized string, so XPath assertions can evaluate text-only output correctly.
+   - `ParseResultDocument` strips an XML declaration before wrapping non-well-formed text output in the synthetic `__xdm_doc__` wrapper.
+   - Clears the entire W3C `mode` cluster (mode-1405, 1407, 1409, 1427, 1429, 1440–1443) and several other text-only-assertion failures.
+
 ## Results
 
 - Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
-- Full W3C XSLT 3.0 suite: **5,565 passed / 40 failed / 8,995 skipped** (99.3%; was 5,561/44/8,995).
-- Remaining failures: `mode` (9), `xml-version` (7), and scattered regressions in `attribute`, `backwards`, `bug`, `copy`, `docbook`, `for-each-group`, `maps`, `merge`, `message`, `normalize-unicode`, `select`, `whitespace`, and `xsl-document`. The `character-map` cluster is now clear.
+- Full W3C XSLT 3.0 suite: **5,580 passed / 25 failed / 8,995 skipped** (99.6%; was 5,565/40/8,995).
+- Remaining failures: `xml-version` (7) and scattered regressions in `attribute`, `backwards`, `bug`, `copy`, `docbook`, `for-each-group`, `maps`, `merge`, `message`, `normalize-unicode`, `select`, `whitespace`, and `xsl-document`. The `character-map` and `mode` clusters are now clear.
 
 ## Files Changed
 

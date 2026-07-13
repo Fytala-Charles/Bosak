@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-13 (`character-map` cluster cleared; adaptive string-literal escaping fixed)
+> **Living Registry** — Last updated: 2026-07-13 (`mode` cluster cleared; initial-mode/text-only assertion handling fixed)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

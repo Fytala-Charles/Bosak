@@ -41,6 +41,7 @@
 //                      | Charles Korthout | 2.9   | 11-07-2026     | Recursively evaluate nested <all-of> / <any-of> result assertions.                     |
 //                      | Charles Korthout | 3.0   | 11-07-2026     | Strip XML declaration in assert-string-value for atomic-only results                   |
 //                      | Charles Korthout | 3.1   | 12-07-2026     | Detect serialization errors for raw XDM results and assert-serialization-error.        |
+//                      | Charles Korthout | 3.2   | 13-07-2026     | Use raw XDM results for initial-mode tests so text-only output can be asserted.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -611,7 +612,9 @@ class Program
             // Check for initial-function entry point
             var initialFunctionElem = testElem.Element(ns + "initial-function");
             bool isInitialFunction = initialFunctionElem != null;
-            bool rawOutput = (isInitialFunction || initialTemplateElem != null || hasImplicitInitialTemplate) && testElem.Element(ns + "output")?.Attribute("tree")?.Value == "no";
+            bool rawOutput = isInitialFunction ||
+                initialModeElem != null ||
+                ((initialTemplateElem != null || hasImplicitInitialTemplate) && testElem.Element(ns + "output")?.Attribute("tree")?.Value == "no");
 
             string resultXml = string.Empty;
             XdmValue? resultValue = null;
@@ -645,7 +648,10 @@ class Program
             }
             else if (sourceNode != null)
             {
-                resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode, baseOutputUri);
+                if (rawOutput)
+                    resultValue = executable.Transform(sourceNode, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                else
+                    resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode, baseOutputUri);
             }
             else if (!string.IsNullOrEmpty(initialTemplate) || hasImplicitInitialTemplate)
             {
@@ -1734,7 +1740,10 @@ class Program
             // wrapped children as document-level nodes for XPath assertions.
             try
             {
-                var wrapped = $"<__xdm_doc__>{actual}</__xdm_doc__>";
+                // Strip any XML declaration so text-only results can be wrapped
+                // and parsed as a synthetic document fragment.
+                var stripped = System.Text.RegularExpressions.Regex.Replace(actual, @"^\s*<\?xml.*?\?>", string.Empty);
+                var wrapped = $"<__xdm_doc__>{stripped}</__xdm_doc__>";
                 var doc = Xml11Loader.ParseXml11(wrapped, LoadOptions.PreserveWhitespace);
                 return new XDocumentNode(doc);
             }
