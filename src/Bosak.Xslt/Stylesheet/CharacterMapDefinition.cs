@@ -35,10 +35,10 @@ public sealed class CharacterMapDefinition
     public IReadOnlyList<string> UseCharacterMaps { get; }
 
     /// <summary>
-    /// The explicit character-to-string mappings declared by <c>xsl:output-character</c>
+    /// The explicit Unicode codepoint-to-string mappings declared by <c>xsl:output-character</c>
     /// children, in declaration order.
     /// </summary>
-    public IReadOnlyList<(char Character, string String)> Mappings { get; }
+    public IReadOnlyList<(int Codepoint, string String)> Mappings { get; }
 
     /// <summary>
     /// Parses an <c>xsl:character-map</c> element into a <see cref="CharacterMapDefinition"/>.
@@ -61,22 +61,42 @@ public sealed class CharacterMapDefinition
             }
         }
 
-        var mappings = new List<(char, string)>();
+        var mappings = new List<(int, string)>();
         foreach (var child in element.Elements(XName.Get("output-character", Stylesheet.XslNamespace)))
         {
+            foreach (var attr in child.Attributes())
+            {
+                var attrName = attr.Name.LocalName;
+                if (attrName != "character" && attrName != "string" && string.IsNullOrEmpty(attr.Name.NamespaceName))
+                    throw new InvalidOperationException("XTSE0010: Unrecognized attribute on xsl:output-character.");
+            }
+
             var charAttr = child.Attribute("character")?.Value;
             var stringAttr = child.Attribute("string")?.Value;
             if (string.IsNullOrEmpty(charAttr))
-                continue;
+                throw new InvalidOperationException("XTSE0010: xsl:output-character must have a character attribute.");
 
-            var ch = charAttr[0];
-            mappings.Add((ch, stringAttr ?? string.Empty));
+            var codepoint = ParseCodepoint(charAttr);
+            mappings.Add((codepoint, stringAttr ?? string.Empty));
         }
 
         return new CharacterMapDefinition(expandedName, useMaps, mappings);
     }
 
-    private CharacterMapDefinition(string expandedName, IReadOnlyList<string> useCharacterMaps, IReadOnlyList<(char, string)> mappings)
+    private static int ParseCodepoint(string value)
+    {
+        if (value.Length == 0)
+            throw new InvalidOperationException("XTSE0010: xsl:output-character character attribute is empty.");
+        if (value.Length == 1)
+            return value[0];
+        if (value.Length == 2 && char.IsHighSurrogate(value[0]) && char.IsLowSurrogate(value[1]))
+            return char.ConvertToUtf32(value[0], value[1]);
+        if (System.Text.Rune.TryGetRuneAt(value, 0, out var rune))
+            return rune.Value;
+        throw new InvalidOperationException("XTSE0010: xsl:output-character character attribute is not a single character.");
+    }
+
+    private CharacterMapDefinition(string expandedName, IReadOnlyList<string> useCharacterMaps, IReadOnlyList<(int, string)> mappings)
     {
         ExpandedName = expandedName;
         UseCharacterMaps = useCharacterMaps;

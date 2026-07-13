@@ -899,6 +899,8 @@ public sealed class Stylesheet
         {
             if (!UseWhen(cm)) continue;
             var def = CharacterMapDefinition.FromElement(cm, this);
+            if (_characterMaps.ContainsKey(def.ExpandedName))
+                throw new InvalidOperationException($"XTSE1580: Duplicate character-map name '{def.ExpandedName}'.");
             _characterMaps[def.ExpandedName] = def;
         }
 
@@ -2291,60 +2293,69 @@ public sealed class Stylesheet
     }
 
     /// <summary>
-    /// Resolves a list of character-map names into an effective character-to-string map.
-    /// The maps are processed in the order supplied; for duplicate characters, the first
+    /// Resolves a list of character-map names into an effective Unicode codepoint-to-string map.
+    /// The maps are processed in the order supplied; for duplicate characters, the last
     /// map in the list wins. Within a single character map, explicit
     /// <c>xsl:output-character</c> mappings override mappings inherited via
     /// <c>use-character-maps</c>.
     /// </summary>
-    public Dictionary<char, string> ResolveCharacterMap(IEnumerable<string> expandedNames)
+    public Dictionary<int, string> ResolveCharacterMap(IEnumerable<string> expandedNames)
     {
-        var result = new Dictionary<char, string>();
-        var expanded = new Dictionary<string, Dictionary<char, string>>();
+        var result = new Dictionary<int, string>();
+        var expanded = new Dictionary<string, Dictionary<int, string>>();
         foreach (var name in expandedNames)
         {
-            var map = ExpandCharacterMap(name, expanded);
-            foreach (var (ch, str) in map)
+            var map = ExpandCharacterMap(name, expanded, new HashSet<string>());
+            foreach (var (cp, str) in map)
             {
                 // Later maps in the supplied list override earlier ones; explicit mappings
                 // within a single map already override its used maps in ExpandCharacterMap.
-                result[ch] = str;
+                result[cp] = str;
             }
         }
         return result;
     }
 
-    private Dictionary<char, string> ExpandCharacterMap(string expandedName, Dictionary<string, Dictionary<char, string>> expanded)
+    private Dictionary<int, string> ExpandCharacterMap(string expandedName, Dictionary<string, Dictionary<int, string>> expanded, HashSet<string> visiting)
     {
         if (string.IsNullOrEmpty(expandedName))
-            return new Dictionary<char, string>();
+            return new Dictionary<int, string>();
+
+        if (!visiting.Add(expandedName))
+            throw new InvalidOperationException($"XTSE1600: Circular reference in character-map '{expandedName}'.");
 
         if (expanded.TryGetValue(expandedName, out var cached))
-            return cached;
-
-        var result = new Dictionary<char, string>();
-        var def = GetCharacterMap(expandedName);
-        if (def == null)
         {
+            visiting.Remove(expandedName);
+            return cached;
+        }
+
+        try
+        {
+            var result = new Dictionary<int, string>();
+            var def = GetCharacterMap(expandedName);
+            if (def == null)
+                throw new InvalidOperationException($"XTSE1590: Unresolved character-map reference '{expandedName}'.");
+
             expanded[expandedName] = result;
+
+            foreach (var used in def.UseCharacterMaps)
+            {
+                var usedMap = ExpandCharacterMap(used, expanded, visiting);
+                foreach (var (cp, str) in usedMap)
+                    result[cp] = str;
+            }
+
+            // Explicit mappings in this character map override its used maps.
+            foreach (var (cp, str) in def.Mappings)
+                result[cp] = str;
+
             return result;
         }
-
-        // Place an empty entry before recursing so cycles terminate without revisiting.
-        expanded[expandedName] = result;
-
-        foreach (var used in def.UseCharacterMaps)
+        finally
         {
-            var usedMap = ExpandCharacterMap(used, expanded);
-            foreach (var (ch, str) in usedMap)
-                result[ch] = str;
+            visiting.Remove(expandedName);
         }
-
-        // Explicit mappings in this character map override its used maps.
-        foreach (var (ch, str) in def.Mappings)
-            result[ch] = str;
-
-        return result;
     }
 
     /// <summary>Top-level xsl:param elements defined in this stylesheet.</summary>

@@ -1,8 +1,44 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-13
+**Commit:** `7b67f27` (working tree contains uncommitted character-map and current-time fixes)
+**Current focus:** Remaining W3C XSLT 3.0 conformance failures in `mode` and `xml-version` clusters, plus scattered regressions.
+
+---
+
+## This Session Fixes
+
+1. **Adaptive output method string escaping**
+   - `ResultTreeSerializer.EscapeAdaptiveString` now uses XPath/XQuery string-literal escaping: only the delimiting double quote is escaped (by doubling); backslash and control characters are no longer JSON-escaped.
+   - Clears `character-map-026` (adaptive output with character maps); the entire `character-map` cluster now passes.
+
+2. **`fn:current-time()` DateTimeOffset underflow**
+   - `FunctionLibrary.CurrentTime` now attempts to build the time value on day 1 of year 1 and falls back to day 2 when a positive timezone offset would push the UTC instant before `DateTimeOffset.MinValue`.
+   - `FunctionLibraryTests.CurrentTime_ReturnsTimeValue` accepts day 1 or 2 in recognition of the .NET limitation.
+
+3. **Conformance harness cleanup**
+   - Removed temporary `character-map-026` debug output from `Program.cs`.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,565 passed / 40 failed / 8,995 skipped** (99.3%; was 5,561/44/8,995).
+- Remaining failures: `mode` (9), `xml-version` (7), and scattered regressions in `attribute`, `backwards`, `bug`, `copy`, `docbook`, `for-each-group`, `maps`, `merge`, `message`, `normalize-unicode`, `select`, `whitespace`, and `xsl-document`. The `character-map` cluster is now clear.
+
+## Files Changed
+
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`
+- `tests/Bosak.Xslt.Conformance/Program.cs`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-12
-**Commit:** `bd9f8bd` (working tree contains uncommitted serialization fixes)
-**Current focus:** Remaining W3C XSLT 3.0 serialization conformance failures and `fn:current-output-uri()`.
+**Commit:** `7b67f27` (working tree contains uncommitted namespace-inheritance fixes)
+**Current focus:** Remaining W3C XSLT 3.0 conformance failures in `character-map`, `mode`, and `xml-version` clusters.
 
 ---
 
@@ -48,11 +84,17 @@
    - Functions, variables, parameters, sort keys, merge keys, and patterns continue to run in temporary output state (empty sequence).
    - Clears `current-output-uri-002`, `-004`, `-008`, `-010`, and `-014`.
 
+10. **`inherit-namespaces="no"` for `xsl:element` and literal result elements**
+    - `FinalizeNamespaceInheritance` now attaches `PrefixedNamespaceUndeclarations` annotations to the children of `NamespaceInheritanceBarrier` elements.
+    - `TransformEngine.Transform` detaches the single root element from the synthetic `__xdm_doc__` wrapper before wrapping it in an `XDocument`, so namespace annotations are preserved instead of cloned away.
+    - `ResultTreeSerializer.SerializeXmlFragment` routes trees with prefixed namespace undeclarations to the raw serializer.
+    - Clears `namespace-2603` through `namespace-2632`; the entire `namespace` cluster is now green.
+
 ## Results
 
 - Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
-- Full W3C XSLT 3.0 suite: **5,544 passed / 61 failed / 8,995 skipped** (98.9%; was 5,526/79/8,995).
-- Remaining failure clusters: `mode`, `namespace`, `xml-version`, `character-map` (a few each); `output` and `current-output-uri` clusters are now clear.
+- Full W3C XSLT 3.0 suite: **5,561 passed / 44 failed / 8,995 skipped** (99.2%; was 5,544/61/8,995).
+- Remaining failures: `character-map` (9), `mode` (9), and `xml-version-023`; scattered regressions in `attribute`, `backwards`, `bug`, `copy`, `docbook`, `for-each-group`, `include`, `maps`, `merge`, `message`, `normalize-unicode`, `select`, `whitespace`, and `xsl-document`. `output`, `current-output-uri`, and `namespace` clusters are now clear.
 
 ## Files Changed
 

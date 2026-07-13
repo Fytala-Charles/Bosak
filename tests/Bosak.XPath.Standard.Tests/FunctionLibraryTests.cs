@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.2   | 19-05-2026     | Added fn:trace, fn:boolean, cardinality, fn:base-uri, fn:document-uri tests            |
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added JSON function tests (parse-json, json-to-xml, xml-to-json, round-trip)            |
 //                      | Charles Korthout | 1.4   | 27-05-2026     | Updated tokenize tests for spec-correct leading/trailing empty string preservation       |
+//                      | Charles Korthout | 1.5   | 13-07-2026     | Allow current-time test day 1 or 2 when positive offset underflows DateTimeOffset.       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -593,7 +594,9 @@ public class FunctionLibraryTests
         var now = DateTimeOffset.Now;
         Assert.Equal(1, dto.Year);
         Assert.Equal(1, dto.Month);
-        Assert.Equal(1, dto.Day);
+        // DateTimeOffset cannot represent year 0; with a positive offset the UTC instant may
+        // underflow, so the implementation falls back to day 2 while preserving the time.
+        Assert.True(dto.Day == 1 || dto.Day == 2, $"Expected day 1 or 2, got {dto.Day}");
         Assert.True(Math.Abs((now.TimeOfDay - dto.TimeOfDay).TotalMinutes) < 1);
     }
 

@@ -4,13 +4,27 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 12 July 2026
+> **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,544 passed / 61 failed / 8,995 skipped (98.9%)
+> **XSLT baseline:** 5,565 passed / 40 failed / 8,995 skipped (99.3%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-13** — Phase 5h `character-map` conformance cluster cleared.
+  - Adaptive output now uses XPath/XQuery string-literal escaping (double quotes) instead of JSON escaping, so character-map replacements in strings and maps are serialized correctly.
+  - `fn:current-time()` now keeps the date part on day 1 of year 1 when possible and falls back to day 2 only when a positive timezone offset would underflow `DateTimeOffset.MinValue`.
+  - W3C `character-map` conformance set: **29 passed / 0 failed / 0 skipped**.
+  - Full W3C suite: **5,565 passed / 40 failed / 8,995 skipped** (99.3%).
+  - Remaining clusters: `mode` (9), `xml-version` (7), and scattered regressions.
+
+- **2026-07-12** — Phase 5g `inherit-namespaces="no"` conformance fix; the W3C `namespace` cluster is now clear.
+  - `TransformEngine.FinalizeNamespaceInheritance` attaches `PrefixedNamespaceUndeclarations` to children of `NamespaceInheritanceBarrier` elements so `xmlns:prefix=""` is emitted where required.
+  - The synthetic `__xdm_doc__` root is detached before being wrapped in the final `XDocument`, preserving namespace annotations instead of cloning them away.
+  - `ResultTreeSerializer` routes trees with prefixed namespace undeclarations to the raw XML serializer.
+  - W3C `namespace` conformance set: **203 passed / 0 failed / 21 skipped**.
+  - Full W3C suite: **5,561 passed / 44 failed / 8,995 skipped** (99.2%).
 
 - **2026-07-12** — Phase 5f final serialization clusters cleared.
   - `fn:current-output-uri()` now returns the base output URI at the top level and remains empty in temporary output state (functions, variables, sort/merge keys, patterns), clearing the `current-output-uri` cluster.

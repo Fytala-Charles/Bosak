@@ -86,6 +86,8 @@
 //                      | Charles Korthout | 5.20  | 07-07-2026     | fn:subsequence uses BC numeric coercion for start/length; fixes xpath-compat-0401     |
 //                      | Charles Korthout | 5.21  | 08-07-2026     | unparsed-text encoding detection and HTTP fetch; distinct-values NaN; BC string coercion |
 //                      | Charles Korthout | 5.22  | 26-06-2026     | Added xsl:accept, accumulator, accumulator-rule, fork, next-iteration, override, use-package |
+//                      | Charles Korthout | 5.23  | 12-07-2026     | Fix fn:current-time DateTimeOffset underflow near midnight with positive timezone offsets. |
+//                      | Charles Korthout | 5.24  | 13-07-2026     | Fallback to day 2 for current-time when positive offset pushes UTC before year 1.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -8666,7 +8668,19 @@ public static class FunctionLibrary
     private static XdmValue CurrentTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var now = ctx.CurrentDateTimeSnapshot;
-        return XdmValue.FromTime(new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Offset), hasTimezone: true);
+        // Keep the date part at year 1 when possible. For positive timezone offsets where the
+        // local time is earlier than the offset, the UTC instant would fall before
+        // DateTimeOffset.MinValue; fall back to day 2 in that case.
+        DateTimeOffset time;
+        try
+        {
+            time = new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Offset);
+        }
+        catch (ArgumentException)
+        {
+            time = new DateTimeOffset(1, 1, 2, now.Hour, now.Minute, now.Second, now.Offset);
+        }
+        return XdmValue.FromTime(time, hasTimezone: true);
     }
 
     private static XdmValue AdjustDateToTimezone_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

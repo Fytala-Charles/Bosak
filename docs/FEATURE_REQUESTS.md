@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-11 (Phase 5 JSON output method: method="json", json-node-output-method, allow-duplicate-names, escape-solidus, parameter-document)    
+> **Living Registry** — Last updated: 2026-07-13 (`character-map` cluster cleared; adaptive string-literal escaping fixed)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -142,6 +142,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-035 | *(internal)* | XSLT `number` cluster — German/Italian word and ordinal formatting | Required for `number-0802/0812/0813/0828/0829/2506` and `format-integer-065/066`: German cardinal/ordinal words (`drei`, `dritte`, `zweihunderteinste`), Italian masculine/feminine ordinals (`primo`/`prima`), and CLDR `%spellout-ordinal` scheme support | **Implemented** | TBD | Charles Korthout | 2026-06-28 |
 | REQ-036 | *(internal)* | XSLT `method="json"` output serialization | Required for W3C `output-0701` through `output-0719`: JSON output method, node serialization via `json-node-output-method`, duplicate-key control, solidus escaping, `item-separator` for text output, `SENR0001` validation, and `xsl:output parameter-document` defaults | **Implemented** | Phase 5 | Charles Korthout | 2026-07-11 |
 | REQ-037 | *(internal)* | XSLT `xsl:result-document` serialization completeness | Required for W3C `result-document` cluster: AVT evaluation on all serialization attributes, case-sensitive yes/no values, `SEPM0009` scoping, `build-tree="no"`, and raw-item collection for `method="json"`/`adaptive` | **Implemented** | Phase 5 | Charles Korthout | 2026-07-11 |
+| REQ-038 | *(internal)* | XSLT `namespace` cluster — `inherit-namespaces="no"` | Required for W3C `namespace-2603` through `namespace-2632`: prefixed namespace undeclarations for children of `xsl:element`/`xsl:copy`/LRE barriers, and preservation of namespace annotations when unwrapping the synthetic document root | **Implemented** | Phase 5 | Charles Korthout | 2026-07-12 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1655,6 +1656,43 @@ After clearing the principal `output` cluster, the W3C `result-document` cluster
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-07-11 | Kimi | Implemented | AVT evaluation, value normalization, SEPM0009 scoping, and raw-item collection clear 18 result-document failures and push the full suite to 98.2%. |
+
+---
+
+### REQ-038: XSLT `namespace` cluster — `inherit-namespaces="no"`
+
+**Requesting Application:** *(internal — conformance)*  
+**Submitted:** 2026-07-12  
+**Status:** Implemented
+
+#### Problem Statement
+After clearing the principal `output` and `current-output-uri` clusters, the W3C `namespace` cluster still had 10 failures (`namespace-2603` through `namespace-2632`). The failures were caused by `inherit-namespaces="no"` on `xsl:element`, `xsl:copy`, and literal result elements not emitting the required `xmlns:prefix=""` undeclarations for children that inherited prefixed namespaces. In addition, the synthetic `__xdm_doc__` wrapper was unwrapped by creating a new `XDocument` from its single child, which cloned the element and silently dropped all namespace annotations.
+
+#### Proposed Solution
+1. In `TransformEngine.FinalizeNamespaceInheritance`, detect `NamespaceInheritanceBarrier` annotations and attach a `PrefixedNamespaceUndeclarations` annotation to every child element listing the non-empty prefixed bindings that would otherwise be inherited.
+2. In `TransformEngine.Transform`, detach the single root element from the synthetic wrapper before constructing the final `XDocument`, so user annotations are moved rather than cloned away.
+3. In `ResultTreeSerializer.SerializeXmlFragment`, route any tree carrying `PrefixedNamespaceUndeclarations` annotations to the raw XML 1.1 serializer, because `XmlWriter` cannot represent `xmlns:prefix=""`.
+
+#### Acceptance Criteria
+- [x] `namespace-2603` passes: `xsl:element` with `inherit-namespaces="no"` emits `xmlns:n=""` for a child that would otherwise inherit `n`.
+- [x] `namespace-2604` through `namespace-2632` pass: coverage for `xsl:copy`, literal result elements, nested barriers, and explicit `inherit-namespaces="yes"` redeclarations.
+- [x] The entire W3C `namespace` conformance set reports 0 failures.
+- [x] The `output-0138` prefix-preservation path continues to pass.
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine.FinalizeNamespaceInheritance` and `Transform` unwrap logic. |
+| Standard | None | |
+| XSLT | Modified | `xsl:element`, `xsl:copy`, and literal result elements now honor `inherit-namespaces="no"` for prefixed namespaces. |
+| API | None | |
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-12 | Kimi | Implemented | Barrier-attached undeclarations plus raw-serializer routing clear the remaining namespace failures without regressing output tests. |
 
 ---
 

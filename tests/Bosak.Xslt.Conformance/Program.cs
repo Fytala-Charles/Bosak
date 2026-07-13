@@ -79,6 +79,7 @@ class Program
     static int Failed = 0;
     static int Skipped = 0;
     static string _debugName = "";
+    static string? _testNameFilter = null;
 
     static readonly HashSet<string> SupportedSpecs = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -182,6 +183,7 @@ class Program
     {
         string catalogPath = args.Length > 0 ? args[0] : "tests/xslt30-test/catalog.xml";
         string? filter = args.Length > 1 ? args[1] : null;
+        _testNameFilter = args.Length > 2 ? args[2] : null;
 
         if (!File.Exists(catalogPath))
         {
@@ -294,6 +296,9 @@ class Program
     {
         var name = testCase.Attribute("name")?.Value ?? "unknown";
         _debugName = name;
+
+        if (_testNameFilter != null && !name.Contains(_testNameFilter, StringComparison.OrdinalIgnoreCase))
+            return TestResult.Skip;
 
         if (SkipTests.Contains(name))
         {
@@ -1306,7 +1311,8 @@ class Program
                 .Replace("\r\n", "\n");
             var pattern = serializationMatches.Value;
             var flags = serializationMatches.Attribute("flags")?.Value;
-            return Regex.IsMatch(serialized, pattern, ParseRegexFlags(flags));
+            var ok = Regex.IsMatch(serialized, pattern, ParseRegexFlags(flags));
+            return ok;
         }
 
         // assert-serialization-error: serialize the value and check the error code.
@@ -1540,7 +1546,8 @@ class Program
         {
             var pattern = serializationMatches.Value;
             var flags = serializationMatches.Attribute("flags")?.Value;
-            return Regex.IsMatch(actual, pattern, ParseRegexFlags(flags));
+            var ok = Regex.IsMatch(actual, pattern, ParseRegexFlags(flags));
+            return ok;
         }
 
         // error expected

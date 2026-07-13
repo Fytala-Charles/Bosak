@@ -117,9 +117,10 @@ public sealed class OutputProperties
 
     /// <summary>
     /// Resolved effective character map for this output definition. Populated by the
-    /// stylesheet when the output properties are prepared for serialization.
+    /// stylesheet when the output properties are prepared for serialization. Keys are
+    /// Unicode codepoints.
     /// </summary>
-    public Dictionary<char, string>? CharacterMap { get; set; }
+    public Dictionary<int, string>? CharacterMap { get; set; }
 
     // Internal flags tracking which properties were explicitly set on the parsed xsl:output element.
     internal bool MethodSpecified { get; set; }
@@ -386,7 +387,7 @@ public sealed class OutputProperties
             var localName = child.Name.LocalName;
             if (localName == "use-character-maps")
             {
-                var map = new Dictionary<char, string>();
+                var map = new Dictionary<int, string>();
                 foreach (var cm in child.Elements())
                 {
                     if (cm.Name.LocalName != "character-map")
@@ -395,8 +396,8 @@ public sealed class OutputProperties
                     var mapString = cm.Attribute("map-string")?.Value ?? string.Empty;
                     if (!string.IsNullOrEmpty(charAttr))
                     {
-                        var ch = charAttr[0];
-                        map[ch] = mapString;
+                        var cp = ParseCharacterMapCodepoint(charAttr);
+                        map[cp] = mapString;
                     }
                 }
                 if (map.Count > 0)
@@ -605,7 +606,7 @@ public sealed class OutputProperties
 
         if (source.CharacterMapSpecified && source.CharacterMap != null)
         {
-            var merged = target.CharacterMap != null ? new Dictionary<char, string>(target.CharacterMap) : new Dictionary<char, string>();
+            var merged = target.CharacterMap != null ? new Dictionary<int, string>(target.CharacterMap) : new Dictionary<int, string>();
             foreach (var kvp in source.CharacterMap)
                 merged[kvp.Key] = kvp.Value;
             target.CharacterMap = merged;
@@ -670,6 +671,19 @@ public sealed class OutputProperties
             CharacterMapSpecified = CharacterMapSpecified
         };
         return clone;
+    }
+
+    private static int ParseCharacterMapCodepoint(string value)
+    {
+        if (value.Length == 0)
+            throw new InvalidOperationException("XTSE0010: character-map character attribute is empty.");
+        if (value.Length == 1)
+            return value[0];
+        if (value.Length == 2 && char.IsHighSurrogate(value[0]) && char.IsLowSurrogate(value[1]))
+            return char.ConvertToUtf32(value[0], value[1]);
+        if (System.Text.Rune.TryGetRuneAt(value, 0, out var rune))
+            return rune.Value;
+        throw new InvalidOperationException("XTSE0010: character-map character attribute is not a single character.");
     }
 
     private static bool ParseYesNo(string value, bool defaultValue)

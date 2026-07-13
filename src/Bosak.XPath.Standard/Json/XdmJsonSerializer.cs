@@ -43,9 +43,9 @@ public sealed class XdmJsonOptions
 
     /// <summary>
     /// Optional character map applied while serializing JSON string values.
-    /// Mapped characters are replaced before JSON escaping is applied.
+    /// Mapped characters are replaced before JSON escaping is applied. Keys are Unicode codepoints.
     /// </summary>
-    public Dictionary<char, string>? CharacterMap { get; set; }
+    public Dictionary<int, string>? CharacterMap { get; set; }
 }
 
 /// <summary>
@@ -238,20 +238,21 @@ public static class XdmJsonSerializer
     /// Encodes a string as a JSON string literal, applying any character map before
     /// escaping quotes, backslashes, control characters and (optionally) forward slashes.
     /// </summary>
-    public static string EncodeJsonString(string value, bool escapeSolidus, Dictionary<char, string>? characterMap)
+    public static string EncodeJsonString(string value, bool escapeSolidus, Dictionary<int, string>? characterMap)
     {
         var sb = new StringBuilder();
         sb.Append('"');
-        foreach (var ch in value)
+        foreach (var rune in value.EnumerateRunes())
         {
             // Character maps are applied before JSON escaping. The replacement string is
             // output as-is and is not itself JSON-escaped or subject to further mapping.
-            if (characterMap != null && characterMap.Count > 0 && characterMap.TryGetValue(ch, out var replacement))
+            if (characterMap != null && characterMap.Count > 0 && characterMap.TryGetValue(rune.Value, out var replacement))
             {
                 sb.Append(replacement);
                 continue;
             }
 
+            var ch = rune.Value;
             switch (ch)
             {
                 case '"':
@@ -279,13 +280,13 @@ public static class XdmJsonSerializer
                     sb.Append("\\t");
                     break;
                 default:
-                    if (char.IsControl(ch))
+                    if (ch <= char.MaxValue && char.IsControl((char)ch))
                     {
-                        sb.Append($"\\u{(int)ch:X4}");
+                        sb.Append($"\\u{ch:X4}");
                     }
                     else
                     {
-                        sb.Append(ch);
+                        sb.Append(rune.ToString());
                     }
                     break;
             }

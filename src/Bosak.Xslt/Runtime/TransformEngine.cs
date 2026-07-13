@@ -174,6 +174,7 @@
 //                      | Charles Korthout | 6.03  | 12-07-2026     | Added null-forgiving operators to silence three compiler null-reference warnings.       |
 //                      | Charles Korthout | 6.04  | 12-07-2026     | Flatten arrays in sequence constructors; result-document character-map precedence.     |
 //                      | Charles Korthout | 6.05  | 12-07-2026     | Preserve original namespace prefixes for LREs; initialize current-output-uri to base.  |
+//                      | Charles Korthout | 6.06  | 12-07-2026     | Fix inherit-namespaces="no" undeclarations; detach root before document unwrap.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -228,6 +229,7 @@ public sealed class TransformEngine
 
     // Raw top-level items collected when the output method is JSON (build-tree="no").
     private bool _jsonOutputMode;
+    private bool _adaptiveOutputMode;
     private List<XdmValue> _jsonResultItems = new();
 
     // Raw top-level items collected for a secondary xsl:result-document with
@@ -639,8 +641,9 @@ public sealed class TransformEngine
         _principalOutputHasContent = false;
         _principalResultDocumentProperties = null;
         _jsonOutputMode = (_stylesheet.OutputProperties?.Method ?? "xml") == "json";
+        _adaptiveOutputMode = (_stylesheet.OutputProperties?.Method ?? "xml") == "adaptive";
         _jsonResultItems.Clear();
-        _collectRawItems = false;
+        _collectRawItems = _jsonOutputMode || _adaptiveOutputMode;
         _resultDocumentRawItems.Clear();
         _principalRawResultDocument = null;
 
@@ -789,14 +792,14 @@ public sealed class TransformEngine
         if (_principalRawResultDocument != null)
             return _principalRawResultDocument.Value;
 
-        // For JSON output, return the collected raw top-level items as a sequence.
-        if (_jsonOutputMode)
+        // For JSON or adaptive output, return the collected raw top-level items as a sequence.
+        if (_jsonOutputMode || _adaptiveOutputMode)
         {
             if (_jsonResultItems.Count == 0)
                 return XdmValue.Undefined;
-            var jsonResult = XdmValue.FromSequence(MaterializedSequence.FromList(_jsonResultItems));
-            FinalizeResultTreeNamespaces(jsonResult);
-            return jsonResult;
+            var rawSequenceResult = XdmValue.FromSequence(MaterializedSequence.FromList(_jsonResultItems));
+            FinalizeResultTreeNamespaces(rawSequenceResult);
+            return rawSequenceResult;
         }
 
         // Return the result document, or document-level text if no root element was produced
@@ -813,6 +816,7 @@ public sealed class TransformEngine
         var rootElements = _resultDocument.Elements().ToList();
         if (rootElements.Count == 1 && _resultDocument.Nodes().Count() == 1)
         {
+            rootElements[0].Remove();
             var doc = new XDocument(rootElements[0]);
             var rdProps = _resultDocument.Annotation<Stylesheet.OutputProperties>();
             if (rdProps != null)
@@ -6732,10 +6736,11 @@ public sealed class TransformEngine
                     {
                         if (item.IsMap || item.IsFunction)
                         {
-                            if (IsPrincipalTopLevel)
+                            if (IsPrincipalTopLevel && !_adaptiveOutputMode && !_jsonOutputMode)
                                 throw new XsltRuntimeException("SENR0001",
                                     "Cannot serialize a map, array, or function using this output method.", XdmValue.Undefined);
-                            throw new InvalidOperationException("XTDE0450: Maps and functions cannot be serialized directly to element content.");
+                            if (!IsPrincipalTopLevel)
+                                throw new InvalidOperationException("XTDE0450: Maps and functions cannot be serialized directly to element content.");
                         }
 
                         // Atomic value: insert space only if previous item was also atomic
@@ -6779,10 +6784,11 @@ public sealed class TransformEngine
         {
             if (value.IsMap || value.IsFunction)
             {
-                if (IsPrincipalTopLevel)
+                if (IsPrincipalTopLevel && !_adaptiveOutputMode && !_jsonOutputMode)
                     throw new XsltRuntimeException("SENR0001",
                         "Cannot serialize a map, array, or function using this output method.", XdmValue.Undefined);
-                throw new InvalidOperationException("XTDE0450: Maps and functions cannot be serialized directly to element content.");
+                if (!IsPrincipalTopLevel)
+                    throw new InvalidOperationException("XTDE0450: Maps and functions cannot be serialized directly to element content.");
             }
 
             var text = value.IsArray ? XdmValueToString(value, " ") : value.ToString();
@@ -7620,8 +7626,7 @@ public sealed class TransformEngine
         context.PrefixOrder.Clear();
         context.PrefixOrder.AddRange(prefixOrder);
 
-        bool thisHasBarrier = element.Annotation<NamespaceInheritanceBarrier>() != null;
-        if (thisHasBarrier)
+        if (element.Annotation<NamespaceInheritanceBarrier>() != null)
         {
             foreach (var child in element.Elements())
             {
@@ -7640,7 +7645,7 @@ public sealed class TransformEngine
         }
 
         foreach (var child in element.Elements())
-            FinalizeNamespaceInheritance(child, bindings, prefixOrder, thisHasBarrier);
+            FinalizeNamespaceInheritance(child, bindings, prefixOrder, element.Annotation<NamespaceInheritanceBarrier>() != null);
     }
 
     /// <summary>

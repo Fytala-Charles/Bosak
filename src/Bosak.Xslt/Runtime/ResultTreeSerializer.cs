@@ -36,6 +36,8 @@
 //                      | Charles Korthout | 1.13  | 12-07-2026     | Text-output normalization/BOM; SEPM0009/SEPM0010; HTML doctype-before-first-element.    |
 //                      | Charles Korthout | 1.14  | 12-07-2026     | Preserve CR in XML comments; JSON node method defaults; adaptive XML declaration.       |
 //                      | Charles Korthout | 1.15  | 12-07-2026     | Preserve original namespace prefixes via annotation; copy annotations through normalizers.|
+//                      | Charles Korthout | 1.16  | 12-07-2026     | Route prefixed namespace undeclarations to raw XML serializer.                         |
+//                      | Charles Korthout | 1.17  | 12-07-2026     | Adaptive string literals use XPath escaping (double quotes) instead of JSON escapes.   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -553,12 +555,12 @@ public static class ResultTreeSerializer
                 case XdmNodeKind.Attribute:
                     writer.Write(Xml11NameCodec.EncodeName(node.LocalName));
                     writer.Write("=\"");
-                    writer.Write(EscapeAdaptiveString(node.StringValue, isAttribute: true));
+                    writer.Write(EscapeAdaptiveString(node.StringValue, isAttribute: true, props.CharacterMap));
                     writer.Write('"');
                     break;
 
                 case XdmNodeKind.Text:
-                    writer.Write(EscapeAdaptiveString(node.StringValue, isAttribute: false));
+                    writer.Write(EscapeAdaptiveString(node.StringValue, isAttribute: false, props.CharacterMap));
                     break;
 
                 case XdmNodeKind.Comment:
@@ -595,7 +597,7 @@ public static class ResultTreeSerializer
         if (item.Kind == XdmValueKind.String)
         {
             writer.Write('"');
-            writer.Write(EscapeAdaptiveString(item.StringValue, isAttribute: false));
+            writer.Write(EscapeAdaptiveString(item.StringValue, isAttribute: false, props.CharacterMap));
             writer.Write('"');
         }
         else
@@ -604,35 +606,28 @@ public static class ResultTreeSerializer
         }
     }
 
-    private static string EscapeAdaptiveString(string value, bool isAttribute)
+    private static string EscapeAdaptiveString(string value, bool isAttribute, Dictionary<int, string>? characterMap)
     {
         var sb = new StringBuilder(value.Length);
-        foreach (var ch in value)
+        foreach (var rune in value.EnumerateRunes())
         {
-            switch (ch)
+            // Character maps are applied before adaptive escaping. The replacement string is
+            // output as-is and is not itself escaped or subject to further mapping.
+            if (characterMap != null && characterMap.TryGetValue(rune.Value, out var replacement))
             {
-                case '"':
-                    sb.Append("\\\"");
-                    break;
-                case '\\':
-                    sb.Append("\\\\");
-                    break;
-                case '\n':
-                    sb.Append("\\n");
-                    break;
-                case '\r':
-                    sb.Append("\\r");
-                    break;
-                case '\t':
-                    sb.Append("\\t");
-                    break;
-                default:
-                    if (char.IsControl(ch))
-                        sb.Append($"\\u{(int)ch:X4}");
-                    else
-                        sb.Append(ch);
-                    break;
+                sb.Append(replacement);
+                continue;
             }
+
+            // Adaptive strings are enclosed in XPath/XQuery string literals: only the
+            // delimiting quotation mark needs to be escaped, and that is done by doubling it.
+            if (rune.Value == '"')
+            {
+                sb.Append("\"\"");
+                continue;
+            }
+
+            sb.Append(rune.ToString());
         }
         return sb.ToString();
     }
@@ -690,9 +685,9 @@ public static class ResultTreeSerializer
         if (TryGetNormalizationForm(props) is { } normForm)
         {
             if (rootDocument != null)
-                rootDocument = (XDocument)NormalizeXNode(rootDocument, normForm);
+                rootDocument = (XDocument)NormalizeCommentsAndPis(rootDocument, normForm);
             else if (rootElement != null)
-                rootElement = (XElement)NormalizeXNode(rootElement, normForm);
+                rootElement = (XElement)NormalizeCommentsAndPis(rootElement, normForm);
         }
 
         bool doctypeNeeded = rootElement != null &&
@@ -868,13 +863,13 @@ public static class ResultTreeSerializer
         if (TryGetNormalizationForm(props) is { } normForm)
         {
             if (rootDocument != null)
-                rootDocument = (XDocument)NormalizeXNode(rootDocument, normForm);
+                rootDocument = (XDocument)NormalizeCommentsAndPis(rootDocument, normForm);
             else if (isDocumentMode && rootElement != null)
-                rootElement = (XElement)NormalizeXNode(rootElement, normForm);
+                rootElement = (XElement)NormalizeCommentsAndPis(rootElement, normForm);
             else
             {
                 for (int i = 0; i < fragmentNodes.Count; i++)
-                    fragmentNodes[i] = NormalizeXNode(fragmentNodes[i], normForm);
+                    fragmentNodes[i] = NormalizeCommentsAndPis(fragmentNodes[i], normForm);
             }
         }
 
@@ -1244,6 +1239,11 @@ public static class ResultTreeSerializer
 
     private static string SerializeXmlFragment(XElement wrapper, Stylesheet.OutputProperties props)
     {
+        // XML 1.1 and trees with prefixed namespace undeclarations must use the raw
+        // serializer because XmlWriter cannot represent xmlns:prefix="".
+        if (props.Version == "1.1" || HasUndeclarationAnnotations(wrapper))
+            return SerializeRaw(wrapper, props);
+
         var node = (XNode)wrapper;
 
         // Apply Unicode normalization if requested before encoding-aware writing.
@@ -1495,59 +1495,107 @@ public static class ResultTreeSerializer
     /// Applies a character map to a string value, replacing each mapped character
     /// with its corresponding replacement string.
     /// </summary>
-    private static string ApplyCharacterMap(string value, Dictionary<char, string> map)
+    private static string ApplyCharacterMap(string value, Dictionary<int, string> map)
     {
         var sb = new System.Text.StringBuilder(value.Length);
-        foreach (var ch in value)
+        foreach (var rune in value.EnumerateRunes())
         {
-            if (map.TryGetValue(ch, out var replacement))
+            if (map.TryGetValue(rune.Value, out var replacement))
                 sb.Append(replacement);
             else
-                sb.Append(ch);
+                sb.Append(rune.ToString());
         }
         return sb.ToString();
     }
 
     /// <summary>
-    /// Returns a deep clone of the supplied node with the effective character map applied
-    /// to text node values and attribute values. CDATA sections and comment/PI values are
-    /// left unchanged.
+    /// Splits a string into normal and immune segments. Immune segments contain replacement
+    /// strings produced by a character map; normal segments contain the original characters
+    /// that were not mapped and remain subject to escaping and normalization.
     /// </summary>
-    private static XNode ApplyCharacterMap(XNode node, Dictionary<char, string>? map)
+    private static List<(bool immune, string text)> GetCharacterMapSegments(string value, Dictionary<int, string>? map)
     {
         if (map == null || map.Count == 0)
-            return node;
+            return new List<(bool, string)> { (false, value) };
 
-        switch (node)
+        var segments = new List<(bool immune, string text)>();
+        var currentImmune = false;
+        var current = new System.Text.StringBuilder();
+        foreach (var rune in value.EnumerateRunes())
         {
-            case XDocument doc:
-                var clonedDoc = new XDocument(doc.Declaration);
-                foreach (var child in doc.Nodes())
-                    clonedDoc.Add(ApplyCharacterMap(child, map));
-                return clonedDoc;
-            case XElement element:
-                var cloned = new XElement(element.Name);
-                foreach (var attr in element.Attributes())
+            if (map.TryGetValue(rune.Value, out var replacement))
+            {
+                if (current.Length > 0 && !currentImmune)
                 {
-                    if (attr.IsNamespaceDeclaration)
-                        cloned.SetAttributeValue(attr.Name, attr.Value);
-                    else
-                        cloned.SetAttributeValue(attr.Name, ApplyCharacterMap(attr.Value, map));
+                    segments.Add((false, current.ToString()));
+                    current.Clear();
                 }
-                foreach (var child in element.Nodes())
-                    cloned.Add(ApplyCharacterMap(child, map));
-                return cloned;
-            case XCData cdata:
-                return new XCData(cdata.Value);
-            case XText text:
-                return new XText(ApplyCharacterMap(text.Value, map));
-            case XComment comment:
-                return new XComment(comment.Value);
-            case XProcessingInstruction pi:
-                return new XProcessingInstruction(pi.Target, pi.Data);
-            default:
-                return node;
+                currentImmune = true;
+                current.Append(replacement);
+            }
+            else
+            {
+                if (current.Length > 0 && currentImmune)
+                {
+                    segments.Add((true, current.ToString()));
+                    current.Clear();
+                }
+                currentImmune = false;
+                current.Append(rune.ToString());
+            }
         }
+        if (current.Length > 0)
+            segments.Add((currentImmune, current.ToString()));
+        return segments;
+    }
+
+    /// <summary>
+    /// Applies a Unicode normalization form to <paramref name="value"/> while keeping
+    /// characters produced by a character map immune from normalization.
+    /// </summary>
+    private static string NormalizeWithCharacterMap(string value, Dictionary<int, string>? map, System.Text.NormalizationForm? form)
+    {
+        if (form == null && (map == null || map.Count == 0))
+            return value;
+
+        var segments = new List<(bool immune, string text)>();
+        var currentImmune = false;
+        var current = new System.Text.StringBuilder();
+        foreach (var rune in value.EnumerateRunes())
+        {
+            if (map != null && map.TryGetValue(rune.Value, out var replacement))
+            {
+                if (current.Length > 0 && !currentImmune)
+                {
+                    segments.Add((false, current.ToString()));
+                    current.Clear();
+                }
+                currentImmune = true;
+                current.Append(replacement);
+            }
+            else
+            {
+                if (current.Length > 0 && currentImmune)
+                {
+                    segments.Add((true, current.ToString()));
+                    current.Clear();
+                }
+                currentImmune = false;
+                current.Append(rune.ToString());
+            }
+        }
+        if (current.Length > 0)
+            segments.Add((currentImmune, current.ToString()));
+
+        var sb = new System.Text.StringBuilder(value.Length);
+        foreach (var (immune, text) in segments)
+        {
+            if (immune || form == null)
+                sb.Append(text);
+            else
+                sb.Append(text.Normalize(form.Value));
+        }
+        return sb.ToString();
     }
 
     /// <summary>
@@ -1609,6 +1657,38 @@ public static class ResultTreeSerializer
                 return new XProcessingInstruction(pi.Target, pi.Data.Normalize(form));
             case XDocumentType docType:
                 return new XDocumentType(docType.Name, docType.PublicId, docType.SystemId, docType.InternalSubset);
+            default:
+                return node;
+        }
+    }
+
+    /// <summary>
+    /// Normalizes comment and processing-instruction values, leaving text and attribute
+    /// values unchanged so that character-map replacement strings remain immune to
+    /// normalization during raw serialization.
+    /// </summary>
+    private static XNode NormalizeCommentsAndPis(XNode node, System.Text.NormalizationForm form)
+    {
+        switch (node)
+        {
+            case XDocument doc:
+                var clonedDoc = new XDocument(doc.Declaration);
+                foreach (var child in doc.Nodes())
+                    clonedDoc.Add(NormalizeCommentsAndPis(child, form));
+                return clonedDoc;
+            case XElement element:
+                var clonedElem = new XElement(element.Name);
+                foreach (var attr in element.Attributes())
+                    clonedElem.SetAttributeValue(attr.Name, attr.Value);
+                foreach (var child in element.Nodes())
+                    clonedElem.Add(NormalizeCommentsAndPis(child, form));
+                foreach (var annotation in element.Annotations<object>())
+                    clonedElem.AddAnnotation(annotation);
+                return clonedElem;
+            case XComment comment:
+                return new XComment(comment.Value.Normalize(form));
+            case XProcessingInstruction pi:
+                return new XProcessingInstruction(pi.Target, pi.Data.Normalize(form));
             default:
                 return node;
         }
@@ -1882,44 +1962,49 @@ public static class ResultTreeSerializer
     private static void WriteHtmlEscaped(TextWriter writer, string value, Stylesheet.OutputProperties props, bool applyCharacterMap = true)
     {
         var map = applyCharacterMap ? props.CharacterMap : null;
-        foreach (var ch in value)
+        var form = applyCharacterMap ? TryGetNormalizationForm(props) : null;
+        foreach (var (immune, text) in GetCharacterMapSegments(value, map))
         {
-            // Character maps are applied before any HTML escaping or encoding checks.
-            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+            if (immune)
             {
-                WriteEncodingOnly(writer, replacement, props);
+                WriteEncodingOnly(writer, text, props);
                 continue;
             }
 
-            switch (ch)
+            var normalized = form != null ? text.Normalize(form.Value) : text;
+            foreach (var rune in normalized.EnumerateRunes())
             {
-                case '<':
-                    writer.Write("&lt;");
-                    break;
-                case '>':
-                    writer.Write("&gt;");
-                    break;
-                case '&':
-                    writer.Write("&amp;");
-                    break;
-                case '"':
-                    writer.Write("&quot;");
-                    break;
-                case '\r':
-                    writer.Write("&#13;");
-                    break;
-                default:
-                    if (!IsRepresentable(ch, props.Encoding))
-                    {
-                        writer.Write("&#");
-                        writer.Write((int)ch);
-                        writer.Write(';');
-                    }
-                    else
-                    {
-                        writer.Write(ch);
-                    }
-                    break;
+                var cp = rune.Value;
+                switch (cp)
+                {
+                    case '<':
+                        writer.Write("&lt;");
+                        break;
+                    case '>':
+                        writer.Write("&gt;");
+                        break;
+                    case '&':
+                        writer.Write("&amp;");
+                        break;
+                    case '"':
+                        writer.Write("&quot;");
+                        break;
+                    case '\r':
+                        writer.Write("&#13;");
+                        break;
+                    default:
+                        if (!IsRepresentable(cp, props.Encoding))
+                        {
+                            writer.Write("&#");
+                            writer.Write(cp);
+                            writer.Write(';');
+                        }
+                        else
+                        {
+                            writer.Write(rune.ToString());
+                        }
+                        break;
+                }
             }
         }
     }
@@ -2187,50 +2272,55 @@ public static class ResultTreeSerializer
     private static void WriteXmlEscaped(TextWriter writer, string value, Stylesheet.OutputProperties props, bool applyCharacterMap = true)
     {
         var map = applyCharacterMap ? props.CharacterMap : null;
-        foreach (var ch in value)
+        var form = applyCharacterMap ? TryGetNormalizationForm(props) : null;
+        foreach (var (immune, text) in GetCharacterMapSegments(value, map))
         {
-            // Character maps are applied before any XML escaping or encoding checks.
-            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+            if (immune)
             {
-                WriteEncodingOnly(writer, replacement, props);
+                WriteEncodingOnly(writer, text, props);
                 continue;
             }
 
-            switch (ch)
+            var normalized = form != null ? text.Normalize(form.Value) : text;
+            foreach (var rune in normalized.EnumerateRunes())
             {
-                case '<':
-                    writer.Write("&lt;");
-                    break;
-                case '>':
-                    writer.Write("&gt;");
-                    break;
-                case '&':
-                    writer.Write("&amp;");
-                    break;
-                case '"':
-                    writer.Write("&quot;");
-                    break;
-                case '\r':
-                    writer.Write("&#13;");
-                    break;
-                default:
-                    if (props.Version == "1.1" && MustEscapeInXml11(ch, isAttribute: false))
-                    {
-                        writer.Write("&#");
-                        writer.Write((int)ch);
-                        writer.Write(';');
-                    }
-                    else if (!IsRepresentable(ch, props.Encoding))
-                    {
-                        writer.Write("&#");
-                        writer.Write((int)ch);
-                        writer.Write(';');
-                    }
-                    else
-                    {
-                        writer.Write(ch);
-                    }
-                    break;
+                var cp = rune.Value;
+                switch (cp)
+                {
+                    case '<':
+                        writer.Write("&lt;");
+                        break;
+                    case '>':
+                        writer.Write("&gt;");
+                        break;
+                    case '&':
+                        writer.Write("&amp;");
+                        break;
+                    case '"':
+                        writer.Write("&quot;");
+                        break;
+                    case '\r':
+                        writer.Write("&#13;");
+                        break;
+                    default:
+                        if (props.Version == "1.1" && MustEscapeInXml11(cp, isAttribute: false))
+                        {
+                            writer.Write("&#");
+                            writer.Write(cp);
+                            writer.Write(';');
+                        }
+                        else if (!IsRepresentable(cp, props.Encoding))
+                        {
+                            writer.Write("&#");
+                            writer.Write(cp);
+                            writer.Write(';');
+                        }
+                        else
+                        {
+                            writer.Write(rune.ToString());
+                        }
+                        break;
+                }
             }
         }
     }
@@ -2382,6 +2472,19 @@ public static class ResultTreeSerializer
         }
     }
 
+    private static bool CanEncode(int codepoint, System.Text.Encoding encoding)
+    {
+        try
+        {
+            _ = encoding.GetBytes(char.ConvertFromUtf32(codepoint));
+            return true;
+        }
+        catch (System.Text.EncoderFallbackException)
+        {
+            return false;
+        }
+    }
+
     /// <summary>
     /// Determines whether a character can be represented in the output encoding.
     /// Unknown encodings are treated as representable so validation errors take precedence.
@@ -2392,6 +2495,14 @@ public static class ResultTreeSerializer
         if (encoding == null)
             return true;
         return CanEncode(ch, encoding);
+    }
+
+    private static bool IsRepresentable(int codepoint, string encodingName)
+    {
+        var encoding = GetEncodingWithExceptionFallback(encodingName);
+        if (encoding == null)
+            return true;
+        return CanEncode(codepoint, encoding);
     }
 
     /// <summary>
@@ -2757,7 +2868,7 @@ public static class ResultTreeSerializer
     {
         // Apply normalization and CDATA wrapping for raw path as well.
         if (TryGetNormalizationForm(props) is { } normForm)
-            node = NormalizeXNode(node, normForm);
+            node = NormalizeCommentsAndPis(node, normForm);
         node = WrapCdataSections(node, props);
 
         var sb = new System.Text.StringBuilder();
@@ -2943,6 +3054,7 @@ public static class ResultTreeSerializer
         if (CanUndeclarePrefixes(props))
         {
             var undecl = element.Annotation<PrefixedNamespaceUndeclarations>();
+
             if (undecl != null)
             {
                 foreach (var prefix in undecl.Prefixes)
@@ -3275,53 +3387,56 @@ public static class ResultTreeSerializer
     private static void WriteEscaped(TextWriter writer, string value, bool isAttribute, Stylesheet.OutputProperties props, bool applyCharacterMap = true)
     {
         var map = applyCharacterMap ? props.CharacterMap : null;
-        foreach (var ch in value)
+        var form = applyCharacterMap ? TryGetNormalizationForm(props) : null;
+        foreach (var (immune, text) in GetCharacterMapSegments(value, map))
         {
-            // Character maps are applied before any XML/HTML escaping or encoding checks.
-            // The replacement string is output as-is (it is not itself subject to escaping
-            // or further character mapping, but unrepresentable characters in the replacement
-            // string are still emitted as numeric character references).
-            if (map != null && map.Count > 0 && map.TryGetValue(ch, out var replacement))
+            if (immune)
             {
-                WriteEncodingOnly(writer, replacement, props);
+                // Replacement strings are written as-is, with only encoding fallback.
+                WriteEncodingOnly(writer, text, props);
                 continue;
             }
 
-            switch (ch)
+            var normalized = form != null ? text.Normalize(form.Value) : text;
+            foreach (var rune in normalized.EnumerateRunes())
             {
-                case '<':
-                    writer.Write("&lt;");
-                    break;
-                case '>':
-                    writer.Write("&gt;");
-                    break;
-                case '&':
-                    writer.Write("&amp;");
-                    break;
-                case '"' when isAttribute:
-                    writer.Write("&quot;");
-                    break;
-                case '\r':
-                    writer.Write("&#13;");
-                    break;
-                default:
-                    if (props.Version == "1.1" && MustEscapeInXml11(ch, isAttribute))
-                    {
-                        writer.Write("&#");
-                        writer.Write((int)ch);
-                        writer.Write(';');
-                    }
-                    else if (!IsRepresentable(ch, props.Encoding))
-                    {
-                        writer.Write("&#");
-                        writer.Write((int)ch);
-                        writer.Write(';');
-                    }
-                    else
-                    {
-                        writer.Write(ch);
-                    }
-                    break;
+                var cp = rune.Value;
+                switch (cp)
+                {
+                    case '<':
+                        writer.Write("&lt;");
+                        break;
+                    case '>':
+                        writer.Write("&gt;");
+                        break;
+                    case '&':
+                        writer.Write("&amp;");
+                        break;
+                    case '"' when isAttribute:
+                        writer.Write("&quot;");
+                        break;
+                    case '\r':
+                        writer.Write("&#13;");
+                        break;
+                    default:
+                        if (props.Version == "1.1" && MustEscapeInXml11(cp, isAttribute))
+                        {
+                            writer.Write("&#");
+                            writer.Write(cp);
+                            writer.Write(';');
+                        }
+                        else if (!IsRepresentable(cp, props.Encoding))
+                        {
+                            writer.Write("&#");
+                            writer.Write(cp);
+                            writer.Write(';');
+                        }
+                        else
+                        {
+                            writer.Write(rune.ToString());
+                        }
+                        break;
+                }
             }
         }
     }
@@ -3333,24 +3448,28 @@ public static class ResultTreeSerializer
     /// </summary>
     private static void WriteEncodingOnly(TextWriter writer, string value, Stylesheet.OutputProperties props)
     {
-        foreach (var ch in value)
+        foreach (var rune in value.EnumerateRunes())
         {
-            if (!IsRepresentable(ch, props.Encoding))
+            if (!IsRepresentable(rune.Value, props.Encoding))
             {
                 writer.Write("&#");
-                writer.Write((int)ch);
+                writer.Write(rune.Value);
                 writer.Write(';');
             }
             else
             {
-                writer.Write(ch);
+                writer.Write(rune.ToString());
             }
         }
     }
 
     private static bool MustEscapeInXml11(char ch, bool isAttribute)
     {
-        int cp = ch;
+        return MustEscapeInXml11((int)ch, isAttribute);
+    }
+
+    private static bool MustEscapeInXml11(int cp, bool isAttribute)
+    {
         // C0 controls (except tab, line feed, carriage return).
         if (cp is >= 0x01 and <= 0x1F && cp is not 0x09 and not 0x0A and not 0x0D)
             return true;
