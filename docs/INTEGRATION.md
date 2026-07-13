@@ -6,11 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,600 passed / 5 failed / 8,995 skipped (99.9%)
+> **XSLT baseline:** 5,605 passed / 0 failed / 8,995 skipped (100% of runnable tests)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-13** — Phase 5n: all remaining singleton failures cleared; **zero failing runnable tests** in the W3C XSLT 3.0 suite.
+  - `attribute-0701`: HTML serialization now minimizes recognized boolean attributes (`checked`, `selected`, `disabled`, ...) whose value equals their name, restricted to the HTML boolean allowlist so attributes such as `ffi="ffi"` keep the explicit form.
+  - `backwards-019b`: `escape-uri-attributes` now defaults to true for the XHTML method as well as HTML. The XSLT 3.0 backwards-compatibility rule is implemented via new `OutputProperties.EffectiveVersion` / `ImplicitResultTree` flags: in version-1.0 mode an implicitly generated result tree infers the `xml` (not `xhtml`) output method, while an explicit `xsl:result-document` still infers `xhtml` (`backwards-019` vs `backwards-019b`).
+  - `maps-017`: the conformance harness unwraps JSON-string-serialized results (json/adaptive output of a node) before reparsing for tree assertions.
+  - `merge-021`: `XTDE2210` is now also raised when a merge-key attribute (`lang`, `order`, `collation`, `case-order`, `data-type`) is present on one of two corresponding `xsl:merge-key` elements and absent on the other, per the XSLT 3.0 spec as written.
+  - `include-0101`: two fixes. (1) `xsl:include`/`xsl:import` hrefs now resolve against the *element's* base URI, so modules pulled in through DTD external entities resolve nested imports relative to the entity location. (2) The unnamed `xsl:output` declarations are now merged across the module tree by import precedence via `Stylesheet.EffectiveOutputProperties` (previously only the principal module's declarations were used), so the included module's `method="html"` correctly overrides the imported module's `method="xml"`.
+  - Full W3C suite: **5,605 passed / 0 failed / 8,995 skipped** (100% of runnable tests).
 
 - **2026-07-13** — Phase 5m `select` conformance cluster cleared.
   - The conformance harness now honors the `encoding` attribute on assertion elements (`assert-serialization`, `assert-xml`) when reading expected-result files, so ISO-8859-1 expected outputs decode correctly (`select-6101`).

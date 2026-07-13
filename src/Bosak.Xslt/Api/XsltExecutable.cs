@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 1.1   | 11-07-2026     | Merge parameter-document character maps with named character-map resolutions.          |
 //                      | Charles Korthout | 1.2   | 12-07-2026     | Use principal xsl:result-document output properties (including JSON) in TransformToString. |
 //                      | Charles Korthout | 1.3   | 12-07-2026     | Resolve stylesheet-level character maps in OutputProperties; pre-resolved maps win.     |
+//                      | Charles Korthout | 1.4   | 13-07-2026     | Stamp EffectiveVersion and ImplicitResultTree for default output-method inference.      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -58,7 +59,7 @@ public sealed class XsltExecutable
     {
         get
         {
-            var props = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+            var props = _stylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties();
             if (props.UseCharacterMaps.Count > 0 && props.CharacterMap == null)
             {
                 props = props.Clone();
@@ -123,11 +124,12 @@ public sealed class XsltExecutable
             // A principal xsl:result-document (no href) supplies the effective output
             // properties, overriding the stylesheet-level xsl:output defaults.
             var outputProperties = engine.PrincipalResultDocumentProperties
-                ?? _stylesheet.OutputProperties
+                ?? _stylesheet.EffectiveOutputProperties
                 ?? new Stylesheet.OutputProperties();
 
             // Fall back to annotation-based output properties for backward compatibility
             // when the result tree is a wrapper element produced by the legacy path.
+            bool implicitResultTree = engine.PrincipalResultDocumentProperties == null;
             if (engine.PrincipalResultDocumentProperties == null && result.IsNode && result.NodeValue is XDocumentNode xdn)
             {
                 Stylesheet.OutputProperties? rdProps = null;
@@ -136,8 +138,16 @@ public sealed class XsltExecutable
                 else if (xdn.UnderlyingObject is XElement elem)
                     rdProps = elem.Annotation<Stylesheet.OutputProperties>();
                 if (rdProps != null)
+                {
                     outputProperties = rdProps;
+                    implicitResultTree = false;
+                }
             }
+
+            // Default output-method inference needs the effective stylesheet version
+            // and whether the result tree was generated implicitly (XSLT 3.0 §26).
+            outputProperties.EffectiveVersion = _stylesheet.Version;
+            outputProperties.ImplicitResultTree = implicitResultTree;
 
             // Resolve named character maps for the principal output if not already done.
             if (outputProperties.UseCharacterMaps.Count > 0)
@@ -184,7 +194,9 @@ public sealed class XsltExecutable
     public string TransformFunctionToString(string name, XdmValue[] args, EvaluationContext? context = null)
     {
         var result = TransformFunction(name, args, context);
-        var outputProperties = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+        var outputProperties = _stylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties();
+        outputProperties.EffectiveVersion = _stylesheet.Version;
+        outputProperties.ImplicitResultTree = true;
         if (outputProperties.UseCharacterMaps.Count > 0)
         {
             outputProperties = outputProperties.Clone();

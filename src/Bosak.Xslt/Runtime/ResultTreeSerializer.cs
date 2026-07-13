@@ -40,6 +40,9 @@
 //                      | Charles Korthout | 1.17  | 12-07-2026     | Adaptive string literals use XPath escaping (double quotes) instead of JSON escapes.   |
 //                      | Charles Korthout | 1.18  | 13-07-2026     | Escape tab and line-feed as numeric references in XML attribute values.                |
 //                      | Charles Korthout | 1.19  | 13-07-2026     | Text output method skips comment and processing-instruction nodes (bug-1405).          |
+//                      | Charles Korthout | 1.20  | 13-07-2026     | HTML attribute minimization; escape-uri-attributes defaults true for XHTML too.        |
+//                      | Charles Korthout | 1.21  | 13-07-2026     | BC rule: version 1.0 + implicit result tree infers xml, not xhtml (backwards-019).     |
+//                      | Charles Korthout | 1.22  | 13-07-2026     | Restrict attribute minimization to recognized HTML boolean attributes.                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -128,8 +131,8 @@ public static class ResultTreeSerializer
 
         if (!props.EscapeUriAttributesSpecified)
         {
-            // Default is true for HTML, false for XML and XHTML.
-            props.EscapeUriAttributes = method == "html";
+            // Default is true for HTML and XHTML, false for XML.
+            props.EscapeUriAttributes = method is "html" or "xhtml";
         }
 
         if (!props.IncludeContentTypeSpecified)
@@ -357,6 +360,16 @@ public static class ResultTreeSerializer
         if (rootElement.Name.LocalName == "html" &&
             rootElement.Name.NamespaceName == "http://www.w3.org/1999/xhtml")
         {
+            // In backwards-compatible mode (effective version 1.0) an implicitly
+            // generated result tree uses the xml output method rather than xhtml
+            // (XSLT 3.0 §26; backwards-019 vs backwards-019b).
+            if (props.EffectiveVersion == "1.0" && props.ImplicitResultTree)
+            {
+                props.Method = "xml";
+                props.MethodSpecified = true;
+                return;
+            }
+
             props.Method = "xhtml";
             props.MethodSpecified = true;
             if (!props.OmitXmlDeclarationSpecified)
@@ -1981,6 +1994,13 @@ public static class ResultTreeSerializer
         {
             writer.Write(' ');
             writer.Write(attr.Name.LocalName);
+            // HTML attribute minimization: a recognized boolean attribute whose value
+            // equals its name (case-insensitive) is written without the value
+            // (attribute-0701). Other value==name attributes keep the explicit form
+            // (normalize-unicode-015: ffi="ffi").
+            if (IsHtmlBooleanAttribute(attr.Name.LocalName) &&
+                string.Equals(attr.Value, attr.Name.LocalName, StringComparison.OrdinalIgnoreCase))
+                continue;
             writer.Write("=\"");
             var value = attr.Value;
             bool isUri = props.EscapeUriAttributes && IsUriAttribute(attr.Name);
@@ -2831,6 +2851,27 @@ public static class ResultTreeSerializer
         {
             "area" or "base" or "br" or "col" or "embed" or "hr" or "img" or "input" or
             "link" or "meta" or "param" or "source" or "track" or "wbr" => true,
+            _ => false,
+        };
+    }
+
+    /// <summary>
+    /// Returns whether an attribute name is a recognized HTML boolean attribute
+    /// (HTML 4.01 and common HTML5 booleans) eligible for minimized serialization.
+    /// </summary>
+    private static bool IsHtmlBooleanAttribute(string localName)
+    {
+        return localName.ToLowerInvariant() switch
+        {
+            // HTML 4.01 boolean attributes.
+            "checked" or "compact" or "declare" or "defer" or "disabled" or "ismap" or
+            "multiple" or "nohref" or "noresize" or "noshade" or "nowrap" or "readonly" or
+            "selected" or
+            // Common HTML5 boolean attributes.
+            "async" or "autofocus" or "autoplay" or "controls" or "default" or "hidden" or
+            "inert" or "itemscope" or "loop" or "muted" or "open" or "required" or
+            "reversed" or "scoped" or "formnovalidate" or "novalidate" or "allowfullscreen" or
+            "playsinline" or "sortable" => true,
             _ => false,
         };
     }

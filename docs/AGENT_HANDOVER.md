@@ -1,7 +1,44 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** *(working tree contains uncommitted select-cluster fix)*
+**Commit:** *(singleton cluster fixes — committing after this handover)*
+**Current focus:** All runnable W3C XSLT 3.0 conformance tests pass (5,605 / 0 failed). Next: optional hardening (e.g. route remaining `@select` compile sites through `CompileXPath`) or new feature work.
+
+---
+
+## This Session Fixes
+
+1. **All 5 remaining singleton conformance failures cleared (100% of runnable tests)**
+   - `attribute-0701`: HTML serialization minimizes recognized boolean attributes (e.g. `checked` instead of `checked="checked"`) via an `IsHtmlBooleanAttribute` allowlist in `ResultTreeSerializer.WriteHtmlElement` — unrestricted name=value matching regressed `normalize-unicode-015` (`ffi="ffi"`).
+   - `backwards-019b` / `backwards-019`: `escape-uri-attributes` now defaults to true for the `xhtml` method as well as `html`; and the XSLT 3.0 §3.6.1 backwards-compat rule is implemented: stylesheet `version="1.0"` + implicit result tree + XHTML-namespace `html` root ⇒ default method is `xml`, not `xhtml`. Two new `OutputProperties` flags (`StylesheetVersion`, `ExplicitResultDocument`) are stamped at serialization call sites (`XsltExecutable.TransformToString`, `TransformEngine.WriteResultDocument`) and consulted by `InferMethod`.
+   - `merge-021`: `XTDE2210` now also fires when a merge-key attribute (`lang`, `order`, `collation`, `case-order`, `data-type`) is present on one corresponding `xsl:merge-key` and absent on the other — the spec compares attribute presence, not just effective values.
+   - `include-0101`: two fixes. (1) `Stylesheet.ResolveImport`/`ResolveInclude` resolve hrefs against `GetEffectiveBaseUri(element)` instead of the module base URI, so modules loaded through DTD external entities (which carry their own `BaseUri` via `LoadOptions.SetBaseUri`) resolve nested imports correctly. (2) New `Stylesheet.EffectiveOutputProperties` merges the *unnamed* `xsl:output` declarations across imports/includes by import precedence (mirroring `GetEffectiveNamedOutput`); consumers in `TransformEngine` and `XsltExecutable` switched over.
+   - `maps-017`: harness-side — `ParseResultDocument` unwraps JSON-string-serialized results (`method="json"` output of a node) before reparsing for tree assertions.
+   - Note: `StylesheetTests.cs` was edited mid-session and reverted; final state is identical to HEAD (143/143 unit tests pass).
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,605 passed / 0 failed / 8,995 skipped** (**100% of runnable tests**; was 5,600/5/8,995).
+- **No remaining failures.** Known harness skips: `include-0102/0103` (stack limit), streaming sets, schema-aware features.
+- Latent bug noted (not fixed): `ResultTreeSerializer.EscapeUriAttribute` iterates UTF-16 chars, so astral characters in URIs are percent-encoded as lone surrogates instead of the 4-byte UTF-8 sequence.
+
+## Files Changed
+
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs` (boolean-attribute minimization, xhtml escape-uri-attributes default, version-aware method inference)
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs` (XTDE2210 attribute-presence check, `EffectiveOutputProperties` consumers, `ExplicitResultDocument` stamping)
+- `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (element base-URI resolution for include/import, `EffectiveOutputProperties`)
+- `src/Bosak.Xslt/Stylesheet/OutputProperties.cs` (`StylesheetVersion` / `ExplicitResultDocument` flags)
+- `src/Bosak.Xslt/Api/XsltExecutable.cs` (flag stamping, `EffectiveOutputProperties`)
+- `tests/Bosak.Xslt.Conformance/Program.cs` (JSON-string unwrap in `ParseResultDocument`)
+- `docs/ARCHITECTURE.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `README.md`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-13
+**Commit:** `2f57f4d` (select-cluster fix)
 **Current focus:** Continue clearing the remaining 5 W3C XSLT 3.0 conformance regressions: `attribute-0701`, `backwards-019b`, `include-0101`, `maps-017`, `merge-021`.
 
 ---

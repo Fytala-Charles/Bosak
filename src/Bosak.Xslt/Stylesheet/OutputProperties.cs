@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 1.2   | 12-07-2026     | Made yes/no parsing case-sensitive while still accepting true/false/1/0.                |
 //                      | Charles Korthout | 1.3   | 12-07-2026     | Append use-character-maps during merge so last-wins resolution is correct.              |
 //                      | Charles Korthout | 1.4   | 12-07-2026     | Merge multiple xsl:output use-character-maps lists in declaration order.                |
+//                      | Charles Korthout | 1.5   | 13-07-2026     | Added EffectiveVersion and ImplicitResultTree for default method inference (BC rule).   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -124,6 +125,18 @@ public sealed class OutputProperties
 
     // Internal flags tracking which properties were explicitly set on the parsed xsl:output element.
     internal bool MethodSpecified { get; set; }
+
+    /// <summary>
+    /// The effective XSLT version of the principal stylesheet module, used for the
+    /// backwards-compatibility rule in default output-method inference.
+    /// </summary>
+    internal string? EffectiveVersion { get; set; }
+
+    /// <summary>
+    /// True when the result tree being serialized was generated implicitly rather than
+    /// by an explicit <c>xsl:result-document</c> instruction.
+    /// </summary>
+    internal bool ImplicitResultTree { get; set; }
     internal bool OmitXmlDeclarationSpecified { get; set; }
     internal bool IndentSpecified { get; set; }
     internal bool EncodingSpecified { get; set; }
@@ -668,7 +681,9 @@ public sealed class OutputProperties
             UseCharacterMaps = UseCharacterMaps,
             UseCharacterMapsSpecified = UseCharacterMapsSpecified,
             CharacterMap = CharacterMap,
-            CharacterMapSpecified = CharacterMapSpecified
+            CharacterMapSpecified = CharacterMapSpecified,
+            EffectiveVersion = EffectiveVersion,
+            ImplicitResultTree = ImplicitResultTree
         };
         return clone;
     }

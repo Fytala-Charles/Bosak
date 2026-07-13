@@ -177,6 +177,8 @@
 //                      | Charles Korthout | 6.06  | 12-07-2026     | Fix inherit-namespaces="no" undeclarations; detach root before document unwrap.        |
 //                      | Charles Korthout | 6.07  | 13-07-2026     | Scope raw-item collection to the actual result document; fix typed variable bodies.    |
 //                      | Charles Korthout | 6.08  | 13-07-2026     | Dynamic calls on current-group/current-grouping-key/current-merge-* raise XTDE errors. |
+//                      | Charles Korthout | 6.09  | 13-07-2026     | XTDE2210 also raised when a merge-key attribute is present on one source only.         |
+//                      | Charles Korthout | 6.10  | 13-07-2026     | Stamp EffectiveVersion/ImplicitResultTree on result-document output properties.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -395,7 +397,7 @@ public sealed class TransformEngine
     private XdmValue _globalContextItem = XdmValue.Undefined;
 
     /// <summary>The parsed xsl:output serialization properties.</summary>
-    public Stylesheet.OutputProperties? OutputProperties => _stylesheet.OutputProperties;
+    public Stylesheet.OutputProperties? OutputProperties => _stylesheet.EffectiveOutputProperties;
 
     /// <summary>
     /// The effective output properties of a principal <c>xsl:result-document</c>, if one
@@ -642,8 +644,8 @@ public sealed class TransformEngine
         _principalOutputClosed = false;
         _principalOutputHasContent = false;
         _principalResultDocumentProperties = null;
-        _jsonOutputMode = (_stylesheet.OutputProperties?.Method ?? "xml") == "json";
-        _adaptiveOutputMode = (_stylesheet.OutputProperties?.Method ?? "xml") == "adaptive";
+        _jsonOutputMode = (_stylesheet.EffectiveOutputProperties?.Method ?? "xml") == "json";
+        _adaptiveOutputMode = (_stylesheet.EffectiveOutputProperties?.Method ?? "xml") == "adaptive";
         _jsonResultItems.Clear();
         _collectRawItems = _jsonOutputMode || _adaptiveOutputMode;
         _resultDocumentRawItems.Clear();
@@ -1032,7 +1034,7 @@ public sealed class TransformEngine
     /// </summary>
     private string GetAtomicSeparator()
     {
-        var props = _stylesheet.OutputProperties;
+        var props = _stylesheet.EffectiveOutputProperties;
         if (props?.ItemSeparatorSpecified == true && props.Method == "text")
             return props.ItemSeparator;
         return " ";
@@ -13302,6 +13304,11 @@ public sealed class TransformEngine
         if (!string.IsNullOrEmpty(dir))
             System.IO.Directory.CreateDirectory(dir);
 
+        // Result trees produced by xsl:result-document are explicit (not implicit)
+        // for default output-method inference; carry the stylesheet version along.
+        props.EffectiveVersion ??= _stylesheet.Version;
+        props.ImplicitResultTree = false;
+
         // Wrap the result-document children in a document so that serialization
         // honours the effective output properties (version, undeclare-prefixes, etc.).
         var elementChildren = content.Elements().ToList();
@@ -13333,6 +13340,9 @@ public sealed class TransformEngine
         var dir = System.IO.Path.GetDirectoryName(path);
         if (!string.IsNullOrEmpty(dir))
             System.IO.Directory.CreateDirectory(dir);
+
+        props.EffectiveVersion ??= _stylesheet.Version;
+        props.ImplicitResultTree = false;
 
         var serialized = ResultTreeSerializer.Serialize(value, props);
         System.IO.File.WriteAllText(path, serialized);
@@ -13435,7 +13445,7 @@ public sealed class TransformEngine
                     contextItem);
         }
 
-        var baseProps = _stylesheet.OutputProperties ?? new Stylesheet.OutputProperties();
+        var baseProps = _stylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties();
         var evaluatedInstruction = EvaluateResultDocumentInstruction(instruction);
         var resultDocumentProps = new Stylesheet.OutputProperties();
 
@@ -15306,6 +15316,7 @@ public sealed class TransformEngine
 
         var sourceNames = new List<string?>();
         var sourceControls = new List<List<SortControl>>();
+        var sourceKeyElems = new List<List<XElement>>();
         var allEntries = new List<MergeEntry>();
         int sourceIndex = 0;
 
@@ -15327,6 +15338,7 @@ public sealed class TransformEngine
                 foreach (var keySpec in keySpecElems)
                     controls.Add(EvaluateSortControl(keySpec));
                 sourceControls.Add(controls);
+                sourceKeyElems.Add(keySpecElems);
 
                 var sourceItems = EvaluateMergeSourceItems(sourceElem, contextItem);
 
@@ -15356,9 +15368,14 @@ public sealed class TransformEngine
 
         // XTDE2210: corresponding merge-key elements across sources must have the same
         // effective values for data-type, order, lang, case-order, and collation.
+        // Values are considered to differ if the attribute is present on one element
+        // and not on the other, or if both are present with unequal effective values.
+        string[] mergeKeyAttrs = { "lang", "order", "collation", "case-order", "data-type" };
         for (int s = 1; s < sourceControls.Count; s++)
         {
             var otherControls = sourceControls[s];
+            var otherKeyElems = sourceKeyElems[s];
+            var firstKeyElems = sourceKeyElems[0];
             int maxKeys = Math.Max(keyControls.Count, otherControls.Count);
             for (int k = 0; k < maxKeys; k++)
             {
@@ -15371,6 +15388,19 @@ public sealed class TransformEngine
                     a.Collation != b.Collation)
                 {
                     throw new InvalidOperationException("XTDE2210: xsl:merge-key specifications are incompatible across xsl:merge-source elements");
+                }
+
+                // Presence mismatch on a corresponding pair of merge-key elements also
+                // counts as differing values (merge-021: order omitted vs order="ascending").
+                if (k < firstKeyElems.Count && k < otherKeyElems.Count)
+                {
+                    foreach (var attrName in mergeKeyAttrs)
+                    {
+                        bool inFirst = firstKeyElems[k].Attribute(attrName) != null;
+                        bool inOther = otherKeyElems[k].Attribute(attrName) != null;
+                        if (inFirst != inOther)
+                            throw new InvalidOperationException("XTDE2210: xsl:merge-key specifications are incompatible across xsl:merge-source elements");
+                    }
                 }
             }
         }

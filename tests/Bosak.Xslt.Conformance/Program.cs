@@ -46,6 +46,8 @@
 //                      | Charles Korthout | 3.4   | 13-07-2026     | Self-close HTML void elements when reparsing output for tree assertions (bug-1301).    |
 //                      | Charles Korthout | 3.5   | 13-07-2026     | Strip serialization-injected Content-Type meta for assert-xml tree compares (bug-1901).|
 //                      | Charles Korthout | 3.6   | 13-07-2026     | Honor @encoding when reading expected-result files (select-6101, ISO-8859-1).          |
+//                      | Charles Korthout | 3.7   | 13-07-2026     | Unwrap JSON-string-serialized results when reparsing for tree assertions (maps-017).   |
+//                      | Charles Korthout | 3.8   | 13-07-2026     | Removed leftover _debugName debug field.                                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -83,7 +85,6 @@ class Program
     static int Passed = 0;
     static int Failed = 0;
     static int Skipped = 0;
-    static string _debugName = "";
     static string? _testNameFilter = null;
 
     static readonly HashSet<string> SupportedSpecs = new(StringComparer.OrdinalIgnoreCase)
@@ -300,7 +301,6 @@ class Program
     static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
     {
         var name = testCase.Attribute("name")?.Value ?? "unknown";
-        _debugName = name;
 
         if (_testNameFilter != null && !name.Contains(_testNameFilter, StringComparison.OrdinalIgnoreCase))
             return TestResult.Skip;
@@ -1794,6 +1794,24 @@ class Program
                 }
             }
 
+            // With method="json" (or adaptive), an element result serializes as a
+            // JSON string of its markup (e.g. "<out>{...}<\/out>"). Unwrap and
+            // JSON-decode such strings so tree assertions can be evaluated against
+            // the reconstructed result tree (maps-017).
+            var unwrapped = UnwrapJsonString(actual);
+            if (unwrapped != null)
+            {
+                try
+                {
+                    var doc = Xml11Loader.ParseXml11(unwrapped, LoadOptions.PreserveWhitespace);
+                    return new XDocumentNode(doc);
+                }
+                catch
+                {
+                    // Fall through to the fragment-wrapper fallback below.
+                }
+            }
+
             // Not well-formed XML (e.g., text output or XML fragment)
             // Wrap in the synthetic document wrapper so XDocumentNode treats the
             // wrapped children as document-level nodes for XPath assertions.
@@ -1827,6 +1845,26 @@ class Program
             @"<(area|base|basefont|br|col|embed|frame|hr|img|input|isindex|link|meta|param|source|track|wbr)((?:\s[^<>]*[^/<>\s])?)\s*>",
             "<$1$2 />",
             System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+    }
+
+    /// <summary>
+    /// If the serialized result is a JSON string literal (as produced by the json
+    /// or adaptive output methods for a node result), returns the decoded inner
+    /// text; otherwise returns null.
+    /// </summary>
+    static string? UnwrapJsonString(string text)
+    {
+        var trimmed = text.Trim();
+        if (trimmed.Length < 2 || trimmed[0] != '"' || trimmed[^1] != '"')
+            return null;
+        try
+        {
+            return System.Text.Json.JsonSerializer.Deserialize<string>(trimmed);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     static Dictionary<string, string> ExtractNamespaces(XElement element)

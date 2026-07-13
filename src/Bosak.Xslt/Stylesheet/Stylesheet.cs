@@ -61,6 +61,7 @@
 //                      | Charles Korthout | 2.27  | 11-07-2026     | Named-output import-precedence merge now puts the importing stylesheet last            |
 //                      | Charles Korthout | 2.28  | 11-07-2026     | Load xsl:output parameter-document defaults and merge them with explicit attributes.    |
 //                      | Charles Korthout | 2.29  | 12-07-2026     | Last map in use-character-maps list wins for duplicate characters.                      |
+//                      | Charles Korthout | 2.30  | 13-07-2026     | Resolve include/import hrefs against the element base URI (external entities).          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2127,7 +2128,11 @@ public sealed class Stylesheet
 
     private void ResolveImport(XElement importElement, string href)
     {
-        var resolvedUri = ResolveAbsoluteUri(href, _baseUri);
+        // Relative hrefs resolve against the base URI of the xsl:import element,
+        // which may differ from the module base URI when the element arrived via
+        // external-entity expansion (include-0101: import inside a DTD entity).
+        var elementBaseUri = GetEffectiveBaseUri(importElement);
+        var resolvedUri = ResolveAbsoluteUri(href, elementBaseUri);
 
         if (_resolvedUris.Contains(resolvedUri))
             throw new InvalidOperationException($"Circular stylesheet reference detected: {resolvedUri}");
@@ -2136,7 +2141,7 @@ public sealed class Stylesheet
 
         try
         {
-            var doc = _resolver.Resolve(href, _baseUri);
+            var doc = _resolver.Resolve(href, elementBaseUri);
             var root = doc.Root;
             // use-when on the root element of an imported module excludes the whole module.
             if (root != null && !UseWhen(root, resolvedUri))
@@ -2155,7 +2160,10 @@ public sealed class Stylesheet
 
     private void ResolveInclude(XElement includeElement, string href)
     {
-        var resolvedUri = ResolveAbsoluteUri(href, _baseUri);
+        // See ResolveImport: resolve against the element's base URI so includes
+        // pulled in through external entities resolve relative to the entity.
+        var elementBaseUri = GetEffectiveBaseUri(includeElement);
+        var resolvedUri = ResolveAbsoluteUri(href, elementBaseUri);
 
         // Circular reference detection: if this URI is already in the ancestor chain,
         // including it would create a cycle.
@@ -2166,7 +2174,7 @@ public sealed class Stylesheet
 
         try
         {
-            var doc = _resolver.Resolve(href, _baseUri);
+            var doc = _resolver.Resolve(href, elementBaseUri);
             var root = doc.Root;
             // use-when on the root element of an included module excludes the whole module.
             if (root != null && !UseWhen(root, resolvedUri))
@@ -2227,6 +2235,43 @@ public sealed class Stylesheet
 
     /// <summary>The parsed xsl:output properties, or null if not specified.</summary>
     public OutputProperties? OutputProperties => _outputProperties;
+
+    /// <summary>
+    /// The effective unnamed xsl:output properties, merging definitions from imported,
+    /// included, and local modules in ascending order of import precedence (imports
+    /// first, then includes, then this module), so higher-precedence definitions
+    /// override lower-precedence ones (include-0101).
+    /// </summary>
+    public OutputProperties? EffectiveOutputProperties
+    {
+        get
+        {
+            var definitions = new List<(int Precedence, OutputProperties Props)>();
+            CollectOutputDefinitions(this, definitions);
+            if (definitions.Count == 0)
+                return null;
+
+            // Lower numeric precedence means higher XSLT import precedence, so merge
+            // imported definitions first and the main stylesheet last. OrderByDescending
+            // is stable, keeping includes before the including module at equal precedence.
+            var result = new OutputProperties();
+            foreach (var (_, props) in definitions.OrderByDescending(d => d.Precedence))
+                OutputProperties.Merge(result, props);
+
+            return result;
+        }
+    }
+
+    private static void CollectOutputDefinitions(Stylesheet sheet, List<(int, OutputProperties)> definitions)
+    {
+        foreach (var imported in sheet._imports)
+            CollectOutputDefinitions(imported, definitions);
+        foreach (var included in sheet._includes)
+            CollectOutputDefinitions(included, definitions);
+
+        if (sheet._outputProperties != null)
+            definitions.Add((sheet.ImportPrecedence, sheet._outputProperties));
+    }
 
     /// <summary>Named xsl:output definitions keyed by expanded QName (Clark notation).</summary>
     public IReadOnlyDictionary<string, OutputProperties> NamedOutputProperties => _namedOutputProperties;
