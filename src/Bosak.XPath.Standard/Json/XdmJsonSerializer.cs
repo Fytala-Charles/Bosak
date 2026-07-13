@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-07-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 12-07-2026     | Added CharacterMap option and apply it during JSON string encoding.                     |
+//                      | Charles Korthout | 0.3   | 13-07-2026     | Serialize sequence-valued array/map members via SerializeTopLevel.                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -139,6 +140,14 @@ public static class XdmJsonSerializer
         if (IsNumeric(value))
         {
             sb.Append(value.ToString());
+            return;
+        }
+
+        // Array/map members are sequences; empty becomes null, one item becomes
+        // that value, and multiple items become a nested JSON array.
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            SerializeTopLevel(value, sb, options, indent);
             return;
         }
 

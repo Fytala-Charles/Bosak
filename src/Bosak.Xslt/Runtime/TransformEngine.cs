@@ -175,6 +175,7 @@
 //                      | Charles Korthout | 6.04  | 12-07-2026     | Flatten arrays in sequence constructors; result-document character-map precedence.     |
 //                      | Charles Korthout | 6.05  | 12-07-2026     | Preserve original namespace prefixes for LREs; initialize current-output-uri to base.  |
 //                      | Charles Korthout | 6.06  | 12-07-2026     | Fix inherit-namespaces="no" undeclarations; detach root before document unwrap.        |
+//                      | Charles Korthout | 6.07  | 13-07-2026     | Scope raw-item collection to the actual result document; fix typed variable bodies.    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -6494,7 +6495,10 @@ public sealed class TransformEngine
                 // Principal output can collect raw items either because the stylesheet-level
                 // method is JSON, or because an explicit xsl:result-document instruction has
                 // requested raw-item collection (method=json/adaptive or build-tree=no).
-                return _collectRawItems || (_jsonOutputMode && ReferenceEquals(_currentContainer, _resultDocument));
+                // The current container must actually be the principal result document,
+                // otherwise literal elements inside temporary sequence constructors
+                // (e.g. xsl:variable/@as) would be lost.
+                return (_collectRawItems || _jsonOutputMode) && ReferenceEquals(_currentContainer, _resultDocument);
             }
 
             if (!_collectRawItems)
@@ -12116,7 +12120,8 @@ public sealed class TransformEngine
         try
         {
             if (ContainsConditionalInstruction(parent)
-                || (!wrapInDocumentNode && ContainsTopLevelAttributeOrNamespaceInstruction(parent)))
+                || !wrapInDocumentNode
+                || ContainsTopLevelAttributeOrNamespaceInstruction(parent))
             {
                 var items = EvaluateSequenceConstructorToItems(parent, contextItem);
                 if (wrapInDocumentNode)
@@ -12458,6 +12463,7 @@ public sealed class TransformEngine
                         break;
                 }
             }
+
         }
         finally
         {

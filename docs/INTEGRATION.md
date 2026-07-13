@@ -6,11 +6,20 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,588 passed / 17 failed / 8,995 skipped (99.7%)
+> **XSLT baseline:** 5,593 passed / 12 failed / 8,995 skipped (99.8%)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-13** — Phase 5j `output` conformance cluster cleared.
+  - `ResultTreeSerializer.SerializeAsXhtml` now normalizes text/attribute values before CDATA wrapping, so `cdata-section-elements` combined with `normalization-form` split unrepresentable normalized characters correctly (`output-0115d`).
+  - `TransformEngine.IsRawCollectionTopLevel` is now scoped to the actual principal/secondary result document, so literal elements inside `xsl:variable/@as` bodies are no longer swallowed by raw-item collection (`output-0716`, `output-0717`).
+  - `XdmJsonSerializer.SerializeValue` now handles sequence-valued array/map members, so nested HTML/XML nodes serialize as JSON strings instead of `"(sequence)"` (`output-0702`).
+  - Also clears `arrays-304`.
+  - W3C `output` conformance set: **232 passed / 0 failed / 29 skipped**.
+  - Full W3C suite: **5,593 passed / 12 failed / 8,995 skipped** (99.8%).
+  - Remaining failures: `bug` (3), `select` (2), `for-each-group` (2), `attribute` (1), and singleton regressions in `include`, `maps`, `merge`, and `backwards`.
 
 - **2026-07-13** — Phase 5i `normalize-unicode` conformance cluster cleared.
   - `ResultTreeSerializer` now escapes tab, line-feed, and carriage-return characters inside XML attribute values as decimal numeric character references (`&#9;`, `&#10;`, `&#13;`) after `XmlWriter` emits them literally. This aligns the `xml` output method with XSLT/XQuery Serialization 3.1.

@@ -860,17 +860,19 @@ public static class ResultTreeSerializer
             rootElement = newRoot;
         }
 
-        // Apply normalization if requested.
+        // Apply normalization if requested. Text and attribute values must be
+        // normalized before CDATA wrapping so unrepresentable normalized characters
+        // are split out correctly (e.g. NFD decomposition for cdata-section-elements).
         if (TryGetNormalizationForm(props) is { } normForm)
         {
             if (rootDocument != null)
-                rootDocument = (XDocument)NormalizeCommentsAndPis(rootDocument, normForm);
+                rootDocument = (XDocument)NormalizeXNode(rootDocument, normForm);
             else if (isDocumentMode && rootElement != null)
-                rootElement = (XElement)NormalizeCommentsAndPis(rootElement, normForm);
+                rootElement = (XElement)NormalizeXNode(rootElement, normForm);
             else
             {
                 for (int i = 0; i < fragmentNodes.Count; i++)
-                    fragmentNodes[i] = NormalizeCommentsAndPis(fragmentNodes[i], normForm);
+                    fragmentNodes[i] = NormalizeXNode(fragmentNodes[i], normForm);
             }
         }
 

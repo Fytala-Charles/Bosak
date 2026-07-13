@@ -1,6 +1,40 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
+**Commit:** *(working tree contains uncommitted output-cluster fixes)*
+**Current focus:** Continue clearing the remaining 12 W3C XSLT 3.0 conformance regressions; next recommended targets are the `bug` cluster (3 failures) or the `select`/`for-each-group` pairs.
+
+---
+
+## This Session Fixes
+
+1. **`output` conformance cluster cleared**
+   - `ResultTreeSerializer.SerializeAsXhtml` normalizes text/attribute values before CDATA wrapping, fixing `output-0115d` (NFD decomposition + `cdata-section-elements`).
+   - `TransformEngine.IsRawCollectionTopLevel` is now tied to the actual result-document container, so literal elements inside typed `xsl:variable` bodies are no longer lost; fixes `output-0716` and `output-0717`.
+   - `XdmJsonSerializer.SerializeValue` handles sequence-valued array/map members, fixing `output-0702` (nested HTML nodes in JSON).
+   - Also clears `arrays-304`.
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,593 passed / 12 failed / 8,995 skipped** (99.8%; was 5,588/17/8,995).
+- Remaining failures: `bug` (3), `select` (2), `for-each-group` (2), `attribute-0701`, `include-0101`, `maps-017`, `merge-021`, `backwards-019b`.
+- Clusters now clear: `character-map`, `mode`, `xml-version`, `normalize-unicode`, `copy`, `output`, `arrays`.
+
+## Files Changed
+
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs`
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs`
+- `src/Bosak.XPath.Standard/Json/XdmJsonSerializer.cs`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-13
 **Commit:** *(working tree contains uncommitted normalize-unicode serializer fix)*
 **Current focus:** Continue clearing remaining W3C XSLT 3.0 conformance regressions; next target is the `output` cluster.
 

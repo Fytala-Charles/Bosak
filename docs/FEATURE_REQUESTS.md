@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-13 (`normalize-unicode` cluster cleared; XML attribute whitespace escaping)
+> **Living Registry** — Last updated: 2026-07-13 (`output` cluster cleared; JSON sequence-valued members and raw-collection scoping)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
