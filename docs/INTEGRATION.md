@@ -6,11 +6,13 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 13 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,605 passed / 0 failed / 8,995 skipped (100% of runnable tests)
+> **XSLT baseline:** 5,607 passed / 0 failed / 8,993 skipped (100% of runnable tests)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-13** — Skip-pool audit: unskipped `position-0103` (xsl:merge) and `position-2201` (xsl:result-document); both pass now that the features they gate on are implemented. Full W3C suite: **5,607 passed / 0 failed / 8,993 skipped**.
 
 - **2026-07-13** — Phase 5n: all remaining singleton failures cleared; **zero failing runnable tests** in the W3C XSLT 3.0 suite.
   - `attribute-0701`: HTML serialization now minimizes recognized boolean attributes (`checked`, `selected`, `disabled`, ...) whose value equals their name, restricted to the HTML boolean allowlist so attributes such as `ffi="ffi"` keep the explicit form.

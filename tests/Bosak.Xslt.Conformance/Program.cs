@@ -48,6 +48,7 @@
 //                      | Charles Korthout | 3.6   | 13-07-2026     | Honor @encoding when reading expected-result files (select-6101, ISO-8859-1).          |
 //                      | Charles Korthout | 3.7   | 13-07-2026     | Unwrap JSON-string-serialized results when reparsing for tree assertions (maps-017).   |
 //                      | Charles Korthout | 3.8   | 13-07-2026     | Removed leftover _debugName debug field.                                               |
+//                      | Charles Korthout | 3.9   | 13-07-2026     | Unskip position-0103 and position-2201 (merge/result-document now implemented).        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -148,13 +149,11 @@ class Program
         // High-precision decimal formatting requires arbitrary-precision decimals
         "format-number-047",
         "format-number-048",
-        // xsl:merge is not implemented
-        "position-0103",
         // xsl:merge streaming/uri-collection tests require uri-collection() support
         "merge-065a", "merge-065b",
         "merge-097", "merge-097s", "merge-097sf", "merge-098", "merge-099",
-        // xsl:result-document is not implemented
-        "position-2201", "mode-1801", "mode-1802",
+        // mode-1801/1802: result-document URI handling (see audit 2026-07-13)
+        "mode-1801", "mode-1802",
         // xsl:package not supported
         "declared-modes-009", "declared-modes-010", "declared-modes-011", "declared-modes-012",
         // Variable references other than $value in xsl:accumulator-rule match patterns
