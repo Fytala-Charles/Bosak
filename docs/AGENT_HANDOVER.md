@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-14
-**Commit:** `pending` (fn:transform completion — docs follow-up sets hash)
+**Commit:** `dd094ff` (fn:transform completion — suite 100% green)
 **Current focus:** **W3C XSLT 3.0 suite fully green: 5,744 passed / 0 failed / 8,856 skipped (100% of runnable tests).** Next frontiers: big skip pools (unicode-90 collation ~1,460; error test-set ~385; import-schema ~185; streaming; principal `xsl:package`/`xsl:use-package`), or the QT3 XPath suite (~59%).
 
 ---
