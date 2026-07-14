@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 1.3   | 12-07-2026     | Resolve stylesheet-level character maps in OutputProperties; pre-resolved maps win.     |
 //                      | Charles Korthout | 1.4   | 13-07-2026     | Stamp EffectiveVersion and ImplicitResultTree for default output-method inference.      |
 //                      | Charles Korthout | 1.5   | 13-07-2026     | Raised transform stack to 16MB for deep continuation-style recursion (HOF-068).         |
+//                      | Charles Korthout | 1.6    | 14-07-2026     | TransformCaptured: fn:transform entry point with result-document capture and formats.  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -103,6 +104,67 @@ public sealed class XsltExecutable
             LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
             return result;
         }, DefaultTransformStackSize);
+    }
+
+    /// <summary>
+    /// Runs a transformation on behalf of <c>fn:transform</c>: secondary result
+    /// documents are captured rather than written to disk, and both the principal
+    /// and the secondary results are post-processed according to the requested
+    /// delivery format (document, raw, or serialized).
+    /// </summary>
+    /// <param name="source">The source node, or null when no source-node is supplied.</param>
+    /// <param name="initialMatchSelection">Optional initial match selection applied in the initial mode.</param>
+    /// <param name="context">Optional evaluation context (stylesheet parameters).</param>
+    /// <param name="initialTemplate">Optional initial named template (lexical or Clark form).</param>
+    /// <param name="initialMode">Optional initial mode.</param>
+    /// <param name="deliveryFormat">One of <c>document</c>, <c>raw</c>, or <c>serialized</c>.</param>
+    /// <param name="baseOutputUri">Optional base output URI for resolving result-document hrefs.</param>
+    /// <param name="secondaryResults">The captured secondary result documents, keyed by resolved URI.</param>
+    /// <returns>The principal result in the requested delivery format.</returns>
+    public XdmValue TransformCaptured(
+        IXdmNode? source,
+        XdmValue? initialMatchSelection,
+        EvaluationContext? context,
+        string? initialTemplate,
+        string? initialMode,
+        string deliveryFormat,
+        string? baseOutputUri,
+        out IReadOnlyDictionary<string, XdmValue> secondaryResults)
+    {
+        IReadOnlyDictionary<string, XdmValue> capturedResults = new Dictionary<string, XdmValue>();
+        var principalResult = RunWithStack(() =>
+        {
+            bool raw = deliveryFormat == "raw";
+            bool serialized = deliveryFormat == "serialized";
+            var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
+            var result = engine.Transform(source, initialTemplate, initialMode,
+                rawResult: raw, baseOutputUri: baseOutputUri,
+                initialMatchSelection: initialMatchSelection,
+                captureResultDocuments: true, rawTransformResult: raw);
+            LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
+
+            var captured = new Dictionary<string, XdmValue>();
+            foreach (var (uri, entry) in engine.CapturedResultDocuments)
+            {
+                captured[uri] = serialized
+                    ? XdmValue.FromString(Runtime.ResultTreeSerializer.Serialize(entry.Value, entry.Props))
+                    : entry.Value;
+            }
+            capturedResults = captured;
+
+            if (serialized)
+            {
+                var outputProperties = engine.PrincipalResultDocumentProperties
+                    ?? OutputProperties;
+                outputProperties.EffectiveVersion ??= _stylesheet.Version;
+                outputProperties.ImplicitResultTree = engine.PrincipalResultDocumentProperties == null;
+                return XdmValue.FromString(Runtime.ResultTreeSerializer.Serialize(result, outputProperties));
+            }
+
+            return result;
+        }, DefaultTransformStackSize);
+        secondaryResults = capturedResults;
+        return principalResult;
     }
 
     /// <summary>

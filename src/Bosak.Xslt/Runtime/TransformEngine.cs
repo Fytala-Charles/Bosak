@@ -181,6 +181,7 @@
 //                      | Charles Korthout | 6.10  | 13-07-2026     | Stamp EffectiveVersion/ImplicitResultTree on result-document output properties.        |
 //                      | Charles Korthout | 6.11  | 13-07-2026     | HOF: function-type coercion, raw map/function items in typed templates, sig metadata   |
 //                      | Charles Korthout | 6.12  | 14-07-2026     | Typed templates keep node identity/parentage; single text nodes not cloned; fn:snapshot |
+//                      | Charles Korthout | 6.13  | 14-07-2026     | fn:transform: initial-match-selection, raw principal result, result-document capture; map-entry content; text result-doc fix |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -242,6 +243,29 @@ public sealed class TransformEngine
     // method="json"/"adaptive" or build-tree="no".
     private bool _collectRawItems;
     private List<XdmValue> _resultDocumentRawItems = new();
+
+    // fn:transform support: when _returnRawTransformResult is true the raw top-level
+    // items of the transformation (from apply-templates or an initial template) are
+    // returned as a sequence instead of a result tree (delivery-format="raw").
+    private bool _returnRawTransformResult;
+
+    // Raw-item collection at the principal top level only (fn:transform raw delivery).
+    // Unlike _collectRawItems this does not leak into result-document frames, so
+    // secondary result documents still build result trees.
+    private bool _principalRawCollection;
+
+    // fn:transform support: when _captureResultDocuments is true, secondary
+    // xsl:result-document output is captured into _capturedResultDocuments instead of
+    // being serialized to the file system.
+    private bool _captureResultDocuments;
+    private readonly Dictionary<string, (XdmValue Value, Stylesheet.OutputProperties Props)> _capturedResultDocuments = new();
+
+    /// <summary>
+    /// The secondary result documents captured during the last transformation when
+    /// result-document capture was enabled (used by fn:transform), keyed by the
+    /// resolved result-document URI.
+    /// </summary>
+    public IReadOnlyDictionary<string, (XdmValue Value, Stylesheet.OutputProperties Props)> CapturedResultDocuments => _capturedResultDocuments;
 
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
@@ -578,7 +602,15 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the stylesheet transformation.
     /// </summary>
-    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
+    /// <param name="source">The source node, or null when an initial template or initial match selection is used.</param>
+    /// <param name="initialTemplate">Optional name of the initial named template (lexical or Clark form).</param>
+    /// <param name="initialMode">Optional name of the initial mode.</param>
+    /// <param name="rawResult">When true and an initial template is used, returns the raw template result instead of wrapping it in a result document.</param>
+    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
+    /// <param name="initialMatchSelection">Optional initial match selection (fn:transform): an arbitrary XDM value to which templates are applied in the initial mode.</param>
+    /// <param name="captureResultDocuments">When true, secondary result documents are captured instead of written to disk.</param>
+    /// <param name="rawTransformResult">When true, the raw top-level items of the transformation are returned as a sequence (fn:transform delivery-format="raw").</param>
+    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null, XdmValue? initialMatchSelection = null, bool captureResultDocuments = false, bool rawTransformResult = false)
     {
         _baseOutputUri = baseOutputUri;
         _context.CurrentOutputUri = baseOutputUri;
@@ -587,11 +619,15 @@ public sealed class TransformEngine
         _startedWithNamedTemplate = false;
         _returnRawInitialTemplateResult = rawResult;
         _rawInitialTemplateResult = null;
+        _returnRawTransformResult = rawTransformResult;
+        _captureResultDocuments = captureResultDocuments;
+        _capturedResultDocuments.Clear();
 
-        // A source document is required unless an initial template is supplied or the
-        // stylesheet declares an xsl:initial-template (with any namespace prefix).
+        // A source document is required unless an initial template is supplied, an
+        // initial match selection is given, or the stylesheet declares an
+        // xsl:initial-template (with any namespace prefix).
         var implicitInitialTemplate = string.IsNullOrEmpty(initialTemplate) ? FindInitialTemplateName() : null;
-        if (source == null && string.IsNullOrEmpty(initialTemplate) && implicitInitialTemplate == null)
+        if (source == null && initialMatchSelection == null && string.IsNullOrEmpty(initialTemplate) && implicitInitialTemplate == null)
             throw new ArgumentException("A source document is required unless an initial template is specified.", nameof(source));
 
         // XTDE3086: a required global context item must be supplied.
@@ -656,6 +692,7 @@ public sealed class TransformEngine
         _adaptiveOutputMode = (_stylesheet.EffectiveOutputProperties?.Method ?? "xml") == "adaptive";
         _jsonResultItems.Clear();
         _collectRawItems = _jsonOutputMode || _adaptiveOutputMode;
+        _principalRawCollection = _returnRawTransformResult;
         _resultDocumentRawItems.Clear();
         _principalRawResultDocument = null;
 
@@ -710,6 +747,21 @@ public sealed class TransformEngine
             if (!TryFindNamedTemplate(effectiveInitialTemplate, out var templateKey, out var entryRule))
                 throw new InvalidOperationException($"XTDE0040: Named template '{effectiveInitialTemplate}' not found.");
 
+            // In an xsl:package, only public (or final) named templates may be used as
+            // a transformation entry point; the default visibility is private, except
+            // for xsl:initial-template which is implicitly public.
+            if (_stylesheet.IsPackage)
+            {
+                bool isPublicEntry = entryRule.Visibility is "public" or "final";
+                if (!isPublicEntry && entryRule.Visibility == null && entryRule.Name != null)
+                {
+                    var (tplLocal, tplNs) = ExpandVariableName(entryRule.Element, entryRule.Name);
+                    isPublicEntry = tplLocal == "initial-template" && tplNs == Stylesheet.Stylesheet.XslNamespace;
+                }
+                if (!isPublicEntry)
+                    throw new InvalidOperationException($"XTDE0040: Named template '{effectiveInitialTemplate}' is not public.");
+            }
+
             _startedWithNamedTemplate = true;
             // If the designated initial template has a match pattern, execute it as a
             // template rule against the source node so that xsl:next-match has a current
@@ -730,6 +782,70 @@ public sealed class TransformEngine
             finally
             {
                 _isExecutingInitialTemplate = false;
+            }
+        }
+        else if (initialMatchSelection != null)
+        {
+            // fn:transform initial-match-selection: apply templates in the initial mode
+            // to each item of the supplied selection (XSLT 3.0 §24.2).
+            var resolvedInitialMode = string.IsNullOrEmpty(initialMode)
+                ? ResolveMode("#default")
+                : ExpandModeName(initialMode, _stylesheet.Root);
+            if (resolvedInitialMode == "#unnamed")
+                resolvedInitialMode = "";
+            _initialMode = resolvedInitialMode;
+            // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
+            if (!ModeExists(resolvedInitialMode))
+            {
+                throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' does not exist in the stylesheet.");
+            }
+            // A private or abstract mode cannot be used as the initial mode.
+            var matchModeDef = _stylesheet.GetModeDefinition(resolvedInitialMode);
+            if (matchModeDef != null && (matchModeDef.Visibility == Stylesheet.ModeVisibility.Private || matchModeDef.Visibility == Stylesheet.ModeVisibility.Abstract))
+            {
+                throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' is not visible.");
+            }
+
+            var selectionItems = new List<XdmValue>();
+            FlattenToList(initialMatchSelection.Value, selectionItems);
+
+            _modeStack.Push(resolvedInitialMode);
+            try
+            {
+                int pos = 1;
+                int last = selectionItems.Count;
+                foreach (var item in selectionItems)
+                {
+                    if (item.IsNode && item.NodeValue != null)
+                    {
+                        var rule = FindBestTemplate(item.NodeValue, resolvedInitialMode);
+                        if (rule != null)
+                        {
+                            ExecuteTemplate(rule, item.NodeValue, position: pos, last: last);
+                        }
+                        else
+                        {
+                            ApplyBuiltInRules(item.NodeValue, resolvedInitialMode, position: pos, last: last);
+                        }
+                    }
+                    else
+                    {
+                        var rule = FindBestTemplate(item, resolvedInitialMode);
+                        if (rule != null)
+                        {
+                            ExecuteTemplate(rule, item, position: pos, last: last);
+                        }
+                        else
+                        {
+                            ApplyBuiltInRulesForAtomic(item, resolvedInitialMode);
+                        }
+                    }
+                    pos++;
+                }
+            }
+            finally
+            {
+                _modeStack.Pop();
             }
         }
         else if (!string.IsNullOrEmpty(initialMode))
@@ -797,6 +913,17 @@ public sealed class TransformEngine
         {
             FinalizeResultTreeNamespaces(_rawInitialTemplateResult.Value);
             return _rawInitialTemplateResult.Value;
+        }
+
+        // fn:transform with delivery-format="raw" and no principal xsl:result-document:
+        // return the collected raw top-level items as a sequence.
+        if (_returnRawTransformResult && _principalResultDocumentProperties == null)
+        {
+            var rawTransformValue = _jsonResultItems.Count == 0
+                ? XdmValue.Undefined
+                : XdmValue.FromSequence(MaterializedSequence.FromList(_jsonResultItems));
+            FinalizeResultTreeNamespaces(rawTransformValue);
+            return rawTransformValue;
         }
 
         // A principal xsl:result-document with method="json" or build-tree="no" takes
@@ -2377,9 +2504,7 @@ public sealed class TransformEngine
             return CompileXPath(selectAttr, mapEntry).Evaluate(_context);
         }
 
-        var items = new List<XdmValue>();
-        foreach (var child in mapEntry.Elements())
-            EvaluateFunctionBodyInstruction(child, items, contextItem);
+        var items = EvaluateSequenceConstructorToItems(mapEntry, contextItem);
         return MaterializeItemList(items);
     }
 
@@ -6599,12 +6724,14 @@ public sealed class TransformEngine
             if (_resultDocumentStack.Count == 0)
             {
                 // Principal output can collect raw items either because the stylesheet-level
-                // method is JSON, or because an explicit xsl:result-document instruction has
-                // requested raw-item collection (method=json/adaptive or build-tree=no).
-                // The current container must actually be the principal result document,
-                // otherwise literal elements inside temporary sequence constructors
-                // (e.g. xsl:variable/@as) would be lost.
-                return (_collectRawItems || _jsonOutputMode) && ReferenceEquals(_currentContainer, _resultDocument);
+                // method is JSON, because an explicit xsl:result-document instruction has
+                // requested raw-item collection (method=json/adaptive or build-tree=no), or
+                // because fn:transform requested the raw principal result. The current
+                // container must actually be the principal result document, otherwise
+                // literal elements inside temporary sequence constructors (e.g.
+                // xsl:variable/@as) would be lost.
+                return (_collectRawItems || _jsonOutputMode || _principalRawCollection)
+                    && ReferenceEquals(_currentContainer, _resultDocument);
             }
 
             if (!_collectRawItems)
@@ -13532,6 +13659,13 @@ public sealed class TransformEngine
             var serialized = ResultTreeSerializer.Serialize(XdmValue.FromNode(new XDocumentNode(doc)), props);
             System.IO.File.WriteAllText(path, serialized);
         }
+        else if (props.Method == "text")
+        {
+            // The text output method emits the string value of the result tree without
+            // XML escaping; string.Concat over XNodes would escape text via
+            // XText.ToString(). Comments and processing instructions are ignored.
+            System.IO.File.WriteAllText(path, content.Value);
+        }
         else
         {
             System.IO.File.WriteAllText(path, string.Concat(content.Nodes()));
@@ -13868,7 +14002,33 @@ public sealed class TransformEngine
                 _resultDocumentRawItems = savedRawItems;
             }
 
-            if (rawItems != null)
+            if (_captureResultDocuments)
+            {
+                // fn:transform: capture the secondary result document instead of
+                // writing it to the file system. Tree output is wrapped in a real
+                // document node; raw output (build-tree="no", JSON) is kept as-is.
+                resultDocumentProps.EffectiveVersion ??= _stylesheet.Version;
+                resultDocumentProps.ImplicitResultTree = false;
+                XdmValue capturedValue;
+                if (rawItems != null)
+                {
+                    capturedValue = rawItems.Count == 0
+                        ? XdmValue.Undefined
+                        : XdmValue.FromSequence(MaterializedSequence.FromList(rawItems));
+                }
+                else
+                {
+                    var capturedDoc = new XDocument();
+                    foreach (var node in temp!.Nodes().ToList())
+                    {
+                        node.Remove();
+                        capturedDoc.Add(node);
+                    }
+                    capturedValue = XdmValue.FromNode(new XDocumentNode(capturedDoc));
+                }
+                _capturedResultDocuments[resolvedHref] = (capturedValue, resultDocumentProps);
+            }
+            else if (rawItems != null)
             {
                 var rawValue = rawItems.Count == 0
                     ? XdmValue.Undefined

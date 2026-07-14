@@ -50,6 +50,7 @@
 //                      | Charles Korthout | 3.8   | 13-07-2026     | Removed leftover _debugName debug field.                                               |
 //                      | Charles Korthout | 3.9   | 13-07-2026     | Unskip position-0103 and position-2201 (merge/result-document now implemented).        |
 //                      | Charles Korthout | 3.10  | 13-07-2026     | Enabled higher_order_functions feature (HOF cluster fixed, 76/76 runnable).            |
+//                      | Charles Korthout | 3.11   | 14-07-2026     | Register environment packages for fn:transform; any-of text result-document asserts.   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -391,6 +392,26 @@ class Program
                 var loadedEnv = LoadEnvironment(envToLoad, testSetDir, testSetPath, catalogDir, ns);
                 sourceNode = loadedEnv.SourceNode;
                 envDefaultCollation = loadedEnv.DefaultCollation;
+            }
+
+            // Register secondary packages declared in the environment so that
+            // fn:transform can resolve package-name / package-version options.
+            Bosak.Xslt.Api.XsltFunctionLibrary.ClearPackages();
+            if (envToLoad != null)
+            {
+                foreach (var pkg in envToLoad.Elements(ns + "package"))
+                {
+                    var pkgFile = pkg.Attribute("file")?.Value;
+                    var pkgUri = pkg.Attribute("uri")?.Value;
+                    var pkgVersion = pkg.Attribute("package-version")?.Value;
+                    if (pkgFile == null || pkgUri == null)
+                        continue;
+                    var pkgPath = Path.Combine(testSetDir, pkgFile);
+                    if (!File.Exists(pkgPath)) pkgPath = Path.Combine(catalogDir, pkgFile);
+                    if (File.Exists(pkgPath))
+                        Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
+                            pkgUri, pkgVersion ?? "", new Uri(pkgPath).AbsoluteUri);
+                }
             }
 
             // Load test (stylesheet(s))
@@ -1425,9 +1446,11 @@ class Program
                     {
                         // Text result documents (method="text") are compared as strings;
                         // everything else is loaded as XML so that base-uri and node
-                        // assertions work correctly.
-                        var childNames = assertDoc.Elements().Select(e => e.Name.LocalName).ToHashSet();
-                        bool isText = childNames.All(n => n is "assert-serialization" or "assert-string-value" or "serialization-matches");
+                        // assertions work correctly. any-of/all-of/not wrappers around
+                        // serialization assertions still count as text comparisons.
+                        var childNames = assertDoc.Descendants().Select(e => e.Name.LocalName).ToHashSet();
+                        bool isText = childNames.All(n => n is "assert-serialization" or "assert-string-value"
+                            or "serialization-matches" or "any-of" or "all-of" or "not");
                         if (isText)
                         {
                             var text = File.ReadAllText(path);

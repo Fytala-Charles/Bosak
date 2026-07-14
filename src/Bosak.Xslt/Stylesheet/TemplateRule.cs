@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 1.4   | 05-07-2026     | Reject AVT syntax in xsl:template/@match with XTSE0340                                 |
 //                      | Charles Korthout | 1.5   | 08-07-2026     | Allow Q{uri} EQName braces in xsl:template/@match AVT check                            |
 //                      | Charles Korthout | 1.6   | 14-07-2026     | namespace-node() default priority -0.5 (kind test)                                     |
+//                      | Charles Korthout | 1.7    | 14-07-2026     | Template @visibility exposed for package entry-point checks (XTDE0040)                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -71,6 +72,13 @@ public sealed class TemplateRule
 
     /// <summary>The optional xsl:context-item declaration for this template.</summary>
     public ContextItemDeclaration? ContextItem { get; }
+
+    /// <summary>
+    /// The value of the template's <c>@visibility</c> attribute (public, private, final,
+    /// or abstract), or null when absent. In an xsl:package the default visibility of a
+    /// named template is private; xsl:initial-template is implicitly public.
+    /// </summary>
+    public string? Visibility => Element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
 
     private TemplateRule(XElement element, string? match, string? name, IReadOnlyList<string> modes, double priority, Stylesheet stylesheet, ContextItemDeclaration? contextItem = null)
     {

@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2    | 14-07-2026     | NamedFunctionItem.DefiningContext for cross-context function items (fn:transform)      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -29,6 +30,16 @@ public abstract record FunctionItem
 public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, int ArityValue) : FunctionItem
 {
     public override int Arity => ArityValue;
+
+    /// <summary>
+    /// The evaluation context in which the function item was materialized, if known.
+    /// Used as a fallback for signature resolution when the function item crosses
+    /// context boundaries (e.g. a function returned by fn:transform with
+    /// delivery-format="raw" and invoked in the calling stylesheet). Typed as
+    /// <see cref="object"/> to preserve project layering; the runtime casts it to
+    /// its EvaluationContext.
+    /// </summary>
+    public object? DefiningContext { get; init; }
 }
 
 /// <summary>

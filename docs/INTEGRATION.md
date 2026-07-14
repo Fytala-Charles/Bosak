@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 14 July 2026
 > **Bosak baseline:** 940 unit tests passed / 0 failed / 0 skipped
-> **XSLT baseline:** 5,737 passed / 7 failed / 8,856 skipped (only `fn:transform` tests fail)
+> **XSLT baseline:** 5,744 passed / 0 failed / 8,856 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
@@ -19,7 +19,7 @@
   - `namespace-node()` is now a valid match pattern (priority −0.5) matching namespace-axis nodes.
   - `fn:concat` / `fn:compare#2` register their `xs:anyAtomicType?` parameters as pass-through; dynamic-call argument conversion no longer stringifies arbitrary atomics to `xs:string` (`higher-order-functions-064` raises XPTY0004 again).
   - Other fixes: `fn:min`/`fn:max` return `xs:integer` for all-integer input; `system-property()` expands `Q{uri}local` and reports `xsl:supports-higher-order-functions`; `xsl:function` accepts `cache`; user functions in map/math/array reserved namespaces raise XTSE0080; TVT/§4.3 whitespace handling; missing F&O registrations (`element-with-id#2`, `idref`, `uri-collection`, `xs:error`).
-  - Full W3C suite: **5,737 passed / 7 failed / 8,856 skipped** — remaining failures are the `fn:transform` set (transform-002..009), which awaits `fn:transform` implementation.
+  - Full W3C suite: **5,744 passed / 0 failed / 8,856 skipped** — every runnable test passes, including the complete `fn:transform` set (transform-001..009).
 
 - **2026-07-13** — Skip-pool audit: unskipped `position-0103` (xsl:merge) and `position-2201` (xsl:result-document); both pass now that the features they gate on are implemented. Full W3C suite: **5,607 passed / 0 failed / 8,993 skipped**.
 
@@ -507,7 +507,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 | `xsl:mode` | ✅ Working | `on-no-match`, `on-multiple-match`, `warning-on-no-match`, `warning-on-multiple-match`, `visibility`, `typed`, `streamable`, `default-mode`, duplicate-declaration checks (`XTSE0545`), and `#unnamed` normalization |
 | `xsl:analyze-string` | ✅ Working | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics; `@flags` including multiline (`m`) are passed to regex translation |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
-| `fn:transform()` | ⚠️ Partial | Basic XPath-level XSLT invocation works; `transform#1` unregistered, `stylesheet-location` edge cases and several result mismatches remain (W3C transform-002..009) |
+| `fn:transform()` | ✅ Working | Full option support: `stylesheet-location`/`stylesheet-node`/`stylesheet-text`/`package-name`(+`package-version` range selection), `source-node`, `initial-match-selection` (arbitrary XDM), `initial-template`/`initial-mode` (xs:QName), `stylesheet-params`, `delivery-format` (`document`/`raw`/`serialized`), `base-output-uri`. Secondary `xsl:result-document` output is captured into the result map keyed by resolved URI. Available in static expressions (`static="yes"` variables, `xsl:use-when`); function items returned via `delivery-format="raw"` remain callable in the calling stylesheet. Package entry points honor `visibility` (XTDE0040). W3C transform set 9/9. |
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
 | `xsl:use-when` | ✅ Working | Top-level and nested elements evaluated in document order; `true()`/`false()` and static-variable references work; XTSE0090 and XTSE3450 error cases validated. |
 | Shadow attributes (`_{attr}` static AVTs) | ✅ Working | `_version`, `_href`, `_use-when`, `_xpath-default-namespace`, `_static`, `_select`, and other underscore-prefixed XSLT attributes are evaluated at compile time in the current static context and replace their non-underscore counterparts. Shadow attributes on literal result elements are preserved as ordinary attributes. |
@@ -539,7 +539,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 ### Known gaps
 - `fn:load-xquery-module` — not implemented
 - `fn:serialize` — partial (JSON method supported for maps/arrays/atomics; XML serialization options still limited)
-- `fn:transform` options (`delivery-format`, etc.) — partial
+- `fn:transform` — full option support including `delivery-format` and package selection; principal `xsl:use-package` stylesheets remain unsupported
 - Schema-aware operations — not supported
 - Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — XSD regex validation, backreferences, flags, and `$` end-anchor semantics are now spec-compliant; surrogate-pair handling in `.` is the remaining gap
 

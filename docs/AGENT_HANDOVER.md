@@ -1,6 +1,51 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-14
+**Commit:** `pending` (fn:transform completion — docs follow-up sets hash)
+**Current focus:** **W3C XSLT 3.0 suite fully green: 5,744 passed / 0 failed / 8,856 skipped (100% of runnable tests).** Next frontiers: big skip pools (unicode-90 collation ~1,460; error test-set ~385; import-schema ~185; streaming; principal `xsl:package`/`xsl:use-package`), or the QT3 XPath suite (~59%).
+
+---
+
+## This Session Fixes (fn:transform completion)
+
+1. **fn:transform full option surface (transform set 9/9)** — `XsltFunctionLibrary.Transform_1` rewritten:
+   - Options: `stylesheet-location`/`stylesheet-node`/`stylesheet-text`/`package-name`(+`package-version`), `source-node`, `initial-match-selection`, `initial-template`/`initial-mode` (xs:QName → Clark form), `stylesheet-params`, `delivery-format` (`document`/`raw`/`serialized`), `base-output-uri`; static errors in the nested stylesheet → FOXT0002.
+   - `initial-match-selection`: new `TransformEngine.Transform(..., initialMatchSelection, captureResultDocuments, rawTransformResult)` — applies templates in the initial mode to arbitrary XDM items (atomic items match `.[. instance of xs:integer]`).
+   - `delivery-format="raw"`: `_principalRawCollection` flag collects top-level raw items at the principal level only (does NOT leak into result-document frames — that leak emptied captured secondary docs); function items (e.g. `round(?, 3)`) survive as result items.
+   - Secondary `xsl:result-document` output is captured (`_captureResultDocuments`) into a URI-keyed dictionary with its effective output properties instead of being written to disk; `XsltExecutable.TransformCaptured` post-processes principal + secondaries per delivery format.
+   - `package-name`/`package-version`: static registry on `XsltFunctionLibrary` (`RegisterPackage`/`ClearPackages`) populated by the conformance harness from environment `<package role="secondary">` elements; version-range matching (`1.*`, exact, `a-b`) picks the highest matching version.
+   - `xsl:package` roots now compile (`Stylesheet.IsPackage`/`PackageName`/`PackageVersion`); package entry points require `visibility="public"` (or `final`; `xsl:initial-template` implicitly public) — XTDE0040 otherwise (`TemplateRule.Visibility`).
+   - `fn:transform` registered in the static context (`Stylesheet.CreateUseWhenContext`) so it works in `static="yes"` variables used by `xsl:use-when` (transform-004).
+   - `NamedFunctionItem.DefiningContext`: function items created inside a nested transform resolve against their defining context when invoked in the calling stylesheet (`{f}negative#1` in transform-004); fallback in `VmEngine.InvokeFunctionItemCore`.
+   - `xsl:map-entry` with sequence-constructor content (text) now evaluated via `EvaluateSequenceConstructorToItems` (was dropped → `()`).
+   - `WriteResultDocument` with `method="text"` writes the tree string value (`XText.ToString()` escapes — legacy `string.Concat` path was broken).
+   - Harness: `assert-result-document` text comparison now sees `any-of`/`all-of`/`not` wrappers around serialization assertions (transform-009).
+
+## Results
+
+- Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
+- Full W3C XSLT 3.0 suite: **5,744 passed / 0 failed / 8,856 skipped — 100% pass rate** (was 5,737/7 at session start; +7 transform fixes, no regressions).
+- Known harness skips: `include-0102/0103`, `arrays-306`, `mode-1801/1802` (stack limit), streaming sets, schema-aware features, principal `xsl:package`/`xsl:use-package` stylesheets.
+- Latent bugs noted (not fixed): `ResultTreeSerializer.EscapeUriAttribute` percent-encodes astral chars as lone surrogates; several `@select` sites compile raw XPath without namespaces.
+
+## Files Changed
+
+- `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs` (full fn:transform rewrite + package registry)
+- `src/Bosak.Xslt/Api/XsltExecutable.cs` (`TransformCaptured`)
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs` (initial-match-selection, raw principal collection, result-document capture, package visibility check, map-entry content, text result-doc fix)
+- `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (xsl:package root, transform#1 in static context)
+- `src/Bosak.Xslt/Stylesheet/TemplateRule.cs` (`Visibility`)
+- `src/Bosak.XPath.Core/Xdm/FunctionItem.cs` (`NamedFunctionItem.DefiningContext`)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (defining-context capture + fallback resolution)
+- `tests/Bosak.Xslt.Conformance/Program.cs` (environment package registration; any-of text result-doc asserts)
+- `README.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
+
+---
+
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-14
 **Commit:** `ee4bfb7` (HOF unskip + snapshot cluster)
 **Current focus:** All W3C XSLT 3.0 failures cleared except the `fn:transform` set (transform-002..009). Next: implement `fn:transform` properly, or attack the big skip pools (unicode-90 collation 1,460; error test-set 385; import-schema 185; streaming; packages).
 

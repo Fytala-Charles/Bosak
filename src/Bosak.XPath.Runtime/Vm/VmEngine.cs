@@ -64,6 +64,7 @@
 //                      | Charles Korthout | 2.29  | 13-07-2026     | Honor FunctionSignature.DynamicImplementation for dynamic named-function calls         |
 //                      | Charles Korthout | 2.30  | 13-07-2026     | HOF: closure capture, dynamic-call arity/conversion, coerced items, instance-of types  |
 //                      | Charles Korthout | 2.31  | 14-07-2026     | Dynamic-call String conversion back to spec (untypedAtomic cast + URI promotion only)  |
+//                      | Charles Korthout | 2.32   | 14-07-2026     | NamedFunctionItem carries defining context; fallback resolution across contexts        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1702,7 +1703,12 @@ public static class VmEngine
                         var raw = literalPool[instr.Operand]!;
                         FunctionItem funcItem = raw switch
                         {
-                            NamedFunctionItem named => named,
+                            // Capture the defining context so the function item can still be
+                            // resolved if it crosses into another evaluation context (e.g. a
+                            // function returned by fn:transform delivery-format="raw").
+                            NamedFunctionItem named => named.DefiningContext != null
+                                ? named
+                                : named with { DefiningContext = context },
                             CurriedFunctionItem curried => curried,
                             InlineFunctionItem inline => inline,
                             CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body, cif.ParameterTypes, cif.ReturnType)
@@ -1919,7 +1925,7 @@ public static class VmEngine
         var (localName, nsUri) = ResolveFunctionName(tuple.Item1, context);
         if (!context.TryResolveFunction(nsUri, localName, tuple.Item2, out _))
             throw new InvalidOperationException($"XPST0017: Function {{{nsUri}}}{localName}#{tuple.Item2} not found.");
-        return new NamedFunctionItem(nsUri, localName, tuple.Item2);
+        return new NamedFunctionItem(nsUri, localName, tuple.Item2) { DefiningContext = context };
     }
 
     public static XdmValue InvokeFunctionItem(FunctionItem func, EvaluationContext context, ReadOnlySpan<XdmValue> args)
@@ -1951,7 +1957,19 @@ public static class VmEngine
                 if (args.Length != named.ArityValue)
                     throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.ArityValue} cannot be called with {args.Length} argument(s).");
                 if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out var sig))
-                    throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
+                {
+                    // Fall back to the context in which the function item was created
+                    // (function items returned by fn:transform delivery-format="raw").
+                    if (named.DefiningContext is EvaluationContext definingContext
+                        && definingContext.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out sig))
+                    {
+                        // Resolved against the defining context.
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
+                    }
+                }
                 // XSLT context-dependent functions (e.g. current-group) supply a separate
                 // implementation for dynamic invocation through a function item.
                 return (sig.DynamicImplementation ?? sig.Implementation)(context, ConvertDynamicCallArgs(sig, args));

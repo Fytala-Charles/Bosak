@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-14 (HOF unskip + snapshot cluster cleared; W3C XSLT 3.0 suite at 5,737 passed / 7 failed — only `fn:transform` tests remain)
+> **Living Registry** — Last updated: 2026-07-14 (fn:transform completed; W3C XSLT 3.0 suite at **5,744 passed / 0 failed** — 100% of runnable tests)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -583,6 +583,12 @@ Implemented `fn:transform` in `XsltFunctionLibrary` (Bosak.Xslt project) as a de
 - [x] `fn:transform(map{"stylesheet-location":"foo.xsl","source-node":.})` executes
 - [x] `initial-template` option works for named-template entry points
 - [x] Parameters can be passed via `stylesheet-params`
+- [x] `initial-match-selection` applies templates to arbitrary XDM values (2026-07-14)
+- [x] `delivery-format` `document`/`raw`/`serialized`, incl. callable function items in raw results (2026-07-14)
+- [x] Secondary `xsl:result-document` output captured in the result map (2026-07-14)
+- [x] `package-name`/`package-version` selection from a registered package set (2026-07-14)
+- [x] Available in static expressions (`static="yes"`, `xsl:use-when`) (2026-07-14)
+- [x] W3C transform test set 9/9 (2026-07-14)
 
 #### Impact Analysis
 | Layer | Impact | Notes |
@@ -598,6 +604,7 @@ Implemented `fn:transform` in `XsltFunctionLibrary` (Bosak.Xslt project) as a de
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-05-24 | Kimi | Pending | Phase 3 item; depends on stable XSLT engine |
+| 2026-07-14 | Kimi | Completed | Full option surface implemented; W3C transform set 9/9; conformance suite green |
 
 ---
 

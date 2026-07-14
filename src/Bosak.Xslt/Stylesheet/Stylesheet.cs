@@ -62,6 +62,7 @@
 //                      | Charles Korthout | 2.28  | 11-07-2026     | Load xsl:output parameter-document defaults and merge them with explicit attributes.    |
 //                      | Charles Korthout | 2.29  | 12-07-2026     | Last map in use-character-maps list wins for duplicate characters.                      |
 //                      | Charles Korthout | 2.30  | 13-07-2026     | Resolve include/import hrefs against the element base URI (external entities).          |
+//                      | Charles Korthout | 2.31   | 14-07-2026     | xsl:package root support (name/version); fn:transform registered in the static context |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -146,6 +147,9 @@ public sealed class Stylesheet
         ctx.BaseUri = explicitBaseUri ?? GetEffectiveBaseUri(elem);
         ctx.IsStaticEvaluation = true;
         Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
+        // fn:transform is available in static expressions (XSLT 3.0 §24.1), e.g. a
+        // static variable whose value is used in an xsl:use-when attribute.
+        Api.XsltFunctionLibrary.Populate(ctx);
 
         // Add in-scope namespace declarations so prefixes in use-when resolve correctly.
         var currentNs = elem;
@@ -517,6 +521,15 @@ public sealed class Stylesheet
     /// <summary>The value of the xsl:global-context-item/@use attribute, or null if absent.</summary>
     public string? GlobalContextItemUse { get; private set; }
 
+    /// <summary>Whether the root element of this module is <c>xsl:package</c>.</summary>
+    public bool IsPackage { get; private set; }
+
+    /// <summary>The package name (URI) from xsl:package/@name, or null for a stylesheet module.</summary>
+    public string? PackageName { get; private set; }
+
+    /// <summary>The package version from xsl:package/@package-version, or null when absent.</summary>
+    public string? PackageVersion { get; private set; }
+
     /// <summary>The value of the xsl:global-context-item/@as attribute, or null if absent.</summary>
     public string? GlobalContextItemAs { get; private set; }
 
@@ -629,8 +642,15 @@ public sealed class Stylesheet
         if (rootName.NamespaceName != XslNamespace)
             throw new InvalidOperationException($"Expected xsl:stylesheet or xsl:transform, got {rootName}.");
 
-        if (rootName.LocalName != "stylesheet" && rootName.LocalName != "transform")
+        if (rootName.LocalName != "stylesheet" && rootName.LocalName != "transform" && rootName.LocalName != "package")
             throw new InvalidOperationException($"Expected xsl:stylesheet or xsl:transform, got {rootName}.");
+
+        IsPackage = rootName.LocalName == "package";
+        if (IsPackage)
+        {
+            PackageName = root.Attribute("name")?.Value;
+            PackageVersion = root.Attribute("package-version")?.Value;
+        }
 
         // Expand a shadow version attribute before the effective version is determined.
         ExpandShadowAttribute(root, "version");
