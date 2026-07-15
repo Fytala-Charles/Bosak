@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** `PENDING` (QT3 regex/string quick-wins cluster)
+**Commit:** `7865cab` (QT3 regex/string quick-wins cluster)
 **Current focus:** **QT3 XPath 3.1 suite: 18,698 passed / 1,742 failed / 11,381 skipped (58.76%)** — up from 18,482/1,940/11,399 (58.08%) at session start (+216 passed, −198 failed, zero regressions). XSLT 3.0 suite remains 7,109/0/7,491 (100% runnable). Next QT3 clusters: fn:transform (61), fn:unparsed-text (54), fn:parse-xml/json (32), fn:load-xquery-module (31), fn:function-lookup (29), serialize (17), op/xs-numeric (22), map:find (10), fn:normalize-space residuals; caseless 'i'-flag full case folding (needs CaseFolding data tables).
 
 ---
