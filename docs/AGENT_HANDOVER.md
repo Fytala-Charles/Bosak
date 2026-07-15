@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** (pending) (QT3 Tier-2h: fn:serialize full Serialization 3.1 + map-constructor XQDY0137)
+**Current focus:** **QT3 XPath 3.1 suite: 21,454 passed / 1,083 failed / 9,284 skipped (67.42%)** — up from 21,387/1,150/9,284 (67.21%): **+67 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2g-final2.log`: fn-serialize pool CLEARED 56/0 → 119/119 in filtered run, +11 bonus map-constructor duplicate-key tests: MapConstructor-036/037/038/041/042, map-for-each-007, map-keys-007, map-size-007, same-key-003/027/028). Unit tests 1,087/0 (+19 serialize). Next pools: MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
+
+---
+
+## This Session Fixes (Tier-2h: fn:serialize)
+
+1. **New `XdmSerializer`** (`src/Bosak.XPath.Standard/Functions/XdmSerializer.cs`, internal static) — full XSLT/XQuery Serialization 3.1 engine replacing the naive fn:serialize path (space-joined `ToXmlString`).
+   - **Option forms**: map form with option parameter conventions (node atomization, untypedAtomic→required type, array flattening for QName lists, empty-sequence value → parameter default, unknown string keys + all QName keys ignored) and `output:serialization-parameters` element form (value attributes, `character-map` children, lexical QNames resolved against in-scope namespaces, vendor-namespace elements ignored).
+   - **Validation**: SENR0001 (free-standing attribute/namespace node, function item), XPTY0004 (wrong option types, char-map keys/values not xs:string), SEPM0016 (char key ≠ 1 char), SEPM0017 (bad element-form lexical/attribute/child, no-namespace param element, unknown output-ns param), SEPM0018 (duplicate char-map character), SEPM0019 (duplicate parameter element incl. vendor ns).
+   - **xml/xhtml/html/text**: own recursive node writer (`<f/>` not `<f />`, XmlWriter-compatible escaping incl. `&gt;` and `&#xD;`), XML declaration + standalone, item-separator, use-character-maps (text+attributes, replacement verbatim), cdata-section-elements (adjacent text merged, `]]>` split), indent with element-only-content detection + suppress-indentation, HTML5 doctype (only when a top-level `html` element is serialized) + `<meta charset>` injection into first `head`, HTML void elements.
+   - **json**: `()`→"null", top-level/nested multi-item sequences → SERE0023, duplicate keys after key→string conversion → SERE0022 (allow-duplicate-names opt-out), NaN/±INF → SERE0020, nodes serialized per json-node-output-method as JSON strings, solidus escaped (`\/`), non-encodable chars (non-UTF encoding option) → `\uXXXX` surrogate pairs.
+   - **adaptive**: canonical atomics (`true()`, quoted strings with doubled quotes), nodes as XML, free-standing attributes as `x="1"`, maps/arrays as XPath constructor syntax (`map{1:true()}`), item-separator.
+2. **Map constructors reject duplicate keys** — `VmEngine` `MapAdd` (constructor-only opcode) throws XQDY0137 when the atomized key already exists (serialize-xml-119/124/125 + 8 bonus MapTest/same-key tests).
+3. **`FunctionLibrary.Serialize_1/_2`** are now one-liners delegating to `XdmSerializer`; old `SerializeItem`/`SerializeJson`/`EncodeJsonString` helpers deleted (fn:xml-to-json keeps its own `XdmJsonSerializer`).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/XdmSerializer.cs` (v0.1: new serialization engine)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.38: serialize delegation, dead code removal)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.37: MapAdd XQDY0137)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.6: +19 serialize tests)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `930437c` (QT3 Tier-2g: fn:json-to-xml on JsonReader + canonical assert-xml)
 **Current focus:** **QT3 XPath 3.1 suite: 21,387 passed / 1,150 failed / 9,284 skipped (67.21%)** — up from 21,355/1,179/9,287 (67.11%): **+29 fixed, zero regressions** (name-level diff: json-to-xml 20 (pool cleared: 79/0), json-doc-012/error-016/error-026, plus comparer bonuses fn-doc-25/26/29, parse-xml-006/013, xml-to-json-017). Unit tests 1,068/0 (+11). Next pools: serialize-xml (37), MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
 

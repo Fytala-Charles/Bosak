@@ -102,6 +102,7 @@
 //                      | Charles Korthout | 5.36  | 15-07-2026     | fn:json-to-xml: duplicates='retain' accepted and is the default (retains duplicate keys); use-last still FOJS0005
 //                      | Charles Korthout | 5.37  | 15-07-2026     | fn:json-to-xml on JsonReader via JNode tree (dup-preserving): escaped/escaped-key attrs, () input, BaseUri annotation, raw j:number; escape=true now decodes quotes (json-doc-012); eager fallback/validate option validation (XPTY0004); removed System.Text.Json path
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
+//                      | Charles Korthout | 5.38  | 15-07-2026     | fn:serialize rewritten on XdmSerializer: map+element option forms, xml/json/adaptive methods, char maps, CDATA, indent, item-separator, SENR0001/SERE002x |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4381,32 +4382,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Serialize_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-    {
-        var value = args[0];
-        if (value.IsUndefined)
-            return XdmValue.FromString(string.Empty);
-
-        if (!value.IsSequence)
-            return XdmValue.FromString(SerializeItem(value));
-
-        // Sequence normalization (Serialization 3.1 §4): items are separated by one space.
-        var sb = new StringBuilder();
-        bool first = true;
-        foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
-        {
-            if (!first) sb.Append(' ');
-            sb.Append(SerializeItem(item));
-            first = false;
-        }
-        return XdmValue.FromString(sb.ToString());
-    }
-
-    private static string SerializeItem(XdmValue value)
-    {
-        if (value.IsNode)
-            return value.NodeValue.ToXmlString();
-        return value.ToString();
-    }
+        => XdmValue.FromString(XdmSerializer.Serialize(args[0]));
 
     private static XdmValue ParseXmlFragment_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -6462,167 +6438,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Serialize_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-    {
-        var value = args[0];
-        // An empty sequence for the options parameter means the default options; the
-        // element(output:serialization-parameters) form is not supported.
-        var optionsArg = args[1];
-        XdmMap options;
-        if (optionsArg.IsMap)
-            options = optionsArg.MapValue;
-        else if (optionsArg.IsUndefined || IsEmptySequence(optionsArg))
-            options = new XdmMap();
-        else
-            throw new InvalidOperationException($"XPTY0004: fn:serialize options must be a map or the empty sequence, got {optionsArg.Kind}.");
-        bool indent = false;
-        string method = "xml";
-        if (options.TryGetValue(XdmValue.FromString("indent"), out var indentVal))
-            indent = indentVal.BooleanValue;
-        if (options.TryGetValue(XdmValue.FromString("method"), out var methodVal))
-            method = methodVal.ToString().ToLowerInvariant();
-
-        if (value.IsUndefined)
-            return XdmValue.FromString(string.Empty);
-
-        if (!value.IsSequence)
-            return XdmValue.FromString(SerializeItem(value, indent, method));
-
-        // Sequence normalization (Serialization 3.1 §4): for the xml/xhtml/html methods
-        // items are separated by one space; the JSON method concatenates.
-        bool spaceSeparate = method is "xml" or "xhtml" or "html";
-        var sb = new StringBuilder();
-        bool first = true;
-        foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
-        {
-            if (!first && spaceSeparate) sb.Append(' ');
-            sb.Append(SerializeItem(item, indent, method));
-            first = false;
-        }
-        return XdmValue.FromString(sb.ToString());
-    }
-
-    private static string SerializeItem(XdmValue value, bool indent, string method)
-    {
-        if (method == "json")
-        {
-            if (value.IsNode)
-            {
-                if (value.NodeValue.NodeKind == XdmNodeKind.Document)
-                {
-                    // For JSON method on document, serialize the root element's content
-                    var doc = value.NodeValue;
-                    foreach (var child in doc.Axis(XdmAxis.Child))
-                    {
-                        if (child.NodeValue.NodeKind == XdmNodeKind.Element)
-                            return child.NodeValue.ToXmlString();
-                    }
-                }
-                return value.NodeValue.ToXmlString();
-            }
-            return SerializeJson(value);
-        }
-
-        if (value.IsNode)
-            return value.NodeValue.ToXmlString();
-        return value.ToString();
-    }
-
-    /// <summary>
-    /// Serializes an XDM value as JSON.
-    /// </summary>
-    private static string SerializeJson(XdmValue value)
-    {
-        if (value.IsUndefined)
-            return "null";
-
-        if (value.IsSequence && value.SequenceValue != null)
-        {
-            var sb = new StringBuilder("[");
-            bool first = true;
-            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
-            {
-                if (!first)
-                    sb.Append(',');
-                sb.Append(SerializeJson(item));
-                first = false;
-            }
-            sb.Append(']');
-            return sb.ToString();
-        }
-
-        if (value.IsMap)
-        {
-            var sb = new StringBuilder("{");
-            bool first = true;
-            foreach (var kvp in value.MapValue.Entries)
-            {
-                if (!first)
-                    sb.Append(',');
-                sb.Append(EncodeJsonString(kvp.Key.ToString()));
-                sb.Append(':');
-                sb.Append(SerializeJson(kvp.Value));
-                first = false;
-            }
-            sb.Append('}');
-            return sb.ToString();
-        }
-
-        if (value.IsArray)
-        {
-            var arr = value.ArrayValue;
-            var sb = new StringBuilder("[");
-            for (int i = 1; i <= arr.Count; i++)
-            {
-                if (i > 1)
-                    sb.Append(',');
-                sb.Append(SerializeJson(arr.Get(i)));
-            }
-            sb.Append(']');
-            return sb.ToString();
-        }
-
-        if (value.Kind == XdmValueKind.Boolean)
-            return value.BooleanValue ? "true" : "false";
-
-        if (value.Kind == XdmValueKind.String)
-            return EncodeJsonString(value.StringValue);
-
-        if (IsNumeric(value))
-            return value.ToString();
-
-        return EncodeJsonString(value.ToString());
-    }
-
-    /// <summary>
-    /// Encodes a string as a JSON string literal, escaping quotes, backslashes and
-    /// control characters.
-    /// </summary>
-    private static string EncodeJsonString(string value)
-    {
-        var sb = new StringBuilder(value.Length + 2);
-        sb.Append('"');
-        foreach (var c in value)
-        {
-            switch (c)
-            {
-                case '"': sb.Append("\\\""); break;
-                case '\\': sb.Append("\\\\"); break;
-                case '\b': sb.Append("\\b"); break;
-                case '\f': sb.Append("\\f"); break;
-                case '\n': sb.Append("\\n"); break;
-                case '\r': sb.Append("\\r"); break;
-                case '\t': sb.Append("\\t"); break;
-                default:
-                    if (c < 0x20)
-                        sb.Append($"\\u{(int)c:X4}");
-                    else
-                        sb.Append(c);
-                    break;
-            }
-        }
-        sb.Append('"');
-        return sb.ToString();
-    }
+        => XdmValue.FromString(XdmSerializer.Serialize(args[0], args[1]));
 
     private static XdmValue Error_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => throw new InvalidOperationException("fn:error() called");

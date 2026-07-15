@@ -35,6 +35,7 @@
 //                      | Charles Korthout | 2.3   | 15-07-2026     | fn:min/fn:max tests: untypedAtomic→double, FORG0001/FORG0006, NaN propagation, duration   |
 //                      | Charles Korthout | 2.4   | 15-07-2026     | fn:parse-json tests: empty input, duplicates modes, escape semantics, fallback rules      |
 //                      | Charles Korthout | 2.5   | 15-07-2026     | json-to-xml tests: retain/use-first duplicates, escape attrs, surrogates, () input, eager option validation; parse-json quote decoding
+//                      | Charles Korthout | 2.6   | 15-07-2026     | fn:serialize tests: xml declaration/standalone, item-separator, char maps, CDATA, element form, json/adaptive methods, SENR0001/SERE002x/SEPM001x/XQDY0137
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1927,6 +1928,194 @@ public class FunctionLibraryTests
     public void Serialize_EmptySequence()
     {
         Assert.Equal("", EvalStr("serialize(())"));
+    }
+
+    // ------------------------------------------------------------------
+    // fn:serialize — Serialization 3.1 parameters and output methods
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Serialize_FreeStandingAttribute_SENR0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize((parse-xml('<a x=\"1\"/>')//@*)[1])"));
+        Assert.Contains("SENR0001", ex.Message);
+    }
+
+    [Fact]
+    public void Serialize_FunctionItem_SENR0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("serialize(name#1)"));
+        Assert.Contains("SENR0001", ex.Message);
+    }
+
+    [Fact]
+    public void Serialize_MapConstructorDuplicateKey_XQDY0137()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("map{'indent':true(),'indent':true()}"));
+        Assert.Contains("XQDY0137", ex.Message);
+    }
+
+    [Fact]
+    public void Serialize_XmlDeclaration()
+    {
+        Assert.Contains("<?xml", EvalStr("serialize(parse-xml('<e/>'), map{'omit-xml-declaration':false()})"));
+        Assert.Contains("standalone=\"no\"",
+            EvalStr("serialize(parse-xml('<e/>'), map{'omit-xml-declaration':false(),'standalone':false()})"));
+        Assert.Contains("standalone=\"yes\"",
+            EvalStr("serialize(parse-xml('<e/>'), map{'omit-xml-declaration':false(),'standalone':true()})"));
+    }
+
+    [Fact]
+    public void Serialize_ItemSeparator()
+    {
+        Assert.Equal("1|2|3", EvalStr("serialize(1 to 3, map{'method':'xml','item-separator':'|'})"));
+        Assert.Equal("<e/>  <f/>",
+            EvalStr("serialize(parse-xml('<x><e/><f/></x>')/x/*, map{'item-separator':'  '})"));
+    }
+
+    [Fact]
+    public void Serialize_CharacterMap()
+    {
+        Assert.Equal("<e>a£b</e>",
+            EvalStr("serialize(parse-xml('<e>a$b</e>'), map{'use-character-maps':map{'$':'£'}})"));
+    }
+
+    [Fact]
+    public void Serialize_CharacterMapMultiCharKey_SEPM0016()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize(parse-xml('<e/>'), map{'use-character-maps':map{'$$':'£'}})"));
+        Assert.Contains("SEPM0016", ex.Message);
+    }
+
+    [Fact]
+    public void Serialize_CharacterMapWrongTypes_XPTY0004()
+    {
+        Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize(parse-xml('<e/>'), map{'use-character-maps':true()})"));
+        Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize(parse-xml('<e/>'), map{'use-character-maps':map{'x':xs:untypedAtomic('j')}})"));
+    }
+
+    [Fact]
+    public void Serialize_CdataSectionElements()
+    {
+        Assert.Equal("<doc><b><![CDATA[bold]]></b><i>italic</i></doc>",
+            EvalStr("serialize(parse-xml('<doc><b>bold</b><i>italic</i></doc>'), map{'cdata-section-elements':QName('','b')})"));
+    }
+
+    [Fact]
+    public void Serialize_UntypedAtomicOptionConversion()
+    {
+        Assert.Equal("<e/>  <f/>",
+            EvalStr("serialize(parse-xml('<x><e/><f/></x>')/x/*, map{'indent':xs:untypedAtomic('false'),'item-separator':xs:untypedAtomic('  ')})"));
+    }
+
+    [Fact]
+    public void Serialize_WrongOptionType_XPTY0004()
+    {
+        Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize(parse-xml('<e/>'), map{'indent':'yes'})"));
+        Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize(parse-xml('<e/>'), map{'standalone':' omit '})"));
+    }
+
+    [Fact]
+    public void Serialize_QNameKeyAndUnknownKeyIgnored()
+    {
+        // Absent-namespace QName keys and unknown string keys are both ignored.
+        Assert.Equal("<e><f/></e>",
+            EvalStr("serialize(parse-xml('<e><f/></e>'), map{QName('','indent'):true(),'xindent':true()})"));
+    }
+
+    [Fact]
+    public void Serialize_EmptySequenceOptionKeepsDefault()
+    {
+        Assert.DoesNotContain("standalone",
+            EvalStr("serialize(parse-xml('<e/>'), map{'omit-xml-declaration':false(),'standalone':()})"));
+    }
+
+    [Fact]
+    public void Serialize_ElementForm()
+    {
+        const string paramsDoc = "'<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\">"
+                                 + "<output:method value=\"xml\"/><output:item-separator value=\"|\"/></output:serialization-parameters>'";
+        Assert.Equal("1|2|3", EvalStr($"serialize(1 to 3, parse-xml({paramsDoc}))"));
+    }
+
+    [Fact]
+    public void Serialize_ElementFormValidation()
+    {
+        // Bad boolean lexical → SEPM0017
+        var ex1 = Assert.Throws<InvalidOperationException>(() => Evaluate(
+            "serialize(parse-xml('<e/>'), parse-xml('<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\"><output:indent value=\"maybe\"/></output:serialization-parameters>'))"));
+        Assert.Contains("SEPM0017", ex1.Message);
+        // Duplicate parameter element → SEPM0019
+        var ex2 = Assert.Throws<InvalidOperationException>(() => Evaluate(
+            "serialize(parse-xml('<e/>'), parse-xml('<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\"><output:indent value=\"yes\"/><output:indent value=\"no\"/></output:serialization-parameters>'))"));
+        Assert.Contains("SEPM0019", ex2.Message);
+        // Duplicate character map entry → SEPM0018
+        var ex3 = Assert.Throws<InvalidOperationException>(() => Evaluate(
+            "serialize(parse-xml('<e/>'), parse-xml('<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\"><output:use-character-maps><output:character-map character=\"$\" map-string=\"a\"/><output:character-map character=\"$\" map-string=\"b\"/></output:use-character-maps></output:serialization-parameters>'))"));
+        Assert.Contains("SEPM0018", ex3.Message);
+        // Vendor-namespace parameter is ignored
+        Assert.Equal("<e/>", EvalStr(
+            "serialize(parse-xml('<e/>'), parse-xml('<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\"><v:x value=\"yes\" xmlns:v=\"http://vendor.example.com/\"/></output:serialization-parameters>'))"));
+    }
+
+    [Fact]
+    public void Serialize_Html5()
+    {
+        var result = EvalStr(
+            "serialize(parse-xml('<html><head/><body><p>Hello World!</p></body></html>'), map{'method':'html','html-version':5})");
+        Assert.Contains("<!DOCTYPE HTML>", result);
+        Assert.Contains("<meta charset", result);
+        // Fragment (no html element) → no DOCTYPE.
+        Assert.Equal("<body><p>Hello World!</p></body>",
+            EvalStr("serialize(parse-xml('<html><head/><body><p>Hello World!</p></body></html>')//body, map{'method':'html','html-version':5})"));
+    }
+
+    [Fact]
+    public void Serialize_Json()
+    {
+        Assert.Equal("null", EvalStr("serialize((), map{'method':'json'})"));
+        Assert.Equal("{\"uri\":\"http:\\/\\/www.w3.org\\/\"}",
+            EvalStr("serialize(map{'uri':xs:anyURI('http://www.w3.org/')}, map{'method':'json'})"));
+        Assert.Equal("[\"a\",\"<a>b<\\/a>\"]",
+            EvalStr("serialize(array{'a', parse-xml('<a>b</a>')}, map{'method':'json'})"));
+        Assert.Equal("\"\\uD834\\uDD1E\"",
+            EvalStr("serialize(codepoints-to-string(119070), map{'method':'json','encoding':'ISO-8859-1'})"));
+    }
+
+    [Fact]
+    public void Serialize_JsonErrors()
+    {
+        var ex1 = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize(1 to 3, map{'method':'json'})"));
+        Assert.Contains("SERE0023", ex1.Message);
+        var ex2 = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize(map{'abc':(1 to 3)}, map{'method':'json'})"));
+        Assert.Contains("SERE0023", ex2.Message);
+        var ex3 = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize(map{xs:QName('foo'):1,'foo':2}, map{'method':'json'})"));
+        Assert.Contains("SERE0022", ex3.Message);
+        var ex4 = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("serialize([number('NaN')], map{'method':'json'})"));
+        Assert.Contains("SERE0020", ex4.Message);
+    }
+
+    [Fact]
+    public void Serialize_Adaptive()
+    {
+        Assert.Equal("1;2;3", EvalStr("serialize((1,2,3), map{'method':'adaptive','item-separator':';'})"));
+        Assert.Equal("<a/>;<b/>",
+            EvalStr("serialize((parse-xml('<a/>'), parse-xml('<b/>')), map{'method':'adaptive','item-separator':';'})"));
+        Assert.Equal("x=\"1\";y=\"2\"",
+            EvalStr("serialize((parse-xml('<a x=\"1\"/>')/a/@x, parse-xml('<b y=\"2\"/>')/b/@y), map{'method':'adaptive','item-separator':';'})"));
+        Assert.Equal("map{1:true(),2:false()};map{8:80,9:90}",
+            EvalStr("serialize((map{1:true(),2:false()}, map{8:80,9:90}), map{'method':'adaptive','item-separator':';'})"));
     }
 
     // ------------------------------------------------------------------

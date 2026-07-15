@@ -69,6 +69,7 @@
 //                      | Charles Korthout | 2.34  | 15-07-2026     | OverflowException during execution is surfaced as FOAR0002 (numeric range error)       |
 //                      | Charles Korthout | 2.35  | 15-07-2026     | ConvertArgToKind passes empty sequences through for optional parameters (xs:T?/xs:T*)  |
 //                      | Charles Korthout | 2.36  | 15-07-2026     | Lookup semantics: container-major multi-key, single-result unwrap, strict xs:integer array keys (FOAY0001 bounds/XPTY0004 type), array-as-function via shared ArrayLookup, CompareGeneral atomizes arrays |
+//                      | Charles Korthout | 2.37  | 15-07-2026     | MapAdd raises XQDY0137 on duplicate keys in map constructors (serialize-xml-119/124/125) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1615,6 +1616,9 @@ public static class VmEngine
                     {
                         var map = registers[instr.RegisterA].MapValue;
                         var key = AtomizeMapKey(registers[instr.RegisterB]);
+                        // XPath 3.1 §3.11.4: duplicate keys in a map constructor are a dynamic error.
+                        if (map.ContainsKey(key))
+                            throw new InvalidOperationException($"XQDY0137: Duplicate key '{key}' in map constructor.");
                         map.Add(key, registers[instr.RegisterC]);
                         ip++;
                         break;
