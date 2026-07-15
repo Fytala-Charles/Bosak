@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** `TBD` (QT3 Tier-2c: `?` lookup operator — UnaryLookup parsing + spec-complete VM semantics)
+**Commit:** `bb16583` (QT3 Tier-2c: `?` lookup operator — UnaryLookup parsing + spec-complete VM semantics)
 **Current focus:** **QT3 XPath 3.1 suite: 21,218 passed / 1,317 failed / 9,286 skipped (66.68%)** — up from 21,145/1,390/9,286 (66.45%): **+73 passed, zero regressions** (73 fixed, 0 new). Unit tests 1,028/0 (+8 lookup VM, +6 parser). Next pools: xml-to-json (43: `//*:template` paths + escape), serialize-xml (37), fn-parse-json (31: escape round-trip), K-ForExprPositionalVar (29: parser lacks `at $pos`), K-SeqMAX/MINFunc (39: untypedAtomic→double), MapTest/ArrayTest (34), fn-transform (57, genuine XSLT).
 
 ---
