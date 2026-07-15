@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** `PENDING` (QT3 URI-mapping cluster: 2,106 UriFormatException skips cleared)
+**Commit:** `36ded23` (QT3 URI-mapping cluster: 2,106 UriFormatException skips cleared)
 **Current focus:** **QT3 XPath 3.1 suite: 20,294 passed / 1,985 failed / 9,542 skipped (63.78%)** — up from 18,698/1,742/11,381 (58.76%): **+1,596 passed, −1,839 skipped, zero regressions** (name-level diff per run; all new failures are previously-skipped tests now exposing genuine gaps). XSLT 3.0 suite smoke green (transform 9/9, json 10/0, analyze-string 53/0). Unit tests 1,010/0. Next QT3 pools: ~90 OverflowException→FOAR0002 (numeric range), 189 invalid assert-count + 72 assert-permutation (harness asserts), 460 external-variable binding, json-doc option semantics (escape/duplicates, FOJS0005, XPTY0004), map:find#2 function items, fn:unparsed-text residual (comparator newline quirk, flaky w3.org fetches for repo-missing files), fn:transform XSLT feature gaps (54).
 
 ---
