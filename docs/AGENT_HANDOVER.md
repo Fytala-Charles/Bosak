@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-14
-**Commit:** `PENDING` (unicode-90 conformance set — suite still 100% green)
+**Commit:** `67a0a3d` (unicode-90 conformance set — suite still 100% green)
 **Current focus:** **W3C XSLT 3.0 suite fully green: 7,109 passed / 0 failed / 7,491 skipped (100% of runnable tests).** unicode-90 (1,460 tests) now enabled: **1,365 passed / 0 failed / 95 skipped** — all skips are upstream test/data defects, documented in the harness. Next frontiers: error test-set (~385), import-schema (~185), streaming, principal `xsl:package`/`xsl:use-package`, or the QT3 XPath suite (~59%).
 
 ---
