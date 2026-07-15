@@ -50,7 +50,7 @@ Target framework: `net10.0`. All tests must pass before considering a task compl
 > normal `bin\Release\net10.0` directory. If `dotnet test` fails with
 > `0x800711C7` for that project, use the provided script instead:
 > ```powershell
-> .\run-xslt-tests.ps1 -Configuration Release
+> powershell -ExecutionPolicy Bypass -File .\run-xslt-tests.ps1 -Configuration Release
 > ```
 > The script copies the build output to `%TEMP%` and runs `dotnet vstest` from there,
 > which bypasses the policy. Other test projects run normally with `dotnet test`.

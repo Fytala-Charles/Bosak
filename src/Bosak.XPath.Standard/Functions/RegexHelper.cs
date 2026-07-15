@@ -13,6 +13,8 @@
 //                      | Charles Korthout | 0.1   | 13-06-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 25-06-2026     | Added flags-aware ValidateAndTranslatePattern; $ to \z in non-multiline mode             |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Translate '.' to match Unicode code points, including surrogate pairs                   |
+//                      | Charles Korthout | 0.4   | 11-07-2026     | Translate XSD char classes via XsdCharClasses with pinned Unicode 9.0 data              |
+//                      | Charles Korthout | 0.5   | 14-07-2026     | Translation/Regex caches; always Compiled (NonBacktracking silently mis-matched U+000A) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -60,7 +62,7 @@ public static class RegexHelper
     public static string ValidateAndTranslatePattern(string pattern)
     {
         ValidateXsdRegex(pattern);
-        return TranslateEndAnchor(TranslateDot(TranslateBackreferences(pattern), RegexOptions.None), multiline: false);
+        return TranslateEndAnchor(TranslateDot(TranslateBackreferences(XsdCharClasses.Translate(pattern)), RegexOptions.None), multiline: false);
     }
 
     /// <summary>
@@ -71,7 +73,7 @@ public static class RegexHelper
     public static string ValidateAndTranslatePattern(string pattern, RegexOptions options)
     {
         ValidateXsdRegex(pattern);
-        return TranslateEndAnchor(TranslateDot(TranslateBackreferences(pattern), options), (options & RegexOptions.Multiline) != 0);
+        return TranslateEndAnchor(TranslateDot(TranslateBackreferences(XsdCharClasses.Translate(pattern)), options), (options & RegexOptions.Multiline) != 0);
     }
 
     /// <summary>
@@ -79,7 +81,77 @@ public static class RegexHelper
     /// </summary>
     public static void CheckZeroLengthMatch(string pattern, RegexOptions options)
     {
-        if (Regex.IsMatch(string.Empty, pattern, options))
+        if (GetRegex(pattern, options).IsMatch(string.Empty))
+            throw new InvalidOperationException("FORX0003");
+    }
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<(string Pattern, RegexOptions Options), string> TranslationCache = new();
+
+    /// <summary>
+    /// <see cref="ValidateAndTranslatePattern(string, RegexOptions)"/> with a cache: hot paths
+    /// such as <c>fn:matches</c> may translate the same literal pattern millions of times.
+    /// The cache holds at most 512 entries and is cleared when full.
+    /// </summary>
+    public static string ValidateAndTranslatePatternCached(string pattern, RegexOptions options)
+    {
+        var key = (pattern, options);
+        if (TranslationCache.TryGetValue(key, out var translated))
+            return translated;
+        if (TranslationCache.Count >= 512)
+            TranslationCache.Clear();
+        translated = ValidateAndTranslatePattern(pattern, options);
+        TranslationCache[key] = translated;
+        return translated;
+    }
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<(string Pattern, RegexOptions Options), Regex> RegexCache = new();
+
+    /// <summary>
+    /// Validates and translates an XSD pattern (cached) and returns a cached <see cref="Regex"/>
+    /// for it. The cache is keyed by the original (short) pattern so that hot loops calling
+    /// <c>fn:matches</c>/<c>fn:replace</c> with large translated Unicode classes pay only a
+    /// small dictionary lookup per call.
+    /// </summary>
+    public static Regex GetRegexForXsdPattern(string originalPattern, RegexOptions options)
+    {
+        var key = (originalPattern, options);
+        if (RegexCache.TryGetValue(key, out var cached))
+            return cached;
+        string translated = ValidateAndTranslatePattern(originalPattern, options);
+        return CacheRegex(key, translated, options);
+    }
+
+    /// <summary>
+    /// Returns a cached <see cref="Regex"/> for the (already translated) pattern and options.
+    /// Patterns are compiled (<see cref="RegexOptions.Compiled"/>): the large translated Unicode
+    /// classes run far faster compiled than interpreted. (NonBacktracking was tried but both
+    /// rejected large alternations and, worse, silently mis-matched U+000A on some patterns.)
+    /// The cache holds at most 512 entries and is cleared when full (patterns are cheap to
+    /// recreate).
+    /// </summary>
+    public static Regex GetRegex(string pattern, RegexOptions options)
+    {
+        var key = (pattern, options);
+        if (RegexCache.TryGetValue(key, out var cached))
+            return cached;
+        return CacheRegex(key, pattern, options);
+    }
+
+    private static Regex CacheRegex((string Pattern, RegexOptions Options) key, string pattern, RegexOptions options)
+    {
+        if (RegexCache.Count >= 512)
+            RegexCache.Clear();
+        var regex = new Regex(pattern, options | RegexOptions.Compiled);
+        RegexCache[key] = regex;
+        return regex;
+    }
+
+    /// <summary>
+    /// Throws <c>FORX0003</c> if the pattern matches a zero-length string.
+    /// </summary>
+    public static void CheckZeroLengthMatch(Regex regex)
+    {
+        if (regex.IsMatch(string.Empty))
             throw new InvalidOperationException("FORX0003");
     }
 

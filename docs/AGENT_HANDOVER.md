@@ -1,6 +1,51 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-14
+**Commit:** `PENDING` (unicode-90 conformance set — suite still 100% green)
+**Current focus:** **W3C XSLT 3.0 suite fully green: 7,109 passed / 0 failed / 7,491 skipped (100% of runnable tests).** unicode-90 (1,460 tests) now enabled: **1,365 passed / 0 failed / 95 skipped** — all skips are upstream test/data defects, documented in the harness. Next frontiers: error test-set (~385), import-schema (~185), streaming, principal `xsl:package`/`xsl:use-package`, or the QT3 XPath suite (~59%).
+
+---
+
+## This Session Fixes (unicode-90 cluster)
+
+1. **XSD character-class regex engine with pinned Unicode 9.0.0 data** — new `XsdCharClasses` (range-set engine: `\p{X}`/`\P{X}` for all 38 categories incl. grouped `LC`, `\p{IsBlock}` script blocks, `\d \D \w \W \s \S \i \I \c \C`, ranges, negation, unions, subtraction `[A-[B]]`; astral ranges emitted as surrogate-pair alternations) + generated `UnicodeData90` tables (from UCD `DerivedGeneralCategory-9.0.0.txt` / `Blocks-9.0.0.txt`). `\w` follows XSD (`[^\p{P}\p{Z}\p{C}]` — So symbols are word chars). Unknown category/block → FORX0002.
+2. **Regex caches** — `RegexHelper.ValidateAndTranslatePatternCached` + `GetRegex` keyed by the short original pattern; wired into fn:matches/replace/tokenize/analyze-string and xsl:analyze-string. Compiled regexes throughout: `RegexOptions.NonBacktracking` **silently mis-matched U+000A (LF)** on large translated alternations (found by the suite; probe-verified vs Compiled/interpreted; regression test added).
+3. **fn:codepoints-to-string validity** — now exactly the XML 1.1 Char production (C0-except-NUL, U+FDD0..FDEF and astral xFFFE/xFFFF legal; surrogates/U+FFFE/U+FFFF/NUL → FOCH0001). **fn:translate** is Rune-based (astral pairs no longer split).
+4. **fn:concat to arity 32** — unicode-90 uses concat#16 (fn-matches19/20).
+5. **VmEngine CompareGeneral fast path** — `=`/`!=` between a single xs:integer and a large all-integer sequence uses a cached `HashSet<long>` (ConditionalWeakTable keyed by sequence identity): `$validrange[not(. = $c)]` (1.1M × 2,063 pairwise comparisons per test) collapses to O(n).
+6. **Harness (unicode-90)** — `charclass` stylesheet param injection for Gen tests (upstream generator omits it; default 'Ll' would make every category test Ll); 54MB data docs cached (LRU 3) across the ≤38 tests per category; degenerate empty-`@c` entries (U+FFFE/U+FFFF placeholders in unicode-C.xml/Cn.xml — not XML-representable) dropped on load.
+
+## Upstream defects (skipped, documented in Program.cs)
+
+- `unicode90-001..008` — BMP-only expected class counts contradict this suite's own Gen tests (full-range code-point semantics).
+- `unicode90-{cat}-033/035` (76 tests) — fn-replace3/5 compare against `string-join(*/c,'')` but `<c>` elements are empty; can never hold (still broken in w3c/xslt30-test master).
+- `unicode90-Cs-001..004/023` + `unicode90-Zl-023`/`Zp-023` — empty (Cs) or one-member (Zl/Zp) categories produce invalid quantifiers in mode 23; Cs content is unrepresentable in XDM strings.
+- `unicode90-L-017/038` + `unicode90-Lo-017/038` — stylesheet `$validrange` omits U+10000 (astral range starts at 65537) but the documents include it (Linear B, Lo); count/replace comparisons are off by one on any processor.
+
+## Results
+
+- Unit-test suite: **961 passed / 0 failed / 0 skipped** across 8 projects (Standard 326, incl. regression tests: LF-in-complement, concat#16, C0 controls).
+- unicode-90 set: **1,365 passed / 0 failed / 95 skipped** (~1h50m runtime).
+- Full W3C XSLT 3.0 suite: **7,109 passed / 0 failed / 7,491 skipped** (100% of runnable).
+- Perf: fn:matches ~15–22µs/call cached (was ~36µs at cluster start); heavy Gen modes ~2.5min → ~7s per test after the CompareGeneral fast path.
+
+## Files Changed
+
+- `src/Bosak.XPath.Standard/Functions/XsdCharClasses.cs` (NEW), `UnicodeData90.cs` (NEW, generated)
+- `src/Bosak.XPath.Standard/Functions/RegexHelper.cs` (XSD class routing, translation/regex caches, Compiled-only)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (cps validity, Rune translate, cached regex use, concat arities 14–32)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (CompareGeneral integer-set fast path)
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs` (xsl:analyze-string cached regex)
+- `tests/Bosak.Xslt.Conformance/Program.cs` (charclass injection, doc cache, empty-@c filter, skips + reasons)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (+20 tests over the cluster)
+- `.gitignore` (tmp/, tmpdebug/, mult/), `AGENTS.md`, `README.md`, `docs/ARCHITECTURE.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
+
+---
+
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-14
 **Commit:** `dd094ff` (fn:transform completion — suite 100% green)
 **Current focus:** **W3C XSLT 3.0 suite fully green: 5,744 passed / 0 failed / 8,856 skipped (100% of runnable tests).** Next frontiers: big skip pools (unicode-90 collation ~1,460; error test-set ~385; import-schema ~185; streaming; principal `xsl:package`/`xsl:use-package`), or the QT3 XPath suite (~59%).
 

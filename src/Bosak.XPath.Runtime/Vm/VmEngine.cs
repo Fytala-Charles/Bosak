@@ -65,6 +65,7 @@
 //                      | Charles Korthout | 2.30  | 13-07-2026     | HOF: closure capture, dynamic-call arity/conversion, coerced items, instance-of types  |
 //                      | Charles Korthout | 2.31  | 14-07-2026     | Dynamic-call String conversion back to spec (untypedAtomic cast + URI promotion only)  |
 //                      | Charles Korthout | 2.32   | 14-07-2026     | NamedFunctionItem carries defining context; fallback resolution across contexts        |
+//                      | Charles Korthout | 2.33  | 14-07-2026     | CompareGeneral integer-set fast path (cached HashSet) for = / != on large sequences    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3519,6 +3520,19 @@ public static class VmEngine
 
     private static XdmValue CompareGeneral(IrOpCode op, XdmValue left, XdmValue right, EvaluationContext context)
     {
+        // XPath 3.1 §17.3: if one operand is an empty sequence, the result is false.
+        if (left.IsUndefined || right.IsUndefined)
+            return XdmValue.FromBoolean(false);
+
+        // Fast path: '=' / '!=' between a single xs:integer and a large all-integer
+        // sequence (e.g. $validrange[not(. = $c)] with 1.1M x 2k comparisons): use a
+        // cached hash set instead of O(n x m) pairwise comparison.
+        if (!context.BackwardsCompatible && op is IrOpCode.GeneralEqual or IrOpCode.GeneralNotEqual &&
+            TryIntegerSetComparison(op, left, right, out bool intSetResult))
+        {
+            return XdmValue.FromBoolean(intSetResult);
+        }
+
         // General comparisons use existential semantics over sequences.
         // For now, materialize both sides and compare pairwise.
         var leftItems = MaterializeSequence(left);
@@ -3540,10 +3554,6 @@ public static class VmEngine
                 false, false, context);
             return XdmValue.FromBoolean(match);
         }
-
-        // XPath 3.1 §17.3: if one operand is an empty sequence, the result is false.
-        if (left.IsUndefined || right.IsUndefined)
-            return XdmValue.FromBoolean(false);
 
         bool relational = IsRelationalGeneralComparison(op);
 
@@ -3598,6 +3608,76 @@ public static class VmEngine
             IrOpCode.GeneralGreaterThanOrEqual => IrOpCode.GreaterThanOrEqual,
             _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
         };
+
+    private sealed class IntegerSetHolder
+    {
+        public HashSet<long>? Set;
+    }
+
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<IXdmSequence, IntegerSetHolder> IntegerSetCache = new();
+
+    /// <summary>
+    /// Evaluates <c>=</c>/<c>!=</c> between a single xs:integer item and a sequence that
+    /// consists solely of xs:integer items, using a cached hash set for the sequence
+    /// (built once per sequence identity). Returns false when the fast path does not apply.
+    /// </summary>
+    private static bool TryIntegerSetComparison(IrOpCode op, XdmValue left, XdmValue right, out bool result)
+    {
+        result = false;
+        XdmValue single, multi;
+        if (left.IsAtomic) { single = left; multi = right; }
+        else if (right.IsAtomic) { single = right; multi = left; }
+        else return false;
+
+        var atom = Atomize(single);
+        if (atom.Kind != XdmValueKind.Integer)
+            return false;
+
+        HashSet<long>? set;
+        long singleOther = 0;
+        if (multi.IsAtomic)
+        {
+            var other = Atomize(multi);
+            if (other.Kind != XdmValueKind.Integer)
+                return false;
+            singleOther = other.IntegerValue;
+            set = null;
+        }
+        else if (multi.IsSequence && multi.SequenceValue is not null)
+        {
+            set = GetOrBuildIntegerSet(multi.SequenceValue);
+            if (set is null)
+                return false;
+        }
+        else return false;
+
+        result = op == IrOpCode.GeneralEqual
+            ? (set is null ? atom.IntegerValue == singleOther : set.Contains(atom.IntegerValue))
+            : (set is null ? atom.IntegerValue != singleOther : set.Count > 1 || !set.Contains(atom.IntegerValue));
+        return true;
+    }
+
+    private static HashSet<long>? GetOrBuildIntegerSet(IXdmSequence seq)
+    {
+        var holder = IntegerSetCache.GetValue(seq, BuildIntegerSetHolder);
+        return holder.Set;
+    }
+
+    private static IntegerSetHolder BuildIntegerSetHolder(IXdmSequence seq)
+    {
+        // Only larger, all-integer sequences qualify for the cached hash set.
+        if (!seq.TryGetLength(out int len) || len < 8)
+            return new IntegerSetHolder { Set = null };
+        var set = new HashSet<long>(len);
+        foreach (var item in XdmSequence.FromSource(seq))
+        {
+            var atom = Atomize(item);
+            if (atom.Kind != XdmValueKind.Integer)
+                return new IntegerSetHolder { Set = null };
+            set.Add(atom.IntegerValue);
+        }
+        return new IntegerSetHolder { Set = set };
+    }
 
     private static bool IsRelationalGeneralComparison(IrOpCode op)
         => op is IrOpCode.GeneralLessThan or IrOpCode.GeneralLessThanOrEqual

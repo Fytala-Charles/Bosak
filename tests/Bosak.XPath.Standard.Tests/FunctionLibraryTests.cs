@@ -25,6 +25,9 @@
 //                      | Charles Korthout | 1.3   | 27-05-2026     | Added JSON function tests (parse-json, json-to-xml, xml-to-json, round-trip)            |
 //                      | Charles Korthout | 1.4   | 27-05-2026     | Updated tokenize tests for spec-correct leading/trailing empty string preservation       |
 //                      | Charles Korthout | 1.5   | 13-07-2026     | Allow current-time test day 1 or 2 when positive offset underflows DateTimeOffset.       |
+//                      | Charles Korthout | 1.6   | 11-07-2026     | Added XSD char-class (Unicode 9.0), translate and codepoints-to-string astral tests      |
+//                      | Charles Korthout | 1.7   | 14-07-2026     | Regression tests: LF in complement classes (NonBacktracking bug), fn:concat arity 16     |
+//                      | Charles Korthout | 1.8   | 14-07-2026     | codepoints-to-string accepts XML 1.1 C0 controls (xml-to-json regression)                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1257,6 +1260,150 @@ public class FunctionLibraryTests
 
     [Fact]
     public void Replace_FlagsQuoteMode() => Assert.Equal("aXb", EvalStr("replace('a.b', '.', 'X', 'q')"));
+
+    // ------------------------------------------------------------------
+    // XSD character classes (Unicode 9.0 pinned)
+    // ------------------------------------------------------------------
+
+    private const string AdlamCap = "\U0001E900";   // Lu, new in Unicode 9.0
+    private const string AdlamDigit = "\U0001E950"; // Nd, new in Unicode 9.0
+    private const string Emoji = "\U0001F600";      // So
+    private const string Tangut = "\U00017000";     // Lo, new in Unicode 9.0
+
+    [Fact]
+    public void Matches_Category_AstralLetter()
+        => Assert.Equal("true", EvalStr("matches('" + AdlamCap + "', '\\p{Lu}')"));
+
+    [Fact]
+    public void Matches_Category_AstralDigit()
+        => Assert.Equal("true", EvalStr("matches('" + AdlamDigit + "', '\\d')"));
+
+    [Fact]
+    public void Matches_Category_SymbolIsWordChar()
+        => Assert.Equal("true", EvalStr("matches('" + Emoji + "', '\\w')"));
+
+    [Fact]
+    public void Matches_Category_ComplementAstral()
+    {
+        Assert.Equal("false", EvalStr("matches('" + AdlamCap + "', '\\P{L}')"));
+        Assert.Equal("true", EvalStr("matches('" + Emoji + "', '\\P{L}')"));
+    }
+
+    [Fact]
+    public void Matches_Block_Adlam()
+    {
+        Assert.Equal("true", EvalStr("matches('" + AdlamCap + "', '\\p{IsAdlam}')"));
+        Assert.Equal("false", EvalStr("matches('A', '\\p{IsAdlam}')"));
+        Assert.Equal("true", EvalStr("matches('A', '\\P{IsAdlam}')"));
+    }
+
+    [Fact]
+    public void Matches_Block_UnknownThrows()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("matches('A', '\\p{IsFoo}')"));
+        Assert.Contains("FORX0002", ex.Message);
+    }
+
+    [Fact]
+    public void Matches_Category_UnknownThrows()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("matches('A', '\\p{Xx}')"));
+        Assert.Contains("FORX0002", ex.Message);
+    }
+
+    [Fact]
+    public void Matches_ClassSubtraction_Empty()
+        => Assert.Equal("false", EvalStr("matches('A', '[\\p{L}-[\\p{L}]]')"));
+
+    [Fact]
+    public void Matches_ClassSubtraction_Range()
+    {
+        Assert.Equal("true", EvalStr("matches('b', '[a-z-[x]]')"));
+        Assert.Equal("false", EvalStr("matches('x', '[a-z-[x]]')"));
+    }
+
+    [Fact]
+    public void Matches_NegatedComplement()
+    {
+        Assert.Equal("true", EvalStr("matches('a', '[^\\P{Ll}]')"));
+        Assert.Equal("false", EvalStr("matches('A', '[^\\P{Ll}]')"));
+    }
+
+    [Fact]
+    public void Matches_AnchoredAstral()
+        => Assert.Equal("true", EvalStr("matches('A" + AdlamCap + "z', '^\\p{L}+$')"));
+
+    [Fact]
+    public void Matches_BackreferenceAstral()
+        => Assert.Equal("true", EvalStr("matches('" + AdlamCap + AdlamCap + "', '^(\\p{Lu})\\1$')"));
+
+    [Fact]
+    public void Replace_AstralClass()
+        => Assert.Equal("x#y", EvalStr("replace('x" + AdlamDigit + "y', '\\p{Nd}', '#')"));
+
+    [Fact]
+    public void Matches_AdlamBlockCount()
+        => Assert.Equal("96", EvalStr("count(((125184 to 125279) ! codepoints-to-string(.))[matches(., '\\p{IsAdlam}')])"));
+
+    // Regression: RegexOptions.NonBacktracking silently failed to match U+000A (LF) on the
+    // large translated complement classes; the regex cache now always uses Compiled.
+    [Fact]
+    public void Matches_ComplementContainsLineFeed()
+    {
+        Assert.Equal("true", EvalStr("matches('\n', '\\P{Ll}')"));
+        Assert.Equal("true", EvalStr("matches('\n', '[\\p{Ll}]|[\\P{Ll}]')"));
+        Assert.Equal("**", EvalStr("replace('\n', '\\P{Ll}', '**')"));
+    }
+
+    // Regression: fn:concat is variadic; arities above 13 must resolve (unicode-90 uses #16).
+    [Fact]
+    public void Concat_Arity16()
+        => Assert.Equal("abcdefghijklmnop",
+            EvalStr("concat('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p')"));
+
+    // ------------------------------------------------------------------
+    // fn:translate code-point semantics
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Translate_AstralSource()
+        => Assert.Equal("yx", EvalStr("translate('" + AdlamCap + "x', '" + AdlamCap + "', 'y')"));
+
+    [Fact]
+    public void Translate_AstralDelete()
+        => Assert.Equal("xy", EvalStr("translate('x" + AdlamCap + "y', '" + AdlamCap + "', '')"));
+
+    // ------------------------------------------------------------------
+    // fn:codepoints-to-string XML 1.1 Char validity
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void CodepointsToString_AllowsNonCharacters()
+    {
+        // FDD0-FDEF and astral code points ending in FFFE/FFFF are valid XML 1.1 characters.
+        Assert.Equal("64976", EvalStr("string-to-codepoints(codepoints-to-string(64976))[1]"));
+        Assert.Equal("131070", EvalStr("string-to-codepoints(codepoints-to-string(131070))[1]"));
+        Assert.Equal("1114111", EvalStr("string-to-codepoints(codepoints-to-string(1114111))[1]"));
+    }
+
+    [Fact]
+    public void CodepointsToString_AllowsXml11C0Controls()
+    {
+        // Bosak is XML 1.1-capable (Xml11Loader): C0 controls except NUL are valid characters
+        // (xml-to-json serializes e.g. backspace/form-feed as JSON escapes).
+        Assert.Equal("8", EvalStr("string-to-codepoints(codepoints-to-string(8))[1]"));
+        Assert.Equal("12", EvalStr("string-to-codepoints(codepoints-to-string(12))[1]"));
+    }
+
+    [Fact]
+    public void CodepointsToString_RejectsNonChars()
+    {
+        Assert.Contains("FOCH0001", Assert.Throws<InvalidOperationException>(() => Evaluate("codepoints-to-string(65534)")).Message);
+        Assert.Contains("FOCH0001", Assert.Throws<InvalidOperationException>(() => Evaluate("codepoints-to-string(65535)")).Message);
+        Assert.Contains("FOCH0001", Assert.Throws<InvalidOperationException>(() => Evaluate("codepoints-to-string(55296)")).Message);
+        Assert.Contains("FOCH0001", Assert.Throws<InvalidOperationException>(() => Evaluate("codepoints-to-string(0)")).Message);
+    }
+
 
     [Fact]
     public void Tokenize_Basic()

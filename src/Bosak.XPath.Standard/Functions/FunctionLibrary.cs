@@ -90,6 +90,7 @@
 //                      | Charles Korthout | 5.24  | 13-07-2026     | Fallback to day 2 for current-time when positive offset pushes UTC before year 1.        |
 //                      | Charles Korthout | 5.25  | 13-07-2026     | HOF: FOTY0015 deep-equal, FOTY0013 atomize, anonymous curried names, arity unwrap      |
 //                      | Charles Korthout | 5.26  | 14-07-2026     | fn:concat/fn:compare#2 params now pass-through anyAtomicType; fixes HOF-064            |
+//                      | Charles Korthout | 5.27  | 14-07-2026     | fn:concat registered up to arity 32 (unicode-90 concat#16); codepoints-to-string XML-char fix; Rune-based translate
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2873,6 +2874,21 @@ public static class FunctionLibrary
             },
         };
 
+        // fn:concat is variadic (any arity >= 2): register the higher arities not covered by
+        // the explicit entries above (e.g. concat#16 used by the unicode-90 conformance tests).
+        for (int concatArity = 14; concatArity <= 32; concatArity++)
+        {
+            functions[(Namespaces.Fn, "concat", concatArity)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "concat",
+                Arity = concatArity,
+                ParameterTypes = Enumerable.Repeat(XdmValueKind.Undefined, concatArity).ToArray(),
+                ReturnType = XdmValueKind.String,
+                Implementation = ConcatN
+            };
+        }
+
         StandardFunctions = functions.ToFrozenDictionary();
     }
 
@@ -3827,10 +3843,11 @@ public static class FunctionLibrary
         foreach (var item in items)
         {
             int cp = (int)item.IntegerValue;
-            if (cp < 0 || cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF) ||
-                cp == 0 ||
-                cp == 0xFFFE || cp == 0xFFFF || (cp >= 0xFDD0 && cp <= 0xFDEF) ||
-                (cp & 0xFFFE) == 0xFFFE && cp > 0xFFFF)
+            // XML 1.1 Char production (Bosak is an XML 1.1-capable implementation):
+            // #x1-#xD7FF | #xE000-#xFFFD | #x10000-#x10FFFF. Only NUL, surrogates, and
+            // U+FFFE/U+FFFF are invalid; C0 controls and noncharacters such as FDD0-FDEF
+            // and astral xFFFE/xFFFF are legal (FOCH0001 otherwise).
+            if (cp < 1 || cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF) || cp == 0xFFFE || cp == 0xFFFF)
                 throw new InvalidOperationException("FOCH0001");
             sb.Append(char.ConvertFromUtf32(cp));
         }
@@ -4526,11 +4543,11 @@ public static class FunctionLibrary
         if (isQuoteMode)
             pattern = Regex.Escape(pattern);
         else
-            pattern = RegexHelper.ValidateAndTranslatePattern(pattern);
+            pattern = RegexHelper.ValidateAndTranslatePatternCached(pattern, options);
 
         RegexHelper.CheckZeroLengthMatch(pattern, options);
 
-        var matches = Regex.Matches(value, pattern, options);
+        var matches = RegexHelper.GetRegex(pattern, options).Matches(value);
         int pos = 0;
 
         foreach (Match match in matches)
@@ -4983,18 +5000,30 @@ public static class FunctionLibrary
         string arg = AtomizedString(args[0]);
         string map = AtomizedString(args[1]);
         string trans = AtomizedString(args[2]);
-        var sb = new StringBuilder(arg.Length);
-        foreach (char c in arg)
+        // Code-point aware: astral characters count as single characters.
+        var transRunes = new List<int>(trans.Length);
+        foreach (Rune rune in trans.EnumerateRunes())
+            transRunes.Add(rune.Value);
+        var mapIndex = new Dictionary<int, int>(map.Length);
+        int pos = 0;
+        foreach (Rune rune in map.EnumerateRunes())
         {
-            int idx = map.IndexOf(c);
-            if (idx >= 0)
+            // First occurrence of a character in $map wins.
+            mapIndex.TryAdd(rune.Value, pos);
+            pos++;
+        }
+        var sb = new StringBuilder(arg.Length);
+        foreach (Rune rune in arg.EnumerateRunes())
+        {
+            if (mapIndex.TryGetValue(rune.Value, out int idx))
             {
-                if (idx < trans.Length)
-                    sb.Append(trans[idx]);
+                if (idx < transRunes.Count)
+                    sb.Append(char.ConvertFromUtf32(transRunes[idx]));
+                // else: character is deleted
             }
             else
             {
-                sb.Append(c);
+                sb.Append(rune.ToString());
             }
         }
         return XdmValue.FromString(sb.ToString());
@@ -5186,8 +5215,8 @@ public static class FunctionLibrary
     private static XdmValue Matches_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
-        string pattern = RegexHelper.ValidateAndTranslatePattern(AtomizedString(args[1]));
-        return XdmValue.FromBoolean(Regex.IsMatch(input, pattern));
+        string pattern = AtomizedString(args[1]);
+        return XdmValue.FromBoolean(RegexHelper.GetRegexForXsdPattern(pattern, RegexOptions.None).IsMatch(input));
     }
 
     private static XdmValue Matches_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5196,10 +5225,8 @@ public static class FunctionLibrary
         string pattern = AtomizedString(args[1]);
         var options = RegexHelper.ParseRegexFlags(AtomizedString(args[2]), out bool isQuoteMode);
         if (isQuoteMode)
-            pattern = Regex.Escape(pattern);
-        else
-            pattern = RegexHelper.ValidateAndTranslatePattern(pattern, options);
-        return XdmValue.FromBoolean(Regex.IsMatch(input, pattern, options));
+            return XdmValue.FromBoolean(RegexHelper.GetRegex(Regex.Escape(pattern), options).IsMatch(input));
+        return XdmValue.FromBoolean(RegexHelper.GetRegexForXsdPattern(pattern, options).IsMatch(input));
     }
 
 
@@ -5207,12 +5234,12 @@ public static class FunctionLibrary
     {
         string input = AtomizedString(args[0]);
         string originalPattern = AtomizedString(args[1]);
-        string pattern = RegexHelper.ValidateAndTranslatePattern(originalPattern);
+        var regex = RegexHelper.GetRegexForXsdPattern(originalPattern, RegexOptions.None);
         string replacement = AtomizedString(args[2]);
-        RegexHelper.CheckZeroLengthMatch(pattern, RegexOptions.None);
+        RegexHelper.CheckZeroLengthMatch(regex);
         int groupCount = RegexHelper.CountCapturingGroups(originalPattern);
         string netReplacement = RegexHelper.ValidateAndTranslateReplacement(replacement, groupCount);
-        return XdmValue.FromString(Regex.Replace(input, pattern, netReplacement));
+        return XdmValue.FromString(regex.Replace(input, netReplacement));
     }
 
     private static XdmValue Replace_4(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5221,21 +5248,21 @@ public static class FunctionLibrary
         string originalPattern = AtomizedString(args[1]);
         string replacement = AtomizedString(args[2]);
         var options = RegexHelper.ParseRegexFlags(AtomizedString(args[3]), out bool isQuoteMode);
-        string pattern;
+        Regex regex;
         string netReplacement;
         if (isQuoteMode)
         {
-            pattern = Regex.Escape(originalPattern);
+            regex = RegexHelper.GetRegex(Regex.Escape(originalPattern), options);
             netReplacement = RegexHelper.EscapeReplacementForQuoteMode(replacement);
         }
         else
         {
-            pattern = RegexHelper.ValidateAndTranslatePattern(originalPattern, options);
+            regex = RegexHelper.GetRegexForXsdPattern(originalPattern, options);
             int groupCount = RegexHelper.CountCapturingGroups(originalPattern);
             netReplacement = RegexHelper.ValidateAndTranslateReplacement(replacement, groupCount);
         }
-        RegexHelper.CheckZeroLengthMatch(pattern, options);
-        return XdmValue.FromString(Regex.Replace(input, pattern, netReplacement, options));
+        RegexHelper.CheckZeroLengthMatch(regex);
+        return XdmValue.FromString(regex.Replace(input, netReplacement));
     }
 
     private static XdmValue Tokenize_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5266,14 +5293,13 @@ public static class FunctionLibrary
             return XdmValue.FromSequence(XdmSequence.Empty);
 
         var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode);
-        if (isQuoteMode)
-            pattern = Regex.Escape(pattern);
-        else
-            pattern = RegexHelper.ValidateAndTranslatePattern(pattern, options);
+        Regex regex = isQuoteMode
+            ? RegexHelper.GetRegex(Regex.Escape(pattern), options)
+            : RegexHelper.GetRegexForXsdPattern(pattern, options);
 
-        RegexHelper.CheckZeroLengthMatch(pattern, options);
+        RegexHelper.CheckZeroLengthMatch(regex);
 
-        var parts = Regex.Split(input, pattern, options);
+        var parts = regex.Split(input);
         var result = new List<XdmValue>();
 
         foreach (var part in parts)

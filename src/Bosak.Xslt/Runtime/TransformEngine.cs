@@ -182,6 +182,7 @@
 //                      | Charles Korthout | 6.11  | 13-07-2026     | HOF: function-type coercion, raw map/function items in typed templates, sig metadata   |
 //                      | Charles Korthout | 6.12  | 14-07-2026     | Typed templates keep node identity/parentage; single text nodes not cloned; fn:snapshot |
 //                      | Charles Korthout | 6.13  | 14-07-2026     | fn:transform: initial-match-selection, raw principal result, result-document capture; map-entry content; text result-doc fix |
+//                      | Charles Korthout | 6.14  | 14-07-2026     | xsl:analyze-string uses cached XSD regex translation + compiled-Regex cache             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -15953,7 +15954,7 @@ public sealed class TransformEngine
         if (isQuoteMode)
             pattern = Regex.Escape(pattern);
         else
-            pattern = RegexHelper.ValidateAndTranslatePattern(pattern, options);
+            pattern = RegexHelper.ValidateAndTranslatePatternCached(pattern, options);
 
         var matchingChild = instruction.Element(XName.Get("matching-substring", xsl));
         var nonMatchingChild = instruction.Element(XName.Get("non-matching-substring", xsl));
@@ -15997,7 +15998,7 @@ public sealed class TransformEngine
         // XSLT 3.0 position-based algorithm (§17.1). This correctly handles regexes
         // that match zero-length substrings.
         var segments = new List<(bool IsMatch, string Text, Match? Match)>();
-        var regex = new Regex(pattern, options);
+        var regex = RegexHelper.GetRegex(pattern, options);
         int pos = 0;
         var pendingNonMatch = new StringBuilder();
 
