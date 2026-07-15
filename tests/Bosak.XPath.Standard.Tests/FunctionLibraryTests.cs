@@ -36,6 +36,7 @@
 //                      | Charles Korthout | 2.4   | 15-07-2026     | fn:parse-json tests: empty input, duplicates modes, escape semantics, fallback rules      |
 //                      | Charles Korthout | 2.5   | 15-07-2026     | json-to-xml tests: retain/use-first duplicates, escape attrs, surrogates, () input, eager option validation; parse-json quote decoding
 //                      | Charles Korthout | 2.6   | 15-07-2026     | fn:serialize tests: xml declaration/standalone, item-separator, char maps, CDATA, element form, json/adaptive methods, SENR0001/SERE002x/SEPM001x/XQDY0137
+//                      | Charles Korthout | 2.7   | 15-07-2026     | Tier-2i: map:merge options, strict keys, numeric/duration key equality, array bounds, FORG0006 EBV, map(K,V)/array(T)/function-type tests, deep-equal map collation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -3284,4 +3285,221 @@ public class FunctionLibraryTests
         var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("normalize-unicode(12)"));
         Assert.Contains("XPTY0004", ex.Message);
     }
+}
+
+
+public class Tier2iMapArrayTests
+{
+    private static XdmValue Evaluate(string xpath)
+    {
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        return XPath31Expression.Compile(xpath).Evaluate(ctx);
+    }
+
+    private static string EvalStr(string xpath) => Evaluate(xpath).ToString();
+
+    // ----- map:merge duplicates option ---------------------------------
+
+    [Fact]
+    public void MapMerge_UseFirst_KeepsFirstValue()
+        => Assert.Equal("a", EvalStr("map:merge((map{1:'a'},map{1:'b'}), map{'duplicates':'use-first'})?1"));
+
+    [Fact]
+    public void MapMerge_UseLast_KeepsLastValue()
+        => Assert.Equal("b", EvalStr("map:merge((map{1:'a'},map{1:'b'}), map{'duplicates':'use-last'})?1"));
+
+    [Fact]
+    public void MapMerge_Combine_ConcatenatesValues()
+    {
+        var result = Evaluate("map:merge((map{1:'a'},map{1:'b'},map{1:'c'}), map{'duplicates':'combine'})?1");
+        Assert.True(result.IsSequence);
+        var items = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item.ToString());
+        Assert.Equal(new[] { "a", "b", "c" }, items);
+    }
+
+    [Fact]
+    public void MapMerge_Reject_RaisesFOJS0003()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("map:merge((map{1:'a'},map{1:'b'}), map{'duplicates':'reject'})"));
+        Assert.Contains("FOJS0003", ex.Message);
+    }
+
+    [Fact]
+    public void MapMerge_EmptyOptions_RaisesXPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("map:merge((map{1:'a'}), ())"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void MapMerge_UseLast_RetainsNewestKeyObject()
+        // same-key-001: the surviving key for "abc" must be the xs:anyURI one.
+        => Assert.Equal("true", EvalStr(
+            "let $m := map:merge((map:entry(xs:untypedAtomic('abc'),1), map:entry(xs:string('abc'),1), map:entry(xs:anyURI('abc'),1)), map{'duplicates':'use-last'}) " +
+            "return map:keys($m)[deep-equal(.,'abc')] instance of xs:anyURI"));
+
+    // ----- map:remove / strict singleton keys ---------------------------
+
+    [Fact]
+    public void MapRemove_MultipleKeys()
+        => Assert.Equal("1", EvalStr("map:size(map:remove(map{'a':1,'b':2,'c':3}, ('a','c')))"));
+
+    [Fact]
+    public void MapGet_EmptyKey_RaisesXPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("map:get(map{'a':1}, ())"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void MapGet_MultiItemKey_RaisesXPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("map:get(map{'a':1}, ('a','b'))"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void MapConstructor_EmptyKey_RaisesXPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("map{():'x'}"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void MapCall_MultiItemKey_RaisesXPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("map{'a':1}(('a','b'))"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    // ----- Numeric and duration key equality ----------------------------
+
+    [Fact]
+    public void MapKeys_DecimalAndDouble_AreDistinctWhenPrecisionDiffers()
+        // map-put-023: decimal 1.0000000000100000000001 and double 1.00000000001 are different keys.
+        => Assert.Equal("2", EvalStr("map:size(map:put(map:put(map{}, 1.0000000000100000000001, 1), xs:double('1.00000000001'), 2))"));
+
+    [Fact]
+    public void MapKeys_IntegerAndDouble_SameValue_AreSameKey()
+        => Assert.Equal("1", EvalStr("map:size(map:put(map:put(map{}, 1, 'a'), xs:double('1'), 'b'))"));
+
+    [Fact]
+    public void MapKeys_Duration_NormalizedEquality()
+        => Assert.Equal("true", EvalStr("map:contains(map{xs:duration('P1Y'):'x'}, xs:yearMonthDuration('P12M'))"));
+
+    // ----- Array bounds -------------------------------------------------
+
+    [Theory]
+    [InlineData("array:get([5,6,7], 0)")]
+    [InlineData("array:get([5,6,7], 4)")]
+    [InlineData("array:head([])")]
+    [InlineData("array:tail([])")]
+    [InlineData("array:put([4,5], 0, 'a')")]
+    [InlineData("array:put([4,5], 3, 'a')")]
+    [InlineData("array:remove([], 1)")]
+    [InlineData("array:remove(['a','b'], (2 to 3))")]
+    [InlineData("array:insert-before([], 2, ())")]
+    [InlineData("array:insert-before([1,2], 0, 'x')")]
+    [InlineData("array:subarray([1,2,3], 0)")]
+    [InlineData("array:subarray([1,2,3], 2, 3)")]
+    [InlineData("array:subarray([1,2,3,4,5], 4294967297, 2)")]
+    public void ArrayBounds_RaiseFOAY0001(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("FOAY0001", ex.Message);
+    }
+
+    [Fact]
+    public void ArraySubarray_NegativeLength_RaisesFOAY0002()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("array:subarray([1,2,3], 2, -1)"));
+        Assert.Contains("FOAY0002", ex.Message);
+    }
+
+    [Fact]
+    public void ArrayInsertBefore_AppendAtCountPlusOne_Succeeds()
+        => Assert.Equal("3", EvalStr("array:size(array:insert-before([1,2], 3, 'x'))"));
+
+    // ----- Effective boolean value --------------------------------------
+
+    [Theory]
+    [InlineData("if ([1,2]) then 1 else 2")]
+    [InlineData("if (map{}) then 1 else 2")]
+    [InlineData("not(map{})")]
+    public void EffectiveBooleanValue_FunctionItems_RaiseFORG0006(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("FORG0006", ex.Message);
+    }
+
+    [Fact]
+    public void Exists_IsCountBased_NotEbv()
+    {
+        Assert.Equal("true", EvalStr("exists((0))"));
+        Assert.Equal("true", EvalStr("exists(map{})"));
+        Assert.Equal("false", EvalStr("empty(map{})"));
+    }
+
+    // ----- Parameterized map/array type tests ---------------------------
+
+    [Theory]
+    [InlineData("map{1:'a', 2:'b'} instance of map(xs:integer, xs:string)", "true")]
+    [InlineData("map{1:'a', 'x':1} instance of map(xs:integer, xs:string)", "false")]
+    [InlineData("map{'a':()} instance of map(xs:string, empty-sequence())", "true")]
+    [InlineData("map{'a':(), 'b':5} instance of map(xs:string, empty-sequence())", "false")]
+    [InlineData("map{'a':1, 'b':()} instance of map(xs:string, xs:integer+)", "false")]
+    [InlineData("[('A','B'),'C'] instance of array(xs:string)", "false")]
+    [InlineData("[(),'A'] instance of array(xs:string)", "false")]
+    [InlineData("[1,2] instance of array(xs:integer)", "true")]
+    [InlineData("map{1:'a'} instance of map(xs:integer)", "ERROR:XPST0003")]
+    [InlineData("map{1:'a'} instance of map(xs:string+, xs:integer+)", "ERROR:XPST0003")]
+    [InlineData("map{1:'a'} instance of map(integer, string)", "ERROR:XPST0051")]
+    public void ParameterizedTypeTests(string expr, string expected)
+    {
+        if (expected.StartsWith("ERROR:"))
+        {
+            var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+            Assert.Contains(expected[6..], ex.Message);
+        }
+        else
+        {
+            Assert.Equal(expected, EvalStr(expr));
+        }
+    }
+
+    // ----- Maps and arrays as function items ----------------------------
+
+    [Theory]
+    [InlineData("map{1:'a'} instance of function(*)", "true")]
+    [InlineData("[1,2] instance of function(*)", "true")]
+    [InlineData("map{1:'A','x':'B'} instance of function(xs:integer) as xs:string?", "true")]
+    [InlineData("map{1:'A','x':'B'} instance of function(xs:integer) as xs:string", "false")]
+    [InlineData("map{} instance of function(xs:integer) as empty-sequence()", "true")]
+    [InlineData("map{12:()} instance of function(xs:decimal) as xs:string*", "true")]
+    [InlineData("map{12:'z'} instance of function(xs:decimal) as xs:string", "false")]
+    [InlineData("[['A'],['B']] instance of function(xs:integer) as item()*", "true")]
+    public void MapsAndArraysAsFunctionItems(string expr, string expected)
+        => Assert.Equal(expected, EvalStr(expr));
+
+    // ----- Function type subsumption ------------------------------------
+
+    [Theory]
+    [InlineData("function($m as map(*)) as xs:integer {map:size($m)} instance of function(map(xs:integer, xs:string)) as xs:integer", "true")]
+    [InlineData("function($m as map(xs:decimal, xs:string+)) as xs:integer {map:size($m)} instance of function(map(xs:integer, xs:string)) as xs:integer", "true")]
+    [InlineData("function($m as function(*)) as xs:integer {function-arity($m)} instance of function(map(*)) as xs:integer", "true")]
+    [InlineData("function($m as function(xs:anyAtomicType) as item()*) as xs:integer {map:size($m)} instance of function(map(xs:integer, xs:string)) as xs:integer", "true")]
+    [InlineData("fn:floor#1 instance of function(xs:numeric) as xs:numeric", "false")]
+    [InlineData("fn:floor#1 instance of function(xs:numeric?) as xs:numeric?", "true")]
+    public void FunctionTypeSubsumption(string expr, string expected)
+        => Assert.Equal(expected, EvalStr(expr));
+
+    // ----- deep-equal ----------------------------------------------------
+
+    [Fact]
+    public void DeepEqual_MapKeys_IgnoreCollation()
+        => Assert.Equal("false", EvalStr(
+            "deep-equal(map{'a':1}, map{'A':1}, 'http://www.w3.org/2013/collation/UCA?strength=secondary')"));
 }

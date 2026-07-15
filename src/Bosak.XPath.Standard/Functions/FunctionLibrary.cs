@@ -103,6 +103,7 @@
 //                      | Charles Korthout | 5.37  | 15-07-2026     | fn:json-to-xml on JsonReader via JNode tree (dup-preserving): escaped/escaped-key attrs, () input, BaseUri annotation, raw j:number; escape=true now decodes quotes (json-doc-012); eager fallback/validate option validation (XPTY0004); removed System.Text.Json path
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
 //                      | Charles Korthout | 5.38  | 15-07-2026     | fn:serialize rewritten on XdmSerializer: map+element option forms, xml/json/adaptive methods, char maps, CDATA, indent, item-separator, SENR0001/SERE002x |
+//                      | Charles Korthout | 5.39  | 15-07-2026     | map:merge duplicates option (use-first/use-last/use-any/combine/reject); map:remove multi-key; strict singleton map keys (XPTY0004); array bounds FOAY0001/FOAY0002; deep-equal map keys collation-free (QT3 Tier-2i) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -1280,6 +1281,8 @@ public static class FunctionLibrary
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Undefined,
+                ParameterTypeNames = ["xs:numeric?"],
+                ReturnTypeName = "xs:numeric?",
                 Implementation = Floor
             },
 
@@ -1291,6 +1294,8 @@ public static class FunctionLibrary
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Undefined,
+                ParameterTypeNames = ["xs:numeric?"],
+                ReturnTypeName = "xs:numeric?",
                 Implementation = Ceiling
             },
 
@@ -1302,6 +1307,8 @@ public static class FunctionLibrary
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Undefined,
+                ParameterTypeNames = ["xs:numeric?"],
+                ReturnTypeName = "xs:numeric?",
                 Implementation = Round_1
             },
             [(Namespaces.Fn, "round", 2)] = new()
@@ -1391,6 +1398,8 @@ public static class FunctionLibrary
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["node()?"],
+                ReturnTypeName = "xs:string",
                 Implementation = Name_1
             },
 
@@ -7148,14 +7157,63 @@ public static class FunctionLibrary
 
     private static XdmValue MapMerge(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var result = new XdmMap();
         var maps = Materialize(args[0]);
+
+        // F+O 3.1 §14.5.1: the options map may carry a 'duplicates' entry selecting
+        // the duplicate-key strategy: use-first | use-last (default) | use-any |
+        // combine | reject. An empty-sequence options argument is a type error.
+        string duplicates = "use-last";
+        if (args.Length > 1)
+        {
+            var opts = args[1];
+            if (opts.IsUndefined || !opts.IsMap)
+                throw new InvalidOperationException("XPTY0004: map:merge options must be a single map");
+            if (opts.MapValue.TryGetValue(XdmValue.FromString("duplicates"), out var dupOpt))
+            {
+                duplicates = AtomizeValue(dupOpt).ToString();
+                switch (duplicates)
+                {
+                    case "use-first": case "use-last": case "use-any": case "combine": case "reject":
+                        break;
+                    default:
+                        throw new InvalidOperationException($"FOJS0005: Invalid value for the duplicates option of map:merge: '{duplicates}'");
+                }
+            }
+        }
+
+        var result = new XdmMap();
         foreach (var mapVal in maps)
         {
-            if (mapVal.IsMap)
+            if (!mapVal.IsMap)
+                continue;
+            foreach (var kvp in mapVal.MapValue.Entries)
             {
-                foreach (var kvp in mapVal.MapValue.Entries)
+                if (!result.TryGetValue(kvp.Key, out var existing))
+                {
                     result.Add(kvp.Key, kvp.Value);
+                    continue;
+                }
+                switch (duplicates)
+                {
+                    case "use-first":
+                    case "use-any": // implementation-defined choice; we keep the first
+                        break;
+                    case "combine":
+                    {
+                        // The associated value is the concatenation of all values for
+                        // the key, in input order (map-merge-025/027).
+                        var combined = new List<XdmValue>();
+                        combined.AddRange(AsSequence(existing));
+                        combined.AddRange(AsSequence(kvp.Value));
+                        result.Add(kvp.Key, XdmValue.FromSequence(MaterializedSequence.FromList(combined)));
+                        break;
+                    }
+                    case "reject":
+                        throw new InvalidOperationException("FOJS0003: map:merge found duplicate keys and the duplicates option is 'reject'");
+                    default: // use-last
+                        result.Add(kvp.Key, kvp.Value);
+                        break;
+                }
             }
         }
         return XdmValue.FromMap(result);
@@ -7164,11 +7222,24 @@ public static class FunctionLibrary
     private static XdmValue MapRemove(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var map = args[0].MapValue;
-        var key = AtomizeMapKey(args[1]);
+        // map:remove accepts a sequence of keys (spec bug 29660): every listed key
+        // is removed; each key must be a single atomic value.
+        var keys = new List<XdmValue>();
+        foreach (var k in AsSequence(args[1]))
+            keys.Add(AtomizeMapKey(k));
         var result = new XdmMap();
         foreach (var kvp in map.Entries)
         {
-            if (!XdmValueEqualityComparer.Instance.Equals(kvp.Key, key))
+            bool remove = false;
+            foreach (var key in keys)
+            {
+                if (XdmValueEqualityComparer.Instance.Equals(kvp.Key, key))
+                {
+                    remove = true;
+                    break;
+                }
+            }
+            if (!remove)
                 result.Add(kvp.Key, kvp.Value);
         }
         return XdmValue.FromMap(result);
@@ -7199,36 +7270,43 @@ public static class FunctionLibrary
     private static XdmValue ArrayGet(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arr = args[0].ArrayValue;
-        int idx = (int)args[1].IntegerValue;
-        return arr.Get(idx);
+        long idx = args[1].IntegerValue;
+        if (idx < 1 || idx > arr.Count)
+            throw new InvalidOperationException($"FOAY0001: Array index {idx} is out of bounds (array size {arr.Count}).");
+        return arr.Get((int)idx);
     }
 
     private static XdmValue ArrayContains(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromBoolean(args[0].ArrayValue.Contains(args[1]));
 
     private static XdmValue ArrayHead(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => args[0].ArrayValue.Get(1);
+    {
+        var arr = args[0].ArrayValue;
+        if (arr.Count == 0)
+            throw new InvalidOperationException("FOAY0001: array:head is not defined for the empty array.");
+        return arr.Get(1);
+    }
 
     private static XdmValue ArrayPut(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arr = args[0].ArrayValue;
-        int idx = (int)args[1].IntegerValue;
+        long idx = args[1].IntegerValue;
         var value = args[2];
+        if (idx < 1 || idx > arr.Count)
+            throw new InvalidOperationException($"FOAY0001: array:put position {idx} is out of bounds (array size {arr.Count}).");
         var items = new List<XdmValue>();
         foreach (var item in arr.Values)
             items.Add(item);
         // XPath arrays are 1-based
-        int pos = idx - 1;
-        if (pos >= 0 && pos < items.Count)
-            items[pos] = value;
-        else if (pos == items.Count)
-            items.Add(value);
+        items[(int)idx - 1] = value;
         return XdmValue.FromArray(new XdmArray(items));
     }
 
     private static XdmValue ArrayTail(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arr = args[0].ArrayValue;
+        if (arr.Count == 0)
+            throw new InvalidOperationException("FOAY0001: array:tail is not defined for the empty array.");
         var items = new List<XdmValue>();
         bool first = true;
         foreach (var item in arr.Values)
@@ -7242,15 +7320,16 @@ public static class FunctionLibrary
     private static XdmValue ArrayRemove(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arr = args[0].ArrayValue;
-        var removePositions = new HashSet<int>();
+        var removePositions = new HashSet<long>();
         foreach (var posVal in AsSequence(args[1]))
         {
-            int pos = (int)posVal.IntegerValue;
-            if (pos >= 1 && pos <= arr.Count)
-                removePositions.Add(pos);
+            long pos = posVal.IntegerValue;
+            if (pos < 1 || pos > arr.Count)
+                throw new InvalidOperationException($"FOAY0001: array:remove position {pos} is out of bounds (array size {arr.Count}).");
+            removePositions.Add(pos);
         }
         var items = new List<XdmValue>();
-        int idx = 1;
+        long idx = 1;
         foreach (var item in arr.Values)
         {
             if (!removePositions.Contains(idx))
@@ -7330,15 +7409,27 @@ public static class FunctionLibrary
     }
 
     private static XdmValue ArraySubarray_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ArraySubarray(ctx, args[0].ArrayValue, (int)args[1].IntegerValue, int.MaxValue);
+        => ArraySubarray(ctx, args[0].ArrayValue, args[1].IntegerValue, null);
 
     private static XdmValue ArraySubarray_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ArraySubarray(ctx, args[0].ArrayValue, (int)args[1].IntegerValue, (int)args[2].IntegerValue);
+        => ArraySubarray(ctx, args[0].ArrayValue, args[1].IntegerValue, args[2].IntegerValue);
 
-    private static XdmValue ArraySubarray(EvaluationContext ctx, XdmArray arr, int start, int length)
+    /// <summary>
+    /// F+O 3.1 §16.3.4: FOAY0001 when $start is less than 1 or when $start+$length-1
+    /// exceeds the array size; FOAY0002 when $length is negative. The 2-argument form
+    /// uses an implicit length of size-$start+1.
+    /// </summary>
+    private static XdmValue ArraySubarray(EvaluationContext ctx, XdmArray arr, long start, long? lengthArg)
     {
+        long length = lengthArg ?? (arr.Count - start + 1);
+        if (start < 1)
+            throw new InvalidOperationException($"FOAY0001: array:subarray start {start} is out of bounds (array size {arr.Count}).");
+        if (length < 0)
+            throw new InvalidOperationException($"FOAY0002: array:subarray length {length} is negative.");
+        if (start + length - 1 > arr.Count)
+            throw new InvalidOperationException($"FOAY0001: array:subarray range {start}..{start + length - 1} exceeds the array size {arr.Count}.");
         var items = new List<XdmValue>();
-        int i = 1;
+        long i = 1;
         foreach (var item in arr.Values)
         {
             if (i >= start)
@@ -7489,10 +7580,12 @@ public static class FunctionLibrary
     private static XdmValue ArrayInsertBefore(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arr = args[0].ArrayValue;
-        int pos = (int)args[1].IntegerValue;
+        long pos = args[1].IntegerValue;
         var value = args[2];
+        if (pos < 1 || pos > arr.Count + 1L)
+            throw new InvalidOperationException($"FOAY0001: array:insert-before position {pos} is out of bounds (array size {arr.Count}).");
         var items = new List<XdmValue>();
-        int i = 1;
+        long i = 1;
         foreach (var item in arr.Values)
         {
             if (i == pos)
@@ -7500,7 +7593,7 @@ public static class FunctionLibrary
             items.Add(item);
             i++;
         }
-        if (pos > arr.Count)
+        if (pos == arr.Count + 1L)
             items.Add(value);
         return XdmValue.FromArray(new XdmArray(items));
     }
@@ -7655,10 +7748,32 @@ public static class FunctionLibrary
         return value;
     }
 
+    /// <summary>
+    /// Atomizes a map key expression. The key must be a single atomic value:
+    /// the empty sequence or a multi-item sequence is a type error (XPTY0004),
+    /// and function items cannot be atomized (FOTY0013).
+    /// </summary>
     private static XdmValue AtomizeMapKey(XdmValue value)
     {
         if (value.IsFunction || value.IsMap || value.IsArray)
             throw new InvalidOperationException("FOTY0013");
+        if (value.IsUndefined)
+            throw new InvalidOperationException("XPTY0004: A map key must be a single atomic value, not the empty sequence");
+        if (value.IsSequence)
+        {
+            XdmValue single = XdmValue.Undefined;
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            {
+                count++;
+                if (count > 1)
+                    throw new InvalidOperationException("XPTY0004: A map key must be a single atomic value, not a sequence");
+                single = item;
+            }
+            if (count == 0)
+                throw new InvalidOperationException("XPTY0004: A map key must be a single atomic value, not the empty sequence");
+            value = single;
+        }
         return AtomizeValue(value);
     }
 
@@ -9835,7 +9950,9 @@ public static class FunctionLibrary
             bool found = false;
             foreach (var (keyB, valB) in entriesB)
             {
-                if (DeepEqualItem(keyA, keyB, collation) && DeepEqualItem(valA, valB, collation))
+                // Map keys are compared with op:same-key semantics: the collation
+                // parameter does NOT apply to keys (fn-deep-equal-maps-13).
+                if (XdmValueEqualityComparer.Instance.Equals(keyA, keyB) && DeepEqualItem(valA, valB, collation))
                 {
                     found = true;
                     break;

@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 21-05-2026     | Keys changed from string to XdmValue with numeric promotion equality                   |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | Added Remove(key) for fn:parse-json duplicates='use-last' entry replacement            |
+//                      | Charles Korthout | 0.4   | 15-07-2026     | Add replaces existing key object so the newest key (and its type annotation) survives  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -32,8 +33,17 @@ public sealed class XdmMap
     public XdmMap(IEnumerable<KeyValuePair<XdmValue, XdmValue>> entries)
         => _entries = new Dictionary<XdmValue, XdmValue>(entries, XdmValueEqualityComparer.Instance);
 
-    /// <summary>Adds or replaces a key-value pair.</summary>
-    public void Add(XdmValue key, XdmValue value) => _entries[key] = value;
+    /// <summary>
+    /// Adds or replaces a key-value pair. When the key already exists, the entry is
+    /// removed and re-added so that the surviving key object is the newest one (with
+    /// its type annotation), as required by op:same-key / map:merge use-last semantics.
+    /// </summary>
+    public void Add(XdmValue key, XdmValue value)
+    {
+        if (_entries.ContainsKey(key))
+            _entries.Remove(key);
+        _entries.Add(key, value);
+    }
 
     /// <summary>Removes the entry with the given key, if present.</summary>
     public bool Remove(XdmValue key) => _entries.Remove(key);

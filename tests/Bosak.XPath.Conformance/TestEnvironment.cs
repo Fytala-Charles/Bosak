@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 27-05-2026     | Added default collation parsing from QT3 test environments                             |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Parse <resource>/<source uri=> into a URI map installed as ctx.ResourceUriMapper       |
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Bind <source role="$var"> documents to variables (generalexpression, fn-transform)     |
+//                      | Charles Korthout | 0.6   | 15-07-2026     | Roleless <source> no longer becomes the context item (URI-map only; d1e41648)          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -55,7 +56,10 @@ internal sealed class TestEnvironment
                 {
                     path = Path.Combine(suitePath, file);
                 }
-                env.Sources.Add(new SourceDocument(role ?? ".", path, uri));
+                // A source without an explicit role is only URI-mapped (available to
+                // fn:doc/fn:collection); it must NOT become the context item. Only
+                // role="." designates the context document (FOTS convention; d1e41648).
+                env.Sources.Add(new SourceDocument(role ?? "", path, uri));
                 if (uri is not null && File.Exists(path))
                 {
                     env.UriMap[uri] = path;

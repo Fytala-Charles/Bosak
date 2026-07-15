@@ -70,6 +70,7 @@
 //                      | Charles Korthout | 2.35  | 15-07-2026     | ConvertArgToKind passes empty sequences through for optional parameters (xs:T?/xs:T*)  |
 //                      | Charles Korthout | 2.36  | 15-07-2026     | Lookup semantics: container-major multi-key, single-result unwrap, strict xs:integer array keys (FOAY0001 bounds/XPTY0004 type), array-as-function via shared ArrayLookup, CompareGeneral atomizes arrays |
 //                      | Charles Korthout | 2.37  | 15-07-2026     | MapAdd raises XQDY0137 on duplicate keys in map constructors (serialize-xml-119/124/125) |
+//                      | Charles Korthout | 2.38  | 15-07-2026     | Tier-2i: strict singleton map keys (XPTY0004); Exists/Empty opcodes count-based; parameterized map(K,V)/array(T)/function(A)-as-R instance-of routing; maps/arrays match function(*); map/array-as-function value rule; named-fn signature checks with context; structural function-family subtyping (MapTest-050..054); XPST0003/XPST0051 map-type validation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1337,7 +1338,7 @@ public static class VmEngine
                         }
                         else
                         {
-                            instance = InstanceOf(instanceValue, typeName, occurrence, context.DefaultElementNamespace);
+                            instance = InstanceOf(instanceValue, typeName, occurrence, context.DefaultElementNamespace, context);
                         }
                         registers[instr.RegisterA] = XdmValue.FromBoolean(instance);
                         ip++;
@@ -1349,7 +1350,7 @@ public static class VmEngine
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var value = registers[instr.RegisterB];
-                        if (!InstanceOf(value, typeName, occurrence, context.DefaultElementNamespace))
+                        if (!InstanceOf(value, typeName, occurrence, context.DefaultElementNamespace, context))
                             throw new InvalidOperationException($"Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
                         registers[instr.RegisterA] = value;
                         ip++;
@@ -1379,9 +1380,11 @@ public static class VmEngine
 
                 case IrOpCode.Exists:
                     {
+                        // fn:exists is purely existential: any item (including 0, "",
+                        // false, maps and arrays) counts; no effective boolean value
+                        // is computed.
                         var seq = registers[instr.RegisterB];
-                        registers[instr.RegisterA] = XdmValue.FromBoolean(
-                            !seq.IsUndefined && seq.EffectiveBooleanValue());
+                        registers[instr.RegisterA] = XdmValue.FromBoolean(SequenceHasAnyItem(seq));
                         ip++;
                         break;
                     }
@@ -1389,8 +1392,7 @@ public static class VmEngine
                 case IrOpCode.Empty:
                     {
                         var seq = registers[instr.RegisterB];
-                        registers[instr.RegisterA] = XdmValue.FromBoolean(
-                            seq.IsUndefined || !seq.EffectiveBooleanValue());
+                        registers[instr.RegisterA] = XdmValue.FromBoolean(!SequenceHasAnyItem(seq));
                         ip++;
                         break;
                     }
@@ -2106,13 +2108,13 @@ public static class VmEngine
                                         throw new InvalidOperationException("XPTY0004");
                                     foreach (var item in items)
                                     {
-                                        if (!ValueMatchesType(item, expectedType))
+                                        if (!ValueMatchesType(item, expectedType, context))
                                             throw new InvalidOperationException("XPTY0004");
                                     }
                                 }
                                 else
                                 {
-                                    if (!ValueMatchesType(arg, expectedType))
+                                    if (!ValueMatchesType(arg, expectedType, context))
                                         throw new InvalidOperationException("XPTY0004");
                                 }
                             }
@@ -2147,7 +2149,7 @@ public static class VmEngine
                                 foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
                                 {
                                     count++;
-                                    if (!ValueMatchesType(item, inline.ReturnType))
+                                    if (!ValueMatchesType(item, inline.ReturnType, context))
                                     {
                                         matches = false;
                                         break;
@@ -2161,7 +2163,7 @@ public static class VmEngine
                             }
                             else
                             {
-                                matches = ValueMatchesType(result, inline.ReturnType);
+                                matches = ValueMatchesType(result, inline.ReturnType, context);
                             }
                             if (!matches)
                                 throw new InvalidOperationException("XPTY0004");
@@ -4931,7 +4933,7 @@ public static class VmEngine
         return true;
     }
 
-    private static bool InstanceOf(XdmValue value, string typeName, OccurrenceIndicator occurrence, string? defaultElementNamespace)
+    private static bool InstanceOf(XdmValue value, string typeName, OccurrenceIndicator occurrence, string? defaultElementNamespace, EvaluationContext? context = null)
     {
         string normalized = NormalizeTypeName(typeName);
 
@@ -5002,14 +5004,32 @@ public static class VmEngine
         // Function, map, array and item tests are valid regardless of the default namespace.
         if (effective is "function" or "function(*)" or "function()")
         {
-            if (!value.IsSequence) return value.IsFunction;
+            if (HasNonGenericParameters(typeName))
+            {
+                // Typed function test function(A) as R: delegate per item (maps and
+                // arrays are matched against their implied function signature).
+                if (!value.IsSequence) return ValueMatchesType(value, typeName, context);
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                    if (!ValueMatchesType(item, typeName, context)) return false;
+                return true;
+            }
+            // function(*) matches every function item, including maps and arrays.
+            if (!value.IsSequence) return value.IsFunction || value.IsMap || value.IsArray;
             foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
-                if (!item.IsFunction) return false;
+                if (!item.IsFunction && !item.IsMap && !item.IsArray) return false;
             return true;
         }
 
         if (effective is "map" or "map(*)" or "map()")
         {
+            if (HasNonGenericParameters(typeName))
+            {
+                ValidateParameterizedMapArrayTypeNames(typeName, defaultElementNamespace);
+                if (!value.IsSequence) return ValueMatchesType(value, typeName, context);
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                    if (!ValueMatchesType(item, typeName, context)) return false;
+                return true;
+            }
             if (!value.IsSequence) return value.IsMap;
             foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
                 if (!item.IsMap) return false;
@@ -5018,6 +5038,14 @@ public static class VmEngine
 
         if (effective is "array" or "array(*)" or "array()")
         {
+            if (HasNonGenericParameters(typeName))
+            {
+                ValidateParameterizedMapArrayTypeNames(typeName, defaultElementNamespace);
+                if (!value.IsSequence) return ValueMatchesType(value, typeName, context);
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                    if (!ValueMatchesType(item, typeName, context)) return false;
+                return true;
+            }
             if (!value.IsSequence) return value.IsArray;
             foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
                 if (!item.IsArray) return false;
@@ -5036,10 +5064,10 @@ public static class VmEngine
         // such as element(*, xs:anyType) are evaluated by ValueMatchesType).
         if (IsKnownSequenceTypeName(effective))
         {
-            if (!value.IsSequence) return ValueMatchesType(value, typeName);
+            if (!value.IsSequence) return ValueMatchesType(value, typeName, context);
             foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
             {
-                if (!ValueMatchesType(item, typeName))
+                if (!ValueMatchesType(item, typeName, context))
                     return false;
             }
             return true;
@@ -5051,14 +5079,63 @@ public static class VmEngine
             throw new InvalidOperationException("XPST0051");
 
         if (!value.IsSequence)
-            return ValueMatchesType(value, effective);
+            return ValueMatchesType(value, effective, context);
 
         foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
         {
-            if (!ValueMatchesType(item, effective))
+            if (!ValueMatchesType(item, effective, context))
                 return false;
         }
         return true;
+    }
+
+    /// <summary>
+    /// Returns true when the type test carries parenthesised parameters other than
+    /// the generic <c>()</c> and <c>(*)</c> forms (e.g. <c>map(xs:string, xs:integer)</c>,
+    /// <c>array(xs:string)</c>, <c>function(xs:integer) as xs:string</c>).
+    /// </summary>
+    private static bool HasNonGenericParameters(string typeName)
+    {
+        int paren = typeName.IndexOf('(');
+        if (paren < 0) return false;
+        int close = FindMatchingParen(typeName, paren);
+        if (close < 0) return false;
+        var inner = typeName.Substring(paren + 1, close - paren - 1).Trim();
+        return inner.Length > 0 && inner != "*";
+    }
+
+    /// <summary>
+    /// Validates that type names nested inside a parameterised map/array/function test
+    /// are namespace-qualified (or kind tests). Bare atomic names are only valid when
+    /// the default element/type namespace is the XML Schema namespace (MapTest-008).
+    /// </summary>
+    private static void ValidateParameterizedMapArrayTypeNames(string typeName, string? defaultElementNamespace)
+    {
+        if (defaultElementNamespace == "http://www.w3.org/2001/XMLSchema")
+            return;
+        int paren = typeName.IndexOf('(');
+        if (paren < 0) return;
+        int close = FindMatchingParen(typeName, paren);
+        if (close < 0) return;
+        var inner = typeName.Substring(paren + 1, close - paren - 1);
+        foreach (var part in SplitTopLevel(inner, ','))
+        {
+            var t = part.Trim();
+            if (t.Length > 0 && t[^1] is '?' or '*' or '+')
+                t = t[..^1].TrimEnd();
+            if (t.Length == 0 || t == "*")
+                continue;
+            var lower = t.ToLowerInvariant();
+            if (lower.StartsWith("map(") || lower.StartsWith("array(") || lower.StartsWith("function("))
+            {
+                ValidateParameterizedMapArrayTypeNames(t, defaultElementNamespace);
+                continue;
+            }
+            if (t.Contains('(') || t.Contains(':'))
+                continue; // kind test (element(), item(), ...) or prefixed QName
+            throw new InvalidOperationException(
+                $"XPST0051: Type name '{t}' in a map/array type test is not in the XML Schema namespace");
+        }
     }
 
     private static string NormalizeTypeName(string typeName)
@@ -5245,12 +5322,22 @@ public static class VmEngine
     /// Checks whether an XDM value matches a declared type name (e.g. "xs:string", "element(foo)").
     /// </summary>
     public static bool ValueMatchesType(XdmValue value, string typeName)
+        => ValueMatchesType(value, typeName, null);
+
+    /// <summary>
+    /// Checks whether a value matches a sequence type, with an optional evaluation
+    /// context that enables signature-aware matching of named function items.
+    /// </summary>
+    public static bool ValueMatchesType(XdmValue value, string typeName, EvaluationContext? context)
     {
         if (string.IsNullOrEmpty(typeName)) return true;
 
         // empty-sequence() only matches the empty sequence.
         if (typeName.Trim().Equals("empty-sequence()", StringComparison.OrdinalIgnoreCase))
-            return value.IsUndefined;
+        {
+            if (value.IsUndefined) return true;
+            return value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var esl) && esl == 0;
+        }
 
         // Sequence values (including the empty sequence) must be checked against the
         // occurrence indicator of the sequence type. Each item is matched against the
@@ -5290,7 +5377,7 @@ public static class VmEngine
 
             foreach (var item in items)
             {
-                if (!ValueMatchesType(item, trimmed))
+                if (!ValueMatchesType(item, trimmed, context))
                     return false;
             }
             return true;
@@ -5301,11 +5388,19 @@ public static class VmEngine
         // Unwrap one layer of redundant outer parentheses: (function(...) as T) is
         // equivalent to function(...) as T.
         if (normalized.Length > 1 && normalized[0] == '(' && FindMatchingParen(normalized, 0) == normalized.Length - 1)
-            return ValueMatchesType(value, typeName.Trim()[1..^1]);
+            return ValueMatchesType(value, typeName.Trim()[1..^1], context);
 
-        // Strip occurrence indicator for non-sequence values.
-        if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
-            normalized = normalized[..^1].TrimEnd();
+        // Strip occurrence indicator for non-sequence values. For function-family
+        // types a trailing indicator only counts as an outer occurrence when it
+        // directly follows the closing parenthesis of the parameter list; after an
+        // 'as' clause it belongs to the return type (ArrayTest-063).
+        if (normalized.Length > 0 && normalized[^1] is '?' or '*' or '+')
+        {
+            if (normalized.StartsWith("function(") || normalized.StartsWith("map(") || normalized.StartsWith("array("))
+                (normalized, _) = StripOuterOccurrence(normalized);
+            else
+                normalized = normalized[..^1].TrimEnd();
+        }
 
         // Strip xs:/xsd: prefix
         if (normalized.StartsWith("xs:"))
@@ -5399,7 +5494,7 @@ public static class VmEngine
             if (childElems.Count != 1)
                 return false;
             var inner = normalized.Substring("document-node(".Length, normalized.Length - "document-node(".Length - 1);
-            return ValueMatchesType(XdmValue.FromNode(childElems[0].NodeValue!), inner);
+            return ValueMatchesType(XdmValue.FromNode(childElems[0].NodeValue!), inner, context);
         }
 
         if (normalized is "document-node()" or "document-node")
@@ -5429,6 +5524,10 @@ public static class VmEngine
                 bool isFunctionStar = testParamTypes.Length == 1 && testParamTypes[0] == "*";
                 if (!isFunctionStar)
                 {
+                    // Maps and arrays are function items: match them against their
+                    // implied signature (MapTest-059..066, ArrayTest-043).
+                    if (value.IsMap || value.IsArray)
+                        return MapOrArrayMatchesFunctionType(value, testParamTypes, testReturnType);
                     if (!value.IsFunction) return false;
                     if (TryGetInlineFunctionSignature(value, out var actualParamTypes, out var actualReturnType))
                     {
@@ -5444,6 +5543,10 @@ public static class VmEngine
                             return false;
                         return true;
                     }
+                    // Named function items: when an evaluation context is available,
+                    // match against the registered declared signature (ArrayTest-064/084).
+                    if (context != null)
+                        return FunctionItemInstanceOf(value, typeName, context);
                     // Named, curried, or delegate function items: the declared parameter and
                     // return types are not available without an evaluation context, so match
                     // on arity only. Argument types are re-checked against the target
@@ -5454,7 +5557,7 @@ public static class VmEngine
         }
 
         if (normalized is "function(*)" or "function")
-            return value.IsFunction;
+            return value.IsFunction || value.IsMap || value.IsArray;
 
         // Parameterized map types: map(K, V). Empty maps match any key/value types;
         // otherwise every entry must match the declared key and value types.
@@ -5466,13 +5569,17 @@ public static class VmEngine
                 return true;
             var parts = SplitTopLevel(inner, ',');
             if (parts.Length != 2)
-                return true; // malformed, be permissive
+                throw new InvalidOperationException(
+                    "XPST0003: A map type test takes either zero or two arguments, e.g. map(xs:string, xs:integer)");
             string keyType = parts[0].Trim();
             string valueType = parts[1].Trim();
+            if (keyType.Length > 0 && keyType[^1] is '?' or '*' or '+')
+                throw new InvalidOperationException(
+                    "XPST0003: The key type of a map type test must be an item type without an occurrence indicator");
             foreach (var entry in value.MapValue.Entries)
             {
-                if (!ValueMatchesType(entry.Key, keyType)) return false;
-                if (!ValueMatchesType(entry.Value, valueType)) return false;
+                if (!ValueMatchesType(entry.Key, keyType, context)) return false;
+                if (!ValueMatchesType(entry.Value, valueType, context)) return false;
             }
             return true;
         }
@@ -5487,7 +5594,7 @@ public static class VmEngine
                 return true;
             foreach (var member in value.ArrayValue.Values)
             {
-                if (!ValueMatchesType(member, inner)) return false;
+                if (!ValueMatchesType(member, inner, context)) return false;
             }
             return true;
         }
@@ -5694,7 +5801,10 @@ public static class VmEngine
         if (!TryParseFunctionType(typeName.Trim(), out var testParamTypes, out var testReturnType))
             return false;
         if (testParamTypes.Length == 1 && testParamTypes[0] == "*")
-            return value.IsFunction;
+            return value.IsFunction || value.IsMap || value.IsArray;
+        // Maps and arrays are function items (MapTest-059..066, ArrayTest-042/043).
+        if (value.IsMap || value.IsArray)
+            return MapOrArrayMatchesFunctionType(value, testParamTypes, testReturnType);
         if (value.FunctionValue is not FunctionItem func)
             return false;
 
@@ -5717,6 +5827,36 @@ public static class VmEngine
         }
 
         return ValueMatchesType(value, typeName);
+    }
+
+    /// <summary>
+    /// Matches a map or array value against a typed function test <c>function(A) as R</c>.
+    /// A map behaves as <c>function(xs:anyAtomicType) as V?</c> (an absent key returns the
+    /// empty sequence, so () must also match R); an array behaves as
+    /// <c>function(xs:integer) as T</c>. The parameter type is contravariant.
+    /// </summary>
+    private static bool MapOrArrayMatchesFunctionType(XdmValue value, string[] testParamTypes, string testReturnType)
+    {
+        if (testParamTypes.Length != 1)
+            return false;
+        // Contravariant domain: the test's parameter type must accept every key/index
+        // the map or array itself accepts.
+        string domain = value.IsMap ? "xs:anyAtomicType" : "xs:integer";
+        if (!IsSequenceTypeSubtype(testParamTypes[0], domain))
+            return false;
+        if (value.IsMap)
+        {
+            if (!ValueMatchesType(XdmValue.Undefined, testReturnType))
+                return false;
+            foreach (var v in value.MapValue.Values)
+                if (!ValueMatchesType(v, testReturnType))
+                    return false;
+            return true;
+        }
+        foreach (var member in value.ArrayValue.Values)
+            if (!ValueMatchesType(member, testReturnType))
+                return false;
+        return true;
     }
 
     /// <summary>
@@ -5908,15 +6048,25 @@ public static class VmEngine
         if (actual.StartsWith("xs:")) actual = actual[3..];
         if (test.StartsWith("xs:")) test = test[3..];
 
-        // Extract occurrence indicators
+        // Function-family types (function/map/array) need structured comparison:
+        // an occurrence indicator at the end of such a type only counts as an outer
+        // occurrence when it directly follows the closing parenthesis (otherwise it
+        // belongs to the return type or the map/array member type).
+        bool actualFamily = IsFunctionFamilyType(actual);
+        bool testFamily = IsFunctionFamilyType(test);
+
         char actualOcc = '\0';
         char testOcc = '\0';
-        if (actual.Length > 0 && "?+*".Contains(actual[^1]))
+        if (actualFamily)
+            (actual, actualOcc) = StripOuterOccurrence(actual);
+        else if (actual.Length > 0 && "?+*".Contains(actual[^1]))
         {
             actualOcc = actual[^1];
             actual = actual[..^1].TrimEnd();
         }
-        if (test.Length > 0 && "?+*".Contains(test[^1]))
+        if (testFamily)
+            (test, testOcc) = StripOuterOccurrence(test);
+        else if (test.Length > 0 && "?+*".Contains(test[^1]))
         {
             testOcc = test[^1];
             test = test[..^1].TrimEnd();
@@ -5940,7 +6090,162 @@ public static class VmEngine
         if (!occOk) return false;
         if (actual == test) return true;
 
+        if (actualFamily || testFamily)
+            return IsFunctionFamilySubtype(actual, test);
+
         return IsBaseTypeSubtype(actual, test);
+    }
+
+    /// <summary>
+    /// Whether the (lower-cased, occurrence-free) base type belongs to the function
+    /// family: function types, map types, and array types.
+    /// </summary>
+    private static bool IsFunctionFamilyType(string baseType)
+        => baseType.StartsWith("function(") || baseType.StartsWith("map(") || baseType.StartsWith("array(")
+            || baseType is "function(*)" or "map(*)" or "array(*)" or "function" or "map" or "array";
+
+    /// <summary>
+    /// Strips an outer occurrence indicator from a function-family type, but only when
+    /// it directly follows the closing parenthesis (e.g. <c>map(*)*</c>); a trailing
+    /// indicator after a return type (e.g. <c>function(xs:int) as xs:string*</c>) is
+    /// part of the type itself.
+    /// </summary>
+    private static (string Type, char Occurrence) StripOuterOccurrence(string type)
+    {
+        if (type.Length >= 2 && type[^1] is '?' or '*' or '+' && type[^2] == ')')
+        {
+            // The trailing indicator is an outer occurrence only when it directly
+            // follows the closing parenthesis of the parameter/member list; after an
+            // 'as' return clause it belongs to the return type instead.
+            int open = type.IndexOf('(');
+            if (open >= 0 && FindMatchingParen(type, open) == type.Length - 2)
+                return (type[..^1].TrimEnd(), type[^1]);
+        }
+        return (type, '\0');
+    }
+
+    /// <summary>
+    /// Adds an empty-sequence alternative to a sequence type (used for the result type
+    /// of a map viewed as a function: looking up an absent key returns ()).
+    /// </summary>
+    private static string Optionalize(string sequenceType)
+    {
+        var t = sequenceType.Trim();
+        if (t.Length == 0) return "item()*";
+        return t[^1] switch
+        {
+            '*' or '?' => t,
+            '+' => t[..^1] + "*",
+            _ => t + "?"
+        };
+    }
+
+    /// <summary>
+    /// Structural subtyping within the function family (XPath 3.1 §2.5.6): function
+    /// subsumption with contravariant parameters and a covariant result; map/array
+    /// type covariance; and the implied function signatures of maps and arrays
+    /// (MapTest-050..054).
+    /// </summary>
+    private static bool IsFunctionFamilySubtype(string actual, string test)
+    {
+        // Normalize the bare/generic names.
+        if (actual is "map" or "map()") actual = "map(*)";
+        if (actual is "array" or "array()") actual = "array(*)";
+        if (actual is "function" or "function()") actual = "function(*)";
+        if (test is "map" or "map()") test = "map(*)";
+        if (test is "array" or "array()") test = "array(*)";
+        if (test is "function" or "function()") test = "function(*)";
+
+        if (test == "item()") return true;
+        if (test == "function(*)") return true; // every function-family type is a function(*)
+        if (actual == "function(*)") return false;
+
+        if (actual == "map(*)" || actual.StartsWith("map("))
+        {
+            if (test == "map(*)") return true;
+            if (test.StartsWith("map("))
+            {
+                if (!TryGetMapTypeParts(actual, out var ak, out var av) || !TryGetMapTypeParts(test, out var tk, out var tv))
+                    return false;
+                return IsSequenceTypeSubtype(ak, tk) && IsSequenceTypeSubtype(av, tv);
+            }
+            if (test.StartsWith("function("))
+            {
+                if (!TryParseFunctionType(test, out var tp, out var tr)) return false;
+                if (tp.Length != 1) return false;
+                // A map accepts any single atomic key; contravariance: test param ≤ xs:anyAtomicType.
+                if (!IsSequenceTypeSubtype(tp[0], "xs:anyAtomicType")) return false;
+                string v = actual == "map(*)" ? "item()*" : MapTypeParts(actual).Value;
+                return IsSequenceTypeSubtype(Optionalize(v), tr);
+            }
+            return false;
+        }
+
+        if (actual == "array(*)" || actual.StartsWith("array("))
+        {
+            if (test == "array(*)") return true;
+            if (test.StartsWith("array("))
+            {
+                return IsSequenceTypeSubtype(ArrayTypeInner(actual), ArrayTypeInner(test));
+            }
+            if (test.StartsWith("function("))
+            {
+                if (!TryParseFunctionType(test, out var tp, out var tr)) return false;
+                if (tp.Length != 1) return false;
+                // An array accepts any integer index; contravariance: test param ≤ xs:integer.
+                if (!IsSequenceTypeSubtype(tp[0], "xs:integer")) return false;
+                string t = actual == "array(*)" ? "item()*" : ArrayTypeInner(actual);
+                return IsSequenceTypeSubtype(t, tr);
+            }
+            return false;
+        }
+
+        if (actual.StartsWith("function(") && test.StartsWith("function("))
+        {
+            if (!TryParseFunctionType(actual, out var ap, out var ar)) return false;
+            if (!TryParseFunctionType(test, out var tp, out var tr)) return false;
+            if (ap.Length != tp.Length) return false;
+            // Parameters are contravariant; the result is covariant.
+            for (int i = 0; i < ap.Length; i++)
+                if (!IsSequenceTypeSubtype(tp[i], ap[i])) return false;
+            return IsSequenceTypeSubtype(ar, tr);
+        }
+
+        return false;
+    }
+
+    /// <summary>Extracts the key and value type parts of a <c>map(K, V)</c> type.</summary>
+    private static bool TryGetMapTypeParts(string mapType, out string keyType, out string valueType)
+    {
+        keyType = "xs:anyAtomicType";
+        valueType = "item()*";
+        if (!mapType.StartsWith("map(") || !mapType.EndsWith(')'))
+            return false;
+        var inner = mapType.Substring(4, mapType.Length - 5).Trim();
+        if (inner.Length == 0 || inner == "*")
+            return false;
+        var parts = SplitTopLevel(inner, ',');
+        if (parts.Length != 2)
+            return false;
+        keyType = parts[0];
+        valueType = parts[1];
+        return true;
+    }
+
+    /// <summary>Returns the value type part of a <c>map(K, V)</c> type (assumed well-formed).</summary>
+    private static (string Key, string Value) MapTypeParts(string mapType)
+    {
+        TryGetMapTypeParts(mapType, out var k, out var v);
+        return (k, v);
+    }
+
+    /// <summary>Extracts the member type of an <c>array(T)</c> type.</summary>
+    private static string ArrayTypeInner(string arrayType)
+    {
+        if (!arrayType.StartsWith("array(") || !arrayType.EndsWith(')'))
+            return "item()*";
+        var inner = arrayType.Substring(6, arrayType.Length - 7).Trim();
+        return inner.Length == 0 || inner == "*" ? "item()*" : inner;
     }
 
     /// <summary>
@@ -6451,10 +6756,36 @@ public static class VmEngine
     // Opcode helpers
     // ------------------------------------------------------------------
 
+    /// <summary>
+    /// Returns whether the value contains at least one item (fn:exists/fn:empty semantics).
+    /// </summary>
+    private static bool SequenceHasAnyItem(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return false;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            if (value.SequenceValue.TryGetLength(out var length))
+                return length > 0;
+            foreach (var _ in XdmSequence.FromSource(value.SequenceValue))
+                return true;
+            return false;
+        }
+        return true;
+    }
     private static XdmValue AtomizeMapKey(XdmValue value)
     {
         if (value.IsFunction || value.IsMap || value.IsArray)
             throw new InvalidOperationException("FOTY0013");
+        if (value.IsUndefined)
+            throw new InvalidOperationException("XPTY0004: A map key must be a single atomic value, not the empty sequence");
+        if (value.IsSequence)
+        {
+            var items = MaterializeSequence(value);
+            if (items.Length != 1)
+                throw new InvalidOperationException("XPTY0004: A map key must be a single atomic value, not a sequence");
+            value = items[0];
+        }
         return Atomize(value);
     }
 

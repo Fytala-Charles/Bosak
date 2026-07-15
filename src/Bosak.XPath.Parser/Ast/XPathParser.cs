@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 1.7   | 26-06-2026     | Static errors for removed map functions and obsolete map namespace; XPST0003 for :=    |
 //                      | Charles Korthout | 1.8   | 15-07-2026     | UnaryLookup (?KS ≡ .?KS); empty-paren lookup key .?(); keyword NCName lookup keys; qualified-name keys are XPST0003; argument-placeholder vs lookup disambiguation |
 //                      | Charles Korthout | 1.8   | 26-06-2026     | Parse Q{uri}* URI-qualified wildcards                                                    |
+//                      | Charles Korthout | 1.9   | 15-07-2026     | Keep ' as ' separated in nested function tests inside map/array type parens (ArrayTest-063) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1496,6 +1497,15 @@ public sealed class XPathParser
                 {
                     parenDepth--;
                     sb.Append(GetString(Current));
+                    Advance();
+                }
+                else if (Current.Kind == TokenKind.KeywordAs)
+                {
+                    // Nested function tests: keep ' as ' separated so that the
+                    // concatenated type string remains parseable (ArrayTest-063).
+                    sb.Append(' ');
+                    sb.Append(GetString(Current));
+                    sb.Append(' ');
                     Advance();
                 }
                 else

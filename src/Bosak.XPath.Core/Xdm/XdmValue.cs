@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 0.9   | 26-06-2026     | Fixed EffectiveBooleanValue for singleton/multi-item sequences                         |
 //                      | Charles Korthout | 1.0   | 27-06-2026     | Use shortest round-trip format (G17/G9) for XPath double/float scientific notation      |
 //                      | Charles Korthout | 1.1   | 26-06-2026     | Use shortest round-trip (\"R\") format for xs:float scientific notation                  |
+//                      | Charles Korthout | 1.2   | 15-07-2026     | EffectiveBooleanValue raises FORG0006 for maps, arrays, and function items             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -368,6 +369,7 @@ public readonly struct XdmValue
 
     /// <summary>
     /// Returns the effective boolean value per XPath/XQuery semantics.
+    /// Maps, arrays, and function items have no effective boolean value (FORG0006).
     /// </summary>
     public bool EffectiveBooleanValue()
     {
@@ -380,6 +382,9 @@ public readonly struct XdmValue
             XdmValueKind.Double or XdmValueKind.Float => _double != 0.0 && !double.IsNaN(_double),
             XdmValueKind.Sequence => SequenceEffectiveBooleanValue(),
             XdmValueKind.Node => true,
+            XdmValueKind.Function or XdmValueKind.Map or XdmValueKind.Array =>
+                throw new InvalidOperationException(
+                    "FORG0006: The effective boolean value is not defined for maps, arrays, and function items"),
             _ => false
         };
     }
