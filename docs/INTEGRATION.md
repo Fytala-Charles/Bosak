@@ -714,7 +714,7 @@ dotnet test Bosak.sln
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
 | XSLT 3.0 (W3C) | 5,506 | 99 | 8,995 | 98.2% | `output` cluster 179/24/29; `result-document` cluster 104/21/29; remaining failures are pre-existing non-output issues |
-| XPath 3.1 (QT3) | 20,684 | 1,361 | 9,776 | 65.0% | UriFormatException skip pool cleared; suite http: resources mapped to local files |
+| XPath 3.1 (QT3) | 21,081 | 1,454 | 9,286 | 66.25% | External `<param>` binding + OverflowException→FOAR0002 pools cleared; suite http: resources mapped to local files |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
 > ```bash

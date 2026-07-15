@@ -1,8 +1,37 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `TBD` (QT3 Tier-2a: OverflowException→FOAR0002 + external `<param select>` binding)
+**Current focus:** **QT3 XPath 3.1 suite: 21,081 passed / 1,454 failed / 9,286 skipped (66.25%)** — up from 20,684/1,361/9,776 (65.0%): **+397 passed, −490 skips, zero regressions** (name-level diff: all 93 new failures are previously-skipped tests now exposing genuine engine gaps, listed below). Unit tests 1,010/0. Next pools: map:find#2 + fn-function-lookup/function-literal function items (~65); `?` lookup operator (Lookup/UnaryLookup ~65); xml-to-json options (43); serialize (37); the Tier-2a-exposed gaps below.
+
+---
+
+## This Session Fixes (Tier-2a)
+
+1. **OverflowException→FOAR0002 (~90 skips → 4)** — `VmEngine.Execute` wraps `ExecuteBlock` in try/catch(OverflowException)→`InvalidOperationException("FOAR0002: …")`. Single wrap point suffices (no constant folding exists). Remaining 4 skips: overflow thrown outside Execute (assert evaluation).
+2. **External `<param select>` binding (460 skips → 0)** — deleted the skip block in `ConformanceRunner.cs`; new `TestExecutor.BindExternalParameters` evaluates each param's `select` via `XPath31Expression` on the post-ApplyTo context (can reference `$var` sources) and binds via `WithVariable` (prefix stripped — engine variables are local-name keyed); empty-select params get unbound; bind failure → NotSupportedException→skip. Net: 490 un-skipped → 397 pass + 93 fail.
+
+## Newly-exposed engine gaps (93, from previously-skipped tests)
+
+- **format-date/dateTime/time (~50)** — format-date-010/017..027, de101..116, en155..158, format-dateTime-006/011/017/018, format-time-023p..v: picture-string/locale semantics gaps in FormatNumberEngine/FormatDateTime.
+- **BigInteger ranges (12)** — RangeExpr-409/411(+a..e): `1e21 to …` needs arbitrary-precision xs:integer (engine uses Int64); deferred — major engine change.
+- **Duration arithmetic edge cases (8)** — K-DayTimeDurationDivide-2/3, op-divide/multiply-dayTimeDuration2args-1/2/3/5: overflow→should be FODT0002 (not FOAR0002); div by ±INF should yield PT0S.
+- **cbcl-castable-* (8)** — castable with out-of-range decimal/duration literals should return false, not raise FOAR0002.
+- **collection/fn-doc URIs (11)** — collection-005..009, fn-collection-4/5/8, fn-doc-25/26/29/37: weird/invalid URIs hit the file system raw (IOException) instead of FODC0002/FODC0005.
+- **fn-transform (13)** — fn-transform-15..err-18: genuine XSLT feature gaps now reachable with params bound.
+- **Misc (3)** — same-key-004/005 (collation keys), serialize-json-127.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.34: OverflowException→FOAR0002 in Execute)
+- `tests/Bosak.XPath.Conformance/TestExecutor.cs` (v0.3: BindExternalParameters)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (v0.4: external-param skip block removed)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `8d9aab9` (QT3 Tier-1 harness cluster: assert-count/permutation, $var sources, XQuery detection)
-**Current focus:** **QT3 XPath 3.1 suite: 20,684 passed / 1,361 failed / 9,776 skipped (65.0%)** — up from 20,294/1,985/9,542 (63.8%): **+390 passed, −624 failed** (641 fixed; 17 new failures, all genuine newly-exposed engine gaps, listed below). Unit tests 1,010/0 (harness-only change). Next pools: ~90 OverflowException→FOAR0002; 460 external `<param>` binding; json-doc option semantics; map:find#2 + fn-function-lookup/function-literal function items (~65); `?` lookup operator (Lookup/UnaryLookup ~65); xml-to-json options (43); serialize (37).
+**Current focus:** **QT3 XPath 3.1 suite: 20,684 passed / 1,361 failed / 9,776 skipped (65.0%)** — up from 20,294/1,985/9,542 (63.8%): **+390 passed, −624 failed** (641 fixed; 17 new failures, all genuine newly-exposed engine gaps, listed below). Unit tests 1,010/0 (harness-only change).
 
 ---
 

@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added optional test-set name filter for targeted conformance runs                        |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | DocumentedSkips: upstream defects/platform limitations recorded as skips with reasons    |
+//                      | Charles Korthout | 0.4   | 15-07-2026     | External-variable tests now run; params are bound by the executor                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -171,12 +172,7 @@ internal sealed class ConformanceRunner
                 continue;
             }
 
-            // Skip tests requiring external variables with complex expressions (not yet supported)
-            if (env?.Parameters.Any(p => !string.IsNullOrEmpty(p.SelectExpression)) == true)
-            {
-                report.Record(testCase.Name, TestOutcomeKind.Skipped, "External variable binding not supported");
-                continue;
-            }
+            // External variables with select expressions are bound by the executor.
 
             try
             {

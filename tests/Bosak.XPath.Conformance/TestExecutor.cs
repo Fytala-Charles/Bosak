@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 15-07-2026     | Register fn:transform via XsltFunctionLibrary.Populate (fn-transform test set)           |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | XQuery detection covers constructors/switch/try/FLWOR with string-literal stripping      |
+//                      | Charles Korthout | 0.4   | 15-07-2026     | Bind environment <param> external variables by evaluating their select expressions       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -39,6 +40,24 @@ internal sealed class TestExecutor
         if (environment is not null)
         {
             ctx = environment.ApplyTo(ctx);
+
+            // Bind external variables: evaluate each <param select="..."> in the prepared
+            // context (namespaces, sources, and $var sources are already applied).
+            foreach (var param in environment.Parameters)
+            {
+                if (string.IsNullOrEmpty(param.SelectExpression))
+                    continue;
+                try
+                {
+                    var value = XPath31Expression.Compile(param.SelectExpression).Evaluate(ctx);
+                    var (local, ns) = SplitVariableQName(param.Name, environment);
+                    ctx = ctx.WithVariable(local, value, ns);
+                }
+                catch (Exception ex)
+                {
+                    return new TestOutcome(TestOutcomeKind.Skipped, $"External variable binding failed ({param.Name}): {ex.Message}");
+                }
+            }
         }
 
         // Detect XQuery-only tests by syntax (declare namespace, constructors, switch, etc.).
@@ -105,6 +124,18 @@ internal sealed class TestExecutor
             return true;
 
         return XQueryConstructRegex.IsMatch(stripped);
+    }
+
+    /// <summary>Resolves a possibly prefixed variable name to (local, namespaceUri).</summary>
+    private static (string Local, string NamespaceUri) SplitVariableQName(string name, TestEnvironment environment)
+    {
+        int colon = name.IndexOf(':');
+        if (colon < 0)
+            return (name, "");
+        var prefix = name.Substring(0, colon);
+        var local = name.Substring(colon + 1);
+        var binding = environment.Namespaces.FirstOrDefault(n => n.Prefix == prefix);
+        return (local, binding?.Uri ?? "");
     }
 
     /// <summary>

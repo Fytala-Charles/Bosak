@@ -66,6 +66,7 @@
 //                      | Charles Korthout | 2.31  | 14-07-2026     | Dynamic-call String conversion back to spec (untypedAtomic cast + URI promotion only)  |
 //                      | Charles Korthout | 2.32   | 14-07-2026     | NamedFunctionItem carries defining context; fallback resolution across contexts        |
 //                      | Charles Korthout | 2.33  | 14-07-2026     | CompareGeneral integer-set fast path (cached HashSet) for = / != on large sequences    |
+//                      | Charles Korthout | 2.34  | 15-07-2026     | OverflowException during execution is surfaced as FOAR0002 (numeric range error)       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -89,10 +90,19 @@ public static class VmEngine
     /// </summary>
     public static XdmValue Execute(IrModule module, EvaluationContext context)
     {
-        // The lowerer uses monotonic register allocation; size is determined at compile time.
-        var registers = new XdmValue[module.MaxRegisterCount];
-        var (result, _) = ExecuteBlock(module, context, registers, 0);
-        return result;
+        try
+        {
+            // The lowerer uses monotonic register allocation; size is determined at compile time.
+            var registers = new XdmValue[module.MaxRegisterCount];
+            var (result, _) = ExecuteBlock(module, context, registers, 0);
+            return result;
+        }
+        catch (OverflowException ex)
+        {
+            // XPath surfaces numeric range failures as FOAR0002 (arithmetic overflow),
+            // not as raw CLR conversion/negation exceptions.
+            throw new InvalidOperationException($"FOAR0002: {ex.Message}", ex);
+        }
     }
 
     private static (XdmValue Result, int NextIp) ExecuteBlock(
