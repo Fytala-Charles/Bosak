@@ -95,6 +95,7 @@
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:json-doc/unparsed-text(-available/-lines) consult ResourceUriMapper for URI->local-file mapping
 //                      | Charles Korthout | 5.30  | 15-07-2026     | JSON parse failures (parse-json/json-doc/json-to-xml) now raise FOJS0001 instead of JsonException
 //                      | Charles Korthout | 5.31  | 15-07-2026     | JSON BOM strip; fallback for unpaired \uXXXX surrogates; strict unparsed-text decoding (FOUT1200/1190)
+//                      | Charles Korthout | 5.32  | 15-07-2026     | Spec-correct ParameterTypes for dynamic calls (fn:not, *-from-duration, adjust-*, fn:id/idref/element-with-id, map key args); implemented map:find#2; fn:load-xquery-module resolvable stub (invocation raises FOQM0001); fn:serialize sequence normalization (space-join) and empty-sequence options
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -245,7 +246,7 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Fn,
                 LocalName = "not",
                 Arity = 1,
-                ParameterTypes = [XdmValueKind.Boolean],
+                ParameterTypes = [XdmValueKind.Sequence],
                 ReturnType = XdmValueKind.Boolean,
                 Implementation = Not
             },
@@ -987,7 +988,7 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Map,
                 LocalName = "get",
                 Arity = 2,
-                ParameterTypes = [XdmValueKind.Map, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Undefined,
                 Implementation = MapGet
             },
@@ -1009,7 +1010,7 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Map,
                 LocalName = "contains",
                 Arity = 2,
-                ParameterTypes = [XdmValueKind.Map, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Boolean,
                 Implementation = MapContains
             },
@@ -1045,7 +1046,7 @@ public static class FunctionLibrary
             [(Namespaces.Map, "remove", 2)] = new()
             {
                 NamespaceUri = Namespaces.Map, LocalName = "remove", Arity = 2,
-                ParameterTypes = [XdmValueKind.Map, XdmValueKind.String],
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Map,
                 Implementation = MapRemove
             },
@@ -1069,6 +1070,15 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Map, XdmValueKind.Function],
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = MapForEach
+            },
+
+            // ----- map:find ---------------------------------------------------
+            [(Namespaces.Map, "find", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "find", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Array,
+                Implementation = MapFind
             },
 
             // ----- array:size -------------------------------------------------
@@ -1589,7 +1599,7 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "adjust-date-to-timezone", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "adjust-date-to-timezone", Arity = 2,
-                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String], ReturnType = XdmValueKind.Date,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.Duration], ReturnType = XdmValueKind.Date,
                 Implementation = AdjustDateToTimezone_2
             },
 
@@ -1603,7 +1613,7 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "adjust-time-to-timezone", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "adjust-time-to-timezone", Arity = 2,
-                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String], ReturnType = XdmValueKind.Time,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.Duration], ReturnType = XdmValueKind.Time,
                 Implementation = AdjustTimeToTimezone_2
             },
 
@@ -1617,7 +1627,7 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "adjust-dateTime-to-timezone", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "adjust-dateTime-to-timezone", Arity = 2,
-                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String], ReturnType = XdmValueKind.DateTime,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.Duration], ReturnType = XdmValueKind.DateTime,
                 Implementation = AdjustDateTimeToTimezone_2
             },
 
@@ -1854,37 +1864,37 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "years-from-duration", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "years-from-duration", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                ParameterTypes = [XdmValueKind.Duration], ReturnType = XdmValueKind.Integer,
                 Implementation = YearsFromDuration
             },
             [(Namespaces.Fn, "months-from-duration", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "months-from-duration", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                ParameterTypes = [XdmValueKind.Duration], ReturnType = XdmValueKind.Integer,
                 Implementation = MonthsFromDuration
             },
             [(Namespaces.Fn, "days-from-duration", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "days-from-duration", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                ParameterTypes = [XdmValueKind.Duration], ReturnType = XdmValueKind.Integer,
                 Implementation = DaysFromDuration
             },
             [(Namespaces.Fn, "hours-from-duration", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "hours-from-duration", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                ParameterTypes = [XdmValueKind.Duration], ReturnType = XdmValueKind.Integer,
                 Implementation = HoursFromDuration
             },
             [(Namespaces.Fn, "minutes-from-duration", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "minutes-from-duration", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Integer,
+                ParameterTypes = [XdmValueKind.Duration], ReturnType = XdmValueKind.Integer,
                 Implementation = MinutesFromDuration
             },
             [(Namespaces.Fn, "seconds-from-duration", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "seconds-from-duration", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Decimal,
+                ParameterTypes = [XdmValueKind.Duration], ReturnType = XdmValueKind.Decimal,
                 Implementation = SecondsFromDuration
             },
 
@@ -2496,6 +2506,19 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.QName, XdmValueKind.Integer], ReturnType = XdmValueKind.Function,
                 Implementation = FunctionLookup
             },
+            // ----- fn:load-xquery-module (stub: resolvable, invocation raises FOQM0001) ----
+            [(Namespaces.Fn, "load-xquery-module", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "load-xquery-module", Arity = 1,
+                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Map,
+                Implementation = LoadXQueryModuleStub
+            },
+            [(Namespaces.Fn, "load-xquery-module", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "load-xquery-module", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Map], ReturnType = XdmValueKind.Map,
+                Implementation = LoadXQueryModuleStub
+            },
             // ----- fn:error ---------------------------------------------------
             [(Namespaces.Fn, "doc", 1)] = new()
             {
@@ -2524,37 +2547,37 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "id", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "id", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Sequence], ReturnType = XdmValueKind.Sequence,
                 Implementation = Id_1
             },
             [(Namespaces.Fn, "id", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "id", Arity = 2,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
                 Implementation = Id_2
             },
             [(Namespaces.Fn, "element-with-id", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "element-with-id", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Sequence], ReturnType = XdmValueKind.Sequence,
                 Implementation = ElementWithId_1
             },
             [(Namespaces.Fn, "element-with-id", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "element-with-id", Arity = 2,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
                 Implementation = ElementWithId_2
             },
             [(Namespaces.Fn, "idref", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "idref", Arity = 1,
-                ParameterTypes = [XdmValueKind.String], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Sequence], ReturnType = XdmValueKind.Sequence,
                 Implementation = Idref_1
             },
             [(Namespaces.Fn, "idref", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "idref", Arity = 2,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Node], ReturnType = XdmValueKind.Sequence,
                 Implementation = Idref_2
             },
             [(Namespaces.Fn, "default-language", 0)] = new()
@@ -4361,9 +4384,15 @@ public static class FunctionLibrary
         if (!value.IsSequence)
             return XdmValue.FromString(SerializeItem(value));
 
+        // Sequence normalization (Serialization 3.1 §4): items are separated by one space.
         var sb = new StringBuilder();
+        bool first = true;
         foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+        {
+            if (!first) sb.Append(' ');
             sb.Append(SerializeItem(item));
+            first = false;
+        }
         return XdmValue.FromString(sb.ToString());
     }
 
@@ -5548,6 +5577,15 @@ public static class FunctionLibrary
         return XdmValue.Undefined;
     }
 
+    /// <summary>
+    /// Stub for fn:load-xquery-module: the function is resolvable (so fn:function-lookup
+    /// finds it) but this processor does not load XQuery library modules; every
+    /// invocation raises FOQM0001.
+    /// </summary>
+    private static XdmValue LoadXQueryModuleStub(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => throw new InvalidOperationException(
+            "FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader).");
+
     // ------------------------------------------------------------------
     // fn:error
     // ------------------------------------------------------------------
@@ -6421,7 +6459,16 @@ public static class FunctionLibrary
     private static XdmValue Serialize_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var value = args[0];
-        var options = args[1].MapValue;
+        // An empty sequence for the options parameter means the default options; the
+        // element(output:serialization-parameters) form is not supported.
+        var optionsArg = args[1];
+        XdmMap options;
+        if (optionsArg.IsMap)
+            options = optionsArg.MapValue;
+        else if (optionsArg.IsUndefined || IsEmptySequence(optionsArg))
+            options = new XdmMap();
+        else
+            throw new InvalidOperationException($"XPTY0004: fn:serialize options must be a map or the empty sequence, got {optionsArg.Kind}.");
         bool indent = false;
         string method = "xml";
         if (options.TryGetValue(XdmValue.FromString("indent"), out var indentVal))
@@ -6435,9 +6482,17 @@ public static class FunctionLibrary
         if (!value.IsSequence)
             return XdmValue.FromString(SerializeItem(value, indent, method));
 
+        // Sequence normalization (Serialization 3.1 §4): for the xml/xhtml/html methods
+        // items are separated by one space; the JSON method concatenates.
+        bool spaceSeparate = method is "xml" or "xhtml" or "html";
         var sb = new StringBuilder();
+        bool first = true;
         foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+        {
+            if (!first && spaceSeparate) sb.Append(' ');
             sb.Append(SerializeItem(item, indent, method));
+            first = false;
+        }
         return XdmValue.FromString(sb.ToString());
     }
 
@@ -7402,6 +7457,45 @@ public static class FunctionLibrary
             AppendResult(r, result);
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue MapFind(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var key = AtomizeMapKey(args[1]);
+        var found = new XdmArray();
+        MapFindInto(args[0], key, found);
+        return XdmValue.FromArray(found);
+    }
+
+    /// <summary>
+    /// Recursively searches maps and arrays in the input for the given key, appending
+    /// each matching value to <paramref name="found"/> (map:find, F+O 3.1 §14.4.6).
+    /// </summary>
+    private static void MapFindInto(XdmValue input, XdmValue key, XdmArray found)
+    {
+        if (input.IsUndefined)
+            return;
+        if (input.IsMap)
+        {
+            var map = input.MapValue;
+            if (map.TryGetValue(key, out var hit))
+                found.Add(hit);
+            foreach (var value in map.Values)
+                MapFindInto(value, key, found);
+            return;
+        }
+        if (input.IsArray)
+        {
+            foreach (var member in input.ArrayValue.Values)
+                MapFindInto(member, key, found);
+            return;
+        }
+        if (input.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(input.SequenceValue!))
+                MapFindInto(item, key, found);
+        }
+        // Atomic values and nodes are ignored.
     }
 
     private static XdmValue ArrayAppend(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

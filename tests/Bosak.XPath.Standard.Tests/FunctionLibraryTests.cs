@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 1.8   | 14-07-2026     | codepoints-to-string accepts XML 1.1 C0 controls (xml-to-json regression)                |
 //                      | Charles Korthout | 1.9   | 15-07-2026     | QT3 regex quick wins: dot-vs-CR, \S, x flag, backref/empty-class FORX0002, tokenize captures/NBSP, translate XPTY0004
 //                      | Charles Korthout | 2.0   | 15-07-2026     | ResourceUriMapper tests (doc/json-doc/unparsed-text) + FOJS0001 JSON parse error wrapping
+//                      | Charles Korthout | 2.1   | 15-07-2026     | map:find tests (flat, nested maps/arrays, no-match, empty input)                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -258,6 +259,23 @@ public class FunctionLibraryTests
 
     [Fact]
     public void MapContains_False() => Assert.Equal("false", EvalStr("map:contains(map{'a':1},'b')"));
+
+    [Fact]
+    public void MapFind_Flat() => Assert.Equal("1", EvalStr("array:get(map:find(map{'a':1,'b':2},'a'), 1)"));
+
+    [Fact]
+    public void MapFind_NestedMapsAndArrays()
+    {
+        // Searches maps and arrays at any depth; collects every value under the key.
+        Assert.Equal("3", EvalStr("array:size(map:find((map{'a':1,'b':map{'a':2}}, [map{'a':3}, 42]), 'a'))"));
+        Assert.Equal("2", EvalStr("array:get(map:find(map{'a':1,'b':map{'a':2}},'a'), 2)"));
+    }
+
+    [Fact]
+    public void MapFind_NoMatch_ReturnsEmptyArray() => Assert.Equal("0", EvalStr("array:size(map:find(map{'a':1},'zz'))"));
+
+    [Fact]
+    public void MapFind_EmptyInput_ReturnsEmptyArray() => Assert.Equal("0", EvalStr("array:size(map:find((), 17))"));
 
     // ------------------------------------------------------------------
     // array:*

@@ -208,7 +208,7 @@ The harness:
 | Metric | Value |
 |--------|-------|
 | **XPath (QT3)** | 428 test sets, ~32,000 tests |
-| Pass Rate (XPath) | **66.25%** (21,081 passed / 1,454 failed / 9,286 skipped) |
+| Pass Rate (XPath) | **66.45%** (21,145 passed / 1,390 failed / 9,286 skipped) |
 | **XSLT 3.0** | 234 test sets, 14,600 tests |
 | Pass Rate (XSLT) | **7,109 passed / 0 failed / 7,491 skipped** — 100% of runnable tests pass |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |

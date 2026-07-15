@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `TBD` (QT3 Tier-2b: function-item registry — map:find, spec-correct dynamic-call param kinds)
+**Current focus:** **QT3 XPath 3.1 suite: 21,145 passed / 1,390 failed / 9,286 skipped (66.45%)** — up from 21,081/1,454/9,286 (66.25%): **+64 passed, zero regressions** (name-level diff: 64 fixed, 0 new failures). Unit tests 1,014/0 (+4 map:find). Next pools: `?` lookup operator semantics (Lookup/UnaryLookup ~65 — UnaryLookup parser gap fixed, VM semantics in flight); xml-to-json options (43); serialize (37); the Tier-2a-exposed gaps.
+
+---
+
+## This Session Fixes (Tier-2b: function-item registry)
+
+Root cause: dynamic invocation (`function-lookup`, named function literals `Q{...}name#arity(args)`) coerces arguments against registry `ParameterTypes`, but several registrations declared sloppy kinds (static calls bypass them at VmEngine.cs:184, so only dynamic calls suffered).
+
+1. **Spec-correct ParameterTypes** — fn:not `[Boolean]→[Sequence]` (item()*); years/months/days/hours/minutes/seconds-from-duration `[String]→[Duration]`; adjust-date/time/dateTime-to-timezone#2 tz arg `[String]→[Duration]`; fn:id/element-with-id/idref `[String]→[Sequence]` (xs:string*); map:get/contains/remove key `[String]→[Undefined]` (anyAtomicType).
+2. **`ConvertArgToKind` empty-sequence pass-through** — `()` satisfies optional params (format-number#3, format-date/time#5 calendar args, collection#1).
+3. **map:find#2 implemented** — recursive map/array key search returning array (map-find cluster 10→0).
+4. **fn:load-xquery-module#1/#2 resolvable stub** — lookup succeeds (exists→true); invocation raises FOQM0001 (XQuery module loading unsupported).
+5. **fn:serialize fixes** — multi-item sequences space-joined per Serialization §4 (xml/xhtml/html methods); options `()` → defaults; non-map non-empty options → XPTY0004 (element serialization-parameters form unsupported — keeps SEPM0017 error tests passing via lenient match).
+
+Remaining in cluster: fn-function-lookup-018/022 (xml:base vs document base-uri corner), 370-376 (environment collections not set up), 760/766a (module loading), function-literal-370-376 (same collection gap).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.32: param kinds, map:find, load-xquery-module stub, serialize)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.35: ConvertArgToKind empty-seq pass-through)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.1: +4 map:find tests)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `cc7c87c` (QT3 Tier-2a: OverflowException→FOAR0002 + external `<param select>` binding)
 **Current focus:** **QT3 XPath 3.1 suite: 21,081 passed / 1,454 failed / 9,286 skipped (66.25%)** — up from 20,684/1,361/9,776 (65.0%): **+397 passed, −490 skips, zero regressions** (name-level diff: all 93 new failures are previously-skipped tests now exposing genuine engine gaps, listed below). Unit tests 1,010/0. Next pools: map:find#2 + fn-function-lookup/function-literal function items (~65); `?` lookup operator (Lookup/UnaryLookup ~65); xml-to-json options (43); serialize (37); the Tier-2a-exposed gaps below.
 

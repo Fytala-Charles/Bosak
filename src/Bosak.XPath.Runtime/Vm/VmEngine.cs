@@ -67,6 +67,7 @@
 //                      | Charles Korthout | 2.32   | 14-07-2026     | NamedFunctionItem carries defining context; fallback resolution across contexts        |
 //                      | Charles Korthout | 2.33  | 14-07-2026     | CompareGeneral integer-set fast path (cached HashSet) for = / != on large sequences    |
 //                      | Charles Korthout | 2.34  | 15-07-2026     | OverflowException during execution is surfaced as FOAR0002 (numeric range error)       |
+//                      | Charles Korthout | 2.35  | 15-07-2026     | ConvertArgToKind passes empty sequences through for optional parameters (xs:T?/xs:T*)  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -5693,6 +5694,20 @@ public static class VmEngine
     {
         if (arg.Kind == expected || arg.IsUndefined)
             return arg;
+
+        // An empty sequence satisfies any optional parameter (xs:T? / xs:T*) — the
+        // kind-level metadata cannot express optionality, so pass it through.
+        if (arg.Kind == XdmValueKind.Sequence)
+        {
+            bool isEmpty = true;
+            foreach (var _ in XdmSequence.FromSource(arg.SequenceValue!))
+            {
+                isEmpty = false;
+                break;
+            }
+            if (isEmpty)
+                return arg;
+        }
 
         // Function conversion atomizes nodes to xs:untypedAtomic before casting.
         var atomic = arg.IsNode ? XdmValue.FromString(arg.NodeValue.StringValue, "untypedAtomic") : arg;

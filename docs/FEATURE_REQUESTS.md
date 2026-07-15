@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-15 (QT3 Tier-2a: QT3 at **21,081 passed / 1,454 failed / 9,286 skipped — 66.25%**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
+> **Living Registry** — Last updated: 2026-07-15 (QT3 Tier-2b: QT3 at **21,145 passed / 1,390 failed / 9,286 skipped — 66.45%**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
