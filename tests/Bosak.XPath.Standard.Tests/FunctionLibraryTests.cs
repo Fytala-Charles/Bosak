@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 2.0   | 15-07-2026     | ResourceUriMapper tests (doc/json-doc/unparsed-text) + FOJS0001 JSON parse error wrapping
 //                      | Charles Korthout | 2.1   | 15-07-2026     | map:find tests (flat, nested maps/arrays, no-match, empty input)                          |
 //                      | Charles Korthout | 2.2   | 15-07-2026     | xml-to-json F+O §32.2.2 tests: number reformat, FOJS0006 validation, escaped strings      |
+//                      | Charles Korthout | 2.3   | 15-07-2026     | fn:min/fn:max tests: untypedAtomic→double, FORG0001/FORG0006, NaN propagation, duration   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -237,6 +238,46 @@ public class FunctionLibraryTests
 
     [Fact]
     public void Max_Empty() => Assert.True(Evaluate("fn:max(())").IsUndefined);
+
+    [Fact]
+    public void Max_UntypedAtomic_ReturnsDouble()
+    {
+        var result = Evaluate("fn:max(xs:untypedAtomic(\"3\"))");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(3.0, result.DoubleValue);
+    }
+
+    [Fact]
+    public void Min_UntypedAtomicMixed_ReturnsDouble()
+    {
+        var result = Evaluate("fn:min((xs:untypedAtomic(\"3\"), 4, 5))");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(3.0, result.DoubleValue);
+    }
+
+    [Fact]
+    public void Max_UntypedAtomicUncastable_RaisesFORG0001()
+        => Assert.Contains("FORG0001", Assert.Throws<InvalidOperationException>(() => Evaluate("fn:max(xs:untypedAtomic(\"three\"))")).Message);
+
+    [Fact]
+    public void Max_StringMixedWithNumber_RaisesFORG0006()
+        => Assert.Contains("FORG0006", Assert.Throws<InvalidOperationException>(() => Evaluate("fn:max((3, 4, \"Zero\"))")).Message);
+
+    [Fact]
+    public void Max_NaNWins()
+        => Assert.Equal("NaN", EvalStr("fn:string(fn:max((3, xs:double(\"NaN\"))))"));
+
+    [Fact]
+    public void Min_NaNWins()
+        => Assert.Equal("NaN", EvalStr("fn:string(fn:min((xs:float(\"NaN\"), 1, 2)))"));
+
+    [Fact]
+    public void Max_GenericDuration_RaisesFORG0006()
+        => Assert.Contains("FORG0006", Assert.Throws<InvalidOperationException>(() => Evaluate("fn:max(xs:duration(\"P1Y1M1D\"))")).Message);
+
+    [Fact]
+    public void Max_DayTimeDurations_Orderable()
+        => Assert.Equal("P2D", EvalStr("fn:max((xs:dayTimeDuration(\"P1D\"), xs:dayTimeDuration(\"P2D\")))"));
 
     // ------------------------------------------------------------------
     // fn:string-join

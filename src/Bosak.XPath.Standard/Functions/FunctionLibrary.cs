@@ -97,6 +97,7 @@
 //                      | Charles Korthout | 5.31  | 15-07-2026     | JSON BOM strip; fallback for unpaired \uXXXX surrogates; strict unparsed-text decoding (FOUT1200/1190)
 //                      | Charles Korthout | 5.32  | 15-07-2026     | Spec-correct ParameterTypes for dynamic calls (fn:not, *-from-duration, adjust-*, fn:id/idref/element-with-id, map key args); implemented map:find#2; fn:load-xquery-module resolvable stub (invocation raises FOQM0001); fn:serialize sequence normalization (space-join) and empty-sequence options
 //                      | Charles Korthout | 5.33  | 15-07-2026     | fn:xml-to-json: empty/single/multi-node argument handling (XPTY0004); full j:* validation (FOJS0006/FOJS0007); escaped/escaped-key unescaping; F+O escaping (solidus, C0/C1/DEL, non-BMP surrogate pairs); j:number cast to xs:double
+//                      | Charles Korthout | 5.34  | 15-07-2026     | fn:min/fn:max: untypedAtomic cast to xs:double (FORG0001), NaN propagation, FORG0006 for incomparable mixes (K-SeqMAX/MINFunc)
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -8009,10 +8010,21 @@ public static class FunctionLibrary
     {
         var atomized = items.Select(AtomizeValue).ToList();
 
+        // XPath spec: xs:untypedAtomic values (including atomized untyped nodes) are
+        // cast to xs:double before comparison; an uncastable value raises FORG0001.
+        for (int i = 0; i < atomized.Count; i++)
+            if (IsUntypedAtomic(atomized[i]))
+                atomized[i] = XdmValue.FromDouble(CastUntypedAtomicToDouble(atomized[i].StringValue));
+
         // All date/time
         bool allDateTime = atomized.All(a => a.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.Duration);
         if (allDateTime)
         {
+            // A generic xs:duration is not orderable — only its subtypes
+            // xs:yearMonthDuration and xs:dayTimeDuration are (fn-max-9/fn-min-9).
+            foreach (var a in atomized)
+                if (a.Kind == XdmValueKind.Duration && !IsOrderableDurationLexical(a.ToString()))
+                    throw new InvalidOperationException("FORG0006: xs:duration is not orderable (only xs:yearMonthDuration and xs:dayTimeDuration are)");
             var first = atomized[0];
             var result = first;
             for (int i = 1; i < atomized.Count; i++)
@@ -8024,27 +8036,11 @@ public static class FunctionLibrary
             return result;
         }
 
-        // All string
+        // All string — after the untypedAtomic conversion above, only true xs:string
+        // values remain, so a string comparison (with collation) is correct.
         bool allString = atomized.All(a => a.Kind == XdmValueKind.String);
         if (allString)
         {
-            // XPath spec: untypedAtomic (from node atomization) is cast to xs:double
-            // for min/max. Explicit strings remain strings. Since our XDM doesn't
-            // distinguish untypedAtomic from string, we check if any original item
-            // was a node — if so, the strings came from atomization and are numeric.
-            bool anyOriginalNode = items.Any(i => i.IsNode);
-            if (anyOriginalNode)
-            {
-                double resultNum = ToDoubleValue(atomized[0]);
-                for (int i = 1; i < atomized.Count; i++)
-                {
-                    double v = ToDoubleValue(atomized[i]);
-                    if (min ? v < resultNum : v > resultNum)
-                        resultNum = v;
-                }
-                return XdmValue.FromDouble(resultNum);
-            }
-
             var result = atomized[0].StringValue;
             var resultVal = atomized[0];
             for (int i = 1; i < atomized.Count; i++)
@@ -8059,6 +8055,15 @@ public static class FunctionLibrary
             }
             return resultVal;
         }
+
+        // Anything that is not numeric cannot be compared against numbers or mixed
+        // with strings: FORG0006. Booleans are tolerated as 0/1 (engine extension).
+        bool allNumeric = true;
+        foreach (var a in atomized)
+            if (a.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double or XdmValueKind.Boolean))
+                allNumeric = false;
+        if (!allNumeric)
+            throw new InvalidOperationException("FORG0006: fn:min/fn:max requires arguments of a single comparable type");
 
         bool allIntegerOrDecimal = true;
         bool anyDouble = false;
@@ -8085,23 +8090,61 @@ public static class FunctionLibrary
         }
         if (!anyDouble)
         {
-            float resultF = (float)ToDoubleValue(items[0]);
-            for (int i = 1; i < items.Count; i++)
+            float resultF = (float)ToDoubleValue(atomized[0]);
+            bool nanF = float.IsNaN(resultF);
+            for (int i = 1; i < atomized.Count; i++)
             {
-                float v = (float)ToDoubleValue(items[i]);
-                if (min ? v < resultF : v > resultF)
+                float v = (float)ToDoubleValue(atomized[i]);
+                if (float.IsNaN(v)) { nanF = true; continue; }
+                if (!nanF && (min ? v < resultF : v > resultF))
                     resultF = v;
             }
-            return XdmValue.FromFloat(resultF);
+            // XPath spec: if the converted sequence contains NaN, the result is NaN.
+            return XdmValue.FromFloat(nanF ? float.NaN : resultF);
         }
-        double resultD = ToDoubleValue(items[0]);
-        for (int i = 1; i < items.Count; i++)
+        double resultD = ToDoubleValue(atomized[0]);
+        bool nanD = double.IsNaN(resultD);
+        for (int i = 1; i < atomized.Count; i++)
         {
-            double v = ToDoubleValue(items[i]);
-            if (min ? v < resultD : v > resultD)
+            double v = ToDoubleValue(atomized[i]);
+            if (double.IsNaN(v)) { nanD = true; continue; }
+            if (!nanD && (min ? v < resultD : v > resultD))
                 resultD = v;
         }
-        return XdmValue.FromDouble(resultD);
+        // XPath spec: if the converted sequence contains NaN, the result is NaN.
+        return XdmValue.FromDouble(nanD ? double.NaN : resultD);
+    }
+
+    /// <summary>
+    /// Determines lexically whether a duration value is an orderable subtype
+    /// (xs:yearMonthDuration or xs:dayTimeDuration) rather than a generic xs:duration
+    /// mixing year/month with day/time components.
+    /// </summary>
+    private static bool IsOrderableDurationLexical(string lexical)
+    {
+        string s = lexical.Trim().TrimStart('-', '+');
+        int tIdx = s.IndexOf('T');
+        string datePart = tIdx >= 0 ? s[..tIdx] : s;
+        bool hasYearMonth = datePart.Contains('Y') || datePart.Contains('M');
+        bool hasDayTime = datePart.Contains('D') || (tIdx >= 0 && tIdx < s.Length - 1);
+        return hasYearMonth != hasDayTime || (!hasYearMonth && !hasDayTime);
+    }
+
+    /// <summary>
+    /// Casts an xs:untypedAtomic lexical value to xs:double per the XPath casting
+    /// rules (whitespace collapsed; INF/-INF/NaN accepted); raises FORG0001 otherwise.
+    /// </summary>
+    private static double CastUntypedAtomicToDouble(string lexical)
+    {
+        string t = lexical.Trim();
+        if (t == "NaN") return double.NaN;
+        if (t == "INF") return double.PositiveInfinity;
+        if (t == "-INF") return double.NegativeInfinity;
+        if (double.TryParse(t,
+                NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint | NumberStyles.AllowExponent,
+                CultureInfo.InvariantCulture, out var d))
+            return d;
+        throw new InvalidOperationException($"FORG0001: Cannot cast xs:untypedAtomic(\"{lexical}\") to xs:double");
     }
 
     private static int CompareDateTimeValues(XdmValue a, XdmValue b)
