@@ -4,37 +4,32 @@
 
 ## Session Date
 
-2026-07-15 (late evening)
+2026-07-15 (night)
 
 ## What Was Done
 
-- **URI-mapping cluster: QT3 18,698 → 20,294 passed (+1,596), skips 11,381 → 9,542, zero regressions.**
-  Now **20,294 / 1,985 / 9,542 (63.78%)**. All new failures are previously-skipped tests
-  exposing genuine gaps (verified by per-run name-level diffs).
-- UriFormatException root cause: `XDocumentProvider.LoadXml` did `new Uri(relativePath)` →
-  throws. Now absolutizes; harness Program also absolutizes suite path. 2,106 skips → 0.
-- New `EvaluationContext.ResourceUriMapper` (Func<string,string?>): maps published http:
-  URIs to local files; consulted by LoadDocument/json-doc/unparsed-text*/fn:transform
-  stylesheet-location. Harness parses `<source uri=>`/`<resource uri=>` (existing files only).
-- JSON: parse failures → FOJS0001 (incl. STJ surrogate InvalidOperationException); U+FEFF
-  stripped; fallback option now handles unpaired \uXXXX (manual unescaper, json-doc-039).
-- unparsed-text strict decoding: explicit→FOUT1200, inferred→FOUT1190; unknown encoding
-  name→FOUT1200; unparsed-text-available reads+validates local files.
-- `#UNDEFINED` static-base-uri sentinel no longer poisons ctx.BaseUri.
-- Unit tests 1,010/0 (+11). XSLT smoke green (transform 9/9, json 10/0, analyze-string 53/0).
+- **Tier-1 QT3 harness cluster: 20,294 → 20,684 passed (+390), failures 1,985 → 1,361 (−624).**
+  Now **20,684 / 1,361 / 9,776 (65.0%)**. 641 fixed; 17 new failures, all genuine
+  newly-exposed engine gaps (documented in AGENT_HANDOVER).
+- assert-count: harness read nonexistent `count` attribute → reads element text (189 skips→0).
+- `<source role="$var">` binds docs to variables — cleared generalexpression cluster (77).
+- XQuery detection: string/comment stripping + constructors/switch/try/FLWOR patterns;
+  **parse-error exemption** — XPST0003/`*`-expecting tests still run (52 passes preserved),
+  XQTY/XQST-expecting tests skip (avoids ~300 false failures). Lesson: wildcard
+  `<error code="*">` needed ParseException handling in CompareError.
+- assert-permutation implemented (multiset DeepEqual); `<assert>` uses EBV.
+- Unit tests 1,010/0 (harness-only changes).
 
 ## Next Session Pointers
 
 - Canonical state: `docs/AGENT_HANDOVER.md` (top section).
-- Remaining skip pools: ~90 OverflowException→FOAR0002 (numeric range, engine-wide),
-  189 invalid assert-count + 72 assert-permutation (harness assert support),
-  460 external-variable binding, 13 harness InvalidOperationException.
-- Newly-exposed failure clusters: json-doc options (escape/duplicates semantics, FOJS0005,
-  XPTY0004 ~8), map:find#2 function items (2), d1e* assert-xml serialization diffs (3),
-  fn:transform XSLT gaps (54), XQuery constructors (Constr-*) failing instead of skipping.
-- w3.org rate-limits (403) — tests needing repo-missing files (text-plain-utf-8-invalid.txt)
-  are flaky when falling through to network.
-- fn-unparsed-text-040: harness assert-string-value newline→space comparator quirk (like
-  cbcl-normalizedstring-002b). Deprioritized.
-- Background tasks need explicit timeout (default 60s kills 7-min QT3 runs; use 900s).
-- Harness exit code 2 = has failures (normal). Full QT3 ~6-7 min.
+- Tier 2 order: (1) OverflowException→FOAR0002 (~90); (2) external `<param select>`
+  binding (460 — biggest skip pool); (3) function-item registry (function-lookup 37,
+  function-literal 26, map:find#2); (4) `?` lookup operator (~65); (5) xml-to-json
+  options (43); (6) serialize-xml (37).
+- Newly-exposed gaps (17): distinct-values coercion, innermost/outermost namespace axis,
+  transform result-docs, `?` lookup, json-to-xml keys, map:merge duplicates, serialize
+  param types.
+- Probe trick: replicate harness heuristics in tmp/testrd to enumerate affected tests
+  without a full run. Watch CRLF in comm diffs (sed -i 's/\r$//').
+- Full QT3 ~6-7 min background (timeout 900). Exit code 2 = has failures (normal).

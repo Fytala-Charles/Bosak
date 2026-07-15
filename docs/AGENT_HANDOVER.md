@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `PENDING` (QT3 Tier-1 harness cluster: assert-count/permutation, $var sources, XQuery detection)
+**Current focus:** **QT3 XPath 3.1 suite: 20,684 passed / 1,361 failed / 9,776 skipped (65.0%)** — up from 20,294/1,985/9,542 (63.8%): **+390 passed, −624 failed** (641 fixed; 17 new failures, all genuine newly-exposed engine gaps, listed below). Unit tests 1,010/0 (harness-only change). Next pools: ~90 OverflowException→FOAR0002; 460 external `<param>` binding; json-doc option semantics; map:find#2 + fn-function-lookup/function-literal function items (~65); `?` lookup operator (Lookup/UnaryLookup ~65); xml-to-json options (43); serialize (37).
+
+---
+
+## This Session Fixes (Tier-1 harness cluster)
+
+1. **assert-count read element text** — the harness read a nonexistent `count` attribute, skipping all 189 assert-count tests (`Invalid assert-count value:` pool → 0).
+2. **`<source role="$var">` binding** — variable-role sources now load as document nodes via `ctx.WithVariable` (non-XML resources stay unbound). Cleared the 77-strong `generalexpression` cluster (`XPST0008: Variable $works is not defined`) plus fn-transform variable tests.
+3. **XQuery-syntax detection refinement** — string literals and nested comments are stripped before matching (the old `;` rule relied on string content); new patterns: node constructors (`element/attribute NAME`, `document|text|comment {`), direct constructors (expression starts with `<`), `processing-instruction`, `namespace` constructor, `switch (`, `try {`, `typeswitch (`, FLWOR `order by|group by|count $`, `schema-element|schema-attribute (`, `unordered {`, `validate`, windows. Every pattern is unparseable by XPath 3.1, so only failures convert to skips. **Parse-error exemption**: tests expecting XPST0003 or `*`/codeless errors still run (a parse failure is the expected outcome — 52 such passes preserved); tests expecting XQST/XQTY codes skip (the parser can never produce them — this avoided ~300 false failures from prolog error tests).
+4. **assert-permutation implemented** — expected XPath sequence evaluated, multiset-matched against actual via DeepEqual (72 skips → passes).
+5. **`<assert>` uses effective boolean value** — node results are truthy (FOTS semantics; CondExpr017). **`<error code="*">` matches any exception** incl. ParseException (K-FunctionProlog-54/55).
+
+## Newly-exposed engine gaps (17, from previously-skipped tests)
+
+cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (namespace axis); fn-transform-14/82e (result documents); json-doc-009 (`?` lookup operator); json-to-xml-008 (key structure); map-merge-006b/006c/027 (duplicates options); serialize-xml-140b (param type check).
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs` (assert-count text, assert-permutation, assert EBV, error wildcard)
+- `tests/Bosak.XPath.Conformance/TestEnvironment.cs` ($var source binding)
+- `tests/Bosak.XPath.Conformance/TestExecutor.cs` (XQuery detection + literal stripper + parse-error exemption)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `36ded23` (QT3 URI-mapping cluster: 2,106 UriFormatException skips cleared)
 **Current focus:** **QT3 XPath 3.1 suite: 20,294 passed / 1,985 failed / 9,542 skipped (63.78%)** — up from 18,698/1,742/11,381 (58.76%): **+1,596 passed, −1,839 skipped, zero regressions** (name-level diff per run; all new failures are previously-skipped tests now exposing genuine gaps). XSLT 3.0 suite smoke green (transform 9/9, json 10/0, analyze-string 53/0). Unit tests 1,010/0. Next QT3 pools: ~90 OverflowException→FOAR0002 (numeric range), 189 invalid assert-count + 72 assert-permutation (harness asserts), 460 external-variable binding, json-doc option semantics (escape/duplicates, FOJS0005, XPTY0004), map:find#2 function items, fn:unparsed-text residual (comparator newline quirk, flaky w3.org fetches for repo-missing files), fn:transform XSLT feature gaps (54).
 

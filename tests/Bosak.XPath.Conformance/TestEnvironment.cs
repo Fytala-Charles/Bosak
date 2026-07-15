@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added decimal-format parsing from QT3 test environments                                |
 //                      | Charles Korthout | 0.3   | 27-05-2026     | Added default collation parsing from QT3 test environments                             |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Parse <resource>/<source uri=> into a URI map installed as ctx.ResourceUriMapper       |
+//                      | Charles Korthout | 0.5   | 15-07-2026     | Bind <source role="$var"> documents to variables (generalexpression, fn-transform)     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -210,6 +211,20 @@ internal sealed class TestEnvironment
                 {
                     // XML 1.1 is not supported by XDocument; rethrow as a known exception
                     throw new NotSupportedException("XML 1.1 not supported");
+                }
+            }
+            else if (src.Role.StartsWith("$", StringComparison.Ordinal) && File.Exists(src.FilePath))
+            {
+                // Sources with a variable role (role="$name") are bound to that variable as
+                // document nodes. Non-XML resources stay unbound (previous behavior).
+                try
+                {
+                    var doc = XDocumentProvider.LoadXml(src.FilePath);
+                    ctx = ctx.WithVariable(src.Role.Substring(1), XdmValue.FromNode(doc));
+                }
+                catch (Exception)
+                {
+                    // Leave the variable unbound; the test fails as before with XPST0008.
                 }
             }
         }

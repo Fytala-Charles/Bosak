@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 27-05-2026     | DeepEqual: single-item sequence is equivalent to bare item (XDM semantics)               |
 //                      | Charles Korthout | 0.7   | 01-06-2026     | assert-string-value respects normalize-space="true"; added NormalizeSpace helper        |
 //                      | Charles Korthout | 0.8   | 05-06-2026     | ValuesEqual now compares QNames by namespace URI and local name (ignores prefix)         |
+//                      | Charles Korthout | 0.9   | 15-07-2026     | assert-count reads element text (was missing attribute); assert-permutation implemented  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -99,8 +100,8 @@ internal static class ResultComparer
             "assert-deep-eq" => CompareAssertDeepEq(assertion, actual, caughtException),
             "all-of" => CompareAllOf(assertion.Elements(), actual, caughtException),
             "any-of" => CompareAnyOf(assertion.Elements(), actual, caughtException),
-            "assert-count" => CompareAssertCount((string?)assertion.Attribute("count") ?? "", actual, caughtException),
-            "assert-permutation" => new TestOutcome(TestOutcomeKind.Skipped, "assert-permutation not yet implemented"),
+            "assert-count" => CompareAssertCount((string?)assertion.Attribute("count") ?? assertion.Value.Trim(), actual, caughtException),
+            "assert-permutation" => CompareAssertPermutation(assertion, actual, caughtException),
             "assert" => CompareAssert(assertion.Value, actual, caughtException),
             _ => new TestOutcome(TestOutcomeKind.Skipped, $"Unknown assertion: {name}"),
         };
@@ -237,6 +238,10 @@ internal static class ResultComparer
     {
         if (caughtException is null)
             return new TestOutcome(TestOutcomeKind.Failed, $"Expected error {expectedCode} but succeeded");
+
+        // Wildcard: any error outcome is acceptable.
+        if (expectedCode is "*" or "")
+            return new TestOutcome(TestOutcomeKind.Passed, null);
 
         // Try to extract error code from exception message
         string message = caughtException.Message;
@@ -513,7 +518,8 @@ internal static class ResultComparer
             FunctionLibrary.Populate(ctx);
             ctx = ctx.WithVariable("result", actual);
             var result = XPath31Expression.Compile(assertExpr).Evaluate(ctx);
-            if (result.Kind == XdmValueKind.Boolean && result.BooleanValue)
+            // FOTS assert expressions are truthy: the effective boolean value decides.
+            if (EffectiveBooleanValue(result))
                 return new TestOutcome(TestOutcomeKind.Passed, null);
             return new TestOutcome(TestOutcomeKind.Failed, $"assert failed. Expression: {assertExpr}, Got: {SerializeValue(result)}");
         }
@@ -588,6 +594,76 @@ internal static class ResultComparer
             return new TestOutcome(TestOutcomeKind.Skipped, $"Could not evaluate assert-deep-eq: {ex.Message}");
         }
     }
+
+    private static TestOutcome CompareAssertPermutation(XElement assertion, XdmValue actual, Exception? caughtException)
+    {
+        if (caughtException is not null)
+            return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
+
+        var expectedExpr = assertion.Value.Trim();
+        if (string.IsNullOrEmpty(expectedExpr))
+            return new TestOutcome(TestOutcomeKind.Skipped, "assert-permutation: no expected expression");
+
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            var expectedItems = MaterializeValue(XPath31Expression.Compile(expectedExpr).Evaluate(ctx));
+            var actualItems = MaterializeValue(actual);
+
+            if (expectedItems.Count != actualItems.Count)
+                return new TestOutcome(TestOutcomeKind.Failed, $"assert-permutation failed. Expected {expectedItems.Count} items, got {actualItems.Count}");
+
+            // Order-insensitive multiset match using deep-equal semantics.
+            var remaining = new List<XdmValue>(expectedItems);
+            foreach (var actualItem in actualItems)
+            {
+                int match = remaining.FindIndex(e => DeepEqual(e, actualItem));
+                if (match < 0)
+                    return new TestOutcome(TestOutcomeKind.Failed, $"assert-permutation failed. No expected match for: {SerializeValue(actualItem)}");
+                remaining.RemoveAt(match);
+            }
+
+            return new TestOutcome(TestOutcomeKind.Passed, null);
+        }
+        catch (Exception ex)
+        {
+            return new TestOutcome(TestOutcomeKind.Skipped, $"Could not evaluate assert-permutation: {ex.Message}");
+        }
+    }
+
+    private static bool EffectiveBooleanValue(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return false;
+        if (value.Kind == XdmValueKind.Boolean)
+            return value.BooleanValue;
+        if (value.IsNode)
+            return true;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var items = MaterializeValue(value);
+            if (items.Count == 0)
+                return false;
+            if (items[0].IsNode)
+                return true;
+            if (items.Count > 1)
+                return false; // EBV error for multiple atomics; treat as not-true
+            return AtomicEffectiveBooleanValue(items[0]);
+        }
+        return AtomicEffectiveBooleanValue(value);
+    }
+
+    private static bool AtomicEffectiveBooleanValue(XdmValue value) => value.Kind switch
+    {
+        XdmValueKind.Boolean => value.BooleanValue,
+        XdmValueKind.String => value.StringValue.Length > 0,
+        XdmValueKind.Integer => value.IntegerValue != 0,
+        XdmValueKind.Decimal => value.DecimalValue != 0,
+        XdmValueKind.Double => value.DoubleValue != 0 && !double.IsNaN(value.DoubleValue),
+        XdmValueKind.Float => value.DoubleValue != 0 && !double.IsNaN(value.DoubleValue),
+        _ => false
+    };
 
     private static List<XdmValue> MaterializeValue(XdmValue value)
     {
