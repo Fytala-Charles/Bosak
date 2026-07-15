@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** `PENDING` (QT3 fn:transform harness registration + skip-reason inventory)
+**Commit:** `c1ec4b0` (QT3 fn:transform harness registration + skip-reason inventory)
 **Current focus:** **QT3 fn:transform now registered in the conformance harness** — fn-transform set: **33 passed / 54 failed / 37 skipped** (was ~0 passing, all XPST0017). Remaining 54 failures are genuine XSLT feature gaps (stylesheet-node as parsed doc, static-base-uri, xsl:result-document, stylesheet params). **Skip-reason inventory revealed the next big fish: 2,106 skips from `Harness error: UriFormatException`** — the QT3 harness resolves `http://www.w3.org/qt3/...` doc/JSON URIs as local filesystem paths; mapping those to suite files should recover tests in bulk. Other recoverable skip pools: ~90 OverflowException (should be FOAR0002), ~40 JsonReaderException (should be FOJS0001), FileNotFoundException (should be FODC0002), 138 invalid assert-count + 50 assert-permutation (harness assert support), 460 external-variable binding.
 
 ---
