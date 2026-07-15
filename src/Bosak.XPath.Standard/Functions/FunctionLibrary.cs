@@ -91,6 +91,8 @@
 //                      | Charles Korthout | 5.25  | 13-07-2026     | HOF: FOTY0015 deep-equal, FOTY0013 atomize, anonymous curried names, arity unwrap      |
 //                      | Charles Korthout | 5.26  | 14-07-2026     | fn:concat/fn:compare#2 params now pass-through anyAtomicType; fixes HOF-064            |
 //                      | Charles Korthout | 5.27  | 14-07-2026     | fn:concat registered up to arity 32 (unicode-90 concat#16); codepoints-to-string XML-char fix; Rune-based translate
+//                      | Charles Korthout | 5.28  | 15-07-2026     | QT3 quick wins: XPath-whitespace normalize-space; tokenize excludes captures; translate arg-type XPTY0004
+//                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4970,36 +4972,55 @@ public static class FunctionLibrary
 
     private static string NormalizeSpaceString(string s)
     {
-        if (string.IsNullOrWhiteSpace(s)) return string.Empty;
-        var parts = s.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        // XPath fn:normalize-space collapses only #x20, #x9, #xD and #xA; other Unicode
+        // whitespace (e.g. NBSP U+00A0) is NOT whitespace for XPath (fn-tokenize-51).
+        var parts = s.Split([' ', '\t', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         return string.Join(' ', parts);
     }
 
     private static XdmValue NormalizeUnicode_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => NormalizeUnicode(AtomizedString(args[0]), "NFC");
+        => NormalizeUnicode(RequireString(args[0]), "NFC");
 
     private static XdmValue NormalizeUnicode_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => NormalizeUnicode(AtomizedString(args[0]), AtomizedString(args[1]));
+        => NormalizeUnicode(RequireString(args[0]), RequireStringRequired(args[1]));
 
     private static XdmValue NormalizeUnicode(string input, string form)
     {
-        var nf = form switch
+        // The form name is matched case-insensitively after stripping whitespace; the
+        // zero-length form performs no normalization (fn-normalize-unicode-1/2args-2/4).
+        switch (form.Trim().ToUpperInvariant())
         {
-            "NFC" => System.Text.NormalizationForm.FormC,
-            "NFD" => System.Text.NormalizationForm.FormD,
-            "NFKC" => System.Text.NormalizationForm.FormKC,
-            "NFKD" => System.Text.NormalizationForm.FormKD,
-            "FULLY-NORMALIZED" => throw new InvalidOperationException("FOCH0003"),
-            _ => throw new InvalidOperationException("FOCH0003")
-        };
-        return XdmValue.FromString(input.Normalize(nf));
+            case "":
+                return XdmValue.FromString(input);
+            case "NFC":
+                return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormC));
+            case "NFD":
+                return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormD));
+            case "NFKC":
+                return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormKC));
+            case "NFKD":
+                return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormKD));
+            case "FULLY-NORMALIZED":
+                // XML 1.1 full normalization: NFC and not starting with a non-starter
+                // (combining mark; spacing marks such as U+09BE are starters).
+                if (!input.IsNormalized(System.Text.NormalizationForm.FormC) ||
+                    (input.Length > 0 && char.GetUnicodeCategory(input, 0) is
+                        System.Globalization.UnicodeCategory.NonSpacingMark or
+                        System.Globalization.UnicodeCategory.EnclosingMark))
+                    throw new InvalidOperationException("FOCH0003");
+                return XdmValue.FromString(input);
+            default:
+                throw new InvalidOperationException("FOCH0003");
+        }
     }
 
     private static XdmValue Translate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string arg = AtomizedString(args[0]);
-        string map = AtomizedString(args[1]);
-        string trans = AtomizedString(args[2]);
+        // Signature: translate($arg as xs:string?, $map as xs:string, $trans as xs:string).
+        // $map/$trans are required: an empty sequence or a non-string atomic raises XPTY0004.
+        string arg = RequireString(args[0]);
+        string map = RequireStringRequired(args[1]);
+        string trans = RequireStringRequired(args[2]);
         // Code-point aware: astral characters count as single characters.
         var transRunes = new List<int>(trans.Length);
         foreach (Rune rune in trans.EnumerateRunes())
@@ -5214,16 +5235,16 @@ public static class FunctionLibrary
 
     private static XdmValue Matches_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string input = AtomizedString(args[0]);
-        string pattern = AtomizedString(args[1]);
+        string input = RequireString(args[0]);
+        string pattern = RequireStringRequired(args[1]);
         return XdmValue.FromBoolean(RegexHelper.GetRegexForXsdPattern(pattern, RegexOptions.None).IsMatch(input));
     }
 
     private static XdmValue Matches_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string input = AtomizedString(args[0]);
-        string pattern = AtomizedString(args[1]);
-        var options = RegexHelper.ParseRegexFlags(AtomizedString(args[2]), out bool isQuoteMode);
+        string input = RequireString(args[0]);
+        string pattern = RequireStringRequired(args[1]);
+        var options = RegexHelper.ParseRegexFlags(RequireStringRequired(args[2]), out bool isQuoteMode);
         if (isQuoteMode)
             return XdmValue.FromBoolean(RegexHelper.GetRegex(Regex.Escape(pattern), options).IsMatch(input));
         return XdmValue.FromBoolean(RegexHelper.GetRegexForXsdPattern(pattern, options).IsMatch(input));
@@ -5299,11 +5320,16 @@ public static class FunctionLibrary
 
         RegexHelper.CheckZeroLengthMatch(regex);
 
-        var parts = regex.Split(input);
+        // Slice between matches: Regex.Split would also return the values of capturing
+        // groups, but fn:tokenize must deliver only the substrings between separators.
         var result = new List<XdmValue>();
-
-        foreach (var part in parts)
-            result.Add(XdmValue.FromString(part));
+        int lastEnd = 0;
+        foreach (System.Text.RegularExpressions.Match match in regex.Matches(input))
+        {
+            result.Add(XdmValue.FromString(input[lastEnd..match.Index]));
+            lastEnd = match.Index + match.Length;
+        }
+        result.Add(XdmValue.FromString(input[lastEnd..]));
 
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
@@ -7627,6 +7653,28 @@ public static class FunctionLibrary
             return value.ToString();
 
         throw new InvalidOperationException("XPTY0004");
+    }
+
+    /// <summary>
+    /// Like <see cref="RequireString"/> but for required (non-optional) string parameters:
+    /// the empty sequence raises XPTY0004 instead of returning "".
+    /// </summary>
+    private static string RequireStringRequired(XdmValue value, bool backwardsCompatible = false)
+    {
+        if (value.IsUndefined)
+            throw new InvalidOperationException("XPTY0004");
+        if (value.IsSequence)
+        {
+            bool any = false;
+            foreach (var unused in XdmSequence.FromSource(value.SequenceValue!))
+            {
+                any = true;
+                break;
+            }
+            if (!any)
+                throw new InvalidOperationException("XPTY0004");
+        }
+        return RequireString(value, backwardsCompatible);
     }
 
     private static XdmValue AtomizeValue(XdmValue value)

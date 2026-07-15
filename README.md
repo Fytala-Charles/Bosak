@@ -178,7 +178,7 @@ dotnet test Bosak.sln
 
 Target framework: **.NET 10**.
 
-All 961 unit tests pass (0 failures).
+All 999 unit tests pass (0 failures).
 
 ---
 
@@ -208,7 +208,7 @@ The harness:
 | Metric | Value |
 |--------|-------|
 | **XPath (QT3)** | 428 test sets, ~32,000 tests |
-| Pass Rate (XPath) | **~59.0%** (18,785 passed / 3,085 failed / 9,951 skipped) |
+| Pass Rate (XPath) | **58.8%** (18,698 passed / 1,742 failed / 11,381 skipped) |
 | **XSLT 3.0** | 234 test sets, 14,600 tests |
 | Pass Rate (XSLT) | **7,109 passed / 0 failed / 7,491 skipped** — 100% of runnable tests pass |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |

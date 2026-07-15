@@ -4,13 +4,23 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 14 July 2026
-> **Bosak baseline:** 961 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 15 July 2026
+> **Bosak baseline:** 999 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 18,698 passed / 1,742 failed / 11,381 skipped (58.76%)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-15** — QT3 regex/string quick-wins cluster: **+216 passed, −198 failed, zero regressions** (QT3 now 18,698 / 1,742 / 11,381 = 58.76%; unit tests 999/0).
+  - Strict XSD regex syntax validation (re00xxx cluster, ~124 tests): malformed quantifiers, bare `{`/`}`/`]`, `(?x` constructs other than `(?:`, octal escapes, .NET-only escapes (`\x \u \A \Z \z \b \B`), trailing backslash, empty char classes, unescaped `[` in classes, and empty-base subtraction all raise FORX0002.
+  - Back-references per F&O 5.6.1.4: multi-digit gobbling bounded by previously-opened groups; reference to an unclosed group → FORX0002 (erratum FO.E24).
+  - `.` excludes `#xD` as well as `#xA`; `\S` no longer matches CR/TAB/space (unsorted `\s` range broke `Complement`); flag `x` strips pattern whitespace pre-translation (incl. inside `\p{ }` names); multiline `^` no longer matches after a trailing newline but still matches at 0 of the empty string.
+  - fn:tokenize no longer interleaves capturing groups (was `Regex.Split`); one-arg fn:tokenize and fn:normalize-space treat only #x20/#x9/#xD/#xA as whitespace (NBSP preserved).
+  - XPTY0004 for non-string atomics / empty sequences passed to required string parameters of fn:translate, fn:matches, fn:normalize-unicode.
+  - fn:normalize-unicode: case-insensitive trimmed form names, zero-length form = no normalization, FULLY-NORMALIZED implemented (NFC + leading-non-starter check, FOCH0003 otherwise).
+  - QT3 harness: `DocumentedSkips` per-test skip list with reasons (upstream defects, platform limitations).
 
 - **2026-07-14** — W3C `unicode-90` conformance set enabled: **1,365 passed / 0 failed / 95 skipped** (1,460 tests; all skips are upstream test/data defects, documented in the harness).
   - New XSD character-class regex engine `XsdCharClasses` with pinned **Unicode 9.0.0** data (`UnicodeData90`, generated from UCD 9.0): all 38 general categories (incl. grouped `LC`), `\p{IsBlock}` script blocks, `\d \D \w \W \s \S \i \I \c \C`, ranges, negation, unions, and class subtraction `[A-[B]]`; astral ranges are emitted as surrogate-pair alternations so astral characters are never split. `\w` follows the XSD definition `[^\p{P}\p{Z}\p{C}]` (emoji are word characters). Unknown category/block → `FORX0002`.
@@ -551,7 +561,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 - `fn:serialize` — partial (JSON method supported for maps/arrays/atomics; XML serialization options still limited)
 - `fn:transform` — full option support including `delivery-format` and package selection; principal `xsl:use-package` stylesheets remain unsupported
 - Schema-aware operations — not supported
-- Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — full XSD regex support: character classes/subtraction, backreferences, flags, code-point `.`, and pinned Unicode 9.0 category/block data (`\p{X}`, `\p{IsBlock}`)
+- Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — full XSD regex support: strict syntax validation, character classes/subtraction, backreferences (incl. unclosed-group FORX0002), flags, code-point `.`, and pinned Unicode 9.0 category/block data (`\p{X}`, `\p{IsBlock}`). Remaining gap: the `i` flag uses .NET case-insensitivity rather than Unicode full case folding (affects patterns mixing `i` with `\p{...}` or negated classes)
 
 ---
 

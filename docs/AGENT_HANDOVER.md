@@ -1,5 +1,46 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-15
+**Commit:** `PENDING` (QT3 regex/string quick-wins cluster)
+**Current focus:** **QT3 XPath 3.1 suite: 18,698 passed / 1,742 failed / 11,381 skipped (58.76%)** — up from 18,482/1,940/11,399 (58.08%) at session start (+216 passed, −198 failed, zero regressions). XSLT 3.0 suite remains 7,109/0/7,491 (100% runnable). Next QT3 clusters: fn:transform (61), fn:unparsed-text (54), fn:parse-xml/json (32), fn:load-xquery-module (31), fn:function-lookup (29), serialize (17), op/xs-numeric (22), map:find (10), fn:normalize-space residuals; caseless 'i'-flag full case folding (needs CaseFolding data tables).
+
+---
+
+## This Session Fixes (QT3 regex/string quick wins)
+
+1. **XSD regex syntax validation (re00xxx cluster, ~124 tests)** — the translator passed .NET-only constructs straight through. Now FORX0002 for: unclosed/malformed quantifiers (`{5`), bare `{`/`}`/`]` outside classes, `(?x` group constructs other than `(?:` (`(?i:`, `(?=`, `(?<`, `(?#`), octal escapes (`\077`, `\7` — leading zero or reference to a nonexistent group), .NET-only escapes (`\x`, `\u`, `\A`, `\Z`, `\z`, `\b`, `\B`), trailing backslash, empty char classes (`[]`, `[^]`), unescaped `[` inside a class, and subtraction with an empty base (`[^-[bc]]`). `ValidateXsdRegex` tracks class depth (subtraction nests one level).
+2. **Back-references per F&O 5.6.1.4** — multi-digit gobbling bounded by groups *opened* before the reference (`(a)(b)\12` = `\1` + literal `2`); reference to a group not yet closed → FORX0002 (erratum FO.E24: `(a\1)`, matchesErr-4/5, fn-matches-37..40).
+3. **Dot and whitespace classes** — `.` now excludes `#xD` as well as `#xA` (fn-matches-45, fn-tokenize-34); `\s` literal range-set was unsorted so `Complement` produced a wrong `\S` that matched CR/TAB/space (cbcl-matches-041b); `Complement` now normalizes defensively.
+4. **Flag `x`** — whitespace (#x20/#x9/#xD/#xA) stripped from the pattern *before* translation, except inside char classes; a pending backslash escape carries over the removed whitespace (`hello\ sworld` → `hello\sworld`, spec example). Fixes K2-MatchesFunc-1/5/6 incl. `\p{ IsBasicLatin}`.
+5. **Multiline `^`** — translated to `^(?!(?<=\n)\z)` so it no longer matches the position after a trailing newline (fn-matches-26) while still matching at 0 of the empty string (fn-tokenize-36/38 FORX0003 preserved).
+6. **fn:tokenize** — separators sliced between `Regex.Matches` instead of `Regex.Split` (which interleaves capturing groups: fn-tokenize-9, K2-TokenizeFunc-3/4); one-arg form uses XPath whitespace only (NBSP is not a separator: fn-tokenize-51) — `NormalizeSpaceString` no longer uses .NET's all-Unicode-whitespace split.
+7. **Argument type checking (XPTY0004)** — fn:translate (`translate(1,'-','x')`, `translate('a',(), 'b')`), fn:matches (`matches('input', ())`), fn:normalize-unicode (`normalize-unicode(12)`): non-string atomics and empty sequences for required string params now raise XPTY0004 via `RequireString`/`RequireStringRequired`.
+8. **fn:normalize-unicode forms** — form name matched case-insensitively after trimming (`'nFc'`, `' NFC '`); zero-length form performs no normalization; `FULLY-NORMALIZED` returns fully-normalized input unchanged and raises FOCH0003 otherwise (NFC + leading-non-starter check).
+9. **QT3 harness `DocumentedSkips`** — per-test skip list with reasons (mirrors the XSLT harness): cbcl-fn-normalize-unicode-006 (upstream expected-value defect), fo-test-fn-year-from-dateTime-005 / fo-test-fn-year-from-date-003 (DateTimeOffset year-1 floor, documented in AGENTS.md).
+
+## Results
+
+- Unit tests: **999 passed / 0 failed** across 8 projects (Standard 364, +38 new regression tests).
+- QT3 full suite: **18,698 passed / 1,742 failed / 11,381 skipped (58.76%)** — zero regressions (verified by name-level diff vs. baseline).
+- Cluster scores: matches 1,114/3 (was ~1,045/131), tokenize 64/0, translate 44/0, normalize 69/1 (residual: cbcl-normalizedstring-002b, whiteSpace facet).
+- XSLT smoke: analyze-string 53/0, regex 49/0 — suite discipline preserved.
+
+## Deferred / latent
+
+- **caselessmatch12/13/14 + 'i' flag semantics** — Unicode *full* case folding must apply to literals and class members/ranges (incl. negation/subtraction: `[A-Z-[OI]]`, `[^Q]`) but NOT to `\p{...}` escapes; .NET `RegexOptions.IgnoreCase` folds our emitted ranges indiscriminately. Needs pinned CaseFolding-9.0.0 data (equivalence classes incl. U+212A Kelvin) + fold-aware translation.
+- Skip-count drift: skips rose ~1.4k since the 8c3eebd README baseline (11,381 now vs 9,951 then) — runner unchanged; likely engine-thrown `NotSupportedException`s recorded as skips. Worth a skip-reason inventory next session.
+- fn-matches-26-style anchors: `$` in multiline is .NET-compatible; no action needed.
+
+## Files Changed
+
+- `src/Bosak.XPath.Standard/Functions/RegexHelper.cs` (x-flag strip, dot \r, backref validation, multiline ^, quantifier/`(?`/`]`/trailing-\ validation)
+- `src/Bosak.XPath.Standard/Functions/XsdCharClasses.cs` (sorted \s, hardened Complement, empty-class/empty-base-subtraction/unescaped-`[` FORX0002, strict escape letters)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (tokenize slicing, XPath normalize-space, translate/matches/normalize-unicode arg checks, normalize-unicode forms)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (DocumentedSkips)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (+38 tests)
+
+---
+
 **Date:** 2026-07-14
 **Commit:** `67a0a3d` (unicode-90 conformance set — suite still 100% green)
 **Current focus:** **W3C XSLT 3.0 suite fully green: 7,109 passed / 0 failed / 7,491 skipped (100% of runnable tests).** unicode-90 (1,460 tests) now enabled: **1,365 passed / 0 failed / 95 skipped** — all skips are upstream test/data defects, documented in the harness. Next frontiers: error test-set (~385), import-schema (~185), streaming, principal `xsl:package`/`xsl:use-package`, or the QT3 XPath suite (~59%).

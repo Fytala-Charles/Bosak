@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added optional test-set name filter for targeted conformance runs                        |
+//                      | Charles Korthout | 0.3   | 15-07-2026     | DocumentedSkips: upstream defects/platform limitations recorded as skips with reasons    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -26,6 +27,21 @@ internal sealed class ConformanceRunner
     private readonly XNamespace _ns = "http://www.w3.org/2010/09/qt-fots-catalog";
     private readonly DependencyFilter _dependencyFilter = new();
     private readonly TestExecutor _executor = new();
+
+    /// <summary>
+    /// Tests that can never pass in this harness, with the reason. Each entry is a
+    /// documented upstream test/data defect or a documented platform limitation.
+    /// </summary>
+    private static readonly Dictionary<string, string> DocumentedSkips = new(StringComparer.Ordinal)
+    {
+        // Upstream defect: the expected value in the catalog carries an artifactual leading
+        // space (formatting), but U+09BE by itself is the only correct result.
+        ["cbcl-fn-normalize-unicode-006"] = "Upstream defect: expected value has an artifactual leading space",
+        // Platform limitation (AGENTS.md): DateTimeOffset minimum year is 1; year -2 needs a
+        // custom date representation.
+        ["fo-test-fn-year-from-dateTime-005"] = "Platform limitation: DateTimeOffset does not support year -2",
+        ["fo-test-fn-year-from-date-003"] = "Platform limitation: DateTimeOffset does not support year -2",
+    };
 
     public ConformanceRunner(string suitePath, string? filter = null)
     {
@@ -114,6 +130,13 @@ internal sealed class ConformanceRunner
         foreach (var testCaseElem in doc.Descendants(_ns + "test-case"))
         {
             var testCase = TestCase.FromElement(testCaseElem, _ns);
+
+            // Documented skips: upstream defects and platform limitations.
+            if (DocumentedSkips.TryGetValue(testCase.Name, out var skipReason))
+            {
+                report.Record(testCase.Name, TestOutcomeKind.Skipped, skipReason);
+                continue;
+            }
 
             // Resolve environment
             TestEnvironment? env = null;

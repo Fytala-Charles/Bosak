@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Translate '.' to match Unicode code points, including surrogate pairs                   |
 //                      | Charles Korthout | 0.4   | 11-07-2026     | Translate XSD char classes via XsdCharClasses with pinned Unicode 9.0 data              |
 //                      | Charles Korthout | 0.5   | 14-07-2026     | Translation/Regex caches; always Compiled (NonBacktracking silently mis-matched U+000A) |
+//                      | Charles Korthout | 0.6   | 15-07-2026     | QT3 regex cluster: dot excludes \r, x-flag whitespace strip, FORX0002 for backrefs to unclosed groups
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -72,8 +73,61 @@ public static class RegexHelper
     /// </summary>
     public static string ValidateAndTranslatePattern(string pattern, RegexOptions options)
     {
+        if ((options & RegexOptions.IgnorePatternWhitespace) != 0)
+            pattern = StripPatternWhitespace(pattern);
         ValidateXsdRegex(pattern);
         return TranslateEndAnchor(TranslateDot(TranslateBackreferences(XsdCharClasses.Translate(pattern)), options), (options & RegexOptions.Multiline) != 0);
+    }
+
+    /// <summary>
+    /// Implements the XPath <c>x</c> flag: removes whitespace (#x20, #x9, #xD, #xA) from the
+    /// pattern prior to matching. Whitespace inside character class expressions is retained.
+    /// Removal applies even after a backslash (spec example: <c>hello\ sworld</c> strips to
+    /// <c>hello\sworld</c>, the whitespace class), so a pending escape simply carries over
+    /// to the next non-whitespace character.
+    /// </summary>
+    private static string StripPatternWhitespace(string pattern)
+    {
+        var sb = new StringBuilder(pattern.Length);
+        bool escaped = false;
+        int classDepth = 0;
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+            if (escaped)
+            {
+                if (c is ' ' or '\t' or '\r' or '\n')
+                    continue; // strip; the backslash stays pending for the next character
+                sb.Append('\\');
+                sb.Append(c);
+                escaped = false;
+                continue;
+            }
+            if (c == '\\')
+            {
+                escaped = true;
+                continue;
+            }
+            if (c == '[')
+            {
+                classDepth++;
+                sb.Append(c);
+                continue;
+            }
+            if (classDepth > 0)
+            {
+                sb.Append(c);
+                if (c == ']')
+                    classDepth--;
+                continue;
+            }
+            if (c is ' ' or '\t' or '\r' or '\n')
+                continue;
+            sb.Append(c);
+        }
+        if (escaped)
+            sb.Append('\\');
+        return sb.ToString();
     }
 
     /// <summary>
@@ -276,7 +330,7 @@ public static class RegexHelper
     private static void ValidateXsdRegex(string pattern)
     {
         bool escaped = false;
-        bool inCharClass = false;
+        int classDepth = 0;
         for (int i = 0; i < pattern.Length; i++)
         {
             char c = pattern[i];
@@ -298,19 +352,36 @@ public static class RegexHelper
                 escaped = true;
                 continue;
             }
-            if (inCharClass)
-            {
-                if (c == ']') inCharClass = false;
-                continue;
-            }
             if (c == '[')
             {
-                inCharClass = true;
+                // Class expressions nest one level for subtraction ([a-d-[b-c]]).
+                classDepth++;
+                continue;
+            }
+            if (c == ']')
+            {
+                // A right square bracket outside a character class is not a NormalChar
+                // in XSD regular expressions (re00804: 'a]').
+                if (classDepth == 0)
+                    throw new InvalidOperationException("FORX0002");
+                classDepth--;
+                continue;
+            }
+            if (classDepth > 0)
+                continue;
+            if (c == '(')
+            {
+                // XSD/XPath groups are plain (...) or non-capturing (?:...); .NET-only
+                // constructs ((?=, (?!, (?<, (?#, (?i:, ...) are invalid (re00767+).
+                if (i + 1 < pattern.Length && pattern[i + 1] == '?' &&
+                    (i + 2 >= pattern.Length || pattern[i + 2] != ':'))
+                    throw new InvalidOperationException("FORX0002");
                 continue;
             }
             if (c == '{')
             {
-                // A valid quantifier is {n}, {n,} or {n,m}.
+                // A valid quantifier is {n}, {n,} or {n,m}; a bare '{' is not a NormalChar
+                // in XSD regular expressions (re00567-9).
                 int j = i + 1;
                 while (j < pattern.Length && char.IsDigit(pattern[j])) j++;
                 if (j > i + 1)
@@ -326,7 +397,7 @@ public static class RegexHelper
                         continue;
                     }
                 }
-                continue;
+                throw new InvalidOperationException("FORX0002");
             }
             if (c == '}')
             {
@@ -334,6 +405,11 @@ public static class RegexHelper
                 // is not a NormalChar in XSD regular expressions.
                 throw new InvalidOperationException("FORX0002");
             }
+        }
+        if (escaped)
+        {
+            // A trailing backslash has nothing to escape.
+            throw new InvalidOperationException("FORX0002");
         }
     }
 
@@ -348,7 +424,54 @@ public static class RegexHelper
     private static string TranslateEndAnchor(string pattern, bool multiline)
     {
         if (multiline)
-            return pattern;
+        {
+            // XPath multiline '^' matches at the start of the string and after any newline
+            // OTHER than a newline that is the last character; .NET's Multiline '^' also
+            // matches at the position after a trailing newline (fn-matches-26). Guard it.
+            var mlb = new StringBuilder(pattern.Length + 8);
+            bool mlEscaped = false;
+            bool mlInClass = false;
+            for (int i = 0; i < pattern.Length; i++)
+            {
+                char c = pattern[i];
+                if (mlEscaped)
+                {
+                    mlb.Append('\\');
+                    mlb.Append(c);
+                    mlEscaped = false;
+                    continue;
+                }
+                if (mlInClass)
+                {
+                    mlb.Append(c);
+                    if (c == ']')
+                        mlInClass = false;
+                    continue;
+                }
+                if (c == '\\')
+                {
+                    mlEscaped = true;
+                    continue;
+                }
+                if (c == '[')
+                {
+                    mlInClass = true;
+                    mlb.Append(c);
+                    continue;
+                }
+                if (c == '^')
+                {
+                    // Forbidden position: absolute end preceded by a newline. (On the empty
+                    // string '^' still matches at 0, so a plain (?!\z) guard is wrong.)
+                    mlb.Append("^(?!(?<=\\n)\\z)");
+                    continue;
+                }
+                mlb.Append(c);
+            }
+            if (mlEscaped)
+                mlb.Append('\\');
+            return mlb.ToString();
+        }
 
         var sb = new StringBuilder(pattern.Length + 2);
         bool escaped = false;
@@ -403,7 +526,8 @@ public static class RegexHelper
     {
         bool matchNewline = (options & RegexOptions.Singleline) != 0;
         const string SurrogatePair = "[\\ud800-\\udbff][\\udc00-\\udfff]";
-        string single = matchNewline ? "[\\s\\S]" : "[^\\n]";
+        // XSD '.' matches any character except #xA and #xD (.NET '.' excludes only \n).
+        string single = matchNewline ? "[\\s\\S]" : "[^\\r\\n]";
         string replacement = $"(?:{SurrogatePair}|{single})";
 
         var sb = new StringBuilder(pattern.Length + 16);
@@ -451,7 +575,10 @@ public static class RegexHelper
 
     private static string TranslateBackreferences(string pattern)
     {
-        int groupCount = CountCapturingGroups(pattern);
+        var closedGroups = new HashSet<int>();
+        var openGroups = new Stack<int>();
+        var parenIsCapturing = new Stack<bool>();
+        int nextGroup = 0;
         var sb = new StringBuilder(pattern.Length + 8);
         bool escaped = false;
         bool inCharClass = false;
@@ -473,26 +600,38 @@ public static class RegexHelper
                     int digitsEnd = digitsStart;
                     while (digitsEnd < pattern.Length && char.IsDigit(pattern[digitsEnd])) digitsEnd++;
                     string digits = pattern[digitsStart..digitsEnd];
-                    int fullNumber = int.Parse(digits, System.Globalization.CultureInfo.InvariantCulture);
+
+                    // A back-reference is \[1-9][0-9]*; a leading zero is not a back-reference
+                    // (and not any other XSD construct either): (foo)(\077) is invalid.
+                    if (digits[0] == '0')
+                        throw new InvalidOperationException("FORX0002");
+
+                    // Multi-digit gobbling (F&O 5.6.1.4): trailing digits are part of the
+                    // reference only while the number does not exceed the capturing groups
+                    // whose opening parenthesis precedes the reference.
+                    int openBefore = nextGroup;
                     int prefixLength = 0;
                     int prefixNumber = 0;
                     for (int k = 1; k <= digits.Length; k++)
                     {
                         int candidate = int.Parse(digits[0..k], System.Globalization.CultureInfo.InvariantCulture);
-                        if (candidate > 0 && candidate <= groupCount)
+                        if (candidate > 0 && candidate <= openBefore)
                         {
                             prefixLength = k;
                             prefixNumber = candidate;
                         }
                     }
 
+                    // The reference must identify an existing group (re00622: (foo)(\7)).
                     if (prefixLength == 0)
-                    {
-                        // No valid group for any prefix; leave the escape as-is.
-                        sb.Append('\\');
-                        sb.Append(digits);
-                    }
-                    else if (prefixLength == digits.Length)
+                        throw new InvalidOperationException("FORX0002");
+
+                    // XSD erratum FO.E24: a back-reference to a group whose closing
+                    // parenthesis has not yet been seen is an error (FORX0002).
+                    if (!closedGroups.Contains(prefixNumber))
+                        throw new InvalidOperationException("FORX0002");
+
+                    if (prefixLength == digits.Length)
                     {
                         // The whole digit sequence is a valid group reference.
                         sb.Append('\\');
@@ -523,6 +662,25 @@ public static class RegexHelper
             if (c == '[')
             {
                 inCharClass = true;
+                sb.Append(c);
+                continue;
+            }
+            if (c == '(')
+            {
+                bool isCapturing = i + 1 >= pattern.Length || pattern[i + 1] != '?';
+                parenIsCapturing.Push(isCapturing);
+                if (isCapturing)
+                {
+                    nextGroup++;
+                    openGroups.Push(nextGroup);
+                }
+                sb.Append(c);
+                continue;
+            }
+            if (c == ')')
+            {
+                if (parenIsCapturing.Count > 0 && parenIsCapturing.Pop())
+                    closedGroups.Add(openGroups.Pop());
                 sb.Append(c);
                 continue;
             }

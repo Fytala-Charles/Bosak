@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.6   | 11-07-2026     | Added XSD char-class (Unicode 9.0), translate and codepoints-to-string astral tests      |
 //                      | Charles Korthout | 1.7   | 14-07-2026     | Regression tests: LF in complement classes (NonBacktracking bug), fn:concat arity 16     |
 //                      | Charles Korthout | 1.8   | 14-07-2026     | codepoints-to-string accepts XML 1.1 C0 controls (xml-to-json regression)                |
+//                      | Charles Korthout | 1.9   | 15-07-2026     | QT3 regex quick wins: dot-vs-CR, \S, x flag, backref/empty-class FORX0002, tokenize captures/NBSP, translate XPTY0004
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -2378,5 +2379,243 @@ public class FunctionLibraryTests
         var parsed = Evaluate($"parse-json('{json.StringValue.Replace("\\", "\\\\").Replace("'", "\\'")}')");
         Assert.True(parsed.IsArray);
         Assert.Equal(4, parsed.ArrayValue.Count);
+    }
+
+    // ------------------------------------------------------------------
+    // QT3 regex quick wins (2026-07-15): dot-vs-CR, \S, x flag, backrefs,
+    // empty classes, tokenize captures/NBSP, translate arity types
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Matches_DotExcludesCarriageReturn()
+    {
+        // XSD '.' matches any character except #xA and #xD (fn-matches-45, fn-tokenize-34).
+        Assert.Equal("false", EvalStr("fn:matches(concat('Mary', codepoints-to-string(13), 'Jones'), 'Mary.Jones')"));
+        Assert.Equal("true", EvalStr("fn:matches(concat('Mary', codepoints-to-string(13), 'Jones'), 'Mary.Jones', 's')"));
+    }
+
+    [Fact]
+    public void Matches_WhitespaceClass_ExcludesOnlyXsdWhitespace()
+    {
+        // \S is the complement of {#x20,#x9,#xA,#xD} only (cbcl-matches-041b).
+        Assert.Equal("false", EvalStr("fn:matches(codepoints-to-string((13, 32, 9)), '\\S+')"));
+        Assert.Equal("true", EvalStr("fn:matches('a', '\\S')"));
+        // NBSP is not XSD whitespace.
+        Assert.Equal("true", EvalStr("fn:matches(codepoints-to-string(160), '\\S')"));
+    }
+
+    [Fact]
+    public void Matches_FlagX_StripsPatternWhitespace()
+    {
+        // The four examples from the F&O 3.1 spec (5.6.2 Flags).
+        Assert.Equal("true", EvalStr("fn:matches('helloworld', 'hello world', 'x')"));
+        Assert.Equal("false", EvalStr("fn:matches('helloworld', 'hello[ ]world', 'x')"));
+        Assert.Equal("true", EvalStr("fn:matches('hello world', 'hello\\ sworld', 'x')"));
+        Assert.Equal("false", EvalStr("fn:matches('hello world', 'hello world', 'x')"));
+    }
+
+    [Fact]
+    public void Matches_FlagX_StripsInsideCategoryBraces()
+    {
+        // Whitespace is removed even inside \p{...} names (K2-MatchesFunc-5/6).
+        Assert.Equal("true", EvalStr("fn:matches('hello world', '\\p{ IsBasicLatin}+', 'x')"));
+        Assert.Equal("true", EvalStr("fn:matches('hello world', '\\p{ I s B a s i c L a t i n }+', 'x')"));
+    }
+
+    [Fact]
+    public void Matches_BackreferenceToUnclosedGroup_Throws()
+    {
+        // XSD erratum FO.E24: a back-reference before the group's closing parenthesis
+        // is FORX0002 (fn-matches-37..40, fn-matchesErr-4/5).
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:matches('aa', '(a\\1)')"));
+        Assert.Contains("FORX0002", ex.Message);
+        ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:matches('#abc#1', '^((#)abc\\1)$')"));
+        Assert.Contains("FORX0002", ex.Message);
+        // A reference to a group that is already closed is fine.
+        Assert.Equal("true", EvalStr("fn:matches('abab', '^(ab)\\1$')"));
+    }
+
+    [Fact]
+    public void Matches_EmptyCharClass_Throws()
+    {
+        // XSD grammar requires at least one class member (cbcl-matches-001).
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:matches('foo', '[^]')"));
+        Assert.Contains("FORX0002", ex.Message);
+        ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:matches('foo', '[]')"));
+        Assert.Contains("FORX0002", ex.Message);
+    }
+
+    [Fact]
+    public void Tokenize_ExcludesCapturingGroups()
+    {
+        // .NET Regex.Split interleaves captures; fn:tokenize must not (fn-tokenize-9).
+        Assert.Equal("#r#c#d#r#", EvalStr("string-join(fn:tokenize('abracadabra', '(ab)|(a)'), '#')"));
+    }
+
+    [Fact]
+    public void Tokenize_OneArg_NbspIsNotASeparator()
+    {
+        // fn:tokenize/1 splits on XPath whitespace only; NBSP stays (fn-tokenize-51).
+        Assert.Equal("1", EvalStr("count(fn:tokenize(codepoints-to-string((97, 98, 99, 160, 100, 101, 102))))"));
+    }
+
+    [Fact]
+    public void NormalizeSpace_KeepsNonXsdWhitespace()
+    {
+        Assert.Equal("a b", EvalStr("fn:normalize-space('  a   b  ')"));
+        // NBSP is not collapsed or stripped.
+        Assert.Equal("1", EvalStr("count(fn:tokenize(fn:normalize-space(codepoints-to-string((160, 97, 160)))) )"));
+    }
+
+    [Fact]
+    public void Translate_NonStringArgument_Throws()
+    {
+        // fn-translate3args-5/6/7
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("translate(1, '-', 'x')"));
+        Assert.Contains("XPTY0004", ex.Message);
+        ex = Assert.Throws<InvalidOperationException>(() => Evaluate("translate('abc', 1, 'x')"));
+        Assert.Contains("XPTY0004", ex.Message);
+        ex = Assert.Throws<InvalidOperationException>(() => Evaluate("translate('abc', 'x', 1)"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Translate_EmptySequenceForRequiredArg_Throws()
+    {
+        // K2-TranslateFunc-1/2: $map and $trans are required (xs:string, not xs:string?).
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:translate('arg', (), 'transString')"));
+        Assert.Contains("XPTY0004", ex.Message);
+        ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:translate('arg', 'mapString', ())"));
+        Assert.Contains("XPTY0004", ex.Message);
+        // $arg remains optional: the empty sequence translates to "".
+        Assert.Equal("", EvalStr("fn:translate((), 'a', 'b')"));
+    }
+
+    // ------------------------------------------------------------------
+    // XSD regex syntax validation (re00xxx cluster) and anchor/arg fixes
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("{5")]
+    [InlineData("{5,")]
+    [InlineData("{5,6")]
+    [InlineData("a]")]
+    [InlineData(@"(?n:(foo)(\s+)(bar))")]
+    [InlineData(@"(?i:foo)")]
+    [InlineData(@"foo(?#comment)")]
+    [InlineData(@"(foo)(\077)")]
+    [InlineData(@"(foo)(\7)")]
+    [InlineData(@"(foo)(\x2a*)(bar)")]
+    [InlineData(@"(\u0034)")]
+    [InlineData(@"\A(foo)")]
+    [InlineData(@"(foo)\Z")]
+    [InlineData(@".*\b(\w+)\b")]
+    [InlineData(@"abc(?=XXX)\w+")]
+    [InlineData(@"[^-[bc]]")]
+    [InlineData(@"[[abcd]-[bc]]+")]
+    [InlineData(@"foo\")]
+    public void Matches_InvalidXsdSyntax_Throws(string pattern)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate($"fn:matches('qwerty', '{pattern}')"));
+        Assert.Contains("FORX0002", ex.Message);
+    }
+
+    [Fact]
+    public void Matches_ValidSyntax_StillAccepted()
+    {
+        // Non-capturing groups are part of XSD 1.1 / XPath 3.1.
+        Assert.Equal("true", EvalStr(@"fn:matches('abab', '^(?:ab)+$')"));
+        // Class subtraction nests one level: [a-d-[b-c]] = {a, d}.
+        Assert.Equal("true", EvalStr(@"fn:matches('a', '[a-d-[b-c]]')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('c', '[a-d-[b-c]]')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('b', '[a-d-[b-c]]')"));
+        // Escaped brackets/braces are ordinary members.
+        Assert.Equal("true", EvalStr(@"fn:matches(']', '[\[\]]')"));
+        Assert.Equal("true", EvalStr(@"fn:matches('x{y}', 'x\{y\}')"));
+        // Quantifiers still work.
+        Assert.Equal("true", EvalStr(@"fn:matches('aaa', 'a{2,3}')"));
+    }
+
+    [Fact]
+    public void Matches_Backreference_MultiDigitGobbling()
+    {
+        // F&O 5.6.1.4: trailing digits join the reference only while the number fits the
+        // groups opened so far; (a)(b)\12 is \1 + literal '2'.
+        Assert.Equal("true", EvalStr(@"fn:matches('aba2', '^(a)(b)\12$')"));
+        // Reference to a group that does not exist yet is rejected.
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(@"fn:matches('qwerty', '(foo)(\7)')"));
+        Assert.Contains("FORX0002", ex.Message);
+    }
+
+    [Fact]
+    public void Matches_MultilineCaret_ExcludesPositionAfterTrailingNewline()
+    {
+        // fn-matches-26: '^' must not match the position after a final newline.
+        Assert.Equal("false", EvalStr("fn:matches(concat('abcd', codepoints-to-string(10), 'defg', codepoints-to-string(10)), '^$', 'm')"));
+        // ...but still matches real line starts (an empty middle line here).
+        Assert.Equal("true", EvalStr("fn:matches(concat('abcd', codepoints-to-string((10, 10)), 'defg'), '^$', 'm')"));
+        Assert.Equal("true", EvalStr("fn:matches(concat('ab', codepoints-to-string(10), 'cd'), '^cd', 'm')"));
+    }
+
+    [Fact]
+    public void Matches_EmptyPatternArgument_Throws()
+    {
+        // K-MatchesFunc-1/3: $pattern and $flags are required.
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:matches('input', ())"));
+        Assert.Contains("XPTY0004", ex.Message);
+        ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:matches('input', 'pattern', ())"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Tokenize_MultilineCaret_ZeroLengthMatch_Throws()
+    {
+        // fn-tokenize-36/38: '^' in multiline mode still matches the empty string (at 0),
+        // so the zero-length check must fire even with the trailing-newline guard in place.
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("fn:tokenize(concat('Mary', codepoints-to-string(10), 'Jones'), '^', 'm')"));
+        Assert.Contains("FORX0003", ex.Message);
+        ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("fn:tokenize(concat('Mary', codepoints-to-string(10), 'Jones'), '^[\\s]*$', 'm')"));
+        Assert.Contains("FORX0003", ex.Message);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:normalize-unicode form handling
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void NormalizeUnicode_FormNameIsCaseInsensitiveAndTrimmed()
+    {
+        Assert.Equal("Nothing to normalize.", EvalStr("normalize-unicode('Nothing to normalize.', 'nFc')"));
+        Assert.Equal("ÅÅ", EvalStr("fn:concat(fn:normalize-unicode('Å',' NFC '),fn:normalize-unicode('Å','NFC'))"));
+    }
+
+    [Fact]
+    public void NormalizeUnicode_EmptyForm_PerformsNoNormalization()
+    {
+        // U+00C5 (Å) and U+212B (Å) differ unless a normalization form is applied.
+        Assert.Equal("false", EvalStr("normalize-unicode('Å', '') eq normalize-unicode('Å', '')"));
+        Assert.Equal("f oo", EvalStr("normalize-unicode('f oo', '')"));
+    }
+
+    [Fact]
+    public void NormalizeUnicode_FullyNormalized()
+    {
+        // Fully-normalized input passes through unchanged...
+        Assert.Equal("blah", EvalStr("normalize-unicode('blah', 'FULLY-NORMALIZED')"));
+        Assert.Equal("1", EvalStr("count(normalize-unicode(codepoints-to-string(2494), 'FULLY-NORMALIZED'))"));
+        // ...input not in NFC raises FOCH0003.
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("normalize-unicode(codepoints-to-string((65, 775)), 'FULLY-NORMALIZED')"));
+        Assert.Contains("FOCH0003", ex.Message);
+    }
+
+    [Fact]
+    public void NormalizeUnicode_NonStringInput_Throws()
+    {
+        // fn-normalize-unicode1args-7
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("normalize-unicode(12)"));
+        Assert.Contains("XPTY0004", ex.Message);
     }
 }

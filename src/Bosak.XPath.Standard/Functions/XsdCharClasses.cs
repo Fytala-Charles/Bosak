@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-07-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-07-2026     | Sorted \s literal (Complement requires normalized input); FORX0002 on empty char class  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -62,11 +63,19 @@ internal static class XsdCharClasses
                     sb.Append(EmitAtom(set));
                     continue;
                 }
-                // Any other escape passes through unchanged.
-                sb.Append('\\');
-                sb.Append(e);
-                i += 2;
-                continue;
+                // Any other escape passes through unchanged, but only XSD SingleCharEsc
+                // letters and back-reference digits are legal here (.NET-only escapes such
+                // as \x, \u, \A, \b are rejected: re00627, re00767, re00791).
+                if (e is 'n' or 'r' or 't' or '\\' or '|' or '.' or '?' or '*' or '+' or
+                    '(' or ')' or '{' or '}' or '$' or '-' or '[' or ']' or '^' ||
+                    char.IsDigit(e))
+                {
+                    sb.Append('\\');
+                    sb.Append(e);
+                    i += 2;
+                    continue;
+                }
+                throw new InvalidOperationException("FORX0002");
             }
             if (c == '[')
             {
@@ -107,8 +116,8 @@ internal static class XsdCharClasses
             case 'D': return Complement(UnicodeData90.GetCategoryRanges("Nd")!);
             case 'w': return Complement(WordNonChars());
             case 'W': return WordNonChars();
-            case 's': return [0x20, 0x20, 0x09, 0x09, 0x0A, 0x0A, 0x0D, 0x0D];
-            case 'S': return Complement([0x20, 0x20, 0x09, 0x09, 0x0A, 0x0A, 0x0D, 0x0D]);
+            case 's': return [0x09, 0x09, 0x0A, 0x0A, 0x0D, 0x0D, 0x20, 0x20];
+            case 'S': return Complement([0x09, 0x09, 0x0A, 0x0A, 0x0D, 0x0D, 0x20, 0x20]);
             case 'i': return Union(Union(UnicodeData90.GetCategoryRanges("L")!, UnicodeData90.GetCategoryRanges("Nl")!), [0x3A, 0x3A, 0x5F, 0x5F]);
             case 'I': return Complement(Union(Union(UnicodeData90.GetCategoryRanges("L")!, UnicodeData90.GetCategoryRanges("Nl")!), [0x3A, 0x3A, 0x5F, 0x5F]));
             case 'c': return NameChars();
@@ -181,12 +190,22 @@ internal static class XsdCharClasses
             char c = pattern[i];
             if (c == ']')
             {
+                if (set.Count == 0 && pendingSingle < 0)
+                {
+                    // XSD grammar requires at least one member: [] and [^] are invalid.
+                    throw new InvalidOperationException("FORX0002");
+                }
                 FlushPending(set, pendingSingle);
                 i++;
                 break;
             }
             if (c == '-' && i + 1 < pattern.Length && pattern[i + 1] == '[')
             {
+                if (set.Count == 0 && pendingSingle < 0)
+                {
+                    // Subtraction requires a non-empty base (e.g. [^-[bc]] is invalid).
+                    throw new InvalidOperationException("FORX0002");
+                }
                 // Subtraction: flush a pending single first (a-[x] = {a} - [x]).
                 FlushPending(set, pendingSingle);
                 pendingSingle = -1;
@@ -264,6 +283,10 @@ internal static class XsdCharClasses
             }, null);
         }
         // A literal code point, possibly an astral character (surrogate pair).
+        // An unescaped '[' is not a valid class member in XSD (only the -[ subtraction form
+        // nests classes, and that is handled by the caller).
+        if (c == '[')
+            throw new InvalidOperationException("FORX0002");
         if (c >= SurrogateLo && c <= 0xDBFF && i + 1 < pattern.Length &&
             pattern[i + 1] >= 0xDC00 && pattern[i + 1] <= SurrogateHi)
         {
@@ -330,7 +353,7 @@ internal static class XsdCharClasses
     }
 
     private static int[] Complement(int[] set)
-        => Difference(Universe, set);
+        => Difference(Universe, Normalize(new List<int>(set)));
 
     /// <summary>Computes <paramref name="a"/> minus <paramref name="b"/>; both normalized.</summary>
     private static int[] Difference(int[] a, int[] b)

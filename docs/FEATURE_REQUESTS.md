@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-14 (unicode-90 set enabled; W3C XSLT 3.0 suite at **7,109 passed / 0 failed** — 100% of runnable tests)
+> **Living Registry** — Last updated: 2026-07-15 (QT3 regex/string quick wins: QT3 at **18,698 passed / 1,742 failed**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
