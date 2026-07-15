@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** `(pending)` (QT3 Tier-2f: fn:parse-json rewrite + fn:transform stylesheet-base-uri)
+**Commit:** `6d873ba` (QT3 Tier-2f: fn:parse-json rewrite + fn:transform stylesheet-base-uri)
 **Current focus:** **QT3 XPath 3.1 suite: 21,355 passed / 1,179 failed / 9,287 skipped (67.11%)** — up from 21,311/1,224/9,286 (66.97%): **+45 fixed, zero regressions** (name-level diff vs Tier-2e: 45 fixed — 31 fn-parse-json + 5 fn-json-doc + duplicates/retain cluster + fn-transform-err-9a — 0 new; one fix moved a test fail→skip). Unit tests 1,057/0 (+21 parse-json). Next pools: serialize-xml (37), MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), json-to-xml (20: switch to JsonReader — root causes known), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
 
 ---
