@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-07-2026     | Skip-reason tracking with grouped summary (harness-error collapse)                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -24,6 +25,7 @@ internal sealed class TestReport
     public int Total => Passed + Failed + Skipped;
 
     private readonly List<(string Name, TestOutcomeKind Kind, string? Reason)> _failures = new();
+    private readonly Dictionary<string, int> _skipReasons = new(StringComparer.Ordinal);
     private readonly object _lock = new();
 
     public void Record(string name, TestOutcomeKind kind, string? message)
@@ -41,6 +43,8 @@ internal sealed class TestReport
                     break;
                 case TestOutcomeKind.Skipped:
                     Skipped++;
+                    if (message is not null)
+                        _skipReasons[message] = _skipReasons.TryGetValue(message, out int n) ? n + 1 : 1;
                     break;
             }
         }
@@ -73,6 +77,23 @@ internal sealed class TestReport
                 Console.WriteLine($"  FAIL {name}: {reason}");
             }
 
+        }
+
+        if (_skipReasons.Count > 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Skip reasons (grouped):");
+            var grouped = new Dictionary<string, int>(StringComparer.Ordinal);
+            foreach (var (reason, count) in _skipReasons)
+            {
+                // Collapse per-test "Harness error: TypeName: message" into the type name.
+                string key = reason.StartsWith("Harness error: ", StringComparison.Ordinal)
+                    ? reason[..(reason.IndexOf(':', "Harness error: ".Length) is int idx && idx > 0 ? idx : reason.Length)]
+                    : reason;
+                grouped[key] = grouped.TryGetValue(key, out int n) ? n + count : count;
+            }
+            foreach (var (reason, count) in grouped.OrderByDescending(kv => kv.Value).Take(40))
+                Console.WriteLine($"  {count,5}  {reason}");
         }
     }
 }

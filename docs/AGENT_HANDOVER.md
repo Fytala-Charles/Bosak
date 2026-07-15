@@ -1,6 +1,25 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `PENDING` (QT3 fn:transform harness registration + skip-reason inventory)
+**Current focus:** **QT3 fn:transform now registered in the conformance harness** — fn-transform set: **33 passed / 54 failed / 37 skipped** (was ~0 passing, all XPST0017). Remaining 54 failures are genuine XSLT feature gaps (stylesheet-node as parsed doc, static-base-uri, xsl:result-document, stylesheet params). **Skip-reason inventory revealed the next big fish: 2,106 skips from `Harness error: UriFormatException`** — the QT3 harness resolves `http://www.w3.org/qt3/...` doc/JSON URIs as local filesystem paths; mapping those to suite files should recover tests in bulk. Other recoverable skip pools: ~90 OverflowException (should be FOAR0002), ~40 JsonReaderException (should be FOJS0001), FileNotFoundException (should be FODC0002), 138 invalid assert-count + 50 assert-permutation (harness assert support), 460 external-variable binding.
+
+---
+
+## This Session Fixes (fn:transform harness registration + skip inventory)
+
+1. **fn:transform registered in QT3 harness** — `TestExecutor.Execute` now calls `XsltFunctionLibrary.Populate(ctx)` (before and after `environment.ApplyTo`, which may rebuild the context); conformance project gained a `Bosak.Xslt` reference. fn-transform set 33/54/37 (was all-XPST0017).
+2. **Skip-reason inventory** — `TestReport` records every outcome (name + reason) and prints grouped skip-reason counts. Full-suite totals: 6,667 Unsupported dependency; **2,106 UriFormatException**; 1,476 "XQuery syntax not supported"; 460 external-variable binding; 138 schema-awareness; 138 invalid assert-count; ~90 OverflowException (Decimal/Int64/Int32 range); ~40 JsonReaderException (strict JSON on error tests); 50 assert-permutation.
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/TestExecutor.cs` (XsltFunctionLibrary.Populate)
+- `tests/Bosak.XPath.Conformance/Bosak.XPath.Conformance.csproj` (Bosak.Xslt reference)
+- `tests/Bosak.XPath.Conformance/TestReport.cs` (skip-reason inventory printing)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `7865cab` (QT3 regex/string quick-wins cluster)
 **Current focus:** **QT3 XPath 3.1 suite: 18,698 passed / 1,742 failed / 11,381 skipped (58.76%)** — up from 18,482/1,940/11,399 (58.08%) at session start (+216 passed, −198 failed, zero regressions). XSLT 3.0 suite remains 7,109/0/7,491 (100% runnable). Next QT3 clusters: fn:transform (61), fn:unparsed-text (54), fn:parse-xml/json (32), fn:load-xquery-module (31), fn:function-lookup (29), serialize (17), op/xs-numeric (22), map:find (10), fn:normalize-space residuals; caseless 'i'-flag full case folding (needs CaseFolding data tables).
 

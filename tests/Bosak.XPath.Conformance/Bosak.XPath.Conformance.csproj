@@ -14,6 +14,7 @@
     <ProjectReference Include="..\..\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.Xslt\Bosak.Xslt.csproj" />
   </ItemGroup>
 
 </Project>

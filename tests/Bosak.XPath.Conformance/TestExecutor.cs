@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-07-2026     | Register fn:transform via XsltFunctionLibrary.Populate (fn-transform test set)           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -29,6 +30,8 @@ internal sealed class TestExecutor
     {
         var ctx = new EvaluationContext();
         FunctionLibrary.Populate(ctx);
+        // fn:transform lives in the XSLT layer; register it so the fn-transform test set runs.
+        Bosak.Xslt.Api.XsltFunctionLibrary.Populate(ctx);
 
         if (environment is not null)
         {
