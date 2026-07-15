@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added optional test-set name filter argument                                             |
+//                      | Charles Korthout | 0.3   | 15-07-2026     | Absolutize the suite path so relative invocations yield file:/// document URIs           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -27,6 +28,9 @@ internal class Program
     static int Main(string[] args)
     {
         string suitePath = args.Length > 0 ? args[0] : "tests/qt3tests";
+        // Absolutize so document URIs derived from suite files are stable file:/// URIs
+        // (relative paths triggered UriFormatException in XDocumentProvider.LoadXml).
+        suitePath = Path.GetFullPath(suitePath);
         string? filter = args.Length > 1 ? args[1] : null;
         string catalogPath = Path.Combine(suitePath, "catalog.xml");
 

@@ -365,6 +365,15 @@ var ctx = new EvaluationContext
     DocumentLoader = uri => /* your IXdmNode loader */
 };
 
+// Redirect published (e.g. http:) resource URIs to local files. Consulted by
+// fn:doc, fn:json-doc, fn:unparsed-text(-available/-lines), and fn:transform's
+// stylesheet-location before any filesystem or network access. Return null for
+// URIs that should follow the normal resolution path.
+ctx.ResourceUriMapper = uri =>
+    uri == "http://example.org/published/spec.xml"
+        ? @"C:\Data\local-copy.xml"
+        : null;
+
 // Pre-register a source document so fn:doc(document-uri($node)) returns the same node.
 ctx.RegisterDocument("file:///C:/Data/input.xml", sourceDocument);
 
@@ -698,13 +707,14 @@ dotnet test Bosak.sln
 | XSLT 1.0 backwards-compatible mode is fully implemented. | `CompileOptions.BackwardsCompatible` flows into the XPath optimizer, IR lowerer, VM arithmetic/comparisons, standard-function argument conversion, `xsl:value-of`, `xsl:number`, and `key()` string-valued lookups. Clears the `backwards` cluster (43/43 runnable). | 2026-07-07 |
 | The `bug` conformance cluster is fully passing. | Imported-template XTSE0680 validation, `<assert-serialization>` file loading in the harness, namespace fixup for copied attributes, and `current()` inside `xsl:sort`. Clears the `bug` cluster (69/69 runnable). | 2026-07-07 |
 | The `xpath-compat` conformance cluster is fully passing. | Backwards-compatible negative-zero constant folding and `fn:subsequence` numeric argument coercion for strings/untyped atoms. Clears the `xpath-compat` cluster (17/17 runnable). | 2026-07-07 |
+| Resource URIs can be redirected to local files. | `EvaluationContext.ResourceUriMapper` (`Func<string, string?>`) maps a requested URI to a local path; consulted by `fn:doc`, `fn:json-doc`, `fn:unparsed-text(-available/-lines)`, and `fn:transform`'s `stylesheet-location` before filesystem/network access. `XDocumentProvider.LoadXml` now absolutizes relative paths before deriving the document URI (previously `UriFormatException`). JSON parse failures in `fn:parse-json`/`fn:json-doc`/`fn:json-to-xml` raise `FOJS0001` instead of propagating `JsonException`. | 2026-07-15 |
 
 ### Conformance Baselines
 
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
 | XSLT 3.0 (W3C) | 5,506 | 99 | 8,995 | 98.2% | `output` cluster 179/24/29; `result-document` cluster 104/21/29; remaining failures are pre-existing non-output issues |
-| XPath 3.1 (QT3) | 18,785 | 3,085 | 9,951 | 59.04% | Stable |
+| XPath 3.1 (QT3) | 20,294 | 1,985 | 9,542 | 63.8% | UriFormatException skip pool cleared; suite http: resources mapped to local files |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
 > ```bash

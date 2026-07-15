@@ -1,6 +1,36 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `PENDING` (QT3 URI-mapping cluster: 2,106 UriFormatException skips cleared)
+**Current focus:** **QT3 XPath 3.1 suite: 20,294 passed / 1,985 failed / 9,542 skipped (63.78%)** — up from 18,698/1,742/11,381 (58.76%): **+1,596 passed, −1,839 skipped, zero regressions** (name-level diff per run; all new failures are previously-skipped tests now exposing genuine gaps). XSLT 3.0 suite smoke green (transform 9/9, json 10/0, analyze-string 53/0). Unit tests 1,010/0. Next QT3 pools: ~90 OverflowException→FOAR0002 (numeric range), 189 invalid assert-count + 72 assert-permutation (harness asserts), 460 external-variable binding, json-doc option semantics (escape/duplicates, FOJS0005, XPTY0004), map:find#2 function items, fn:unparsed-text residual (comparator newline quirk, flaky w3.org fetches for repo-missing files), fn:transform XSLT feature gaps (54).
+
+---
+
+## This Session Fixes (URI-mapping cluster)
+
+1. **UriFormatException root cause (2,106 skips → 0)** — `XDocumentProvider.LoadXml` did `new Uri(relativePath)` which throws; now absolutizes first. Harness `Program` also absolutizes the suite path so document URIs are stable `file:///` URIs.
+2. **`EvaluationContext.ResourceUriMapper`** (`Func<string, string?>`) — maps published `http:` resource URIs to local suite files. Consulted by `EvaluationContext.LoadDocument` (fn:doc; cache key stays the original URI), fn:json-doc, fn:unparsed-text(-available/-lines), and fn:transform's stylesheet-location. The QT3 harness parses `<source uri=>` and `<resource uri=>` environment entries into a per-environment map (existing files only) and installs it in `ApplyTo`; `#UNDEFINED` static-base-uri sentinel now leaves `ctx.BaseUri` unset instead of throwing downstream.
+3. **JSON robustness** — parse failures (`JsonException` and System.Text.Json's surrogate `InvalidOperationException`) → FOJS0001 for parse-json/json-doc/json-to-xml; leading U+FEFF stripped (json-to-xml-015); the `fallback` option now receives unpaired `\uXXXX` surrogate escapes (manual unescaper — System.Text.Json rejects them before the fallback could run; json-doc-039).
+4. **fn:unparsed-text strict decoding** — all detected/explicit encodings use `throwOnInvalidBytes`; undecodable content → FOUT1200 (explicit encoding) / FOUT1190 (inferred, per fn-unparsed-text-045); unknown encoding names → FOUT1200. `unparsed-text-available` on local files now actually reads+validates (available-036/037/038).
+
+## Results (this session)
+
+- QT3: **20,294 / 1,985 / 9,542 (63.78%)** from 18,698 / 1,742 / 11,381 — three measured runs, zero regressions at each step.
+- Unit tests: **1,010 passed / 0 failed** (Standard 375, +11 new: mapper×3, FOJS0001×2, BOM, surrogate fallback×2, strict decoding×3).
+- Skip inventory after: 6,667 unsupported dependency; 1,798 XQuery syntax; 460 external vars; 189 assert-count; 138 schema-awareness; 72 assert-permutation; ~90 OverflowException; 13 harness InvalidOperationException.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs` (absolutize before document URI)
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (ResourceUriMapper + LoadDocument hook)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (mapper consumers, FOJS0001 wrapping, BOM strip, surrogate fallback, strict decoding, available-via-read)
+- `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs` (stylesheet-location mapper)
+- `tests/Bosak.XPath.Conformance/Program.cs` (absolutize suite path), `TestEnvironment.cs` (resource parsing + mapper install + #UNDEFINED)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (+11 tests)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `c1ec4b0` (QT3 fn:transform harness registration + skip-reason inventory)
 **Current focus:** **QT3 fn:transform now registered in the conformance harness** — fn-transform set: **33 passed / 54 failed / 37 skipped** (was ~0 passing, all XPST0017). Remaining 54 failures are genuine XSLT feature gaps (stylesheet-node as parsed doc, static-base-uri, xsl:result-document, stylesheet params). **Skip-reason inventory revealed the next big fish: 2,106 skips from `Harness error: UriFormatException`** — the QT3 harness resolves `http://www.w3.org/qt3/...` doc/JSON URIs as local filesystem paths; mapping those to suite files should recover tests in bulk. Other recoverable skip pools: ~90 OverflowException (should be FOAR0002), ~40 JsonReaderException (should be FOJS0001), FileNotFoundException (should be FODC0002), 138 invalid assert-count + 50 assert-permutation (harness assert support), 460 external-variable binding.
 

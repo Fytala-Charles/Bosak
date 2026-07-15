@@ -29,6 +29,7 @@
 //                      | Charles Korthout | 1.7   | 14-07-2026     | Regression tests: LF in complement classes (NonBacktracking bug), fn:concat arity 16     |
 //                      | Charles Korthout | 1.8   | 14-07-2026     | codepoints-to-string accepts XML 1.1 C0 controls (xml-to-json regression)                |
 //                      | Charles Korthout | 1.9   | 15-07-2026     | QT3 regex quick wins: dot-vs-CR, \S, x flag, backref/empty-class FORX0002, tokenize captures/NBSP, translate XPTY0004
+//                      | Charles Korthout | 2.0   | 15-07-2026     | ResourceUriMapper tests (doc/json-doc/unparsed-text) + FOJS0001 JSON parse error wrapping
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -2379,6 +2380,168 @@ public class FunctionLibraryTests
         var parsed = Evaluate($"parse-json('{json.StringValue.Replace("\\", "\\\\").Replace("'", "\\'")}')");
         Assert.True(parsed.IsArray);
         Assert.Equal(4, parsed.ArrayValue.Count);
+    }
+
+    // ------------------------------------------------------------------
+    // Resource URI mapping / JSON error codes (2026-07-15)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ParseJson_InvalidJson_RaisesFOJS0001()
+    {
+        // Invalid JSON must surface as XPath error FOJS0001, not a raw JsonException.
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("parse-json('{\"a\":}')"));
+        Assert.Contains("FOJS0001", ex.Message);
+    }
+
+    [Fact]
+    public void JsonToXml_InvalidJson_RaisesFOJS0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("json-to-xml('[1,]')"));
+        Assert.Contains("FOJS0001", ex.Message);
+    }
+
+    [Fact]
+    public void JsonDoc_ResourceUriMapper_LoadsMappedFile()
+    {
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".json");
+        File.WriteAllText(path, "{" + "\"x\":1}");
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx.ResourceUriMapper = u => u == "http://example.org/qt3/json/test-json" ? path : null;
+            var result = XPath31Expression.Compile("json-doc('http://example.org/qt3/json/test-json')?x").Evaluate(ctx);
+            Assert.Equal(1.0, result.DoubleValue);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void UnparsedText_ResourceUriMapper_LoadsMappedFile()
+    {
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".txt");
+        File.WriteAllText(path, "hello world");
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx.ResourceUriMapper = u => u == "http://example.org/text/doc-txt" ? path : null;
+            var result = XPath31Expression.Compile("unparsed-text('http://example.org/text/doc-txt')").Evaluate(ctx);
+            Assert.Equal("hello world", result.StringValue);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void ParseJson_LeadingBom_IsIgnored()
+    {
+        // json-to-xml-015: a leading U+FEFF must be accepted.
+        var result = Evaluate("parse-json(codepoints-to-string(65279) || '[1]')");
+        Assert.True(result.IsArray);
+        Assert.Equal(1.0, result.ArrayValue.Get(1).DoubleValue);
+    }
+
+    [Fact]
+    public void ParseJson_UnpairedSurrogate_UsesFallback()
+    {
+        // json-doc-039 pattern: the fallback receives the raw escape sequence.
+        var result = Evaluate("parse-json('{\"s\":\"oh dear \\uDEAD\"}', map{'fallback': function($s){substring($s, 3)}})");
+        Assert.True(result.IsMap);
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("s"), out var value));
+        Assert.Equal("oh dear DEAD", value.StringValue);
+    }
+
+    [Fact]
+    public void ParseJson_UnpairedSurrogate_NoFallback_RaisesFOJS0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("parse-json('{\"s\":\"\\uDEAD\"}')"));
+        Assert.Contains("FOJS0001", ex.Message);
+    }
+
+    [Fact]
+    public void UnparsedText_InvalidUtf8_InferredEncoding_RaisesFOUT1190()
+    {
+        // fn-unparsed-text-045 pattern: undecodable bytes with no explicit encoding.
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".txt");
+        File.WriteAllBytes(path, new byte[] { 0x68, 0x65, 0x6C, 0x6C, 0x6F, 0xA0, 0x77, 0x6F, 0x72, 0x6C, 0x64 });
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx.ResourceUriMapper = u => u == "http://example.org/text/latin1-txt" ? path : null;
+            var ex = Assert.Throws<InvalidOperationException>(() =>
+                XPath31Expression.Compile("unparsed-text('http://example.org/text/latin1-txt')").Evaluate(ctx));
+            Assert.Contains("FOUT1190", ex.Message);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void UnparsedText_UnknownExplicitEncoding_RaisesFOUT1200()
+    {
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".txt");
+        File.WriteAllText(path, "hello");
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx.ResourceUriMapper = u => u == "http://example.org/text/plain-txt" ? path : null;
+            var ex = Assert.Throws<InvalidOperationException>(() =>
+                XPath31Expression.Compile("unparsed-text('http://example.org/text/plain-txt', 'no-such-encoding')").Evaluate(ctx));
+            Assert.Contains("FOUT1200", ex.Message);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void UnparsedTextAvailable_InvalidUtf8_ReturnsFalse()
+    {
+        // fn-unparsed-text-available-037 pattern.
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".txt");
+        File.WriteAllBytes(path, new byte[] { 0x68, 0x69, 0xA0 });
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx.ResourceUriMapper = u => u == "http://example.org/text/bad-txt" ? path : null;
+            Assert.Equal("false", XPath31Expression.Compile("unparsed-text-available('http://example.org/text/bad-txt')").Evaluate(ctx).ToString());
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Doc_ResourceUriMapper_LoadsMappedFile()
+    {
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".xml");
+        File.WriteAllText(path, "<root><a>1</a></root>");
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx.ResourceUriMapper = u => u == "http://example.org/docs/test-doc" ? path : null;
+            var result = XPath31Expression.Compile("string(doc('http://example.org/docs/test-doc')/root/a)").Evaluate(ctx);
+            Assert.Equal("1", result.StringValue);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
     }
 
     // ------------------------------------------------------------------

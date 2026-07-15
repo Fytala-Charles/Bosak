@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 05-06-2026     | Preserve whitespace in elements; strip document-level whitespace-only text nodes        |
 //                      | Charles Korthout | 0.3   | 25-06-2026     | LoadXml sets DocumentUri on returned document node                                      |
+//                      | Charles Korthout | 0.4   | 15-07-2026     | LoadXml absolutizes relative paths before building the document URI (UriFormatException)|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -88,7 +89,11 @@ public static class XDocumentProvider
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
         var node = new XDocumentNode(document);
-        node.SetDocumentUri(new Uri(filePath).AbsoluteUri);
+        // Relative paths must be absolutized first: new Uri(relativePath) throws UriFormatException.
+        var absolutePath = Uri.IsWellFormedUriString(filePath, UriKind.Absolute)
+            ? filePath
+            : Path.GetFullPath(filePath);
+        node.SetDocumentUri(new Uri(absolutePath).AbsoluteUri);
         return node;
     }
 

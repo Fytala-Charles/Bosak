@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added decimal-format parsing from QT3 test environments                                |
 //                      | Charles Korthout | 0.3   | 27-05-2026     | Added default collation parsing from QT3 test environments                             |
+//                      | Charles Korthout | 0.4   | 15-07-2026     | Parse <resource>/<source uri=> into a URI map installed as ctx.ResourceUriMapper       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -33,6 +34,9 @@ internal sealed class TestEnvironment
     public string? DefaultCollation { get; set; }
     public string? BaseUri { get; set; }
 
+    /// <summary>Maps published resource URIs (typically http:) to local suite files.</summary>
+    public Dictionary<string, string> UriMap { get; } = new(StringComparer.Ordinal);
+
     public static TestEnvironment FromElement(XElement element, string suitePath, string baseDir)
     {
         var env = new TestEnvironment();
@@ -51,6 +55,30 @@ internal sealed class TestEnvironment
                     path = Path.Combine(suitePath, file);
                 }
                 env.Sources.Add(new SourceDocument(role ?? ".", path, uri));
+                if (uri is not null && File.Exists(path))
+                {
+                    env.UriMap[uri] = path;
+                }
+            }
+        }
+
+        foreach (var resource in element.Elements(ns + "resource"))
+        {
+            string? file = (string?)resource.Attribute("file");
+            string? uri = (string?)resource.Attribute("uri");
+            if (file is not null && uri is not null)
+            {
+                string path = Path.IsPathRooted(file) ? file : Path.Combine(baseDir, file);
+                if (!File.Exists(path))
+                {
+                    path = Path.Combine(suitePath, file);
+                }
+                // Only map URIs whose target actually exists; unmapped URIs fall through
+                // to normal resolution so missing suite files keep their original behavior.
+                if (File.Exists(path))
+                {
+                    env.UriMap[uri] = path;
+                }
             }
         }
 
@@ -186,9 +214,15 @@ internal sealed class TestEnvironment
             }
         }
 
-        if (!string.IsNullOrEmpty(BaseUri))
+        if (!string.IsNullOrEmpty(BaseUri) && BaseUri != "#UNDEFINED")
         {
             ctx.BaseUri = BaseUri;
+        }
+
+        if (UriMap.Count > 0)
+        {
+            var previous = ctx.ResourceUriMapper;
+            ctx.ResourceUriMapper = u => UriMap.TryGetValue(u, out var path) ? path : previous?.Invoke(u);
         }
 
         foreach (var df in DecimalFormats)

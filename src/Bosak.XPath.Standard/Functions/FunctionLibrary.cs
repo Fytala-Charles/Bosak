@@ -92,6 +92,9 @@
 //                      | Charles Korthout | 5.26  | 14-07-2026     | fn:concat/fn:compare#2 params now pass-through anyAtomicType; fixes HOF-064            |
 //                      | Charles Korthout | 5.27  | 14-07-2026     | fn:concat registered up to arity 32 (unicode-90 concat#16); codepoints-to-string XML-char fix; Rune-based translate
 //                      | Charles Korthout | 5.28  | 15-07-2026     | QT3 quick wins: XPath-whitespace normalize-space; tokenize excludes captures; translate arg-type XPTY0004
+//                      | Charles Korthout | 5.29  | 15-07-2026     | fn:json-doc/unparsed-text(-available/-lines) consult ResourceUriMapper for URI->local-file mapping
+//                      | Charles Korthout | 5.30  | 15-07-2026     | JSON parse failures (parse-json/json-doc/json-to-xml) now raise FOJS0001 instead of JsonException
+//                      | Charles Korthout | 5.31  | 15-07-2026     | JSON BOM strip; fallback for unpaired \uXXXX surrogates; strict unparsed-text decoding (FOUT1200/1190)
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -6078,27 +6081,26 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedText_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedText(AtomizedString(args[0]), null, ctx.BaseUri);
+        => UnparsedText(AtomizedString(args[0]), null, ctx);
 
     private static XdmValue UnparsedText_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedText(AtomizedString(args[0]), AtomizedString(args[1]), ctx.BaseUri);
+        => UnparsedText(AtomizedString(args[0]), AtomizedString(args[1]), ctx);
 
     private static readonly HttpClient _httpClient = new HttpClient();
 
-    private static XdmValue UnparsedText(string href, string? encoding, string? baseUri = null)
+    private static XdmValue UnparsedText(string href, string? encoding, EvaluationContext ctx)
     {
         if (string.IsNullOrEmpty(href))
             throw new InvalidOperationException("FOUT1170");
         try
         {
-            var path = ResolveUriAgainstBase(href, baseUri);
+            // A resource mapper may redirect published (e.g. http:) URIs to local files.
+            var path = ctx.ResourceUriMapper?.Invoke(href) ?? ResolveUriAgainstBase(href, ctx.BaseUri);
 
             string content;
             if (File.Exists(path))
             {
-                content = string.IsNullOrEmpty(encoding)
-                    ? ReadTextWithDetectedEncoding(path)
-                    : File.ReadAllText(path, Encoding.GetEncoding(encoding));
+                content = DecodeBytes(File.ReadAllBytes(path), encoding);
             }
             else if (Uri.TryCreate(path, UriKind.Absolute, out var uri) &&
                      (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
@@ -6132,12 +6134,6 @@ public static class FunctionLibrary
         }
     }
 
-    private static string ReadTextWithDetectedEncoding(string path)
-    {
-        var bytes = File.ReadAllBytes(path);
-        return DecodeBytes(bytes, null);
-    }
-
     private static string DecodeBytes(byte[] bytes, string? encoding)
     {
         var bomLength = GetBomLength(bytes);
@@ -6145,22 +6141,50 @@ public static class FunctionLibrary
 
         if (!string.IsNullOrEmpty(encoding))
         {
-            enc = Encoding.GetEncoding(encoding);
+            try
+            {
+                enc = Encoding.GetEncoding(encoding, EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback);
+            }
+            catch (ArgumentException)
+            {
+                throw new InvalidOperationException($"FOUT1200: Unknown encoding '{encoding}'");
+            }
         }
         else if (bomLength == 0)
         {
             // Only consult the text declaration when there is no BOM; a BOM overrides
             // any encoding declaration for endianness-sensitive UTF-16/32 encodings.
+            // The header probe must be lenient: a 512-byte window can split a surrogate pair.
+            var lenient = (Encoding)enc.Clone();
+            lenient.DecoderFallback = DecoderFallback.ReplacementFallback;
             var headerLength = Math.Min(bytes.Length - bomLength, 512);
-            var header = enc.GetString(bytes, bomLength, headerLength);
+            var header = lenient.GetString(bytes, bomLength, headerLength);
             var declaredEncoding = ExtractDeclaredEncoding(header);
             if (!string.IsNullOrEmpty(declaredEncoding))
             {
-                try { enc = Encoding.GetEncoding(declaredEncoding); } catch { }
+                try
+                {
+                    enc = Encoding.GetEncoding(declaredEncoding, EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback);
+                }
+                catch (ArgumentException)
+                {
+                    throw new InvalidOperationException($"FOUT1200: Unknown encoding '{declaredEncoding}'");
+                }
             }
         }
 
-        return enc.GetString(bytes, bomLength, bytes.Length - bomLength);
+        try
+        {
+            return enc.GetString(bytes, bomLength, bytes.Length - bomLength);
+        }
+        catch (DecoderFallbackException)
+        {
+            // With an explicit encoding the spec error is FOUT1200; with an inferred
+            // (default UTF-8) encoding the suite expects FOUT1190 (fn-unparsed-text-045).
+            throw new InvalidOperationException(!string.IsNullOrEmpty(encoding)
+                ? $"FOUT1200: Resource cannot be decoded using encoding '{encoding}'"
+                : "FOUT1190: Resource is not decodable in the detected encoding");
+        }
     }
 
     private static int GetBomLength(byte[] bytes)
@@ -6180,32 +6204,33 @@ public static class FunctionLibrary
 
     private static Encoding DetectEncodingFromBytes(byte[] bytes)
     {
-        // BOM-based detection.
+        // BOM-based detection. Decoders are strict (throwOnInvalidBytes) so undecodable
+        // content raises FOUT1200/FOUT1190 instead of silently producing U+FFFD.
         if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
-            return new UTF8Encoding(false, false);
+            return new UTF8Encoding(false, true);
         if (bytes.Length >= 4 && bytes[0] == 0xFF && bytes[1] == 0xFE && bytes[2] == 0x00 && bytes[3] == 0x00)
-            return new UTF32Encoding(false, false, false);
+            return new UTF32Encoding(false, false, true);
         if (bytes.Length >= 4 && bytes[0] == 0x00 && bytes[1] == 0x00 && bytes[2] == 0xFE && bytes[3] == 0xFF)
-            return new UTF32Encoding(true, false, false);
+            return new UTF32Encoding(true, false, true);
         if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
-            return new UnicodeEncoding(false, false, false);
+            return new UnicodeEncoding(false, false, true);
         if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
-            return new UnicodeEncoding(true, false, false);
+            return new UnicodeEncoding(true, false, true);
 
         // BOM-less XML declaration detection (UTF-16/32 declarations are self-describing).
         if (bytes.Length >= 4)
         {
             if (bytes[0] == 0x00 && bytes[1] == 0x3C && bytes[2] == 0x00 && bytes[3] == 0x3F)
-                return new UnicodeEncoding(true, false, false);  // UTF-16 BE
+                return new UnicodeEncoding(true, false, true);  // UTF-16 BE
             if (bytes[0] == 0x3C && bytes[1] == 0x00 && bytes[2] == 0x3F && bytes[3] == 0x00)
-                return new UnicodeEncoding(false, false, false); // UTF-16 LE
+                return new UnicodeEncoding(false, false, true); // UTF-16 LE
             if (bytes[0] == 0x00 && bytes[1] == 0x00 && bytes[2] == 0x00 && bytes[3] == 0x3C)
-                return new UTF32Encoding(true, false, false);    // UTF-32 BE
+                return new UTF32Encoding(true, false, true);    // UTF-32 BE
             if (bytes[0] == 0x3C && bytes[1] == 0x00 && bytes[2] == 0x00 && bytes[3] == 0x00)
-                return new UTF32Encoding(false, false, false);   // UTF-32 LE
+                return new UTF32Encoding(false, false, true);   // UTF-32 LE
         }
 
-        return new UTF8Encoding(false, false);
+        return new UTF8Encoding(false, true);
     }
 
     private static readonly Regex EncodingDeclarationRegex = new(
@@ -6227,23 +6252,31 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedTextAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextAvailable(AtomizedString(args[0]), null, ctx.BaseUri);
+        => UnparsedTextAvailable(AtomizedString(args[0]), null, ctx);
 
     private static XdmValue UnparsedTextAvailable_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextAvailable(AtomizedString(args[0]), AtomizedString(args[1]), ctx.BaseUri);
+        => UnparsedTextAvailable(AtomizedString(args[0]), AtomizedString(args[1]), ctx);
 
-    private static XdmValue UnparsedTextAvailable(string href, string? encoding, string? baseUri = null)
+    private static XdmValue UnparsedTextAvailable(string href, string? encoding, EvaluationContext ctx)
     {
         if (string.IsNullOrEmpty(href))
             return XdmValue.False;
         try
         {
-            var path = ResolveUriAgainstBase(href, baseUri);
+            var path = ctx.ResourceUriMapper?.Invoke(href) ?? ResolveUriAgainstBase(href, ctx.BaseUri);
             if (File.Exists(path))
             {
-                if (encoding is not null)
-                    _ = Encoding.GetEncoding(encoding);
-                return XdmValue.True;
+                // Spec: true iff fn:unparsed-text with the same arguments would succeed.
+                // Undecodable content (FOUT1200) and non-XML characters (FOUT1190) mean false.
+                try
+                {
+                    _ = UnparsedText(href, encoding, ctx);
+                    return XdmValue.True;
+                }
+                catch
+                {
+                    return XdmValue.False;
+                }
             }
 
             if (Uri.TryCreate(path, UriKind.Absolute, out var uri) &&
@@ -6270,14 +6303,14 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedTextLines_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextLines(args[0].ToString(), null, ctx.BaseUri);
+        => UnparsedTextLines(args[0].ToString(), null, ctx);
 
     private static XdmValue UnparsedTextLines_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextLines(args[0].ToString(), args[1].ToString(), ctx.BaseUri);
+        => UnparsedTextLines(args[0].ToString(), args[1].ToString(), ctx);
 
-    private static XdmValue UnparsedTextLines(string href, string? encoding, string? baseUri = null)
+    private static XdmValue UnparsedTextLines(string href, string? encoding, EvaluationContext ctx)
     {
-        var textValue = UnparsedText(href, encoding, baseUri);
+        var textValue = UnparsedText(href, encoding, ctx);
         var text = textValue.StringValue;
         if (string.IsNullOrEmpty(text))
             return XdmValue.Undefined;
@@ -10150,6 +10183,31 @@ public static class FunctionLibrary
     private static XdmValue ParseJson_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => ParseJson(ctx, AtomizedString(args[0]), ParseJsonOptions(args[1]));
 
+    /// <summary>
+    /// Parses JSON text, translating <see cref="System.Text.Json.JsonException"/> parse failures
+    /// into the XPath error FOJS0001 as required by the fn:parse-json / fn:json-doc / fn:json-to-xml
+    /// specifications.
+    /// </summary>
+    private static JsonDocument ParseJsonDocument(string json, JsonDocumentOptions docOptions)
+    {
+        // A leading U+FEFF (byte order mark) is ignored (json-to-xml-015).
+        if (json.Length > 0 && json[0] == '\uFEFF')
+            json = json.Substring(1);
+        try
+        {
+            return JsonDocument.Parse(json, docOptions);
+        }
+        catch (System.Text.Json.JsonException ex)
+        {
+            throw new InvalidOperationException($"FOJS0001: Invalid JSON: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            // System.Text.Json surfaces some malformed content (e.g. invalid surrogates) this way.
+            throw new InvalidOperationException($"FOJS0001: Invalid JSON: {ex.Message}");
+        }
+    }
+
     private static XdmValue ParseJson(EvaluationContext ctx, string json, JsonOptions options)
     {
         if (string.IsNullOrEmpty(json))
@@ -10160,7 +10218,7 @@ public static class FunctionLibrary
             AllowTrailingCommas = options.Liberal
         };
 
-        using var document = JsonDocument.Parse(json, docOptions);
+        using var document = ParseJsonDocument(json, docOptions);
         return JsonElementToXdmValue(ctx, document.RootElement, options);
     }
 
@@ -10194,7 +10252,7 @@ public static class FunctionLibrary
                     return XdmValue.FromArray(array);
                 }
             case JsonValueKind.String:
-                return XdmValue.FromString(ProcessJsonString(element.GetString()!, options, ctx));
+                return XdmValue.FromString(ProcessJsonString(ReadJsonString(element, options, ctx), options, ctx));
             case JsonValueKind.Number:
                 return XdmValue.FromDouble(element.GetDouble());
             case JsonValueKind.True:
@@ -10233,6 +10291,103 @@ public static class FunctionLibrary
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Reads a JSON string value, routing invalid \uXXXX escape sequences (unpaired surrogates,
+    /// which System.Text.Json rejects) through the fallback function when one is supplied.
+    /// Without a fallback such strings raise FOJS0001.
+    /// </summary>
+    private static string ReadJsonString(JsonElement element, JsonOptions options, EvaluationContext ctx)
+    {
+        try
+        {
+            return element.GetString()!;
+        }
+        catch (InvalidOperationException ex)
+        {
+            if (options.Fallback is not null && !options.Fallback.Value.IsUndefined)
+                return UnescapeJsonStringWithFallback(element.GetRawText(), options, ctx);
+            throw new InvalidOperationException($"FOJS0001: Invalid JSON string: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Manually unescapes a raw JSON string token (quotes included), invoking the fallback
+    /// function for every \uXXXX escape that does not form a valid (paired) scalar value.
+    /// </summary>
+    private static string UnescapeJsonStringWithFallback(string raw, JsonOptions options, EvaluationContext ctx)
+    {
+        var sb = new StringBuilder(raw.Length);
+        int i = 1; // skip the opening quote
+        int end = raw.Length - 1; // exclude the closing quote
+        while (i < end)
+        {
+            char c = raw[i];
+            if (c != '\\')
+            {
+                sb.Append(c);
+                i++;
+                continue;
+            }
+
+            char esc = raw[i + 1];
+            switch (esc)
+            {
+                case '"': sb.Append('"'); i += 2; break;
+                case '\\': sb.Append('\\'); i += 2; break;
+                case '/': sb.Append('/'); i += 2; break;
+                case 'b': sb.Append('\b'); i += 2; break;
+                case 'f': sb.Append('\f'); i += 2; break;
+                case 'n': sb.Append('\n'); i += 2; break;
+                case 'r': sb.Append('\r'); i += 2; break;
+                case 't': sb.Append('\t'); i += 2; break;
+                case 'u':
+                    {
+                        var escape = raw.Substring(i, 6);
+                        int code = int.Parse(raw.Substring(i + 2, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                        if (code is >= 0xD800 and <= 0xDBFF)
+                        {
+                            // High surrogate: valid only when immediately followed by a low-surrogate escape.
+                            if (i + 11 < raw.Length && raw[i + 6] == '\\' && raw[i + 7] == 'u')
+                            {
+                                int low = int.Parse(raw.Substring(i + 8, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                                if (low is >= 0xDC00 and <= 0xDFFF)
+                                {
+                                    sb.Append(char.ConvertFromUtf32(0x10000 + ((code - 0xD800) << 10) + (low - 0xDC00)));
+                                    i += 12;
+                                    break;
+                                }
+                            }
+                            sb.Append(InvokeJsonFallback(options, ctx, escape));
+                            i += 6;
+                        }
+                        else if (code is >= 0xDC00 and <= 0xDFFF)
+                        {
+                            sb.Append(InvokeJsonFallback(options, ctx, escape));
+                            i += 6;
+                        }
+                        else
+                        {
+                            sb.Append((char)code);
+                            i += 6;
+                        }
+                        break;
+                    }
+                default:
+                    // Unknown escape letters are rejected earlier by JsonDocument.Parse.
+                    sb.Append(esc);
+                    i += 2;
+                    break;
+            }
+        }
+        return sb.ToString();
+    }
+
+    private static string InvokeJsonFallback(JsonOptions options, EvaluationContext ctx, string escapeSequence)
+    {
+        var fallbackResult = VmEngine.InvokeFunctionItem(options.Fallback!.Value, ctx, new[] { XdmValue.FromString(escapeSequence) });
+        return AtomizedString(fallbackResult);
+    }
+
     private static string ProcessJsonString(string s, JsonOptions options, EvaluationContext ctx)
     {
         if (!s.Any(c => c < 0x20))
@@ -10249,9 +10404,7 @@ public static class FunctionLibrary
             {
                 if (options.Fallback is not null && !options.Fallback.Value.IsUndefined)
                 {
-                    var fallbackArg = XdmValue.FromString($"\\u{(int)c:X4}");
-                    var fallbackResult = VmEngine.InvokeFunctionItem(options.Fallback.Value, ctx, new[] { fallbackArg });
-                    sb.Append(AtomizedString(fallbackResult));
+                    sb.Append(InvokeJsonFallback(options, ctx, $"\\u{(int)c:X4}"));
                 }
                 else
                 {
@@ -10282,7 +10435,7 @@ public static class FunctionLibrary
             AllowTrailingCommas = options.Liberal
         };
 
-        using var document = JsonDocument.Parse(json, docOptions);
+        using var document = ParseJsonDocument(json, docOptions);
         var rootElement = JsonElementToXml(ctx, document.RootElement, options);
         var xdoc = new XDocument(rootElement);
         return XdmValue.FromNode(new XDocumentNode(xdoc));
@@ -10321,9 +10474,10 @@ public static class FunctionLibrary
                 }
             case JsonValueKind.String:
                 {
-                    var processed = ProcessJsonString(element.GetString()!, options, ctx);
+                    var unescaped = ReadJsonString(element, options, ctx);
+                    var processed = ProcessJsonString(unescaped, options, ctx);
                     var strEl = new XElement(XName.Get("string", JsonXmlNs), processed);
-                    if (options.Escape && processed != element.GetString()!)
+                    if (options.Escape && processed != unescaped)
                         strEl.SetAttributeValue(XName.Get("escaped"), "true");
                     return strEl;
                 }
@@ -10481,7 +10635,20 @@ public static class FunctionLibrary
             throw new InvalidOperationException("FOUT1170: Invalid URI");
 
         string json;
-        if (ctx.DocumentLoader is not null)
+        var mappedPath = ctx.ResourceUriMapper?.Invoke(uri);
+        if (mappedPath is not null)
+        {
+            // The suite maps this (typically http:) URI to a local JSON resource file.
+            try
+            {
+                json = File.ReadAllText(mappedPath);
+            }
+            catch
+            {
+                throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+            }
+        }
+        else if (ctx.DocumentLoader is not null)
         {
             var node = ctx.DocumentLoader(uri);
             json = node.StringValue;

@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 11-07-2026     | Full fn:transform: initial-match-selection/mode, delivery formats, packages, result docs |
+//                      | Charles Korthout | 0.3   | 15-07-2026     | stylesheet-location consults ResourceUriMapper so published http: URIs map to local files|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -209,6 +210,8 @@ public static class XsltFunctionLibrary
         string resolvedUri = stylesheetLocation!;
         if (!Uri.IsWellFormedUriString(stylesheetLocation!, UriKind.Absolute) && !string.IsNullOrEmpty(ctx.BaseUri))
             resolvedUri = new Uri(new Uri(ctx.BaseUri), stylesheetLocation!).AbsoluteUri;
+        // A resource mapper may redirect published (e.g. http:) URIs to local files.
+        resolvedUri = ctx.ResourceUriMapper?.Invoke(resolvedUri) ?? resolvedUri;
         return CompileFromLocation(compiler, resolvedUri, resolvedUri);
     }
 

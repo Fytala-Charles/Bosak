@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 1.8   | 29-06-2026     | Added SkipLazyGlobalCacheOnce and TryGetBoundVariable for deferred locals              |
 //                      | Charles Korthout | 2.0   | 26-06-2026     | Added CurrentOutputUri for fn:current-output-uri                                       |
 //                      | Charles Korthout | 1.9   | 26-06-2026     | File-not-found document loads report FODC0002 so xsl:catch can match                    |
+//                      | Charles Korthout | 2.1   | 15-07-2026     | Added ResourceUriMapper to redirect published http: resource URIs to local files        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -171,6 +172,14 @@ public sealed class EvaluationContext
     public Func<string, IXdmNode>? DocumentLoader { get; set; }
 
     /// <summary>
+    /// Optional mapper that translates a requested resource URI (for example an <c>http:</c> URI
+    /// published by a test suite) to a local file path. Returns <c>null</c> when the URI is not
+    /// mapped. Consulted by fn:doc, fn:json-doc, fn:unparsed-text(-available/-lines), and
+    /// fn:transform's stylesheet-location before any filesystem/network access.
+    /// </summary>
+    public Func<string, string?>? ResourceUriMapper { get; set; }
+
+    /// <summary>
     /// Optional post-processor applied to documents loaded through <see cref="DocumentLoader"/>.
     /// Used by XSLT to apply xsl:strip-space / xsl:preserve-space rules to documents
     /// returned by fn:doc and fn:document.
@@ -226,10 +235,14 @@ public sealed class EvaluationContext
         if (DocumentLoader is null)
             throw new InvalidOperationException($"No document loader configured. Cannot load document: {uri}");
 
+        // A resource mapper may redirect published (e.g. http:) URIs to local files;
+        // the cache key remains the originally requested URI.
+        var loadUri = ResourceUriMapper?.Invoke(uri) ?? uri;
+
         IXdmNode node;
         try
         {
-            node = DocumentLoader(uri);
+            node = DocumentLoader(loadUri);
         }
         catch (System.IO.FileNotFoundException)
         {
