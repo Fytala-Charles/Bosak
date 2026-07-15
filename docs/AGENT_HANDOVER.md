@@ -1,6 +1,27 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `eb8e5d5` (QT3 Tier-2d: fn:xml-to-json — F+O §17.5.4 spec compliance)
+**Current focus:** **QT3 XPath 3.1 suite: 21,266 passed / 1,269 failed / 9,286 skipped (66.83%)** — up from 21,218/1,317/9,286 (66.68%): **+48 passed, zero regressions** (name-level diff: 48 fixed — 46 xml-to-json cluster + CastAs014/096 — 0 new). Unit tests 1,036/0 (+8 xml-to-json). Next pools: serialize-xml (37), fn-parse-json (31: escape round-trip), K-ForExprPositionalVar (29: parser lacks `at $pos`), K-SeqMAX/MINFunc (39: untypedAtomic→double), MapTest/ArrayTest (34), fn-transform (57, genuine XSLT). xml-to-json remainder: xml-to-json-017 only.
+
+---
+
+## This Session Fixes (Tier-2d: fn:xml-to-json)
+
+1. **Argument cardinality** — empty sequence → empty sequence (xml-to-json-066); single-node sequence unwrapped (D cluster); more than one node → XPTY0004 (C-001).
+2. **Full j:* validation (FOJS0006/FOJS0007)** — elements outside the JSON-XML namespace, unknown attributes (`@escaped` only on j:string; xmlns/xml/xsi ignored), misplaced text, missing `@key`, duplicate map keys (post-unescape), invalid j:number/j:boolean content and invalid JSON escape sequences all raise FOJS0006.
+3. **escaped / escaped-key** — strict JSON unescaping (`\uXXXX` incl. surrogate pairs, invalid escapes rejected); F+O output escaping (solidus, C0/C1/DEL controls, non-BMP as surrogate pairs).
+4. **j:number canonicalization** — content cast to xs:double; `XdmValue.FormatXPathDouble` expands "R"-scientific to fixed-point inside the decimal range (1e-6 ≤ |x| < 1e6) — also fixed CastAs014/096.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v0.8: ExpandScientificToFixed)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.33: xml-to-json spec compliance)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.2: +8 xml-to-json tests)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `bb16583` (QT3 Tier-2c: `?` lookup operator — UnaryLookup parsing + spec-complete VM semantics)
 **Current focus:** **QT3 XPath 3.1 suite: 21,218 passed / 1,317 failed / 9,286 skipped (66.68%)** — up from 21,145/1,390/9,286 (66.45%): **+73 passed, zero regressions** (73 fixed, 0 new). Unit tests 1,028/0 (+8 lookup VM, +6 parser). Next pools: xml-to-json (43: `//*:template` paths + escape), serialize-xml (37), fn-parse-json (31: escape round-trip), K-ForExprPositionalVar (29: parser lacks `at $pos`), K-SeqMAX/MINFunc (39: untypedAtomic→double), MapTest/ArrayTest (34), fn-transform (57, genuine XSLT).
 
