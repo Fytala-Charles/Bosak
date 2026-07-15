@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** `TBD` (QT3 Tier-2a: OverflowException→FOAR0002 + external `<param select>` binding)
+**Commit:** `cc7c87c` (QT3 Tier-2a: OverflowException→FOAR0002 + external `<param select>` binding)
 **Current focus:** **QT3 XPath 3.1 suite: 21,081 passed / 1,454 failed / 9,286 skipped (66.25%)** — up from 20,684/1,361/9,776 (65.0%): **+397 passed, −490 skips, zero regressions** (name-level diff: all 93 new failures are previously-skipped tests now exposing genuine engine gaps, listed below). Unit tests 1,010/0. Next pools: map:find#2 + fn-function-lookup/function-literal function items (~65); `?` lookup operator (Lookup/UnaryLookup ~65); xml-to-json options (43); serialize (37); the Tier-2a-exposed gaps below.
 
 ---
