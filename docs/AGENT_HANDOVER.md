@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** `PENDING` (QT3 Tier-1 harness cluster: assert-count/permutation, $var sources, XQuery detection)
+**Commit:** `8d9aab9` (QT3 Tier-1 harness cluster: assert-count/permutation, $var sources, XQuery detection)
 **Current focus:** **QT3 XPath 3.1 suite: 20,684 passed / 1,361 failed / 9,776 skipped (65.0%)** — up from 20,294/1,985/9,542 (63.8%): **+390 passed, −624 failed** (641 fixed; 17 new failures, all genuine newly-exposed engine gaps, listed below). Unit tests 1,010/0 (harness-only change). Next pools: ~90 OverflowException→FOAR0002; 460 external `<param>` binding; json-doc option semantics; map:find#2 + fn-function-lookup/function-literal function items (~65); `?` lookup operator (Lookup/UnaryLookup ~65); xml-to-json options (43); serialize (37).
 
 ---
