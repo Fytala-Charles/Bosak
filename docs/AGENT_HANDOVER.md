@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `56bd57d` (QT3 Tier-2i: MapTest/ArrayTest pool)
+**Current focus:** **QT3 XPath 3.1 suite: 21,543 passed / 994 failed / 9,284 skipped (67.70%)** — up from 21,454/1,083 (67.42%): **+89 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2h-full.log`). MapTest/ArrayTest pool CLEARED (all 86 + 3 bonus: instanceof128/129/130, same-key-004/005/021, d1e77419). Unit tests 1,146/0 (+59). Next pools: K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), format-date/time picture+locale (~50), collection/fn-doc FODC000x (11), cbcl-castable (8), duration arith FODT0002 (8), BigInteger/arbitrary-precision decimal (12+, deferred — same-key-008 needs it).
+
+---
+
+## This Session Fixes (Tier-2i: MapTest/ArrayTest pool)
+
+1. **Map-key semantics (op:same-key)** — `XdmValueEqualityComparer` rewritten:
+   - **Exact numeric comparison**: keys compare by exact mathematical value via canonical exact-decimal strings (IEEE-754 decomposition `mantissa × 5^k / 10^k`, no rounding/loss); `xs:double('1.1')` ≠ `xs:decimal('1.1')` (same-key-007), high-precision decimals distinct from nearby doubles (map-put-023, map-remove-016, map-size-015); NaN≡NaN, ±INF sentinels, `-0`≡`0`. Hash uses the same canonical string (consistent with Equals).
+   - **Duration keys**: equality + hash on `XPathDateTimeHelper.NormalizeDuration` (months, seconds) totals — `xs:duration('P1Y')` ≡ `xs:yearMonthDuration('P12M')` (map-contains/get/call-017).
+   - `XdmMap.Add` now removes-then-adds on existing keys so the NEWEST key object (with its type annotation) survives — same-key-001 asserts the merged "abc" key is `xs:anyURI`.
+2. **map:merge duplicates option** — `use-first`/`use-last` (default)/`use-any`/`combine` (value concatenation in input order)/`reject` (FOJS0003); empty-sequence options arg → XPTY0004; unknown value → FOJS0005 (merge-006b/c/f, 025, 026, 027). **map:remove** accepts a sequence of keys (spec bug 29660; map-remove-017/019).
+3. **Strict singleton map keys** — `AtomizeMapKey` in both `FunctionLibrary` and `VmEngine` throws XPTY0004 for empty/multi-item keys and FOTY0013 for function items (map-get/contains/call-901/902, MapConstructor-023/024). Lookup operator `$map?(k1,k2)` unaffected (per-key iteration).
+4. **Array bounds (21 tests)** — FOAY0001 for array:get/head/tail/put/remove/insert-before out-of-range (put no longer clamps/appends; remove errors if ANY position is OOB incl. empty arrays; insert-before allows Count+1); array:subarray validates start<1 (FOAY0001), length<0 (FOAY0002), start+length-1>size (FOAY0001); positions are `long` (subarray-317: 4294967297).
+5. **EBV of function items** — `XdmValue.EffectiveBooleanValue` throws FORG0006 for Map/Array/Function (ArrayTest-044); `Exists`/`Empty` VM opcodes fixed to be count-based (fn:exists((0))=true, fn:exists(map{})=true).
+6. **Parameterized type tests** — `VmEngine.InstanceOf` only short-circuits GENERIC `map`/`array`/`function` forms; `map(K,V)`/`array(T)`/`function(A) as R` route per-item to `ValueMatchesType` (now with optional `EvaluationContext`): MapTest-006/010/013/015, ArrayTest-035/036/037/055/059/061/067. Validation: `map(xs:integer)` → XPST0003 (one type arg), `map(xs:string+, ...)` → XPST0003 (key occurrence), `map(integer, string)` → XPST0051 (unprefixed names when default element ns ≠ xs; nested map/array/function validated recursively). `empty-sequence()` now also matches a stored empty `XdmSequence` (not just `Undefined`).
+7. **Maps/arrays as function items** — `function(*)` matches maps and arrays; value-level rule for `function(A) as R`: arity 1, A contravariant (`xs:anyAtomicType` map / `xs:integer` array domain), every map value/array member matches R, and for maps () matches R (absent-key lookup) — MapTest-059..066, ArrayTest-042/043. Named function items matched against registered `ParameterTypeNames`/`ReturnTypeName` (added for floor/ceiling/round#1 `xs:numeric?`, name#1 `node()?`→`xs:string`) with context-aware resolution — ArrayTest-064/084.
+8. **Function-family structural subtyping** (`IsSequenceTypeSubtype`): function subsumption (contravariant params, covariant result), `map(K1,V1)`≤`map(K2,V2)`/`array(T1)`≤`array(T2)` covariance, `map/array(*)→function(*)` edges, map(K,V)≤`function(xs:anyAtomicType) as V?`, array(T)≤`function(xs:integer) as T` — MapTest-050..054. Outer occurrence on function-family types only recognized directly after the param-list closing paren (`function(...) as item()*` keeps its return-type `*`).
+9. **Parser**: nested function tests inside `map(...)`/`array(...)` keep ` as ` separated (was `function(xs:int)asxs:int`) — ArrayTest-063.
+10. **Harness**: roleless `<source>` elements no longer become the context item (URI-map only; FOTS convention) — d1e41648.
+11. **deep-equal map keys** compared collation-free (op:same-key) — fn-deep-equal-maps-13.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs` (v0.3: exact numeric + duration keys)
+- `src/Bosak.XPath.Core/Xdm/XdmMap.cs` (v0.4: Add keeps newest key object)
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v1.2: FORG0006 EBV for function items)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.38: strict keys, Exists/Empty, type-test routing, map/array-as-function, function subsumption)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.39: merge options, remove multi-key, array bounds, deep-equal map keys, fn signature registrations)
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (v1.9: nested `as` spacing in type parens)
+- `tests/Bosak.XPath.Conformance/TestEnvironment.cs` (v0.6: roleless source ≠ context item)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.7: +59 Tier-2i tests)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `6c30c3e` (QT3 Tier-2h: fn:serialize full Serialization 3.1 + map-constructor XQDY0137)
 **Current focus:** **QT3 XPath 3.1 suite: 21,454 passed / 1,083 failed / 9,284 skipped (67.42%)** — up from 21,387/1,150/9,284 (67.21%): **+67 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2g-final2.log`: fn-serialize pool CLEARED 56/0 → 119/119 in filtered run, +11 bonus map-constructor duplicate-key tests: MapConstructor-036/037/038/041/042, map-for-each-007, map-keys-007, map-size-007, same-key-003/027/028). Unit tests 1,087/0 (+19 serialize). Next pools: MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
 
