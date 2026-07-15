@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** `TBD` (QT3 Tier-2b: function-item registry — map:find, spec-correct dynamic-call param kinds)
+**Commit:** `d1387bc` (QT3 Tier-2b: function-item registry — map:find, spec-correct dynamic-call param kinds)
 **Current focus:** **QT3 XPath 3.1 suite: 21,145 passed / 1,390 failed / 9,286 skipped (66.45%)** — up from 21,081/1,454/9,286 (66.25%): **+64 passed, zero regressions** (name-level diff: 64 fixed, 0 new failures). Unit tests 1,014/0 (+4 map:find). Next pools: `?` lookup operator semantics (Lookup/UnaryLookup ~65 — UnaryLookup parser gap fixed, VM semantics in flight); xml-to-json options (43); serialize (37); the Tier-2a-exposed gaps.
 
 ---
