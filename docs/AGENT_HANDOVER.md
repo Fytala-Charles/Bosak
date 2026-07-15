@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
-**Commit:** (pending) (QT3 Tier-2h: fn:serialize full Serialization 3.1 + map-constructor XQDY0137)
+**Commit:** `6c30c3e` (QT3 Tier-2h: fn:serialize full Serialization 3.1 + map-constructor XQDY0137)
 **Current focus:** **QT3 XPath 3.1 suite: 21,454 passed / 1,083 failed / 9,284 skipped (67.42%)** — up from 21,387/1,150/9,284 (67.21%): **+67 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2g-final2.log`: fn-serialize pool CLEARED 56/0 → 119/119 in filtered run, +11 bonus map-constructor duplicate-key tests: MapConstructor-036/037/038/041/042, map-for-each-007, map-keys-007, map-size-007, same-key-003/027/028). Unit tests 1,087/0 (+19 serialize). Next pools: MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
 
 ---
