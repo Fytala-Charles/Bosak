@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 22-05-2026     | Added FormatXPathFloat, fixed FormatXPathDouble exponent and negative zero               |
 //                      | Charles Korthout | 0.6   | 23-05-2026     | Fixed decimal ToString invariant culture; added XPath canonical double formatting        |
 //                      | Charles Korthout | 0.7   | 08-06-2026     | Fixed FormatXPathDouble/Float stripping trailing zeros from whole numbers (e.g. 50→5)   |
+//                      | Charles Korthout | 0.8   | 15-07-2026     | FormatXPathDouble expands R-scientific to fixed-point inside the decimal range (1e-6)   |
 //                      | Charles Korthout | 0.8   | 25-06-2026     | FromNode(null) returns Undefined to prevent null-node context-item bugs                |
 //                      | Charles Korthout | 0.9   | 26-06-2026     | Fixed EffectiveBooleanValue for singleton/multi-item sequences                         |
 //                      | Charles Korthout | 1.0   | 27-06-2026     | Use shortest round-trip format (G17/G9) for XPath double/float scientific notation      |
@@ -26,6 +27,7 @@
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Bosak.XPath.Core.Xdm;
 
@@ -498,13 +500,54 @@ public readonly struct XdmValue
         // For non-scientific range, use round-trip format and trim trailing zeros
         string r = value.ToString("R", CultureInfo.InvariantCulture);
         if (r.Contains('E') || r.Contains('e'))
-            return NormalizeScientific(r);
+        {
+            // "R" may choose scientific notation inside the decimal range (e.g. for
+            // 1e-6); XPath requires fixed-point notation for 1e-6 <= |x| < 1e6.
+            r = ExpandScientificToFixed(r);
+        }
         if (r.Contains('.'))
         {
             r = r.TrimEnd('0').TrimEnd('.');
             if (r == "-0") r = "0";
         }
         return r;
+    }
+
+    /// <summary>
+    /// Expands a scientific-notation double string (e.g. "1E-06", "1.23E-05") to
+    /// fixed-point notation, preserving the shortest-round-trip digits.
+    /// </summary>
+    private static string ExpandScientificToFixed(string s)
+    {
+        bool negative = s.StartsWith('-');
+        if (negative) s = s[1..];
+        int eIdx = s.IndexOf('E');
+        if (eIdx < 0) eIdx = s.IndexOf('e');
+        string mantissa = s[..eIdx];
+        int exponent = int.Parse(s[(eIdx + 1)..], CultureInfo.InvariantCulture);
+        var digits = mantissa.Replace(".", "");
+        // The decimal point starts after the first digit and shifts by the exponent.
+        int pointPos = 1 + exponent;
+        var sb = new StringBuilder();
+        if (negative) sb.Append('-');
+        if (pointPos <= 0)
+        {
+            sb.Append("0.");
+            sb.Append('0', -pointPos);
+            sb.Append(digits);
+        }
+        else if (pointPos >= digits.Length)
+        {
+            sb.Append(digits);
+            sb.Append('0', pointPos - digits.Length);
+        }
+        else
+        {
+            sb.Append(digits[..pointPos]);
+            sb.Append('.');
+            sb.Append(digits[pointPos..]);
+        }
+        return sb.ToString();
     }
 
     private static string NormalizeScientific(string s)

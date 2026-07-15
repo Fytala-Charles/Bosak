@@ -96,6 +96,7 @@
 //                      | Charles Korthout | 5.30  | 15-07-2026     | JSON parse failures (parse-json/json-doc/json-to-xml) now raise FOJS0001 instead of JsonException
 //                      | Charles Korthout | 5.31  | 15-07-2026     | JSON BOM strip; fallback for unpaired \uXXXX surrogates; strict unparsed-text decoding (FOUT1200/1190)
 //                      | Charles Korthout | 5.32  | 15-07-2026     | Spec-correct ParameterTypes for dynamic calls (fn:not, *-from-duration, adjust-*, fn:id/idref/element-with-id, map key args); implemented map:find#2; fn:load-xquery-module resolvable stub (invocation raises FOQM0001); fn:serialize sequence normalization (space-join) and empty-sequence options
+//                      | Charles Korthout | 5.33  | 15-07-2026     | fn:xml-to-json: empty/single/multi-node argument handling (XPTY0004); full j:* validation (FOJS0006/FOJS0007); escaped/escaped-key unescaping; F+O escaping (solidus, C0/C1/DEL, non-BMP surrogate pairs); j:number cast to xs:double
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -10596,6 +10597,24 @@ public static class FunctionLibrary
 
     private static XdmValue XmlToJson(XdmValue nodeValue, JsonOptions options)
     {
+        // fn:xml-to-json takes node()?: the empty sequence yields the empty sequence
+        // (xml-to-json-066); a single-node sequence is unwrapped (xml-to-json-D cluster);
+        // more than one node is XPTY0004 (xml-to-json-C-001).
+        if (nodeValue.IsUndefined || IsEmptySequence(nodeValue))
+            return XdmValue.Undefined;
+        if (nodeValue.IsSequence)
+        {
+            XdmValue? single = null;
+            foreach (var item in XdmSequence.FromSource(nodeValue.SequenceValue!))
+            {
+                if (single is not null)
+                    throw new InvalidOperationException("XPTY0004: xml-to-json requires a single node, got a sequence");
+                single = item;
+            }
+            nodeValue = single ?? XdmValue.Undefined;
+            if (nodeValue.IsUndefined)
+                return XdmValue.Undefined;
+        }
         if (!nodeValue.IsNode)
             throw new InvalidOperationException("XPTY0004: xml-to-json requires a node");
 
@@ -10630,66 +10649,279 @@ public static class FunctionLibrary
     }
 
     private static void XmlNodeToJsonString(IXdmNode node, StringBuilder sb, JsonOptions options)
+        => XmlNodeToJsonString(node, sb, options, isMapEntry: false);
+
+    /// <summary>
+    /// Serializes one element of the JSON XML representation (F+O 3.1 §17.5.4), validating
+    /// the input against the schema rules: unknown elements/attributes, misplaced text,
+    /// duplicate keys, invalid numbers and invalid escape sequences raise FOJS0006/FOJS0007.
+    /// </summary>
+    private static void XmlNodeToJsonString(IXdmNode node, StringBuilder sb, JsonOptions options, bool isMapEntry)
     {
+        if (node.NamespaceUri != JsonXmlNs)
+            throw new InvalidOperationException($"FOJS0006: Element {{{node.NamespaceUri}}}{node.LocalName} is not in the JSON XML namespace");
         var localName = node.LocalName;
+        bool isString = localName == "string";
+        bool escaped = false;
+
+        // Validate attributes: @key/@escaped-key are allowed on any element (only used
+        // when the parent is a map); @escaped only on j:string; namespace declarations
+        // and XML/XSI attributes are ignored (xml-to-json-D-001/D-002/D-302).
+        foreach (var attr in node.Attributes())
+        {
+            var attrNode = attr.NodeValue!;
+            var attrNs = attrNode.NamespaceUri;
+            if (attrNode.LocalName == "xmlns" || attrNode.Prefix == "xmlns"
+                || attrNs == "http://www.w3.org/XML/1998/namespace"
+                || attrNs == "http://www.w3.org/2001/XMLSchema-instance")
+                continue;
+            var attrName = attrNode.LocalName;
+            var attrValue = attrNode.StringValue;
+            switch (attrName)
+            {
+                case "key":
+                    break; // allowed everywhere; read by the containing map
+                case "escaped-key":
+                    _ = ParseJsonXmlBoolean(attrValue, "escaped-key");
+                    break;
+                case "escaped" when isString:
+                    escaped = ParseJsonXmlBoolean(attrValue, "escaped");
+                    break;
+                default:
+                    throw new InvalidOperationException($"FOJS0006: Attribute @{attrName} is not allowed on j:{localName}");
+            }
+        }
+
         switch (localName)
         {
             case "map":
                 sb.Append('{');
                 var first = true;
-                foreach (var child in node.Axis(XdmAxis.Child))
+                var seenKeys = new HashSet<string>();
+                foreach (var child in ElementChildrenOnly(node, localName))
                 {
-                    var childNode = child.NodeValue!;
-                    if (childNode.NodeKind != XdmNodeKind.Element)
-                        continue;
                     if (!first) sb.Append(',');
                     first = false;
-                    string? key = null;
-                    foreach (var attr in childNode.Attributes("key"))
+                    var childNode = child.NodeValue!;
+                    string? entryKey = null;
+                    bool entryEscapedKey = false;
+                    foreach (var attr in childNode.Attributes())
                     {
-                        key = attr.NodeValue?.StringValue;
-                        break;
+                        var attrNode = attr.NodeValue!;
+                        if (attrNode.LocalName == "key")
+                            entryKey = attrNode.StringValue;
+                        else if (attrNode.LocalName == "escaped-key")
+                            entryEscapedKey = ParseJsonXmlBoolean(attrNode.StringValue, "escaped-key");
                     }
-                    if (key is null)
+                    if (entryKey is null)
                         throw new InvalidOperationException("FOJS0006: Missing key attribute in map entry");
+                    var rawKey = entryEscapedKey ? UnescapeJsonContentStrict(entryKey) : entryKey;
+                    if (!seenKeys.Add(rawKey))
+                        throw new InvalidOperationException($"FOJS0006: Duplicate key '{rawKey}' in map");
                     sb.Append('"');
-                    sb.Append(JsonEscapeKey(key));
+                    sb.Append(XmlToJsonEscape(rawKey));
                     sb.Append("\":");
-                    XmlNodeToJsonString(childNode, sb, options);
+                    XmlNodeToJsonString(childNode, sb, options, isMapEntry: true);
                 }
                 sb.Append('}');
                 break;
             case "array":
                 sb.Append('[');
                 first = true;
-                foreach (var child in node.Axis(XdmAxis.Child))
+                foreach (var child in ElementChildrenOnly(node, localName))
                 {
-                    var childNode = child.NodeValue!;
-                    if (childNode.NodeKind != XdmNodeKind.Element)
-                        continue;
                     if (!first) sb.Append(',');
                     first = false;
-                    XmlNodeToJsonString(childNode, sb, options);
+                    XmlNodeToJsonString(child.NodeValue!, sb, options);
                 }
                 sb.Append(']');
                 break;
             case "string":
-                sb.Append('"');
-                sb.Append(JsonEscapeString(node.StringValue));
-                sb.Append('"');
-                break;
+                {
+                    var content = ElementTextContent(node, localName);
+                    if (escaped)
+                        content = UnescapeJsonContentStrict(content);
+                    sb.Append('"');
+                    sb.Append(XmlToJsonEscape(content));
+                    sb.Append('"');
+                    break;
+                }
             case "number":
-                sb.Append(node.StringValue);
-                break;
+                {
+                    // The content is cast to xs:double and serialized with XPath double
+                    // formatting (xml-to-json-D-201..206); INF/NaN are not JSON numbers.
+                    var content = ElementTextContent(node, localName).Trim();
+                    if (!JsonXmlNumberPattern.IsMatch(content)
+                        || !double.TryParse(content, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
+                        throw new InvalidOperationException($"FOJS0006: '{content}' is not a valid JSON number");
+                    sb.Append(XdmValue.FromDouble(number).ToString());
+                    break;
+                }
             case "boolean":
-                sb.Append(node.StringValue);
-                break;
+                {
+                    var content = ElementTextContent(node, localName).Trim();
+                    sb.Append(content switch
+                    {
+                        "true" or "1" => "true",
+                        "false" or "0" => "false",
+                        _ => throw new InvalidOperationException($"FOJS0006: '{content}' is not a valid JSON boolean")
+                    });
+                    break;
+                }
             case "null":
-                sb.Append("null");
-                break;
+                {
+                    var content = ElementTextContent(node, localName);
+                    if (content.Trim().Length != 0)
+                        throw new InvalidOperationException("FOJS0006: j:null must be empty");
+                    sb.Append("null");
+                    break;
+                }
             default:
                 throw new InvalidOperationException($"FOJS0006: Unexpected element {localName} in JSON XML representation");
         }
+    }
+
+    private static readonly System.Text.RegularExpressions.Regex JsonXmlNumberPattern =
+        new(@"^[+-]?([0-9]+(\.[0-9]*)?|\.[0-9]+)([eE][-+]?[0-9]+)?$", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    /// <summary>
+    /// Returns the element children of a map/array, rejecting non-whitespace text
+    /// (FOJS0006; xml-to-json-C-011/C-015).
+    /// </summary>
+    private static List<XdmValue> ElementChildrenOnly(IXdmNode node, string localName)
+    {
+        var elements = new List<XdmValue>();
+        foreach (var child in node.Axis(XdmAxis.Child))
+        {
+            var childNode = child.NodeValue!;
+            if (childNode.NodeKind == XdmNodeKind.Element)
+            {
+                elements.Add(child);
+            }
+            else if (childNode.NodeKind == XdmNodeKind.Text && childNode.StringValue.Trim().Length != 0)
+            {
+                throw new InvalidOperationException($"FOJS0006: j:{localName} must not have text content");
+            }
+            // Whitespace-only text and comments/PIs are ignored.
+        }
+        return elements;
+    }
+
+    /// <summary>
+    /// Returns the concatenated text content of a leaf j:* element, rejecting element
+    /// children (FOJS0006; xml-to-json-C-008/C-009).
+    /// </summary>
+    private static string ElementTextContent(IXdmNode node, string localName)
+    {
+        var sb = new StringBuilder();
+        foreach (var child in node.Axis(XdmAxis.Child))
+        {
+            var childNode = child.NodeValue!;
+            if (childNode.NodeKind == XdmNodeKind.Element)
+                throw new InvalidOperationException($"FOJS0006: j:{localName} must not have element children");
+            // Comments and processing instructions are not content (xml-to-json-D-101).
+            if (childNode.NodeKind == XdmNodeKind.Text)
+                sb.Append(childNode.StringValue);
+        }
+        return sb.ToString();
+    }
+
+    private static bool ParseJsonXmlBoolean(string value, string attributeName)
+        => value.Trim() switch
+        {
+            "true" or "1" => true,
+            "false" or "0" => false,
+            _ => throw new InvalidOperationException($"FOJS0006: Invalid value '{value}' for @{attributeName}")
+        };
+
+    /// <summary>
+    /// Strictly unescapes JSON escape sequences in escaped="true" string content or an
+    /// escaped-key attribute (fn:xml-to-json). Invalid escapes raise FOJS0007.
+    /// </summary>
+    private static string UnescapeJsonContentStrict(string content)
+    {
+        if (!content.Contains('\\'))
+            return content;
+        var sb = new StringBuilder(content.Length);
+        int i = 0;
+        while (i < content.Length)
+        {
+            char c = content[i];
+            if (c != '\\')
+            {
+                sb.Append(c);
+                i++;
+                continue;
+            }
+            if (i + 1 >= content.Length)
+                throw new InvalidOperationException("FOJS0007: Trailing backslash in escaped string content");
+            char esc = content[i + 1];
+            switch (esc)
+            {
+                case '"': sb.Append('"'); i += 2; break;
+                case '\\': sb.Append('\\'); i += 2; break;
+                case '/': sb.Append('/'); i += 2; break;
+                case 'b': sb.Append('\b'); i += 2; break;
+                case 'f': sb.Append('\f'); i += 2; break;
+                case 'n': sb.Append('\n'); i += 2; break;
+                case 'r': sb.Append('\r'); i += 2; break;
+                case 't': sb.Append('\t'); i += 2; break;
+                case 'u':
+                    if (i + 5 >= content.Length
+                        || !int.TryParse(content.Substring(i + 2, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int code))
+                        throw new InvalidOperationException($"FOJS0007: Invalid \\u escape in '{content}'");
+                    sb.Append((char)code);
+                    i += 6;
+                    break;
+                default:
+                    throw new InvalidOperationException($"FOJS0007: Invalid escape sequence '\\{esc}'");
+            }
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// JSON string escaping per F+O 3.1 §17.5.4: quote, backslash and solidus are escaped;
+    /// control characters use short escapes or \u00XX; non-BMP characters are written as
+    /// \uXXXX surrogate pairs (xml-to-json-D-005).
+    /// </summary>
+    private static string XmlToJsonEscape(string s)
+    {
+        var sb = new StringBuilder(s.Length + 8);
+        int i = 0;
+        while (i < s.Length)
+        {
+            char c = s[i];
+            switch (c)
+            {
+                case '"': sb.Append("\\\""); i++; break;
+                case '\\': sb.Append("\\\\"); i++; break;
+                case '/': sb.Append("\\/"); i++; break;
+                case '\b': sb.Append("\\b"); i++; break;
+                case '\f': sb.Append("\\f"); i++; break;
+                case '\n': sb.Append("\\n"); i++; break;
+                case '\r': sb.Append("\\r"); i++; break;
+                case '\t': sb.Append("\\t"); i++; break;
+                default:
+                    if (c < 0x20 || (c >= 0x7F && c <= 0x9F))
+                    {
+                        sb.Append($"\\u{(int)c:X4}");
+                        i++;
+                    }
+                    else if (char.IsHighSurrogate(c) && i + 1 < s.Length && char.IsLowSurrogate(s[i + 1]))
+                    {
+                        sb.Append($"\\u{(int)c:X4}\\u{(int)s[i + 1]:X4}");
+                        i += 2;
+                    }
+                    else
+                    {
+                        sb.Append(c);
+                        i++;
+                    }
+                    break;
+            }
+        }
+        return sb.ToString();
     }
 
     private static string JsonEscapeKey(string s)

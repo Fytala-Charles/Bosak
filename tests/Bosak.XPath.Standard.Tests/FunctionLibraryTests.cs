@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 1.9   | 15-07-2026     | QT3 regex quick wins: dot-vs-CR, \S, x flag, backref/empty-class FORX0002, tokenize captures/NBSP, translate XPTY0004
 //                      | Charles Korthout | 2.0   | 15-07-2026     | ResourceUriMapper tests (doc/json-doc/unparsed-text) + FOJS0001 JSON parse error wrapping
 //                      | Charles Korthout | 2.1   | 15-07-2026     | map:find tests (flat, nested maps/arrays, no-match, empty input)                          |
+//                      | Charles Korthout | 2.2   | 15-07-2026     | xml-to-json F+O §32.2.2 tests: number reformat, FOJS0006 validation, escaped strings      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -2398,6 +2399,73 @@ public class FunctionLibraryTests
         var parsed = Evaluate($"parse-json('{json.StringValue.Replace("\\", "\\\\").Replace("'", "\\'")}')");
         Assert.True(parsed.IsArray);
         Assert.Equal(4, parsed.ArrayValue.Count);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:xml-to-json validation / escaping (F+O §32.2.2) — 2026-07-15
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void XmlToJson_Number_ReformatsToCanonicalDouble()
+    {
+        // j:number content is validated and re-emitted as a canonical xs:double.
+        var json = Evaluate("xml-to-json(parse-xml('<number xmlns=\"http://www.w3.org/2005/xpath-functions\">1E6</number>'))");
+        Assert.Equal("1.0E6", json.StringValue);
+    }
+
+    [Fact]
+    public void XmlToJson_Number_SmallNegativeExponent_ExpandsToDecimal()
+    {
+        // Doubles in [1e-6, 1e6) use decimal notation, not scientific.
+        var json = Evaluate("xml-to-json(parse-xml('<number xmlns=\"http://www.w3.org/2005/xpath-functions\">-1E-6</number>'))");
+        Assert.Equal("-0.000001", json.StringValue);
+    }
+
+    [Fact]
+    public void XmlToJson_InvalidNumber_RaisesFOJS0006()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("xml-to-json(parse-xml('<number xmlns=\"http://www.w3.org/2005/xpath-functions\">12x</number>'))"));
+        Assert.Contains("FOJS0006", ex.Message);
+    }
+
+    [Fact]
+    public void XmlToJson_MapEntryMissingKey_RaisesFOJS0006()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("xml-to-json(parse-xml('<map xmlns=\"http://www.w3.org/2005/xpath-functions\"><string>v</string></map>'))"));
+        Assert.Contains("FOJS0006", ex.Message);
+    }
+
+    [Fact]
+    public void XmlToJson_NonJsonNamespace_RaisesFOJS0006()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("xml-to-json(parse-xml('<string xmlns=\"http://example.com/other\">v</string>'))"));
+        Assert.Contains("FOJS0006", ex.Message);
+    }
+
+    [Fact]
+    public void XmlToJson_EscapedString_UnescapesUnicodeEscape()
+    {
+        // escaped="true" marks JSON-escaped content; \uXXXX must be decoded on output.
+        var json = Evaluate("xml-to-json(parse-xml('<string xmlns=\"http://www.w3.org/2005/xpath-functions\" escaped=\"true\">\\u0041bc</string>'))");
+        Assert.Equal("\"Abc\"", json.StringValue);
+    }
+
+    [Fact]
+    public void XmlToJson_Boolean_CanonicalizesOne()
+    {
+        var json = Evaluate("xml-to-json(parse-xml('<boolean xmlns=\"http://www.w3.org/2005/xpath-functions\">1</boolean>'))");
+        Assert.Equal("true", json.StringValue);
+    }
+
+    [Fact]
+    public void XmlToJson_InvalidBoolean_RaisesFOJS0006()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("xml-to-json(parse-xml('<boolean xmlns=\"http://www.w3.org/2005/xpath-functions\">yes</boolean>'))"));
+        Assert.Contains("FOJS0006", ex.Message);
     }
 
     // ------------------------------------------------------------------
