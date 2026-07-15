@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.2   | 11-07-2026     | Full fn:transform: initial-match-selection/mode, delivery formats, packages, result docs |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | stylesheet-location consults ResourceUriMapper so published http: URIs map to local files|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 15-07-2026     | Honor stylesheet-base-uri; stylesheet-text without it has no base URI (XTSE0165)         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
@@ -179,6 +181,19 @@ public static class XsltFunctionLibrary
             return CompileFromLocation(compiler, location, packageName);
         }
 
+        // The stylesheet-base-uri option supplies the static base URI of the principal
+        // stylesheet module when it has no base URI of its own (F+O: "This value must
+        // be used if no other static base URI is available"). A relative reference is
+        // resolved against the static base URI of the fn:transform call (QT3 bug 30023
+        // — fn-transform-err-9a).
+        var stylesheetBaseUri = GetStringOption(options, "stylesheet-base-uri");
+        if (stylesheetBaseUri != null
+            && !Uri.IsWellFormedUriString(stylesheetBaseUri, UriKind.Absolute)
+            && !string.IsNullOrEmpty(ctx.BaseUri))
+        {
+            stylesheetBaseUri = new Uri(new Uri(ctx.BaseUri), stylesheetBaseUri).AbsoluteUri;
+        }
+
         if (stylesheetNodeValue != null)
         {
             var first = FirstItem(stylesheetNodeValue.Value);
@@ -188,22 +203,26 @@ public static class XsltFunctionLibrary
                 ? doc
                 : new XDocument(xdn.UnderlyingObject as XElement
                     ?? throw new InvalidOperationException("XPTY0004: fn:transform stylesheet-node must be a document or element node"));
-            var baseUri = first.NodeValue!.BaseUri ?? ctx.BaseUri;
+            var baseUri = first.NodeValue!.BaseUri ?? stylesheetBaseUri ?? ctx.BaseUri;
             return new XdmExecutableSource(compiler.Compile(nodeDoc, baseUri));
         }
 
         if (stylesheetText != null)
         {
+            // stylesheet-text has NO base URI of its own and does not inherit the calling
+            // context's static base URI; only the stylesheet-base-uri option supplies one.
+            // Without it, relative references (e.g. xsl:include href) cannot be resolved
+            // and raise XTSE0165 (fn-transform-err-9).
             XDocument textDoc;
             try
             {
-                textDoc = Xml11Loader.Parse(stylesheetText, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace, ctx.BaseUri ?? string.Empty);
+                textDoc = Xml11Loader.Parse(stylesheetText, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace, stylesheetBaseUri ?? string.Empty);
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"FOXT0002: Failed to parse stylesheet text: {ex.Message}");
             }
-            return new XdmExecutableSource(compiler.Compile(textDoc, ctx.BaseUri));
+            return new XdmExecutableSource(compiler.Compile(textDoc, stylesheetBaseUri));
         }
 
         // stylesheet-location: resolve against the static base URI.

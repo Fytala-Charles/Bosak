@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 21-05-2026     | Keys changed from string to XdmValue with numeric promotion equality                   |
+//                      | Charles Korthout | 0.3   | 15-07-2026     | Added Remove(key) for fn:parse-json duplicates='use-last' entry replacement            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -33,6 +34,9 @@ public sealed class XdmMap
 
     /// <summary>Adds or replaces a key-value pair.</summary>
     public void Add(XdmValue key, XdmValue value) => _entries[key] = value;
+
+    /// <summary>Removes the entry with the given key, if present.</summary>
+    public bool Remove(XdmValue key) => _entries.Remove(key);
 
     /// <summary>Attempts to retrieve the value for the given key.</summary>
     public bool TryGetValue(XdmValue key, out XdmValue value) => _entries.TryGetValue(key, out value!);

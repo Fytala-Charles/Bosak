@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `(pending)` (QT3 Tier-2f: fn:parse-json rewrite + fn:transform stylesheet-base-uri)
+**Current focus:** **QT3 XPath 3.1 suite: 21,355 passed / 1,179 failed / 9,287 skipped (67.11%)** — up from 21,311/1,224/9,286 (66.97%): **+45 fixed, zero regressions** (name-level diff vs Tier-2e: 45 fixed — 31 fn-parse-json + 5 fn-json-doc + duplicates/retain cluster + fn-transform-err-9a — 0 new; one fix moved a test fail→skip). Unit tests 1,057/0 (+21 parse-json). Next pools: serialize-xml (37), MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), json-to-xml (20: switch to JsonReader — root causes known), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
+
+---
+
+## This Session Fixes (Tier-2f: fn:parse-json + fn:transform)
+
+1. **fn:parse-json rewritten on a hand-rolled recursive-descent `JsonReader`** (replaces System.Text.Json, which rejected unpaired surrogates before the fallback could run) — fn-parse-json 116/31 → 147/0; json-doc net +5.
+   - `()` input → `()` (fn-parse-json-112..115); empty STRING still FOJS0001.
+   - Spec escape semantics: escape=false decodes named/\uXXXX escapes (unpaired surrogates & invalid-XML chars → fallback, default U+FFFD); escape=true retains named escapes verbatim, expands \uXXXX for valid XML chars, retains invalid ones re-escaped canonically; surrogate pairs → astral chars both modes.
+   - Duplicates: use-first / use-last (via new `XdmMap.Remove`) / reject; duplicate detection on the fully-decoded canonical key even with escape:true (`{"%":..,"\u0025":..}` → FOJS0003).
+   - `InvokeJsonFallback`: arity-1 check (XPTY0004), result must be xs:string, fallback errors propagate (error() → Q{}USER9999); escape+fallback combo → FOJS0005.
+2. **fn:json-to-xml duplicates option** — `retain` accepted (early-draft spelling kept for json-to-xml only; serialize-json-011) and is the DEFAULT (json-to-xml-018); `use-last` still FOJS0005 (json-to-xml-error-040). (Remaining 20 json-to-xml failures need the JsonReader switch — next pool.)
+3. **fn:transform stylesheet-base-uri honored** (was ignored) — supplies the static base URI for stylesheet-text/node; a relative value resolves against the call's static base URI (QT3 bug 30023, fn-transform-err-9a). stylesheet-text WITHOUT it has NO base URI (does not inherit ctx.BaseUri) → relative xsl:include raises XTSE0165 (fn-transform-err-9).
+4. **Harness empty-sequence equivalence** — `ResultComparer.DeepEqual` and the library's `DeepEqualItem` treat Undefined vs empty-Sequence as equal () representations (fn-parse-json-007/106/107).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.35 parse-json JsonReader rewrite; v5.36 json-to-xml retain)
+- `src/Bosak.XPath.Core/Xdm/XdmMap.cs` (v0.10: `Remove`)
+- `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs` (v0.4: stylesheet-base-uri + no-base-uri stylesheet-text)
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs` (v1.0: empty-sequence equivalence)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (v0.5: header)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.3: +21 parse-json tests; unpaired-surrogate test now expects default-fallback U+FFFD)
+
+---
+
+**Date:** 2026-07-15
+**Commit:** `a3be343` (QT3 Tier-2e: fn:min/fn:max — untypedAtomic→double, NaN propagation)
+**Current focus:** **QT3 XPath 3.1 suite: 21,311 passed / 1,224 failed / 9,286 skipped (66.97%)** — up from 21,266/1,269 (66.83%): **+45 fixed, zero regressions** (K-SeqMAX/MINFunc cluster + fn-min/fn-max). Unit tests 1,044/0 (+8 min/max).
+
+Tier-2e details: untypedAtomic→xs:double cast (invalid → FORG0001); any float/double/NaN or untypedAtomic → double path with NaN propagation; xs:string/QName/boolean mixed with numerics → FORG0006; homogeneous strings via collation; generic xs:duration (years+days, e.g. "P1Y1M1D") not orderable → FORG0006 (fn-max-9/fn-min-9); booleans-only still work (cbcl-max-019).
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `eb8e5d5` (QT3 Tier-2d: fn:xml-to-json — F+O §17.5.4 spec compliance)
 **Current focus:** **QT3 XPath 3.1 suite: 21,266 passed / 1,269 failed / 9,286 skipped (66.83%)** — up from 21,218/1,317/9,286 (66.68%): **+48 passed, zero regressions** (name-level diff: 48 fixed — 46 xml-to-json cluster + CastAs014/096 — 0 new). Unit tests 1,036/0 (+8 xml-to-json). Next pools: serialize-xml (37), fn-parse-json (31: escape round-trip), K-ForExprPositionalVar (29: parser lacks `at $pos`), K-SeqMAX/MINFunc (39: untypedAtomic→double), MapTest/ArrayTest (34), fn-transform (57, genuine XSLT). xml-to-json remainder: xml-to-json-017 only.
 

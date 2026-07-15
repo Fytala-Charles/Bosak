@@ -33,6 +33,7 @@
 //                      | Charles Korthout | 2.1   | 15-07-2026     | map:find tests (flat, nested maps/arrays, no-match, empty input)                          |
 //                      | Charles Korthout | 2.2   | 15-07-2026     | xml-to-json F+O §32.2.2 tests: number reformat, FOJS0006 validation, escaped strings      |
 //                      | Charles Korthout | 2.3   | 15-07-2026     | fn:min/fn:max tests: untypedAtomic→double, FORG0001/FORG0006, NaN propagation, duration   |
+//                      | Charles Korthout | 2.4   | 15-07-2026     | fn:parse-json tests: empty input, duplicates modes, escape semantics, fallback rules      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -2301,6 +2302,83 @@ public class FunctionLibraryTests
     }
 
     [Fact]
+    public void ParseJson_EmptyInput_ReturnsEmpty()
+        => Assert.True(Evaluate("parse-json(())").IsUndefined);
+
+    [Fact]
+    public void ParseJson_DuplicatesUseLast()
+    {
+        var result = Evaluate("parse-json('{\"a\":1, \"b\":2, \"a\":3}', map{'duplicates':'use-last'})");
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("a"), out var value));
+        Assert.Equal(3.0, value.DoubleValue);
+    }
+
+    [Fact]
+    public void ParseJson_DuplicatesReject_RaisesFOJS0003()
+        => Assert.Contains("FOJS0003", Assert.Throws<InvalidOperationException>(() => Evaluate("parse-json('{\"a\":1, \"a\":2}', map{'duplicates':'reject'})")).Message);
+
+    [Fact]
+    public void ParseJson_DuplicatesRetain_RaisesFOJS0005()
+        => Assert.Contains("FOJS0005", Assert.Throws<InvalidOperationException>(() => Evaluate("parse-json('{\"a\":1}', map{'duplicates':'retain'})")).Message);
+
+    [Fact]
+    public void ParseJson_DuplicateKeysAfterUnescape_RaisesFOJS0003()
+        => Assert.Contains("FOJS0003", Assert.Throws<InvalidOperationException>(() => Evaluate("parse-json('{\"%\":\"x\", \"\\u0025\":\"y\"}', map{'escape':true(), 'duplicates':'reject'})")).Message);
+
+    [Fact]
+    public void ParseJson_ControlEscape_BecomesCharacter()
+    {
+        var result = Evaluate("parse-json('[\"\\r\"]')");
+        Assert.Equal("\r", result.ArrayValue.Get(1).StringValue);
+    }
+
+    [Fact]
+    public void ParseJson_InvalidXmlCharEscape_DefaultsToReplacementChar()
+    {
+        var result = Evaluate("parse-json('\"\\uFFFF\"')");
+        Assert.Equal("\uFFFD", result.StringValue);
+    }
+
+    [Fact]
+    public void ParseJson_UnpairedSurrogate_DefaultsToReplacementChar()
+    {
+        var result = Evaluate("parse-json('\"\\uDEAD\"')");
+        Assert.Equal("\uFFFD", result.StringValue);
+    }
+
+    [Fact]
+    public void ParseJson_EscapeTrue_RetainsNamedEscapes()
+    {
+        var result = Evaluate("parse-json('[\"\\n\"]', map{'escape':true()})");
+        Assert.Equal("\\n", result.ArrayValue.Get(1).StringValue);
+    }
+
+    [Fact]
+    public void ParseJson_EscapeTrue_ExpandsValidUnicodeEscapes()
+    {
+        var result = Evaluate("parse-json('[\"\\u0025\"]', map{'escape':true()})");
+        Assert.Equal("%", result.ArrayValue.Get(1).StringValue);
+    }
+
+    [Fact]
+    public void ParseJson_Fallback_ReceivesEscapeSequenceAsWritten()
+    {
+        var result = Evaluate("parse-json('\"\\uFFFF\"', map{'fallback':lower-case#1})");
+        Assert.Equal("\\uffff", result.StringValue);
+    }
+
+    [Fact]
+    public void ParseJson_FallbackWrongArity_RaisesXPTY0004()
+        => Assert.Contains("XPTY0004", Assert.Throws<InvalidOperationException>(() => Evaluate("parse-json('\"\\uFFFF\"', map{'fallback':substring#2})")).Message);
+
+    [Fact]
+    public void ParseJson_SurrogatePair_ExpandsToAstralChar()
+    {
+        var result = Evaluate("parse-json('\"\\uD834\\uDD1E\"')");
+        Assert.Equal("\U0001D11E", result.StringValue);
+    }
+
+    [Fact]
     public void ParseJson_ArrayWithMixedValues()
     {
         var result = Evaluate("parse-json('[1,\"two\",true,null]')");
@@ -2586,10 +2664,13 @@ public class FunctionLibraryTests
     }
 
     [Fact]
-    public void ParseJson_UnpairedSurrogate_NoFallback_RaisesFOJS0001()
+    public void ParseJson_UnpairedSurrogate_NoFallback_YieldsReplacementChar()
     {
-        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("parse-json('{\"s\":\"\\uDEAD\"}')"));
-        Assert.Contains("FOJS0001", ex.Message);
+        // F+O 3.1: without an explicit fallback option the default fallback returns
+        // U+FFFD for escapes denoting invalid characters (fn-parse-json-054/922).
+        var result = Evaluate("parse-json('{\"s\":\"\\uDEAD\"}')");
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("s"), out var value));
+        Assert.Equal("\uFFFD", value.StringValue);
     }
 
     [Fact]

@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 01-06-2026     | assert-string-value respects normalize-space="true"; added NormalizeSpace helper        |
 //                      | Charles Korthout | 0.8   | 05-06-2026     | ValuesEqual now compares QNames by namespace URI and local name (ignores prefix)         |
 //                      | Charles Korthout | 0.9   | 15-07-2026     | assert-count reads element text (was missing attribute); assert-permutation implemented  |
+//                      | Charles Korthout | 1.0   | 15-07-2026     | DeepEqual treats Undefined and empty sequence as equal (fn-parse-json-007)               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -767,6 +768,12 @@ internal static class ResultComparer
     {
         if (a.IsUndefined && b.IsUndefined)
             return true;
+        // The empty sequence compares equal regardless of representation — Undefined
+        // (fn:parse-json null values) vs an empty XdmSequence (fn-parse-json-007).
+        if (a.IsUndefined && b.IsSequence)
+            return MaterializeValue(b).Count == 0;
+        if (b.IsUndefined && a.IsSequence)
+            return MaterializeValue(a).Count == 0;
         if (a.IsUndefined || b.IsUndefined)
             return false;
 

@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added optional test-set name filter for targeted conformance runs                        |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | DocumentedSkips: upstream defects/platform limitations recorded as skips with reasons    |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | External-variable tests now run; params are bound by the executor                        |
+//                      | Charles Korthout | 0.5   | 15-07-2026     | Tests without environment resolve relative URIs against the test-set directory           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -157,6 +158,10 @@ internal sealed class ConformanceRunner
                     env = TestEnvironment.FromElement(envRef, _suitePath, baseDir);
                 }
             }
+
+            // FOTS convention: tests without an explicit environment resolve relative
+            // resource URIs against the test-set file's directory (fn-parse-json-101..105).
+            env ??= new TestEnvironment { BaseUri = new Uri(baseDir + Path.DirectorySeparatorChar).AbsoluteUri };
 
             // Dependency check
             if (!_dependencyFilter.IsSupported(testCase.Dependencies))
