@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 2.2   | 15-07-2026     | xml-to-json F+O §32.2.2 tests: number reformat, FOJS0006 validation, escaped strings      |
 //                      | Charles Korthout | 2.3   | 15-07-2026     | fn:min/fn:max tests: untypedAtomic→double, FORG0001/FORG0006, NaN propagation, duration   |
 //                      | Charles Korthout | 2.4   | 15-07-2026     | fn:parse-json tests: empty input, duplicates modes, escape semantics, fallback rules      |
+//                      | Charles Korthout | 2.5   | 15-07-2026     | json-to-xml tests: retain/use-first duplicates, escape attrs, surrogates, () input, eager option validation; parse-json quote decoding
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -2495,6 +2496,111 @@ public class FunctionLibraryTests
         }
         Assert.NotNull(childNode);
         Assert.Equal("null", childNode!.LocalName);
+    }
+
+    [Fact]
+    public void JsonToXml_DuplicatesRetainedByDefault()
+    {
+        // fn:json-to-xml retains duplicate keys by default (QT3 json-to-xml-018).
+        var result = Evaluate("json-to-xml('{\"a\":3, \"b\":4, \"a\":5}')");
+        var xml = result.NodeValue.ToXmlString();
+        Assert.Contains("<number key=\"a\">3</number>", xml);
+        Assert.Contains("<number key=\"a\">5</number>", xml);
+    }
+
+    [Fact]
+    public void JsonToXml_DuplicatesUseFirst_KeepsFirstOccurrence()
+    {
+        var result = Evaluate("json-to-xml('{\"a\":3, \"b\":4, \"a\":5}', map{'duplicates':'use-first'})");
+        var xml = result.NodeValue.ToXmlString();
+        Assert.Contains("<number key=\"a\">3</number>", xml);
+        Assert.DoesNotContain("<number key=\"a\">5</number>", xml);
+    }
+
+    [Fact]
+    public void JsonToXml_EmptySequence_ReturnsEmpty()
+    {
+        // json-to-xml-028/035: the empty sequence yields the empty sequence.
+        var result = Evaluate("json-to-xml(())");
+        Assert.True(result.IsUndefined);
+        var result2 = Evaluate("json-to-xml((), map{'escape':false()})");
+        Assert.True(result2.IsUndefined);
+    }
+
+    [Fact]
+    public void JsonToXml_EscapeTrue_DecodesQuotesAndRetainsControlEscapes()
+    {
+        // json-to-xml-049: with escape=true the quotation mark is decoded, the
+        // reverse solidus and control characters stay escaped, and the string is
+        // marked escaped="true".
+        var result = Evaluate("json-to-xml('\"\\\\\\/\\\"\\r\\t\\u0020\"', map{'escape':true()})");
+        var xml = result.NodeValue.ToXmlString();
+        Assert.Contains("escaped=\"true\"", xml);
+        Assert.Contains(">\\\\/\"\\r\\t </string>", xml);
+    }
+
+    [Fact]
+    public void JsonToXml_EscapeTrue_InvalidXmlChar_RetainedEscaped()
+    {
+        // json-to-xml-021:  is retained in canonical short form \f.
+        var result = Evaluate("json-to-xml('{\"a\":\"\\u000C\"}', map{'escape':true()})");
+        var xml = result.NodeValue.ToXmlString();
+        Assert.Contains("escaped=\"true\"", xml);
+        Assert.Contains(">\\f</string>", xml);
+    }
+
+    [Fact]
+    public void JsonToXml_UnpairedSurrogate_EscapeFalse_ReplacementChar()
+    {
+        // json-to-xml-023: the default fallback maps unpaired surrogates to U+FFFD.
+        var result = Evaluate("json-to-xml('{\"a\":\"\\uDA00\"}', map{'escape':false()})");
+        var xml = result.NodeValue.ToXmlString();
+        Assert.Contains("\uFFFD", xml);
+    }
+
+    [Fact]
+    public void JsonToXml_UnpairedSurrogate_EscapeTrue_RetainedEscaped()
+    {
+        // json-to-xml-024: with escape=true the escape sequence is retained.
+        var result = Evaluate("json-to-xml('{\"a\":\"\\uDA00\"}', map{'escape':true()})");
+        var xml = result.NodeValue.ToXmlString();
+        Assert.Contains("escaped=\"true\"", xml);
+        Assert.Contains(">\\uDA00</string>", xml);
+    }
+
+    [Fact]
+    public void JsonToXml_FallbackNotFunction_RaisesXPTY0004()
+    {
+        // json-to-xml-error-026: validated eagerly even when never invoked.
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("json-to-xml('[\"String\"]', map{'fallback':'dummy'})"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void JsonToXml_FallbackWrongArity_RaisesXPTY0004()
+    {
+        // json-to-xml-error-041: wrong-arity fallback is rejected at option-parse time.
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("json-to-xml('[\"String\"]', map{'fallback':concat#2})"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void JsonToXml_ValidateNotBoolean_RaisesXPTY0004()
+    {
+        // json-to-xml-error-022: the validate option must be a single xs:boolean.
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("json-to-xml('[\"String\"]', map{'validate':'EMCA-262'})"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void ParseJson_EscapeTrue_DecodesQuotes()
+    {
+        // json-doc-012: the quotation mark is decoded even with escape=true.
+        var result = Evaluate("parse-json('[\"a\\\"b\"]', map{'escape':true()})?1");
+        Assert.Equal("a\"b", result.StringValue);
     }
 
     [Fact]

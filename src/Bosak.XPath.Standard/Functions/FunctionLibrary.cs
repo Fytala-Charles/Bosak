@@ -100,6 +100,7 @@
 //                      | Charles Korthout | 5.34  | 15-07-2026     | fn:min/fn:max: untypedAtomic cast to xs:double (FORG0001), NaN propagation, FORG0006 for incomparable mixes (K-SeqMAX/MINFunc)
 //                      | Charles Korthout | 5.35  | 15-07-2026     | fn:parse-json rewrite: recursive-descent parser; empty input; duplicates use-last/reject + canonical-key detection; spec escape semantics (raw retention, fallback with escape-as-written, default U+FFFD); escape+fallback and json-to-xml use-last FOJS0005; deep-equal empty-sequence representation fix
 //                      | Charles Korthout | 5.36  | 15-07-2026     | fn:json-to-xml: duplicates='retain' accepted and is the default (retains duplicate keys); use-last still FOJS0005
+//                      | Charles Korthout | 5.37  | 15-07-2026     | fn:json-to-xml on JsonReader via JNode tree (dup-preserving): escaped/escaped-key attrs, () input, BaseUri annotation, raw j:number; escape=true now decodes quotes (json-doc-012); eager fallback/validate option validation (XPTY0004); removed System.Text.Json path
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -10324,8 +10325,25 @@ public static class FunctionLibrary
             result = result with { Escape = escape.BooleanValue };
         if (map.TryGetValue(XdmValue.FromString("indent"), out var indent))
             result = result with { Indent = indent.BooleanValue };
+        if (map.TryGetValue(XdmValue.FromString("validate"), out var validate))
+        {
+            // fn:json-to-xml only: requests schema validation of the result. The
+            // value must be a single xs:boolean (json-to-xml-error-020/021/022);
+            // the option is accepted but ignored — this processor is not schema-aware.
+            if (validate.Kind != XdmValueKind.Boolean)
+                throw new InvalidOperationException("XPTY0004: The validate option must be a single xs:boolean");
+        }
         if (map.TryGetValue(XdmValue.FromString("fallback"), out var fallback))
+        {
+            // Validated eagerly (json-to-xml-error-026/041, json-doc-error-016/026):
+            // the fallback must be a function item of arity 1 even when the input
+            // never causes it to be invoked.
+            if (!fallback.IsFunction)
+                throw new InvalidOperationException("XPTY0004: The fallback option must be a function item");
+            if (((FunctionItem)fallback.FunctionValue).Arity != 1)
+                throw new InvalidOperationException("XPTY0004: The fallback function must have arity 1");
             result = result with { Fallback = fallback };
+        }
 
         // The escape and fallback options cannot be combined (json-doc-027).
         if (result.Escape && result.Fallback is { IsUndefined: false })
@@ -10350,31 +10368,6 @@ public static class FunctionLibrary
         return ParseJson(ctx, AtomizedString(args[0]), ParseJsonOptions(args[1]));
     }
 
-    /// <summary>
-    /// Parses JSON text, translating <see cref="System.Text.Json.JsonException"/> parse failures
-    /// into the XPath error FOJS0001 as required by the fn:parse-json / fn:json-doc / fn:json-to-xml
-    /// specifications.
-    /// </summary>
-    private static JsonDocument ParseJsonDocument(string json, JsonDocumentOptions docOptions)
-    {
-        // A leading U+FEFF (byte order mark) is ignored (json-to-xml-015).
-        if (json.Length > 0 && json[0] == '\uFEFF')
-            json = json.Substring(1);
-        try
-        {
-            return JsonDocument.Parse(json, docOptions);
-        }
-        catch (System.Text.Json.JsonException ex)
-        {
-            throw new InvalidOperationException($"FOJS0001: Invalid JSON: {ex.Message}");
-        }
-        catch (InvalidOperationException ex)
-        {
-            // System.Text.Json surfaces some malformed content (e.g. invalid surrogates) this way.
-            throw new InvalidOperationException($"FOJS0001: Invalid JSON: {ex.Message}");
-        }
-    }
-
     private static XdmValue ParseJson(EvaluationContext ctx, string json, JsonOptions options)
     {
         if (string.IsNullOrEmpty(json))
@@ -10382,7 +10375,7 @@ public static class FunctionLibrary
         // A leading U+FEFF (byte order mark) is ignored (json-to-xml-015).
         if (json[0] == '\uFEFF')
             json = json.Substring(1);
-        return new JsonReader(json, options, ctx).ParseDocument();
+        return JNodeToXdm(new JsonReader(json, options, ctx).ParseDocument(), options);
     }
 
     /// <summary>
@@ -10405,7 +10398,7 @@ public static class FunctionLibrary
             _ctx = ctx;
         }
 
-        public XdmValue ParseDocument()
+        public JNode ParseDocument()
         {
             SkipWhitespace();
             var value = ParseValue();
@@ -10415,7 +10408,7 @@ public static class FunctionLibrary
             return value;
         }
 
-        private XdmValue ParseValue()
+        private JNode ParseValue()
         {
             if (_pos >= _text.Length)
                 throw Error("Unexpected end of JSON input");
@@ -10424,15 +10417,15 @@ public static class FunctionLibrary
             {
                 '{' => ParseObject(),
                 '[' => ParseArray(),
-                '"' => XdmValue.FromString(ParseString()),
-                't' => ExpectLiteral("true", XdmValue.True),
-                'f' => ExpectLiteral("false", XdmValue.False),
-                'n' => ExpectLiteral("null", XdmValue.Undefined),
+                '"' => ParseStringNode(),
+                't' => ExpectLiteral("true", JNode.True),
+                'f' => ExpectLiteral("false", JNode.False),
+                'n' => ExpectLiteral("null", JNode.Null),
                 _ => c == '-' || (c >= '0' && c <= '9') ? ParseNumber() : throw Error($"Unexpected character '{c}'")
             };
         }
 
-        private XdmValue ExpectLiteral(string literal, XdmValue value)
+        private JNode ExpectLiteral(string literal, JNode value)
         {
             if (_pos + literal.Length > _text.Length || !_text.Substring(_pos, literal.Length).Equals(literal, StringComparison.Ordinal))
                 throw Error($"Invalid literal (expected '{literal}')");
@@ -10440,17 +10433,15 @@ public static class FunctionLibrary
             return value;
         }
 
-        private XdmValue ParseObject()
+        private JNode ParseObject()
         {
             _pos++; // consume '{'
-            var map = new XdmMap();
-            // Duplicate detection uses the fully decoded key regardless of the escape
-            // option (F+O 3.1 §17.5.1 — fn-parse-json-108/109/110).
-            var seenKeys = new HashSet<string>();
-            var canonKeys = new Dictionary<string, XdmValue>();
+            // All members are preserved in source order; the writers apply the
+            // duplicates option on the fully decoded canonical key.
+            var members = new List<KeyValuePair<(string Key, string Canon), JNode>>();
             SkipWhitespace();
             if (Consume('}'))
-                return XdmValue.FromMap(map);
+                return JNode.MakeObject(members);
             while (true)
             {
                 SkipWhitespace();
@@ -10461,48 +10452,36 @@ public static class FunctionLibrary
                 Expect(':');
                 SkipWhitespace();
                 var value = ParseValue();
-                if (!seenKeys.Add(canonical))
-                {
-                    if (_options.Duplicates == "reject")
-                        throw new InvalidOperationException("FOJS0003: Duplicate key in JSON object");
-                    if (_options.Duplicates == "use-last")
-                    {
-                        map.Remove(canonKeys[canonical]);
-                        var newKey = XdmValue.FromString(keyString);
-                        map.Add(newKey, value);
-                        canonKeys[canonical] = newKey;
-                    }
-                    // "use-first" (default): keep the first occurrence
-                }
-                else
-                {
-                    var key = XdmValue.FromString(keyString);
-                    map.Add(key, value);
-                    canonKeys[canonical] = key;
-                }
+                members.Add(new KeyValuePair<(string, string), JNode>((keyString, canonical), value));
                 SkipWhitespace();
                 if (Consume('}'))
-                    return XdmValue.FromMap(map);
+                    return JNode.MakeObject(members);
                 Expect(',');
             }
         }
 
-        private XdmValue ParseArray()
+        private JNode ParseArray()
         {
             _pos++; // consume '['
-            var array = new XdmArray();
+            var items = new List<JNode>();
             SkipWhitespace();
             if (Consume(']'))
-                return XdmValue.FromArray(array);
+                return JNode.MakeArray(items);
             while (true)
             {
                 SkipWhitespace();
-                array.Add(ParseValue());
+                items.Add(ParseValue());
                 SkipWhitespace();
                 if (Consume(']'))
-                    return XdmValue.FromArray(array);
+                    return JNode.MakeArray(items);
                 Expect(',');
             }
+        }
+
+        private JNode ParseStringNode()
+        {
+            string text = ParseString(out string canon);
+            return JNode.MakeString(text, canon);
         }
 
         /// <summary>
@@ -10559,9 +10538,10 @@ public static class FunctionLibrary
                 case '\\':
                 case '/':
                     canon?.Append(esc);
-                    // escape=true re-escapes canonically: " and \ stay escaped, the
-                    // solidus is decoded (json-doc-021).
-                    if (_options.Escape && esc != '/')
+                    // escape=true re-escapes canonically: only the reverse solidus
+                    // stays escaped; the quotation mark and solidus are decoded
+                    // (json-doc-012, json-to-xml-049).
+                    if (_options.Escape && esc == '\\')
                         sb.Append('\\');
                     sb.Append(esc);
                     _pos += 2;
@@ -10678,7 +10658,7 @@ public static class FunctionLibrary
             return value;
         }
 
-        private XdmValue ParseNumber()
+        private JNode ParseNumber()
         {
             int start = _pos;
             if (_text[_pos] == '-') _pos++;
@@ -10702,9 +10682,9 @@ public static class FunctionLibrary
                 if (_pos >= _text.Length || _text[_pos] is not (>= '0' and <= '9')) throw Error("Invalid number: digits required in exponent");
                 while (_pos < _text.Length && _text[_pos] is >= '0' and <= '9') _pos++;
             }
-            // JSON numbers map to xs:double; the grammar above guarantees a parseable
-            // lexical form (overflow yields ±INF in .NET Core).
-            return XdmValue.FromDouble(double.Parse(_text.Substring(start, _pos - start), NumberStyles.Float, CultureInfo.InvariantCulture));
+            // The raw lexical form is retained; fn:parse-json maps it to xs:double,
+            // fn:json-to-xml copies it verbatim into j:number.
+            return JNode.MakeNumber(_text.Substring(start, _pos - start));
         }
 
         private void SkipWhitespace()
@@ -10729,6 +10709,162 @@ public static class FunctionLibrary
             => new($"FOJS0001: Invalid JSON: {message} at position {_pos}");
     }
 
+    private enum JNodeKind { Object, Array, String, Number, Boolean, Null }
+
+    /// <summary>
+    /// JSON tree node produced by <see cref="JsonReader"/>. Unlike an XDM map it
+    /// preserves source member order and duplicate keys, which fn:json-to-xml needs
+    /// for duplicates='retain' (json-to-xml-018) and fn:parse-json for use-last.
+    /// Strings carry both the processed form (per the escape/fallback options) and
+    /// the fully decoded canonical form (duplicate detection, escaped-attribute
+    /// detection in fn:json-to-xml).
+    /// </summary>
+    private sealed class JNode
+    {
+        public static readonly JNode True = new() { Kind = JNodeKind.Boolean, Bool = true };
+        public static readonly JNode False = new() { Kind = JNodeKind.Boolean, Bool = false };
+        public static readonly JNode Null = new() { Kind = JNodeKind.Null };
+
+        public JNodeKind Kind;
+        public bool Bool;
+        public string? Text;   // String: processed form; Number: raw lexical form
+        public string? Canon;  // String: fully decoded canonical form
+        public List<JNode>? Items;
+        public List<KeyValuePair<(string Key, string Canon), JNode>>? Members;
+
+        public static JNode MakeString(string text, string canon) => new() { Kind = JNodeKind.String, Text = text, Canon = canon };
+        public static JNode MakeNumber(string raw) => new() { Kind = JNodeKind.Number, Text = raw };
+        public static JNode MakeArray(List<JNode> items) => new() { Kind = JNodeKind.Array, Items = items };
+        public static JNode MakeObject(List<KeyValuePair<(string Key, string Canon), JNode>> members) => new() { Kind = JNodeKind.Object, Members = members };
+    }
+
+    /// <summary>
+    /// Converts a parsed JSON tree to the XDM map/array model of fn:parse-json,
+    /// applying the duplicates option on the fully decoded canonical keys
+    /// (F+O 3.1 §17.5.1 — fn-parse-json-108/109/110).
+    /// </summary>
+    private static XdmValue JNodeToXdm(JNode node, JsonOptions options)
+    {
+        switch (node.Kind)
+        {
+            case JNodeKind.String:
+                return XdmValue.FromString(node.Text!);
+            case JNodeKind.Number:
+                // JSON numbers map to xs:double; the reader's grammar guarantees a
+                // parseable lexical form (overflow yields ±INF in .NET Core).
+                return XdmValue.FromDouble(double.Parse(node.Text!, NumberStyles.Float, CultureInfo.InvariantCulture));
+            case JNodeKind.Boolean:
+                return node.Bool ? XdmValue.True : XdmValue.False;
+            case JNodeKind.Null:
+                return XdmValue.Undefined;
+            case JNodeKind.Array:
+                {
+                    var array = new XdmArray();
+                    foreach (var item in node.Items!)
+                        array.Add(JNodeToXdm(item, options));
+                    return XdmValue.FromArray(array);
+                }
+            case JNodeKind.Object:
+                {
+                    var map = new XdmMap();
+                    var canonKeys = new Dictionary<string, XdmValue>();
+                    foreach (var member in node.Members!)
+                    {
+                        var (keyText, canon) = member.Key;
+                        var value = JNodeToXdm(member.Value, options);
+                        if (canonKeys.TryGetValue(canon, out var existingKey))
+                        {
+                            if (options.Duplicates == "reject")
+                                throw new InvalidOperationException("FOJS0003: Duplicate key in JSON object");
+                            if (options.Duplicates == "use-last")
+                            {
+                                map.Remove(existingKey);
+                                var newKey = XdmValue.FromString(keyText);
+                                map.Add(newKey, value);
+                                canonKeys[canon] = newKey;
+                            }
+                            // "use-first" (default): keep the first occurrence
+                        }
+                        else
+                        {
+                            var key = XdmValue.FromString(keyText);
+                            map.Add(key, value);
+                            canonKeys[canon] = key;
+                        }
+                    }
+                    return XdmValue.FromMap(map);
+                }
+            default:
+                return XdmValue.Undefined;
+        }
+    }
+
+    /// <summary>
+    /// Converts a parsed JSON tree to the XML representation of fn:json-to-xml
+    /// (F+O 3.1 §17.5.4). Duplicate keys follow the duplicates option on the decoded
+    /// canonical key (retain emits all occurrences — json-to-xml-018); with
+    /// escape=true, string values and keys that still contain escape sequences are
+    /// marked escaped / escaped-key (json-to-xml-019/021/024/049).
+    /// </summary>
+    private static XElement JNodeToXml(JNode node, JsonOptions options, (string Text, string Canon)? key = null)
+    {
+        XElement element;
+        switch (node.Kind)
+        {
+            case JNodeKind.Object:
+                {
+                    var mapEl = new XElement(XName.Get("map", JsonXmlNs));
+                    var seenKeys = new HashSet<string>();
+                    foreach (var member in node.Members!)
+                    {
+                        var (keyText, canon) = member.Key;
+                        if (!seenKeys.Add(canon))
+                        {
+                            if (options.Duplicates == "reject")
+                                throw new InvalidOperationException("FOJS0003: Duplicate key in JSON object");
+                            if (options.Duplicates == "use-first")
+                                continue;
+                            // "retain": every occurrence appears as a sibling.
+                        }
+                        mapEl.Add(JNodeToXml(member.Value, options, (keyText, canon)));
+                    }
+                    element = mapEl;
+                    break;
+                }
+            case JNodeKind.Array:
+                {
+                    var arrEl = new XElement(XName.Get("array", JsonXmlNs));
+                    foreach (var item in node.Items!)
+                        arrEl.Add(JNodeToXml(item, options));
+                    element = arrEl;
+                    break;
+                }
+            case JNodeKind.String:
+                element = new XElement(XName.Get("string", JsonXmlNs), node.Text);
+                break;
+            case JNodeKind.Number:
+                element = new XElement(XName.Get("number", JsonXmlNs), node.Text);
+                break;
+            case JNodeKind.Boolean:
+                element = new XElement(XName.Get("boolean", JsonXmlNs), node.Bool ? "true" : "false");
+                break;
+            default:
+                element = new XElement(XName.Get("null", JsonXmlNs));
+                break;
+        }
+
+        // Stable attribute order: key, escaped-key, escaped.
+        if (key is { } k)
+        {
+            element.SetAttributeValue(XName.Get("key"), k.Text);
+            if (options.Escape && k.Text != k.Canon)
+                element.SetAttributeValue(XName.Get("escaped-key"), "true");
+        }
+        if (options.Escape && node.Kind == JNodeKind.String && node.Text != node.Canon)
+            element.SetAttributeValue(XName.Get("escaped"), "true");
+        return element;
+    }
+
     private static bool IsValidXmlChar(char c)
         => c is '\t' or '\n' or '\r' or >= '\u0020' && c is <= '\uD7FF' or >= '\uE000' && c is <= '\uFFFD';
 
@@ -10741,7 +10877,9 @@ public static class FunctionLibrary
     {
         switch (c)
         {
-            case '"': sb.Append("\\\""); break;
+            // The quotation mark is decoded like any other valid XML character
+            // (json-to-xml-049); only the reverse solidus must stay escaped.
+            case '"': sb.Append('"'); break;
             case '\\': sb.Append("\\\\"); break;
             case '\b': sb.Append("\\b"); break;
             case '\f': sb.Append("\\f"); break;
@@ -10753,122 +10891,6 @@ public static class FunctionLibrary
                 else sb.Append($"\\u{(int)c:X4}");
                 break;
         }
-    }
-
-    private static string JsonEscapeString(string s)
-    {
-        var sb = new StringBuilder();
-        foreach (char c in s)
-        {
-            switch (c)
-            {
-                case '"': sb.Append("\\\""); break;
-                case '\\': sb.Append("\\\\"); break;
-                case '\b': sb.Append("\\b"); break;
-                case '\f': sb.Append("\\f"); break;
-                case '\n': sb.Append("\\n"); break;
-                case '\r': sb.Append("\\r"); break;
-                case '\t': sb.Append("\\t"); break;
-                default:
-                    if (c < 0x20)
-                        sb.Append($"\\u{(int)c:X4}");
-                    else
-                        sb.Append(c);
-                    break;
-            }
-        }
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Reads a JSON string value, routing invalid \uXXXX escape sequences (unpaired surrogates,
-    /// which System.Text.Json rejects) through the fallback function when one is supplied.
-    /// Without a fallback such strings raise FOJS0001.
-    /// </summary>
-    private static string ReadJsonString(JsonElement element, JsonOptions options, EvaluationContext ctx)
-    {
-        try
-        {
-            return element.GetString()!;
-        }
-        catch (InvalidOperationException ex)
-        {
-            if (options.Fallback is not null && !options.Fallback.Value.IsUndefined)
-                return UnescapeJsonStringWithFallback(element.GetRawText(), options, ctx);
-            throw new InvalidOperationException($"FOJS0001: Invalid JSON string: {ex.Message}");
-        }
-    }
-
-    /// <summary>
-    /// Manually unescapes a raw JSON string token (quotes included), invoking the fallback
-    /// function for every \uXXXX escape that does not form a valid (paired) scalar value.
-    /// </summary>
-    private static string UnescapeJsonStringWithFallback(string raw, JsonOptions options, EvaluationContext ctx)
-    {
-        var sb = new StringBuilder(raw.Length);
-        int i = 1; // skip the opening quote
-        int end = raw.Length - 1; // exclude the closing quote
-        while (i < end)
-        {
-            char c = raw[i];
-            if (c != '\\')
-            {
-                sb.Append(c);
-                i++;
-                continue;
-            }
-
-            char esc = raw[i + 1];
-            switch (esc)
-            {
-                case '"': sb.Append('"'); i += 2; break;
-                case '\\': sb.Append('\\'); i += 2; break;
-                case '/': sb.Append('/'); i += 2; break;
-                case 'b': sb.Append('\b'); i += 2; break;
-                case 'f': sb.Append('\f'); i += 2; break;
-                case 'n': sb.Append('\n'); i += 2; break;
-                case 'r': sb.Append('\r'); i += 2; break;
-                case 't': sb.Append('\t'); i += 2; break;
-                case 'u':
-                    {
-                        var escape = raw.Substring(i, 6);
-                        int code = int.Parse(raw.Substring(i + 2, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-                        if (code is >= 0xD800 and <= 0xDBFF)
-                        {
-                            // High surrogate: valid only when immediately followed by a low-surrogate escape.
-                            if (i + 11 < raw.Length && raw[i + 6] == '\\' && raw[i + 7] == 'u')
-                            {
-                                int low = int.Parse(raw.Substring(i + 8, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-                                if (low is >= 0xDC00 and <= 0xDFFF)
-                                {
-                                    sb.Append(char.ConvertFromUtf32(0x10000 + ((code - 0xD800) << 10) + (low - 0xDC00)));
-                                    i += 12;
-                                    break;
-                                }
-                            }
-                            sb.Append(InvokeJsonFallback(options, ctx, escape));
-                            i += 6;
-                        }
-                        else if (code is >= 0xDC00 and <= 0xDFFF)
-                        {
-                            sb.Append(InvokeJsonFallback(options, ctx, escape));
-                            i += 6;
-                        }
-                        else
-                        {
-                            sb.Append((char)code);
-                            i += 6;
-                        }
-                        break;
-                    }
-                default:
-                    // Unknown escape letters are rejected earlier by JsonDocument.Parse.
-                    sb.Append(esc);
-                    i += 2;
-                    break;
-            }
-        }
-        return sb.ToString();
     }
 
     /// <summary>
@@ -10890,111 +10912,37 @@ public static class FunctionLibrary
         return atomized.StringValue;
     }
 
-    private static string ProcessJsonString(string s, JsonOptions options, EvaluationContext ctx)
+    private static XdmValue JsonToXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (!s.Any(c => c < 0x20))
-            return options.Escape ? JsonEscapeString(s) : s;
-
-        // If escape=true, JSON-escape control characters directly
-        if (options.Escape)
-            return JsonEscapeString(s);
-
-        var sb = new StringBuilder();
-        foreach (char c in s)
-        {
-            if (c < 0x20)
-            {
-                if (options.Fallback is not null && !options.Fallback.Value.IsUndefined)
-                {
-                    sb.Append(InvokeJsonFallback(options, ctx, $"\\u{(int)c:X4}"));
-                }
-                else
-                {
-                    sb.Append('\uFFFD');
-                }
-            }
-            else
-            {
-                sb.Append(c);
-            }
-        }
-        return sb.ToString();
+        // fn:json-to-xml($input as xs:string?): the empty sequence yields the empty
+        // sequence (json-to-xml-035).
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        // fn:json-to-xml retains duplicate keys by default (json-to-xml-018).
+        return JsonToXml(ctx, AtomizedString(args[0]), JsonOptions.Default with { Duplicates = "retain" });
     }
 
-    private static XdmValue JsonToXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        // fn:json-to-xml retains duplicate keys by default (json-to-xml-018).
-        => JsonToXml(ctx, AtomizedString(args[0]), JsonOptions.Default with { Duplicates = "retain" });
-
     private static XdmValue JsonToXml_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => JsonToXml(ctx, AtomizedString(args[0]), ParseJsonOptions(args[1], forJsonToXml: true));
+    {
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;   // json-to-xml-028
+        return JsonToXml(ctx, AtomizedString(args[0]), ParseJsonOptions(args[1], forJsonToXml: true));
+    }
 
     private static XdmValue JsonToXml(EvaluationContext ctx, string json, JsonOptions options)
     {
         if (string.IsNullOrEmpty(json))
             throw new InvalidOperationException("FOJS0001: Empty string is not valid JSON");
-
-        var docOptions = new JsonDocumentOptions
-        {
-            AllowTrailingCommas = options.Liberal
-        };
-
-        using var document = ParseJsonDocument(json, docOptions);
-        var rootElement = JsonElementToXml(ctx, document.RootElement, options);
-        var xdoc = new XDocument(rootElement);
+        // A leading U+FEFF (byte order mark) is ignored (json-to-xml-015).
+        if (json[0] == '\uFEFF')
+            json = json.Substring(1);
+        var root = new JsonReader(json, options, ctx).ParseDocument();
+        var xdoc = new XDocument(JNodeToXml(root, options));
+        // The base URI of the result document is the static base URI of the function
+        // call (json-to-xml-041); XDocumentNode reads this string annotation.
+        if (!string.IsNullOrEmpty(ctx.BaseUri))
+            xdoc.AddAnnotation(ctx.BaseUri);
         return XdmValue.FromNode(new XDocumentNode(xdoc));
-    }
-
-    private static XElement JsonElementToXml(EvaluationContext ctx, JsonElement element, JsonOptions options)
-    {
-        switch (element.ValueKind)
-        {
-            case JsonValueKind.Object:
-                {
-                    var mapEl = new XElement(XName.Get("map", JsonXmlNs));
-                    var seenKeys = new HashSet<string>();
-                    foreach (var property in element.EnumerateObject())
-                    {
-                        var key = options.Escape ? JsonEscapeString(property.Name) : property.Name;
-                        if (!seenKeys.Add(key))
-                        {
-                            if (options.Duplicates == "reject")
-                                throw new InvalidOperationException("FOJS0003: Duplicate key in JSON object");
-                            if (options.Duplicates == "use-first")
-                                continue;
-                        }
-                        var child = JsonElementToXml(ctx, property.Value, options);
-                        child.SetAttributeValue(XName.Get("key"), key);
-                        mapEl.Add(child);
-                    }
-                    return mapEl;
-                }
-            case JsonValueKind.Array:
-                {
-                    var arrEl = new XElement(XName.Get("array", JsonXmlNs));
-                    foreach (var item in element.EnumerateArray())
-                        arrEl.Add(JsonElementToXml(ctx, item, options));
-                    return arrEl;
-                }
-            case JsonValueKind.String:
-                {
-                    var unescaped = ReadJsonString(element, options, ctx);
-                    var processed = ProcessJsonString(unescaped, options, ctx);
-                    var strEl = new XElement(XName.Get("string", JsonXmlNs), processed);
-                    if (options.Escape && processed != unescaped)
-                        strEl.SetAttributeValue(XName.Get("escaped"), "true");
-                    return strEl;
-                }
-            case JsonValueKind.Number:
-                return new XElement(XName.Get("number", JsonXmlNs), element.GetRawText());
-            case JsonValueKind.True:
-                return new XElement(XName.Get("boolean", JsonXmlNs), "true");
-            case JsonValueKind.False:
-                return new XElement(XName.Get("boolean", JsonXmlNs), "false");
-            case JsonValueKind.Null:
-                return new XElement(XName.Get("null", JsonXmlNs));
-            default:
-                return new XElement(XName.Get("null", JsonXmlNs));
-        }
     }
 
     private static XdmValue XmlToJson_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

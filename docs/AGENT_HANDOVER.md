@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `(pending)` (QT3 Tier-2g: fn:json-to-xml on JsonReader + canonical assert-xml)
+**Current focus:** **QT3 XPath 3.1 suite: 21,387 passed / 1,150 failed / 9,284 skipped (67.21%)** — up from 21,355/1,179/9,287 (67.11%): **+29 fixed, zero regressions** (name-level diff: json-to-xml 20 (pool cleared: 79/0), json-doc-012/error-016/error-026, plus comparer bonuses fn-doc-25/26/29, parse-xml-006/013, xml-to-json-017). Unit tests 1,068/0 (+11). Next pools: serialize-xml (37), MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
+
+---
+
+## This Session Fixes (Tier-2g: json-to-xml)
+
+1. **fn:json-to-xml rewritten on the Tier-2f `JsonReader`** via a new `JNode` tree (preserves source member order + duplicate keys, carries processed + fully-decoded-canonical string forms). The System.Text.Json path (`JsonDocument`/`JsonElementToXml`/`ReadJsonString`/`ProcessJsonString`/`UnescapeJsonStringWithFallback`/`JsonEscapeString`) is deleted.
+   - duplicates=retain (default) emits all occurrences; use-first skips; reject → FOJS0003 on the canonical key (json-to-xml-042).
+   - escape=true: `escaped`/`escaped-key="true"` when processed ≠ decoded (019/021/024); attributes emitted key → escaped-key → escaped.
+   - Unpaired surrogates: escape=false → U+FFFD (023) / fallback receives the escape as written (026); escape=true → retained `\uDA00` (024).
+   - `()` input → `()` (028/035); result document gets `ctx.BaseUri` via XDocument string annotation (041); j:number keeps the raw lexical form.
+2. **escape=true now decodes the quotation mark** (both parse-json and json-to-xml — json-doc-012, json-to-xml-049): only `\` stays escaped; `"` and `\/` decode. `AppendEscapedJsonChar` aligned.
+3. **Eager option validation (XPTY0004)** — `fallback` must be a function item of arity 1 even when never invoked (error-026/041, json-doc-error-016/026); `validate` must be a single xs:boolean (error-020/021/022, accepted+ignored: not schema-aware).
+4. **Harness: canonical assert-xml comparison** (`ResultComparer.NormalizeXml`) — attributes sorted (xmlns first), empty elements self-closed, names in Clark `{uri}local` form with ignore-prefixes; insignificant differences (attribute order 014, empty-tag style 034, prefix spelling 024) no longer fail. Actual nodes are written via XmlWriter with `NewLineHandling.Entitize` so CR survives as `&#xD;` (048) and constructed trees get synthesized xmlns. Deterministic on both sides ⇒ previously-equal pairs stay equal.
+5. **Harness: assert contexts pre-bind `j`** → xpath-functions (008/009 use `j:` with no declared environment namespace).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.37: JNode model, JNodeToXdm/JNodeToXml writers, JsonToXml rewrite, quote decoding, eager validation, dead-code removal)
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs` (v1.1: canonical assert-xml, Entitize writer, j pre-bind)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.5: +11 json-to-xml tests)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `6d873ba` (QT3 Tier-2f: fn:parse-json rewrite + fn:transform stylesheet-base-uri)
 **Current focus:** **QT3 XPath 3.1 suite: 21,355 passed / 1,179 failed / 9,287 skipped (67.11%)** — up from 21,311/1,224/9,286 (66.97%): **+45 fixed, zero regressions** (name-level diff vs Tier-2e: 45 fixed — 31 fn-parse-json + 5 fn-json-doc + duplicates/retain cluster + fn-transform-err-9a — 0 new; one fix moved a test fail→skip). Unit tests 1,057/0 (+21 parse-json). Next pools: serialize-xml (37), MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), json-to-xml (20: switch to JsonReader — root causes known), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
 

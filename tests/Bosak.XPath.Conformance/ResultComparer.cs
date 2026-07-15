@@ -21,11 +21,16 @@
 //                      | Charles Korthout | 0.9   | 15-07-2026     | assert-count reads element text (was missing attribute); assert-permutation implemented  |
 //                      | Charles Korthout | 1.0   | 15-07-2026     | DeepEqual treats Undefined and empty sequence as equal (fn-parse-json-007)               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 15-07-2026     | Canonical assert-xml (sorted attrs, self-closing empties, Clark names with ignore-prefixes); actual nodes canonicalized from tree (CR fidelity); assert contexts pre-bind j
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 
@@ -108,6 +113,19 @@ internal static class ResultComparer
         };
     }
 
+    /// <summary>
+    /// Creates the evaluation context for compiling FOTS assertion expressions.
+    /// Beyond the engine's predefined namespaces, QT3 drivers are expected to
+    /// pre-bind the j prefix (the XML representation of JSON); several tests use
+    /// it in assertions without a declared environment namespace (json-to-xml-008/009).
+    /// </summary>
+    private static EvaluationContext NewAssertContext()
+    {
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        return ctx.WithNamespace("j", "http://www.w3.org/2005/xpath-functions");
+    }
+
     private static TestOutcome CompareAssertEq(string expectedExpr, XdmValue actual, Exception? caughtException)
     {
         if (caughtException is not null)
@@ -115,8 +133,7 @@ internal static class ResultComparer
 
         try
         {
-            var ctx = new EvaluationContext();
-            FunctionLibrary.Populate(ctx);
+            var ctx = NewAssertContext();
             var expected = XPath31Expression.Compile(expectedExpr).Evaluate(ctx);
             if (ValuesEqual(actual, expected))
                 return new TestOutcome(TestOutcomeKind.Passed, null);
@@ -515,8 +532,7 @@ internal static class ResultComparer
 
         try
         {
-            var ctx = new EvaluationContext();
-            FunctionLibrary.Populate(ctx);
+            var ctx = NewAssertContext();
             ctx = ctx.WithVariable("result", actual);
             var result = XPath31Expression.Compile(assertExpr).Evaluate(ctx);
             // FOTS assert expressions are truthy: the effective boolean value decides.
@@ -569,8 +585,7 @@ internal static class ResultComparer
 
         try
         {
-            var ctx = new EvaluationContext();
-            FunctionLibrary.Populate(ctx);
+            var ctx = NewAssertContext();
             var expectedItems = new List<XdmValue>();
             foreach (var expr in expectedExprs)
             {
@@ -607,8 +622,7 @@ internal static class ResultComparer
 
         try
         {
-            var ctx = new EvaluationContext();
-            FunctionLibrary.Populate(ctx);
+            var ctx = NewAssertContext();
             var expectedItems = MaterializeValue(XPath31Expression.Compile(expectedExpr).Evaluate(ctx));
             var actualItems = MaterializeValue(actual);
 
@@ -689,18 +703,69 @@ internal static class ResultComparer
             return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
 
         string expectedXml = assertion.Value;
-        string actualXml = SerializeToXml(actual);
-
         bool ignorePrefixes = (string?)assertion.Attribute("ignore-prefixes") == "true";
 
         string expectedNorm = NormalizeXml(expectedXml, ignorePrefixes);
-        string actualNorm = NormalizeXml(actualXml, ignorePrefixes);
+        string actualNorm = NormalizeActualXml(actual, ignorePrefixes);
 
         if (expectedNorm == actualNorm)
             return new TestOutcome(TestOutcomeKind.Passed, null);
 
         return new TestOutcome(TestOutcomeKind.Failed,
             $"assert-xml failed. Expected: {expectedNorm}, Got: {actualNorm}");
+    }
+
+    /// <summary>
+    /// Serializes the actual result for assert-xml comparison. Nodes are written
+    /// with an XmlWriter that synthesizes namespace declarations (constructed trees
+    /// carry none as attributes) and entitizes newlines, so a CR in content is
+    /// written as &amp;#xD; and survives the re-parse (json-to-xml-048) instead of
+    /// being normalized to LF as with the default XNode.ToString serialization.
+    /// </summary>
+    private static string NormalizeActualXml(XdmValue actual, bool ignorePrefixes)
+    {
+        if (actual.IsNode && actual.NodeValue is XDocumentNode xdn)
+        {
+            try
+            {
+                var sb = new StringBuilder();
+                var settings = new XmlWriterSettings
+                {
+                    OmitXmlDeclaration = true,
+                    ConformanceLevel = ConformanceLevel.Fragment,
+                    NewLineHandling = NewLineHandling.Entitize
+                };
+                using (var writer = XmlWriter.Create(sb, settings))
+                {
+                    switch (xdn.UnderlyingObject)
+                    {
+                        // Unwrap the synthetic document wrapper like ToXmlString does.
+                        case XDocument wrapped when wrapped.Root?.Name.LocalName == "__xdm_doc__":
+                            foreach (var child in wrapped.Root.Nodes())
+                                child.WriteTo(writer);
+                            break;
+                        case XDocument doc:
+                            foreach (var child in doc.Nodes())
+                                child.WriteTo(writer);
+                            break;
+                        case XNode xnode:
+                            xnode.WriteTo(writer);
+                            break;
+                        default:
+                            // Attributes and other non-XNode values use the generic serializer.
+                            return NormalizeXml(SerializeToXml(actual), ignorePrefixes);
+                    }
+                }
+                return NormalizeXml(sb.ToString(), ignorePrefixes);
+            }
+            catch
+            {
+                // Content the writer rejects (e.g. characters invalid in XML) falls
+                // back to the generic serialization.
+                return NormalizeXml(SerializeToXml(actual), ignorePrefixes);
+            }
+        }
+        return NormalizeXml(SerializeToXml(actual), ignorePrefixes);
     }
 
     private static string SerializeToXml(XdmValue value)
@@ -733,24 +798,119 @@ internal static class ResultComparer
 
         try
         {
-            var doc = XDocument.Parse(xml);
-            if (ignorePrefixes)
-                StripNamespaceDeclarations(doc.Root!);
-            return doc.ToString(SaveOptions.DisableFormatting);
+            var doc = XDocument.Parse(xml, LoadOptions.PreserveWhitespace);
+            return CanonicalSerialize(doc.Root!, ignorePrefixes);
         }
         catch
         {
             // If not a valid document (e.g., fragment), try as element
             try
             {
-                var el = XElement.Parse(xml);
-                if (ignorePrefixes)
-                    StripNamespaceDeclarations(el);
-                return el.ToString(SaveOptions.DisableFormatting);
+                var el = XElement.Parse(xml, LoadOptions.PreserveWhitespace);
+                return CanonicalSerialize(el, ignorePrefixes);
             }
             catch
             {
                 return xml;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Serializes an element in a canonical form for assert-xml comparison
+    /// (json-to-xml-014/034): attributes are sorted (namespace declarations first,
+    /// then by name), empty elements use the self-closing form, and character
+    /// escaping is normalized, so differences that are insignificant per the XML
+    /// Infoset (attribute order, empty-tag style, escape spelling) do not affect
+    /// the comparison. With ignore-prefixes, names are compared in {uri}local
+    /// (Clark) form so the same namespace may be bound to any prefix
+    /// (json-to-xml-024).
+    /// </summary>
+    private static string CanonicalSerialize(XElement root, bool ignorePrefixes)
+    {
+        var sb = new StringBuilder();
+        CanonicalSerializeNode(root, sb, ignorePrefixes);
+        return sb.ToString();
+    }
+
+    private static void CanonicalSerializeNode(XNode node, StringBuilder sb, bool ignorePrefixes)
+    {
+        switch (node)
+        {
+            case XElement el:
+                sb.Append('<').Append(CanonicalName(el.Name, ignorePrefixes));
+                var attrs = el.Attributes().ToList();
+                if (!ignorePrefixes)
+                {
+                    foreach (var a in attrs.Where(a => a.IsNamespaceDeclaration).OrderBy(a => a.Name.ToString(), StringComparer.Ordinal))
+                        CanonicalSerializeAttribute(sb, a, false);
+                }
+                foreach (var a in attrs.Where(a => !a.IsNamespaceDeclaration).OrderBy(a => a.Name.ToString(), StringComparer.Ordinal))
+                    CanonicalSerializeAttribute(sb, a, ignorePrefixes);
+                if (!el.Nodes().Any())
+                {
+                    sb.Append("/>");
+                }
+                else
+                {
+                    sb.Append('>');
+                    foreach (var child in el.Nodes())
+                        CanonicalSerializeNode(child, sb, ignorePrefixes);
+                    sb.Append("</").Append(CanonicalName(el.Name, ignorePrefixes)).Append('>');
+                }
+                break;
+            case XText t: // XText covers XCData (CDATA serializes as text for comparison)
+                EscapeXmlText(sb, t.Value);
+                break;
+            case XComment c:
+                sb.Append("<!--").Append(c.Value).Append("-->");
+                break;
+            case XProcessingInstruction pi:
+                sb.Append("<?").Append(pi.Target).Append(' ').Append(pi.Data).Append("?>");
+                break;
+        }
+    }
+
+    private static string CanonicalName(XName name, bool ignorePrefixes)
+        => ignorePrefixes && name.NamespaceName.Length > 0
+            ? "{" + name.NamespaceName + "}" + name.LocalName
+            : name.ToString();
+
+    private static void CanonicalSerializeAttribute(StringBuilder sb, XAttribute a, bool ignorePrefixes)
+    {
+        sb.Append(' ').Append(CanonicalName(a.Name, ignorePrefixes)).Append("=\"");
+        EscapeXmlAttribute(sb, a.Value);
+        sb.Append('"');
+    }
+
+    private static void EscapeXmlText(StringBuilder sb, string value)
+    {
+        foreach (var c in value)
+        {
+            switch (c)
+            {
+                case '&': sb.Append("&amp;"); break;
+                case '<': sb.Append("&lt;"); break;
+                case '>': sb.Append("&gt;"); break;
+                case '\r': sb.Append("&#xD;"); break;
+                default: sb.Append(c); break;
+            }
+        }
+    }
+
+    private static void EscapeXmlAttribute(StringBuilder sb, string value)
+    {
+        foreach (var c in value)
+        {
+            switch (c)
+            {
+                case '&': sb.Append("&amp;"); break;
+                case '<': sb.Append("&lt;"); break;
+                case '"': sb.Append("&quot;"); break;
+                case '\r': sb.Append("&#xD;"); break;
+                case '\n': sb.Append("&#xA;"); break;
+                case '\t': sb.Append("&#x9;"); break;
+                default: sb.Append(c); break;
             }
         }
     }
