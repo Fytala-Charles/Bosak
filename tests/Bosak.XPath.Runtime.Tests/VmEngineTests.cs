@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Updated date/time ordering tests to use explicit timezones                             |
 //                      | Charles Korthout | 0.3   | 24-06-2026     | Added ValueMatchesType sequence occurrence-indicator tests                              |
+//                      | Charles Korthout | 0.4   | 15-07-2026     | Lookup operator tests (multi-key order, FOAY0001/XPTY0004, array-as-function, array atomization in general comparison) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -616,6 +617,68 @@ public class VmEngineTests
     {
         var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>()));
         Assert.False(VmEngine.ValueMatchesType(seq, "xs:string+"));
+    }
+
+    // ------------------------------------------------------------------
+    // Lookup operator (? / ?*)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Eval_Lookup_Map()
+    {
+        var result = Evaluate("map{'a':1}?a");
+        Assert.Equal(1, result.IntegerValue);
+    }
+
+    [Fact]
+    public void Eval_Lookup_MultiKey_ContainerMajorOrder()
+    {
+        // For each container (outer), for each key (inner): XPath 3.1 §3.11.3.
+        var result = Materialize(Evaluate("(['a','b'],['c','d'])?(1 to 2)"));
+        Assert.Equal(new[] { "a", "b", "c", "d" }, result.Select(v => v.StringValue).ToArray());
+    }
+
+    [Fact]
+    public void Eval_Lookup_EmptyKey_YieldsEmpty()
+    {
+        Assert.True(Evaluate("map{'a':1}?()").IsUndefined);
+    }
+
+    [Fact]
+    public void Eval_Lookup_ArrayOutOfBounds_FOAY0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("[1,2,3]?5"));
+        Assert.Contains("FOAY0001", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_Lookup_ArrayNonIntegerKey_XPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("[1,2,3]?(1.0)"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_Lookup_NonMapArray_XPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("(1 to 3)?1"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_Lookup_ArrayAsFunction()
+    {
+        Assert.Equal(2, Evaluate("[1,2,3](2)").IntegerValue);
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("[1,2,3](-1)"));
+        Assert.Contains("FOAY0001", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_GeneralComparison_AtomizesArrays()
+    {
+        Assert.True(Evaluate("[3] = 3").BooleanValue);
+        Assert.True(Evaluate("([3],[4]) = 4").BooleanValue);
+        Assert.False(Evaluate("[5] = 3").BooleanValue);
     }
 
     // ------------------------------------------------------------------

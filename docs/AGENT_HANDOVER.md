@@ -1,6 +1,28 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-15
+**Commit:** `TBD` (QT3 Tier-2c: `?` lookup operator — UnaryLookup parsing + spec-complete VM semantics)
+**Current focus:** **QT3 XPath 3.1 suite: 21,218 passed / 1,317 failed / 9,286 skipped (66.68%)** — up from 21,145/1,390/9,286 (66.45%): **+73 passed, zero regressions** (73 fixed, 0 new). Unit tests 1,028/0 (+8 lookup VM, +6 parser). Next pools: xml-to-json (43: `//*:template` paths + escape), serialize-xml (37), fn-parse-json (31: escape round-trip), K-ForExprPositionalVar (29: parser lacks `at $pos`), K-SeqMAX/MINFunc (39: untypedAtomic→double), MapTest/ArrayTest (34), fn-transform (57, genuine XSLT).
+
+---
+
+## This Session Fixes (Tier-2c: lookup operator)
+
+1. **UnaryLookup parsing** — `?KS` ≡ `.?KS` in primary expressions (was XPST0003); `.?()` empty-paren keys; keyword NCName keys (`?or`, `?div`, `?else`); qualified-name keys (`?xs:integer`, `?Q{}integer`) → XPST0003; argument-placeholder disambiguation (bare `?` followed by `,`/`)` stays a placeholder, `?1`/`?()`/`?name` parse as lookups — fixes partial-application regressions).
+2. **VM lookup semantics** — container-major multi-key ordering (`?(1 to 2)` per XPath 3.1 §3.11.3); single-result unwrap; strict xs:integer array keys (double → XPTY0004, not truncation); FOAY0001 on out-of-bounds (bounds checked against Count, not Get, so stored empty-sequence members aren't mistaken for OOB); XPTY0004 for lookup on non-map/array.
+3. **Shared `ArrayLookup`** — array-as-function calls (`[1,2,3](-1)` → FOAY0001, `(1.1)` → XPTY0004) use the same strict path as `?`.
+4. **CompareGeneral atomizes arrays** — XDM 3.1: an array atomizes to its members' atomized values (`[3] = 3` → true).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (v1.8: UnaryLookup, key forms, placeholder disambiguation)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.36: LookupValue restructure, ArrayLookup, CompareGeneral array expansion)
+- `tests/Bosak.XPath.Runtime.Tests/VmEngineTests.cs` (v0.4: +8 lookup tests)
+- `tests/Bosak.XPath.Parser.Tests/ParserTests.cs` (v0.3: +6 parser tests)
+
+---
+
+**Date:** 2026-07-15
 **Commit:** `d1387bc` (QT3 Tier-2b: function-item registry — map:find, spec-correct dynamic-call param kinds)
 **Current focus:** **QT3 XPath 3.1 suite: 21,145 passed / 1,390 failed / 9,286 skipped (66.45%)** — up from 21,081/1,454/9,286 (66.25%): **+64 passed, zero regressions** (name-level diff: 64 fixed, 0 new failures). Unit tests 1,014/0 (+4 map:find). Next pools: `?` lookup operator semantics (Lookup/UnaryLookup ~65 — UnaryLookup parser gap fixed, VM semantics in flight); xml-to-json options (43); serialize (37); the Tier-2a-exposed gaps.
 

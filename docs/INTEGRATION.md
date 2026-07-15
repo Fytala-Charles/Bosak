@@ -714,7 +714,7 @@ dotnet test Bosak.sln
 | Suite | Passed | Failed | Skipped | Pass Rate | Notes |
 |-------|--------|--------|---------|-----------|-------|
 | XSLT 3.0 (W3C) | 5,506 | 99 | 8,995 | 98.2% | `output` cluster 179/24/29; `result-document` cluster 104/21/29; remaining failures are pre-existing non-output issues |
-| XPath 3.1 (QT3) | 21,145 | 1,390 | 9,286 | 66.45% | Function-item registry spec-correct (map:find, dynamic-call param kinds); suite http: resources mapped to local files |
+| XPath 3.1 (QT3) | 21,218 | 1,317 | 9,286 | 66.68% | `?`/`?*` lookup operator spec-complete (UnaryLookup, FOAY0001/XPTY0004); suite http: resources mapped to local files |
 
 > **Note:** The conformance runner locks DLLs. If you get build errors about locked files, run:
 > ```bash

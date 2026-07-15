@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.5   | 13-06-2026     | Resolve xml prefix in node tests to the XML namespace                                    |
 //                      | Charles Korthout | 1.6   | 13-06-2026     | Fixed Unquote to preserve doubled quotes that do not match the enclosing delimiter      |
 //                      | Charles Korthout | 1.7   | 26-06-2026     | Static errors for removed map functions and obsolete map namespace; XPST0003 for :=    |
+//                      | Charles Korthout | 1.8   | 15-07-2026     | UnaryLookup (?KS ≡ .?KS); empty-paren lookup key .?(); keyword NCName lookup keys; qualified-name keys are XPST0003; argument-placeholder vs lookup disambiguation |
 //                      | Charles Korthout | 1.8   | 26-06-2026     | Parse Q{uri}* URI-qualified wildcards                                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -988,9 +989,13 @@ public sealed class XPathParser
             Advance();
             return WithSpan(node, start, End);
         }
-        if (Current.Kind == TokenKind.Name)
+        if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
         {
             var name = GetString(Current);
+            // KeySpecifier allows only a plain NCName — qualified names (xs:integer,
+            // Q{}integer) are a static error here (Lookup-156/157).
+            if (name.Contains(':') || name.Contains('{'))
+                throw new ParseException($"XPST0003: Qualified name '{name}' is not allowed as a lookup key", Current.Start);
             Advance();
             return WithSpan(new StringLiteralNode(name), start, End);
         }
@@ -1003,6 +1008,8 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.LParen)
         {
             Advance();
+            if (Match(TokenKind.RParen))
+                return WithSpan(new SequenceExpressionNode(Array.Empty<XPathAstNode>()), start, End);
             var expr = ParseExpr();
             Expect(TokenKind.RParen);
             return WithSpan(new ParenthesizedExprNode(expr), start, End);
@@ -1069,6 +1076,13 @@ public sealed class XPathParser
                 Advance();
                 return WithSpan(new ContextItemNode(), start, End);
 
+            case TokenKind.Question:
+                // UnaryLookup: ?KS is equivalent to .?KS (lookup on the context item).
+                Advance();
+                if (Match(TokenKind.Star))
+                    return WithSpan(new LookupWildcardNode(new ContextItemNode()), start, End);
+                return WithSpan(new LookupNode(new ContextItemNode(), ParseLookupKey()), start, End);
+
             case TokenKind.Name:
                 var name = GetString(Current);
                 var (prefix, local, _) = SplitQName(name);
@@ -1134,7 +1148,11 @@ public sealed class XPathParser
         {
             do
             {
-                if (Current.Kind == TokenKind.Question)
+                // A bare '?' is an argument placeholder only when it cannot start a
+                // UnaryLookup, i.e. when the next token ends the argument (',' or ')').
+                // Otherwise ('?1', '?name', '?(') it is a lookup on the context item.
+                if (Current.Kind == TokenKind.Question
+                    && (Peek(1).Kind == TokenKind.Comma || Peek(1).Kind == TokenKind.RParen))
                 {
                     Advance();
                     args.Add(new ArgumentPlaceholderNode());

@@ -68,6 +68,7 @@
 //                      | Charles Korthout | 2.33  | 14-07-2026     | CompareGeneral integer-set fast path (cached HashSet) for = / != on large sequences    |
 //                      | Charles Korthout | 2.34  | 15-07-2026     | OverflowException during execution is surfaced as FOAR0002 (numeric range error)       |
 //                      | Charles Korthout | 2.35  | 15-07-2026     | ConvertArgToKind passes empty sequences through for optional parameters (xs:T?/xs:T*)  |
+//                      | Charles Korthout | 2.36  | 15-07-2026     | Lookup semantics: container-major multi-key, single-result unwrap, strict xs:integer array keys (FOAY0001 bounds/XPTY0004 type), array-as-function via shared ArrayLookup, CompareGeneral atomizes arrays |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1701,7 +1702,15 @@ public static class VmEngine
                                     foreach (var v in item.ArrayValue.Values)
                                         AddFlattened(v);
                                 }
+                                else
+                                {
+                                    throw new InvalidOperationException($"XPTY0004: Wildcard lookup requires a map or an array, got {item.Kind}.");
+                                }
                             }
+                        }
+                        else if (!container.IsUndefined)
+                        {
+                            throw new InvalidOperationException($"XPTY0004: Wildcard lookup requires a map or an array, got {container.Kind}.");
                         }
 
                         registers[instr.RegisterA] = XdmValue.FromSequence(
@@ -1808,6 +1817,45 @@ public static class VmEngine
         }
 
         return new[] { sequence };
+    }
+
+    /// <summary>
+    /// Expands arrays into their member items for general-comparison operands
+    /// (XDM 3.1 atomization: an array atomizes to the atomized values of its members).
+    /// Returns the input array unchanged when no item is an array.
+    /// </summary>
+    private static XdmValue[] ExpandArraysForComparison(XdmValue[] items)
+    {
+        bool hasArray = false;
+        foreach (var item in items)
+        {
+            if (item.IsArray) { hasArray = true; break; }
+        }
+        if (!hasArray)
+            return items;
+
+        var list = new List<XdmValue>();
+        foreach (var item in items)
+            FlattenArrayItem(item, list);
+        return list.ToArray();
+    }
+
+    private static void FlattenArrayItem(XdmValue value, List<XdmValue> list)
+    {
+        if (value.IsArray)
+        {
+            foreach (var member in value.ArrayValue.Values)
+                FlattenArrayItem(member, list);
+            return;
+        }
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                FlattenArrayItem(item, list);
+            return;
+        }
+        if (!value.IsUndefined)
+            list.Add(value);
     }
 
     private static bool TryGetSequenceLength(IXdmSequence? seq, out int length)
@@ -2191,11 +2239,7 @@ public static class VmEngine
         {
             if (args.Length != 1)
                 throw new InvalidOperationException("XPTY0004");
-            var index = (int)ToInteger(args[0]);
-            var arr = funcValue.ArrayValue;
-            if (index >= 1 && index <= arr.Count)
-                return arr.Get(index);
-            return XdmValue.Undefined;
+            return ArrayLookup(funcValue.ArrayValue, args[0]);
         }
 
         throw new InvalidOperationException("XPTY0004");
@@ -3546,8 +3590,8 @@ public static class VmEngine
 
         // General comparisons use existential semantics over sequences.
         // For now, materialize both sides and compare pairwise.
-        var leftItems = MaterializeSequence(left);
-        var rightItems = MaterializeSequence(right);
+        var leftItems = ExpandArraysForComparison(MaterializeSequence(left));
+        var rightItems = ExpandArraysForComparison(MaterializeSequence(right));
 
         // XPath 1.0 backwards compatibility: when a node-set (or any sequence) is
         // compared to a boolean, both operands are converted to booleans using the
@@ -6412,42 +6456,99 @@ public static class VmEngine
 
     private static XdmValue LookupValue(XdmValue container, XdmValue key)
     {
+        var results = new List<XdmValue>();
+        LookupInto(container, key, results);
+        return results.Count switch
+        {
+            0 => XdmValue.Undefined,
+            1 => results[0],
+            _ => XdmValue.FromSequence(MaterializedSequence.FromList(results))
+        };
+    }
+
+    /// <summary>
+    /// Expands the lookup over container items (outer) and key items (inner), matching
+    /// XPath 3.1 §3.11.3 result ordering (Lookup-107: for each container, for each key).
+    /// </summary>
+    private static void LookupInto(XdmValue container, XdmValue key, List<XdmValue> results)
+    {
+        if (container.IsUndefined)
+            return;
+        if (container.IsSequence && container.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(container.SequenceValue))
+                LookupInto(item, key, results);
+            return;
+        }
+        if (key.IsUndefined)
+            return;
+        if (key.IsSequence && key.SequenceValue is not null)
+        {
+            foreach (var singleKey in XdmSequence.FromSource(key.SequenceValue))
+                LookupSingle(container, singleKey, results);
+            return;
+        }
+        LookupSingle(container, key, results);
+    }
+
+    private static void LookupSingle(XdmValue container, XdmValue key, List<XdmValue> results)
+    {
         if (container.Kind == XdmValueKind.Map)
         {
             var vkey = AtomizeMapKey(key);
             if (container.MapValue.TryGetValue(vkey, out var value))
-                return value;
-            return XdmValue.Undefined;
+                AppendLookupResult(results, value);
+            return;
         }
         if (container.Kind == XdmValueKind.Array)
         {
-            int idx = (int)ToInteger(key);
-            return container.ArrayValue.Get(idx);
+            AppendLookupResult(results, ArrayLookup(container.ArrayValue, key));
+            return;
         }
-        if (container.IsSequence && container.SequenceValue is not null)
+        // Lookup on anything other than a map or an array is a type error (Lookup-012).
+        throw new InvalidOperationException($"XPTY0004: Lookup operator requires a map or an array, got {container.Kind}.");
+    }
+
+    /// <summary>
+    /// Array member access shared by the lookup operator and array-as-function calls.
+    /// The key must be xs:integer (Lookup-119: a double is XPTY0004, not truncated);
+    /// out-of-range indexes raise FOAY0001. Bounds are checked against Count (not Get)
+    /// so that a stored empty-sequence member is not mistaken for an out-of-range index.
+    /// </summary>
+    private static XdmValue ArrayLookup(XdmArray array, XdmValue key)
+    {
+        var akey = Atomize(key);
+        long idx;
+        if (akey.Kind == XdmValueKind.Integer)
         {
-            var results = new List<XdmValue>();
-            foreach (var item in XdmSequence.FromSource(container.SequenceValue))
-            {
-                var sub = LookupValue(item, key);
-                if (!sub.IsUndefined)
-                {
-                    if (sub.IsSequence && sub.SequenceValue is not null)
-                    {
-                        foreach (var s in XdmSequence.FromSource(sub.SequenceValue))
-                            results.Add(s);
-                    }
-                    else
-                    {
-                        results.Add(sub);
-                    }
-                }
-            }
-            if (results.Count == 0)
-                return XdmValue.Undefined;
-            return XdmValue.FromSequence(MaterializedSequence.FromList(results));
+            idx = akey.IntegerValue;
         }
-        return XdmValue.Undefined;
+        else if (IsUntypedAtomicValue(akey) && long.TryParse(akey.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed))
+        {
+            idx = parsed;
+        }
+        else
+        {
+            throw new InvalidOperationException($"XPTY0004: Array lookup key must be xs:integer, got {akey.Kind}.");
+        }
+        if (idx < 1 || idx > array.Count)
+            throw new InvalidOperationException($"FOAY0001: Array index {idx} is out of bounds (array size {array.Count}).");
+        return array.Get((int)idx);
+    }
+
+    private static void AppendLookupResult(List<XdmValue> results, XdmValue value)
+    {
+        if (value.IsUndefined)
+            return;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                results.Add(item);
+        }
+        else
+        {
+            results.Add(value);
+        }
     }
 
     private static string AtomizedString(XdmValue value)

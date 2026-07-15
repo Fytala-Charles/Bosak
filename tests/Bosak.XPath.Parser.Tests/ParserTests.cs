@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 26-06-2026     | Added URI-qualified wildcard node-test parsing tests                                     |
+//                      | Charles Korthout | 0.3   | 15-07-2026     | UnaryLookup parsing, keyword/qualified lookup keys, placeholder-vs-lookup disambiguation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -533,5 +534,54 @@ public class ParserTests
         Assert.Equal(XdmAxis.Child, step.Axis);
         Assert.Equal(NameTestKind.NamespaceAny, step.NodeTest.Kind);
         Assert.Equal("http://example.com", step.NodeTest.NamespaceUri);
+    }
+
+    [Fact]
+    public void UnaryLookup_OnContextItem()
+    {
+        var node = AssertParse<LookupNode>("?name");
+        Assert.IsType<ContextItemNode>(node.Expression);
+        Assert.IsType<StringLiteralNode>(node.Key);
+    }
+
+    [Fact]
+    public void UnaryLookup_Wildcard()
+    {
+        var node = AssertParse<LookupWildcardNode>("?*");
+        Assert.IsType<ContextItemNode>(node.Expression);
+    }
+
+    [Fact]
+    public void UnaryLookup_EmptyParenKey()
+    {
+        var node = AssertParse<LookupNode>("?()");
+        Assert.IsType<ContextItemNode>(node.Expression);
+        Assert.IsType<SequenceExpressionNode>(node.Key);
+    }
+
+    [Fact]
+    public void PostfixLookup_KeywordKey()
+    {
+        // Keyword NCNames are valid lookup keys (Lookup-155: map{'or':true()}?or).
+        var node = AssertParse<LookupNode>("map{'or':true()}?or");
+        var key = Assert.IsType<StringLiteralNode>(node.Key);
+        Assert.Equal("or", key.Value);
+    }
+
+    [Fact]
+    public void PostfixLookup_QualifiedNameKey_IsStaticError()
+    {
+        Assert.Throws<ParseException>(() => XPathParser.Parse("map{'a':1}?xs:integer"));
+        Assert.Throws<ParseException>(() => XPathParser.Parse("map{'a':1}?Q{}integer"));
+    }
+
+    [Fact]
+    public void ArgumentList_PlaceholderVsUnaryLookup()
+    {
+        // Bare '?' is a placeholder; '?1' and '?()' are unary lookups.
+        var call = AssertParse<FunctionCallNode>("fn:contains(?, 'a')");
+        Assert.IsType<ArgumentPlaceholderNode>(call.Arguments[0]);
+        var call2 = AssertParse<FunctionCallNode>("fn:exists(?())");
+        Assert.IsType<LookupNode>(call2.Arguments[0]);
     }
 }
