@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 01-06-2026     | Special zero for full-stop block U+2488; XdmValueToLongArray returns long[] to prevent overflow |
 //                      | Charles Korthout | 0.7   | 03-06-2026     | Added BigInteger overload for formatting values > long.MaxValue (fixes number-0807)       |
 //                      | Charles Korthout | 0.8   | 26-06-2026     | German word/ordinal support for xsl:number and fn:format-integer                         |
+//                      | Charles Korthout | 0.9   | 15-07-2026     | Tier-2l: CJK kanji, French ordinal, Italian gender, o(-lang) suffix                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -272,6 +273,13 @@ public static class FormatIntegerEngine
 
         int cp = codepoints[0];
 
+        // CJK kanji numbering sequence (primary token U+4E00)
+        if (cp == 0x4E00)
+        {
+            result = FormatCjkKanji(v);
+            return true;
+        }
+
         // Circled digits: U+24EA (0), U+2460-U+2473 (1-20), U+3251-U+325F (21-35), U+32B1-U+32BF (36-50)
         if (cp >= 0x2460 && cp <= 0x2473)
         {
@@ -348,6 +356,39 @@ public static class FormatIntegerEngine
             return true;
 
         return false;
+    }
+
+    private static string FormatCjkKanji(long n)
+    {
+        if (n <= 0)
+            return "\u96F6"; // zero
+        string[] digits = { "", "\u4E00", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03", "\u516B", "\u4E5D" };
+        string[] units = { "", "\u5341", "\u767E", "\u5343" };
+
+        int thousands = (int)(n / 1000);
+        int hundreds = (int)((n % 1000) / 100);
+        int tens = (int)((n % 100) / 10);
+        int ones = (int)(n % 10);
+
+        var sb = new StringBuilder();
+        if (thousands > 0)
+        {
+            if (thousands != 1) sb.Append(digits[thousands]);
+            sb.Append(units[3]);
+        }
+        if (hundreds > 0)
+        {
+            if (hundreds != 1) sb.Append(digits[hundreds]);
+            sb.Append(units[2]);
+        }
+        if (tens > 0)
+        {
+            if (tens != 1) sb.Append(digits[tens]);
+            sb.Append(units[1]);
+        }
+        if (ones > 0)
+            sb.Append(digits[ones]);
+        return sb.ToString();
     }
 
     /// <summary>
@@ -718,7 +759,8 @@ public static class FormatIntegerEngine
         
         if (isDigits)
         {
-            if (!string.IsNullOrEmpty(suffix) && !suffix.StartsWith('%'))
+            // A parenthesized suffix starting with '-' is a language/variant hint, not a literal suffix.
+            if (!string.IsNullOrEmpty(suffix) && !suffix.StartsWith('%') && !suffix.StartsWith('-'))
                 return result + suffix;
 
             // Remove grouping separators for suffix determination
@@ -739,6 +781,8 @@ public static class FormatIntegerEngine
                 return GermanToOrdinalWords(result, suffix);
             if (lang == "it")
                 return ItalianToOrdinal(value, suffix, result);
+            if (lang == "fr")
+                return FrenchToOrdinalWords(result, (long)value, suffix);
             return ToOrdinalWords(result, (long)value, language);
         }
     }
@@ -912,6 +956,8 @@ public static class FormatIntegerEngine
         var lang = NormalizeLanguage(language);
         if (lang == "de")
             return GermanNumberToWords(n);
+        if (lang == "fr")
+            return FrenchNumberToWords(n);
         return EnglishNumberToWords(n);
     }
 
@@ -1039,7 +1085,8 @@ public static class FormatIntegerEngine
         if (value > long.MaxValue || value < 0)
             return originalResult + (suffix ?? "th");
         long v = (long)value;
-        bool feminine = suffix != null && suffix.IndexOf("feminine", StringComparison.OrdinalIgnoreCase) >= 0;
+        bool feminine = suffix is not null &&
+            (suffix == "-a" || suffix.IndexOf("feminine", StringComparison.OrdinalIgnoreCase) >= 0);
         string ordinal = v switch
         {
             1 => feminine ? "prima" : "primo",
@@ -1055,5 +1102,77 @@ public static class FormatIntegerEngine
             _ => originalResult.ToLowerInvariant() + (feminine ? "a" : "o")
         };
         return MatchCase(originalResult, ordinal);
+    }
+
+    private static string FrenchNumberToWords(long n)
+    {
+        if (n == 0) return "zéro";
+        if (n < 0) return "moins " + FrenchNumberToWords(-n);
+        if (n <= 19) return new[] { "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf" }[n - 1];
+        if (n < 100)
+        {
+            var tens = new[] { "vingt", "trente", "quarante", "cinquante", "soixante", "soixante-dix", "quatre-vingts", "quatre-vingt-dix" };
+            long t = n / 10;
+            long u = n % 10;
+            if (u == 0) return tens[t - 2];
+            if (t == 7 || t == 9) // soixante-dix / quatre-vingt-dix use 1..19 for units
+                return tens[t - 2] + "-" + FrenchNumberToWords((t == 7 ? 60 : 80) + u);
+            if (t == 8 && u == 1) return "quatre-vingt-un";
+            return tens[t - 2].TrimEnd('s') + "-" + FrenchNumberToWords(u);
+        }
+        if (n < 1000)
+        {
+            long h = n / 100;
+            long r = n % 100;
+            string hw = h == 1 ? "cent" : FrenchNumberToWords(h) + " cents";
+            if (r == 0)
+            {
+                if (h == 1) return hw;
+                return hw.TrimEnd('s');
+            }
+            return hw.TrimEnd('s') + " " + FrenchNumberToWords(r);
+        }
+        if (n < 1_000_000)
+        {
+            long t = n / 1000;
+            long r = n % 1000;
+            string tw = t == 1 ? "mille" : FrenchNumberToWords(t) + " mille";
+            if (r == 0) return tw;
+            return tw + " " + FrenchNumberToWords(r);
+        }
+        return n.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private static string FrenchToOrdinalWords(string cardinalWord, long value, string? suffix)
+    {
+        if (value == 1)
+            return MatchCase(cardinalWord, "premier");
+
+        int lastSpace = cardinalWord.LastIndexOf(' ');
+        int lastHyphen = cardinalWord.LastIndexOf('-');
+        int splitAt = Math.Max(lastSpace, lastHyphen);
+
+        string prefix;
+        string originalLast;
+        if (splitAt < 0)
+        {
+            prefix = "";
+            originalLast = cardinalWord;
+        }
+        else
+        {
+            prefix = cardinalWord.Substring(0, splitAt + 1);
+            originalLast = cardinalWord.Substring(splitAt + 1);
+        }
+
+        string last = originalLast.ToLowerInvariant();
+        string ordinalLast = last switch
+        {
+            "un" => "unième",
+            "cinq" => "cinquième",
+            "neuf" => "neuvième",
+            _ => last.TrimEnd('e') + "ième"
+        };
+        return prefix + MatchCase(originalLast, ordinalLast);
     }
 }

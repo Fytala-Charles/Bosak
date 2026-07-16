@@ -16,6 +16,8 @@
 //                      | Charles Korthout | 0.4   | 13-06-2026     | Name width modifiers, default component widths, ordinal suffixes, fallback lang/cal   |
 //                      | Charles Korthout | 0.5   | 13-06-2026     | English number words, era-aware negative years, ordinal-year width handling          |
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Bracket escapes, default widths, roman/alpha/timezone/week-of-month fixes             |
+//                      | Charles Korthout | 0.7   | 15-07-2026     | Tier-2l: timezone §9.8.4.2, fractional seconds, ISO week-in-month, German names       |
+//                      | Charles Korthout | 0.8   | 16-07-2026     | Tier-2l: week-in-month boundary fix, [Z99] zero-padding, namespaced unknown calendars |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -153,7 +155,9 @@ internal static class FormatDateTimeEngine
         }
 
         bool languageFallback = !IsLanguageSupported(language);
-        bool calendarFallback = !IsCalendarSupported(calendar);
+
+        // Validate calendar argument (invalid/unknown EQName is an error)
+        ValidateCalendar(calendar);
 
         // Validate component is available for the value type
         ValidateComponentAvailable(component, components);
@@ -161,10 +165,10 @@ internal static class FormatDateTimeEngine
         string result = component switch
         {
             'Y' => FormatYear(value, presentation, minWidth, maxWidth, hasEra),
-            'M' => FormatMonth(value, presentation, minWidth, maxWidth),
+            'M' => FormatMonth(value, presentation, minWidth, maxWidth, language),
             'D' => FormatDay(value, presentation, minWidth, maxWidth),
             'd' => FormatDayOfYear(value, presentation, minWidth, maxWidth),
-            'F' => FormatDayOfWeek(value, presentation, minWidth, maxWidth),
+            'F' => FormatDayOfWeek(value, presentation, minWidth, maxWidth, language),
             'W' => FormatWeekOfYear(value, presentation, minWidth, maxWidth),
             'w' => FormatWeekOfMonth(value, presentation, minWidth, maxWidth),
             'H' => FormatHour24(value, presentation, minWidth, maxWidth),
@@ -182,8 +186,6 @@ internal static class FormatDateTimeEngine
 
         if (languageFallback)
             result = $"[Language: en]{result}";
-        else if (calendarFallback)
-            result = $"[Calendar: AD]{result}";
 
         return result;
     }
@@ -192,7 +194,7 @@ internal static class FormatDateTimeEngine
         => component switch
         {
             'Y' => 4,
-            'd' => 3,
+            'd' => 1,
             'm' => 2,
             's' => 2,
             _ => 1
@@ -208,14 +210,70 @@ internal static class FormatDateTimeEngine
 
     private static bool IsLanguageSupported(string? language)
         => string.IsNullOrEmpty(language) ||
-           language.StartsWith("en", StringComparison.OrdinalIgnoreCase);
+           language.StartsWith("en", StringComparison.OrdinalIgnoreCase) ||
+           language.StartsWith("de", StringComparison.OrdinalIgnoreCase);
 
-    private static bool IsCalendarSupported(string? calendar)
-        => string.IsNullOrEmpty(calendar) ||
-           calendar.Equals("AD", StringComparison.OrdinalIgnoreCase) ||
-           calendar.Equals("Gregorian", StringComparison.OrdinalIgnoreCase) ||
-           calendar.Equals("ISO", StringComparison.OrdinalIgnoreCase) ||
-           calendar.Equals("ISO8601", StringComparison.OrdinalIgnoreCase);
+    private static bool TryParseCalendarName(string calendar, [NotNullWhen(true)] out string? ns, [NotNullWhen(true)] out string? localName)
+    {
+        ns = null;
+        localName = null;
+        if (calendar.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int close = calendar.IndexOf('}');
+            if (close < 0)
+                return false;
+            ns = calendar.Substring(2, close - 2);
+            localName = calendar.Substring(close + 1);
+            return IsNcName(localName);
+        }
+        int colon = calendar.IndexOf(':');
+        if (colon >= 0)
+        {
+            // Lexical QName. We cannot resolve the prefix here, but any prefixed name is
+            // considered to be in a namespace and is accepted implementation-defined.
+            string prefix = calendar.Substring(0, colon);
+            localName = calendar.Substring(colon + 1);
+            if (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(localName))
+                return false;
+            ns = "urn:placeholder";
+            return IsNcName(prefix) && IsNcName(localName);
+        }
+        ns = "";
+        localName = calendar;
+        return IsNcName(localName);
+    }
+
+    private static bool IsNcName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return false;
+        char first = name[0];
+        if (first != '_' && !char.IsLetter(first))
+            return false;
+        for (int i = 1; i < name.Length; i++)
+        {
+            char c = name[i];
+            if (c != '_' && c != '-' && c != '.' && !char.IsLetterOrDigit(c))
+                return false;
+        }
+        return true;
+    }
+
+    private static void ValidateCalendar(string? calendar)
+    {
+        if (string.IsNullOrEmpty(calendar))
+            return;
+        if (!TryParseCalendarName(calendar, out string? ns, out string? localName))
+            throw FormatError("FOFD1340");
+        bool knownLocal = localName.Equals("AD", StringComparison.OrdinalIgnoreCase) ||
+                          localName.Equals("Gregorian", StringComparison.OrdinalIgnoreCase) ||
+                          localName.Equals("ISO", StringComparison.OrdinalIgnoreCase) ||
+                          localName.Equals("ISO8601", StringComparison.OrdinalIgnoreCase);
+        // Unknown calendars in no namespace are an error; calendars with a namespace URI are
+        // accepted as an implementation-defined fallback to the default (Gregorian) calendar.
+        if (string.IsNullOrEmpty(ns) && !knownLocal)
+            throw FormatError("FOFD1340");
+    }
 
     private static void ValidateComponentAvailable(char component, DateTimeComponents components)
     {
@@ -491,27 +549,16 @@ internal static class FormatDateTimeEngine
 
     private static string FormatFractionalSeconds(XPathDateTime value, string presentation, int minWidth, int maxWidth)
     {
-        // Extract fractional seconds string
-        string frac = value.Millisecond.ToString(CultureInfo.InvariantCulture).TrimEnd('0');
-        if (frac.Length == 0) frac = "0";
+        // Fractional seconds are available to millisecond precision.
+        string frac = value.Millisecond.ToString("000", CultureInfo.InvariantCulture);
 
         var info = ParseDigitPresentation(presentation, isFractional: true);
         int totalPositions = info.TotalPositions;
 
-        if (totalPositions == 0)
+        // Width-only presentation (no digit signs): apply min/max width rules.
+        if (totalPositions == 0 || (totalPositions == 1 && info.Mandatory == 1 && info.Optional == 0))
         {
-            // No digit characters - use width modifier only
-            string fracResult = frac;
-            fracResult = ApplyWidthFractional(fracResult, minWidth, maxWidth, info.ZeroDigit);
-            return MapDigits(fracResult, info.ZeroDigit);
-        }
-
-        // Special case: single digit in presentation means "show all available fractional digits"
-        if (totalPositions == 1 && info.Mandatory == 1 && info.Optional == 0)
-        {
-            string fracResult = frac;
-            fracResult = ApplyWidthFractional(fracResult, minWidth, maxWidth, info.ZeroDigit);
-            return MapDigits(fracResult, info.ZeroDigit);
+            return FormatFractionalSecondsWidthOnly(frac, minWidth, maxWidth, info.ZeroDigit);
         }
 
         // For fractional seconds with only fixed digits (>1), ignore width max
@@ -578,6 +625,31 @@ internal static class FormatDateTimeEngine
         }
 
         return sb.ToString();
+    }
+
+    private static string FormatFractionalSecondsWidthOnly(string frac, int minWidth, int maxWidth, Rune zeroDigit)
+    {
+        bool exactWidth = minWidth == maxWidth;
+
+        if (exactWidth)
+        {
+            // Exact width: truncate or pad on the right with zeros.
+            string digits = maxWidth == int.MaxValue
+                ? frac
+                : frac[..Math.Min(frac.Length, maxWidth)];
+            if (digits.Length < minWidth)
+                digits = digits.PadRight(minWidth, '0');
+            return MapDigits(digits, zeroDigit);
+        }
+
+        // Range (or unbounded): truncate to max, then strip trailing zeros, keeping at least one digit.
+        int limit = maxWidth == int.MaxValue ? frac.Length : maxWidth;
+        string sig = frac[..Math.Min(frac.Length, limit)].TrimEnd('0');
+        if (sig.Length == 0)
+            sig = "0";
+        if (sig.Length < minWidth)
+            sig = sig.PadRight(minWidth, '0');
+        return MapDigits(sig, zeroDigit);
     }
 
     // ------------------------------------------------------------------
@@ -692,10 +764,20 @@ internal static class FormatDateTimeEngine
         if (TryFormatWords(year, presentation, out string? wordsResult))
             return ApplyAlphabeticWidth(wordsResult, nonNumericMin, int.MaxValue);
 
-        if (presentation == "i")
-            return ApplyAlphabeticWidth(ToRoman(year, upper: false), nonNumericMin, int.MaxValue);
-        if (presentation == "I")
-            return ApplyAlphabeticWidth(ToRoman(year, upper: true), nonNumericMin, int.MaxValue);
+        if (presentation == "i" || presentation == "I")
+        {
+            long displayYear = year;
+            if (maxWidth != int.MaxValue)
+            {
+                long modulus = 1;
+                for (int i = 0; i < maxWidth; i++)
+                    modulus *= 10;
+                displayYear %= modulus;
+            }
+            if (displayYear is >= 1 and <= 3999)
+                return ApplyAlphabeticWidth(ToRoman(displayYear, upper: presentation == "I"), nonNumericMin, int.MaxValue);
+            return displayYear.ToString(CultureInfo.InvariantCulture);
+        }
 
         var info = ParseDigitPresentation(presentation, isFractional: false);
         if (info.TotalPositions > 0)
@@ -722,9 +804,9 @@ internal static class FormatDateTimeEngine
         return digits;
     }
 
-    private static string FormatMonth(XPathDateTime value, string presentation, int minWidth, int maxWidth)
+    private static string FormatMonth(XPathDateTime value, string presentation, int minWidth, int maxWidth, string? language)
     {
-        if (TryFormatName(value.Month, presentation, GetMonthNames(), GetAbbreviatedMonthNames(), minWidth, maxWidth, out string? nameResult))
+        if (TryFormatName(value.Month, presentation, GetMonthNames(language), GetAbbreviatedMonthNames(language), minWidth, maxWidth, out string? nameResult))
             return nameResult;
 
         return FormatInteger(value.Month, presentation, minWidth, maxWidth, allowTruncate: false);
@@ -740,12 +822,12 @@ internal static class FormatDateTimeEngine
         return FormatInteger(GetDayOfYear(value), presentation, minWidth, maxWidth, allowTruncate: false);
     }
 
-    private static string FormatDayOfWeek(XPathDateTime value, string presentation, int minWidth, int maxWidth)
+    private static string FormatDayOfWeek(XPathDateTime value, string presentation, int minWidth, int maxWidth, string? language)
     {
         int dow = (int)GetDayOfWeek(value);
         if (dow == 0) dow = 7; // ISO: Monday=1, Sunday=7
 
-        if (TryFormatName(dow, presentation, GetDayNames(), GetAbbreviatedDayNames(), minWidth, maxWidth, out string? nameResult))
+        if (TryFormatName(dow, presentation, GetDayNames(language), GetAbbreviatedDayNames(language), minWidth, maxWidth, out string? nameResult))
             return nameResult;
 
         return FormatInteger(dow, presentation, minWidth, maxWidth, allowTruncate: false);
@@ -759,19 +841,51 @@ internal static class FormatDateTimeEngine
 
     private static string FormatWeekOfMonth(XPathDateTime value, string presentation, int minWidth, int maxWidth)
     {
-        // The first week of the month is the ISO week that contains its first Thursday.
-        // This avoids negative week numbers around ISO year boundaries.
-        var firstOfMonth = new XPathDateTime(value.Year, value.Month, 1, 0, 0, 0, 0, value.TimezoneOffsetMinutes, value.HasTimezone);
-        int dowFirst = (int)GetDayOfWeek(firstOfMonth);
-        if (dowFirst == 0)
-            dowFirst = 7;
-        int daysToThursday = (4 - dowFirst + 7) % 7;
-        var (y, m, d) = XPathDateTimeHelper.AddDays(firstOfMonth.Year, firstOfMonth.Month, firstOfMonth.Day, daysToThursday);
-        var firstThursday = new XPathDateTime(y, m, d, 0, 0, 0, 0, value.TimezoneOffsetMinutes, value.HasTimezone);
+        // ISO week-in-month: the week number is based on the Thursday of the date's ISO week.
+        int dow = (int)GetDayOfWeek(value);
+        if (dow == 0) dow = 7; // ISO: Monday=1, Sunday=7
+        int daysToThursday = 4 - dow;
+        var (ty, tm, td) = XPathDateTimeHelper.AddDays(value.Year, value.Month, value.Day, daysToThursday);
+        var thursday = new XPathDateTime(ty, tm, td, 0, 0, 0, 0, value.TimezoneOffsetMinutes, value.HasTimezone);
 
-        int baseWeek = GetIsoWeekOfYear(firstThursday);
-        int week = GetIsoWeekOfYear(value) - baseWeek + 1;
+        var firstThursdayThisMonth = FirstThursdayOfMonth(value.Year, value.Month, value);
+        int dateWeek = GetIsoWeekOfYear(thursday);
+        long dateYear = thursday.Year;
+        int thisWeek = GetIsoWeekOfYear(firstThursdayThisMonth);
+        long thisYear = firstThursdayThisMonth.Year;
+
+        int week;
+        if (dateYear < thisYear || (dateYear == thisYear && dateWeek < thisWeek))
+        {
+            // The date belongs to a week that starts in the previous month;
+            // count from the first Thursday of that previous month.
+            long prevYear = value.Month == 1 ? value.Year - 1 : value.Year;
+            int prevMonth = value.Month == 1 ? 12 : value.Month - 1;
+            var firstThursdayPrevMonth = FirstThursdayOfMonth(prevYear, prevMonth, value);
+            week = WeekDifference(firstThursdayPrevMonth, thursday) + 1;
+        }
+        else
+        {
+            week = (dateWeek - thisWeek) + 1;
+        }
+
         return FormatInteger(week, presentation, minWidth, maxWidth, allowTruncate: false);
+    }
+
+    private static XPathDateTime FirstThursdayOfMonth(long year, int month, XPathDateTime value)
+    {
+        int dowFirst = (int)GetDayOfWeek(new XPathDateTime(year, month, 1, 0, 0, 0, 0, value.TimezoneOffsetMinutes, value.HasTimezone));
+        if (dowFirst == 0) dowFirst = 7;
+        int daysToFirstThu = (4 - dowFirst + 7) % 7;
+        var (fy, fm, fd) = XPathDateTimeHelper.AddDays(year, month, 1, daysToFirstThu);
+        return new XPathDateTime(fy, fm, fd, 0, 0, 0, 0, value.TimezoneOffsetMinutes, value.HasTimezone);
+    }
+
+    private static int WeekDifference(XPathDateTime earlierThursday, XPathDateTime laterThursday)
+    {
+        var earlier = new DateTime((int)Math.Clamp(earlierThursday.Year, 1, 9999), earlierThursday.Month, earlierThursday.Day);
+        var later = new DateTime((int)Math.Clamp(laterThursday.Year, 1, 9999), laterThursday.Month, laterThursday.Day);
+        return (int)(later - earlier).TotalDays / 7;
     }
 
     private static string FormatHour24(XPathDateTime value, string presentation, int minWidth, int maxWidth)
@@ -814,75 +928,209 @@ internal static class FormatDateTimeEngine
     }
 
     private static string FormatTimezone(XPathDateTime value, string presentation, int minWidth, int maxWidth)
-    {
-        if (!value.HasTimezone)
-            return "";
-
-        var offset = TimeSpan.FromMinutes(value.TimezoneOffsetMinutes);
-        string sign = offset < TimeSpan.Zero ? "-" : "+";
-        var abs = offset < TimeSpan.Zero ? -offset : offset;
-        int hours = abs.Hours;
-        int minutes = abs.Minutes;
-
-        // Explicit "Z" presentation requests the short "Z" form for a zero offset.
-        if (presentation == "Z" || presentation == "z")
-        {
-            if (offset == TimeSpan.Zero)
-                return "Z";
-        }
-
-        // Hours only, no leading zeros; include minutes if they are non-zero.
-        if (presentation == "0")
-        {
-            string result = $"{sign}{hours}";
-            if (minutes != 0)
-                result += $":{minutes:00}";
-            return result;
-        }
-
-        // Hours only, two digits.
-        if (presentation == "00")
-            return $"{sign}{hours:00}";
-
-        // Hours and minutes without colon.
-        if (presentation == "0000")
-            return $"{sign}{hours:00}{minutes:00}";
-
-        // Default is the full ±HH:MM representation.
-        return $"{sign}{hours:00}:{minutes:00}";
-    }
+        => FormatTimezoneCore(value, presentation, gmtPrefix: false);
 
     private static string FormatTimezoneGmt(XPathDateTime value, string presentation, int minWidth, int maxWidth)
+        => FormatTimezoneCore(value, presentation, gmtPrefix: true);
+
+    private static string FormatTimezoneCore(XPathDateTime value, string presentation, bool gmtPrefix)
     {
+        // Detect the optional trailing "t" modifier (zero offset prints as Z).
+        bool flagT = presentation.Length > 0 && (presentation[^1] == 't' || presentation[^1] == 'T');
+        string pres = flagT ? presentation[..^1] : presentation;
+
+        // Military notation [ZZ] / [zz] formats a missing timezone as "J".
+        bool military = pres == "Z" || pres == "z";
+
         if (!value.HasTimezone)
-            return "";
+            return military ? (gmtPrefix ? "GMTJ" : "J") : "";
 
         var offset = TimeSpan.FromMinutes(value.TimezoneOffsetMinutes);
-        string sign = offset < TimeSpan.Zero ? "-" : "+";
-        var abs = offset < TimeSpan.Zero ? -offset : offset;
+        bool negative = offset < TimeSpan.Zero;
+        var abs = negative ? -offset : offset;
         int hours = abs.Hours;
         int minutes = abs.Minutes;
 
-        // [z0] => hours only, no leading zero; minutes appended only when non-zero.
-        if (presentation == "0")
+        if (flagT && hours == 0 && minutes == 0)
+            return (gmtPrefix ? "GMT" : "") + "Z";
+
+        // Military notation [ZZ] / [zz] applies only to whole-hour offsets in the range -12 to +12.
+        if (military)
         {
-            string result = $"GMT{sign}{hours}";
-            if (minutes != 0)
-                result += $":{minutes:00}";
-            return result;
+            if (minutes != 0 || hours > 12)
+                return FormatDefaultTimezone(hours, minutes, negative, gmtPrefix, separator: ":");
+            if (hours == 0)
+                return (gmtPrefix ? "GMT" : "") + "Z";
+            char letter;
+            if (negative)
+            {
+                letter = (char)('N' + hours - 1); // -1 -> N, ..., -12 -> Y
+            }
+            else
+            {
+                letter = (char)('A' + hours - 1); // +1 -> A, ..., +12 -> M
+                if (letter >= 'J')
+                    letter++; // military timezone skips J
+            }
+            if (pres == "z")
+                letter = char.ToLowerInvariant(letter);
+            return (gmtPrefix ? "GMT" : "") + letter;
         }
 
-        // [z,2-2] (empty presentation, width 2-2) => two-digit hours, omit minutes when zero.
-        if (string.IsNullOrEmpty(presentation) && minWidth == 2 && maxWidth == 2)
+        Rune? zeroDigit = DetectZeroDigit(pres);
+        string asciiResult = FormatTimezoneDigits(pres, hours, minutes, negative, gmtPrefix);
+        if (zeroDigit.HasValue)
+            asciiResult = MapDigits(asciiResult, zeroDigit.Value);
+        return asciiResult;
+    }
+
+    private static string FormatTimezoneDigits(string presentation, int hours, int minutes, bool negative, bool gmtPrefix)
+    {
+        string sign = negative ? "-" : "+";
+        string prefix = gmtPrefix ? "GMT" + sign : sign;
+
+        if (string.IsNullOrEmpty(presentation))
+            return FormatDefaultTimezone(hours, minutes, negative, gmtPrefix, separator: ":");
+
+        // Tokenize the presentation into digit groups and separators.
+        var groups = new List<string>();
+        var separators = new List<string>();
+        var currentGroup = new StringBuilder();
+        string currentSep = "";
+        foreach (var rune in presentation.EnumerateRunes())
         {
-            string result = $"GMT{sign}{hours:00}";
-            if (minutes != 0)
-                result += $":{minutes:00}";
-            return result;
+            if (Rune.GetUnicodeCategory(rune) == UnicodeCategory.DecimalDigitNumber)
+            {
+                if (currentSep.Length > 0)
+                {
+                    separators.Add(currentSep);
+                    currentSep = "";
+                }
+                currentGroup.Append(rune.ToString());
+            }
+            else
+            {
+                if (currentGroup.Length > 0)
+                {
+                    groups.Add(currentGroup.ToString());
+                    currentGroup.Clear();
+                }
+                currentSep += rune.ToString();
+            }
+        }
+        if (currentGroup.Length > 0)
+            groups.Add(currentGroup.ToString());
+        if (currentSep.Length > 0 && groups.Count == 0)
+            separators.Add(currentSep);
+
+        if (groups.Count == 0)
+            return FormatDefaultTimezone(hours, minutes, negative, gmtPrefix, separator: ":");
+
+        if (groups.Count == 1)
+        {
+            string group = groups[0];
+            int total = group.Length;
+            var (mandatory, _) = CountTimezoneDigits(group);
+
+            if (total <= 2)
+            {
+                // Hours only; append minutes with default separator only when non-zero.
+                string hourStr = FormatNumberMinWidth(hours, Math.Max(1, total));
+                string result = prefix + hourStr;
+                if (minutes != 0)
+                    result += ":" + minutes.ToString("00", CultureInfo.InvariantCulture);
+                return result;
+            }
+            else
+            {
+                // Concatenated hours and minutes: minutes always two digits.
+                int hourPositions = total - 2;
+                string hourStr = FormatNumberMinWidth(hours, Math.Max(1, hourPositions));
+                string minuteStr = minutes.ToString("00", CultureInfo.InvariantCulture);
+                return prefix + hourStr + minuteStr;
+            }
         }
 
-        // Default [z] => GMT±HH:MM, even for a zero offset.
-        return $"GMT{sign}{hours:00}:{minutes:00}";
+        // Two or more groups: separator present; hours and minutes are always output.
+        // The number of digit positions in each group determines the minimum width.
+        string hourGroup = groups[0];
+        string minuteGroup = groups.Count > 1 ? groups[1] : "00";
+        int hourMin = CountDigitPositions(hourGroup);
+        int minuteMin = CountDigitPositions(minuteGroup);
+        string hourStr2 = FormatNumberMinWidth(hours, Math.Max(1, hourMin));
+        string minuteStr2 = FormatNumberMinWidth(minutes, Math.Max(1, minuteMin));
+        string sep = separators.Count > 0 ? separators[0] : ":";
+        return prefix + hourStr2 + sep + minuteStr2;
+    }
+
+    private static string FormatDefaultTimezone(int hours, int minutes, bool negative, bool gmtPrefix, string separator)
+    {
+        string sign = negative ? "-" : "+";
+        string prefix = gmtPrefix ? "GMT" + sign : sign;
+        return prefix + hours.ToString("00", CultureInfo.InvariantCulture)
+            + separator + minutes.ToString("00", CultureInfo.InvariantCulture);
+    }
+
+    private static string FormatNumberMinWidth(int value, int minWidth)
+    {
+        string s = value.ToString(CultureInfo.InvariantCulture);
+        if (s.Length < minWidth)
+            s = s.PadLeft(minWidth, '0');
+        return s;
+    }
+
+    private static (int mandatory, int optional) CountTimezoneDigits(string group)
+    {
+        int mandatory = 0;
+        int optional = 0;
+        for (int i = 0; i < group.Length;)
+        {
+            if (Rune.TryGetRuneAt(group, i, out var rune)
+                && Rune.GetUnicodeCategory(rune) == UnicodeCategory.DecimalDigitNumber)
+            {
+                int digitValue = CharUnicodeInfo.GetDigitValue(group, i);
+                if (digitValue == 0)
+                    mandatory++;
+                else if (digitValue == 9)
+                    optional++;
+                else
+                    mandatory++;
+                i += rune.Utf16SequenceLength;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        return (mandatory, optional);
+    }
+
+    private static int CountDigitPositions(string group)
+    {
+        int count = 0;
+        for (int i = 0; i < group.Length;)
+        {
+            if (Rune.TryGetRuneAt(group, i, out var rune)
+                && Rune.GetUnicodeCategory(rune) == UnicodeCategory.DecimalDigitNumber)
+            {
+                count++;
+                i += rune.Utf16SequenceLength;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        return count;
+    }
+
+    private static bool IsMandatoryDigit(char c)
+    {
+        if (c >= '0' && c <= '9')
+            return c == '0';
+        // For non-ASCII digit families we cannot distinguish optional from mandatory signs;
+        // treat every digit position as mandatory.
+        return char.GetUnicodeCategory(c) == UnicodeCategory.DecimalDigitNumber;
     }
 
     // ------------------------------------------------------------------
@@ -965,21 +1213,50 @@ internal static class FormatDateTimeEngine
         return true;
     }
 
-    private static string[] GetMonthNames() => CultureInfo.InvariantCulture.DateTimeFormat.MonthNames;
-    private static string[] GetAbbreviatedMonthNames() => CultureInfo.InvariantCulture.DateTimeFormat.AbbreviatedMonthNames;
+    private static string[] GetMonthNames(string? language)
+    {
+        if (IsGerman(language))
+            return GermanMonthNames;
+        return CultureInfo.InvariantCulture.DateTimeFormat.MonthNames;
+    }
+
+    private static string[] GetAbbreviatedMonthNames(string? language)
+    {
+        if (IsGerman(language))
+            return GermanMonthNames; // German abbreviations are the first three letters of the full name
+        return CultureInfo.InvariantCulture.DateTimeFormat.AbbreviatedMonthNames;
+    }
 
     // ISO 8601 ordering: Monday = index 0, Sunday = index 6.
-    private static string[] GetDayNames()
+    private static string[] GetDayNames(string? language)
     {
+        if (IsGerman(language))
+            return GermanDayNames;
         var net = CultureInfo.InvariantCulture.DateTimeFormat.DayNames;
         return new[] { net[(int)DayOfWeek.Monday], net[(int)DayOfWeek.Tuesday], net[(int)DayOfWeek.Wednesday], net[(int)DayOfWeek.Thursday], net[(int)DayOfWeek.Friday], net[(int)DayOfWeek.Saturday], net[(int)DayOfWeek.Sunday] };
     }
 
-    private static string[] GetAbbreviatedDayNames()
+    private static string[] GetAbbreviatedDayNames(string? language)
     {
+        if (IsGerman(language))
+            return GermanDayNames; // German two-letter abbreviations are the first two letters of the full name
         var net = CultureInfo.InvariantCulture.DateTimeFormat.AbbreviatedDayNames;
         return new[] { net[(int)DayOfWeek.Monday], net[(int)DayOfWeek.Tuesday], net[(int)DayOfWeek.Wednesday], net[(int)DayOfWeek.Thursday], net[(int)DayOfWeek.Friday], net[(int)DayOfWeek.Saturday], net[(int)DayOfWeek.Sunday] };
     }
+
+    private static bool IsGerman(string? language)
+        => language is not null && language.StartsWith("de", StringComparison.OrdinalIgnoreCase);
+
+    private static readonly string[] GermanMonthNames =
+    {
+        "Januar", "Februar", "März", "April", "Mai", "Juni",
+        "Juli", "August", "September", "Oktober", "November", "Dezember"
+    };
+
+    private static readonly string[] GermanDayNames =
+    {
+        "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+    };
 
     // ------------------------------------------------------------------
     // ISO week / day-of-week / day-of-year calculation

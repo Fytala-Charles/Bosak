@@ -40,6 +40,8 @@
 //                      | Charles Korthout | 2.8   | 15-07-2026     | Tier-2j: FLWOR 'at $pos'/'where'/mixed chains, strict arithmetic/EBV/atomization, fn:sum/avg/numeric-fn strictness (40 tests) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.9   | 15-07-2026     | Tier-2k: instance-of type annotations, EQName vars, range/round/comparison strictness, outermost/innermost validation, aggregate annotation preservation (61 tests) |
+//                      | Charles Korthout | 2.10  | 16-07-2026     | Tier-2l: timezone, fractional seconds, ISO week-in-month, German names, calendar validation, format-integer CJK/French/Italian (27 tests) |
+//                      | Charles Korthout | 2.11  | 16-07-2026     | Tier-2l: 32 format picture/locale tests, [Z99] zero-padding, calendar namespace fallback |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -3967,4 +3969,132 @@ public class Tier2kValidationTests
         Assert.Equal("true", EvalStr("some $x in (1, 2) satisfies $x > 1"));
         Assert.Equal("true", EvalStr("every $x in (1, 2) satisfies $x > 0"));
     }
+}
+
+public class Tier2lFormatDateTimeIntegerTests
+{
+    private static XdmValue Evaluate(string xpath)
+    {
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        return XPath31Expression.Compile(xpath).Evaluate(ctx);
+    }
+
+    private static string EvalStr(string xpath) => Evaluate(xpath).ToString()!;
+
+    [Fact]
+    public void Timezone_MilitaryLetters()
+        => Assert.Equal("Y X W V U T S R Q P O N Z A B C D E F G H I K L M",
+            EvalStr("string-join(for $z in -12 to +12 return format-date(adjust-date-to-timezone(xs:date('1985-03-01Z'), $z*xs:dayTimeDuration('PT1H')), '[ZZ]'), ' ')"));
+
+    [Fact]
+    public void Timezone_MilitaryMissingTimezone_IsJ()
+        => Assert.Equal("J", EvalStr("format-date(xs:date('1987-12-13'), '[ZZ]')"));
+
+    [Fact]
+    public void Timezone_AlternateSeparator()
+        => Assert.Equal("GMT-14~00; GMT-13~30; GMT-13~00; GMT-12~30; GMT-12~00; GMT-11~30; GMT-11~00; GMT-10~30; GMT-10~00; GMT-09~30; GMT-09~00; GMT-08~30; GMT-08~00; GMT-07~30; GMT-07~00; GMT-06~30; GMT-06~00; GMT-05~30; GMT-05~00; GMT-04~30; GMT-04~00; GMT-03~30; GMT-03~00; GMT-02~30; GMT-02~00; GMT-01~30; GMT-01~00; GMT-00~30; GMT+00~00; GMT+00~30; GMT+01~00; GMT+01~30; GMT+02~00; GMT+02~30; GMT+03~00; GMT+03~30; GMT+04~00; GMT+04~30; GMT+05~00; GMT+05~30; GMT+06~00; GMT+06~30; GMT+07~00; GMT+07~30; GMT+08~00; GMT+08~30; GMT+09~00; GMT+09~30; GMT+10~00; GMT+10~30; GMT+11~00; GMT+11~30; GMT+12~00; GMT+12~30; GMT+13~00; GMT+13~30; GMT+14~00",
+            EvalStr("string-join(for $z in -28 to +28 return format-date(adjust-date-to-timezone(xs:date('1985-03-01Z'), $z*xs:dayTimeDuration('PT30M')), '[z00~00]'), '; ')"));
+
+    [Fact]
+    public void Timezone_ThreeDigitWithSeparator()
+        => Assert.Equal("-14:00; -13:30; -13:00; -12:30; -12:00; -11:30; -11:00; -10:30; -10:00; -9:30; -9:00; -8:30; -8:00; -7:30; -7:00; -6:30; -6:00; -5:30; -5:00; -4:30; -4:00; -3:30; -3:00; -2:30; -2:00; -1:30; -1:00; -0:30; +0:00; +0:30; +1:00; +1:30; +2:00; +2:30; +3:00; +3:30; +4:00; +4:30; +5:00; +5:30; +6:00; +6:30; +7:00; +7:30; +8:00; +8:30; +9:00; +9:30; +10:00; +10:30; +11:00; +11:30; +12:00; +12:30; +13:00; +13:30; +14:00",
+            EvalStr("string-join(for $z in -28 to +28 return format-date(adjust-date-to-timezone(xs:date('1985-03-01Z'), $z*xs:dayTimeDuration('PT30M')), '[Z0:01]'), '; ')"));
+
+    [Fact]
+    public void Timezone_ThreeDigitNoSeparator()
+        => Assert.Equal("-1400; -1330; -1300; -1230; -1200; -1130; -1100; -1030; -1000; -930; -900; -830; -800; -730; -700; -630; -600; -530; -500; -430; -400; -330; -300; -230; -200; -130; -100; -030; +000; +030; +100; +130; +200; +230; +300; +330; +400; +430; +500; +530; +600; +630; +700; +730; +800; +830; +900; +930; +1000; +1030; +1100; +1130; +1200; +1230; +1300; +1330; +1400",
+            EvalStr("string-join(for $z in -28 to +28 return format-date(adjust-date-to-timezone(xs:date('1985-03-01Z'), $z*xs:dayTimeDuration('PT30M')), '[Z999]'), '; ')"));
+
+    [Fact]
+    public void Timezone_TwoDigitOptionalHours()
+        => Assert.Equal("-14; -13:30; -13; -12:30; -12; -11:30; -11; -10:30; -10; -09:30; -09; -08:30; -08; -07:30; -07; -06:30; -06; -05:30; -05; -04:30; -04; -03:30; -03; -02:30; -02; -01:30; -01; -00:30; +00; +00:30; +01; +01:30; +02; +02:30; +03; +03:30; +04; +04:30; +05; +05:30; +06; +06:30; +07; +07:30; +08; +08:30; +09; +09:30; +10; +10:30; +11; +11:30; +12; +12:30; +13; +13:30; +14",
+            EvalStr("string-join(for $z in -28 to +28 return format-date(adjust-date-to-timezone(xs:date('1985-03-01Z'), $z*xs:dayTimeDuration('PT30M')), '[Z99]'), '; ')"));
+
+    [Fact]
+    public void Timezone_OneDigitWithTFlag()
+        => Assert.Equal("-14; -13:30; -13; -12:30; -12; -11:30; -11; -10:30; -10; -9:30; -9; -8:30; -8; -7:30; -7; -6:30; -6; -5:30; -5; -4:30; -4; -3:30; -3; -2:30; -2; -1:30; -1; -0:30; Z; +0:30; +1; +1:30; +2; +2:30; +3; +3:30; +4; +4:30; +5; +5:30; +6; +6:30; +7; +7:30; +8; +8:30; +9; +9:30; +10; +10:30; +11; +11:30; +12; +12:30; +13; +13:30; +14",
+            EvalStr("string-join(for $z in -28 to +28 return format-date(adjust-date-to-timezone(xs:date('1985-03-01Z'), $z*xs:dayTimeDuration('PT30M')), '[Z0t]'), '; ')"));
+
+    [Fact]
+    public void Timezone_GmtTwoDigitHours()
+        => Assert.Equal("0715GMT-14; 0745GMT-13:30; 0815GMT-13; 0845GMT-12:30; 0915GMT-12; 0945GMT-11:30; 1015GMT-11; 1045GMT-10:30; 1115GMT-10; 1145GMT-09:30; 1215GMT-09; 1245GMT-08:30; 0115GMT-08; 0145GMT-07:30; 0215GMT-07; 0245GMT-06:30; 0315GMT-06; 0345GMT-05:30; 0415GMT-05; 0445GMT-04:30; 0515GMT-04; 0545GMT-03:30; 0615GMT-03; 0645GMT-02:30; 0715GMT-02; 0745GMT-01:30; 0815GMT-01; 0845GMT-00:30; 0915GMT+00; 0945GMT+00:30; 1015GMT+01; 1045GMT+01:30; 1115GMT+02; 1145GMT+02:30; 1215GMT+03; 1245GMT+03:30; 0115GMT+04; 0145GMT+04:30; 0215GMT+05; 0245GMT+05:30; 0315GMT+06; 0345GMT+06:30; 0415GMT+07; 0445GMT+07:30; 0515GMT+08; 0545GMT+08:30; 0615GMT+09; 0645GMT+09:30; 0715GMT+10; 0745GMT+10:30; 0815GMT+11; 0845GMT+11:30; 0915GMT+12; 0945GMT+12:30; 1015GMT+13; 1045GMT+13:30; 1115GMT+14",
+            EvalStr("string-join(for $z in -28 to +28 return format-dateTime(adjust-dateTime-to-timezone(xs:dateTime('0985-03-01T09:15:06.456Z'), $z*xs:dayTimeDuration('PT30M')), '[h01][m01][z00]'), '; ')"));
+
+    [Theory]
+    [InlineData("[f,4-4]", "0060")]
+    [InlineData("[f,1-4]", "006")]
+    [InlineData("[f,2-5]", "006")]
+    [InlineData("[f,2-2]", "00")]
+    [InlineData("[f,1-*]", "006")]
+    [InlineData("[f,*-2]", "0")]
+    [InlineData("[f,3]", "006")]
+    public void FractionalSeconds_WidthModifiers(string picture, string expected)
+        => Assert.Equal(expected, EvalStr($"format-time(xs:time('09:15:06.006'), '{picture}')"));
+
+    [Fact]
+    public void IsoWeekInMonth_FirstOfMonth2006()
+        => Assert.Equal("5 1 1 5 1 1 5 1 5 4 1 5",
+            EvalStr("string-join(for $m in 1 to 12 return format-dateTime(xs:dateTime(concat('2006-', format-number($m,'00'), '-01T12:00:00')), '[w]'), ' ')"));
+
+    [Fact]
+    public void IsoWeekInMonth_FirstOfMonth2007()
+        => Assert.Equal("1 1 1 5 1 5 4 1 5 1 1 5",
+            EvalStr("string-join(for $m in 1 to 12 return format-dateTime(xs:dateTime(concat('2007-', format-number($m,'00'), '-01T12:00:00')), '[w]'), ' ')"));
+
+    [Fact]
+    public void Calendar_EqNameIso_RemovesFallbackMarker()
+        => Assert.Equal("[2004-01-01:04]",
+            EvalStr("concat('[', xs:date('2003-12-01') + xs:yearMonthDuration('P1M'), ':', format-date(xs:date('2003-12-01') + xs:yearMonthDuration('P1M'), '[F01]', (), 'Q{}ISO', ()), ']')"));
+
+    [Fact]
+    public void DayOfYear_DefaultWidth_IsOneDigit()
+        => Assert.Equal("32", EvalStr("format-date(xs:date('2003-02-01'), '[d]')"));
+
+    [Theory]
+    [InlineData("[MN]", "JANUAR FEBRUAR MÄRZ APRIL MAI JUNI JULI AUGUST SEPTEMBER OKTOBER NOVEMBER DEZEMBER")]
+    [InlineData("[MN,3-3]", "JAN FEB MÄR APR MAI JUN JUL AUG SEP OKT NOV DEZ")]
+    public void German_MonthNames(string picture, string expected)
+        => Assert.Equal(expected,
+            EvalStr($"string-join(for $i in 1 to 12 return format-date(xs:date('2003-12-07') + xs:yearMonthDuration('P1M')*$i, '{picture}', 'de', (), ()), ' ')"));
+
+    [Theory]
+    [InlineData("[FN]", "MONTAG DIENSTAG MITTWOCH DONNERSTAG FREITAG SAMSTAG SONNTAG")]
+    [InlineData("[FN,2-2]", "MO DI MI DO FR SA SO")]
+    public void German_DayNames(string picture, string expected)
+        => Assert.Equal(expected,
+            EvalStr($"string-join(for $i in 1 to 7 return format-date(xs:date('2003-12-07') + xs:dayTimeDuration('P1D')*$i, '{picture}', 'de', (), ()), ' ')"));
+
+    [Fact]
+    public void RomanYear_MaxWidth_TruncatesModulo1000()
+        => Assert.Equal("dcccxvii; dcccxxxiv; dcccli; dccclxviii; dccclxxxv",
+            EvalStr("string-join(for $i in 1 to 5 return format-dateTime(xs:dateTime('0800-01-01T12:00:00') + xs:yearMonthDuration('P17Y')*$i, '[Yi,3-3]'), '; ')"));
+
+    [Theory]
+    [InlineData(":w")]
+    [InlineData("Q{}1")]
+    [InlineData("ZODIAC")]
+    [InlineData("Q{}ZODIAC")]
+    public void Calendar_InvalidOrUnknown_RaisesFOFD1340(string calendar)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate($"format-date(xs:date('2003-12-01'), '[Y]', (), '{calendar}', ())"));
+        Assert.Contains("FOFD1340", ex.Message);
+    }
+
+    [Fact]
+    public void FormatInteger_FrenchOrdinal()
+        => Assert.Equal("Deuxième", EvalStr("format-integer(2, 'Ww;o', 'fr')"));
+
+    [Fact]
+    public void FormatInteger_ItalianGenderedOrdinal()
+        => Assert.Equal("Quinto;Quinta", EvalStr("format-integer(5, 'Ww;o(-o)', 'it') || ';' || format-integer(5, 'Ww;o(-a)', 'it')"));
+
+    [Fact]
+    public void FormatInteger_EnglishOrdinalLanguageHint()
+        => Assert.Equal("1st", EvalStr("format-integer(1, '1;o(-en)')"));
+
+    [Fact]
+    public void FormatInteger_CjkKanji()
+        => Assert.Equal("1=一|2=二|3=三|4=四|5=五|6=六|7=七|8=八|9=九|10=十|11=十一|12=十二|13=十三|14=十四|15=十五|16=十六|17=十七|18=十八|19=十九|20=二十|21=二十一|22=二十二|23=二十三|151=百五十一|302=三百二|469=四百六十九|2025=二千二十五",
+            EvalStr("string-join(for $i in (1 to 23, 151, 302, 469, 2025) return concat($i, '=', format-integer($i, '一')), '|')"));
 }
