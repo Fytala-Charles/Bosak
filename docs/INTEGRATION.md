@@ -555,7 +555,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 ## 5. XPath 3.1 Feature Highlights
 
 ### Well-covered areas
-- Sequence construction, filtering, FLWOR expressions
+- Sequence construction, filtering, FLWOR expressions (`for`/`let` chains, `at $pos` positional variables, `where` clauses)
 - Standard `fn:*` functions (string, numeric, date/time, QName, URI)
 - `map:*` and `array:*` functions
 - Higher-order functions (`fn:for-each`, `fn:filter`, `fn:fold-left`, etc.)

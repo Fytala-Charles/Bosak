@@ -1,5 +1,34 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-16
+**Commit:** `e5bcb6c` (QT3 Tier-2j: FLWOR completion)
+**Current focus:** **QT3 XPath 3.1 suite: 21,688 passed / 849 failed / 9,284 skipped (68.16%)** — up from 21,543/994 (67.70%): **+146 fixed, 1 documented spec-superset tradeoff** (name-level diff vs `tmp/qt3-t2i-full.log`). FLWOR pool CLEARED: K-ForExprPositionalVar (29), statictyping (23), K-WhereExpr (11), whereClause (10) = 73/73, plus 73 bonus (WhereExpr 7, fn-abs-more-args 10, K-LogicExpr 7, cbcl-hash-join 6, K-Numeric* 11, K-SeqSUMFunc 4, K-SeqAVGFunc 2, K-QuantExprWithout 2, LetExpr 2, K2-ForExprPositionalVar 2, op-numeric-* 6, …). Unit tests 1,186/0 (+40). **Tradeoff:** `LetExpr020a` expects XPST0003 for chained `let` clauses (XPath 3.0/3.1 grammar restriction); Bosak intentionally implements the XQuery FLWOR superset (chains required by statictyping-21 et al.) — the two are mutually exclusive under one grammar. Next pools: fn-transform (61, genuine XSLT), format-date/time/dateTime/integer picture+locale (~42), K2-SeqExprInstanceOf (16, string-derived type chain missing in `GetDirectSupertypes`), RangeExpr/K-RangeExpr (16, XPTY0004 operand validation), fn-outermost/innermost (16), collection/fn-collection FODC (18), eqname (13, whitespace in `Q{ uri }local`), BigInteger/arbitrary-precision decimal (12+, deferred — same-key-008 needs it).
+
+---
+
+## This Session Fixes (Tier-2j: FLWOR completion)
+
+1. **Parser: full FLWOR clause loop** (`XPathParser.ParseFlworExpr`) — replaces single-clause `for`/`let` parsing. Parses an initial `for`/`let` clause, any number of intermediate `for`/`let`/`where` clauses, then `return`, folding right-to-left into nested `ForExpressionNode`/`LetExpressionNode`/`IfExpressionNode`. `where C` desugars to `if (C) then body else ()`. `where` and `at` are **contextual keywords** recognized as `Name` tokens at clause/binding level — no lexer changes, so `for $where in ... return $where` and element names `at`/`where` still parse.
+2. **Positional variables (`at $pos`)** — `QuantifiedBinding` gains optional `PositionalVariableName`; `QuantifiedLoopInfo` carries it through the literal pool; the `For` VM opcode binds a 1-based `xs:integer` position per iteration with save/restore semantics (out-of-scope after the loop → XPST0008, K-ForExprPositionalVar-1). Quantified `some`/`every` bindings reject `at` (parse error preserved).
+3. **Strict atomization** — `VmEngine.Atomize` now throws XPTY0004 for multi-item sequences (was lenient first-item with a comment admitting non-conformance). Fixes `(1,2,3) + 1`, K-QuantExprWithout cases, and cascades through arithmetic/value comparisons.
+4. **Strict arithmetic operands** — new `ValidateNumericOperand` guard in all arithmetic paths (`Add`/`Subtract`/`Multiply`/`Divide`/`IntegerDivide`/`Modulo`/`Negate`, after date/duration special cases): operands must be numeric or xs:untypedAtomic after atomization; xs:string/xs:boolean → XPTY0004 (`"2" + 1`, `1 + true()`, `$p + "1"`). XPath 1.0 BC mode (`ToDoubleOrNaN`) untouched.
+5. **EBV corrections** (`XdmValue.EffectiveBooleanValue`) — xs:anyURI is string-like (non-empty → true); date/time/dateTime/duration/QName/binary atomics now throw FORG0006 (was `false`) — `where xs:time(...)` correctly errors (K-WhereExpr-4).
+6. **Numeric function strictness** (`FunctionLibrary`) — `ConvertToDouble` (shared by abs/floor/ceiling/round/round-half-to-even) rejects non-numeric non-untypedAtomic args with XPTY0004 (`fn:abs('a')`, `fn:abs(true())`); `fn:sum`/`fn:avg` throw FORG0006 for xs:string/xs:boolean items (only xs:untypedAtomic coerces) — statictyping-2/6, K-SeqSUMFunc/AVGFunc.
+7. **Optimizer** — `QuantifiedBinding` rebuilds preserve `PositionalVariableName` (would have been silently dropped by the new default parameter).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (v1.10: FLWOR clause loop, `at $pos`, `where`, chains)
+- `src/Bosak.XPath.Parser/Ast/XPathAstNode.cs` (v0.4: QuantifiedBinding.PositionalVariableName)
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs` (v1.9: QuantifiedLoopInfo positional variable)
+- `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs` (v0.6: preserve positional variable)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.39: For opcode positional binding, strict Atomize, ValidateNumericOperand)
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v1.3: EBV anyURI/FORG0006 corrections)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.40: numeric fn + sum/avg strictness)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.8: +40 Tier-2j tests)
+
+---
+
 **Date:** 2026-07-15
 **Commit:** `56bd57d` (QT3 Tier-2i: MapTest/ArrayTest pool)
 **Current focus:** **QT3 XPath 3.1 suite: 21,543 passed / 994 failed / 9,284 skipped (67.70%)** — up from 21,454/1,083 (67.42%): **+89 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2h-full.log`). MapTest/ArrayTest pool CLEARED (all 86 + 3 bonus: instanceof128/129/130, same-key-004/005/021, d1e77419). Unit tests 1,146/0 (+59). Next pools: K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), format-date/time picture+locale (~50), collection/fn-doc FODC000x (11), cbcl-castable (8), duration arith FODT0002 (8), BigInteger/arbitrary-precision decimal (12+, deferred — same-key-008 needs it).
