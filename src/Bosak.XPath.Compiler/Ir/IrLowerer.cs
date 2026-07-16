@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.6   | 25-06-2026     | Named node tests on element-principal axes filter to element kind first                |
 //                      | Charles Korthout | 1.7   | 26-06-2026     | Lower Q{uri}* URI-qualified wildcards to NamespaceTest                                  |
 //                      | Charles Korthout | 1.8   | 13-07-2026     | Partial application (placeholders) for dynamic function calls (higher-order-func-045)   |
+//                      | Charles Korthout | 1.9   | 15-07-2026     | QuantifiedLoopInfo carries optional positional variable for FLWOR 'at $pos'             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -39,7 +40,7 @@ namespace Bosak.XPath.Compiler.Ir;
 /// <summary>
 /// Loop information stored in the literal pool for For/Some/Every opcodes.
 /// </summary>
-public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint);
+public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null);
 
 /// <summary>
 /// Try/catch information stored in the literal pool for the TryCatch opcode.
@@ -1204,7 +1205,7 @@ public sealed class IrLowerer
         }
 
         int afterRhs = _instructions.Count;
-        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);

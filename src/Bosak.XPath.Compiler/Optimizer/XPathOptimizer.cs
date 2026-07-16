@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 21-05-2026     | Integer div constant fold produces DecimalLiteralNode (XPath div semantics)            |
 //                      | Charles Korthout | 0.4   | 26-06-2026     | Backwards-compatible mode promotes integer arithmetic folding to xs:double            |
 //                      | Charles Korthout | 0.5   | 07-07-2026     | Preserve negative-zero unary minus in BC mode; fixes xpath-compat-0101               |
+//                      | Charles Korthout | 0.6   | 15-07-2026     | Preserve PositionalVariableName when rebuilding QuantifiedBinding (FLWOR 'at $pos')     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -429,7 +430,7 @@ public sealed class XPathOptimizer
         foreach (var b in node.Bindings)
         {
             var expr = OptimizeNode(b.Expression, ref changed);
-            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr));
+            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName));
         }
 
         var body = OptimizeNode(node.ReturnExpression, ref changed);
@@ -449,7 +450,7 @@ public sealed class XPathOptimizer
         foreach (var b in node.Bindings)
         {
             var expr = OptimizeNode(b.Expression, ref changed);
-            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr));
+            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName));
         }
 
         var body = OptimizeNode(node.SatisfiesExpression, ref changed);
@@ -613,7 +614,7 @@ public sealed class XPathOptimizer
         foreach (var binding in node.Bindings)
         {
             var optExpr = OptimizeNode(binding.Expression, ref changed);
-            newBindings.Add(new QuantifiedBinding(binding.VariableName, optExpr));
+            newBindings.Add(new QuantifiedBinding(binding.VariableName, optExpr, binding.PositionalVariableName));
             if (optExpr != binding.Expression) bindingsChanged = true;
         }
         var body = OptimizeNode(node.Body, ref changed);

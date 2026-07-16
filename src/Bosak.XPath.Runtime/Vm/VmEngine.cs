@@ -71,6 +71,7 @@
 //                      | Charles Korthout | 2.36  | 15-07-2026     | Lookup semantics: container-major multi-key, single-result unwrap, strict xs:integer array keys (FOAY0001 bounds/XPTY0004 type), array-as-function via shared ArrayLookup, CompareGeneral atomizes arrays |
 //                      | Charles Korthout | 2.37  | 15-07-2026     | MapAdd raises XQDY0137 on duplicate keys in map constructors (serialize-xml-119/124/125) |
 //                      | Charles Korthout | 2.38  | 15-07-2026     | Tier-2i: strict singleton map keys (XPTY0004); Exists/Empty opcodes count-based; parameterized map(K,V)/array(T)/function(A)-as-R instance-of routing; maps/arrays match function(*); map/array-as-function value rule; named-fn signature checks with context; structural function-family subtyping (MapTest-050..054); XPST0003/XPST0051 map-type validation |
+//                      | Charles Korthout | 2.39  | 15-07-2026     | Tier-2j: For opcode binds optional positional variable (1-based); Atomize raises XPTY0004 on multi-item sequences; arithmetic operands validated numeric/untypedAtomic (XPTY0004) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -581,12 +582,19 @@ public static class VmEngine
                         var results = new List<XdmValue>();
 
                         bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
+                        XdmValue savedPosVar = default;
+                        bool hadPosVariable = info.PositionalVariableName is not null &&
+                                              context.TryGetVariable(info.PositionalVariableName, out savedPosVar);
 
+                        int position = 0;
                         foreach (var item in items)
                         {
+                            position++;
                             // FLWOR for-expression does NOT change the focus;
-                            // it only binds the variable.
+                            // it only binds the variable (and optional positional variable).
                             context.WithVariable(info.VariableName, item);
+                            if (info.PositionalVariableName is not null)
+                                context.WithVariable(info.PositionalVariableName, XdmValue.FromInteger(position));
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
 
                             if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
@@ -604,6 +612,14 @@ public static class VmEngine
                             context.WithVariable(info.VariableName, savedVar);
                         else
                             context.RemoveVariable(info.VariableName);
+
+                        if (info.PositionalVariableName is not null)
+                        {
+                            if (hadPosVariable)
+                                context.WithVariable(info.PositionalVariableName, savedPosVar);
+                            else
+                                context.RemoveVariable(info.PositionalVariableName);
+                        }
 
                         registers[instr.RegisterA] = XdmValue.FromSequence(
                             MaterializedSequence.FromList(results));
@@ -2266,9 +2282,10 @@ public static class VmEngine
                 return Atomize(items[0]);
             if (items.Length == 0)
                 return XdmValue.Undefined;
-            // For value comparisons with multiple items, take the first
-            // (strictly this is an error in XPath, but we are lenient).
-            return Atomize(items[0]);
+            // Singleton requirement (fn:data, arithmetic, value comparisons):
+            // atomization of a multi-item sequence is a type error.
+            throw new InvalidOperationException(
+                "XPTY0004: Atomization requires a singleton or empty sequence, but got a sequence of length " + items.Length);
         }
 
         return value;
@@ -2449,6 +2466,8 @@ public static class VmEngine
         if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
             return AddDurations(left, right);
 
+        ValidateNumericOperand(left);
+        ValidateNumericOperand(right);
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
         if (IsFloat(left) || IsFloat(right))
@@ -2578,6 +2597,8 @@ public static class VmEngine
         if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
             return SubtractDurations(left, right);
 
+        ValidateNumericOperand(left);
+        ValidateNumericOperand(right);
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
         if (IsFloat(left) || IsFloat(right))
@@ -3029,6 +3050,8 @@ public static class VmEngine
         if (right.Kind == XdmValueKind.Duration)
             return MultiplyDuration(right, left);
 
+        ValidateNumericOperand(left);
+        ValidateNumericOperand(right);
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) * ToDouble(right));
         if (IsFloat(left) || IsFloat(right))
@@ -3065,6 +3088,8 @@ public static class VmEngine
         if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
             return DivideDurationByDuration(left, right);
 
+        ValidateNumericOperand(left);
+        ValidateNumericOperand(right);
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
         if (IsFloat(left) || IsFloat(right))
@@ -3094,6 +3119,8 @@ public static class VmEngine
         if (context.BackwardsCompatible)
             return XdmValue.FromInteger((long)(ToDoubleOrNaN(left) / ToDoubleOrNaN(right)));
 
+        ValidateNumericOperand(left);
+        ValidateNumericOperand(right);
         if (IsDouble(left) || IsDouble(right))
         {
             if (ToDouble(right) == 0)
@@ -3140,6 +3167,8 @@ public static class VmEngine
         if (context.BackwardsCompatible)
             return XdmValue.FromDouble(ToDoubleOrNaN(left) % ToDoubleOrNaN(right));
 
+        ValidateNumericOperand(left);
+        ValidateNumericOperand(right);
         if (IsDouble(left) || IsDouble(right))
         {
             if (ToDouble(right) == 0)
@@ -3192,6 +3221,7 @@ public static class VmEngine
                 return XdmValue.FromDuration(s[1..]);
             return XdmValue.FromDuration("-" + s);
         }
+        ValidateNumericOperand(value);
         if (IsDouble(value))
             return XdmValue.FromDouble(-ToDouble(value));
         if (IsFloat(value))
@@ -3803,6 +3833,22 @@ public static class VmEngine
 
     private static bool IsNumeric(XdmValue value)
         => IsDouble(value) || IsFloat(value) || IsDecimal(value) || value.Kind == XdmValueKind.Integer;
+
+    /// <summary>
+    /// Validates that an arithmetic operand is numeric or xs:untypedAtomic after atomization.
+    /// Date/time and duration operands must be handled by the caller before this check.
+    /// Throws XPTY0004 for xs:string, xs:boolean and other non-numeric atomic types.
+    /// </summary>
+    private static void ValidateNumericOperand(XdmValue value)
+    {
+        var atomized = Atomize(value);
+        if (atomized.IsUndefined)
+            return; // empty-sequence operands are handled by the caller
+        if (IsNumeric(atomized) || IsUntypedAtomic(atomized))
+            return;
+        throw new InvalidOperationException(
+            $"XPTY0004: Arithmetic operands must be numeric or xs:untypedAtomic values, but got {atomized.Kind}");
+    }
 
     private static bool IsUntypedAtomic(XdmValue value)
         => value.Kind == XdmValueKind.String &&

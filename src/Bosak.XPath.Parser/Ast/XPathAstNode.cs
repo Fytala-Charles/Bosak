@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added LookupWildcardNode                                                               |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added OccurrenceIndicator to type expression nodes                                       |
+//                      | Charles Korthout | 0.4   | 15-07-2026     | Added PositionalVariableName to QuantifiedBinding (FLWOR 'at $pos')                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
@@ -95,7 +96,7 @@ public sealed record ForExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings
 public sealed record LetExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode Body) : XPathAstNode;
 public sealed record QuantifiedExpressionNode(QuantifierKind Quantifier, IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode SatisfiesExpression) : XPathAstNode;
 
-public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression);
+public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null);
 
 // ------------------------------------------------------------------
 // Binary / Unary expressions

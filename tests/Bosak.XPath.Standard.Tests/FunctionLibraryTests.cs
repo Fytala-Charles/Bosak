@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 2.5   | 15-07-2026     | json-to-xml tests: retain/use-first duplicates, escape attrs, surrogates, () input, eager option validation; parse-json quote decoding
 //                      | Charles Korthout | 2.6   | 15-07-2026     | fn:serialize tests: xml declaration/standalone, item-separator, char maps, CDATA, element form, json/adaptive methods, SENR0001/SERE002x/SEPM001x/XQDY0137
 //                      | Charles Korthout | 2.7   | 15-07-2026     | Tier-2i: map:merge options, strict keys, numeric/duration key equality, array bounds, FORG0006 EBV, map(K,V)/array(T)/function-type tests, deep-equal map collation |
+//                      | Charles Korthout | 2.8   | 15-07-2026     | Tier-2j: FLWOR 'at $pos'/'where'/mixed chains, strict arithmetic/EBV/atomization, fn:sum/avg/numeric-fn strictness (40 tests) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -3502,4 +3503,223 @@ public class Tier2iMapArrayTests
     public void DeepEqual_MapKeys_IgnoreCollation()
         => Assert.Equal("false", EvalStr(
             "deep-equal(map{'a':1}, map{'A':1}, 'http://www.w3.org/2013/collation/UCA?strength=secondary')"));
+}
+
+// ===========================================================================================================================================================
+// Tier-2j: FLWOR completion — 'at $pos' positional variables, 'where' clause, mixed for/let chains,
+// plus strict arithmetic / EBV / atomization type checking.
+// ===========================================================================================================================================================
+public class Tier2jFlworTests
+{
+    private static XdmValue Evaluate(string xpath)
+    {
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        return XPath31Expression.Compile(xpath).Evaluate(ctx);
+    }
+
+    private static string EvalStr(string xpath) => Evaluate(xpath).ToString();
+
+    private static IReadOnlyList<string> EvalItems(string xpath)
+    {
+        var result = Evaluate(xpath);
+        var items = new List<string>();
+        if (result.IsSequence && result.SequenceValue is not null)
+            foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                items.Add(item.ToString());
+        else if (!result.IsUndefined)
+            items.Add(result.ToString());
+        return items;
+    }
+
+    // ----- Positional variables (at $pos) -------------------------------
+
+    [Fact]
+    public void ForPositional_BindsOneBasedPosition()
+        => Assert.Equal(new[] { "1", "2", "3" }, EvalItems("for $i at $p in (10, 20, 30) return $p"));
+
+    [Fact]
+    public void ForPositional_PairsWithItem()
+        => Assert.Equal(new[] { "10", "1", "20", "2", "30", "3" },
+            EvalItems("for $i at $p in (10, 20, 30) return ($i, $p)"));
+
+    [Fact]
+    public void ForPositional_EmptyInput_BindsNothing()
+        => Assert.Empty(EvalItems("for $i at $p in () return $p"));
+
+    [Fact]
+    public void ForPositional_MultipleBindings_EachTracksOwnSequence()
+        => Assert.Equal(new[] { "1", "1", "1", "2", "2", "1", "2", "2" },
+            EvalItems("for $a at $p1 in (1, 2), $b at $p2 in (1, 2) return ($p1, $p2)"));
+
+    [Fact]
+    public void ForPositional_OutOfScopeAfterLoop_RaisesXPST0008()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("for $a at $p in (1, 2) return 1, $p"));
+        Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void ForPositional_MissingDollar_IsParseError()
+        => Assert.Throws<Bosak.XPath.Parser.ParseException>(() => Evaluate("for $a at p1 in 1 return 1"));
+
+    [Fact]
+    public void ForPositional_RestoresShadowedOuterVariable()
+        => Assert.Equal(new[] { "7", "outer" }, EvalItems(
+            "let $p := 'outer' return ((for $i at $p in (7, 8) return $i)[1], $p)"));
+
+    // ----- where clause ---------------------------------------------------
+
+    [Fact]
+    public void Where_FiltersItems()
+        => Assert.Equal(new[] { "3" }, EvalItems("(for $fo in (1, 2, 3) where $fo eq 3 return $fo)"));
+
+    [Fact]
+    public void Where_FalseCondition_YieldsEmpty()
+        => Assert.Equal("true", EvalStr("empty(for $i in 1 where false() return $i)"));
+
+    [Fact]
+    public void Where_OnLet_FiltersSingleTuple()
+        => Assert.Equal("true", EvalStr("let $var := (fn:true()) where $var or fn:true() return $var"));
+
+    [Fact]
+    public void Where_UsesPositionalVariable()
+        => Assert.Equal(new[] { "10", "30" },
+            EvalItems("for $file at $offset in (10, 20, 30, 40) where $offset mod 2 = 1 return $file"));
+
+    [Fact]
+    public void Where_MultipleClauses_BothApply()
+        => Assert.Empty(EvalItems("for $x in (1, 2) where true() where false() return $x"));
+
+    [Fact]
+    public void Where_NonBooleanEbvAtomic_RaisesFORG0006()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("count((for $fo in (1, 2, 3) where xs:time('08:08:23Z') return $fo))"));
+        Assert.Contains("FORG0006", ex.Message);
+    }
+
+    // ----- Mixed for/let chains -------------------------------------------
+
+    [Fact]
+    public void Chain_LetLet_BindsSequentially()
+        => Assert.Equal("2", EvalStr("let $x := 1 let $z := $x + 1 return $z"));
+
+    [Fact]
+    public void Chain_LetLet_UndefinedVariable_RaisesXPST0008()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("let $x := 1 let $z := $x + $y return $x"));
+        Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void Chain_ForFor_InnerSeesOuterBinding()
+        => Assert.Equal(new[] { "2", "5", "4", "6", "6", "7" },
+            EvalItems("for $x in (1, 2, 3) for $z in ($x, 4) return $x + $z"));
+
+    [Fact]
+    public void Chain_ForLet_LetSeesPositionalVariable()
+        => Assert.Equal(new[] { "2", "1", "3", "2", "4", "3", "5", "4" },
+            EvalItems("for $i at $pos in (3 to 6) let $let := $pos + 1 return ($let, $let - 1)"));
+
+    [Fact]
+    public void Chain_VariableNamedWhere_StillWorks()
+        => Assert.Equal(new[] { "4", "5" }, EvalItems("for $where in (4, 5) return $where"));
+
+    // ----- Strict arithmetic operands -------------------------------------
+
+    [Theory]
+    [InlineData("\"2\" + 1")]
+    [InlineData("1 + true()")]
+    [InlineData("-(\"2\")")]
+    [InlineData("for $i at $p in (1, 2, 3) return $p + \"1\"")]
+    public void Arithmetic_NonNumericOperand_RaisesXPTY0004(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Arithmetic_MultiItemOperand_RaisesXPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("(1, 2, 3) + 1"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Arithmetic_UntypedAtomicOperand_PromotesToDouble()
+        => Assert.Equal("3", EvalStr("let $x := xs:untypedAtomic('2') return $x + 1"));
+
+    [Fact]
+    public void Arithmetic_DatePlusDuration_StillWorks()
+        => Assert.Equal("2020-01-02", EvalStr("xs:date('2020-01-01') + xs:dayTimeDuration('P1D')"));
+
+    // ----- EBV strictness --------------------------------------------------
+
+    [Theory]
+    [InlineData("if (xs:date('2020-01-01')) then 1 else 2")]
+    [InlineData("if (xs:dayTimeDuration('P1D')) then 1 else 2")]
+    public void Ebv_NonBooleanAtomic_RaisesFORG0006(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("FORG0006", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("if (xs:anyURI('http://x')) then 1 else 2", "1")]
+    [InlineData("if (xs:anyURI('')) then 1 else 2", "2")]
+    public void Ebv_AnyUri_BehavesLikeString(string expr, string expected)
+        => Assert.Equal(expected, EvalStr(expr));
+
+    // ----- Numeric function strictness ------------------------------------
+
+    [Theory]
+    [InlineData("fn:abs('a')")]
+    [InlineData("fn:floor('2.5')")]
+    [InlineData("fn:ceiling('2.5')")]
+    [InlineData("fn:round('2.5')")]
+    [InlineData("fn:abs(true())")]
+    public void NumericFunction_StringOrBooleanArg_RaisesXPTY0004(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Sum_StringItem_RaisesFORG0006()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:sum(('a', 1))"));
+        Assert.Contains("FORG0006", ex.Message);
+    }
+
+    [Fact]
+    public void Avg_StringItem_RaisesFORG0006()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:avg(('a', 1))"));
+        Assert.Contains("FORG0006", ex.Message);
+    }
+
+    [Fact]
+    public void Sum_UntypedAtomicItems_SumsAsDouble()
+        => Assert.Equal("3", EvalStr("fn:sum((xs:untypedAtomic('1'), xs:untypedAtomic('2')))"));
+
+    // ----- Regression sanity ----------------------------------------------
+
+    [Fact]
+    public void For_SimpleIteration_Unchanged()
+        => Assert.Equal(new[] { "2", "4", "6" }, EvalItems("for $x in (1, 2, 3) return $x * 2"));
+
+    [Fact]
+    public void QuantifiedExpressions_Unchanged()
+    {
+        Assert.Equal("true", EvalStr("some $x in (1, 2) satisfies $x > 1"));
+        Assert.Equal("true", EvalStr("every $x in (1, 2) satisfies $x > 0"));
+    }
+
+    [Fact]
+    public void GeneralComparison_StillExistential()
+    {
+        Assert.Equal("true", EvalStr("\"a\" = (\"a\", \"b\")"));
+        Assert.Equal("true", EvalStr("(1, 2) = (2, 3)"));
+    }
 }

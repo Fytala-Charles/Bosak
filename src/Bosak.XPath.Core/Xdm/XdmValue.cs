@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 1.0   | 27-06-2026     | Use shortest round-trip format (G17/G9) for XPath double/float scientific notation      |
 //                      | Charles Korthout | 1.1   | 26-06-2026     | Use shortest round-trip (\"R\") format for xs:float scientific notation                  |
 //                      | Charles Korthout | 1.2   | 15-07-2026     | EffectiveBooleanValue raises FORG0006 for maps, arrays, and function items             |
+//                      | Charles Korthout | 1.3   | 15-07-2026     | EBV: xs:anyURI string-like (non-empty); FORG0006 for date/time/duration/QName/binary    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -382,6 +383,12 @@ public readonly struct XdmValue
             XdmValueKind.Double or XdmValueKind.Float => _double != 0.0 && !double.IsNaN(_double),
             XdmValueKind.Sequence => SequenceEffectiveBooleanValue(),
             XdmValueKind.Node => true,
+            // xs:anyURI is in the string-like group: EBV is true iff the value is non-empty.
+            XdmValueKind.Uri => !string.IsNullOrEmpty((string?)_reference),
+            XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime or XdmValueKind.Duration
+                or XdmValueKind.QName or XdmValueKind.Binary =>
+                throw new InvalidOperationException(
+                    "FORG0006: The effective boolean value is not defined for values of this atomic type"),
             XdmValueKind.Function or XdmValueKind.Map or XdmValueKind.Array =>
                 throw new InvalidOperationException(
                     "FORG0006: The effective boolean value is not defined for maps, arrays, and function items"),

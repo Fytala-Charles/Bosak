@@ -104,6 +104,7 @@
 //                      | Charles Korthout | 5.29  | 15-07-2026     | fn:normalize-unicode: case-insensitive trimmed form names, empty form, FULLY-NORMALIZED; matches arg-type XPTY0004
 //                      | Charles Korthout | 5.38  | 15-07-2026     | fn:serialize rewritten on XdmSerializer: map+element option forms, xml/json/adaptive methods, char maps, CDATA, indent, item-separator, SENR0001/SERE002x |
 //                      | Charles Korthout | 5.39  | 15-07-2026     | map:merge duplicates option (use-first/use-last/use-any/combine/reject); map:remove multi-key; strict singleton map keys (XPTY0004); array bounds FOAY0001/FOAY0002; deep-equal map keys collation-free (QT3 Tier-2i) |
+//                      | Charles Korthout | 5.40  | 15-07-2026     | Tier-2j: numeric fns (abs/floor/ceiling/round) reject non-numeric non-untypedAtomic (XPTY0004); fn:sum/fn:avg reject xs:string/xs:boolean items (FORG0006) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -7030,7 +7031,7 @@ public static class FunctionLibrary
                 else
                     throw new InvalidOperationException("FORG0006");
             }
-            else if (a.Kind == XdmValueKind.String && double.TryParse(a.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+            else if (IsUntypedAtomic(a) && double.TryParse(a.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _))
             {
                 hasNumeric = true;
             }
@@ -7871,6 +7872,13 @@ public static class FunctionLibrary
         foreach (var item in items)
         {
             var a = AtomizeValue(item);
+            // Only numeric, duration, and xs:untypedAtomic items may be summed;
+            // xs:string, xs:boolean and other types are FORG0006.
+            if (a.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                or XdmValueKind.Float or XdmValueKind.Duration)
+                && !IsUntypedAtomic(a))
+                throw new InvalidOperationException(
+                    "FORG0006: fn:sum() requires a sequence of numeric or xs:duration values");
             if (a.Kind == XdmValueKind.Double)
                 anyDouble = true;
             if (a.Kind == XdmValueKind.String && double.TryParse(a.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _))
@@ -8146,8 +8154,8 @@ public static class FunctionLibrary
     }
 
     /// <summary>
-    /// Converts an XDM value to double for numeric functions that accept
-    /// string/untyped-atomic arguments (e.g., floor, ceiling, round).
+    /// Converts an XDM value to double for numeric functions (abs, floor, ceiling, round).
+    /// Only numeric and xs:untypedAtomic arguments are accepted; anything else is XPTY0004.
     /// </summary>
     private static double ConvertToDouble(XdmValue value)
     {
@@ -8156,8 +8164,9 @@ public static class FunctionLibrary
             XdmValueKind.Integer => value.IntegerValue,
             XdmValueKind.Decimal => (double)value.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
-            XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
-            _ => ParseXPathDouble(value.ToString())
+            _ when IsUntypedAtomic(value) => ParseXPathDouble(value.ToString()),
+            _ => throw new InvalidOperationException(
+                $"XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got {value.Kind}")
         };
     }
 

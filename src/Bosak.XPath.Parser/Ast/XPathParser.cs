@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 1.8   | 15-07-2026     | UnaryLookup (?KS ≡ .?KS); empty-paren lookup key .?(); keyword NCName lookup keys; qualified-name keys are XPST0003; argument-placeholder vs lookup disambiguation |
 //                      | Charles Korthout | 1.8   | 26-06-2026     | Parse Q{uri}* URI-qualified wildcards                                                    |
 //                      | Charles Korthout | 1.9   | 15-07-2026     | Keep ' as ' separated in nested function tests inside map/array type parens (ArrayTest-063) |
+//                      | Charles Korthout | 1.10  | 15-07-2026     | FLWOR completion: 'at $pos' positional var, 'where' clause, mixed for/let chains          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -203,44 +204,103 @@ public sealed class XPathParser
         };
     }
 
-    // ForExpr ::= SimpleForClause "return" ExprSingle
-    private XPathAstNode ParseForExpr()
+    // FLWORExpr ::= InitialClause IntermediateClause* "return" ExprSingle
+    // InitialClause ::= ForClause | LetClause
+    // IntermediateClause ::= ForClause | LetClause | WhereClause
+    // ForClause ::= "for" ForBinding ("," ForBinding)*
+    // ForBinding ::= "$" VarName ("at" "$" VarName)? "in" ExprSingle
+    // LetClause ::= "let" LetBinding ("," LetBinding)*
+    // WhereClause ::= "where" ExprSingle
+    private XPathAstNode ParseForExpr() => ParseFlworExpr();
+
+    private XPathAstNode ParseLetExpr() => ParseFlworExpr();
+
+    private XPathAstNode ParseFlworExpr()
     {
         int start = Current.Start;
+        var clauses = new List<(string Kind, object Payload)>();
+
+        // Initial clause (dispatch guarantees 'for' or 'let').
+        clauses.Add(Current.Kind == TokenKind.KeywordFor
+            ? ("for", ParseForClauseBindings())
+            : ("let", ParseLetClauseBindings()));
+
+        // Intermediate clauses. 'where' is recognized contextually as a Name token:
+        // at clause level only a clause keyword or 'return' may follow, so an
+        // unquoted Name "where" here is unambiguous.
+        while (true)
+        {
+            if (Current.Kind == TokenKind.KeywordFor)
+                clauses.Add(("for", ParseForClauseBindings()));
+            else if (Current.Kind == TokenKind.KeywordLet)
+                clauses.Add(("let", ParseLetClauseBindings()));
+            else if (Current.Kind == TokenKind.Name && GetString(Current) == "where")
+            {
+                Advance();
+                clauses.Add(("where", ParseExprSingle()));
+            }
+            else
+                break;
+        }
+
+        Expect(TokenKind.KeywordReturn);
+        var body = ParseExprSingle();
+
+        // Fold clauses right-to-left into nested For/Let/If nodes.
+        for (int i = clauses.Count - 1; i >= 0; i--)
+        {
+            var (kind, payload) = clauses[i];
+            body = kind switch
+            {
+                "for" => WithSpan(new ForExpressionNode((IReadOnlyList<QuantifiedBinding>)payload, body), start, End),
+                "let" => WithSpan(new LetExpressionNode((IReadOnlyList<QuantifiedBinding>)payload, body), start, End),
+                _ => WithSpan(new IfExpressionNode((XPathAstNode)payload, body,
+                        new SequenceExpressionNode(Array.Empty<XPathAstNode>())), start, End),
+            };
+        }
+        return body;
+    }
+
+    private IReadOnlyList<QuantifiedBinding> ParseForClauseBindings()
+    {
         Expect(TokenKind.KeywordFor);
         var bindings = new List<QuantifiedBinding>();
         do
         {
-            bindings.Add(ParseSimpleForBinding());
+            bindings.Add(ParseSimpleForBinding(allowPositional: true));
         } while (Match(TokenKind.Comma));
-        Expect(TokenKind.KeywordReturn);
-        var body = ParseExprSingle();
-        return WithSpan(new ForExpressionNode(bindings, body), start, End);
+        return bindings;
     }
 
-    private QuantifiedBinding ParseSimpleForBinding()
+    private IReadOnlyList<QuantifiedBinding> ParseLetClauseBindings()
     {
-        Expect(TokenKind.Dollar);
-        var nameTok = ExpectName();
-        var (prefix, local, _) = SplitQName(GetString(nameTok));
-        Expect(TokenKind.KeywordIn);
-        var expr = ParseExprSingle();
-        return new QuantifiedBinding(local, expr);
-    }
-
-    // LetExpr ::= SimpleLetClause "return" ExprSingle
-    private XPathAstNode ParseLetExpr()
-    {
-        int start = Current.Start;
         Expect(TokenKind.KeywordLet);
         var bindings = new List<QuantifiedBinding>();
         do
         {
             bindings.Add(ParseSimpleLetBinding());
         } while (Match(TokenKind.Comma));
-        Expect(TokenKind.KeywordReturn);
-        var body = ParseExprSingle();
-        return WithSpan(new LetExpressionNode(bindings, body), start, End);
+        return bindings;
+    }
+
+    private QuantifiedBinding ParseSimpleForBinding(bool allowPositional = false)
+    {
+        Expect(TokenKind.Dollar);
+        var nameTok = ExpectName();
+        var (prefix, local, _) = SplitQName(GetString(nameTok));
+        string? positionalVar = null;
+        // PositionalVar ::= "at" "$" VarName  (contextual keyword, lexed as Name)
+        if (allowPositional && Current.Kind == TokenKind.Name && GetString(Current) == "at")
+        {
+            Advance();
+            Expect(TokenKind.Dollar);
+            var posTok = ExpectName();
+            var (_, posLocal, _) = SplitQName(GetString(posTok));
+            positionalVar = posLocal;
+        }
+        Expect(TokenKind.KeywordIn);
+        var expr = ParseExprSingle();
+        return new QuantifiedBinding(local, expr, positionalVar);
     }
 
     private QuantifiedBinding ParseSimpleLetBinding()
