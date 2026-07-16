@@ -16,6 +16,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Honor stylesheet-base-uri; stylesheet-text without it has no base URI (XTSE0165)         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 15-07-2026     | fn:transform option handling: params, serialization, base URI, default mode, validation |
+//                      | Charles Korthout | 0.6   | 15-07-2026     | global-context-item default wrapper, xslt-version type validation, xslt-version override  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
@@ -86,16 +89,15 @@ public static class XsltFunctionLibrary
 
         var options = args[0].MapValue;
 
-        XdmExecutableSource executableSource = LoadExecutable(options, ctx);
-
         // delivery-format: document (default), raw, or serialized.
         var deliveryFormat = GetStringOption(options, "delivery-format") ?? "document";
         if (deliveryFormat is not ("document" or "raw" or "serialized"))
             throw new InvalidOperationException($"FOXT0004: Invalid delivery-format '{deliveryFormat}'.");
 
-        // initial-template / initial-mode are xs:QName values; convert to Clark form.
+        // initial-template / initial-mode / initial-function are xs:QName values.
         string? initialTemplate = GetQNameOption(options, "initial-template");
         string? initialMode = GetQNameOption(options, "initial-mode");
+        string? initialFunction = GetQNameOption(options, "initial-function");
 
         // source-node (optional).
         IXdmNode? sourceNode = null;
@@ -113,33 +115,99 @@ public static class XsltFunctionLibrary
         if (options.TryGetValue(XdmValue.FromString("initial-match-selection"), out var selectionValue))
             initialMatchSelection = selectionValue;
 
-        // base-output-uri (optional).
+        // base-output-uri (optional): resolve against the calling static base URI if relative.
         string? baseOutputUri = GetStringOption(options, "base-output-uri");
-
-        // stylesheet-params (optional) — map of parameter names to values.
-        var transformContext = new EvaluationContext();
-        if (options.TryGetValue(XdmValue.FromString("stylesheet-params"), out var paramsValue) && paramsValue.IsMap)
+        if (!string.IsNullOrEmpty(baseOutputUri)
+            && !Uri.IsWellFormedUriString(baseOutputUri, UriKind.Absolute)
+            && !string.IsNullOrEmpty(ctx.BaseUri))
         {
-            foreach (var kvp in paramsValue.MapValue.Entries)
+            baseOutputUri = new Uri(new Uri(ctx.BaseUri), baseOutputUri).AbsoluteUri;
+        }
+
+        // xslt-version: extract numeric value and reject non-numeric strings (XPTY0004).
+        double? xsltVersion = GetXsltVersion(options);
+
+        // Validate option types and mutually-exclusive combinations.
+        ValidateTransformOptions(options, initialTemplate, initialMode, initialFunction,
+            sourceNode, initialMatchSelection);
+
+        // global-context-item (XSLT 3.0 only). When absent and source-node is not a
+        // document node, the global context item is a parentless document node that
+        // has the source node as its only child.
+        IXdmNode? globalContextItem = null;
+        if (xsltVersion is null or >= 3.0)
+        {
+            if (options.TryGetValue(XdmValue.FromString("global-context-item"), out var gciValue))
             {
-                var paramName = GetQNameString(kvp.Key);
-                if (!string.IsNullOrEmpty(paramName))
-                    transformContext.WithVariable(paramName, kvp.Value);
+                var first = FirstItem(gciValue);
+                if (first.IsNode && first.NodeValue != null)
+                    globalContextItem = first.NodeValue;
+                else if (!first.IsUndefined)
+                    throw new InvalidOperationException("XPTY0004: fn:transform global-context-item must be a node");
             }
         }
+        if (globalContextItem == null && sourceNode != null && sourceNode.NodeKind != XdmNodeKind.Document)
+            globalContextItem = WrapNodeInDocument(sourceNode);
+
+        // Static parameters are supplied at compile time.
+        var staticParams = GetParameterMap(options, "static-params", allowStringKeys: false);
+        var staticParameters = staticParams.Count > 0
+            ? staticParams.ToDictionary(
+                kvp => SplitClarkName(kvp.Key),
+                kvp => kvp.Value)
+            : null;
+
+        var transformContext = new EvaluationContext();
+        XdmExecutableSource executableSource = LoadExecutable(options, ctx, staticParameters);
+
+        // The static base URI inside the nested stylesheet is the stylesheet's own base URI.
+        transformContext.BaseUri = executableSource.BaseUri ?? ctx.BaseUri;
+        if (xsltVersion.HasValue)
+            transformContext.XsltVersion = xsltVersion.Value;
+
+        // Serialization parameters supplied by the caller.
+        Stylesheet.OutputProperties? serializationParams = null;
+        if (options.TryGetValue(XdmValue.FromString("serialization-params"), out var serValue))
+        {
+            if (!serValue.IsMap)
+                throw new InvalidOperationException("XPTY0004: fn:transform serialization-params must be a map.");
+            serializationParams = Stylesheet.OutputProperties.FromMap(serValue.MapValue);
+        }
+
+        // Stylesheet-level parameters are ordinary variables in the transform context.
+        var stylesheetParams = GetParameterMap(options, "stylesheet-params", allowStringKeys: false);
+        foreach (var kvp in stylesheetParams)
+        {
+            var (local, ns) = SplitClarkName(kvp.Key);
+            transformContext.WithVariable(local, kvp.Value, ns);
+        }
+
+        // Template/tunnel parameters for the initial named template.
+        transformContext.InitialTemplateCallParameters = GetParameterMap(options, "template-params", allowStringKeys: false);
+        transformContext.InitialTemplateTunnelParameters = GetParameterMap(options, "tunnel-params", allowStringKeys: false);
+
+        XdmValue result;
+        IReadOnlyDictionary<string, XdmValue> secondaryResults;
 
         try
         {
-            var result = executableSource.Executable.TransformCaptured(
-                sourceNode, initialMatchSelection, transformContext,
-                initialTemplate, initialMode, deliveryFormat, baseOutputUri,
-                out var secondaryResults);
-
-            var resultMap = new XdmMap();
-            resultMap.Add(XdmValue.FromString("output"), result);
-            foreach (var (uri, value) in secondaryResults)
-                resultMap.Add(XdmValue.FromString(uri), value);
-            return XdmValue.FromMap(resultMap);
+            if (!string.IsNullOrEmpty(initialFunction))
+            {
+                var functionParamsValue = XdmValue.Undefined;
+                if (options.TryGetValue(XdmValue.FromString("function-params"), out var fpValue))
+                    functionParamsValue = fpValue;
+                var argsArray = FunctionArgsFromValue(functionParamsValue);
+                result = executableSource.Executable.TransformFunctionCaptured(
+                    initialFunction, argsArray, transformContext,
+                    deliveryFormat, baseOutputUri, serializationParams, sourceNode, globalContextItem, out secondaryResults);
+            }
+            else
+            {
+                result = executableSource.Executable.TransformCaptured(
+                    sourceNode, initialMatchSelection, transformContext,
+                    initialTemplate, initialMode, deliveryFormat, baseOutputUri, serializationParams,
+                    globalContextItem, out secondaryResults);
+            }
         }
         catch (Exception ex) when (ex.Message.StartsWith("XTSE", StringComparison.Ordinal)
             || ex.Message.StartsWith("XPST", StringComparison.Ordinal))
@@ -147,12 +215,23 @@ public static class XsltFunctionLibrary
             // A static error in the nested stylesheet is reported as FOXT0002.
             throw new InvalidOperationException($"FOXT0002: {ex.Message}");
         }
+
+        var resultMap = new XdmMap();
+        string principalKey = !string.IsNullOrEmpty(baseOutputUri) ? baseOutputUri : "output";
+        if (!IsAbsentPrincipalResult(result, deliveryFormat))
+            resultMap.Add(XdmValue.FromString(principalKey), result);
+        foreach (var (uri, value) in secondaryResults)
+            resultMap.Add(XdmValue.FromString(uri), value);
+        return XdmValue.FromMap(resultMap);
     }
 
     /// <summary>
     /// Loads and compiles the stylesheet or package identified by the options map.
     /// </summary>
-    private static XdmExecutableSource LoadExecutable(XdmMap options, EvaluationContext ctx)
+    private static XdmExecutableSource LoadExecutable(
+        XdmMap options,
+        EvaluationContext ctx,
+        Dictionary<(string LocalName, string NamespaceUri), XdmValue>? staticParameters = null)
     {
         var stylesheetLocation = GetStringOption(options, "stylesheet-location");
         var stylesheetText = GetStringOption(options, "stylesheet-text");
@@ -170,6 +249,8 @@ public static class XsltFunctionLibrary
                 "FOXT0001: fn:transform requires exactly one of stylesheet-location, stylesheet-node, stylesheet-text, or package-name.");
 
         var compiler = new XsltCompiler();
+        if (staticParameters != null)
+            compiler.StaticParameters = staticParameters;
 
         if (packageName != null)
         {
@@ -197,14 +278,28 @@ public static class XsltFunctionLibrary
         if (stylesheetNodeValue != null)
         {
             var first = FirstItem(stylesheetNodeValue.Value);
-            if (!first.IsNode || first.NodeValue is not XDocumentNode xdn)
+            if (!first.IsNode || first.NodeValue == null)
                 throw new InvalidOperationException("XPTY0004: fn:transform stylesheet-node must be a node");
-            var nodeDoc = xdn.UnderlyingObject is XDocument doc
-                ? doc
-                : new XDocument(xdn.UnderlyingObject as XElement
-                    ?? throw new InvalidOperationException("XPTY0004: fn:transform stylesheet-node must be a document or element node"));
-            var baseUri = first.NodeValue!.BaseUri ?? stylesheetBaseUri ?? ctx.BaseUri;
-            return new XdmExecutableSource(compiler.Compile(nodeDoc, baseUri));
+            XDocument nodeDoc;
+            var node = first.NodeValue;
+            if (node.NodeKind == XdmNodeKind.Document && node is XDocumentNode docNode && docNode.UnderlyingObject is XDocument doc)
+            {
+                nodeDoc = doc;
+            }
+            else if (node.NodeKind == XdmNodeKind.Element && node is XDocumentNode elemNode && elemNode.UnderlyingObject is XElement elem)
+            {
+                nodeDoc = new XDocument(elem);
+            }
+            else
+            {
+                throw new InvalidOperationException("XPTY0004: fn:transform stylesheet-node must be a document or element node");
+            }
+            var nodeBaseUri = stylesheetBaseUri ?? node.BaseUri ?? ctx.BaseUri;
+            // Reparse with the intended base URI so stylesheet-element BaseUri values
+            // reflect the published/static base URI rather than the node origin.
+            nodeDoc = Xml11Loader.Parse(nodeDoc.ToString(),
+                LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace, nodeBaseUri);
+            return new XdmExecutableSource(compiler.Compile(nodeDoc, nodeBaseUri), nodeBaseUri);
         }
 
         if (stylesheetText != null)
@@ -222,33 +317,56 @@ public static class XsltFunctionLibrary
             {
                 throw new InvalidOperationException($"FOXT0002: Failed to parse stylesheet text: {ex.Message}");
             }
-            return new XdmExecutableSource(compiler.Compile(textDoc, stylesheetBaseUri));
+            return new XdmExecutableSource(compiler.Compile(textDoc, stylesheetBaseUri), stylesheetBaseUri);
         }
 
         // stylesheet-location: resolve against the static base URI.
-        string resolvedUri = stylesheetLocation!;
+        string originalUri = stylesheetLocation!;
         if (!Uri.IsWellFormedUriString(stylesheetLocation!, UriKind.Absolute) && !string.IsNullOrEmpty(ctx.BaseUri))
-            resolvedUri = new Uri(new Uri(ctx.BaseUri), stylesheetLocation!).AbsoluteUri;
+            originalUri = new Uri(new Uri(ctx.BaseUri), stylesheetLocation!).AbsoluteUri;
         // A resource mapper may redirect published (e.g. http:) URIs to local files.
-        resolvedUri = ctx.ResourceUriMapper?.Invoke(resolvedUri) ?? resolvedUri;
-        return CompileFromLocation(compiler, resolvedUri, resolvedUri);
+        string mappedUri = ctx.ResourceUriMapper?.Invoke(originalUri) ?? originalUri;
+        // The static base URI of the stylesheet is the original (published) URI, not the
+        // mapped local file path, unless the stylesheet-base-uri option overrides it.
+        string baseUri = stylesheetBaseUri ?? originalUri;
+        return CompileFromLocation(compiler, mappedUri, baseUri, displayName: originalUri, sourceBaseUri: baseUri);
     }
 
-    private static XdmExecutableSource CompileFromLocation(XsltCompiler compiler, string resolvedUri, string displayName)
+    private static XdmExecutableSource CompileFromLocation(
+        XsltCompiler compiler,
+        string resolvedUri,
+        string baseUri,
+        string? displayName = null,
+        string? sourceBaseUri = null)
     {
-        XDocument stylesheetDoc;
+        string resolvedPath = resolvedUri;
+        if (Uri.IsWellFormedUriString(resolvedUri, UriKind.Absolute) && new Uri(resolvedUri).IsFile)
+            resolvedPath = new Uri(resolvedUri).LocalPath;
+
+        string stylesheetText;
         try
         {
-            stylesheetDoc = Xml11Loader.Load(resolvedUri, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
+            stylesheetText = File.ReadAllText(resolvedPath);
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"FOXT0001: Failed to load stylesheet '{displayName}': {ex.Message}");
+            throw new InvalidOperationException($"FOXT0001: Failed to load stylesheet '{displayName ?? resolvedUri}': {ex.Message}");
+        }
+
+        XDocument stylesheetDoc;
+        try
+        {
+            stylesheetDoc = Xml11Loader.Parse(stylesheetText,
+                LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace, baseUri);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"FOXT0002: Failed to parse stylesheet '{displayName ?? resolvedUri}': {ex.Message}");
         }
 
         try
         {
-            return new XdmExecutableSource(compiler.Compile(stylesheetDoc, resolvedUri));
+            return new XdmExecutableSource(compiler.Compile(stylesheetDoc, baseUri), sourceBaseUri ?? baseUri);
         }
         catch (Exception ex) when (ex.Message.StartsWith("XTSE", StringComparison.Ordinal)
             || ex.Message.StartsWith("XPST", StringComparison.Ordinal))
@@ -409,5 +527,175 @@ public static class XsltFunctionLibrary
         return value;
     }
 
-    private readonly record struct XdmExecutableSource(XsltExecutable Executable);
+    /// <summary>
+    /// Extracts the numeric <c>xslt-version</c> option value, raising <c>XPTY0004</c>
+    /// for non-numeric or string values.
+    /// </summary>
+    private static double? GetXsltVersion(XdmMap options)
+    {
+        if (!options.TryGetValue(XdmValue.FromString("xslt-version"), out var value))
+            return null;
+        var first = FirstItem(value);
+        if (first.IsUndefined)
+            return null;
+        if (first.Kind == XdmValueKind.Decimal)
+            return (double)first.DecimalValue;
+        if (first.Kind == XdmValueKind.Integer)
+            return first.IntegerValue;
+        if (first.Kind is XdmValueKind.Double or XdmValueKind.Float)
+            return first.DoubleValue;
+        throw new InvalidOperationException("XPTY0004: fn:transform xslt-version must be a numeric value.");
+    }
+
+    /// <summary>
+    /// Wraps a non-document source node in a parentless document node for use as the
+    /// default global context item.
+    /// </summary>
+    private static IXdmNode WrapNodeInDocument(IXdmNode node)
+    {
+        if (node is XDocumentNode xdn)
+        {
+            if (xdn.UnderlyingObject is XElement elem)
+                return new XDocumentNode(new XDocument(new XElement(elem)));
+            if (xdn.UnderlyingObject is XDocument doc)
+                return new XDocumentNode(doc);
+        }
+        var fallback = new XElement("__wrapper__", node.StringValue);
+        return new XDocumentNode(new XDocument(fallback));
+    }
+
+    private static void ValidateTransformOptions(
+        XdmMap options,
+        string? initialTemplate,
+        string? initialMode,
+        string? initialFunction,
+        IXdmNode? sourceNode,
+        XdmValue? initialMatchSelection)
+    {
+        // Mutually exclusive entry-point options.
+        if (!string.IsNullOrEmpty(initialMode) && !string.IsNullOrEmpty(initialTemplate))
+            throw new InvalidOperationException("XPTY0004: fn:transform options initial-mode and initial-template are mutually exclusive.");
+
+        if (sourceNode != null && initialMatchSelection != null)
+            throw new InvalidOperationException("FOXT0002: fn:transform options source-node and initial-match-selection are mutually exclusive.");
+
+        if (!string.IsNullOrEmpty(initialFunction))
+        {
+            if (!string.IsNullOrEmpty(initialTemplate) || !string.IsNullOrEmpty(initialMode)
+                || initialMatchSelection != null)
+            {
+                throw new InvalidOperationException("FOXT0002: fn:transform option initial-function cannot be combined with initial-template, initial-mode, or initial-match-selection.");
+            }
+            if (!options.TryGetValue(XdmValue.FromString("function-params"), out _))
+                throw new InvalidOperationException("FOXT0002: fn:transform option function-params is required when initial-function is supplied.");
+        }
+
+        // Unsupported options: requested-properties and post-process.
+        if (options.TryGetValue(XdmValue.FromString("requested-properties"), out var requestedProps))
+        {
+            var first = FirstItem(requestedProps);
+            if (!first.IsUndefined && (!(first.IsMap && first.MapValue.Entries.Count() == 0)))
+                throw new InvalidOperationException("FOXT0001: fn:transform requested-properties option is not supported.");
+        }
+        if (options.TryGetValue(XdmValue.FromString("post-process"), out _))
+            throw new InvalidOperationException("FOXT0001: fn:transform post-process option is not supported.");
+    }
+
+    /// <summary>
+    /// Reads a map-valued option whose keys must be QNames and returns a dictionary
+    /// keyed by expanded Clark notation.
+    /// </summary>
+    private static Dictionary<string, XdmValue> GetParameterMap(XdmMap options, string key, bool allowStringKeys)
+    {
+        if (!options.TryGetValue(XdmValue.FromString(key), out var value))
+            return new Dictionary<string, XdmValue>();
+        if (!value.IsMap)
+            throw new InvalidOperationException($"XPTY0004: fn:transform option '{key}' must be a map.");
+
+        var result = new Dictionary<string, XdmValue>();
+        foreach (var kvp in value.MapValue.Entries)
+        {
+            string expanded;
+            if (kvp.Key.Kind == XdmValueKind.QName)
+            {
+                var qn = kvp.Key.QNameValue;
+                expanded = string.IsNullOrEmpty(qn.NamespaceUri) ? qn.LocalName : $"{{{qn.NamespaceUri}}}{qn.LocalName}";
+            }
+            else if (allowStringKeys && kvp.Key.Kind == XdmValueKind.String)
+            {
+                expanded = kvp.Key.StringValue;
+            }
+            else
+            {
+                throw new InvalidOperationException($"FOXT0002: fn:transform option '{key}' keys must be QNames.");
+            }
+            result[expanded] = kvp.Value;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Splits a Clark-notation QName into its local name and namespace URI components.
+    /// </summary>
+    private static (string LocalName, string NamespaceUri) SplitClarkName(string name)
+    {
+        if (name.Length > 2 && name[0] == '{')
+        {
+            int end = name.IndexOf('}');
+            if (end > 0)
+                return (name[(end + 1)..], name[1..end]);
+        }
+        return (name, "");
+    }
+
+    private static XdmValue[] FunctionArgsFromValue(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return Array.Empty<XdmValue>();
+        if (value.IsArray)
+        {
+            var list = new List<XdmValue>();
+            foreach (var item in value.ArrayValue.Values)
+                list.Add(item);
+            return list.ToArray();
+        }
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var list = new List<XdmValue>();
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                list.Add(item);
+            return list.ToArray();
+        }
+        return [value];
+    }
+
+    private static bool IsAbsentPrincipalResult(XdmValue result, string deliveryFormat)
+    {
+        if (result.IsUndefined)
+            return true;
+        if (deliveryFormat == "serialized")
+            return result.Kind == XdmValueKind.String && result.StringValue.Length == 0;
+        if (deliveryFormat == "raw")
+        {
+            if (result.IsSequence && result.SequenceValue is not null)
+            {
+                foreach (var _ in XdmSequence.FromSource(result.SequenceValue))
+                    return false;
+                return true;
+            }
+            return false;
+        }
+        // document delivery format
+        if (result.IsNode && result.NodeValue != null && result.NodeValue.NodeKind == XdmNodeKind.Document)
+        {
+            if (result.NodeValue is XDocumentNode xdn && xdn.UnderlyingObject is XDocument doc)
+                return !doc.Nodes().Any();
+            foreach (var _ in result.NodeValue.Axis(XdmAxis.Child))
+                return false;
+            return true;
+        }
+        return false;
+    }
+
+    private readonly record struct XdmExecutableSource(XsltExecutable Executable, string? BaseUri);
 }

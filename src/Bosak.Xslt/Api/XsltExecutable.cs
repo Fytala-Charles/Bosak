@@ -26,6 +26,8 @@
 //                      | Charles Korthout | 1.4   | 13-07-2026     | Stamp EffectiveVersion and ImplicitResultTree for default output-method inference.      |
 //                      | Charles Korthout | 1.5   | 13-07-2026     | Raised transform stack to 16MB for deep continuation-style recursion (HOF-068).         |
 //                      | Charles Korthout | 1.6    | 14-07-2026     | TransformCaptured: fn:transform entry point with result-document capture and formats.  |
+//                      | Charles Korthout | 1.7   | 15-07-2026     | Added serialization-params merge and TransformFunctionCaptured for fn:transform.        |
+//                      | Charles Korthout | 1.8   | 15-07-2026     | TransformCaptured/TransformFunctionCaptured accept explicit global context item           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -131,6 +133,35 @@ public sealed class XsltExecutable
         string? baseOutputUri,
         out IReadOnlyDictionary<string, XdmValue> secondaryResults)
     {
+        return TransformCaptured(source, initialMatchSelection, context, initialTemplate, initialMode,
+            deliveryFormat, baseOutputUri, serializationParams: null, out secondaryResults);
+    }
+
+    public XdmValue TransformCaptured(
+        IXdmNode? source,
+        XdmValue? initialMatchSelection,
+        EvaluationContext? context,
+        string? initialTemplate,
+        string? initialMode,
+        string deliveryFormat,
+        string? baseOutputUri,
+        Stylesheet.OutputProperties? serializationParams,
+        out IReadOnlyDictionary<string, XdmValue> secondaryResults)
+        => TransformCaptured(source, initialMatchSelection, context, initialTemplate, initialMode,
+            deliveryFormat, baseOutputUri, serializationParams, globalContextItem: null, out secondaryResults);
+
+    public XdmValue TransformCaptured(
+        IXdmNode? source,
+        XdmValue? initialMatchSelection,
+        EvaluationContext? context,
+        string? initialTemplate,
+        string? initialMode,
+        string deliveryFormat,
+        string? baseOutputUri,
+        Stylesheet.OutputProperties? serializationParams,
+        IXdmNode? globalContextItem,
+        out IReadOnlyDictionary<string, XdmValue> secondaryResults)
+    {
         IReadOnlyDictionary<string, XdmValue> capturedResults = new Dictionary<string, XdmValue>();
         var principalResult = RunWithStack(() =>
         {
@@ -140,14 +171,21 @@ public sealed class XsltExecutable
             var result = engine.Transform(source, initialTemplate, initialMode,
                 rawResult: raw, baseOutputUri: baseOutputUri,
                 initialMatchSelection: initialMatchSelection,
-                captureResultDocuments: true, rawTransformResult: raw);
+                captureResultDocuments: true, rawTransformResult: raw,
+                globalContextItem: globalContextItem);
             LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
 
             var captured = new Dictionary<string, XdmValue>();
             foreach (var (uri, entry) in engine.CapturedResultDocuments)
             {
+                var props = entry.Props;
+                if (serialized && serializationParams != null)
+                {
+                    props = props.Clone();
+                    Stylesheet.OutputProperties.Merge(props, serializationParams);
+                }
                 captured[uri] = serialized
-                    ? XdmValue.FromString(Runtime.ResultTreeSerializer.Serialize(entry.Value, entry.Props))
+                    ? XdmValue.FromString(Runtime.ResultTreeSerializer.Serialize(entry.Value, props))
                     : entry.Value;
             }
             capturedResults = captured;
@@ -158,6 +196,11 @@ public sealed class XsltExecutable
                     ?? OutputProperties;
                 outputProperties.EffectiveVersion ??= _stylesheet.Version;
                 outputProperties.ImplicitResultTree = engine.PrincipalResultDocumentProperties == null;
+                if (serializationParams != null)
+                {
+                    outputProperties = outputProperties.Clone();
+                    Stylesheet.OutputProperties.Merge(outputProperties, serializationParams);
+                }
                 return XdmValue.FromString(Runtime.ResultTreeSerializer.Serialize(result, outputProperties));
             }
 
@@ -273,6 +316,141 @@ public sealed class XsltExecutable
             outputProperties.CharacterMap = resolved;
         }
         return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
+    }
+
+    /// <summary>
+    /// Invokes an <c>xsl:function</c> as the transformation entry point on behalf of
+    /// <c>fn:transform</c>, honoring delivery format, base output URI, serialization
+    /// parameters, and captured secondary result documents.
+    /// </summary>
+    /// <param name="name">The expanded function name (EQName form <c>Q{{uri}}local</c>).</param>
+    /// <param name="args">Arguments to pass to the function.</param>
+    /// <param name="context">Optional evaluation context.</param>
+    /// <param name="deliveryFormat">One of <c>document</c>, <c>raw</c>, or <c>serialized</c>.</param>
+    /// <param name="baseOutputUri">Optional base output URI for secondary result documents.</param>
+    /// <param name="serializationParams">Optional user-supplied serialization parameters.</param>
+    /// <param name="secondaryResults">The captured secondary result documents.</param>
+    /// <returns>The principal result in the requested delivery format.</returns>
+    public XdmValue TransformFunctionCaptured(
+        string name,
+        XdmValue[] args,
+        EvaluationContext? context,
+        string deliveryFormat,
+        string? baseOutputUri,
+        Stylesheet.OutputProperties? serializationParams,
+        out IReadOnlyDictionary<string, XdmValue> secondaryResults)
+        => TransformFunctionCaptured(name, args, context, deliveryFormat, baseOutputUri, serializationParams, source: null, out secondaryResults);
+
+    public XdmValue TransformFunctionCaptured(
+        string name,
+        XdmValue[] args,
+        EvaluationContext? context,
+        string deliveryFormat,
+        string? baseOutputUri,
+        Stylesheet.OutputProperties? serializationParams,
+        IXdmNode? source,
+        out IReadOnlyDictionary<string, XdmValue> secondaryResults)
+        => TransformFunctionCaptured(name, args, context, deliveryFormat, baseOutputUri, serializationParams, source, globalContextItem: null, out secondaryResults);
+
+    public XdmValue TransformFunctionCaptured(
+        string name,
+        XdmValue[] args,
+        EvaluationContext? context,
+        string deliveryFormat,
+        string? baseOutputUri,
+        Stylesheet.OutputProperties? serializationParams,
+        IXdmNode? source,
+        IXdmNode? globalContextItem,
+        out IReadOnlyDictionary<string, XdmValue> secondaryResults)
+    {
+        IReadOnlyDictionary<string, XdmValue> capturedResults = new Dictionary<string, XdmValue>();
+        var principalResult = RunWithStack(() =>
+        {
+            bool serialized = deliveryFormat == "serialized";
+            var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
+            var result = engine.TransformFunction(name, args, captureResultDocuments: true, baseOutputUri: baseOutputUri, source: source, globalContextItem: globalContextItem);
+            LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
+
+            var captured = new Dictionary<string, XdmValue>();
+            foreach (var (uri, entry) in engine.CapturedResultDocuments)
+            {
+                var props = entry.Props;
+                if (serialized && serializationParams != null)
+                {
+                    props = props.Clone();
+                    Stylesheet.OutputProperties.Merge(props, serializationParams);
+                }
+                captured[uri] = serialized
+                    ? XdmValue.FromString(Runtime.ResultTreeSerializer.Serialize(entry.Value, props))
+                    : entry.Value;
+            }
+            capturedResults = captured;
+
+            if (deliveryFormat == "serialized")
+            {
+                var outputProperties = _stylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties();
+                outputProperties.EffectiveVersion = _stylesheet.Version;
+                outputProperties.ImplicitResultTree = true;
+                if (serializationParams != null)
+                {
+                    outputProperties = outputProperties.Clone();
+                    Stylesheet.OutputProperties.Merge(outputProperties, serializationParams);
+                }
+                ResolveCharacterMapsFor(outputProperties);
+                return XdmValue.FromString(Runtime.ResultTreeSerializer.Serialize(result, outputProperties));
+            }
+
+            if (deliveryFormat == "document" && !result.IsUndefined)
+            {
+                if (!result.IsNode || result.NodeValue?.NodeKind != XdmNodeKind.Document)
+                {
+                    // Wrap a non-document result in a new document node.
+                    XDocument wrapper;
+                    if (result.IsNode && result.NodeValue != null)
+                    {
+                        var xdn = (Bosak.XPath.Providers.Xml.XDocumentNode)result.NodeValue;
+                        if (xdn.UnderlyingObject is System.Xml.Linq.XElement elem)
+                        {
+                            wrapper = new System.Xml.Linq.XDocument(elem);
+                        }
+                        else if (xdn.UnderlyingObject is System.Xml.Linq.XDocument doc)
+                        {
+                            wrapper = doc;
+                        }
+                        else
+                        {
+                            wrapper = new System.Xml.Linq.XDocument();
+                            wrapper.Add(new System.Xml.Linq.XText(result.ToString()));
+                        }
+                    }
+                    else
+                    {
+                        wrapper = new System.Xml.Linq.XDocument();
+                        wrapper.Add(new System.Xml.Linq.XText(result.ToString()));
+                    }
+                    result = XdmValue.FromNode(new Bosak.XPath.Providers.Xml.XDocumentNode(wrapper));
+                }
+            }
+
+            return result;
+        }, DefaultTransformStackSize);
+        secondaryResults = capturedResults;
+        return principalResult;
+    }
+
+    private void ResolveCharacterMapsFor(Stylesheet.OutputProperties outputProperties)
+    {
+        if (outputProperties.UseCharacterMaps.Count > 0)
+        {
+            var resolved = _stylesheet.ResolveCharacterMap(
+                outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
+            if (outputProperties.CharacterMap != null)
+            {
+                foreach (var kvp in outputProperties.CharacterMap)
+                    resolved[kvp.Key] = kvp.Value;
+            }
+            outputProperties.CharacterMap = resolved;
+        }
     }
 
     /// <summary>

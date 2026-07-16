@@ -35,6 +35,7 @@
 //                      | Charles Korthout | 2.2   | 26-06-2026     | Added fn:current-output-uri; hide XSLT dynamic functions in static context            |
 //                      | Charles Korthout | 2.1   | 23-05-2026     | Added math:log10, math:exp10, math:asin, math:acos, math:atan, math:atan2             |
 //                      | Charles Korthout | 2.2   | 23-05-2026     | Added fn:parse-xml-fragment, fn:has-children, fn:path, fn:unordered, map:put           |
+//                      | Charles Korthout | 2.2   | 15-07-2026     | fn:parse-xml-fragment now returns a document node containing all fragment children       |
 //                      | Charles Korthout | 2.3   | 24-05-2026     | Fixed fn:substring rounding, fn:round-half-to-even decimal, fn:subsequence lazy ranges  |
 //                      | Charles Korthout | 2.4   | 24-05-2026     | Implemented RFC-822/1123 parser for fn:parse-ietf-date with full timezone support        |
 //                      | Charles Korthout | 2.5   | 24-05-2026     | Fixed fn:subsequence edge cases: negative start, INF/NaN bounds, XPTY0004 for strings    |
@@ -108,6 +109,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.41  | 15-07-2026     | Tier-2k: fn:outermost/innermost reject non-node items (XPTY0004); round/round-half-to-even keep xs:integer type for negative precision (F+O instance-of-T rule); huge-precision identity guard; fn:min/max/sum preserve integer subtype annotations (least common type) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.42  | 15-07-2026     | fn:system-property('xsl:version') honors EvaluationContext.XsltVersion override                        |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3964,7 +3966,7 @@ public static class FunctionLibrary
         name = ExpandXsltPropertyName(name, ctx);
         string value = name switch
         {
-            "xsl:version" => "3.0",
+            "xsl:version" => ctx.XsltVersion?.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture) ?? "3.0",
             "xsl:vendor" => "Bosak",
             "xsl:vendor-url" => "https://github.com/poco-irrilevante/Bosak",
             "xsl:product-name" => "Bosak XPath",
@@ -4407,14 +4409,12 @@ public static class FunctionLibrary
         string xml = AtomizedString(args[0]);
         if (string.IsNullOrEmpty(xml))
             return XdmValue.Undefined;
-        var wrapper = $"<wrapper xmlns=\"http://www.w3.org/2005/xpath-functions\">{xml}</wrapper>";
+        // Parse the fragment inside a synthetic document wrapper so it can hold any
+        // sequence of top-level nodes. The wrapper is transparent to XDM axes.
+        var wrapper = $"<__xdm_doc__>{xml}</__xdm_doc__>";
         var doc = XDocument.Parse(wrapper, LoadOptions.PreserveWhitespace);
         XDocumentProvider.StripDocumentLevelWhitespace(doc);
-        var wrapperEl = doc.Root;
-        if (wrapperEl is null || !wrapperEl.HasElements)
-            return XdmValue.Undefined;
-        var firstChild = wrapperEl.Elements().First();
-        return XdmValue.FromNode(new XDocumentNode(firstChild));
+        return XdmValue.FromNode(new XDocumentNode(doc));
     }
 
     private static XdmValue HasChildren_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

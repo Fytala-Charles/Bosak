@@ -43,6 +43,7 @@
 //                      | Charles Korthout | 1.20  | 13-07-2026     | HTML attribute minimization; escape-uri-attributes defaults true for XHTML too.        |
 //                      | Charles Korthout | 1.21  | 13-07-2026     | BC rule: version 1.0 + implicit result tree infers xml, not xhtml (backwards-019).     |
 //                      | Charles Korthout | 1.22  | 13-07-2026     | Restrict attribute minimization to recognized HTML boolean attributes.                 |
+//                      | Charles Korthout | 1.23  | 15-07-2026     | XML method uses raw serializer for suppress-indentation; raw serializer honors the list  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1251,15 +1252,22 @@ public static class ResultTreeSerializer
             return SerializeRaw(element, props);
         }
 
+        if (props.Indent && props.SuppressIndentation.Count > 0)
+        {
+            ValidateXml10(element);
+            return SerializeRaw(element, props);
+        }
+
         ValidateXml10(element);
         return SerializeWithEncoding(element, props);
     }
 
     private static string SerializeXmlFragment(XElement wrapper, Stylesheet.OutputProperties props)
     {
-        // XML 1.1 and trees with prefixed namespace undeclarations must use the raw
-        // serializer because XmlWriter cannot represent xmlns:prefix="".
-        if (props.Version == "1.1" || HasUndeclarationAnnotations(wrapper))
+        // XML 1.1, trees with prefixed namespace undeclarations, and
+        // suppress-indentation must use the raw serializer.
+        if (props.Version == "1.1" || HasUndeclarationAnnotations(wrapper)
+            || (props.Indent && props.SuppressIndentation.Count > 0))
             return SerializeRaw(wrapper, props);
 
         var node = (XNode)wrapper;
@@ -1317,6 +1325,12 @@ public static class ResultTreeSerializer
             return SerializeRaw(document, props);
 
         if (props.CharacterMap != null && props.CharacterMap.Count > 0)
+        {
+            ValidateXml10(document);
+            return SerializeRaw(document, props);
+        }
+
+        if (props.Indent && props.SuppressIndentation.Count > 0)
         {
             ValidateXml10(document);
             return SerializeRaw(document, props);
@@ -3261,9 +3275,12 @@ public static class ResultTreeSerializer
         writer.Write('>');
 
         bool hasElementChildren = children.Any(c => c is XElement);
+        bool suppressThis = IsSuppressIndentationElement(element.Name, props);
         foreach (var child in children)
         {
-            if (props.Indent && hasElementChildren && child is XElement)
+            if (props.Indent && hasElementChildren && child is XElement childElem
+                && !IsSuppressIndentationElement(childElem.Name, props)
+                && !suppressThis)
             {
                 writer.WriteLine();
                 writer.Write(new string(' ', (depth + 1) * 2));
@@ -3273,7 +3290,7 @@ public static class ResultTreeSerializer
             SerializeRawNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings));
         }
 
-        if (props.Indent && hasElementChildren)
+        if (props.Indent && hasElementChildren && !suppressThis)
         {
             writer.WriteLine();
             writer.Write(new string(' ', depth * 2));

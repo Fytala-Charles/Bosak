@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 15-07-2026     | DocumentedSkips: upstream defects/platform limitations recorded as skips with reasons    |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | External-variable tests now run; params are bound by the executor                        |
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Tests without environment resolve relative URIs against the test-set directory           |
+//                      | Charles Korthout | 0.6   | 15-07-2026     | Referenced environments without static-base-uri also fall back to test-set directory     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -161,7 +162,16 @@ internal sealed class ConformanceRunner
 
             // FOTS convention: tests without an explicit environment resolve relative
             // resource URIs against the test-set file's directory (fn-parse-json-101..105).
-            env ??= new TestEnvironment { BaseUri = new Uri(baseDir + Path.DirectorySeparatorChar).AbsoluteUri };
+            // Referenced environments that do not declare a static-base-uri also fall back
+            // to the test-set directory so fn:transform relative URIs resolve correctly.
+            if (env is null)
+            {
+                env = new TestEnvironment { BaseUri = new Uri(baseDir + Path.DirectorySeparatorChar).AbsoluteUri };
+            }
+            else if (string.IsNullOrEmpty(env.BaseUri))
+            {
+                env.BaseUri = new Uri(baseDir + Path.DirectorySeparatorChar).AbsoluteUri;
+            }
 
             // Dependency check
             if (!_dependencyFilter.IsSupported(testCase.Dependencies))

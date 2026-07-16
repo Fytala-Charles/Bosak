@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 24-05-2026     | Added xsl:number tests (single, any, multiple, value attribute, format tokens)         |
 //                      | Charles Korthout | 0.6   | 26-05-2026     | Added global variable and parameter tests for main/include/import scopes                 |
 //                      | Charles Korthout | 0.7   | 27-05-2026     | Added fn:transform tests (basic, stylesheet-params, initial-template) and map key lookup  |
+//                      | Charles Korthout | 0.71  | 15-07-2026     | Updated stylesheet-params test to use xs:QName keys per spec                             |
 //                      | Charles Korthout | 0.8   | 31-05-2026     | Added xsl:try / xsl:catch tests (result tree, select attribute, function body)         |
 //                      | Charles Korthout | 0.9   | 31-05-2026     | Added xsl:for-each-group tests (group-by, group-adjacent, group-starting-with, current-grouping-key) |
 //                      | Charles Korthout | 0.10  | 13-06-2026     | Relaxed fn:transform assertions to tolerate copied in-scope namespaces                   |
@@ -37,6 +38,7 @@
 //                      | Charles Korthout | 0.25  | 11-07-2026     | Added SESU0007 unsupported-encoding and SEPM0009 standalone/omit-declaration tests.    |
 //                      | Charles Korthout | 0.26  | 11-07-2026     | Updated expected XML empty-element tag to no-space form.                               |
 //                      | Charles Korthout | 0.27  | 12-07-2026     | Updated default-output tests to expect the XML declaration.                              |
+//                      | Charles Korthout | 0.28  | 15-07-2026     | Removed temporary debug tests used during fn:transform Tier-2m investigation.            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2116,7 +2118,7 @@ Welcome to this document on XHTML.
                 <result>
                     <xsl:variable name='result' select='transform(map{{""stylesheet-location"": ""{mainUri}"",
                         ""source-node"": .,
-                        ""stylesheet-params"": map{{""greeting"": ""world""}}}})'/>
+                        ""stylesheet-params"": map{{xs:QName(""greeting""): ""world""}}}})'/>
                     <xsl:copy-of select='map:get($result, ""output"")'/>
                 </result>
             </xsl:template>
@@ -2131,6 +2133,7 @@ Welcome to this document on XHTML.
         var doc = XDocument.Parse(result);
         Assert.Equal("world", doc.Descendants("output").Single().Value);
     }
+
 
     [Fact]
     public void FnTransform_With_Initial_Template()

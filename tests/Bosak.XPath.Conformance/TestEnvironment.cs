@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Parse <resource>/<source uri=> into a URI map installed as ctx.ResourceUriMapper       |
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Bind <source role="$var"> documents to variables (generalexpression, fn-transform)     |
 //                      | Charles Korthout | 0.6   | 15-07-2026     | Roleless <source> no longer becomes the context item (URI-map only; d1e41648)          |
+//                      | Charles Korthout | 0.7   | 15-07-2026     | LoadXml uses the published <source uri> as the document base URI                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -208,7 +209,7 @@ internal sealed class TestEnvironment
             {
                 try
                 {
-                    var doc = XDocumentProvider.LoadXml(src.FilePath);
+                    var doc = XDocumentProvider.LoadXml(src.FilePath, src.Uri);
                     ctx = ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
                 }
                 catch (System.Xml.XmlException ex) when (ex.Message.Contains("1.1"))
@@ -223,7 +224,7 @@ internal sealed class TestEnvironment
                 // document nodes. Non-XML resources stay unbound (previous behavior).
                 try
                 {
-                    var doc = XDocumentProvider.LoadXml(src.FilePath);
+                    var doc = XDocumentProvider.LoadXml(src.FilePath, src.Uri);
                     ctx = ctx.WithVariable(src.Role.Substring(1), XdmValue.FromNode(doc));
                 }
                 catch (Exception)

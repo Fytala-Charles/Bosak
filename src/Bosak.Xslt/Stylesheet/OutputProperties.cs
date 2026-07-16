@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 1.3   | 12-07-2026     | Append use-character-maps during merge so last-wins resolution is correct.              |
 //                      | Charles Korthout | 1.4   | 12-07-2026     | Merge multiple xsl:output use-character-maps lists in declaration order.                |
 //                      | Charles Korthout | 1.5   | 13-07-2026     | Added EffectiveVersion and ImplicitResultTree for default method inference (BC rule).   |
+//                      | Charles Korthout | 1.6   | 15-07-2026     | Added FromMap to support fn:transform serialization-params option.                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -380,6 +381,168 @@ public sealed class OutputProperties
         ValidateDoctypePublic(props);
 
         return props;
+    }
+
+    /// <summary>
+    /// Parses a map of serialization parameters (option-parameter conventions) into
+    /// <see cref="OutputProperties"/>. Keys are string-valued serialization parameter
+    /// names; values are the corresponding XDM values.
+    /// </summary>
+    public static OutputProperties FromMap(XdmMap map)
+    {
+        var props = new OutputProperties();
+
+        foreach (var kvp in map.Entries)
+        {
+            string name;
+            if (kvp.Key.Kind == XdmValueKind.String)
+            {
+                name = kvp.Key.StringValue;
+            }
+            else if (kvp.Key.Kind == XdmValueKind.QName)
+            {
+                // QName keys identify implementation-defined parameters; ignore.
+                continue;
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    $"XPTY0004: fn:transform serialization-params keys must be xs:string or xs:QName, got {kvp.Key.Kind}.");
+            }
+
+            ApplyMapParameter(props, name, kvp.Value);
+        }
+
+        return props;
+    }
+
+    private static void ApplyMapParameter(OutputProperties props, string name, XdmValue rawValue)
+    {
+        // Option parameter conventions: an empty sequence leaves the parameter at its default.
+        if (rawValue.IsUndefined)
+            return;
+        if (rawValue.IsSequence && rawValue.SequenceValue is not null)
+        {
+            bool any = false;
+            foreach (var _ in XdmSequence.FromSource(rawValue.SequenceValue))
+            {
+                any = true;
+                break;
+            }
+            if (!any)
+                return;
+        }
+
+        switch (name)
+        {
+            case "method":
+                props.Method = AsMethodName(name, rawValue);
+                props.MethodSpecified = true;
+                break;
+            case "indent":
+                props.Indent = AsBoolean(name, rawValue);
+                props.IndentSpecified = true;
+                break;
+            case "omit-xml-declaration":
+                props.OmitXmlDeclaration = AsBoolean(name, rawValue);
+                props.OmitXmlDeclarationSpecified = true;
+                break;
+            case "standalone":
+                props.Standalone = AsStandalone(rawValue);
+                props.StandaloneSpecified = true;
+                break;
+            case "item-separator":
+                props.ItemSeparator = AsString(name, rawValue);
+                props.ItemSeparatorSpecified = true;
+                break;
+            case "encoding":
+                props.Encoding = AsString(name, rawValue);
+                props.EncodingSpecified = true;
+                break;
+            case "version":
+                props.Version = AsString(name, rawValue);
+                props.VersionSpecified = true;
+                break;
+            case "media-type":
+                props.MediaType = AsString(name, rawValue);
+                props.MediaTypeSpecified = true;
+                break;
+            case "doctype-system":
+                props.DoctypeSystem = AsString(name, rawValue);
+                props.DoctypeSystemSpecified = true;
+                break;
+            case "doctype-public":
+                props.DoctypePublic = AsString(name, rawValue);
+                props.DoctypePublicSpecified = true;
+                break;
+            case "normalization-form":
+                props.NormalizationForm = AsString(name, rawValue);
+                props.NormalizationFormSpecified = true;
+                break;
+            case "json-node-output-method":
+                props.JsonNodeOutputMethod = AsString(name, rawValue).ToLowerInvariant();
+                props.JsonNodeOutputMethodSpecified = true;
+                break;
+            case "html-version":
+                {
+                    var d = AsDecimal(name, rawValue);
+                    props.HtmlVersion = d switch
+                    {
+                        1.0m => "1.0",
+                        1.1m => "1.1",
+                        4.0m => "4.0",
+                        5.0m => "5.0",
+                        _ => d.ToString(CultureInfo.InvariantCulture)
+                    };
+                    props.HtmlVersionSpecified = true;
+                }
+                break;
+            case "allow-duplicate-names":
+                props.AllowDuplicateNames = AsBoolean(name, rawValue);
+                props.AllowDuplicateNamesSpecified = true;
+                break;
+            case "escape-solidus":
+                props.EscapeSolidus = AsBoolean(name, rawValue);
+                props.EscapeSolidusSpecified = true;
+                break;
+            case "escape-uri-attributes":
+                props.EscapeUriAttributes = AsBoolean(name, rawValue);
+                props.EscapeUriAttributesSpecified = true;
+                break;
+            case "include-content-type":
+                props.IncludeContentType = AsBoolean(name, rawValue);
+                props.IncludeContentTypeSpecified = true;
+                break;
+            case "undeclare-prefixes":
+                props.UndeclarePrefixes = AsBoolean(name, rawValue);
+                props.UndeclarePrefixesSpecified = true;
+                break;
+            case "byte-order-mark":
+                props.ByteOrderMark = AsBoolean(name, rawValue);
+                props.ByteOrderMarkSpecified = true;
+                break;
+            case "use-character-maps":
+                props.CharacterMap = AsCharacterMap(rawValue);
+                props.CharacterMapSpecified = true;
+                break;
+            case "cdata-section-elements":
+                props.CdataSectionElements = AsQNameSet(name, rawValue);
+                props.CdataSectionElementsSpecified = true;
+                break;
+            case "suppress-indentation":
+                props.SuppressIndentation = AsQNameSet(name, rawValue);
+                props.SuppressIndentationSpecified = true;
+                break;
+            case "build-tree":
+                props.BuildTree = AsBoolean(name, rawValue);
+                props.BuildTreeSpecified = true;
+                break;
+            default:
+                // Unrecognized string keys are ignored (option parameter conventions).
+                break;
+        }
+
+        ValidateDoctypePublic(props);
     }
 
     /// <summary>
@@ -809,5 +972,174 @@ public sealed class OutputProperties
         }
 
         return list;
+    }
+
+    // ------------------------------------------------------------------
+    // Map serialization parameter helpers (fn:transform serialization-params)
+    // ------------------------------------------------------------------
+
+    private static XdmValue AtomizeOptionValue(XdmValue value)
+    {
+        if (value.IsNode)
+            return value.NodeValue.TypedValue;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var items = ToItemList(value);
+            if (items.Count == 1 && items[0].IsNode)
+                return items[0].NodeValue.TypedValue;
+        }
+        return value;
+    }
+
+    private static List<XdmValue> ToItemList(XdmValue value)
+    {
+        var list = new List<XdmValue>();
+        if (value.IsUndefined)
+            return list;
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                list.Add(item);
+            return list;
+        }
+        list.Add(value);
+        return list;
+    }
+
+    private static bool IsUntypedAtomic(XdmValue value)
+        => value.Kind == XdmValueKind.String
+           && string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
+
+    private static bool AsBoolean(string name, XdmValue rawValue)
+    {
+        var value = AtomizeOptionValue(rawValue);
+        if (value.Kind == XdmValueKind.Boolean)
+            return value.BooleanValue;
+        if (IsUntypedAtomic(value))
+        {
+            return value.StringValue.Trim() switch
+            {
+                "true" or "1" => true,
+                "false" or "0" => false,
+                _ => throw new InvalidOperationException(
+                    $"XPTY0004: Cannot convert xs:untypedAtomic('{value.StringValue}') to xs:boolean for serialization parameter '{name}'.")
+            };
+        }
+        throw new InvalidOperationException(
+            $"XPTY0004: Serialization parameter '{name}' requires xs:boolean, got {value.Kind}.");
+    }
+
+    private static string AsStandalone(XdmValue rawValue)
+    {
+        var value = AtomizeOptionValue(rawValue);
+        if (value.Kind == XdmValueKind.Boolean)
+            return value.BooleanValue ? "yes" : "no";
+        if (IsUntypedAtomic(value))
+        {
+            return value.StringValue.Trim() switch
+            {
+                "true" or "1" => "yes",
+                "false" or "0" => "no",
+                "omit" => "omit",
+                _ => throw new InvalidOperationException(
+                    $"XPTY0004: Cannot convert xs:untypedAtomic('{value.StringValue}') for serialization parameter 'standalone'.")
+            };
+        }
+        throw new InvalidOperationException(
+            $"XPTY0004: Serialization parameter 'standalone' requires xs:boolean or 'omit', got {value.Kind}.");
+    }
+
+    private static string AsString(string name, XdmValue rawValue)
+    {
+        var value = AtomizeOptionValue(rawValue);
+        if (value.Kind == XdmValueKind.String)
+            return value.StringValue;
+        throw new InvalidOperationException(
+            $"XPTY0004: Serialization parameter '{name}' requires xs:string, got {value.Kind}.");
+    }
+
+    private static string AsMethodName(string name, XdmValue rawValue)
+    {
+        var value = AtomizeOptionValue(rawValue);
+        if (value.Kind == XdmValueKind.String)
+            return value.StringValue.ToLowerInvariant();
+        if (value.Kind == XdmValueKind.QName)
+            return value.QNameValue.LocalName.ToLowerInvariant();
+        throw new InvalidOperationException(
+            $"XPTY0004: Serialization parameter '{name}' requires xs:string, got {value.Kind}.");
+    }
+
+    private static decimal AsDecimal(string name, XdmValue rawValue)
+    {
+        var value = AtomizeOptionValue(rawValue);
+        switch (value.Kind)
+        {
+            case XdmValueKind.Decimal:
+                return value.DecimalValue;
+            case XdmValueKind.Integer:
+                return value.IntegerValue;
+            case XdmValueKind.Double:
+            case XdmValueKind.Float:
+                return (decimal)value.DoubleValue;
+            default:
+                if (IsUntypedAtomic(value)
+                    && decimal.TryParse(value.StringValue.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var d))
+                    return d;
+                throw new InvalidOperationException(
+                    $"XPTY0004: Serialization parameter '{name}' requires a numeric value, got {value.Kind}.");
+        }
+    }
+
+    private static IReadOnlyList<XsQName> AsQNameSet(string name, XdmValue rawValue)
+    {
+        var list = new List<XsQName>();
+        foreach (var item in ToItemList(rawValue))
+        {
+            if (item.IsArray)
+            {
+                var arr = item.ArrayValue;
+                for (int i = 1; i <= arr.Count; i++)
+                    AddQName(arr.Get(i));
+                continue;
+            }
+            AddQName(item);
+        }
+        return list;
+
+        void AddQName(XdmValue item)
+        {
+            var value = AtomizeOptionValue(item);
+            if (value.Kind != XdmValueKind.QName)
+                throw new InvalidOperationException(
+                    $"XPTY0004: Serialization parameter '{name}' requires xs:QName values, got {value.Kind}.");
+            var q = value.QNameValue;
+            list.Add(new XsQName(q.LocalName, q.NamespaceUri, ""));
+        }
+    }
+
+    private static Dictionary<int, string> AsCharacterMap(XdmValue rawValue)
+    {
+        if (!rawValue.IsMap)
+            throw new InvalidOperationException(
+                $"XPTY0004: Serialization parameter 'use-character-maps' requires a map, got {rawValue.Kind}.");
+        var result = new Dictionary<int, string>();
+        foreach (var kvp in rawValue.MapValue.Entries)
+        {
+            var keyValue = AtomizeOptionValue(kvp.Key);
+            if (keyValue.Kind != XdmValueKind.String || IsUntypedAtomic(keyValue))
+                throw new InvalidOperationException(
+                    $"XPTY0004: fn:transform use-character-maps keys must be xs:string, got {keyValue.Kind}.");
+            string key = keyValue.StringValue;
+            if (key.Length != 1)
+                throw new InvalidOperationException(
+                    $"SEPM0016: fn:transform use-character-maps key '{key}' must be a single character.");
+
+            var valueValue = AtomizeOptionValue(kvp.Value);
+            if (valueValue.Kind != XdmValueKind.String || IsUntypedAtomic(valueValue))
+                throw new InvalidOperationException(
+                    $"XPTY0004: fn:transform use-character-maps values must be xs:string, got {valueValue.Kind}.");
+            result[key[0]] = valueValue.StringValue;
+        }
+        return result;
     }
 }

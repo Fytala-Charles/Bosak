@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 2.0   | 26-06-2026     | Added CurrentOutputUri for fn:current-output-uri                                       |
 //                      | Charles Korthout | 1.9   | 26-06-2026     | File-not-found document loads report FODC0002 so xsl:catch can match                    |
 //                      | Charles Korthout | 2.1   | 15-07-2026     | Added ResourceUriMapper to redirect published http: resource URIs to local files        |
+//                      | Charles Korthout | 2.2   | 15-07-2026     | Added XsltVersion override for fn:system-property('xsl:version')                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -191,6 +192,12 @@ public sealed class EvaluationContext
     /// coercion rules (e.g., string-to-boolean, number-to-boolean in general comparisons).
     /// </summary>
     public bool BackwardsCompatible { get; set; }
+
+    /// <summary>
+    /// Optional override for the effective XSLT version reported by
+    /// <c>fn:system-property('xsl:version')</c> during a transformation.
+    /// </summary>
+    public double? XsltVersion { get; set; }
 
     /// <summary>
     /// The default element namespace URI for unprefixed element and type names.

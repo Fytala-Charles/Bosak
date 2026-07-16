@@ -4,39 +4,33 @@
 
 ## Session Date
 
-2026-07-15 (night → morning)
+2026-07-16
 
 ## What Was Done
 
-- **Tier-2a QT3: 20,684 → 21,081 passed (+397), skips 9,776 → 9,286 (−490), zero regressions.**
-  Now **21,081 / 1,454 / 9,286 (66.25%)**. The 93 new failures are all previously-skipped
-  tests exposing genuine engine gaps (verified: −490 skips = 397 pass + 93 fail exactly).
-- **T2.1 OverflowException→FOAR0002** (~90 skips → 4): `VmEngine.Execute` wraps ExecuteBlock
-  in try/catch. No constant folding exists, so one wrap point suffices.
-- **T2.2 External `<param select>` binding** (460 skips → 0): deleted skip block in
-  ConformanceRunner; `TestExecutor.BindExternalParameters` evaluates select via
-  XPath31Expression on post-ApplyTo ctx (can use `$var` sources), binds via WithVariable
-  (prefix stripped — engine vars are local-name keyed); empty select → unbind;
-  bind failure → skip.
-- Unit tests 1,010/0.
+- **QT3 Tier-2m `fn:transform` option handling is complete.**
+  Filtered suite: **117 passed / 0 failed / 7 skipped**.
+  - Implemented `global-context-item` (defaults to `source-node`) via `TransformCaptured`/`TransformFunctionCaptured`.
+  - Implemented `xslt-version` numeric validation (XPTY0004 for non-numeric) and propagation to `fn:system-property('xsl:version')`.
+  - Fixed default-mode routing and raw-result extraction for `base-output-uri` delivery.
+  - Suppressed absent principal output when only secondary `xsl:result-document` outputs are produced.
+  - Routed XML method through raw serializer when `suppress-indentation` is specified.
+  - Added serialization parameter merging for principal and secondary outputs.
+- **Removed temporary `Temp_Debug_*` unit tests** from `StylesheetTests.cs`.
+- **Updated documentation:** `docs/AGENT_HANDOVER.md`, `docs/ARCHITECTURE.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md`.
+- **Updated file change histories** for all modified source files.
+- **Build:** `dotnet build Bosak.sln` — 0 warnings, 0 errors.
+- **Unit tests:** all passing (1,282/0).
 
-## Tier-2a-exposed gaps (93, documented in AGENT_HANDOVER)
+## Remaining Skipped `fn:transform` Tests (7)
 
-format-date/time picture+locale (~50); BigInteger ranges (12 — deferred, major change);
-duration arith FODT0002/±INF (8); cbcl-castable out-of-range (8); collection/fn-doc invalid
-URIs → IOException instead of FODC000x (11); fn-transform XSLT gaps (13); misc (3).
+Skipped due to unsupported dependencies/features, not implementation failures:
+- Schema-aware test (1).
+- Saxon-specific extensions / non-standard environment (5).
+- XSLT 1.0 source-required argument behavior (1).
 
 ## Next Session Pointers
 
 - Canonical state: `docs/AGENT_HANDOVER.md` (top section).
-- Tier 2 remaining: (3) function-item registry (function-lookup 37, function-literal 26,
-  map:find#2 — root cause found: wrong ParameterTypes in registry for dynamic calls, e.g.
-  fn:not=[Boolean]→item()*, *-from-duration=[String]→[Duration], map:* key=[String]→any;
-  empty-seq () passed to String params needs pass-through in ConvertArgToKind;
-  fn:load-xquery-module stub registration for exists() tests); (4) `?` lookup operator
-  (~65); (5) xml-to-json options (43); (6) serialize-xml (37).
-- Static calls bypass ParameterTypes (VmEngine.cs:184) — registry kind fixes only affect
-  dynamic invocation; safe to correct kinds to spec values.
-- Probe trick: replicate harness heuristics in tmp/testrd to enumerate affected tests
-  without a full run. Watch CRLF in comm diffs (sed -i 's/\r$//').
-- Full QT3 ~5-6 min background (timeout 900). Exit code 2 = has failures (normal).
+- Continue QT3 Tier-2 work: `fn-load-xquery-module` (31), format-date/time picture+locale (~42), ST-Axes (15), fn-id/idref-dtd (27), fn-unparsed-text* (23), collection/fn-collection (18), xs-numeric (10), K-NumericIntegerDivide (9), cbcl-* (8), fn-function-lookup (7), K2-SeqIDFunc (6), K2-NumericMod (6), K-SeqIndexOfFunc (6).
+- Full QT3 run ~5-6 min background (timeout 900). Exit code 2 = has failures (normal).

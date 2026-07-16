@@ -1,6 +1,43 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-16
+**Commit:** *(pending — QT3 Tier-2m: fn:transform option handling)*
+**Current focus:** **QT3 `fn:transform` Tier-2m suite: 117 passed / 0 failed / 7 skipped** — full option surface now implemented; 7 skipped tests depend on unsupported features (schema awareness, saxon-specific extensions, XSLT 1.0 source-required behavior). QT3 XPath 3.1 suite remains **21,838 passed / 699 failed / 9,284 skipped (68.63%)**.
+
+---
+
+## This Session Fixes (Tier-2m: fn:transform option handling)
+
+1. **`global-context-item` option** — `TransformCaptured`/`TransformFunctionCaptured` accept an explicit global context item and default to `source-node` when absent; `InitializeGlobalParametersAndVariables` uses it for global variable evaluation. Fixes `fn-transform-15` (stylesheet-node + stylesheet-params), `fn-transform-82a-e`.
+2. **`xslt-version` validation and propagation** — non-numeric `xslt-version` raises **XPTY0004**; accepted numeric types are `xs:decimal`/`xs:integer`/`xs:double`/`xs:float` or a numeric string. The requested version is propagated to `fn:system-property('xsl:version')` via `EvaluationContext.XsltVersion`. Fixes `fn-transform-err-4`.
+3. **Default-mode routing and raw result extraction** — when `initial-mode` is absent, the engine uses the stylesheet's declared `default-mode`; raw results are keyed by `base-output-uri` and return the collected text/sequence instead of an empty document wrapper. Fixes `fn-transform-88`.
+4. **Absent principal output suppression** — when a stylesheet produces only secondary `xsl:result-document` outputs, the empty principal output entry is no longer added to the result map. Fixes `fn-transform-43`.
+5. **`suppress-indentation` serialization override** — the XML method routes through the raw serializer when `suppress-indentation` is specified, and `SerializeRawNode` honors the list. Fixes `fn-transform-66`.
+6. **Serialization parameter merging** — `fn:transform` serialization params are merged into principal and secondary outputs before serialization, with list-union handling for `cdata-section-elements`, `suppress-indentation`, and `use-character-maps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs` (v0.6: global-context-item, xslt-version validation, template/tunnel/static params, option parsing)
+- `src/Bosak.Xslt/Api/XsltExecutable.cs` (v1.8: TransformCaptured/TransformFunctionCaptured global context item passthrough)
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs` (v6.15: global context item plumbing, default mode routing, raw result extraction, absent principal output suppression)
+- `src/Bosak.Xslt/Stylesheet/OutputProperties.cs` (v1.6: map-based serialization params, merge/clone semantics)
+- `src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs` (v1.23: suppress-indentation raw path)
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (v2.2: `XsltVersion` override)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.42: `system-property('xsl:version')` override)
+- `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (v0.28: removed temporary debug tests)
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs` (v0.5: `LoadXml` overload with explicit `baseUri` for published resource URIs)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (v0.6: environment `static-base-uri` fallback to test-set directory)
+- `tests/Bosak.XPath.Conformance/TestEnvironment.cs` (v0.7: pass published `<source uri>` to `LoadXml`)
+- `docs/ARCHITECTURE.md` (fn:transform feature row updated)
+- `docs/INTEGRATION.md` (fn:transform feature matrix + changelog updated)
+- `docs/FEATURE_REQUESTS.md` (REQ-011 completion details updated)
+- `README.md` (XPath pass rate + phase-2 fn:transform note updated)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-16
 **Commit:** `0ae8739` (QT3 Tier-2l: format picture/locale fixes)
 **Current focus:** **QT3 XPath 3.1 suite: 21,838 passed / 699 failed / 9,284 skipped (68.63%)** — up from 21,798/739 (68.50%): **+40 net passes, zero regressions** (name-level diff vs `tmp/fails-t2k.txt`: 42 format picture/locale failures fixed, 2 time-dependent `millisecs-*` tests newly failing). Tier-2l target pool CLEARED: `fn-format-date`/`fn-format-dateTime`/`fn-format-time`/`fn-format-integer` picture+locale fixes (~42 tests). Unit tests 1,282/0 (+32). Deferred (unchanged): fn-transform (61), fn-load-xquery-module (31), ST-Axes (15), fn-id/idref-dtd (27), fn-unparsed-text* (23), collection/fn-collection (18), xs-numeric (10), K-NumericIntegerDivide (9), cbcl-* (8), fn-function-lookup (7), K2-SeqIDFunc (6), K2-NumericMod (6), K-SeqIndexOfFunc (6).
 

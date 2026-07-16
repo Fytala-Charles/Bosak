@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 05-06-2026     | Preserve whitespace in elements; strip document-level whitespace-only text nodes        |
 //                      | Charles Korthout | 0.3   | 25-06-2026     | LoadXml sets DocumentUri on returned document node                                      |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | LoadXml absolutizes relative paths before building the document URI (UriFormatException)|
+//                      | Charles Korthout | 0.5   | 15-07-2026     | Added LoadXml overload with explicit baseUri for published resource URIs                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -83,9 +84,26 @@ public static class XDocumentProvider
     /// XML 1.1 declarations are accepted by encoding name characters that .NET rejects.
     /// </summary>
     public static IXdmNode LoadXml(string filePath)
+        => LoadXml(filePath, baseUri: null);
+
+    /// <summary>
+    /// Loads an XML file and returns the root as an <see cref="IXdmNode"/>.
+    /// When <paramref name="baseUri"/> is supplied, it is used as the document's base URI
+    /// instead of the file path. This is used by test harnesses that publish a source
+    /// document under a different URI than its local file location.
+    /// XML 1.1 declarations are accepted by encoding name characters that .NET rejects.
+    /// </summary>
+    public static IXdmNode LoadXml(string filePath, string? baseUri)
     {
         var document = Xml11Loader.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
         StripDocumentLevelWhitespace(document);
+        if (!string.IsNullOrEmpty(baseUri))
+        {
+            // Reparse with the published URI so element BaseUri values reflect it.
+            document = Xml11Loader.Parse(document.ToString(),
+                LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace, baseUri);
+            StripDocumentLevelWhitespace(document);
+        }
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
         var node = new XDocumentNode(document);

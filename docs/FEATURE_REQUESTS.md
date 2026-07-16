@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-16 (QT3 Tier-2l: QT3 at **21,838 passed / 699 failed / 9,284 skipped — 68.63%**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
+> **Living Registry** — Last updated: 2026-07-16 (QT3 Tier-2m: `fn:transform` option handling complete — **117 passed / 0 failed / 7 skipped**; QT3 suite at **21,838 passed / 699 failed / 9,284 skipped — 68.63%**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -588,7 +588,11 @@ Implemented `fn:transform` in `XsltFunctionLibrary` (Bosak.Xslt project) as a de
 - [x] Secondary `xsl:result-document` output captured in the result map (2026-07-14)
 - [x] `package-name`/`package-version` selection from a registered package set (2026-07-14)
 - [x] Available in static expressions (`static="yes"`, `xsl:use-when`) (2026-07-14)
-- [x] W3C transform test set 9/9 (2026-07-14)
+- [x] `global-context-item` option and default wrapper for non-document source nodes (2026-07-15)
+- [x] `default-mode` honored when no `initial-mode` is supplied (2026-07-15)
+- [x] `xslt-version` type validation (string value raises `XPTY0004`) (2026-07-15)
+- [x] `serialization-params` override `cdata-section-elements`/`suppress-indentation` for XML method (2026-07-15)
+- [x] W3C `fn-transform` test set 117/124 passed (7 skipped) (2026-07-15)
 
 #### Impact Analysis
 | Layer | Impact | Notes |
@@ -605,6 +609,7 @@ Implemented `fn:transform` in `XsltFunctionLibrary` (Bosak.Xslt project) as a de
 |------|-------|----------|-----------|
 | 2026-05-24 | Kimi | Pending | Phase 3 item; depends on stable XSLT engine |
 | 2026-07-14 | Kimi | Completed | Full option surface implemented; W3C transform set 9/9; conformance suite green |
+| 2026-07-15 | Kimi | Completed | Tier-2m fixes: global-context-item, default-mode, xslt-version validation, serialization overrides; fn-transform 117/124 passed |
 
 ---
 

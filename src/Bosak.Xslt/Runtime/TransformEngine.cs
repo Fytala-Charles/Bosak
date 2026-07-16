@@ -183,6 +183,7 @@
 //                      | Charles Korthout | 6.12  | 14-07-2026     | Typed templates keep node identity/parentage; single text nodes not cloned; fn:snapshot |
 //                      | Charles Korthout | 6.13  | 14-07-2026     | fn:transform: initial-match-selection, raw principal result, result-document capture; map-entry content; text result-doc fix |
 //                      | Charles Korthout | 6.14  | 14-07-2026     | xsl:analyze-string uses cached XSD regex translation + compiled-Regex cache             |
+//                      | Charles Korthout | 6.15  | 15-07-2026     | fn:transform: global-context-item, default-mode routing, raw result extraction, absent principal output |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -611,12 +612,12 @@ public sealed class TransformEngine
     /// <param name="initialMatchSelection">Optional initial match selection (fn:transform): an arbitrary XDM value to which templates are applied in the initial mode.</param>
     /// <param name="captureResultDocuments">When true, secondary result documents are captured instead of written to disk.</param>
     /// <param name="rawTransformResult">When true, the raw top-level items of the transformation are returned as a sequence (fn:transform delivery-format="raw").</param>
-    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null, XdmValue? initialMatchSelection = null, bool captureResultDocuments = false, bool rawTransformResult = false)
+    public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null, XdmValue? initialMatchSelection = null, bool captureResultDocuments = false, bool rawTransformResult = false, IXdmNode? globalContextItem = null)
     {
         _baseOutputUri = baseOutputUri;
         _context.CurrentOutputUri = baseOutputUri;
         _initialSource = source;
-        _initialMode = initialMode ?? "";
+        _initialMode = initialMode ?? _stylesheet.DefaultMode;
         _startedWithNamedTemplate = false;
         _returnRawInitialTemplateResult = rawResult;
         _rawInitialTemplateResult = null;
@@ -674,10 +675,16 @@ public sealed class TransformEngine
                 _context.RegisterDocument(sourceDoc.DocumentUri, sourceDoc);
         }
 
+        // Determine the global context item. For fn:transform, the caller supplies
+        // the value explicitly or supplies a wrapper document for non-document nodes.
+        // When called directly without an explicit global context item, the source
+        // node serves as the global context item for backward compatibility.
+        var effectiveGlobalContextItem = globalContextItem ?? source;
+
         // Initialize global parameters and variables before compiling match patterns
         // and building key indices, because both match-pattern predicate validation
         // and xsl:key/@use expressions may reference global variables/parameters.
-        InitializeGlobalParametersAndVariables(source);
+        InitializeGlobalParametersAndVariables(effectiveGlobalContextItem);
 
         // Capture the variable bindings that are visible before any template executes.
         // Attribute sets are evaluated with only these top-level bindings in scope.
@@ -789,8 +796,9 @@ public sealed class TransformEngine
         {
             // fn:transform initial-match-selection: apply templates in the initial mode
             // to each item of the supplied selection (XSLT 3.0 §24.2).
+            // When no initial mode is supplied, use the stylesheet's default mode.
             var resolvedInitialMode = string.IsNullOrEmpty(initialMode)
-                ? ResolveMode("#default")
+                ? _stylesheet.DefaultMode
                 : ExpandModeName(initialMode, _stylesheet.Root);
             if (resolvedInitialMode == "#unnamed")
                 resolvedInitialMode = "";
@@ -890,21 +898,27 @@ public sealed class TransformEngine
             }
             else
             {
-                // Look for a template matching "/" or other document-node-specific patterns
-                var rootTemplate = FindRootTemplate();
-                if (rootTemplate != null && EvaluatePatternMatch(rootTemplate, XdmValue.FromNode(source!)))
+                // No initial template/mode/selection was supplied. Start in the
+                // stylesheet's default mode and apply templates to the source node
+                // itself (the built-in document/element rules handle the children
+                // when no template matches the source node).
+                _modeStack.Push(_initialMode);
+                try
                 {
-                    ExecuteTemplate(rootTemplate, source!);
+                    var rootTemplate = FindBestTemplate(source!, _initialMode);
+                    if (rootTemplate != null)
+                    {
+                        var (initCallParams, initTunnelParams) = CollectExternalParameters(rootTemplate.Element);
+                        ExecuteTemplate(rootTemplate, source!, callParams: initCallParams, incomingTunnelParams: initTunnelParams);
+                    }
+                    else
+                    {
+                        ApplyBuiltInRules(source!, _initialMode);
+                    }
                 }
-                else
+                finally
                 {
-                    // XSLT 2.0 §5.4: when there is no template matching "/",
-                    // the built-in template rule for the document node is invoked.
-                    // This built-in rule applies templates to the children of the
-                    // document node. We must NOT search for other patterns (like
-                    // node() or document-node()) that might match the document node
-                    // directly, as that causes incorrect next-match chaining.
-                    ApplyTemplates(source!, mode: "", select: null);
+                    _modeStack.Pop();
                 }
             }
 
@@ -920,9 +934,15 @@ public sealed class TransformEngine
         // return the collected raw top-level items as a sequence.
         if (_returnRawTransformResult && _principalResultDocumentProperties == null)
         {
-            var rawTransformValue = _jsonResultItems.Count == 0
-                ? XdmValue.Undefined
-                : XdmValue.FromSequence(MaterializedSequence.FromList(_jsonResultItems));
+            XdmValue rawTransformValue;
+            if (_jsonResultItems.Count > 0)
+            {
+                rawTransformValue = XdmValue.FromSequence(MaterializedSequence.FromList(_jsonResultItems));
+            }
+            else
+            {
+                rawTransformValue = ExtractRawResultTreeItems();
+            }
             FinalizeResultTreeNamespaces(rawTransformValue);
             return rawTransformValue;
         }
@@ -941,6 +961,12 @@ public sealed class TransformEngine
             FinalizeResultTreeNamespaces(rawSequenceResult);
             return rawSequenceResult;
         }
+
+        // If no content was ever written to the principal result tree and no
+        // explicit principal xsl:result-document was produced, the principal result
+        // is absent.
+        if (!_principalOutputHasContent && _principalResultDocumentProperties == null)
+            return XdmValue.Undefined;
 
         // Return the result document, or document-level text if no root element was produced
         if (_documentLevelText.Length > 0 && !_resultDocument.Elements().Any())
@@ -973,23 +999,68 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Extracts the raw top-level items from the implicit result tree for
+    /// <c>fn:transform</c> delivery-format="raw".
+    /// </summary>
+    private XdmValue ExtractRawResultTreeItems()
+    {
+        if (_documentLevelText.Length > 0 && !_resultDocument.Elements().Any())
+            return XdmValue.FromString(_documentLevelText.ToString());
+
+        var nodes = _resultDocument.Nodes().ToList();
+        if (nodes.Count == 0)
+            return XdmValue.Undefined;
+
+        XdmValue RawNodeFromXNode(XNode node)
+        {
+            if (node is XElement elem)
+            {
+                elem.Remove();
+                return XdmValue.FromNode(new XDocumentNode(new XDocument(elem)));
+            }
+            if (node is XText text)
+                return XdmValue.FromString(text.Value);
+            if (node is XComment comment)
+                return XdmValue.FromNode(new XDocumentNode(new XDocument(new XComment(comment.Value))));
+            if (node is XProcessingInstruction pi)
+                return XdmValue.FromNode(new XDocumentNode(new XDocument(new XProcessingInstruction(pi.Target, pi.Data))));
+            return XdmValue.FromString(node.ToString());
+        }
+
+        if (nodes.Count == 1)
+            return RawNodeFromXNode(nodes[0]);
+
+        var items = new List<XdmValue>(nodes.Count);
+        foreach (var node in nodes)
+            items.Add(RawNodeFromXNode(node));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    /// <summary>
     /// Executes an initial function as the transformation entry point.
     /// </summary>
-    public XdmValue TransformFunction(string name, XdmValue[] args)
+    /// <param name="name">The expanded function name.</param>
+    /// <param name="args">Arguments to pass to the function.</param>
+    /// <param name="captureResultDocuments">When true, secondary result documents are captured instead of written to disk.</param>
+    /// <param name="baseOutputUri">The base output URI for resolving result-document hrefs.</param>
+    public XdmValue TransformFunction(string name, XdmValue[] args, bool captureResultDocuments = false, string? baseOutputUri = null, IXdmNode? source = null, IXdmNode? globalContextItem = null)
     {
-        _baseOutputUri = null;
-        _context.CurrentOutputUri = null;
+        _baseOutputUri = baseOutputUri;
+        _context.CurrentOutputUri = baseOutputUri;
+        _captureResultDocuments = captureResultDocuments;
         RegisterXsltFunctions();
         RegisterKeyFunction();
         _context.DocumentPostProcessor = PostProcessLoadedDocument;
-        InitializeGlobalParametersAndVariables(null);
+        InitializeGlobalParametersAndVariables(globalContextItem ?? source);
         _attributeSetVariableSnapshot = _context.SnapshotVariables();
 
         // Result-document URIs must be unique within a transformation.
         _resultDocumentUris.Clear();
         _resultDocumentStack.Clear();
+        _capturedResultDocuments.Clear();
         _principalOutputClosed = false;
         _principalOutputHasContent = false;
+        _principalResultDocumentProperties = null;
 
         // Compile template match patterns before execution, just as for a normal
         // transformation. The function body may contain xsl:apply-templates that
@@ -1031,6 +1102,14 @@ public sealed class TransformEngine
             if (close < 2 || close == name.Length - 1)
                 throw new InvalidOperationException("XTDE0041");
             return (name.Substring(2, close - 2), name.Substring(close + 1));
+        }
+
+        if (name.Length > 2 && name[0] == '{')
+        {
+            int close = name.IndexOf('}');
+            if (close < 1 || close == name.Length - 1)
+                throw new InvalidOperationException("XTDE0041");
+            return (name.Substring(1, close - 1), name.Substring(close + 1));
         }
 
         int colon = name.IndexOf(':');
@@ -9114,19 +9193,18 @@ public sealed class TransformEngine
     /// reference, using a singleton focus based on the root of the tree containing the initial
     /// context node (per XSLT 3.0 §9.6). If no initial context node is supplied, the focus is absent.
     /// </summary>
-    private void InitializeGlobalParametersAndVariables(IXdmNode? source)
+    private void InitializeGlobalParametersAndVariables(IXdmNode? globalContextItem)
     {
-        var focus = source != null ? XdmValue.FromNode(source) : XdmValue.Undefined;
+        var focus = globalContextItem != null ? XdmValue.FromNode(globalContextItem) : XdmValue.Undefined;
         _globalContextItem = focus;
 
         // Global variables/parameters are evaluated with a singleton focus based on the
-        // root node of the tree containing the initial context node (XSLT 3.0 §9.6).
-        // If no source node is supplied, the focus is absent and any reference to the
-        // context item raises XPDY0002.
-        if (source != null)
+        // global context item supplied for the transformation. If no global context item
+        // is supplied, the focus is absent and any reference to the context item raises
+        // XPDY0002.
+        if (globalContextItem != null)
         {
-            var root = GetRootNode(source);
-            _context.WithFocus(XdmValue.FromNode(root), 1, 1);
+            _context.WithFocus(XdmValue.FromNode(globalContextItem), 1, 1);
         }
 
         // Capture externally-supplied parameter bindings before we add any globals.
@@ -9228,9 +9306,8 @@ public sealed class TransformEngine
                 try
                 {
                     // Global variables/parameters are evaluated with a singleton focus based
-                    // on the root node of the tree containing the initial context node.
-                    var root = _globalContextItem.IsNode ? GetRootNode(_globalContextItem.NodeValue) : null;
-                    var focus = root != null ? XdmValue.FromNode(root) : XdmValue.Undefined;
+                    // on the global context item for the transformation.
+                    var focus = _globalContextItem.IsUndefined ? XdmValue.Undefined : _globalContextItem;
                     _context.WithFocus(focus, focus.IsUndefined ? 0 : 1, focus.IsUndefined ? 0 : 1);
                     if (_globalVariableSnapshot != null)
                         _context.RestoreVariables(_globalVariableSnapshot);
