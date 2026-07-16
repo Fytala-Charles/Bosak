@@ -1,6 +1,30 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-16
+**Commit:** `0ae8739` (QT3 Tier-2l: format picture/locale fixes)
+**Current focus:** **QT3 XPath 3.1 suite: 21,838 passed / 699 failed / 9,284 skipped (68.63%)** — up from 21,798/739 (68.50%): **+40 net passes, zero regressions** (name-level diff vs `tmp/fails-t2k.txt`: 42 format picture/locale failures fixed, 2 time-dependent `millisecs-*` tests newly failing). Tier-2l target pool CLEARED: `fn-format-date`/`fn-format-dateTime`/`fn-format-time`/`fn-format-integer` picture+locale fixes (~42 tests). Unit tests 1,282/0 (+32). Deferred (unchanged): fn-transform (61), fn-load-xquery-module (31), ST-Axes (15), fn-id/idref-dtd (27), fn-unparsed-text* (23), collection/fn-collection (18), xs-numeric (10), K-NumericIntegerDivide (9), cbcl-* (8), fn-function-lookup (7), K2-SeqIDFunc (6), K2-NumericMod (6), K-SeqIndexOfFunc (6).
+
+---
+
+## This Session Fixes (Tier-2l: format picture/locale fixes)
+
+1. **ISO week-in-month boundary fix** (`FormatWeekOfMonth`) — weeks that start in the previous calendar month are now counted from the first Thursday of that previous month; also handles year-boundary weeks correctly. Fixes `format-date-011`, `format-dateTime-011` first-of-month cluster, and related `[w]` cases.
+2. **Timezone military notation range** — `[ZZ]`/`[zz]` now applies only to whole-hour offsets in the -12 to +12 range; offsets outside the range (e.g. +13:00) fall back to numeric output. `[z]` emits lower-case military letters.
+3. **Two-digit timezone `[Z99]` zero-padding** — optional digit positions in the hour group are now zero-padded to the full group width, so single-digit hours print as `+09`, `-09`, etc.
+4. **Calendar validation nuance** — unknown calendars with a namespace URI (`Q{uri}local` or a prefixed lexical QName) are accepted as an implementation-defined fallback to the Gregorian calendar; unknown no-namespace calendars and invalid EQName syntax still raise **FOFD1340**.
+5. **Earlier Tier-2l fixes included in this commit**: fractional-seconds width handling, German month/day names (`de`), `Q{}ISO` calendar EQName support, Roman year width truncation, CJK kanji numbering, French/Italian ordinal words, and English ordinal suffix hints.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FormatDateTimeEngine.cs` (v0.8: week-in-month, timezone military/range/[Z99], calendar namespace fallback)
+- `src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs` (v0.9: CJK kanji, French/Italian ordinals)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.11: 32 Tier-2l format picture/locale tests)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-16
 **Commit:** `063e908` (QT3 Tier-2k: validation & type-strictness sweep)
 **Current focus:** **QT3 XPath 3.1 suite: 21,798 passed / 739 failed / 9,284 skipped (68.50%)** — up from 21,688/849 (68.16%): **+110 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2j-full.log`). Tier-2k target pools CLEARED: K2-SeqExprInstanceOf (16), eqname (11), K-QuantExprWithout (9), K-ValCompTypeChecking (9), K-GenCompEq (4) + GenCompEq-3/5, K-RangeExpr (4) + K2-RangeExpr (2), round family (9: fn-round2args-2, fn-round-half-to-even-30..35, cbcl-001/012), fn-outermost/innermost validation (8), plus bonus (K-GenCompGT/GTEQ/LT/LTEQ/NE 20, K-FilterExpr-91, K-ForExprWithout 3, cbcl-treat-as 2, instanceof110, predicates-33..36, K-SeqSUMFunc-33, fn-sum-7/9/10, …). Unit tests 1,250/0 (+64). Deferred (unchanged): fn-has-children (8) + outermost/innermost-018..021 (8) namespace-axis cluster; RangeExpr-409* BigInteger; LetExpr020a tradeoff. Next pools: fn-transform (61, genuine XSLT), fn-load-xquery-module (31), format-date/time/dateTime/integer picture+locale (~42), ST-Axes (15, XPST0005), fn-id/idref-dtd (27, harness-skip candidate via test-set dependency propagation), fn-unparsed-text* (23), collection/fn-collection (18), xs-numeric (10), K-NumericIntegerDivide (9, BigInteger), cbcl-* (8), fn-function-lookup (7), K2-SeqIDFunc (6), K2-NumericMod (6), K-SeqIndexOfFunc (6).
 
