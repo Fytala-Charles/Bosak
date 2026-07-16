@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-16
-**Commit:** *(pending — QT3 Tier-2m: fn:transform option handling)*
+**Commit:** `9ac5b6e` (QT3 Tier-2m: fn:transform option handling)
 **Current focus:** **QT3 `fn:transform` Tier-2m suite: 117 passed / 0 failed / 7 skipped** — full option surface now implemented; 7 skipped tests depend on unsupported features (schema awareness, saxon-specific extensions, XSLT 1.0 source-required behavior). QT3 XPath 3.1 suite remains **21,838 passed / 699 failed / 9,284 skipped (68.63%)**.
 
 ---
