@@ -30,6 +30,8 @@
 //                      | Charles Korthout | 1.8   | 13-07-2026     | Partial application (placeholders) for dynamic function calls (higher-order-func-045)   |
 //                      | Charles Korthout | 1.9   | 15-07-2026     | QuantifiedLoopInfo carries optional positional variable for FLWOR 'at $pos'             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.10  | 15-07-2026     | QuantifiedLoopInfo carries VariablePrefix/VariableNamespaceUri; for/some/every bindings preserve EQName namespaces |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -40,7 +42,7 @@ namespace Bosak.XPath.Compiler.Ir;
 /// <summary>
 /// Loop information stored in the literal pool for For/Some/Every opcodes.
 /// </summary>
-public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null);
+public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null);
 
 /// <summary>
 /// Try/catch information stored in the literal pool for the TryCatch opcode.
@@ -1205,7 +1207,7 @@ public sealed class IrLowerer
         }
 
         int afterRhs = _instructions.Count;
-        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName);
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
@@ -1273,7 +1275,7 @@ public sealed class IrLowerer
         }
 
         int afterRhs = _instructions.Count;
-        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry);
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, null, binding.VariablePrefix, binding.VariableNamespaceUri);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(quantIdx, opCode, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
@@ -1290,7 +1292,14 @@ public sealed class IrLowerer
         foreach (var binding in node.Bindings)
         {
             int exprReg = LowerNode(binding.Expression);
-            int varPoolIdx = AddToLiteralPool(binding.VariableName);
+            // Store under the same key form used by variable references:
+            // resolved (local, uri) tuple for Q{uri} names, "prefix:local" for
+            // prefixed names (resolved at runtime), or the bare local name.
+            int varPoolIdx = binding.VariableNamespaceUri is not null
+                ? AddToLiteralPool((binding.VariableName, binding.VariableNamespaceUri))
+                : binding.VariablePrefix is not null
+                    ? AddToLiteralPool($"{binding.VariablePrefix}:{binding.VariableName}")
+                    : AddToLiteralPool(binding.VariableName);
             Emit(IrOpCode.StoreVariable, 0, (ushort)exprReg, 0, varPoolIdx);
             FreeRegister(exprReg);
         }

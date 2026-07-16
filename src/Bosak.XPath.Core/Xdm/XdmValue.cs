@@ -26,6 +26,8 @@
 //                      | Charles Korthout | 1.2   | 15-07-2026     | EffectiveBooleanValue raises FORG0006 for maps, arrays, and function items             |
 //                      | Charles Korthout | 1.3   | 15-07-2026     | EBV: xs:anyURI string-like (non-empty); FORG0006 for date/time/duration/QName/binary    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 15-07-2026     | Tier-2k: annotated FromInteger/FromDuration overloads; EBV FORG0006 for String-kind hexBinary/base64Binary/gYear-family annotations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -70,6 +72,10 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromInteger(long value) => new(XdmValueKind.Integer, integer: value);
 
+    /// <summary>Creates an integer-family value with a derived-type annotation (e.g. xs:long, xs:byte).</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromInteger(long value, string schemaTypeName) => new(XdmValueKind.Integer, integer: value, schemaTypeName: schemaTypeName);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDouble(double value) => new(XdmValueKind.Double, @double: value);
 
@@ -87,6 +93,9 @@ public readonly struct XdmValue
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDuration(string value) => new(XdmValueKind.Duration, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDuration(string value, string schemaTypeName) => new(XdmValueKind.Duration, reference: value, schemaTypeName: schemaTypeName);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromNode(IXdmNode node) => node != null ? new(XdmValueKind.Node, reference: node) : Undefined;
@@ -377,7 +386,13 @@ public readonly struct XdmValue
         return _kind switch
         {
             XdmValueKind.Boolean => _integer != 0,
-            XdmValueKind.String => !string.IsNullOrEmpty((string?)_reference),
+            // Only string-family annotations (xs:string and derived, xs:untypedAtomic,
+            // xs:anyURI) have a string-like EBV; values annotated hexBinary/base64Binary/
+            // gYear etc. are not in the string group and raise FORG0006.
+            XdmValueKind.String => IsEbvStringLike(_schemaTypeName)
+                ? !string.IsNullOrEmpty((string?)_reference)
+                : throw new InvalidOperationException(
+                    "FORG0006: The effective boolean value is not defined for values of this atomic type"),
             XdmValueKind.Integer => _integer != 0,
             XdmValueKind.Decimal => (decimal)_reference! != 0m,
             XdmValueKind.Double or XdmValueKind.Float => _double != 0.0 && !double.IsNaN(_double),
@@ -394,6 +409,19 @@ public readonly struct XdmValue
                     "FORG0006: The effective boolean value is not defined for maps, arrays, and function items"),
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Returns whether a schema type annotation belongs to the string-like group for EBV
+    /// (xs:string and its derived types, xs:untypedAtomic, xs:anyURI).
+    /// </summary>
+    private static bool IsEbvStringLike(string? schemaTypeName)
+    {
+        if (schemaTypeName is null) return true;
+        return schemaTypeName.ToLowerInvariant() is
+            "string" or "untypedatomic" or "anyuri"
+            or "normalizedstring" or "token" or "language" or "nmtoken" or "name"
+            or "ncname" or "id" or "idref" or "entity";
     }
 
     /// <summary>

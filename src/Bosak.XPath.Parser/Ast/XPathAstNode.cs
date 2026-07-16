@@ -15,6 +15,8 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added OccurrenceIndicator to type expression nodes                                       |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Added PositionalVariableName to QuantifiedBinding (FLWOR 'at $pos')                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 15-07-2026     | Added VariablePrefix/VariableNamespaceUri to QuantifiedBinding (EQName variables)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -96,7 +98,7 @@ public sealed record ForExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings
 public sealed record LetExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode Body) : XPathAstNode;
 public sealed record QuantifiedExpressionNode(QuantifierKind Quantifier, IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode SatisfiesExpression) : XPathAstNode;
 
-public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null);
+public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null);
 
 // ------------------------------------------------------------------
 // Binary / Unary expressions

@@ -17,6 +17,8 @@
 //                      | Charles Korthout | 0.5   | 07-07-2026     | Preserve negative-zero unary minus in BC mode; fixes xpath-compat-0101               |
 //                      | Charles Korthout | 0.6   | 15-07-2026     | Preserve PositionalVariableName when rebuilding QuantifiedBinding (FLWOR 'at $pos')     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 15-07-2026     | Preserve VariablePrefix/VariableNamespaceUri when rebuilding QuantifiedBinding          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -430,7 +432,7 @@ public sealed class XPathOptimizer
         foreach (var b in node.Bindings)
         {
             var expr = OptimizeNode(b.Expression, ref changed);
-            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName));
+            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName, b.VariablePrefix, b.VariableNamespaceUri));
         }
 
         var body = OptimizeNode(node.ReturnExpression, ref changed);
@@ -450,7 +452,7 @@ public sealed class XPathOptimizer
         foreach (var b in node.Bindings)
         {
             var expr = OptimizeNode(b.Expression, ref changed);
-            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName));
+            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName, b.VariablePrefix, b.VariableNamespaceUri));
         }
 
         var body = OptimizeNode(node.SatisfiesExpression, ref changed);
@@ -614,7 +616,7 @@ public sealed class XPathOptimizer
         foreach (var binding in node.Bindings)
         {
             var optExpr = OptimizeNode(binding.Expression, ref changed);
-            newBindings.Add(new QuantifiedBinding(binding.VariableName, optExpr, binding.PositionalVariableName));
+            newBindings.Add(new QuantifiedBinding(binding.VariableName, optExpr, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
             if (optExpr != binding.Expression) bindingsChanged = true;
         }
         var body = OptimizeNode(node.Body, ref changed);

@@ -39,6 +39,8 @@
 //                      | Charles Korthout | 2.7   | 15-07-2026     | Tier-2i: map:merge options, strict keys, numeric/duration key equality, array bounds, FORG0006 EBV, map(K,V)/array(T)/function-type tests, deep-equal map collation |
 //                      | Charles Korthout | 2.8   | 15-07-2026     | Tier-2j: FLWOR 'at $pos'/'where'/mixed chains, strict arithmetic/EBV/atomization, fn:sum/avg/numeric-fn strictness (40 tests) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.9   | 15-07-2026     | Tier-2k: instance-of type annotations, EQName vars, range/round/comparison strictness, outermost/innermost validation, aggregate annotation preservation (61 tests) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -3703,6 +3705,33 @@ public class Tier2jFlworTests
     public void Sum_UntypedAtomicItems_SumsAsDouble()
         => Assert.Equal("3", EvalStr("fn:sum((xs:untypedAtomic('1'), xs:untypedAtomic('2')))"));
 
+    // ----- fn:max / fn:min / fn:sum annotation preservation (K2) ---------
+
+    [Theory]
+    [InlineData("max(xs:unsignedShort('1')) instance of xs:unsignedShort")]
+    [InlineData("min(xs:unsignedShort('1')) instance of xs:unsignedShort")]
+    [InlineData("sum(xs:unsignedShort('1')) instance of xs:unsignedShort")]
+    [InlineData("max((xs:unsignedShort('1'), xs:unsignedShort('2'))) instance of xs:unsignedShort")]
+    public void Aggregate_IntegerSubtypeAnnotation_Preserved(string expr)
+        => Assert.Equal("true", EvalStr(expr));
+
+    [Fact]
+    public void Max_MixedIntegerDecimal_ReturnsDecimal()
+        => Assert.Equal("true", EvalStr("max((1, xs:decimal('2.5'))) instance of xs:decimal"));
+
+    [Theory]
+    [InlineData("sum((xs:yearMonthDuration('P1Y'), xs:dayTimeDuration('P1D')))")]
+    [InlineData("sum((xs:yearMonthDuration('P20Y'), (3, 4, 5)))")]
+    public void Sum_MixedDurationTypes_RaisesFORG0006(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("FORG0006", ex.Message);
+    }
+
+    [Fact]
+    public void Sum_HomogeneousYearMonthDurations_StillWorks()
+        => Assert.Equal("P3Y", EvalStr("sum((xs:yearMonthDuration('P1Y'), xs:yearMonthDuration('P2Y')))"));
+
     // ----- Regression sanity ----------------------------------------------
 
     [Fact]
@@ -3721,5 +3750,221 @@ public class Tier2jFlworTests
     {
         Assert.Equal("true", EvalStr("\"a\" = (\"a\", \"b\")"));
         Assert.Equal("true", EvalStr("(1, 2) = (2, 3)"));
+    }
+}
+
+// ===========================================================================================================================================================
+// Tier-2k: Validation & type-strictness sweep — annotation-aware instance-of, EQName variable
+// bindings, 'to' range validation, fn:round type preservation, fn:outermost/innermost argument
+// validation, EBV annotation strictness, value/general comparison untypedAtomic casting rules.
+// ===========================================================================================================================================================
+public class Tier2kValidationTests
+{
+    private static XdmValue Evaluate(string xpath)
+    {
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        return XPath31Expression.Compile(xpath).Evaluate(ctx);
+    }
+
+    private static string EvalStr(string xpath) => Evaluate(xpath).ToString();
+
+    private static IReadOnlyList<string> EvalItems(string xpath)
+    {
+        var result = Evaluate(xpath);
+        var items = new List<string>();
+        if (result.IsSequence && result.SequenceValue is not null)
+            foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                items.Add(item.ToString());
+        else if (!result.IsUndefined)
+            items.Add(result.ToString());
+        return items;
+    }
+
+    // ----- instance-of with subtype annotations (K2-SeqExprInstanceOf) ---
+
+    [Theory]
+    [InlineData("xs:long(1) instance of xs:integer", "true")]
+    [InlineData("xs:int(1) instance of xs:long", "true")]
+    [InlineData("xs:short(1) instance of xs:int", "true")]
+    [InlineData("xs:unsignedByte(1) instance of xs:nonNegativeInteger", "true")]
+    [InlineData("xs:nonPositiveInteger(-1) instance of xs:integer", "true")]
+    [InlineData("xs:token('a') instance of xs:string", "true")]
+    [InlineData("xs:NMTOKEN('a') instance of xs:token", "true")]
+    [InlineData("xs:language('en') instance of xs:token", "true")]
+    [InlineData("xs:NCName('a') instance of xs:normalizedString", "true")]
+    [InlineData("1 instance of xs:integer", "true")]
+    [InlineData("'a' instance of xs:string", "true")]
+    public void InstanceOf_SubtypeAnnotation_MatchesSupertype(string expr, string expected)
+        => Assert.Equal(expected, EvalStr(expr));
+
+    [Theory]
+    [InlineData("xs:integer(1) instance of xs:short")]
+    [InlineData("xs:long(1) instance of xs:int")]
+    [InlineData("xs:normalizedString('a') instance of xs:token")]
+    [InlineData("xs:string('a') instance of xs:NCName")]
+    public void InstanceOf_WiderAnnotation_DoesNotMatchSubtype(string expr)
+        => Assert.Equal("false", EvalStr(expr));
+
+    // ----- EQName variable bindings (eqname-015, K-QuantExprWithout-56) --
+
+    [Fact]
+    public void For_EQNameVariable_BindsAndResolves()
+        => Assert.Equal("true", EvalStr(
+            "deep-equal((for $Q{http://example.com/ns}x in 1 to 10 return $Q{http://example.com/ns}x + 1), 2 to 11)"));
+
+    [Fact]
+    public void For_EQNameVariable_WhitespaceAroundUri_Normalized()
+        => Assert.Equal("true", EvalStr(
+            "deep-equal((for $Q{  http://example.com/ns  }x in 1 to 3 return $Q{http://example.com/ns}x + 1), (2, 3, 4))"));
+
+    [Fact]
+    public void Some_EQNameVariable_BindsAndResolves()
+        => Assert.Equal("true", EvalStr(
+            "some $Q{http://example.com/ns}x in (1, 2) satisfies $Q{http://example.com/ns}x eq 2"));
+
+    [Fact]
+    public void Every_EQNameVariable_BindsAndResolves()
+        => Assert.Equal("true", EvalStr(
+            "every $Q{http://example.com/ns}x in (1, 2) satisfies $Q{http://example.com/ns}x gt 0"));
+
+    [Fact]
+    public void Some_PrefixedFnVariable_ResolvesAgainstStaticContext()
+        => Assert.Equal("true", EvalStr("true() eq (some $fn:name in (1, 2) satisfies $fn:name)"));
+
+    [Fact]
+    public void For_MixedEQNameAndPlainBindings_BothResolve()
+        => Assert.Equal(new[] { "11", "21", "12", "22" }, EvalItems(
+            "for $Q{http://example.com/ns}x in (1, 2), $y in (10, 20) return $Q{http://example.com/ns}x + $y"));
+
+    [Fact]
+    public void EQNameFunctionCall_WhitespaceAroundUri_Works()
+        => Assert.Equal("true", EvalStr("Q{  http://www.w3.org/2005/xpath-functions  }true()"));
+
+    // ----- 'to' range operand validation (RangeExpr) ---------------------
+
+    [Theory]
+    [InlineData("1.1 to 3")]
+    [InlineData("1e3 to 3")]
+    [InlineData("xs:decimal('2.5') to 4")]
+    [InlineData("'1' to 3")]
+    public void Range_NonIntegerOperand_RaisesXPTY0004(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Range_UntypedAtomicOperand_CastsToInteger()
+        => Assert.Equal("true", EvalStr("deep-equal((xs:untypedAtomic('1') to 3), (1, 2, 3))"));
+
+    [Fact]
+    public void Range_IntegerOperands_Unchanged()
+        => Assert.Equal(new[] { "1", "2", "3" }, EvalItems("1 to 3"));
+
+    // ----- fn:round / round-half-to-even type preservation ---------------
+
+    [Fact]
+    public void Round_IntegerNegativePrecision_KeepsIntegerType()
+    {
+        Assert.Equal("10", EvalStr("round(xs:integer(5), -1)"));
+        Assert.Equal("true", EvalStr("round(xs:integer(5), -1) instance of xs:integer"));
+        Assert.Equal("true", EvalStr("round(xs:integer(5), -1) instance of xs:decimal"));
+        Assert.Equal("4561234600", EvalStr("round-half-to-even(4561234567, -2)"));
+        Assert.Equal("true", EvalStr("round-half-to-even(4561234567, -2) instance of xs:integer"));
+    }
+
+    [Fact]
+    public void RoundHalfToEven_HugePrecision_ReturnsArgumentUnchanged()
+        => Assert.Equal("1.2345", EvalStr("round-half-to-even(1.2345, 4294967296)"));
+
+    [Fact]
+    public void Round_NormalPrecision_Unchanged()
+        => Assert.Equal("1.8", EvalStr("round(1.75, 1)"));
+
+    // ----- EBV strictness for annotated strings --------------------------
+
+    [Theory]
+    [InlineData("if (xs:hexBinary('AA')) then 1 else 2")]
+    [InlineData("if (xs:base64Binary('AAAA')) then 1 else 2")]
+    [InlineData("if (xs:gYear('2020')) then 1 else 2")]
+    [InlineData("if (xs:gMonthDay('--12-25')) then 1 else 2")]
+    public void Ebv_NonStringLikeAnnotation_RaisesFORG0006(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("FORG0006", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("if (xs:token('x')) then 1 else 2", "1")]
+    [InlineData("if (xs:token('')) then 1 else 2", "2")]
+    public void Ebv_StringLikeAnnotation_UsesStringValue(string expr, string expected)
+        => Assert.Equal(expected, EvalStr(expr));
+
+    // ----- Value comparison strictness (K-ValCompTypeChecking) -----------
+
+    [Theory]
+    [InlineData("'1' eq 1")]
+    [InlineData("1 eq '1'")]
+    [InlineData("xs:untypedAtomic('1') eq 1")]
+    [InlineData("'a' lt 2")]
+    public void ValueComparison_StringVsNumeric_RaisesXPTY0004(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void ValueComparison_CompatibleOperands_Unchanged()
+    {
+        Assert.Equal("true", EvalStr("'a' eq 'a'"));
+        Assert.Equal("true", EvalStr("1 eq 1"));
+        Assert.Equal("true", EvalStr("1 lt 2"));
+    }
+
+    // ----- General comparison untypedAtomic casting (K-GenCompEq) --------
+
+    [Theory]
+    [InlineData("xs:untypedAtomic('1') = 1", "true")]
+    [InlineData("xs:untypedAtomic('1.5') = 1.5", "true")]
+    [InlineData("xs:untypedAtomic('false') = false()", "true")]
+    [InlineData("xs:untypedAtomic('P1D') = xs:dayTimeDuration('P1D')", "true")]
+    [InlineData("xs:untypedAtomic('P1Y') = xs:yearMonthDuration('P1Y')", "true")]
+    [InlineData("xs:untypedAtomic('a') = 'a'", "true")]
+    [InlineData("xs:untypedAtomic('1') = xs:NCName('string')", "false")]
+    [InlineData("(1, 2) = 2", "true")]
+    public void GeneralComparison_UntypedAtomicCastsPerOtherOperand(string expr, string expected)
+        => Assert.Equal(expected, EvalStr(expr));
+
+    [Fact]
+    public void GeneralComparison_UncastableUntypedAtomic_RaisesFORG0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("xs:untypedAtomic('abc') = 1"));
+        Assert.Contains("FORG0001", ex.Message);
+    }
+
+    // ----- fn:outermost / fn:innermost argument validation ---------------
+
+    [Theory]
+    [InlineData("fn:outermost((1, 2))")]
+    [InlineData("fn:innermost((1, 2))")]
+    [InlineData("fn:outermost(('a', 'b'))")]
+    public void OutermostInnermost_NonNodeItem_RaisesXPTY0004(string expr)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(expr));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Outermost_EmptySequence_ReturnsEmpty()
+        => Assert.Equal("true", EvalStr("empty(fn:outermost(()))"));
+
+    // ----- Regression sanity ----------------------------------------------
+
+    [Fact]
+    public void Quantified_PlainVariables_Unchanged()
+    {
+        Assert.Equal("true", EvalStr("some $x in (1, 2) satisfies $x > 1"));
+        Assert.Equal("true", EvalStr("every $x in (1, 2) satisfies $x > 0"));
     }
 }

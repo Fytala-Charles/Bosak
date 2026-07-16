@@ -106,6 +106,8 @@
 //                      | Charles Korthout | 5.39  | 15-07-2026     | map:merge duplicates option (use-first/use-last/use-any/combine/reject); map:remove multi-key; strict singleton map keys (XPTY0004); array bounds FOAY0001/FOAY0002; deep-equal map keys collation-free (QT3 Tier-2i) |
 //                      | Charles Korthout | 5.40  | 15-07-2026     | Tier-2j: numeric fns (abs/floor/ceiling/round) reject non-numeric non-untypedAtomic (XPTY0004); fn:sum/fn:avg reject xs:string/xs:boolean items (FORG0006) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.41  | 15-07-2026     | Tier-2k: fn:outermost/innermost reject non-node items (XPTY0004); round/round-half-to-even keep xs:integer type for negative precision (F+O instance-of-T rule); huge-precision identity guard; fn:min/max/sum preserve integer subtype annotations (least common type) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3286,7 +3288,10 @@ public static class FunctionLibrary
 
     private static XdmValue Innermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var items = AsSequence(args[0]).ToList();
+        if (items.Any(v => !v.IsNode))
+            throw new InvalidOperationException("XPTY0004: fn:innermost() requires a sequence of nodes");
+        var nodes = items.Select(v => v.NodeValue!).ToList();
         var result = new List<XdmValue>();
         foreach (var node in nodes)
         {
@@ -3308,7 +3313,10 @@ public static class FunctionLibrary
 
     private static XdmValue Outermost(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var nodes = AsSequence(args[0]).Where(v => v.IsNode).Select(v => v.NodeValue!).ToList();
+        var items = AsSequence(args[0]).ToList();
+        if (items.Any(v => !v.IsNode))
+            throw new InvalidOperationException("XPTY0004: fn:outermost() requires a sequence of nodes");
+        var nodes = items.Select(v => v.NodeValue!).ToList();
         var result = new List<XdmValue>();
         foreach (var node in nodes)
         {
@@ -7920,11 +7928,21 @@ public static class FunctionLibrary
             return XdmValue.FromDuration(FormatDayTimeDurationFromSeconds(totalSeconds));
         }
 
+        // A duration that survived the homogeneous-type branches above is mixed with
+        // an incompatible type (numerics or the other duration subtype): FORG0006.
+        if (items.Any(i => AtomizeValue(i).Kind == XdmValueKind.Duration))
+            throw new InvalidOperationException(
+                "FORG0006: fn:sum() cannot combine xs:duration with numeric or other duration subtypes");
+
         if (allIntegerOrDecimal)
         {
             bool allInteger = items.All(item => AtomizeValue(item).Kind == XdmValueKind.Integer);
             if (allInteger)
             {
+                // Sum of a single item is the item itself — keep its type annotation
+                // (e.g. xs:unsignedShort) per the F+O least-common-type rule.
+                if (items.Count == 1)
+                    return AtomizeValue(items[0]);
                 long intSum = 0;
                 foreach (var item in items)
                     intSum += ToIntegerValue(item);
@@ -8019,16 +8037,21 @@ public static class FunctionLibrary
         if (allIntegerOrDecimal)
         {
             // fn:min/fn:max return the selected item converted to the least common
-            // type of the input: all xs:integer input yields an xs:integer result.
+            // type of the input: all xs:integer input yields the winning item itself
+            // (preserving a subtype annotation such as xs:unsignedShort).
             bool anyDecimal = atomized.Any(a => a.Kind == XdmValueKind.Decimal);
-            decimal result = ToDecimalValue(items[0]);
-            for (int i = 1; i < items.Count; i++)
+            int winner = 0;
+            decimal best = ToDecimalValue(atomized[0]);
+            for (int i = 1; i < atomized.Count; i++)
             {
-                decimal v = ToDecimalValue(items[i]);
-                if (min ? v < result : v > result)
-                    result = v;
+                decimal v = ToDecimalValue(atomized[i]);
+                if (min ? v < best : v > best)
+                {
+                    best = v;
+                    winner = i;
+                }
             }
-            return anyDecimal ? XdmValue.FromDecimal(result) : XdmValue.FromInteger((long)result);
+            return anyDecimal ? XdmValue.FromDecimal(best) : atomized[winner];
         }
         if (!anyDouble)
         {
@@ -8193,6 +8216,11 @@ public static class FunctionLibrary
         if (arg.IsUndefined || IsEmptySequence(arg))
             return ctx.BackwardsCompatible ? XdmValue.FromDouble(double.NaN) : XdmValue.Undefined;
 
+        // Precision beyond the significant digits of any supported numeric type
+        // is the identity function (avoids int overflow for huge precisions).
+        if (precision > 1000)
+            return arg;
+
         // For non-numeric types (string, untypedAtomic, etc.), convert to double first.
         bool isNumeric = arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
         if (!isNumeric)
@@ -8221,6 +8249,8 @@ public static class FunctionLibrary
         {
             return arg.Kind switch
             {
+                // Per F+O 3.1 the result is an instance of the argument's type, so
+                // rounding an xs:integer (even with negative precision) stays xs:integer.
                 XdmValueKind.Integer =>
                     XdmValue.FromInteger((long)RoundDecimal((decimal)arg.IntegerValue, (int)precision)),
                 XdmValueKind.Decimal =>
@@ -8325,6 +8355,11 @@ public static class FunctionLibrary
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
+        // Precision beyond the significant digits of any supported numeric type
+        // is the identity function (avoids int overflow for huge precisions).
+        if (precision > 1000)
+            return arg;
+
         if (precision >= 0)
         {
             return arg.Kind switch
@@ -8343,6 +8378,8 @@ public static class FunctionLibrary
         {
             return arg.Kind switch
             {
+                // Per F+O 3.1 the result is an instance of the argument's type, so
+                // rounding an xs:integer (even with negative precision) stays xs:integer.
                 XdmValueKind.Integer =>
                     XdmValue.FromInteger((long)RoundHalfToEvenDecimal((decimal)arg.IntegerValue, (int)precision)),
                 XdmValueKind.Decimal =>

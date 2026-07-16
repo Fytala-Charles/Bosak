@@ -73,6 +73,8 @@
 //                      | Charles Korthout | 2.38  | 15-07-2026     | Tier-2i: strict singleton map keys (XPTY0004); Exists/Empty opcodes count-based; parameterized map(K,V)/array(T)/function(A)-as-R instance-of routing; maps/arrays match function(*); map/array-as-function value rule; named-fn signature checks with context; structural function-family subtyping (MapTest-050..054); XPST0003/XPST0051 map-type validation |
 //                      | Charles Korthout | 2.39  | 15-07-2026     | Tier-2j: For opcode binds optional positional variable (1-based); Atomize raises XPTY0004 on multi-item sequences; arithmetic operands validated numeric/untypedAtomic (XPTY0004) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.40  | 15-07-2026     | Tier-2k: annotation-aware instance-of (integer/string/duration supertype walks, nmtoken); 'to' operand validation (XPTY0004); value-comparison string-vs-numeric XPTY0004; general-comparison untypedAtomic rule-b casting via primitive base type; for/some/every bind namespace-qualified variables; duration casts keep subtype annotation |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -387,8 +389,17 @@ public static class VmEngine
                             ip++;
                             break;
                         }
-                        long from = ToInteger(left);
-                        long to = ToInteger(right);
+                        long from, to;
+                        if (context.BackwardsCompatible)
+                        {
+                            from = ToInteger(left);
+                            to = ToInteger(right);
+                        }
+                        else
+                        {
+                            from = RangeOperandToInteger(left);
+                            to = RangeOperandToInteger(right);
+                        }
                         if (from > to)
                         {
                             registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
@@ -581,7 +592,8 @@ public static class VmEngine
                         var items = MaterializeSequence(sequence);
                         var results = new List<XdmValue>();
 
-                        bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
+                        var (bindLocal, bindNs) = ResolveLoopVariableKey(info, context);
+                        bool hadVariable = context.TryGetVariable(bindLocal, out var savedVar, bindNs);
                         XdmValue savedPosVar = default;
                         bool hadPosVariable = info.PositionalVariableName is not null &&
                                               context.TryGetVariable(info.PositionalVariableName, out savedPosVar);
@@ -592,7 +604,7 @@ public static class VmEngine
                             position++;
                             // FLWOR for-expression does NOT change the focus;
                             // it only binds the variable (and optional positional variable).
-                            context.WithVariable(info.VariableName, item);
+                            context.WithVariable(bindLocal, item, bindNs);
                             if (info.PositionalVariableName is not null)
                                 context.WithVariable(info.PositionalVariableName, XdmValue.FromInteger(position));
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
@@ -609,9 +621,9 @@ public static class VmEngine
                         }
 
                         if (hadVariable)
-                            context.WithVariable(info.VariableName, savedVar);
+                            context.WithVariable(bindLocal, savedVar, bindNs);
                         else
-                            context.RemoveVariable(info.VariableName);
+                            context.RemoveVariable(bindLocal, bindNs);
 
                         if (info.PositionalVariableName is not null)
                         {
@@ -633,14 +645,15 @@ public static class VmEngine
                         var sequence = registers[instr.RegisterB];
                         var items = MaterializeSequence(sequence);
 
-                        bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
+                        var (bindLocal, bindNs) = ResolveLoopVariableKey(info, context);
+                        bool hadVariable = context.TryGetVariable(bindLocal, out var savedVar, bindNs);
 
                         bool result = false;
                         foreach (var item in items)
                         {
                             // Quantified expression does NOT change the focus;
                             // it only binds the variable.
-                            context.WithVariable(info.VariableName, item);
+                            context.WithVariable(bindLocal, item, bindNs);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
 
                             if (rhsResult.EffectiveBooleanValue())
@@ -651,9 +664,9 @@ public static class VmEngine
                         }
 
                         if (hadVariable)
-                            context.WithVariable(info.VariableName, savedVar);
+                            context.WithVariable(bindLocal, savedVar, bindNs);
                         else
-                            context.RemoveVariable(info.VariableName);
+                            context.RemoveVariable(bindLocal, bindNs);
 
                         registers[instr.RegisterA] = XdmValue.FromBoolean(result);
                         ip++;
@@ -666,14 +679,15 @@ public static class VmEngine
                         var sequence = registers[instr.RegisterB];
                         var items = MaterializeSequence(sequence);
 
-                        bool hadVariable = context.TryGetVariable(info.VariableName, out var savedVar);
+                        var (bindLocal, bindNs) = ResolveLoopVariableKey(info, context);
+                        bool hadVariable = context.TryGetVariable(bindLocal, out var savedVar, bindNs);
 
                         bool result = true;
                         foreach (var item in items)
                         {
                             // Quantified expression does NOT change the focus;
                             // it only binds the variable.
-                            context.WithVariable(info.VariableName, item);
+                            context.WithVariable(bindLocal, item, bindNs);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
 
                             if (!rhsResult.EffectiveBooleanValue())
@@ -684,9 +698,9 @@ public static class VmEngine
                         }
 
                         if (hadVariable)
-                            context.WithVariable(info.VariableName, savedVar);
+                            context.WithVariable(bindLocal, savedVar, bindNs);
                         else
-                            context.RemoveVariable(info.VariableName);
+                            context.RemoveVariable(bindLocal, bindNs);
 
                         registers[instr.RegisterA] = XdmValue.FromBoolean(result);
                         ip++;
@@ -3311,6 +3325,14 @@ public static class VmEngine
 
     private static bool CompareCore(IrOpCode op, XdmValue left, XdmValue right, bool strict, bool leftFromNode, bool rightFromNode, EvaluationContext context)
     {
+        // After untypedAtomic operands have been cast (xs:string for value comparisons,
+        // per-type for general comparisons), a remaining xs:string operand has no valid
+        // operator mapping against a numeric operand: type error XPTY0004.
+        if (strict && ((left.Kind == XdmValueKind.String && IsNumeric(right))
+            || (right.Kind == XdmValueKind.String && IsNumeric(left))))
+            throw new InvalidOperationException(
+                "XPTY0004: Comparison between xs:string and numeric operands is not defined");
+
         if (IsDouble(left) || IsDouble(right))
         {
             double l = ToDouble(left);
@@ -3675,6 +3697,13 @@ public static class VmEngine
                     }
                 }
 
+                // XPath 3.1 §3.5.3 general-comparison casting rules: when exactly one
+                // value is xs:untypedAtomic, cast it to a type depending on the other
+                // value's type (numeric -> xs:double, duration subtypes -> same subtype,
+                // otherwise the primitive base type of T).
+                if (!context.BackwardsCompatible)
+                    CastUntypedForGeneralComparison(ref atomizedL, ref atomizedR, context);
+
                 bool match = CompareCore(
                     MapGeneralToStrictOp(op),
                     atomizedL, atomizedR, strict: !context.BackwardsCompatible,
@@ -3686,6 +3715,83 @@ public static class VmEngine
         }
 
         return XdmValue.FromBoolean(false);
+    }
+
+    /// <summary>
+    /// Applies the XPath 3.1 §3.5.3 general-comparison casting rules to one atomized
+    /// value pair: both xs:untypedAtomic are cast to xs:string; a single xs:untypedAtomic
+    /// is cast to xs:double (numeric other), the matching duration subtype, xs:QName
+    /// (QName other), or the primitive base type of the other value.
+    /// </summary>
+    private static void CastUntypedForGeneralComparison(ref XdmValue left, ref XdmValue right, EvaluationContext context)
+    {
+        bool lu = IsUntypedAtomic(left);
+        bool ru = IsUntypedAtomic(right);
+        if (lu && ru)
+        {
+            left = XdmValue.FromString(left.StringValue);
+            right = XdmValue.FromString(right.StringValue);
+            return;
+        }
+        if (lu)
+            left = CastUntypedToOtherType(left, right, context);
+        else if (ru)
+            right = CastUntypedToOtherType(right, left, context);
+    }
+
+    private static XdmValue CastUntypedToOtherType(XdmValue untyped, XdmValue other, EvaluationContext context)
+    {
+        string targetType;
+        if (other.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
+        {
+            targetType = "xs:double";
+        }
+        else if (other.Kind == XdmValueKind.Duration)
+        {
+            targetType = other.SchemaTypeName?.Equals("yearMonthDuration", StringComparison.OrdinalIgnoreCase) == true
+                ? "xs:yearMonthDuration"
+                : "xs:dayTimeDuration";
+        }
+        else if (other.Kind == XdmValueKind.QName)
+        {
+            return CastUntypedAtomicToQName(untyped, context);
+        }
+        else
+        {
+            targetType = other.Kind switch
+            {
+                XdmValueKind.String => "xs:" + (other.SchemaTypeName is null
+                    ? "string"
+                    : PrimitiveBaseTypeName(other.SchemaTypeName)),
+                XdmValueKind.Boolean => "xs:boolean",
+                XdmValueKind.Uri => "xs:anyURI",
+                XdmValueKind.Date => "xs:date",
+                XdmValueKind.Time => "xs:time",
+                XdmValueKind.DateTime => "xs:dateTime",
+                _ => "xs:string"
+            };
+        }
+        if (!TryCast(untyped, targetType, out var casted))
+            throw new InvalidOperationException(
+                $"FORG0001: Cannot cast xs:untypedAtomic '{untyped}' to {targetType}");
+        return casted;
+    }
+
+    /// <summary>
+    /// Walks the direct-supertype chain from a schema type annotation up to (but not
+    /// including) xs:anyAtomicType, yielding the primitive base type — e.g. NCName →
+    /// string, hexBinary → hexBinary. Used by the general-comparison casting rules.
+    /// </summary>
+    private static string PrimitiveBaseTypeName(string schemaTypeName)
+    {
+        string current = schemaTypeName;
+        while (true)
+        {
+            var next = GetDirectSupertypes(current.ToLowerInvariant()).FirstOrDefault();
+            if (next is null or "anyatomictype" or "item()")
+                return current;
+            current = next;
+        }
     }
 
     private static IrOpCode MapGeneralToStrictOp(IrOpCode op)
@@ -3835,6 +3941,44 @@ public static class VmEngine
         => IsDouble(value) || IsFloat(value) || IsDecimal(value) || value.Kind == XdmValueKind.Integer;
 
     /// <summary>
+    /// Resolves the (local, namespace) key under which a for/quantified loop variable is
+    /// bound: resolved EQName URI if present, prefix resolved against the static context,
+    /// otherwise the bare local name in no namespace.
+    /// </summary>
+    private static (string Local, string Ns) ResolveLoopVariableKey(QuantifiedLoopInfo info, EvaluationContext context)
+    {
+        if (info.VariableNamespaceUri is not null)
+            return (info.VariableName, info.VariableNamespaceUri);
+        if (info.VariablePrefix is not null)
+            return ResolveVariableName($"{info.VariablePrefix}:{info.VariableName}", context);
+        if (info.VariableName.Contains(':'))
+            return ResolveVariableName(info.VariableName, context);
+        return (info.VariableName, "");
+    }
+
+    /// <summary>
+    /// Converts a 'to' (range) operand to an integer per function conversion rules:
+    /// xs:integer is accepted directly, xs:untypedAtomic is cast (FORG0001 on failure),
+    /// anything else (including xs:decimal/xs:double) is XPTY0004.
+    /// </summary>
+    private static long RangeOperandToInteger(XdmValue value)
+    {
+        var atomized = Atomize(value);
+        if (atomized.Kind == XdmValueKind.Integer)
+            return atomized.IntegerValue;
+        if (IsUntypedAtomic(atomized))
+        {
+            string s = atomized.ToString().Trim();
+            if (long.TryParse(s, out var l))
+                return l;
+            throw new InvalidOperationException(
+                $"FORG0001: Cannot cast xs:untypedAtomic '{s}' to xs:integer");
+        }
+        throw new InvalidOperationException(
+            $"XPTY0004: The operands of 'to' must be xs:integer, but got {atomized.Kind}");
+    }
+
+    /// <summary>
     /// Validates that an arithmetic operand is numeric or xs:untypedAtomic after atomization.
     /// Date/time and duration operands must be handled by the caller before this check.
     /// Throws XPTY0004 for xs:string, xs:boolean and other non-numeric atomic types.
@@ -3972,6 +4116,7 @@ public static class VmEngine
                 {
                     if (!IsIntegerInRange(value.IntegerValue, normalized))
                         return false;
+                    result = XdmValue.FromInteger(value.IntegerValue, normalized);
                     return true;
                 }
                 if (value.Kind == XdmValueKind.Decimal)
@@ -3979,7 +4124,7 @@ public static class VmEngine
                     long lVal = (long)value.DecimalValue;
                     if (!IsIntegerInRange(lVal, normalized))
                         return false;
-                    result = XdmValue.FromInteger(lVal);
+                    result = XdmValue.FromInteger(lVal, normalized);
                     return true;
                 }
                 if (value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float)
@@ -3992,7 +4137,7 @@ public static class VmEngine
                     long lDbl = (long)d;
                     if (!IsIntegerInRange(lDbl, normalized))
                         return false;
-                    result = XdmValue.FromInteger(lDbl);
+                    result = XdmValue.FromInteger(lDbl, normalized);
                     return true;
                 }
                 if (value.Kind == XdmValueKind.Boolean)
@@ -4000,7 +4145,7 @@ public static class VmEngine
                     long lBool = value.BooleanValue ? 1 : 0;
                     if (!IsIntegerInRange(lBool, normalized))
                         return false;
-                    result = XdmValue.FromInteger(lBool);
+                    result = XdmValue.FromInteger(lBool, normalized);
                     return true;
                 }
                 if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
@@ -4010,7 +4155,7 @@ public static class VmEngine
                 {
                     if (!IsIntegerInRange(lInt, normalized))
                         return false;
-                    result = XdmValue.FromInteger(lInt);
+                    result = XdmValue.FromInteger(lInt, normalized);
                     return true;
                 }
                 return false;
@@ -4334,14 +4479,14 @@ public static class VmEngine
             case "yearmonthduration":
                 if (value.Kind == XdmValueKind.Duration)
                 {
-                    result = XdmValue.FromDuration(ExtractYearMonthDuration(value.DurationValue));
+                    result = XdmValue.FromDuration(ExtractYearMonthDuration(value.DurationValue), "yearMonthDuration");
                     return true;
                 }
                 {
                     string sYm = value.ToString().Trim();
                     if (IsValidYearMonthDuration(sYm))
                     {
-                        result = XdmValue.FromDuration(ExtractYearMonthDuration(sYm));
+                        result = XdmValue.FromDuration(ExtractYearMonthDuration(sYm), "yearMonthDuration");
                         return true;
                     }
                 }
@@ -4350,14 +4495,14 @@ public static class VmEngine
             case "daytimeduration":
                 if (value.Kind == XdmValueKind.Duration)
                 {
-                    result = XdmValue.FromDuration(ExtractDayTimeDuration(value.DurationValue));
+                    result = XdmValue.FromDuration(ExtractDayTimeDuration(value.DurationValue), "dayTimeDuration");
                     return true;
                 }
                 {
                     string sDt = value.ToString().Trim();
                     if (IsValidDayTimeDuration(sDt))
                     {
-                        result = XdmValue.FromDuration(ExtractDayTimeDuration(sDt));
+                        result = XdmValue.FromDuration(ExtractDayTimeDuration(sDt), "dayTimeDuration");
                         return true;
                     }
                 }
@@ -5238,11 +5383,13 @@ public static class VmEngine
     {
         return normalized switch
         {
-            "string" => value.Kind == XdmValueKind.String && IsStringSubtype(value.SchemaTypeName),
+            "string" or "normalizedstring" or "token" or "language" or "nmtoken" or "name"
+                or "ncname" or "id" or "idref" or "entity"
+                => value.Kind == XdmValueKind.String && IsAtomicTypeSubtype(value.SchemaTypeName ?? "string", normalized),
             "integer" or "int" or "long" or "short" or "byte"
                 or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
                 or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
-                => value.Kind == XdmValueKind.Integer,
+                => value.Kind == XdmValueKind.Integer && IsAtomicTypeSubtype(value.SchemaTypeName ?? "integer", normalized),
             "decimal" => value.Kind is XdmValueKind.Decimal or XdmValueKind.Integer,
             "double" => value.Kind == XdmValueKind.Double,
             "float" => value.Kind == XdmValueKind.Float,
@@ -5252,7 +5399,11 @@ public static class VmEngine
             "datetime" => value.Kind == XdmValueKind.DateTime,
             "date" => value.Kind == XdmValueKind.Date,
             "time" => value.Kind == XdmValueKind.Time,
-            "duration" or "daytimeduration" or "yearmonthduration" => value.Kind == XdmValueKind.Duration,
+            "duration" => value.Kind == XdmValueKind.Duration,
+            "daytimeduration" => value.Kind == XdmValueKind.Duration &&
+                (value.SchemaTypeName is null || value.SchemaTypeName.Equals("dayTimeDuration", StringComparison.OrdinalIgnoreCase)),
+            "yearmonthduration" => value.Kind == XdmValueKind.Duration &&
+                (value.SchemaTypeName is null || value.SchemaTypeName.Equals("yearMonthDuration", StringComparison.OrdinalIgnoreCase)),
             "qname" => value.Kind == XdmValueKind.QName,
             "gyear" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gYear", StringComparison.OrdinalIgnoreCase) == true,
             "gyearmonth" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gYearMonth", StringComparison.OrdinalIgnoreCase) == true,
@@ -5263,15 +5414,6 @@ public static class VmEngine
             "base64binary" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("base64Binary", StringComparison.OrdinalIgnoreCase) == true,
             "anyuri" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("anyURI", StringComparison.OrdinalIgnoreCase) == true,
             "untypedatomic" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("untypedAtomic", StringComparison.OrdinalIgnoreCase) == true,
-            "normalizedstring" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("normalizedString", StringComparison.OrdinalIgnoreCase) == true,
-            "token" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("token", StringComparison.OrdinalIgnoreCase) == true,
-            "language" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("language", StringComparison.OrdinalIgnoreCase) == true,
-            "nmtoken" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("NMTOKEN", StringComparison.OrdinalIgnoreCase) == true,
-            "name" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("Name", StringComparison.OrdinalIgnoreCase) == true,
-            "ncname" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("NCName", StringComparison.OrdinalIgnoreCase) == true,
-            "id" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("ID", StringComparison.OrdinalIgnoreCase) == true,
-            "idref" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("IDREF", StringComparison.OrdinalIgnoreCase) == true,
-            "entity" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("ENTITY", StringComparison.OrdinalIgnoreCase) == true,
             "node" => value.IsNode,
             "element" or "element()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Element,
             "attribute" or "attribute()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Attribute,
@@ -5285,12 +5427,30 @@ public static class VmEngine
         };
     }
 
-    private static bool IsStringSubtype(string? schemaTypeName)
+    /// <summary>
+    /// Returns true when the atomic type <paramref name="actual"/> equals or derives from
+    /// <paramref name="target"/> per the XSD type hierarchy (instance-of semantics).
+    /// Names are case-insensitive and compared without the xs: prefix.
+    /// </summary>
+    private static bool IsAtomicTypeSubtype(string actual, string target)
     {
-        if (schemaTypeName is null) return true;
-        return schemaTypeName.ToLowerInvariant() is
-            "normalizedstring" or "token" or "language" or "nmtoken" or "name"
-            or "ncname" or "id" or "idref" or "entity";
+        actual = actual.ToLowerInvariant().Replace("xs:", "");
+        target = target.ToLowerInvariant().Replace("xs:", "");
+        if (actual == target) return true;
+        var visited = new HashSet<string>();
+        var queue = new Queue<string>();
+        queue.Enqueue(actual);
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+            if (!visited.Add(current)) continue;
+            foreach (var super in GetDirectSupertypes(current))
+            {
+                if (super == target) return true;
+                queue.Enqueue(super);
+            }
+        }
+        return false;
     }
 
     private static bool IsElementTypeCompatible(string typeName)
@@ -6349,6 +6509,7 @@ public static class VmEngine
             "numeric" => ["anyatomictype"],
             "ncname" => ["name"],
             "name" => ["token"],
+            "nmtoken" => ["token"],
             "language" => ["token"],
             "id" => ["ncname"],
             "idref" => ["ncname"],

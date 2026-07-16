@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 15-07-2026     | Canonical assert-xml (sorted attrs, self-closing empties, Clark names with ignore-prefixes); actual nodes canonicalized from tree (CR fidelity); assert contexts pre-bind j
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 15-07-2026     | assert-type xs:decimal accepts xs:integer values (FOTS instance-of semantics)            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -487,7 +489,9 @@ internal static class ResultComparer
                 or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
                 or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
                 => item.Kind == XdmValueKind.Integer,
-            "decimal" => item.Kind == XdmValueKind.Decimal,
+            // xs:integer is a subtype of xs:decimal, so integer values match xs:decimal
+            // (assert-type is an instance-of check per the FOTS specification).
+            "decimal" => item.Kind is XdmValueKind.Decimal or XdmValueKind.Integer,
             "double" => item.Kind == XdmValueKind.Double,
             "float" => item.Kind == XdmValueKind.Float,
             "boolean" => item.Kind == XdmValueKind.Boolean,

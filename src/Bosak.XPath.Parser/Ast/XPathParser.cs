@@ -33,6 +33,8 @@
 //                      | Charles Korthout | 1.9   | 15-07-2026     | Keep ' as ' separated in nested function tests inside map/array type parens (ArrayTest-063) |
 //                      | Charles Korthout | 1.10  | 15-07-2026     | FLWOR completion: 'at $pos' positional var, 'where' clause, mixed for/let chains          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11  | 15-07-2026     | EQName URI whitespace normalized in SplitQName; for/let bindings capture prefix/namespace |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -287,7 +289,7 @@ public sealed class XPathParser
     {
         Expect(TokenKind.Dollar);
         var nameTok = ExpectName();
-        var (prefix, local, _) = SplitQName(GetString(nameTok));
+        var (prefix, local, ns) = SplitQName(GetString(nameTok));
         string? positionalVar = null;
         // PositionalVar ::= "at" "$" VarName  (contextual keyword, lexed as Name)
         if (allowPositional && Current.Kind == TokenKind.Name && GetString(Current) == "at")
@@ -300,17 +302,17 @@ public sealed class XPathParser
         }
         Expect(TokenKind.KeywordIn);
         var expr = ParseExprSingle();
-        return new QuantifiedBinding(local, expr, positionalVar);
+        return new QuantifiedBinding(local, expr, positionalVar, prefix, ns);
     }
 
     private QuantifiedBinding ParseSimpleLetBinding()
     {
         Expect(TokenKind.Dollar);
         var nameTok = ExpectName();
-        var (prefix, local, _) = SplitQName(GetString(nameTok));
+        var (prefix, local, ns) = SplitQName(GetString(nameTok));
         Expect(TokenKind.Assign);  // := 
         var expr = ParseExprSingle();
-        return new QuantifiedBinding(local, expr);
+        return new QuantifiedBinding(local, expr, null, prefix, ns);
     }
 
     // QuantifiedExpr ::= ("some" | "every") SimpleForBinding ("satisfies" ExprSingle)+
@@ -1340,12 +1342,14 @@ public sealed class XPathParser
     {
         // Braced URI literal: Q{uri}localname or Q{uri}prefix:local
         // The empty URI form Q{}local is permitted and means "no namespace".
+        // Whitespace in the URI part is not significant: leading/trailing whitespace
+        // is stripped and internal runs are collapsed to a single space.
         if (qname.Length > 2 && qname[0] == 'Q' && qname[1] == '{')
         {
             int closeBrace = qname.IndexOf('}');
             if (closeBrace >= 2)
             {
-                string nsUri = qname[2..closeBrace];
+                string nsUri = NormalizeEQNameUri(qname[2..closeBrace]);
                 string rest = qname[(closeBrace + 1)..];
                 int restColon = rest.IndexOf(':');
                 return restColon < 0 ? (null, rest, nsUri) : (rest[..restColon], rest[(restColon + 1)..], nsUri);
@@ -1354,6 +1358,31 @@ public sealed class XPathParser
 
         int colon = qname.IndexOf(':');
         return colon < 0 ? (null, qname, null) : (qname[..colon], qname[(colon + 1)..], null);
+    }
+
+    /// <summary>
+    /// Normalizes the URI part of an EQName: strips leading/trailing whitespace and
+    /// collapses internal whitespace runs (space, tab, CR, LF) to a single space.
+    /// </summary>
+    private static string NormalizeEQNameUri(string uri)
+    {
+        uri = uri.Trim();
+        if (uri.Length == 0) return uri;
+        var sb = new System.Text.StringBuilder(uri.Length);
+        bool pendingSpace = false;
+        foreach (char c in uri)
+        {
+            if (c is ' ' or '\t' or '\n' or '\r')
+            {
+                pendingSpace = true;
+                continue;
+            }
+            if (pendingSpace && sb.Length > 0)
+                sb.Append(' ');
+            pendingSpace = false;
+            sb.Append(c);
+        }
+        return sb.ToString();
     }
 
     private static bool IsKindTestName(string localName) => localName switch
