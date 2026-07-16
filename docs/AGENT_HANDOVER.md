@@ -1,6 +1,39 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-16
+**Commit:** `063e908` (QT3 Tier-2k: validation & type-strictness sweep)
+**Current focus:** **QT3 XPath 3.1 suite: 21,798 passed / 739 failed / 9,284 skipped (68.50%)** — up from 21,688/849 (68.16%): **+110 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2j-full.log`). Tier-2k target pools CLEARED: K2-SeqExprInstanceOf (16), eqname (11), K-QuantExprWithout (9), K-ValCompTypeChecking (9), K-GenCompEq (4) + GenCompEq-3/5, K-RangeExpr (4) + K2-RangeExpr (2), round family (9: fn-round2args-2, fn-round-half-to-even-30..35, cbcl-001/012), fn-outermost/innermost validation (8), plus bonus (K-GenCompGT/GTEQ/LT/LTEQ/NE 20, K-FilterExpr-91, K-ForExprWithout 3, cbcl-treat-as 2, instanceof110, predicates-33..36, K-SeqSUMFunc-33, fn-sum-7/9/10, …). Unit tests 1,250/0 (+64). Deferred (unchanged): fn-has-children (8) + outermost/innermost-018..021 (8) namespace-axis cluster; RangeExpr-409* BigInteger; LetExpr020a tradeoff. Next pools: fn-transform (61, genuine XSLT), fn-load-xquery-module (31), format-date/time/dateTime/integer picture+locale (~42), ST-Axes (15, XPST0005), fn-id/idref-dtd (27, harness-skip candidate via test-set dependency propagation), fn-unparsed-text* (23), collection/fn-collection (18), xs-numeric (10), K-NumericIntegerDivide (9, BigInteger), cbcl-* (8), fn-function-lookup (7), K2-SeqIDFunc (6), K2-NumericMod (6), K-SeqIndexOfFunc (6).
+
+---
+
+## This Session Fixes (Tier-2k: validation & type-strictness sweep)
+
+1. **Annotation-aware `instance of`** (`VmEngine.ItemInstanceOf`) — integer-family and string-family cases now walk the XSD supertype chain from the value's `SchemaTypeName` annotation (new `IsAtomicTypeSubtype` BFS over `GetDirectSupertypes`, which gained `nmtoken → token`); bare (unannotated) values match as before. Integer casts (`TryCast` to long/int/short/byte/unsigned*/positive/negative/nonPositive/nonNegativeInteger) now **preserve the subtype annotation** via new `XdmValue.FromInteger(long, schemaTypeName)`. Fixes K2-SeqExprInstanceOf-38..45 (true cases) and -58..65 (false cases: `xs:integer(1) instance of xs:short` etc.).
+2. **Duration subtype annotations** — `TryCast` to xs:yearMonthDuration/xs:dayTimeDuration annotates results (new `XdmValue.FromDuration(string, schemaTypeName)`); `instance of` duration cases respect the annotation (bare xs:duration values match both subtypes, as before).
+3. **EQName variable bindings** — `QuantifiedBinding` gains `VariablePrefix`/`VariableNamespaceUri` (parser captures from `SplitQName`; optimizer preserves all fields at all 3 rebuild sites); `QuantifiedLoopInfo` carries them through the literal pool; the `For`/`Some`/`Every` VM opcodes bind/save/restore loop variables under the resolved (local, namespace) key via new `ResolveLoopVariableKey` (positional `at $pos` variables stay no-namespace). Fixes eqname-015 (`for $Q{uri}x …`), K-QuantExprWithout-56..59 (`some $fn:name …`). Parser also **normalizes EQName URI whitespace** (`Q{  uri  }local`, internal runs → single space) — eqname-020..027, 031..033.
+4. **`to` range operand validation** — `ValidateRangeOperand` in the Range opcode: operands must be xs:integer or castable xs:untypedAtomic, else XPTY0004 (`1.1 to 3`, `1e3 to 3`, `'1' to 3`). BC-mode first-item rule untouched. K-RangeExpr-33..36, K2-RangeExpr-1/2. RangeExpr-409* (10^21 literals) still needs BigInteger — deferred.
+5. **fn:round / fn:round-half-to-even** — negative precision on xs:integer keeps **xs:integer** result type (F+O 3.1: result is an instance of the argument's type T); huge precision (>1000) is the identity function (int-overflow guard; cbcl-round-half-to-even-001 precision 4294967296, -012). Harness `assert-type xs:decimal` now accepts xs:integer values (FOTS instance-of semantics) — fn-round2args-2, fn-round-half-to-even-30..35.
+6. **fn:outermost / fn:innermost argument validation** — non-node items now raise XPTY0004 (were silently filtered out). fn-outermost/innermost-006..011 (8 tests).
+7. **EBV annotation strictness** (`XdmValue.EffectiveBooleanValue`) — String-kind values annotated hexBinary/base64Binary/gYear/gYearMonth/gMonthDay/gDay/gMonth throw FORG0006 (these types ride the String kind with an annotation). K-QuantExprWithout-28..32.
+8. **Value comparisons (eq/ne/lt/…)** — after untypedAtomic→xs:string normalization (spec transitivity rule), string↔numeric pairs raise XPTY0004 (`'1' eq 1`). K-ValCompTypeChecking-18..29.
+9. **General comparisons (=, !=, <, …)** — per spec §3.5.2 rule b: a lone xs:untypedAtomic operand is cast per the OTHER operand's type: numeric → xs:double, duration subtypes → that subtype, xs:QName → QName (namespace context), otherwise the **primitive base type** of T (new `PrimitiveBaseTypeName` walks the supertype chain: NCName → string, hexBinary → hexBinary); cast failure → FORG0001. Fixes K-GenCompEq-43..46, GenCompEq-2/3/5, and 20 K-GenCompGT/GTEQ/LT/LTEQ/NE bonus tests.
+10. **fn:min / fn:max / fn:sum least-common-type** — min/max return the winning item itself (integer subtype annotations like xs:unsignedShort preserved); sum of a single integer item returns it unchanged; mixed duration/numeric or yearMonth+dayTime sums now raise FORG0006 (were Float NaN). K2-SeqMAXFunc-7, K2-SeqMINFunc-15, K2-SeqSUMFunc-4, K-SeqSUMFunc-33, fn-sum-7/9/10.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v1.4: annotated FromInteger/FromDuration overloads; EBV FORG0006 for String-kind binary/gYear-family annotations)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.40: annotation-aware instance-of, range validation, comparison strictness, namespace-qualified loop variables, duration annotations)
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs` (v1.10: QuantifiedLoopInfo VariablePrefix/VariableNamespaceUri)
+- `src/Bosak.XPath.Parser/Ast/XPathAstNode.cs` (v0.5: QuantifiedBinding VariablePrefix/VariableNamespaceUri)
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (v1.11: EQName URI whitespace normalization; ns-capturing for/let bindings)
+- `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs` (v0.7: preserve VariablePrefix/VariableNamespaceUri)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.41: round type preservation, outermost/innermost validation, min/max/sum annotations + duration-mix FORG0006)
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs` (v1.2: assert-type xs:decimal accepts xs:integer)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.9: +64 Tier-2k tests)
+
+---
+
+**Date:** 2026-07-16
 **Commit:** `e5bcb6c` (QT3 Tier-2j: FLWOR completion)
 **Current focus:** **QT3 XPath 3.1 suite: 21,688 passed / 849 failed / 9,284 skipped (68.16%)** — up from 21,543/994 (67.70%): **+146 fixed, 1 documented spec-superset tradeoff** (name-level diff vs `tmp/qt3-t2i-full.log`). FLWOR pool CLEARED: K-ForExprPositionalVar (29), statictyping (23), K-WhereExpr (11), whereClause (10) = 73/73, plus 73 bonus (WhereExpr 7, fn-abs-more-args 10, K-LogicExpr 7, cbcl-hash-join 6, K-Numeric* 11, K-SeqSUMFunc 4, K-SeqAVGFunc 2, K-QuantExprWithout 2, LetExpr 2, K2-ForExprPositionalVar 2, op-numeric-* 6, …). Unit tests 1,186/0 (+40). **Tradeoff:** `LetExpr020a` expects XPST0003 for chained `let` clauses (XPath 3.0/3.1 grammar restriction); Bosak intentionally implements the XQuery FLWOR superset (chains required by statictyping-21 et al.) — the two are mutually exclusive under one grammar. Next pools: fn-transform (61, genuine XSLT), format-date/time/dateTime/integer picture+locale (~42), K2-SeqExprInstanceOf (16, string-derived type chain missing in `GetDirectSupertypes`), RangeExpr/K-RangeExpr (16, XPTY0004 operand validation), fn-outermost/innermost (16), collection/fn-collection FODC (18), eqname (13, whitespace in `Q{ uri }local`), BigInteger/arbitrary-precision decimal (12+, deferred — same-key-008 needs it).
 
