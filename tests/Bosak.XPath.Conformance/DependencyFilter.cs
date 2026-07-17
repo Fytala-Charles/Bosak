@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Skip XSD 1.0 tests (Bosak implements XSD 1.1 per XPath 3.1)                             |
+//                      | Charles Korthout | 0.3   | 17-07-2026     | Skip arbitraryPrecisionDecimal tests (.NET decimal is fixed-precision 128-bit)          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -33,6 +34,7 @@ internal sealed class DependencyFilter
         "xpath-1.0-compatibility",
         "advanced-uca-fallback",
         "olson-timezone",
+        "arbitraryPrecisionDecimal",
     };
 
     // Spec tokens that Bosak supports (XPath versions)

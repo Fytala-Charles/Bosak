@@ -113,6 +113,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.43  | 17-07-2026     | fn:unparsed-text/-available: resolve href against base URI before URI mapping; reject fragment identifiers |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.44  | 17-07-2026     | Persistent XdmMap backing; map:remove/map:put now O(log n) via structural sharing (op-same-key) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -7252,22 +7254,12 @@ public static class FunctionLibrary
         var keys = new List<XdmValue>();
         foreach (var k in AsSequence(args[1]))
             keys.Add(AtomizeMapKey(k));
-        var result = new XdmMap();
-        foreach (var kvp in map.Entries)
-        {
-            bool remove = false;
-            foreach (var key in keys)
-            {
-                if (XdmValueEqualityComparer.Instance.Equals(kvp.Key, key))
-                {
-                    remove = true;
-                    break;
-                }
-            }
-            if (!remove)
-                result.Add(kvp.Key, kvp.Value);
-        }
-        return XdmValue.FromMap(result);
+
+        var entries = map.Entries;
+        foreach (var key in keys)
+            entries = entries.Remove(key);
+
+        return XdmValue.FromMap(new XdmMap(entries));
     }
 
     private static XdmValue MapPut(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7275,14 +7267,13 @@ public static class FunctionLibrary
         var map = args[0].MapValue;
         var key = AtomizeMapKey(args[1]);
         var value = args[2];
-        var result = new XdmMap();
-        foreach (var kvp in map.Entries)
-        {
-            if (!XdmValueEqualityComparer.Instance.Equals(kvp.Key, key))
-                result.Add(kvp.Key, kvp.Value);
-        }
-        result.Add(key, value);
-        return XdmValue.FromMap(result);
+
+        var entries = map.Entries;
+        if (entries.ContainsKey(key))
+            entries = entries.Remove(key);
+        entries = entries.Add(key, value);
+
+        return XdmValue.FromMap(new XdmMap(entries));
     }
 
     // ------------------------------------------------------------------

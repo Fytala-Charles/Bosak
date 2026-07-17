@@ -356,6 +356,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 | Register VM | Expression execution (better cache locality than tree walking) |
 | General-comparison integer sets | `=`/`!=` between a single `xs:integer` and a large all-integer sequence uses a cached `HashSet<long>` (e.g. `$validrange[not(. = $c)]` in the unicode-90 tests: 1.1M × 2k pairwise comparisons collapse to O(n)) |
 | Cached regex translation/compilation | XSD→.NET pattern translation and `Regex` objects cached by original pattern; compiled regexes reused across millions of `fn:matches`/`fn:replace` calls |
+| Persistent map storage | `XdmMap` is backed by `ImmutableDictionary<XdmValue, XdmValue>` so `map:remove`, `map:put`, and `map:merge` share structure instead of copying the whole map |
 | IL JIT (future) | Hot expression compilation to `DynamicMethod` |
 | QName interning | `StringPool` for element/attribute names |
 | Avoid `System.Xml.XmlNode` | `IXdmNode` adapter pattern prevents DOM locking |

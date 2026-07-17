@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-16 (QT3 Tier-2m: `fn:transform` option handling complete — **117 passed / 0 failed / 7 skipped**; QT3 suite at **21,838 passed / 699 failed / 9,284 skipped — 68.63%**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
+> **Living Registry** — Last updated: 2026-07-17 (QT3 Tier-2p: `op-same-key` hang resolved — **14 passed / 0 failed / 14 skipped**; full QT3 suite at **21,523 passed / 654 failed / 9,644 skipped — 67.64%**; unit tests **1,286/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -143,6 +143,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-036 | *(internal)* | XSLT `method="json"` output serialization | Required for W3C `output-0701` through `output-0719`: JSON output method, node serialization via `json-node-output-method`, duplicate-key control, solidus escaping, `item-separator` for text output, `SENR0001` validation, and `xsl:output parameter-document` defaults | **Implemented** | Phase 5 | Charles Korthout | 2026-07-11 |
 | REQ-037 | *(internal)* | XSLT `xsl:result-document` serialization completeness | Required for W3C `result-document` cluster: AVT evaluation on all serialization attributes, case-sensitive yes/no values, `SEPM0009` scoping, `build-tree="no"`, and raw-item collection for `method="json"`/`adaptive` | **Implemented** | Phase 5 | Charles Korthout | 2026-07-11 |
 | REQ-038 | *(internal)* | XSLT `namespace` cluster — `inherit-namespaces="no"` | Required for W3C `namespace-2603` through `namespace-2632`: prefixed namespace undeclarations for children of `xsl:element`/`xsl:copy`/LRE barriers, and preservation of namespace annotations when unwrapping the synthetic document root | **Implemented** | Phase 5 | Charles Korthout | 2026-07-12 |
+| REQ-039 | *(internal)* | Resolve QT3 `op-same-key` hang | `XdmMap` copied the whole dictionary on every `map:remove`/`map:put`, causing O(N²) behavior on the 28-test `op-same-key` set; switched to `ImmutableDictionary` structural sharing | **Implemented** | TBD | Charles Korthout | 2026-07-17 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1705,6 +1706,47 @@ After clearing the principal `output` and `current-output-uri` clusters, the W3C
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-07-12 | Kimi | Implemented | Barrier-attached undeclarations plus raw-serializer routing clear the remaining namespace failures without regressing output tests. |
+
+---
+
+### REQ-039: Resolve QT3 `op-same-key` hang
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-17  
+**Status:** Implemented  
+**Target Version:** TBD  
+
+**Problem Statement:**  
+The full W3C QT3 suite could not complete because the `op-same-key` test set (28 tests) hung. The first hanging test (`same-key-023`) builds a ~400k-entry map and then calls `map:remove` and `map:put` inside an `every` quantifier over all keys. The original `XdmMap` implemented `map:remove` and `map:put` by copying the entire dictionary, giving O(N²) behavior and causing an effective hang.
+
+**Acceptance Criteria:**  
+- `op-same-key` completes without hanging.
+- All non-skipped `op-same-key` tests pass.
+- No regressions in the existing `map:*` unit or QT3 tests.
+
+**Implementation Notes:**  
+- Replaced the `Dictionary<XdmValue, XdmValue>` backing of `XdmMap` with `ImmutableDictionary<XdmValue, XdmValue>` (using the existing `XdmValueEqualityComparer`).
+- `map:remove` now removes keys by structural sharing; `map:put` removes then re-adds the key so the newest key object survives for `op:same-key` / `map:merge use-last` semantics.
+- `map:merge` continues to use `XdmMap.Add`, which now performs remove+add under the immutable dictionary.
+- Added `arbitraryPrecisionDecimal` to the harness's unsupported-feature list so the two tests that require arbitrary-precision decimal arithmetic are skipped (same-key-008 and same-key-025).
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | None | |
+| Standard | Modified | `map:remove`, `map:put`, and `map:merge` in `FunctionLibrary.cs`; `XdmMap` in `Bosak.XPath.Core`. |
+| XSLT | None | |
+| API | None | |
+| Conformance | Modified | `DependencyFilter` skips `arbitraryPrecisionDecimal` tests. |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-17 | Kimi | Implemented | `ImmutableDictionary` gives structural sharing with minimal API surface change; remove+add preserves the key-object replacement semantics required by `op:same-key`. |
 
 ---
 

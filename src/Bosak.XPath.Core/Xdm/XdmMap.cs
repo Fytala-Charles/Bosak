@@ -14,8 +14,11 @@
 //                      | Charles Korthout | 0.2   | 21-05-2026     | Keys changed from string to XdmValue with numeric promotion equality                   |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | Added Remove(key) for fn:parse-json duplicates='use-last' entry replacement            |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Add replaces existing key object so the newest key (and its type annotation) survives  |
+//                      | Charles Korthout | 0.5   | 17-07-2026     | Persistent ImmutableDictionary backing for O(log n) map updates (op-same-key)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+
+using System.Collections.Immutable;
 
 namespace Bosak.XPath.Core.Xdm;
 
@@ -24,29 +27,41 @@ namespace Bosak.XPath.Core.Xdm;
 /// </summary>
 public sealed class XdmMap
 {
-    private readonly Dictionary<XdmValue, XdmValue> _entries;
+    private ImmutableDictionary<XdmValue, XdmValue> _entries;
 
     /// <summary>Creates an empty map.</summary>
-    public XdmMap() => _entries = new Dictionary<XdmValue, XdmValue>(XdmValueEqualityComparer.Instance);
+    public XdmMap()
+        => _entries = ImmutableDictionary.Create<XdmValue, XdmValue>(XdmValueEqualityComparer.Instance);
 
     /// <summary>Creates a map from an existing sequence of key-value pairs.</summary>
     public XdmMap(IEnumerable<KeyValuePair<XdmValue, XdmValue>> entries)
-        => _entries = new Dictionary<XdmValue, XdmValue>(entries, XdmValueEqualityComparer.Instance);
+        => _entries = ImmutableDictionary.CreateRange(XdmValueEqualityComparer.Instance, entries);
+
+    /// <summary>Creates a map that wraps an existing immutable dictionary.</summary>
+    public XdmMap(ImmutableDictionary<XdmValue, XdmValue> entries)
+        => _entries = entries;
 
     /// <summary>
-    /// Adds or replaces a key-value pair. When the key already exists, the entry is
-    /// removed and re-added so that the surviving key object is the newest one (with
-    /// its type annotation), as required by op:same-key / map:merge use-last semantics.
+    /// Adds or replaces a key-value pair. The stored key object is the supplied key, so
+    /// the newest key (and its type annotation) survives, as required by op:same-key
+    /// and map:merge use-last semantics.
     /// </summary>
     public void Add(XdmValue key, XdmValue value)
     {
+        // ImmutableDictionary.SetItem with a custom equality comparer does not always
+        // replace the stored key object, so remove first then re-add.
         if (_entries.ContainsKey(key))
-            _entries.Remove(key);
-        _entries.Add(key, value);
+            _entries = _entries.Remove(key);
+        _entries = _entries.Add(key, value);
     }
 
     /// <summary>Removes the entry with the given key, if present.</summary>
-    public bool Remove(XdmValue key) => _entries.Remove(key);
+    public bool Remove(XdmValue key)
+    {
+        bool contained = _entries.ContainsKey(key);
+        _entries = _entries.Remove(key);
+        return contained;
+    }
 
     /// <summary>Attempts to retrieve the value for the given key.</summary>
     public bool TryGetValue(XdmValue key, out XdmValue value) => _entries.TryGetValue(key, out value!);
@@ -63,6 +78,6 @@ public sealed class XdmMap
     /// <summary>Returns all values in the map.</summary>
     public IEnumerable<XdmValue> Values => _entries.Values;
 
-    /// <summary>Returns all key-value pairs in the map.</summary>
-    public IEnumerable<KeyValuePair<XdmValue, XdmValue>> Entries => _entries;
+    /// <summary>Returns the underlying immutable key-value dictionary.</summary>
+    public ImmutableDictionary<XdmValue, XdmValue> Entries => _entries;
 }

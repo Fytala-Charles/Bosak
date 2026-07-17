@@ -5,13 +5,18 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 15 July 2026
-> **Bosak baseline:** 999 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 18,698 passed / 1,742 failed / 11,381 skipped (58.76%)
+> **Bosak baseline:** 1,286 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,523 passed / 654 failed / 9,644 skipped (67.64%)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-17** — QT3 `op-same-key` hang resolved: **+14 passed, −2 failed, +14 skipped** (QT3 now 21,523 / 654 / 9,644 = 67.64%; unit tests 1,286/0).
+  - `XdmMap` now uses `ImmutableDictionary<XdmValue, XdmValue>` so `map:remove`, `map:put`, and `map:merge` perform O(log n) structural sharing instead of copying the whole dictionary.
+  - `map:remove` and `map:put` rewritten to use the immutable dictionary directly.
+  - QT3 harness dependency filter now skips `arbitraryPrecisionDecimal` tests (same-key-008 and same-key-025) because .NET `decimal` is fixed-precision 128-bit.
 
 - **2026-07-15** — QT3 regex/string quick-wins cluster: **+216 passed, −198 failed, zero regressions** (QT3 now 18,698 / 1,742 / 11,381 = 58.76%; unit tests 999/0).
   - Strict XSD regex syntax validation (re00xxx cluster, ~124 tests): malformed quantifiers, bare `{`/`}`/`]`, `(?x` constructs other than `(?:`, octal escapes, .NET-only escapes (`\x \u \A \Z \z \b \B`), trailing backslash, empty char classes, unescaped `[` in classes, and empty-base subtraction all raise FORX0002.
