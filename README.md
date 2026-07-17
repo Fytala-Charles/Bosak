@@ -178,7 +178,7 @@ dotnet test Bosak.sln
 
 Target framework: **.NET 10**.
 
-All 999 unit tests pass (0 failures).
+All 1,282 unit tests pass (0 failures).
 
 ---
 

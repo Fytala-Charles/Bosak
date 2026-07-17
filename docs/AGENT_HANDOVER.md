@@ -1,5 +1,52 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-17
+**Commit:** `f924720` (baseline) + uncommitted Tier-2n/2o harness changes
+**Current focus:** **QT3 Tier-2o: `fn:unparsed-text` function family** — `fn-unparsed-text`, `fn-unparsed-text-available`, and `fn-unparsed-text-lines` now at **153 passed / 4 failed / 9 skipped (92.17%)**, down from **134 passed / 23 failed / 9 skipped**. The 4 remaining failures are one HTTP 403 environmental test and 3 XPTY0004 type-checking cases that require broader function-call coercion changes. Unit tests remain **1,282/0**.
+
+---
+
+## This Session Fixes (Tier-2o: fn:unparsed-text)
+
+1. **Resolve `href` against the static base URI before URI mapping** — `UnparsedText` and `UnparsedTextAvailable` now call `ResolveUriAgainstBase(href, ctx.BaseUri)` first, then invoke `ResourceUriMapper` with the resolved URI. This fixes relative-URI tests such as `fn-unparsed-text-027/028` and empty-`href` tests (`fn-unparsed-text-031/032`) where the base URI carries the resource location.
+
+2. **Reject fragment identifiers with FOUT1170** — `fn:unparsed-text` now raises `FOUT1170` when the resolved URI has a fragment identifier (`fn-unparsed-text-013/014`); `fn:unparsed-text-available` returns `false` for the same case (`fn-unparsed-text-available-013/014`).
+
+3. **Preserve raw newlines in `assert-string-value` comparisons** — `ResultComparer.CompareAssertStringValue` now tries an exact string match first, then falls back to the previous newline-to-space normalization. This allows `fn-unparsed-text-040` (UTF-16 CRLF result) to pass while keeping compatibility with assertions that rely on XML formatting-newline normalization.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.43: unparsed-text/-available base-URI resolution, fragment check, URI-mapper key)
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs` (v1.3: exact-then-normalized assert-string-value comparison)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-17
+**Commit:** `f924720` (baseline) + uncommitted Tier-2n harness changes
+**Current focus:** **QT3 Tier-2n: test-set dependency inheritance** — `prod-AxisStep.static-typing` (15 tests) now correctly skipped via the inherited `staticTyping` feature dependency. Full QT3 suite execution is blocked by a pre-existing hang in `op-same-key` (28 tests); a run excluding that set yields **21,509 passed / 654 failed / 9,630 skipped** (67.65% of 31,793 tests). Unit tests remain **1,282/0**.
+
+---
+
+## This Session Fixes (Tier-2n: harness dependency inheritance)
+
+1. **Test-set dependency inheritance** — `ConformanceRunner.RunTestSet` collects `<dependency>` elements declared on the `<test-set>` root and passes them to `TestCase.FromElement`, which merges them with each test case's own dependencies before `DependencyFilter.IsSupported` evaluates them. This honors feature dependencies (e.g., `staticTyping`, `serialization`) that are declared at the test-set level rather than repeated on every test case.
+
+2. **`ST-Axes` correctly skipped** — `prod-AxisStep.static-typing` requires pessimistic static typing; Bosak does not support it, so all 15 tests (`ST-Axes001..015`) are now reported as skipped with reason `Unsupported dependency` instead of failing with `XPST0005`.
+
+3. **`README.md` unit-test count corrected** — the build section now states the actual **1,282** unit tests, not the stale **999** count.
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (v0.7: inherit test-set-level dependencies)
+- `tests/Bosak.XPath.Conformance/TestCase.cs` (v0.2: accept inherited test-set dependencies)
+- `README.md` (unit test count updated)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-16
 **Commit:** `9ac5b6e` (QT3 Tier-2m: fn:transform option handling)
 **Current focus:** **QT3 `fn:transform` Tier-2m suite: 117 passed / 0 failed / 7 skipped** — full option surface now implemented; 7 skipped tests depend on unsupported features (schema awareness, saxon-specific extensions, XSLT 1.0 source-required behavior). QT3 XPath 3.1 suite remains **21,838 passed / 699 failed / 9,284 skipped (68.63%)**.

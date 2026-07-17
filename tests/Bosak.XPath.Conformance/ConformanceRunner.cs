@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 15-07-2026     | External-variable tests now run; params are bound by the executor                        |
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Tests without environment resolve relative URIs against the test-set directory           |
 //                      | Charles Korthout | 0.6   | 15-07-2026     | Referenced environments without static-base-uri also fall back to test-set directory     |
+//                      | Charles Korthout | 0.7   | 17-07-2026     | Inherit test-set-level dependencies when filtering test cases (staticTyping)               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -119,6 +120,13 @@ internal sealed class ConformanceRunner
         var doc = XDocument.Load(path);
         string baseDir = Path.GetDirectoryName(path) ?? _suitePath;
 
+        // Collect test-set-level dependencies to inherit by each test case.
+        var testSetDependencies = new List<Dependency>();
+        foreach (var depElem in doc.Root?.Elements(_ns + "dependency") ?? [])
+        {
+            testSetDependencies.Add(Dependency.FromElement(depElem));
+        }
+
         // Load local environments
         var localEnvs = new Dictionary<string, TestEnvironment>();
         foreach (var envElem in doc.Descendants(_ns + "environment"))
@@ -132,7 +140,7 @@ internal sealed class ConformanceRunner
 
         foreach (var testCaseElem in doc.Descendants(_ns + "test-case"))
         {
-            var testCase = TestCase.FromElement(testCaseElem, _ns);
+            var testCase = TestCase.FromElement(testCaseElem, _ns, testSetDependencies);
 
             // Documented skips: upstream defects and platform limitations.
             if (DocumentedSkips.TryGetValue(testCase.Name, out var skipReason))

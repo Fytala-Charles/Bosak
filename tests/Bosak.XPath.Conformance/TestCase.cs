@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 17-07-2026     | Accept inherited test-set dependencies for dependency filtering                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -35,13 +36,13 @@ internal sealed class TestCase
         ResultElement = resultElement;
     }
 
-    public static TestCase FromElement(XElement element, XNamespace ns)
+    public static TestCase FromElement(XElement element, XNamespace ns, IEnumerable<Dependency> inheritedDependencies)
     {
         string name = (string?)element.Attribute("name") ?? "unknown";
         string description = (string?)element.Element(ns + "description") ?? "";
         string expression = (string?)element.Element(ns + "test") ?? "";
 
-        var dependencies = new List<Dependency>();
+        var dependencies = new List<Dependency>(inheritedDependencies);
         foreach (var depElem in element.Elements(ns + "dependency"))
         {
             dependencies.Add(Dependency.FromElement(depElem));

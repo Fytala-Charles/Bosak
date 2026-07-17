@@ -110,6 +110,9 @@
 //                      | Charles Korthout | 5.41  | 15-07-2026     | Tier-2k: fn:outermost/innermost reject non-node items (XPTY0004); round/round-half-to-even keep xs:integer type for negative precision (F+O instance-of-T rule); huge-precision identity guard; fn:min/max/sum preserve integer subtype annotations (least common type) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.42  | 15-07-2026     | fn:system-property('xsl:version') honors EvaluationContext.XsltVersion override                        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.43  | 17-07-2026     | fn:unparsed-text/-available: resolve href against base URI before URI mapping; reject fragment identifiers |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -6127,12 +6130,18 @@ public static class FunctionLibrary
 
     private static XdmValue UnparsedText(string href, string? encoding, EvaluationContext ctx)
     {
-        if (string.IsNullOrEmpty(href))
-            throw new InvalidOperationException("FOUT1170");
         try
         {
-            // A resource mapper may redirect published (e.g. http:) URIs to local files.
-            var path = ctx.ResourceUriMapper?.Invoke(href) ?? ResolveUriAgainstBase(href, ctx.BaseUri);
+            // Resolve against the static base URI first, then check for a fragment
+            // identifier (which is not allowed) and apply the published-URI mapper.
+            var resolved = ResolveUriAgainstBase(href, ctx.BaseUri);
+            if (Uri.TryCreate(resolved, UriKind.Absolute, out var resolvedUri) &&
+                !string.IsNullOrEmpty(resolvedUri.Fragment))
+            {
+                throw new InvalidOperationException("FOUT1170");
+            }
+
+            var path = ctx.ResourceUriMapper?.Invoke(resolved) ?? resolved;
 
             string content;
             if (File.Exists(path))
@@ -6296,11 +6305,18 @@ public static class FunctionLibrary
 
     private static XdmValue UnparsedTextAvailable(string href, string? encoding, EvaluationContext ctx)
     {
-        if (string.IsNullOrEmpty(href))
-            return XdmValue.False;
         try
         {
-            var path = ctx.ResourceUriMapper?.Invoke(href) ?? ResolveUriAgainstBase(href, ctx.BaseUri);
+            // Resolve against the static base URI first, then check for a fragment
+            // identifier (which makes unparsed-text fail, so availability is false).
+            var resolved = ResolveUriAgainstBase(href, ctx.BaseUri);
+            if (Uri.TryCreate(resolved, UriKind.Absolute, out var resolvedUri) &&
+                !string.IsNullOrEmpty(resolvedUri.Fragment))
+            {
+                return XdmValue.False;
+            }
+
+            var path = ctx.ResourceUriMapper?.Invoke(resolved) ?? resolved;
             if (File.Exists(path))
             {
                 // Spec: true iff fn:unparsed-text with the same arguments would succeed.

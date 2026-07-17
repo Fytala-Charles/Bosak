@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 15-07-2026     | assert-type xs:decimal accepts xs:integer values (FOTS instance-of semantics)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 17-07-2026     | assert-string-value: prefer exact match, then newline-collapsed match (fn:unparsed-text raw text) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -204,8 +206,12 @@ internal static class ResultComparer
         }
         else
         {
-            // Even without normalize-space, replace newlines in the expected value
-            // because XML formatting may insert them in the assertion text.
+            // Some expected values contain literal newlines (e.g. fn:unparsed-text
+            // raw text results) while others contain formatting newlines introduced
+            // by XML indentation. Try the exact value first, then fall back to a
+            // version where newlines are collapsed to a single space.
+            if (actualStr == expected)
+                return new TestOutcome(TestOutcomeKind.Passed, null);
             expected = expected.Replace("\r\n", "\n").Replace("\n", " ");
         }
 
