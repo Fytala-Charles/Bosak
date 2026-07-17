@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-17
-**Commit:** `f924720` (baseline) + uncommitted Tier-2n/2o harness changes
+**Commit:** `5983996` (QT3 Tier-2n/2o: harness dependency inheritance + fn:unparsed-text fixes)
 **Current focus:** **QT3 Tier-2o: `fn:unparsed-text` function family** — `fn-unparsed-text`, `fn-unparsed-text-available`, and `fn-unparsed-text-lines` now at **153 passed / 4 failed / 9 skipped (92.17%)**, down from **134 passed / 23 failed / 9 skipped**. The 4 remaining failures are one HTTP 403 environmental test and 3 XPTY0004 type-checking cases that require broader function-call coercion changes. Unit tests remain **1,282/0**.
 
 ---
@@ -24,7 +24,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-17
-**Commit:** `f924720` (baseline) + uncommitted Tier-2n harness changes
+**Commit:** `5983996` (QT3 Tier-2n/2o: harness dependency inheritance + fn:unparsed-text fixes)
 **Current focus:** **QT3 Tier-2n: test-set dependency inheritance** — `prod-AxisStep.static-typing` (15 tests) now correctly skipped via the inherited `staticTyping` feature dependency. Full QT3 suite execution is blocked by a pre-existing hang in `op-same-key` (28 tests); a run excluding that set yields **21,509 passed / 654 failed / 9,630 skipped** (67.65% of 31,793 tests). Unit tests remain **1,282/0**.
 
 ---
