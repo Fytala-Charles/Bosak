@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-17
 **Commit:** `4345314` (QT3 Tier-2p: persistent XdmMap + op-same-key hang fix)
-**Current focus:** **QT3 Tier-2p: `op-same-key` hang resolved** — `op-same-key` now completes with **14 passed / 0 failed / 14 skipped** (was hanging on `same-key-023` due to O(N²) map copying). Full QT3 suite now at **21,523 passed / 654 failed / 9,644 skipped (67.64%)**, up from **21,509/654/9,630** excluding `op-same-key`. Unit tests remain **1,286/0**.
+**Current focus:** **QT3 Tier-2p: `op-same-key` hang resolved** — `op-same-key` now completes with **14 passed / 0 failed / 14 skipped** (was hanging on `same-key-023` due to O(N²) map copying). Full QT3 suite now at **21,543 passed / 634 failed / 9,644 skipped (67.70%)**, up from **21,509/654/9,630** excluding `op-same-key`. Unit tests remain **1,286/0**.
 
 ---
 

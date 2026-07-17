@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-17 (QT3 Tier-2p: `op-same-key` hang resolved — **14 passed / 0 failed / 14 skipped**; full QT3 suite at **21,523 passed / 654 failed / 9,644 skipped — 67.64%**; unit tests **1,286/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
+> **Living Registry** — Last updated: 2026-07-17 (QT3 Tier-2p: `op-same-key` hang resolved — **14 passed / 0 failed / 14 skipped**; full QT3 suite at **21,543 passed / 634 failed / 9,644 skipped — 67.70%**; unit tests **1,286/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
