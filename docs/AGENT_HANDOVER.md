@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-17
+**Commit:** `4345314` (QT3 Tier-2p: persistent XdmMap + op-same-key hang fix)
+**Current focus:** **QT3 Tier-2p: `op-same-key` hang resolved** — `op-same-key` now completes with **14 passed / 0 failed / 14 skipped** (was hanging on `same-key-023` due to O(N²) map copying). Full QT3 suite now at **21,523 passed / 654 failed / 9,644 skipped (67.64%)**, up from **21,509/654/9,630** excluding `op-same-key`. Unit tests remain **1,286/0**.
+
+---
+
+## This Session Fixes (Tier-2p: op-same-key)
+
+1. **Replace `XdmMap` dictionary copying with persistent immutable storage** — `XdmMap` is now backed by `ImmutableDictionary<XdmValue, XdmValue>` so `map:remove`, `map:put`, and `map:merge` perform O(log n) structural sharing instead of copying the whole dictionary. This eliminates the hang in `same-key-023` (421k keys × 421k map operations) and reduces the full `op-same-key` run from ~60s+ to ~13s.
+
+2. **Preserve newest-key semantics under structural sharing** — `XdmMap.Add` and `map:put` remove the existing key before re-adding, so `op:same-key` and `map:merge use-last` still retain the newest key object (and its type annotation).
+
+3. **Skip arbitrary-precision-decimal tests** — `DependencyFilter` now treats `arbitraryPrecisionDecimal` as unsupported; `same-key-008` and `same-key-025` are skipped because .NET `decimal` is fixed-precision 128-bit.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/XdmMap.cs` (v0.5: `ImmutableDictionary` backing for structural sharing)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.44: `map:remove`/`map:put` use immutable operations)
+- `tests/Bosak.XPath.Conformance/DependencyFilter.cs` (v0.3: skip `arbitraryPrecisionDecimal` tests)
+- `README.md`, `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md` (updated baselines)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-17
 **Commit:** `5983996` (QT3 Tier-2n/2o: harness dependency inheritance + fn:unparsed-text fixes)
 **Current focus:** **QT3 Tier-2o: `fn:unparsed-text` function family** — `fn-unparsed-text`, `fn-unparsed-text-available`, and `fn-unparsed-text-lines` now at **153 passed / 4 failed / 9 skipped (92.17%)**, down from **134 passed / 23 failed / 9 skipped**. The 4 remaining failures are one HTTP 403 environmental test and 3 XPTY0004 type-checking cases that require broader function-call coercion changes. Unit tests remain **1,282/0**.
 
