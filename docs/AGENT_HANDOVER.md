@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-18
-**Commit:** uncommitted changes on `210e9f5`
+**Commit:** `7c44257` (QT3 Tier-2r: fn:collection / fn:uri-collection support)
 **Current focus:** **QT3 Tier-2r: fn:collection / fn:uri-collection support** — `EvaluationContext.Collections` is now populated by the QT3 harness and used by `fn:collection()` and `fn:uri-collection()` to resolve registered collections, with directory-based fallback and FODC error codes. Full QT3 suite now at **21,511 passed / 482 failed / 9,828 skipped (67.60%)**; runnable pass rate **97.81%** (21511 / 21993). Unit tests **1,282/0**.
 
 ---
