@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added ToXmlString for fn:serialize                                                     |
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added BaseUri property for fn:base-uri and fn:document-uri                             |
 //                      | Charles Korthout | 0.4   | 25-06-2026     | Added DocumentUri property separate from BaseUri                                       |
+//                      | Charles Korthout | 0.5   | 18-07-2026     | Added DTD properties for fn:id/fn:idref DTD support                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -81,6 +82,21 @@ public interface IXdmNode
 
     /// <summary>Gets the document URI of this node, or empty string if none.</summary>
     string DocumentUri { get; }
+
+    /// <summary>Gets a value indicating whether the containing document has a document type declaration.</summary>
+    bool HasDocumentType => false;
+
+    /// <summary>Gets the name of the document type declaration, or empty string if none.</summary>
+    string DocumentTypeName => string.Empty;
+
+    /// <summary>Gets the public identifier of the document type declaration, or empty string if none.</summary>
+    string PublicId => string.Empty;
+
+    /// <summary>Gets the system identifier of the document type declaration, or empty string if none.</summary>
+    string SystemId => string.Empty;
+
+    /// <summary>Gets the internal subset of the document type declaration, or empty string if none.</summary>
+    string InternalSubset => string.Empty;
 
     /// <summary>Returns the XML serialization of this node.</summary>
     string ToXmlString();

@@ -117,6 +117,7 @@
 //                      | Charles Korthout | 5.45  | 18-07-2026     | map:remove/map:put use XdmMap.WithAdded/WithRemoved to preserve insertion order          |
 //                      | Charles Korthout | 5.46  | 18-07-2026     | fn:collection/fn:uri-collection use EvaluationContext.Collections + FODC errors         |
 //                      | Charles Korthout | 5.47  | 18-07-2026     | fn:function-lookup captures EvaluationContext so context-dependent functions use it   |
+//                      | Charles Korthout | 5.48  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id support DTD-declared ID/IDREF and raise XPTY0004    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -5840,65 +5841,68 @@ public static class FunctionLibrary
 
     private static XdmValue Id_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ids = ParseIdTokens(args[0].ToString());
+        var focus = ctx.ContextItem;
+        if (!focus.IsNode)
+            throw new InvalidOperationException("XPTY0004: fn:id() context item is not a node.");
+
+        var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
         var result = new List<XdmValue>();
-        var focus = ctx.ContextItem;
-        if (focus.IsNode)
-        {
-            var doc = focus.NodeValue.Document ?? focus.NodeValue;
-            if (doc is not null)
-                CollectIdElements(doc, ids, result);
-        }
+        var doc = focus.NodeValue.Document ?? focus.NodeValue;
+        if (doc is not null)
+            CollectIdElements(doc, ids, result);
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     private static XdmValue Id_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ids = ParseIdTokens(args[0].ToString());
+        var node = FirstNode(args[1]);
+        if (node == null)
+            throw new InvalidOperationException("XPTY0004: fn:id() argument is not a node.");
+
+        var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
         var result = new List<XdmValue>();
-        var nodeArg = args[1];
-        var node = nodeArg.IsNode ? nodeArg.NodeValue : null;
-        if (node == null && nodeArg.IsSequence && nodeArg.SequenceValue != null)
-        {
-            foreach (var item in XdmSequence.FromSource(nodeArg.SequenceValue))
-            {
-                if (item.IsNode)
-                {
-                    node = item.NodeValue;
-                    break;
-                }
-            }
-        }
-        if (node != null)
-        {
-            var doc = node.Document ?? node;
-            if (doc is not null)
-                CollectIdElements(doc, ids, result);
-        }
+        var doc = node.Document ?? node;
+        if (doc is not null)
+            CollectIdElements(doc, ids, result);
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     private static XdmValue ElementWithId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ids = ParseIdTokens(args[0].ToString());
+        var focus = ctx.ContextItem;
+        if (!focus.IsNode)
+            throw new InvalidOperationException("XPTY0004: fn:element-with-id() context item is not a node.");
+
+        var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
         var result = new List<XdmValue>();
-        var focus = ctx.ContextItem;
-        if (focus.IsNode)
-        {
-            var doc = focus.NodeValue.Document ?? focus.NodeValue;
-            if (doc is not null)
-                CollectElementWithId(doc, ids, result);
-        }
+        var doc = focus.NodeValue.Document ?? focus.NodeValue;
+        if (doc is not null)
+            CollectElementWithId(doc, ids, result);
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static HashSet<string> ParseIdTokens(XdmValue value)
+    {
+        var ids = new HashSet<string>();
+        foreach (var item in AsSequence(value))
+        {
+            foreach (var token in item.ToString().Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var trimmed = token.Trim();
+                if (trimmed.Length > 0)
+                    ids.Add(trimmed);
+            }
+        }
+        return ids;
     }
 
     private static HashSet<string> ParseIdTokens(string value)
@@ -5911,81 +5915,72 @@ public static class FunctionLibrary
 
     private static void CollectElementWithId(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
     {
+        var dtdInfo = GetDtdAttributeInfo(node);
+        CollectElementWithId(node, ids, result, dtdInfo);
+    }
+
+    private static void CollectElementWithId(IXdmNode node, HashSet<string> ids, List<XdmValue> result, DtdAttributeInfo dtdInfo)
+    {
         if (node.NodeKind == XdmNodeKind.Element)
         {
-            // Check for xml:id attribute (treated as ID even without DTD/schema)
-            foreach (var attr in node.Attributes("id", ""))
-            {
-                if (ids.Contains(AtomizedString(attr).Trim()))
-                {
-                    result.Add(XdmValue.FromNode(node));
-                    return;
-                }
-            }
-            foreach (var attr in node.Attributes("id", "http://www.w3.org/XML/1998/namespace"))
-            {
-                if (ids.Contains(AtomizedString(attr).Trim()))
-                {
-                    result.Add(XdmValue.FromNode(node));
-                    return;
-                }
-            }
+            if (ElementHasId(node, ids, dtdInfo))
+                result.Add(XdmValue.FromNode(node));
         }
         foreach (var child in node.Children(XdmNodeKind.Element))
         {
             if (child.IsNode)
-                CollectElementWithId(child.NodeValue!, ids, result);
+                CollectElementWithId(child.NodeValue!, ids, result, dtdInfo);
         }
     }
 
     private static XdmValue ElementWithId_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ids = ParseIdTokens(args[0].ToString());
+        var node = FirstNode(args[1]);
+        if (node == null)
+            throw new InvalidOperationException("XPTY0004: fn:element-with-id() argument is not a node.");
+
+        var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
         var result = new List<XdmValue>();
-        var node = FirstNode(args[1]);
-        if (node != null)
-        {
-            var doc = node.Document ?? node;
-            if (doc is not null)
-                CollectElementWithId(doc, ids, result);
-        }
+        var doc = node.Document ?? node;
+        if (doc is not null)
+            CollectElementWithId(doc, ids, result);
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     private static XdmValue Idref_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ids = ParseIdTokens(args[0].ToString());
+        var focus = ctx.ContextItem;
+        if (!focus.IsNode)
+            throw new InvalidOperationException("XPTY0004: fn:idref() context item is not a node.");
+
+        var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
         var result = new List<XdmValue>();
-        var focus = ctx.ContextItem;
-        if (focus.IsNode)
-        {
-            var doc = focus.NodeValue.Document ?? focus.NodeValue;
-            if (doc is not null)
-                CollectIdrefElements(doc, ids, result);
-        }
+        var doc = focus.NodeValue.Document ?? focus.NodeValue;
+        if (doc is not null)
+            CollectIdrefElements(doc, ids, result);
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     private static XdmValue Idref_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ids = ParseIdTokens(args[0].ToString());
+        var node = FirstNode(args[1]);
+        if (node == null)
+            throw new InvalidOperationException("XPTY0004: fn:idref() argument is not a node.");
+
+        var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
         var result = new List<XdmValue>();
-        var node = FirstNode(args[1]);
-        if (node != null)
-        {
-            var doc = node.Document ?? node;
-            if (doc is not null)
-                CollectIdrefElements(doc, ids, result);
-        }
+        var doc = node.Document ?? node;
+        if (doc is not null)
+            CollectIdrefElements(doc, ids, result);
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
@@ -5993,6 +5988,8 @@ public static class FunctionLibrary
     {
         if (value.IsNode)
             return value.NodeValue;
+        if (value.IsUndefined)
+            return null;
         if (value.IsSequence && value.SequenceValue != null)
         {
             foreach (var item in XdmSequence.FromSource(value.SequenceValue))
@@ -6006,6 +6003,12 @@ public static class FunctionLibrary
 
     private static void CollectIdrefElements(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
     {
+        var dtdInfo = GetDtdAttributeInfo(node);
+        CollectIdrefElements(node, ids, result, dtdInfo);
+    }
+
+    private static void CollectIdrefElements(IXdmNode node, HashSet<string> ids, List<XdmValue> result, DtdAttributeInfo dtdInfo)
+    {
         if (node.NodeKind == XdmNodeKind.Element)
         {
             // Without schema/DTD processing no attribute is typed as xs:IDREF; by
@@ -6015,16 +6018,25 @@ public static class FunctionLibrary
             {
                 var tokens = ParseIdTokens(AtomizedString(attr));
                 if (tokens.Overlaps(ids))
+                    result.Add(attr);
+            }
+            if (dtdInfo.IdrefAttributes.TryGetValue(node.LocalName, out var dtdIdrefAttrs))
+            {
+                foreach (var attrName in dtdIdrefAttrs)
                 {
-                    result.Add(XdmValue.FromNode(node));
-                    break;
+                    foreach (var attr in node.Attributes(attrName, ""))
+                    {
+                        var tokens = ParseIdTokens(AtomizedString(attr));
+                        if (tokens.Overlaps(ids))
+                            result.Add(attr);
+                    }
                 }
             }
         }
         foreach (var child in node.Children(XdmNodeKind.Element))
         {
             if (child.IsNode)
-                CollectIdrefElements(child.NodeValue!, ids, result);
+                CollectIdrefElements(child.NodeValue!, ids, result, dtdInfo);
         }
     }
 
@@ -6033,31 +6045,109 @@ public static class FunctionLibrary
 
     private static void CollectIdElements(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
     {
+        var dtdInfo = GetDtdAttributeInfo(node);
+        CollectIdElements(node, ids, result, dtdInfo);
+    }
+
+    private static void CollectIdElements(IXdmNode node, HashSet<string> ids, List<XdmValue> result, DtdAttributeInfo dtdInfo)
+    {
         if (node.NodeKind == XdmNodeKind.Element)
         {
-            foreach (var attr in node.Attributes("id", ""))
-            {
-                if (ids.Contains(AtomizedString(attr).Trim()))
-                {
-                    result.Add(XdmValue.FromNode(node));
-                    break;
-                }
-            }
-            foreach (var attr in node.Attributes("id", "http://www.w3.org/XML/1998/namespace"))
-            {
-                if (ids.Contains(AtomizedString(attr).Trim()))
-                {
-                    result.Add(XdmValue.FromNode(node));
-                    break;
-                }
-            }
+            if (ElementHasId(node, ids, dtdInfo))
+                result.Add(XdmValue.FromNode(node));
         }
         foreach (var child in node.Children(XdmNodeKind.Element))
         {
             if (child.IsNode)
-                CollectIdElements(child.NodeValue!, ids, result);
+                CollectIdElements(child.NodeValue!, ids, result, dtdInfo);
         }
     }
+
+    private static bool ElementHasId(IXdmNode element, HashSet<string> ids, DtdAttributeInfo dtdInfo)
+    {
+        foreach (var attr in element.Attributes("id", ""))
+        {
+            if (ids.Contains(AtomizedString(attr).Trim()))
+                return true;
+        }
+        foreach (var attr in element.Attributes("id", "http://www.w3.org/XML/1998/namespace"))
+        {
+            if (ids.Contains(AtomizedString(attr).Trim()))
+                return true;
+        }
+        if (dtdInfo.IdAttributes.TryGetValue(element.LocalName, out var dtdIdAttrs))
+        {
+            foreach (var attrName in dtdIdAttrs)
+            {
+                foreach (var attr in element.Attributes(attrName, ""))
+                {
+                    if (ids.Contains(AtomizedString(attr).Trim()))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private sealed record DtdAttributeInfo(
+        Dictionary<string, List<string>> IdAttributes,
+        Dictionary<string, List<string>> IdrefAttributes);
+
+    private static readonly ConditionalWeakTable<IXdmNode, DtdAttributeInfo> DtdAttributeCache = new();
+
+    private static DtdAttributeInfo GetDtdAttributeInfo(IXdmNode node)
+    {
+        var doc = node.Document ?? node;
+        if (!doc.HasDocumentType || string.IsNullOrEmpty(doc.InternalSubset))
+            return EmptyDtdAttributeInfo;
+
+        return DtdAttributeCache.GetValue(doc, static d =>
+        {
+            try
+            {
+                return ParseDtdAttlistDeclarations(d.InternalSubset);
+            }
+            catch
+            {
+                return EmptyDtdAttributeInfo;
+            }
+        });
+    }
+
+    private static readonly DtdAttributeInfo EmptyDtdAttributeInfo =
+        new(new Dictionary<string, List<string>>(StringComparer.Ordinal), new Dictionary<string, List<string>>(StringComparer.Ordinal));
+
+    private static DtdAttributeInfo ParseDtdAttlistDeclarations(string subset)
+    {
+        var idAttrs = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        var idrefAttrs = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+
+        foreach (Match match in AttlistDeclarationRegex.Matches(subset))
+        {
+            string element = match.Groups[1].Value;
+            string attr = match.Groups[2].Value;
+            string type = match.Groups[3].Value;
+
+            if (type.Equals("ID", StringComparison.Ordinal))
+            {
+                if (!idAttrs.TryGetValue(element, out var list))
+                    idAttrs[element] = list = new List<string>();
+                list.Add(attr);
+            }
+            else if (type.Equals("IDREF", StringComparison.Ordinal) || type.Equals("IDREFS", StringComparison.Ordinal))
+            {
+                if (!idrefAttrs.TryGetValue(element, out var list))
+                    idrefAttrs[element] = list = new List<string>();
+                list.Add(attr);
+            }
+        }
+
+        return new DtdAttributeInfo(idAttrs, idrefAttrs);
+    }
+
+    private static readonly Regex AttlistDeclarationRegex = new(
+        @"<!ATTLIST\s+(\S+)\s+(\S+)\s+(ID|IDREF|IDREFS)\b",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline);
 
     private static XdmValue Collection_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => ResolveCollection(null, ctx, returnUris: false);

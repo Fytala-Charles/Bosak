@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 1.4   | 25-06-2026     | Fixed following/preceding axes for attribute and namespace nodes                       |
 //                      | Charles Korthout | 1.5   | 26-06-2026     | GetNamespaceAxis adds implied default namespaces only when not explicitly declared     |
 //                      | Charles Korthout | 1.6   | 28-06-2026     | ResolveXmlBase honors external-entity node base URIs; fixes resolve-uri-021          |
+//                      | Charles Korthout | 1.7   | 18-07-2026     | Exposed XDocumentType properties for DTD-based ID/IDREF support                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -368,6 +369,28 @@ public sealed class XDocumentNode : IXdmNode
     public string BaseUri => ComputeBaseUri();
 
     public string DocumentUri => ComputeDocumentUri();
+
+    public bool HasDocumentType => GetDocumentType() is not null;
+
+    public string DocumentTypeName => GetDocumentType()?.Name ?? string.Empty;
+
+    public string PublicId => GetDocumentType()?.PublicId ?? string.Empty;
+
+    public string SystemId => GetDocumentType()?.SystemId ?? string.Empty;
+
+    public string InternalSubset => GetDocumentType()?.InternalSubset ?? string.Empty;
+
+    private XDocumentType? GetDocumentType()
+    {
+        if (_node is System.Xml.Linq.XDocument doc)
+            return doc.DocumentType;
+
+        var containingDoc = _node.Document;
+        if (containingDoc is not null)
+            return containingDoc.DocumentType;
+
+        return null;
+    }
 
     private string ComputeDocumentUri()
     {

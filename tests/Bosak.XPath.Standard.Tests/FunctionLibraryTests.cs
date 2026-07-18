@@ -43,11 +43,13 @@
 //                      | Charles Korthout | 2.10  | 16-07-2026     | Tier-2l: timezone, fractional seconds, ISO week-in-month, German names, calendar validation, format-integer CJK/French/Italian (27 tests) |
 //                      | Charles Korthout | 2.11  | 16-07-2026     | Tier-2l: 32 format picture/locale tests, [Z99] zero-padding, calendar namespace fallback |
 //                      | Charles Korthout | 2.12  | 18-07-2026     | function-lookup context-dependent base-uri test (creator focus vs call-site focus)        |
+//                      | Charles Korthout | 2.13  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id DTD and XPTY0004 tests                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Xunit;
@@ -3307,6 +3309,83 @@ public class FunctionLibraryTests
         // fn-normalize-unicode1args-7
         var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("normalize-unicode(12)"));
         Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:id / fn:idref / fn:element-with-id with DTD
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Id_DtdDeclaredAttribute_ReturnsElement()
+    {
+        var xml = "<!DOCTYPE ROOT [<!ATTLIST R anId ID #REQUIRED><!ATTLIST R anIdRef IDREF #IMPLIED>]><ROOT><R anId='a' anIdRef='b'/><R anId='b'/><R anId='c' anIdRef='a c'/></ROOT>";
+        var result = EvalSequence($"let $d := parse-xml(\"{xml}\") return for $e in fn:id(('a','b'), $d) return local-name($e) || '#' || string($e/@anId)");
+        Assert.Equal(new[] { "R#a", "R#b" }, result);
+    }
+
+    [Fact]
+    public void Idref_DtdDeclaredAttribute_ReturnsReferencingElements()
+    {
+        var xml = "<!DOCTYPE ROOT [<!ATTLIST R anId ID #REQUIRED><!ATTLIST R anIdRef IDREF #IMPLIED>]><ROOT><R anId='a' anIdRef='b'/><R anId='b'/><R anId='c' anIdRef='a c'/></ROOT>";
+        var result = EvalSequence($"let $d := parse-xml(\"{xml}\") return for $e in fn:idref('a', $d) return local-name($e) || '=' || string($e)");
+        Assert.Equal(new[] { "anIdRef=a c" }, result);
+    }
+
+    [Fact]
+    public void ElementWithId_DtdDeclaredAttribute_ReturnsElement()
+    {
+        var xml = "<!DOCTYPE ROOT [<!ATTLIST R anId ID #REQUIRED>]><ROOT><R anId='x'/><R anId='y'/></ROOT>";
+        var result = EvalStr($"let $d := parse-xml(\"{xml}\") return string(fn:element-with-id('y', $d)/@anId)");
+        Assert.Equal("y", result);
+    }
+
+    [Fact]
+    public void Id_SecondArgumentNotNode_RaisesXPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:id('a', 'not-a-node')"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Idref_SecondArgumentNotNode_RaisesXPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:idref('a', 'not-a-node')"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void DtdParser_ExtractsIdAndIdrefAttributes()
+    {
+        var subset = "<!ATTLIST R anId ID #REQUIRED><!ATTLIST R anIdRef IDREF #IMPLIED>";
+        var method = typeof(FunctionLibrary).GetMethod("ParseDtdAttlistDeclarations", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        Assert.NotNull(method);
+        var info = method.Invoke(null, new object[] { subset });
+        Assert.NotNull(info);
+        var idAttrs = (System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>>)info.GetType().GetProperty("IdAttributes")!.GetValue(info)!;
+        var idrefAttrs = (System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>>)info.GetType().GetProperty("IdrefAttributes")!.GetValue(info)!;
+        Assert.Single(idAttrs);
+        Assert.True(idAttrs.ContainsKey("R"), $"Keys: {string.Join(", ", idAttrs.Keys)}");
+        Assert.Contains("anId", idAttrs["R"]);
+        Assert.Single(idrefAttrs);
+        Assert.True(idrefAttrs.ContainsKey("R"), $"Keys: {string.Join(", ", idrefAttrs.Keys)}");
+        Assert.Contains("anIdRef", idrefAttrs["R"]);
+    }
+
+    [Fact]
+    public void Id_ContextItem_DtdDocument()
+    {
+        var xml = "<!DOCTYPE ROOT [<!ATTLIST R anId ID #REQUIRED>]><ROOT><R anId='x'/><R anId='y'/></ROOT>";
+        var doc = XDocumentProvider.ParseXml(xml);
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
+        var result = XPath31Expression.Compile("fn:id('y')").Evaluate(ctx);
+        Assert.True(result.IsSequence);
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item);
+        Assert.Single(items);
+        Assert.Equal("R", items[0].NodeValue!.LocalName);
     }
 }
 
