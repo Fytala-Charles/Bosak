@@ -5,13 +5,18 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 18 July 2026
-> **Bosak baseline:** 1,282 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,511 passed / 482 failed / 9,828 skipped (67.60% / 97.81% of runnable tests)
+> **Bosak baseline:** 1,283 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,494 passed / 446 failed / 9,881 skipped (67.55% / 97.97% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-18** — QT3 Tier-2s: `fn:function-lookup` context-focus capture.
+  - `function-lookup` and compiler-generated named function references now capture the creation focus in `NamedFunctionItem`, so context-dependent functions (`fn:base-uri#0`, `fn:document-uri#0`) use the creator's context item during dynamic invocation.
+  - `DependencyFilter` now declares `fn-load-xquery-module` unsupported, so tests that assert the feature are skipped rather than failing with `FOQM0001`.
+  - Full QT3 now **21,494 / 446 / 9,881 = 67.55%** (runnable pass rate **97.97%**); unit tests **1,283/0**.
 
 - **2026-07-18** — QT3 Tier-2r: `fn:collection()` / `fn:uri-collection()` support.
   - `EvaluationContext.Collections` is now populated by the QT3 harness and used by `fn:collection()` and `fn:uri-collection()` to resolve registered collections, with directory-based fallback and `FODC0002`/`FODC0003`/`FODC0004` error reporting.

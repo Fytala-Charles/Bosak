@@ -74,6 +74,7 @@
 //                      | Charles Korthout | 2.39  | 15-07-2026     | Tier-2j: For opcode binds optional positional variable (1-based); Atomize raises XPTY0004 on multi-item sequences; arithmetic operands validated numeric/untypedAtomic (XPTY0004) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.40  | 15-07-2026     | Tier-2k: annotation-aware instance-of (integer/string/duration supertype walks, nmtoken); 'to' operand validation (XPTY0004); value-comparison string-vs-numeric XPTY0004; general-comparison untypedAtomic rule-b casting via primitive base type; for/some/every bind namespace-qualified variables; duration casts keep subtype annotation |
+//                      | Charles Korthout | 2.41  | 18-07-2026     | NamedFunctionItem dynamic calls use defining-context focus (fn:function-lookup base-uri) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1765,7 +1766,13 @@ public static class VmEngine
                             // function returned by fn:transform delivery-format="raw").
                             NamedFunctionItem named => named.DefiningContext != null
                                 ? named
-                                : named with { DefiningContext = context },
+                                : named with
+                                {
+                                    DefiningContext = context,
+                                    CapturedContextItem = context.ContextItem,
+                                    CapturedContextPosition = context.ContextPosition,
+                                    CapturedContextSize = context.ContextSize
+                                },
                             CurriedFunctionItem curried => curried,
                             InlineFunctionItem inline => inline,
                             CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body, cif.ParameterTypes, cif.ReturnType)
@@ -2021,7 +2028,13 @@ public static class VmEngine
         var (localName, nsUri) = ResolveFunctionName(tuple.Item1, context);
         if (!context.TryResolveFunction(nsUri, localName, tuple.Item2, out _))
             throw new InvalidOperationException($"XPST0017: Function {{{nsUri}}}{localName}#{tuple.Item2} not found.");
-        return new NamedFunctionItem(nsUri, localName, tuple.Item2) { DefiningContext = context };
+        return new NamedFunctionItem(nsUri, localName, tuple.Item2)
+        {
+            DefiningContext = context,
+            CapturedContextItem = context.ContextItem,
+            CapturedContextPosition = context.ContextPosition,
+            CapturedContextSize = context.ContextSize
+        };
     }
 
     public static XdmValue InvokeFunctionItem(FunctionItem func, EvaluationContext context, ReadOnlySpan<XdmValue> args)
@@ -2066,9 +2079,43 @@ public static class VmEngine
                         throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{args.Length} not found.");
                     }
                 }
-                // XSLT context-dependent functions (e.g. current-group) supply a separate
-                // implementation for dynamic invocation through a function item.
-                return (sig.DynamicImplementation ?? sig.Implementation)(context, ConvertDynamicCallArgs(sig, args));
+                // Named function references and function-lookup results capture the dynamic
+                // context in which they are created. Context-dependent functions such as
+                // fn:base-uri#0 and fn:document-uri#0 therefore use the creator's focus,
+                // not the call-site focus (fn-function-lookup-018/022).
+                XdmValue savedItem = XdmValue.Undefined;
+                int savedPosition = 0;
+                int savedSize = 0;
+                bool restoreFocus = false;
+                if (!named.CapturedContextItem.IsUndefined)
+                {
+                    savedItem = context.ContextItem;
+                    savedPosition = context.ContextPosition;
+                    savedSize = context.ContextSize;
+                    context.WithFocus(named.CapturedContextItem, named.CapturedContextPosition, named.CapturedContextSize);
+                    restoreFocus = true;
+                }
+                else if (named.DefiningContext is EvaluationContext definingCtx)
+                {
+                    // Legacy fallback: older function items captured only the defining context
+                    // reference; use its current focus.
+                    savedItem = context.ContextItem;
+                    savedPosition = context.ContextPosition;
+                    savedSize = context.ContextSize;
+                    context.WithFocus(definingCtx.ContextItem, definingCtx.ContextPosition, definingCtx.ContextSize);
+                    restoreFocus = true;
+                }
+                try
+                {
+                    // XSLT context-dependent functions (e.g. current-group) supply a separate
+                    // implementation for dynamic invocation through a function item.
+                    return (sig.DynamicImplementation ?? sig.Implementation)(context, ConvertDynamicCallArgs(sig, args));
+                }
+                finally
+                {
+                    if (restoreFocus)
+                        context.WithFocus(savedItem, savedPosition, savedSize);
+                }
 
             case DelegateFunctionItem del:
                 if (args.Length != del.ArityValue)

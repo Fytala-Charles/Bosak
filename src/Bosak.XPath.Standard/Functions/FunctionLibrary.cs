@@ -116,6 +116,7 @@
 //                      | Charles Korthout | 5.44  | 17-07-2026     | Persistent XdmMap backing; map:remove/map:put now O(log n) via structural sharing (op-same-key) |
 //                      | Charles Korthout | 5.45  | 18-07-2026     | map:remove/map:put use XdmMap.WithAdded/WithRemoved to preserve insertion order          |
 //                      | Charles Korthout | 5.46  | 18-07-2026     | fn:collection/fn:uri-collection use EvaluationContext.Collections + FODC errors         |
+//                      | Charles Korthout | 5.47  | 18-07-2026     | fn:function-lookup captures EvaluationContext so context-dependent functions use it   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -5579,7 +5580,13 @@ public static class FunctionLibrary
         var qname = args[0].QNameValue;
         int arity = (int)args[1].IntegerValue;
         if (ctx.TryResolveFunction(qname.NamespaceUri, qname.LocalName, arity, out var sig))
-            return XdmValue.FromFunction(new NamedFunctionItem(sig.NamespaceUri, sig.LocalName, sig.Arity));
+            return XdmValue.FromFunction(new NamedFunctionItem(sig.NamespaceUri, sig.LocalName, sig.Arity)
+            {
+                DefiningContext = ctx,
+                CapturedContextItem = ctx.ContextItem,
+                CapturedContextPosition = ctx.ContextPosition,
+                CapturedContextSize = ctx.ContextSize
+            });
         return XdmValue.Undefined;
     }
 

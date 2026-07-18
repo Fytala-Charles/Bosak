@@ -42,6 +42,7 @@
 //                      | Charles Korthout | 2.9   | 15-07-2026     | Tier-2k: instance-of type annotations, EQName vars, range/round/comparison strictness, outermost/innermost validation, aggregate annotation preservation (61 tests) |
 //                      | Charles Korthout | 2.10  | 16-07-2026     | Tier-2l: timezone, fractional seconds, ISO week-in-month, German names, calendar validation, format-integer CJK/French/Italian (27 tests) |
 //                      | Charles Korthout | 2.11  | 16-07-2026     | Tier-2l: 32 format picture/locale tests, [Z99] zero-padding, calendar namespace fallback |
+//                      | Charles Korthout | 2.12  | 18-07-2026     | function-lookup context-dependent base-uri test (creator focus vs call-site focus)        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1674,6 +1675,22 @@ public class FunctionLibraryTests
     {
         var result = Evaluate("function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'nonexistent'), 1)");
         Assert.True(result.IsUndefined);
+    }
+
+    [Fact]
+    public void FunctionLookup_ContextDependentBaseUri()
+    {
+        // fn:function-lookup captures the dynamic context (focus) in which it is evaluated.
+        // A context-dependent function item such as fn:base-uri#0 must therefore use the
+        // creator's context item, not the call-site context item.
+        const string XPath = @"
+            let $xml := '<root xml:base=""http://www.example.org/root.xml""><extra xml:base=""http://www.example.org/extra.xml""/></root>'
+            let $doc := parse-xml($xml)
+            let $baseUriFn := $doc/root/function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'base-uri'), 0)
+            return $doc/root/extra/$baseUriFn()";
+        var values = EvalSequence(XPath);
+        Assert.Single(values);
+        Assert.Equal("http://www.example.org/root.xml", values[0]);
     }
 
     // ------------------------------------------------------------------

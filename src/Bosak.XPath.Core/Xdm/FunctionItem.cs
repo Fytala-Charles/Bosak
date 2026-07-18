@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2    | 14-07-2026     | NamedFunctionItem.DefiningContext for cross-context function items (fn:transform)      |
+//                      | Charles Korthout | 0.3    | 18-07-2026     | Capture creation focus for context-dependent dynamic named-function calls            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -40,6 +41,19 @@ public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, in
     /// its EvaluationContext.
     /// </summary>
     public object? DefiningContext { get; init; }
+
+    /// <summary>
+    /// The focus (context item, position, size) captured when the function item was
+    /// materialized. Context-dependent functions invoked through this function item
+    /// use this focus instead of the call-site focus.
+    /// </summary>
+    public XdmValue CapturedContextItem { get; init; } = XdmValue.Undefined;
+
+    /// <summary>Captured context position from the materialization focus.</summary>
+    public int CapturedContextPosition { get; init; }
+
+    /// <summary>Captured context size from the materialization focus.</summary>
+    public int CapturedContextSize { get; init; }
 }
 
 /// <summary>

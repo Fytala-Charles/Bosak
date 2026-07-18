@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Skip XSD 1.0 tests (Bosak implements XSD 1.1 per XPath 3.1)                            |
 //                      | Charles Korthout | 0.3   | 17-07-2026     | Skip arbitraryPrecisionDecimal tests (.NET decimal is fixed-precision 128-bit)          |
 //                      | Charles Korthout | 0.4   | 18-07-2026     | Skip XQ31-only positive spec dependencies (tests using XQuery direct constructors)        |
+//                      | Charles Korthout | 0.5   | 18-07-2026     | Skip fn-load-xquery-module feature tests (XQuery module loading unsupported)              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -36,6 +37,7 @@ internal sealed class DependencyFilter
         "advanced-uca-fallback",
         "olson-timezone",
         "arbitraryPrecisionDecimal",
+        "fn-load-xquery-module",
     };
 
     // Spec tokens that Bosak supports (XPath versions)

@@ -8,30 +8,25 @@
 
 ## What Was Done
 
-- **QT3 Tier-2r `fn:collection` / `fn:uri-collection` support is complete.**
-  - Added `EvaluationContext.Collections` dictionary populated by the QT3 harness.
-  - Implemented `<collection>` parsing in `TestEnvironment`.
-  - Rewrote `Collection_0/1` and `UriCollection_0/1` to use `ResolveCollection` with registered collection lookup, directory fallback, and FODC error codes.
-  - Restored `XdmMap` insertion-order iteration via `_keyOrder` / `_keyIndices` helpers.
-  - Updated `Collection_EmptyArg` unit-test expectation to expect FODC error.
-- **Committed and pushed to origin/main:** commit `7c44257`.
-- **Updated documentation:** `docs/AGENT_HANDOVER.md` (commit hash), `.kimi/HANDOVER.md`.
-- **Build:** `dotnet build Bosak.sln` — 0 warnings, 0 errors.
-- **Unit tests:** all passing (1,282/0).
-
-## Current QT3 Status
-
-Full QT3 suite: **21,511 passed / 482 failed / 9,828 skipped (67.60%)**; runnable pass rate **97.81%**.
+- **QT3 Tier-2s `fn:function-lookup` support is complete.**
+  - `function-lookup` now captures the creation focus in the returned `NamedFunctionItem`.
+  - Compiler-generated named function references also capture the focus.
+  - `InvokeFunctionItemCore` uses the captured focus for context-dependent functions (`fn:base-uri#0`, `fn:document-uri#0`), fixing `fn-function-lookup-018` and `fn-function-lookup-022`.
+  - Declared `fn-load-xquery-module` unsupported in `DependencyFilter`, correctly skipping tests that assert the feature (e.g. `fn-function-lookup-760`).
+  - Added `FunctionLibraryTests.FunctionLookup_ContextDependentBaseUri` unit test.
+- **Updated QT3 baselines:** full suite **21,494 passed / 446 failed / 9,881 skipped (67.55%)**; runnable pass rate **97.97%**. `fn-function-lookup` test set now **660/0/14**.
+- **Unit tests:** all passing **1,283/0**.
+- **Updated documentation:** `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md`.
+- **Updated file change histories** for all modified source files.
+- **Build:** `dotnet build Bosak.sln` — 0 warnings, 0 errors (1 pre-existing nullable warning).
 
 ## Next Session Focus
 
-**QT3 Tier-2s: `fn:function-lookup`** (7 tests).
-Likely touches the function library and dynamic function-call dispatch path in `Bosak.XPath.Standard` / `Bosak.XPath.Runtime`.
+**QT3 Tier-2t: `fn-id` / `fn-idref` with DTD** (27 tests).
+Likely touches the `fn:id` and `fn:element-with-id` implementations in `Bosak.XPath.Standard/Functions/FunctionLibrary.cs` and the DTD-aware document parsing in the providers.
 
-## Remaining Tier-2 Pools (after 2s)
+## Remaining Tier-2 Pools (after 2t)
 
-- `fn-load-xquery-module` (31)
-- `fn-id` / `fn-idref` with DTD (27)
 - `xs-numeric` (10)
 - `K-NumericIntegerDivide` (9)
 - `cbcl-*` (8)
