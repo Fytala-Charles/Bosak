@@ -5,13 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 18 July 2026
-> **Bosak baseline:** 1,283 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,494 passed / 446 failed / 9,881 skipped (67.55% / 97.97% of runnable tests)
+> **Bosak baseline:** 1,147 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,535 passed / 405 failed / 9,881 skipped (67.68% / 98.15% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-18** — QT3 Tier-2t: `fn:id` / `fn:idref` / `fn:element-with-id` DTD support.
+  - `IXdmNode` gains DTD properties (`HasDocumentType`, `DocumentTypeName`, `PublicId`, `SystemId`, `InternalSubset`); `XDocumentNode` exposes `XDocument.DocumentType`.
+  - `FunctionLibrary` parses the DTD internal subset for `ID`/`IDREF`/`IDREFS` attribute declarations and caches the result per document node.
+  - `fn:idref` now returns the matching attribute node(s) per F+O.
+  - `fn:id`/`fn:idref`/`fn:element-with-id` raise `XPTY0004` when the context item or second argument is not a node.
+  - `fn-id`/`fn-idref` targeted pool now **54 passed / 0 failed / 61 skipped**.
+  - Full QT3 now **21,535 / 405 / 9,881 = 67.68%** (runnable pass rate **98.15%**); unit tests **1,147/0**.
 
 - **2026-07-18** — QT3 Tier-2s: `fn:function-lookup` context-focus capture.
   - `function-lookup` and compiler-generated named function references now capture the creation focus in `NamedFunctionItem`, so context-dependent functions (`fn:base-uri#0`, `fn:document-uri#0`) use the creator's context item during dynamic invocation.

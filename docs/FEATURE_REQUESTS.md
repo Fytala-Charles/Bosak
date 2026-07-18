@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-18 (QT3 Tier-2s: `fn:function-lookup` context-focus capture + `fn-load-xquery-module` skip — full QT3 suite at **21,494 passed / 446 failed / 9,881 skipped — 67.55%**; runnable pass rate **97.97%**; unit tests **1,283/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
+> **Living Registry** — Last updated: 2026-07-18 (QT3 Tier-2t: fn:id/fn:idref DTD support + XPTY0004 type checks — full QT3 suite at **21,535 passed / 405 failed / 9,881 skipped — 67.68%**; runnable pass rate **98.15%**; unit tests **1,147/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests pass); runnable pass rate **97.97%**; unit tests **1,283/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

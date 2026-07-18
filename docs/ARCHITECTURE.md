@@ -132,6 +132,13 @@ public interface IXdmNode
     string BaseUri { get; }
     string DocumentUri { get; }  // separate from BaseUri; empty for temporary trees
 
+    // DTD properties (for fn:id / fn:idref / fn:element-with-id and serialization)
+    bool HasDocumentType => false;
+    string DocumentTypeName => string.Empty;
+    string PublicId => string.Empty;
+    string SystemId => string.Empty;
+    string InternalSubset => string.Empty;
+
     IXdmNode? Parent { get; }
     XdmSequence Children(XdmNodeKind kind = XdmNodeKind.All);
     XdmSequence Attributes(string? localName = null, string? namespaceUri = null);
