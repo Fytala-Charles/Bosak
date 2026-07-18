@@ -2260,8 +2260,9 @@ public class FunctionLibraryTests
     [Fact]
     public void Collection_EmptyArg()
     {
-        var result = EvalStr("collection()");
-        Assert.Equal("()", result);
+        // No default collection is registered; the spec raises FODC0003.
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("collection()"));
+        Assert.Contains("FODC", ex.Message);
     }
 
     [Fact]

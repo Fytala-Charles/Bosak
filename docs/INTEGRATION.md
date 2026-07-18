@@ -4,14 +4,22 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 15 July 2026
-> **Bosak baseline:** 1,286 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,543 passed / 634 failed / 9,644 skipped (67.70%)
+> **Last updated:** 18 July 2026
+> **Bosak baseline:** 1,282 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,511 passed / 482 failed / 9,828 skipped (67.60% / 97.81% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-18** — QT3 Tier-2r: `fn:collection()` / `fn:uri-collection()` support.
+  - `EvaluationContext.Collections` is now populated by the QT3 harness and used by `fn:collection()` and `fn:uri-collection()` to resolve registered collections, with directory-based fallback and `FODC0002`/`FODC0003`/`FODC0004` error reporting.
+  - Full QT3 now **21,511 / 482 / 9,828 = 67.60%** (runnable pass rate **97.81%**); unit tests **1,282/0**.
+
+- **2026-07-18** — QT3 Tier-2q: XQ31-only dependency filter + XdmMap insertion-order fix.
+  - `DependencyFilter` now skips positive `spec="XQ31"` dependencies, correctly reclassifying ~116 previously-failing and ~68 previously-passing XQuery-only tests as skipped. Full QT3 now **21,475 / 518 / 9,828 = 67.49%** (runnable pass rate **97.65%**); unit tests **1,282/0**.
+  - `XdmMap` restored insertion-order iteration for `Keys`/`Values`/`Entries` via persistent `_keyOrder` and `_keyIndices`; `map:remove`/`map:put` use new `WithRemoved`/`WithAdded` helpers.
 
 - **2026-07-17** — QT3 `op-same-key` hang resolved: **+34 net passed, −20 failed, +14 skipped** (full QT3 now 21,543 / 634 / 9,644 = 67.70%; unit tests 1,286/0).
   - `XdmMap` now uses `ImmutableDictionary<XdmValue, XdmValue>` so `map:remove`, `map:put`, and `map:merge` perform O(log n) structural sharing instead of copying the whole dictionary.

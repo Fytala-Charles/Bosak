@@ -249,6 +249,7 @@ flowchart TD
 - Function calls dispatch through a vtable in `EvaluationContext`.
 - `FunctionSignature` may supply a `DynamicImplementation` used only when the function is invoked through a function item (named reference or partial application) rather than a static call. The XSLT layer uses this to raise the spec-mandated dynamic errors (`XTDE1061`/`XTDE1071`/`XTDE3480`/`XTDE3510`) for dynamic calls on `current-group`, `current-grouping-key`, `current-merge-group`, and `current-merge-key`, whose context components are not retained in function-item closures.
 - `EvaluationContext.ImplicitTimezoneOffsetMinutes` supplies the dynamic context's implicit timezone (default UTC) for date/time comparisons and `adjust-*-to-timezone#1`.
+- `EvaluationContext.Collections` maps collection names (empty string for the default collection) to the URIs or file paths of their documents, used by `fn:collection` and `fn:uri-collection`.
 
 **Performance features**:
 - **Sequence pipelining**: Axis results are not buffered unless required by sorting or positional predicates.
@@ -356,7 +357,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 | Register VM | Expression execution (better cache locality than tree walking) |
 | General-comparison integer sets | `=`/`!=` between a single `xs:integer` and a large all-integer sequence uses a cached `HashSet<long>` (e.g. `$validrange[not(. = $c)]` in the unicode-90 tests: 1.1M × 2k pairwise comparisons collapse to O(n)) |
 | Cached regex translation/compilation | XSD→.NET pattern translation and `Regex` objects cached by original pattern; compiled regexes reused across millions of `fn:matches`/`fn:replace` calls |
-| Persistent map storage | `XdmMap` is backed by `ImmutableDictionary<XdmValue, XdmValue>` so `map:remove`, `map:put`, and `map:merge` share structure instead of copying the whole map |
+| Persistent map storage | `XdmMap` is backed by `ImmutableDictionary<XdmValue, XdmValue>` plus an order list/index so `map:remove`, `map:put`, and `map:merge` share structure while preserving insertion-order iteration |
 | IL JIT (future) | Hot expression compilation to `DynamicMethod` |
 | QName interning | `StringPool` for element/attribute names |
 | Avoid `System.Xml.XmlNode` | `IXdmNode` adapter pattern prevents DOM locking |

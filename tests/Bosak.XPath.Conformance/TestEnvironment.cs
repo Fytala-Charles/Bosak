@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Bind <source role="$var"> documents to variables (generalexpression, fn-transform)     |
 //                      | Charles Korthout | 0.6   | 15-07-2026     | Roleless <source> no longer becomes the context item (URI-map only; d1e41648)          |
 //                      | Charles Korthout | 0.7   | 15-07-2026     | LoadXml uses the published <source uri> as the document base URI                       |
+//                      | Charles Korthout | 0.8   | 18-07-2026     | Parse <collection> elements into EvaluationContext.Collections                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -34,6 +35,8 @@ internal sealed class TestEnvironment
     public List<NamespaceBinding> Namespaces { get; } = new();
     public List<ExternalParameter> Parameters { get; } = new();
     public List<DecimalFormatEntry> DecimalFormats { get; } = new();
+    /// <summary>Collection URI -> list of document file paths/URIs. Empty string key = default collection.</summary>
+    public Dictionary<string, List<string>> Collections { get; } = new();
     public string? DefaultCollation { get; set; }
     public string? BaseUri { get; set; }
 
@@ -86,6 +89,31 @@ internal sealed class TestEnvironment
                     env.UriMap[uri] = path;
                 }
             }
+        }
+
+        foreach (var colElem in element.Elements(ns + "collection"))
+        {
+            string? uri = (string?)colElem.Attribute("uri");
+            string key = uri ?? "";
+            var docs = new List<string>();
+            foreach (var source in colElem.Elements(ns + "source"))
+            {
+                string? file = (string?)source.Attribute("file");
+                string? sourceUri = (string?)source.Attribute("uri");
+                if (file is not null)
+                {
+                    string path = Path.IsPathRooted(file) ? file : Path.Combine(baseDir, file);
+                    if (!File.Exists(path))
+                        path = Path.Combine(suitePath, file);
+                    if (File.Exists(path))
+                        docs.Add(Path.GetFullPath(path));
+                }
+                else if (sourceUri is not null)
+                {
+                    docs.Add(sourceUri);
+                }
+            }
+            env.Collections[key] = docs;
         }
 
         foreach (var nsElem in element.Elements(ns + "namespace"))
@@ -243,6 +271,11 @@ internal sealed class TestEnvironment
         {
             var previous = ctx.ResourceUriMapper;
             ctx.ResourceUriMapper = u => UriMap.TryGetValue(u, out var path) ? path : previous?.Invoke(u);
+        }
+
+        foreach (var kvp in Collections)
+        {
+            ctx.Collections[kvp.Key] = kvp.Value;
         }
 
         foreach (var df in DecimalFormats)

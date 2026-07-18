@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 1.9   | 26-06-2026     | File-not-found document loads report FODC0002 so xsl:catch can match                    |
 //                      | Charles Korthout | 2.1   | 15-07-2026     | Added ResourceUriMapper to redirect published http: resource URIs to local files        |
 //                      | Charles Korthout | 2.2   | 15-07-2026     | Added XsltVersion override for fn:system-property('xsl:version')                       |
+//                      | Charles Korthout | 2.3   | 18-07-2026     | Added Collections dictionary for fn:collection/fn:uri-collection resolution             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -179,6 +180,13 @@ public sealed class EvaluationContext
     /// fn:transform's stylesheet-location before any filesystem/network access.
     /// </summary>
     public Func<string, string?>? ResourceUriMapper { get; set; }
+
+    /// <summary>
+    /// Collection URI resolver. Keys are absolute collection URIs (the empty string key
+    /// designates the default collection); values are the absolute URIs or file paths of the
+    /// documents in the collection. Used by fn:collection and fn:uri-collection.
+    /// </summary>
+    public Dictionary<string, IReadOnlyList<string>> Collections { get; } = new();
 
     /// <summary>
     /// Optional post-processor applied to documents loaded through <see cref="DocumentLoader"/>.

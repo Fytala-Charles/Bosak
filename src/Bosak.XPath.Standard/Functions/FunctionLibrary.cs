@@ -114,6 +114,8 @@
 //                      | Charles Korthout | 5.43  | 17-07-2026     | fn:unparsed-text/-available: resolve href against base URI before URI mapping; reject fragment identifiers |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.44  | 17-07-2026     | Persistent XdmMap backing; map:remove/map:put now O(log n) via structural sharing (op-same-key) |
+//                      | Charles Korthout | 5.45  | 18-07-2026     | map:remove/map:put use XdmMap.WithAdded/WithRemoved to preserve insertion order          |
+//                      | Charles Korthout | 5.46  | 18-07-2026     | fn:collection/fn:uri-collection use EvaluationContext.Collections + FODC errors         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -6051,51 +6053,69 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Collection_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.Undefined;
+        => ResolveCollection(null, ctx, returnUris: false);
 
     private static XdmValue UriCollection_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.Undefined;
+        => ResolveCollection(null, ctx, returnUris: true);
 
     private static XdmValue UriCollection_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-    {
-        var uri = args[0].ToString();
-        if (string.IsNullOrEmpty(uri))
-            return XdmValue.Undefined;
-
-        var resolved = ResolveUriAgainstBase(uri, ctx.BaseUri);
-        if (System.IO.Directory.Exists(resolved))
-        {
-            var files = System.IO.Directory.GetFiles(resolved, "*.xml");
-            var uris = new List<XdmValue>(files.Length);
-            foreach (var file in files.OrderBy(f => f, StringComparer.Ordinal))
-            {
-                uris.Add(XdmValue.FromString(new Uri(System.IO.Path.GetFullPath(file)).AbsoluteUri, "anyURI"));
-            }
-            return XdmValue.FromSequence(MaterializedSequence.FromList(uris));
-        }
-
-        return XdmValue.Undefined;
-    }
+        => ResolveCollection(AtomizedString(args[0]), ctx, returnUris: true);
 
     private static XdmValue Collection_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-    {
-        var uri = args[0].ToString();
-        if (string.IsNullOrEmpty(uri))
-            return XdmValue.Undefined;
+        => ResolveCollection(AtomizedString(args[0]), ctx, returnUris: false);
 
-        var resolved = ResolveUriAgainstBase(uri, ctx.BaseUri);
-        if (System.IO.Directory.Exists(resolved))
+    private static XdmValue ResolveCollection(string? uri, EvaluationContext ctx, bool returnUris)
+    {
+        string key = uri ?? "";
+        if (ctx.Collections.TryGetValue(key, out var docs))
         {
-            var files = System.IO.Directory.GetFiles(resolved, "*.xml");
-            var nodes = new List<XdmValue>(files.Length);
-            foreach (var file in files.OrderBy(f => f, StringComparer.Ordinal))
+            if (docs.Count == 0)
             {
-                nodes.Add(XdmValue.FromNode(ctx.LoadDocument(file)));
+                if (string.IsNullOrEmpty(uri))
+                    throw new InvalidOperationException("FODC0003: Default collection is not available");
+                throw new InvalidOperationException($"FODC0002: Collection not available: {uri}");
             }
+            if (returnUris)
+            {
+                var uris = new List<XdmValue>(docs.Count);
+                foreach (var doc in docs)
+                    uris.Add(XdmValue.FromString(doc, "anyURI"));
+                return XdmValue.FromSequence(MaterializedSequence.FromList(uris));
+            }
+            var nodes = new List<XdmValue>(docs.Count);
+            foreach (var doc in docs)
+                nodes.Add(XdmValue.FromNode(ctx.LoadDocument(doc)));
             return XdmValue.FromSequence(MaterializedSequence.FromList(nodes));
         }
 
-        return XdmValue.Undefined;
+        if (!string.IsNullOrEmpty(uri))
+        {
+            // Absolute filesystem paths are valid collection arguments even though they are
+            // not RFC 3986 URIs; everything else must be a well-formed URI.
+            if (!System.IO.Path.IsPathRooted(uri) && !Uri.IsWellFormedUriString(uri, UriKind.RelativeOrAbsolute))
+                throw new InvalidOperationException($"FODC0004: Invalid URI: {uri}");
+
+            var resolved = ResolveUriAgainstBase(uri, ctx.BaseUri);
+            if (System.IO.Directory.Exists(resolved))
+            {
+                var files = System.IO.Directory.GetFiles(resolved, "*.xml");
+                if (returnUris)
+                {
+                    var uris = new List<XdmValue>(files.Length);
+                    foreach (var file in files.OrderBy(f => f, StringComparer.Ordinal))
+                        uris.Add(XdmValue.FromString(new Uri(System.IO.Path.GetFullPath(file)).AbsoluteUri, "anyURI"));
+                    return XdmValue.FromSequence(MaterializedSequence.FromList(uris));
+                }
+                var nodes = new List<XdmValue>(files.Length);
+                foreach (var file in files.OrderBy(f => f, StringComparer.Ordinal))
+                    nodes.Add(XdmValue.FromNode(ctx.LoadDocument(file)));
+                return XdmValue.FromSequence(MaterializedSequence.FromList(nodes));
+            }
+        }
+
+        if (string.IsNullOrEmpty(uri))
+            throw new InvalidOperationException("FODC0003: Default collection is not available");
+        throw new InvalidOperationException($"FODC0002: Collection not available: {uri}");
     }
 
     private static string ResolveUriAgainstBase(string uri, string? baseUri)
@@ -7255,11 +7275,11 @@ public static class FunctionLibrary
         foreach (var k in AsSequence(args[1]))
             keys.Add(AtomizeMapKey(k));
 
-        var entries = map.Entries;
+        var result = map;
         foreach (var key in keys)
-            entries = entries.Remove(key);
+            result = result.WithRemoved(key);
 
-        return XdmValue.FromMap(new XdmMap(entries));
+        return XdmValue.FromMap(result);
     }
 
     private static XdmValue MapPut(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7268,12 +7288,7 @@ public static class FunctionLibrary
         var key = AtomizeMapKey(args[1]);
         var value = args[2];
 
-        var entries = map.Entries;
-        if (entries.ContainsKey(key))
-            entries = entries.Remove(key);
-        entries = entries.Add(key, value);
-
-        return XdmValue.FromMap(new XdmMap(entries));
+        return XdmValue.FromMap(map.WithAdded(key, value));
     }
 
     // ------------------------------------------------------------------

@@ -1,5 +1,62 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-18
+**Commit:** uncommitted changes on `210e9f5`
+**Current focus:** **QT3 Tier-2r: fn:collection / fn:uri-collection support** — `EvaluationContext.Collections` is now populated by the QT3 harness and used by `fn:collection()` and `fn:uri-collection()` to resolve registered collections, with directory-based fallback and FODC error codes. Full QT3 suite now at **21,511 passed / 482 failed / 9,828 skipped (67.60%)**; runnable pass rate **97.81%** (21511 / 21993). Unit tests **1,282/0**.
+
+---
+
+## This Session Fixes (Tier-2r)
+
+1. **Add `EvaluationContext.Collections`** — `EvaluationContext` now carries a public `Dictionary<string, IReadOnlyList<string>> Collections` property mapping collection names (empty string for the default collection) to the URIs or file paths of the documents in that collection.
+
+2. **Implement QT3 `<collection>` parsing** — `TestEnvironment` now parses the `<collection>` element in the QT3 test metadata and registers its document URIs in `ctx.Collections`.
+
+3. **Rewrite `fn:collection()` and `fn:uri-collection()`** — `Collection_0/1` and `UriCollection_0/1` now delegate to `ResolveCollection`, which:
+   - Looks up registered collections first (for named and default collections).
+   - Falls back to loading `*.xml` from a directory argument.
+   - Throws `FODC0004` for malformed URIs and `FODC0002`/`FODC0003` for missing collections.
+   - Allows absolute filesystem paths (e.g. `C:/...`) as collection arguments.
+
+4. **Update unit-test expectation** — `Collection_EmptyArg` now expects an `FODC*` error instead of `()`, matching the spec behavior when no default collection is defined.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (v2.3: added `Collections` property)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.46: `ResolveCollection` helper)
+- `tests/Bosak.XPath.Conformance/TestEnvironment.cs` (parse QT3 `<collection>` elements)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (updated `Collection_EmptyArg`)
+- `README.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md` (updated baselines)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-18
+**Commit:** uncommitted changes on `210e9f5`
+**Current focus:** **QT3 Tier-2q: XQ31-only dependency filter + XdmMap insertion-order fix** — `DependencyFilter` now skips positive `spec="XQ31"` dependencies, correctly reclassifying ~116 previously-failing tests and ~68 previously-passing XQuery-only tests as skipped. Full QT3 suite now at **21,475 passed / 518 failed / 9,828 skipped (67.49%)**; runnable pass rate improved to **97.65%** (21475 / 21993). Unit tests **1,282/0**.
+
+---
+
+## This Session Fixes (Tier-2q)
+
+1. **Skip XQ31-only positive spec dependencies** — `DependencyFilter` now treats a positive `spec` dependency whose tokens are all XQuery-only as unsupported. Previously the harness only checked that *any* supported XPath spec token existed, so XQ31-only tests inside XP31+/XQ31+ test-sets (e.g. `xml-to-json` direct constructors, `fo-test-*` XQuery `let` expressions) were incorrectly run and produced parser failures. This reclassifies `xml-to-json` (41 → 0 failures), `app-spec-examples`/`fo-test-*` (27 → 0 failures), and several other XQuery-only clusters as skipped.
+
+2. **Restore XdmMap insertion-order iteration** — the switch to `ImmutableDictionary` in Tier-2p broke insertion order for `Keys`/`Values`/`Entries`, causing `Serialize_Adaptive` to produce `map{2:false(),1:true()}` instead of `map{1:true(),2:false()}`. `XdmMap` now tracks a persistent `_keyOrder` list and a `_keyIndices` map, so iteration order is preserved while retaining O(log n) structural sharing. `map:remove` and `map:put` use new `WithRemoved`/`WithAdded` helpers to keep order intact across operations.
+
+3. **Fix map newest-key semantics after order change** — the order-preserving update ensures `map:merge(..., map{'duplicates':'use-last'})` still retains the newest key object (and its type annotation), keeping the `op:same-key` and `MapMerge_UseLast_RetainsNewestKeyObject` tests green.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/XdmMap.cs` (v0.6: insertion-order tracking + `WithAdded`/`WithRemoved` helpers)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.45: `map:remove`/`map:put` use `WithAdded`/`WithRemoved`)
+- `tests/Bosak.XPath.Conformance/DependencyFilter.cs` (v0.4: skip XQ31-only positive spec dependencies)
+- `README.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md` (updated baselines)
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-17
 **Commit:** `4345314` (QT3 Tier-2p: persistent XdmMap + op-same-key hang fix)
 **Current focus:** **QT3 Tier-2p: `op-same-key` hang resolved** — `op-same-key` now completes with **14 passed / 0 failed / 14 skipped** (was hanging on `same-key-023` due to O(N²) map copying). Full QT3 suite now at **21,543 passed / 634 failed / 9,644 skipped (67.70%)**, up from **21,509/654/9,630** excluding `op-same-key`. Unit tests remain **1,286/0**.
