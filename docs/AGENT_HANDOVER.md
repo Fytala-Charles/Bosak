@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-18
-**Commit:** `TBD` (QT3 Tier-2s: fn:function-lookup context-focus capture + fn-load-xquery-module skip)
+**Commit:** `6e2f111` (QT3 Tier-2s: fn:function-lookup context-focus capture + fn-load-xquery-module skip)
 **Current focus:** **QT3 Tier-2s: `fn:function-lookup` support** — `function-lookup` now returns `NamedFunctionItem`s that capture the creation focus, so context-dependent functions (`fn:base-uri#0`, `fn:document-uri#0`) use the creator's context item instead of the call-site item. `fn-load-xquery-module` is now declared unsupported so tests that assert the feature are skipped rather than run. Full QT3 suite now at **21,494 passed / 446 failed / 9,881 skipped (67.55%)**; runnable pass rate improved to **97.97%** (21494 / 21940). Unit tests **1,283/0**.
 
 ---
