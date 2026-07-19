@@ -83,6 +83,7 @@
 //                      | Charles Korthout | 5.16  | 02-07-2026     | available-system-properties returns xs:QName values; added missing XSLT system properties |
 //                      | Charles Korthout | 5.17  | 26-06-2026     | Default-collation aware default-collation(), deep-equal, max/min, index-of, distinct-values |
 //                      | Charles Korthout | 5.18  | 05-07-2026     | Default-collation aware fn:compare, contains, starts-with, ends-with, substring-before/after |
+//                      | Charles Korthout | 5.19  | 19-07-2026     | Fixed UCA collation strength mapping; HTML ASCII case-insensitive folding |
 //                      | Charles Korthout | 5.19  | 26-06-2026     | Backwards-compatible argument coercion for string and node functions                   |
 //                      | Charles Korthout | 5.20  | 07-07-2026     | fn:subsequence uses BC numeric coercion for start/length; fixes xpath-compat-0401     |
 //                      | Charles Korthout | 5.21  | 08-07-2026     | unparsed-text encoding detection and HTTP fetch; distinct-values NaN; BC string coercion |
@@ -3863,7 +3864,7 @@ public static class FunctionLibrary
             }
             return XdmValue.FromString(matchLen > 0 ? s[(idx + matchLen)..] : string.Empty);
         }
-        int plainIdx = s.IndexOf(search, GetStringComparison(collation));
+        int plainIdx = StringIndexOf(s, search, collation);
         return XdmValue.FromString(plainIdx >= 0 ? s[(plainIdx + search.Length)..] : string.Empty);
     }
 
@@ -3898,7 +3899,7 @@ public static class FunctionLibrary
             return XdmValue.FromString(matchLen > 0 ? s[(idx + matchLen)..] : string.Empty);
         }
 
-        int plainIdx = s.IndexOf(search, GetStringComparison(collation));
+        int plainIdx = StringIndexOf(s, search, collation);
         return XdmValue.FromString(plainIdx >= 0 ? s[(plainIdx + search.Length)..] : string.Empty);
     }
 
@@ -4766,7 +4767,7 @@ public static class FunctionLibrary
             if (string.IsNullOrWhiteSpace(s))
                 continue;
 
-            var parts = s.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+            var parts = s.Split([' ', '\t', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
             foreach (var part in parts)
             {
                 if (comparer.Equals(part, token))
@@ -4830,6 +4831,72 @@ public static class FunctionLibrary
         return sb.ToString();
     }
 
+    private static bool AsciiCaseInsensitiveMatchAt(string s, int start, string search)
+    {
+        for (int i = 0; i < search.Length; i++)
+        {
+            char a = s[start + i];
+            char b = search[i];
+            if (a != b)
+            {
+                if (a >= 'A' && a <= 'Z') a = (char)(a + 32);
+                if (b >= 'A' && b <= 'Z') b = (char)(b + 32);
+                if (a != b) return false;
+            }
+        }
+        return true;
+    }
+
+    private static bool AsciiCaseInsensitiveContains(string s, string search)
+    {
+        if (search.Length == 0) return true;
+        for (int i = 0; i <= s.Length - search.Length; i++)
+        {
+            if (AsciiCaseInsensitiveMatchAt(s, i, search))
+                return true;
+        }
+        return false;
+    }
+
+    private static bool AsciiCaseInsensitiveStartsWith(string s, string search)
+    {
+        if (search.Length > s.Length) return false;
+        return AsciiCaseInsensitiveMatchAt(s, 0, search);
+    }
+
+    private static bool AsciiCaseInsensitiveEndsWith(string s, string search)
+    {
+        if (search.Length > s.Length) return false;
+        return AsciiCaseInsensitiveMatchAt(s, s.Length - search.Length, search);
+    }
+
+    private static int AsciiCaseInsensitiveIndexOf(string s, string search)
+    {
+        if (search.Length == 0) return 0;
+        for (int i = 0; i <= s.Length - search.Length; i++)
+        {
+            if (AsciiCaseInsensitiveMatchAt(s, i, search))
+                return i;
+        }
+        return -1;
+    }
+
+    private sealed class AsciiCaseInsensitiveComparer : IEqualityComparer<string>
+    {
+        public static readonly AsciiCaseInsensitiveComparer Instance = new();
+
+        public bool Equals(string? x, string? y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (x is null || y is null) return false;
+            if (x.Length != y.Length) return false;
+            return AsciiCaseInsensitiveMatchAt(x, 0, y);
+        }
+
+        public int GetHashCode(string obj)
+            => ToAsciiLower(obj).GetHashCode();
+    }
+
     private const string CodepointCollation = "http://www.w3.org/2005/xpath-functions/collation/codepoint";
     private const string HtmlAsciiCaseInsensitiveCollation = "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive";
     private const string CaseblindCollation = "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind";
@@ -4852,14 +4919,16 @@ public static class FunctionLibrary
 
     private static StringComparison GetStringComparison(string collation)
     {
-        if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
+        if (collation == CaseblindCollation)
             return StringComparison.OrdinalIgnoreCase;
         return StringComparison.Ordinal;
     }
 
     private static IEqualityComparer<string> GetStringComparer(string collation)
     {
-        if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return AsciiCaseInsensitiveComparer.Instance;
+        if (collation == CaseblindCollation)
             return StringComparer.OrdinalIgnoreCase;
         return StringComparer.Ordinal;
     }
@@ -4872,6 +4941,8 @@ public static class FunctionLibrary
     {
         if (TryParseUca(collation, out var uca))
             return uca.CompareInfo.Compare(s1, s2, uca.Options);
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return string.Compare(ToAsciiLower(s1), ToAsciiLower(s2), StringComparison.Ordinal);
         var comparison = GetStringComparison(collation);
         if (comparison == StringComparison.Ordinal)
             return CompareCodepoints(s1, s2);
@@ -4899,6 +4970,8 @@ public static class FunctionLibrary
     {
         if (TryParseUca(collation, out var uca))
             return uca.CompareInfo.IndexOf(s, search, uca.Options) >= 0;
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return AsciiCaseInsensitiveContains(s, search);
         return s.Contains(search, GetStringComparison(collation));
     }
 
@@ -4916,6 +4989,8 @@ public static class FunctionLibrary
             int matchPos = uca.CompareInfo.IndexOf(s, search, uca.Options);
             return matchPos >= 0 && matchPos <= firstNonIgnorable;
         }
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return AsciiCaseInsensitiveStartsWith(s, search);
         return s.StartsWith(search, GetStringComparison(collation));
     }
 
@@ -4946,6 +5021,8 @@ public static class FunctionLibrary
 
             return lastMatchPos + matchLen > lastNonIgnorablePos;
         }
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return AsciiCaseInsensitiveEndsWith(s, search);
         return s.EndsWith(search, GetStringComparison(collation));
     }
 
@@ -4953,6 +5030,8 @@ public static class FunctionLibrary
     {
         if (TryParseUca(collation, out var uca))
             return uca.CompareInfo.IndexOf(s, search, uca.Options);
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return AsciiCaseInsensitiveIndexOf(s, search);
         return s.IndexOf(search, GetStringComparison(collation));
     }
 
@@ -4997,8 +5076,8 @@ public static class FunctionLibrary
         var options = strength.ToLowerInvariant() switch
         {
             "primary" => CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace,
-            "secondary" => CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace,
-            "tertiary" => CompareOptions.IgnoreNonSpace,
+            "secondary" => CompareOptions.IgnoreCase,
+            "tertiary" => CompareOptions.None,
             "quaternary" => CompareOptions.None,
             "identical" => CompareOptions.Ordinal,
             _ => CompareOptions.None,
