@@ -18,10 +18,13 @@
 //                      | Charles Korthout | 0.6   | 15-07-2026     | Roleless <source> no longer becomes the context item (URI-map only; d1e41648)          |
 //                      | Charles Korthout | 0.7   | 15-07-2026     | LoadXml uses the published <source uri> as the document base URI                       |
 //                      | Charles Korthout | 0.8   | 18-07-2026     | Parse <collection> elements into EvaluationContext.Collections                          |
+//                      | Charles Korthout | 0.9   | 19-07-2026     | Parse <source validation> and <schema> for strict XML Schema validation of sources     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
@@ -32,6 +35,7 @@ namespace Bosak.XPath.Conformance;
 internal sealed class TestEnvironment
 {
     public List<SourceDocument> Sources { get; } = new();
+    public List<SourceSchema> Schemas { get; } = new();
     public List<NamespaceBinding> Namespaces { get; } = new();
     public List<ExternalParameter> Parameters { get; } = new();
     public List<DecimalFormatEntry> DecimalFormats { get; } = new();
@@ -53,6 +57,7 @@ internal sealed class TestEnvironment
             string? file = (string?)source.Attribute("file");
             string? role = (string?)source.Attribute("role");
             string? uri = (string?)source.Attribute("uri");
+            string? validation = (string?)source.Attribute("validation");
             if (file is not null)
             {
                 string path = Path.IsPathRooted(file) ? file : Path.Combine(baseDir, file);
@@ -63,11 +68,26 @@ internal sealed class TestEnvironment
                 // A source without an explicit role is only URI-mapped (available to
                 // fn:doc/fn:collection); it must NOT become the context item. Only
                 // role="." designates the context document (FOTS convention; d1e41648).
-                env.Sources.Add(new SourceDocument(role ?? "", path, uri));
+                env.Sources.Add(new SourceDocument(role ?? "", path, uri, validation));
                 if (uri is not null && File.Exists(path))
                 {
                     env.UriMap[uri] = path;
                 }
+            }
+        }
+
+        foreach (var schema in element.Elements(ns + "schema"))
+        {
+            string? file = (string?)schema.Attribute("file");
+            string? uri = (string?)schema.Attribute("uri");
+            if (file is not null)
+            {
+                string path = Path.IsPathRooted(file) ? file : Path.Combine(baseDir, file);
+                if (!File.Exists(path))
+                {
+                    path = Path.Combine(suitePath, file);
+                }
+                env.Schemas.Add(new SourceSchema(uri, path));
             }
         }
 
@@ -233,11 +253,17 @@ internal sealed class TestEnvironment
 
         foreach (var src in Sources)
         {
+            XmlSchemaSet? strictSchemas = null;
+            if (string.Equals(src.Validation, "strict", StringComparison.OrdinalIgnoreCase))
+            {
+                strictSchemas = BuildSchemaSet();
+            }
+
             if (src.Role == "." && File.Exists(src.FilePath))
             {
                 try
                 {
-                    var doc = XDocumentProvider.LoadXml(src.FilePath, src.Uri);
+                    var doc = XDocumentProvider.LoadXml(src.FilePath, src.Uri, strictSchemas);
                     ctx = ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
                 }
                 catch (System.Xml.XmlException ex) when (ex.Message.Contains("1.1"))
@@ -252,7 +278,7 @@ internal sealed class TestEnvironment
                 // document nodes. Non-XML resources stay unbound (previous behavior).
                 try
                 {
-                    var doc = XDocumentProvider.LoadXml(src.FilePath, src.Uri);
+                    var doc = XDocumentProvider.LoadXml(src.FilePath, src.Uri, strictSchemas);
                     ctx = ctx.WithVariable(src.Role.Substring(1), XdmValue.FromNode(doc));
                 }
                 catch (Exception)
@@ -298,9 +324,26 @@ internal sealed class TestEnvironment
         // Note: External parameters are not yet supported; they require evaluating the select expression
         return ctx;
     }
+
+    private XmlSchemaSet? BuildSchemaSet()
+    {
+        if (Schemas.Count == 0)
+            return null;
+
+        var schemaSet = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+        foreach (var schema in Schemas)
+        {
+            using var stream = File.OpenRead(schema.FilePath);
+            using var reader = XmlReader.Create(stream, null, new Uri(schema.FilePath).AbsoluteUri);
+            schemaSet.Add(XmlSchema.Read(reader, null));
+        }
+        schemaSet.Compile();
+        return schemaSet;
+    }
 }
 
-internal sealed record SourceDocument(string Role, string FilePath, string? Uri);
+internal sealed record SourceDocument(string Role, string FilePath, string? Uri, string? Validation);
+internal sealed record SourceSchema(string? Uri, string FilePath);
 internal sealed record NamespaceBinding(string Prefix, string Uri);
 internal sealed record ExternalParameter(string Name, string SelectExpression);
 internal sealed record DecimalFormatEntry(string Name, string NamespaceUri, DecimalFormat Format);

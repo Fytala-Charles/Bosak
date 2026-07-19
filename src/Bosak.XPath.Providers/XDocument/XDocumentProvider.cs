@@ -15,10 +15,13 @@
 //                      | Charles Korthout | 0.3   | 25-06-2026     | LoadXml sets DocumentUri on returned document node                                      |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | LoadXml absolutizes relative paths before building the document URI (UriFormatException)|
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Added LoadXml overload with explicit baseUri for published resource URIs                |
+//                      | Charles Korthout | 0.6   | 19-07-2026     | Added LoadXml overload with optional XML Schema validation and PSVI annotations         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
 
 namespace Bosak.XPath.Providers.Xml;
@@ -113,6 +116,52 @@ public static class XDocumentProvider
             : Path.GetFullPath(filePath);
         node.SetDocumentUri(new Uri(absolutePath).AbsoluteUri);
         return node;
+    }
+
+    /// <summary>
+    /// Loads an XML file, optionally validates it against the supplied XML Schema set,
+    /// and returns the root as an <see cref="IXdmNode"/>.
+    /// When <paramref name="baseUri"/> is supplied, it is used as the document's base URI
+    /// instead of the file path. PSVI annotations are added to the tree so that
+    /// <see cref="XDocumentNode.IsId"/> reflects the schema types.
+    /// </summary>
+    public static IXdmNode LoadXml(string filePath, string? baseUri, XmlSchemaSet? schemaSet)
+    {
+        var document = Xml11Loader.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
+        StripDocumentLevelWhitespace(document);
+        if (!string.IsNullOrEmpty(baseUri))
+        {
+            document = Xml11Loader.Parse(document.ToString(),
+                LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace, baseUri);
+            StripDocumentLevelWhitespace(document);
+        }
+        if (schemaSet is not null)
+        {
+            ValidateDocument(document, schemaSet);
+        }
+        var map = ComputeDocumentOrder(document);
+        XDocumentNode.RegisterOrderMap(document, map);
+        var node = new XDocumentNode(document);
+        var absolutePath = Uri.IsWellFormedUriString(filePath, UriKind.Absolute)
+            ? filePath
+            : Path.GetFullPath(filePath);
+        node.SetDocumentUri(new Uri(absolutePath).AbsoluteUri);
+        return node;
+    }
+
+    private static void ValidateDocument(XDocument document, XmlSchemaSet schemaSet)
+    {
+        var errors = new List<string>();
+        document.Validate(schemaSet, (sender, e) =>
+        {
+            if (e.Severity == XmlSeverityType.Error)
+                errors.Add(e.Message);
+        }, addSchemaInfo: true);
+        if (errors.Count > 0)
+        {
+            throw new XmlSchemaValidationException(
+                $"Document validation failed against the supplied schema(s):\n{string.Join("\n", errors)}");
+        }
     }
 
     /// <summary>

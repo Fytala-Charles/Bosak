@@ -123,6 +123,7 @@
 //                      | Charles Korthout | 5.50  | 19-07-2026     | cbcl fixes: XML 1.0 codepoints-to-string; QName whitespace validation; current-date/time use implicit timezone; distinct-values/index-of honor implicit timezone; duration*NaN raises FOCA0005 |
 //                      | Charles Korthout | 5.50  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence fixes                     |
 //                      | Charles Korthout | 5.51  | 19-07-2026     | Tier-2y: fn:index-of uses eq semantics, validates single search/collation, NaN-safe    |
+//                      | Charles Korthout | 5.52  | 19-07-2026     | fn:id/fn:element-with-id use IsId and support schema-validated element/attribute IDs    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
@@ -6169,7 +6170,7 @@ public static class FunctionLibrary
     {
         if (node.NodeKind == XdmNodeKind.Element)
         {
-            if (ElementHasId(node, ids, dtdInfo))
+            if (ElementHasIdValue(node, ids, dtdInfo))
                 result.Add(XdmValue.FromNode(node));
         }
         foreach (var child in node.Children(XdmNodeKind.Element))
@@ -6179,18 +6180,21 @@ public static class FunctionLibrary
         }
     }
 
-    private static bool ElementHasId(IXdmNode element, HashSet<string> ids, DtdAttributeInfo dtdInfo)
+    private static bool ElementHasIdValue(IXdmNode element, HashSet<string> ids, DtdAttributeInfo dtdInfo)
     {
-        foreach (var attr in element.Attributes("id", ""))
+        // The element itself is ID-valued (for example an element of type xs:ID or
+        // a list-of-ID element with a singleton value).
+        if (element.IsId && ids.Contains(element.StringValue.Trim()))
+            return true;
+
+        // ID-typed attributes (schema-validated, xml:id, or name fallback).
+        foreach (var attr in element.Attributes())
         {
-            if (ids.Contains(AtomizedString(attr).Trim()))
+            if (attr.IsNode && attr.NodeValue!.IsId && ids.Contains(attr.NodeValue.StringValue.Trim()))
                 return true;
         }
-        foreach (var attr in element.Attributes("id", "http://www.w3.org/XML/1998/namespace"))
-        {
-            if (ids.Contains(AtomizedString(attr).Trim()))
-                return true;
-        }
+
+        // DTD-declared ID attributes not covered by the generic attribute scan.
         if (dtdInfo.IdAttributes.TryGetValue(element.LocalName, out var dtdIdAttrs))
         {
             foreach (var attrName in dtdIdAttrs)
@@ -6202,6 +6206,39 @@ public static class FunctionLibrary
                 }
             }
         }
+
+        return false;
+    }
+
+    private static bool ElementHasId(IXdmNode element, HashSet<string> ids, DtdAttributeInfo dtdInfo)
+    {
+        // ID-typed attributes.
+        foreach (var attr in element.Attributes())
+        {
+            if (attr.IsNode && attr.NodeValue!.IsId && ids.Contains(attr.NodeValue.StringValue.Trim()))
+                return true;
+        }
+
+        // DTD-declared ID attributes.
+        if (dtdInfo.IdAttributes.TryGetValue(element.LocalName, out var dtdIdAttrs))
+        {
+            foreach (var attrName in dtdIdAttrs)
+            {
+                foreach (var attr in element.Attributes(attrName, ""))
+                {
+                    if (ids.Contains(AtomizedString(attr).Trim()))
+                        return true;
+                }
+            }
+        }
+
+        // Child elements whose typed value is an ID.
+        foreach (var child in element.Children(XdmNodeKind.Element))
+        {
+            if (child.IsNode && child.NodeValue!.IsId && ids.Contains(child.NodeValue.StringValue.Trim()))
+                return true;
+        }
+
         return false;
     }
 

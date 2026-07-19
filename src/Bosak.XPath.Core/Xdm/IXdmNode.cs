@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 19-05-2026     | Added BaseUri property for fn:base-uri and fn:document-uri                             |
 //                      | Charles Korthout | 0.4   | 25-06-2026     | Added DocumentUri property separate from BaseUri                                       |
 //                      | Charles Korthout | 0.5   | 18-07-2026     | Added DTD properties for fn:id/fn:idref DTD support                                      |
+//                      | Charles Korthout | 0.6   | 19-07-2026     | Added IsId accessor for schema-validated ID nodes                                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -55,6 +56,12 @@ public interface IXdmNode
 
     /// <summary>Gets the typed value if available, otherwise the string value.</summary>
     XdmValue TypedValue { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether this node has the XDM is-id property
+    /// (its typed value is a single xs:ID atomic value, or it is an ID-typed attribute).
+    /// </summary>
+    bool IsId => false;
 
     /// <summary>Gets the parent node, or null if this is the root.</summary>
     IXdmNode? Parent { get; }

@@ -28,12 +28,14 @@
 //                      | Charles Korthout | 1.6   | 28-06-2026     | ResolveXmlBase honors external-entity node base URIs; fixes resolve-uri-021          |
 //                      | Charles Korthout | 1.7   | 18-07-2026     | Exposed XDocumentType properties for DTD-based ID/IDREF support                        |
 //                      | Charles Korthout | 1.8   | 19-07-2026     | GetNamespaceAxis returns xml first, then namespaces in root-to-current order         |
+//                      | Charles Korthout | 1.9   | 19-07-2026     | Added IsId property using PSVI for schema-validated ID nodes                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
 
 namespace Bosak.XPath.Providers.Xml;
@@ -228,6 +230,15 @@ public sealed class XDocumentNode : IXdmNode
     }
 
     public XdmValue TypedValue => XdmValue.FromString(StringValue);
+
+    /// <summary>
+    /// Gets a value indicating whether this node has the XDM is-id property.
+    /// For elements this is true when the typed value is a single xs:ID atomic value
+    /// (including derived types, union members and singleton lists of xs:ID).
+    /// For attributes this is true for ID-typed attributes, including <c>id</c> and
+    /// <c>xml:id</c> attributes even when no schema is available.
+    /// </summary>
+    public bool IsId => ComputeIsId();
 
     public bool IsSameNode(IXdmNode other)
         => other is XDocumentNode xn
@@ -1049,6 +1060,84 @@ public sealed class XDocumentNode : IXdmNode
     // ------------------------------------------------------------------
     // Synthetic document wrapper helpers
     // ------------------------------------------------------------------
+
+    // ------------------------------------------------------------------
+    // ID-node helpers
+    // ------------------------------------------------------------------
+
+    private bool ComputeIsId()
+    {
+        if (_isNamespaceNode)
+            return false;
+
+        if (_node is XAttribute attr)
+            return IsIdAttribute(attr);
+
+        if (_node is XElement element)
+            return IsIdElement(element);
+
+        return false;
+    }
+
+    private static bool IsIdAttribute(XAttribute attr)
+    {
+        var info = attr.GetSchemaInfo();
+        if (info is not null)
+        {
+            if (IsIdSchemaType(info.MemberType, attr.Value))
+                return true;
+            if (IsIdSchemaType(info.SchemaType, attr.Value))
+                return true;
+        }
+
+        // Infoset fallback: attributes named "id" (no namespace) or "xml:id" are IDs.
+        if (attr.Name.LocalName == "id" && attr.Name.NamespaceName.Length == 0)
+            return true;
+        if (attr.Name.LocalName == "id" && attr.Name.NamespaceName == "http://www.w3.org/XML/1998/namespace")
+            return true;
+
+        return false;
+    }
+
+    private static bool IsIdElement(XElement element)
+    {
+        var info = element.GetSchemaInfo();
+        if (info is null)
+            return false;
+
+        if (info.IsNil)
+            return false;
+
+        if (IsIdSchemaType(info.MemberType, element.Value))
+            return true;
+        if (IsIdSchemaType(info.SchemaType, element.Value))
+            return true;
+
+        return false;
+    }
+
+    private static bool IsIdSchemaType(XmlSchemaType? type, string value)
+    {
+        if (type is null)
+            return false;
+
+        if (type is XmlSchemaSimpleType simple && simple.Datatype is not null)
+        {
+            if (simple.Datatype.Variety == XmlSchemaDatatypeVariety.List)
+            {
+                // A list-of-ID element is considered an ID only when its typed value
+                // is a single xs:ID atomic value.
+                if (simple.Datatype.TypeCode == XmlTypeCode.Id)
+                {
+                    var tokens = value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                    return tokens.Length == 1;
+                }
+                return false;
+            }
+        }
+
+        return type.TypeCode == XmlTypeCode.Id;
+    }
 
     /// <summary>
     /// Returns the synthetic wrapper element for document nodes that contain

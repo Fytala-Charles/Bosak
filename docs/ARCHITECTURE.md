@@ -139,6 +139,9 @@ public interface IXdmNode
     string SystemId => string.Empty;
     string InternalSubset => string.Empty;
 
+    // PSVI / is-id accessor (used by fn:id and fn:element-with-id)
+    bool IsId => false;
+
     IXdmNode? Parent { get; }
     XdmSequence Children(XdmNodeKind kind = XdmNodeKind.All);
     XdmSequence Attributes(string? localName = null, string? namespaceUri = null);

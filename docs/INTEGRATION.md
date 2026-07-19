@@ -5,19 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,343 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,632 passed / 305 failed / 9,884 skipped (67.94% / 98.61% of runnable tests)
+> **Bosak baseline:** 1,344 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,703 passed / 173 failed / 16,945 skipped (46.21% / 98.84% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
 
-- **2026-07-19** — QT3 Tier-2z: `op-to` / `RangeExpr` big-integer and lazy comparison fixes.
-  - `to` expressions now accept `xs:integer` operands that exceed `long.MaxValue` by storing them as `XdmValueKind.Decimal` annotated with the `xs:integer` schema type and generating a lazy `DecimalRangeSequence`.
-  - `CompareGeneral` no longer materializes both operands; it enumerates items lazily, so huge ranges do not allocate billions of items.
-  - Targeted `op-to` pool now **166 passed / 0 failed / 2 skipped** (12 previously failing tests now pass).
-  - Full QT3 now **21,632 passed / 305 failed / 9,884 skipped = 67.94%** (runnable pass rate **98.61%**); unit tests **1,343/0**.
+- **2026-07-19** — QT3 Tier-2z: `fn-element-with-id` schema-validated ID support.
+  - The conformance harness now loads source documents with `validation="strict"` against the environment's declared XML Schema(s), adding PSVI annotations to the XDocument tree.
+  - `IXdmNode` gains an `IsId` accessor; `XDocumentNode` computes it from `XmlSchemaInfo` so that elements and attributes with typed values of type `xs:ID` (derived types, union ID members, and singleton lists of `xs:ID`) are recognized.
+  - `fn:id()` now returns ID-valued elements themselves (including child `<id>` elements typed as `xs:ID`), and `fn:element-with-id()` returns their parent element when the ID is provided by a child element.
+  - `fn:id()` / `fn:element-with-id()` continue to support DTD-declared `ID` attributes via `XDocumentType.InternalSubset`.
+  - Targeted `fn-element-with-id` pool now **5 passed / 0 failed / 0 skipped** (5 previously failing tests now pass).
+  - Full QT3 now **14,703 passed / 173 failed / 16,945 skipped = 46.21%** (runnable pass rate **98.84%**); unit tests **1,344/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `op/numeric-less-than` unsignedLong overflow fix.
   - `xs:unsignedLong` lexical values that exceed `long.MaxValue` (e.g. `18446744073709551615`) are now represented as `XdmValueKind.Decimal` with the `unsignedLong` subtype annotation, so casts and comparisons work.
@@ -664,7 +666,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 - `fn:load-xquery-module` — not implemented
 - `fn:serialize` — partial (JSON method supported for maps/arrays/atomics; XML serialization options still limited)
 - `fn:transform` — full option support including `delivery-format`, `global-context-item`, `xslt-version`, serialization parameters, and package selection; principal `xsl:use-package` stylesheets remain unsupported
-- Schema-aware operations — not supported
+- Schema-aware operations — source documents with `validation="strict"` are now validated in the QT3 harness, and `fn:id`/`fn:element-with-id` use the resulting PSVI; `import schema` and `validate` expressions remain unsupported.
 - Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — full XSD regex support: strict syntax validation, character classes/subtraction, backreferences (incl. unclosed-group FORX0002), flags, code-point `.`, and pinned Unicode 9.0 category/block data (`\p{X}`, `\p{IsBlock}`). Remaining gap: the `i` flag uses .NET case-insensitivity rather than Unicode full case folding (affects patterns mixing `i` with `\p{...}` or negated classes)
 
 ---
