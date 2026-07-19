@@ -1,6 +1,38 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `4a5370b` (QT3 Tier-2z: fn/matches caseless-match i-flag fix)
+**Current focus:** **QT3 Tier-2z: `fn/matches` caseless-match cluster** — `RegexHelper.ParseRegexFlags` now maps the XPath `i` flag to `RegexOptions.IgnoreCase`, while `XsdCharClasses` wraps category escapes (`\p{}`, `\P{}`) in `(?-i:...)` to prevent .NET from expanding them. Bracketed class expressions are case-folded during translation (single code points and escaped atoms) and then completed by `IgnoreCase` (ranges and special Unicode foldings such as U+212A Kelvin sign). Back-references and quote mode now match case-insensitively. Targeted `fn-matches` pool (including `fn-matches.re`) is now **1,117 passed / 0 failed / 58 skipped** (5 previously failing caseless-match/back-reference tests now pass). Full QT3 suite now at **21,610 passed / 330 failed / 9,881 skipped (67.91%)**; runnable pass rate improved to **98.49%** (21610 / 21940). Unit tests **1,343/0**.
+
+---
+
+## This Session Fixes (Tier-2z: fn/matches caseless-match)
+
+1. **`i` flag uses `RegexOptions.IgnoreCase`** — `RegexHelper.ParseRegexFlags` now sets `RegexOptions.IgnoreCase` when the `i` flag is present. This gives correct case-insensitive matching for literal characters, back-references (`cbcl-matches-050`), and quote mode (`fn-matches-34`).
+
+2. **Category escapes stay case-sensitive** — `\p{...}` and `\P{...}` are emitted inside `(?-i:...)` so .NET's `IgnoreCase` does not expand them, matching XPath semantics (`caselessmatch14/15`).
+
+3. **Bracketed classes are case-folded during translation** — Single code points and escaped atoms in character classes are expanded to their case variants, and the final class set is case-folded. Ranges are preserved and completed by `IgnoreCase`. This fixes `caselessmatch04/05/06/07/08/09/12/13`, `cbcl-matches-050`, and `K2-MatchesFunc-17`.
+
+4. **Fix `CaseFoldSet` range emission** — The helper now emits singleton ranges `[cp, cp]` instead of flattening code points, so bracketed classes like `[md]` emit a correct character class instead of an empty/never-matching one.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/RegexHelper.cs` (v0.8: `i` flag sets `RegexOptions.IgnoreCase`; allow `(?-i:...)` in end-anchor translation)
+- `src/Bosak.XPath.Standard/Functions/XsdCharClasses.cs` (v0.4: case-fold bracketed classes; wrap category escapes in `(?-i:...)`; fix `CaseFoldSet` range emission)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.52: regex functions use flags-aware `ParseRegexFlags`/`ValidateAndTranslatePattern`)
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs` (v6.16: `xsl:analyze-string` adapts to new flags-aware regex helpers)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`fn/format-number`** (5 failures in the full QT3 suite: numberformat63/64 large-number precision, numberformat123 non-ASCII exponent digits, numberformat128 FODF1310, numberformat906InputErr XPTY0004). Other candidates: `fn/contains` collation/whitespace cluster (5), `cbcl-*` residual clusters.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `fd529e5` (QT3 Tier-2z: cbcl-castable castable-as overflow and empty-sequence fixes)
 **Current focus:** **QT3 Tier-2z: `cbcl-*` scattered clusters** — `VmEngine` `Castable` opcode now catches dynamic cast errors (FOCA0003, FOAR0002) and returns `false` for `castable as`, and correctly reports that an empty sequence is only castable to optional/zero-or-more sequence types. The `prod-CastableExpr` targeted pool is now **782 passed / 0 failed / 177 skipped** (was 772/10/177). Full QT3 suite now at **21,607 passed / 333 failed / 9,881 skipped (67.81%)**; runnable pass rate improved to **98.48%** (21607 / 21940). Unit tests **1,343/0**.
 

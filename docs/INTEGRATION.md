@@ -6,7 +6,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,343 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,607 passed / 333 failed / 9,881 skipped (67.81% / 98.48% of runnable tests)
+> **QT3 baseline:** 21,610 passed / 330 failed / 9,881 skipped (67.91% / 98.49% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
@@ -18,6 +18,8 @@
   - Empty sequence is now correctly reported as castable only for `?` / `*` occurrence indicators.
   - `prod-CastableExpr` targeted pool now **782 passed / 0 failed / 177 skipped** (was 772/10/177).
   - Full QT3 now **21,607 / 333 / 9,881 = 67.81%** (runnable pass rate **98.48%**); unit tests **1,343/0**.
+
+- **2026-07-19** — QT3 Tier-2z: `fn/matches` caseless-match `i`-flag fix. `i` now maps to `RegexOptions.IgnoreCase`; category escapes `\p{}`/`\P{}` stay case-sensitive via `(?-i:...)`; bracketed classes are case-folded during translation; back-references and quote mode match case-insensitively. Targeted `fn-matches` pool **1,117/0/58** (was 5 failing). Full QT3 now **21,610 / 330 / 9,881 = 67.91%** (runnable pass rate **98.49%**); unit tests **1,343/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `prod-NamedFunctionRef` / `named-function-ref-reserved-function-names` fixes.
   - `XPathParser.ParseNamedFunctionRef` raises `XPST0003` for reserved function names (e.g., `attribute#0`, `element#0`).
