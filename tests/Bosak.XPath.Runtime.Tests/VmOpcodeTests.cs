@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 19-07-2026     | Concatenate test uses node values; added LoadNode opcode usage                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 19-07-2026     | Added DebugDateAdd VM-level test for date + dayTimeDuration equality                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
@@ -291,6 +293,25 @@ public class VmOpcodeTests
             },
             new object?[] { node1, node2 });
         Assert.True(result.IsSequence);
+    }
+
+    [Fact]
+    public void DebugDateAdd()
+    {
+        var date = XdmValue.FromDate(new XPathDateTime(1999, 8, 12, 0, 0, 0, 0, 0, false), false);
+        var duration = XdmValue.FromDuration("P23DT09H32M59S", "dayTimeDuration");
+        var expected = XdmValue.FromDate(new XPathDateTime(1999, 9, 4, 0, 0, 0, 0, 0, false), false);
+        var result = Run(
+            new IrInstruction[] {
+                new IrInstruction(IrOpCode.LoadNode, 1, 0, 0, 0),
+                new IrInstruction(IrOpCode.LoadNode, 2, 0, 0, 1),
+                new IrInstruction(IrOpCode.Add, 3, 1, 2),
+                new IrInstruction(IrOpCode.LoadNode, 4, 0, 0, 2),
+                new IrInstruction(IrOpCode.Equal, 0, 3, 4),
+                new IrInstruction(IrOpCode.Return, 0)
+            },
+            new object?[] { date, duration, expected });
+        Assert.True(result.BooleanValue);
     }
 
     // ------------------------------------------------------------------

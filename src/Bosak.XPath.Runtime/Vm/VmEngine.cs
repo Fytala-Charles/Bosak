@@ -87,6 +87,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.51  | 19-07-2026     | Tier-2z: union/intersect/except require node sequences; added LoadNode VM opcode           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.52  | 19-07-2026     | Tier-2z: date/dayTime arithmetic zeroes time for xs:date; time +/- yearMonth raises XPTY0004 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -2636,9 +2638,9 @@ public static class VmEngine
             return XdmValue.FromDouble(ToDoubleOrNaN(left) + ToDoubleOrNaN(right));
 
         // Date/Time + Duration
-        if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
+        if ((left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time) && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
             return AddDuration(left, right.ToString());
-        if (right.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (left.Kind == XdmValueKind.String || left.Kind == XdmValueKind.Duration))
+        if ((right.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time) && (left.Kind == XdmValueKind.String || left.Kind == XdmValueKind.Duration))
             return AddDuration(right, left.ToString());
 
         // Duration + Duration
@@ -2678,20 +2680,18 @@ public static class VmEngine
         XPathDateTime result;
         if (IsYearMonthDurationString(duration))
         {
-            var (years, months, _, _, _, _) = ParseDuration(duration);
             if (isTime)
-            {
-                result = xdt;
-            }
-            else
-            {
-                var (ny, nm, nd) = XPathDateTimeHelper.AddMonths(xdt.Year, xdt.Month, xdt.Day, years * 12 + months);
-                result = new XPathDateTime(ny, nm, nd, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, tzMinutes, hasTz);
-            }
+                throw new InvalidOperationException("XPTY0004: xs:time values do not support year-month duration arithmetic");
+
+            var (years, months, _, _, _, _) = ParseDuration(duration);
+            var (ny, nm, nd) = XPathDateTimeHelper.AddMonths(xdt.Year, xdt.Month, xdt.Day, years * 12 + months);
+            result = new XPathDateTime(ny, nm, nd, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, tzMinutes, hasTz);
         }
         else if (IsDayTimeDurationString(duration))
         {
             result = AddDayTimeDuration(xdt, duration, isTime, tzMinutes, hasTz);
+            if (dateTimeValue.Kind == XdmValueKind.Date)
+                result = new XPathDateTime(result.Year, result.Month, result.Day, 0, 0, 0, 0, tzMinutes, hasTz);
         }
         else
         {
@@ -2820,22 +2820,20 @@ public static class VmEngine
         XPathDateTime result;
         if (IsYearMonthDurationString(duration))
         {
-            var (years, months, _, _, _, _) = ParseDuration(duration);
             if (isTime)
-            {
-                result = xdt;
-            }
-            else
-            {
-                var (ny, nm, nd) = XPathDateTimeHelper.AddMonths(xdt.Year, xdt.Month, xdt.Day, -(years * 12 + months));
-                result = new XPathDateTime(ny, nm, nd, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, tzMinutes, hasTz);
-            }
+                throw new InvalidOperationException("XPTY0004: xs:time values do not support year-month duration arithmetic");
+
+            var (years, months, _, _, _, _) = ParseDuration(duration);
+            var (ny, nm, nd) = XPathDateTimeHelper.AddMonths(xdt.Year, xdt.Month, xdt.Day, -(years * 12 + months));
+            result = new XPathDateTime(ny, nm, nd, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, tzMinutes, hasTz);
         }
         else if (IsDayTimeDurationString(duration))
         {
             var (_, _, days, hours, minutes, seconds) = ParseDuration(duration);
             long deltaMs = ((days * 24L + hours) * 3600L + minutes * 60L) * 1000L + (long)(seconds * 1000m);
             result = AddDayTimeDuration(xdt, $"-P{days}DT{hours}H{minutes}M{seconds}S", isTime, tzMinutes, hasTz);
+            if (dateTimeValue.Kind == XdmValueKind.Date)
+                result = new XPathDateTime(result.Year, result.Month, result.Day, 0, 0, 0, 0, tzMinutes, hasTz);
         }
         else
         {

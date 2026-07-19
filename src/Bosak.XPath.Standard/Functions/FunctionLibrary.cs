@@ -136,6 +136,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.58  | 19-07-2026     | Tier-2z: adjust-*-to-timezone validate target offset range and minute resolution (FODT0003) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.59  | 19-07-2026     | Tier-2z: distinct-values/index-of duration equality; generic xs:duration component extraction |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -7294,8 +7296,22 @@ public static class FunctionLibrary
             XdmValueKind.Time => DateTimeValuesEqual(a, b, XdmValueKind.Time, implicitTimezoneOffsetMinutes),
             XdmValueKind.QName => a.QNameValue.Equals(b.QNameValue),
             XdmValueKind.Uri => CompareStrings(a.StringValue, b.StringValue, collation) == 0,
+            XdmValueKind.Duration => DurationValuesEqual(a, b),
             _ => false
         };
+    }
+
+    private static bool DurationValuesEqual(XdmValue a, XdmValue b)
+    {
+        var (aYears, aMonths, aDays, aHours, aMinutes, aSeconds) = ParseDuration(a.DurationValue);
+        var (bYears, bMonths, bDays, bHours, bMinutes, bSeconds) = ParseDuration(b.DurationValue);
+        bool aNegative = a.DurationValue.StartsWith('-');
+        bool bNegative = b.DurationValue.StartsWith('-');
+        long aTotalMonths = (aYears * 12 + aMonths) * (aNegative ? -1 : 1);
+        long bTotalMonths = (bYears * 12 + bMonths) * (bNegative ? -1 : 1);
+        decimal aTotalSeconds = (aDays * 86400m + aHours * 3600m + aMinutes * 60m + aSeconds) * (aNegative ? -1 : 1);
+        decimal bTotalSeconds = (bDays * 86400m + bHours * 3600m + bMinutes * 60m + bSeconds) * (bNegative ? -1 : 1);
+        return aTotalMonths == bTotalMonths && aTotalSeconds == bTotalSeconds;
     }
 
     /// <summary>
@@ -10021,33 +10037,30 @@ public static class FunctionLibrary
 
         var (years, months, days, hours, minutes, seconds) = ParseDuration(s);
 
-        if (IsYearMonthDurationString(s))
+        bool isYearMonth = IsYearMonthDurationString(s) || IsGenericDurationString(s);
+        bool isDayTime = IsDayTimeDurationString(s) || IsGenericDurationString(s);
+
+        long normYears = 0, normMonths = 0;
+        if (isYearMonth)
         {
             long totalMonths = years * 12 + months;
-            long normYears = totalMonths / 12;
-            long normMonths = totalMonths % 12;
-            return part switch
-            {
-                DurationPart.Years => XdmValue.FromInteger(normYears),
-                DurationPart.Months => XdmValue.FromInteger(normMonths),
-                DurationPart.Days => XdmValue.FromInteger(0),
-                DurationPart.Hours => XdmValue.FromInteger(0),
-                DurationPart.Minutes => XdmValue.FromInteger(0),
-                DurationPart.Seconds => XdmValue.FromDecimal(0m),
-                _ => XdmValue.Undefined
-            };
+            normYears = totalMonths / 12;
+            normMonths = totalMonths % 12;
         }
-        else
+
+        long normDays = 0, normHours = 0, normMinutes = 0;
+        decimal normSeconds = 0m;
+        if (isDayTime)
         {
             decimal totalSeconds = days * 86400m + hours * 3600m + minutes * 60m + seconds;
             bool negative = totalSeconds < 0;
             totalSeconds = negative ? -totalSeconds : totalSeconds;
-            long normDays = (long)(totalSeconds / 86400m);
+            normDays = (long)(totalSeconds / 86400m);
             totalSeconds -= normDays * 86400m;
-            long normHours = (long)(totalSeconds / 3600m);
+            normHours = (long)(totalSeconds / 3600m);
             totalSeconds -= normHours * 3600m;
-            long normMinutes = (long)(totalSeconds / 60m);
-            decimal normSeconds = totalSeconds - normMinutes * 60m;
+            normMinutes = (long)(totalSeconds / 60m);
+            normSeconds = totalSeconds - normMinutes * 60m;
             if (negative)
             {
                 normDays = -normDays;
@@ -10055,17 +10068,18 @@ public static class FunctionLibrary
                 normMinutes = -normMinutes;
                 normSeconds = -normSeconds;
             }
-            return part switch
-            {
-                DurationPart.Years => XdmValue.FromInteger(0),
-                DurationPart.Months => XdmValue.FromInteger(0),
-                DurationPart.Days => XdmValue.FromInteger(normDays),
-                DurationPart.Hours => XdmValue.FromInteger(normHours),
-                DurationPart.Minutes => XdmValue.FromInteger(normMinutes),
-                DurationPart.Seconds => XdmValue.FromDecimal(normSeconds),
-                _ => XdmValue.Undefined
-            };
         }
+
+        return part switch
+        {
+            DurationPart.Years => XdmValue.FromInteger(normYears),
+            DurationPart.Months => XdmValue.FromInteger(normMonths),
+            DurationPart.Days => XdmValue.FromInteger(normDays),
+            DurationPart.Hours => XdmValue.FromInteger(normHours),
+            DurationPart.Minutes => XdmValue.FromInteger(normMinutes),
+            DurationPart.Seconds => XdmValue.FromDecimal(normSeconds),
+            _ => XdmValue.Undefined
+        };
     }
 
     private static (long Years, long Months, long Days, long Hours, long Minutes, decimal Seconds) ParseDuration(string s)
