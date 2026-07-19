@@ -134,6 +134,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.57  | 19-07-2026     | Tier-2z: fn:string-length#0 uses fn:string(.) semantics; type checks for string-join/string-to-codepoints/replace/remove |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.58  | 19-07-2026     | Tier-2z: adjust-*-to-timezone validate target offset range and minute resolution (FODT0003) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -9601,7 +9603,7 @@ public static class FunctionLibrary
         if (tzArg.IsUndefined || IsEmptySequence(tzArg))
             return DoAdjustDateToTimezone(xdt, hasTz, 0, removeTimezone: true);
 
-        int targetOffset = (int)XmlConvert.ToTimeSpan(AtomizedString(tzArg)).TotalMinutes;
+        int targetOffset = ParseTimezoneOffset(tzArg);
         return DoAdjustDateToTimezone(xdt, hasTz, targetOffset, removeTimezone: false);
     }
 
@@ -9646,7 +9648,7 @@ public static class FunctionLibrary
         if (tzArg.IsUndefined || IsEmptySequence(tzArg))
             return DoAdjustTimeToTimezone(xdt, hasTz, 0, removeTimezone: true);
 
-        int targetOffset = (int)XmlConvert.ToTimeSpan(AtomizedString(tzArg)).TotalMinutes;
+        int targetOffset = ParseTimezoneOffset(tzArg);
         return DoAdjustTimeToTimezone(xdt, hasTz, targetOffset, removeTimezone: false);
     }
 
@@ -9695,7 +9697,7 @@ public static class FunctionLibrary
         if (tzArg.IsUndefined || IsEmptySequence(tzArg))
             return DoAdjustDateTimeToTimezone(xdt, hasTz, 0, removeTimezone: true);
 
-        int targetOffset = (int)XmlConvert.ToTimeSpan(AtomizedString(tzArg)).TotalMinutes;
+        int targetOffset = ParseTimezoneOffset(tzArg);
         return DoAdjustDateTimeToTimezone(xdt, hasTz, targetOffset, removeTimezone: false);
     }
 
@@ -9715,6 +9717,22 @@ public static class FunctionLibrary
         var withTarget = new XPathDateTime(normalized.Year, normalized.Month, normalized.Day, normalized.Hour, normalized.Minute, normalized.Second, normalized.Millisecond, -targetOffset, true);
         var targetLocal = XPathDateTimeHelper.NormalizeToUtc(withTarget);
         return XdmValue.FromDateTime(new XPathDateTime(targetLocal.Year, targetLocal.Month, targetLocal.Day, targetLocal.Hour, targetLocal.Minute, targetLocal.Second, targetLocal.Millisecond, targetOffset, true), true);
+    }
+
+    /// <summary>
+    /// Parses an xs:dayTimeDuration timezone offset and validates it is in the
+    /// range -PT14H to +PT14H inclusive with a resolution of one minute.
+    /// Raises FODT0003 if the offset is out of range or has seconds/milliseconds.
+    /// </summary>
+    private static int ParseTimezoneOffset(XdmValue tzValue)
+    {
+        TimeSpan ts = XmlConvert.ToTimeSpan(AtomizedString(tzValue));
+        if (ts.Ticks % TimeSpan.TicksPerMinute != 0)
+            throw new InvalidOperationException("FODT0003");
+        long totalMinutes = ts.Ticks / TimeSpan.TicksPerMinute;
+        if (Math.Abs(totalMinutes) > 14 * 60)
+            throw new InvalidOperationException("FODT0003");
+        return (int)totalMinutes;
     }
 
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

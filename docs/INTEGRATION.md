@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,345 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,755 passed / 122 failed / 16,944 skipped (46.37% / 99.18% of runnable tests)
+> **QT3 baseline:** 14,766 passed / 111 failed / 16,944 skipped (46.40% / 99.25% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `fn:adjust-date-to-timezone` / `fn:adjust-time-to-timezone` / `fn:adjust-dateTime-to-timezone` FODT0003 validation.
+  - Added `ParseTimezoneOffset` helper to validate timezone offset arguments.
+  - Offsets outside `-PT14H` to `+PT14H` (e.g., `PT14H1M`, `-PT14H1M`, `P1D`) now raise `FODT0003`.
+  - Offsets with seconds/milliseconds (e.g., `PT14H0M0.001S`) now raise `FODT0003` for violating the one-minute resolution requirement.
+  - Targeted pools now all **0 failed**: `fn-adjust-date-to-timezone` 37/0/4, `fn-adjust-time-to-timezone` 37/0/5, `fn-adjust-dateTime-to-timezone` 46/0/2.
+  - Full QT3 now **14,766 passed / 111 failed / 16,944 skipped = 46.40%** (runnable pass rate **99.25%**); unit tests **1,345/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn-string-length` / `fn-string-join` / `fn-string-to-codepoints` / `fn:remove` / `fn:replace` type checks.
   - `fn:string-length()` zero-arg form now uses `fn:string(.)` semantics, so non-string atomic context items (e.g., integers) are converted to their string representation before counting code points.
