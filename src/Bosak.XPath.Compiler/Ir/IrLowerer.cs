@@ -32,6 +32,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.10  | 15-07-2026     | QuantifiedLoopInfo carries VariablePrefix/VariableNamespaceUri; for/some/every bindings preserve EQName namespaces |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11  | 19-07-2026     | Fixed LowerAnd/LowerOr to not free the result register when reusing it for operands       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -256,7 +258,8 @@ public sealed class IrLowerer
         int leftReg = LowerNode(node.Left, resultReg);
         if (leftReg != resultReg)
             Emit(IrOpCode.Move, (ushort)resultReg, (ushort)leftReg);
-        FreeRegister(leftReg);
+        if (leftReg != resultReg)
+            FreeRegister(leftReg);
 
         // If left is false, result is false
         int jumpToFalse = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)resultReg);
@@ -265,7 +268,8 @@ public sealed class IrLowerer
         int rightReg = LowerNode(node.Right, resultReg);
         if (rightReg != resultReg)
             Emit(IrOpCode.Move, (ushort)resultReg, (ushort)rightReg);
-        FreeRegister(rightReg);
+        if (rightReg != resultReg)
+            FreeRegister(rightReg);
 
         // If right is false, result is false
         int jumpToFalse2 = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)resultReg);
@@ -293,7 +297,8 @@ public sealed class IrLowerer
         int leftReg = LowerNode(node.Left, resultReg);
         if (leftReg != resultReg)
             Emit(IrOpCode.Move, (ushort)resultReg, (ushort)leftReg);
-        FreeRegister(leftReg);
+        if (leftReg != resultReg)
+            FreeRegister(leftReg);
 
         // If left is true, result is true
         int jumpToTrue = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (ushort)resultReg);
@@ -302,7 +307,8 @@ public sealed class IrLowerer
         int rightReg = LowerNode(node.Right, resultReg);
         if (rightReg != resultReg)
             Emit(IrOpCode.Move, (ushort)resultReg, (ushort)rightReg);
-        FreeRegister(rightReg);
+        if (rightReg != resultReg)
+            FreeRegister(rightReg);
 
         // If right is true, result is true
         int jumpToTrue2 = EmitJumpPlaceholder(IrOpCode.JumpIfTrue, (ushort)resultReg);

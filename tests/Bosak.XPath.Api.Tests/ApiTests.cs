@@ -13,6 +13,8 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added occurrence indicator tests for type expressions                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 19-07-2026     | Added DebugBooleanEqual regression test for and/or target-register reuse                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -393,5 +395,16 @@ public class ApiTests
         var expr2 = XPath31Expression.Compile("2 + 2");
         Assert.Equal("2", expr1.Evaluate(ctx).ToString());
         Assert.Equal("4", expr2.Evaluate(ctx).ToString());
+    }
+
+    [Fact]
+    public void DebugBooleanEqual()
+    {
+        Assert.Equal("true", Eval("(1 eq 1) and (2 eq 2)").ToString());
+        Assert.Equal("false", Eval("(1 eq 1) and (2 eq 3)").ToString());
+        Assert.Equal("false", Eval("(1 eq 1) eq (2 eq 3)").ToString());
+        Assert.Equal("true", Eval("xs:boolean('true') and xs:boolean('true')").ToString());
+        Assert.Equal("false", Eval("xs:boolean('false') and xs:boolean('false')").ToString());
+        Assert.Equal("false", Eval("(xs:boolean('true') and xs:boolean('true')) eq (xs:boolean('false') and xs:boolean('false'))").ToString());
     }
 }
