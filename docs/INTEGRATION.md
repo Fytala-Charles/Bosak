@@ -6,12 +6,20 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,344 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,703 passed / 173 failed / 16,945 skipped (46.21% / 98.84% of runnable tests)
+> **QT3 baseline:** 14,720 passed / 160 failed / 16,941 skipped (46.26% / 98.92% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: duration-arithmetic round-half-up and overflow fixes.
+  - `VmEngine.MultiplyDuration` and `DivideDuration` for `xs:yearMonthDuration` now use `RoundHalfUp(totalMonths)` (`floor(x + 0.5)`) per F+O Erratum FO.E12, fixing rounding ties such as `P5M div -2` and `P2Y11M * 2.3`.
+  - `xs:dayTimeDuration` multiply/divide no longer casts `xs:double` factors/divisors directly to `decimal`; zero-duration operands return `PT0S`, huge divisors fall back to `double` and round to `PT0S` when below half a tick, and true overflow raises `FODT0002`.
+  - Divide by `NaN` raises `FOCA0005`; divide by `0` raises `FODT0002`; divide by `INF`/`-INF` returns `P0M`/`PT0S`.
+  - `TryCast` to `xs:duration` now records the generic `duration` schema annotation so the runtime can distinguish `xs:duration` from `xs:yearMonthDuration`/`xs:dayTimeDuration`, making `xs:duration("P1Y3M") * 3` and `xs:duration("P1Y3M") div 3` raise `XPTY0004`.
+  - Targeted duration pools now **0 failed** (16 previously failing tests now pass).
+  - Full QT3 now **14,720 passed / 160 failed / 16,941 skipped = 46.26%** (runnable pass rate **98.92%**); unit tests **1,344/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn-element-with-id` schema-validated ID support.
   - The conformance harness now loads source documents with `validation="strict"` against the environment's declared XML Schema(s), adding PSVI annotations to the XDocument tree.

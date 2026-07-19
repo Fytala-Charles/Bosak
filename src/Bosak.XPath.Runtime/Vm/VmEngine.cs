@@ -83,6 +83,7 @@
 //                      | Charles Korthout | 2.47  | 19-07-2026     | RangeExpr supports xs:integer operands that exceed long range via DecimalRangeSequence |
 //                      | Charles Korthout | 2.48  | 19-07-2026     | CompareGeneral enumerates operands lazily to avoid materializing huge ranges |
 //                      | Charles Korthout | 2.49  | 19-07-2026     | NormalizeSequence stable-sorts namespace nodes by owner element so namespace axis is document-ordered |
+//                      | Charles Korthout | 2.50  | 19-07-2026     | Duration multiply/divide uses round-half-up for yearMonth and overflow-safe decimal for dayTime |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2937,6 +2938,11 @@ public static class VmEngine
         return s.StartsWith('P') && (s.Contains('D') || s.Contains('T'));
     }
 
+    private static long RoundHalfUp(decimal value)
+    {
+        return (long)Math.Floor(value + 0.5m);
+    }
+
     private enum DurationSubtype { YearMonthDuration, DayTimeDuration, Duration }
 
     private static DurationSubtype GetDurationSubtype(string s)
@@ -2948,6 +2954,19 @@ public static class VmEngine
         if (hasYm && !hasDt) return DurationSubtype.YearMonthDuration;
         if (!hasYm && hasDt) return DurationSubtype.DayTimeDuration;
         return DurationSubtype.Duration;
+    }
+
+    private static DurationSubtype GetDurationSubtype(XdmValue value)
+    {
+        var schemaType = value.SchemaTypeName;
+        if (schemaType is not null)
+        {
+            var normalized = schemaType.ToLowerInvariant().Replace("xs:", "");
+            if (normalized == "yearmonthduration") return DurationSubtype.YearMonthDuration;
+            if (normalized == "daytimeduration") return DurationSubtype.DayTimeDuration;
+            if (normalized == "duration") return DurationSubtype.Duration;
+        }
+        return GetDurationSubtype(value.DurationValue);
     }
 
     private static string? GetDateTimeSubtype(XdmValue value)
@@ -3176,43 +3195,128 @@ public static class VmEngine
 
     private static XdmValue MultiplyDuration(XdmValue duration, XdmValue factor)
     {
-        var d = duration.DurationValue;
         double f = ToDouble(factor);
         if (double.IsNaN(f) || double.IsInfinity(f))
             throw new InvalidOperationException("FOCA0005");
 
-        if (IsYearMonthDurationString(d))
+        var subtype = GetDurationSubtype(duration);
+        if (subtype == DurationSubtype.YearMonthDuration)
         {
+            var d = duration.DurationValue;
             var (y, m, _, _, _, _) = ParseDuration(d);
-            long totalMonths = (long)Math.Round((y * 12 + m) * f);
-            return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths));
+            decimal baseMonths = y * 12m + m;
+            if (baseMonths == 0m)
+                return XdmValue.FromDuration("P0M");
+            decimal totalMonths = baseMonths * (decimal)f;
+            long roundedMonths;
+            try
+            {
+                roundedMonths = RoundHalfUp(totalMonths);
+            }
+            catch (OverflowException)
+            {
+                throw new InvalidOperationException("FODT0002");
+            }
+            return XdmValue.FromDuration(FormatYearMonthDuration(roundedMonths));
         }
-        if (IsDayTimeDurationString(d))
+        if (subtype == DurationSubtype.DayTimeDuration)
         {
+            var d = duration.DurationValue;
             var (_, _, days, hours, minutes, seconds) = ParseDuration(d);
-            decimal totalSeconds = (days * 86400m + hours * 3600m + minutes * 60m + seconds) * (decimal)f;
-            long totalTicks = (long)(totalSeconds * TimeSpan.TicksPerSecond);
-            return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+            decimal totalSeconds = days * 86400m + hours * 3600m + minutes * 60m + seconds;
+            if (totalSeconds == 0m)
+                return XdmValue.FromDuration("PT0S");
+            try
+            {
+                decimal resultSeconds = totalSeconds * (decimal)f;
+                long totalTicks = (long)(resultSeconds * TimeSpan.TicksPerSecond);
+                return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+            }
+            catch (OverflowException)
+            {
+                throw new InvalidOperationException("FODT0002");
+            }
         }
         throw new InvalidOperationException("XPTY0004");
     }
 
     private static XdmValue DivideDuration(XdmValue duration, XdmValue divisor)
     {
-        var d = duration.DurationValue;
         double div = ToDouble(divisor);
-        if (IsYearMonthDurationString(d))
+        var subtype = GetDurationSubtype(duration);
+        if (subtype == DurationSubtype.YearMonthDuration)
         {
+            var d = duration.DurationValue;
             var (y, m, _, _, _, _) = ParseDuration(d);
-            long totalMonths = (long)Math.Round((y * 12 + m) / div);
-            return XdmValue.FromDuration(FormatYearMonthDuration(totalMonths));
+            if (double.IsNaN(div))
+                throw new InvalidOperationException("FOCA0005");
+            if (double.IsInfinity(div))
+                return XdmValue.FromDuration("P0M");
+            if (div == 0.0)
+                throw new InvalidOperationException("FODT0002");
+            decimal baseMonths = y * 12m + m;
+            if (baseMonths == 0m)
+                return XdmValue.FromDuration("P0M");
+            long roundedMonths;
+            try
+            {
+                decimal totalMonths = baseMonths / (decimal)div;
+                roundedMonths = RoundHalfUp(totalMonths);
+            }
+            catch (OverflowException)
+            {
+                double resultMonthsD = (double)baseMonths / div;
+                if (Math.Abs(resultMonthsD) < 0.5)
+                    return XdmValue.FromDuration("P0M");
+                throw new InvalidOperationException("FODT0002");
+            }
+            catch (DivideByZeroException)
+            {
+                double resultMonthsD = (double)baseMonths / div;
+                if (Math.Abs(resultMonthsD) < 0.5)
+                    return XdmValue.FromDuration("P0M");
+                if (Math.Abs(resultMonthsD) > (double)decimal.MaxValue || double.IsInfinity(resultMonthsD))
+                    throw new InvalidOperationException("FODT0002");
+                roundedMonths = RoundHalfUp((decimal)resultMonthsD);
+            }
+            return XdmValue.FromDuration(FormatYearMonthDuration(roundedMonths));
         }
-        if (IsDayTimeDurationString(d))
+        if (subtype == DurationSubtype.DayTimeDuration)
         {
+            var d = duration.DurationValue;
             var (_, _, days, hours, minutes, seconds) = ParseDuration(d);
-            decimal totalSeconds = (days * 86400m + hours * 3600m + minutes * 60m + seconds) / (decimal)div;
-            long totalTicks = (long)(totalSeconds * TimeSpan.TicksPerSecond);
-            return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+            decimal totalSeconds = days * 86400m + hours * 3600m + minutes * 60m + seconds;
+            if (totalSeconds == 0m)
+                return XdmValue.FromDuration("PT0S");
+            if (double.IsNaN(div))
+                throw new InvalidOperationException("FOCA0005");
+            if (double.IsInfinity(div))
+                return XdmValue.FromDuration("PT0S");
+            if (div == 0.0)
+                throw new InvalidOperationException("FODT0002");
+            try
+            {
+                decimal resultSeconds = totalSeconds / (decimal)div;
+                long totalTicks = (long)(resultSeconds * TimeSpan.TicksPerSecond);
+                return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+            }
+            catch (OverflowException)
+            {
+                double resultSecondsD = (double)totalSeconds / div;
+                if (Math.Abs(resultSecondsD) * TimeSpan.TicksPerSecond < 0.5)
+                    return XdmValue.FromDuration("PT0S");
+                throw new InvalidOperationException("FODT0002");
+            }
+            catch (DivideByZeroException)
+            {
+                double resultSecondsD = (double)totalSeconds / div;
+                if (Math.Abs(resultSecondsD) * TimeSpan.TicksPerSecond < 0.5)
+                    return XdmValue.FromDuration("PT0S");
+                if (Math.Abs(resultSecondsD) > (double)decimal.MaxValue || double.IsInfinity(resultSecondsD))
+                    throw new InvalidOperationException("FODT0002");
+                long totalTicks = (long)((decimal)resultSecondsD * TimeSpan.TicksPerSecond);
+                return XdmValue.FromDuration(FormatDuration(new TimeSpan(totalTicks)));
+            }
         }
         throw new InvalidOperationException("XPTY0004");
     }
@@ -4806,12 +4910,17 @@ public static class VmEngine
 
             case "duration":
                 if (value.Kind == XdmValueKind.Duration)
+                {
+                    // Casting to the generic xs:duration type ensures subsequent operator
+                    // dispatch can distinguish it from the yearMonth/dayTime subtypes.
+                    result = XdmValue.FromDuration(value.DurationValue, "duration");
                     return true;
+                }
                 {
                     string sDur = value.ToString().Trim();
                     if (IsValidDuration(sDur))
                     {
-                        result = XdmValue.FromDuration(CanonicalizeDuration(sDur));
+                        result = XdmValue.FromDuration(CanonicalizeDuration(sDur), "duration");
                         return true;
                     }
                 }

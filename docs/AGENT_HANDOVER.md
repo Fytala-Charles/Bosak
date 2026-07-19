@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `7d4dc6c` (QT3 Tier-2z: duration-arithmetic round-half-up and overflow fixes)
+**Current focus:** **QT3 Tier-2z: `op-multiply-yearMonthDuration` / `op-divide-yearMonthDuration` / `op-multiply-dayTimeDuration` / `op-divide-dayTimeDuration` clusters** — YearMonth multiply/divide was using .NET `Math.Round` (banker's rounding), but the F+O Erratum FO.E12 expects round-half-up (`floor(x + 0.5)`), so ties such as `P5M div -2` and `P2Y11M * 2.3` were off by one month. DayTime multiply/divide was casting `xs:double` factors/divisors directly to `decimal`, causing `OverflowException`/`FOAR0002` for `1.7976931348623157E308` and underflow/division-by-zero for very small divisors. `VmEngine` now uses a `RoundHalfUp` helper for yearMonth results and overflow-safe decimal/double fallback for dayTime results. It also checks the dynamic `xs:duration` schema annotation so `xs:duration("P1Y3M") * 3` and `xs:duration("P1Y3M") div 3` raise `XPTY0004` as required. `TryCast` to `xs:duration` now preserves the generic `duration` schema annotation so the runtime can distinguish it from the subtypes. Targeted duration pools now **0 failed** (16 previously failing tests now pass). Full QT3 suite now at **14,720 passed / 160 failed / 16,941 skipped (46.26%)**; runnable pass rate **98.92%** (14720 / 14880). Unit tests **1,344/0**.
+## This Session Fixes (Tier-2z: duration arithmetic)
+
+1. **YearMonth duration round-half-up** — `VmEngine.MultiplyDuration` and `DivideDuration` for `xs:yearMonthDuration` now use `RoundHalfUp(totalMonths)` (`floor(x + 0.5)`) instead of `Math.Round` (banker's rounding). This fixes `op-multiply-yearMonthDuration-1`, `op-multiply-yearMonthDuration-20`, and `op-divide-yearMonthDuration-17`.
+
+2. **DayTime duration overflow/underflow safety** — `xs:dayTimeDuration` multiply/divide no longer casts `xs:double` factors/divisors directly to `decimal`. Zero-duration operands short-circuit to `PT0S`; huge divisors fall back to `double` and round to `PT0S` when the result is below half a tick; true overflow raises `FODT0002`. This fixes the `2args` boundary tests and `K-DayTimeDurationDivide-2/3`.
+
+3. **NaN/Infinity/zero divisor handling** — `xs:yearMonthDuration` and `xs:dayTimeDuration` divide by `NaN` now raises `FOCA0005`; divide by `0` raises `FODT0002`; divide by `INF`/`-INF` returns `P0M`/`PT0S` as specified.
+
+4. **Generic `xs:duration` operator dispatch** — `VmEngine.GetDurationSubtype` checks the dynamic schema type annotation. `TryCast` to `xs:duration` now records the `duration` annotation so `xs:duration("P1Y3M") * 3` and `xs:duration("P1Y3M") div 3` raise `XPTY0004` instead of silently returning a subtype result.
+
+5. **Regression safety** — Full QT3 suite improved by **+17 passed, −13 failed, −4 skipped** with no regressions in the targeted duration pools or unit tests.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.50: `RoundHalfUp`, `GetDurationSubtype(XdmValue)`, overflow-safe `MultiplyDuration`/`DivideDuration`, `TryCast` to `xs:duration` preserves generic annotation)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn-prefix-from-qname` / `ExpandedQNameConstructFunc` QName handling cases. Other candidates: remaining `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `errors-and-optimization-4`, and `string-queries-results-q1` residual failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `13295c6` (QT3 Tier-2z: fn-element-with-id schema-validated ID support)
 **Current focus:** **QT3 Tier-2z: `fn-element-with-id` cluster** — The five failures were caused by the conformance harness not loading the schema-validated source document and by `fn:id`/`fn:element-with-id` only recognizing attribute-based IDs. `TestEnvironment` now parses `<source validation="strict">` and `<schema>` elements, loads the source through a new `XDocumentProvider.LoadXml` overload that validates against the declared XML Schema and adds PSVI annotations. `IXdmNode` gains an `IsId` accessor; `XDocumentNode` implements it using `XmlSchemaInfo` so that typed values of type `xs:ID` (derived types, union ID members, and singleton lists of `xs:ID`) are recognized. `fn:id()` now returns ID-valued elements themselves, and `fn:element-with-id()` returns the parent element when the ID is supplied by a child element. DTD-declared ID attributes continue to work via `InternalSubset`. Targeted `fn-element-with-id` pool now **5 passed / 0 failed / 0 skipped** (5 previously failing tests now pass). Full QT3 suite now at **14,703 passed / 173 failed / 16,945 skipped (46.21%)**; runnable pass rate **98.84%** (14703 / 14876). Unit tests **1,344/0**.
 
