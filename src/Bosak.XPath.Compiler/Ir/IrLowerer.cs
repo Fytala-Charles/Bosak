@@ -34,6 +34,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.11  | 19-07-2026     | Fixed LowerAnd/LowerOr to not free the result register when reusing it for operands       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.12  | 19-07-2026     | Emit UnaryPlus opcode instead of Move; runtime validates operand type                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -369,8 +371,7 @@ public sealed class IrLowerer
         switch (node.Operator)
         {
             case UnaryOperator.Plus:
-                // Unary plus is a no-op; just move the value
-                Emit(IrOpCode.Move, (ushort)resultReg, (ushort)operandReg);
+                Emit(IrOpCode.UnaryPlus, (ushort)resultReg, (ushort)operandReg);
                 break;
             case UnaryOperator.Minus:
                 Emit(IrOpCode.UnaryMinus, (ushort)resultReg, (ushort)operandReg);

@@ -89,6 +89,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.52  | 19-07-2026     | Tier-2z: date/dayTime arithmetic zeroes time for xs:date; time +/- yearMonth raises XPTY0004 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.53  | 19-07-2026     | Tier-2z: unary plus validates numeric operand and raises XPTY0004 for non-numeric        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1147,7 +1149,7 @@ public static class VmEngine
                     break;
 
                 case IrOpCode.UnaryPlus:
-                    registers[instr.RegisterA] = registers[instr.RegisterB];
+                    registers[instr.RegisterA] = UnaryPlus(registers[instr.RegisterB], context);
                     ip++;
                     break;
 
@@ -3611,6 +3613,25 @@ public static class VmEngine
         if (IsDecimal(value))
             return XdmValue.FromDecimal(-ToDecimal(value));
         return XdmValue.FromInteger(-ToInteger(value));
+    }
+
+    private static XdmValue UnaryPlus(XdmValue value, EvaluationContext context)
+    {
+        if (IsEmptySequence(value))
+        {
+            if (context.BackwardsCompatible)
+                return XdmValue.FromDouble(double.NaN);
+            return XdmValue.Undefined;
+        }
+
+        if (context.BackwardsCompatible)
+            return XdmValue.FromDouble(ToDoubleOrNaN(value));
+
+        if (IsUntypedAtomic(value))
+            return XdmValue.FromDouble(ToDouble(value));
+
+        ValidateNumericOperand(value);
+        return value;
     }
 
     /// <summary>

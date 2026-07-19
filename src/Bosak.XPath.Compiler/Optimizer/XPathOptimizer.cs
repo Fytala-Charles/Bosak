@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 15-07-2026     | Preserve VariablePrefix/VariableNamespaceUri when rebuilding QuantifiedBinding          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 19-07-2026     | Only fold unary plus for numeric literals; non-literals need runtime type check         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -275,8 +277,8 @@ public sealed class XPathOptimizer
             return new DecimalLiteralNode(-dec.Value);
         }
 
-        // +x => x
-        if (node.Operator == UnaryOperator.Plus)
+        // +x => x only for numeric literals; non-numeric operands must be checked at runtime
+        if (node.Operator == UnaryOperator.Plus && operand is IntegerLiteralNode or DecimalLiteralNode or DoubleLiteralNode)
         {
             changed = true;
             return operand;

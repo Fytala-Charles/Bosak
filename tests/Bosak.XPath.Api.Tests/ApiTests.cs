@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 19-07-2026     | Added DebugBooleanEqual regression test for and/or target-register reuse                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 19-07-2026     | Added UnaryPlus_ValidatesOperandType test                                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -406,5 +408,13 @@ public class ApiTests
         Assert.Equal("true", Eval("xs:boolean('true') and xs:boolean('true')").ToString());
         Assert.Equal("false", Eval("xs:boolean('false') and xs:boolean('false')").ToString());
         Assert.Equal("false", Eval("(xs:boolean('true') and xs:boolean('true')) eq (xs:boolean('false') and xs:boolean('false'))").ToString());
+    }
+
+    [Fact]
+    public void UnaryPlus_ValidatesOperandType()
+    {
+        Assert.Equal("3", Eval("+3").ToString());
+        Assert.Equal("true", Eval("(+3) eq 3").ToString());
+        Assert.Throws<InvalidOperationException>(() => Eval("+\"a string\""));
     }
 }
