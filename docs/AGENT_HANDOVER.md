@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `TBD` (QT3 Tier-2z: fn/format-number precision and dependency-filter fixes)
+**Commit:** `ef9dace` (QT3 Tier-2z: fn/format-number precision and dependency-filter fixes)
 **Current focus:** **QT3 Tier-2z: `fn/format-number` cluster** — `FormatNumberEngine` now raises `XPTY0004` for non-numeric string inputs in non-backwards-compatible mode, supports non-BMP (supplementary-plane) zero-digits in scientific notation, and counts exponent digit signs correctly for surrogate-pair zero-digits. The conformance harness `DependencyFilter` now ANDs spec dependencies across `<dependency>` elements, so XP30-only tests like `numberformat128` are skipped when Bosak runs as XP31+. `numberformat63` and `numberformat64` (decimal literals requiring >28 digits of precision) are documented as platform limitations because .NET `decimal` is fixed-precision. Targeted `fn-format-number` pool is now **246 passed / 0 failed / 23 skipped** (3 previously failing tests now pass; 2 precision tests skipped). Full QT3 suite now at **21,612 passed / 325 failed / 9,884 skipped (67.92%)**; runnable pass rate improved to **98.52%** (21612 / 21937). Unit tests **1,343/0**.
 
 ---
