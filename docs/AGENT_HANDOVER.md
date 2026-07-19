@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `741b431` (QT3 Tier-2z: fn-string-length / fn-string-join / fn-string-to-codepoints / fn:remove / fn:replace type checks)
+**Commit:** `0ef1217` (QT3 Tier-2z: fn-string-length / fn-string-join / fn-string-to-codepoints / fn:remove / fn:replace type checks)
 **Current focus:** **QT3 Tier-2z: string/sequence function type-error cluster** — Fixed `fn:string-length()` zero-arg form to use `fn:string(.)` semantics so non-string atomic context items (e.g., integers) are converted to their string representation before counting code points. Hardened `fn:string-join`, `fn:string-to-codepoints`, `fn:replace`, and `fn:remove` against type errors by using `RequireStringRequired` for required string parameters and the new `RequireInteger` helper for the position argument. Added `RequireStringRequired` and `RequireInteger` helpers to `FunctionLibrary`. Targeted pools now all **0 failed**: `fn-string-length` 33/0/3, `fn-string-join` 32/0/14, `fn-string-to-codepoints` 44/0/0, `fn-remove` 51/0/0, `fn-replace` 81/0/10. Full QT3 suite now at **14,755 passed / 122 failed / 16,944 skipped (46.37%)**; runnable pass rate **99.18%** (14755 / 14877). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: string/sequence function type checks)
