@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `<uncommitted>` (QT3 Tier-2y: fn:index-of eq-semantics and NaN handling)
+**Commit:** `4c79b2c` (QT3 Tier-2y: fn:index-of eq-semantics and NaN handling)
 **Current focus:** **QT3 Tier-2y: `K-SeqIndexOfFunc` / `fn-index-of`** — `FunctionLibrary.IndexOfImpl` now uses XPath `eq` semantics via `AtomicValuesEqual` instead of string comparison. NaN no longer matches itself, empty / multi-item search arguments and empty collation arguments raise `XPTY0004`, and incompatible types (e.g., `xs:integer` vs `xs:string`) return empty. Targeted `fn-index-of` pool now **53 passed / 0 failed / 0 skipped** (was 44/9/0). Full QT3 suite now at **21,585 passed / 355 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.38%** (21585 / 21940). Unit tests **1,327/0**.
 
 ---
