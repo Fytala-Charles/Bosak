@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `<uncommitted>` (QT3 Tier-2w: fn:has-children context-item and singleton-sequence fixes)
+**Commit:** `3ea70d1` (QT3 Tier-2w: fn:has-children context-item and singleton-sequence fixes)
 **Current focus:** **QT3 Tier-2w: `fn-has-children`** — `HasChildren_0` now raises `XPDY0002` when the context item is absent; `HasChildren`/`HasChildren_1` now unwrap singleton sequences so empty sequence returns `false` and multi-item / non-node arguments raise `XPTY0004`. Targeted `fn-has-children` pool now **34 passed / 0 failed / 3 skipped** (was 26/8/3). Full QT3 suite now at **21,570 passed / 370 failed / 9,881 skipped (67.77%)**; runnable pass rate improved to **98.31%** (21570 / 21940). Unit tests **1,311/0**.
 
 ---
