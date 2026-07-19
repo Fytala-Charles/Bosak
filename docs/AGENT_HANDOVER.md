@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `d041979` (QT3 Tier-2z: fn-outermost/fn-innermost namespace-axis document order fix)
+**Current focus:** **QT3 Tier-2z: `fn-outermost` / `fn-innermost` cluster** — The eight remaining `fn-outermost-*` / `fn-innermost-*` failures were caused by namespace nodes not being returned in document order. `XDocumentNode.GetNamespaceAxis` now places the implicit `xml` namespace first and orders the remaining namespaces root-to-current; `XDocumentNode.DocumentOrder` for namespace nodes now uses the owner element's order; and `VmEngine.NormalizeSequence` uses a stable sort keyed by owner element so that namespace nodes of the same element retain their axis order while being sorted correctly across elements. Targeted `fn-outermost` / `fn-innermost` pools now **13 passed / 0 failed / 105 skipped** (8 previously failing tests now pass). Full QT3 suite now at **14,698 passed / 178 failed / 16,945 skipped (46.19%)**; runnable pass rate **98.80%** (14698 / 14876). Unit tests **1,344/0**.
+
+---
+
+## This Session Fixes (Tier-2z: fn-outermost/fn-innermost)
+
+1. **Namespace axis order** — `XDocumentNode.GetNamespaceAxis` now returns namespace nodes in the order required by XPath: the `xml` namespace first, followed by the in-scope namespaces from the root down to the element (i.e., inherited prefixes before the element's own declarations). Previously `xml` was last and the order was current-to-root, which made `fn:innermost(...)[position()]` and `fn:outermost(...)[position()]` select the wrong items.
+
+2. **Document order for namespace nodes** — Namespace nodes are virtual; their document order is determined by their owner element. `XDocumentNode.DocumentOrder` now returns the owner element's order for namespace nodes, and `VmEngine.NormalizeSequence` uses a stable sort keyed by document order. This ensures that `//*/namespace::*` and other path expressions return namespace nodes in document order, while preserving the within-element axis order produced by `GetNamespaceAxis`.
+
+3. **Regression test** — `FunctionLibraryTests.NamespaceAxis_XmlFirstAndDocumentOrdered` verifies that `xml` is first on a namespace axis and that `//*/namespace::*` is document-ordered across elements.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs` (v1.8: `GetNamespaceAxis` xml-first root-to-current order; namespace node `DocumentOrder` uses owner element)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.49: stable sort in `NormalizeSequence` for namespace nodes with equal owner element order)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.19: namespace axis order regression test)
+- `docs/AGENT_HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`fn-element-with-id` cluster** (4 failures). Other candidates: scattered `K-SeqExprTreat` / `K2-SeqExprTreat` parser/grammar cases, `op-multiply/divide-dayTimeDuration`/`yearMonthDuration` edge cases, and remaining `fn-concatdbl2args`/`fn-stringdbl1args` dynamic-context issues.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `4b74fc3` (QT3 Tier-2z: cbcl residual cluster fixes)
 **Current focus:** **QT3 Tier-2z: `cbcl-*` residual cluster** — Final two `cbcl-treat-as-*` failures were caused by `fn:zero-or-one` returning `()` for a single-item sequence instead of the item. Fixed `ZeroOrOne_1` to return the sole item. Also completed earlier cbcl work: test-name filter in the harness, `LoadOptions.PreserveWhitespace` so `assert-string-value` keeps CR/spaces, XQuery-only spec dependencies skipped, `current-dateTime/date/time` now honor the implicit timezone, `distinct-values`/`index-of` equality applies the implicit timezone, `gYear/gYearMonth/gMonth/gMonthDay/gDay` equality is timezone-aware, `xs:duration * NaN/Infinity` raises `FOCA0005`, `codepoints-to-string` reverted to XML 1.1 rules, and `xs:QName` whitespace/local-name validation now raises `FOCA0002`. Targeted `cbcl-` run now **516 passed / 0 failed / 1,332 skipped** (2 previously failing tests now pass). Full QT3 suite now at **14,690 passed / 186 failed / 16,945 skipped (46.16%)**; runnable pass rate **98.75%** (14690 / 14876). Unit tests **1,344/0**.
 
