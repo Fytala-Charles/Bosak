@@ -34,6 +34,8 @@
 //                      | Charles Korthout | 1.10  | 15-07-2026     | FLWOR completion: 'at $pos' positional var, 'where' clause, mixed for/let chains          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.11  | 15-07-2026     | EQName URI whitespace normalized in SplitQName; for/let bindings capture prefix/namespace |
+//                      | Charles Korthout | 1.12  | 19-07-2026     | Reserved function names in function calls and named function references raise XPST0003    |
+//                      | Charles Korthout | 1.13  | 19-07-2026     | Reserved function name check applies only to named function references, not function calls |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -73,6 +75,19 @@ public sealed class XPathParser
     };
 
     private const string OldMapNamespace = "http://www.w3.org/2011/xpath-functions/map";
+
+    /// <summary>
+    /// XPath reserved function names. These cannot be used as function names in
+    /// function calls or named function references when the name has no prefix
+    /// (i.e., is in the default function namespace).
+    /// </summary>
+    private static readonly HashSet<string> ReservedFunctionNames = new(StringComparer.Ordinal)
+    {
+        "attribute", "comment", "document-node", "element", "empty-sequence",
+        "function", "if", "item", "namespace-node", "node", "processing-instruction",
+        "schema-attribute", "schema-element", "switch", "text", "typeswitch",
+        "array", "map"
+    };
 
     /// <summary>
     /// Convenience method: lexes and parses an XPath expression string.
@@ -1187,6 +1202,7 @@ public sealed class XPathParser
         var name = GetString(Current);
         var (prefix, local, nsUri) = SplitQName(name);
         ThrowIfRemovedFunction(nsUri, local, start);
+        ThrowIfReservedFunctionName(prefix, local, start);
         Advance(); // name
         Advance(); // #
         var arityTok = Expect(TokenKind.IntegerLiteral);
@@ -1201,6 +1217,12 @@ public sealed class XPathParser
 
         if (!string.IsNullOrEmpty(nsUri) && RemovedFunctions.Contains((nsUri, localName)))
             throw new ParseException($"XPST0017: Function {{{nsUri}}}{localName} has been removed", position);
+    }
+
+    private static void ThrowIfReservedFunctionName(string? prefix, string localName, int position)
+    {
+        if (string.IsNullOrEmpty(prefix) && ReservedFunctionNames.Contains(localName))
+            throw new ParseException($"XPST0003: '{localName}' is a reserved function name and cannot be used in a function call or named function reference", position);
     }
 
     private List<XPathAstNode> ParseArgumentList()

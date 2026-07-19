@@ -13,6 +13,8 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 26-06-2026     | Added URI-qualified wildcard node-test parsing tests                                     |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | UnaryLookup parsing, keyword/qualified lookup keys, placeholder-vs-lookup disambiguation |
+//                      | Charles Korthout | 0.4   | 19-07-2026     | Reserved function names in function calls and named function references raise XPST0003   |
+//                      | Charles Korthout | 0.5   | 19-07-2026     | Removed function-call reserved-name tests; kept named-function-reference tests           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -292,6 +294,25 @@ public class ParserTests
         var node = AssertParse<NamedFunctionRefNode>("abs#1");
         Assert.Equal("abs", node.LocalName);
         Assert.Equal(1, node.Arity);
+    }
+
+    [Theory]
+    [InlineData("attribute#0")]
+    [InlineData("comment#0")]
+    [InlineData("document-node#0")]
+    [InlineData("element#0")]
+    [InlineData("empty-sequence#0")]
+    [InlineData("item#0")]
+    [InlineData("namespace-node#0")]
+    [InlineData("node#0")]
+    [InlineData("processing-instruction#0")]
+    [InlineData("schema-attribute#0")]
+    [InlineData("schema-element#0")]
+    [InlineData("switch#0")]
+    public void NamedFunctionRef_ReservedName_RaisesXPST0003(string expr)
+    {
+        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse(expr));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     // ------------------------------------------------------------------
