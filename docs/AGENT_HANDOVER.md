@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `TBD` (QT3 Tier-2z: fn-lang / fn-in-scope-prefixes / fn-codepoints-to-string fixes)
+**Commit:** `c03a630` (QT3 Tier-2z: fn-lang / fn-in-scope-prefixes / fn-codepoints-to-string fixes)
 **Current focus:** **QT3 Tier-2z: `fn-lang` / `fn-in-scope-prefixes` / `fn-codepoints-to-string` clusters** — The residual failures were caused by missing type checks in `fn:lang` and `fn:in-scope-prefixes` and by XML 1.0-only `codepoints-to-string` tests running on an XML 1.1 implementation. Fixed `Lang_1` to raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context item; fixed `Lang_2` to raise `XPTY0004` when the second argument is not a single node. Fixed `InScopePrefixes` to raise `XPTY0004` when the argument is not a single element node (including document nodes and empty sequence). Added `K-CodepointToStringFunc-8/11/12` to `DocumentedSkips` as XML 1.0-only tests on an XML 1.1 implementation. Targeted pools now **0 failed**: `fn-lang` 36/0/10, `fn-in-scope-prefixes` 9/0/53, `fn-codepoints-to-string` 61/0/18. Full QT3 suite now at **14,747 passed / 130 failed / 16,944 skipped (46.34%)**; runnable pass rate **98.92%** (14747 / 14877). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: fn-lang, fn-in-scope-prefixes, fn-codepoints-to-string)
