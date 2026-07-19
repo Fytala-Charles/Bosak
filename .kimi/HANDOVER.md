@@ -4,32 +4,30 @@
 
 ## Session Date
 
-2026-07-18
+2026-07-19
 
 ## What Was Done
 
-- **QT3 Tier-2t `fn:id` / `fn:idref` / `fn:element-with-id` DTD support is complete.**
-  - Added DTD properties to `IXdmNode` (`HasDocumentType`, `DocumentTypeName`, `PublicId`, `SystemId`, `InternalSubset`) and implemented them on `XDocumentNode` via `XDocument.DocumentType`.
-  - `FunctionLibrary` parses the DTD internal subset for `ID`/`IDREF`/`IDREFS` attribute declarations and caches the result per document node.
-  - `fn:id`, `fn:idref`, and `fn:element-with-id` now match DTD-declared ID/IDREF attributes in addition to `id`/`xml:id`.
-  - `fn:idref` returns the matching attribute node(s) per F+O.
-  - Sequence arguments like `("id1", "id2")` are tokenized correctly via a new `ParseIdTokens(XdmValue)` overload.
-  - All six arities now raise `XPTY0004` when the context item (one-argument forms) or second argument (two-argument forms) is not a node.
-  - Added seven unit tests covering DTD-declared attributes, type-check errors, and DTD parser behavior.
-- **Updated QT3 baselines:** full suite **21,535 passed / 405 failed / 9,881 skipped (67.68%)**; runnable pass rate **98.15%**. Targeted `fn-id`/`fn-idref` pool **54/0/61**.
-- **Unit tests:** all passing **1,147/0**.
-- **Updated documentation:** `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/ARCHITECTURE.md`, `README.md`, `.kimi/HANDOVER.md`.
-- **Updated file change histories** for all modified source files.
-- **Build:** `dotnet build Bosak.sln` — 0 warnings, 0 errors.
+- **Deleted stale root `AGENT_HANDOVER.md`.** The canonical handover is in `docs/AGENT_HANDOVER.md`; the root copy was outdated (2026-06-05) and caused restart confusion.
+- **QT3 Tier-2u `xs:numeric` support is complete.**
+  - Added `xs:numeric` target to `VmEngine.TryCast` so `cast as xs:numeric` works.
+  - Casting from a member type (integer, decimal, float, double and their subtypes) preserves the source type.
+  - Casting from string, untypedAtomic, or boolean yields `xs:double`.
+  - Registered `xs:numeric#1` constructor in `FunctionLibrary`.
+  - Added nine unit tests covering constructor, cast-as, castable-as, and type preservation.
+- **Updated QT3 baselines:** full suite **21,545 passed / 395 failed / 9,881 skipped (67.71%)**; runnable pass rate **98.20%**. Targeted `xs-numeric` pool **19/0/3**.
+- **Unit tests:** all passing **1,299/0**.
+- **Updated documentation:** `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `.kimi/HANDOVER.md`.
+- **Updated file change histories** for all modified source and test files.
+- **Build:** `dotnet build Bosak.sln` — 0 errors, 1 pre-existing warning.
 
 ## Next Session Focus
 
-**QT3 Tier-2u: `xs-numeric`** (10 failures).
-`xs:numeric` is a union type in XSD; Bosak currently lacks the `xs:numeric#1` constructor and casts to `xs:numeric`, causing failures in `xs-numeric-007` through `xs-numeric-018`. Likely touches `FunctionLibrary` constructor/cast handling and possibly the `XsBuiltInTypes` registry.
+**QT3 Tier-2v: `K-NumericIntegerDivide`** (9 failures).
+The `idiv` operator and `fn:numeric-integer-divide` may not handle edge cases (overflow, division by zero error codes, negative operands) correctly.
 
-## Remaining Tier-2 Pools (after 2u)
+## Remaining Tier-2 Pools (after 2v)
 
-- `K-NumericIntegerDivide` (9)
 - `fn-has-children` (8)
 - `K2-NumericMod` (6)
 - `K-SeqIndexOfFunc` (6)

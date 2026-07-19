@@ -1,5 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
+**Date:** 2026-07-19
+**Commit:** `<uncommitted>`
+**Current focus:** **QT3 Tier-2u: `xs:numeric` support** — `VmEngine.TryCast` now handles the `xs:numeric` union type and `FunctionLibrary` registers the `xs:numeric#1` constructor. Full QT3 suite now at **21,545 passed / 395 failed / 9,881 skipped (67.71%)**; runnable pass rate improved to **98.20%** (21545 / 21940). Unit tests **1,299/0**.
+
+---
+
+## This Session Fixes (Tier-2u: xs:numeric)
+
+1. **Add `xs:numeric` cast target** — `VmEngine.TryCast` now recognizes the `xs:numeric` union type. Casting from a member type (integer, decimal, float, double, and their subtypes) preserves the source type; casting from string, untypedAtomic, or boolean yields `xs:double`.
+
+2. **Register `xs:numeric#1` constructor** — `FunctionLibrary` now exposes `xs:numeric($arg as xs:anyAtomicType?) as xs:numeric?`, implemented by `XsNumeric`.
+
+3. **Add unit tests** — `FunctionLibraryTests` adds `CastAs_Numeric_String`, `CastAs_Numeric_String_IsDouble`, `CastAs_Numeric_Integer_PreservesType`, `CastAs_Numeric_Decimal_PreservesType`, `CastAs_Numeric_Float_PreservesType`, `CastAs_Numeric_Boolean_YieldsDouble`, `CastableAs_Numeric_True`, `CastableAs_Numeric_False`, and `InstanceOf_Numeric`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.42: xs:numeric cast)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.49: xs:numeric#1 constructor)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.14: xs:numeric cast and constructor tests)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+- `AGENT_HANDOVER.md` (deleted stale root copy)
+
+## Next Tier-2 Pool
+
+**`K-NumericIntegerDivide`** (9 failures in the full QT3 suite): `idiv` and `fn:numeric-integer-divide` may not handle edge cases (overflow, division by zero error codes, negative operands) correctly. Other candidate pools: `fn-has-children` (8), `K2-NumericMod` (6), `K-SeqIndexOfFunc` (6), `cbcl-*` scattered clusters (~8+), `named-function-ref-reserved-function-names` (12), and `RangeExpr` BigInteger cases (12 — known limitation).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
 **Date:** 2026-07-18
 **Commit:** `7dfd1df` (QT3 Tier-2t: fn:id/fn:idref DTD support and XPTY0004 type checks)
 **Current focus:** **QT3 Tier-2t: `fn:id` / `fn:idref` / `fn:element-with-id` DTD support** — DTD-declared `ID`/`IDREF`/`IDREFS` attributes are now recognized, and the three functions raise `XPTY0004` when the context item or second argument is not a node. Full QT3 suite now at **21,535 passed / 405 failed / 9,881 skipped (67.68%)**; runnable pass rate improved to **98.15%** (21535 / 21940). Unit tests **1,147/0**.

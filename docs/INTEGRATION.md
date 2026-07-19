@@ -4,14 +4,20 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 18 July 2026
-> **Bosak baseline:** 1,147 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,535 passed / 405 failed / 9,881 skipped (67.68% / 98.15% of runnable tests)
+> **Last updated:** 19 July 2026
+> **Bosak baseline:** 1,299 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,545 passed / 395 failed / 9,881 skipped (67.71% / 98.20% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2u: `xs:numeric` cast and constructor support.
+  - `VmEngine.TryCast` now recognizes the `xs:numeric` union type: member types are preserved, and string/untypedAtomic/boolean inputs yield `xs:double`.
+  - `FunctionLibrary` registers the `xs:numeric#1` constructor.
+  - `xs-numeric` targeted pool now **19 passed / 0 failed / 3 skipped**.
+  - Full QT3 now **21,545 / 395 / 9,881 = 67.71%** (runnable pass rate **98.20%**); unit tests **1,299/0**.
 
 - **2026-07-18** — QT3 Tier-2t: `fn:id` / `fn:idref` / `fn:element-with-id` DTD support.
   - `IXdmNode` gains DTD properties (`HasDocumentType`, `DocumentTypeName`, `PublicId`, `SystemId`, `InternalSubset`); `XDocumentNode` exposes `XDocument.DocumentType`.

@@ -44,6 +44,7 @@
 //                      | Charles Korthout | 2.11  | 16-07-2026     | Tier-2l: 32 format picture/locale tests, [Z99] zero-padding, calendar namespace fallback |
 //                      | Charles Korthout | 2.12  | 18-07-2026     | function-lookup context-dependent base-uri test (creator focus vs call-site focus)        |
 //                      | Charles Korthout | 2.13  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id DTD and XPTY0004 tests                               |
+//                      | Charles Korthout | 2.14  | 19-07-2026     | Tier-2u: xs:numeric cast and constructor tests                                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1557,6 +1558,57 @@ public class FunctionLibraryTests
 
     [Fact]
     public void CastAs_Boolean() => Assert.Equal("true", EvalStr("1 cast as xs:boolean"));
+
+    [Fact]
+    public void CastAs_Numeric_String() => Assert.Equal("12", EvalStr("xs:numeric('12')"));
+
+    [Fact]
+    public void CastAs_Numeric_String_IsDouble()
+    {
+        var result = Evaluate("xs:numeric('12.5') instance of xs:double");
+        Assert.Equal(XdmValueKind.Boolean, result.Kind);
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void CastAs_Numeric_Integer_PreservesType()
+    {
+        var result = Evaluate("17 cast as xs:numeric");
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(17L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void CastAs_Numeric_Decimal_PreservesType()
+    {
+        var result = Evaluate("17.2 cast as xs:numeric");
+        Assert.Equal(XdmValueKind.Decimal, result.Kind);
+        Assert.Equal(17.2m, result.DecimalValue);
+    }
+
+    [Fact]
+    public void CastAs_Numeric_Float_PreservesType()
+    {
+        var result = Evaluate("xs:float(1e3) cast as xs:numeric");
+        Assert.Equal(XdmValueKind.Float, result.Kind);
+    }
+
+    [Fact]
+    public void CastAs_Numeric_Boolean_YieldsDouble()
+    {
+        var result = Evaluate("true() cast as xs:numeric");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        Assert.Equal(1.0, result.DoubleValue);
+    }
+
+    [Fact]
+    public void CastableAs_Numeric_True() => Assert.Equal("true", EvalStr("'12.5' castable as xs:numeric"));
+
+    [Fact]
+    public void CastableAs_Numeric_False() => Assert.Equal("false", EvalStr("'12.5.7' castable as xs:numeric"));
+
+    [Fact]
+    public void InstanceOf_Numeric() => Assert.Equal("true", EvalStr("3.14 instance of xs:numeric"));
 
     [Fact]
     public void CastAs_DateTime()

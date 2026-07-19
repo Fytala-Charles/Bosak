@@ -118,6 +118,7 @@
 //                      | Charles Korthout | 5.46  | 18-07-2026     | fn:collection/fn:uri-collection use EvaluationContext.Collections + FODC errors         |
 //                      | Charles Korthout | 5.47  | 18-07-2026     | fn:function-lookup captures EvaluationContext so context-dependent functions use it   |
 //                      | Charles Korthout | 5.48  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id support DTD-declared ID/IDREF and raise XPTY0004    |
+//                      | Charles Korthout | 5.49  | 19-07-2026     | Tier-2u: xs:numeric cast and xs:numeric#1 constructor                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -2197,6 +2198,13 @@ public static class FunctionLibrary
                 NamespaceUri = Namespaces.Xs, LocalName = "float", Arity = 1,
                 ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Float,
                 Implementation = XsFloat
+            },
+            [(Namespaces.Xs, "numeric", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "numeric", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Double,
+                ParameterTypeNames = ["xs:anyAtomicType?"], ReturnTypeName = "xs:numeric?",
+                Implementation = XsNumeric
             },
             [(Namespaces.Xs, "boolean", 1)] = new()
             {
@@ -5392,6 +5400,9 @@ public static class FunctionLibrary
 
     private static XdmValue XsFloat(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "float");
+
+    private static XdmValue XsNumeric(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "numeric");
 
     private static XdmValue XsBoolean(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "boolean");

@@ -75,6 +75,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.40  | 15-07-2026     | Tier-2k: annotation-aware instance-of (integer/string/duration supertype walks, nmtoken); 'to' operand validation (XPTY0004); value-comparison string-vs-numeric XPTY0004; general-comparison untypedAtomic rule-b casting via primitive base type; for/some/every bind namespace-qualified variables; duration casts keep subtype annotation |
 //                      | Charles Korthout | 2.41  | 18-07-2026     | NamedFunctionItem dynamic calls use defining-context focus (fn:function-lookup base-uri) |
+//                      | Charles Korthout | 2.42  | 19-07-2026     | Tier-2u: xs:numeric cast and xs:numeric#1 constructor                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -4306,6 +4307,30 @@ public static class VmEngine
                 if (TryParseFloat(value.ToString(), out var flt))
                 {
                     result = XdmValue.FromFloat(flt);
+                    return true;
+                }
+                return false;
+
+            case "numeric":
+                // xs:numeric is a union type of xs:double, xs:float, xs:decimal.
+                // Casting from a member type preserves the source type; casting from
+                // string, untypedAtomic, or boolean yields xs:double.
+                if (value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float)
+                {
+                    result = value;
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Boolean)
+                {
+                    result = XdmValue.FromDouble(value.BooleanValue ? 1.0 : 0.0);
+                    return true;
+                }
+                if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
+                    or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Node)
+                    return false;
+                if (TryParseDouble(value.ToString(), out var numericDbl))
+                {
+                    result = XdmValue.FromDouble(numericDbl);
                     return true;
                 }
                 return false;
