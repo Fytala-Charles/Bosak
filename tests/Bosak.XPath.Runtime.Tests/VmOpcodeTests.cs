@@ -12,10 +12,14 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 19-07-2026     | Concatenate test uses node values; added LoadNode opcode usage                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
+using System.Xml.Linq;
 using Xunit;
 
 namespace Bosak.XPath.Runtime.Tests;
@@ -270,20 +274,22 @@ public class VmOpcodeTests
     [Fact]
     public void Concatenate()
     {
+        var node1 = XdmValue.FromNode(new XDocumentNode(new XElement("a")));
+        var node2 = XdmValue.FromNode(new XDocumentNode(new XElement("b")));
         var result = Run(
             new IrInstruction[] {
                 new IrInstruction(IrOpCode.SequenceStart, 1),
-                new IrInstruction(IrOpCode.LoadInteger, 2, 0, 0, 0),
+                new IrInstruction(IrOpCode.LoadNode, 2, 0),
                 new IrInstruction(IrOpCode.SequenceAdd, 1, 2),
                 new IrInstruction(IrOpCode.SequenceEnd, 1),
                 new IrInstruction(IrOpCode.SequenceStart, 2),
-                new IrInstruction(IrOpCode.LoadInteger, 3, 0, 0, 1),
+                new IrInstruction(IrOpCode.LoadNode, 3, 1),
                 new IrInstruction(IrOpCode.SequenceAdd, 2, 3),
                 new IrInstruction(IrOpCode.SequenceEnd, 2),
                 new IrInstruction(IrOpCode.Concatenate, 0, 1, 2),
                 new IrInstruction(IrOpCode.Return, 0)
             },
-            new object?[] { 1L, 2L });
+            new object?[] { node1, node2 });
         Assert.True(result.IsSequence);
     }
 

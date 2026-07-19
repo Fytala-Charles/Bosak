@@ -85,6 +85,8 @@
 //                      | Charles Korthout | 2.49  | 19-07-2026     | NormalizeSequence stable-sorts namespace nodes by owner element so namespace axis is document-ordered |
 //                      | Charles Korthout | 2.50  | 19-07-2026     | Duration multiply/divide uses round-half-up for yearMonth and overflow-safe decimal for dayTime |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.51  | 19-07-2026     | Tier-2z: union/intersect/except require node sequences; added LoadNode VM opcode           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -319,6 +321,11 @@ public static class VmEngine
                     ip++;
                     break;
 
+                case IrOpCode.LoadNode:
+                    registers[instr.RegisterA] = (XdmValue)literalPool[instr.Operand]!;
+                    ip++;
+                    break;
+
                 case IrOpCode.LoadEmptySequence:
                     registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
                     ip++;
@@ -443,6 +450,8 @@ public static class VmEngine
                     {
                         var left = MaterializeSequence(registers[instr.RegisterB]);
                         var right = MaterializeSequence(registers[instr.RegisterC]);
+                        RequireNodeSequence(left);
+                        RequireNodeSequence(right);
                         var combined = new List<XdmValue>(left.Length + right.Length);
                         combined.AddRange(left);
                         combined.AddRange(right);
@@ -456,6 +465,8 @@ public static class VmEngine
                     {
                         var left = MaterializeSequence(registers[instr.RegisterB]);
                         var right = MaterializeSequence(registers[instr.RegisterC]);
+                        RequireNodeSequence(left);
+                        RequireNodeSequence(right);
                         var rightNodes = new List<IXdmNode>();
                         foreach (var item in right)
                             if (item.IsNode)
@@ -484,6 +495,8 @@ public static class VmEngine
                     {
                         var left = MaterializeSequence(registers[instr.RegisterB]);
                         var right = MaterializeSequence(registers[instr.RegisterC]);
+                        RequireNodeSequence(left);
+                        RequireNodeSequence(right);
                         var rightNodes = new List<IXdmNode>();
                         foreach (var item in right)
                             if (item.IsNode)
@@ -2549,6 +2562,19 @@ public static class VmEngine
         combined.AddRange(nodes);
         combined.AddRange(nonNodes);
         return XdmValue.FromSequence(MaterializedSequence.FromList(combined));
+    }
+
+    /// <summary>
+    /// Validates that every item in a sequence is a node, raising XPTY0004 otherwise.
+    /// Used by union, intersect, and except operators.
+    /// </summary>
+    private static void RequireNodeSequence(XdmValue[] sequence)
+    {
+        foreach (var item in sequence)
+        {
+            if (!item.IsNode)
+                throw new InvalidOperationException("XPTY0004");
+        }
     }
 
     private static XdmValue FilterNodes(XdmValue input, Func<IXdmNode, bool> predicate)

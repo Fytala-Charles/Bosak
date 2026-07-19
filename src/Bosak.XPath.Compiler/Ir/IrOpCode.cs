@@ -16,6 +16,8 @@
 //                      | Charles Korthout | 0.4   | 27-05-2026     | Added DocumentRoot opcode for absolute XPath paths                                     |
 //                      | Charles Korthout | 0.5   | 30-05-2026     | Added PathStepMap opcode for per-context-item predicate evaluation                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 19-07-2026     | Added LoadNode opcode for unit-test node literals                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -56,6 +58,7 @@ public enum IrOpCode : byte
     LoadDecimal,
     LoadDouble,
     LoadBoolean,
+    LoadNode,
     LoadEmptySequence,
     Move,
     

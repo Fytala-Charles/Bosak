@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,345 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,766 passed / 111 failed / 16,944 skipped (46.40% / 99.25% of runnable tests)
+> **QT3 baseline:** 14,773 passed / 104 failed / 16,944 skipped (46.43% / 99.30% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `union` / `intersect` / `except` XPTY0004 validation.
+  - `VmEngine` now validates that all items in both operands of `union`, `intersect`, and `except` are nodes, raising `XPTY0004` for non-node operands.
+  - Added `RequireNodeSequence` helper and `LoadNode` VM opcode.
+  - Updated `VmOpcodeTests.Concatenate` to use node values.
+  - Targeted tests pass: `K2-SeqExcept-1`, `K2-SeqIntersect-1/43/44`, `K2-SeqUnion-5/46/47`.
+  - Full QT3 now **14,773 passed / 104 failed / 16,944 skipped = 46.43%** (runnable pass rate **99.30%**); unit tests **1,345/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn:adjust-date-to-timezone` / `fn:adjust-time-to-timezone` / `fn:adjust-dateTime-to-timezone` FODT0003 validation.
   - Added `ParseTimezoneOffset` helper to validate timezone offset arguments.

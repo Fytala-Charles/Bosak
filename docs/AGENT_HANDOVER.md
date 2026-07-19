@@ -1,6 +1,36 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `PENDING` (QT3 Tier-2z: union / intersect / except XPTY0004 validation)
+**Current focus:** **QT3 Tier-2z: sequence set-operator XPTY0004 cluster** — `union`, `intersect`, and `except` were silently ignoring non-node items instead of raising `XPTY0004` as required by XPath. The `Concatenate` VM opcode (used for `union`), `Intersect`, and `Except` now validate that every operand item is a node. This fixes the seven `K2-SeqExcept/Intersect/Union` failures. Added a `LoadNode` VM opcode so the unit test for `Concatenate` can exercise node sequences. Targeted tests now pass: `K2-SeqExcept-1`, `K2-SeqIntersect-1/43/44`, `K2-SeqUnion-5/46/47`. Full QT3 suite now at **14,773 passed / 104 failed / 16,944 skipped (46.43%)**; runnable pass rate **99.30%** (14773 / 14877). Unit tests **1,345/0**.
+
+## This Session Fixes (Tier-2z: sequence set-operator XPTY0004)
+
+1. **Node-sequence validation for set operators** — `VmEngine.ExecuteBlock` now calls `RequireNodeSequence` for `Concatenate` (used by `union`), `Intersect`, and `Except`. Any non-node item in either operand raises `XPTY0004` instead of being silently skipped.
+
+2. **`RequireNodeSequence` helper** — Added to `VmEngine` to centralize the node-sequence validation used by the three set operators.
+
+3. **`LoadNode` VM opcode** — Added to `IrOpCode` and `VmEngine` so unit tests can load `XdmValue` node literals directly into registers. Updated `VmOpcodeTests.Concatenate` to use node values, matching the union-only semantics of `Concatenate`.
+
+4. **Regression safety** — Full QT3 suite improved by **+7 passed, −7 failed** with no regressions in the targeted tests or unit tests.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.51: `RequireNodeSequence`, `Concatenate`/`Intersect`/`Except` validation, `LoadNode` handler)
+- `src/Bosak.XPath.Compiler/Ir/IrOpCode.cs` (v0.6: `LoadNode` opcode)
+- `tests/Bosak.XPath.Runtime.Tests/VmOpcodeTests.cs` (v0.2: `Concatenate` test uses node values via `LoadNode`)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `compare-011`, `fn-concatdbl2args-*`, `fn-datadbl1args-*`, `fn-doc-available-2`, `fn-exactly-onedbl1args-*`, `fn-floordbl1args-*`, `fn-implicit-timezone-*`, `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-*`, `fn-months-from-duration-20`, `K-MonthsFromDurationFunc-7`, `fn-not-28`, `fn-numberdbl1args-*`, `fn-number-3`, `fn-one-or-moredbl1args-*`, `fn-resolve-uri-*`, `fn-stringdbl1args-*`, `fn-substring-after/before-23`, `fn-upper-case-22`, `fn-years-from-duration-20`, `K-YearsFromDurationFunc-7`, `K2-SeqDeepEqualFunc-40`, `K2-DataFunc-6`, `fn-intersect-node-args-015/016`, `fn-union-node-args-015/016/017` (namespace serialization), `K-NodeNumberFunc-13/15`, `fn-zero-or-onedbl1args-*`, `xs-dateTimeStamp-*`, `K-DateAddDTD-*`, `op-boolean-equal-4`, `distinct-duration-equal-1`, `K2-StringLT-1`, `K-DateSubtractDTD-*`, `K-TimeSubtractDTD-*`, `op-numeric-divide-1`, `K-NumericSubtract-34/35`, `K-NumericUnaryPlus-1`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `ForExpr013`, `FunctionCall-*`, `K-FunctionCallExpr-*`, `K2-FunctionCallExpr-*`, `K-SeqExprInstanceOf-46/51`, `LetExpr020a`, `Literals017/025/028`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `errors-and-optimization-4`, `string-queries-results-q1`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `6d0cfff` (QT3 Tier-2z: adjust-date-to-timezone / adjust-time-to-timezone / adjust-dateTime-to-timezone FODT0003 validation)
 **Current focus:** **QT3 Tier-2z: timezone adjustment FODT0003 cluster** — `fn:adjust-date-to-timezone`, `fn:adjust-time-to-timezone`, and `fn:adjust-dateTime-to-timezone` two-arg forms were accepting timezone offsets outside the F+O-specified range of `-PT14H` to `+PT14H` and offsets with sub-minute resolution (seconds/milliseconds). Added a shared `ParseTimezoneOffset` helper that validates the offset and raises `FODT0003` for out-of-range or non-integral-minute values. Targeted pools now all **0 failed**: `fn-adjust-date-to-timezone` 37/0/4, `fn-adjust-time-to-timezone` 37/0/5, `fn-adjust-dateTime-to-timezone` 46/0/2. Full QT3 suite now at **14,766 passed / 111 failed / 16,944 skipped (46.40%)**; runnable pass rate **99.25%** (14766 / 14877). Unit tests **1,345/0**.
 
