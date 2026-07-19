@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `0fa6196` (QT3 Tier-2z: RangeExpr big-integer and general-comparison lazy enumeration)
+**Current focus:** **QT3 Tier-2z: `op-to` / `RangeExpr` cluster** — `to` expressions now accept integer operands that exceed `long.MaxValue` by storing them as `XdmValueKind.Decimal` annotated with the `xs:integer` schema type and generating a lazy `DecimalRangeSequence`. `CompareGeneral` no longer materializes both operands before comparing; it enumerates items lazily so huge ranges (e.g. 10^21 to 10^21+5×10^9) do not allocate billions of items or run for minutes. Targeted `op-to` pool now **166 passed / 0 failed / 2 skipped** (12 previously failing tests now pass). Full QT3 suite now at **21,632 passed / 305 failed / 9,884 skipped (67.94%)**; runnable pass rate improved to **98.61%** (21632 / 21937). Unit tests **1,343/0**.
+
+---
+
+## This Session Fixes (Tier-2z: RangeExpr)
+
+1. **Big-integer `to` operands** — `VmEngine.TryGetRangeOperand` accepts `xs:integer` values backed by `XdmValueKind.Decimal` (whole numbers) and `xs:untypedAtomic` strings that parse to whole decimals. The `Range` opcode chooses `IntegerRangeSequence` for ranges that fit in `long` and `DecimalRangeSequence` for larger ranges, returning `xs:integer`-annotated decimal items. This fixes `RangeExpr-409`, `RangeExpr-409a-e`, `RangeExpr-411`, and `RangeExpr-411a-e`.
+
+2. **Lazy general-comparison enumeration** — `CompareGeneral` now uses `EnumerateItemsForComparison` and `SequenceContainsBooleanItem` instead of `MaterializeSequence`. This avoids materializing huge ranges for relational and equality comparisons, so tests like `RangeExpr-409d` complete in milliseconds rather than attempting to allocate billions of items.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/DecimalRangeSequence.cs` (v0.1: lazy decimal-backed integer range sequence)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.47/v2.48: big-integer `to` support; lazy general-comparison enumeration)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`cbcl-*` residual clusters**. Other candidates: XSLT-specific edge cases, remaining schema-aware tests (skipped as unsupported dependency).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `16484ae` (QT3 Tier-2z: op/numeric-less-than unsignedLong overflow fix)
 **Current focus:** **QT3 Tier-2z: `op/numeric-less-than` cluster** — `xs:unsignedLong` values above `long.MaxValue` (e.g. `18446744073709551615`) are now represented as `XdmValueKind.Decimal` with the `unsignedLong` subtype annotation, so they can be cast from strings and compared correctly. `ItemInstanceOf` now accepts decimal-backed values whose schema type is an integer subtype. Targeted `op-numeric-less-than` pool now **154 passed / 0 failed / 29 skipped** (2 previously failing tests now pass). Full QT3 suite now at **21,620 passed / 317 failed / 9,884 skipped (67.93%)**; runnable pass rate improved to **98.56%** (21620 / 21937). Unit tests **1,343/0**.
 
