@@ -79,6 +79,7 @@
 //                      | Charles Korthout | 2.43  | 19-07-2026     | Tier-2v: idiv NaN/INF and numeric-literal+keyword boundary checks                       |
 //                      | Charles Korthout | 2.44  | 19-07-2026     | Tier-2x: floating-point mod by zero returns NaN instead of FOAR0001                     |
 //                      | Charles Korthout | 2.45  | 19-07-2026     | Castable opcode catches overflow/cast errors; empty sequence only castable for ?/*    |
+//                      | Charles Korthout | 2.46  | 19-07-2026     | xs:unsignedLong values above long.MaxValue stored as xs:decimal with subtype annotation; instance-of accepts decimal-backed integer subtypes |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -4197,6 +4198,57 @@ public static class VmEngine
             case "negativeinteger":
             case "nonpositiveinteger":
             case "nonnegativeinteger":
+                // xs:unsignedLong values can exceed long.MaxValue; handle them with decimal backing.
+                if (normalized == "unsignedlong")
+                {
+                    if (value.Kind == XdmValueKind.Integer)
+                    {
+                        if (value.IntegerValue < 0) return false;
+                        result = XdmValue.FromInteger(value.IntegerValue, normalized);
+                        return true;
+                    }
+                    if (value.Kind == XdmValueKind.Decimal)
+                    {
+                        decimal d = value.DecimalValue;
+                        if (d < 0 || d > ulong.MaxValue) return false;
+                        if (d <= long.MaxValue)
+                            result = XdmValue.FromInteger((long)d, normalized);
+                        else
+                            result = XdmValue.FromDecimal(d, normalized);
+                        return true;
+                    }
+                    if (value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float)
+                    {
+                        double d = value.DoubleValue;
+                        if (double.IsNaN(d) || double.IsInfinity(d)) return false;
+                        if (d < 0 || d > ulong.MaxValue) return false;
+                        if (d <= long.MaxValue)
+                            result = XdmValue.FromInteger((long)d, normalized);
+                        else
+                            result = XdmValue.FromDecimal((decimal)d, normalized);
+                        return true;
+                    }
+                    if (value.Kind == XdmValueKind.Boolean)
+                    {
+                        result = XdmValue.FromInteger(value.BooleanValue ? 1 : 0, normalized);
+                        return true;
+                    }
+                    if (value.Kind is XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime
+                        or XdmValueKind.Duration or XdmValueKind.QName or XdmValueKind.Node)
+                        return false;
+                    string s = value.ToString().Trim();
+                    if (s.StartsWith('+')) s = s[1..];
+                    if (ulong.TryParse(s, out var uInt))
+                    {
+                        if (uInt <= (ulong)long.MaxValue)
+                            result = XdmValue.FromInteger((long)uInt, normalized);
+                        else
+                            result = XdmValue.FromDecimal((decimal)uInt, normalized);
+                        return true;
+                    }
+                    return false;
+                }
+
                 if (value.Kind == XdmValueKind.Integer)
                 {
                     if (!IsIntegerInRange(value.IntegerValue, normalized))
@@ -5498,7 +5550,8 @@ public static class VmEngine
             "integer" or "int" or "long" or "short" or "byte"
                 or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
                 or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
-                => value.Kind == XdmValueKind.Integer && IsAtomicTypeSubtype(value.SchemaTypeName ?? "integer", normalized),
+                => (value.Kind == XdmValueKind.Integer || (value.Kind == XdmValueKind.Decimal && IsIntegerSchemaType(value.SchemaTypeName)))
+                   && IsAtomicTypeSubtype(value.SchemaTypeName ?? "integer", normalized),
             "decimal" => value.Kind is XdmValueKind.Decimal or XdmValueKind.Integer,
             "double" => value.Kind == XdmValueKind.Double,
             "float" => value.Kind == XdmValueKind.Float,
@@ -5631,6 +5684,15 @@ public static class VmEngine
             "nonnegativeinteger" => value >= 0,
             _ => true
         };
+    }
+
+    private static bool IsIntegerSchemaType(string? schemaTypeName)
+    {
+        if (string.IsNullOrEmpty(schemaTypeName)) return false;
+        return schemaTypeName.ToLowerInvariant() is
+            "integer" or "int" or "long" or "short" or "byte"
+            or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
+            or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger";
     }
 
     /// <summary>

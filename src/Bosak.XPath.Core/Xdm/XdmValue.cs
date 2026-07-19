@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 1.3   | 15-07-2026     | EBV: xs:anyURI string-like (non-empty); FORG0006 for date/time/duration/QName/binary    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 15-07-2026     | Tier-2k: annotated FromInteger/FromDuration overloads; EBV FORG0006 for String-kind hexBinary/base64Binary/gYear-family annotations |
+//                      | Charles Korthout | 1.5   | 19-07-2026     | Added FromDecimal with schemaTypeName for xs:unsignedLong overflow values               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -84,6 +85,9 @@ public readonly struct XdmValue
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDecimal(decimal value) => new(XdmValueKind.Decimal, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDecimal(decimal value, string schemaTypeName) => new(XdmValueKind.Decimal, reference: value, schemaTypeName: schemaTypeName);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromString(string value) => new(XdmValueKind.String, reference: value);
