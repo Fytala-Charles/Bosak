@@ -6,12 +6,20 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,345 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,747 passed / 130 failed / 16,944 skipped (46.34% / 98.92% of runnable tests)
+> **QT3 baseline:** 14,755 passed / 122 failed / 16,944 skipped (46.37% / 99.18% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `fn-string-length` / `fn-string-join` / `fn-string-to-codepoints` / `fn:remove` / `fn:replace` type checks.
+  - `fn:string-length()` zero-arg form now uses `fn:string(.)` semantics, so non-string atomic context items (e.g., integers) are converted to their string representation before counting code points.
+  - `fn:string-join()`, `fn:string-to-codepoints()`, `fn:replace()`, and `fn:replace()` four-arg form now use `RequireStringRequired` for required string parameters; the empty sequence raises `XPTY0004`.
+  - `fn:remove()` now uses `RequireInteger` for the position argument, raising `XPTY0004` for non-integer atomics or the empty sequence.
+  - Added `RequireStringRequired` and `RequireInteger` helpers to `FunctionLibrary`.
+  - Targeted pools now all **0 failed**: `fn-string-length` 33/0/3, `fn-string-join` 32/0/14, `fn-string-to-codepoints` 44/0/0, `fn-remove` 51/0/0, `fn-replace` 81/0/10.
+  - Full QT3 now **14,755 passed / 122 failed / 16,944 skipped = 46.37%** (runnable pass rate **99.18%**); unit tests **1,345/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn-lang` / `fn-in-scope-prefixes` / `fn-codepoints-to-string` fixes.
   - `fn:lang()` now raises `XPDY0002` for an absent context item and `XPTY0004` for a non-node context item; `fn:lang($test, $node)` raises `XPTY0004` when `$node` is not a single node.

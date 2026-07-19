@@ -132,6 +132,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.56  | 19-07-2026     | Tier-2z: fn:lang context-item and node-arg type checks; fn:in-scope-prefixes element-node validation; documented XML 1.0 codepoints-to-string skips |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.57  | 19-07-2026     | Tier-2z: fn:string-length#0 uses fn:string(.) semantics; type checks for string-join/string-to-codepoints/replace/remove |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3769,12 +3771,13 @@ public static class FunctionLibrary
     {
         var item = ctx.ContextItem;
         if (item.IsUndefined)
-            throw new InvalidOperationException("fn:string-length() called with no context item.");
+            throw new InvalidOperationException("XPDY0002: fn:string-length() called with no context item.");
+        // fn:string-length() is equivalent to fn:string-length(fn:string(.))
         return XdmValue.FromInteger(CountCodePoints(AtomizedString(item)));
     }
 
     private static XdmValue StringLength_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromInteger(CountCodePoints(AtomizedString(args[0])));
+        => XdmValue.FromInteger(CountCodePoints(RequireString(args[0], ctx.BackwardsCompatible)));
 
     private static int RoundForSubstring(double value)
     {
@@ -3912,7 +3915,7 @@ public static class FunctionLibrary
 
     private static XdmValue StringToCodepoints(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string s = AtomizedString(args[0]);
+        string s = RequireString(args[0], ctx.BackwardsCompatible);
         var values = new List<XdmValue>(s.Length);
         foreach (Rune rune in s.EnumerateRunes())
             values.Add(XdmValue.FromInteger(rune.Value));
@@ -5424,9 +5427,9 @@ public static class FunctionLibrary
     private static XdmValue Replace_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
-        string originalPattern = AtomizedString(args[1]);
+        string originalPattern = RequireStringRequired(args[1], ctx.BackwardsCompatible);
         var regex = RegexHelper.GetRegexForXsdPattern(originalPattern, RegexOptions.None, false);
-        string replacement = AtomizedString(args[2]);
+        string replacement = RequireStringRequired(args[2], ctx.BackwardsCompatible);
         RegexHelper.CheckZeroLengthMatch(regex);
         int groupCount = RegexHelper.CountCapturingGroups(originalPattern);
         string netReplacement = RegexHelper.ValidateAndTranslateReplacement(replacement, groupCount);
@@ -5436,9 +5439,9 @@ public static class FunctionLibrary
     private static XdmValue Replace_4(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
-        string originalPattern = AtomizedString(args[1]);
-        string replacement = AtomizedString(args[2]);
-        var options = RegexHelper.ParseRegexFlags(AtomizedString(args[3]), out bool isQuoteMode, out bool caseInsensitive);
+        string originalPattern = RequireStringRequired(args[1], ctx.BackwardsCompatible);
+        string replacement = RequireStringRequired(args[2], ctx.BackwardsCompatible);
+        var options = RegexHelper.ParseRegexFlags(RequireStringRequired(args[3], ctx.BackwardsCompatible), out bool isQuoteMode, out bool caseInsensitive);
         Regex regex;
         string netReplacement;
         if (isQuoteMode)
@@ -7071,10 +7074,10 @@ public static class FunctionLibrary
         var posValue = AtomizeValue(args[1]);
         if (posValue.IsUndefined || IsEmptySequence(posValue))
             return XdmValue.FromSequence(MaterializedSequence.FromList(target));
-        double posD = ToDoubleValueStrict(posValue);
-        if (double.IsNaN(posD) || posD < 1 || posD > target.Count)
+        long pos = RequireInteger(posValue, ctx.BackwardsCompatible);
+        if (pos < 1 || pos > target.Count)
             return XdmValue.FromSequence(MaterializedSequence.FromList(target));
-        target.RemoveAt((int)posD - 1);
+        target.RemoveAt((int)pos - 1);
         return XdmValue.FromSequence(MaterializedSequence.FromList(target));
     }
 
@@ -7500,7 +7503,7 @@ public static class FunctionLibrary
     private static XdmValue StringJoin(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var items = Materialize(args[0]);
-        string sep = AtomizedString(args[1]);
+        string sep = RequireStringRequired(args[1], ctx.BackwardsCompatible);
         var strings = new List<string>(items.Count);
         foreach (var item in items)
             strings.Add(AtomizedString(item));
@@ -8085,6 +8088,54 @@ public static class FunctionLibrary
                 throw new InvalidOperationException("XPTY0004");
         }
         return RequireString(value, backwardsCompatible);
+    }
+
+    /// <summary>
+    /// Validates that the value is suitable for an xs:integer parameter.
+    /// Atomizes if needed; empty sequence and non-integer atomics (including decimal/double/float)
+    /// raise XPTY0004. xs:untypedAtomic is parsed as an integer.
+    /// </summary>
+    private static long RequireInteger(XdmValue value, bool backwardsCompatible = false)
+    {
+        if (value.IsUndefined)
+            throw new InvalidOperationException("XPTY0004");
+
+        XdmValue atomized = value.IsNode ? AtomizeValue(value) : value;
+
+        if (atomized.IsSequence)
+        {
+            bool any = false;
+            foreach (var unused in XdmSequence.FromSource(atomized.SequenceValue!))
+            {
+                any = true;
+                break;
+            }
+            if (!any)
+                throw new InvalidOperationException("XPTY0004");
+        }
+
+        if (atomized.Kind == XdmValueKind.Integer)
+            return atomized.IntegerValue;
+
+        if (IsUntypedAtomic(atomized))
+        {
+            if (long.TryParse(atomized.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed))
+                return parsed;
+            throw new InvalidOperationException("XPTY0004");
+        }
+
+        if (backwardsCompatible && atomized.IsAtomic)
+        {
+            // XPath 1.0 compatibility: numeric values are coerced to integer.
+            if (atomized.Kind == XdmValueKind.Decimal)
+                return (long)atomized.DecimalValue;
+            if (atomized.Kind is XdmValueKind.Double or XdmValueKind.Float)
+                return (long)atomized.DoubleValue;
+            if (atomized.Kind == XdmValueKind.Integer)
+                return atomized.IntegerValue;
+        }
+
+        throw new InvalidOperationException("XPTY0004");
     }
 
     private static XdmValue AtomizeValue(XdmValue value)

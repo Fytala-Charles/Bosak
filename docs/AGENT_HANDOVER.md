@@ -1,6 +1,36 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `741b431` (QT3 Tier-2z: fn-string-length / fn-string-join / fn-string-to-codepoints / fn:remove / fn:replace type checks)
+**Current focus:** **QT3 Tier-2z: string/sequence function type-error cluster** — Fixed `fn:string-length()` zero-arg form to use `fn:string(.)` semantics so non-string atomic context items (e.g., integers) are converted to their string representation before counting code points. Hardened `fn:string-join`, `fn:string-to-codepoints`, `fn:replace`, and `fn:remove` against type errors by using `RequireStringRequired` for required string parameters and the new `RequireInteger` helper for the position argument. Added `RequireStringRequired` and `RequireInteger` helpers to `FunctionLibrary`. Targeted pools now all **0 failed**: `fn-string-length` 33/0/3, `fn-string-join` 32/0/14, `fn-string-to-codepoints` 44/0/0, `fn-remove` 51/0/0, `fn-replace` 81/0/10. Full QT3 suite now at **14,755 passed / 122 failed / 16,944 skipped (46.37%)**; runnable pass rate **99.18%** (14755 / 14877). Unit tests **1,345/0**.
+
+## This Session Fixes (Tier-2z: string/sequence function type checks)
+
+1. **`fn:string-length()` zero-arg semantics** — `StringLength_0` now applies `fn:string(.)` conversion via `AtomizedString(ctx.ContextItem)` before counting code points. This fixes `fn-string-length-24` (`(1 to 100)[string-length() = 3]`, context item is an integer) and correctly raises `XPDY0002` for an absent context item or `FOTY0013` for function/map/array context items.
+
+2. **Required string parameter validation** — `StringJoin`, `StringToCodepoints`, `Replace_3`, and `Replace_4` now use `RequireStringRequired` for required string arguments (separator, pattern, replacement, flags). The empty sequence now raises `XPTY0004` instead of being silently coerced to `""`.
+
+3. **Integer position validation for `fn:remove`** — `Remove` now uses the new `RequireInteger` helper for the position argument, raising `XPTY0004` for non-integer atomics (including `xs:decimal`, `xs:double`, `xs:float`) and the empty sequence.
+
+4. **New helpers** — Added `RequireStringRequired` (empty sequence is `XPTY0004`) and `RequireInteger` (validates `xs:integer` / `xs:untypedAtomic` integer parsing, with backwards-compatible numeric coercion) to `FunctionLibrary`.
+
+5. **Regression safety** — Full QT3 suite improved by **+8 passed, −8 failed** with no regressions in the targeted pools or unit tests.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.57: `StringLength_0`, `StringJoin`, `StringToCodepoints`, `Replace_3/4`, `Remove`, `RequireStringRequired`, `RequireInteger`)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton failures from the full QT3 suite: `K-AdjDateToTimezoneFunc-*`, `fn-ceilingdbl1args-*`, `compare-011`, `fn-doc-available-2`, `fn-implicit-timezone-*`, `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-*`, `fn-months-from-duration-20`, `fn-not-28`, `fn-number-3`, `fn-resolve-uri-*`, `fn-substring-after/before-23`, `fn-upper-case-22`, `K2-SeqDeepEqualFunc-40`, `K2-DataFunc-6`, `K2-SeqExcept/Intersect/Union` XPTY0004 cases, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K2-StringLT-1`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `errors-and-optimization-4`, `string-queries-results-q1`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `c03a630` (QT3 Tier-2z: fn-lang / fn-in-scope-prefixes / fn-codepoints-to-string fixes)
 **Current focus:** **QT3 Tier-2z: `fn-lang` / `fn-in-scope-prefixes` / `fn-codepoints-to-string` clusters** — The residual failures were caused by missing type checks in `fn:lang` and `fn:in-scope-prefixes` and by XML 1.0-only `codepoints-to-string` tests running on an XML 1.1 implementation. Fixed `Lang_1` to raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context item; fixed `Lang_2` to raise `XPTY0004` when the second argument is not a single node. Fixed `InScopePrefixes` to raise `XPTY0004` when the argument is not a single element node (including document nodes and empty sequence). Added `K-CodepointToStringFunc-8/11/12` to `DocumentedSkips` as XML 1.0-only tests on an XML 1.1 implementation. Targeted pools now **0 failed**: `fn-lang` 36/0/10, `fn-in-scope-prefixes` 9/0/53, `fn-codepoints-to-string` 61/0/18. Full QT3 suite now at **14,747 passed / 130 failed / 16,944 skipped (46.34%)**; runnable pass rate **98.92%** (14747 / 14877). Unit tests **1,345/0**.
 
