@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `<uncommitted>` (QT3 Tier-2x: op-numeric-mod floating-point mod-by-zero returns NaN)
+**Commit:** `8c81587` (QT3 Tier-2x: op-numeric-mod floating-point mod-by-zero returns NaN)
 **Current focus:** **QT3 Tier-2x: `op-numeric-mod`** — `VmEngine.Modulo` now follows IEEE 754 semantics for `xs:double` and `xs:float`: mod by zero returns `NaN` instead of raising `FOAR0001`. Integer and decimal mod by zero continue to raise `FOAR0001`. Targeted `op-numeric-mod` pool now **113 passed / 0 failed / 11 skipped** (was 107/6/11). Full QT3 suite now at **21,576 passed / 364 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.34%** (21576 / 21940). Unit tests **1,317/0**.
 
 ---
