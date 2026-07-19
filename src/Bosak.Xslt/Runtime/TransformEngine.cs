@@ -185,6 +185,8 @@
 //                      | Charles Korthout | 6.14  | 14-07-2026     | xsl:analyze-string uses cached XSD regex translation + compiled-Regex cache             |
 //                      | Charles Korthout | 6.15  | 15-07-2026     | fn:transform: global-context-item, default-mode routing, raw result extraction, absent principal output |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.16  | 19-07-2026     | xsl:analyze-string adapts to new flags-aware ParseRegexFlags/ValidateAndTranslatePattern |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -16027,11 +16029,11 @@ public sealed class TransformEngine
         var flagsAttr = instruction.Attribute("flags")?.Value ?? string.Empty;
         string flags = EvaluateAvt(flagsAttr, instruction);
 
-        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode);
+        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode, out bool caseInsensitive);
         if (isQuoteMode)
             pattern = Regex.Escape(pattern);
         else
-            pattern = RegexHelper.ValidateAndTranslatePatternCached(pattern, options);
+            pattern = RegexHelper.ValidateAndTranslatePatternCached(pattern, options, caseInsensitive);
 
         var matchingChild = instruction.Element(XName.Get("matching-substring", xsl));
         var nonMatchingChild = instruction.Element(XName.Get("non-matching-substring", xsl));

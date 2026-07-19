@@ -16,6 +16,8 @@
 //                      | Charles Korthout | 0.4   | 11-07-2026     | Translate XSD char classes via XsdCharClasses with pinned Unicode 9.0 data              |
 //                      | Charles Korthout | 0.5   | 14-07-2026     | Translation/Regex caches; always Compiled (NonBacktracking silently mis-matched U+000A) |
 //                      | Charles Korthout | 0.6   | 15-07-2026     | QT3 regex cluster: dot excludes \r, x-flag whitespace strip, FORX0002 for backrefs to unclosed groups
+//                      | Charles Korthout | 0.7   | 19-07-2026     | XPath 'i' flag: case-fold during translation; ParseRegexFlags returns caseInsensitive flag      |
+//                      | Charles Korthout | 0.8   | 19-07-2026     | XPath 'i' flag: use RegexOptions.IgnoreCase, wrap class atoms in (?-i:)                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -33,16 +35,21 @@ public static class RegexHelper
     /// <summary>
     /// Parses the flags string used by <c>fn:matches</c>, <c>fn:replace</c>,
     /// <c>fn:tokenize</c>, <c>fn:analyze-string</c>, and <c>xsl:analyze-string</c>.
+    /// The <c>i</c> flag is mapped to <see cref="RegexOptions.IgnoreCase"/> so that
+    /// .NET handles literal case-folding and back-references; the <paramref name="caseInsensitive"/>
+    /// out parameter is still returned so that the XSD translator can wrap category and
+    /// bracketed class atoms in <c>(?-i:...)</c>, keeping them case-sensitive per XPath semantics.
     /// </summary>
-    public static RegexOptions ParseRegexFlags(string flags, out bool isQuoteMode)
+    public static RegexOptions ParseRegexFlags(string flags, out bool isQuoteMode, out bool caseInsensitive)
     {
         var options = RegexOptions.None;
         isQuoteMode = false;
+        caseInsensitive = false;
         foreach (char c in flags)
         {
             switch (c)
             {
-                case 'i': options |= RegexOptions.IgnoreCase; break;
+                case 'i': caseInsensitive = true; options |= RegexOptions.IgnoreCase; break;
                 case 'm': options |= RegexOptions.Multiline; break;
                 case 's': options |= RegexOptions.Singleline; break;
                 case 'x': options |= RegexOptions.IgnorePatternWhitespace; break;
@@ -71,12 +78,12 @@ public static class RegexHelper
     /// mode) are known. In non-multiline mode, <c>$</c> is translated to <c>\z</c> so that it
     /// matches only the absolute end of the string, not the position before a final newline.
     /// </summary>
-    public static string ValidateAndTranslatePattern(string pattern, RegexOptions options)
+    public static string ValidateAndTranslatePattern(string pattern, RegexOptions options, bool caseInsensitive)
     {
         if ((options & RegexOptions.IgnorePatternWhitespace) != 0)
             pattern = StripPatternWhitespace(pattern);
         ValidateXsdRegex(pattern);
-        return TranslateEndAnchor(TranslateDot(TranslateBackreferences(XsdCharClasses.Translate(pattern)), options), (options & RegexOptions.Multiline) != 0);
+        return TranslateEndAnchor(TranslateDot(TranslateBackreferences(XsdCharClasses.Translate(pattern, caseInsensitive)), options), (options & RegexOptions.Multiline) != 0);
     }
 
     /// <summary>
@@ -139,26 +146,26 @@ public static class RegexHelper
             throw new InvalidOperationException("FORX0003");
     }
 
-    private static readonly System.Collections.Concurrent.ConcurrentDictionary<(string Pattern, RegexOptions Options), string> TranslationCache = new();
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<(string Pattern, RegexOptions Options, bool CaseInsensitive), string> TranslationCache = new();
 
     /// <summary>
-    /// <see cref="ValidateAndTranslatePattern(string, RegexOptions)"/> with a cache: hot paths
+    /// <see cref="ValidateAndTranslatePattern(string, RegexOptions, bool)"/> with a cache: hot paths
     /// such as <c>fn:matches</c> may translate the same literal pattern millions of times.
     /// The cache holds at most 512 entries and is cleared when full.
     /// </summary>
-    public static string ValidateAndTranslatePatternCached(string pattern, RegexOptions options)
+    public static string ValidateAndTranslatePatternCached(string pattern, RegexOptions options, bool caseInsensitive)
     {
-        var key = (pattern, options);
+        var key = (pattern, options, caseInsensitive);
         if (TranslationCache.TryGetValue(key, out var translated))
             return translated;
         if (TranslationCache.Count >= 512)
             TranslationCache.Clear();
-        translated = ValidateAndTranslatePattern(pattern, options);
+        translated = ValidateAndTranslatePattern(pattern, options, caseInsensitive);
         TranslationCache[key] = translated;
         return translated;
     }
 
-    private static readonly System.Collections.Concurrent.ConcurrentDictionary<(string Pattern, RegexOptions Options), Regex> RegexCache = new();
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<(string Pattern, RegexOptions Options, bool CaseInsensitive), Regex> RegexCache = new();
 
     /// <summary>
     /// Validates and translates an XSD pattern (cached) and returns a cached <see cref="Regex"/>
@@ -166,12 +173,12 @@ public static class RegexHelper
     /// <c>fn:matches</c>/<c>fn:replace</c> with large translated Unicode classes pay only a
     /// small dictionary lookup per call.
     /// </summary>
-    public static Regex GetRegexForXsdPattern(string originalPattern, RegexOptions options)
+    public static Regex GetRegexForXsdPattern(string originalPattern, RegexOptions options, bool caseInsensitive)
     {
-        var key = (originalPattern, options);
+        var key = (originalPattern, options, caseInsensitive);
         if (RegexCache.TryGetValue(key, out var cached))
             return cached;
-        string translated = ValidateAndTranslatePattern(originalPattern, options);
+        string translated = ValidateAndTranslatePattern(originalPattern, options, caseInsensitive);
         return CacheRegex(key, translated, options);
     }
 
@@ -185,13 +192,13 @@ public static class RegexHelper
     /// </summary>
     public static Regex GetRegex(string pattern, RegexOptions options)
     {
-        var key = (pattern, options);
+        var key = (pattern, options, false);
         if (RegexCache.TryGetValue(key, out var cached))
             return cached;
         return CacheRegex(key, pattern, options);
     }
 
-    private static Regex CacheRegex((string Pattern, RegexOptions Options) key, string pattern, RegexOptions options)
+    private static Regex CacheRegex((string Pattern, RegexOptions Options, bool CaseInsensitive) key, string pattern, RegexOptions options)
     {
         if (RegexCache.Count >= 512)
             RegexCache.Clear();

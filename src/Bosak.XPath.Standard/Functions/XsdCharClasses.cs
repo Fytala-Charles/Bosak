@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-07-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 15-07-2026     | Sorted \s literal (Complement requires normalized input); FORX0002 on empty char class  |
+//                      | Charles Korthout | 0.3   | 19-07-2026     | XPath 'i' flag: case-fold during translation; \p{} escapes unaffected (caselessmatch12-14) |
+//                      | Charles Korthout | 0.4   | 19-07-2026     | XPath 'i' flag: use RegexOptions.IgnoreCase, wrap class atoms in (?-i:)                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -26,13 +28,15 @@ namespace Bosak.XPath.Standard.Functions;
 /// (<c>[a-[b]]</c>) — against pinned Unicode 9.0.0 data, and emits an equivalent .NET regex
 /// fragment. All emitted classes exclude the surrogate range; astral members are emitted as
 /// surrogate-pair alternatives so that matching is based on whole Unicode code points.
+/// When the XPath <c>i</c> flag is active, class atoms are wrapped in <c>(?-i:...)</c> so that
+/// .NET's <see cref="RegexOptions.IgnoreCase"/> expands literals but leaves category and
+/// bracketed classes unchanged, matching XPath case-folding semantics.
 /// </summary>
 internal static class XsdCharClasses
 {
     private const int SurrogateLo = 0xD800;
     private const int SurrogateHi = 0xDFFF;
     private const int MaxCodePoint = 0x10FFFF;
-
     // Universe for negation/complement: every code point except the surrogate range.
     // (Surrogates are XML-noncharacters; astral characters must be matched as pairs, never as
     // individual code units, so no emitted class may contain the surrogate range.)
@@ -44,7 +48,16 @@ internal static class XsdCharClasses
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown with code <c>FORX0002</c> when the
     /// pattern contains an unknown category/block name or a malformed class expression.</exception>
-    public static string Translate(string pattern)
+    public static string Translate(string pattern) => Translate(pattern, false);
+
+    /// <summary>
+    /// Translates all XSD character-class constructs in <paramref name="pattern"/> to .NET
+    /// syntax. When <paramref name="caseInsensitive"/> is <c>true</c>, emitted class atoms
+    /// (category escapes, single-letter escapes, and bracketed class expressions) are wrapped
+    /// in <c>(?-i:...)</c> so that .NET's <see cref="RegexOptions.IgnoreCase"/> only affects
+    /// literal characters, matching XPath case-folding semantics.
+    /// </summary>
+    public static string Translate(string pattern, bool caseInsensitive)
     {
         var sb = new StringBuilder(pattern.Length + 16);
         int i = 0;
@@ -60,7 +73,10 @@ internal static class XsdCharClasses
                 {
                     i += 2;
                     int[] set = ReadEscapeSet(pattern, ref i, e);
-                    sb.Append(EmitAtom(set));
+                    // Category escapes \p{...} and \P{...} are never case-folded by the i flag;
+                    // wrap them in (?-i:...) so .NET's RegexOptions.IgnoreCase leaves them alone.
+                    bool isCategoryEscape = e is 'p' or 'P';
+                    sb.Append(caseInsensitive && isCategoryEscape ? MakeCaseSensitiveAtom(set) : EmitAtom(set));
                     continue;
                 }
                 // Any other escape passes through unchanged, but only XSD SingleCharEsc
@@ -79,15 +95,23 @@ internal static class XsdCharClasses
             }
             if (c == '[')
             {
-                int[] set = ParseClassExpression(pattern, ref i);
+                int[] set = ParseClassExpression(pattern, ref i, caseInsensitive);
+                // Bracketed class expressions are case-folded under the i flag; the fold is
+                // applied during parsing (single code points) and completed by the caller's
+                // RegexOptions.IgnoreCase (ranges).  Do not wrap in (?-i:...).
                 sb.Append(EmitAtom(set));
                 continue;
             }
+            // Literal characters pass through unchanged.  RegexOptions.IgnoreCase (applied by
+            // the caller) handles case-insensitive matching for literals, while class atoms are
+            // wrapped in (?-i:...) to prevent .NET from expanding them.
             sb.Append(c);
             i++;
         }
         return sb.ToString();
     }
+
+    private static string MakeCaseSensitiveAtom(int[] set) => "(?-i:" + EmitAtom(set) + ")";
 
     private static bool IsClassEscapeLetter(char e) => e is 'p' or 'P' or 'd' or 'D' or 'w' or 'W' or 's' or 'S' or 'i' or 'I' or 'c' or 'C';
 
@@ -170,7 +194,7 @@ internal static class XsdCharClasses
     /// the closing bracket. Handles negation and one level of subtraction (which may itself
     /// contain a nested subtraction, per the XSD grammar).
     /// </summary>
-    private static int[] ParseClassExpression(string pattern, ref int i)
+    private static int[] ParseClassExpression(string pattern, ref int i, bool caseInsensitive)
     {
         // pattern[i] == '['
         i++;
@@ -210,8 +234,10 @@ internal static class XsdCharClasses
                 FlushPending(set, pendingSingle);
                 pendingSingle = -1;
                 i++; // skip '-'; ParseClassExpression expects '['
-                int[] sub = ParseClassExpression(pattern, ref i);
+                int[] sub = ParseClassExpression(pattern, ref i, caseInsensitive);
                 int[] current = Normalize(set);
+                if (caseInsensitive)
+                    current = CaseFoldSet(current);
                 if (i >= pattern.Length || pattern[i] != ']')
                     throw new InvalidOperationException("FORX0002");
                 i++;
@@ -244,6 +270,8 @@ internal static class XsdCharClasses
         }
 
         int[] normalized = Normalize(set);
+        if (caseInsensitive)
+            normalized = CaseFoldSet(normalized);
         return negated ? Complement(normalized) : normalized;
     }
 
@@ -272,7 +300,7 @@ internal static class XsdCharClasses
             i += 2;
             if (IsClassEscapeLetter(e))
                 return (0, ReadEscapeSet(pattern, ref i, e));
-            return (e switch
+            int cp = e switch
             {
                 'n' => 0x0A,
                 'r' => 0x0D,
@@ -280,7 +308,8 @@ internal static class XsdCharClasses
                 '\\' or '|' or '.' or '-' or '^' or '$' or '?' or '*' or '+' or
                 '{' or '}' or '(' or ')' or '[' or ']' => e,
                 _ => throw new InvalidOperationException("FORX0002")
-            }, null);
+            };
+            return (cp, null);
         }
         // A literal code point, possibly an astral character (surrogate pair).
         // An unescaped '[' is not a valid class member in XSD (only the -[ subtraction form
@@ -296,6 +325,37 @@ internal static class XsdCharClasses
         }
         i++;
         return (c, null);
+    }
+
+    /// <summary>
+    /// Returns the case-insensitive closure of a normalized range set. Each code point in the
+    /// input ranges is expanded with its simple case-folded variants (BMP only). Used for the
+    /// XPath <c>i</c> flag on bracketed class expressions; category/escape escapes inside
+    /// classes are folded by the surrounding class fold.
+    /// </summary>
+    private static int[] CaseFoldSet(ReadOnlySpan<int> ranges)
+    {
+        var result = new List<int>(ranges.Length * 2);
+        for (int k = 0; k < ranges.Length; k += 2)
+        {
+            int lo = ranges[k];
+            int hi = ranges[k + 1];
+            for (int cp = lo; cp <= hi; cp++)
+            {
+                AddRange(result, cp, cp);
+                if (cp < 0x10000)
+                {
+                    char c = (char)cp;
+                    char lower = char.ToLowerInvariant(c);
+                    char upper = char.ToUpperInvariant(c);
+                    if (lower != c)
+                        AddRange(result, lower, lower);
+                    if (upper != c && upper != lower)
+                        AddRange(result, upper, upper);
+                }
+            }
+        }
+        return Normalize(result);
     }
 
     // ------------------------------------------------------------------

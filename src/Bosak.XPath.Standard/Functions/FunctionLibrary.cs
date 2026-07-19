@@ -122,6 +122,8 @@
 //                      | Charles Korthout | 5.50  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence fixes                     |
 //                      | Charles Korthout | 5.51  | 19-07-2026     | Tier-2y: fn:index-of uses eq semantics, validates single search/collation, NaN-safe    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.52  | 19-07-2026     | Tier-2z: regex functions use flags-aware ParseRegexFlags/ValidateAndTranslatePattern |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -4611,11 +4613,11 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(value))
             return XdmValue.FromNode(new XDocumentNode(result));
 
-        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode);
+        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode, out bool caseInsensitive);
         if (isQuoteMode)
             pattern = Regex.Escape(pattern);
         else
-            pattern = RegexHelper.ValidateAndTranslatePatternCached(pattern, options);
+            pattern = RegexHelper.ValidateAndTranslatePatternCached(pattern, options, caseInsensitive);
 
         RegexHelper.CheckZeroLengthMatch(pattern, options);
 
@@ -5307,17 +5309,17 @@ public static class FunctionLibrary
     {
         string input = RequireString(args[0]);
         string pattern = RequireStringRequired(args[1]);
-        return XdmValue.FromBoolean(RegexHelper.GetRegexForXsdPattern(pattern, RegexOptions.None).IsMatch(input));
+        return XdmValue.FromBoolean(RegexHelper.GetRegexForXsdPattern(pattern, RegexOptions.None, false).IsMatch(input));
     }
 
     private static XdmValue Matches_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = RequireString(args[0]);
         string pattern = RequireStringRequired(args[1]);
-        var options = RegexHelper.ParseRegexFlags(RequireStringRequired(args[2]), out bool isQuoteMode);
+        var options = RegexHelper.ParseRegexFlags(RequireStringRequired(args[2]), out bool isQuoteMode, out bool caseInsensitive);
         if (isQuoteMode)
             return XdmValue.FromBoolean(RegexHelper.GetRegex(Regex.Escape(pattern), options).IsMatch(input));
-        return XdmValue.FromBoolean(RegexHelper.GetRegexForXsdPattern(pattern, options).IsMatch(input));
+        return XdmValue.FromBoolean(RegexHelper.GetRegexForXsdPattern(pattern, options, caseInsensitive).IsMatch(input));
     }
 
 
@@ -5325,7 +5327,7 @@ public static class FunctionLibrary
     {
         string input = AtomizedString(args[0]);
         string originalPattern = AtomizedString(args[1]);
-        var regex = RegexHelper.GetRegexForXsdPattern(originalPattern, RegexOptions.None);
+        var regex = RegexHelper.GetRegexForXsdPattern(originalPattern, RegexOptions.None, false);
         string replacement = AtomizedString(args[2]);
         RegexHelper.CheckZeroLengthMatch(regex);
         int groupCount = RegexHelper.CountCapturingGroups(originalPattern);
@@ -5338,7 +5340,7 @@ public static class FunctionLibrary
         string input = AtomizedString(args[0]);
         string originalPattern = AtomizedString(args[1]);
         string replacement = AtomizedString(args[2]);
-        var options = RegexHelper.ParseRegexFlags(AtomizedString(args[3]), out bool isQuoteMode);
+        var options = RegexHelper.ParseRegexFlags(AtomizedString(args[3]), out bool isQuoteMode, out bool caseInsensitive);
         Regex regex;
         string netReplacement;
         if (isQuoteMode)
@@ -5348,7 +5350,7 @@ public static class FunctionLibrary
         }
         else
         {
-            regex = RegexHelper.GetRegexForXsdPattern(originalPattern, options);
+            regex = RegexHelper.GetRegexForXsdPattern(originalPattern, options, caseInsensitive);
             int groupCount = RegexHelper.CountCapturingGroups(originalPattern);
             netReplacement = RegexHelper.ValidateAndTranslateReplacement(replacement, groupCount);
         }
@@ -5383,10 +5385,10 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(input))
             return XdmValue.FromSequence(XdmSequence.Empty);
 
-        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode);
+        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode, out bool caseInsensitive);
         Regex regex = isQuoteMode
             ? RegexHelper.GetRegex(Regex.Escape(pattern), options)
-            : RegexHelper.GetRegexForXsdPattern(pattern, options);
+            : RegexHelper.GetRegexForXsdPattern(pattern, options, caseInsensitive);
 
         RegexHelper.CheckZeroLengthMatch(regex);
 
