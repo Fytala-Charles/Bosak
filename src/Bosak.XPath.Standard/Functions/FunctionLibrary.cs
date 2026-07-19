@@ -120,10 +120,12 @@
 //                      | Charles Korthout | 5.47  | 18-07-2026     | fn:function-lookup captures EvaluationContext so context-dependent functions use it   |
 //                      | Charles Korthout | 5.48  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id support DTD-declared ID/IDREF and raise XPTY0004    |
 //                      | Charles Korthout | 5.49  | 19-07-2026     | Tier-2u: xs:numeric cast and xs:numeric#1 constructor                                  |
+//                      | Charles Korthout | 5.50  | 19-07-2026     | cbcl fixes: XML 1.0 codepoints-to-string; QName whitespace validation; current-date/time use implicit timezone; distinct-values/index-of honor implicit timezone; duration*NaN raises FOCA0005 |
 //                      | Charles Korthout | 5.50  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence fixes                     |
 //                      | Charles Korthout | 5.51  | 19-07-2026     | Tier-2y: fn:index-of uses eq semantics, validates single search/collation, NaN-safe    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
+//                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -6806,6 +6808,9 @@ public static class FunctionLibrary
             return arg;
         if (SequenceLength(arg) > 1)
             throw new InvalidOperationException("fn:zero-or-one called with a sequence containing more than one item.");
+        // Sequence contains exactly one item: return that item.
+        foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
+            return item;
         return XdmValue.Undefined;
     }
 
@@ -7109,9 +7114,9 @@ public static class FunctionLibrary
     }
 
     private static XdmValue DistinctValues_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => DistinctValuesImpl(args[0], ctx.DefaultCollation);
+        => DistinctValuesImpl(args[0], ctx.DefaultCollation, ctx.ImplicitTimezoneOffsetMinutes);
 
-    private static XdmValue DistinctValuesImpl(XdmValue sequence, string collation)
+    private static XdmValue DistinctValuesImpl(XdmValue sequence, string collation, int implicitTimezoneOffsetMinutes)
     {
         var items = Materialize(sequence);
         var seen = new List<XdmValue>();
@@ -7122,7 +7127,7 @@ public static class FunctionLibrary
             bool isDistinct = true;
             foreach (var s in seen)
             {
-                if (AtomicValuesEqual(atomized, s, collation) || BothNaN(atomized, s))
+                if (AtomicValuesEqual(atomized, s, collation, implicitTimezoneOffsetMinutes) || BothNaN(atomized, s))
                 {
                     isDistinct = false;
                     break;
@@ -7150,14 +7155,15 @@ public static class FunctionLibrary
     {
         string collation = AtomizedString(args[1]);
         ValidateCollation(collation);
-        return DistinctValuesImpl(args[0], collation);
+        return DistinctValuesImpl(args[0], collation, ctx.ImplicitTimezoneOffsetMinutes);
     }
 
     /// <summary>
     /// Compares two atomized XDM values using XPath <c>eq</c> semantics and the
-    /// supplied collation for string comparisons.
+    /// supplied collation for string comparisons. Date/time values without an explicit
+    /// timezone are treated as having <paramref name="implicitTimezoneOffsetMinutes"/>.
     /// </summary>
-    private static bool AtomicValuesEqual(XdmValue a, XdmValue b, string collation)
+    private static bool AtomicValuesEqual(XdmValue a, XdmValue b, string collation, int implicitTimezoneOffsetMinutes)
     {
         if (a.IsUndefined || b.IsUndefined)
             return false;
@@ -7195,13 +7201,43 @@ public static class FunctionLibrary
             XdmValueKind.Integer => a.IntegerValue == b.IntegerValue,
             XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => a.DoubleValue == b.DoubleValue,
-            XdmValueKind.DateTime => a.DateTimeValue == b.DateTimeValue,
-            XdmValueKind.Date => a.DateValue == b.DateValue,
-            XdmValueKind.Time => a.TimeValue == b.TimeValue,
+            XdmValueKind.DateTime => DateTimeValuesEqual(a, b, XdmValueKind.DateTime, implicitTimezoneOffsetMinutes),
+            XdmValueKind.Date => DateTimeValuesEqual(a, b, XdmValueKind.Date, implicitTimezoneOffsetMinutes),
+            XdmValueKind.Time => DateTimeValuesEqual(a, b, XdmValueKind.Time, implicitTimezoneOffsetMinutes),
             XdmValueKind.QName => a.QNameValue.Equals(b.QNameValue),
             XdmValueKind.Uri => CompareStrings(a.StringValue, b.StringValue, collation) == 0,
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Compares date, time, or dateTime values per XPath eq semantics, treating values
+    /// without an explicit timezone as having the implicit timezone.
+    /// </summary>
+    private static bool DateTimeValuesEqual(XdmValue a, XdmValue b, XdmValueKind kind, int implicitTimezoneOffsetMinutes)
+    {
+        XPathDateTime GetXdt(XdmValue v)
+        {
+            return kind switch
+            {
+                XdmValueKind.DateTime => v.DateTimeXPathValue,
+                XdmValueKind.Date => v.DateXPathValue,
+                XdmValueKind.Time => v.TimeXPathValue,
+                _ => throw new InvalidOperationException()
+            };
+        }
+
+        bool aHasTz = a.HasTimezone;
+        bool bHasTz = b.HasTimezone;
+        var aXdt = GetXdt(a);
+        var bXdt = GetXdt(b);
+
+        var aEffective = aHasTz ? aXdt : new XPathDateTime(aXdt.Year, aXdt.Month, aXdt.Day, aXdt.Hour, aXdt.Minute, aXdt.Second, aXdt.Millisecond, implicitTimezoneOffsetMinutes, true);
+        var bEffective = bHasTz ? bXdt : new XPathDateTime(bXdt.Year, bXdt.Month, bXdt.Day, bXdt.Hour, bXdt.Minute, bXdt.Second, bXdt.Millisecond, implicitTimezoneOffsetMinutes, true);
+
+        var aUtc = XPathDateTimeHelper.NormalizeToUtc(aEffective);
+        var bUtc = XPathDateTimeHelper.NormalizeToUtc(bEffective);
+        return XPathDateTimeHelper.CompareComponents(aUtc, bUtc) == 0;
     }
 
     private static bool IsUntypedAtomic(XdmValue value)
@@ -7219,9 +7255,9 @@ public static class FunctionLibrary
         => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double;
 
     private static XdmValue IndexOf_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => IndexOfImpl(args[0], args[1], ctx.DefaultCollation);
+        => IndexOfImpl(args[0], args[1], ctx.DefaultCollation, ctx.ImplicitTimezoneOffsetMinutes);
 
-    private static XdmValue IndexOfImpl(XdmValue sequence, XdmValue search, string collation)
+    private static XdmValue IndexOfImpl(XdmValue sequence, XdmValue search, string collation, int implicitTimezoneOffsetMinutes)
     {
         // $search must be a single item (xs:anyAtomicType, not empty/multi sequence).
         if (IsEmptySequence(search))
@@ -7235,7 +7271,7 @@ public static class FunctionLibrary
         for (int i = 0; i < seq.Count; i++)
         {
             var atomizedItem = AtomizeValue(seq[i]);
-            if (AtomicValuesEqual(atomizedItem, atomizedSearch, collation))
+            if (AtomicValuesEqual(atomizedItem, atomizedSearch, collation, implicitTimezoneOffsetMinutes))
                 result.Add(XdmValue.FromInteger(i + 1));
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
@@ -7245,7 +7281,7 @@ public static class FunctionLibrary
     {
         string collation = RequireStringRequired(args[2]);
         ValidateCollation(collation);
-        return IndexOfImpl(args[0], args[1], collation);
+        return IndexOfImpl(args[0], args[1], collation, ctx.ImplicitTimezoneOffsetMinutes);
     }
 
     // ------------------------------------------------------------------
@@ -9358,28 +9394,34 @@ public static class FunctionLibrary
     }
 
     private static XdmValue CurrentDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromDateTime(ctx.CurrentDateTimeSnapshot, hasTimezone: true);
+    {
+        var now = ctx.CurrentDateTimeSnapshot;
+        var offset = TimeSpan.FromMinutes(ctx.ImplicitTimezoneOffsetMinutes);
+        return XdmValue.FromDateTime(new DateTimeOffset(now.DateTime, offset), hasTimezone: true);
+    }
 
     private static XdmValue CurrentDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var now = ctx.CurrentDateTimeSnapshot;
-        return XdmValue.FromDate(new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, now.Offset), hasTimezone: true);
+        var offset = TimeSpan.FromMinutes(ctx.ImplicitTimezoneOffsetMinutes);
+        return XdmValue.FromDate(new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, offset), hasTimezone: true);
     }
 
     private static XdmValue CurrentTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var now = ctx.CurrentDateTimeSnapshot;
-        // Keep the date part at year 1 when possible. For positive timezone offsets where the
+        var offset = TimeSpan.FromMinutes(ctx.ImplicitTimezoneOffsetMinutes);
+        // Keep the date part at year 1 when possible. For timezone offsets where the
         // local time is earlier than the offset, the UTC instant would fall before
         // DateTimeOffset.MinValue; fall back to day 2 in that case.
         DateTimeOffset time;
         try
         {
-            time = new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Offset);
+            time = new DateTimeOffset(1, 1, 1, now.Hour, now.Minute, now.Second, now.Millisecond, offset);
         }
         catch (ArgumentException)
         {
-            time = new DateTimeOffset(1, 1, 2, now.Hour, now.Minute, now.Second, now.Offset);
+            time = new DateTimeOffset(1, 1, 2, now.Hour, now.Minute, now.Second, now.Millisecond, offset);
         }
         return XdmValue.FromTime(time, hasTimezone: true);
     }
@@ -10397,9 +10439,48 @@ public static class FunctionLibrary
     {
         var ns = AtomizedString(args[0]);
         var lexical = AtomizedString(args[1]);
+        if (string.IsNullOrWhiteSpace(lexical))
+            throw new InvalidOperationException("FOCA0002");
+
         var local = lexical.Contains(':') ? lexical[(lexical.IndexOf(':') + 1)..] : lexical;
         var prefix = lexical.Contains(':') ? lexical[..lexical.IndexOf(':')] : string.Empty;
+        if (!IsValidNcName(local))
+            throw new InvalidOperationException("FOCA0002");
+        if (!string.IsNullOrEmpty(prefix) && !IsValidNcName(prefix))
+            throw new InvalidOperationException("FOCA0002");
+
         return XdmValue.FromQName(new XsQName(local, ns, prefix));
+    }
+
+    /// <summary>
+    /// Validates that <paramref name="name"/> conforms to the XML NCName production
+    /// (no colon, non-empty, starts with letter or underscore, remaining chars are
+    /// letters, digits, '.', '-', '_', or combining/extender characters).
+    /// </summary>
+    private static bool IsValidNcName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return false;
+
+        char first = name[0];
+        if (!(char.IsLetter(first) || first == '_'))
+            return false;
+
+        for (int i = 1; i < name.Length; i++)
+        {
+            char c = name[i];
+            if (char.IsLetterOrDigit(c) || c == '.' || c == '-' || c == '_')
+                continue;
+            var category = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c);
+            if (category is System.Globalization.UnicodeCategory.NonSpacingMark
+                or System.Globalization.UnicodeCategory.SpacingCombiningMark
+                or System.Globalization.UnicodeCategory.ConnectorPunctuation
+                or System.Globalization.UnicodeCategory.Format)
+                continue;
+            return false;
+        }
+
+        return true;
     }
 
     private static XdmValue ResolveQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

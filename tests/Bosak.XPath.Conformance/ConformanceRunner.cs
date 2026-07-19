@@ -17,6 +17,8 @@
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Tests without environment resolve relative URIs against the test-set directory           |
 //                      | Charles Korthout | 0.6   | 15-07-2026     | Referenced environments without static-base-uri also fall back to test-set directory     |
 //                      | Charles Korthout | 0.8   | 19-07-2026     | DocumentedSkips: numberformat63/64 precision limitation                                  |
+//                      | Charles Korthout | 0.9   | 19-07-2026     | Added optional test-name filter for targeted cbcl-style conformance runs                 |
+//                      | Charles Korthout | 1.0   | 19-07-2026     | Load catalog/test sets with PreserveWhitespace so assert-string-value keeps spaces/CR     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -27,7 +29,8 @@ namespace Bosak.XPath.Conformance;
 internal sealed class ConformanceRunner
 {
     private readonly string _suitePath;
-    private readonly string? _filter;
+    private readonly string? _setFilter;
+    private readonly string? _testFilter;
     private readonly XNamespace _ns = "http://www.w3.org/2010/09/qt-fots-catalog";
     private readonly DependencyFilter _dependencyFilter = new();
     private readonly TestExecutor _executor = new();
@@ -41,6 +44,10 @@ internal sealed class ConformanceRunner
         // Upstream defect: the expected value in the catalog carries an artifactual leading
         // space (formatting), but U+09BE by itself is the only correct result.
         ["cbcl-fn-normalize-unicode-006"] = "Upstream defect: expected value has an artifactual leading space",
+        // XML 1.0-specific tests on an XML 1.1-capable implementation: these require FOCH0001
+        // for C0 controls that XML 1.1 allows.
+        ["cbcl-codepoints-to-string-023"] = "XML 1.0-only test on an XML 1.1 implementation",
+        ["cbcl-codepoints-to-string-024"] = "XML 1.0-only test on an XML 1.1 implementation",
         // Platform limitation (AGENTS.md): DateTimeOffset minimum year is 1; year -2 needs a
         // custom date representation.
         ["fo-test-fn-year-from-dateTime-005"] = "Platform limitation: DateTimeOffset does not support year -2",
@@ -53,17 +60,18 @@ internal sealed class ConformanceRunner
         ["numberformat64"] = "Platform limitation: .NET decimal cannot preserve the precision of this decimal literal",
     };
 
-    public ConformanceRunner(string suitePath, string? filter = null)
+    public ConformanceRunner(string suitePath, string? setFilter = null, string? testFilter = null)
     {
         _suitePath = suitePath;
-        _filter = filter;
+        _setFilter = setFilter;
+        _testFilter = testFilter;
     }
 
     public TestReport Run()
     {
         var report = new TestReport();
         string catalogPath = Path.Combine(_suitePath, "catalog.xml");
-        var catalog = XDocument.Load(catalogPath);
+        var catalog = XDocument.Load(catalogPath, LoadOptions.PreserveWhitespace);
         var testSetRefs = catalog.Descendants(_ns + "test-set").ToList();
 
         Console.WriteLine($"Discovered {testSetRefs.Count} test sets.");
@@ -80,7 +88,7 @@ internal sealed class ConformanceRunner
             if (string.IsNullOrEmpty(fileName))
                 continue;
 
-            if (_filter is not null && setName is not null && !setName.Contains(_filter, StringComparison.OrdinalIgnoreCase))
+            if (_setFilter is not null && setName is not null && !setName.Contains(_setFilter, StringComparison.OrdinalIgnoreCase))
                 continue;
 
             string testSetPath = Path.Combine(_suitePath, fileName);
@@ -123,7 +131,7 @@ internal sealed class ConformanceRunner
 
     private void RunTestSet(string path, Dictionary<string, TestEnvironment> sharedEnvs, TestReport report)
     {
-        var doc = XDocument.Load(path);
+        var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
         string baseDir = Path.GetDirectoryName(path) ?? _suitePath;
 
         // Collect test-set-level dependencies to inherit by each test case.
@@ -147,6 +155,9 @@ internal sealed class ConformanceRunner
         foreach (var testCaseElem in doc.Descendants(_ns + "test-case"))
         {
             var testCase = TestCase.FromElement(testCaseElem, _ns, testSetDependencies);
+
+            if (_testFilter is not null && !testCase.Name.Contains(_testFilter, StringComparison.OrdinalIgnoreCase))
+                continue;
 
             // Documented skips: upstream defects and platform limitations.
             if (DocumentedSkips.TryGetValue(testCase.Name, out var skipReason))

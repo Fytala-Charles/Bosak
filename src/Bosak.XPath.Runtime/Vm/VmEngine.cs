@@ -57,7 +57,7 @@
 //                      | Charles Korthout | 2.22  | 30-06-2026     | Cast to xs:float parses via float.TryParse to preserve single-precision lexical form  |
 //                      | Charles Korthout | 2.23  | 02-07-2026     | Root opcode handles parentless nodes and raises XPDY0050; Range atomizes operands       |
 //                      | Charles Korthout | 2.24  | 03-07-2026     | Trim whitespace when casting strings to xs:integer (TVT function results)              |
-//                      | Charles Korthout | 2.25  | 26-06-2026     | Backwards-compatible arithmetic, comparisons, and range expressions                    |
+//                      | Charles Korthout | 2.26  | 19-07-2026     | cbcl fixes: gDay/gMonthDay timezone-aware equality; duration*NaN raises FOCA0005          |
 //                      | Charles Korthout | 2.26  | 26-06-2026     | LookupWildcard flattens map values and array members                                   |
 //                      | Charles Korthout | 2.27  | 26-06-2026     | NormalizeSequence places document-rooted nodes before parentless nodes                 |
 //                      | Charles Korthout | 2.28  | 26-06-2026     | Removed leftover debug output from CompareCore                                         |
@@ -2969,8 +2969,8 @@ public static class VmEngine
         var leftXdt = AsComparableDateTime(GetXPathDateTime(left, subtype), subtype);
         var rightXdt = AsComparableDateTime(GetXPathDateTime(right, subtype), subtype);
 
-        bool leftHasTz = left.HasTimezone;
-        bool rightHasTz = right.HasTimezone;
+        bool leftHasTz = GetHasTimezone(left, subtype);
+        bool rightHasTz = GetHasTimezone(right, subtype);
 
         // Neither has timezone: compare local components directly
         if (!leftHasTz && !rightHasTz)
@@ -3006,6 +3006,11 @@ public static class VmEngine
             // xs:time comparisons use the reference date 1972-12-31 (per XPath spec).
             return new XPathDateTime(1972, 12, 31, xdt.Hour, xdt.Minute, xdt.Second, xdt.Millisecond, xdt.TimezoneOffsetMinutes, xdt.HasTimezone);
         }
+        if (subtype is "gYear" or "gYearMonth" or "gMonth" or "gMonthDay" or "gDay")
+        {
+            // ParseGDateTime already applies the correct reference components for each subtype.
+            return xdt;
+        }
         return xdt;
     }
 
@@ -3016,8 +3021,74 @@ public static class VmEngine
             "dateTime" => value.DateTimeXPathValue,
             "date" => value.DateXPathValue,
             "time" => value.TimeXPathValue,
+            "gYear" or "gYearMonth" or "gMonth" or "gMonthDay" or "gDay" => ParseGDateTime(value.ToString(), subtype).Xdt,
             _ => throw new InvalidOperationException($"Unsupported date/time subtype: {subtype}")
         };
+    }
+
+    private static bool GetHasTimezone(XdmValue value, string subtype)
+    {
+        return subtype switch
+        {
+            "dateTime" => value.HasTimezone,
+            "date" => value.HasTimezone,
+            "time" => value.HasTimezone,
+            "gYear" or "gYearMonth" or "gMonth" or "gMonthDay" or "gDay" => ParseGDateTime(value.ToString(), subtype).HasTz,
+            _ => throw new InvalidOperationException($"Unsupported date/time subtype: {subtype}")
+        };
+    }
+
+    private static (XPathDateTime Xdt, bool HasTz) ParseGDateTime(string s, string subtype)
+    {
+        int year = 1972, month = 1, day = 1;
+        int tz = 0;
+        bool hasTz = false;
+
+        // Strip optional timezone from the end
+        if (s.EndsWith('Z'))
+        {
+            hasTz = true;
+            s = s[..^1];
+        }
+        else
+        {
+            int tzIdx = s.LastIndexOfAny(['+', '-']);
+            // A leading '-' is the sign for the duration/gYear; for gYear it is part of the value.
+            // For gDay/gMonthDay/gMonth the string starts with '--' so the timezone sign is after that.
+            if (tzIdx > 0 && (s[tzIdx - 1] == '-' || s[tzIdx - 1] == ':' || char.IsDigit(s[tzIdx - 1])))
+            {
+                hasTz = true;
+                string tzStr = s[tzIdx..];
+                s = s[..tzIdx];
+                tz = ParseTimezoneOffset(tzStr);
+            }
+        }
+
+        switch (subtype)
+        {
+            case "gYear":
+                var yearMatch = Regex.Match(s, @"^(-?\d{4})");
+                if (yearMatch.Success) year = int.Parse(yearMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                break;
+            case "gYearMonth":
+                var ymMatch = Regex.Match(s, @"^(-?\d{4})-(\d{2})");
+                if (ymMatch.Success) { year = int.Parse(ymMatch.Groups[1].Value, CultureInfo.InvariantCulture); month = int.Parse(ymMatch.Groups[2].Value, CultureInfo.InvariantCulture); }
+                break;
+            case "gMonth":
+                var mMatch = Regex.Match(s, @"^--(\d{2})");
+                if (mMatch.Success) month = int.Parse(mMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                break;
+            case "gMonthDay":
+                var mdMatch = Regex.Match(s, @"^--(\d{2})-(\d{2})");
+                if (mdMatch.Success) { month = int.Parse(mdMatch.Groups[1].Value, CultureInfo.InvariantCulture); day = int.Parse(mdMatch.Groups[2].Value, CultureInfo.InvariantCulture); }
+                break;
+            case "gDay":
+                var dMatch = Regex.Match(s, @"^---(\d{2})");
+                if (dMatch.Success) day = int.Parse(dMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                break;
+        }
+
+        return (new XPathDateTime(year, month, day, 0, 0, 0, 0, tz, hasTz), hasTz);
     }
 
     private static (long TotalMonths, decimal TotalSeconds) NormalizeDuration(string s)
@@ -3097,6 +3168,9 @@ public static class VmEngine
     {
         var d = duration.DurationValue;
         double f = ToDouble(factor);
+        if (double.IsNaN(f) || double.IsInfinity(f))
+            throw new InvalidOperationException("FOCA0005");
+
         if (IsYearMonthDurationString(d))
         {
             var (y, m, _, _, _, _) = ParseDuration(d);
@@ -3676,12 +3750,24 @@ public static class VmEngine
                     throw new InvalidOperationException("XPTY0004");
                 }
             }
-            // gYear/gYearMonth/gMonth/gMonthDay/gDay only support equality; use lexical comparison.
+            // gYear/gYearMonth/gMonth/gMonthDay/gDay only support equality.
             if (leftDateSub is "gYear" or "gYearMonth" or "gMonth" or "gMonthDay" or "gDay")
             {
                 if (op is IrOpCode.LessThan or IrOpCode.ValueLessThan or IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan
                     or IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual or IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual)
                     throw new InvalidOperationException("XPTY0004");
+
+                var gCmp = CompareDateTimeValues(left, right, leftDateSub, context);
+                if (gCmp.HasValue)
+                {
+                    return op switch
+                    {
+                        IrOpCode.Equal or IrOpCode.ValueEqual => gCmp.Value == 0,
+                        IrOpCode.NotEqual or IrOpCode.ValueNotEqual => gCmp.Value != 0,
+                        _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+                    };
+                }
+                // Indeterminate: eq/ne fall back to string comparison
                 int lexCmp = string.CompareOrdinal(left.ToString(), right.ToString());
                 return op switch
                 {

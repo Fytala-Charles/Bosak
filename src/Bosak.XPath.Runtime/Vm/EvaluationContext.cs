@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.8   | 10-06-2026     | Added LazyVariableResolver and _evaluatedLazyGlobals for deferred XSLT globals         |
 //                      | Charles Korthout | 0.9   | 11-06-2026     | TryResolveNamespace resolves predefined xml prefix to XML namespace URI                 |
 //                      | Charles Korthout | 1.0   | 13-06-2026     | Added ImplicitTimezoneOffsetMinutes property (defaults to UTC)                          |
+//                      | Charles Korthout | 1.1   | 19-07-2026     | CurrentDateTimeSnapshot initializes implicit timezone from snapshot offset when not set |
 //                      | Charles Korthout | 1.1   | 13-06-2026     | Added RegexGroups property for xsl:analyze-string / regex-group()                       |
 //                      | Charles Korthout | 1.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      | Charles Korthout | 1.3   | 24-06-2026     | Added DocumentPostProcessor for XSLT whitespace stripping on loaded documents          |
@@ -109,6 +110,7 @@ public sealed class EvaluationContext
 
     // Stable snapshot for current-dateTime / current-date / current-time
     private DateTimeOffset? _currentDateTimeSnapshot;
+    private bool _implicitTimezoneOffsetSet;
 
     // Decimal formats for fn:format-number
     private DecimalFormat _defaultDecimalFormat = new();
@@ -160,7 +162,16 @@ public sealed class EvaluationContext
     /// The implicit timezone offset in minutes used when a date, time, or dateTime value
     /// has no explicit timezone. Defaults to UTC (0 minutes).
     /// </summary>
-    public int ImplicitTimezoneOffsetMinutes { get; set; }
+    public int ImplicitTimezoneOffsetMinutes
+    {
+        get => _implicitTimezoneOffsetMinutes;
+        set
+        {
+            _implicitTimezoneOffsetMinutes = value;
+            _implicitTimezoneOffsetSet = true;
+        }
+    }
+    private int _implicitTimezoneOffsetMinutes;
 
     /// <summary>
     /// Captured substring values for the current <c>xsl:analyze-string</c> matching substring,
@@ -570,6 +581,23 @@ public sealed class EvaluationContext
     /// <summary>
     /// Returns a stable snapshot of the current date/time for the lifetime of this context.
     /// Used by fn:current-dateTime, fn:current-date, and fn:current-time.
+    /// Also initializes the implicit timezone from the snapshot's offset when it has
+    /// not been explicitly set.
     /// </summary>
-    public DateTimeOffset CurrentDateTimeSnapshot => _currentDateTimeSnapshot ??= System.DateTimeOffset.Now;
+    public DateTimeOffset CurrentDateTimeSnapshot
+    {
+        get
+        {
+            if (!_currentDateTimeSnapshot.HasValue)
+            {
+                var now = System.DateTimeOffset.Now;
+                _currentDateTimeSnapshot = now;
+                if (!_implicitTimezoneOffsetSet)
+                {
+                    _implicitTimezoneOffsetMinutes = (int)now.Offset.TotalMinutes;
+                }
+            }
+            return _currentDateTimeSnapshot.Value;
+        }
+    }
 }

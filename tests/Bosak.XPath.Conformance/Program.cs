@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added optional test-set name filter argument                                             |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | Absolutize the suite path so relative invocations yield file:/// document URIs           |
+//                      | Charles Korthout | 0.4   | 19-07-2026     | Added optional test-name filter argument for targeted cbcl-style runs                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -31,24 +32,27 @@ internal class Program
         // Absolutize so document URIs derived from suite files are stable file:/// URIs
         // (relative paths triggered UriFormatException in XDocumentProvider.LoadXml).
         suitePath = Path.GetFullPath(suitePath);
-        string? filter = args.Length > 1 ? args[1] : null;
+        string? setFilter = args.Length > 1 ? args[1] : null;
+        string? testFilter = args.Length > 2 ? args[2] : null;
         string catalogPath = Path.Combine(suitePath, "catalog.xml");
 
         if (!File.Exists(catalogPath))
         {
             Console.Error.WriteLine($"Catalog not found: {catalogPath}");
-            Console.Error.WriteLine("Usage: Bosak.XPath.Conformance [path-to-qt3tests] [filter]");
+            Console.Error.WriteLine("Usage: Bosak.XPath.Conformance [path-to-qt3tests] [test-set-filter] [test-name-filter]");
             return 1;
         }
 
         Console.WriteLine($"Bosak XPath 3.1 Conformance Harness");
         Console.WriteLine($"Catalog: {catalogPath}");
-        if (filter is not null)
-            Console.WriteLine($"Filter:  {filter}");
+        if (setFilter is not null)
+            Console.WriteLine($"Test-set filter:  {setFilter}");
+        if (testFilter is not null)
+            Console.WriteLine($"Test-name filter: {testFilter}");
         Console.WriteLine();
 
         var stopwatch = Stopwatch.StartNew();
-        var runner = new ConformanceRunner(suitePath, filter);
+        var runner = new ConformanceRunner(suitePath, setFilter, testFilter);
         var report = runner.Run();
         stopwatch.Stop();
 

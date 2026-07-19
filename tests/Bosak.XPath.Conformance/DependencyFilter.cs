@@ -138,6 +138,8 @@ internal sealed class DependencyFilter
         if (dep.Type != "spec")
             return false;
         var tokens = dep.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        return tokens.All(t => XqueryOnlySpecs.Contains(t));
+        // A spec dependency that mentions any XQuery version is not applicable to an
+        // XPath-only processor, even when combined with an XPath version (e.g. XQ10+ XP30+).
+        return tokens.Any(t => XqueryOnlySpecs.Contains(t));
     }
 }

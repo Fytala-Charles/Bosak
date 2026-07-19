@@ -48,6 +48,7 @@
 //                      | Charles Korthout | 2.15  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence regression tests          |
 //                      | Charles Korthout | 2.16  | 19-07-2026     | Tier-2y: fn:index-of eq-semantics, NaN, and XPTY0004 regression tests                  |
 //                      | Charles Korthout | 2.17  | 19-07-2026     | Tier-2z: castable masks overflow/cast errors and empty-sequence occurrence tests      |
+//                      | Charles Korthout | 2.18  | 19-07-2026     | fn:zero-or-one singleton-sequence regression test                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -2579,6 +2580,9 @@ public class FunctionLibraryTests
 
     [Fact]
     public void ZeroOrOne_Singleton() => Assert.Equal("42", EvalStr("zero-or-one(42)"));
+
+    [Fact]
+    public void ZeroOrOne_SingletonSequence() => Assert.Equal("2", EvalStr("zero-or-one((1 to 10)[. div 2 = 1])"));
 
     [Fact]
     public void ZeroOrOne_Multi() => Assert.Throws<InvalidOperationException>(() => Evaluate("zero-or-one((1,2))"));
