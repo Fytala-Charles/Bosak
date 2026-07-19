@@ -6,12 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,343 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,618 passed / 319 failed / 9,884 skipped (67.93% / 98.54% of runnable tests)
+> **QT3 baseline:** 21,620 passed / 317 failed / 9,884 skipped (67.93% / 98.56% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `op/numeric-less-than` unsignedLong overflow fix.
+  - `xs:unsignedLong` lexical values that exceed `long.MaxValue` (e.g. `18446744073709551615`) are now represented as `XdmValueKind.Decimal` with the `unsignedLong` subtype annotation, so casts and comparisons work.
+  - `ItemInstanceOf` accepts decimal-backed values whose schema type is an integer subtype.
+  - Targeted `op-numeric-less-than` pool now **154 passed / 0 failed / 29 skipped** (2 previously failing tests now pass).
+  - Full QT3 now **21,620 passed / 317 failed / 9,884 skipped = 67.93%** (runnable pass rate **98.56%**); unit tests **1,343/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn/contains` collation/whitespace fixes.
   - Fixed UCA collation strength mapping in `FunctionLibrary.TryParseUca`: `primary` ignores case and non-space accents, `secondary` ignores only case, and `tertiary`/`quaternary` use no ignore flags.

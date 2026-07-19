@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `16484ae` (QT3 Tier-2z: op/numeric-less-than unsignedLong overflow fix)
+**Current focus:** **QT3 Tier-2z: `op/numeric-less-than` cluster** — `xs:unsignedLong` values above `long.MaxValue` (e.g. `18446744073709551615`) are now represented as `XdmValueKind.Decimal` with the `unsignedLong` subtype annotation, so they can be cast from strings and compared correctly. `ItemInstanceOf` now accepts decimal-backed values whose schema type is an integer subtype. Targeted `op-numeric-less-than` pool now **154 passed / 0 failed / 29 skipped** (2 previously failing tests now pass). Full QT3 suite now at **21,620 passed / 317 failed / 9,884 skipped (67.93%)**; runnable pass rate improved to **98.56%** (21620 / 21937). Unit tests **1,343/0**.
+
+---
+
+## This Session Fixes (Tier-2z: op/numeric-less-than)
+
+1. **`xs:unsignedLong` overflow representation** — `VmEngine.TryCast` now parses `xs:unsignedLong` lexical values as `ulong`. Values that fit in `long` continue to be stored as `XdmValueKind.Integer`; values larger than `long.MaxValue` are stored as `XdmValueKind.Decimal` with the `unsignedLong` schema type. This fixes `K2-NumericLT-1` and `K2-NumericLT-2`.
+
+2. **`ItemInstanceOf` accepts decimal-backed integer subtypes** — Added `IsIntegerSchemaType` so `instance of xs:unsignedLong` (and other integer subtypes) matches decimal-backed values that carry the corresponding schema annotation.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.46: unsignedLong overflow handling; decimal-backed integer subtype instance-of)
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v1.5: `FromDecimal(decimal, schemaTypeName)` overload)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`RangeExpr` BigInteger cases** (12 failures in the full QT3 suite — known platform limitation because `XdmValue.IntegerValue` is `long`). Other candidates: `cbcl-*` residual clusters.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `c3c76a2` (QT3 Tier-2z: fn/contains collation/whitespace fixes)
 **Current focus:** **QT3 Tier-2z: `fn/contains` collation/whitespace cluster** — Fixed UCA collation strength mapping in `FunctionLibrary.TryParseUca` so `strength=secondary` ignores only case and `strength=tertiary` ignores no attributes. Implemented true ASCII-only case folding for the HTML ASCII case-insensitive collation in `StringContains`, `StringStartsWith`, `StringEndsWith`, `StringIndexOf`, `CompareStrings`, and `GetCollationEqualityComparer`. `fn:contains-token` now tokenizes on XPath whitespace only (`#x20`, `#x9`, `#xD`, `#xA`), so non-breaking space is no longer treated as a separator. Targeted `fn-contains` and `fn-contains-token` pools now **0 failed** (6 previously failing tests now pass). Full QT3 suite now at **21,618 passed / 319 failed / 9,884 skipped (67.93%)**; runnable pass rate improved to **98.54%** (21618 / 21937). Unit tests **1,343/0**.
 
