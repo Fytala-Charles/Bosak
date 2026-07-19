@@ -2,6 +2,38 @@
 
 **Date:** 2026-07-19
 **Commit:** `<uncommitted>`
+**Current focus:** **QT3 Tier-2v: `op-numeric-integer-divide`** — `VmEngine.IntegerDivide` now raises `FOAR0002` for NaN/INF operands and returns `0` for finite-dividend `idiv` INF; `XPathLexer.ReadNumber` now rejects `NumericLiteral` tokens immediately followed by keyword operators (e.g. `10idiv 3`). Full QT3 suite now at **21,562 passed / 378 failed / 9,881 skipped (67.76%)**; runnable pass rate improved to **98.28%** (21562 / 21940). Unit tests **1,303/0**.
+
+---
+
+## This Session Fixes (Tier-2v: op-numeric-integer-divide)
+
+1. **`idiv` NaN/INF handling** — `VmEngine.IntegerDivide` now detects `NaN` and `INF/-INF` dividend operands and raises `FOAR0002` (numeric overflow). A finite dividend divided by `INF/-INF` returns `0`.
+
+2. **`idiv` float overflow** — `xs:float('1e38') idiv xs:float('1e-37')` and similar overflow cases now raise `FOAR0002` instead of returning a truncated `long`.
+
+3. **Numeric-literal keyword boundary** — `XPathLexer.ReadNumber` now returns `TokenKind.Invalid` when a `NumericLiteral` is immediately followed by a keyword operator (e.g. `10idiv`). This causes the parser to raise `XPST0003` for expressions like `10idiv 3`, `10idiv3`, and `10 idiv3` already fails at the parser level.
+
+4. **Add unit tests** — `VmEngineTests` adds `Eval_IntegerDivision_NaN_IsOverflow`, `Eval_IntegerDivision_InfinityDividend_IsOverflow`, and `Eval_IntegerDivision_InfinityDivisor_ReturnsZero`; `LexerTests` adds `NumericLiteral_FollowedByKeyword_IsInvalid`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.43: idiv NaN/INF and overflow checks)
+- `src/Bosak.XPath.Parser/Lexer/XPathLexer.cs` (v0.4: numeric-literal + keyword boundary)
+- `tests/Bosak.XPath.Runtime.Tests/VmEngineTests.cs` (v0.5: idiv overflow tests)
+- `tests/Bosak.XPath.Parser.Tests/LexerTests.cs` (v0.3: numeric-literal boundary test)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`fn-has-children`** (8 failures in the full QT3 suite): `fn:has-children($node?)` may not handle empty sequence, document fragments, or text-only nodes correctly. Other candidate pools: `K2-NumericMod` (6), `K-SeqIndexOfFunc` (6), `cbcl-*` scattered clusters (~8+), `named-function-ref-reserved-function-names` (12), and `RangeExpr` BigInteger cases (12 — known limitation).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
+**Commit:** `<uncommitted>`
 **Current focus:** **QT3 Tier-2u: `xs:numeric` support** — `VmEngine.TryCast` now handles the `xs:numeric` union type and `FunctionLibrary` registers the `xs:numeric#1` constructor. Full QT3 suite now at **21,545 passed / 395 failed / 9,881 skipped (67.71%)**; runnable pass rate improved to **98.20%** (21545 / 21940). Unit tests **1,299/0**.
 
 ---

@@ -76,6 +76,7 @@
 //                      | Charles Korthout | 2.40  | 15-07-2026     | Tier-2k: annotation-aware instance-of (integer/string/duration supertype walks, nmtoken); 'to' operand validation (XPTY0004); value-comparison string-vs-numeric XPTY0004; general-comparison untypedAtomic rule-b casting via primitive base type; for/some/every bind namespace-qualified variables; duration casts keep subtype annotation |
 //                      | Charles Korthout | 2.41  | 18-07-2026     | NamedFunctionItem dynamic calls use defining-context focus (fn:function-lookup base-uri) |
 //                      | Charles Korthout | 2.42  | 19-07-2026     | Tier-2u: xs:numeric cast and xs:numeric#1 constructor                                  |
+//                      | Charles Korthout | 2.43  | 19-07-2026     | Tier-2v: idiv NaN/INF and numeric-literal+keyword boundary checks                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3183,18 +3184,39 @@ public static class VmEngine
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
+
         if (IsDouble(left) || IsDouble(right))
         {
-            if (ToDouble(right) == 0)
+            double l = ToDouble(left);
+            double r = ToDouble(right);
+            if (double.IsNaN(l) || double.IsNaN(r) || double.IsInfinity(l))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            if (double.IsInfinity(r))
+                return XdmValue.FromInteger(0L);
+            if (r == 0)
                 throw new InvalidOperationException("FOAR0001: Division by zero.");
-            return XdmValue.FromInteger((long)(ToDouble(left) / ToDouble(right)));
+            double result = l / r;
+            if (double.IsNaN(result) || double.IsInfinity(result))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            return XdmValue.FromInteger((long)result);
         }
+
         if (IsFloat(left) || IsFloat(right))
         {
-            if (ToFloat(right) == 0)
+            float l = ToFloat(left);
+            float r = ToFloat(right);
+            if (float.IsNaN(l) || float.IsNaN(r) || float.IsInfinity(l))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            if (float.IsInfinity(r))
+                return XdmValue.FromInteger(0L);
+            if (r == 0)
                 throw new InvalidOperationException("FOAR0001: Division by zero.");
-            return XdmValue.FromInteger((long)(ToFloat(left) / ToFloat(right)));
+            float result = l / r;
+            if (float.IsNaN(result) || float.IsInfinity(result))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            return XdmValue.FromInteger((long)result);
         }
+
         if (IsDecimal(left) || IsDecimal(right))
         {
             if (ToDecimal(right) == 0)
@@ -3206,9 +3228,18 @@ public static class VmEngine
         right = Atomize(right);
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
         {
-            if (ToDouble(right) == 0)
+            double l = ToDouble(left);
+            double r = ToDouble(right);
+            if (double.IsNaN(l) || double.IsNaN(r) || double.IsInfinity(l))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            if (double.IsInfinity(r))
+                return XdmValue.FromInteger(0L);
+            if (r == 0)
                 throw new InvalidOperationException("FOAR0001: Division by zero.");
-            return XdmValue.FromInteger((long)(ToDouble(left) / ToDouble(right)));
+            double result = l / r;
+            if (double.IsNaN(result) || double.IsInfinity(result))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            return XdmValue.FromInteger((long)result);
         }
 
         if (ToInteger(right) == 0)

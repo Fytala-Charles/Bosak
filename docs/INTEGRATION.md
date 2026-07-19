@@ -5,19 +5,22 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,299 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,545 passed / 395 failed / 9,881 skipped (67.71% / 98.20% of runnable tests)
+> **Bosak baseline:** 1,303 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,562 passed / 378 failed / 9,881 skipped (67.76% / 98.28% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
 
+- **2026-07-19** — QT3 Tier-2v: `op-numeric-integer-divide` fixes.
+  - `VmEngine.IntegerDivide` raises `FOAR0002` for NaN/INF operands and returns `0` for finite dividend `idiv` INF/-INF.
+  - `xs:float('1e38') idiv xs:float('1e-37')` and similar overflow cases now raise `FOAR0002` instead of returning a truncated `long`.
+  - `XPathLexer.ReadNumber` rejects `NumericLiteral` tokens immediately followed by keyword operators (e.g. `10idiv 3` → `XPST0003`).
+  - `op-numeric-integer-divide` targeted pool now **125 passed / 0 failed / 11 skipped**.
+  - Full QT3 now **21,562 / 378 / 9,881 = 67.76%** (runnable pass rate **98.28%**); unit tests **1,303/0**.
+
 - **2026-07-19** — QT3 Tier-2u: `xs:numeric` cast and constructor support.
-  - `VmEngine.TryCast` now recognizes the `xs:numeric` union type: member types are preserved, and string/untypedAtomic/boolean inputs yield `xs:double`.
-  - `FunctionLibrary` registers the `xs:numeric#1` constructor.
-  - `xs-numeric` targeted pool now **19 passed / 0 failed / 3 skipped**.
-  - Full QT3 now **21,545 / 395 / 9,881 = 67.71%** (runnable pass rate **98.20%**); unit tests **1,299/0**.
 
 - **2026-07-18** — QT3 Tier-2t: `fn:id` / `fn:idref` / `fn:element-with-id` DTD support.
   - `IXdmNode` gains DTD properties (`HasDocumentType`, `DocumentTypeName`, `PublicId`, `SystemId`, `InternalSubset`); `XDocumentNode` exposes `XDocument.DocumentType`.

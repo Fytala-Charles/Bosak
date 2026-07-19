@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Updated date/time ordering tests to use explicit timezones                             |
 //                      | Charles Korthout | 0.3   | 24-06-2026     | Added ValueMatchesType sequence occurrence-indicator tests                              |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Lookup operator tests (multi-key order, FOAY0001/XPTY0004, array-as-function, array atomization in general comparison) |
+//                      | Charles Korthout | 0.5   | 19-07-2026     | idiv NaN/INF overflow tests                                                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -174,6 +175,27 @@ public class VmEngineTests
     {
         var result = Evaluate("7 idiv 2");
         Assert.Equal(3, result.IntegerValue);
+    }
+
+    [Fact]
+    public void Eval_IntegerDivision_NaN_IsOverflow()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("1 idiv xs:double('NaN')"));
+        Assert.Contains("FOAR0002", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_IntegerDivision_InfinityDividend_IsOverflow()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("xs:double('INF') idiv 3"));
+        Assert.Contains("FOAR0002", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_IntegerDivision_InfinityDivisor_ReturnsZero()
+    {
+        var result = Evaluate("3 idiv xs:double('INF')");
+        Assert.Equal(0L, result.IntegerValue);
     }
 
     [Fact]

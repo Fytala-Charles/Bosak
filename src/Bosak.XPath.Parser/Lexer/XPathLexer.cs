@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Trailing dot in number is DecimalLiteral (fixes select-3501/3502)                        |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Lex Q{uri}* URI-qualified wildcards                                                      |
+//                      | Charles Korthout | 0.4   | 19-07-2026     | NumericLiteral followed by NameStartChar is Invalid (10idiv → XPST0003)                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
@@ -240,6 +241,16 @@ public ref struct XPathLexer
 
         if (hasDot)
             return new Token(TokenKind.DecimalLiteral, start, length);
+
+        // NumericLiteral must be followed by a terminal or whitespace; a
+        // name-start character immediately after the number is a lexical error
+        // (e.g. "10idiv 3" must raise XPST0003, not parse as "10 idiv 3").
+        if (_position < _source.Length && IsNameStartChar(_source[_position]) && _source[_position] != ':')
+        {
+            while (_position < _source.Length && IsNameChar(_source[_position]))
+                _position++;
+            return new Token(TokenKind.Invalid, start, _position - start);
+        }
 
         return new Token(TokenKind.IntegerLiteral, start, length);
     }

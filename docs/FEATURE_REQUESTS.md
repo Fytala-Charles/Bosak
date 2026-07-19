@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-19 (QT3 Tier-2u: xs:numeric support — full QT3 suite at **21,545 passed / 395 failed / 9,881 skipped — 67.71%**; runnable pass rate **98.20%**; unit tests **1,299/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests pass)
+> **Living Registry** — Last updated: 2026-07-19 (QT3 Tier-2v: op-numeric-integer-divide — full QT3 suite at **21,562 passed / 378 failed / 9,881 skipped — 67.76%**; runnable pass rate **98.28%**; unit tests **1,303/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests pass)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

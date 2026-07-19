@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Update IntegerFollowedByDot for decimal-literal grammar                                |
+//                      | Charles Korthout | 0.3   | 19-07-2026     | NumericLiteral+keyword boundary test (10idiv → Invalid)                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Lexer;
@@ -195,6 +196,16 @@ public class LexerTests
         Assert.Equal(TokenKind.KeywordFunction, toks[24].Kind);
         Assert.Equal(TokenKind.KeywordMap, toks[25].Kind);
         Assert.Equal(TokenKind.KeywordArray, toks[26].Kind);
+    }
+
+    [Fact]
+    public void NumericLiteral_FollowedByKeyword_IsInvalid()
+    {
+        var src = "10idiv 3";
+        var toks = Tokenize(src);
+        Assert.Equal(2, toks.Length);
+        Assert.Equal(TokenKind.Invalid, toks[0].Kind);
+        Assert.Equal(TokenKind.IntegerLiteral, toks[1].Kind);
     }
 
     [Fact]
