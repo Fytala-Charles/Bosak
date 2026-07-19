@@ -46,6 +46,7 @@
 //                      | Charles Korthout | 2.13  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id DTD and XPTY0004 tests                               |
 //                      | Charles Korthout | 2.14  | 19-07-2026     | Tier-2u: xs:numeric cast and constructor tests                                         |
 //                      | Charles Korthout | 2.15  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence regression tests          |
+//                      | Charles Korthout | 2.16  | 19-07-2026     | Tier-2y: fn:index-of eq-semantics, NaN, and XPTY0004 regression tests                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -385,6 +386,76 @@ public class FunctionLibraryTests
     {
         var items = EvalSequence("fn:index-of((1,2,2,3),2)");
         Assert.Equal(new[] { "2", "3" }, items);
+    }
+
+    [Fact]
+    public void IndexOf_NaN_NotEqualToItself()
+    {
+        var items = EvalSequence("fn:index-of((xs:float('NaN')), xs:float('NaN'))");
+        Assert.Empty(items);
+    }
+
+    [Fact]
+    public void IndexOf_DoubleNaN_NotEqualToItself()
+    {
+        var items = EvalSequence("fn:index-of((xs:double('NaN')), xs:double('NaN'))");
+        Assert.Empty(items);
+    }
+
+    [Fact]
+    public void IndexOf_FloatNaNvsDoubleNaN_NotEqual()
+    {
+        var items = EvalSequence("fn:index-of((xs:float('NaN')), xs:double('NaN'))");
+        Assert.Empty(items);
+    }
+
+    [Fact]
+    public void IndexOf_IntegerDoesNotMatchString()
+    {
+        var items = EvalSequence("fn:index-of(4, '4')");
+        Assert.Empty(items);
+    }
+
+    [Fact]
+    public void IndexOf_StringMatchesString()
+    {
+        var items = EvalSequence("fn:index-of(('a','b','a'), 'a')");
+        Assert.Equal(new[] { "1", "3" }, items);
+    }
+
+    [Fact]
+    public void IndexOf_EmptySearchArgument_XPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:index-of((1,2,3), ())"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void IndexOf_EmptyCollationArgument_XPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:index-of((1,2,3), 1, ())"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void IndexOf_UntypedAtomicMatchesUri()
+    {
+        var items = EvalSequence("fn:index-of(xs:untypedAtomic('http://example.com/'), xs:anyURI('http://example.com/'))");
+        Assert.Equal(new[] { "1" }, items);
+    }
+
+    [Fact]
+    public void IndexOf_NumericPromotion_DecimalMatchesInteger()
+    {
+        var items = EvalSequence("fn:index-of((1,2,3), xs:decimal('2.0'))");
+        Assert.Equal(new[] { "2" }, items);
+    }
+
+    [Fact]
+    public void IndexOf_NotFound()
+    {
+        var items = EvalSequence("fn:index-of((10,20,30), 35)");
+        Assert.Empty(items);
     }
 
     [Fact]

@@ -120,6 +120,7 @@
 //                      | Charles Korthout | 5.48  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id support DTD-declared ID/IDREF and raise XPTY0004    |
 //                      | Charles Korthout | 5.49  | 19-07-2026     | Tier-2u: xs:numeric cast and xs:numeric#1 constructor                                  |
 //                      | Charles Korthout | 5.50  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence fixes                     |
+//                      | Charles Korthout | 5.51  | 19-07-2026     | Tier-2y: fn:index-of uses eq semantics, validates single search/collation, NaN-safe    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -7137,15 +7138,23 @@ public static class FunctionLibrary
         => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double;
 
     private static XdmValue IndexOf_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => IndexOfImpl(args[0], AtomizedString(args[1]), ctx.DefaultCollation);
+        => IndexOfImpl(args[0], args[1], ctx.DefaultCollation);
 
-    private static XdmValue IndexOfImpl(XdmValue sequence, string search, string collation)
+    private static XdmValue IndexOfImpl(XdmValue sequence, XdmValue search, string collation)
     {
+        // $search must be a single item (xs:anyAtomicType, not empty/multi sequence).
+        if (IsEmptySequence(search))
+            throw new InvalidOperationException("XPTY0004: fn:index-of search argument must be a single item.");
+        if (search.IsSequence && SequenceLength(search) > 1)
+            throw new InvalidOperationException("XPTY0004: fn:index-of search argument must be a single item.");
+
+        var atomizedSearch = AtomizeValue(search);
         var seq = Materialize(sequence);
         var result = new List<XdmValue>();
         for (int i = 0; i < seq.Count; i++)
         {
-            if (CompareStrings(AtomizedString(seq[i]), search, collation) == 0)
+            var atomizedItem = AtomizeValue(seq[i]);
+            if (AtomicValuesEqual(atomizedItem, atomizedSearch, collation))
                 result.Add(XdmValue.FromInteger(i + 1));
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
@@ -7153,9 +7162,9 @@ public static class FunctionLibrary
 
     private static XdmValue IndexOf_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string collation = AtomizedString(args[2]);
+        string collation = RequireStringRequired(args[2]);
         ValidateCollation(collation);
-        return IndexOfImpl(args[0], AtomizedString(args[1]), collation);
+        return IndexOfImpl(args[0], args[1], collation);
     }
 
     // ------------------------------------------------------------------

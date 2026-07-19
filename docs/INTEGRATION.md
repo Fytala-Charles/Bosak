@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,317 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,576 passed / 364 failed / 9,881 skipped (67.79% / 98.34% of runnable tests)
+> **Bosak baseline:** 1,327 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,585 passed / 355 failed / 9,881 skipped (67.79% / 98.38% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2y: `fn:index-of` fixes.
+  - `FunctionLibrary.IndexOfImpl` now uses XPath `eq` semantics via `AtomicValuesEqual` instead of string comparison.
+  - NaN no longer matches itself; incompatible types (e.g., `xs:integer` vs `xs:string`) return empty.
+  - Empty / multi-item search argument and empty collation argument now raise `XPTY0004`.
+  - `fn-index-of` targeted pool now **53 passed / 0 failed / 0 skipped** (was 44/9/0).
+  - Full QT3 now **21,585 / 355 / 9,881 = 67.79%** (runnable pass rate **98.38%**); unit tests **1,327/0**.
 
 - **2026-07-19** — QT3 Tier-2x: `op-numeric-mod` fixes.
   - `VmEngine.Modulo` now returns `NaN` for `xs:double`/`xs:float` mod by zero (IEEE 754 semantics).

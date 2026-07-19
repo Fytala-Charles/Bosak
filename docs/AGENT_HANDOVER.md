@@ -1,6 +1,38 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `<uncommitted>` (QT3 Tier-2y: fn:index-of eq-semantics and NaN handling)
+**Current focus:** **QT3 Tier-2y: `K-SeqIndexOfFunc` / `fn-index-of`** — `FunctionLibrary.IndexOfImpl` now uses XPath `eq` semantics via `AtomicValuesEqual` instead of string comparison. NaN no longer matches itself, empty / multi-item search arguments and empty collation arguments raise `XPTY0004`, and incompatible types (e.g., `xs:integer` vs `xs:string`) return empty. Targeted `fn-index-of` pool now **53 passed / 0 failed / 0 skipped** (was 44/9/0). Full QT3 suite now at **21,585 passed / 355 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.38%** (21585 / 21940). Unit tests **1,327/0**.
+
+---
+
+## This Session Fixes (Tier-2y: fn-index-of)
+
+1. **`fn:index-of` uses `eq` semantics** — `IndexOfImpl` now atomizes the sequence items and the search argument, then compares via `AtomicValuesEqual`. This handles numeric promotion (`xs:integer` vs `xs:decimal`), string/URI comparison with the requested collation, boolean, date/time, and QName equality.
+
+2. **NaN never matches itself** — `AtomicValuesEqual` already rejects NaN equality, so `index-of((xs:float('NaN')), xs:float('NaN'))` now returns the empty sequence.
+
+3. **Single-item search/collation validation** — `IndexOfImpl` now raises `XPTY0004` when the search argument is the empty sequence or contains more than one item. `IndexOf_3` uses `RequireStringRequired` for the collation argument, so an empty or multi-item collation also raises `XPTY0004`.
+
+4. **Incompatible types return empty** — `index-of(4, "4")` no longer matches because `xs:integer` and `xs:string` are not comparable under `eq`.
+
+5. **Add unit tests** — `FunctionLibraryTests` adds `IndexOf_NaN_NotEqualToItself`, `IndexOf_DoubleNaN_NotEqualToItself`, `IndexOf_FloatNaNvsDoubleNaN_NotEqual`, `IndexOf_IntegerDoesNotMatchString`, `IndexOf_StringMatchesString`, `IndexOf_EmptySearchArgument_XPTY0004`, `IndexOf_EmptyCollationArgument_XPTY0004`, `IndexOf_UntypedAtomicMatchesUri`, `IndexOf_NumericPromotion_DecimalMatchesInteger`, and `IndexOf_NotFound`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.51: fn:index-of eq-semantics, single-item validation, NaN-safe comparison)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.16: fn:index-of regression tests)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`cbcl-*` scattered clusters** (~8+ failures in the full QT3 suite). Other candidate pools: `named-function-ref-reserved-function-names` (12), and `RangeExpr` BigInteger cases (12 — known limitation).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `8c81587` (QT3 Tier-2x: op-numeric-mod floating-point mod-by-zero returns NaN)
 **Current focus:** **QT3 Tier-2x: `op-numeric-mod`** — `VmEngine.Modulo` now follows IEEE 754 semantics for `xs:double` and `xs:float`: mod by zero returns `NaN` instead of raising `FOAR0001`. Integer and decimal mod by zero continue to raise `FOAR0001`. Targeted `op-numeric-mod` pool now **113 passed / 0 failed / 11 skipped** (was 107/6/11). Full QT3 suite now at **21,576 passed / 364 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.34%** (21576 / 21940). Unit tests **1,317/0**.
 
