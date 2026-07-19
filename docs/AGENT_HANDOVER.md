@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `fd529e5` (QT3 Tier-2z: cbcl-castable castable-as overflow and empty-sequence fixes)
+**Current focus:** **QT3 Tier-2z: `cbcl-*` scattered clusters** — `VmEngine` `Castable` opcode now catches dynamic cast errors (FOCA0003, FOAR0002) and returns `false` for `castable as`, and correctly reports that an empty sequence is only castable to optional/zero-or-more sequence types. The `prod-CastableExpr` targeted pool is now **782 passed / 0 failed / 177 skipped** (was 772/10/177). Full QT3 suite now at **21,607 passed / 333 failed / 9,881 skipped (67.81%)**; runnable pass rate improved to **98.48%** (21607 / 21940). Unit tests **1,343/0**.
+
+---
+
+## This Session Fixes (Tier-2z: cbcl-castable)
+
+1. **`castable as` masks dynamic errors** — The `Castable` opcode now catches `InvalidOperationException` and `OverflowException` raised by `TryCast` and returns `false` instead of propagating the error. This fixes `cbcl-castable-dayTimeDuration-001/002`, `cbcl-castable-yearMonthDuration-001/002`, and `cbcl-castable-decimal-007/008/009/010`.
+
+2. **Empty-sequence castability** — `()` is now correctly reported as not castable to an exactly-one sequence type (`xs:integer`, `xs:QName`) and castable to optional types (`xs:integer?`, `xs:QName?`). This fixes `K-SeqExprCastable-20` and `K-SeqExprCastable-35`.
+
+3. **Add unit tests** — `FunctionLibraryTests` adds `CastableAs_EmptySequence_NotCastableToExactlyOne`, `CastableAs_EmptySequence_CastableToOptional`, `CastableAs_OverflowDoubleToDecimal_ReturnsFalse`, and `CastableAs_OverflowDuration_ReturnsFalse`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.45: castable masks dynamic errors and handles empty-sequence occurrence correctly)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.17: castable-as regression tests)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`fn/format-number`** (5 failures in the full QT3 suite: numberformat63/64 large-number precision, numberformat123 non-ASCII exponent digits, numberformat128 FODF1310, numberformat906InputErr XPTY0004). Other candidate: `fn/matches` caseless-match cluster (3).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `33dfc94` (QT3 Tier-2z: prod-NamedFunctionRef reserved-function-name fixes)
 **Current focus:** **QT3 Tier-2z: `prod-NamedFunctionRef` / `named-function-ref-reserved-function-names`** — `XPathParser.ParseNamedFunctionRef` now raises `XPST0003` when a reserved function name (e.g., `attribute#0`, `element#0`) is used in a named function reference. The check is intentionally not applied to `ParseFunctionCall` because reserved names like `attribute()` are valid as kind tests. Targeted `prod-NamedFunctionRef` pool now **546 passed / 0 failed / 10 skipped** (was 534/12/10). Full QT3 suite now at **21,597 passed / 343 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.44%** (21597 / 21940). Unit tests **1,339/0**.
 
