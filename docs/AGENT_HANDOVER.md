@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `PENDING` (QT3 Tier-2z: union / intersect / except XPTY0004 validation)
+**Commit:** `4dad663` (QT3 Tier-2z: union / intersect / except XPTY0004 validation)
 **Current focus:** **QT3 Tier-2z: sequence set-operator XPTY0004 cluster** — `union`, `intersect`, and `except` were silently ignoring non-node items instead of raising `XPTY0004` as required by XPath. The `Concatenate` VM opcode (used for `union`), `Intersect`, and `Except` now validate that every operand item is a node. This fixes the seven `K2-SeqExcept/Intersect/Union` failures. Added a `LoadNode` VM opcode so the unit test for `Concatenate` can exercise node sequences. Targeted tests now pass: `K2-SeqExcept-1`, `K2-SeqIntersect-1/43/44`, `K2-SeqUnion-5/46/47`. Full QT3 suite now at **14,773 passed / 104 failed / 16,944 skipped (46.43%)**; runnable pass rate **99.30%** (14773 / 14877). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: sequence set-operator XPTY0004)
