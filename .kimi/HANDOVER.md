@@ -8,36 +8,27 @@
 
 ## What Was Done
 
-- **QT3 Tier-2w `fn-has-children` is complete.**
-  - Fixed `HasChildren_0` to raise `XPDY0002` when the context item is absent.
-  - Fixed `HasChildren`/`HasChildren_1` to unwrap singleton sequences: empty sequence returns `false`, multi-item sequences raise `XPTY0004`, and non-node items raise `XPTY0004`.
-  - Targeted `fn-has-children` pool now **34 passed / 0 failed / 3 skipped** (was 26/8/3).
-- **QT3 Tier-2x `op-numeric-mod` is complete.**
-  - Fixed `VmEngine.Modulo` so floating-point (`xs:double`/`xs:float`) mod by zero returns `NaN` per IEEE 754, instead of raising `FOAR0001`.
-  - Integer and decimal mod by zero continue to raise `FOAR0001`.
-  - Targeted `op-numeric-mod` pool now **113 passed / 0 failed / 11 skipped** (was 107/6/11).
-- **QT3 Tier-2y `K-SeqIndexOfFunc` / `fn-index-of` is complete.**
-  - Rewrote `FunctionLibrary.IndexOfImpl` to use XPath `eq` semantics via `AtomicValuesEqual` instead of string comparison.
-  - NaN no longer matches itself in `fn:index-of`.
-  - Empty / multi-item search argument and empty collation argument now raise `XPTY0004`.
-  - Incompatible types (e.g., `xs:integer` vs `xs:string`) return empty instead of matching.
-  - Targeted `fn-index-of` pool now **53 passed / 0 failed / 0 skipped** (was 44/9/0).
-- **Updated QT3 baselines:** full suite **21,585 passed / 355 failed / 9,881 skipped (67.79%)**; runnable pass rate **98.38%**. Unit tests **1,327/0**.
+- **QT3 Tier-2z `prod-NamedFunctionRef` / `named-function-ref-reserved-function-names` is complete.**
+  - Added `XPST0003` validation in `XPathParser.ParseNamedFunctionRef` for unprefixed reserved function names (e.g., `attribute#0`, `element#0`, `node#0`, `switch#0`).
+  - Removed the reserved-name check from `ParseFunctionCall` because reserved names like `attribute()` are valid as kind tests / node tests.
+  - Added `NamedFunctionRef_ReservedName_RaisesXPST0003` `[Theory]` tests covering all reserved function names.
+  - Removed the two function-call tests that incorrectly assumed reserved names would raise `XPST0003`.
+  - Targeted `prod-NamedFunctionRef` pool now **546 passed / 0 failed / 10 skipped** (was 534/12/10).
+- **Updated QT3 baselines:** full suite **21,597 passed / 343 failed / 9,881 skipped (67.79%)**; runnable pass rate **98.44%**. Unit tests **1,339/0**.
 - **Updated documentation:** `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md`.
-- **Updated file change histories** for `FunctionLibrary.cs` and `FunctionLibraryTests.cs`.
+- **Updated file change histories** for `XPathParser.cs` and `ParserTests.cs`.
 - **Build:** `dotnet build Bosak.sln` — 0 errors, 1 warning (pre-existing `XdmSequence.FromSource` nullability in `FunctionLibrary.cs`).
 
 ## Next Session Focus
 
-**QT3 Tier-2z: `cbcl-*` scattered clusters** (~8+ failures, or pick the largest individual cluster).
+**QT3 Tier-3a: `cbcl-*` scattered clusters** (~8+ failures in the full QT3 suite; pick the largest individual cluster first).
 
-## Remaining Tier-2 Pools (after 2z)
+## Remaining Tier-2 Pools
 
-- `named-function-ref-reserved-function-names` (12)
 - `RangeExpr` BigInteger cases (12 — known limitation)
 
 ## Notes
 
 - Full QT3 run ~5 min background (timeout 900). Exit code 2 = has failures (normal).
 - Canonical state is in `docs/AGENT_HANDOVER.md`.
-- All changes from this session are committed and pushed as `4c79b2c`.
+- All changes from this session are committed and pushed as `33dfc94`.

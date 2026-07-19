@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `33dfc94` (QT3 Tier-2z: prod-NamedFunctionRef reserved-function-name fixes)
+**Current focus:** **QT3 Tier-2z: `prod-NamedFunctionRef` / `named-function-ref-reserved-function-names`** — `XPathParser.ParseNamedFunctionRef` now raises `XPST0003` when a reserved function name (e.g., `attribute#0`, `element#0`) is used in a named function reference. The check is intentionally not applied to `ParseFunctionCall` because reserved names like `attribute()` are valid as kind tests. Targeted `prod-NamedFunctionRef` pool now **546 passed / 0 failed / 10 skipped** (was 534/12/10). Full QT3 suite now at **21,597 passed / 343 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.44%** (21597 / 21940). Unit tests **1,339/0**.
+
+---
+
+## This Session Fixes (Tier-2z: prod-NamedFunctionRef)
+
+1. **`NamedFunctionRef` reserved-function-name check** — `ParseNamedFunctionRef` now calls `ThrowIfReservedFunctionName` and raises `XPST0003` for unprefixed reserved names such as `attribute#0`, `element#0`, `node#0`, `switch#0`, etc.
+
+2. **No check for function calls** — `ParseFunctionCall` no longer calls `ThrowIfReservedFunctionName`. Reserved names like `attribute()`, `element()`, and `node()` are valid as kind tests and must be parsed as function calls / node tests without raising `XPST0003`.
+
+3. **Add unit tests** — `ParserTests` adds a `[Theory]` test `NamedFunctionRef_ReservedName_RaisesXPST0003` covering all reserved function names. The two function-call tests that assumed reserved names would raise are removed.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (v1.13: reserved-function-name check only in named function references)
+- `tests/Bosak.XPath.Parser.Tests/ParserTests.cs` (v0.5: named-function-reference reserved-name tests; remove function-call tests)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`cbcl-*` scattered clusters** (~8+ failures in the full QT3 suite). Other candidate pool: `RangeExpr` BigInteger cases (12 — known limitation).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `4c79b2c` (QT3 Tier-2y: fn:index-of eq-semantics and NaN handling)
 **Current focus:** **QT3 Tier-2y: `K-SeqIndexOfFunc` / `fn-index-of`** — `FunctionLibrary.IndexOfImpl` now uses XPath `eq` semantics via `AtomicValuesEqual` instead of string comparison. NaN no longer matches itself, empty / multi-item search arguments and empty collation arguments raise `XPTY0004`, and incompatible types (e.g., `xs:integer` vs `xs:string`) return empty. Targeted `fn-index-of` pool now **53 passed / 0 failed / 0 skipped** (was 44/9/0). Full QT3 suite now at **21,585 passed / 355 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.38%** (21585 / 21940). Unit tests **1,327/0**.
 

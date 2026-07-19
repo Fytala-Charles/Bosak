@@ -5,13 +5,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,327 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,585 passed / 355 failed / 9,881 skipped (67.79% / 98.38% of runnable tests)
+> **Bosak baseline:** 1,339 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,597 passed / 343 failed / 9,881 skipped (67.79% / 98.44% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `prod-NamedFunctionRef` / `named-function-ref-reserved-function-names` fixes.
+  - `XPathParser.ParseNamedFunctionRef` raises `XPST0003` for reserved function names (e.g., `attribute#0`, `element#0`).
+  - The reserved-name check is not applied to `ParseFunctionCall` because names like `attribute()` are valid as kind tests.
+  - `prod-NamedFunctionRef` targeted pool now **546 passed / 0 failed / 10 skipped** (was 534/12/10).
+  - Full QT3 now **21,597 / 343 / 9,881 = 67.79%** (runnable pass rate **98.44%**); unit tests **1,339/0**.
 
 - **2026-07-19** — QT3 Tier-2y: `fn:index-of` fixes.
   - `FunctionLibrary.IndexOfImpl` now uses XPath `eq` semantics via `AtomicValuesEqual` instead of string comparison.
