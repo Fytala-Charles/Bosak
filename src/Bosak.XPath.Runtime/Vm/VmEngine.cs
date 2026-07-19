@@ -78,6 +78,7 @@
 //                      | Charles Korthout | 2.42  | 19-07-2026     | Tier-2u: xs:numeric cast and xs:numeric#1 constructor                                  |
 //                      | Charles Korthout | 2.43  | 19-07-2026     | Tier-2v: idiv NaN/INF and numeric-literal+keyword boundary checks                       |
 //                      | Charles Korthout | 2.44  | 19-07-2026     | Tier-2x: floating-point mod by zero returns NaN instead of FOAR0001                     |
+//                      | Charles Korthout | 2.45  | 19-07-2026     | Castable opcode catches overflow/cast errors; empty sequence only castable for ?/*    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1331,9 +1332,9 @@ public static class VmEngine
                         var value = registers[instr.RegisterB];
                         bool isEmpty = value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
                         bool castable;
-                        if (occurrence == OccurrenceIndicator.ZeroOrOne && isEmpty)
+                        if (isEmpty)
                         {
-                            castable = true;
+                            castable = occurrence is OccurrenceIndicator.ZeroOrOne or OccurrenceIndicator.ZeroOrMore;
                         }
                         else if (occurrence is OccurrenceIndicator.ZeroOrMore or OccurrenceIndicator.OneOrMore)
                         {
@@ -1345,7 +1346,13 @@ public static class VmEngine
                             {
                                 castable = TryCast(value, typeName, out _);
                             }
-                            catch (InvalidOperationException ex) when (ex.Message == "FOCA0003")
+                            catch (InvalidOperationException)
+                            {
+                                // castable as returns false for any dynamic error that the cast would raise
+                                // (e.g. FOCA0003, FOAR0002), rather than propagating the exception.
+                                castable = false;
+                            }
+                            catch (OverflowException)
                             {
                                 castable = false;
                             }

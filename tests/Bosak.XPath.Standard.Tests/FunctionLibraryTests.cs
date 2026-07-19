@@ -47,6 +47,7 @@
 //                      | Charles Korthout | 2.14  | 19-07-2026     | Tier-2u: xs:numeric cast and constructor tests                                         |
 //                      | Charles Korthout | 2.15  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence regression tests          |
 //                      | Charles Korthout | 2.16  | 19-07-2026     | Tier-2y: fn:index-of eq-semantics, NaN, and XPTY0004 regression tests                  |
+//                      | Charles Korthout | 2.17  | 19-07-2026     | Tier-2z: castable masks overflow/cast errors and empty-sequence occurrence tests      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1798,6 +1799,34 @@ public class FunctionLibraryTests
 
     [Fact]
     public void CastableAs_False() => Assert.Equal("false", EvalStr("'hello' castable as xs:integer"));
+
+    [Fact]
+    public void CastableAs_EmptySequence_NotCastableToExactlyOne()
+    {
+        Assert.Equal("false", EvalStr("() castable as xs:integer"));
+        Assert.Equal("false", EvalStr("() castable as xs:QName"));
+    }
+
+    [Fact]
+    public void CastableAs_EmptySequence_CastableToOptional()
+    {
+        Assert.Equal("true", EvalStr("() castable as xs:integer?"));
+        Assert.Equal("true", EvalStr("() castable as xs:QName?"));
+    }
+
+    [Fact]
+    public void CastableAs_OverflowDoubleToDecimal_ReturnsFalse()
+    {
+        Assert.Equal("false", EvalStr("1.7976931348623157E+308 castable as xs:decimal"));
+        Assert.Equal("false", EvalStr("xs:float('3.402823e38') castable as xs:decimal"));
+    }
+
+    [Fact]
+    public void CastableAs_OverflowDuration_ReturnsFalse()
+    {
+        Assert.Equal("false", EvalStr("'P11768614336404564651D' castable as xs:dayTimeDuration"));
+        Assert.Equal("false", EvalStr("'-P768614336404564651Y' castable as xs:yearMonthDuration"));
+    }
 
     [Fact]
     public void InstanceOf_Integer() => Assert.Equal("true", EvalStr("42 instance of xs:integer"));
