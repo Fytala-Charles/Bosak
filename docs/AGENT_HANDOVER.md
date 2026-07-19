@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `TBD` (QT3 Tier-2z: fn-root/fn-name/fn-local-name context-item and fn-QName QName fixes)
+**Commit:** `ebacc48` (QT3 Tier-2z: fn-root/fn-name/fn-local-name context-item and fn-QName QName fixes)
 **Current focus:** **QT3 Tier-2z: `fn-root` / `fn-name` / `fn-local-name` / `fn-prefix-from-QName` / `fn-QName` clusters** — The residual failures were caused by missing context-item error checks in the zero-arg node-name accessors and by incorrect empty-sequence / empty-prefix handling in the one-arg forms and in `fn:QName`. Added `GetOptionalSingleNode` helper for empty-sequence/single-node extraction with `XPTY0004` for non-node/multiple items. Fixed `LocalName_0/1`, `NamespaceUri_0/1`, `Name_0/1`, `NodeName_0/1`, and `Root_0/1` to raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context/argument. Fixed `LocalName_1` and `NamespaceUri_1` to return the zero-length `xs:string` / `xs:anyURI` (not the empty sequence) when the argument is empty, matching the F+O spec return type. Fixed `Qname` to accept an empty-sequence namespace URI argument and to reject lexical QNames that begin or end with a colon (`FOCA0002`). Targeted pools now all **0 failed**: `fn-root` 11/0/27, `fn-name` 72/0/54, `fn-local-name` 66/0/22, `fn-prefix-from-QName` 27/0/0, `fn-QName` 25/0/9. Full QT3 suite now at **14,743 passed / 137 failed / 16,941 skipped (46.33%)**; runnable pass rate **98.92%** (14743 / 14880). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: node-name accessors and QName construction)
