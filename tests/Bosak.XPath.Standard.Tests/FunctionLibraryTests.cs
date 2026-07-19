@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 2.16  | 19-07-2026     | Tier-2y: fn:index-of eq-semantics, NaN, and XPTY0004 regression tests                  |
 //                      | Charles Korthout | 2.17  | 19-07-2026     | Tier-2z: castable masks overflow/cast errors and empty-sequence occurrence tests      |
 //                      | Charles Korthout | 2.18  | 19-07-2026     | fn:zero-or-one singleton-sequence regression test                                      |
+//                      | Charles Korthout | 2.19  | 19-07-2026     | Namespace axis order: xml first, document order across elements                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -921,6 +922,33 @@ public class FunctionLibraryTests
         // Inner declaration overrides outer one
         Assert.Contains("http://override.com", uris);
         Assert.DoesNotContain("http://example.com", uris);
+    }
+
+    [Fact]
+    public void NamespaceAxis_XmlFirstAndDocumentOrdered()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse(
+            "<root xmlns='urn:root' xmlns:a='urn:a'><b:child xmlns:b='urn:b'><c:grandchild xmlns:c='urn:c'/></b:child></root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("namespace::node()").Evaluate(root);
+        var prefixes = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            prefixes.Add(item.NodeValue.LocalName);
+        Assert.Equal("xml", prefixes[0]);
+        Assert.Contains(string.Empty, prefixes);
+        Assert.Contains("a", prefixes);
+
+        // //*/namespace::* must be in document order: root namespaces first.
+        var allResult = XPath31Expression.Compile("//*/namespace::* ! local-name()").Evaluate(root);
+        var allPrefixes = new List<string>();
+        foreach (var item in XdmSequence.FromSource(allResult.SequenceValue!))
+            allPrefixes.Add(item.ToString());
+        // First namespace node in document order is xml on the root, followed by root's
+        // declared prefixes, before any descendant namespaces.
+        Assert.Equal("xml", allPrefixes[0]);
+        Assert.Contains("a", allPrefixes.Take(3));
+        Assert.Contains("b", allPrefixes);
+        Assert.Contains("c", allPrefixes);
     }
 
     // ------------------------------------------------------------------

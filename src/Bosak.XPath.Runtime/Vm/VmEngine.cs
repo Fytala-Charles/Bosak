@@ -82,6 +82,7 @@
 //                      | Charles Korthout | 2.46  | 19-07-2026     | xs:unsignedLong values above long.MaxValue stored as xs:decimal with subtype annotation; instance-of accepts decimal-backed integer subtypes |
 //                      | Charles Korthout | 2.47  | 19-07-2026     | RangeExpr supports xs:integer operands that exceed long range via DecimalRangeSequence |
 //                      | Charles Korthout | 2.48  | 19-07-2026     | CompareGeneral enumerates operands lazily to avoid materializing huge ranges |
+//                      | Charles Korthout | 2.49  | 19-07-2026     | NormalizeSequence stable-sorts namespace nodes by owner element so namespace axis is document-ordered |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2521,14 +2522,23 @@ public static class VmEngine
 
         if (nodes.Count > 1)
         {
-            nodes.Sort((a, b) =>
+            // Use a stable sort by document order. Namespace nodes of the same element
+            // share the same DocumentOrder (they are ordered by the owner element), so
+            // preserving their original sequence order keeps the namespace axis order
+            // (xml first, then root-to-current) intact.
+            var indexed = nodes.Select((n, i) => (Node: n, Index: i)).ToList();
+            indexed.Sort((a, b) =>
             {
-                bool aDoc = a.NodeValue!.Document is not null;
-                bool bDoc = b.NodeValue!.Document is not null;
+                bool aDoc = a.Node.NodeValue!.Document is not null;
+                bool bDoc = b.Node.NodeValue!.Document is not null;
                 if (aDoc != bDoc)
                     return aDoc ? -1 : 1;
-                return a.NodeValue.DocumentOrder.CompareTo(b.NodeValue.DocumentOrder);
+                int cmp = a.Node.NodeValue.DocumentOrder.CompareTo(b.Node.NodeValue.DocumentOrder);
+                if (cmp != 0)
+                    return cmp;
+                return a.Index.CompareTo(b.Index);
             });
+            nodes = indexed.Select(x => x.Node).ToList();
         }
 
         if (nonNodes.Count == 0)

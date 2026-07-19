@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 1.5   | 26-06-2026     | GetNamespaceAxis adds implied default namespaces only when not explicitly declared     |
 //                      | Charles Korthout | 1.6   | 28-06-2026     | ResolveXmlBase honors external-entity node base URIs; fixes resolve-uri-021          |
 //                      | Charles Korthout | 1.7   | 18-07-2026     | Exposed XDocumentType properties for DTD-based ID/IDREF support                        |
+//                      | Charles Korthout | 1.8   | 19-07-2026     | GetNamespaceAxis returns xml first, then namespaces in root-to-current order         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -249,6 +250,14 @@ public sealed class XDocumentNode : IXdmNode
     {
         get
         {
+            // Namespace nodes are virtual; their document order is determined by the
+            // owner element so that all namespace nodes of an element sort together and
+            // before the namespace nodes of any descendant.
+            if (_isNamespaceNode && _namespaceOwner is not null)
+            {
+                return new XDocumentNode(_namespaceOwner).DocumentOrder;
+            }
+
             var doc = _node.Document;
             if (doc is not null)
             {
@@ -758,6 +767,10 @@ public sealed class XDocumentNode : IXdmNode
         bool hasExplicitDefaultForElementNs = false;
         bool hasPrefixDeclarationForElementNs = false;
 
+        // Collect namespace declarations from current element up to the root.
+        // Because we walk upward, this produces current-to-root order; we will
+        // reverse it below so the final axis order is root-to-current.
+        var collected = new List<XdmValue>();
         while (current is not null)
         {
             foreach (var attr in current.Attributes())
@@ -766,7 +779,7 @@ public sealed class XDocumentNode : IXdmNode
                     continue;
 
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
-                AddNamespaceNode(items, seen, prefix, attr.Value, element);
+                AddNamespaceNode(collected, seen, prefix, attr.Value, element);
 
                 if (elementNsIsNonEmpty)
                 {
@@ -792,10 +805,13 @@ public sealed class XDocumentNode : IXdmNode
         // when it is not already declared explicitly (either as default or prefixed).
         if (elementNsIsNonEmpty && !hasExplicitDefaultForElementNs && !hasPrefixDeclarationForElementNs)
         {
-            AddNamespaceNode(items, seen, string.Empty, elementNs, element);
+            AddNamespaceNode(collected, seen, string.Empty, elementNs, element);
         }
 
-        // The xml namespace is always implicitly in scope
+        // Reverse from current-to-root into root-to-current order.
+        collected.Reverse();
+
+        // The xml namespace is always implicitly in scope and must be first.
         if (seen.Add("xml"))
         {
             items.Add(XdmValue.FromNode(new XDocumentNode(
@@ -803,6 +819,7 @@ public sealed class XDocumentNode : IXdmNode
                 element)));
         }
 
+        items.AddRange(collected);
         return MaterializedSequence.FromList(items);
     }
 
