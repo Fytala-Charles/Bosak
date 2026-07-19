@@ -8,20 +8,21 @@
 
 ## What Was Done
 
-- **QT3 Tier-2z `fn/format-number` cluster is complete.**
-  - `FormatNumberEngine` now raises `XPTY0004` for non-numeric string inputs when not in XPath 1.0 backwards-compatible mode.
-  - Scientific notation formatting supports supplementary-plane (non-BMP) zero-digits, counts exponent digit signs correctly for surrogate-pair zero-digits, and pads/maps exponent digits using the full `ZeroDigit` string.
-  - `DependencyFilter` ANDs spec dependencies across `<dependency>` elements, so XP30-only tests like `numberformat128` are skipped under XP31+.
-  - `numberformat63` and `numberformat64` (decimal literals requiring >28 digits of precision) are documented as platform limitations because .NET `decimal` is fixed-precision and the parser falls back to `double`.
-  - Targeted `fn-format-number` pool now **246 passed / 0 failed / 23 skipped** (3 previously failing tests now pass; 2 precision tests skipped).
-- **Updated QT3 baselines:** full suite **21,612 passed / 325 failed / 9,884 skipped (67.92%)**; runnable pass rate **98.52%**. Unit tests **1,343/0**.
+- **QT3 Tier-2z `fn/contains` collation/whitespace cluster is complete.**
+  - Fixed UCA collation strength mapping in `FunctionLibrary.TryParseUca`: `primary` ignores case and non-space accents, `secondary` ignores only case, and `tertiary`/`quaternary` use no ignore flags.
+  - Implemented true ASCII-only case folding for the HTML ASCII case-insensitive collation (`http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive`), so only `A-Z`/`a-z` are folded; non-ASCII characters such as `ô`/`Ô` are compared exactly.
+  - `fn:contains-token` now tokenizes on XPath whitespace only (`#x20`, `#x9`, `#xD`, `#xA`); non-breaking space (`U+00A0`) is no longer treated as a token separator.
+  - `fn:substring-after` now delegates its non-UCA search to `StringIndexOf`, so HTML-ASCII collation is honored consistently.
+  - Targeted `fn-contains` and `fn-contains-token` pools now **0 failed** (6 previously failing tests now pass).
+- **Updated QT3 baselines:** full suite **21,618 passed / 319 failed / 9,884 skipped (67.93%)**; runnable pass rate **98.54%**. Unit tests **1,343/0**.
 - **Updated documentation:** `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md`.
-- **Updated file change histories** for `FormatNumberEngine.cs`, `FunctionLibrary.cs`, `DependencyFilter.cs`, and `ConformanceRunner.cs`.
+- **Updated file change history** for `FunctionLibrary.cs`.
 - **Build:** `dotnet build Bosak.sln` — 0 errors, 1 warning (pre-existing `XdmSequence.FromSource` nullability in `FunctionLibrary.cs`).
+- **Tests:** `dotnet test Bosak.sln --configuration Release --no-build` — all 1,343 unit tests passed.
 
 ## Next Session Focus
 
-**QT3 Tier-2z: `fn/contains` collation/whitespace cluster** (5 failures). Alternate: `op/numeric-less-than` (2), `RangeExpr` BigInteger cases (12 — known limitation).
+**QT3 Tier-2z: `op/numeric-less-than`** (2 failures). Alternate: `RangeExpr` BigInteger cases (12 — known limitation), `cbcl-*` residual clusters.
 
 ## Remaining Tier-2 Pools
 
@@ -33,4 +34,4 @@
 
 - Full QT3 run ~5 min background (timeout 900). Exit code 2 = has failures (normal).
 - Canonical state is in `docs/AGENT_HANDOVER.md`.
-- All changes from this session are committed and pushed as `ef9dace` (code and docs).
+- All changes from this session are committed and pushed as `c3c76a2` (code) and the following docs commit.

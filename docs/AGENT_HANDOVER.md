@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `c3c76a2` (QT3 Tier-2z: fn/contains collation/whitespace fixes)
+**Current focus:** **QT3 Tier-2z: `fn/contains` collation/whitespace cluster** — Fixed UCA collation strength mapping in `FunctionLibrary.TryParseUca` so `strength=secondary` ignores only case and `strength=tertiary` ignores no attributes. Implemented true ASCII-only case folding for the HTML ASCII case-insensitive collation in `StringContains`, `StringStartsWith`, `StringEndsWith`, `StringIndexOf`, `CompareStrings`, and `GetCollationEqualityComparer`. `fn:contains-token` now tokenizes on XPath whitespace only (`#x20`, `#x9`, `#xD`, `#xA`), so non-breaking space is no longer treated as a separator. Targeted `fn-contains` and `fn-contains-token` pools now **0 failed** (6 previously failing tests now pass). Full QT3 suite now at **21,618 passed / 319 failed / 9,884 skipped (67.93%)**; runnable pass rate improved to **98.54%** (21618 / 21937). Unit tests **1,343/0**.
+
+---
+
+## This Session Fixes (Tier-2z: fn/contains)
+
+1. **UCA collation strength mapping** — `FunctionLibrary.TryParseUca` now maps `primary` to `IgnoreCase | IgnoreNonSpace`, `secondary` to `IgnoreCase`, and `tertiary`/`quaternary` to `CompareOptions.None`. This fixes `fn-contains-26`, `fn-contains-27`, and `fn-contains-30`.
+
+2. **HTML ASCII case-insensitive collation** — The previous implementation used `StringComparison.OrdinalIgnoreCase`, which folds non-ASCII characters such as `ô`/`Ô`. New `AsciiCaseInsensitiveContains`/`StartsWith`/`EndsWith`/`IndexOf` helpers and `AsciiCaseInsensitiveComparer` fold only ASCII `A-Z`/`a-z`, matching the HTML collation specification. This fixes `liam-contains-004`.
+
+3. **`fn:contains-token` whitespace handling** — Tokenization now splits on XPath whitespace only (`#x20`, `#x9`, `#xD`, `#xA`) instead of all Unicode whitespace, so codepoint `160` (NBSP) is no longer treated as a separator. This fixes `fn-contains-token-21` and `fn-contains-token-51`.
+
+4. **`fn:substring-after` uses `StringIndexOf`** — The non-UCA path now delegates to `StringIndexOf`, so HTML-ASCII collation is honored consistently.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.19: UCA strength mapping; HTML ASCII case-insensitive helpers; XPath whitespace tokenization)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`op/numeric-less-than`** (2 failures in the full QT3 suite). Other candidates: `RangeExpr` BigInteger cases (12 — known limitation), `cbcl-*` residual clusters.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `ef9dace` (QT3 Tier-2z: fn/format-number precision and dependency-filter fixes)
 **Current focus:** **QT3 Tier-2z: `fn/format-number` cluster** — `FormatNumberEngine` now raises `XPTY0004` for non-numeric string inputs in non-backwards-compatible mode, supports non-BMP (supplementary-plane) zero-digits in scientific notation, and counts exponent digit signs correctly for surrogate-pair zero-digits. The conformance harness `DependencyFilter` now ANDs spec dependencies across `<dependency>` elements, so XP30-only tests like `numberformat128` are skipped when Bosak runs as XP31+. `numberformat63` and `numberformat64` (decimal literals requiring >28 digits of precision) are documented as platform limitations because .NET `decimal` is fixed-precision. Targeted `fn-format-number` pool is now **246 passed / 0 failed / 23 skipped** (3 previously failing tests now pass; 2 precision tests skipped). Full QT3 suite now at **21,612 passed / 325 failed / 9,884 skipped (67.92%)**; runnable pass rate improved to **98.52%** (21612 / 21937). Unit tests **1,343/0**.
 

@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,343 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,612 passed / 325 failed / 9,884 skipped (67.92% / 98.52% of runnable tests)
+> **QT3 baseline:** 21,618 passed / 319 failed / 9,884 skipped (67.93% / 98.54% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `fn/contains` collation/whitespace fixes.
+  - Fixed UCA collation strength mapping in `FunctionLibrary.TryParseUca`: `primary` ignores case and non-space accents, `secondary` ignores only case, and `tertiary`/`quaternary` use no ignore flags.
+  - Implemented true ASCII-only case folding for the HTML ASCII case-insensitive collation (`http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive`), so only `A-Z`/`a-z` are folded; non-ASCII characters such as `ô`/`Ô` are compared exactly.
+  - `fn:contains-token` now tokenizes on XPath whitespace only (`#x20`, `#x9`, `#xD`, `#xA`); non-breaking space (`U+00A0`) is no longer treated as a token separator.
+  - Targeted `fn-contains` and `fn-contains-token` pools now **0 failed** (6 previously failing tests now pass).
+  - Full QT3 now **21,618 passed / 319 failed / 9,884 skipped = 67.93%** (runnable pass rate **98.54%**); unit tests **1,343/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `cbcl-castable` fixes.
   - `VmEngine` `Castable` opcode catches dynamic cast errors (FOCA0003, FOAR0002) and returns `false` for `castable as`.
