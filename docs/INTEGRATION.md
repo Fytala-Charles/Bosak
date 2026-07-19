@@ -5,13 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,345 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,773 passed / 104 failed / 16,944 skipped (46.43% / 99.30% of runnable tests)
+> **Bosak baseline:** 1,346 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,784 passed / 93 failed / 16,944 skipped (46.46% / 99.38% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: duration / date arithmetic cluster.
+  - `xs:date` +/− `xs:dayTimeDuration` now returns an `xs:date` with the time components zeroed to `00:00:00`.
+  - `xs:time` +/− `xs:yearMonthDuration` now raises `XPTY0004` instead of returning the time unchanged.
+  - Generic `xs:duration` values are handled by `fn:*-from-duration` so mixed year-month and day-time components are extracted correctly.
+  - `fn:distinct-values` and `fn:index-of` now compare durations using normalized total months and total seconds.
+  - Targeted tests pass: `fn-months-from-duration-20`, `K-MonthsFromDurationFunc-7`, `fn-years-from-duration-20`, `K-YearsFromDurationFunc-7`, `K-DateAddDTD-1/2`, `K-DateSubtractDTD-1`, `K-TimeSubtractDTD-2/3/5`, and `distinct-duration-equal-1`.
+  - Full QT3 now **14,784 passed / 93 failed / 16,944 skipped = 46.46%** (runnable pass rate **99.38%**); unit tests **1,346/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `union` / `intersect` / `except` XPTY0004 validation.
   - `VmEngine` now validates that all items in both operands of `union`, `intersect`, and `except` are nodes, raising `XPTY0004` for non-node operands.
