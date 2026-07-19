@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `7d4dc6c` (QT3 Tier-2z: duration-arithmetic round-half-up and overflow fixes)
+**Commit:** `284a39b` (QT3 Tier-2z: duration-arithmetic round-half-up and overflow fixes)
 **Current focus:** **QT3 Tier-2z: `op-multiply-yearMonthDuration` / `op-divide-yearMonthDuration` / `op-multiply-dayTimeDuration` / `op-divide-dayTimeDuration` clusters** — YearMonth multiply/divide was using .NET `Math.Round` (banker's rounding), but the F+O Erratum FO.E12 expects round-half-up (`floor(x + 0.5)`), so ties such as `P5M div -2` and `P2Y11M * 2.3` were off by one month. DayTime multiply/divide was casting `xs:double` factors/divisors directly to `decimal`, causing `OverflowException`/`FOAR0002` for `1.7976931348623157E308` and underflow/division-by-zero for very small divisors. `VmEngine` now uses a `RoundHalfUp` helper for yearMonth results and overflow-safe decimal/double fallback for dayTime results. It also checks the dynamic `xs:duration` schema annotation so `xs:duration("P1Y3M") * 3` and `xs:duration("P1Y3M") div 3` raise `XPTY0004` as required. `TryCast` to `xs:duration` now preserves the generic `duration` schema annotation so the runtime can distinguish it from the subtypes. Targeted duration pools now **0 failed** (16 previously failing tests now pass). Full QT3 suite now at **14,720 passed / 160 failed / 16,941 skipped (46.26%)**; runnable pass rate **98.92%** (14720 / 14880). Unit tests **1,344/0**.
 ## This Session Fixes (Tier-2z: duration arithmetic)
 
