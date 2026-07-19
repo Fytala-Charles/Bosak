@@ -5,13 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,344 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,720 passed / 160 failed / 16,941 skipped (46.26% / 98.92% of runnable tests)
+> **Bosak baseline:** 1,345 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,743 passed / 137 failed / 16,941 skipped (46.33% / 98.92% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `fn-root`/`fn-name`/`fn-local-name` context-item and `fn-QName` QName fixes.
+  - Added `GetOptionalSingleNode` helper for `node()?` arguments, raising `XPTY0004` for non-node or multi-item arguments.
+  - `fn:local-name()`, `fn:namespace-uri()`, `fn:name()`, `fn:node-name()`, and `fn:root()` now raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context item.
+  - `fn:local-name(())` and `fn:namespace-uri(())` now return the zero-length `xs:string` / `xs:anyURI` per their declared return types, not the empty sequence.
+  - `fn:QName((), "local")` now works (empty-sequence namespace URI treated as empty string); `:person` and `person:` lexical forms now raise `FOCA0002`.
+  - Targeted pools now all **0 failed**: `fn-root` 11/0/27, `fn-name` 72/0/54, `fn-local-name` 66/0/22, `fn-prefix-from-QName` 27/0/0, `fn-QName` 25/0/9.
+  - Full QT3 now **14,743 passed / 137 failed / 16,941 skipped = 46.33%** (runnable pass rate **98.92%**); unit tests **1,345/0**.
 
 - **2026-07-19** — QT3 Tier-2z: duration-arithmetic round-half-up and overflow fixes.
   - `VmEngine.MultiplyDuration` and `DivideDuration` for `xs:yearMonthDuration` now use `RoundHalfUp(totalMonths)` (`floor(x + 0.5)`) per F+O Erratum FO.E12, fixing rounding ties such as `P5M div -2` and `P2Y11M * 2.3`.

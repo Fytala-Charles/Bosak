@@ -1,6 +1,36 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `TBD` (QT3 Tier-2z: fn-root/fn-name/fn-local-name context-item and fn-QName QName fixes)
+**Current focus:** **QT3 Tier-2z: `fn-root` / `fn-name` / `fn-local-name` / `fn-prefix-from-QName` / `fn-QName` clusters** — The residual failures were caused by missing context-item error checks in the zero-arg node-name accessors and by incorrect empty-sequence / empty-prefix handling in the one-arg forms and in `fn:QName`. Added `GetOptionalSingleNode` helper for empty-sequence/single-node extraction with `XPTY0004` for non-node/multiple items. Fixed `LocalName_0/1`, `NamespaceUri_0/1`, `Name_0/1`, `NodeName_0/1`, and `Root_0/1` to raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context/argument. Fixed `LocalName_1` and `NamespaceUri_1` to return the zero-length `xs:string` / `xs:anyURI` (not the empty sequence) when the argument is empty, matching the F+O spec return type. Fixed `Qname` to accept an empty-sequence namespace URI argument and to reject lexical QNames that begin or end with a colon (`FOCA0002`). Targeted pools now all **0 failed**: `fn-root` 11/0/27, `fn-name` 72/0/54, `fn-local-name` 66/0/22, `fn-prefix-from-QName` 27/0/0, `fn-QName` 25/0/9. Full QT3 suite now at **14,743 passed / 137 failed / 16,941 skipped (46.33%)**; runnable pass rate **98.92%** (14743 / 14880). Unit tests **1,345/0**.
+
+## This Session Fixes (Tier-2z: node-name accessors and QName construction)
+
+1. **Context-item error checks for node-name accessors** — `LocalName_0`, `NamespaceUri_0`, `Name_0`, `NodeName_0`, and `Root_0` now raise `XPDY0002` when the context item is absent and `XPTY0004` when it is not a node.
+
+2. **`GetOptionalSingleNode` helper** — New helper in `FunctionLibrary` extracts an optional single node from `node()?` arguments, raising `XPTY0004` for non-node or multi-item arguments (unless backwards-compatible mode allows multiple items). Used by `LocalName_1`, `Name_1`, `NamespaceUri_1`, `NodeName_1`, `Root_1`, and others.
+
+3. **Empty-sequence returns for `fn:local-name` and `fn:namespace-uri`** — `LocalName_1` now returns the zero-length `xs:string` and `NamespaceUri_1` returns the zero-length `xs:anyURI` when the argument is the empty sequence, matching the declared F+O return types. `Name_1` already returned the zero-length string; `NodeName_1` and `Root_1` continue to return the empty sequence per their `xs:QName?` / `node()?` return types.
+
+4. **`fn:QName` empty-sequence and lexical-QName fixes** — `Qname` now accepts an empty-sequence first argument (treated as the zero-length namespace URI) and uses `RequireString`/`RequireStringRequired` for spec-correct type checking. It rejects lexical forms that start or end with a colon (`:person`, `person:`) with `FOCA0002`.
+
+5. **Regression safety** — Full QT3 suite improved by **+23 passed, −23 failed** with no regressions in the targeted pools or unit tests.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.55: `GetOptionalSingleNode`, context-item checks, empty-sequence returns, `Qname` fixes)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton failures from the full QT3 suite: `K-AdjDateToTimezoneFunc-*`, `fn-ceilingdbl1args-*`, `K-CodepointToStringFunc-*`, `compare-011`, `fn-doc-available-2`, `fn-implicit-timezone-*`, `fn-in-scope-prefixes-*`, `fn-lang-15`, `fn-months-from-duration-20`, `fn-not-28`, `fn-number-3`, `fn-resolve-uri-*`, `fn-substring-after/before-23`, `fn-upper-case-22`, `K2-SeqDeepEqualFunc-40`, `K2-DataFunc-6`, `K2-SeqExcept/Intersect/Union` XPTY0004 cases, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K2-StringLT-1`, `K-XQueryComment-14/15`, and schema-aware namespace-node failures. Other candidates: `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `errors-and-optimization-4`, `string-queries-results-q1`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `284a39b` (QT3 Tier-2z: duration-arithmetic round-half-up and overflow fixes)
 **Current focus:** **QT3 Tier-2z: `op-multiply-yearMonthDuration` / `op-divide-yearMonthDuration` / `op-multiply-dayTimeDuration` / `op-divide-dayTimeDuration` clusters** — YearMonth multiply/divide was using .NET `Math.Round` (banker's rounding), but the F+O Erratum FO.E12 expects round-half-up (`floor(x + 0.5)`), so ties such as `P5M div -2` and `P2Y11M * 2.3` were off by one month. DayTime multiply/divide was casting `xs:double` factors/divisors directly to `decimal`, causing `OverflowException`/`FOAR0002` for `1.7976931348623157E308` and underflow/division-by-zero for very small divisors. `VmEngine` now uses a `RoundHalfUp` helper for yearMonth results and overflow-safe decimal/double fallback for dayTime results. It also checks the dynamic `xs:duration` schema annotation so `xs:duration("P1Y3M") * 3` and `xs:duration("P1Y3M") div 3` raise `XPTY0004` as required. `TryCast` to `xs:duration` now preserves the generic `duration` schema annotation so the runtime can distinguish it from the subtypes. Targeted duration pools now **0 failed** (16 previously failing tests now pass). Full QT3 suite now at **14,720 passed / 160 failed / 16,941 skipped (46.26%)**; runnable pass rate **98.92%** (14720 / 14880). Unit tests **1,344/0**.
 ## This Session Fixes (Tier-2z: duration arithmetic)

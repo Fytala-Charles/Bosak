@@ -128,6 +128,8 @@
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.55  | 19-07-2026     | Tier-2z: fn:root/fn:name/fn:local-name context-item checks; fn:QName/xs:QName empty-prefix and empty-sequence fixes |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -4392,7 +4394,11 @@ public static class FunctionLibrary
 
     private static XdmValue XsQNameConstructor(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string lexical = AtomizedString(args[0]);
+        var arg = args[0];
+        if (arg.Kind != XdmValueKind.String)
+            throw new InvalidOperationException("XPTY0004");
+
+        string lexical = arg.StringValue.Trim();
         if (string.IsNullOrEmpty(lexical))
             throw new InvalidOperationException("FOCA0002");
 
@@ -4411,9 +4417,17 @@ public static class FunctionLibrary
             local = lexical;
         }
 
-        if (!ctx.TryResolveNamespace(prefix, out string nsUri))
-            nsUri = string.Empty;
-        return XdmValue.FromQName(new XsQName(local, nsUri, prefix));
+        if (!IsValidNcName(local) || (!string.IsNullOrEmpty(prefix) && !IsValidNcName(prefix)))
+            throw new InvalidOperationException("FOCA0002");
+
+        if (!string.IsNullOrEmpty(prefix))
+        {
+            if (!ctx.TryResolveNamespace(prefix, out string nsUri))
+                throw new InvalidOperationException($"FONS0004: No namespace binding for prefix '{prefix}'.");
+            return XdmValue.FromQName(new XsQName(local, nsUri, prefix));
+        }
+
+        return XdmValue.FromQName(new XsQName(local, string.Empty, string.Empty));
     }
 
     private static XdmValue ParseXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -6823,6 +6837,36 @@ public static class FunctionLibrary
         return true;
     }
 
+    /// <summary>
+    /// Returns the single node contained in <paramref name="value"/>, or <c>null</c> if the
+    /// value is the empty sequence. Raises <c>XPTY0004</c> for a non-node atomic value or a
+    /// multi-item sequence (unless backwards-compatible mode allows multiple items).
+    /// </summary>
+    private static IXdmNode? GetOptionalSingleNode(XdmValue value, bool backwardsCompatible)
+    {
+        if (IsEmptySequence(value))
+            return null;
+        var arg = value;
+        if (arg.IsSequence)
+        {
+            XdmValue? first = null;
+            int count = 0;
+            foreach (var x in XdmSequence.FromSource(arg.SequenceValue!))
+            {
+                first = x;
+                count++;
+                if (!backwardsCompatible && count > 1) break;
+            }
+            if (count == 0) return null;
+            if (!backwardsCompatible && count > 1)
+                throw new InvalidOperationException("XPTY0004");
+            arg = first!.Value;
+        }
+        if (!arg.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return arg.NodeValue;
+    }
+
     private static int SequenceLength(XdmValue value)
     {
         if (value.IsUndefined) return 0;
@@ -8778,37 +8822,49 @@ public static class FunctionLibrary
 
     private static XdmValue LocalName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
-        return XdmValue.FromString(node?.LocalName ?? string.Empty);
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(item.NodeValue.LocalName);
     }
 
     private static XdmValue LocalName_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
+        var node = GetOptionalSingleNode(args[0], ctx.BackwardsCompatible);
         return XdmValue.FromString(node?.LocalName ?? string.Empty);
     }
 
     private static XdmValue NamespaceUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
-        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty);
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(item.NodeValue.NamespaceUri, "anyURI");
     }
 
     private static XdmValue NamespaceUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
-        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty);
+        var node = GetOptionalSingleNode(args[0], ctx.BackwardsCompatible);
+        return XdmValue.FromString(node?.NamespaceUri ?? string.Empty, "anyURI");
     }
 
     private static XdmValue Name_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
-        return XdmValue.FromString(GetQualifiedName(node));
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004");
+        return XdmValue.FromString(GetQualifiedName(item.NodeValue));
     }
 
     private static XdmValue Name_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
+        var node = GetOptionalSingleNode(args[0], ctx.BackwardsCompatible);
         return XdmValue.FromString(GetQualifiedName(node));
     }
 
@@ -9605,14 +9661,16 @@ public static class FunctionLibrary
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
-            return XdmValue.Undefined;
+            throw new InvalidOperationException("XPTY0004");
         return NodeToQName(item.NodeValue);
     }
 
     private static XdmValue NodeName_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
+        var node = GetOptionalSingleNode(args[0], ctx.BackwardsCompatible);
         return node is null ? XdmValue.Undefined : NodeToQName(node);
     }
 
@@ -9727,14 +9785,16 @@ public static class FunctionLibrary
     private static XdmValue Root_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
-            return XdmValue.Undefined;
+            throw new InvalidOperationException("XPTY0004");
         return Root(item.NodeValue);
     }
 
     private static XdmValue Root_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
+        var node = GetOptionalSingleNode(args[0], ctx.BackwardsCompatible);
         return node is null ? XdmValue.Undefined : Root(node);
     }
 
@@ -10474,17 +10534,25 @@ public static class FunctionLibrary
 
     private static XdmValue Qname(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var ns = AtomizedString(args[0]);
-        var lexical = AtomizedString(args[1]);
+        var ns = RequireString(args[0]);
+        var lexical = RequireStringRequired(args[1]);
+
         if (string.IsNullOrWhiteSpace(lexical))
             throw new InvalidOperationException("FOCA0002");
 
         var local = lexical.Contains(':') ? lexical[(lexical.IndexOf(':') + 1)..] : lexical;
         var prefix = lexical.Contains(':') ? lexical[..lexical.IndexOf(':')] : string.Empty;
+        if (lexical.Contains(':') && (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(local)))
+            throw new InvalidOperationException("FOCA0002");
         if (!IsValidNcName(local))
             throw new InvalidOperationException("FOCA0002");
-        if (!string.IsNullOrEmpty(prefix) && !IsValidNcName(prefix))
-            throw new InvalidOperationException("FOCA0002");
+        if (!string.IsNullOrEmpty(prefix))
+        {
+            if (!IsValidNcName(prefix))
+                throw new InvalidOperationException("FOCA0002");
+            if (string.IsNullOrEmpty(ns))
+                throw new InvalidOperationException("FOCA0002");
+        }
 
         return XdmValue.FromQName(new XsQName(local, ns, prefix));
     }
@@ -10600,7 +10668,7 @@ public static class FunctionLibrary
         if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = atomized.QNameValue;
-        return XdmValue.FromString(qn.LocalName);
+        return XdmValue.FromString(qn.LocalName, "NCName");
     }
 
     private static XdmValue NamespaceUriFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -10609,7 +10677,7 @@ public static class FunctionLibrary
         if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = atomized.QNameValue;
-        return XdmValue.FromString(qn.NamespaceUri);
+        return XdmValue.FromString(qn.NamespaceUri, "anyURI");
     }
 
     private static XdmValue PrefixFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -10618,7 +10686,9 @@ public static class FunctionLibrary
         if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = atomized.QNameValue;
-        return XdmValue.FromString(qn.Prefix);
+        if (string.IsNullOrEmpty(qn.Prefix))
+            return XdmValue.FromSequence(XdmSequence.Empty);
+        return XdmValue.FromString(qn.Prefix, "NCName");
     }
 
     // ------------------------------------------------------------------
