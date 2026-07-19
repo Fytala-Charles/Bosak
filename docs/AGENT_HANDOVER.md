@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `<uncommitted>`
+**Commit:** `7f3dc81` (QT3 Tier-2v: idiv NaN/INF handling and numeric-literal keyword boundary)
 **Current focus:** **QT3 Tier-2v: `op-numeric-integer-divide`** — `VmEngine.IntegerDivide` now raises `FOAR0002` for NaN/INF operands and returns `0` for finite-dividend `idiv` INF; `XPathLexer.ReadNumber` now rejects `NumericLiteral` tokens immediately followed by keyword operators (e.g. `10idiv 3`). Full QT3 suite now at **21,562 passed / 378 failed / 9,881 skipped (67.76%)**; runnable pass rate improved to **98.28%** (21562 / 21940). Unit tests **1,303/0**.
 
 ---

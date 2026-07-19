@@ -37,4 +37,4 @@
 
 - Full QT3 run ~5 min background (timeout 900). Exit code 2 = has failures (normal).
 - Canonical state is in `docs/AGENT_HANDOVER.md`.
-- All changes from this session are uncommitted.
+- All changes from this session are committed and pushed as `7f3dc81`.
