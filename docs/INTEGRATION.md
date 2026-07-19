@@ -5,13 +5,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,346 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,784 passed / 93 failed / 16,944 skipped (46.46% / 99.38% of runnable tests)
+> **Bosak baseline:** 1,347 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,785 passed / 92 failed / 16,944 skipped (46.46% / 99.38% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `op-boolean-equal-4` / `and`/`or` register-lifetime fix.
+  - `IrLowerer.LowerAnd` and `LowerOr` no longer free the target result register when an operand is lowered into it.
+  - This fixes `op-boolean-equal-4`, where `xs:boolean('true') and xs:boolean('true')` was clobbering its left operand register, causing the subsequent `eq` to compare the same value against itself.
+  - Added `ApiTests.DebugBooleanEqual` regression test.
+  - Full QT3 now **14,785 passed / 92 failed / 16,944 skipped = 46.46%** (runnable pass rate **99.38%**); unit tests **1,347/0**.
 
 - **2026-07-19** — QT3 Tier-2z: duration / date arithmetic cluster.
   - `xs:date` +/− `xs:dayTimeDuration` now returns an `xs:date` with the time components zeroed to `00:00:00`.

@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `9417c55` (Tier-2z: op-boolean-equal-4 / and-or register reuse fix)
+**Current focus:** **QT3 Tier-2z: `op-boolean-equal-4` cluster** — `LowerAnd` and `LowerOr` were freeing the target result register when it was reused for an operand. For subexpressions like `xs:boolean('true') and xs:boolean('true')` the right operand could overwrite the left operand's register, causing later comparisons to compare the value against itself. Fixed by only freeing operand registers that are not the target result register. Targeted test now passes: `op-boolean-equal-4`. Full QT3 suite now at **14,785 passed / 92 failed / 16,944 skipped (46.46%)**; runnable pass rate **99.38%** (14785 / 14877). Unit tests **1,347/0**.
+
+## This Session Fixes (Tier-2z: op-boolean-equal-4)
+
+1. **LowerAnd/LowerOr register lifetime fix** — The IR lowerer no longer frees `resultReg` when an operand is lowered into the same register. This prevents the right operand of `and`/`or` from overwriting the left operand when both are non-trivial expressions (e.g., constructor function calls).
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or the targeted pool.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs` (v1.11: fixed LowerAnd/LowerOr target-register lifetime)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v0.3: `DebugBooleanEqual` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `compare-011`, `fn-concatdbl2args-*`, `fn-datadbl1args-*`, `fn-doc-available-2`, `fn-exactly-onedbl1args-*`, `fn-floordbl1args-*`, `fn-implicit-timezone-*`, `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-*`, `fn-not-28`, `fn-numberdbl1args-*`, `fn-number-3`, `fn-one-or-moredbl1args-*`, `fn-resolve-uri-*`, `fn-stringdbl1args-*`, `fn-substring-after-23`, `fn-substring-before-23`, `fn-upper-case-22`, `K2-SeqDeepEqualFunc-40`, `K2-DataFunc-6`, `K-NodeNumberFunc-13/15`, `fn-zero-or-onedbl1args-*`, `xs-dateTimeStamp-*`, `op-boolean-equal-4` (fixed), `K2-StringLT-1`, `op-numeric-divide-1`, `K-NumericSubtract-34/35`, `K-NumericUnaryPlus-1`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `K-NodeSame-6`, `fn-intersect-node-args-015/016`, `fn-union-node-args-015/016/017`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `277d17f` (Tier-2z: duration / date arithmetic cluster)
 **Current focus:** **QT3 Tier-2z: duration/date arithmetic cluster** — Fixed `xs:date` addition/subtraction of `xs:dayTimeDuration` so the result is an `xs:date` with time components zeroed. Fixed `xs:time` addition/subtraction of `xs:yearMonthDuration` to raise `XPTY0004` instead of returning the time unchanged. Fixed generic `xs:duration` component extraction in `fn:*-from-duration` so mixed year-month and day-time components are returned. Fixed `fn:distinct-values` and `fn:index-of` duration equality so zero `xs:yearMonthDuration` and `xs:dayTimeDuration` values are treated as equal. Targeted tests now pass: `fn-months-from-duration-20`, `K-MonthsFromDurationFunc-7`, `fn-years-from-duration-20`, `K-YearsFromDurationFunc-7`, `K-DateAddDTD-1/2`, `K-DateSubtractDTD-1`, `K-TimeSubtractDTD-2/3/5`, and `distinct-duration-equal-1`. Full QT3 suite now at **14,784 passed / 93 failed / 16,944 skipped (46.46%)**; runnable pass rate **99.38%** (14784 / 14877). Unit tests **1,346/0**.
 
