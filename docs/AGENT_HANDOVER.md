@@ -1,6 +1,43 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `13295c6` (QT3 Tier-2z: fn-element-with-id schema-validated ID support)
+**Current focus:** **QT3 Tier-2z: `fn-element-with-id` cluster** — The five failures were caused by the conformance harness not loading the schema-validated source document and by `fn:id`/`fn:element-with-id` only recognizing attribute-based IDs. `TestEnvironment` now parses `<source validation="strict">` and `<schema>` elements, loads the source through a new `XDocumentProvider.LoadXml` overload that validates against the declared XML Schema and adds PSVI annotations. `IXdmNode` gains an `IsId` accessor; `XDocumentNode` implements it using `XmlSchemaInfo` so that typed values of type `xs:ID` (derived types, union ID members, and singleton lists of `xs:ID`) are recognized. `fn:id()` now returns ID-valued elements themselves, and `fn:element-with-id()` returns the parent element when the ID is supplied by a child element. DTD-declared ID attributes continue to work via `InternalSubset`. Targeted `fn-element-with-id` pool now **5 passed / 0 failed / 0 skipped** (5 previously failing tests now pass). Full QT3 suite now at **14,703 passed / 173 failed / 16,945 skipped (46.21%)**; runnable pass rate **98.84%** (14703 / 14876). Unit tests **1,344/0**.
+
+---
+
+## This Session Fixes (Tier-2z: fn-element-with-id)
+
+1. **Conformance harness strict schema validation** — `TestEnvironment` parses the `validation` attribute on `<source>` and the `<schema>` environment element, builds an `XmlSchemaSet`, and passes it to a new `XDocumentProvider.LoadXml` overload that validates the document and populates the XDocument tree with PSVI (`addSchemaInfo: true`). This is the first harness-level support for schema-validated source documents.
+
+2. **`IXdmNode.IsId` accessor** — `IXdmNode` now exposes `IsId` (default `false`). `XDocumentNode` computes it from the node's `XmlSchemaInfo`: the typed value is a single `xs:ID` atomic value (or a type derived from `xs:ID`, or a union member of type `xs:ID`, or a singleton list of `xs:ID`). For attributes, `id` (no namespace) and `xml:id` are treated as IDs even without a schema.
+
+3. **`fn:id` supports element-valued IDs** — `CollectIdElements` now returns an element when the element itself is ID-valued, in addition to the existing attribute-ID and DTD-ID attribute logic. This fixes `id('iota')`/`id('lambda')`/`id('nu')`/`id('xi')` in the schema-validated test source.
+
+4. **`fn:element-with-id` returns parent elements** — `ElementHasId` now also checks direct child elements whose `IsId` property is true. When a child `<id>` element carries the ID value, `fn:element-with-id` returns the parent element rather than the child, matching the F+O Erratum FO.E31 semantics.
+
+5. **Regression safety** — The change preserves the previous DTD-based `fn:id`/`fn:idref` behavior and does not affect unvalidated documents. The full QT3 suite improved by 5 passes with zero regressions.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/IXdmNode.cs` (v0.6: added `IsId` accessor)
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs` (v1.9: `IsId` implementation using `XmlSchemaInfo`)
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs` (v0.6: `LoadXml` overload with optional XML Schema validation and PSVI)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.52: `fn:id`/`fn:element-with-id` use `IsId` and child element IDs)
+- `tests/Bosak.XPath.Conformance/TestEnvironment.cs` (v0.9/v1.0: parse `<source validation>` and `<schema>`, build `XmlSchemaSet` for strict validation)
+- `docs/ARCHITECTURE.md` (documented `IXdmNode.IsId`)
+- `docs/INTEGRATION.md` (updated baseline and schema-aware status)
+- `docs/AGENT_HANDOVER.md` (this update)
+
+## Next Tier-2 Pool
+
+**`op-multiply-yearMonthDuration` / `op-divide-yearMonthDuration` / `op-multiply-dayTimeDuration` / `op-divide-dayTimeDuration` clusters** (~16 failures, including duration scaling/division edge cases and some decimal-overflow FOAR0002 cases). Other candidates: the scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn-prefix-from-qname` / `ExpandedQNameConstructFunc` QName handling cases.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `d041979` (QT3 Tier-2z: fn-outermost/fn-innermost namespace-axis document order fix)
 **Current focus:** **QT3 Tier-2z: `fn-outermost` / `fn-innermost` cluster** — The eight remaining `fn-outermost-*` / `fn-innermost-*` failures were caused by namespace nodes not being returned in document order. `XDocumentNode.GetNamespaceAxis` now places the implicit `xml` namespace first and orders the remaining namespaces root-to-current; `XDocumentNode.DocumentOrder` for namespace nodes now uses the owner element's order; and `VmEngine.NormalizeSequence` uses a stable sort keyed by owner element so that namespace nodes of the same element retain their axis order while being sorted correctly across elements. Targeted `fn-outermost` / `fn-innermost` pools now **13 passed / 0 failed / 105 skipped** (8 previously failing tests now pass). Full QT3 suite now at **14,698 passed / 178 failed / 16,945 skipped (46.19%)**; runnable pass rate **98.80%** (14698 / 14876). Unit tests **1,344/0**.
 
