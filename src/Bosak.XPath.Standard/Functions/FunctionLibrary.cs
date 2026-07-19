@@ -130,6 +130,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.55  | 19-07-2026     | Tier-2z: fn:root/fn:name/fn:local-name context-item checks; fn:QName/xs:QName empty-prefix and empty-sequence fixes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.56  | 19-07-2026     | Tier-2z: fn:lang context-item and node-arg type checks; fn:in-scope-prefixes element-node validation; documented XML 1.0 codepoints-to-string skips |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -8879,13 +8881,19 @@ public static class FunctionLibrary
 
     private static XdmValue Lang_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = ctx.ContextItem.IsNode ? ctx.ContextItem.NodeValue : null;
-        return Lang(AtomizedString(args[0]), node);
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: fn:lang() called with no context item.");
+        if (!item.IsNode)
+            throw new InvalidOperationException("XPTY0004: fn:lang() context item is not a node.");
+        return Lang(AtomizedString(args[0]), item.NodeValue);
     }
 
     private static XdmValue Lang_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[1]);
+        var node = GetOptionalSingleNode(args[1], ctx.BackwardsCompatible);
+        if (node is null)
+            throw new InvalidOperationException("XPTY0004: fn:lang() argument is not a node.");
         return Lang(AtomizedString(args[0]), node);
     }
 
@@ -11957,9 +11965,9 @@ public static class FunctionLibrary
 
     private static XdmValue InScopePrefixes(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var node = GetNodeFromValue(args[0]);
-        if (node == null || node.NodeKind != XdmNodeKind.Element)
-            return XdmValue.Undefined;
+        var node = GetOptionalSingleNode(args[0], ctx.BackwardsCompatible);
+        if (node is null || node.NodeKind != XdmNodeKind.Element)
+            throw new InvalidOperationException("XPTY0004: fn:in-scope-prefixes argument must be an element node.");
 
         var prefixes = new List<XdmValue>();
         var seen = new HashSet<string>();

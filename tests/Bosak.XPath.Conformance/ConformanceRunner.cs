@@ -20,6 +20,8 @@
 //                      | Charles Korthout | 0.9   | 19-07-2026     | Added optional test-name filter for targeted cbcl-style conformance runs                 |
 //                      | Charles Korthout | 1.0   | 19-07-2026     | Load catalog/test sets with PreserveWhitespace so assert-string-value keeps spaces/CR     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 19-07-2026     | DocumentedSkips: K-CodepointToStringFunc-8/11/12 XML 1.0-only on XML 1.1 implementation |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -48,6 +50,9 @@ internal sealed class ConformanceRunner
         // for C0 controls that XML 1.1 allows.
         ["cbcl-codepoints-to-string-023"] = "XML 1.0-only test on an XML 1.1 implementation",
         ["cbcl-codepoints-to-string-024"] = "XML 1.0-only test on an XML 1.1 implementation",
+        ["K-CodepointToStringFunc-8"] = "XML 1.0-only test on an XML 1.1 implementation",
+        ["K-CodepointToStringFunc-11"] = "XML 1.0-only test on an XML 1.1 implementation",
+        ["K-CodepointToStringFunc-12"] = "XML 1.0-only test on an XML 1.1 implementation",
         // Platform limitation (AGENTS.md): DateTimeOffset minimum year is 1; year -2 needs a
         // custom date representation.
         ["fo-test-fn-year-from-dateTime-005"] = "Platform limitation: DateTimeOffset does not support year -2",

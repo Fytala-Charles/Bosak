@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `TBD` (QT3 Tier-2z: fn-lang / fn-in-scope-prefixes / fn-codepoints-to-string fixes)
+**Current focus:** **QT3 Tier-2z: `fn-lang` / `fn-in-scope-prefixes` / `fn-codepoints-to-string` clusters** — The residual failures were caused by missing type checks in `fn:lang` and `fn:in-scope-prefixes` and by XML 1.0-only `codepoints-to-string` tests running on an XML 1.1 implementation. Fixed `Lang_1` to raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context item; fixed `Lang_2` to raise `XPTY0004` when the second argument is not a single node. Fixed `InScopePrefixes` to raise `XPTY0004` when the argument is not a single element node (including document nodes and empty sequence). Added `K-CodepointToStringFunc-8/11/12` to `DocumentedSkips` as XML 1.0-only tests on an XML 1.1 implementation. Targeted pools now **0 failed**: `fn-lang` 36/0/10, `fn-in-scope-prefixes` 9/0/53, `fn-codepoints-to-string` 61/0/18. Full QT3 suite now at **14,747 passed / 130 failed / 16,944 skipped (46.34%)**; runnable pass rate **98.92%** (14747 / 14877). Unit tests **1,345/0**.
+
+## This Session Fixes (Tier-2z: fn-lang, fn-in-scope-prefixes, fn-codepoints-to-string)
+
+1. **`fn:lang` context-item and node-argument type checks** — `Lang_1` now raises `XPDY0002` when the context item is absent and `XPTY0004` when it is not a node. `Lang_2` now raises `XPTY0004` when the second argument is not a single node (empty sequence or non-node atomic).
+
+2. **`fn:in-scope-prefixes` element-node validation** — The function now raises `XPTY0004` when the argument is not a single element node. Previously it returned the empty sequence for document nodes, empty sequences, and non-node arguments, which masked required type errors.
+
+3. **XML 1.0 `codepoints-to-string` documented skips** — Added `K-CodepointToStringFunc-8`, `-11`, and `-12` to `DocumentedSkips`. These tests require `FOCH0001` for codepoints 8/11/12, which are legal in XML 1.1 but illegal in XML 1.0; Bosak is an XML 1.1 implementation.
+
+4. **Regression safety** — Full QT3 suite improved by **+4 passed, −7 failed, +3 skipped** with no regressions in the targeted pools or unit tests.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.56: `Lang_1`/`Lang_2` and `InScopePrefixes` type checks)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (DocumentedSkips for XML 1.0 codepoints-to-string tests)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton failures from the full QT3 suite: `K-AdjDateToTimezoneFunc-*`, `fn-ceilingdbl1args-*`, `compare-011`, `fn-doc-available-2`, `fn-implicit-timezone-*`, `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-*`, `fn-months-from-duration-20`, `fn-not-28`, `fn-number-3`, `fn-resolve-uri-*`, `fn-substring-after/before-23`, `fn-upper-case-22`, `K2-SeqDeepEqualFunc-40`, `K2-DataFunc-6`, `K2-SeqExcept/Intersect/Union` XPTY0004 cases, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K2-StringLT-1`, `K-XQueryComment-14/15`, and schema-aware namespace-node failures. Other candidates: `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `errors-and-optimization-4`, `string-queries-results-q1`.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `ebacc48` (QT3 Tier-2z: fn-root/fn-name/fn-local-name context-item and fn-QName QName fixes)
 **Current focus:** **QT3 Tier-2z: `fn-root` / `fn-name` / `fn-local-name` / `fn-prefix-from-QName` / `fn-QName` clusters** — The residual failures were caused by missing context-item error checks in the zero-arg node-name accessors and by incorrect empty-sequence / empty-prefix handling in the one-arg forms and in `fn:QName`. Added `GetOptionalSingleNode` helper for empty-sequence/single-node extraction with `XPTY0004` for non-node/multiple items. Fixed `LocalName_0/1`, `NamespaceUri_0/1`, `Name_0/1`, `NodeName_0/1`, and `Root_0/1` to raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context/argument. Fixed `LocalName_1` and `NamespaceUri_1` to return the zero-length `xs:string` / `xs:anyURI` (not the empty sequence) when the argument is empty, matching the F+O spec return type. Fixed `Qname` to accept an empty-sequence namespace URI argument and to reject lexical QNames that begin or end with a colon (`FOCA0002`). Targeted pools now all **0 failed**: `fn-root` 11/0/27, `fn-name` 72/0/54, `fn-local-name` 66/0/22, `fn-prefix-from-QName` 27/0/0, `fn-QName` 25/0/9. Full QT3 suite now at **14,743 passed / 137 failed / 16,941 skipped (46.33%)**; runnable pass rate **98.92%** (14743 / 14880). Unit tests **1,345/0**.
 

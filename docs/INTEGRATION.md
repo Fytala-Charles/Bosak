@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,345 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,743 passed / 137 failed / 16,941 skipped (46.33% / 98.92% of runnable tests)
+> **QT3 baseline:** 14,747 passed / 130 failed / 16,944 skipped (46.34% / 98.92% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `fn-lang` / `fn-in-scope-prefixes` / `fn-codepoints-to-string` fixes.
+  - `fn:lang()` now raises `XPDY0002` for an absent context item and `XPTY0004` for a non-node context item; `fn:lang($test, $node)` raises `XPTY0004` when `$node` is not a single node.
+  - `fn:in-scope-prefixes()` now raises `XPTY0004` when the argument is not a single element node (e.g., document node or non-node value).
+  - Documented `K-CodepointToStringFunc-8/11/12` as XML 1.0-only tests on an XML 1.1 implementation.
+  - Targeted pools now **0 failed**: `fn-lang` 36/0/10, `fn-in-scope-prefixes` 9/0/53, `fn-codepoints-to-string` 61/0/18.
+  - Full QT3 now **14,747 passed / 130 failed / 16,944 skipped = 46.34%** (runnable pass rate **98.92%**); unit tests **1,345/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn-root`/`fn-name`/`fn-local-name` context-item and `fn-QName` QName fixes.
   - Added `GetOptionalSingleNode` helper for `node()?` arguments, raising `XPTY0004` for non-node or multi-item arguments.
