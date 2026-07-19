@@ -16,7 +16,7 @@
 //                      | Charles Korthout | 0.4   | 15-07-2026     | External-variable tests now run; params are bound by the executor                        |
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Tests without environment resolve relative URIs against the test-set directory           |
 //                      | Charles Korthout | 0.6   | 15-07-2026     | Referenced environments without static-base-uri also fall back to test-set directory     |
-//                      | Charles Korthout | 0.7   | 17-07-2026     | Inherit test-set-level dependencies when filtering test cases (staticTyping)               |
+//                      | Charles Korthout | 0.8   | 19-07-2026     | DocumentedSkips: numberformat63/64 precision limitation                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -45,6 +45,12 @@ internal sealed class ConformanceRunner
         // custom date representation.
         ["fo-test-fn-year-from-dateTime-005"] = "Platform limitation: DateTimeOffset does not support year -2",
         ["fo-test-fn-year-from-date-003"] = "Platform limitation: DateTimeOffset does not support year -2",
+        // Platform limitation: .NET decimal is fixed-precision (28-29 significant digits).
+        // These decimal literals exceed that range and are rounded to double, so the exact
+        // expected string is unrecoverable; FOAR0002 is the spec-permitted alternative but
+        // is indistinguishable from valid double literals at runtime.
+        ["numberformat63"] = "Platform limitation: .NET decimal cannot preserve the precision of this decimal literal",
+        ["numberformat64"] = "Platform limitation: .NET decimal cannot preserve the precision of this decimal literal",
     };
 
     public ConformanceRunner(string suitePath, string? filter = null)

@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 31-05-2026     | Non-numeric atomic cast, grouping-separator fixes, decimal-format merge support          |
+//                      | Charles Korthout | 0.3   | 19-07-2026     | XPTY0004 for non-numeric strings; non-BMP zero-digit support in scientific notation        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -24,7 +25,7 @@ namespace Bosak.XPath.Standard.Functions;
 
 internal static class FormatNumberEngine
 {
-    public static string Format(XdmValue value, string picture, DecimalFormat format)
+    public static string Format(XdmValue value, string picture, DecimalFormat format, bool backwardsCompatible = false)
     {
         if (value.IsUndefined)
             return format.NaN;
@@ -32,12 +33,17 @@ internal static class FormatNumberEngine
         value = AtomizeForFormatNumber(value);
 
         // Non-numeric atomic values (e.g., strings) are cast to double.
-        // If the cast yields NaN, return the NaN symbol.
+        // In XPath 1.0 backwards-compatible mode the cast yields NaN; otherwise
+        // an uncastable value is a type error (XPTY0004).
         if (!IsNumeric(value))
         {
             double d = ConvertToDouble(value);
             if (double.IsNaN(d))
-                return format.NaN;
+            {
+                if (backwardsCompatible)
+                    return format.NaN;
+                throw new InvalidOperationException("XPTY0004");
+            }
             value = XdmValue.FromDouble(d);
         }
 
@@ -212,9 +218,12 @@ internal static class FormatNumberEngine
             if (pos < picture.Length && MatchesAt(picture, pos, format.ExponentSeparator))
             {
                 int lookahead = pos + format.ExponentSeparator.Length;
+                int expDigitCount = 0;
                 while (lookahead < picture.Length && IsMandatoryDigitSign(picture, lookahead, format, out int len))
+                {
                     lookahead += len;
-                int expDigitCount = lookahead - (pos + format.ExponentSeparator.Length);
+                    expDigitCount++;
+                }
                 if (expDigitCount > 0)
                 {
                     hasExponent = true;
@@ -705,7 +714,7 @@ internal static class FormatNumberEngine
         int targetMinInt = sub.MinIntegerDigits;
         if (intStr.Length < targetMinInt)
         {
-            intStr = intStr.PadLeft(targetMinInt, format.ZeroDigit[0]);
+            intStr = intStr.PadLeft(targetMinInt, '0');
         }
 
         // If integer part is still empty (no digits), and we need at least one digit
@@ -1135,9 +1144,18 @@ internal static class FormatNumberEngine
     private static int CountDigitSigns(string part, DecimalFormat format)
     {
         int count = 0;
-        foreach (char c in part)
-            if (IsOptionalDigitSign(c, format) || IsMandatoryDigitSign(c, format))
+        for (int i = 0; i < part.Length; )
+        {
+            if (IsDigitSign(part, i, format, out int len))
+            {
                 count++;
+                i += len;
+            }
+            else
+            {
+                i++;
+            }
+        }
         return count;
     }
 
@@ -1292,8 +1310,17 @@ internal static class FormatNumberEngine
             bool expNegative = exponent < 0;
             int expAbs = Math.Abs(exponent);
             string expDigits = expAbs.ToString(CultureInfo.InvariantCulture);
-            expDigits = expDigits.PadLeft(sub.ExponentDigits, format.ZeroDigit[0]);
-            return (expNegative ? format.MinusSign : "") + expDigits;
+
+            // Map exponent digits to the configured zero-digit family.
+            StringBuilder mapped = new();
+            foreach (char c in expDigits)
+                mapped.Append(MapDigit(c, format));
+
+            // Pad with the full zero-digit string (supports non-BMP zero-digits).
+            while (mapped.Length < sub.ExponentDigits * format.ZeroDigit.Length)
+                mapped.Insert(0, format.ZeroDigit);
+
+            return (expNegative ? format.MinusSign : "") + mapped.ToString();
         }
 
         if (absNum == 0)
@@ -1319,10 +1346,7 @@ internal static class FormatNumberEngine
 
         // Calculate exponent and mantissa
         // Scaling factor = number of mandatory digit signs in integer part
-        int scalingFactor = 0;
-        foreach (char c in sub.IntegerDigits)
-            if (IsMandatoryDigitSign(c, format))
-                scalingFactor++;
+        int scalingFactor = CountMandatoryDigits(sub.IntegerDigits, format);
 
         int exponent = 0;
         decimal mantissa = absNum;

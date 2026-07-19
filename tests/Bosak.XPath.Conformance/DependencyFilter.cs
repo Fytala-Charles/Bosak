@@ -14,7 +14,7 @@
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Skip XSD 1.0 tests (Bosak implements XSD 1.1 per XPath 3.1)                            |
 //                      | Charles Korthout | 0.3   | 17-07-2026     | Skip arbitraryPrecisionDecimal tests (.NET decimal is fixed-precision 128-bit)          |
 //                      | Charles Korthout | 0.4   | 18-07-2026     | Skip XQ31-only positive spec dependencies (tests using XQuery direct constructors)        |
-//                      | Charles Korthout | 0.5   | 18-07-2026     | Skip fn-load-xquery-module feature tests (XQuery module loading unsupported)              |
+//                      | Charles Korthout | 0.6   | 19-07-2026     | AND spec dependencies across dependency elements (fixes XP30-only tests in XP31+ mode) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -58,8 +58,6 @@ internal sealed class DependencyFilter
 
     public bool IsSupported(IReadOnlyList<Dependency> dependencies)
     {
-        bool hasSpecDependency = false;
-        bool specSupported = false;
 
         foreach (var dep in dependencies)
         {
@@ -81,8 +79,6 @@ internal sealed class DependencyFilter
 
             if (dep.Type == "spec")
             {
-                hasSpecDependency = true;
-
                 // A positive dependency that is purely XQuery-only means the test uses
                 // XQuery syntax (e.g. direct element constructors) and is not applicable
                 // to an XPath-only processor.
@@ -90,13 +86,19 @@ internal sealed class DependencyFilter
                     return false;
 
                 var tokens = dep.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                bool thisDepSupported = false;
                 foreach (var token in tokens)
                 {
                     if (SupportedSpecs.Contains(token))
                     {
-                        specSupported = true;
+                        thisDepSupported = true;
+                        break;
                     }
                 }
+
+                // Spec dependencies are AND-ed: each dependency element must be satisfied.
+                if (!thisDepSupported)
+                    return false;
             }
 
             if (dep.Type == "xml-version")
@@ -122,10 +124,6 @@ internal sealed class DependencyFilter
                     return false;
             }
         }
-
-        // If there are spec dependencies, at least one must be a supported XPath version
-        if (hasSpecDependency && !specSupported)
-            return false;
 
         return true;
     }

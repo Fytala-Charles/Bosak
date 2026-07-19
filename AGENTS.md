@@ -91,6 +91,7 @@ UCA `alternate=blanked` maps to `CompareOptions.IgnoreSymbols`. Due to .NET `IsP
 
 - **DateTime year < 1**: `DateTimeOffset` minimum year is 1. Tests using year `-2` cannot pass without switching to a custom date representation.
 - **Timezone adjustment**: `adjust-time-to-timezone` produces incorrect offsets in some cases.
+- **Decimal precision**: .NET `decimal` is fixed-precision (28-29 significant digits). XPath decimal literals and arithmetic that exceed this range are rounded; tests that expect exact results beyond this range cannot pass without an arbitrary-precision decimal implementation.
 
 ## XML Documentation
 

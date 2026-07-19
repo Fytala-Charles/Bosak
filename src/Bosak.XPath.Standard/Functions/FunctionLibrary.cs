@@ -122,7 +122,7 @@
 //                      | Charles Korthout | 5.50  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence fixes                     |
 //                      | Charles Korthout | 5.51  | 19-07-2026     | Tier-2y: fn:index-of uses eq semantics, validates single search/collation, NaN-safe    |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 5.52  | 19-07-2026     | Tier-2z: regex functions use flags-aware ParseRegexFlags/ValidateAndTranslatePattern |
+//                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -9079,7 +9079,7 @@ public static class FunctionLibrary
         if (format == null)
             throw new InvalidOperationException("FODF1280");
 
-        string result = FormatNumberEngine.Format(value, picture, format);
+        string result = FormatNumberEngine.Format(value, picture, format, ctx.BackwardsCompatible);
         return XdmValue.FromString(result);
     }
 
