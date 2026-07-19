@@ -5,13 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,347 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,785 passed / 92 failed / 16,944 skipped (46.46% / 99.38% of runnable tests)
+> **Bosak baseline:** 1,348 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,786 passed / 91 failed / 16,944 skipped (46.47% / 99.38% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `K-NumericUnaryPlus-1` unary plus type validation.
+  - `XPathOptimizer` now only folds `+x` for numeric literals; non-literal operands keep the `UnaryExpressionNode`.
+  - `IrLowerer` emits the `UnaryPlus` VM opcode instead of a simple `Move`.
+  - `VmEngine.UnaryPlus` validates the operand and raises `XPTY0004` for non-numeric, non-untypedAtomic values (e.g., `+"a string"`).
+  - `xs:untypedAtomic` is promoted to `xs:double`; numeric types are returned unchanged.
+  - Targeted test passes: `K-NumericUnaryPlus-1`.
+  - Full QT3 now **14,786 passed / 91 failed / 16,944 skipped = 46.47%** (runnable pass rate **99.38%**); unit tests **1,348/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `op-boolean-equal-4` / `and`/`or` register-lifetime fix.
   - `IrLowerer.LowerAnd` and `LowerOr` no longer free the target result register when an operand is lowered into it.
