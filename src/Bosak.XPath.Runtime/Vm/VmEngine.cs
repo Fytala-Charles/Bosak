@@ -80,6 +80,8 @@
 //                      | Charles Korthout | 2.44  | 19-07-2026     | Tier-2x: floating-point mod by zero returns NaN instead of FOAR0001                     |
 //                      | Charles Korthout | 2.45  | 19-07-2026     | Castable opcode catches overflow/cast errors; empty sequence only castable for ?/*    |
 //                      | Charles Korthout | 2.46  | 19-07-2026     | xs:unsignedLong values above long.MaxValue stored as xs:decimal with subtype annotation; instance-of accepts decimal-backed integer subtypes |
+//                      | Charles Korthout | 2.47  | 19-07-2026     | RangeExpr supports xs:integer operands that exceed long range via DecimalRangeSequence |
+//                      | Charles Korthout | 2.48  | 19-07-2026     | CompareGeneral enumerates operands lazily to avoid materializing huge ranges |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -395,25 +397,42 @@ public static class VmEngine
                             ip++;
                             break;
                         }
-                        long from, to;
                         if (context.BackwardsCompatible)
                         {
-                            from = ToInteger(left);
-                            to = ToInteger(right);
+                            long from = ToInteger(left);
+                            long to = ToInteger(right);
+                            if (from > to)
+                            {
+                                registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
+                                ip++;
+                                break;
+                            }
+                            registers[instr.RegisterA] = XdmValue.FromSequence(
+                                XdmSequence.FromSource(new IntegerRangeSequence(from, to)));
+                            ip++;
+                            break;
                         }
-                        else
-                        {
-                            from = RangeOperandToInteger(left);
-                            to = RangeOperandToInteger(right);
-                        }
-                        if (from > to)
+
+                        if (!TryGetRangeOperand(left, out var fromDecimal) || !TryGetRangeOperand(right, out var toDecimal))
+                            throw new InvalidOperationException("XPTY0004: The operands of 'to' must be xs:integer");
+
+                        if (fromDecimal > toDecimal)
                         {
                             registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
                             ip++;
                             break;
                         }
-                        registers[instr.RegisterA] = XdmValue.FromSequence(
-                            XdmSequence.FromSource(new IntegerRangeSequence(from, to)));
+                        if (fromDecimal >= long.MinValue && fromDecimal <= long.MaxValue
+                            && toDecimal >= long.MinValue && toDecimal <= long.MaxValue)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(
+                                XdmSequence.FromSource(new IntegerRangeSequence((long)fromDecimal, (long)toDecimal)));
+                        }
+                        else
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(
+                                XdmSequence.FromSource(new DecimalRangeSequence(fromDecimal, toDecimal)));
+                        }
                         ip++;
                         break;
                     }
@@ -1892,6 +1911,57 @@ public static class VmEngine
         foreach (var item in items)
             FlattenArrayItem(item, list);
         return list.ToArray();
+    }
+
+    /// <summary>
+    /// Lazily enumerates the items of a value for general comparison, expanding arrays.
+    /// Unlike <see cref="MaterializeSequence"/>, this avoids allocating huge lists for
+    /// large lazy sequences such as integer ranges.
+    /// </summary>
+    private static IEnumerable<XdmValue> EnumerateItemsForComparison(XdmValue value)
+    {
+        if (value.IsUndefined) yield break;
+
+        if (!value.IsSequence)
+        {
+            if (value.IsArray)
+            {
+                foreach (var member in value.ArrayValue.Values)
+                    yield return member;
+            }
+            else
+            {
+                yield return value;
+            }
+            yield break;
+        }
+
+        var seq = value.SequenceValue;
+        if (seq is null) yield break;
+
+        foreach (var item in XdmSequence.FromSource(seq))
+        {
+            if (item.IsArray)
+            {
+                foreach (var member in item.ArrayValue.Values)
+                    yield return member;
+            }
+            else
+            {
+                yield return item;
+            }
+        }
+    }
+
+    private static bool SequenceContainsBooleanItem(XdmValue value)
+    {
+        foreach (var item in EnumerateItemsForComparison(value))
+        {
+            var atomized = Atomize(item);
+            if (!atomized.IsUndefined && atomized.Kind == XdmValueKind.Boolean)
+                return true;
+        }
+        return false;
     }
 
     private static void FlattenArrayItem(XdmValue value, List<XdmValue> list)
@@ -3733,17 +3803,17 @@ public static class VmEngine
         }
 
         // General comparisons use existential semantics over sequences.
-        // For now, materialize both sides and compare pairwise.
-        var leftItems = ExpandArraysForComparison(MaterializeSequence(left));
-        var rightItems = ExpandArraysForComparison(MaterializeSequence(right));
+        // Enumerate lazily to avoid materializing huge ranges (e.g. 1e21 to 1e21+5e9).
+        var leftItems = EnumerateItemsForComparison(left);
+        var rightItems = EnumerateItemsForComparison(right);
 
         // XPath 1.0 backwards compatibility: when a node-set (or any sequence) is
         // compared to a boolean, both operands are converted to booleans using the
         // effective boolean value of the whole operand.
         if (context.BackwardsCompatible &&
-            (HasBooleanItem(leftItems) || HasBooleanItem(rightItems) ||
-             (left.IsUndefined && HasBooleanItem(rightItems)) ||
-             (right.IsUndefined && HasBooleanItem(leftItems))))
+            (SequenceContainsBooleanItem(left) || SequenceContainsBooleanItem(right) ||
+             (left.IsUndefined && SequenceContainsBooleanItem(right)) ||
+             (right.IsUndefined && SequenceContainsBooleanItem(left))))
         {
             int li = left.EffectiveBooleanValue() ? 1 : 0;
             int ri = right.EffectiveBooleanValue() ? 1 : 0;
@@ -4047,21 +4117,35 @@ public static class VmEngine
     /// xs:integer is accepted directly, xs:untypedAtomic is cast (FORG0001 on failure),
     /// anything else (including xs:decimal/xs:double) is XPTY0004.
     /// </summary>
-    private static long RangeOperandToInteger(XdmValue value)
+    private static bool TryGetRangeOperand(XdmValue value, out decimal result)
     {
+        result = 0;
         var atomized = Atomize(value);
         if (atomized.Kind == XdmValueKind.Integer)
-            return atomized.IntegerValue;
+        {
+            result = atomized.IntegerValue;
+            return true;
+        }
+        if (atomized.Kind == XdmValueKind.Decimal)
+        {
+            decimal d = atomized.DecimalValue;
+            if (d != decimal.Truncate(d))
+                return false;
+            result = d;
+            return true;
+        }
         if (IsUntypedAtomic(atomized))
         {
             string s = atomized.ToString().Trim();
-            if (long.TryParse(s, out var l))
-                return l;
+            if (decimal.TryParse(s, out var dec) && dec == decimal.Truncate(dec))
+            {
+                result = dec;
+                return true;
+            }
             throw new InvalidOperationException(
                 $"FORG0001: Cannot cast xs:untypedAtomic '{s}' to xs:integer");
         }
-        throw new InvalidOperationException(
-            $"XPTY0004: The operands of 'to' must be xs:integer, but got {atomized.Kind}");
+        return false;
     }
 
     /// <summary>
