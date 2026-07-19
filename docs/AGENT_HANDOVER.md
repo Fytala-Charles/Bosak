@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `<uncommitted>` (QT3 Tier-2w: fn:has-children context-item and singleton-sequence fixes)
+**Current focus:** **QT3 Tier-2w: `fn-has-children`** — `HasChildren_0` now raises `XPDY0002` when the context item is absent; `HasChildren`/`HasChildren_1` now unwrap singleton sequences so empty sequence returns `false` and multi-item / non-node arguments raise `XPTY0004`. Targeted `fn-has-children` pool now **34 passed / 0 failed / 3 skipped** (was 26/8/3). Full QT3 suite now at **21,570 passed / 370 failed / 9,881 skipped (67.77%)**; runnable pass rate improved to **98.31%** (21570 / 21940). Unit tests **1,311/0**.
+
+---
+
+## This Session Fixes (Tier-2w: fn-has-children)
+
+1. **`fn:has-children()` context-item error** — `HasChildren_0` now throws `XPDY0002` when `ctx.ContextItem` is undefined, matching the F+O specification for the zero-argument form.
+
+2. **`fn:has-children($node?)` singleton-sequence handling** — `HasChildren` now unwraps singleton sequences: an empty sequence argument returns `false`, a multi-item sequence raises `XPTY0004`, and a non-node item raises `XPTY0004`. This fixes path-expression arguments such as `/root/empty`.
+
+3. **Add unit tests** — `FunctionLibraryTests` adds `HasChildren_ContextItemTrue`, `HasChildren_ContextItemFalse`, `HasChildren_ContextItemAbsent_XPDY0002`, `HasChildren_ArgumentSingletonSequence`, `HasChildren_ArgumentEmptySequence`, `HasChildren_ArgumentMultiItem_XPTY0004`, `HasChildren_ArgumentNotNode_XPTY0004`, and `HasChildren_TextNodeFalse`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.50: fn:has-children context-item and singleton-sequence fixes)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.15: fn:has-children regression tests)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`K2-NumericMod`** (6 failures in the full QT3 suite): `mod` operator may not handle edge cases (NaN, INF, division by zero, negative operands) correctly. Other candidate pools: `K-SeqIndexOfFunc` (6), `cbcl-*` scattered clusters (~8+), `named-function-ref-reserved-function-names` (12), and `RangeExpr` BigInteger cases (12 — known limitation).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `7f3dc81` (QT3 Tier-2v: idiv NaN/INF handling and numeric-literal keyword boundary)
 **Current focus:** **QT3 Tier-2v: `op-numeric-integer-divide`** — `VmEngine.IntegerDivide` now raises `FOAR0002` for NaN/INF operands and returns `0` for finite-dividend `idiv` INF; `XPathLexer.ReadNumber` now rejects `NumericLiteral` tokens immediately followed by keyword operators (e.g. `10idiv 3`). Full QT3 suite now at **21,562 passed / 378 failed / 9,881 skipped (67.76%)**; runnable pass rate improved to **98.28%** (21562 / 21940). Unit tests **1,303/0**.
 

@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 2.12  | 18-07-2026     | function-lookup context-dependent base-uri test (creator focus vs call-site focus)        |
 //                      | Charles Korthout | 2.13  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id DTD and XPTY0004 tests                               |
 //                      | Charles Korthout | 2.14  | 19-07-2026     | Tier-2u: xs:numeric cast and constructor tests                                         |
+//                      | Charles Korthout | 2.15  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence regression tests          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -716,6 +717,77 @@ public class FunctionLibraryTests
         var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
         var result = XPath31Expression.Compile("fn:node-name(child::text())").Evaluate(node);
         Assert.True(result.IsUndefined);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:has-children
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void HasChildren_ContextItemTrue()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><child/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:has-children()").Evaluate(node);
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void HasChildren_ContextItemFalse()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root/>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:has-children()").Evaluate(node);
+        Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void HasChildren_ContextItemAbsent_XPDY0002()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:has-children()"));
+        Assert.Contains("XPDY0002", ex.Message);
+    }
+
+    [Fact]
+    public void HasChildren_ArgumentSingletonSequence()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><empty/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:has-children(root/empty)").Evaluate(node);
+        Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void HasChildren_ArgumentEmptySequence()
+    {
+        var result = Evaluate("fn:has-children(())");
+        Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void HasChildren_ArgumentMultiItem_XPTY0004()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><a/><b/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => XPath31Expression.Compile("fn:has-children(root/*)").Evaluate(node));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void HasChildren_ArgumentNotNode_XPTY0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:has-children(1)"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void HasChildren_TextNodeFalse()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root>hello</root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var result = XPath31Expression.Compile("fn:has-children(child::text())").Evaluate(node);
+        Assert.False(result.BooleanValue);
     }
 
     // ------------------------------------------------------------------

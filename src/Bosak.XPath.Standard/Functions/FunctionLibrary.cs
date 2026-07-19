@@ -119,6 +119,7 @@
 //                      | Charles Korthout | 5.47  | 18-07-2026     | fn:function-lookup captures EvaluationContext so context-dependent functions use it   |
 //                      | Charles Korthout | 5.48  | 18-07-2026     | fn:id/fn:idref/fn:element-with-id support DTD-declared ID/IDREF and raise XPTY0004    |
 //                      | Charles Korthout | 5.49  | 19-07-2026     | Tier-2u: xs:numeric cast and xs:numeric#1 constructor                                  |
+//                      | Charles Korthout | 5.50  | 19-07-2026     | Tier-2w: fn:has-children context-item and singleton-sequence fixes                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4435,17 +4436,37 @@ public static class FunctionLibrary
     }
 
     private static XdmValue HasChildren_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => HasChildren(ctx.ContextItem);
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: Context item is absent for fn:has-children().");
+        return HasChildren(item);
+    }
 
     private static XdmValue HasChildren_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => HasChildren(args[0]);
 
     private static XdmValue HasChildren(XdmValue value)
     {
+        // Spec signature: $node as node()?
+        // Unwrap singleton sequences; empty sequence is valid and returns false.
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            if (!value.SequenceValue.TryGetLength(out var len))
+                throw new InvalidOperationException("XPTY0004: fn:has-children argument must be a node or empty sequence.");
+            if (len == 0)
+                return XdmValue.False;
+            if (len != 1)
+                throw new InvalidOperationException("XPTY0004: fn:has-children argument must be a single node.");
+            var enumerator = XdmSequence.FromSource(value.SequenceValue).GetEnumerator();
+            enumerator.MoveNext();
+            value = enumerator.Current;
+        }
+
         if (value.IsUndefined)
             return XdmValue.False;
         if (!value.IsNode)
-            throw new InvalidOperationException("XPTY0004");
+            throw new InvalidOperationException("XPTY0004: fn:has-children argument must be a node.");
         var node = value.NodeValue;
         if (node.NodeKind is not XdmNodeKind.Element and not XdmNodeKind.Document)
             return XdmValue.False;

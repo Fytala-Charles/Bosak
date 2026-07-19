@@ -8,33 +8,29 @@
 
 ## What Was Done
 
-- **QT3 Tier-2v `op-numeric-integer-divide` / `K-NumericIntegerDivide` is complete.**
-  - Fixed `VmEngine.IntegerDivide` to raise `FOAR0002` for NaN and INF/-INF dividend operands.
-  - `idiv` with a finite dividend and an INF/-INF divisor now correctly returns `0`.
-  - `idiv` with float overflow (e.g. `xs:float('1e38') idiv xs:float('1e-37')`) now raises `FOAR0002` instead of returning a truncated `long`.
-  - Fixed `XPathLexer.ReadNumber` so a `NumericLiteral` immediately followed by a keyword (e.g. `10idiv 3`) produces an `Invalid` token, causing the parser to raise `XPST0003`.
-  - Added unit tests for NaN/INF idiv behavior and for the numeric-literal+keyword boundary.
-- **Updated QT3 baselines:** full suite **21,562 passed / 378 failed / 9,881 skipped (67.76%)**; runnable pass rate **98.28%**. Targeted `op-numeric-integer-divide` pool **125/0/11**.
-- **Unit tests:** all passing **1,303/0**.
+- **QT3 Tier-2w `fn-has-children` is complete.**
+  - Fixed `HasChildren_0` to raise `XPDY0002` when the context item is absent.
+  - Fixed `HasChildren`/`HasChildren_1` to unwrap singleton sequences: empty sequence returns `false`, multi-item sequences raise `XPTY0004`, and non-node items raise `XPTY0004`.
+  - Targeted `fn-has-children` pool now **34 passed / 0 failed / 3 skipped** (was 26/8/3).
+- **Updated QT3 baselines:** full suite **21,570 passed / 370 failed / 9,881 skipped (67.77%)**; runnable pass rate **98.31%**. Unit tests **1,311/0**.
 - **Updated documentation:** `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md`.
-- **Updated file change histories** for all modified source and test files.
-- **Build:** `dotnet build Bosak.sln` — 0 errors, 0 warnings.
+- **Updated file change histories** for `FunctionLibrary.cs` and `FunctionLibraryTests.cs`.
+- **Build:** `dotnet build Bosak.sln` — 0 errors, 1 warning (pre-existing `XdmSequence.FromSource` nullability in `FunctionLibrary.cs`).
 
 ## Next Session Focus
 
-**QT3 Tier-2w: `fn-has-children`** (8 failures).
-`fn:has-children($node?)` may not handle empty sequence, document fragments, or text-only nodes correctly.
+**QT3 Tier-2x: `K2-NumericMod`** (6 failures).
+`mod` operator may not handle edge cases (NaN, INF, division by zero, negative operands) correctly.
 
-## Remaining Tier-2 Pools (after 2w)
+## Remaining Tier-2 Pools (after 2x)
 
-- `K2-NumericMod` (6)
 - `K-SeqIndexOfFunc` (6)
 - `cbcl-*` scattered clusters (~8+)
-- `named-function-ref-reserved-function-names` (12 — newly surfaced)
+- `named-function-ref-reserved-function-names` (12)
 - `RangeExpr` BigInteger cases (12 — known limitation)
 
 ## Notes
 
 - Full QT3 run ~5 min background (timeout 900). Exit code 2 = has failures (normal).
 - Canonical state is in `docs/AGENT_HANDOVER.md`.
-- All changes from this session are committed and pushed as `7f3dc81`.
+- All changes from this session are committed and pushed as `<commit>`.

@@ -5,13 +5,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,303 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,562 passed / 378 failed / 9,881 skipped (67.76% / 98.28% of runnable tests)
+> **Bosak baseline:** 1,311 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,570 passed / 370 failed / 9,881 skipped (67.77% / 98.31% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2w: `fn:has-children` fixes.
+  - `FunctionLibrary.HasChildren_0` raises `XPDY0002` when the context item is absent.
+  - `FunctionLibrary.HasChildren` unwraps singleton sequences: empty sequence returns `false`, multi-item / non-node arguments raise `XPTY0004`.
+  - `fn-has-children` targeted pool now **34 passed / 0 failed / 3 skipped** (was 26/8/3).
+  - Full QT3 now **21,570 / 370 / 9,881 = 67.77%** (runnable pass rate **98.31%**); unit tests **1,311/0**.
 
 - **2026-07-19** — QT3 Tier-2v: `op-numeric-integer-divide` fixes.
   - `VmEngine.IntegerDivide` raises `FOAR0002` for NaN/INF operands and returns `0` for finite dividend `idiv` INF/-INF.
