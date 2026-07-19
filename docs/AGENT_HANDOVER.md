@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `PENDING` (QT3 Tier-2z: adjust-date-to-timezone / adjust-time-to-timezone / adjust-dateTime-to-timezone FODT0003 validation)
+**Commit:** `6d0cfff` (QT3 Tier-2z: adjust-date-to-timezone / adjust-time-to-timezone / adjust-dateTime-to-timezone FODT0003 validation)
 **Current focus:** **QT3 Tier-2z: timezone adjustment FODT0003 cluster** — `fn:adjust-date-to-timezone`, `fn:adjust-time-to-timezone`, and `fn:adjust-dateTime-to-timezone` two-arg forms were accepting timezone offsets outside the F+O-specified range of `-PT14H` to `+PT14H` and offsets with sub-minute resolution (seconds/milliseconds). Added a shared `ParseTimezoneOffset` helper that validates the offset and raises `FODT0003` for out-of-range or non-integral-minute values. Targeted pools now all **0 failed**: `fn-adjust-date-to-timezone` 37/0/4, `fn-adjust-time-to-timezone` 37/0/5, `fn-adjust-dateTime-to-timezone` 46/0/2. Full QT3 suite now at **14,766 passed / 111 failed / 16,944 skipped (46.40%)**; runnable pass rate **99.25%** (14766 / 14877). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: timezone adjustment FODT0003)
