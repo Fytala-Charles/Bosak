@@ -77,6 +77,7 @@
 //                      | Charles Korthout | 2.41  | 18-07-2026     | NamedFunctionItem dynamic calls use defining-context focus (fn:function-lookup base-uri) |
 //                      | Charles Korthout | 2.42  | 19-07-2026     | Tier-2u: xs:numeric cast and xs:numeric#1 constructor                                  |
 //                      | Charles Korthout | 2.43  | 19-07-2026     | Tier-2v: idiv NaN/INF and numeric-literal+keyword boundary checks                       |
+//                      | Charles Korthout | 2.44  | 19-07-2026     | Tier-2x: floating-point mod by zero returns NaN instead of FOAR0001                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3264,14 +3265,12 @@ public static class VmEngine
         ValidateNumericOperand(right);
         if (IsDouble(left) || IsDouble(right))
         {
-            if (ToDouble(right) == 0)
-                throw new InvalidOperationException("FOAR0001: Division by zero.");
+            // IEEE 754 semantics: floating-point mod by zero returns NaN, not FOAR0001.
             return XdmValue.FromDouble(ToDouble(left) % ToDouble(right));
         }
         if (IsFloat(left) || IsFloat(right))
         {
-            if (ToFloat(right) == 0)
-                throw new InvalidOperationException("FOAR0001: Division by zero.");
+            // IEEE 754 semantics: floating-point mod by zero returns NaN, not FOAR0001.
             return XdmValue.FromFloat(ToFloat(left) % ToFloat(right));
         }
         if (IsDecimal(left) || IsDecimal(right))

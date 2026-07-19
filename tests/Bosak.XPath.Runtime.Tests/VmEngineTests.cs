@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 24-06-2026     | Added ValueMatchesType sequence occurrence-indicator tests                              |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Lookup operator tests (multi-key order, FOAY0001/XPTY0004, array-as-function, array atomization in general comparison) |
 //                      | Charles Korthout | 0.5   | 19-07-2026     | idiv NaN/INF overflow tests                                                            |
+//                      | Charles Korthout | 0.6   | 19-07-2026     | floating-point mod by zero returns NaN; integer mod by zero raises FOAR0001            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -203,6 +204,48 @@ public class VmEngineTests
     {
         var result = Evaluate("10 mod 3");
         Assert.Equal(1, result.IntegerValue);
+    }
+
+    [Fact]
+    public void Eval_Modulo_DoubleByZero_ReturnsNaN()
+    {
+        var result = Evaluate("3 mod xs:double('0')");
+        Assert.True(double.IsNaN(result.DoubleValue));
+    }
+
+    [Fact]
+    public void Eval_Modulo_DoubleByNegativeZero_ReturnsNaN()
+    {
+        var result = Evaluate("3 mod xs:double('-0')");
+        Assert.True(double.IsNaN(result.DoubleValue));
+    }
+
+    [Fact]
+    public void Eval_Modulo_FloatByZero_ReturnsNaN()
+    {
+        var result = Evaluate("3 mod xs:float('0')");
+        Assert.True(float.IsNaN((float)result.DoubleValue));
+    }
+
+    [Fact]
+    public void Eval_Modulo_IntegerByZero_RaisesFOAR0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("3 mod 0"));
+        Assert.Contains("FOAR0001", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_Modulo_DecimalByZero_RaisesFOAR0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("3.0 mod 0.0"));
+        Assert.Contains("FOAR0001", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_Modulo_NegativeZeroByNegativeZero_ReturnsNaN()
+    {
+        var result = Evaluate("xs:double('-0') mod xs:double('-0')");
+        Assert.True(double.IsNaN(result.DoubleValue));
     }
 
     [Fact]

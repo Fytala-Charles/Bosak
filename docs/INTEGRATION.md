@@ -5,13 +5,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,311 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 21,570 passed / 370 failed / 9,881 skipped (67.77% / 98.31% of runnable tests)
+> **Bosak baseline:** 1,317 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 21,576 passed / 364 failed / 9,881 skipped (67.79% / 98.34% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2x: `op-numeric-mod` fixes.
+  - `VmEngine.Modulo` now returns `NaN` for `xs:double`/`xs:float` mod by zero (IEEE 754 semantics).
+  - Integer and decimal mod by zero continue to raise `FOAR0001`.
+  - `op-numeric-mod` targeted pool now **113 passed / 0 failed / 11 skipped** (was 107/6/11).
+  - Full QT3 now **21,576 / 364 / 9,881 = 67.79%** (runnable pass rate **98.34%**); unit tests **1,317/0**.
 
 - **2026-07-19** — QT3 Tier-2w: `fn:has-children` fixes.
   - `FunctionLibrary.HasChildren_0` raises `XPDY0002` when the context item is absent.

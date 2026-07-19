@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `<uncommitted>` (QT3 Tier-2x: op-numeric-mod floating-point mod-by-zero returns NaN)
+**Current focus:** **QT3 Tier-2x: `op-numeric-mod`** — `VmEngine.Modulo` now follows IEEE 754 semantics for `xs:double` and `xs:float`: mod by zero returns `NaN` instead of raising `FOAR0001`. Integer and decimal mod by zero continue to raise `FOAR0001`. Targeted `op-numeric-mod` pool now **113 passed / 0 failed / 11 skipped** (was 107/6/11). Full QT3 suite now at **21,576 passed / 364 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.34%** (21576 / 21940). Unit tests **1,317/0**.
+
+---
+
+## This Session Fixes (Tier-2x: op-numeric-mod)
+
+1. **Floating-point mod by zero returns NaN** — `VmEngine.Modulo` no longer checks for zero divisor on `xs:double` or `xs:float` operands. Instead it relies on IEEE 754 `%` semantics, which return `NaN` for `3 mod xs:double('0')`, `3 mod xs:double('-0')`, and similar float cases.
+
+2. **Integer and decimal mod by zero still raise FOAR0001** — the zero-divisor guard remains for `xs:integer`, `xs:decimal`, and derived integer/decimal types.
+
+3. **Add unit tests** — `VmEngineTests` adds `Eval_Modulo_DoubleByZero_ReturnsNaN`, `Eval_Modulo_DoubleByNegativeZero_ReturnsNaN`, `Eval_Modulo_FloatByZero_ReturnsNaN`, `Eval_Modulo_IntegerByZero_RaisesFOAR0001`, `Eval_Modulo_DecimalByZero_RaisesFOAR0001`, and `Eval_Modulo_NegativeZeroByNegativeZero_ReturnsNaN`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.44: floating-point mod by zero returns NaN)
+- `tests/Bosak.XPath.Runtime.Tests/VmEngineTests.cs` (v0.6: mod by zero regression tests)
+- `docs/AGENT_HANDOVER.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `README.md`, `.kimi/HANDOVER.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+**`K-SeqIndexOfFunc`** (6 failures in the full QT3 suite): `fn:index-of` may not handle edge cases (NaN equality, collation, empty sequences) correctly. Other candidate pools: `cbcl-*` scattered clusters (~8+), `named-function-ref-reserved-function-names` (12), and `RangeExpr` BigInteger cases (12 — known limitation).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `3ea70d1` (QT3 Tier-2w: fn:has-children context-item and singleton-sequence fixes)
 **Current focus:** **QT3 Tier-2w: `fn-has-children`** — `HasChildren_0` now raises `XPDY0002` when the context item is absent; `HasChildren`/`HasChildren_1` now unwrap singleton sequences so empty sequence returns `false` and multi-item / non-node arguments raise `XPTY0004`. Targeted `fn-has-children` pool now **34 passed / 0 failed / 3 skipped** (was 26/8/3). Full QT3 suite now at **21,570 passed / 370 failed / 9,881 skipped (67.77%)**; runnable pass rate improved to **98.31%** (21570 / 21940). Unit tests **1,311/0**.
 
