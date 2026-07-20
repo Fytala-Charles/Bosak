@@ -1,25 +1,25 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `9750420` (Tier-2z: fn-number-3 / fn:number() without context item)
-**Current focus:** **QT3 Tier-2z: `fn-number-3` singleton** — `fn:number()` with no argument relies on the context item; when the context item is absent, XPath requires `XPDY0002`. `FunctionLibrary.Number_0` was passing `ctx.ContextItem` straight to `Number`, which returned `NaN` for an undefined context item. Fixed by checking `ctx.ContextItem.IsUndefined` and raising `XPDY0002` before converting. The one-argument form `fn:number(())` still returns `NaN`. Targeted test now passes: `fn-number-3`. Full QT3 suite now at **14,824 passed / 53 failed / 16,944 skipped (46.59%)**; runnable pass rate **99.64%** (14824 / 14877). Unit tests **1,357/0**.
+**Commit:** `d444f0d` (Tier-2z: fn-upper-case-22 / Armenian ligature upper-case mapping)
+**Current focus:** **QT3 Tier-2z: `fn-upper-case-22` singleton** — `fn:upper-case` must use Unicode full case mapping for the Armenian small ligature men xeh (U+FB17), which upper-cases to two characters: U+0544 ARMENIAN CAPITAL LETTER MEN and U+053D ARMENIAN CAPITAL LETTER XEH. `FunctionLibrary.ApplyUnicodeCaseMapping` had no special case for this ligature, so `Rune.ToUpperInvariant` returned a single incorrect codepoint. Fixed by adding the explicit one-to-two mapping. Targeted test now passes: `fn-upper-case-22`. Full QT3 suite now at **14,825 passed / 52 failed / 16,944 skipped (46.59%)**; runnable pass rate **99.65%** (14825 / 14877). Unit tests **1,359/0**.
 
-## This Session Fixes (Tier-2z: fn-number-3)
+## This Session Fixes (Tier-2z: fn-upper-case-22)
 
-1. **`fn:number()` context item requirement** — `FunctionLibrary.Number_0` now throws `XPDY0002` when `fn:number()` is called with no context item, matching XPath 3.1 F+O semantics.
+1. **`fn:upper-case` Armenian ligature** — `ApplyUnicodeCaseMapping` now maps U+FB17 to U+0544 U+053D, matching the Unicode special case for this ligature.
 
 2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
 
 ## Files Changed (this session)
 
-- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.60: `fn:number#0` XPDY0002 context-item check)
-- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.4: `Number_ThrowsWithoutContextItem` test)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.61: `fn:upper-case` U+FB17 mapping)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.5: `UpperCase_ArmenianLigatureMenXeh` test)
 - `docs/AGENT_HANDOVER.md` (this update)
 - `docs/INTEGRATION.md` (updated baselines)
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-upper-case-22`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
