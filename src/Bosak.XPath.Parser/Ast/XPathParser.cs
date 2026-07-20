@@ -36,6 +36,7 @@
 //                      | Charles Korthout | 1.11  | 15-07-2026     | EQName URI whitespace normalized in SplitQName; for/let bindings capture prefix/namespace |
 //                      | Charles Korthout | 1.12  | 19-07-2026     | Reserved function names in function calls and named function references raise XPST0003    |
 //                      | Charles Korthout | 1.13  | 19-07-2026     | Reserved function name check applies only to named function references, not function calls |
+//                      | Charles Korthout | 1.14  | 20-07-2026     | Allow 'is' as a non-reserved function name in function calls (K-NodeSame-6)              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1169,6 +1170,13 @@ public sealed class XPathParser
                 if (Peek(1).Kind == TokenKind.Hash)
                     return ParseNamedFunctionRef(start);
                 throw new ParseException($"Unexpected name '{name}' in primary expression", start);
+
+            case TokenKind.ValueIs:
+                // 'is' is an operator keyword, but not a reserved function name,
+                // so 'is()' is a valid function call (K-NodeSame-6).
+                if (Peek(1).Kind == TokenKind.LParen)
+                    return ParseFunctionCall(start);
+                throw new ParseException($"Unexpected token {Current.Kind} in primary expression", start);
 
             case TokenKind.KeywordFunction:
                 return ParseInlineFunction(start);

@@ -42,6 +42,7 @@
 //                      | Charles Korthout | 1.6   | 20-07-2026     | Added Data_ThrowsFoty0012ForElementOnlyComplexElement test                             |
 //                      | Charles Korthout | 1.7   | 20-07-2026     | Added DeepEqual_RespectsImplicitTimezone test                                            |
 //                      | Charles Korthout | 1.8   | 20-07-2026     | Added Number_ReturnsNaNForNonNumericNonStringTypes test                                |
+//                      | Charles Korthout | 1.9   | 20-07-2026     | Added IsKeyword_AllowedAsFunctionName test                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -601,5 +602,14 @@ public class ApiTests
         Assert.Equal("0", Eval("number(false())").ToString());
         Assert.Equal("1", Eval("number('1')").ToString());
         Assert.Equal("2", Eval("number(2)").ToString());
+    }
+
+    [Fact]
+    public void IsKeyword_AllowedAsFunctionName()
+    {
+        // K-NodeSame-6: 'is' is an operator keyword but not a reserved function name,
+        // so 'is()' parses as a function call and raises XPST0017 (function not found).
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval("is()"));
+        Assert.Contains("XPST0017", ex.Message);
     }
 }

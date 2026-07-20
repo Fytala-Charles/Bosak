@@ -6,12 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
 > **Bosak baseline:** 1,361 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,829 passed / 48 failed / 16,944 skipped (46.60% / 99.68% of runnable tests)
+> **QT3 baseline:** 14,830 passed / 47 failed / 16,944 skipped (46.60% / 99.68% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K-NodeSame-6` / allow `is` as a non-reserved function name.
+  - `is` is an operator keyword but not a reserved function name, so `is(...)` parses as a function call and raises `XPST0017` because no such function exists.
+  - Added `IsKeyword_AllowedAsFunctionName` regression test.
+  - Targeted test passes: `K-NodeSame-6`.
+  - Full QT3 now **14,830 passed / 47 failed / 16,944 skipped = 46.60%** (runnable pass rate **99.68%**); unit tests **1,361/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `K-NodeNumberFunc-13/15` / `fn:number` on non-numeric, non-string atomic types.
   - `fn:number` now returns `NaN` for atomic types such as `xs:anyURI`, `xs:gYear`, and `xs:QName`, while continuing to convert numeric types, `xs:string`, `xs:untypedAtomic`, and `xs:boolean` to `xs:double`.
