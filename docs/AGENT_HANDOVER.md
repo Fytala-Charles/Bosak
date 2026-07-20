@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `c702302` (Tier-2z: K-NodeNumberFunc-13/15 / fn:number on non-numeric atomic types)
+**Current focus:** **QT3 Tier-2z: `K-NodeNumberFunc-13/15` cluster** — `fn:number` must return `NaN` for atomic types that are not numeric, not `xs:string`/`xs:untypedAtomic`, and not `xs:boolean`. The implementation was falling back to `ParseXPathDouble(value.ToString())` for any non-numeric atomic value, so `xs:anyURI("1")` and `xs:gYear("2005")` were incorrectly converted to `1.0` and `2005.0`. Fixed by routing `fn:number` through `VmEngine.TryCast(..., "xs:double")`, which respects the schema-type restrictions on casts (e.g., `anyURI` and `gYear` cannot cast to `double`). Targeted tests now pass: `K-NodeNumberFunc-13`, `K-NodeNumberFunc-15`. Full QT3 suite now at **14,829 passed / 48 failed / 16,944 skipped (46.60%)**; runnable pass rate **99.68%** (14829 / 14877). Unit tests **1,361/0**.
+
+## This Session Fixes (Tier-2z: K-NodeNumberFunc-13/15)
+
+1. **`fn:number` type restrictions** — `FunctionLibrary.Number` now atomizes its argument and uses `VmEngine.TryCast` to `xs:double`. Numeric types, `xs:string`, `xs:untypedAtomic`, and `xs:boolean` convert to `xs:double`; all other atomic types return `NaN`.
+
+2. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.64: `fn:number` type-restricted conversion via `VmEngine.TryCast`)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.8: `Number_ReturnsNaNForNonNumericNonStringTypes` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `b544eea` (Tier-2z: K2-SeqDeepEqualFunc-40 / fn:deep-equal implicit timezone handling)
 **Current focus:** **QT3 Tier-2z: `K2-SeqDeepEqualFunc-40` singleton** — `fn:deep-equal` must compare `xs:dateTime`, `xs:date`, and `xs:time` values using the implicit timezone when one operand has no explicit timezone. The implementation was comparing `DateTimeOffset` values directly, so a no-timezone dateTime was treated as UTC rather than as the implicit timezone, causing the comparison to fail. Fixed by threading the evaluation context's implicit timezone through `DeepEqual`, `DeepEqualItem`, `DeepEqualMap`, and `DeepEqualArray`, and normalizing both operands to UTC before comparing. Targeted test now passes: `K2-SeqDeepEqualFunc-40`. Full QT3 suite now at **14,827 passed / 50 failed / 16,944 skipped (46.60%)**; runnable pass rate **99.66%** (14827 / 14877). Unit tests **1,360/0**.
 
@@ -19,7 +44,7 @@
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
