@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `03ab2c2` (Tier-2z: K2-Axes-50/53 / XPTY0019 for path steps on non-node context items)
+**Current focus:** **QT3 Tier-2z: `K2-Axes-50/53` small cluster** — `1/3` and `(1, 2, 3)[1]/(1, 2)[last()]/'a string'` must raise `XPTY0019` because a path step requires its context items to be nodes. The compiler lowers non-axis path steps (e.g., `3`, `(1, 2)[last()]`) to the `SimpleMap` opcode, which previously enforced `XPTY0018` (result contains both nodes and non-nodes) but not `XPTY0019`. Fixed by adding a non-node context-item check in `SimpleMap` when `RegisterC != 0` (path-step mode), while preserving the `!` operator's ability to map over non-node sequences. `PathStepMap` was also updated to enforce the same check for predicated axis steps. Targeted tests now pass: `K2-Axes-50`, `K2-Axes-53`. Full QT3 suite now at **14,835 passed / 42 failed / 16,944 skipped (46.62%)**; runnable pass rate **99.72%** (14835 / 14877). Unit tests **1,366/0**.
+
+## This Session Fixes (Tier-2z: K2-Axes-50/53)
+
+1. **`XPTY0019` for path steps on non-node items** — `VmEngine.SimpleMap` now validates that every item in the input sequence is a node before evaluating the step when `enforceNodeResult` is true. `PathStepMap` applies the same validation for predicated axis steps. This does not affect the `!` simple-map operator, which uses `RegisterC == 0`.
+
+2. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.56: XPTY0019 validation in `SimpleMap` and `PathStepMap`)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.12: `PathStep_RequiresNodeContextItem` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `abc91bf` (Tier-2z: Axes123 / namespace-node identity in 'is')
 **Current focus:** **QT3 Tier-2z: `Axes123` singleton** — Namespace nodes obtained via different paths from the same element must be identical when they represent the same prefix/URI binding. `XDocumentNode.IsSameNode` was using `ReferenceEquals` on the underlying `XAttribute`, but `GetNamespaceAxis` creates fresh `XAttribute` objects for each axis traversal, so two namespace nodes for the same binding compared as different. Fixed by comparing namespace nodes by owner element reference + prefix + URI. `GetHashCode` was updated to stay consistent with the new equality semantics. Targeted test now passes: `Axes123`. Full QT3 suite now at **14,833 passed / 44 failed / 16,944 skipped (46.61%)**; runnable pass rate **99.71%** (14833 / 14877). Unit tests **1,365/0**.
 
