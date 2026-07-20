@@ -6,12 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
 > **Bosak baseline:** 1,360 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,826 passed / 51 failed / 16,944 skipped (46.59% / 99.66% of runnable tests)
+> **QT3 baseline:** 14,827 passed / 50 failed / 16,944 skipped (46.60% / 99.66% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K2-SeqDeepEqualFunc-40` / `fn:deep-equal` implicit timezone handling.
+  - `fn:deep-equal` now compares `xs:dateTime`, `xs:date`, and `xs:time` values using the evaluation context's implicit timezone when one operand has no explicit timezone.
+  - Added `DeepEqual_RespectsImplicitTimezone` regression test.
+  - Targeted test passes: `K2-SeqDeepEqualFunc-40`.
+  - Full QT3 now **14,827 passed / 50 failed / 16,944 skipped = 46.60%** (runnable pass rate **99.66%**); unit tests **1,360/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `K2-DataFunc-6` / `fn:data()` on complex element-only schema elements.
   - Added `IXdmNode.HasNoTypedValue` default accessor and `XDocumentNode.HasNoTypedValue` implementation using PSVI schema info.

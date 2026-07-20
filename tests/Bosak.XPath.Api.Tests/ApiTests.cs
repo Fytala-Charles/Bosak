@@ -40,6 +40,7 @@
 //                      | Charles Korthout | 1.5   | 20-07-2026     | Added UpperCase_ArmenianLigatureMenXeh test                                              |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 20-07-2026     | Added Data_ThrowsFoty0012ForElementOnlyComplexElement test                             |
+//                      | Charles Korthout | 1.7   | 20-07-2026     | Added DeepEqual_RespectsImplicitTimezone test                                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -570,5 +571,20 @@ public class ApiTests
         FunctionLibrary.Populate(ctx);
         ctx = ctx.WithFocus(XdmValue.FromNode(validatedDoc), 1, 1);
         Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("/*/data()").Evaluate(ctx));
+    }
+
+    [Fact]
+    public void DeepEqual_RespectsImplicitTimezone()
+    {
+        // K2-SeqDeepEqualFunc-40: fn:deep-equal must apply the implicit timezone when
+        // comparing a dateTime without an explicit timezone to one with a timezone.
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx.ImplicitTimezoneOffsetMinutes = 120; // +02:00
+
+        var result = XPath31Expression.Compile(
+            "deep-equal(xs:dateTime('2012-05-30T12:00:00'), xs:dateTime('2012-05-30T12:00:00Z') - implicit-timezone())")
+            .Evaluate(ctx);
+        Assert.Equal("true", result.ToString());
     }
 }

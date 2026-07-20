@@ -153,6 +153,7 @@
 //                      | Charles Korthout | 5.61  | 20-07-2026     | Tier-2z: fn:upper-case Armenian ligature men xeh (U+FB17) → U+0544 U+053D                |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.62  | 20-07-2026     | Tier-2z: fn:data() raises FOTY0012 for complex element-only/empty schema elements      |
+//                      | Charles Korthout | 5.63  | 20-07-2026     | Tier-2z: fn:deep-equal timezone-aware dateTime/date/time comparison                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -10289,16 +10290,16 @@ public static class FunctionLibrary
     // ------------------------------------------------------------------
 
     private static XdmValue DeepEqual_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => DeepEqual(args[0], args[1], ctx.DefaultCollation);
+        => DeepEqual(args[0], args[1], ctx.DefaultCollation, ctx.ImplicitTimezoneOffsetMinutes);
 
     private static XdmValue DeepEqual_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
-        return DeepEqual(args[0], args[1], collation);
+        return DeepEqual(args[0], args[1], collation, ctx.ImplicitTimezoneOffsetMinutes);
     }
 
-    private static XdmValue DeepEqual(XdmValue a, XdmValue b, string collation)
+    private static XdmValue DeepEqual(XdmValue a, XdmValue b, string collation, int implicitTimezoneOffsetMinutes)
     {
         var itemsA = ToItemList(a);
         var itemsB = ToItemList(b);
@@ -10306,7 +10307,7 @@ public static class FunctionLibrary
             return XdmValue.False;
         for (int i = 0; i < itemsA.Count; i++)
         {
-            if (!DeepEqualItem(itemsA[i], itemsB[i], collation))
+            if (!DeepEqualItem(itemsA[i], itemsB[i], collation, implicitTimezoneOffsetMinutes))
                 return XdmValue.False;
         }
         return XdmValue.True;
@@ -10327,7 +10328,7 @@ public static class FunctionLibrary
         return list;
     }
 
-    private static bool DeepEqualItem(XdmValue a, XdmValue b, string collation)
+    private static bool DeepEqualItem(XdmValue a, XdmValue b, string collation, int implicitTimezoneOffsetMinutes)
     {
         // Function items cannot be compared for deep equality (XQuery 3.1 fn:deep-equal).
         if (a.IsFunction || b.IsFunction)
@@ -10398,16 +10399,36 @@ public static class FunctionLibrary
             XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => a.DoubleValue == b.DoubleValue,
             XdmValueKind.String => CompareStrings(a.StringValue, b.StringValue, collation) == 0,
-            XdmValueKind.DateTime => a.DateTimeValue == b.DateTimeValue,
-            XdmValueKind.Date => a.DateValue == b.DateValue,
-            XdmValueKind.Time => a.TimeValue == b.TimeValue,
+            XdmValueKind.DateTime => DateTimeEqual(a.DateTimeXPathValue, b.DateTimeXPathValue, a.HasTimezone, b.HasTimezone, implicitTimezoneOffsetMinutes),
+            XdmValueKind.Date => DateTimeEqual(a.DateXPathValue, b.DateXPathValue, a.HasTimezone, b.HasTimezone, implicitTimezoneOffsetMinutes),
+            XdmValueKind.Time => DateTimeEqual(a.TimeXPathValue, b.TimeXPathValue, a.HasTimezone, b.HasTimezone, implicitTimezoneOffsetMinutes),
             XdmValueKind.QName => a.QNameValue.Equals(b.QNameValue),
             XdmValueKind.Node => DeepEqualNode(a.NodeValue, b.NodeValue, collation),
-            XdmValueKind.Sequence => DeepEqual(a, b, collation).BooleanValue,
-            XdmValueKind.Map => DeepEqualMap(a.MapValue, b.MapValue, collation),
-            XdmValueKind.Array => DeepEqualArray(a.ArrayValue, b.ArrayValue, collation),
+            XdmValueKind.Sequence => DeepEqual(a, b, collation, implicitTimezoneOffsetMinutes).BooleanValue,
+            XdmValueKind.Map => DeepEqualMap(a.MapValue, b.MapValue, collation, implicitTimezoneOffsetMinutes),
+            XdmValueKind.Array => DeepEqualArray(a.ArrayValue, b.ArrayValue, collation, implicitTimezoneOffsetMinutes),
             _ => false
         };
+    }
+
+    private static bool DateTimeEqual(XPathDateTime a, XPathDateTime b, bool aHasTimezone, bool bHasTimezone, int implicitTimezoneOffsetMinutes)
+    {
+        // Neither has timezone: compare local components directly.
+        if (!aHasTimezone && !bHasTimezone)
+            return XPathDateTimeHelper.CompareComponents(a, b) == 0;
+
+        // Apply implicit timezone to the value that lacks an explicit timezone,
+        // then normalize both to UTC and compare their components.
+        var aEffective = aHasTimezone
+            ? a
+            : new XPathDateTime(a.Year, a.Month, a.Day, a.Hour, a.Minute, a.Second, a.Millisecond, implicitTimezoneOffsetMinutes, true);
+        var bEffective = bHasTimezone
+            ? b
+            : new XPathDateTime(b.Year, b.Month, b.Day, b.Hour, b.Minute, b.Second, b.Millisecond, implicitTimezoneOffsetMinutes, true);
+
+        var aUtc = XPathDateTimeHelper.NormalizeToUtc(aEffective);
+        var bUtc = XPathDateTimeHelper.NormalizeToUtc(bEffective);
+        return XPathDateTimeHelper.CompareComponents(aUtc, bUtc) == 0;
     }
 
     private static bool IsNumeric(XdmValue value)
@@ -10490,7 +10511,7 @@ public static class FunctionLibrary
         return list;
     }
 
-    private static bool DeepEqualMap(XdmMap a, XdmMap b, string collation)
+    private static bool DeepEqualMap(XdmMap a, XdmMap b, string collation, int implicitTimezoneOffsetMinutes)
     {
         if (a.Count != b.Count)
             return false;
@@ -10503,7 +10524,7 @@ public static class FunctionLibrary
             {
                 // Map keys are compared with op:same-key semantics: the collation
                 // parameter does NOT apply to keys (fn-deep-equal-maps-13).
-                if (XdmValueEqualityComparer.Instance.Equals(keyA, keyB) && DeepEqualItem(valA, valB, collation))
+                if (XdmValueEqualityComparer.Instance.Equals(keyA, keyB) && DeepEqualItem(valA, valB, collation, implicitTimezoneOffsetMinutes))
                 {
                     found = true;
                     break;
@@ -10515,7 +10536,7 @@ public static class FunctionLibrary
         return true;
     }
 
-    private static bool DeepEqualArray(XdmArray a, XdmArray b, string collation)
+    private static bool DeepEqualArray(XdmArray a, XdmArray b, string collation, int implicitTimezoneOffsetMinutes)
     {
         if (a.Count != b.Count)
             return false;
@@ -10523,7 +10544,7 @@ public static class FunctionLibrary
         var bv = b.Values.ToList();
         for (int i = 0; i < av.Count; i++)
         {
-            if (!DeepEqualItem(av[i], bv[i], collation))
+            if (!DeepEqualItem(av[i], bv[i], collation, implicitTimezoneOffsetMinutes))
                 return false;
         }
         return true;
