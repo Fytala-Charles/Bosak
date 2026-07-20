@@ -1,25 +1,25 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `0af2327` (Tier-2z: fn-not-28 / EBV of multi-item sequences)
-**Current focus:** **QT3 Tier-2z: `fn-not-28` singleton** — XPath 3.1 §2.4.3 says the effective boolean value of a sequence of more than one item is defined only when the first item is a node; otherwise it is a type error (`FORG0006`). `XdmValue.SequenceEffectiveBooleanValue` was returning `true` for any multi-item sequence. Fixed by checking the first item: if it is a node, return `true`; otherwise raise `FORG0006`. The empty sequence still returns `false`, and singleton sequences still use the item's own EBV. Targeted test now passes: `fn-not-28`. Full QT3 suite now at **14,823 passed / 54 failed / 16,944 skipped (46.58%)**; runnable pass rate **99.63%** (14823 / 14877). Unit tests **1,357/0**.
+**Commit:** `9750420` (Tier-2z: fn-number-3 / fn:number() without context item)
+**Current focus:** **QT3 Tier-2z: `fn-number-3` singleton** — `fn:number()` with no argument relies on the context item; when the context item is absent, XPath requires `XPDY0002`. `FunctionLibrary.Number_0` was passing `ctx.ContextItem` straight to `Number`, which returned `NaN` for an undefined context item. Fixed by checking `ctx.ContextItem.IsUndefined` and raising `XPDY0002` before converting. The one-argument form `fn:number(())` still returns `NaN`. Targeted test now passes: `fn-number-3`. Full QT3 suite now at **14,824 passed / 53 failed / 16,944 skipped (46.59%)**; runnable pass rate **99.64%** (14824 / 14877). Unit tests **1,357/0**.
 
-## This Session Fixes (Tier-2z: fn-not-28)
+## This Session Fixes (Tier-2z: fn-number-3)
 
-1. **`fn:not` / effective boolean value of mixed sequences** — `XdmValue.SequenceEffectiveBooleanValue` now throws `FORG0006` when a multi-item sequence's first item is not a node, matching XPath 3.1 §2.4.3.
+1. **`fn:number()` context item requirement** — `FunctionLibrary.Number_0` now throws `XPDY0002` when `fn:number()` is called with no context item, matching XPath 3.1 F+O semantics.
 
 2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
 
 ## Files Changed (this session)
 
-- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v1.7: EBV multi-item first-item fix)
-- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.3: `Not_ThrowsOnMixedSequence` test)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.60: `fn:number#0` XPDY0002 context-item check)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.4: `Number_ThrowsWithoutContextItem` test)
 - `docs/AGENT_HANDOVER.md` (this update)
 - `docs/INTEGRATION.md` (updated baselines)
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `fn-number-3`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-upper-case-22`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-upper-case-22`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
