@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `28e7a13` (Tier-2z: fn-implicit-timezone-10/11/12 / duration div NaN/zero validation)
+**Current focus:** **QT3 Tier-2z: `fn-implicit-timezone-10/11/12` cluster** — XPath `xs:dayTimeDuration` divided by `NaN` must raise `FOCA0005`; divided by zero (or negative zero) must raise `FODT0002`. `VmEngine.DivideDuration` was short-circuiting zero-duration operands before checking the divisor, so `fn:implicit-timezone() div 0` (where the implicit timezone is UTC and the duration is `PT0S`) silently returned `PT0S` instead of raising `FODT0002`. Fixed by moving the `NaN` and zero-divisor checks ahead of the zero-duration short-circuit. Targeted tests now pass: `fn-implicit-timezone-10`, `fn-implicit-timezone-11`, `fn-implicit-timezone-12`. Full QT3 suite now at **14,819 passed / 58 failed / 16,944 skipped (46.57%)**; runnable pass rate **99.61%** (14819 / 14877). Unit tests **1,354/0**.
+
+## This Session Fixes (Tier-2z: fn-implicit-timezone-10/11/12)
+
+1. **Duration division validates the divisor before the dividend** — `DivideDuration` now checks for `NaN` and `0.0`/`-0.0` before the zero-duration short-circuit for both `yearMonthDuration` and `dayTimeDuration`. This matches the XPath specification that a zero divisor is always an overflow, even when the dividend is zero.
+
+2. **Regression safety** — Full QT3 suite improved by **+3 passed, −3 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.55: move NaN/zero-divisor checks before zero-duration short-circuit in `DivideDuration`)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.0: `ImplicitTimezone_DivByInvalidNumber_Throws` test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `fn-doc-available-2`, `fn-not-28`, `fn-number-3`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-substring-after-23`, `fn-substring-before-23`, `fn-upper-case-22`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `4403be1` (Tier-2z: fn:iri-to-uri / K2-IRIToURIfunc / non-string argument validation)
 **Current focus:** **QT3 Tier-2z: `fn:iri-to-uri` argument-validation cluster** — `fn:iri-to-uri($uri-part)` is defined only for a single `xs:string` (or `xs:untypedAtomic`) argument; non-string atomics such as `iri-to-uri(12)` or multi-item sequences such as `iri-to-uri(('a string','a string'))` must raise `XPTY0004`. The implementation was using `AtomizedString`, which silently converted any atomic to a string and ignored cardinality. Fixed by routing the argument through `RequireString` before encoding. Targeted tests now pass: `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-3`, `K2-IRIToURIfunc-4`. Full QT3 suite now at **14,816 passed / 61 failed / 16,944 skipped (46.56%)**; runnable pass rate **99.59%** (14816 / 14877). Unit tests **1,353/0**.
 
