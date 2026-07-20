@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `a14d404` (Tier-2z: Literals017/025/028 / XPath canonical double formatting)
+**Current focus:** **QT3 Tier-2z: `Literals017/025/028` singleton cluster** — `65535.032e2`, `-65535.032e2`, and `65535.032E2` expect the canonical XPath double strings `6.5535032E6`, `-6.5535032E6`, and `6.5535032E6`. `FormatXPathDouble` was using `G17` for values in the scientific range (`abs >= 1e6`), which for 6553503.2 produces the round-trip-noisy string `6553503.2000000002`. The subsequent fixed-point-to-scientific normalization then counted the total number of digits (including the fractional noise) to compute the exponent, yielding `6.5535032000000002E16` instead of `6.5535032E6`. Fixed by switching the scientific-range branch to the shortest round-trip `R` format and deriving the exponent from the original decimal-point position. `FormatXPathFloat` was updated to use the same decimal-point-based exponent calculation. Targeted tests now pass: `Literals017`, `Literals025`, `Literals028`. Full QT3 suite now at **14,840 passed / 37 failed / 16,944 skipped (46.64%)**; runnable pass rate **99.75%** (14840 / 14877). Unit tests **1,368/0**.
+
+## This Session Fixes (Tier-2z: Literals017/025/028)
+
+1. **Canonical double formatting** — `FormatXPathDouble` now uses `R` (shortest round-trip) format and computes the scientific exponent from the fixed-point decimal position, not from the total digit count. `FormatXPathFloat` applies the same corrected exponent calculation.
+
+2. **Regression safety** — Full QT3 suite improved by **+4 passed, −4 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v1.8: `R` format and decimal-point exponent in `FormatXPathDouble`/`FormatXPathFloat`)
+- `tests/Bosak.XPath.Core.Tests/XdmValueTests.cs` (v0.4: `DoubleToString_FixedPointScientific_TrimsRoundTripNoise` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `d6f6086` (Tier-2z: K-FilterExpr-82 / atomize predicate result before numeric/EBV check)
 **Current focus:** **QT3 Tier-2z: `K-FilterExpr-82` singleton** — `(0, 1, 2)[remove((1, "a string"), 2)]` expects either `assert-eq 0` or `XPTY0004`. The predicate returns the sequence `(1)`, which must be atomized to the integer `1` before deciding whether it is a numeric positional predicate or used for its effective boolean value. Previously the filter opcode treated the sequence `(1)` directly as a non-numeric sequence and fell back to EBV, which returned true for the whole input sequence. Fixed by atomizing `predResult` in `VmEngine.Filter` before the numeric/EBV branch. Atomization of a multi-item sequence correctly raises `XPTY0004`; a singleton integer is treated as a positional predicate. Targeted test now passes: `K-FilterExpr-82`. Full QT3 suite now at **14,836 passed / 41 failed / 16,944 skipped (46.62%)**; runnable pass rate **99.73%** (14836 / 14877). Unit tests **1,367/0**.
 
@@ -19,7 +44,7 @@
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
