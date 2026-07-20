@@ -35,6 +35,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 20-07-2026     | Added Not_ThrowsOnMixedSequence test                                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 20-07-2026     | Added Number_ThrowsWithoutContextItem test                                               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -509,6 +511,14 @@ public class ApiTests
         // fn-doc-available-2: fn:doc-available expects a string-typed URI argument.
         Assert.Throws<InvalidOperationException>(() => Eval("fn:doc-available(xs:integer(2))"));
         Assert.Equal("false", Eval("fn:doc-available(())").ToString());
+    }
+
+    [Fact]
+    public void Number_ThrowsWithoutContextItem()
+    {
+        // fn-number-3: fn:number() with no context item raises XPDY0002.
+        Assert.Throws<InvalidOperationException>(() => Eval("number()"));
+        Assert.Equal("NaN", Eval("number(())").ToString());
     }
 
     [Fact]

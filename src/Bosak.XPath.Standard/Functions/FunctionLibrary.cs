@@ -148,6 +148,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.59  | 19-07-2026     | Tier-2z: distinct-values/index-of duration equality; generic xs:duration component extraction |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.60  | 20-07-2026     | Tier-2z: fn:number#0 raises XPDY0002 when called with no context item                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -9800,7 +9802,11 @@ public static class FunctionLibrary
     // ------------------------------------------------------------------
 
     private static XdmValue Number_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => Number(ctx.ContextItem);
+    {
+        if (ctx.ContextItem.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: fn:number() called with no context item.");
+        return Number(ctx.ContextItem);
+    }
 
     private static XdmValue Number_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => Number(args[0]);

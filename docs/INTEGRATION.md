@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
 > **Bosak baseline:** 1,357 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,823 passed / 54 failed / 16,944 skipped (46.58% / 99.63% of runnable tests)
+> **QT3 baseline:** 14,824 passed / 53 failed / 16,944 skipped (46.59% / 99.64% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `fn-number-3` / `fn:number()` with no context item.
+  - `FunctionLibrary.Number_0` now raises `XPDY0002` when `fn:number()` is called without a context item.
+  - The one-argument form `fn:number(())` still returns `NaN` as required by the spec.
+  - Added `Number_ThrowsWithoutContextItem` regression test.
+  - Targeted test passes: `fn-number-3`.
+  - Full QT3 now **14,824 passed / 53 failed / 16,944 skipped = 46.59%** (runnable pass rate **99.64%**); unit tests **1,357/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `fn-not-28` / effective boolean value of multi-item sequences.
   - `XdmValue.SequenceEffectiveBooleanValue` now raises `FORG0006` when a sequence of more than one item has a non-node first item.
