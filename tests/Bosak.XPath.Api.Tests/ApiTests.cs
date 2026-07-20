@@ -31,6 +31,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 19-07-2026     | Added SubstringAfter_ResolvesRelativeCollationUri test                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 19-07-2026     | Added DocAvailable_RejectsNonStringArgument test                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -497,5 +499,13 @@ public class ApiTests
         var ctx = new EvaluationContext { BaseUri = "http://www.w3.org/2005/xpath-functions/" };
         FunctionLibrary.Populate(ctx);
         Assert.Equal("nana", expr.Evaluate(ctx).ToString());
+    }
+
+    [Fact]
+    public void DocAvailable_RejectsNonStringArgument()
+    {
+        // fn-doc-available-2: fn:doc-available expects a string-typed URI argument.
+        Assert.Throws<InvalidOperationException>(() => Eval("fn:doc-available(xs:integer(2))"));
+        Assert.Equal("false", Eval("fn:doc-available(())").ToString());
     }
 }

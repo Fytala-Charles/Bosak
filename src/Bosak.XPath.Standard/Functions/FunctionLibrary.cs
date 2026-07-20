@@ -133,6 +133,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.56  | 19-07-2026     | fn:substring-before/after resolve relative collation URIs against EvaluationContext.BaseUri |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.57  | 19-07-2026     | fn:doc/fn:doc-available now validate URI argument with RequireString (XPTY0004)          |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
 //                      |==================|=======|================|=========================================================================================
@@ -5775,17 +5777,11 @@ public static class FunctionLibrary
 
     private static XdmValue Doc_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        // fn:doc accepts a single optional URI. Atomize the argument; empty sequence
-        // yields empty sequence; more than one item is a type error.
-        var uris = AtomizedUriStrings(args[0]);
-        if (uris.Count == 0)
+        // fn:doc accepts a single optional URI. Empty sequence yields empty sequence.
+        if (IsEmptySequence(args[0]))
             return XdmValue.Undefined;
-        if (uris.Count > 1)
-            throw new InvalidOperationException("XPTY0004: fn:doc expects a single URI");
 
-        var uri = uris[0];
-        // In XSLT, doc('') resolves against the static base URI (the stylesheet module).
-        // In pure XPath with no base URI, the empty string yields the empty sequence.
+        var uri = RequireString(args[0]);
         var resolvedUri = ResolveDocumentUri(uri, ctx.BaseUri);
         if (string.IsNullOrEmpty(resolvedUri))
             return XdmValue.Undefined;
@@ -5988,15 +5984,10 @@ public static class FunctionLibrary
 
     private static XdmValue DocAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var uris = AtomizedUriStrings(args[0]);
-        if (uris.Count == 0)
-            return XdmValue.FromBoolean(false);
-        if (uris.Count > 1)
-            throw new InvalidOperationException("XPTY0004: fn:doc-available expects a single URI");
-
-        var uri = uris[0];
+        var uri = RequireString(args[0]);
         if (string.IsNullOrEmpty(uri))
             return XdmValue.FromBoolean(false);
+
         try
         {
             ctx.LoadDocument(uri);

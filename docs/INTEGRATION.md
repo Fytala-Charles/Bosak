@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,355 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,821 passed / 56 failed / 16,944 skipped (46.58% / 99.62% of runnable tests)
+> **Bosak baseline:** 1,356 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,822 passed / 55 failed / 16,944 skipped (46.58% / 99.63% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `fn-doc-available-2` / `fn:doc` and `fn:doc-available` URI argument validation.
+  - `FunctionLibrary.Doc_1` and `DocAvailable_1` now use `RequireString` on the URI argument.
+  - Non-string atomics (e.g., `fn:doc-available(xs:integer(2))`) now raise `XPTY0004`; empty sequence behavior is preserved.
+  - Added `DocAvailable_RejectsNonStringArgument` regression test.
+  - Targeted test passes: `fn-doc-available-2`.
+  - Full QT3 now **14,822 passed / 55 failed / 16,944 skipped = 46.58%** (runnable pass rate **99.63%**); unit tests **1,356/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn-substring-after-23` / `fn-substring-before-23` / relative collation URI resolution.
   - Added `FunctionLibrary.ResolveCollationUri` to absolutize relative collation URIs against `EvaluationContext.BaseUri`.
