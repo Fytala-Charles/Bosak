@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `9a1acec` (Tier-2z: compare-011 / fn:compare non-string argument validation)
+**Current focus:** **QT3 Tier-2z: `compare-011` cluster** — `fn:compare($collation1, $collation2)` is only defined when both atomized arguments are `xs:string` (or `xs:untypedAtomic`); non-string atomics such as `compare(123, 456)` must raise `XPTY0004`. The implementation was using `AtomizedString` without validation, so numeric arguments were silently accepted. Fixed by routing `fn:compare` arguments through `RequireString` before comparing. Targeted test now passes: `compare-011`. Full QT3 suite now at **14,791 passed / 86 failed / 16,944 skipped (46.48%)**; runnable pass rate **99.42%** (14791 / 14877). Unit tests **1,350/0**.
+
+## This Session Fixes (Tier-2z: compare-011)
+
+1. **`fn:compare` argument type validation** — `FunctionLibrary.Compare_2` and `Compare_3` now call `RequireString` on both arguments. Nodes and `xs:untypedAtomic` are atomized to strings; the empty sequence returns the empty sequence; non-string atomics raise `XPTY0004`.
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.54: fn:compare RequireString validation)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v0.7: `Compare_RejectsNonStringArguments` test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `fn-concatdbl2args-*`, `fn-datadbl1args-*`, `fn-exactly-onedbl1args-*`, `fn-floordbl1args-*`, `fn-numberdbl1args-*`, `fn-one-or-moredbl1args-*`, `fn-stringdbl1args-*`, `fn-zero-or-onedbl1args-*` (double `MAX_VALUE` string formatting), `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `fn-doc-available-2`, `fn-implicit-timezone-*`, `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-*`, `fn-not-28`, `fn-number-3`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-*`, `fn-substring-after-23`, `fn-substring-before-23`, `fn-upper-case-22`, `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `6fdb7d5` (Tier-2z: K2-StringLT-1 / default codepoint collation for value comparisons)
 **Current focus:** **QT3 Tier-2z: `K2-StringLT-1` cluster** — XPath value comparisons (`lt`, `le`, `gt`, `ge`, `eq`, `ne`) must use the default codepoint collation, which compares Unicode scalar values, not UTF-16 code units. The API evaluation path did not set `EvaluationContext.CollationComparer`, so `VmEngine.CompareStrings` fell back to `string.CompareOrdinal`, causing `"&#60000;" lt "&#70000;"` to evaluate to `false` (U+EA60 vs the lead surrogate of U+11170). Fixed by having `FunctionLibrary.Populate` install the standard `FunctionLibrary.CompareStrings` comparer on contexts that do not already have one. Targeted test now passes: `K2-StringLT-1`. Full QT3 suite now at **14,790 passed / 87 failed / 16,944 skipped (46.48%)**; runnable pass rate **99.42%** (14790 / 14877). Unit tests **1,350/0**.
 
