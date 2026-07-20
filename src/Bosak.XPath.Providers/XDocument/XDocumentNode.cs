@@ -30,6 +30,8 @@
 //                      | Charles Korthout | 1.8   | 19-07-2026     | GetNamespaceAxis returns xml first, then namespaces in root-to-current order         |
 //                      | Charles Korthout | 1.9   | 19-07-2026     | Added IsId property using PSVI for schema-validated ID nodes                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.0   | 20-07-2026     | Added HasNoTypedValue using PSVI for complex element-only/empty elements               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
@@ -230,6 +232,31 @@ public sealed class XDocumentNode : IXdmNode
     }
 
     public XdmValue TypedValue => XdmValue.FromString(StringValue);
+
+    /// <summary>
+    /// Gets a value indicating whether this node has no typed value per XDM.
+    /// For elements this is true when schema validation produced a complex type
+    /// with element-only or empty content (no simple typed value), which means
+    /// <c>fn:data()</c> must raise FOTY0012.
+    /// </summary>
+    public bool HasNoTypedValue
+    {
+        get
+        {
+            if (_node is not XElement element)
+                return false;
+
+            var info = element.GetSchemaInfo();
+            if (info?.SchemaType is XmlSchemaComplexType complex)
+            {
+                // Complex types with element-only or empty content have no typed value.
+                return complex.ContentType is XmlSchemaContentType.ElementOnly
+                    or XmlSchemaContentType.Empty;
+            }
+
+            return false;
+        }
+    }
 
     /// <summary>
     /// Gets a value indicating whether this node has the XDM is-id property.

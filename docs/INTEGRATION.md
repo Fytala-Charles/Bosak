@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,359 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,825 passed / 52 failed / 16,944 skipped (46.59% / 99.65% of runnable tests)
+> **Bosak baseline:** 1,360 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,826 passed / 51 failed / 16,944 skipped (46.59% / 99.66% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K2-DataFunc-6` / `fn:data()` on complex element-only schema elements.
+  - Added `IXdmNode.HasNoTypedValue` default accessor and `XDocumentNode.HasNoTypedValue` implementation using PSVI schema info.
+  - `FunctionLibrary.Data` now raises `FOTY0012` for element-only or empty complex-type elements.
+  - Added `Data_ThrowsFoty0012ForElementOnlyComplexElement` regression test.
+  - Targeted test passes: `K2-DataFunc-6`.
+  - Full QT3 now **14,826 passed / 51 failed / 16,944 skipped = 46.59%** (runnable pass rate **99.66%**); unit tests **1,360/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `fn-upper-case-22` / Armenian ligature upper-case mapping.
   - `FunctionLibrary.ApplyUnicodeCaseMapping` now maps U+FB17 (Armenian small ligature men xeh) to U+0544 U+053D (MEN + XEH).

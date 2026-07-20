@@ -150,7 +150,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.60  | 20-07-2026     | Tier-2z: fn:number#0 raises XPDY0002 when called with no context item                    |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 5.61  | 20-07-2026     | Tier-2z: fn:upper-case Armenian ligature men xeh (U+FB17) → U+0544 U+054D                |
+//                      | Charles Korthout | 5.61  | 20-07-2026     | Tier-2z: fn:upper-case Armenian ligature men xeh (U+FB17) → U+0544 U+053D                |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.62  | 20-07-2026     | Tier-2z: fn:data() raises FOTY0012 for complex element-only/empty schema elements      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -9839,8 +9841,11 @@ public static class FunctionLibrary
         {
             // XDM §2.7.2: typed value of comments and PIs is xs:string;
             // for elements, attributes, text, and document nodes in the untyped
-            // case it is xs:untypedAtomic.
+            // case it is xs:untypedAtomic. Complex element-only/empty elements
+            // have no typed value and raise FOTY0012.
             var node = value.NodeValue;
+            if (node.HasNoTypedValue)
+                throw new InvalidOperationException("FOTY0012: The argument node does not have a typed value.");
             if (node.NodeKind is XdmNodeKind.ProcessingInstruction or XdmNodeKind.Comment)
                 return XdmValue.FromString(node.StringValue);
             return XdmValue.FromString(node.StringValue, "untypedAtomic");

@@ -39,10 +39,15 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.5   | 20-07-2026     | Added UpperCase_ArmenianLigatureMenXeh test                                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 20-07-2026     | Added Data_ThrowsFoty0012ForElementOnlyComplexElement test                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
+using System.Xml;
+using System.Xml.Schema;
 using Xunit;
 
 namespace Bosak.XPath.Api.Tests;
@@ -538,5 +543,32 @@ public class ApiTests
         // fn-upper-case-22: Armenian small ligature men xeh (U+FB17) upper-cases to two codepoints.
         var items = EvalSequence("string-to-codepoints(upper-case(codepoints-to-string(64279)))");
         Assert.Equal(new[] { "1348", "1341" }, items);
+    }
+
+    [Fact]
+    public void Data_ThrowsFoty0012ForElementOnlyComplexElement()
+    {
+        // K2-DataFunc-6: fn:data() on a complex element-only schema-validated element raises FOTY0012.
+        var schema = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='urn:test' xmlns='urn:test' elementFormDefault='qualified'>
+            <xs:element name='root' type='rootType'/>
+            <xs:complexType name='rootType'>
+                <xs:sequence><xs:element name='child' type='xs:string'/></xs:sequence>
+            </xs:complexType>
+        </xs:schema>";
+
+        var schemaSet = new XmlSchemaSet();
+        using (var reader = XmlReader.Create(new System.IO.StringReader(schema)))
+            schemaSet.Add("urn:test", reader);
+        schemaSet.Compile();
+
+        var xml = "<root xmlns='urn:test'><child>text</child></root>";
+        var tempPath = System.IO.Path.GetTempFileName();
+        System.IO.File.WriteAllText(tempPath, xml);
+        var validatedDoc = XDocumentProvider.LoadXml(tempPath, baseUri: null, schemaSet: schemaSet);
+
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx = ctx.WithFocus(XdmValue.FromNode(validatedDoc), 1, 1);
+        Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("/*/data()").Evaluate(ctx));
     }
 }

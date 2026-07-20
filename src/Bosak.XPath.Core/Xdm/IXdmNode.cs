@@ -17,6 +17,8 @@
 //                      | Charles Korthout | 0.5   | 18-07-2026     | Added DTD properties for fn:id/fn:idref DTD support                                      |
 //                      | Charles Korthout | 0.6   | 19-07-2026     | Added IsId accessor for schema-validated ID nodes                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 20-07-2026     | Added HasNoTypedValue accessor for FOTY0012 in fn:data()                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -56,6 +58,13 @@ public interface IXdmNode
 
     /// <summary>Gets the typed value if available, otherwise the string value.</summary>
     XdmValue TypedValue { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether this node has no typed value per XDM
+    /// (e.g., an element whose schema type is a complex type with element-only
+    /// or empty content). When true, <c>fn:data()</c> must raise FOTY0012.
+    /// </summary>
+    bool HasNoTypedValue => false;
 
     /// <summary>
     /// Gets a value indicating whether this node has the XDM is-id property
