@@ -6,14 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,348 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,786 passed / 91 failed / 16,944 skipped (46.47% / 99.38% of runnable tests)
+> **QT3 baseline:** 14,789 passed / 88 failed / 16,944 skipped (46.48% / 99.41% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
 
-- **2026-07-19** — QT3 Tier-2z: `K-NumericUnaryPlus-1` unary plus type validation.
+- **2026-07-19** — QT3 Tier-2z: `K-NumericSubtract-34/35` / `xs:untypedAtomic` arithmetic promotion.
+  - `VmEngine.Add`, `Subtract`, `Multiply`, `Divide`, `IntegerDivide`, and `Modulo` now atomize operands and check `xs:untypedAtomic` before the numeric type-specific branches.
+  - When any operand of an arithmetic expression is `xs:untypedAtomic`, both operands are cast to `xs:double` and the result is `xs:double` (or `xs:integer` for `idiv`/`mod`).
+  - Added `NumericSubtract_PromotesUntypedAtomicToDouble` regression test.
+  - Targeted tests pass: `K-NumericSubtract-34`, `K-NumericSubtract-35`.
+  - Full QT3 now **14,789 passed / 88 failed / 16,944 skipped = 46.48%** (runnable pass rate **99.41%**); unit tests **1,348/0**.
   - `XPathOptimizer` now only folds `+x` for numeric literals; non-literal operands keep the `UnaryExpressionNode`.
   - `IrLowerer` emits the `UnaryPlus` VM opcode instead of a simple `Move`.
   - `VmEngine.UnaryPlus` validates the operand and raises `XPTY0004` for non-numeric, non-untypedAtomic values (e.g., `+"a string"`).

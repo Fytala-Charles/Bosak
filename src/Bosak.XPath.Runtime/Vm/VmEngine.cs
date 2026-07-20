@@ -91,6 +91,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.53  | 19-07-2026     | Tier-2z: unary plus validates numeric operand and raises XPTY0004 for non-numeric        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.54  | 19-07-2026     | Tier-2z: arithmetic with xs:untypedAtomic now casts the result to xs:double                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -2651,17 +2653,18 @@ public static class VmEngine
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromFloat(ToFloat(left) + ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) + ToDecimal(right));
-
-        left = Atomize(left);
-        right = Atomize(right);
-        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
-            return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
 
         return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), false);
     }
@@ -2780,17 +2783,18 @@ public static class VmEngine
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromFloat(ToFloat(left) - ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) - ToDecimal(right));
-
-        left = Atomize(left);
-        right = Atomize(right);
-        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
-            return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
 
         return MultiplyOrAddInteger(ToInteger(left), -ToInteger(right), false);
     }
@@ -3408,17 +3412,18 @@ public static class VmEngine
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+            return XdmValue.FromDouble(ToDouble(left) * ToDouble(right));
+
         if (IsDouble(left) || IsDouble(right))
             return XdmValue.FromDouble(ToDouble(left) * ToDouble(right));
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromFloat(ToFloat(left) * ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
             return XdmValue.FromDecimal(ToDecimal(left) * ToDecimal(right));
-
-        left = Atomize(left);
-        right = Atomize(right);
-        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
-            return XdmValue.FromDouble(ToDouble(left) * ToDouble(right));
 
         return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), true);
     }
@@ -3446,15 +3451,16 @@ public static class VmEngine
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
-        if (IsDouble(left) || IsDouble(right))
-            return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
-        if (IsFloat(left) || IsFloat(right))
-            return XdmValue.FromFloat(ToFloat(left) / ToFloat(right));
-        // XPath div always returns decimal (or double), never integer
+
         left = Atomize(left);
         right = Atomize(right);
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
             return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
+
+        if (IsDouble(left) || IsDouble(right))
+            return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
+        if (IsFloat(left) || IsFloat(right))
+            return XdmValue.FromFloat(ToFloat(left) / ToFloat(right));
 
         var divisor = ToDecimal(right);
         if (divisor == 0)
@@ -3477,6 +3483,24 @@ public static class VmEngine
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+        {
+            double l = ToDouble(left);
+            double r = ToDouble(right);
+            if (double.IsNaN(l) || double.IsNaN(r) || double.IsInfinity(l))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            if (double.IsInfinity(r))
+                return XdmValue.FromInteger(0L);
+            if (r == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
+            double result = l / r;
+            if (double.IsNaN(result) || double.IsInfinity(result))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            return XdmValue.FromInteger((long)result);
+        }
 
         if (IsDouble(left) || IsDouble(right))
         {
@@ -3517,24 +3541,6 @@ public static class VmEngine
             return XdmValue.FromInteger((long)(ToDecimal(left) / ToDecimal(right)));
         }
 
-        left = Atomize(left);
-        right = Atomize(right);
-        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
-        {
-            double l = ToDouble(left);
-            double r = ToDouble(right);
-            if (double.IsNaN(l) || double.IsNaN(r) || double.IsInfinity(l))
-                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
-            if (double.IsInfinity(r))
-                return XdmValue.FromInteger(0L);
-            if (r == 0)
-                throw new InvalidOperationException("FOAR0001: Division by zero.");
-            double result = l / r;
-            if (double.IsNaN(result) || double.IsInfinity(result))
-                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
-            return XdmValue.FromInteger((long)result);
-        }
-
         if (ToInteger(right) == 0)
             throw new InvalidOperationException("FOAR0001: Division by zero.");
         return XdmValue.FromInteger(ToInteger(left) / ToInteger(right));
@@ -3555,6 +3561,16 @@ public static class VmEngine
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
+
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
+        {
+            if (ToDouble(right) == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
+            return XdmValue.FromDouble(ToDouble(left) % ToDouble(right));
+        }
+
         if (IsDouble(left) || IsDouble(right))
         {
             // IEEE 754 semantics: floating-point mod by zero returns NaN, not FOAR0001.
@@ -3570,15 +3586,6 @@ public static class VmEngine
             if (ToDecimal(right) == 0)
                 throw new InvalidOperationException("FOAR0001: Division by zero.");
             return XdmValue.FromDecimal(ToDecimal(left) % ToDecimal(right));
-        }
-
-        left = Atomize(left);
-        right = Atomize(right);
-        if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
-        {
-            if (ToDouble(right) == 0)
-                throw new InvalidOperationException("FOAR0001: Division by zero.");
-            return XdmValue.FromDouble(ToDouble(left) % ToDouble(right));
         }
 
         if (ToInteger(right) == 0)

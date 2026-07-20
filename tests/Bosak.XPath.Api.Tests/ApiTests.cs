@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 19-07-2026     | Added UnaryPlus_ValidatesOperandType test                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 19-07-2026     | Added NumericSubtract_PromotesUntypedAtomicToDouble test                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -416,5 +418,14 @@ public class ApiTests
         Assert.Equal("3", Eval("+3").ToString());
         Assert.Equal("true", Eval("(+3) eq 3").ToString());
         Assert.Throws<InvalidOperationException>(() => Eval("+\"a string\""));
+    }
+
+    [Fact]
+    public void NumericSubtract_PromotesUntypedAtomicToDouble()
+    {
+        var result = Eval("(xs:untypedAtomic('3') - 1.1)");
+        Assert.Equal(XdmValueKind.Double, result.Kind);
+        var result2 = Eval("(1.1 - xs:untypedAtomic('3'))");
+        Assert.Equal(XdmValueKind.Double, result2.Kind);
     }
 }
