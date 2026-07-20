@@ -5,7 +5,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,349 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,350 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** 14,790 passed / 87 failed / 16,944 skipped (46.48% / 99.42% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
@@ -18,7 +18,7 @@
   - This ensures XPath value comparisons (`lt`/`le`/`gt`/`ge`/`eq`/`ne`) use the codepoint collation (Unicode scalar values) in the API path, not `string.CompareOrdinal`.
   - Added `StringLessThan_UsesUnicodeCodepoints` regression test (BMP vs supplementary plane codepoints).
   - Targeted test passes: `K2-StringLT-1`.
-  - Full QT3 now **14,790 passed / 87 failed / 16,944 skipped = 46.48%** (runnable pass rate **99.42%**); unit tests **1,349/0**.
+  - Full QT3 now **14,790 passed / 87 failed / 16,944 skipped = 46.48%** (runnable pass rate **99.42%**); unit tests **1,350/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `K-NumericSubtract-34/35` / `xs:untypedAtomic` arithmetic promotion.
   - `VmEngine.Add`, `Subtract`, `Multiply`, `Divide`, `IntegerDivide`, and `Modulo` now atomize operands and check `xs:untypedAtomic` before the numeric type-specific branches.
