@@ -1,32 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-07-19
-**Commit:** `a6b3a25` (Tier-2z: fn-doc-available-2 / fn:doc and fn:doc-available URI argument validation)
-**Current focus:** **QT3 Tier-2z: `fn-doc-available-2` singleton** — `fn:doc($uri)` and `fn:doc-available($uri)` are defined only for a single `xs:string` (or `xs:untypedAtomic`) URI argument; non-string atomics such as `fn:doc-available(xs:integer(2))` must raise `XPTY0004`. The implementations were using `AtomizedUriStrings`, which silently converted any atomic to a string. Fixed by routing the argument through `RequireString`, while preserving the empty-sequence behavior. `fn:doc(())` still returns the empty sequence, and `fn:doc-available(())` still returns `false`. Targeted test now passes: `fn-doc-available-2`. Full QT3 suite now at **14,822 passed / 55 failed / 16,944 skipped (46.58%)**; runnable pass rate **99.63%** (14822 / 14877). Unit tests **1,356/0**.
+**Date:** 2026-07-20
+**Commit:** `0af2327` (Tier-2z: fn-not-28 / EBV of multi-item sequences)
+**Current focus:** **QT3 Tier-2z: `fn-not-28` singleton** — XPath 3.1 §2.4.3 says the effective boolean value of a sequence of more than one item is defined only when the first item is a node; otherwise it is a type error (`FORG0006`). `XdmValue.SequenceEffectiveBooleanValue` was returning `true` for any multi-item sequence. Fixed by checking the first item: if it is a node, return `true`; otherwise raise `FORG0006`. The empty sequence still returns `false`, and singleton sequences still use the item's own EBV. Targeted test now passes: `fn-not-28`. Full QT3 suite now at **14,823 passed / 54 failed / 16,944 skipped (46.58%)**; runnable pass rate **99.63%** (14823 / 14877). Unit tests **1,357/0**.
 
-## This Session Fixes (Tier-2z: fn-doc-available-2)
+## This Session Fixes (Tier-2z: fn-not-28)
 
-1. **`fn:doc` and `fn:doc-available` URI argument validation** — `FunctionLibrary.Doc_1` and `DocAvailable_1` now use `RequireString` on the URI argument. Nodes and `xs:untypedAtomic` are atomized to strings; the empty sequence yields the empty sequence / `false`; non-string atomics raise `XPTY0004`.
+1. **`fn:not` / effective boolean value of mixed sequences** — `XdmValue.SequenceEffectiveBooleanValue` now throws `FORG0006` when a multi-item sequence's first item is not a node, matching XPath 3.1 §2.4.3.
 
 2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
 
 ## Files Changed (this session)
 
-- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.57: `fn:doc`/`fn:doc-available` RequireString validation)
-- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.2: `DocAvailable_RejectsNonStringArgument` test)
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v1.7: EBV multi-item first-item fix)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.3: `Not_ThrowsOnMixedSequence` test)
 - `docs/AGENT_HANDOVER.md` (this update)
 - `docs/INTEGRATION.md` (updated baselines)
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `fn-not-28`, `fn-number-3`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-upper-case-22`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `fn-number-3`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-upper-case-22`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `e271a8b` (Tier-2z: fn-substring-after/before-23 / relative collation URI resolution)
+**Commit:** `a6b3a25` (Tier-2z: fn-doc-available-2 / fn:doc and fn:doc-available URI argument validation)
 **Current focus:** **QT3 Tier-2z: `fn-substring-after-23` / `fn-substring-before-23` cluster** — XPath collation arguments may be relative URI references that must be resolved against the static base URI. The test sets the static base URI to `http://www.w3.org/2005/xpath-functions/` and passes `"collation/codepoint"`, which should resolve to the canonical codepoint collation. `FunctionLibrary.SubstringBefore_3` and `SubstringAfter_3` were validating the raw relative URI, causing `FOCH0002`. Fixed by adding `ResolveCollationUri`, which absolutizes relative collation URIs using `EvaluationContext.BaseUri` before validation. Targeted tests now pass: `fn-substring-after-23`, `fn-substring-before-23`. Full QT3 suite now at **14,821 passed / 56 failed / 16,944 skipped (46.58%)**; runnable pass rate **99.62%** (14821 / 14877). Unit tests **1,355/0**.
 
 ## This Session Fixes (Tier-2z: fn-substring-after/before-23)
