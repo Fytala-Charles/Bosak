@@ -43,6 +43,7 @@
 //                      | Charles Korthout | 1.7   | 20-07-2026     | Added DeepEqual_RespectsImplicitTimezone test                                            |
 //                      | Charles Korthout | 1.8   | 20-07-2026     | Added Number_ReturnsNaNForNonNumericNonStringTypes test                                |
 //                      | Charles Korthout | 1.9   | 20-07-2026     | Added IsKeyword_AllowedAsFunctionName test                                             |
+//                      | Charles Korthout | 1.10  | 20-07-2026     | Added FlworKeywords_ParseAsNameTests test                                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -611,5 +612,18 @@ public class ApiTests
         // so 'is()' parses as a function call and raises XPST0017 (function not found).
         var ex = Assert.Throws<InvalidOperationException>(() => Eval("is()"));
         Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void FlworKeywords_ParseAsNameTests()
+    {
+        // K2-NameTest-78/79: 'let' and 'for' are not reserved names. When used as a
+        // single name test (no following '$'), they parse as path steps and raise
+        // XPDY0002 because there is no context item, not XPST0003.
+        var exLet = Assert.Throws<InvalidOperationException>(() => Eval("let"));
+        Assert.Contains("XPDY0002", exLet.Message);
+
+        var exFor = Assert.Throws<InvalidOperationException>(() => Eval("for"));
+        Assert.Contains("XPDY0002", exFor.Message);
     }
 }

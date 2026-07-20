@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 1.12  | 19-07-2026     | Reserved function names in function calls and named function references raise XPST0003    |
 //                      | Charles Korthout | 1.13  | 19-07-2026     | Reserved function name check applies only to named function references, not function calls |
 //                      | Charles Korthout | 1.14  | 20-07-2026     | Allow 'is' as a non-reserved function name in function calls (K-NodeSame-6)              |
+//                      | Charles Korthout | 1.15  | 20-07-2026     | Only treat 'for'/'let' as FLWOR keywords when followed by '$' (K2-NameTest-78/79)        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -213,8 +214,10 @@ public sealed class XPathParser
     {
         return Current.Kind switch
         {
-            TokenKind.KeywordFor => ParseForExpr(),
-            TokenKind.KeywordLet => ParseLetExpr(),
+            // 'for' and 'let' are FLWOR keywords only when followed by a variable binding.
+            // Otherwise they are ordinary names (e.g., name tests) (K2-NameTest-78/79).
+            TokenKind.KeywordFor when Peek(1).Kind == TokenKind.Dollar => ParseForExpr(),
+            TokenKind.KeywordLet when Peek(1).Kind == TokenKind.Dollar => ParseLetExpr(),
             TokenKind.KeywordSome or TokenKind.KeywordEvery => ParseQuantifiedExpr(),
             TokenKind.KeywordIf => ParseIfExpr(),
             TokenKind.KeywordTry => ParseTryExpr(),

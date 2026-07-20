@@ -5,13 +5,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,361 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,830 passed / 47 failed / 16,944 skipped (46.60% / 99.68% of runnable tests)
+> **Bosak baseline:** 1,362 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,832 passed / 45 failed / 16,944 skipped (46.61% / 99.70% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K2-NameTest-78/79` / `let` and `for` as name tests.
+  - `let` and `for` are FLWOR keywords only when followed by a variable binding (`$`). When used as a single name test, they now parse as path steps and raise `XPDY0002` (no context item) instead of `XPST0003`.
+  - Added `FlworKeywords_ParseAsNameTests` regression test.
+  - Targeted tests pass: `K2-NameTest-78`, `K2-NameTest-79`.
+  - Full QT3 now **14,832 passed / 45 failed / 16,944 skipped = 46.61%** (runnable pass rate **99.70%**); unit tests **1,362/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `K-NodeSame-6` / allow `is` as a non-reserved function name.
   - `is` is an operator keyword but not a reserved function name, so `is(...)` parses as a function call and raises `XPST0017` because no such function exists.
