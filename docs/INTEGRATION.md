@@ -4,14 +4,21 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,356 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,822 passed / 55 failed / 16,944 skipped (46.58% / 99.63% of runnable tests)
+> **Last updated:** 20 July 2026
+> **Bosak baseline:** 1,357 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,823 passed / 54 failed / 16,944 skipped (46.58% / 99.63% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `fn-not-28` / effective boolean value of multi-item sequences.
+  - `XdmValue.SequenceEffectiveBooleanValue` now raises `FORG0006` when a sequence of more than one item has a non-node first item.
+  - Previously, any multi-item sequence was treated as `true`; XPath 3.1 §2.4.3 requires a node-first sequence for this behavior.
+  - Added `Not_ThrowsOnMixedSequence` regression test.
+  - Targeted test passes: `fn-not-28`.
+  - Full QT3 now **14,823 passed / 54 failed / 16,944 skipped = 46.58%** (runnable pass rate **99.63%**); unit tests **1,357/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn-doc-available-2` / `fn:doc` and `fn:doc-available` URI argument validation.
   - `FunctionLibrary.Doc_1` and `DocAvailable_1` now use `RequireString` on the URI argument.

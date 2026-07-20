@@ -31,6 +31,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 19-07-2026     | FormatXPathDouble uses G17 to preserve round-trip digits for MAX_VALUE                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 20-07-2026     | EBV multi-item sequence: FORG0006 when first item is not a node                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -460,11 +462,13 @@ public readonly struct XdmValue
         }
 
         // A sequence of more than one item has an effective boolean value of true
-        // if it contains at least one node; otherwise it is a type error.
+        // if its first item is a node; otherwise it is a type error (FORG0006).
         foreach (var item in XdmSequence.FromSource(seq))
         {
             if (item.IsNode)
                 return true;
+            throw new InvalidOperationException(
+                "FORG0006: Invalid argument type for fn:boolean() / effective boolean value");
         }
 
         throw new InvalidOperationException(

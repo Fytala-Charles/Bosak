@@ -33,6 +33,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 19-07-2026     | Added DocAvailable_RejectsNonStringArgument test                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 20-07-2026     | Added Not_ThrowsOnMixedSequence test                                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -507,5 +509,14 @@ public class ApiTests
         // fn-doc-available-2: fn:doc-available expects a string-typed URI argument.
         Assert.Throws<InvalidOperationException>(() => Eval("fn:doc-available(xs:integer(2))"));
         Assert.Equal("false", Eval("fn:doc-available(())").ToString());
+    }
+
+    [Fact]
+    public void Not_ThrowsOnMixedSequence()
+    {
+        // fn-not-28: EBV of a multi-item sequence whose first item is not a node is FORG0006.
+        Assert.Throws<InvalidOperationException>(() => Eval("not((23, 24))"));
+        Assert.Throws<InvalidOperationException>(() => Eval("not((1, 2, 3))"));
+        Assert.Equal("true", Eval("not(())").ToString());
     }
 }
