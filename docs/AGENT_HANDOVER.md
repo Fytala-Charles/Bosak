@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `3ed944e` (Tier-2z: K-NodeSame-6 / allow 'is' as non-reserved function name)
+**Current focus:** **QT3 Tier-2z: `K-NodeSame-6` singleton** — `is` is an operator keyword but not a reserved function name, so `is(...)` must parse as a function call and then raise `XPST0017` because no function named `is` exists. The parser was throwing `XPST0003` because `ValueIs` was not accepted in a primary expression. Fixed by adding a `case TokenKind.ValueIs` in `ParsePrimaryExpr` that parses `is(` as a function call. Targeted test now passes: `K-NodeSame-6`. Full QT3 suite now at **14,830 passed / 47 failed / 16,944 skipped (46.60%)**; runnable pass rate **99.68%** (14830 / 14877). Unit tests **1,361/0**.
+
+## This Session Fixes (Tier-2z: K-NodeSame-6)
+
+1. **`is` as non-reserved function name** — `XPathParser.ParsePrimaryExpr` now accepts `TokenKind.ValueIs` when followed by `(`, treating `is(...)` as a normal function call. The function lookup later raises `XPST0017` because no `is` function is defined in the function library.
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (v1.14: allow `is` as non-reserved function name in function calls)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.9: `IsKeyword_AllowedAsFunctionName` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `c702302` (Tier-2z: K-NodeNumberFunc-13/15 / fn:number on non-numeric atomic types)
 **Current focus:** **QT3 Tier-2z: `K-NodeNumberFunc-13/15` cluster** — `fn:number` must return `NaN` for atomic types that are not numeric, not `xs:string`/`xs:untypedAtomic`, and not `xs:boolean`. The implementation was falling back to `ParseXPathDouble(value.ToString())` for any non-numeric atomic value, so `xs:anyURI("1")` and `xs:gYear("2005")` were incorrectly converted to `1.0` and `2005.0`. Fixed by routing `fn:number` through `VmEngine.TryCast(..., "xs:double")`, which respects the schema-type restrictions on casts (e.g., `anyURI` and `gYear` cannot cast to `double`). Targeted tests now pass: `K-NodeNumberFunc-13`, `K-NodeNumberFunc-15`. Full QT3 suite now at **14,829 passed / 48 failed / 16,944 skipped (46.60%)**; runnable pass rate **99.68%** (14829 / 14877). Unit tests **1,361/0**.
 
