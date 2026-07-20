@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `abc91bf` (Tier-2z: Axes123 / namespace-node identity in 'is')
+**Current focus:** **QT3 Tier-2z: `Axes123` singleton** — Namespace nodes obtained via different paths from the same element must be identical when they represent the same prefix/URI binding. `XDocumentNode.IsSameNode` was using `ReferenceEquals` on the underlying `XAttribute`, but `GetNamespaceAxis` creates fresh `XAttribute` objects for each axis traversal, so two namespace nodes for the same binding compared as different. Fixed by comparing namespace nodes by owner element reference + prefix + URI. `GetHashCode` was updated to stay consistent with the new equality semantics. Targeted test now passes: `Axes123`. Full QT3 suite now at **14,833 passed / 44 failed / 16,944 skipped (46.61%)**; runnable pass rate **99.71%** (14833 / 14877). Unit tests **1,365/0**.
+
+## This Session Fixes (Tier-2z: Axes123)
+
+1. **Namespace-node identity** — `XDocumentNode.IsSameNode` now treats two namespace nodes as the same when they share the same owner element, prefix, and URI. `GetHashCode` uses the same three fields for namespace nodes so the `Equals`/`GetHashCode` contract remains valid.
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs` (v2.1: namespace-node identity by owner + prefix + URI)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.11: `NamespaceNode_IsSameNodeIdentity` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `1d27372` (Tier-2z: K2-NameTest-78/79 / let and for as name tests)
 **Current focus:** **QT3 Tier-2z: `K2-NameTest-78/79` singleton pair** — `let` and `for` are not reserved names. When used as a single name test (no following `$`), they must parse as path steps and raise `XPDY0002` because there is no context item, not `XPST0003`. The parser was eagerly dispatching `for`/`let` to the FLWOR parser in `ParseExprSingle`. Fixed by making that dispatch conditional on the next token being `$`; otherwise the tokens fall through to `ParseOrExpr()` and are treated as name tests. Targeted tests now pass: `K2-NameTest-78`, `K2-NameTest-79`. Full QT3 suite now at **14,832 passed / 45 failed / 16,944 skipped (46.61%)**; runnable pass rate **99.70%** (14832 / 14877). Unit tests **1,362/0**.
 
