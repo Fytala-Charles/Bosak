@@ -5,13 +5,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,350 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,791 passed / 86 failed / 16,944 skipped (46.48% / 99.42% of runnable tests)
+> **Bosak baseline:** 1,352 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,813 passed / 64 failed / 16,944 skipped (46.55% / 99.57% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: double `MAX_VALUE` string formatting / `G17` round-trip cluster.
+  - `XdmValue.FormatXPathDouble` now uses `"G17"` instead of `"G16"` for scientific-notation doubles, preserving all round-trip digits.
+  - Fixes boundary-value failures in `fn:ceiling`, `fn:concat`, `fn:data`, `fn:exactly-one`, `fn:floor`, `fn:number`, `fn:one-or-more`, `fn:string`, and `fn:zero-or-one` `*dbl1args-*` tests.
+  - Added `DoubleMaxValue_RoundTripString` regression test.
+  - Full QT3 now **14,813 passed / 64 failed / 16,944 skipped = 46.55%** (runnable pass rate **99.57%**); unit tests **1,352/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `compare-011` / `fn:compare` non-string argument validation.
   - `FunctionLibrary.Compare_2` and `Compare_3` now use `RequireString` on both arguments.

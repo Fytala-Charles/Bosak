@@ -29,6 +29,8 @@
 //                      | Charles Korthout | 1.4   | 15-07-2026     | Tier-2k: annotated FromInteger/FromDuration overloads; EBV FORG0006 for String-kind hexBinary/base64Binary/gYear-family annotations |
 //                      | Charles Korthout | 1.5   | 19-07-2026     | Added FromDecimal with schemaTypeName for xs:unsignedLong overflow values               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 19-07-2026     | FormatXPathDouble uses G17 to preserve round-trip digits for MAX_VALUE                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -523,10 +525,10 @@ public readonly struct XdmValue
         // XPath canonical double uses scientific notation when abs >= 1e6 or abs < 1e-6
         if (abs >= 1e6 || abs < 1e-6)
         {
-            // "G16" gives a short, round-trippable form for double values. We then force
+            // "G17" is the shortest round-trippable form for double values. We then force
             // scientific notation for values whose magnitude requires XPath canonical
             // representation (e.g. 1000001 must serialize as 1.000001E6, not 1000001).
-            string s = value.ToString("G16", CultureInfo.InvariantCulture);
+            string s = value.ToString("G17", CultureInfo.InvariantCulture);
             if (!s.Contains('E') && !s.Contains('e') && abs >= 1e6)
             {
                 // The round-trip form is fixed-point (e.g. 1230000); normalize to
