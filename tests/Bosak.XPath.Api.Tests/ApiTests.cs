@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.0   | 19-07-2026     | Added ImplicitTimezone_DivByInvalidNumber_Throws test                                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 19-07-2026     | Added SubstringAfter_ResolvesRelativeCollationUri test                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -484,5 +486,16 @@ public class ApiTests
         Assert.Throws<InvalidOperationException>(() => Eval("fn:string(fn:implicit-timezone() div (0 div 0E0))"));
         Assert.Throws<InvalidOperationException>(() => Eval("fn:string(fn:implicit-timezone() div 0)"));
         Assert.Throws<InvalidOperationException>(() => Eval("fn:string(fn:implicit-timezone() div -0)"));
+    }
+
+    [Fact]
+    public void SubstringAfter_ResolvesRelativeCollationUri()
+    {
+        // fn-substring-after-23 / fn-substring-before-23: relative collation URIs
+        // resolve against the static base URI.
+        var expr = XPath31Expression.Compile("substring-after('banana', 'a', 'collation/codepoint')");
+        var ctx = new EvaluationContext { BaseUri = "http://www.w3.org/2005/xpath-functions/" };
+        FunctionLibrary.Populate(ctx);
+        Assert.Equal("nana", expr.Evaluate(ctx).ToString());
     }
 }

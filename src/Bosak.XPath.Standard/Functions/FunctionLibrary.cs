@@ -131,6 +131,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.55  | 19-07-2026     | fn:iri-to-uri now validates argument with RequireString (XPTY0004 for non-string/many items) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.56  | 19-07-2026     | fn:substring-before/after resolve relative collation URIs against EvaluationContext.BaseUri |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
 //                      |==================|=======|================|=========================================================================================
@@ -3861,7 +3863,7 @@ public static class FunctionLibrary
     {
         string s = AtomizedString(args[0]);
         string search = AtomizedString(args[1]);
-        string collation = AtomizedString(args[2]);
+        string collation = ResolveCollationUri(AtomizedString(args[2]), ctx.BaseUri);
         ValidateCollation(collation);
         int idx = StringIndexOf(s, search, collation);
         return XdmValue.FromString(idx >= 0 ? s[..idx] : string.Empty);
@@ -3899,7 +3901,7 @@ public static class FunctionLibrary
     {
         string s = AtomizedString(args[0]);
         string search = AtomizedString(args[1]);
-        string collation = AtomizedString(args[2]);
+        string collation = ResolveCollationUri(AtomizedString(args[2]), ctx.BaseUri);
         ValidateCollation(collation);
 
         if (TryParseUca(collation, out var uca))
@@ -4940,6 +4942,20 @@ public static class FunctionLibrary
     private const string HtmlAsciiCaseInsensitiveCollation = "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive";
     private const string CaseblindCollation = "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind";
     private const string UcaCollationPrefix = "http://www.w3.org/2013/collation/UCA";
+
+    private static string ResolveCollationUri(string collation, string? baseUri)
+    {
+        if (string.IsNullOrEmpty(collation))
+            return string.Empty;
+        if (Uri.IsWellFormedUriString(collation, UriKind.Absolute))
+            return collation;
+        if (!string.IsNullOrEmpty(baseUri) &&
+            Uri.TryCreate(new Uri(baseUri), collation, out var resolved))
+        {
+            return resolved.AbsoluteUri;
+        }
+        return collation;
+    }
 
     private static void ValidateCollation(string collation)
     {
