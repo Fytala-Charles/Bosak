@@ -5,13 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,367 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,836 passed / 41 failed / 16,944 skipped (46.62% / 99.73% of runnable tests)
+> **Bosak baseline:** 1,368 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,840 passed / 37 failed / 16,944 skipped (46.64% / 99.75% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `Literals017/025/028` / XPath canonical double formatting.
+  - `FormatXPathDouble` was using `G17` for scientific-range values, which preserved round-trip noise (e.g. `6553503.2000000002`) and inflated the exponent when normalizing fixed-point to scientific notation.
+  - Switched to `R` (shortest round-trip) format and compute the exponent from the fixed-point decimal position rather than the total digit count.
+  - `FormatXPathFloat` uses the same decimal-point-based exponent calculation.
+  - Added `DoubleToString_FixedPointScientific_TrimsRoundTripNoise` regression test.
+  - Targeted tests pass: `Literals017`, `Literals025`, `Literals028`.
+  - Full QT3 now **14,840 passed / 37 failed / 16,944 skipped = 46.64%** (runnable pass rate **99.75%**); unit tests **1,368/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `K-FilterExpr-82` / atomize predicate result before numeric/EBV check.
   - Filter expression predicates that return a sequence must be atomized before deciding whether they are numeric positional predicates or being used for their effective boolean value.

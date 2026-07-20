@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 26-06-2026     | Added sequence EBV tests                                                                 |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Added xs:float canonical formatting regression tests                                     |
+//                      | Charles Korthout | 0.4   | 20-07-2026     | Added xs:double fixed-point-scientific formatting regression test                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -196,6 +197,18 @@ public class XdmValueTests
     {
         var v = XdmValue.FromDouble(1.23e-7);
         Assert.Equal("1.23E-7", v.ToString());
+    }
+
+    [Fact]
+    public void DoubleToString_FixedPointScientific_TrimsRoundTripNoise()
+    {
+        // Regression for QT3 Literals017/025/028: G17 preserved trailing fractional zeros
+        // that inflated the exponent. "R" plus decimal-point-based exponent gives the
+        // canonical XPath double representation.
+        var v = XdmValue.FromDouble(65535.032e2);
+        Assert.Equal("6.5535032E6", v.ToString());
+        var neg = XdmValue.FromDouble(-65535.032e2);
+        Assert.Equal("-6.5535032E6", neg.ToString());
     }
 
     // ------------------------------------------------------------------

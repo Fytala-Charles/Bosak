@@ -33,6 +33,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.7   | 20-07-2026     | EBV multi-item sequence: FORG0006 when first item is not a node                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 20-07-2026     | FormatXPathDouble/Float use R and decimal-point exponent for fixed-point scientific     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -529,17 +531,22 @@ public readonly struct XdmValue
         // XPath canonical double uses scientific notation when abs >= 1e6 or abs < 1e-6
         if (abs >= 1e6 || abs < 1e-6)
         {
-            // "G17" is the shortest round-trippable form for double values. We then force
+            // "R" gives the shortest round-trippable form for double values. We then force
             // scientific notation for values whose magnitude requires XPath canonical
             // representation (e.g. 1000001 must serialize as 1.000001E6, not 1000001).
-            string s = value.ToString("G17", CultureInfo.InvariantCulture);
+            string s = value.ToString("R", CultureInfo.InvariantCulture);
             if (!s.Contains('E') && !s.Contains('e') && abs >= 1e6)
             {
-                // The round-trip form is fixed-point (e.g. 1230000); normalize to
-                // a single leading digit and an exponent.
+                // The round-trip form is fixed-point (e.g. 1230000 or 6553503.2); normalize to
+                // a single leading digit and an exponent. The exponent is derived from the
+                // position of the decimal point, not the total digit count, because the round-trip
+                // string may contain a fractional part whose digits must not inflate the exponent.
                 bool negative = s.StartsWith('-');
-                var digits = (negative ? s[1..] : s).Replace(".", "");
-                int exponent = digits.Length - 1;
+                var signed = negative ? s[1..] : s;
+                var digits = signed.Replace(".", "");
+                int decimalPos = signed.IndexOf('.');
+                if (decimalPos < 0) decimalPos = digits.Length;
+                int exponent = decimalPos - 1;
                 string mantissa = digits.Insert(1, ".");
                 mantissa = mantissa.TrimEnd('0').TrimEnd('.');
                 if (!mantissa.Contains('.')) mantissa += ".0";
@@ -637,8 +644,11 @@ public readonly struct XdmValue
             if (!s.Contains('E') && !s.Contains('e') && abs >= 1e6f)
             {
                 bool negative = s.StartsWith('-');
-                var digits = (negative ? s[1..] : s).Replace(".", "");
-                int exponent = digits.Length - 1;
+                var signed = negative ? s[1..] : s;
+                var digits = signed.Replace(".", "");
+                int decimalPos = signed.IndexOf('.');
+                if (decimalPos < 0) decimalPos = digits.Length;
+                int exponent = decimalPos - 1;
                 string mantissa = digits.Insert(1, ".");
                 mantissa = mantissa.TrimEnd('0').TrimEnd('.');
                 if (!mantissa.Contains('.')) mantissa += ".0";
