@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `7de2193` (Tier-2z: K-XQueryComment-14/15 / unterminated XPath comments raise XPST0003)
+**Current focus:** **QT3 Tier-2z: `K-XQueryComment-14/15` comment-parsing singleton cluster** — `1(: this comment does not end` and `1(: content (: this comment does not end :)` are malformed XPath comments: the first never ends, and the second opens a nested comment but never closes the outer one. Both expect `XPST0003`. The lexer previously consumed unterminated comments to EOF and returned, so the parser saw only the leading `1` and the expression succeeded. Fixed by making `XPathLexer.SkipComment` throw `ParseException` (auto-prefixed `XPST0003`) when the comment is still open at end of input. Targeted tests now pass: `K-XQueryComment-14`, `K-XQueryComment-15`. Full QT3 suite now at **14,844 passed / 33 failed / 16,944 skipped (46.65%)**; runnable pass rate **99.78%** (14844 / 14877). Unit tests **1,371/0**.
+
+## This Session Fixes (Tier-2z: K-XQueryComment-14/15)
+
+1. **Unterminated comment detection** — `XPathLexer.SkipComment` now raises `XPST0003` when a comment is still open at EOF, including nested comments where the outer level is not closed.
+
+2. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Lexer/XPathLexer.cs` (v0.5: throw `ParseException` on unterminated comments)
+- `tests/Bosak.XPath.Parser.Tests/LexerTests.cs` (v0.4: unterminated/nested comment regression tests)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `f575dc3` (Tier-2z: CastAs009/091 / xs:float fixed-point formatting in decimal range)
 **Current focus:** **QT3 Tier-2z: `CastAs009/091` float-cast singleton cluster** — `xs:untypedAtomic("1e-5") cast as xs:float` and `xs:string("1e-5") cast as xs:float` expect the canonical string value `0.00001`. The value `1e-5` has magnitude `1e-5`, which falls in the XPath fixed-point range (`1e-6 <= |x| < 1e6`), but `FormatXPathFloat` was returning `NormalizeScientific` for `R`-format scientific strings inside that range, yielding `1.0E-5` instead of expanding to fixed-point. Fixed by aligning the float branch with the double branch: `R`-scientific strings in the decimal range are now expanded to fixed-point before trailing-zero trimming. Targeted tests now pass: `CastAs009`, `CastAs091`. Full QT3 suite now at **14,842 passed / 35 failed / 16,944 skipped (46.64%)**; runnable pass rate **99.77%** (14842 / 14877). Unit tests **1,369/0**.
 
@@ -19,7 +44,7 @@
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
