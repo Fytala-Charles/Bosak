@@ -14,9 +14,11 @@
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Trailing dot in number is DecimalLiteral (fixes select-3501/3502)                        |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Lex Q{uri}* URI-qualified wildcards                                                      |
 //                      | Charles Korthout | 0.4   | 19-07-2026     | NumericLiteral followed by NameStartChar is Invalid (10idiv → XPST0003)                 |
+//                      | Charles Korthout | 0.5   | 20-07-2026     | Unterminated XPath comments now raise XPST0003                                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
+using Bosak.XPath.Parser;
 
 namespace Bosak.XPath.Parser.Lexer;
 
@@ -114,6 +116,7 @@ public ref struct XPathLexer
     private void SkipComment()
     {
         // Skip opening '(:'
+        int start = _position;
         _position += 2;
         int depth = 1;
 
@@ -139,8 +142,7 @@ public ref struct XPathLexer
 
         if (depth > 0)
         {
-            // Unterminated comment — let the parser report the error.
-            // The lexer simply consumed to EOF.
+            throw new ParseException("Unterminated comment", start);
         }
     }
 

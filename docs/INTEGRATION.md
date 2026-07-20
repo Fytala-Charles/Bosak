@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,369 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,842 passed / 35 failed / 16,944 skipped (46.64% / 99.77% of runnable tests)
+> **Bosak baseline:** 1,371 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,844 passed / 33 failed / 16,944 skipped (46.65% / 99.78% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K-XQueryComment-14/15` / unterminated XPath comments now raise `XPST0003`.
+  - The lexer previously consumed unterminated comments to EOF silently, so expressions like `1(: this comment does not end` parsed as just `1` and succeeded.
+  - `XPathLexer.SkipComment` now throws `ParseException` (auto-prefixed `XPST0003`) when a comment is still open at end of input, including partially closed nested comments.
+  - Added `UnterminatedComment_AfterExpression_RaisesXPST0003` and `NestedUnterminatedComment_AfterExpression_RaisesXPST0003` regression tests.
+  - Targeted tests pass: `K-XQueryComment-14`, `K-XQueryComment-15`.
+  - Full QT3 now **14,844 passed / 33 failed / 16,944 skipped = 46.65%** (runnable pass rate **99.78%**); unit tests **1,371/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `CastAs009/091` / `xs:float` fixed-point formatting in decimal range.
   - `FormatXPathFloat` was normalizing `R`-format scientific strings (e.g. `1E-05`) inside the decimal range (`1e-6 <= |x| < 1e6`), producing `1.0E-5` instead of expanding to fixed-point `0.00001`.

@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Update IntegerFollowedByDot for decimal-literal grammar                                |
 //                      | Charles Korthout | 0.3   | 19-07-2026     | NumericLiteral+keyword boundary test (10idiv → Invalid)                                |
+//                      | Charles Korthout | 0.4   | 20-07-2026     | Unterminated comment regression tests                                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Lexer;
@@ -69,6 +70,24 @@ public class LexerTests
         var toks = Tokenize(src);
         Assert.Single(toks);
         AssertToken(toks[0], TokenKind.Name, "foo", src);
+    }
+
+    [Fact]
+    public void UnterminatedComment_AfterExpression_RaisesXPST0003()
+    {
+        // Regression for QT3 K-XQueryComment-14.
+        var src = "1(: this comment does not end";
+        var ex = Assert.Throws<ParseException>(() => Tokenize(src));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void NestedUnterminatedComment_AfterExpression_RaisesXPST0003()
+    {
+        // Regression for QT3 K-XQueryComment-15: inner comment opened but outer never closed.
+        var src = "1(: content (: this comment does not end :)";
+        var ex = Assert.Throws<ParseException>(() => Tokenize(src));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     [Fact]
