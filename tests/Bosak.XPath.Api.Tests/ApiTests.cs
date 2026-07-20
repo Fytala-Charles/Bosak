@@ -41,6 +41,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 20-07-2026     | Added Data_ThrowsFoty0012ForElementOnlyComplexElement test                             |
 //                      | Charles Korthout | 1.7   | 20-07-2026     | Added DeepEqual_RespectsImplicitTimezone test                                            |
+//                      | Charles Korthout | 1.8   | 20-07-2026     | Added Number_ReturnsNaNForNonNumericNonStringTypes test                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -586,5 +587,19 @@ public class ApiTests
             "deep-equal(xs:dateTime('2012-05-30T12:00:00'), xs:dateTime('2012-05-30T12:00:00Z') - implicit-timezone())")
             .Evaluate(ctx);
         Assert.Equal("true", result.ToString());
+    }
+
+    [Fact]
+    public void Number_ReturnsNaNForNonNumericNonStringTypes()
+    {
+        // K-NodeNumberFunc-13/15: fn:number on non-numeric, non-string, non-boolean atomic types returns NaN.
+        Assert.Equal("NaN", Eval("number(xs:anyURI('1'))").ToString());
+        Assert.Equal("NaN", Eval("number(xs:gYear('2005'))").ToString());
+
+        // Boolean, numeric and string/untypedAtomic values still convert normally.
+        Assert.Equal("1", Eval("number(true())").ToString());
+        Assert.Equal("0", Eval("number(false())").ToString());
+        Assert.Equal("1", Eval("number('1')").ToString());
+        Assert.Equal("2", Eval("number(2)").ToString());
     }
 }

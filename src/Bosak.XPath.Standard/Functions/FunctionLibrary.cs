@@ -154,6 +154,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.62  | 20-07-2026     | Tier-2z: fn:data() raises FOTY0012 for complex element-only/empty schema elements      |
 //                      | Charles Korthout | 5.63  | 20-07-2026     | Tier-2z: fn:deep-equal timezone-aware dateTime/date/time comparison                  |
+//                      | Charles Korthout | 5.64  | 20-07-2026     | Tier-2z: fn:number returns NaN for non-numeric/non-string atomic types               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -9821,7 +9822,17 @@ public static class FunctionLibrary
     {
         if (value.IsUndefined)
             return XdmValue.FromDouble(double.NaN);
-        return XdmValue.FromDouble(ToDoubleValue(value));
+
+        value = AtomizeValue(value);
+        if (value.IsUndefined)
+            return XdmValue.FromDouble(double.NaN);
+
+        // fn:number converts numeric types, xs:string, xs:untypedAtomic and xs:boolean
+        // to xs:double; other atomic types (anyURI, gYear, QName, dateTime, etc.) return NaN.
+        if (VmEngine.TryCast(value, "xs:double", out var casted))
+            return casted;
+
+        return XdmValue.FromDouble(double.NaN);
     }
 
     private static XdmValue Data_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
