@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `4d53cc8` (Tier-2z: K-NumericSubtract-34/35 / xs:untypedAtomic arithmetic promotion)
+**Current focus:** **QT3 Tier-2z: `K-NumericSubtract-34/35` cluster** — XPath operator mapping requires that when any operand of an arithmetic expression is `xs:untypedAtomic`, both operands are cast to `xs:double` and the result is `xs:double`. `Add`, `Subtract`, `Multiply`, `Divide`, `IntegerDivide`, and `Modulo` were checking the numeric type-specific branches before the untypedAtomic promotion, so `xs:untypedAtomic("3") - 1.1` returned `xs:decimal` instead of `xs:double`. Fixed by atomizing the operands and checking for `xs:untypedAtomic` before the double/float/decimal/integer branches. Targeted tests now pass: `K-NumericSubtract-34`, `K-NumericSubtract-35`. Full QT3 suite now at **14,789 passed / 88 failed / 16,944 skipped (46.48%)**; runnable pass rate **99.41%** (14789 / 14877). Unit tests **1,348/0**.
+
+## This Session Fixes (Tier-2z: K-NumericSubtract-34/35)
+
+1. **`xs:untypedAtomic` promotion in arithmetic** — `VmEngine.Add`, `Subtract`, `Multiply`, `Divide`, `IntegerDivide`, and `Modulo` now atomize operands and check for `xs:untypedAtomic` before the numeric type-specific branches. When one operand is untyped, the operation is performed as `xs:double` and the result is `xs:double` (or `xs:integer` for `idiv`/`mod`, as required).
+
+2. **Regression safety** — Full QT3 suite improved by **+3 passed, −4 failed** with no regressions in unit tests or the targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.54: `xs:untypedAtomic` promotion in arithmetic)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v0.5: `NumericSubtract_PromotesUntypedAtomicToDouble` test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `compare-011`, `fn-concatdbl2args-*`, `fn-datadbl1args-*`, `fn-doc-available-2`, `fn-exactly-onedbl1args-*`, `fn-floordbl1args-*`, `fn-implicit-timezone-*`, `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-*`, `fn-not-28`, `fn-numberdbl1args-*`, `fn-number-3`, `fn-one-or-moredbl1args-*`, `fn-resolve-uri-*`, `fn-stringdbl1args-*`, `fn-substring-after-23`, `fn-substring-before-23`, `fn-upper-case-22`, `K2-SeqDeepEqualFunc-40`, `K2-DataFunc-6`, `K-NodeNumberFunc-13/15`, `fn-zero-or-onedbl1args-*`, `xs-dateTimeStamp-*`, `op-boolean-equal-4` (fixed), `K2-StringLT-1`, `op-numeric-divide-1`, `K-NumericSubtract-34/35` (fixed), `K-NumericUnaryPlus-1` (fixed), `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `K-NodeSame-6`, `fn-intersect-node-args-015/016`, `fn-union-node-args-015/016/017`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `3c8bca6` (Tier-2z: K-NumericUnaryPlus-1 / unary plus type check)
 **Current focus:** **QT3 Tier-2z: `K-NumericUnaryPlus-1` cluster** — XPath unary plus is only defined for numeric operands (and atomized `xs:untypedAtomic`); `+"a string"` must raise `XPTY0004`. The AST optimizer previously folded `+x` to `x` for every operand, and the IR lowerer emitted a simple `Move`. Fixed by limiting the optimizer fold to numeric literals and emitting a real `UnaryPlus` opcode that validates the operand at runtime. Targeted tests now pass: `K-NumericUnaryPlus-1`. Full QT3 suite now at **14,786 passed / 91 failed / 16,944 skipped (46.47%)**; runnable pass rate **99.38%** (14786 / 14877). Unit tests **1,348/0**.
 
