@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `f575dc3` (Tier-2z: CastAs009/091 / xs:float fixed-point formatting in decimal range)
+**Current focus:** **QT3 Tier-2z: `CastAs009/091` float-cast singleton cluster** — `xs:untypedAtomic("1e-5") cast as xs:float` and `xs:string("1e-5") cast as xs:float` expect the canonical string value `0.00001`. The value `1e-5` has magnitude `1e-5`, which falls in the XPath fixed-point range (`1e-6 <= |x| < 1e6`), but `FormatXPathFloat` was returning `NormalizeScientific` for `R`-format scientific strings inside that range, yielding `1.0E-5` instead of expanding to fixed-point. Fixed by aligning the float branch with the double branch: `R`-scientific strings in the decimal range are now expanded to fixed-point before trailing-zero trimming. Targeted tests now pass: `CastAs009`, `CastAs091`. Full QT3 suite now at **14,842 passed / 35 failed / 16,944 skipped (46.64%)**; runnable pass rate **99.77%** (14842 / 14877). Unit tests **1,369/0**.
+
+## This Session Fixes (Tier-2z: CastAs009/091)
+
+1. **Float fixed-point formatting** — `FormatXPathFloat` now expands `R`-format scientific notation to fixed-point when `1e-6 <= |x| < 1e6`, matching `FormatXPathDouble` behavior.
+
+2. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v1.9: expand `R`-scientific to fixed-point in `FormatXPathFloat` decimal range)
+- `tests/Bosak.XPath.Core.Tests/XdmValueTests.cs` (v0.5: `FloatToString_InsideDecimalRange_ExpandsToFixedPoint` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `a14d404` (Tier-2z: Literals017/025/028 / XPath canonical double formatting)
 **Current focus:** **QT3 Tier-2z: `Literals017/025/028` singleton cluster** — `65535.032e2`, `-65535.032e2`, and `65535.032E2` expect the canonical XPath double strings `6.5535032E6`, `-6.5535032E6`, and `6.5535032E6`. `FormatXPathDouble` was using `G17` for values in the scientific range (`abs >= 1e6`), which for 6553503.2 produces the round-trip-noisy string `6553503.2000000002`. The subsequent fixed-point-to-scientific normalization then counted the total number of digits (including the fractional noise) to compute the exponent, yielding `6.5535032000000002E16` instead of `6.5535032E6`. Fixed by switching the scientific-range branch to the shortest round-trip `R` format and deriving the exponent from the original decimal-point position. `FormatXPathFloat` was updated to use the same decimal-point-based exponent calculation. Targeted tests now pass: `Literals017`, `Literals025`, `Literals028`. Full QT3 suite now at **14,840 passed / 37 failed / 16,944 skipped (46.64%)**; runnable pass rate **99.75%** (14840 / 14877). Unit tests **1,368/0**.
 
@@ -19,7 +44,7 @@
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
