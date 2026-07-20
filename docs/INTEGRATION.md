@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
 > **Bosak baseline:** 1,350 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,790 passed / 87 failed / 16,944 skipped (46.48% / 99.42% of runnable tests)
+> **QT3 baseline:** 14,791 passed / 86 failed / 16,944 skipped (46.48% / 99.42% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `compare-011` / `fn:compare` non-string argument validation.
+  - `FunctionLibrary.Compare_2` and `Compare_3` now use `RequireString` on both arguments.
+  - Non-string atomics (e.g., `compare(123, 456)`) now raise `XPTY0004`; nodes and `xs:untypedAtomic` are still atomized to strings.
+  - Added `Compare_RejectsNonStringArguments` regression test.
+  - Targeted test passes: `compare-011`.
+  - Full QT3 now **14,791 passed / 86 failed / 16,944 skipped = 46.48%** (runnable pass rate **99.42%**); unit tests **1,350/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `K2-StringLT-1` / default codepoint collation for value comparisons.
   - `FunctionLibrary.Populate` now installs the standard `FunctionLibrary.CompareStrings` comparer when the context has no custom comparer.

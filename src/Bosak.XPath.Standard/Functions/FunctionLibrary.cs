@@ -127,6 +127,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | FunctionLibrary.Populate sets default CollationComparer for XPath value comparisons     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.54  | 19-07-2026     | fn:compare now validates arguments with RequireString (XPTY0004 for non-string atomics) |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
 //                      |==================|=======|================|=========================================================================================
@@ -10543,22 +10545,24 @@ public static class FunctionLibrary
     {
         if (IsEmptySequence(args[0]) || IsEmptySequence(args[1]))
             return XdmValue.Undefined;
-        return Compare(args[0], args[1], ctx.DefaultCollation);
+        string s1 = RequireString(args[0]);
+        string s2 = RequireString(args[1]);
+        return Compare(s1, s2, ctx.DefaultCollation);
     }
 
     private static XdmValue Compare_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         if (IsEmptySequence(args[0]) || IsEmptySequence(args[1]))
             return XdmValue.Undefined;
+        string s1 = RequireString(args[0]);
+        string s2 = RequireString(args[1]);
         string collation = AtomizedString(args[2]);
         ValidateCollation(collation);
-        return Compare(args[0], args[1], collation);
+        return Compare(s1, s2, collation);
     }
 
-    private static XdmValue Compare(XdmValue a, XdmValue b, string collation = "")
+    private static XdmValue Compare(string s1, string s2, string collation = "")
     {
-        var s1 = AtomizedString(a);
-        var s2 = AtomizedString(b);
         int cmp = CompareStrings(s1, s2, collation);
         return XdmValue.FromInteger(cmp < 0 ? -1 : cmp > 0 ? 1 : 0);
     }

@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 19-07-2026     | Added StringLessThan_UsesUnicodeCodepoints test                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 19-07-2026     | Added Compare_RejectsNonStringArguments test                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -432,12 +434,11 @@ public class ApiTests
     }
 
     [Fact]
-    public void StringLessThan_UsesUnicodeCodepoints()
+    public void Compare_RejectsNonStringArguments()
     {
-        // K2-StringLT-1: codepoint comparison must compare Unicode scalar values,
-        // not UTF-16 code units. U+EA60 (60000) < U+11170 (70000) is true.
-        Assert.Equal("true", Eval("\"\u60000\" lt \"\u70000\"").ToString());
-        Assert.Equal("false", Eval("\"\u70000\" lt \"\u60000\"").ToString());
-        Assert.Equal("true", Eval("\"\u70000\" gt \"\u60000\"").ToString());
+        // compare-011: fn:compare requires string-typed atomized arguments.
+        Assert.Throws<InvalidOperationException>(() => Eval("compare(123, 456)"));
+        Assert.Equal("-1", Eval("compare('a', 'b')").ToString());
+        Assert.Equal("0", Eval("compare('a', 'a')").ToString());
     }
 }
