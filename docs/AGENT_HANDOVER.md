@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `1d27372` (Tier-2z: K2-NameTest-78/79 / let and for as name tests)
+**Current focus:** **QT3 Tier-2z: `K2-NameTest-78/79` singleton pair** — `let` and `for` are not reserved names. When used as a single name test (no following `$`), they must parse as path steps and raise `XPDY0002` because there is no context item, not `XPST0003`. The parser was eagerly dispatching `for`/`let` to the FLWOR parser in `ParseExprSingle`. Fixed by making that dispatch conditional on the next token being `$`; otherwise the tokens fall through to `ParseOrExpr()` and are treated as name tests. Targeted tests now pass: `K2-NameTest-78`, `K2-NameTest-79`. Full QT3 suite now at **14,832 passed / 45 failed / 16,944 skipped (46.61%)**; runnable pass rate **99.70%** (14832 / 14877). Unit tests **1,362/0**.
+
+## This Session Fixes (Tier-2z: K2-NameTest-78/79)
+
+1. **`for`/`let` conditional FLWOR dispatch** — `XPathParser.ParseExprSingle` now only treats `for` and `let` as FLWOR keywords when the next token is `$`. If not, they parse as ordinary names (name tests). This allows the runtime to raise `XPDY0002` when no context item exists.
+
+2. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (v1.15: conditional FLWOR dispatch for `for`/`let`)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.10: `FlworKeywords_ParseAsNameTests` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `3ed944e` (Tier-2z: K-NodeSame-6 / allow 'is' as non-reserved function name)
 **Current focus:** **QT3 Tier-2z: `K-NodeSame-6` singleton** — `is` is an operator keyword but not a reserved function name, so `is(...)` must parse as a function call and then raise `XPST0017` because no function named `is` exists. The parser was throwing `XPST0003` because `ValueIs` was not accepted in a primary expression. Fixed by adding a `case TokenKind.ValueIs` in `ParsePrimaryExpr` that parses `is(` as a function call. Targeted test now passes: `K-NodeSame-6`. Full QT3 suite now at **14,830 passed / 47 failed / 16,944 skipped (46.60%)**; runnable pass rate **99.68%** (14830 / 14877). Unit tests **1,361/0**.
 
