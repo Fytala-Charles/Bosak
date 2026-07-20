@@ -656,4 +656,14 @@ public class ApiTests
         var ex2 = Assert.Throws<InvalidOperationException>(() => Eval("(1, 2, 3)[1]/(1, 2)[last()]/\"a string\""));
         Assert.Contains("XPTY0019", ex2.Message);
     }
+
+    [Fact]
+    public void Predicate_AtomizesSequenceResult()
+    {
+        // K-FilterExpr-82: a predicate whose result is a singleton sequence is
+        // atomized before deciding whether it is a numeric position or an EBV.
+        // remove((1, "a string"), 2) returns (1), which atomizes to the integer 1,
+        // so the predicate selects the first item.
+        Assert.Equal("true", Eval("deep-equal((0), (0, 1, 2)[remove((1, \"a string\"), 2)])").ToString());
+    }
 }

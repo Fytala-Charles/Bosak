@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,366 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,835 passed / 42 failed / 16,944 skipped (46.62% / 99.72% of runnable tests)
+> **Bosak baseline:** 1,367 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,836 passed / 41 failed / 16,944 skipped (46.62% / 99.73% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K-FilterExpr-82` / atomize predicate result before numeric/EBV check.
+  - Filter expression predicates that return a sequence must be atomized before deciding whether they are numeric positional predicates or being used for their effective boolean value.
+  - In `VmEngine.Filter`, `predResult` is now atomized first; a multi-item sequence raises `XPTY0004`, and a singleton integer (e.g. `(1)` from `remove((1, "a string"), 2)`) is treated as a numeric predicate.
+  - Added `Predicate_AtomizesSequenceResult` regression test.
+  - Targeted test passes: `K-FilterExpr-82`.
+  - Full QT3 now **14,836 passed / 41 failed / 16,944 skipped = 46.62%** (runnable pass rate **99.73%**); unit tests **1,367/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `K2-Axes-50/53` / XPTY0019 for path steps on non-node context items.
   - `SimpleMap` (used for non-axis path steps) now raises `XPTY0019` when the input sequence contains non-node items, but only in path-step mode (`RegisterC != 0`); the `!` operator continues to allow non-node items.

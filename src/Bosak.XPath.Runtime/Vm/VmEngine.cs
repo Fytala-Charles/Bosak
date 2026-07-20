@@ -932,15 +932,21 @@ public static class VmEngine
                             context.WithFocus(items[i], i + 1, items.Length);
                             var (predResult, _) = ExecuteBlock(module, context, registers, predicateEntry);
 
+                            // Predicate results are atomized before checking numeric/EBV.
+                            // Atomization of a multi-item sequence raises XPTY0004; an empty
+                            // sequence yields false; a singleton numeric value is a positional
+                            // predicate; any other singleton is evaluated as EBV.
+                            var predAtomized = Atomize(predResult);
+
                             // Numeric predicate: [n] means position() = n
                             // XPath 2.0 §3.2.4: true iff the numeric value is equal to context position.
                             // Any numeric type (integer, decimal, float, double) counts.
-                            if (IsNumeric(predResult))
+                            if (IsNumeric(predAtomized))
                             {
-                                if (ToDouble(predResult) == i + 1)
+                                if (ToDouble(predAtomized) == i + 1)
                                     kept.Add(items[i]);
                             }
-                            else if (predResult.EffectiveBooleanValue())
+                            else if (predAtomized.EffectiveBooleanValue())
                             {
                                 kept.Add(items[i]);
                             }
