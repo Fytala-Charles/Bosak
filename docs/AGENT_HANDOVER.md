@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `d6f6086` (Tier-2z: K-FilterExpr-82 / atomize predicate result before numeric/EBV check)
+**Current focus:** **QT3 Tier-2z: `K-FilterExpr-82` singleton** — `(0, 1, 2)[remove((1, "a string"), 2)]` expects either `assert-eq 0` or `XPTY0004`. The predicate returns the sequence `(1)`, which must be atomized to the integer `1` before deciding whether it is a numeric positional predicate or used for its effective boolean value. Previously the filter opcode treated the sequence `(1)` directly as a non-numeric sequence and fell back to EBV, which returned true for the whole input sequence. Fixed by atomizing `predResult` in `VmEngine.Filter` before the numeric/EBV branch. Atomization of a multi-item sequence correctly raises `XPTY0004`; a singleton integer is treated as a positional predicate. Targeted test now passes: `K-FilterExpr-82`. Full QT3 suite now at **14,836 passed / 41 failed / 16,944 skipped (46.62%)**; runnable pass rate **99.73%** (14836 / 14877). Unit tests **1,367/0**.
+
+## This Session Fixes (Tier-2z: K-FilterExpr-82)
+
+1. **Predicate result atomization** — `VmEngine.Filter` now atomizes the predicate result before checking `IsNumeric` or falling back to `EffectiveBooleanValue`. A singleton numeric value becomes a positional predicate; a multi-item sequence raises `XPTY0004`.
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.56: atomize predicate result in `Filter`)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.12: `Predicate_AtomizesSequenceResult` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `03ab2c2` (Tier-2z: K2-Axes-50/53 / XPTY0019 for path steps on non-node context items)
 **Current focus:** **QT3 Tier-2z: `K2-Axes-50/53` small cluster** — `1/3` and `(1, 2, 3)[1]/(1, 2)[last()]/'a string'` must raise `XPTY0019` because a path step requires its context items to be nodes. The compiler lowers non-axis path steps (e.g., `3`, `(1, 2)[last()]`) to the `SimpleMap` opcode, which previously enforced `XPTY0018` (result contains both nodes and non-nodes) but not `XPTY0019`. Fixed by adding a non-node context-item check in `SimpleMap` when `RegisterC != 0` (path-step mode), while preserving the `!` operator's ability to map over non-node sequences. `PathStepMap` was also updated to enforce the same check for predicated axis steps. Targeted tests now pass: `K2-Axes-50`, `K2-Axes-53`. Full QT3 suite now at **14,835 passed / 42 failed / 16,944 skipped (46.62%)**; runnable pass rate **99.72%** (14835 / 14877). Unit tests **1,366/0**.
 
