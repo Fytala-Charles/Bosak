@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 1.9   | 19-07-2026     | Added IsId property using PSVI for schema-validated ID nodes                            |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.0   | 20-07-2026     | Added HasNoTypedValue using PSVI for complex element-only/empty elements               |
+//                      | Charles Korthout | 2.1   | 20-07-2026     | Namespace-node identity uses owner+prefix+URI (Axes123)                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -268,20 +269,38 @@ public sealed class XDocumentNode : IXdmNode
     public bool IsId => ComputeIsId();
 
     public bool IsSameNode(IXdmNode other)
-        => other is XDocumentNode xn
-           && ReferenceEquals(_node, xn._node)
-           && _isNamespaceNode == xn._isNamespaceNode
-           && ReferenceEquals(_namespaceOwner, xn._namespaceOwner);
+    {
+        if (other is not XDocumentNode xn)
+            return false;
+        if (_isNamespaceNode != xn._isNamespaceNode)
+            return false;
+
+        // Namespace nodes are virtual properties of an element; the underlying
+        // XAttribute objects are created on the fly, so reference equality fails.
+        // Compare by owner element + prefix + URI instead (Axes123).
+        if (_isNamespaceNode)
+        {
+            return ReferenceEquals(_namespaceOwner, xn._namespaceOwner)
+                   && LocalName == xn.LocalName
+                   && StringValue == xn.StringValue;
+        }
+
+        return ReferenceEquals(_node, xn._node);
+    }
 
     public override bool Equals(object? obj)
         => obj is IXdmNode other && IsSameNode(other);
 
     public override int GetHashCode()
     {
-        int h = RuntimeHelpers.GetHashCode(_node);
         if (_isNamespaceNode)
-            h = HashCode.Combine(h, RuntimeHelpers.GetHashCode(_namespaceOwner));
-        return h;
+        {
+            return HashCode.Combine(
+                RuntimeHelpers.GetHashCode(_namespaceOwner),
+                LocalName,
+                StringValue);
+        }
+        return RuntimeHelpers.GetHashCode(_node);
     }
 
     public long DocumentOrder

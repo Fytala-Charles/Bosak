@@ -44,6 +44,7 @@
 //                      | Charles Korthout | 1.8   | 20-07-2026     | Added Number_ReturnsNaNForNonNumericNonStringTypes test                                |
 //                      | Charles Korthout | 1.9   | 20-07-2026     | Added IsKeyword_AllowedAsFunctionName test                                             |
 //                      | Charles Korthout | 1.10  | 20-07-2026     | Added FlworKeywords_ParseAsNameTests test                                              |
+//                      | Charles Korthout | 1.11  | 20-07-2026     | Added NamespaceNode_IsSameNodeIdentity test                                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -52,6 +53,7 @@ using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Linq;
 using Xunit;
 
 namespace Bosak.XPath.Api.Tests;
@@ -625,5 +627,20 @@ public class ApiTests
 
         var exFor = Assert.Throws<InvalidOperationException>(() => Eval("for"));
         Assert.Contains("XPDY0002", exFor.Message);
+    }
+
+    [Fact]
+    public void NamespaceNode_IsSameNodeIdentity()
+    {
+        // Axes123: namespace nodes obtained via different paths from the same element
+        // must be identical when they represent the same prefix/URI binding.
+        var doc = XDocument.Parse("<root xmlns:xlink='http://www.w3.org/1999/xlink'/>");
+        var root = new XDocumentNode(doc.Root!);
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx = ctx.WithFocus(XdmValue.FromNode(root), 1, 1);
+
+        var expr = XPath31Expression.Compile("/*/namespace::xlink is /*/namespace::*[. = 'http://www.w3.org/1999/xlink']");
+        Assert.Equal("true", expr.Evaluate(ctx).ToString());
     }
 }
