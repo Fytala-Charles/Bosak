@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `4403be1` (Tier-2z: fn:iri-to-uri / K2-IRIToURIfunc / non-string argument validation)
+**Current focus:** **QT3 Tier-2z: `fn:iri-to-uri` argument-validation cluster** — `fn:iri-to-uri($uri-part)` is defined only for a single `xs:string` (or `xs:untypedAtomic`) argument; non-string atomics such as `iri-to-uri(12)` or multi-item sequences such as `iri-to-uri(('a string','a string'))` must raise `XPTY0004`. The implementation was using `AtomizedString`, which silently converted any atomic to a string and ignored cardinality. Fixed by routing the argument through `RequireString` before encoding. Targeted tests now pass: `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-3`, `K2-IRIToURIfunc-4`. Full QT3 suite now at **14,816 passed / 61 failed / 16,944 skipped (46.56%)**; runnable pass rate **99.59%** (14816 / 14877). Unit tests **1,353/0**.
+
+## This Session Fixes (Tier-2z: fn:iri-to-uri argument validation)
+
+1. **`fn:iri-to-uri` argument type and cardinality validation** — `FunctionLibrary.IriToUri` now calls `RequireString(args[0])`. Nodes and `xs:untypedAtomic` are atomized to strings; the empty sequence returns the empty string; non-string atomics and sequences longer than one item raise `XPTY0004`.
+
+2. **Regression safety** — Full QT3 suite improved by **+3 passed, −3 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.55: `fn:iri-to-uri` RequireString validation)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v0.9: `IriToUri_RejectsNonStringArguments` test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `fn-doc-available-2`, `fn-implicit-timezone-10/11/12`, `fn-not-28`, `fn-number-3`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-substring-after-23`, `fn-substring-before-23`, `fn-upper-case-22`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `b7dd968` (Tier-2z: double MAX_VALUE string formatting / G17 round-trip cluster)
 **Current focus:** **QT3 Tier-2z: double `MAX_VALUE` string-formatting cluster** — XPath canonical `xs:double` string serialization must preserve enough digits to round-trip. `FormatXPathDouble` was using .NET's `"G16"` format, which drops the final digit of `double.MaxValue`, producing `1.797693134862316E308` instead of the expected `1.7976931348623157E308`. This caused a swarm of failures across `fn:ceiling`, `fn:concat`, `fn:data`, `fn:exactly-one`, `fn:floor`, `fn:number`, `fn:one-or-more`, `fn:string`, and `fn:zero-or-one` tests on `xs:double` boundary values. Fixed by switching the scientific-notation branch to `"G17"`, the shortest round-trip format. Targeted tests now pass: all `*dbl1args-*` boundary cases. Full QT3 suite now at **14,813 passed / 64 failed / 16,944 skipped (46.55%)**; runnable pass rate **99.57%** (14813 / 14877). Unit tests **1,352/0**.
 
