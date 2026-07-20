@@ -129,6 +129,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:compare now validates arguments with RequireString (XPTY0004 for non-string atomics) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.55  | 19-07-2026     | fn:iri-to-uri now validates argument with RequireString (XPTY0004 for non-string/many items) |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
 //                      |==================|=======|================|=========================================================================================
@@ -10584,7 +10586,7 @@ public static class FunctionLibrary
 
     private static XdmValue IriToUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var s = AtomizedString(args[0]);
+        var s = RequireString(args[0]);
         var sb = new StringBuilder();
         foreach (var rune in s.EnumerateRunes())
         {

@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 19-07-2026     | Added DoubleMaxValue_RoundTripString test                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 19-07-2026     | Added IriToUri_RejectsNonStringArguments test                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -460,5 +462,15 @@ public class ApiTests
         // Double formatting must preserve all round-trip digits (G17), not just G16.
         Assert.Equal("1.7976931348623157E308", Eval("xs:double('1.7976931348623157E308')").ToString());
         Assert.Equal("-1.7976931348623157E308", Eval("xs:double('-1.7976931348623157E308')").ToString());
+    }
+
+    [Fact]
+    public void IriToUri_RejectsNonStringArguments()
+    {
+        // fn-iri-to-uri1args-5 / K2-IRIToURIfunc-3/4: argument must be a single string.
+        Assert.Throws<InvalidOperationException>(() => Eval("iri-to-uri(12)"));
+        Assert.Throws<InvalidOperationException>(() => Eval("iri-to-uri(1)"));
+        Assert.Throws<InvalidOperationException>(() => Eval("iri-to-uri(('a string', 'a string'))"));
+        Assert.Equal("a%20string", Eval("iri-to-uri('a string')").ToString());
     }
 }

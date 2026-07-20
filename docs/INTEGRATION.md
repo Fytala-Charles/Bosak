@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,352 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,813 passed / 64 failed / 16,944 skipped (46.55% / 99.57% of runnable tests)
+> **Bosak baseline:** 1,353 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,816 passed / 61 failed / 16,944 skipped (46.56% / 99.59% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `fn:iri-to-uri` / `K2-IRIToURIfunc` non-string argument validation.
+  - `FunctionLibrary.IriToUri` now uses `RequireString` on its argument.
+  - Non-string atomics (e.g., `iri-to-uri(12)`) and multi-item sequences (e.g., `iri-to-uri(('a','b'))`) now raise `XPTY0004`; nodes and `xs:untypedAtomic` are still atomized to strings.
+  - Added `IriToUri_RejectsNonStringArguments` regression test.
+  - Targeted tests pass: `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-3`, `K2-IRIToURIfunc-4`.
+  - Full QT3 now **14,816 passed / 61 failed / 16,944 skipped = 46.56%** (runnable pass rate **99.59%**); unit tests **1,353/0**.
 
 - **2026-07-19** — QT3 Tier-2z: double `MAX_VALUE` string formatting / `G17` round-trip cluster.
   - `XdmValue.FormatXPathDouble` now uses `"G17"` instead of `"G16"` for scientific-notation doubles, preserving all round-trip digits.
