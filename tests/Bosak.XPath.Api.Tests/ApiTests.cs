@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 19-07-2026     | Added NumericSubtract_PromotesUntypedAtomicToDouble test                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 19-07-2026     | Added StringLessThan_UsesUnicodeCodepoints test                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -427,5 +429,15 @@ public class ApiTests
         Assert.Equal(XdmValueKind.Double, result.Kind);
         var result2 = Eval("(1.1 - xs:untypedAtomic('3'))");
         Assert.Equal(XdmValueKind.Double, result2.Kind);
+    }
+
+    [Fact]
+    public void StringLessThan_UsesUnicodeCodepoints()
+    {
+        // K2-StringLT-1: codepoint comparison must compare Unicode scalar values,
+        // not UTF-16 code units. U+EA60 (60000) < U+11170 (70000) is true.
+        Assert.Equal("true", Eval("\"\u60000\" lt \"\u70000\"").ToString());
+        Assert.Equal("false", Eval("\"\u70000\" lt \"\u60000\"").ToString());
+        Assert.Equal("true", Eval("\"\u70000\" gt \"\u60000\"").ToString());
     }
 }

@@ -125,6 +125,8 @@
 //                      | Charles Korthout | 5.51  | 19-07-2026     | Tier-2y: fn:index-of uses eq semantics, validates single search/collation, NaN-safe    |
 //                      | Charles Korthout | 5.52  | 19-07-2026     | fn:id/fn:element-with-id use IsId and support schema-validated element/attribute IDs    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.53  | 19-07-2026     | FunctionLibrary.Populate sets default CollationComparer for XPath value comparisons     |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
 //                      |==================|=======|================|=========================================================================================
@@ -2993,6 +2995,13 @@ public static class FunctionLibrary
         if (context.DocumentLoader is null)
         {
             context.DocumentLoader = XDocumentProvider.LoadXml;
+        }
+
+        // Provide the default collation-aware string comparer used by XPath value
+        // and general comparison operators. Consumers may override this after Populate.
+        if (context.CollationComparer is null)
+        {
+            context.CollationComparer = CompareStrings;
         }
     }
 
