@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 1.9   | 20-07-2026     | Added IsKeyword_AllowedAsFunctionName test                                             |
 //                      | Charles Korthout | 1.10  | 20-07-2026     | Added FlworKeywords_ParseAsNameTests test                                              |
 //                      | Charles Korthout | 1.11  | 20-07-2026     | Added NamespaceNode_IsSameNodeIdentity test                                              |
+//                      | Charles Korthout | 1.12  | 20-07-2026     | Added PathStep_RequiresNodeContextItem test                                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -642,5 +643,17 @@ public class ApiTests
 
         var expr = XPath31Expression.Compile("/*/namespace::xlink is /*/namespace::*[. = 'http://www.w3.org/1999/xlink']");
         Assert.Equal("true", expr.Evaluate(ctx).ToString());
+    }
+
+    [Fact]
+    public void PathStep_RequiresNodeContextItem()
+    {
+        // K2-Axes-50/53: a path step requires every context item to be a node;
+        // otherwise XPTY0019 is raised.
+        var ex1 = Assert.Throws<InvalidOperationException>(() => Eval("1/3"));
+        Assert.Contains("XPTY0019", ex1.Message);
+
+        var ex2 = Assert.Throws<InvalidOperationException>(() => Eval("(1, 2, 3)[1]/(1, 2)[last()]/\"a string\""));
+        Assert.Contains("XPTY0019", ex2.Message);
     }
 }

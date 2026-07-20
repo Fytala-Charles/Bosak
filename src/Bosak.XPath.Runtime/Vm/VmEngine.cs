@@ -95,6 +95,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.55  | 19-07-2026     | Tier-2z: duration div by NaN/0 checked before zero-duration short-circuit               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.56  | 20-07-2026     | PathStepMap raises XPTY0019 when context item is not a node (K2-Axes-50/53)            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -541,6 +543,17 @@ public static class VmEngine
                         var items = MaterializeSequence(sequence);
                         var results = new List<XdmValue>();
 
+                        // XPath path steps require every context item to be a node (XPTY0019).
+                        // SimpleMap with ! allows non-node items, so only enforce in path mode.
+                        if (enforceNodeResult)
+                        {
+                            foreach (var item in items)
+                            {
+                                if (!item.IsNode)
+                                    throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
+                            }
+                        }
+
                         // Save context
                         var savedItem = context.ContextItem;
                         var savedPos = context.ContextPosition;
@@ -597,6 +610,10 @@ public static class VmEngine
 
                         for (int i = 0; i < items.Length; i++)
                         {
+                            // A path step requires every context item to be a node (XPTY0019).
+                            if (!items[i].IsNode)
+                                throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
+
                             // Path-step predicates must see position=1, size=1
                             // for each context item (predicate is relative to the
                             // step result, not the outer sequence).

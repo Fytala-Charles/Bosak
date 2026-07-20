@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,365 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,833 passed / 44 failed / 16,944 skipped (46.61% / 99.71% of runnable tests)
+> **Bosak baseline:** 1,366 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,835 passed / 42 failed / 16,944 skipped (46.62% / 99.72% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K2-Axes-50/53` / XPTY0019 for path steps on non-node context items.
+  - `SimpleMap` (used for non-axis path steps) now raises `XPTY0019` when the input sequence contains non-node items, but only in path-step mode (`RegisterC != 0`); the `!` operator continues to allow non-node items.
+  - `PathStepMap` (used for predicated axis steps) also raises `XPTY0019` for non-node context items.
+  - Added `PathStep_RequiresNodeContextItem` regression test.
+  - Targeted tests pass: `K2-Axes-50`, `K2-Axes-53`.
+  - Full QT3 now **14,835 passed / 42 failed / 16,944 skipped = 46.62%** (runnable pass rate **99.72%**); unit tests **1,366/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `Axes123` / namespace-node identity in `is`.
   - Namespace nodes are virtual properties of an element; the underlying XAttribute objects are created on demand, so reference equality failed. `XDocumentNode.IsSameNode` now compares namespace nodes by owner element + prefix + URI, and `GetHashCode` is consistent with this semantic identity.
