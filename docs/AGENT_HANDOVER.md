@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `e271a8b` (Tier-2z: fn-substring-after/before-23 / relative collation URI resolution)
+**Current focus:** **QT3 Tier-2z: `fn-substring-after-23` / `fn-substring-before-23` cluster** — XPath collation arguments may be relative URI references that must be resolved against the static base URI. The test sets the static base URI to `http://www.w3.org/2005/xpath-functions/` and passes `"collation/codepoint"`, which should resolve to the canonical codepoint collation. `FunctionLibrary.SubstringBefore_3` and `SubstringAfter_3` were validating the raw relative URI, causing `FOCH0002`. Fixed by adding `ResolveCollationUri`, which absolutizes relative collation URIs using `EvaluationContext.BaseUri` before validation. Targeted tests now pass: `fn-substring-after-23`, `fn-substring-before-23`. Full QT3 suite now at **14,821 passed / 56 failed / 16,944 skipped (46.58%)**; runnable pass rate **99.62%** (14821 / 14877). Unit tests **1,355/0**.
+
+## This Session Fixes (Tier-2z: fn-substring-after/before-23)
+
+1. **Relative collation URI resolution** — Added `FunctionLibrary.ResolveCollationUri` and applied it in `SubstringBefore_3` and `SubstringAfter_3`. A relative collation such as `"collation/codepoint"` is now resolved against `ctx.BaseUri` before `ValidateCollation` runs, matching the XPath static-base-uri semantics.
+
+2. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.56: `ResolveCollationUri` helper; apply to substring-before/after)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.1: `SubstringAfter_ResolvesRelativeCollationUri` test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `fn-doc-available-2`, `fn-not-28`, `fn-number-3`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-upper-case-22`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `28e7a13` (Tier-2z: fn-implicit-timezone-10/11/12 / duration div NaN/zero validation)
 **Current focus:** **QT3 Tier-2z: `fn-implicit-timezone-10/11/12` cluster** — XPath `xs:dayTimeDuration` divided by `NaN` must raise `FOCA0005`; divided by zero (or negative zero) must raise `FODT0002`. `VmEngine.DivideDuration` was short-circuiting zero-duration operands before checking the divisor, so `fn:implicit-timezone() div 0` (where the implicit timezone is UTC and the duration is `PT0S`) silently returned `PT0S` instead of raising `FODT0002`. Fixed by moving the `NaN` and zero-divisor checks ahead of the zero-duration short-circuit. Targeted tests now pass: `fn-implicit-timezone-10`, `fn-implicit-timezone-11`, `fn-implicit-timezone-12`. Full QT3 suite now at **14,819 passed / 58 failed / 16,944 skipped (46.57%)**; runnable pass rate **99.61%** (14819 / 14877). Unit tests **1,354/0**.
 
