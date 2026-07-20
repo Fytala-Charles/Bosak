@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 26-06-2026     | Added sequence EBV tests                                                                 |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Added xs:float canonical formatting regression tests                                     |
 //                      | Charles Korthout | 0.4   | 20-07-2026     | Added xs:double fixed-point-scientific formatting regression test                        |
+//                      | Charles Korthout | 0.5   | 20-07-2026     | Added xs:float decimal-range fixed-point formatting regression test                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -234,6 +235,15 @@ public class XdmValueTests
     {
         var v = XdmValue.FromFloat(0.1f);
         Assert.Equal("0.1", v.ToString());
+    }
+
+    [Fact]
+    public void FloatToString_InsideDecimalRange_ExpandsToFixedPoint()
+    {
+        // Regression for QT3 CastAs009/091: 1e-5 as xs:float must serialize as
+        // fixed-point "0.00001" because 1e-6 <= |x| < 1e6.
+        var v = XdmValue.FromFloat(1e-5f);
+        Assert.Equal("0.00001", v.ToString());
     }
 
     [Fact]

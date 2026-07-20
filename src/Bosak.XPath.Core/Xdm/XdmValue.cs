@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 1.7   | 20-07-2026     | EBV multi-item sequence: FORG0006 when first item is not a node                          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 20-07-2026     | FormatXPathDouble/Float use R and decimal-point exponent for fixed-point scientific     |
+//                      | Charles Korthout | 1.9   | 20-07-2026     | FormatXPathFloat expands R-scientific to fixed-point inside the decimal range (1e-6)   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -659,7 +660,11 @@ public readonly struct XdmValue
         // For non-scientific range, use round-trip format and trim trailing zeros
         string r = value.ToString("R", CultureInfo.InvariantCulture);
         if (r.Contains('E') || r.Contains('e'))
-            return NormalizeScientific(r);
+        {
+            // "R" may choose scientific notation inside the decimal range (e.g. for
+            // 1e-5); XPath requires fixed-point notation for 1e-6 <= |x| < 1e6.
+            r = ExpandScientificToFixed(r);
+        }
         if (r.Contains('.'))
         {
             r = r.TrimEnd('0').TrimEnd('.');

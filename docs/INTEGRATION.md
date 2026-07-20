@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,368 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,840 passed / 37 failed / 16,944 skipped (46.64% / 99.75% of runnable tests)
+> **Bosak baseline:** 1,369 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,842 passed / 35 failed / 16,944 skipped (46.64% / 99.77% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `CastAs009/091` / `xs:float` fixed-point formatting in decimal range.
+  - `FormatXPathFloat` was normalizing `R`-format scientific strings (e.g. `1E-05`) inside the decimal range (`1e-6 <= |x| < 1e6`), producing `1.0E-5` instead of expanding to fixed-point `0.00001`.
+  - Aligned the float branch with the double branch: expand `R`-scientific to fixed-point inside the decimal range, then trim trailing zeros.
+  - Added `FloatToString_InsideDecimalRange_ExpandsToFixedPoint` regression test.
+  - Targeted tests pass: `CastAs009`, `CastAs091`.
+  - Full QT3 now **14,842 passed / 35 failed / 16,944 skipped = 46.64%** (runnable pass rate **99.77%**); unit tests **1,369/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `Literals017/025/028` / XPath canonical double formatting.
   - `FormatXPathDouble` was using `G17` for scientific-range values, which preserved round-trip noise (e.g. `6553503.2000000002`) and inflated the exponent when normalizing fixed-point to scientific notation.
