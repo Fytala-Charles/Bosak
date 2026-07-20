@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
+**Commit:** `6fdb7d5` (Tier-2z: K2-StringLT-1 / default codepoint collation for value comparisons)
+**Current focus:** **QT3 Tier-2z: `K2-StringLT-1` cluster** — XPath value comparisons (`lt`, `le`, `gt`, `ge`, `eq`, `ne`) must use the default codepoint collation, which compares Unicode scalar values, not UTF-16 code units. The API evaluation path did not set `EvaluationContext.CollationComparer`, so `VmEngine.CompareStrings` fell back to `string.CompareOrdinal`, causing `"&#60000;" lt "&#70000;"` to evaluate to `false` (U+EA60 vs the lead surrogate of U+11170). Fixed by having `FunctionLibrary.Populate` install the standard `FunctionLibrary.CompareStrings` comparer on contexts that do not already have one. Targeted test now passes: `K2-StringLT-1`. Full QT3 suite now at **14,790 passed / 87 failed / 16,944 skipped (46.48%)**; runnable pass rate **99.42%** (14790 / 14877). Unit tests **1,349/0**.
+
+## This Session Fixes (Tier-2z: K2-StringLT-1)
+
+1. **Default codepoint collation for value comparisons** — `FunctionLibrary.Populate` now sets `context.CollationComparer = CompareStrings` when the context has no custom comparer. This ensures `lt`/`le`/`gt`/`ge`/`eq`/`ne` use the codepoint collation (Unicode scalar values) in the API path, matching the XSLT path which already set the comparer explicitly.
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.53: install default CollationComparer in Populate)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v0.6: `StringLessThan_UsesUnicodeCodepoints` test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `compare-011`, `fn-concatdbl2args-*`, `fn-datadbl1args-*`, `fn-doc-available-2`, `fn-exactly-onedbl1args-*`, `fn-floordbl1args-*`, `fn-implicit-timezone-*`, `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-*`, `fn-not-28`, `fn-numberdbl1args-*`, `fn-number-3`, `fn-one-or-moredbl1args-*`, `fn-resolve-uri-*`, `fn-stringdbl1args-*`, `fn-substring-after-23`, `fn-substring-before-23`, `fn-upper-case-22`, `K2-SeqDeepEqualFunc-40`, `K2-DataFunc-6`, `K-NodeNumberFunc-13/15`, `fn-zero-or-onedbl1args-*`, `xs-dateTimeStamp-*`, `op-boolean-equal-4` (fixed), `K2-StringLT-1` (fixed), `op-numeric-divide-1`, `K-NumericSubtract-34/35` (fixed), `K-NumericUnaryPlus-1` (fixed), `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `K-NodeSame-6`, `fn-intersect-node-args-015/016`, `fn-union-node-args-015/016/017`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-19
 **Commit:** `4d53cc8` (Tier-2z: K-NumericSubtract-34/35 / xs:untypedAtomic arithmetic promotion)
 **Current focus:** **QT3 Tier-2z: `K-NumericSubtract-34/35` cluster** — XPath operator mapping requires that when any operand of an arithmetic expression is `xs:untypedAtomic`, both operands are cast to `xs:double` and the result is `xs:double`. `Add`, `Subtract`, `Multiply`, `Divide`, `IntegerDivide`, and `Modulo` were checking the numeric type-specific branches before the untypedAtomic promotion, so `xs:untypedAtomic("3") - 1.1` returned `xs:decimal` instead of `xs:double`. Fixed by atomizing the operands and checking for `xs:untypedAtomic` before the double/float/decimal/integer branches. Targeted tests now pass: `K-NumericSubtract-34`, `K-NumericSubtract-35`. Full QT3 suite now at **14,789 passed / 88 failed / 16,944 skipped (46.48%)**; runnable pass rate **99.41%** (14789 / 14877). Unit tests **1,348/0**.
 
