@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 19-07-2026     | Added IriToUri_RejectsNonStringArguments test                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 19-07-2026     | Added ImplicitTimezone_DivByInvalidNumber_Throws test                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -472,5 +474,15 @@ public class ApiTests
         Assert.Throws<InvalidOperationException>(() => Eval("iri-to-uri(1)"));
         Assert.Throws<InvalidOperationException>(() => Eval("iri-to-uri(('a string', 'a string'))"));
         Assert.Equal("a%20string", Eval("iri-to-uri('a string')").ToString());
+    }
+
+    [Fact]
+    public void ImplicitTimezone_DivByInvalidNumber_Throws()
+    {
+        // fn-implicit-timezone-10/11/12: dividing a dayTimeDuration by NaN or 0
+        // is an error, even when the duration itself is zero.
+        Assert.Throws<InvalidOperationException>(() => Eval("fn:string(fn:implicit-timezone() div (0 div 0E0))"));
+        Assert.Throws<InvalidOperationException>(() => Eval("fn:string(fn:implicit-timezone() div 0)"));
+        Assert.Throws<InvalidOperationException>(() => Eval("fn:string(fn:implicit-timezone() div -0)"));
     }
 }

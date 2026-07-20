@@ -93,6 +93,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.54  | 19-07-2026     | Tier-2z: arithmetic with xs:untypedAtomic now casts the result to xs:double                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.55  | 19-07-2026     | Tier-2z: duration div by NaN/0 checked before zero-duration short-circuit               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3276,14 +3278,14 @@ public static class VmEngine
         var subtype = GetDurationSubtype(duration);
         if (subtype == DurationSubtype.YearMonthDuration)
         {
-            var d = duration.DurationValue;
-            var (y, m, _, _, _, _) = ParseDuration(d);
             if (double.IsNaN(div))
                 throw new InvalidOperationException("FOCA0005");
-            if (double.IsInfinity(div))
-                return XdmValue.FromDuration("P0M");
             if (div == 0.0)
                 throw new InvalidOperationException("FODT0002");
+            if (double.IsInfinity(div))
+                return XdmValue.FromDuration("P0M");
+            var d = duration.DurationValue;
+            var (y, m, _, _, _, _) = ParseDuration(d);
             decimal baseMonths = y * 12m + m;
             if (baseMonths == 0m)
                 return XdmValue.FromDuration("P0M");
@@ -3313,17 +3315,17 @@ public static class VmEngine
         }
         if (subtype == DurationSubtype.DayTimeDuration)
         {
+            if (double.IsNaN(div))
+                throw new InvalidOperationException("FOCA0005");
+            if (div == 0.0)
+                throw new InvalidOperationException("FODT0002");
+            if (double.IsInfinity(div))
+                return XdmValue.FromDuration("PT0S");
             var d = duration.DurationValue;
             var (_, _, days, hours, minutes, seconds) = ParseDuration(d);
             decimal totalSeconds = days * 86400m + hours * 3600m + minutes * 60m + seconds;
             if (totalSeconds == 0m)
                 return XdmValue.FromDuration("PT0S");
-            if (double.IsNaN(div))
-                throw new InvalidOperationException("FOCA0005");
-            if (double.IsInfinity(div))
-                return XdmValue.FromDuration("PT0S");
-            if (div == 0.0)
-                throw new InvalidOperationException("FODT0002");
             try
             {
                 decimal resultSeconds = totalSeconds / (decimal)div;

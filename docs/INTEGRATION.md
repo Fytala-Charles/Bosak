@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 19 July 2026
-> **Bosak baseline:** 1,353 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,816 passed / 61 failed / 16,944 skipped (46.56% / 99.59% of runnable tests)
+> **Bosak baseline:** 1,354 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,819 passed / 58 failed / 16,944 skipped (46.57% / 99.61% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-19** — QT3 Tier-2z: `fn-implicit-timezone-10/11/12` / duration `div` NaN/zero validation.
+  - `VmEngine.DivideDuration` now checks for `NaN` and `0.0`/`-0.0` before the zero-duration short-circuit.
+  - `xs:dayTimeDuration` (including the `PT0S` implicit timezone) divided by `NaN` now raises `FOCA0005`; divided by zero raises `FODT0002`.
+  - Added `ImplicitTimezone_DivByInvalidNumber_Throws` regression test.
+  - Targeted tests pass: `fn-implicit-timezone-10`, `fn-implicit-timezone-11`, `fn-implicit-timezone-12`.
+  - Full QT3 now **14,819 passed / 58 failed / 16,944 skipped = 46.57%** (runnable pass rate **99.61%**); unit tests **1,354/0**.
 
 - **2026-07-19** — QT3 Tier-2z: `fn:iri-to-uri` / `K2-IRIToURIfunc` non-string argument validation.
   - `FunctionLibrary.IriToUri` now uses `RequireString` on its argument.
