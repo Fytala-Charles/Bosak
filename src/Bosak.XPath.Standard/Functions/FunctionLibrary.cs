@@ -150,6 +150,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.60  | 20-07-2026     | Tier-2z: fn:number#0 raises XPDY0002 when called with no context item                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.61  | 20-07-2026     | Tier-2z: fn:upper-case Armenian ligature men xeh (U+FB17) → U+0544 U+054D                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -5283,6 +5285,7 @@ public static class FunctionLibrary
                     case 0x0149: sb.Append("\u02BCN"); continue; // ŉ → ʼN
                     case 0x017F: sb.Append('S'); continue; // ſ → S
                     case 0x01F0: sb.Append("J\u030C"); continue; // ǰ → J + caron
+                    case 0xFB17: sb.Append("\u0544\u053D"); continue; // Armenian ligature men xeh → ՄԽ (MEN + XEH)
                 }
 
                 // Greek characters with iota subscript (full mapping strips iota subscript and adds iota)

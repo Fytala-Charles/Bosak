@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 20-07-2026     | Added Number_ThrowsWithoutContextItem test                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 20-07-2026     | Added UpperCase_ArmenianLigatureMenXeh test                                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -528,5 +530,13 @@ public class ApiTests
         Assert.Throws<InvalidOperationException>(() => Eval("not((23, 24))"));
         Assert.Throws<InvalidOperationException>(() => Eval("not((1, 2, 3))"));
         Assert.Equal("true", Eval("not(())").ToString());
+    }
+
+    [Fact]
+    public void UpperCase_ArmenianLigatureMenXeh()
+    {
+        // fn-upper-case-22: Armenian small ligature men xeh (U+FB17) upper-cases to two codepoints.
+        var items = EvalSequence("string-to-codepoints(upper-case(codepoints-to-string(64279)))");
+        Assert.Equal(new[] { "1348", "1341" }, items);
     }
 }
