@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `b42c4ac` (Tier-2z: K2-DataFunc-6 / fn:data() FOTY0012 for element-only complex elements)
+**Current focus:** **QT3 Tier-2z: `K2-DataFunc-6` singleton** — `fn:data()` on a complex element-only or empty schema-validated element must raise `FOTY0012` because such an element has no typed value. The implementation was returning the string value of the element instead of detecting the missing typed value. Fixed by adding `IXdmNode.HasNoTypedValue` (default `false`), implementing it for `XDocumentNode` using `XElement.GetSchemaInfo()` and `XmlSchemaComplexType.ContentType`, and having `FunctionLibrary.Data` throw `FOTY0012` when the flag is true. Targeted test now passes: `K2-DataFunc-6`. Full QT3 suite now at **14,826 passed / 51 failed / 16,944 skipped (46.63%)**; runnable pass rate **99.66%** (14826 / 14877). Unit tests **1,360/0**.
+
+## This Session Fixes (Tier-2z: K2-DataFunc-6)
+
+1. **`fn:data()` FOTY0012 for element-only/empty complex elements** — Added `IXdmNode.HasNoTypedValue`, implemented it for `XDocumentNode`, and updated `FunctionLibrary.Data` to raise `FOTY0012` when the context item or supplied node has no typed value. This matches the XPath specification for schema-validated elements with complex type content.
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/IXdmNode.cs` (v0.7: `HasNoTypedValue` default accessor)
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs` (v2.0: implement `HasNoTypedValue` via schema info)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.62: throw `FOTY0012` in `Data` when `HasNoTypedValue`)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.6: `Data_ThrowsFoty0012ForElementOnlyComplexElement` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-SeqDeepEqualFunc-40`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `d444f0d` (Tier-2z: fn-upper-case-22 / Armenian ligature upper-case mapping)
 **Current focus:** **QT3 Tier-2z: `fn-upper-case-22` singleton** — `fn:upper-case` must use Unicode full case mapping for the Armenian small ligature men xeh (U+FB17), which upper-cases to two characters: U+0544 ARMENIAN CAPITAL LETTER MEN and U+053D ARMENIAN CAPITAL LETTER XEH. `FunctionLibrary.ApplyUnicodeCaseMapping` had no special case for this ligature, so `Rune.ToUpperInvariant` returned a single incorrect codepoint. Fixed by adding the explicit one-to-two mapping. Targeted test now passes: `fn-upper-case-22`. Full QT3 suite now at **14,825 passed / 52 failed / 16,944 skipped (46.59%)**; runnable pass rate **99.65%** (14825 / 14877). Unit tests **1,359/0**.
 
@@ -19,7 +46,7 @@
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-DataFunc-6`, `K2-SeqDeepEqualFunc-40`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `K2-SeqDeepEqualFunc-40`, `K-NodeNumberFunc-13/15`, `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `K-NodeSame-6`, `Axes123`, `K2-Axes-50/53`, `unabbreviatedSyntax-30`, `casthc18`, `CastAs009/091`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `K-XQueryComment-14/15`, `K-FilterExpr-82`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `LetExpr020a`, `Literals017/025/028`, `K2-NameTest-78/79`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
