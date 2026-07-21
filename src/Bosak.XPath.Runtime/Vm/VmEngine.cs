@@ -103,6 +103,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.61  | 21-07-2026     | xs:NOTATION instance-of returns false; xs:QName name is case-sensitive (xs:qname raises XPST0051) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.62  | 21-07-2026     | ParseGDateTime uses regex to avoid IndexOutOfRangeException on gDay/gMonth/gMonthDay/gYearMonth |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.59  | 21-07-2026     | Static function calls apply ParameterTypeNames conversion; URI promotion detects xs:anyURI annotation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -3154,49 +3156,58 @@ public static class VmEngine
         int tz = 0;
         bool hasTz = false;
 
-        // Strip optional timezone from the end
-        if (s.EndsWith('Z'))
-        {
-            hasTz = true;
-            s = s[..^1];
-        }
-        else
-        {
-            int tzIdx = s.LastIndexOfAny(['+', '-']);
-            // A leading '-' is the sign for the duration/gYear; for gYear it is part of the value.
-            // For gDay/gMonthDay/gMonth the string starts with '--' so the timezone sign is after that.
-            if (tzIdx > 0 && (s[tzIdx - 1] == '-' || s[tzIdx - 1] == ':' || char.IsDigit(s[tzIdx - 1])))
-            {
-                hasTz = true;
-                string tzStr = s[tzIdx..];
-                s = s[..tzIdx];
-                tz = ParseTimezoneOffset(tzStr);
-            }
-        }
+        s = s.Trim();
+        string tzStr = "";
 
         switch (subtype)
         {
             case "gYear":
-                var yearMatch = Regex.Match(s, @"^(-?\d{4})");
-                if (yearMatch.Success) year = int.Parse(yearMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                var gYearMatch = Regex.Match(s, @"^(-?\d{4,})((?:[Zz]|[+\-]\d{2}:\d{2})?)$");
+                if (gYearMatch.Success)
+                {
+                    year = int.Parse(gYearMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                    tzStr = NormalizeTimezone(gYearMatch.Groups[2].Value) ?? "";
+                }
                 break;
             case "gYearMonth":
-                var ymMatch = Regex.Match(s, @"^(-?\d{4})-(\d{2})");
-                if (ymMatch.Success) { year = int.Parse(ymMatch.Groups[1].Value, CultureInfo.InvariantCulture); month = int.Parse(ymMatch.Groups[2].Value, CultureInfo.InvariantCulture); }
+                var gYearMonthMatch = Regex.Match(s, @"^(-?\d{4,})-(\d{2})((?:[Zz]|[+\-]\d{2}:\d{2})?)$");
+                if (gYearMonthMatch.Success)
+                {
+                    year = int.Parse(gYearMonthMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                    month = int.Parse(gYearMonthMatch.Groups[2].Value, CultureInfo.InvariantCulture);
+                    tzStr = NormalizeTimezone(gYearMonthMatch.Groups[3].Value) ?? "";
+                }
                 break;
             case "gMonth":
-                var mMatch = Regex.Match(s, @"^--(\d{2})");
-                if (mMatch.Success) month = int.Parse(mMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                var gMonthMatch = Regex.Match(s, @"^--(\d{2})((?:[Zz]|[+\-]\d{2}:\d{2})?)$");
+                if (gMonthMatch.Success)
+                {
+                    month = int.Parse(gMonthMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                    tzStr = NormalizeTimezone(gMonthMatch.Groups[2].Value) ?? "";
+                }
                 break;
             case "gMonthDay":
-                var mdMatch = Regex.Match(s, @"^--(\d{2})-(\d{2})");
-                if (mdMatch.Success) { month = int.Parse(mdMatch.Groups[1].Value, CultureInfo.InvariantCulture); day = int.Parse(mdMatch.Groups[2].Value, CultureInfo.InvariantCulture); }
+                var gMonthDayMatch = Regex.Match(s, @"^--(\d{2})-(\d{2})((?:[Zz]|[+\-]\d{2}:\d{2})?)$");
+                if (gMonthDayMatch.Success)
+                {
+                    month = int.Parse(gMonthDayMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                    day = int.Parse(gMonthDayMatch.Groups[2].Value, CultureInfo.InvariantCulture);
+                    tzStr = NormalizeTimezone(gMonthDayMatch.Groups[3].Value) ?? "";
+                }
                 break;
             case "gDay":
-                var dMatch = Regex.Match(s, @"^---(\d{2})");
-                if (dMatch.Success) day = int.Parse(dMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                var gDayMatch = Regex.Match(s, @"^---(\d{2})((?:[Zz]|[+\-]\d{2}:\d{2})?)$");
+                if (gDayMatch.Success)
+                {
+                    day = int.Parse(gDayMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                    tzStr = NormalizeTimezone(gDayMatch.Groups[2].Value) ?? "";
+                }
                 break;
         }
+
+        hasTz = !string.IsNullOrEmpty(tzStr);
+        if (hasTz)
+            tz = tzStr == "Z" ? 0 : ParseTimezoneOffset(tzStr);
 
         return (new XPathDateTime(year, month, day, 0, 0, 0, 0, tz, hasTz), hasTz);
     }
