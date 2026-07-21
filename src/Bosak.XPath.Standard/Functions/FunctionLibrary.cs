@@ -160,7 +160,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.65  | 21-07-2026     | Static codepoints-to-string declares xs:integer* parameter for function conversion       |
 //                      | Charles Korthout | 5.66  | 21-07-2026     | fn:resolve-uri rejects base URIs with fragments and relative refs with colon in first segment |
-// ===========================================================================================================================================================
+//                      | Charles Korthout | 5.67  | 21-07-2026     | year/month-from-dateTime use XPathDateTime to support extended years (fn-*-from-dateTime-6) |
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -9992,13 +9992,13 @@ public static class FunctionLibrary
     private static XdmValue YearFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var v = UnwrapSequenceOrUndefined(args[0]);
-        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeValue.Year);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeXPathValue.Year);
     }
 
     private static XdmValue MonthFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var v = UnwrapSequenceOrUndefined(args[0]);
-        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeValue.Month);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.DateTimeXPathValue.Month);
     }
 
     private static XdmValue DayFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
