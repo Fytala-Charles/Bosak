@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 2.1   | 15-07-2026     | Added ResourceUriMapper to redirect published http: resource URIs to local files        |
 //                      | Charles Korthout | 2.2   | 15-07-2026     | Added XsltVersion override for fn:system-property('xsl:version')                       |
 //                      | Charles Korthout | 2.3   | 18-07-2026     | Added Collections dictionary for fn:collection/fn:uri-collection resolution             |
+//                      | Charles Korthout | 2.4   | 20-07-2026     | Added IsXsltMode to expose XSLT-only functions (fn:current, fn:system-property) only in XSLT mode |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -157,6 +158,13 @@ public sealed class EvaluationContext
     /// functions.
     /// </summary>
     public bool IsStaticEvaluation { get; set; }
+
+    /// <summary>
+    /// When true, the evaluation is being performed by the XSLT processor and
+    /// XSLT-only functions such as <c>fn:current</c> and <c>fn:system-property</c>
+    /// are available. XPath-only contexts leave this false.
+    /// </summary>
+    public bool IsXsltMode { get; set; }
 
     /// <summary>
     /// The implicit timezone offset in minutes used when a date, time, or dateTime value

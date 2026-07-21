@@ -98,6 +98,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.56  | 20-07-2026     | PathStepMap raises XPTY0019 when context item is not a node (K2-Axes-50/53)            |
 //                      | Charles Korthout | 2.57  | 20-07-2026     | Cast opcode raises XPTY0004 for empty input with occurrence One (K-SeqExprCast-67)     |
+//                      | Charles Korthout | 2.58  | 20-07-2026     | Inline functions apply XPath function conversion rules to arguments (FunctionCall-010/011/025/026) |
+//                      | Charles Korthout | 2.59  | 21-07-2026     | Static function calls apply ParameterTypeNames conversion; URI promotion detects xs:anyURI annotation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -211,6 +213,19 @@ public static class VmEngine
                         XdmValue[] args = new XdmValue[argCount];
                         for (int i = 0; i < argCount; i++)
                             args[i] = registers[firstArgReg + i];
+
+                        // Apply XPath 3.1 function conversion rules when the function signature
+                        // declares precise parameter sequence types. This covers untypedAtomic casting,
+                        // numeric promotion, and URI promotion for static calls (FunctionCall-011).
+                        if (sig.ParameterTypeNames != null)
+                        {
+                            for (int i = 0; i < argCount && i < sig.ParameterTypeNames.Count; i++)
+                            {
+                                var paramType = sig.ParameterTypeNames[i];
+                                if (!string.IsNullOrEmpty(paramType))
+                                    args[i] = ApplyFunctionConversion(args[i], paramType!);
+                            }
+                        }
 
                         registers[instr.RegisterA] = sig.Implementation(context, args);
                         ip++;
@@ -2297,29 +2312,23 @@ public static class VmEngine
                         }
                     }
 
-                    // Validate parameter types
+                    // Apply XPath 3.1 function conversion rules to each argument: atomization,
+                    // untypedAtomic casting, numeric promotion, and URI promotion. Validation
+                    // against the declared type is performed on the converted value using the
+                    // static context for context-sensitive types (e.g., xs:QName).
+                    var convertedArgs = new XdmValue[args.Length];
                     for (int i = 0; i < inline.Parameters.Count; i++)
                     {
                         var expectedType = i < inline.ParameterTypes.Count ? inline.ParameterTypes[i] : null;
                         if (!string.IsNullOrEmpty(expectedType))
                         {
-                            var arg = i < args.Length ? args[i] : XdmValue.Undefined;
-                            if (!arg.IsUndefined)
+                            convertedArgs[i] = ApplyFunctionConversion(args[i], expectedType!);
+                            var converted = convertedArgs[i];
+                            if (!converted.IsUndefined)
                             {
-                                string typeTrimmed = expectedType.TrimEnd();
-                                bool allowsMany = typeTrimmed.EndsWith('*') || typeTrimmed.EndsWith('+');
-                                bool allowsEmpty = typeTrimmed.EndsWith('?') || typeTrimmed.EndsWith('*');
-
-                                if (arg.IsSequence)
+                                if (converted.IsSequence)
                                 {
-                                    var items = new List<XdmValue>();
-                                    foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
-                                        items.Add(item);
-                                    if (!allowsMany && items.Count > 1)
-                                        throw new InvalidOperationException("XPTY0004");
-                                    if (!allowsEmpty && items.Count == 0)
-                                        throw new InvalidOperationException("XPTY0004");
-                                    foreach (var item in items)
+                                    foreach (var item in XdmSequence.FromSource(converted.SequenceValue!))
                                     {
                                         if (!ValueMatchesType(item, expectedType, context))
                                             throw new InvalidOperationException("XPTY0004");
@@ -2327,10 +2336,14 @@ public static class VmEngine
                                 }
                                 else
                                 {
-                                    if (!ValueMatchesType(arg, expectedType, context))
+                                    if (!ValueMatchesType(converted, expectedType, context))
                                         throw new InvalidOperationException("XPTY0004");
                                 }
                             }
+                        }
+                        else
+                        {
+                            convertedArgs[i] = args[i];
                         }
                     }
 
@@ -2342,7 +2355,7 @@ public static class VmEngine
                         saved[i].NamespaceUri = nsUri;
                         saved[i].Had = context.TryGetVariable(localName, out var oldVal, nsUri);
                         saved[i].Value = oldVal;
-                        context.WithVariable(localName, i < args.Length ? args[i] : XdmValue.Undefined, nsUri);
+                        context.WithVariable(localName, i < convertedArgs.Length ? convertedArgs[i] : XdmValue.Undefined, nsUri);
                     }
                     try
                     {
@@ -6814,11 +6827,17 @@ public static class VmEngine
         if (t.StartsWith("xs:"))
             t = t[3..];
 
+        // xs:anyURI values are sometimes stored as String kind with the schema type name
+        // annotation rather than as Uri kind, so consult both sources.
+        bool isUri = value.Kind == XdmValueKind.Uri
+            || (value.Kind == XdmValueKind.String
+                && value.SchemaTypeName?.Equals("anyURI", StringComparison.OrdinalIgnoreCase) == true);
+
         bool promotable = t switch
         {
             "double" => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float,
             "float" => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal,
-            "string" => value.Kind == XdmValueKind.Uri,
+            "string" => isUri,
             _ => false
         };
         return promotable && TryCast(value, type, out result);

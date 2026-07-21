@@ -112,6 +112,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.42  | 15-07-2026     | fn:system-property('xsl:version') honors EvaluationContext.XsltVersion override                        |
 //                      | Charles Korthout | 5.43  | 20-07-2026     | xs:QName constructor uses default element namespace for unprefixed lexical QNames     |
+//                      | Charles Korthout | 5.44  | 20-07-2026     | fn:current and fn:system-property raise XPST0017 outside XSLT mode                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.43  | 17-07-2026     | fn:unparsed-text/-available: resolve href against base URI before URI mapping; reject fragment identifiers |
 //                      |==================|=======|================|=========================================================================================
@@ -157,6 +158,7 @@
 //                      | Charles Korthout | 5.63  | 20-07-2026     | Tier-2z: fn:deep-equal timezone-aware dateTime/date/time comparison                  |
 //                      | Charles Korthout | 5.64  | 20-07-2026     | Tier-2z: fn:number returns NaN for non-numeric/non-string atomic types               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.65  | 21-07-2026     | Static codepoints-to-string declares xs:integer* parameter for function conversion       |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -502,7 +504,9 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "codepoints-to-string", Arity = 1,
                 ParameterTypes = [XdmValueKind.Sequence],
+                ParameterTypeNames = ["xs:integer*"],
                 ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string",
                 Implementation = CodepointsToString
             },
 
@@ -3776,7 +3780,11 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Current(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ctx.CurrentItem;
+    {
+        if (!ctx.IsXsltMode)
+            throw new InvalidOperationException("XPST0017: Function fn:current is available only in XSLT.");
+        return ctx.CurrentItem;
+    }
 
     private static XdmValue CurrentOutputUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -4024,6 +4032,8 @@ public static class FunctionLibrary
 
     private static XdmValue SystemProperty(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
+        if (!ctx.IsXsltMode)
+            throw new InvalidOperationException("XPST0017: Function fn:system-property is available only in XSLT.");
         string name = AtomizedString(args[0]);
         name = ExpandXsltPropertyName(name, ctx);
         string value = name switch

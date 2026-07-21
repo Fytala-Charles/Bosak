@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.5   | 15-07-2026     | fn:transform option handling: params, serialization, base URI, default mode, validation |
 //                      | Charles Korthout | 0.6   | 15-07-2026     | global-context-item default wrapper, xslt-version type validation, xslt-version override  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 21-07-2026     | Set IsXsltMode=true in fn:transform nested EvaluationContext                             |
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
@@ -158,6 +159,7 @@ public static class XsltFunctionLibrary
             : null;
 
         var transformContext = new EvaluationContext();
+        transformContext.IsXsltMode = true;
         XdmExecutableSource executableSource = LoadExecutable(options, ctx, staticParameters);
 
         // The static base URI inside the nested stylesheet is the stylesheet's own base URI.

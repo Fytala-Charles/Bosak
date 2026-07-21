@@ -184,6 +184,7 @@
 //                      | Charles Korthout | 6.13  | 14-07-2026     | fn:transform: initial-match-selection, raw principal result, result-document capture; map-entry content; text result-doc fix |
 //                      | Charles Korthout | 6.14  | 14-07-2026     | xsl:analyze-string uses cached XSD regex translation + compiled-Regex cache             |
 //                      | Charles Korthout | 6.15  | 15-07-2026     | fn:transform: global-context-item, default-mode routing, raw result extraction, absent principal output |
+//                      | Charles Korthout | 6.16  | 21-07-2026     | Set EvaluationContext.IsXsltMode=true for main transform context                          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.16  | 19-07-2026     | xsl:analyze-string adapts to new flags-aware ParseRegexFlags/ValidateAndTranslatePattern |
 //                      |==================|=======|================|=========================================================================================
@@ -445,6 +446,7 @@ public sealed class TransformEngine
     {
         _stylesheet = stylesheet;
         _context = context ?? new EvaluationContext();
+        _context.IsXsltMode = true;
         _messageListener = messageListener;
         _treatRecoverableAmbiguousMatchAsError = treatRecoverableAmbiguousMatchAsError;
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
