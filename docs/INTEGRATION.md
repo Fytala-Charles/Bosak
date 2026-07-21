@@ -4,14 +4,23 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 20 July 2026
+> **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,849 passed / 28 failed / 16,944 skipped (46.66% / 99.81% of runnable tests)
+> **QT3 baseline:** 14,857 passed / 20 failed / 16,944 skipped (46.69% / 99.86% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 `prod-FunctionCall` cluster: inline and static function calls now apply XPath 3.1 function conversion rules.
+  - `FunctionCall-010`, `FunctionCall-025`: inline function argument conversion now applies untypedAtomic casting and numeric promotion (already supported; validated).
+  - `FunctionCall-011`: static call to `fn:codepoints-to-string` now casts a sequence of `xs:untypedAtomic` values to `xs:integer*` via the VM `Call` opcode and `ApplyFunctionConversion`.
+  - `FunctionCall-026`: inline function call now promotes `xs:anyURI` values to `xs:string*`; `TryPromoteNumericOrUri` was updated to recognize `xs:anyURI` annotations stored as `String` kind with `SchemaTypeName="anyURI"`.
+  - `K-FunctionCallExpr-22/26`, `K2-FunctionCallExpr-3/8`: `fn:current()` and `fn:system-property()` now raise `XPST0017` when invoked outside XSLT mode. Added `EvaluationContext.IsXsltMode` and set it in `TransformEngine` and `fn:transform`.
+  - Added `ParameterTypeNames = ["xs:integer*"]` and `ReturnTypeName = "xs:string"` to the `fn:codepoints-to-string` signature.
+  - Targeted tests now pass: `FunctionCall-010`, `FunctionCall-011`, `FunctionCall-025`, `FunctionCall-026`, `K-FunctionCallExpr-22`, `K-FunctionCallExpr-26`, `K2-FunctionCallExpr-3`, `K2-FunctionCallExpr-8`.
+  - Full QT3 now **14,857 passed / 20 failed / 16,944 skipped = 46.69%** (runnable pass rate **99.86%**); unit tests **1,379/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `K2-SeqExprCast-1/201` / `xs:QName` namespace resolution for `cast as` and `xs:QName()` constructor.
   - `"myPrefix:ncname" cast as xs:QName` was not resolving the prefix against the static namespace context; the cast was producing a string instead of a QName and raising `XPTY0004`.

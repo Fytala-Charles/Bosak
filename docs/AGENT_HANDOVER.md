@@ -1,8 +1,34 @@
 # Handover — Bosak XPath/XSLT Implementation
 
-**Date:** 2026-07-20
-**Commit:** `dd2cc66` (docs: update AGENT_HANDOVER for K-SeqExprCast-67)
-**Current focus:** **QT3 Tier-2z: `K2-SeqExprCast-1/201` singleton cluster** — `xs:QName` namespace resolution for `cast as` and the `xs:QName()` constructor. `"myPrefix:ncname" cast as xs:QName` was not resolving the prefix against the static namespace context; the `Cast` opcode was calling the context-free `Cast`/`TryCast` helpers, which validated the lexical QName but returned a plain string instead of a QName, so downstream code raised `XPTY0004`. `xs:QName("ncname")` was ignoring the default element namespace and returning an empty namespace URI. Fixed by adding `EvaluationContext` overloads to `VmEngine.Cast`/`TryCast`, passing the context from the `Cast` and `Castable` opcodes, and resolving the lexical QName in the `qname` cast case (prefixed names against namespace bindings, unprefixed names against `DefaultElementNamespace`). Also updated the `xs:QName` constructor (`XsQNameConstructor`) and `CastUntypedAtomicToQName` to use `DefaultElementNamespace` for unprefixed names. Updated `TestEnvironment.ApplyTo` to map a QT3 `<namespace prefix="" uri="...">` to `EvaluationContext.DefaultElementNamespace`. Rewrote the `FunctionLibraryTests` chained-FLWOR regression tests as nested expressions so they remain valid under the XPath grammar restriction enforced by `LetExpr020a`. Targeted tests now pass: `K2-SeqExprCast-1`, `K2-SeqExprCast-201`, `CastableAs647`, `K-SeqExprCastable-19`. Full QT3 suite now at **14,849 passed / 28 failed / 16,944 skipped (46.66%)**; runnable pass rate **99.81%** (14849 / 14877). Unit tests **1,379/0**.
+**Date:** 2026-07-21
+**Commit:** `e0efe93` (fix(FunctionCall): apply XPath function conversion rules to inline/static calls and gate XSLT-only functions)
+**Current focus:** **QT3 `prod-FunctionCall` cluster** — inline and static function calls were missing XPath 3.1 function conversion rules, and `fn:current()` / `fn:system-property()` were callable from XPath. `FunctionCall-010/011/025/026` raised `XPTY0004` instead of casting untypedAtomic sequences or promoting numeric/URI values; `K-FunctionCallExpr-22/26` and `K2-FunctionCallExpr-3/8` expected `XPST0017` for `fn:current()` and `fn:system-property()` in XPath. Fixed by applying `ApplyFunctionConversion` in the VM `Call` opcode when `FunctionSignature.ParameterTypeNames` is present, updating `TryPromoteNumericOrUri` to recognize `xs:anyURI` values stored as `String` kind with `SchemaTypeName="anyURI"`, and adding `EvaluationContext.IsXsltMode` to gate `fn:current()` / `fn:system-property()` to XSLT contexts. Full QT3 suite now at **14,857 passed / 20 failed / 16,944 skipped (46.69%)**; runnable pass rate **99.86%** (14857 / 14877). Unit tests **1,379/0**.
+
+## This Session Fixes (`prod-FunctionCall` cluster)
+
+1. **Inline function argument conversion** — `InvokeFunctionItemCore` for `InlineFunctionItem` already applies `ApplyFunctionConversion` with the declared parameter type and validates the converted value. This validated `FunctionCall-010` and `FunctionCall-025`.
+
+2. **Static function call conversion** — The VM `Call` opcode now applies `ApplyFunctionConversion` to each argument when the resolved `FunctionSignature` provides `ParameterTypeNames`. `fn:codepoints-to-string` was updated to declare `ParameterTypeNames = ["xs:integer*"]` and `ReturnTypeName = "xs:string"`, so `FunctionCall-011` now casts a sequence of `xs:untypedAtomic` values to `xs:integer*` before the function body runs.
+
+3. **URI promotion for `xs:anyURI`** — `ApplyFunctionConversion`/`TryPromoteNumericOrUri` now recognizes `xs:anyURI` values even when they are stored as `String` kind with `SchemaTypeName = "anyURI"`. This fixes `FunctionCall-026`, where an inline function expects `xs:string*` and is passed a sequence of `xs:anyURI` values.
+
+4. **XSLT-only functions gated to XSLT mode** — `fn:current()` and `fn:system-property()` now raise `XPST0017` when `EvaluationContext.IsXsltMode` is false. `IsXsltMode` is set to true in `TransformEngine` for the main transform context and in `XsltFunctionLibrary.Transform_1` for nested `fn:transform` contexts. This fixes `K-FunctionCallExpr-22/26` and `K2-FunctionCallExpr-3/8`.
+
+5. **Regression safety** — Full QT3 suite improved by **+8 passed, −8 failed** with no regressions in unit tests or other targeted pools. Targeted tests now pass: `FunctionCall-010`, `FunctionCall-011`, `FunctionCall-025`, `FunctionCall-026`, `K-FunctionCallExpr-22`, `K-FunctionCallExpr-26`, `K2-FunctionCallExpr-3`, `K2-FunctionCallExpr-8`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.59: `Call` opcode applies `ParameterTypeNames` conversion; `TryPromoteNumericOrUri` detects `xs:anyURI` annotation)
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (v2.4: added `IsXsltMode`)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.65: `fn:current`/`fn:system-property` raise `XPST0017` outside XSLT; `fn:codepoints-to-string` declares `xs:integer*` parameter type)
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs` (v6.16: set `IsXsltMode = true` on main transform context)
+- `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs` (v0.7: set `IsXsltMode = true` on `fn:transform` nested context)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+Continue with the remaining QT3 singleton / small clusters. The highest-impact remaining failures are the `fn-resolve-uri-3/26` pair, `fn-month/from-dateTime-6` (DateTimeOffset year -1999 limitation), `xs-dateTimeStamp-*`, `fn-intersect/union-node-args-*` namespace-node serialization, and the whitespace-sensitive XML comparison failures (`unabbreviatedSyntax-30`, `ForExpr013`, `filterexpressionhc*`, `predicates-24`, `string-queries-results-q1`).
 
 ## This Session Fixes (Tier-2z: K2-SeqExprCast-1/201)
 
