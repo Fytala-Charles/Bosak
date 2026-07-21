@@ -1,8 +1,24 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `0227ba6` (fix(fn:resolve-uri): reject base URIs with fragments and relative refs with colon in first segment)
-**Current focus:** **QT3 `fn-resolve-uri-3/26` singleton pair** — `fn:resolve-uri` was returning a URI instead of raising `FORG0002` for two invalid inputs: a relative reference `":"` (which is neither a valid absolute URI nor a valid relative URI reference because its first path segment contains a colon), and a base URI containing a fragment (`http://www.example.com/a.html#fragment`). Fixed by adding explicit validation in `FunctionLibrary.ResolveUri`: base URIs with non-empty fragments are rejected, and non-path-absolute relative references whose first path segment contains `":"` are rejected. Full QT3 suite now at **14,859 passed / 18 failed / 16,944 skipped (46.70%)**; runnable pass rate **99.88%** (14859 / 14877). Unit tests **1,379/0**.
+**Commit:** `b726414` (fix(dateTime): year/month-from-dateTime use XPathDateTime for extended years)
+**Current focus:** **QT3 `fn-month/from-dateTime-6` singleton pair** — `fn:year-from-dateTime` and `fn:month-from-dateTime` were failing for `xs:dateTime` values with extended years such as `-1999` because they read `XdmValue.DateTimeValue`, which converts to `DateTimeOffset` and cannot represent years outside the 1–9999 range. Fixed by switching to `XdmValue.DateTimeXPathValue.Year` / `.Month`; the `XPathDateTime` struct already supports `long` years. Full QT3 suite now at **14,861 passed / 16 failed / 16,944 skipped (46.70%)**; runnable pass rate **99.89%** (14861 / 14877). Unit tests **1,379/0**.
+
+## This Session Fixes (`fn-month/from-dateTime-6`)
+
+1. **Extended-year support in `fn:year-from-dateTime` and `fn:month-from-dateTime`** — These functions now read `XdmValue.DateTimeXPathValue.Year` / `.Month` instead of `XdmValue.DateTimeValue.Year` / `.Month`. `XPathDateTime` stores the year as `long`, supporting XML Schema extended years such as `-1999` that `DateTimeOffset` cannot represent.
+
+2. **Regression safety** — Full `fn-year-from-dateTime` and `fn-month-from-dateTime` test sets (27 tests each) pass. Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests. Targeted tests now pass: `fn-month-from-dateTime-6`, `fn-year-from-dateTime-6`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.67: `YearFromDateTime`/`MonthFromDateTime` use `XPathDateTime` for extended-year support)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+Continue with the remaining QT3 singleton / small clusters. The highest-impact remaining failures are `xs-dateTimeStamp-*` (3 failures), `fn-intersect/union-node-args-*` namespace-node serialization (6 failures), `K-SeqExprInstanceOf-46/51` (2 failures), and the whitespace-sensitive XML comparison failures (`unabbreviatedSyntax-30`, `ForExpr013`, `filterexpressionhc*`, `predicates-24`, `string-queries-results-q1`).
 
 ## This Session Fixes (`fn-resolve-uri-3/26`)
 

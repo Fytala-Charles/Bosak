@@ -6,12 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,859 passed / 18 failed / 16,944 skipped (46.70% / 99.88% of runnable tests)
+> **QT3 baseline:** 14,861 passed / 16 failed / 16,944 skipped (46.70% / 99.89% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 `fn-month/from-dateTime-6`: `fn:year-from-dateTime` and `fn:month-from-dateTime` now support extended years.
+  - The implementations were reading `XdmValue.DateTimeValue`, which converts to `DateTimeOffset` and fails for years outside the 1–9999 range.
+  - Switched to `XdmValue.DateTimeXPathValue.Year` / `.Month`, which stores the year as `long` and supports XML Schema extended years such as `-1999`.
+  - Targeted tests now pass: `fn-month-from-dateTime-6`, `fn-year-from-dateTime-6`.
+  - Full QT3 now **14,861 passed / 16 failed / 16,944 skipped = 46.70%** (runnable pass rate **99.89%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 `fn-resolve-uri-3/26`: `fn:resolve-uri` now raises `FORG0002` for invalid base URIs and relative references.
   - `fn-resolve-uri-3`: the relative reference `":"` is not a valid absolute URI (empty scheme) and not a valid relative URI reference because its first path segment contains `":"`.
