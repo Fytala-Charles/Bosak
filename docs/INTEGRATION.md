@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,373 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,845 passed / 32 failed / 16,944 skipped (46.65% / 99.79% of runnable tests)
+> **Bosak baseline:** 1,375 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,846 passed / 31 failed / 16,944 skipped (46.65% / 99.79% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K-SeqExprTreat-16` / require closing parenthesis in sequence type tests.
+  - `3 treat as item(` was being accepted because `ParseTypeNameAndParens` consumed tokens until EOF without verifying that the opening parenthesis was closed.
+  - Added a `parenDepth > 0` check after consuming the sequence type; an unclosed paren now raises `XPST0003`.
+  - Added `TreatExpr` and `TreatExpr_UnclosedTypeParens_RaiseXPST0003` regression tests.
+  - Targeted test passes: `K-SeqExprTreat-16`.
+  - Full QT3 now **14,846 passed / 31 failed / 16,944 skipped = 46.65%** (runnable pass rate **99.79%**); unit tests **1,375/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `LetExpr020a` / disallow consecutive `for`/`let` clauses in XPath FLWOR.
   - XPath 3.1 allows only one initial `for` or `let` clause; intermediate clauses may only be `where`, `order by`, or `count`. The parser was treating additional `for`/`let` keywords as new intermediate clauses, so `let $a := 1 let $b := $a return ...` parsed successfully.

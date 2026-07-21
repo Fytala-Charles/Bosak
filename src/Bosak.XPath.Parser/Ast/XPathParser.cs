@@ -39,6 +39,7 @@
 //                      | Charles Korthout | 1.14  | 20-07-2026     | Allow 'is' as a non-reserved function name in function calls (K-NodeSame-6)              |
 //                      | Charles Korthout | 1.15  | 20-07-2026     | Only treat 'for'/'let' as FLWOR keywords when followed by '$' (K2-NameTest-78/79)        |
 //                      | Charles Korthout | 1.16  | 20-07-2026     | Disallow consecutive for/let clauses in FLWOR (XPath-only; LetExpr020a)                   |
+//                      | Charles Korthout | 1.17  | 20-07-2026     | Require closing parenthesis in sequence type tests (K-SeqExprTreat-16)                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1646,6 +1647,11 @@ public sealed class XPathParser
                 string returnType = SkipSequenceType();
                 sb.Append(returnType);
                 local = sb.ToString();
+            }
+
+            if (parenDepth > 0)
+            {
+                throw new ParseException("Unclosed sequence type parenthesis", Current.Start);
             }
         }
 

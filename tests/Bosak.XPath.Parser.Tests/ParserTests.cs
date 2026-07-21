@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 19-07-2026     | Reserved function names in function calls and named function references raise XPST0003   |
 //                      | Charles Korthout | 0.5   | 19-07-2026     | Removed function-call reserved-name tests; kept named-function-reference tests           |
 //                      | Charles Korthout | 0.6   | 20-07-2026     | Added LetExpr and consecutive-let-keyword regression tests                               |
+//                      | Charles Korthout | 0.7   | 20-07-2026     | Added TreatExpr and unclosed-sequence-type-paren regression tests                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -502,6 +503,23 @@ public class ParserTests
     {
         var node = AssertParse<InstanceOfNode>("$x instance of xs:integer");
         Assert.IsType<VariableReferenceNode>(node.Expression);
+    }
+
+    [Fact]
+    public void TreatExpr()
+    {
+        var node = AssertParse<TreatNode>("$x treat as xs:integer");
+        Assert.IsType<VariableReferenceNode>(node.Expression);
+        Assert.Equal("integer", node.TypeName);
+    }
+
+    [Fact]
+    public void TreatExpr_UnclosedTypeParens_RaiseXPST0003()
+    {
+        // Regression for QT3 K-SeqExprTreat-16: missing closing paren in sequence type.
+        var expr = "3 treat as item(";
+        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse(expr));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     // ------------------------------------------------------------------
