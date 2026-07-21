@@ -5,13 +5,22 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
-> **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,861 passed / 16 failed / 16,944 skipped (46.70% / 99.89% of runnable tests)
+> **Bosak baseline:** 1,279 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,864 passed / 13 failed / 16,944 skipped (46.71% / 99.91% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 `xs-dateTimeStamp-*`: registered `xs:dateTimeStamp#1` and added cast/instance-of support.
+  - `xs:dateTimeStamp("2011-07-28T12:34:56-08:00")` raised `XPST0017` because the constructor was missing from the `FunctionLibrary` xs: constructor dictionary.
+  - Added `XsDateTimeStamp` and registered `[(Namespaces.Xs, "dateTimeStamp", 1)]`.
+  - Added `case "datetimestamp"` to `VmEngine.TryCast` requiring a timezone; parses lexical dateTimes, casts timezone-aware `xs:dateTime` and `xs:date` values, and rejects values without a timezone so `Cast` raises `FORG0001`.
+  - Added `datetimestamp` to `IsKnownAtomicTypeName`, `ItemInstanceOf`, and `GetDirectSupertypes` so `instance of xs:dateTimeStamp` and `current-date() castable as xs:dateTimeStamp` work.
+  - Added `dateTimeStamp` to `fn:type-available`'s built-in type list.
+  - Targeted tests now pass: `xs-dateTimeStamp-2`, `xs-dateTimeStamp-5`, `xs-dateTimeStamp-6` (whole set of 6 passes).
+  - Full QT3 now **14,864 passed / 13 failed / 16,944 skipped = 46.71%** (runnable pass rate **99.91%**); unit tests **1,279/0**.
 
 - **2026-07-21** — QT3 `fn-month/from-dateTime-6`: `fn:year-from-dateTime` and `fn:month-from-dateTime` now support extended years.
   - The implementations were reading `XdmValue.DateTimeValue`, which converts to `DateTimeOffset` and fails for years outside the 1–9999 range.

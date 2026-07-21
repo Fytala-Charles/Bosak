@@ -1,6 +1,44 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `9d83d53` (fix(dateTimeStamp): add xs:dateTimeStamp constructor, cast, and instance-of support)
+**Current focus:** **QT3 `xs-dateTimeStamp-*` singleton cluster** — `xs:dateTimeStamp("2011-07-28T12:34:56-08:00")` raised `XPST0017` because the `xs:dateTimeStamp#1` constructor was not registered; `xs:dateTimeStamp("2011-07-28T12:34:56")` without a timezone failed to raise `FORG0001`; and `current-date() castable as xs:dateTimeStamp` returned `false` because `TryCast` did not recognize the type. Fixed by registering the constructor in `FunctionLibrary`, adding a `dateTimeStamp` cast case in `VmEngine.TryCast` that requires a timezone, adding `dateTimeStamp` to `ValueMatchesType`/`ItemInstanceOf` and the type hierarchy, and adding `dateTimeStamp` to `fn:type-available`'s built-in list. Full QT3 suite now at **14,864 passed / 13 failed / 16,944 skipped (46.71%)**; runnable pass rate **99.91%** (14864 / 14877). Unit tests **1,279/0**.
+
+## This Session Fixes (`xs-dateTimeStamp-*`)
+
+1. **`xs:dateTimeStamp#1` constructor registered** — Added `[(Namespaces.Xs, "dateTimeStamp", 1)]` to the `FunctionLibrary` constructor dictionary with `XsDateTimeStamp` delegating to `VmEngine.Cast(args[0], "dateTimeStamp")`.
+
+2. **`TryCast` recognizes `dateTimeStamp`** — Added a `case "datetimestamp"` in `VmEngine.TryCast` that:
+   - accepts existing `xs:dateTime` values that have a timezone;
+   - casts `xs:date` values to `xs:dateTimeStamp` when the date has a timezone (midnight time + source timezone);
+   - parses lexical `xs:dateTime` strings and rejects values without a timezone (returning `false` so `Cast` raises `FORG0001`);
+   - annotates successful results with `SchemaTypeName = "dateTimeStamp"`.
+
+3. **`instance of xs:dateTimeStamp` works** — Added `datetimestamp` to `IsKnownAtomicTypeName` and `ItemInstanceOf`, requiring `value.Kind == XdmValueKind.DateTime && value.HasTimezone`.
+
+4. **Type hierarchy** — Added `datetimestamp => ["datetime"]` in `GetDirectSupertypes` so `xs:dateTimeStamp` derives from `xs:dateTime`.
+
+5. **`fn:type-available` acknowledges `xs:dateTimeStamp`** — Added `datetimestamp`/`dateTimeStamp` to the built-in type list in `FunctionLibrary.TypeAvailable`.
+
+6. **Regression safety** — Full QT3 suite improved by **+3 passed, −3 failed** with no regressions in unit tests. Targeted tests now pass: `xs-dateTimeStamp-2`, `xs-dateTimeStamp-5`, `xs-dateTimeStamp-6` (and the whole `xs-dateTimeStamp` set of 6 tests).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/XdmValue.cs` (v2.0: added `FromDateTime` overloads with `schemaTypeName` for `DateTimeOffset` and `XPathDateTime`)
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.60: `dateTimeStamp` cast, instance-of, type hierarchy, and `IsKnownAtomicTypeName`)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.68: registered `xs:dateTimeStamp#1` constructor and added `TypeAvailable` entry)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+Continue with the remaining QT3 singleton / small clusters. The highest-impact remaining failures are `fn-intersect/union-node-args-*` namespace-node serialization (6 failures), `K-SeqExprInstanceOf-46/51` (2 failures), and the whitespace-sensitive XML comparison failures (`unabbreviatedSyntax-30`, `ForExpr013`, `filterexpressionhc*`, `predicates-24`, `string-queries-results-q1`).
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `b726414` (fix(dateTime): year/month-from-dateTime use XPathDateTime for extended years)
 **Current focus:** **QT3 `fn-month/from-dateTime-6` singleton pair** — `fn:year-from-dateTime` and `fn:month-from-dateTime` were failing for `xs:dateTime` values with extended years such as `-1999` because they read `XdmValue.DateTimeValue`, which converts to `DateTimeOffset` and cannot represent years outside the 1–9999 range. Fixed by switching to `XdmValue.DateTimeXPathValue.Year` / `.Month`; the `XPathDateTime` struct already supports `long` years. Full QT3 suite now at **14,861 passed / 16 failed / 16,944 skipped (46.70%)**; runnable pass rate **99.89%** (14861 / 14877). Unit tests **1,379/0**.
 
