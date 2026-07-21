@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `917327c` (fix(xml): include in-scope namespaces in standalone element serialization and canonicalize multi-root XML fragments)
+**Current focus:** **QT3 `fn-intersect/union-node-args-*` namespace serialization cluster** — `(/atomic:root/atomic:integer) intersect (/atomic:root/atomic:integer)` and the equivalent union tests expected `xmlns:foo` and `xmlns:xsi` from the root element to appear in the serialized output of the standalone child element, but `XDocumentNode.ToXmlString()` only emitted the `atomic` namespace. Fixed by copying all in-scope namespace bindings to the cloned element before serialization. The multi-root fragment `fn-union-node-args-017` still failed because `assert-xml` could not canonicalize fragments with multiple top-level elements, so `ResultComparer.NormalizeXml` now wraps such fragments in a temporary root before canonical comparison. As a side effect, several other fragment-comparison failures also resolved. Full QT3 suite now at **14,873 passed / 4 failed / 16,944 skipped (46.74%)**; runnable pass rate **99.97%** (14873 / 14877). Unit tests **1,279/0**.
+
+## This Session Fixes (`fn-intersect/union-node-args-*` and related fragment comparisons)
+
+1. **Standalone element serialization includes in-scope namespaces** — `XDocumentNode.ToXmlString()` now clones an `XElement`, walks its namespace axis to collect all in-scope namespace bindings, and adds any missing declarations before serializing. This ensures that extracted child elements carry the namespace context from their ancestors, matching the expected `assert-xml` output for the intersect/union tests.
+
+2. **`assert-xml` canonicalizes multi-root fragments** — `ResultComparer.NormalizeXml` previously fell back to raw-string comparison when the actual XML contained multiple top-level elements (e.g. `fn-union-node-args-017`). It now wraps the fragment in a temporary root element, canonicalizes the wrapper, and strips the wrapper tags so that attribute order and namespace-declaration order are normalized consistently. This also fixed `unabbreviatedSyntax-30`, `filterexpressionhc1`, `filterexpressionhc4`, and `predicates-24`.
+
+3. **Regression safety** — Full QT3 suite improved by **+9 passed, −9 failed** with no regressions in unit tests. Targeted `op-intersect` and `op-union` runnable sets now pass entirely (29/29 and 28/28 respectively).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs` (v2.2: `ToXmlString` copies in-scope namespaces for standalone element serialization)
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs` (v1.4: `NormalizeXml` wraps multi-root fragments for canonical comparison)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+Continue with the remaining QT3 singletons. The four remaining failures are `ForExpr013` (empty expected result), `K-SeqExprInstanceOf-46` (`xs:NOTATION` instance-of handling), `K-SeqExprInstanceOf-51` (`xs:qname` unknown-type handling), and `string-queries-results-q1` (empty expected result). The `K-SeqExprInstanceOf` pair is a small, isolated cluster; `ForExpr013` and `string-queries-results-q1` may be whitespace/normalization issues.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `9d83d53` (fix(dateTimeStamp): add xs:dateTimeStamp constructor, cast, and instance-of support)
 **Current focus:** **QT3 `xs-dateTimeStamp-*` singleton cluster** — `xs:dateTimeStamp("2011-07-28T12:34:56-08:00")` raised `XPST0017` because the `xs:dateTimeStamp#1` constructor was not registered; `xs:dateTimeStamp("2011-07-28T12:34:56")` without a timezone failed to raise `FORG0001`; and `current-date() castable as xs:dateTimeStamp` returned `false` because `TryCast` did not recognize the type. Fixed by registering the constructor in `FunctionLibrary`, adding a `dateTimeStamp` cast case in `VmEngine.TryCast` that requires a timezone, adding `dateTimeStamp` to `ValueMatchesType`/`ItemInstanceOf` and the type hierarchy, and adding `dateTimeStamp` to `fn:type-available`'s built-in list. Full QT3 suite now at **14,864 passed / 13 failed / 16,944 skipped (46.71%)**; runnable pass rate **99.91%** (14864 / 14877). Unit tests **1,279/0**.
 

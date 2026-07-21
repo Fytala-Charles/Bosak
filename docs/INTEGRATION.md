@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,279 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,864 passed / 13 failed / 16,944 skipped (46.71% / 99.91% of runnable tests)
+> **QT3 baseline:** 14,873 passed / 4 failed / 16,944 skipped (46.74% / 99.97% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 `fn-intersect/union-node-args-*` and multi-root fragment canonicalization: standalone element serialization now includes in-scope namespaces.
+  - `XDocumentNode.ToXmlString()` only emitted the namespace used by the element name; `assert-xml` expected all ancestor namespace declarations (`xmlns:foo`, `xmlns:xsi`, `xmlns:atomic`) for `fn-intersect-node-args-015/016` and `fn-union-node-args-015/016/017`.
+  - Added `ElementToXmlStringWithNamespaces` which clones the element, gathers missing in-scope namespace bindings via the namespace axis, and adds them before serializing.
+  - `ResultComparer.NormalizeXml` now wraps multi-root fragments in a temporary root so it can canonicalize them (sorted attributes, normalized escaping) instead of falling back to raw-string comparison. This also fixed `unabbreviatedSyntax-30`, `filterexpressionhc1`, `filterexpressionhc4`, and `predicates-24`.
+  - Targeted `op-intersect` and `op-union` sets now pass all runnable tests: 29/29 and 28/28 respectively.
+  - Full QT3 now **14,873 passed / 4 failed / 16,944 skipped = 46.74%** (runnable pass rate **99.97%**); unit tests **1,279/0**.
 
 - **2026-07-21** — QT3 `xs-dateTimeStamp-*`: registered `xs:dateTimeStamp#1` and added cast/instance-of support.
   - `xs:dateTimeStamp("2011-07-28T12:34:56-08:00")` raised `XPST0017` because the constructor was missing from the `FunctionLibrary` xs: constructor dictionary.
