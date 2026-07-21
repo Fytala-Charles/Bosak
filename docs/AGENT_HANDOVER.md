@@ -1,8 +1,26 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `e0efe93` (fix(FunctionCall): apply XPath function conversion rules to inline/static calls and gate XSLT-only functions)
-**Current focus:** **QT3 `prod-FunctionCall` cluster** — inline and static function calls were missing XPath 3.1 function conversion rules, and `fn:current()` / `fn:system-property()` were callable from XPath. `FunctionCall-010/011/025/026` raised `XPTY0004` instead of casting untypedAtomic sequences or promoting numeric/URI values; `K-FunctionCallExpr-22/26` and `K2-FunctionCallExpr-3/8` expected `XPST0017` for `fn:current()` and `fn:system-property()` in XPath. Fixed by applying `ApplyFunctionConversion` in the VM `Call` opcode when `FunctionSignature.ParameterTypeNames` is present, updating `TryPromoteNumericOrUri` to recognize `xs:anyURI` values stored as `String` kind with `SchemaTypeName="anyURI"`, and adding `EvaluationContext.IsXsltMode` to gate `fn:current()` / `fn:system-property()` to XSLT contexts. Full QT3 suite now at **14,857 passed / 20 failed / 16,944 skipped (46.69%)**; runnable pass rate **99.86%** (14857 / 14877). Unit tests **1,379/0**.
+**Commit:** `0227ba6` (fix(fn:resolve-uri): reject base URIs with fragments and relative refs with colon in first segment)
+**Current focus:** **QT3 `fn-resolve-uri-3/26` singleton pair** — `fn:resolve-uri` was returning a URI instead of raising `FORG0002` for two invalid inputs: a relative reference `":"` (which is neither a valid absolute URI nor a valid relative URI reference because its first path segment contains a colon), and a base URI containing a fragment (`http://www.example.com/a.html#fragment`). Fixed by adding explicit validation in `FunctionLibrary.ResolveUri`: base URIs with non-empty fragments are rejected, and non-path-absolute relative references whose first path segment contains `":"` are rejected. Full QT3 suite now at **14,859 passed / 18 failed / 16,944 skipped (46.70%)**; runnable pass rate **99.88%** (14859 / 14877). Unit tests **1,379/0**.
+
+## This Session Fixes (`fn-resolve-uri-3/26`)
+
+1. **Reject base URIs with fragments** — `fn:resolve-uri` now raises `FORG0002` when the `$base` URI contains a non-empty fragment. This fixes `fn-resolve-uri-26`, where the base was `http://www.example.com/a.html#fragment`.
+
+2. **Reject relative references with colon in the first segment** — RFC 3986 §4.2 requires that a `path-noscheme` (used when a relative reference does not begin with `/`) have a first segment without `:`. `fn:resolve-uri` now raises `FORG0002` for relative references like `":"` whose first segment contains a colon. This fixes `fn-resolve-uri-3`.
+
+3. **Regression safety** — All 37 runnable `fn-resolve-uri` tests pass; the two skipped tests require unsupported dependencies. Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests. Targeted tests now pass: `fn-resolve-uri-3`, `fn-resolve-uri-26`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.66: `ResolveUri` validates base URI fragments and first-segment colons in relative references)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+Continue with the remaining QT3 singleton / small clusters. The highest-impact remaining failures are `fn-month/from-dateTime-6` (DateTimeOffset year -1999 limitation, 2 failures), `xs-dateTimeStamp-*` (3 failures), `fn-intersect/union-node-args-*` namespace-node serialization (6 failures), and the whitespace-sensitive XML comparison failures (`unabbreviatedSyntax-30`, `ForExpr013`, `filterexpressionhc*`, `predicates-24`, `string-queries-results-q1`).
 
 ## This Session Fixes (`prod-FunctionCall` cluster)
 

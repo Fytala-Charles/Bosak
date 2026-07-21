@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,857 passed / 20 failed / 16,944 skipped (46.69% / 99.86% of runnable tests)
+> **QT3 baseline:** 14,859 passed / 18 failed / 16,944 skipped (46.70% / 99.88% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 `fn-resolve-uri-3/26`: `fn:resolve-uri` now raises `FORG0002` for invalid base URIs and relative references.
+  - `fn-resolve-uri-3`: the relative reference `":"` is not a valid absolute URI (empty scheme) and not a valid relative URI reference because its first path segment contains `":"`.
+  - `fn-resolve-uri-26`: a base URI containing a fragment (`http://www.example.com/a.html#fragment`) is not a valid base URI per RFC 3986.
+  - Added explicit validation in `FunctionLibrary.ResolveUri`: reject base URIs with non-empty fragments and reject non-path-absolute relative references whose first path segment contains `":"`.
+  - Targeted tests now pass: `fn-resolve-uri-3`, `fn-resolve-uri-26`.
+  - Full QT3 now **14,859 passed / 18 failed / 16,944 skipped = 46.70%** (runnable pass rate **99.88%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 `prod-FunctionCall` cluster: inline and static function calls now apply XPath 3.1 function conversion rules.
   - `FunctionCall-010`, `FunctionCall-025`: inline function argument conversion now applies untypedAtomic casting and numeric promotion (already supported; validated).
