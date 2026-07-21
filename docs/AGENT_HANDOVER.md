@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `b8b8663` (Tier-2z: K-SeqExprCast-67 / cast as raises XPTY0004 for empty singleton input)
+**Current focus:** **QT3 Tier-2z: `K-SeqExprCast-67` singleton** — `() cast as xs:QName` expects either `XPTY0004` (empty-sequence cardinality) or `XPST0005` (static empty sequence). The `Cast` opcode was only checking for empty input when the target occurrence indicator was `?`, `*`, or `+`; for the default occurrence `One` it fell through to `Cast(value, typeName)`, which produced a success. Fixed by restructuring the empty-input branch: empty input with occurrence `One` now raises `XPTY0004`; empty input with `?` still returns `()`; `*`/`+` still raise the existing occurrence-indicator error. Targeted test now passes: `K-SeqExprCast-67`. Full QT3 suite now at **14,847 passed / 30 failed / 16,944 skipped (46.66%)**; runnable pass rate **99.80%** (14847 / 14877). Unit tests **1,376/0**.
+
+## This Session Fixes (Tier-2z: K-SeqExprCast-67)
+
+1. **Singleton cast cardinality check** — `IrOpCode.Cast` now raises `XPTY0004` when the input sequence is empty and the target occurrence indicator is `One`.
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.57: empty input with occurrence `One` raises XPTY0004 in `Cast` opcode)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v0.8: `EvaluateValue_EmptySequenceCastAsQName_RaisesXPTY0004` regression test)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K2-SeqExprCast-1/201`, `predicates-24`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `4197650` (Tier-2z: K-SeqExprTreat-16 / require closing parenthesis in sequence type tests)
 **Current focus:** **QT3 Tier-2z: `K-SeqExprTreat-16` singleton** — `3 treat as item(` is missing the closing parenthesis of the `item()` sequence type and expects `XPST0003`. The parser's `ParseTypeNameAndParens` consumed the opening `(` and then read tokens until EOF or until the parentheses balanced, but it never verified that the final paren depth was zero. For `item(` it simply exited at EOF with `parenDepth == 1`, returned the malformed type string `item(`, and the `treat as` expression succeeded. Fixed by checking `parenDepth` after consuming the parenthesized part and throwing `ParseException` (auto-prefixed `XPST0003`) when the sequence type is not properly closed. Targeted test now passes: `K-SeqExprTreat-16`. Full QT3 suite now at **14,846 passed / 31 failed / 16,944 skipped (46.65%)**; runnable pass rate **99.79%** (14846 / 14877). Unit tests **1,375/0**.
 
@@ -19,7 +44,7 @@
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `predicates-24`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K2-SeqExprCast-1/201`, `predicates-24`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
