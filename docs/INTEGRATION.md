@@ -5,13 +5,25 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,376 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,847 passed / 30 failed / 16,944 skipped (46.66% / 99.80% of runnable tests)
+> **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,849 passed / 28 failed / 16,944 skipped (46.66% / 99.81% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K2-SeqExprCast-1/201` / `xs:QName` namespace resolution for `cast as` and `xs:QName()` constructor.
+  - `"myPrefix:ncname" cast as xs:QName` was not resolving the prefix against the static namespace context; the cast was producing a string instead of a QName and raising `XPTY0004`.
+  - `xs:QName("ncname")` was ignoring the default element namespace, returning an empty namespace URI instead.
+  - Added `EvaluationContext` overloads to `Cast` and `TryCast` so the `Cast`/`Castable` opcodes can pass the static namespace context into QName casting. The cast path now resolves prefixed QNames and uses the default element namespace for unprefixed ones.
+  - Updated the `xs:QName` constructor (`XsQNameConstructor`) to use `DefaultElementNamespace` for unprefixed lexical QNames.
+  - Updated `TestEnvironment.ApplyTo` to map a QT3 environment `<namespace prefix="" uri="...">` to `EvaluationContext.DefaultElementNamespace`.
+  - Fixed unprefixed QName resolution in `CastUntypedAtomicToQName` to fall back to the empty namespace when no default element namespace is defined.
+  - Rewrote `FunctionLibraryTests` chained-FLWOR regression tests as nested expressions so they remain valid under the XPath grammar restriction enforced by `LetExpr020a`.
+  - Added `QNameCast_ResolvesPrefixedNamespace`, `QNameCast_UsesDefaultElementNamespaceForUnprefixed`, and `XsQNameConstructor_UsesDefaultElementNamespace` regression tests.
+  - Targeted tests now pass: `K2-SeqExprCast-1`, `K2-SeqExprCast-201`, `CastableAs647`, `K-SeqExprCastable-19`.
+  - Full QT3 now **14,849 passed / 28 failed / 16,944 skipped = 46.66%** (runnable pass rate **99.81%**); unit tests **1,379/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `K-SeqExprCast-67` / `cast as` raises `XPTY0004` for empty singleton input.
   - `() cast as xs:QName` was succeeding because the `Cast` opcode only checked for empty input when the target occurrence was `?`, `*`, or `+`; the default `One` occurrence fell through to `Cast()`.

@@ -1,6 +1,38 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `dd2cc66` (docs: update AGENT_HANDOVER for K-SeqExprCast-67)
+**Current focus:** **QT3 Tier-2z: `K2-SeqExprCast-1/201` singleton cluster** — `xs:QName` namespace resolution for `cast as` and the `xs:QName()` constructor. `"myPrefix:ncname" cast as xs:QName` was not resolving the prefix against the static namespace context; the `Cast` opcode was calling the context-free `Cast`/`TryCast` helpers, which validated the lexical QName but returned a plain string instead of a QName, so downstream code raised `XPTY0004`. `xs:QName("ncname")` was ignoring the default element namespace and returning an empty namespace URI. Fixed by adding `EvaluationContext` overloads to `VmEngine.Cast`/`TryCast`, passing the context from the `Cast` and `Castable` opcodes, and resolving the lexical QName in the `qname` cast case (prefixed names against namespace bindings, unprefixed names against `DefaultElementNamespace`). Also updated the `xs:QName` constructor (`XsQNameConstructor`) and `CastUntypedAtomicToQName` to use `DefaultElementNamespace` for unprefixed names. Updated `TestEnvironment.ApplyTo` to map a QT3 `<namespace prefix="" uri="...">` to `EvaluationContext.DefaultElementNamespace`. Rewrote the `FunctionLibraryTests` chained-FLWOR regression tests as nested expressions so they remain valid under the XPath grammar restriction enforced by `LetExpr020a`. Targeted tests now pass: `K2-SeqExprCast-1`, `K2-SeqExprCast-201`, `CastableAs647`, `K-SeqExprCastable-19`. Full QT3 suite now at **14,849 passed / 28 failed / 16,944 skipped (46.66%)**; runnable pass rate **99.81%** (14849 / 14877). Unit tests **1,379/0**.
+
+## This Session Fixes (Tier-2z: K2-SeqExprCast-1/201)
+
+1. **QName cast namespace resolution** — `Cast`/`Castable` opcodes now pass `EvaluationContext` into `Cast`/`TryCast`. The `qname` cast case resolves prefixed lexical QNames against the static namespace context and uses `DefaultElementNamespace` for unprefixed ones.
+
+2. **xs:QName constructor default namespace** — `XsQNameConstructor` now uses `EvaluationContext.DefaultElementNamespace` for unprefixed lexical QNames.
+
+3. **QT3 environment default namespace** — `TestEnvironment.ApplyTo` maps an environment namespace binding with an empty prefix to `EvaluationContext.DefaultElementNamespace`.
+
+4. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** (CastableAs647, K-SeqExprCastable-19 also fixed as a side effect) with no regressions in unit tests or targeted pools. Rewrote chained-FLWOR unit tests as nested expressions to keep the suite green under the `LetExpr020a` XPath grammar restriction.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.52: context-aware `Cast`/`TryCast`; QName cast resolves prefix/default namespace; unprefixed QName fallback to empty namespace)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.43: `XsQNameConstructor` uses `DefaultElementNamespace` for unprefixed names)
+- `tests/Bosak.XPath.Conformance/TestEnvironment.cs` (v1.0: map empty-prefix environment namespace to `DefaultElementNamespace`)
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs` (v1.13: QName cast/constructor regression tests)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (v2.20: chained FLWOR tests rewritten as nested expressions)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `predicates-24`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `b8b8663` (Tier-2z: K-SeqExprCast-67 / cast as raises XPTY0004 for empty singleton input)
 **Current focus:** **QT3 Tier-2z: `K-SeqExprCast-67` singleton** — `() cast as xs:QName` expects either `XPTY0004` (empty-sequence cardinality) or `XPST0005` (static empty sequence). The `Cast` opcode was only checking for empty input when the target occurrence indicator was `?`, `*`, or `+`; for the default occurrence `One` it fell through to `Cast(value, typeName)`, which produced a success. Fixed by restructuring the empty-input branch: empty input with occurrence `One` now raises `XPTY0004`; empty input with `?` still returns `()`; `*`/`+` still raise the existing occurrence-indicator error. Targeted test now passes: `K-SeqExprCast-67`. Full QT3 suite now at **14,847 passed / 30 failed / 16,944 skipped (46.66%)**; runnable pass rate **99.80%** (14847 / 14877). Unit tests **1,376/0**.
 
