@@ -34,6 +34,8 @@
 //                      | Charles Korthout | 1.7   | 20-07-2026     | EBV multi-item sequence: FORG0006 when first item is not a node                          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 20-07-2026     | FormatXPathDouble/Float use R and decimal-point exponent for fixed-point scientific     |
+//                      | Charles Korthout | 2.0   | 21-07-2026     | Added FromDateTime overload with schemaTypeName for xs:dateTimeStamp                   |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 20-07-2026     | FormatXPathFloat expands R-scientific to fixed-point inside the decimal range (1e-6)   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -138,8 +140,16 @@ public readonly struct XdmValue
         => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDateTime(DateTimeOffset value, bool hasTimezone, string schemaTypeName)
+        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone), schemaTypeName: schemaTypeName);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value, hasTimezone));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDateTime(XPathDateTime value, bool hasTimezone, string schemaTypeName)
+        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value, hasTimezone), schemaTypeName: schemaTypeName);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDate(DateTimeOffset value)

@@ -99,6 +99,8 @@
 //                      | Charles Korthout | 2.56  | 20-07-2026     | PathStepMap raises XPTY0019 when context item is not a node (K2-Axes-50/53)            |
 //                      | Charles Korthout | 2.57  | 20-07-2026     | Cast opcode raises XPTY0004 for empty input with occurrence One (K-SeqExprCast-67)     |
 //                      | Charles Korthout | 2.58  | 20-07-2026     | Inline functions apply XPath function conversion rules to arguments (FunctionCall-010/011/025/026) |
+//                      | Charles Korthout | 2.60  | 21-07-2026     | Added xs:dateTimeStamp cast, instance-of, and type hierarchy support                 |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.59  | 21-07-2026     | Static function calls apply ParameterTypeNames conversion; URI promotion detects xs:anyURI annotation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -4886,6 +4888,42 @@ public static class VmEngine
                 }
                 return false;
 
+            case "datetimestamp":
+                if (value.Kind == XdmValueKind.DateTime && value.HasTimezone)
+                {
+                    result = XdmValue.FromDateTime(value.DateTimeXPathValue, hasTimezone: true, schemaTypeName: "dateTimeStamp");
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Date)
+                {
+                    if (!value.HasTimezone) return false;
+                    var xdtSrcStamp = value.DateXPathValue;
+                    result = XdmValue.FromDateTime(
+                        new XPathDateTime(xdtSrcStamp.Year, xdtSrcStamp.Month, xdtSrcStamp.Day, 0, 0, 0, 0, xdtSrcStamp.TimezoneOffsetMinutes, true),
+                        hasTimezone: true,
+                        schemaTypeName: "dateTimeStamp");
+                    return true;
+                }
+                if (value.Kind == XdmValueKind.Time)
+                    return false;
+                {
+                    string sStamp = NormalizeDateTimeString(value.ToString().Trim());
+                    if (TryParseXPathDateTime(sStamp, out var xdtStamp, out var hasTzStamp))
+                    {
+                        if (!hasTzStamp) return false;
+                        if (xdtStamp.IsRepresentableAsDateTimeOffset && DateTimeOffset.TryParse(sStamp, out var dtoStamp))
+                        {
+                            result = XdmValue.FromDateTime(dtoStamp, hasTimezone: true, schemaTypeName: "dateTimeStamp");
+                        }
+                        else
+                        {
+                            result = XdmValue.FromDateTime(xdtStamp, hasTimezone: true, schemaTypeName: "dateTimeStamp");
+                        }
+                        return true;
+                    }
+                }
+                return false;
+
             case "date":
                 if (value.Kind == XdmValueKind.Date)
                     return true;
@@ -5959,7 +5997,7 @@ public static class VmEngine
             or "ncname" or "id" or "idref" or "entity" or "boolean" or "integer" or "int" or "long"
             or "short" or "byte" or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
             or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
-            or "decimal" or "double" or "float" or "numeric" or "datetime" or "date" or "time"
+            or "decimal" or "double" or "float" or "numeric" or "datetime" or "datetimestamp" or "date" or "time"
             or "duration" or "daytimeduration" or "yearmonthduration" or "qname" or "anyuri"
             or "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth"
             or "hexbinary" or "base64binary" or "untypedatomic" or "anyatomictype";
@@ -5983,6 +6021,7 @@ public static class VmEngine
             "anyatomictype" => value.Kind is >= XdmValueKind.String and <= XdmValueKind.Binary,
             "boolean" => value.Kind == XdmValueKind.Boolean,
             "datetime" => value.Kind == XdmValueKind.DateTime,
+            "datetimestamp" => value.Kind == XdmValueKind.DateTime && value.HasTimezone,
             "date" => value.Kind == XdmValueKind.Date,
             "time" => value.Kind == XdmValueKind.Time,
             "duration" => value.Kind == XdmValueKind.Duration,
@@ -7123,6 +7162,7 @@ public static class VmEngine
             "date" => ["anyatomictype"],
             "time" => ["anyatomictype"],
             "datetime" => ["anyatomictype"],
+            "datetimestamp" => ["datetime"],
             "duration" => ["anyatomictype"],
             "daytimeduration" => ["duration"],
             "yearmonthduration" => ["duration"],

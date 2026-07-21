@@ -160,6 +160,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.65  | 21-07-2026     | Static codepoints-to-string declares xs:integer* parameter for function conversion       |
 //                      | Charles Korthout | 5.66  | 21-07-2026     | fn:resolve-uri rejects base URIs with fragments and relative refs with colon in first segment |
+//                      | Charles Korthout | 5.68  | 21-07-2026     | Registered xs:dateTimeStamp#1 constructor and added TypeAvailable entry                 |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.67  | 21-07-2026     | year/month-from-dateTime use XPathDateTime to support extended years (fn-*-from-dateTime-6) |
 using System.Collections.Frozen;
 using System.Globalization;
@@ -2260,6 +2262,12 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.DateTime,
                 Implementation = XsDateTime
             },
+            [(Namespaces.Xs, "dateTimeStamp", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Xs, LocalName = "dateTimeStamp", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.DateTime,
+                Implementation = XsDateTimeStamp
+            },
             [(Namespaces.Xs, "date", 1)] = new()
             {
                 NamespaceUri = Namespaces.Xs, LocalName = "date", Arity = 1,
@@ -4162,7 +4170,7 @@ public static class FunctionLibrary
         string[] builtInTypes =
         [
             "string", "boolean", "integer", "decimal", "float", "double",
-            "date", "time", "datetime", "dateTime", "duration", "yearmonthduration",
+            "date", "time", "datetime", "dateTime", "datetimestamp", "dateTimeStamp", "duration", "yearmonthduration",
             "yearMonthDuration", "daytimeduration", "dayTimeDuration",
             "gday", "gmonth", "gyear", "gmonthday", "gyearmonth",
             "hexbinary", "base64binary", "anyuri", "qname", "notation",
@@ -5605,6 +5613,9 @@ public static class FunctionLibrary
 
     private static XdmValue XsDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "dateTime");
+
+    private static XdmValue XsDateTimeStamp(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => VmEngine.Cast(args[0], "dateTimeStamp");
 
     private static XdmValue XsDate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "date");
