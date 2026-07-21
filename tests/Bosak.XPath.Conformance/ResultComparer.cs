@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 1.3   | 17-07-2026     | assert-string-value: prefer exact match, then newline-collapsed match (fn:unparsed-text raw text) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 21-07-2026     | ToXmlString copies in-scope namespaces; NormalizeXml wraps multi-root fragments for canonical comparison |
+//                      | Charles Korthout | 1.5   | 21-07-2026     | Load assert-xml expected output from external file when file attribute is present        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -46,7 +47,7 @@ internal static class ResultComparer
 {
     private static readonly XNamespace Ns = "http://www.w3.org/2010/09/qt-fots-catalog";
 
-    public static TestOutcome Compare(XElement resultElement, XdmValue actual, Exception? caughtException)
+    public static TestOutcome Compare(XElement resultElement, XdmValue actual, Exception? caughtException, string baseDirectory)
     {
         var assertions = resultElement.Elements().ToList();
         if (assertions.Count == 0)
@@ -60,34 +61,34 @@ internal static class ResultComparer
             var wrapper = assertions[0];
             if (wrapper.Name == Ns + "all-of")
             {
-                return CompareAllOf(wrapper.Elements(), actual, caughtException);
+                return CompareAllOf(wrapper.Elements(), actual, caughtException, baseDirectory);
             }
             if (wrapper.Name == Ns + "any-of")
             {
-                return CompareAnyOf(wrapper.Elements(), actual, caughtException);
+                return CompareAnyOf(wrapper.Elements(), actual, caughtException, baseDirectory);
             }
         }
 
-        return CompareAssertion(assertions[0], actual, caughtException);
+        return CompareAssertion(assertions[0], actual, caughtException, baseDirectory);
     }
 
-    private static TestOutcome CompareAllOf(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException)
+    private static TestOutcome CompareAllOf(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException, string baseDirectory)
     {
         foreach (var assertion in assertions)
         {
-            var outcome = CompareAssertion(assertion, actual, caughtException);
+            var outcome = CompareAssertion(assertion, actual, caughtException, baseDirectory);
             if (outcome.Kind != TestOutcomeKind.Passed)
                 return outcome;
         }
         return new TestOutcome(TestOutcomeKind.Passed, null);
     }
 
-    private static TestOutcome CompareAnyOf(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException)
+    private static TestOutcome CompareAnyOf(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException, string baseDirectory)
     {
         var failures = new List<string>();
         foreach (var assertion in assertions)
         {
-            var outcome = CompareAssertion(assertion, actual, caughtException);
+            var outcome = CompareAssertion(assertion, actual, caughtException, baseDirectory);
             if (outcome.Kind == TestOutcomeKind.Passed)
                 return outcome;
             failures.Add(outcome.Message ?? "failed");
@@ -95,7 +96,7 @@ internal static class ResultComparer
         return new TestOutcome(TestOutcomeKind.Failed, $"any-of: none matched. [{string.Join("; ", failures)}]");
     }
 
-    private static TestOutcome CompareAssertion(XElement assertion, XdmValue actual, Exception? caughtException)
+    private static TestOutcome CompareAssertion(XElement assertion, XdmValue actual, Exception? caughtException, string baseDirectory)
     {
         var name = assertion.Name.LocalName;
 
@@ -108,10 +109,10 @@ internal static class ResultComparer
             "assert-empty" => CompareAssertEmpty(actual, caughtException),
             "error" => CompareError((string?)assertion.Attribute("code") ?? "", caughtException),
             "assert-type" => CompareAssertType(assertion.Value, actual, caughtException),
-            "assert-xml" => CompareAssertXml(assertion, actual, caughtException),
+            "assert-xml" => CompareAssertXml(assertion, actual, caughtException, baseDirectory),
             "assert-deep-eq" => CompareAssertDeepEq(assertion, actual, caughtException),
-            "all-of" => CompareAllOf(assertion.Elements(), actual, caughtException),
-            "any-of" => CompareAnyOf(assertion.Elements(), actual, caughtException),
+            "all-of" => CompareAllOf(assertion.Elements(), actual, caughtException, baseDirectory),
+            "any-of" => CompareAnyOf(assertion.Elements(), actual, caughtException, baseDirectory),
             "assert-count" => CompareAssertCount((string?)assertion.Attribute("count") ?? assertion.Value.Trim(), actual, caughtException),
             "assert-permutation" => CompareAssertPermutation(assertion, actual, caughtException),
             "assert" => CompareAssert(assertion.Value, actual, caughtException),
@@ -709,12 +710,26 @@ internal static class ResultComparer
         return result;
     }
 
-    private static TestOutcome CompareAssertXml(XElement assertion, XdmValue actual, Exception? caughtException)
+    private static TestOutcome CompareAssertXml(XElement assertion, XdmValue actual, Exception? caughtException, string baseDirectory)
     {
         if (caughtException is not null)
             return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
 
         string expectedXml = assertion.Value;
+        string? file = (string?)assertion.Attribute("file");
+        if (!string.IsNullOrEmpty(file))
+        {
+            try
+            {
+                string path = Path.GetFullPath(file, baseDirectory);
+                expectedXml = File.ReadAllText(path);
+            }
+            catch (Exception ex)
+            {
+                return new TestOutcome(TestOutcomeKind.Failed, $"assert-xml file load failed: {ex.Message}");
+            }
+        }
+
         bool ignorePrefixes = (string?)assertion.Attribute("ignore-prefixes") == "true";
 
         string expectedNorm = NormalizeXml(expectedXml, ignorePrefixes);

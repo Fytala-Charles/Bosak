@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 15-07-2026     | Register fn:transform via XsltFunctionLibrary.Populate (fn-transform test set)           |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | XQuery detection covers constructors/switch/try/FLWOR with string-literal stripping      |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Bind environment <param> external variables by evaluating their select expressions       |
+//                      | Charles Korthout | 0.5   | 21-07-2026     | Pass test-case base directory through to ResultComparer for assert-xml files             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -97,7 +98,7 @@ internal sealed class TestExecutor
             return new TestOutcome(TestOutcomeKind.Skipped, $"Unexpected error: {ex.GetType().Name}: {ex.Message}");
         }
 
-        return ResultComparer.Compare(testCase.ResultElement, result, caughtException);
+        return ResultComparer.Compare(testCase.ResultElement, result, caughtException, testCase.BaseDirectory);
     }
 
     /// <summary>

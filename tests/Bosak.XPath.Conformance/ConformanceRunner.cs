@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 1.0   | 19-07-2026     | Load catalog/test sets with PreserveWhitespace so assert-string-value keeps spaces/CR     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 19-07-2026     | DocumentedSkips: K-CodepointToStringFunc-8/11/12 XML 1.0-only on XML 1.1 implementation |
+//                      | Charles Korthout | 1.2   | 21-07-2026     | Pass test-set base directory to TestCase for assert-xml file resolution                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -159,7 +160,7 @@ internal sealed class ConformanceRunner
 
         foreach (var testCaseElem in doc.Descendants(_ns + "test-case"))
         {
-            var testCase = TestCase.FromElement(testCaseElem, _ns, testSetDependencies);
+            var testCase = TestCase.FromElement(testCaseElem, _ns, testSetDependencies, baseDir);
 
             if (_testFilter is not null && !testCase.Name.Contains(_testFilter, StringComparison.OrdinalIgnoreCase))
                 continue;

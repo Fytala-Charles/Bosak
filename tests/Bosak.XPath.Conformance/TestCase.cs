@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 17-07-2026     | Accept inherited test-set dependencies for dependency filtering                          |
+//                      | Charles Korthout | 0.3   | 21-07-2026     | Add BaseDirectory for resolving assert-xml file references                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -26,17 +27,19 @@ internal sealed class TestCase
     public string Expression { get; }
     public IReadOnlyList<Dependency> Dependencies { get; }
     public XElement ResultElement { get; }
+    public string BaseDirectory { get; }
 
-    private TestCase(string name, string description, string expression, List<Dependency> dependencies, XElement resultElement)
+    private TestCase(string name, string description, string expression, List<Dependency> dependencies, XElement resultElement, string baseDirectory)
     {
         Name = name;
         Description = description;
         Expression = expression;
         Dependencies = dependencies;
         ResultElement = resultElement;
+        BaseDirectory = baseDirectory;
     }
 
-    public static TestCase FromElement(XElement element, XNamespace ns, IEnumerable<Dependency> inheritedDependencies)
+    public static TestCase FromElement(XElement element, XNamespace ns, IEnumerable<Dependency> inheritedDependencies, string baseDirectory)
     {
         string name = (string?)element.Attribute("name") ?? "unknown";
         string description = (string?)element.Element(ns + "description") ?? "";
@@ -50,7 +53,7 @@ internal sealed class TestCase
 
         var resultElem = element.Element(ns + "result") ?? new XElement(ns + "result");
 
-        return new TestCase(name, description, expression, dependencies, resultElem);
+        return new TestCase(name, description, expression, dependencies, resultElem, baseDirectory);
     }
 }
 
