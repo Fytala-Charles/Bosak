@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `c017b51` (fix(instance-of): xs:NOTATION returns false; xs:QName is case-sensitive vs xs:qname)
+**Current focus:** **QT3 `K-SeqExprInstanceOf-46/51` pair** — `not("a string" instance of xs:NOTATION)` was raising `XPST0051` because `xs:NOTATION` was not in the known atomic type list; `3 instance of xs:qname` was succeeding (returning false) instead of raising `XPST0051` because the type-name lookup was case-insensitive and accepted the lower-case `qname` as a synonym for `xs:QName`. Fixed by adding `xs:NOTATION` as a known type whose instance-of check always returns false, and by making `xs:QName` case-sensitive so only the exact spelling `QName` is accepted. Full QT3 suite now at **14,875 passed / 2 failed / 16,944 skipped (46.75%)**; runnable pass rate **99.99%** (14875 / 14877). Unit tests **1,279/0**.
+
+## This Session Fixes (`K-SeqExprInstanceOf-46/51`)
+
+1. **`xs:NOTATION` is a recognized type for `instance of`** — Added `"notation"` to `IsKnownAtomicTypeName` and added a `"notation"` arm to `ItemInstanceOf` that returns `false`. Per the XDM, `xs:NOTATION` is abstract and cannot be instantiated, so no value can ever be an instance of it, but the expression itself must be valid.
+
+2. **`xs:QName` name is case-sensitive** — Added `GetTypeLocalName` to extract the original local name from a sequence type string before lowercasing. In `InstanceOf`, after the normalized atomic type is identified as `qname`, the code now verifies that the original local name is exactly `QName`. Variants such as `xs:qname` now raise `XPST0051` as required.
+
+3. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests. Targeted `prod-InstanceofExpr` set now passes all 259 runnable tests (50 skipped). Remaining QT3 failures are only `ForExpr013` and `string-queries-results-q1`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.61: `notation` instance-of; case-sensitive `QName` local-name check; `GetTypeLocalName` helper)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The only remaining QT3 failures are `ForExpr013` and `string-queries-results-q1`. Both are `assert-xml` tests that expect an empty result but currently return a sequence of elements. These are likely whitespace/normalization or expression-semantic issues rather than serialization. `ForExpr013` involves a `for` expression over an empty path, and `string-queries-results-q1` involves string queries over a data set; they are unrelated singletons, so either can be tackled next.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `917327c` (fix(xml): include in-scope namespaces in standalone element serialization and canonicalize multi-root XML fragments)
 **Current focus:** **QT3 `fn-intersect/union-node-args-*` namespace serialization cluster** — `(/atomic:root/atomic:integer) intersect (/atomic:root/atomic:integer)` and the equivalent union tests expected `xmlns:foo` and `xmlns:xsi` from the root element to appear in the serialized output of the standalone child element, but `XDocumentNode.ToXmlString()` only emitted the `atomic` namespace. Fixed by copying all in-scope namespace bindings to the cloned element before serialization. The multi-root fragment `fn-union-node-args-017` still failed because `assert-xml` could not canonicalize fragments with multiple top-level elements, so `ResultComparer.NormalizeXml` now wraps such fragments in a temporary root before canonical comparison. As a side effect, several other fragment-comparison failures also resolved. Full QT3 suite now at **14,873 passed / 4 failed / 16,944 skipped (46.74%)**; runnable pass rate **99.97%** (14873 / 14877). Unit tests **1,279/0**.
 

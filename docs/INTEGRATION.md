@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,279 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,873 passed / 4 failed / 16,944 skipped (46.74% / 99.97% of runnable tests)
+> **QT3 baseline:** 14,875 passed / 2 failed / 16,944 skipped (46.75% / 99.99% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 `K-SeqExprInstanceOf-46/51` pair: `xs:NOTATION` is now recognized for `instance of` and `xs:QName` is case-sensitive.
+  - `"a string" instance of xs:NOTATION` raised `XPST0051` because `xs:NOTATION` was missing from the known atomic type list. It is now recognized, and `ItemInstanceOf` always returns `false` since `xs:NOTATION` is abstract and cannot be instantiated.
+  - `3 instance of xs:qname` was incorrectly returning `false` because the type-name lookup was case-insensitive; it now raises `XPST0051` as required. Only the exact spelling `xs:QName` is accepted.
+  - Added `GetTypeLocalName` helper to preserve the original local name from the sequence type string before lowercasing, so `qname` can be detected and rejected while `QName` is accepted.
+  - Targeted `prod-InstanceofExpr` tests now pass: 259 passed / 0 failed / 50 skipped.
+  - Full QT3 now **14,875 passed / 2 failed / 16,944 skipped = 46.75%** (runnable pass rate **99.99%**); unit tests **1,279/0**.
 
 - **2026-07-21** — QT3 `fn-intersect/union-node-args-*` and multi-root fragment canonicalization: standalone element serialization now includes in-scope namespaces.
   - `XDocumentNode.ToXmlString()` only emitted the namespace used by the element name; `assert-xml` expected all ancestor namespace declarations (`xmlns:foo`, `xmlns:xsi`, `xmlns:atomic`) for `fn-intersect-node-args-015/016` and `fn-union-node-args-015/016/017`.
