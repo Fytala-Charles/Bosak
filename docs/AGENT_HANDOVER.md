@@ -1,6 +1,43 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `268a480` (fix(gDateTime): regex-based parsing for xs:gDay/gMonth/gMonthDay/gYearMonth)
+**Current focus:** **QT3 `IndexOutOfRangeException` skip cluster** — 72 runnable tests across `op-gDay-equal`, `op-gMonth-equal`, `op-gMonthDay-equal`, `op-gYearMonth-equal`, and `prod-CastExpr` were skipped because `VmEngine.ParseGDateTime` misidentified the structural dashes in `xs:gDay` (`---DD`), `xs:gMonth` (`--MM`), `xs:gMonthDay` (`--MM-DD`), and `xs:gYearMonth` (`YYYY-MM`) as timezone signs. For `xs:gDay("---31")` it extracted the trailing `-31` as a timezone string and crashed inside `ParseTimezoneOffset`. Fixed by rewriting `ParseGDateTime` to use per-subtype regexes that match the entire lexical form including an optional `Z` or `[+-]HH:MM` timezone, and by normalizing the timezone with the existing `NormalizeTimezone` helper. Full QT3 suite now at **14,949 passed / 0 failed / 16,872 skipped (46.98%)**; runnable pass rate **100%** (14,949 / 14,949). Unit tests **1,279/0**.
+
+## This Session Fixes (72 gDateTime comparison/cast tests)
+
+1. **`ParseGDateTime` no longer confuses structural dashes with timezone signs** — The previous implementation used `s.LastIndexOfAny(['+', '-'])` and treated any trailing `-` preceded by a digit, `-`, or `:` as a timezone delimiter. For `gDay`/`gMonth`/`gMonthDay`/`gYearMonth` this misidentified the literal's own dashes as a timezone and produced an invalid timezone string like `-31` or `-11`, causing an `IndexOutOfRangeException` in `ParseTimezoneOffset`.
+
+2. **Regex-based per-subtype parsing** — The function now matches:
+   - `gYear`: `^(-?\d{4,})(?:Z|[+\-]\d{2}:\d{2})?$`
+   - `gYearMonth`: `^(-?\d{4,})-(\d{2})(?:Z|[+\-]\d{2}:\d{2})?$`
+   - `gMonth`: `^--(\d{2})(?:Z|[+\-]\d{2}:\d{2})?$`
+   - `gMonthDay`: `^--(\d{2})-(\d{2})(?:Z|[+\-]\d{2}:\d{2})?$`
+   - `gDay`: `^---(\d{2})(?:Z|[+\-]\d{2}:\d{2})?$`
+   The optional timezone group is validated and normalized via `NormalizeTimezone`, then converted to offset minutes by `ParseTimezoneOffset` (or `0` for `Z`).
+
+3. **Regression safety** — Full QT3 suite improved by **+72 passed, −72 skipped** with no new failures and no regressions in unit tests. All previously failing `K-g*EQ-*`, `cbcl-g*-equal-*`, and `K-SeqExprCast-*` gDateTime tests now pass.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (v2.62: regex-based `ParseGDateTime` with proper timezone handling)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The `IndexOutOfRangeException` cluster is gone. The next largest non-dependency skip buckets are:
+- 13 `Harness error: InvalidOperationException` (likely a single harness/execution bug)
+- 10 `XQuery syntax not supported` (FLWOR features not yet handled by the XPath parser)
+- 7 `Schema awareness not supported`
+
+The 13 `InvalidOperationException` harness errors are the quickest next target: they are unrelated to XQuery grammar or schema validation, so fixing one bug may clear most or all of them. After that, the `XQuery syntax not supported` tests represent a larger but higher-impact parser effort.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `fb8fd81` (fix(assert-xml): load expected output from external `file` attribute)
 **Current focus:** **QT3 `assert-xml` file-reference tests** — `ForExpr013` and `string-queries-results-q1` were producing the correct element sequences, but the harness compared them against an empty expected string because `assert-xml` with a `file` attribute was not loading the referenced file. The expected output is stored in an external `.out` file (e.g., `ForClause/ForExpr-013.out`), not as inline XML. Fixed by threading the test-set base directory through `TestCase` / `ConformanceRunner` / `TestExecutor` into `ResultComparer`, and reading the file content when the `file` attribute is present. Full QT3 suite now at **14,877 passed / 0 failed / 16,944 skipped (46.75%)**; runnable pass rate **100%** (14,877 / 14,877). Unit tests **1,279/0**.
 

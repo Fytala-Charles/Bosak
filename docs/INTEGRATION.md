@@ -6,12 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,279 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,877 passed / 0 failed / 16,944 skipped (46.75% / 100% of runnable tests)
+> **QT3 baseline:** 14,949 passed / 0 failed / 16,872 skipped (46.98% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 gDateTime comparison/cast cluster: `ParseGDateTime` now uses regex-based parsing and correctly handles optional timezones.
+  - 72 runnable tests across `op-gDay-equal`, `op-gMonth-equal`, `op-gMonthDay-equal`, `op-gYearMonth-equal`, and `prod-CastExpr` were skipped due to `IndexOutOfRangeException`.
+  - The old code used `LastIndexOfAny(['+', '-'])` and misidentified structural dashes in `xs:gDay` (`---DD`), `xs:gMonth` (`--MM`), `xs:gMonthDay` (`--MM-DD`), and `xs:gYearMonth` (`YYYY-MM`) as timezone signs, producing invalid timezone strings like `-31` or `-11`.
+  - Rewrote `ParseGDateTime` with per-subtype regexes that match the complete lexical form including optional `Z` or `[+-]HH:MM` timezone, and normalized the timezone with `NormalizeTimezone`.
+  - Full QT3 now **14,949 passed / 0 failed / 16,872 skipped = 46.98%** (runnable pass rate **100%**); unit tests **1,279/0**.
 
 - **2026-07-21** — QT3 `ForExpr013` / `string-queries-results-q1`: `assert-xml` now loads expected output from external `file` references.
   - Both tests were producing correct element sequences, but the conformance harness compared them against an empty expected string because `assert-xml` with a `file` attribute was not implemented.
