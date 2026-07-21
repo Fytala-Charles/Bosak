@@ -96,6 +96,7 @@
 //                      | Charles Korthout | 2.55  | 19-07-2026     | Tier-2z: duration div by NaN/0 checked before zero-duration short-circuit               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.56  | 20-07-2026     | PathStepMap raises XPTY0019 when context item is not a node (K2-Axes-50/53)            |
+//                      | Charles Korthout | 2.57  | 20-07-2026     | Cast opcode raises XPTY0004 for empty input with occurrence One (K-SeqExprCast-67)     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1375,13 +1376,20 @@ public static class VmEngine
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var value = registers[instr.RegisterB];
                         bool isEmpty = value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
-                        if (occurrence == OccurrenceIndicator.ZeroOrOne && isEmpty)
+                        if (isEmpty)
                         {
-                            registers[instr.RegisterA] = XdmValue.Undefined;
-                        }
-                        else if (occurrence is OccurrenceIndicator.ZeroOrMore or OccurrenceIndicator.OneOrMore)
-                        {
-                            throw new InvalidOperationException("Cannot cast to a sequence type with * or + occurrence indicator.");
+                            if (occurrence == OccurrenceIndicator.ZeroOrOne)
+                            {
+                                registers[instr.RegisterA] = XdmValue.Undefined;
+                            }
+                            else if (occurrence is OccurrenceIndicator.ZeroOrMore or OccurrenceIndicator.OneOrMore)
+                            {
+                                throw new InvalidOperationException("Cannot cast to a sequence type with * or + occurrence indicator.");
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException("XPTY0004: Cast expression requires a singleton input sequence.");
+                            }
                         }
                         else
                         {

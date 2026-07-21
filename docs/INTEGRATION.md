@@ -5,13 +5,20 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 20 July 2026
-> **Bosak baseline:** 1,375 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,846 passed / 31 failed / 16,944 skipped (46.65% / 99.79% of runnable tests)
+> **Bosak baseline:** 1,376 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,847 passed / 30 failed / 16,944 skipped (46.66% / 99.80% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-20** — QT3 Tier-2z: `K-SeqExprCast-67` / `cast as` raises `XPTY0004` for empty singleton input.
+  - `() cast as xs:QName` was succeeding because the `Cast` opcode only checked for empty input when the target occurrence was `?`, `*`, or `+`; the default `One` occurrence fell through to `Cast()`.
+  - Restructured the empty-input branch in the `Cast` opcode: empty input with occurrence `One` now raises `XPTY0004`; empty input with `?` still returns `()`; `*`/`+` still raise the existing occurrence-indicator error.
+  - Added `EvaluateValue_EmptySequenceCastAsQName_RaisesXPTY0004` regression test.
+  - Targeted test passes: `K-SeqExprCast-67`.
+  - Full QT3 now **14,847 passed / 30 failed / 16,944 skipped = 46.66%** (runnable pass rate **99.80%**); unit tests **1,376/0**.
 
 - **2026-07-20** — QT3 Tier-2z: `K-SeqExprTreat-16` / require closing parenthesis in sequence type tests.
   - `3 treat as item(` was being accepted because `ParseTypeNameAndParens` consumed tokens until EOF without verifying that the opening parenthesis was closed.

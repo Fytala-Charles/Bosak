@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.6   | 19-07-2026     | Added StringLessThan_UsesUnicodeCodepoints test                                        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 19-07-2026     | Added Compare_RejectsNonStringArguments test                                             |
+//                      | Charles Korthout | 0.8   | 20-07-2026     | Added EmptySequenceCastAsQName_RaisesXPTY0004 regression test                            |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 19-07-2026     | Added DoubleMaxValue_RoundTripString test                                                |
 //                      |==================|=======|================|=========================================================================================
@@ -259,6 +260,14 @@ public class ApiTests
     {
         var result = Eval("1 cast as xs:string");
         Assert.Equal("1", result.ToString());
+    }
+
+    [Fact]
+    public void EvaluateValue_EmptySequenceCastAsQName_RaisesXPTY0004()
+    {
+        // Regression for QT3 K-SeqExprCast-67: cast as xs:QName requires a singleton input.
+        var ex = Assert.ThrowsAny<System.Exception>(() => Eval("() cast as xs:QName"));
+        Assert.Contains("XPTY0004", ex.Message);
     }
 
     [Fact]
