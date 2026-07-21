@@ -101,6 +101,8 @@
 //                      | Charles Korthout | 2.58  | 20-07-2026     | Inline functions apply XPath function conversion rules to arguments (FunctionCall-010/011/025/026) |
 //                      | Charles Korthout | 2.60  | 21-07-2026     | Added xs:dateTimeStamp cast, instance-of, and type hierarchy support                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.61  | 21-07-2026     | xs:NOTATION instance-of returns false; xs:QName name is case-sensitive (xs:qname raises XPST0051) |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.59  | 21-07-2026     | Static function calls apply ParameterTypeNames conversion; URI promotion detects xs:anyURI annotation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -5892,6 +5894,11 @@ public static class VmEngine
         if (!IsKnownAtomicTypeName(effective))
             throw new InvalidOperationException("XPST0051");
 
+        // xs:QName is case-sensitive: only the exact local name "QName" is valid.
+        // xs:qname, xs:QNAME, etc. are not known types and must raise XPST0051.
+        if (effective == "qname" && GetTypeLocalName(typeName) != "QName")
+            throw new InvalidOperationException("XPST0051");
+
         if (!value.IsSequence)
             return ValueMatchesType(value, effective, context);
 
@@ -5966,6 +5973,26 @@ public static class VmEngine
         return s;
     }
 
+    /// <summary>
+    /// Extracts the local name from a sequence type string, stripping an optional
+    /// xs:/xsd: prefix or Q{uri} EQName wrapper. Used for case-sensitive checks
+    /// where the lower-cased normalized form is no longer sufficient.
+    /// </summary>
+    private static string GetTypeLocalName(string typeName)
+    {
+        var s = typeName.Trim();
+        int brace = s.IndexOf('}');
+        if (brace >= 0 && brace < s.Length - 1)
+            s = s[(brace + 1)..];
+        int colon = s.IndexOf(':');
+        if (colon >= 0 && colon < s.Length - 1)
+            s = s[(colon + 1)..];
+        // Strip occurrence indicator if present.
+        if (s.Length > 0 && (s[^1] is '?' or '*' or '+'))
+            s = s[..^1].TrimEnd();
+        return s;
+    }
+
     private static string ResolveTypeName(string original, string normalized, string? defaultElementNamespace)
     {
         if (original.Contains(':'))
@@ -5998,7 +6025,7 @@ public static class VmEngine
             or "short" or "byte" or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
             or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
             or "decimal" or "double" or "float" or "numeric" or "datetime" or "datetimestamp" or "date" or "time"
-            or "duration" or "daytimeduration" or "yearmonthduration" or "qname" or "anyuri"
+            or "duration" or "daytimeduration" or "yearmonthduration" or "qname" or "anyuri" or "notation"
             or "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth"
             or "hexbinary" or "base64binary" or "untypedatomic" or "anyatomictype";
 
@@ -6039,6 +6066,7 @@ public static class VmEngine
             "base64binary" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("base64Binary", StringComparison.OrdinalIgnoreCase) == true,
             "anyuri" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("anyURI", StringComparison.OrdinalIgnoreCase) == true,
             "untypedatomic" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("untypedAtomic", StringComparison.OrdinalIgnoreCase) == true,
+            "notation" => false, // xs:NOTATION is abstract and cannot be instantiated in XDM
             "node" => value.IsNode,
             "element" or "element()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Element,
             "attribute" or "attribute()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Attribute,
