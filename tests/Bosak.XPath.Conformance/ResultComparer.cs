@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 17-07-2026     | assert-string-value: prefer exact match, then newline-collapsed match (fn:unparsed-text raw text) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 21-07-2026     | ToXmlString copies in-scope namespaces; NormalizeXml wraps multi-root fragments for canonical comparison |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -813,15 +815,36 @@ internal static class ResultComparer
         }
         catch
         {
-            // If not a valid document (e.g., fragment), try as element
+            // Multi-root fragments are not valid XDocument/XElement input, but they
+            // commonly occur in assert-xml results (e.g. union/intersect of several
+            // element nodes). Wrap the fragment in a temporary root, canonicalize,
+            // and strip the wrapper tags so attribute order is normalized.
             try
             {
-                var el = XElement.Parse(xml, LoadOptions.PreserveWhitespace);
-                return CanonicalSerialize(el, ignorePrefixes);
+                const string wrapper = "__x__";
+                string wrapped = $"<{wrapper}>{xml}</{wrapper}>";
+                var doc = XDocument.Parse(wrapped, LoadOptions.PreserveWhitespace);
+                string canonical = CanonicalSerialize(doc.Root!, ignorePrefixes);
+                string startTag = $"<{wrapper}>";
+                string endTag = $"</{wrapper}>";
+                int start = canonical.IndexOf(startTag, StringComparison.Ordinal);
+                int end = canonical.LastIndexOf(endTag, StringComparison.Ordinal);
+                if (start >= 0 && end > start)
+                    return canonical.Substring(start + startTag.Length, end - start - startTag.Length);
+                return canonical;
             }
             catch
             {
-                return xml;
+                // If wrapping also fails, try as a single element for backward compatibility.
+                try
+                {
+                    var el = XElement.Parse(xml, LoadOptions.PreserveWhitespace);
+                    return CanonicalSerialize(el, ignorePrefixes);
+                }
+                catch
+                {
+                    return xml;
+                }
             }
         }
     }

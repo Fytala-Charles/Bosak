@@ -33,6 +33,8 @@
 //                      | Charles Korthout | 2.0   | 20-07-2026     | Added HasNoTypedValue using PSVI for complex element-only/empty elements               |
 //                      | Charles Korthout | 2.1   | 20-07-2026     | Namespace-node identity uses owner+prefix+URI (Axes123)                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.2   | 21-07-2026     | ToXmlString copies in-scope namespaces for standalone element serialization           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
@@ -1094,13 +1096,50 @@ public sealed class XDocumentNode : IXdmNode
             System.Xml.Linq.XDocument doc => GetSyntheticWrapper(doc) is { } wrapperDoc
                 ? string.Concat(wrapperDoc.Nodes().Select(n => n.ToString(SaveOptions.DisableFormatting)))
                 : doc.ToString(SaveOptions.DisableFormatting),
-            XElement el => el.ToString(SaveOptions.DisableFormatting),
+            XElement el => ElementToXmlStringWithNamespaces(el),
             XText t => System.Security.SecurityElement.Escape(t.Value) ?? t.Value,
             XComment c => $"<!--{c.Value}-->",
             XProcessingInstruction pi => $"<?{pi.Target} {pi.Data}?>",
             XAttribute a => a.Value,
             _ => _node.ToString() ?? string.Empty
         };
+    }
+
+    /// <summary>
+    /// Serializes an element node including all in-scope namespace declarations.
+    /// When an element is returned as a singleton (e.g. from an intersect/union expression),
+    /// the harness's assert-xml expects its ancestor namespace bindings to be copied so the
+    /// resulting fragment is namespace-well-formed and reflects the original in-scope prefixes.
+    /// </summary>
+    private static string ElementToXmlStringWithNamespaces(XElement element)
+    {
+        var clone = new XElement(element);
+
+        // Collect namespace declarations already present on the element itself.
+        var existing = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var attr in clone.Attributes().Where(a => a.IsNamespaceDeclaration))
+        {
+            string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+            existing.Add(prefix);
+        }
+
+        // Add any missing in-scope namespace bindings from the original element's ancestors.
+        var nsNode = new XDocumentNode(element);
+        foreach (var ns in nsNode.Axis(XdmAxis.Namespace))
+        {
+            var attr = ns.NodeValue;
+            if (attr is null) continue;
+            string prefix = attr.LocalName;
+            if (prefix == "xml") continue; // always implicitly in scope
+            if (existing.Contains(prefix)) continue;
+            if (string.IsNullOrEmpty(attr.StringValue)) continue;
+
+            existing.Add(prefix);
+            XName name = string.IsNullOrEmpty(prefix) ? "xmlns" : XNamespace.Xmlns + prefix;
+            clone.SetAttributeValue(name, attr.StringValue);
+        }
+
+        return clone.ToString(SaveOptions.DisableFormatting);
     }
 
     // ------------------------------------------------------------------
