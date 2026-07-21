@@ -50,6 +50,7 @@
 //                      | Charles Korthout | 2.17  | 19-07-2026     | Tier-2z: castable masks overflow/cast errors and empty-sequence occurrence tests      |
 //                      | Charles Korthout | 2.18  | 19-07-2026     | fn:zero-or-one singleton-sequence regression test                                      |
 //                      | Charles Korthout | 2.19  | 19-07-2026     | Namespace axis order: xml first, document order across elements                        |
+//                      | Charles Korthout | 2.20  | 20-07-2026     | Rewrite chained FLWOR tests as nested expressions (XPath grammar forbids consecutive clauses) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -1938,11 +1939,14 @@ public class FunctionLibraryTests
         // fn:function-lookup captures the dynamic context (focus) in which it is evaluated.
         // A context-dependent function item such as fn:base-uri#0 must therefore use the
         // creator's context item, not the call-site context item.
+        // Rewritten as nested let expressions because XPath forbids consecutive let clauses.
         const string XPath = @"
             let $xml := '<root xml:base=""http://www.example.org/root.xml""><extra xml:base=""http://www.example.org/extra.xml""/></root>'
-            let $doc := parse-xml($xml)
-            let $baseUriFn := $doc/root/function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'base-uri'), 0)
-            return $doc/root/extra/$baseUriFn()";
+            return
+                let $doc := parse-xml($xml)
+                return
+                    let $baseUriFn := $doc/root/function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'base-uri'), 0)
+                    return $doc/root/extra/$baseUriFn()";
         var values = EvalSequence(XPath);
         Assert.Single(values);
         Assert.Equal("http://www.example.org/root.xml", values[0]);
@@ -3957,27 +3961,29 @@ public class Tier2jFlworTests
     }
 
     // ----- Mixed for/let chains -------------------------------------------
+    // XPath 3.1 (per QT3 LetExpr020a) does not allow consecutive for/let clauses.
+    // The following tests exercise the same semantics using nested expressions.
 
     [Fact]
     public void Chain_LetLet_BindsSequentially()
-        => Assert.Equal("2", EvalStr("let $x := 1 let $z := $x + 1 return $z"));
+        => Assert.Equal("2", EvalStr("let $x := 1 return let $z := $x + 1 return $z"));
 
     [Fact]
     public void Chain_LetLet_UndefinedVariable_RaisesXPST0008()
     {
-        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("let $x := 1 let $z := $x + $y return $x"));
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("let $x := 1 return let $z := $x + $y return $x"));
         Assert.Contains("XPST0008", ex.Message);
     }
 
     [Fact]
     public void Chain_ForFor_InnerSeesOuterBinding()
         => Assert.Equal(new[] { "2", "5", "4", "6", "6", "7" },
-            EvalItems("for $x in (1, 2, 3) for $z in ($x, 4) return $x + $z"));
+            EvalItems("for $x in (1, 2, 3) return for $z in ($x, 4) return $x + $z"));
 
     [Fact]
     public void Chain_ForLet_LetSeesPositionalVariable()
         => Assert.Equal(new[] { "2", "1", "3", "2", "4", "3", "5", "4" },
-            EvalItems("for $i at $pos in (3 to 6) let $let := $pos + 1 return ($let, $let - 1)"));
+            EvalItems("for $i at $pos in (3 to 6) return let $let := $pos + 1 return ($let, $let - 1)"));
 
     [Fact]
     public void Chain_VariableNamedWhere_StillWorks()

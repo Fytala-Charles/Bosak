@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.7   | 15-07-2026     | LoadXml uses the published <source uri> as the document base URI                       |
 //                      | Charles Korthout | 0.8   | 18-07-2026     | Parse <collection> elements into EvaluationContext.Collections                          |
 //                      | Charles Korthout | 0.9   | 19-07-2026     | Parse <source validation> and <schema> for strict XML Schema validation of sources     |
+//                      | Charles Korthout | 1.0   | 20-07-2026     | Map environment <namespace prefix=""> to EvaluationContext.DefaultElementNamespace    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -248,7 +249,14 @@ internal sealed class TestEnvironment
     {
         foreach (var ns in Namespaces)
         {
-            ctx = ctx.WithNamespace(ns.Prefix, ns.Uri);
+            if (string.IsNullOrEmpty(ns.Prefix))
+            {
+                ctx.DefaultElementNamespace = ns.Uri;
+            }
+            else
+            {
+                ctx = ctx.WithNamespace(ns.Prefix, ns.Uri);
+            }
         }
 
         foreach (var src in Sources)

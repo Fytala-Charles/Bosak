@@ -111,6 +111,7 @@
 //                      | Charles Korthout | 5.41  | 15-07-2026     | Tier-2k: fn:outermost/innermost reject non-node items (XPTY0004); round/round-half-to-even keep xs:integer type for negative precision (F+O instance-of-T rule); huge-precision identity guard; fn:min/max/sum preserve integer subtype annotations (least common type) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.42  | 15-07-2026     | fn:system-property('xsl:version') honors EvaluationContext.XsltVersion override                        |
+//                      | Charles Korthout | 5.43  | 20-07-2026     | xs:QName constructor uses default element namespace for unprefixed lexical QNames     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.43  | 17-07-2026     | fn:unparsed-text/-available: resolve href against base URI before URI mapping; reject fragment identifiers |
 //                      |==================|=======|================|=========================================================================================
@@ -4461,7 +4462,10 @@ public static class FunctionLibrary
             return XdmValue.FromQName(new XsQName(local, nsUri, prefix));
         }
 
-        return XdmValue.FromQName(new XsQName(local, string.Empty, string.Empty));
+        // Unprefixed lexical QNames in the xs:QName constructor use the default element
+        // namespace from the static context (or the empty namespace when none is defined).
+        string defaultNsUri = ctx.DefaultElementNamespace ?? string.Empty;
+        return XdmValue.FromQName(new XsQName(local, defaultNsUri, string.Empty));
     }
 
     private static XdmValue ParseXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

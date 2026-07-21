@@ -86,6 +86,7 @@
 //                      | Charles Korthout | 2.50  | 19-07-2026     | Duration multiply/divide uses round-half-up for yearMonth and overflow-safe decimal for dayTime |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.51  | 19-07-2026     | Tier-2z: union/intersect/except require node sequences; added LoadNode VM opcode           |
+//                      | Charles Korthout | 2.52  | 20-07-2026     | Cast/Castable pass EvaluationContext; xs:QName cast resolves prefixes and default namespace |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.52  | 19-07-2026     | Tier-2z: date/dayTime arithmetic zeroes time for xs:date; time +/- yearMonth raises XPTY0004 |
 //                      |==================|=======|================|=========================================================================================
@@ -1393,7 +1394,7 @@ public static class VmEngine
                         }
                         else
                         {
-                            registers[instr.RegisterA] = Cast(value, typeName);
+                            registers[instr.RegisterA] = Cast(value, typeName, context);
                         }
                         ip++;
                         break;
@@ -1418,7 +1419,7 @@ public static class VmEngine
                         {
                             try
                             {
-                                castable = TryCast(value, typeName, out _);
+                                castable = TryCast(value, typeName, context, out _);
                             }
                             catch (InvalidOperationException)
                             {
@@ -4471,8 +4472,16 @@ public static class VmEngine
         if (!IsValidNcName(prefix) || !IsValidNcName(local))
             throw new InvalidOperationException("XPTY0004: Invalid lexical QName for cast to xs:QName.");
 
-        if (!context.TryResolveNamespace(prefix, out string? namespaceUri))
-            throw new InvalidOperationException($"XPTY0004: Namespace prefix '{prefix}' is not declared for xs:QName cast.");
+        string namespaceUri;
+        if (string.IsNullOrEmpty(prefix))
+        {
+            namespaceUri = context.DefaultElementNamespace ?? string.Empty;
+        }
+        else
+        {
+            if (!context.TryResolveNamespace(prefix, out namespaceUri!))
+                throw new InvalidOperationException($"XPTY0004: Namespace prefix '{prefix}' is not declared for xs:QName cast.");
+        }
 
         return XdmValue.FromQName(new XsQName(local, namespaceUri, prefix));
     }
@@ -4497,13 +4506,19 @@ public static class VmEngine
     // ------------------------------------------------------------------
 
     public static XdmValue Cast(XdmValue value, string typeName)
+        => Cast(value, typeName, null);
+
+    public static XdmValue Cast(XdmValue value, string typeName, EvaluationContext? context)
     {
-        if (!TryCast(value, typeName, out var result))
+        if (!TryCast(value, typeName, context, out var result))
             throw new InvalidOperationException($"Cannot cast '{value}' to {typeName}.");
         return result;
     }
 
     public static bool TryCast(XdmValue value, string typeName, out XdmValue result)
+        => TryCast(value, typeName, null, out result);
+
+    public static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result)
     {
         result = value;
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "").Replace("xsd:", "");
@@ -5375,26 +5390,48 @@ public static class VmEngine
                         return false;
                     // Validate lexical QName: prefix:local or local (no prefix)
                     int colon = sQName.IndexOf(':');
+                    string prefix;
+                    string local;
                     if (colon >= 0)
                     {
-                        string prefix = sQName[..colon];
-                        string local = sQName[(colon + 1)..];
+                        prefix = sQName[..colon];
+                        local = sQName[(colon + 1)..];
                         if (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(local))
-                            return false;
-                        // Prefix must be valid NCName
-                        if (!Regex.IsMatch(prefix, @"^[\p{L}_][\w.\-]*$"))
-                            return false;
-                        // Local must be valid NCName
-                        if (!Regex.IsMatch(local, @"^[\p{L}_][\w.\-]*$"))
                             return false;
                     }
                     else
                     {
-                        // No prefix - just local name
-                        if (!Regex.IsMatch(sQName, @"^[A-Za-z_][\w.\-]*$"))
-                            return false;
+                        prefix = string.Empty;
+                        local = sQName;
                     }
-                    result = XdmValue.FromString(sQName);
+
+                    if (!IsValidNcName(prefix) || !IsValidNcName(local))
+                        return false;
+
+                    // Resolve namespace using the static namespace context. Without a context,
+                    // a prefixed QName cannot be resolved and the cast fails. An unprefixed
+                    // QName always resolves to the default element namespace or the empty namespace.
+                    string namespaceUri;
+                    if (context is not null)
+                    {
+                        if (string.IsNullOrEmpty(prefix))
+                        {
+                            namespaceUri = context.DefaultElementNamespace ?? string.Empty;
+                        }
+                        else
+                        {
+                            if (!context.TryResolveNamespace(prefix, out namespaceUri!))
+                                return false;
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(prefix))
+                            return false;
+                        namespaceUri = string.Empty;
+                    }
+
+                    result = XdmValue.FromQName(new XsQName(local, namespaceUri, prefix));
                     return true;
                 }
                 return false;

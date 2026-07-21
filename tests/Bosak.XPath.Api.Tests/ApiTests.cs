@@ -47,6 +47,7 @@
 //                      | Charles Korthout | 1.10  | 20-07-2026     | Added FlworKeywords_ParseAsNameTests test                                              |
 //                      | Charles Korthout | 1.11  | 20-07-2026     | Added NamespaceNode_IsSameNodeIdentity test                                              |
 //                      | Charles Korthout | 1.12  | 20-07-2026     | Added PathStep_RequiresNodeContextItem test                                              |
+//                      | Charles Korthout | 1.13  | 20-07-2026     | Added QNameCast_ResolvesPrefixedNamespace and XsQNameConstructor_UsesDefaultElementNamespace tests |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -674,5 +675,50 @@ public class ApiTests
         // remove((1, "a string"), 2) returns (1), which atomizes to the integer 1,
         // so the predicate selects the first item.
         Assert.Equal("true", Eval("deep-equal((0), (0, 1, 2)[remove((1, \"a string\"), 2)])").ToString());
+    }
+
+    [Fact]
+    public void QNameCast_ResolvesPrefixedNamespace()
+    {
+        // K2-SeqExprCast-1: cast as xs:QName must resolve a prefixed lexical QName
+        // against the static namespace context.
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx = ctx.WithNamespace("myPrefix", "http://example.com/");
+        var expr = XPath31Expression.Compile("\"myPrefix:ncname\" cast as xs:QName");
+        var result = expr.Evaluate(ctx);
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        Assert.Equal("http://example.com/", result.QNameValue.NamespaceUri);
+        Assert.Equal("ncname", result.QNameValue.LocalName);
+    }
+
+    [Fact]
+    public void QNameCast_UsesDefaultElementNamespaceForUnprefixed()
+    {
+        // Cast to xs:QName must use the default element namespace for unprefixed
+        // lexical QNames.
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx.DefaultElementNamespace = "http://example.com/defelementns";
+        var expr = XPath31Expression.Compile("\"ncname\" cast as xs:QName");
+        var result = expr.Evaluate(ctx);
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        Assert.Equal("http://example.com/defelementns", result.QNameValue.NamespaceUri);
+        Assert.Equal("ncname", result.QNameValue.LocalName);
+    }
+
+    [Fact]
+    public void XsQNameConstructor_UsesDefaultElementNamespace()
+    {
+        // K2-SeqExprCast-201: xs:QName("ncname") must use the default element namespace
+        // for unprefixed lexical QNames.
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx.DefaultElementNamespace = "http://example.com/defelementns";
+        var expr = XPath31Expression.Compile("xs:QName(\"ncname\")");
+        var result = expr.Evaluate(ctx);
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        Assert.Equal("http://example.com/defelementns", result.QNameValue.NamespaceUri);
+        Assert.Equal("ncname", result.QNameValue.LocalName);
     }
 }
