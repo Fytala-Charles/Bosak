@@ -159,6 +159,7 @@
 //                      | Charles Korthout | 5.64  | 20-07-2026     | Tier-2z: fn:number returns NaN for non-numeric/non-string atomic types               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.65  | 21-07-2026     | Static codepoints-to-string declares xs:integer* parameter for function conversion       |
+//                      | Charles Korthout | 5.66  | 21-07-2026     | fn:resolve-uri rejects base URIs with fragments and relative refs with colon in first segment |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3679,12 +3680,24 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(baseUri))
             throw new InvalidOperationException("FODC0005: No base URI available");
 
-        // RFC 3986 / XPath FO.E1: the base URI must be absolute and syntactically valid.
+        // RFC 3986 / XPath FO.E1: the base URI must be absolute and syntactically valid,
+        // and must not contain a fragment (a fragment is not part of a base URI).
         if (!Uri.TryCreate(baseUri, UriKind.Absolute, out var baseUriObj)
             || !baseUriObj.IsAbsoluteUri
-            || !Uri.IsWellFormedUriString(baseUri, UriKind.Absolute))
+            || !Uri.IsWellFormedUriString(baseUri, UriKind.Absolute)
+            || !string.IsNullOrEmpty(baseUriObj.Fragment))
         {
             throw new InvalidOperationException("FORG0002: Invalid base URI");
+        }
+
+        // RFC 3986 §4.2: a relative reference that does not begin with '/' and is not
+        // path-empty must have a first path segment that does not contain ':'.
+        if (!relative.StartsWith("/"))
+        {
+            int segmentEnd = relative.AsSpan().IndexOfAny("/?#");
+            string firstSegment = segmentEnd < 0 ? relative : relative[..segmentEnd];
+            if (firstSegment.Contains(':'))
+                throw new InvalidOperationException("FORG0002: Invalid relative URI");
         }
 
         // Validate the relative reference by attempting to resolve it against a well-formed
