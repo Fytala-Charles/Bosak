@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,279 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,875 passed / 2 failed / 16,944 skipped (46.75% / 99.99% of runnable tests)
+> **QT3 baseline:** 14,877 passed / 0 failed / 16,944 skipped (46.75% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 `ForExpr013` / `string-queries-results-q1`: `assert-xml` now loads expected output from external `file` references.
+  - Both tests were producing correct element sequences, but the conformance harness compared them against an empty expected string because `assert-xml` with a `file` attribute was not implemented.
+  - Added `BaseDirectory` to `TestCase` and threaded it through `ConformanceRunner`, `TestExecutor`, and `ResultComparer` so the referenced file can be resolved relative to the test-set directory.
+  - `ResultComparer.CompareAssertXml` now reads the file content when the `file` attribute is present and falls back to inline element content when it is absent.
+  - This fixes all 41 QT3 tests that use `assert-xml file` references, including `ForExpr013` and `string-queries-results-q1`.
+  - Full QT3 now **14,877 passed / 0 failed / 16,944 skipped = 46.75%** (runnable pass rate **100%**); unit tests **1,279/0**.
 
 - **2026-07-21** — QT3 `K-SeqExprInstanceOf-46/51` pair: `xs:NOTATION` is now recognized for `instance of` and `xs:QName` is case-sensitive.
   - `"a string" instance of xs:NOTATION` raised `XPST0051` because `xs:NOTATION` was missing from the known atomic type list. It is now recognized, and `ItemInstanceOf` always returns `false` since `xs:NOTATION` is abstract and cannot be instantiated.

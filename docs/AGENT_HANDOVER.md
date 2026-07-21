@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `fb8fd81` (fix(assert-xml): load expected output from external `file` attribute)
+**Current focus:** **QT3 `assert-xml` file-reference tests** — `ForExpr013` and `string-queries-results-q1` were producing the correct element sequences, but the harness compared them against an empty expected string because `assert-xml` with a `file` attribute was not loading the referenced file. The expected output is stored in an external `.out` file (e.g., `ForClause/ForExpr-013.out`), not as inline XML. Fixed by threading the test-set base directory through `TestCase` / `ConformanceRunner` / `TestExecutor` into `ResultComparer`, and reading the file content when the `file` attribute is present. Full QT3 suite now at **14,877 passed / 0 failed / 16,944 skipped (46.75%)**; runnable pass rate **100%** (14,877 / 14,877). Unit tests **1,279/0**.
+
+## This Session Fixes (`ForExpr013` / `string-queries-results-q1` / all `assert-xml file` references)
+
+1. **`assert-xml file="..."` loads expected output from disk** — `ResultComparer.CompareAssertXml` now reads the `file` attribute, resolves it against the test-set base directory stored on `TestCase`, and uses the file content as the expected XML. Inline `assert-xml` content continues to work as before.
+
+2. **Base directory plumbing** — Added `BaseDirectory` to `TestCase` (set from the test-set XML file's directory in `ConformanceRunner`), passed it through `TestExecutor`, and forwarded it to `ResultComparer.Compare` and the `CompareAllOf` / `CompareAnyOf` / `CompareAssertion` helpers.
+
+3. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 failed** with no regressions in unit tests. All 41 tests that use `assert-xml file` references are now correctly evaluated. There are no remaining QT3 failures; only skipped tests remain (unsupported dependencies, XQuery-only syntax, schema awareness, and documented platform limitations).
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs` (v1.5: `CompareAssertXml` loads expected XML from `file` attribute)
+- `tests/Bosak.XPath.Conformance/TestCase.cs` (v0.3: added `BaseDirectory` property)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (v1.2: pass `baseDir` to `TestCase.FromElement`)
+- `tests/Bosak.XPath.Conformance/TestExecutor.cs` (v0.5: pass `BaseDirectory` to `ResultComparer.Compare`)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+With all runnable QT3 tests passing, the remaining work is in skipped categories. The two largest skipped buckets are "Unsupported dependency" (mostly XQuery/XSLT-only or schema-aware tests) and "XQuery syntax not supported". The next high-impact target is either extending the XPath parser to handle more XQuery FLWOR syntax (a large project) or picking off the smaller skipped clusters: the `Schema awareness not supported` tests, the `IndexOutOfRangeException` / `InvalidOperationException` harness errors, and the `assert-deep-eq` parse failures. A quick first pass would be to audit the 72 `IndexOutOfRangeException` skips — they are likely a single bug in sequence handling that affects many tests.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `c017b51` (fix(instance-of): xs:NOTATION returns false; xs:QName is case-sensitive vs xs:qname)
 **Current focus:** **QT3 `K-SeqExprInstanceOf-46/51` pair** — `not("a string" instance of xs:NOTATION)` was raising `XPST0051` because `xs:NOTATION` was not in the known atomic type list; `3 instance of xs:qname` was succeeding (returning false) instead of raising `XPST0051` because the type-name lookup was case-insensitive and accepted the lower-case `qname` as a synonym for `xs:QName`. Fixed by adding `xs:NOTATION` as a known type whose instance-of check always returns false, and by making `xs:QName` case-sensitive so only the exact spelling `QName` is accepted. Full QT3 suite now at **14,875 passed / 2 failed / 16,944 skipped (46.75%)**; runnable pass rate **99.99%** (14875 / 14877). Unit tests **1,279/0**.
 
