@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
+**Commit:** `4197650` (Tier-2z: K-SeqExprTreat-16 / require closing parenthesis in sequence type tests)
+**Current focus:** **QT3 Tier-2z: `K-SeqExprTreat-16` singleton** — `3 treat as item(` is missing the closing parenthesis of the `item()` sequence type and expects `XPST0003`. The parser's `ParseTypeNameAndParens` consumed the opening `(` and then read tokens until EOF or until the parentheses balanced, but it never verified that the final paren depth was zero. For `item(` it simply exited at EOF with `parenDepth == 1`, returned the malformed type string `item(`, and the `treat as` expression succeeded. Fixed by checking `parenDepth` after consuming the parenthesized part and throwing `ParseException` (auto-prefixed `XPST0003`) when the sequence type is not properly closed. Targeted test now passes: `K-SeqExprTreat-16`. Full QT3 suite now at **14,846 passed / 31 failed / 16,944 skipped (46.65%)**; runnable pass rate **99.79%** (14846 / 14877). Unit tests **1,375/0**.
+
+## This Session Fixes (Tier-2z: K-SeqExprTreat-16)
+
+1. **Sequence type paren validation** — `ParseTypeNameAndParens` now raises `XPST0003` when a sequence type's opening parenthesis is not closed.
+
+2. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 failed** with no regressions in unit tests or targeted pools.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (v1.17: unclosed sequence type paren check)
+- `tests/Bosak.XPath.Parser.Tests/ParserTests.cs` (v0.7: `TreatExpr` and `TreatExpr_UnclosedTypeParens_RaiseXPST0003` tests)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Tier-2 Pool
+
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `predicates-24`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-20
 **Commit:** `5e2c382` (Tier-2z: LetExpr020a / disallow consecutive for/let clauses in XPath FLWOR)
 **Current focus:** **QT3 Tier-2z: `LetExpr020a` singleton** — XPath 3.1 restricts a FLWOR expression to a single initial `for` or `let` clause; intermediate clauses may only be `where`, `order by`, or `count`. The expression `let $a := 1 let $b := $a let $c := $a+$b return ($c)` therefore expects `XPST0003`. The parser was treating each subsequent `let` keyword as a new intermediate clause, so the expression parsed successfully. Fixed by removing `KeywordFor` and `KeywordLet` from the intermediate-clause loop in `ParseFlworExpr`; after the initial clause, a following `let` now causes `Expect(TokenKind.KeywordReturn)` to fail with `XPST0003`. Targeted test now passes: `LetExpr020a`. Full QT3 suite now at **14,845 passed / 32 failed / 16,944 skipped (46.65%)**; runnable pass rate **99.79%** (14845 / 14877). Unit tests **1,373/0**.
 
@@ -19,7 +44,7 @@
 
 ## Next Tier-2 Pool
 
-Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `predicates-24`, `K-SeqExprTreat-16`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `filterexpressionhc*`, and schema-aware namespace-node failures.
+Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1args-2` (decimal precision), `fn-resolve-uri-3/26`, `fn-month-from-dateTime-6` / `fn-year-from-dateTime-6` (DateTimeOffset year -1999), `xs-dateTimeStamp-*`, `fn-intersect-node-args-*`, `fn-union-node-args-*`, `unabbreviatedSyntax-30`, `casthc18`, `K-SeqExprCast-67`, `K2-SeqExprCast-1/201`, `predicates-24`, `string-queries-results-q1`, `FunctionCall-*`, `K-SeqExprInstanceOf-*`, `filterexpressionhc*`, and schema-aware namespace-node failures.
 
 ---
 
