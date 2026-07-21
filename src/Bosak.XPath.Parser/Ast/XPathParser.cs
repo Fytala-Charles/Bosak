@@ -38,6 +38,7 @@
 //                      | Charles Korthout | 1.13  | 19-07-2026     | Reserved function name check applies only to named function references, not function calls |
 //                      | Charles Korthout | 1.14  | 20-07-2026     | Allow 'is' as a non-reserved function name in function calls (K-NodeSame-6)              |
 //                      | Charles Korthout | 1.15  | 20-07-2026     | Only treat 'for'/'let' as FLWOR keywords when followed by '$' (K2-NameTest-78/79)        |
+//                      | Charles Korthout | 1.16  | 20-07-2026     | Disallow consecutive for/let clauses in FLWOR (XPath-only; LetExpr020a)                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -251,11 +252,7 @@ public sealed class XPathParser
         // unquoted Name "where" here is unambiguous.
         while (true)
         {
-            if (Current.Kind == TokenKind.KeywordFor)
-                clauses.Add(("for", ParseForClauseBindings()));
-            else if (Current.Kind == TokenKind.KeywordLet)
-                clauses.Add(("let", ParseLetClauseBindings()));
-            else if (Current.Kind == TokenKind.Name && GetString(Current) == "where")
+            if (Current.Kind == TokenKind.Name && GetString(Current) == "where")
             {
                 Advance();
                 clauses.Add(("where", ParseExprSingle()));

@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 15-07-2026     | UnaryLookup parsing, keyword/qualified lookup keys, placeholder-vs-lookup disambiguation |
 //                      | Charles Korthout | 0.4   | 19-07-2026     | Reserved function names in function calls and named function references raise XPST0003   |
 //                      | Charles Korthout | 0.5   | 19-07-2026     | Removed function-call reserved-name tests; kept named-function-reference tests           |
+//                      | Charles Korthout | 0.6   | 20-07-2026     | Added LetExpr and consecutive-let-keyword regression tests                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -450,6 +451,23 @@ public class ParserTests
         var node = AssertParse<ForExpressionNode>("for $i in 1 to 10 return $i");
         Assert.Single(node.Bindings);
         Assert.IsType<RangeExpressionNode>(node.Bindings[0].Expression);
+    }
+
+    [Fact]
+    public void LetExpr()
+    {
+        var node = AssertParse<LetExpressionNode>("let $x := 1 return $x");
+        Assert.Single(node.Bindings);
+        Assert.IsType<IntegerLiteralNode>(node.Bindings[0].Expression);
+    }
+
+    [Fact]
+    public void LetExpr_ConsecutiveLetKeywords_RaiseXPST0003()
+    {
+        // Regression for QT3 LetExpr020a: XPath does not allow multiple let clauses.
+        var expr = "let $a := 1 let $b := $a let $c := $a+$b return ($c)";
+        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse(expr));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     [Fact]
