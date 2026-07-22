@@ -19,6 +19,8 @@
 //                      | Charles Korthout | 0.7   | 19-07-2026     | XPath 'i' flag: case-fold during translation; ParseRegexFlags returns caseInsensitive flag      |
 //                      | Charles Korthout | 0.8   | 19-07-2026     | XPath 'i' flag: use RegexOptions.IgnoreCase, wrap class atoms in (?-i:)                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 21-07-2026     | CacheRegex converts RegexParseException to FORX0002 (fn-matches-25, cbcl-matches-004)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -202,9 +204,19 @@ public static class RegexHelper
     {
         if (RegexCache.Count >= 512)
             RegexCache.Clear();
-        var regex = new Regex(pattern, options | RegexOptions.Compiled);
-        RegexCache[key] = regex;
-        return regex;
+        try
+        {
+            var regex = new Regex(pattern, options | RegexOptions.Compiled);
+            RegexCache[key] = regex;
+            return regex;
+        }
+        catch (RegexParseException)
+        {
+            // If XSD validation/translation did not catch a pattern that .NET still rejects
+            // (e.g. '**' or a quantifier larger than Int32.MaxValue), surface it as the XPath
+            // invalid-regular-expression error rather than a harness error.
+            throw new InvalidOperationException("FORX0002");
+        }
     }
 
     /// <summary>
