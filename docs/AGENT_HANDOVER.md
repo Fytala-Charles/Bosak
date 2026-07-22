@@ -1,3 +1,45 @@
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-22
+**Commit:** *pending* (XQuery 3.1 Phase 1 foundation)
+**Current focus:** **XQuery 3.1 Phase 1** — `Bosak.XQuery` now compiles and executes prolog-less XQuery queries by delegating to the proven XPath pipeline. Added `XQueryParser` (top-level grammar + prolog declarations), `XQueryStaticContext`, and wired `XQueryCompiler` / `XQueryExecutable` to the XPath parser, optimizer, IR lowerer, and VM. First passing tests: `for $i in 1 to 3 return $i`, `let $x := 42 return $x`, and `declare namespace math = '...'; math:pi()`. Full `dotnet test Bosak.sln` passes: **1,382 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
+
+## This Session Changes (XQuery 3.1 Phase 1 foundation)
+
+1. **`src/Bosak.XQuery/Parser/XQueryParser.cs`** — New XQuery top-level parser. Parses `xquery version "...";`, `declare namespace ...`, `declare default element namespace ...`, `declare default function namespace ...`, and `declare default collation ...`. Delegates the query body (`Expr`) to `XPathParser`.
+
+2. **`src/Bosak.XQuery/Compiler/XQueryStaticContext.cs`** — Immutable static context holding namespace bindings, default element/function namespace, default collation, base URI, declared variables, and declared function signatures.
+
+3. **`src/Bosak.XQuery/Api/XQueryCompiler.cs`** — Now parses the source, resolves function namespaces against the static context, optimizes with `XPathOptimizer`, lowers with `IrLowerer`, and returns an `XQueryExecutable`.
+
+4. **`src/Bosak.XQuery/Api/XQueryExecutable.cs`** — Applies the prolog-derived static context to the runtime `EvaluationContext`, executes the IR module with `VmEngine`, and restores the original context state afterwards.
+
+5. **`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`** — Added end-to-end tests for `for`, `let`, and `declare namespace`.
+
+6. **Documentation** — Updated `docs/ARCHITECTURE.md` (new XQuery Architecture & Roadmap section), `docs/FEATURE_REQUESTS.md` (REQ-040), and `docs/INTEGRATION.md` (XQuery 4.x section and updated baselines).
+
+## Files Changed (this session)
+
+- `src/Bosak.XQuery/Parser/XQueryParser.cs` (new)
+- `src/Bosak.XQuery/Compiler/XQueryStaticContext.cs` (new)
+- `src/Bosak.XQuery/Api/XQueryCompiler.cs` (v1.0: wired to XPath pipeline)
+- `src/Bosak.XQuery/Api/XQueryExecutable.cs` (v1.0: VM execution with static context)
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (v0.2: end-to-end tests)
+- `docs/ARCHITECTURE.md` (XQuery architecture & roadmap)
+- `docs/FEATURE_REQUESTS.md` (REQ-040)
+- `docs/INTEGRATION.md` (XQuery integration guide)
+- `docs/AGENT_HANDOVER.md` (this update)
+
+## Next Recommended Step
+
+XQuery 3.1 Phase 1 is complete. The next step is **Phase 2 — Full core FLWOR**: implement `order by`, `group by`, `count`, and `window` clauses.
+
+- Start with `order by` because it has the smallest surface area and a clear VM requirement (sort tuples by one or more keys).
+- Add a new `OrderByClause` AST node and an `OrderBy` IR opcode, then extend `XQueryParser` to recognize `order by` at the end of a FLWOR expression.
+- Target the QT3 `prod/OrderByClause.xml` cluster once the parser/VM support is in place.
+
+---
+
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21

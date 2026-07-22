@@ -378,7 +378,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 | Priority | Phase | Deliverable | Status | Notes |
 |----------|-------|-------------|--------|-------|
-| 1 | 4 | **XQuery 3.1** | 📋 In Progress | FLWOR expressions, query prolog, direct/computed constructors. Reuses XPath engine entirely. |
+| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 1 | Prolog-less queries now compile and run via `XQueryCompiler`. FLWOR, constructors, and modules follow. |
 | 2 | — | **XSLT 3.0 packages** | 🔮 Planned | `xsl:package`, `xsl:use-package`. Completes the XSLT 3.0 surface. |
 | 3 | — | **Schema awareness / XSD validation** | 🔮 Planned | Cross-cutting feature for XPath + XSLT; clears remaining schema-dependent skips. |
 | 4 | 5 | **Streaming** | 🔮 Planned | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
@@ -520,6 +520,95 @@ The Transform Engine walks this instruction tree, evaluating XPath expressions v
 
 ---
 
+## XQuery Architecture & Roadmap
+
+XQuery 3.1 is implemented as a **thin compiler layer** on top of the existing XPath stack. The XPath engine (parser, optimizer, IR lowerer, VM, and XDM) handles all expression evaluation; XQuery adds a top-level parser for the prolog and query body, a static context, and (in later phases) constructors and serialization.
+
+```mermaid
+flowchart TB
+    subgraph XQ_API["📢 XQuery Public API"]
+        QC["XQueryCompiler"]
+        QX["XQueryExecutable"]
+        QCTX["XQueryContext"]
+    end
+
+    subgraph XQ_CP["🔧 XQuery Compiler"]
+        QP["XQueryParser<br/>(prolog + top-level syntax)"]
+        SC["XQueryStaticContext"]
+    end
+
+    subgraph XPATH["Existing Bosak XPath Stack"]
+        XP["XPathParser"]
+        XO["Optimizer"]
+        XL["IrLowerer"]
+        XV["VmEngine"]
+        XX["XDM Core"]
+    end
+
+    XQ_API --> XQ_CP
+    XQ_CP --> XP
+    XP --> XO
+    XO --> XL
+    XL --> XV
+    XV --> XX
+```
+
+### XQuery Project Structure
+
+```
+src/
+  Bosak.XQuery/
+    Parser/              XQueryParser and XQueryStaticContext
+    Compiler/            Static context and prolog analysis helpers
+    Api/                 XQueryCompiler, XQueryExecutable, XQueryContext
+```
+
+### XQuery Implementation Phases
+
+#### Phase 1 — Foundation (current)
+**Goal:** Compile and execute prolog-less XQuery expressions by delegating the query body to the XPath pipeline.
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| `XQueryCompiler` / `XQueryExecutable` / `XQueryContext` | ✅ Implemented | Public API wired to XPath parser, optimizer, IR lowerer, and VM |
+| `XQueryParser` | ✅ Implemented | Parses version declaration and basic prolog declarations; delegates `Expr` to `XPathParser` |
+| `XQueryStaticContext` | ✅ Implemented | Holds namespaces, default element/function namespace, default collation, base URI, declared variables, and declared functions |
+| Prolog-less queries (`for`/`let`/`where`/`return`) | ✅ Implemented | Reuses XPath 3.1 FLWOR support |
+
+#### Phase 2 — Full core FLWOR
+**Goal:** Add `order by`, `group by`, `count`, and `window` clauses.
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| `order by` | 🔮 Phase 2 | New IR/VM opcode for tuple sorting |
+| `group by` | 🔮 Phase 2 | New IR/VM opcode for grouping tuples |
+| `count` | 🔮 Phase 2 | Positional variable bound to tuple stream position |
+| `window` | 🔮 Phase 2 | Tumbling/sliding window clauses |
+
+#### Phase 3 — Constructors and XQuery-specific expressions
+**Goal:** Support direct and computed constructors, `typeswitch`, `switch`, and `validate`.
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Direct element/attribute constructors | 🔮 Phase 3 | XML-like literal syntax; lowers to node-building VM opcodes |
+| Computed constructors | 🔮 Phase 3 | `element { } { }`, `attribute { } { }`, etc. |
+| `typeswitch` / `switch` / `validate` | 🔮 Phase 3 | Lower to conditional IR |
+
+#### Phase 4 — Modules, serialization, and advanced features
+**Goal:** Library modules, `import module`, and serialization.
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Library modules | 🔮 Phase 4 | `module namespace` and module import resolution |
+| Serialization | 🔮 Phase 4 | `xml`, `html`, `xhtml`, `text`, `json`, `adaptive` output methods |
+| Advanced prolog options | 🔮 Phase 4 | Boundary-space, construction mode, ordering mode, copy-namespaces, decimal formats, context-item declaration |
+
+### Parser Layering Strategy
+
+`XQueryParser` owns the XQuery top-level grammar (version declaration, prolog, and query body) but delegates all `Expr` parsing to the proven `XPathParser`. This keeps the XPath lexer/parser free of XML-like tokenization rules and avoids regressions in XPath conformance. The XQuery AST is a separate `XQueryAstNode` hierarchy that wraps XPath AST nodes where appropriate.
+
+---
+
 ## Project Structure
 
 ```
@@ -532,7 +621,7 @@ src/
   Bosak.XPath.Standard/     Standard function library (fn, math, map, array, xs, JSON)
   Bosak.XPath.Providers/    XDocument adapter (XDocumentNode), XML 1.1 loader/codec; XmlDocument and streaming adapters planned
   Bosak.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
-  Bosak.XQuery/       XQuery 3.1 processor skeleton (query compiler, FLWOR engine)
+  Bosak.XQuery/       XQuery 3.1 processor (query compiler, static context, prolog parser, FLWOR engine)
   Bosak.LanguageServer/   LSP server for XPath / XSLT diagnostics & completions (OmniSharp 0.19.9)
 
 tests/

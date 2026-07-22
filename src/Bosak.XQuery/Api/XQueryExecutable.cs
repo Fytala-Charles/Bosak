@@ -11,10 +11,15 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 06-06-2026     | Creation — placeholder skeleton                                                          |
+//                      | Charles Korthout | 1.0   | 22-07-2026     | Execute via XPath VM using static context                                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Standard.Functions;
+using Bosak.XQuery.Compiler;
 
 namespace Bosak.XQuery.Api;
 
@@ -23,11 +28,13 @@ namespace Bosak.XQuery.Api;
 /// </summary>
 public sealed class XQueryExecutable
 {
-    private readonly string _source;
+    private readonly IrModule _module;
+    private readonly XQueryStaticContext _staticContext;
 
-    internal XQueryExecutable(string source)
+    internal XQueryExecutable(IrModule module, XQueryStaticContext staticContext)
     {
-        _source = source;
+        _module = module;
+        _staticContext = staticContext;
     }
 
     /// <summary>
@@ -38,7 +45,51 @@ public sealed class XQueryExecutable
     public XdmValue Evaluate(XQueryContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
-        // TODO: Wire to the XPath VM once compilation is implemented.
-        return XdmValue.FromString("");
+
+        var evaluationContext = context.EvaluationContext;
+        var snapshot = evaluationContext.SnapshotNamespaces();
+        var savedDefaultNs = evaluationContext.DefaultElementNamespace;
+        var savedBaseUri = evaluationContext.BaseUri;
+        var savedCollation = evaluationContext.DefaultCollation;
+
+        try
+        {
+            ApplyStaticContext(evaluationContext);
+            return VmEngine.Execute(_module, evaluationContext);
+        }
+        finally
+        {
+            evaluationContext.RestoreNamespaces(snapshot);
+            evaluationContext.DefaultElementNamespace = savedDefaultNs;
+            evaluationContext.BaseUri = savedBaseUri;
+            evaluationContext.DefaultCollation = savedCollation;
+        }
+    }
+
+    private void ApplyStaticContext(EvaluationContext ctx)
+    {
+        // Populate the standard function library once per execution context.
+        if (!ctx.SkipStandardFunctionPopulation)
+            FunctionLibrary.Populate(ctx);
+
+        if (!string.IsNullOrEmpty(_staticContext.DefaultElementNamespace))
+            ctx.DefaultElementNamespace = _staticContext.DefaultElementNamespace;
+
+        if (!string.IsNullOrEmpty(_staticContext.BaseUri))
+            ctx.BaseUri = _staticContext.BaseUri;
+
+        if (!string.IsNullOrEmpty(_staticContext.DefaultCollation))
+            ctx.DefaultCollation = _staticContext.DefaultCollation;
+
+        foreach (var (prefix, nsUri) in _staticContext.Namespaces)
+        {
+            if (!string.IsNullOrEmpty(prefix))
+                ctx.WithNamespace(prefix, nsUri);
+        }
+
+        foreach (var ((localName, nsUri), value) in _staticContext.Variables)
+        {
+            ctx.WithVariable(localName, value, nsUri);
+        }
     }
 }

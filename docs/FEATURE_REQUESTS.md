@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-22 (Roadmap formalized after QT3 sweep; XQuery 3.1 selected as next priority. Full QT3 suite at **14,994 passed / 0 failed / 16,827 skipped — 47.12%**; runnable pass rate **100%**; unit tests **1,379/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests pass)
+> **Living Registry** — Last updated: 2026-07-22 (XQuery 3.1 Phase 1 foundation complete: prolog-less queries compile and execute via `XQueryCompiler`; unit tests now **1,382/0**; QT3 and XSLT baselines unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -144,6 +144,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-037 | *(internal)* | XSLT `xsl:result-document` serialization completeness | Required for W3C `result-document` cluster: AVT evaluation on all serialization attributes, case-sensitive yes/no values, `SEPM0009` scoping, `build-tree="no"`, and raw-item collection for `method="json"`/`adaptive` | **Implemented** | Phase 5 | Charles Korthout | 2026-07-11 |
 | REQ-038 | *(internal)* | XSLT `namespace` cluster — `inherit-namespaces="no"` | Required for W3C `namespace-2603` through `namespace-2632`: prefixed namespace undeclarations for children of `xsl:element`/`xsl:copy`/LRE barriers, and preservation of namespace annotations when unwrapping the synthetic document root | **Implemented** | Phase 5 | Charles Korthout | 2026-07-12 |
 | REQ-039 | *(internal)* | Resolve QT3 `op-same-key` hang | `XdmMap` copied the whole dictionary on every `map:remove`/`map:put`, causing O(N²) behavior on the 28-test `op-same-key` set; switched to `ImmutableDictionary` structural sharing | **Implemented** | TBD | Charles Korthout | 2026-07-17 |
+| REQ-040 | Bosak / Fytala Stack | XQuery 3.1 Phase 1 — prolog-less query execution | Wire `Bosak.XQuery` to the XPath pipeline so basic XQuery expressions compile and run | **Implemented** | Phase 4 | Charles Korthout | 2026-07-22 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1750,13 +1751,60 @@ The full W3C QT3 suite could not complete because the `op-same-key` test set (28
 
 ---
 
+### REQ-040: XQuery 3.1 Phase 1 — prolog-less query execution
+
+**Requesting Application:** Bosak / Fytala Stack  
+**Submitted:** 2026-07-22  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The `Bosak.XQuery` project existed only as a skeleton with placeholder `XQueryCompiler`, `XQueryExecutable`, and `XQueryContext` classes. No XQuery source could be parsed, compiled, or executed, blocking the roadmap priority to implement XQuery 3.1.
+
+**Proposed Solution:**  
+Wire the XQuery public API to the proven XPath pipeline: parse the query body with `XPathParser`, resolve function namespaces against an XQuery static context, optimize with `XPathOptimizer`, lower with `IrLowerer`, and execute with `VmEngine`. Add a dedicated `XQueryParser` for the XQuery top-level grammar (version declaration and prolog) and a `XQueryStaticContext` to hold prolog-derived bindings.
+
+**Acceptance Criteria:**
+- [x] `XQueryCompiler.Compile` parses an XQuery source string and returns an executable plan.
+- [x] `XQueryExecutable.Evaluate` executes the plan via the XPath VM and returns an `XdmValue`.
+- [x] Prolog-less queries such as `for $i in 1 to 3 return $i` and `let $x := 42 return $x` produce correct results.
+- [x] Namespace declarations from the prolog are applied to the evaluation context.
+- [x] No regressions in XPath, XSLT, or existing unit tests.
+
+**Implementation Notes:**
+- Created `src/Bosak.XQuery/Parser/XQueryParser.cs` to parse the version declaration and basic prolog declarations (`declare namespace`, `declare default element namespace`, `declare default function namespace`, `declare default collation`). The parser delegates the query body (`Expr`) to the existing `XPathParser`.
+- Created `src/Bosak.XQuery/Compiler/XQueryStaticContext.cs` as an immutable static context holding namespace bindings, default element/function namespaces, default collation, base URI, declared variables, and declared function signatures.
+- Updated `XQueryCompiler` to resolve function namespaces using the static context, optimize, and lower the AST to an `IrModule`.
+- Updated `XQueryExecutable` to apply the static context to the runtime `EvaluationContext`, execute with `VmEngine`, and restore the original context state afterwards.
+- Added unit tests in `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` for `for`, `let`, and `declare namespace`.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | New | `XQueryParser` in `Bosak.XQuery`; reuses `XPathParser` for expressions. |
+| Compiler | New | `XQueryStaticContext` in `Bosak.XQuery`; reuses `XPathOptimizer` and `IrLowerer`. |
+| Runtime | None | Reuses `VmEngine` and `EvaluationContext`. |
+| Standard | None | Standard function library populated as before. |
+| XSLT | None | No XSLT changes. |
+| API | New | Public `XQueryCompiler`, `XQueryExecutable`, `XQueryContext` are now functional. |
+| Conformance | None | QT3 harness not yet wired to XQuery tests. |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-22 | Kimi | Implement separate XQuery parser that delegates to XPathParser | Keeps XPath lexer/parser clean and avoids XML-tokenization complexity in the XPath layer. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | TBD | **XQuery 3.1 full implementation** | Accepted | Next major language capability. Skeleton (`Bosak.XQuery`) exists; requires prolog parser, FLWOR compiler, and constructors. |
+| 1 | REQ-040 | **XQuery 3.1 full implementation** | In Progress | Phase 1 complete: prolog-less queries run via `XQueryCompiler`. Phase 2 (full FLWOR clauses), Phase 3 (constructors), and Phase 4 (modules/serialization) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

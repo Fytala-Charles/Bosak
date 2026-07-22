@@ -3,7 +3,7 @@
   <br><br>
   <h1 style="color:#2F4F4F; font-family:Poppins,Segoe UI,sans-serif; margin:0;">Bosak XPath</h1>
   <p style="color:#556B2F; font-family:Poppins,Segoe UI,sans-serif; font-size:1.1rem; margin:0.5rem 0 0;">
-    A high-performance, XDM-first XPath 3.1 + XSLT 3.0 engine for .NET, with XQuery 3.1 planned
+    A high-performance, XDM-first XPath 3.1 + XSLT 3.0 engine for .NET, with XQuery 3.1 in progress
   </p>
 </div>
 
@@ -21,9 +21,9 @@
 
 ## Overview
 
-**Bosak** is a ground-up .NET implementation of **XPath 3.1** (with forward-compatibility for 4.0), designed as the expression-engine foundation for future XQuery and XSLT processors.
+**Bosak** is a ground-up .NET implementation of **XPath 3.1** (with forward-compatibility for 4.0), designed as the expression-engine foundation for **XSLT 3.0** and **XQuery 3.1** processors.
 
-Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)** from day one. Expressions are compiled once to an intermediate representation (IR) and executed many times on a lightweight, register-based virtual machine.
+Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)** from day one. Expressions are compiled once to an intermediate representation (IR) and executed many times on a lightweight, register-based virtual machine. XSLT and XQuery reuse the same XPath engine for all expression evaluation.
 
 ### Key Features
 
@@ -34,6 +34,7 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 - **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), FLWOR, JSON functions
 - **XSD Regex with Pinned Unicode 9.0** — Full `\p{X}`/`\P{X}` category and `\p{IsBlock}` support, class subtraction, astral-safe matching
 - **XSLT 3.0 Transform Engine** — Template matching, sequence constructors, `xsl:copy`/`xsl:copy-of`, `xsl:for-each-group`, `xsl:analyze-string`, `xsl:where-populated`, `xsl:on-empty`, `xsl:iterate`/`xsl:break`, `fn:transform()`
+- **XQuery 3.1 (Phase 1)** — Prolog-less queries compile and execute; `XQueryCompiler`, `XQueryExecutable`, `XQueryContext` wired to the XPath VM
 
 ---
 
@@ -67,6 +68,20 @@ var expr = XPath31Expression.Compile(
 ```csharp
 var expr = XPath31Expression.Compile("1 to 5");
 // Returns: [1, 2, 3, 4, 5]
+```
+
+### XQuery 3.1
+
+```csharp
+using Bosak.XQuery.Api;
+using Bosak.XPath.Core.Xdm;
+
+var query = new XQueryCompiler().Compile("for $i in 1 to 3 return $i * $i");
+var result = query.Evaluate(new XQueryContext());
+
+foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+    Console.WriteLine(item.IntegerValue);
+// => 1 4 9
 ```
 
 ---
@@ -116,7 +131,7 @@ flowchart TB
 | **XDM Core** | `Bosak.XPath.Core` | `XdmValue`, `IXdmNode`, `XdmSequence`, axis kinds |
 | **Node Providers** | `Bosak.XPath.Providers` | `XDocument`, `XmlDocument`, streaming adapters *(planned)* |
 | **XSLT** | `Bosak.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
-| **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, FLWOR engine *(skeleton)* |
+| **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, `XQueryExecutable`, `XQueryParser`, `XQueryStaticContext`; Phase 1 complete, full FLWOR/constructors in progress |
 | **Language Server** | `Bosak.LanguageServer` | LSP server for XPath / XSLT diagnostics & completions |
 | **VS Code Extension** | `vscode-bosak/` | TypeScript client for the language server |
 
@@ -141,7 +156,7 @@ flowchart TB
 |-------|-------------|--------|
 | 1 | XPath 3.1 Core — compiler + VM + standard functions | ✅ Complete |
 | 2 | XSLT 2.0/3.0 — template matching, sequence constructors, `fn:transform()` | ✅ Complete — full option surface + QT3 Tier-2m (117/124 passed, 7 skipped) |
-| 3 | XQuery 3.1 — FLWOR prolog, query context | 🚧 Skeleton |
+| 3 | XQuery 3.1 — prolog parser, static context, prolog-less queries | 🚧 Phase 1 complete |
 | 4 | Streaming — `XmlReader`-backed `IXdmNode` | 📋 Planned |
 | 5 | Database backends — XML database adapters | 📋 Planned |
 
@@ -178,7 +193,7 @@ dotnet test Bosak.sln
 
 Target framework: **.NET 10**.
 
-All 1,343 unit tests pass (0 failures).
+All 1,382 unit tests pass (0 failures).
 
 ---
 

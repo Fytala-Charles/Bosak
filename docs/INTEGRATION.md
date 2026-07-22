@@ -4,14 +4,22 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 21 July 2026
-> **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 22 July 2026
+> **Bosak baseline:** 1,382 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** 14,994 passed / 0 failed / 16,827 skipped (47.12% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
+> **XQuery baseline:** Phase 1 foundation — prolog-less queries compile and execute via `XQueryCompiler`
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-22** — XQuery 3.1 Phase 1 foundation: `Bosak.XQuery` now compiles and executes prolog-less queries.
+  - Added `XQueryParser` (top-level XQuery grammar + prolog declarations) and `XQueryStaticContext` (namespace/default bindings, declared variables/functions).
+  - Wired `XQueryCompiler` → `XPathParser` → `XPathOptimizer` → `IrLowerer` → `VmEngine`.
+  - `XQueryExecutable.Evaluate` applies the prolog-derived static context to the runtime `EvaluationContext`, executes the IR module, and restores the original context state.
+  - First passing XQuery tests: `for $i in 1 to 3 return $i`, `let $x := 42 return $x`, and `declare namespace math = '...'; math:pi()`.
+  - No regressions in XPath, XSLT, or existing unit tests; unit tests now **1,382/0**.
 
 - **2026-07-21** — QT3 XML 1.0-only skip categorization cleanup: `DependencyFilter` now handles `xml-version` dependencies and the hardcoded `DocumentedSkips` entries are removed.
   - 5 tests (`cbcl-codepoints-to-string-023/024`, `K-CodepointToStringFunc-8/11/12`) were skipped as "XML 1.0-only test on an XML 1.1 implementation" in `ConformanceRunner.DocumentedSkips`.
@@ -950,7 +958,67 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 
 ---
 
-## 4. XSLT Feature Matrix (Current State)
+## 4. XQuery 3.1 Queries
+
+### 4.1 Compile and Evaluate a Query
+
+```csharp
+using Bosak.XQuery.Api;
+using Bosak.XPath.Core.Xdm;
+
+var compiler = new XQueryCompiler();
+var executable = compiler.Compile("for $i in 1 to 3 return $i");
+
+var context = new XQueryContext();
+var result = executable.Evaluate(context);
+
+foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+    Console.WriteLine(item.IntegerValue);
+// => 1 2 3
+```
+
+### 4.2 Prolog Declarations
+
+```csharp
+var query = @"
+    declare namespace math = 'http://www.w3.org/2005/xpath-functions/math';
+    declare default element namespace 'http://example.com/ns';
+    math:pi()
+";
+var result = new XQueryCompiler().Compile(query).Evaluate(new XQueryContext());
+```
+
+### 4.3 Context Item and External Variables
+
+```csharp
+using Bosak.XPath.Providers.Xml;
+using System.Xml.Linq;
+
+var doc = new XDocument(new XElement("root", new XAttribute("id", "42")));
+var context = new XQueryContext()
+    .WithContextItem(XdmValue.FromNode(new XDocumentNode(doc)))
+    .WithVariable("threshold", XdmValue.FromInteger(10));
+
+var result = new XQueryCompiler()
+    .Compile("/root/@id[. > $threshold]")
+    .Evaluate(context);
+```
+
+### 4.4 Current Status
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Prolog-less queries (`for`, `let`, `where`, `return`) | ✅ Working | Reuses XPath 3.1 FLWOR support |
+| Version declaration / namespace declarations | ✅ Working | Parsed by `XQueryParser` |
+| Default element / function / collation declarations | ✅ Working | Stored in `XQueryStaticContext` |
+| `order by`, `group by`, `count`, `window` | 🔮 Phase 2 | New IR/VM opcodes required |
+| Direct / computed constructors | 🔮 Phase 3 | XML-like syntax and node-building opcodes |
+| Library modules / `import module` | 🔮 Phase 4 | Module resolution and shared static context |
+| Serialization | 🔮 Phase 4 | `xml`, `html`, `xhtml`, `text`, `json`, `adaptive` |
+
+---
+
+## 5. XSLT Feature Matrix (Current State)
 
 | Feature | Status | Notes |
 |---------|--------|-------|
@@ -1001,7 +1069,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 
 ---
 
-## 5. XPath 3.1 Feature Highlights
+## 6. XPath 3.1 Feature Highlights
 
 ### Well-covered areas
 - Sequence construction, filtering, FLWOR expressions (`for`/`let` chains, `at $pos` positional variables, `where` clauses)
@@ -1023,7 +1091,7 @@ var callerXsl = @"<xsl:stylesheet version='3.0'
 
 ---
 
-## 6. XSD Validation
+## 7. XSD Validation
 
 Bosak provides an `IXsdValidator` abstraction for XML Schema validation:
 
@@ -1054,7 +1122,7 @@ Features:
 
 ---
 
-## 7. Current Build State
+## 8. Current Build State
 
 Run the full suite from the Bosak repo root:
 
@@ -1174,7 +1242,7 @@ dotnet test Bosak.sln
 
 ---
 
-## 8. VS Code Extension
+## 9. VS Code Extension
 
 Bosak ships with a VS Code extension (`vscode-bosak/`) that provides syntax highlighting, realtime diagnostics, and auto-completion via a Language Server Protocol (LSP) server.
 
@@ -1220,7 +1288,7 @@ Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**
 
 ---
 
-## 9. Getting Help / Reporting Issues
+## 10. Getting Help / Reporting Issues
 
 - Check `docs/ARCHITECTURE.md` in the Bosak repo for the layer overview and execution pipeline.
 - Check `docs/FEATURE_REQUESTS.md` for the feature request registry.
