@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Compile-time namespace resolution and static errors for removed functions                |
 //                      | Charles Korthout | 0.4   | 27-06-2026     | Preserve explicit braced-URI namespace URIs in function calls and named function refs    |
+//                      | Charles Korthout | 0.5   | 21-07-2026     | Empty expression reports XPST0003 via ParseException instead of ArgumentException         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -58,8 +59,10 @@ public sealed class XPath31Expression
     /// </summary>
     public static XPath31Expression Compile(string expression, CompileOptions options)
     {
-        ArgumentException.ThrowIfNullOrEmpty(expression);
         ArgumentNullException.ThrowIfNull(options);
+
+        if (string.IsNullOrWhiteSpace(expression))
+            throw new ParseException("Empty expression is not a valid XPath expression", 0);
 
         // 1. Lex + Parse -> AST
         var ast = XPathParser.Parse(expression);
