@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-22
-**Commit:** *pending* (XQuery 3.1 Phase 1 foundation)
+**Commit:** `e88ede4` (feat(xquery): Phase 1 foundation - prolog-less queries compile and execute via XPath pipeline)
 **Current focus:** **XQuery 3.1 Phase 1** — `Bosak.XQuery` now compiles and executes prolog-less XQuery queries by delegating to the proven XPath pipeline. Added `XQueryParser` (top-level grammar + prolog declarations), `XQueryStaticContext`, and wired `XQueryCompiler` / `XQueryExecutable` to the XPath parser, optimizer, IR lowerer, and VM. First passing tests: `for $i in 1 to 3 return $i`, `let $x := 42 return $x`, and `declare namespace math = '...'; math:pi()`. Full `dotnet test Bosak.sln` passes: **1,382 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 1 foundation)
