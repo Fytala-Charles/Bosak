@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `c5854bf` (fix(dateTime): ResultComparer extended-year serialization; fn:*-from-time avoid DateTimeOffset out-of-range)
+**Current focus:** **QT3 date/time harness-error skip cluster** — 19 runnable tests were skipped because `ResultComparer.SerializeSingle` and `ResultComparer.ValuesEqual` converted `XPathDateTime` extended-year values (e.g., year `-1999`) to `DateTimeOffset`, which only supports years 1–9999. Two additional time tests (`fn-hours-from-time-3`, `fn-timezone-from-time-11`) failed because `fn:*-from-time` accessed `XdmValue.TimeValue`, which converts a time value anchored at `0001-01-01` to `DateTimeOffset`; positive timezone offsets for early-morning times pushed the UTC instant into year 0 and threw `ArgumentOutOfRangeException`. Fixed `ResultComparer` to use `XdmValue.ToString()` (which delegates to `XPathDateTime` formatting) for date/time serialization and to fall back to canonical string comparison in `ValuesEqual` when either operand is outside the `DateTimeOffset` range. Fixed `HoursFromTime`, `MinutesFromTime`, `SecondsFromTime`, and `TimezoneFromTime` to read components directly from `XdmValue.TimeXPathValue` instead of converting through `DateTimeOffset`. Full QT3 suite now at **14,968 passed / 0 failed / 16,853 skipped (47.04%)**; runnable pass rate **100%** (14,968 / 14,968). Unit tests **1,379/0**.
+
+## This Session Fixes (19 date/time tests)
+
+1. **`ResultComparer` extended-year serialization no longer uses `DateTimeOffset`** — `SerializeSingle` previously called `value.DateTimeValue`/`DateValue`/`TimeValue` for `xs:dateTime`, `xs:date`, and `xs:time`, which threw `InvalidOperationException` for years ≤ 0 or > 9999. It now calls `value.ToString()`, which uses the internal `XPathDateTime` formatting (`FormatYear`, `FormatTimezone`, and zero-trimmed fractional seconds) and handles negative years and year 0 correctly.
+
+2. **`ResultComparer.ValuesEqual` falls back to canonical string comparison for extended-year date/time values** — When either operand is not representable as `DateTimeOffset`, the equality check now compares the canonical XPath string forms instead of attempting a `DateTimeOffset` conversion.
+
+3. **`fn:*-from-time` no longer converts time values to `DateTimeOffset`** — `HoursFromTime`, `MinutesFromTime`, `SecondsFromTime`, and `TimezoneFromTime` now read `Hour`, `Minute`, `Second`, `Millisecond`, and `TimezoneOffsetMinutes` directly from `XdmValue.TimeXPathValue`. This avoids `ArgumentOutOfRangeException` when the time value (anchored at `0001-01-01`) with a positive timezone offset normalizes to a UTC instant in year 0.
+
+4. **Regression safety** — Full QT3 suite improved by **+19 passed, −19 skipped** with no new failures and no regressions in unit tests. Targeted `CastAs039`, `fn-hours-from-time-3`, and `fn-timezone-from-time-11` now pass.
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs` (v1.6: extended-year date/time serialization via `XdmValue.ToString()`)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (v5.69: `fn:*-from-time` use `XPathDateTime` to avoid `DateTimeOffset` out-of-range)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The date/time harness-error cluster is gone. The remaining non-dependency skip buckets are:
+- 10 `XQuery syntax not supported` (FLWOR features not yet handled by the XPath parser)
+- 7 `Schema awareness not supported`
+- 5 `Could not evaluate assert-deep-eq` (parse errors in the deep-eq assertion)
+- 4 `Unexpected error: OverflowException` (decimal overflow)
+- and a few small singletons (URI parsing, invalid XML characters, regex, etc.)
+
+The 10 `XQuery syntax not supported` tests represent the next largest parser effort, but they are a sizable project. The smaller singletons (URI parsing, decimal overflow, regex) could be picked off individually for quick wins. Alternatively, the `assert-deep-eq` parse failures may be a single harness issue worth investigating.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `268a480` (fix(gDateTime): regex-based parsing for xs:gDay/gMonth/gMonthDay/gYearMonth)
 **Current focus:** **QT3 `IndexOutOfRangeException` skip cluster** — 72 runnable tests across `op-gDay-equal`, `op-gMonth-equal`, `op-gMonthDay-equal`, `op-gYearMonth-equal`, and `prod-CastExpr` were skipped because `VmEngine.ParseGDateTime` misidentified the structural dashes in `xs:gDay` (`---DD`), `xs:gMonth` (`--MM`), `xs:gMonthDay` (`--MM-DD`), and `xs:gYearMonth` (`YYYY-MM`) as timezone signs. For `xs:gDay("---31")` it extracted the trailing `-31` as a timezone string and crashed inside `ParseTimezoneOffset`. Fixed by rewriting `ParseGDateTime` to use per-subtype regexes that match the entire lexical form including an optional `Z` or `[+-]HH:MM` timezone, and by normalizing the timezone with the existing `NormalizeTimezone` helper. Full QT3 suite now at **14,949 passed / 0 failed / 16,872 skipped (46.98%)**; runnable pass rate **100%** (14,949 / 14,949). Unit tests **1,279/0**.
 

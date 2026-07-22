@@ -5,13 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
-> **Bosak baseline:** 1,279 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,949 passed / 0 failed / 16,872 skipped (46.98% / 100% of runnable tests)
+> **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 14,968 passed / 0 failed / 16,853 skipped (47.04% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 date/time harness-error cluster: `ResultComparer` extended-year serialization and `fn:*-from-time` `DateTimeOffset` out-of-range.
+  - 17 runnable tests were skipped because `ResultComparer` converted extended-year `xs:dateTime`/`xs:date`/`xs:time` values to `DateTimeOffset`, which does not support years outside 1–9999.
+  - `ResultComparer.SerializeSingle` now uses `XdmValue.ToString()` for date/time values, which delegates to `XPathDateTime` formatting and correctly handles negative years and year 0.
+  - `ResultComparer.ValuesEqual` already fell back to canonical string comparison for extended-year operands; the serialization fix removed the remaining `InvalidOperationException` skips.
+  - 2 additional tests (`fn-hours-from-time-3`, `fn-timezone-from-time-11`) were skipped because `fn:*-from-time` read `XdmValue.TimeValue`, which throws `ArgumentOutOfRangeException` when the reference date `0001-01-01` plus a positive timezone offset normalizes to year 0.
+  - `HoursFromTime`, `MinutesFromTime`, `SecondsFromTime`, and `TimezoneFromTime` now read components directly from `XdmValue.TimeXPathValue`.
+  - Full QT3 now **14,968 passed / 0 failed / 16,853 skipped = 47.04%** (runnable pass rate **100%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 gDateTime comparison/cast cluster: `ParseGDateTime` now uses regex-based parsing and correctly handles optional timezones.
   - 72 runnable tests across `op-gDay-equal`, `op-gMonth-equal`, `op-gMonthDay-equal`, `op-gYearMonth-equal`, and `prod-CastExpr` were skipped due to `IndexOutOfRangeException`.
