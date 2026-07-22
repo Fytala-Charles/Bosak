@@ -35,10 +35,13 @@
 //                      | Charles Korthout | 2.2   | 15-07-2026     | Added XsltVersion override for fn:system-property('xsl:version')                       |
 //                      | Charles Korthout | 2.3   | 18-07-2026     | Added Collections dictionary for fn:collection/fn:uri-collection resolution             |
 //                      | Charles Korthout | 2.4   | 20-07-2026     | Added IsXsltMode to expose XSLT-only functions (fn:current, fn:system-property) only in XSLT mode |
+//                      | Charles Korthout | 2.5   | 21-07-2026     | Convert UriFormatException/IOException/XmlException to FODC0005/FODC0002 in LoadDocument |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
+using System.IO;
+using System.Xml;
 
 namespace Bosak.XPath.Runtime.Vm;
 
@@ -258,31 +261,42 @@ public sealed class EvaluationContext
     /// </summary>
     public IXdmNode LoadDocument(string uri)
     {
-        if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(BaseUri))
-        {
-            uri = new Uri(new Uri(BaseUri), uri).AbsoluteUri;
-        }
-
-        if (_documentCache.TryGetValue(uri, out var cached))
-            return cached;
-
         if (DocumentLoader is null)
             throw new InvalidOperationException($"No document loader configured. Cannot load document: {uri}");
-
-        // A resource mapper may redirect published (e.g. http:) URIs to local files;
-        // the cache key remains the originally requested URI.
-        var loadUri = ResourceUriMapper?.Invoke(uri) ?? uri;
 
         IXdmNode node;
         try
         {
+            if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(BaseUri))
+            {
+                uri = new Uri(new Uri(BaseUri), uri).AbsoluteUri;
+            }
+
+            if (_documentCache.TryGetValue(uri, out var cached))
+                return cached;
+
+            // A resource mapper may redirect published (e.g. http:) URIs to local files;
+            // the cache key remains the originally requested URI.
+            var loadUri = ResourceUriMapper?.Invoke(uri) ?? uri;
             node = DocumentLoader(loadUri);
         }
-        catch (System.IO.FileNotFoundException)
+        catch (FileNotFoundException)
         {
             throw new InvalidOperationException($"FODC0002: Document not available: {uri}");
         }
-        catch (System.IO.DirectoryNotFoundException)
+        catch (DirectoryNotFoundException)
+        {
+            throw new InvalidOperationException($"FODC0002: Document not available: {uri}");
+        }
+        catch (UriFormatException)
+        {
+            throw new InvalidOperationException($"FODC0005: Invalid document URI: {uri}");
+        }
+        catch (IOException)
+        {
+            throw new InvalidOperationException($"FODC0002: Document not available: {uri}");
+        }
+        catch (XmlException)
         {
             throw new InvalidOperationException($"FODC0002: Document not available: {uri}");
         }
