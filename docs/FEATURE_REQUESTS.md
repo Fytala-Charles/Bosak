@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-22 (XQuery 3.1 Phase 1 foundation complete: prolog-less queries compile and execute via `XQueryCompiler`; unit tests now **1,382/0**; QT3 and XSLT baselines unchanged)
+> **Living Registry** — Last updated: 2026-07-22 (XQuery 3.1 Phase 2 complete: `order by` clause implemented with tuple-based VM sorting; unit tests now **1,389/0**; QT3 and XSLT baselines unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -145,6 +145,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-038 | *(internal)* | XSLT `namespace` cluster — `inherit-namespaces="no"` | Required for W3C `namespace-2603` through `namespace-2632`: prefixed namespace undeclarations for children of `xsl:element`/`xsl:copy`/LRE barriers, and preservation of namespace annotations when unwrapping the synthetic document root | **Implemented** | Phase 5 | Charles Korthout | 2026-07-12 |
 | REQ-039 | *(internal)* | Resolve QT3 `op-same-key` hang | `XdmMap` copied the whole dictionary on every `map:remove`/`map:put`, causing O(N²) behavior on the 28-test `op-same-key` set; switched to `ImmutableDictionary` structural sharing | **Implemented** | TBD | Charles Korthout | 2026-07-17 |
 | REQ-040 | Bosak / Fytala Stack | XQuery 3.1 Phase 1 — prolog-less query execution | Wire `Bosak.XQuery` to the XPath pipeline so basic XQuery expressions compile and run | **Implemented** | Phase 4 | Charles Korthout | 2026-07-22 |
+| REQ-041 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `order by` clause | Required for full XQuery FLWOR: multi-clause for/let, where, and `order by` with ascending/descending, empty least/greatest, and collation | **Implemented** | Phase 4 | Charles Korthout | 2026-07-22 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1796,6 +1797,52 @@ Wire the XQuery public API to the proven XPath pipeline: parse the query body wi
 |------|-------|----------|-----------|
 | 2026-07-22 | Kimi | Implement separate XQuery parser that delegates to XPathParser | Keeps XPath lexer/parser clean and avoids XML-tokenization complexity in the XPath layer. |
 
+### REQ-041: XQuery 3.1 Phase 2 — FLWOR `order by` clause
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-22  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 requires full FLWOR expressions, including multiple `for`/`let` clauses, `where`, and `order by`. The XPath-only parser only allowed a single initial `for`/`let` and a `where` clause, so queries such as `for $x in ... order by ... return ...` could not be parsed.
+
+**Proposed Solution:**  
+Extend `XPathParser` with an `allowFullFlwor` flag used by `XQueryParser`, add `FlworExpressionNode` and `OrderByClauseNode` AST nodes, and lower them with new `OrderBy` and `TupleBind` IR opcodes executed by the VM.
+
+**Acceptance Criteria:**
+- [x] `XQueryParser` parses multi-clause `for`/`let`/`where`/`order by` FLWOR expressions.
+- [x] `order by` supports `ascending`/`descending`, `empty least`/`greatest`, and an optional `collation` URI.
+- [x] XPath mode still rejects multi-clause FLWOR and `order by` per `LetExpr020a`.
+- [x] `IrLowerer` and `VmEngine` correctly sort tuples and bind them back to the body.
+- [x] No regressions in XPath, XSLT, or existing unit tests.
+
+**Implementation Notes:**
+- Added `allowFullFlwor` to `XPathParser.Parse` and `XPathParser` constructor; XPath callers default to `false`.
+- `ParseFlworExpr` raises `XPST0003` for intermediate `for`/`let` or `order by` when `_allowFullFlwor` is false.
+- Added `OrderByClauseNode`, `ForClauseNode`, `LetClauseNode`, `WhereClauseNode` to `XPathAstNode`.
+- `XPathOptimizer` traverses all FLWOR clause types.
+- `IrLowerer.LowerFlworExpression` builds XDM-array tuples, emits `OrderBy`, then iterates sorted tuples with `TupleBind`.
+- `VmEngine` handlers for `OrderBy` (stable sort with key extraction) and `TupleBind` (bind tuple members to named variables).
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `XPathParser` gains `allowFullFlwor`; new clause AST nodes. |
+| Compiler | Modified | `XPathOptimizer` and `IrLowerer` support `FlworExpressionNode` and `OrderByClauseNode`. |
+| Runtime | Modified | `VmEngine` adds `OrderBy` and `TupleBind` handlers. |
+| Standard | None | No new standard functions. |
+| XSLT | None | No XSLT changes. |
+| API | None | Public `XQueryCompiler` surface unchanged. |
+| Conformance | None | QT3 harness not yet wired to XQuery tests. |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-22 | Kimi | Implement tuple-based lowering for order by | Keeps the VM simple by treating FLWOR tuples as arrays and sorting before binding. |
+
 ---
 
 ## 9. Roadmap (post-QT3 sweep)
@@ -1804,7 +1851,7 @@ After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilitie
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 | **XQuery 3.1 full implementation** | In Progress | Phase 1 complete: prolog-less queries run via `XQueryCompiler`. Phase 2 (full FLWOR clauses), Phase 3 (constructors), and Phase 4 (modules/serialization) remain. |
+| 1 | REQ-040 / REQ-041 | **XQuery 3.1 full implementation** | In Progress | Phase 2 in progress: `order by` implemented. `group by`, `count`, `window` (Phase 2 remainder), constructors (Phase 3), and modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

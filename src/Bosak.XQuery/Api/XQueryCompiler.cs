@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 06-06-2026     | Creation — placeholder skeleton                                                          |
 //                      | Charles Korthout | 1.0   | 22-07-2026     | Wired to XPath parser, optimizer, IR lowerer, and VM                                    |
+//                      | Charles Korthout | 1.1   | 22-07-2026     | Resolve function namespaces inside FlworExpressionNode clauses                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -84,6 +85,11 @@ public sealed class XQueryCompiler
             LetExpressionNode le => le with { Bindings = le.Bindings.Select(b => b with { Expression = ResolveFunctionNamespaces(b.Expression, context) }).ToList(), Body = ResolveFunctionNamespaces(le.Body, context) },
             QuantifiedExpressionNode qe => qe with { Bindings = qe.Bindings.Select(b => b with { Expression = ResolveFunctionNamespaces(b.Expression, context) }).ToList(), SatisfiesExpression = ResolveFunctionNamespaces(qe.SatisfiesExpression, context) },
             BinaryExpressionNode bin => bin with { Left = ResolveFunctionNamespaces(bin.Left, context), Right = ResolveFunctionNamespaces(bin.Right, context) },
+            FlworExpressionNode flwor => flwor with
+            {
+                Clauses = flwor.Clauses.Select(c => ResolveFlworClause(c, context)).ToList(),
+                ReturnExpression = ResolveFunctionNamespaces(flwor.ReturnExpression, context)
+            },
             UnaryExpressionNode un => un with { Operand = ResolveFunctionNamespaces(un.Operand, context) },
             CastNode cast => cast with { Expression = ResolveFunctionNamespaces(cast.Expression, context) },
             CastableNode castable => castable with { Expression = ResolveFunctionNamespaces(castable.Expression, context) },
@@ -111,6 +117,39 @@ public sealed class XQueryCompiler
         {
             Arguments = node.Arguments.Select(a => ResolveFunctionNamespaces(a, context)).ToList(),
             NamespaceUri = nsUri
+        };
+    }
+
+    private static FlworClauseNode ResolveFlworClause(FlworClauseNode clause, XQueryStaticContext context)
+    {
+        return clause switch
+        {
+            ForClauseNode forClause => forClause with
+            {
+                Bindings = forClause.Bindings.Select(b => b with
+                {
+                    Expression = ResolveFunctionNamespaces(b.Expression, context)
+                }).ToList()
+            },
+            LetClauseNode letClause => letClause with
+            {
+                Bindings = letClause.Bindings.Select(b => b with
+                {
+                    Expression = ResolveFunctionNamespaces(b.Expression, context)
+                }).ToList()
+            },
+            WhereClauseNode whereClause => whereClause with
+            {
+                Condition = ResolveFunctionNamespaces(whereClause.Condition, context)
+            },
+            OrderByClauseNode orderClause => orderClause with
+            {
+                Specs = orderClause.Specs.Select(s => s with
+                {
+                    KeyExpression = ResolveFunctionNamespaces(s.KeyExpression, context)
+                }).ToList()
+            },
+            _ => clause
         };
     }
 

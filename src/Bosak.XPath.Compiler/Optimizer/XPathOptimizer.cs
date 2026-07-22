@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.8   | 19-07-2026     | Only fold unary plus for numeric literals; non-literals need runtime type check         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 21-07-2026     | Skip decimal constant folding on OverflowException; let runtime raise FOAR0002        |
+//                      | Charles Korthout | 1.0   | 22-07-2026     | Optimize FlworExpressionNode and all clause types (XQuery order by)                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -86,6 +87,7 @@ public sealed class XPathOptimizer
             FunctionCallNode call => OptimizeFunctionCall(call, ref changed),
             LetExpressionNode let => OptimizeLet(let, ref changed),
             DynamicFunctionCallNode dyn => OptimizeDynamicFunctionCall(dyn, ref changed),
+            FlworExpressionNode flwor => OptimizeFlwor(flwor, ref changed),
             _ => node
         };
     }
@@ -634,6 +636,84 @@ public sealed class XPathOptimizer
             return node with { Bindings = newBindings, Body = body };
         }
         return node;
+    }
+
+    // ------------------------------------------------------------------
+    // Full FLWOR (XQuery order by, etc.)
+    // ------------------------------------------------------------------
+
+    private XPathAstNode OptimizeFlwor(FlworExpressionNode node, ref bool changed)
+    {
+        var clauses = new List<FlworClauseNode>(node.Clauses.Count);
+        bool anyClauseChanged = false;
+        foreach (var clause in node.Clauses)
+        {
+            var newClause = OptimizeFlworClause(clause, ref changed);
+            clauses.Add(newClause);
+            if (newClause != clause) anyClauseChanged = true;
+        }
+        var body = OptimizeNode(node.ReturnExpression, ref changed);
+        if (anyClauseChanged || body != node.ReturnExpression)
+        {
+            changed = true;
+            return node with { Clauses = clauses, ReturnExpression = body };
+        }
+        return node;
+    }
+
+    private FlworClauseNode OptimizeFlworClause(FlworClauseNode clause, ref bool changed)
+    {
+        return clause switch
+        {
+            ForClauseNode forClause => OptimizeForClause(forClause, ref changed),
+            LetClauseNode letClause => OptimizeLetClause(letClause, ref changed),
+            WhereClauseNode whereClause => OptimizeWhereClause(whereClause, ref changed),
+            OrderByClauseNode orderClause => OptimizeOrderByClause(orderClause, ref changed),
+            _ => clause
+        };
+    }
+
+    private ForClauseNode OptimizeForClause(ForClauseNode node, ref bool changed)
+    {
+        var bindings = new List<QuantifiedBinding>(node.Bindings.Count);
+        foreach (var b in node.Bindings)
+        {
+            var expr = OptimizeNode(b.Expression, ref changed);
+            bindings.Add(expr == b.Expression
+                ? b
+                : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName, b.VariablePrefix, b.VariableNamespaceUri));
+        }
+        return bindings.SequenceEqual(node.Bindings) ? node : node with { Bindings = bindings };
+    }
+
+    private LetClauseNode OptimizeLetClause(LetClauseNode node, ref bool changed)
+    {
+        var bindings = new List<QuantifiedBinding>(node.Bindings.Count);
+        foreach (var b in node.Bindings)
+        {
+            var expr = OptimizeNode(b.Expression, ref changed);
+            bindings.Add(expr == b.Expression
+                ? b
+                : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName, b.VariablePrefix, b.VariableNamespaceUri));
+        }
+        return bindings.SequenceEqual(node.Bindings) ? node : node with { Bindings = bindings };
+    }
+
+    private WhereClauseNode OptimizeWhereClause(WhereClauseNode node, ref bool changed)
+    {
+        var condition = OptimizeNode(node.Condition, ref changed);
+        return condition == node.Condition ? node : node with { Condition = condition };
+    }
+
+    private OrderByClauseNode OptimizeOrderByClause(OrderByClauseNode node, ref bool changed)
+    {
+        var specs = new List<OrderSpec>(node.Specs.Count);
+        foreach (var spec in node.Specs)
+        {
+            var key = OptimizeNode(spec.KeyExpression, ref changed);
+            specs.Add(key == spec.KeyExpression ? spec : spec with { KeyExpression = key });
+        }
+        return specs.SequenceEqual(node.Specs) ? node : node with { Specs = specs };
     }
 
     private XPathAstNode OptimizeDynamicFunctionCall(DynamicFunctionCallNode node, ref bool changed)

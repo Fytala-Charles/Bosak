@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 06-06-2026     | Creation — placeholder skeleton                                                          |
 //                      | Charles Korthout | 0.2   | 22-07-2026     | Added first end-to-end FLWOR query test                                                  |
+//                      | Charles Korthout | 0.3   | 22-07-2026     | Added order by clause tests                                                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -90,5 +91,120 @@ public class PlaceholderTests
 
         Assert.Equal(XdmValueKind.Double, result.Kind);
         Assert.True(result.DoubleValue > 3.14 && result.DoubleValue < 3.15);
+    }
+
+    [Fact]
+    public void XQuery_ForLet_Mixed_ReturnsSequence()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3) let $j := $i * 2 return $j");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 2L, 4L, 6L }, items);
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_Ascending_Integers()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (3, 1, 2) order by $i return $i");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 2L, 3L }, items);
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_Descending_Integers()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (3, 1, 2) order by $i descending return $i");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 3L, 2L, 1L }, items);
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_Strings()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $s in ('cherry', 'apple', 'banana') order by $s return $s");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToStrings(result);
+        Assert.Equal(new[] { "apple", "banana", "cherry" }, items);
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_WithWhere()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (5, 1, 4, 2, 3) where $i > 2 order by $i return $i");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 3L, 4L, 5L }, items);
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_WithLet()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (3, 1, 2) let $d := $i * 2 order by $d descending return $i");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 3L, 2L, 1L }, items);
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_MultipleKeys()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (2, 1, 2, 1) order by $i, -$i return $i");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 1L, 2L, 2L }, items);
+    }
+
+    private static List<long> ToIntegers(XdmValue value)
+    {
+        var sequence = XdmSequence.FromSource(value.SequenceValue!);
+        var items = new List<long>();
+        foreach (var item in sequence)
+        {
+            Assert.Equal(XdmValueKind.Integer, item.Kind);
+            items.Add(item.IntegerValue);
+        }
+        return items;
+    }
+
+    private static List<string> ToStrings(XdmValue value)
+    {
+        var sequence = XdmSequence.FromSource(value.SequenceValue!);
+        var items = new List<string>();
+        foreach (var item in sequence)
+        {
+            Assert.Equal(XdmValueKind.String, item.Kind);
+            items.Add(item.StringValue);
+        }
+        return items;
     }
 }

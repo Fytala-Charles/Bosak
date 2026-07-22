@@ -5,14 +5,22 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 22 July 2026
-> **Bosak baseline:** 1,382 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,389 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** 14,994 passed / 0 failed / 16,827 skipped (47.12% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 1 foundation — prolog-less queries compile and execute via `XQueryCompiler`
+> **XQuery baseline:** Phase 2 — `order by` clause implemented with tuple-based VM sorting
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-22** — XQuery 3.1 Phase 2: `order by` clause implemented with tuple-based VM sorting.
+  - Extended `XPathParser` with `allowFullFlwor` to parse multi-clause `for`/`let`, `where`, and `order by` (empty ordering, collation) while preserving XPath-only mode.
+  - Added `FlworExpressionNode` and `OrderByClauseNode` AST nodes; `XPathOptimizer` now traverses full FLWOR clauses.
+  - Added `OrderBy` and `TupleBind` IR opcodes; `IrLowerer` lowers FLWOR expressions into tuple arrays, sorts them, and binds them back to the body.
+  - Added `OrderBy` and `TupleBind` VM handlers in `VmEngine` for stable, collation-aware sorting.
+  - Added 13 XQuery unit tests covering ascending, descending, strings, `where`, `let`, and multiple sort keys — all pass.
+  - No regressions in XPath, XSLT, or existing unit tests; unit tests now **1,389/0**.
 
 - **2026-07-22** — XQuery 3.1 Phase 1 foundation: `Bosak.XQuery` now compiles and executes prolog-less queries.
   - Added `XQueryParser` (top-level XQuery grammar + prolog declarations) and `XQueryStaticContext` (namespace/default bindings, declared variables/functions).
@@ -1011,7 +1019,8 @@ var result = new XQueryCompiler()
 | Prolog-less queries (`for`, `let`, `where`, `return`) | ✅ Working | Reuses XPath 3.1 FLWOR support |
 | Version declaration / namespace declarations | ✅ Working | Parsed by `XQueryParser` |
 | Default element / function / collation declarations | ✅ Working | Stored in `XQueryStaticContext` |
-| `order by`, `group by`, `count`, `window` | 🔮 Phase 2 | New IR/VM opcodes required |
+| `order by` | ✅ Working | Tuple-based sorting; ascending/descending, empty least/greatest, collation |
+| `group by`, `count`, `window` | 🔮 Phase 2 | New IR/VM opcodes required |
 | Direct / computed constructors | 🔮 Phase 3 | XML-like syntax and node-building opcodes |
 | Library modules / `import module` | 🔮 Phase 4 | Module resolution and shared static context |
 | Serialization | 🔮 Phase 4 | `xml`, `html`, `xhtml`, `text`, `json`, `adaptive` |

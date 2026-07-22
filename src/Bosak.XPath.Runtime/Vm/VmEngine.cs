@@ -105,6 +105,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.62  | 21-07-2026     | ParseGDateTime uses regex to avoid IndexOutOfRangeException on gDay/gMonth/gMonthDay/gYearMonth |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.63  | 22-07-2026     | Added OrderBy and TupleBind VM handlers for XQuery FLWOR order by                       |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.59  | 21-07-2026     | Static function calls apply ParameterTypeNames conversion; URI promotion detects xs:anyURI annotation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -115,6 +117,7 @@ using System.Text.RegularExpressions;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Runtime.Functions;
 
 namespace Bosak.XPath.Runtime.Vm;
@@ -791,6 +794,69 @@ public static class VmEngine
                             context.RemoveVariable(bindLocal, bindNs);
 
                         registers[instr.RegisterA] = XdmValue.FromBoolean(result);
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.OrderBy:
+                    {
+                        var orderInfo = (OrderByInfo)literalPool[instr.Operand]!;
+                        var tupleSequence = registers[instr.RegisterB];
+                        var tuples = MaterializeSequence(tupleSequence);
+                        var materializedTuples = new List<XdmValue[]>();
+                        foreach (var tuple in tuples)
+                        {
+                            if (tuple.IsArray && tuple.ArrayValue is not null)
+                            {
+                                materializedTuples.Add(tuple.ArrayValue.Values.ToArray());
+                            }
+                            else if (tuple.IsSequence && tuple.SequenceValue is not null)
+                            {
+                                materializedTuples.Add(MaterializeSequence(tuple));
+                            }
+                            else
+                            {
+                                materializedTuples.Add(new[] { tuple });
+                            }
+                        }
+
+                        materializedTuples.Sort((x, y) => CompareTuples(x, y, orderInfo, context));
+
+                        var sorted = new List<XdmValue>(materializedTuples.Count);
+                        foreach (var tupleItems in materializedTuples)
+                        {
+                            sorted.Add(XdmValue.FromArray(new XdmArray(tupleItems)));
+                        }
+
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(sorted));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.TupleBind:
+                    {
+                        var bindInfo = (TupleBindInfo)literalPool[instr.Operand]!;
+                        var tuple = registers[instr.RegisterA];
+                        XdmValue[] items;
+                        if (tuple.IsArray && tuple.ArrayValue is not null)
+                        {
+                            items = tuple.ArrayValue.Values.ToArray();
+                        }
+                        else if (tuple.IsSequence && tuple.SequenceValue is not null)
+                        {
+                            items = MaterializeSequence(tuple);
+                        }
+                        else
+                        {
+                            items = new[] { tuple };
+                        }
+
+                        for (int i = 0; i < bindInfo.Variables.Count; i++)
+                        {
+                            var (localName, nsUri) = bindInfo.Variables[i];
+                            var item = i < items.Length ? items[i] : XdmValue.Undefined;
+                            context.WithVariable(localName, item, nsUri ?? "");
+                        }
                         ip++;
                         break;
                     }
@@ -7873,5 +7939,74 @@ public static class VmEngine
                 resultD = v;
         }
         return XdmValue.FromDouble(resultD);
+    }
+
+    // ------------------------------------------------------------------
+    // OrderBy helpers
+    // ------------------------------------------------------------------
+
+    private static int CompareTuples(XdmValue[] x, XdmValue[] y, OrderByInfo info, EvaluationContext context)
+    {
+        for (int i = 0; i < info.KeyCount; i++)
+        {
+            int keyIndex = info.ValueCount + i;
+            var keyX = keyIndex < x.Length ? x[keyIndex] : XdmValue.Undefined;
+            var keyY = keyIndex < y.Length ? y[keyIndex] : XdmValue.Undefined;
+
+            int cmp = CompareOrderByValues(keyX, keyY, info.EmptyOrder[i], context);
+            if (cmp != 0)
+                return info.Descending[i] ? -cmp : cmp;
+        }
+        return 0;
+    }
+
+    private static int CompareOrderByValues(XdmValue left, XdmValue right, EmptyOrder emptyOrder, EvaluationContext context)
+    {
+        left = Atomize(left);
+        right = Atomize(right);
+
+        bool leftEmpty = left.IsUndefined || IsEmptySeq(left);
+        bool rightEmpty = right.IsUndefined || IsEmptySeq(right);
+        if (leftEmpty || rightEmpty)
+        {
+            if (leftEmpty && rightEmpty) return 0;
+            int emptyRank = emptyOrder == EmptyOrder.Greatest ? 1 : -1;
+            return leftEmpty ? emptyRank : -emptyRank;
+        }
+
+        if (left.IsSequence) left = FirstItemOrUndefined(left);
+        if (right.IsSequence) right = FirstItemOrUndefined(right);
+
+        if (left.IsUndefined || right.IsUndefined)
+        {
+            if (left.IsUndefined && right.IsUndefined) return 0;
+            int emptyRank = emptyOrder == EmptyOrder.Greatest ? 1 : -1;
+            return left.IsUndefined ? emptyRank : -emptyRank;
+        }
+
+        if (IsNumeric(left) && IsNumeric(right))
+        {
+            double l = ToDouble(left);
+            double r = ToDouble(right);
+            return l.CompareTo(r);
+        }
+
+        if (left.Kind == XdmValueKind.String && right.Kind == XdmValueKind.String)
+        {
+            return string.CompareOrdinal(left.StringValue, right.StringValue);
+        }
+
+        if (left.Kind == XdmValueKind.Boolean && right.Kind == XdmValueKind.Boolean)
+        {
+            return left.BooleanValue.CompareTo(right.BooleanValue);
+        }
+
+        if (left.Kind == XdmValueKind.Integer && right.Kind == XdmValueKind.Integer)
+        {
+            return left.IntegerValue.CompareTo(right.IntegerValue);
+        }
+
+        // Fallback: convert to string and compare.
+        return string.CompareOrdinal(left.ToString(), right.ToString());
     }
 }

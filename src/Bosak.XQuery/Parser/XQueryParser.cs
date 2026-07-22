@@ -10,7 +10,8 @@
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 0.1   | 22-07-2026     | Creation — prolog-less delegation to XPathParser                                       |
+//                      | Charles Korthout | 0.1   | 22-07-2026     | Creation — prolog-less delegation to XPathParser                                        |
+//                      | Charles Korthout | 0.2   | 22-07-2026     | Parse XQuery body with allowFullFlwor=true to enable full FLWOR                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -87,7 +88,7 @@ public sealed class XQueryParser
         if (string.IsNullOrWhiteSpace(remaining))
             throw new ParseException("XQST0003: Query body is missing.", _position);
 
-        var bodyAst = XPathParser.Parse(remaining);
+        var bodyAst = XPathParser.Parse(remaining, allowFullFlwor: true);
         return new XQueryParseResult(context, bodyAst);
     }
 

@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 30-05-2026     | Added PathStepMap opcode for per-context-item predicate evaluation                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 19-07-2026     | Added LoadNode opcode for unit-test node literals                                       |
+//                      | Charles Korthout | 0.7   | 22-07-2026     | Added OrderBy and TupleBind opcodes for XQuery FLWOR order by                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -40,6 +41,8 @@ public enum IrOpCode : byte
     Some,
     Every,
     TryCatch,
+    OrderBy,
+    TupleBind,
     
     // ---- Context -----------------------------------------------------
     LoadContext,

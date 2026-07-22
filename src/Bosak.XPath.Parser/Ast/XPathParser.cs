@@ -40,6 +40,8 @@
 //                      | Charles Korthout | 1.15  | 20-07-2026     | Only treat 'for'/'let' as FLWOR keywords when followed by '$' (K2-NameTest-78/79)        |
 //                      | Charles Korthout | 1.16  | 20-07-2026     | Disallow consecutive for/let clauses in FLWOR (XPath-only; LetExpr020a)                   |
 //                      | Charles Korthout | 1.17  | 20-07-2026     | Require closing parenthesis in sequence type tests (K-SeqExprTreat-16)                    |
+//                      | Charles Korthout | 1.18  | 22-07-2026     | Parse full XQuery FLWOR with order by, empty order, and collation                       |
+//                      | Charles Korthout | 1.19  | 22-07-2026     | Added allowFullFlwor flag to Parse; XPath-only mode rejects multi-clause FLWOR/order by |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -59,12 +61,14 @@ public sealed class XPathParser
 {
     private readonly Token[] _tokens;
     private readonly string _source;
+    private readonly bool _allowFullFlwor;
     private int _position;
 
-    public XPathParser(Token[] tokens, string source)
+    public XPathParser(Token[] tokens, string source, bool allowFullFlwor = false)
     {
         _tokens = tokens;
         _source = source;
+        _allowFullFlwor = allowFullFlwor;
         _position = 0;
     }
 
@@ -96,7 +100,9 @@ public sealed class XPathParser
     /// <summary>
     /// Convenience method: lexes and parses an XPath expression string.
     /// </summary>
-    public static XPathAstNode Parse(string xpath)
+    /// <param name="xpath">The XPath expression to parse.</param>
+    /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax (multiple for/let/where/order-by clauses). Default is false (XPath-only FLWOR).</param>
+    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false)
     {
         var lexer = new XPathLexer(xpath.AsSpan());
         var tokens = new List<Token>();
@@ -104,7 +110,7 @@ public sealed class XPathParser
         while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
             tokens.Add(tok);
 
-        var parser = new XPathParser(tokens.ToArray(), xpath);
+        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor);
         return parser.ParseExpression();
     }
 
@@ -229,11 +235,14 @@ public sealed class XPathParser
 
     // FLWORExpr ::= InitialClause IntermediateClause* "return" ExprSingle
     // InitialClause ::= ForClause | LetClause
-    // IntermediateClause ::= ForClause | LetClause | WhereClause
+    // IntermediateClause ::= ForClause | LetClause | WhereClause | OrderByClause
     // ForClause ::= "for" ForBinding ("," ForBinding)*
     // ForBinding ::= "$" VarName ("at" "$" VarName)? "in" ExprSingle
     // LetClause ::= "let" LetBinding ("," LetBinding)*
+    // LetBinding ::= "$" VarName ":="" ExprSingle
     // WhereClause ::= "where" ExprSingle
+    // OrderByClause ::= "order by" OrderSpec ("," OrderSpec)*
+    // OrderSpec ::= ExprSingle ("ascending" | "descending")? ("empty" ("least" | "greatest"))? ("collation" URILiteral)?
     private XPathAstNode ParseForExpr() => ParseFlworExpr();
 
     private XPathAstNode ParseLetExpr() => ParseFlworExpr();
@@ -241,43 +250,132 @@ public sealed class XPathParser
     private XPathAstNode ParseFlworExpr()
     {
         int start = Current.Start;
-        var clauses = new List<(string Kind, object Payload)>();
+        var clauses = new List<FlworClauseNode>();
 
         // Initial clause (dispatch guarantees 'for' or 'let').
-        clauses.Add(Current.Kind == TokenKind.KeywordFor
-            ? ("for", ParseForClauseBindings())
-            : ("let", ParseLetClauseBindings()));
+        if (Current.Kind == TokenKind.KeywordFor)
+            clauses.Add(new ForClauseNode(ParseForClauseBindings()));
+        else
+            clauses.Add(new LetClauseNode(ParseLetClauseBindings()));
 
-        // Intermediate clauses. 'where' is recognized contextually as a Name token:
-        // at clause level only a clause keyword or 'return' may follow, so an
-        // unquoted Name "where" here is unambiguous.
+        // Intermediate clauses.
         while (true)
         {
-            if (Current.Kind == TokenKind.Name && GetString(Current) == "where")
+            if (Current.Kind == TokenKind.KeywordFor)
+            {
+                if (!_allowFullFlwor)
+                    throw new ParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
+                clauses.Add(new ForClauseNode(ParseForClauseBindings()));
+            }
+            else if (Current.Kind == TokenKind.KeywordLet)
+            {
+                if (!_allowFullFlwor)
+                    throw new ParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
+                clauses.Add(new LetClauseNode(ParseLetClauseBindings()));
+            }
+            else if (Current.Kind == TokenKind.Name && GetString(Current) == "where")
             {
                 Advance();
-                clauses.Add(("where", ParseExprSingle()));
+                clauses.Add(new WhereClauseNode(ParseExprSingle()));
+            }
+            else if (Current.Kind == TokenKind.Name && GetString(Current) == "order")
+            {
+                if (!_allowFullFlwor)
+                    throw new ParseException("XPST0003: XPath does not allow an order by clause.", Current.Start);
+                Advance();
+                if (Current.Kind == TokenKind.Name && GetString(Current) == "by")
+                {
+                    Advance();
+                    clauses.Add(new OrderByClauseNode(ParseOrderBySpecs()));
+                }
+                else
+                {
+                    throw new ParseException("XQST0003: Expected 'by' after 'order'.", Current.Start);
+                }
             }
             else
+            {
                 break;
+            }
         }
 
         Expect(TokenKind.KeywordReturn);
         var body = ParseExprSingle();
 
-        // Fold clauses right-to-left into nested For/Let/If nodes.
-        for (int i = clauses.Count - 1; i >= 0; i--)
+        // For simple cases with no order by (and only one initial for/let + optional where),
+        // preserve the existing nested For/Let/If AST for backward compatibility.
+        if (clauses.Count == 1 && clauses[0] is ForClauseNode forClause && !clauses.Any(c => c is OrderByClauseNode))
         {
-            var (kind, payload) = clauses[i];
-            body = kind switch
-            {
-                "for" => WithSpan(new ForExpressionNode((IReadOnlyList<QuantifiedBinding>)payload, body), start, End),
-                "let" => WithSpan(new LetExpressionNode((IReadOnlyList<QuantifiedBinding>)payload, body), start, End),
-                _ => WithSpan(new IfExpressionNode((XPathAstNode)payload, body,
-                        new SequenceExpressionNode(Array.Empty<XPathAstNode>())), start, End),
-            };
+            return WithSpan(new ForExpressionNode(forClause.Bindings, body), start, End);
         }
-        return body;
+        if (clauses.Count == 1 && clauses[0] is LetClauseNode letClause && !clauses.Any(c => c is OrderByClauseNode))
+        {
+            return WithSpan(new LetExpressionNode(letClause.Bindings, body), start, End);
+        }
+        if (clauses.Count == 2 && clauses[0] is ForClauseNode forClause2 && clauses[1] is WhereClauseNode whereClause && !clauses.Any(c => c is OrderByClauseNode))
+        {
+            var filteredBody = WithSpan(new IfExpressionNode(whereClause.Condition, body,
+                new SequenceExpressionNode(Array.Empty<XPathAstNode>())), start, End);
+            return WithSpan(new ForExpressionNode(forClause2.Bindings, filteredBody), start, End);
+        }
+        if (clauses.Count == 2 && clauses[0] is LetClauseNode letClause2 && clauses[1] is WhereClauseNode whereClause2 && !clauses.Any(c => c is OrderByClauseNode))
+        {
+            var filteredBody = WithSpan(new IfExpressionNode(whereClause2.Condition, body,
+                new SequenceExpressionNode(Array.Empty<XPathAstNode>())), start, End);
+            return WithSpan(new LetExpressionNode(letClause2.Bindings, filteredBody), start, End);
+        }
+
+        return WithSpan(new FlworExpressionNode(clauses, body), start, End);
+    }
+
+    private IReadOnlyList<OrderSpec> ParseOrderBySpecs()
+    {
+        var specs = new List<OrderSpec>();
+        do
+        {
+            var key = ParseExprSingle();
+            bool descending = false;
+            var emptyOrder = EmptyOrder.Least;
+            string? collation = null;
+
+            if (Current.Kind == TokenKind.Name && GetString(Current) == "ascending")
+            {
+                Advance();
+            }
+            else if (Current.Kind == TokenKind.Name && GetString(Current) == "descending")
+            {
+                Advance();
+                descending = true;
+            }
+
+            if (Current.Kind == TokenKind.Name && GetString(Current) == "empty")
+            {
+                Advance();
+                if (Current.Kind == TokenKind.Name && GetString(Current) == "greatest")
+                {
+                    Advance();
+                    emptyOrder = EmptyOrder.Greatest;
+                }
+                else if (Current.Kind == TokenKind.Name && GetString(Current) == "least")
+                {
+                    Advance();
+                }
+                else
+                {
+                    throw new ParseException("XQST0003: Expected 'greatest' or 'least' after 'empty'.", Current.Start);
+                }
+            }
+
+            if (Current.Kind == TokenKind.Name && GetString(Current) == "collation")
+            {
+                Advance();
+                var lit = Expect(TokenKind.StringLiteral);
+                collation = Unquote(GetString(lit));
+            }
+
+            specs.Add(new OrderSpec(key, descending, emptyOrder, collation));
+        } while (Match(TokenKind.Comma));
+        return specs;
     }
 
     private IReadOnlyList<QuantifiedBinding> ParseForClauseBindings()

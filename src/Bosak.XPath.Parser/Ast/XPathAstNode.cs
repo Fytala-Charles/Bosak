@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Added PositionalVariableName to QuantifiedBinding (FLWOR 'at $pos')                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Added VariablePrefix/VariableNamespaceUri to QuantifiedBinding (EQName variables)       |
+//                      | Charles Korthout | 1.0   | 22-07-2026     | Added FlworExpressionNode and clause nodes for full XQuery FLWOR (order by)            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
@@ -97,6 +98,38 @@ public sealed record IfExpressionNode(XPathAstNode Condition, XPathAstNode ThenB
 public sealed record ForExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode ReturnExpression) : XPathAstNode;
 public sealed record LetExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode Body) : XPathAstNode;
 public sealed record QuantifiedExpressionNode(QuantifierKind Quantifier, IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode SatisfiesExpression) : XPathAstNode;
+
+/// <summary>Full XQuery FLWOR expression with clauses and return expression (replaces nested For/Let/Where for full XQuery FLWOR).</summary>
+public sealed record FlworExpressionNode(IReadOnlyList<FlworClauseNode> Clauses, XPathAstNode ReturnExpression) : XPathAstNode;
+
+/// <summary>Base type for a FLWOR clause.</summary>
+public abstract record FlworClauseNode : XPathAstNode;
+
+/// <summary>A for clause: <c>for $var in expr</c> (possibly with multiple bindings).</summary>
+public sealed record ForClauseNode(IReadOnlyList<QuantifiedBinding> Bindings) : FlworClauseNode;
+
+/// <summary>A let clause: <c>let $var := expr</c> (possibly with multiple bindings).</summary>
+public sealed record LetClauseNode(IReadOnlyList<QuantifiedBinding> Bindings) : FlworClauseNode;
+
+/// <summary>A where clause: <c>where expr</c>.</summary>
+public sealed record WhereClauseNode(XPathAstNode Condition) : FlworClauseNode;
+
+/// <summary>An order by clause: <c>order by key [ascending|descending] [empty least|greatest] [collation 'uri']</c>.</summary>
+public sealed record OrderByClauseNode(IReadOnlyList<OrderSpec> Specs) : FlworClauseNode;
+
+/// <summary>A single ordering specification inside an order by clause.</summary>
+public sealed record OrderSpec(
+    XPathAstNode KeyExpression,
+    bool Descending = false,
+    EmptyOrder EmptyOrder = EmptyOrder.Least,
+    string? CollationUri = null);
+
+/// <summary>How to order empty sequences in an order by clause.</summary>
+public enum EmptyOrder
+{
+    Least,
+    Greatest
+}
 
 public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null);
 

@@ -35,6 +35,7 @@
 //                      | Charles Korthout | 1.11  | 19-07-2026     | Fixed LowerAnd/LowerOr to not free the result register when reusing it for operands       |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.12  | 19-07-2026     | Emit UnaryPlus opcode instead of Move; runtime validates operand type                    |
+//                      | Charles Korthout | 1.13  | 22-07-2026     | Lower FlworExpressionNode with order by (OrderBy/TupleBind opcodes)                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -52,6 +53,22 @@ public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEnt
 /// Try/catch information stored in the literal pool for the TryCatch opcode.
 /// </summary>
 public readonly record struct TryCatchInfo(int TryEntryPoint, int CatchEntryPoint);
+
+/// <summary>
+/// Ordering information stored in the literal pool for the OrderBy opcode.
+/// Tuple format: [valueCount variable items, then keyCount key items].
+/// </summary>
+public readonly record struct OrderByInfo(
+    int ValueCount,
+    int KeyCount,
+    bool[] Descending,
+    EmptyOrder[] EmptyOrder,
+    string?[] CollationUri);
+
+/// <summary>
+/// Variable-binding information stored in the literal pool for the TupleBind opcode.
+/// </summary>
+public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, string? NamespaceUri)> Variables);
 
 /// <summary>
 /// Lowers an optimized XPath AST into register-based IR instructions.
@@ -116,6 +133,7 @@ public sealed class IrLowerer
             QuantifiedExpressionNode n => LowerQuantifiedExpression(n, targetReg),
             TryCatchNode n => LowerTryCatch(n, targetReg),
             LetExpressionNode n => LowerLetExpression(n, targetReg),
+            FlworExpressionNode n => LowerFlworExpression(n, targetReg),
             InlineFunctionNode n => LowerInlineFunction(n, targetReg),
             DynamicFunctionCallNode n => LowerDynamicFunctionCall(n, targetReg),
             PredicateNode n => LowerNode(n.Expression, targetReg),
@@ -1316,6 +1334,276 @@ public sealed class IrLowerer
             Emit(IrOpCode.Move, (ushort)resultReg, (ushort)bodyReg);
 
         return resultReg;
+    }
+
+    // ------------------------------------------------------------------
+    // Full FLWOR (XQuery order by, etc.)
+    // ------------------------------------------------------------------
+
+    private readonly record struct BoundVariable(string Name, string? Prefix, string? NamespaceUri)
+    {
+        public object VariableKey => NamespaceUri is not null
+            ? (Name, NamespaceUri)
+            : Prefix is not null
+                ? $"{Prefix}:{Name}"
+                : Name;
+    }
+
+    private int LowerFlworExpression(FlworExpressionNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+
+        if (!node.Clauses.Any(c => c is OrderByClauseNode))
+        {
+            return LowerFlworWithoutOrderBy(node, resultReg);
+        }
+
+        return LowerFlworWithOrderBy(node, resultReg);
+    }
+
+    private int LowerFlworWithoutOrderBy(FlworExpressionNode node, int resultReg)
+    {
+        // Synthesize nested For/Let/If AST and lower it.
+        XPathAstNode body = node.ReturnExpression;
+        for (int i = node.Clauses.Count - 1; i >= 0; i--)
+        {
+            body = node.Clauses[i] switch
+            {
+                ForClauseNode forClause => new ForExpressionNode(forClause.Bindings, body),
+                LetClauseNode letClause => new LetExpressionNode(letClause.Bindings, body),
+                WhereClauseNode whereClause => new IfExpressionNode(whereClause.Condition, body, new SequenceExpressionNode(Array.Empty<XPathAstNode>())),
+                _ => body
+            };
+        }
+
+        int bodyReg = LowerNode(body, resultReg);
+        if (bodyReg != resultReg)
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)bodyReg);
+
+        return resultReg;
+    }
+
+    private int LowerFlworWithOrderBy(FlworExpressionNode node, int resultReg)
+    {
+        // Find the last order by clause.
+        int orderByIndex = -1;
+        for (int i = node.Clauses.Count - 1; i >= 0; i--)
+        {
+            if (node.Clauses[i] is OrderByClauseNode)
+            {
+                orderByIndex = i;
+                break;
+            }
+        }
+
+        var preClauses = node.Clauses.Take(orderByIndex).ToList();
+        var orderByClause = (OrderByClauseNode)node.Clauses[orderByIndex];
+
+        // The variables bound by all for/let clauses before order by must be captured
+        // before the tuple builder recurses, because that builder adds and removes
+        // variables as it unwinds.
+        var boundVariables = ComputeBoundVariables(preClauses);
+
+        // Build a sequence of tuples: [var1, var2, ..., key1, key2, ...]
+        int tupleSeqReg = AllocRegister();
+        var recursionBoundVariables = new List<BoundVariable>();
+        LowerFlworTupleBuilder(preClauses, orderByClause, tupleSeqReg, recursionBoundVariables);
+
+        // Apply OrderBy.
+        int sortedTupleSeqReg = AllocRegister();
+        var orderByInfo = new OrderByInfo(
+            boundVariables.Count,
+            orderByClause.Specs.Count,
+            orderByClause.Specs.Select(s => s.Descending).ToArray(),
+            orderByClause.Specs.Select(s => s.EmptyOrder).ToArray(),
+            orderByClause.Specs.Select(s => s.CollationUri).ToArray());
+        int orderByPoolIdx = AddToLiteralPool(orderByInfo);
+        Emit(IrOpCode.OrderBy, (ushort)sortedTupleSeqReg, (ushort)tupleSeqReg, 0, orderByPoolIdx);
+
+        // Iterate over sorted tuples, bind variables, evaluate body.
+        LowerFlworBodyIteration(sortedTupleSeqReg, boundVariables, node.ReturnExpression, resultReg);
+
+        FreeRegister(tupleSeqReg);
+        FreeRegister(sortedTupleSeqReg);
+        return resultReg;
+    }
+
+    private static List<BoundVariable> ComputeBoundVariables(IReadOnlyList<FlworClauseNode> clauses)
+    {
+        var result = new List<BoundVariable>();
+        foreach (var clause in clauses)
+        {
+            if (clause is ForClauseNode forClause)
+            {
+                foreach (var b in forClause.Bindings)
+                    result.Add(new BoundVariable(b.VariableName, b.VariablePrefix, b.VariableNamespaceUri));
+            }
+            else if (clause is LetClauseNode letClause)
+            {
+                foreach (var b in letClause.Bindings)
+                    result.Add(new BoundVariable(b.VariableName, b.VariablePrefix, b.VariableNamespaceUri));
+            }
+        }
+        return result;
+    }
+
+    private void LowerFlworTupleBuilder(
+        IReadOnlyList<FlworClauseNode> clauses,
+        OrderByClauseNode orderByClause,
+        int resultReg,
+        List<BoundVariable> boundVariables)
+    {
+        if (clauses.Count == 0)
+        {
+            // Build a single tuple as an array and return it.
+            // Arrays are not flattened by the outer For loop, preserving tuple identity.
+            int tupleReg = AllocRegister();
+            Emit(IrOpCode.Array, (ushort)tupleReg);
+
+            foreach (var var in boundVariables)
+            {
+                int varReg = LoadVariable(var);
+                Emit(IrOpCode.ArrayAdd, (ushort)tupleReg, (ushort)varReg);
+                FreeRegister(varReg);
+            }
+
+            foreach (var spec in orderByClause.Specs)
+            {
+                int keyReg = LowerNode(spec.KeyExpression);
+                Emit(IrOpCode.ArrayAdd, (ushort)tupleReg, (ushort)keyReg);
+                FreeRegister(keyReg);
+            }
+
+            Emit(IrOpCode.Return, (ushort)tupleReg);
+            FreeRegister(tupleReg);
+            return;
+        }
+
+        var clause = clauses[0];
+        var restClauses = clauses.Skip(1).ToList();
+
+        if (clause is ForClauseNode forClause)
+        {
+            LowerForClauseForTuples(forClause.Bindings, 0, restClauses, orderByClause, resultReg, boundVariables);
+        }
+        else if (clause is LetClauseNode letClause)
+        {
+            foreach (var binding in letClause.Bindings)
+            {
+                int exprReg = LowerNode(binding.Expression);
+                StoreVariable(binding, exprReg);
+                FreeRegister(exprReg);
+                boundVariables.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+            }
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables);
+            foreach (var _ in letClause.Bindings)
+            {
+                boundVariables.RemoveAt(boundVariables.Count - 1);
+            }
+        }
+        else if (clause is WhereClauseNode whereClause)
+        {
+            int condReg = LowerNode(whereClause.Condition);
+            int jumpToEmpty = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)condReg);
+            FreeRegister(condReg);
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables);
+            int emptyLabel = CurrentInstructionIndex;
+            Emit(IrOpCode.LoadEmptySequence, (ushort)resultReg);
+            Emit(IrOpCode.Return, (ushort)resultReg);
+            PatchJump(jumpToEmpty, emptyLabel);
+        }
+    }
+
+    private void LowerForClauseForTuples(
+        IReadOnlyList<QuantifiedBinding> bindings,
+        int index,
+        IReadOnlyList<FlworClauseNode> restClauses,
+        OrderByClauseNode orderByClause,
+        int resultReg,
+        List<BoundVariable> boundVariables)
+    {
+        var binding = bindings[index];
+        int seqReg = LowerNode(binding.Expression);
+
+        int forIdx = _instructions.Count;
+        Emit(IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, 0);
+        FreeRegister(seqReg);
+
+        int jumpIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+        int rhsEntry = _instructions.Count;
+        boundVariables.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+
+        if (index == bindings.Count - 1)
+        {
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables);
+        }
+        else
+        {
+            LowerForClauseForTuples(bindings, index + 1, restClauses, orderByClause, resultReg, boundVariables);
+        }
+
+        boundVariables.RemoveAt(boundVariables.Count - 1);
+
+        int afterRhs = _instructions.Count;
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri);
+        int poolIdx = AddToLiteralPool(info);
+        PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
+        PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
+    }
+
+    private void LowerFlworBodyIteration(
+        int sortedTupleSeqReg,
+        IReadOnlyList<BoundVariable> boundVariables,
+        XPathAstNode returnExpression,
+        int resultReg)
+    {
+        int forIdx = _instructions.Count;
+        Emit(IrOpCode.For, (ushort)resultReg, (ushort)sortedTupleSeqReg, 0, 0);
+
+        int jumpIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+        int rhsEntry = _instructions.Count;
+
+        // Bind the tuple to a temporary variable, then extract all original variables.
+        int tupleReg = AllocRegister();
+        int tupleVarPoolIdx = AddToLiteralPool("__flwor_tuple");
+        Emit(IrOpCode.LoadVariable, (ushort)tupleReg, 0, 0, tupleVarPoolIdx);
+
+        var tupleBindInfo = new TupleBindInfo(boundVariables.Select(v => (v.Name, v.NamespaceUri)).ToArray());
+        int tupleBindPoolIdx = AddToLiteralPool(tupleBindInfo);
+        Emit(IrOpCode.TupleBind, (ushort)tupleReg, 0, 0, tupleBindPoolIdx);
+        FreeRegister(tupleReg);
+
+        int bodyReg = LowerNode(returnExpression);
+        Emit(IrOpCode.Return, (ushort)bodyReg);
+        FreeRegister(bodyReg);
+
+        int afterRhs = _instructions.Count;
+        var info = new QuantifiedLoopInfo("__flwor_tuple", rhsEntry);
+        int poolIdx = AddToLiteralPool(info);
+        PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)sortedTupleSeqReg, 0, poolIdx);
+        PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
+    }
+
+    private int LoadVariable(BoundVariable variable)
+    {
+        int reg = AllocRegister();
+        int poolIdx = AddToLiteralPool(variable.VariableKey);
+        Emit(IrOpCode.LoadVariable, (ushort)reg, 0, 0, poolIdx);
+        return reg;
+    }
+
+    private void StoreVariable(QuantifiedBinding binding, int exprReg)
+    {
+        int varPoolIdx = binding.VariableNamespaceUri is not null
+            ? AddToLiteralPool((binding.VariableName, binding.VariableNamespaceUri))
+            : binding.VariablePrefix is not null
+                ? AddToLiteralPool($"{binding.VariablePrefix}:{binding.VariableName}")
+                : AddToLiteralPool(binding.VariableName);
+        Emit(IrOpCode.StoreVariable, 0, (ushort)exprReg, 0, varPoolIdx);
     }
 
     // ------------------------------------------------------------------

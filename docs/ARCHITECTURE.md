@@ -378,7 +378,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 | Priority | Phase | Deliverable | Status | Notes |
 |----------|-------|-------------|--------|-------|
-| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 1 | Prolog-less queries now compile and run via `XQueryCompiler`. FLWOR, constructors, and modules follow. |
+| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 2 | `order by` clause implemented with tuple-based VM sorting. `group by`, `count`, `window`, constructors, and modules follow. |
 | 2 | — | **XSLT 3.0 packages** | 🔮 Planned | `xsl:package`, `xsl:use-package`. Completes the XSLT 3.0 surface. |
 | 3 | — | **Schema awareness / XSD validation** | 🔮 Planned | Cross-cutting feature for XPath + XSLT; clears remaining schema-dependent skips. |
 | 4 | 5 | **Streaming** | 🔮 Planned | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
@@ -580,7 +580,7 @@ src/
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| `order by` | 🔮 Phase 2 | New IR/VM opcode for tuple sorting |
+| `order by` | ✅ Implemented | Tuple-based lowering with `OrderBy`/`TupleBind` opcodes; supports ascending/descending, empty least/greatest, and collation |
 | `group by` | 🔮 Phase 2 | New IR/VM opcode for grouping tuples |
 | `count` | 🔮 Phase 2 | Positional variable bound to tuple stream position |
 | `window` | 🔮 Phase 2 | Tumbling/sliding window clauses |
