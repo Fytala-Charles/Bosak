@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `TBD` (fix(conformance): evaluate multi-line assert-deep-eq as one expression; skip unicode-version dependencies)
+**Commit:** `861e3e8` (fix(conformance): evaluate multi-line assert-deep-eq as one expression; skip unicode-version dependencies)
 **Current focus:** **QT3 assert-deep-eq parse cluster** — 5 runnable tests (`last-23`, `fn-lower-case-18/19`, `fn-upper-case-18/19`) were skipped because `ResultComparer.CompareAssertDeepEq` split the assertion value by newlines and compiled each line as a separate XPath expression. Multi-line `assert-deep-eq` content is a single sequence expression with line breaks for readability; splitting it produced trailing commas on intermediate lines, which the parser rejected as "Unexpected token Eof in primary expression". Fixed by trimming the entire element value and compiling it as one expression. Two of the tests (`fn-lower-case-19` and `fn-upper-case-19`) require Unicode 7.0 case folding via a `unicode-version` dependency and would now fail on Bosak's .NET-based case folding; added `unicode-version` to `DependencyFilter` so these are correctly reported as unsupported dependencies. Full QT3 suite now at **14,977 passed / 0 failed / 16,844 skipped (47.07%)**; runnable pass rate **100%** (14,977 / 14,977). Unit tests **1,379/0**.
 
 ## This Session Fixes (5 assert-deep-eq tests)
