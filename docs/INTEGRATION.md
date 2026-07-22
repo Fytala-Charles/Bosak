@@ -6,12 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,977 passed / 0 failed / 16,844 skipped (47.07% / 100% of runnable tests)
+> **QT3 baseline:** 14,983 passed / 0 failed / 16,838 skipped (47.09% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 fn-doc document-loading cluster: `EvaluationContext.LoadDocument` now maps `UriFormatException`, `IOException`, and `XmlException` to the correct XPath error codes.
+  - 6 runnable tests were skipped because raw CLR exceptions escaped during document loading: `fn-doc-1` (invalid hostname → `UriFormatException`), `K2-SeqDocFunc-14` (`':/'` → `UriFormatException`), `K2-SeqDocFunc-5` (invalid `.invalid` domain → `IOException`), and `fn-doc-27/28/35` (malformed XML → `XmlException`).
+  - `UriFormatException` is now reported as `FODC0005` (invalid document URI); `IOException` and `XmlException` are reported as `FODC0002` (document not available).
+  - URI resolution against the static base URI is now protected as well, so malformed relative URIs also produce `FODC0005`.
+  - Full QT3 now **14,983 passed / 0 failed / 16,838 skipped = 47.09%** (runnable pass rate **100%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 assert-deep-eq parse cluster: multi-line `assert-deep-eq` values are now evaluated as a single XPath expression, and `unicode-version` dependencies are skipped.
   - 5 runnable tests were skipped because `ResultComparer` split `assert-deep-eq` content by newlines and tried to compile each line as a standalone XPath expression. Lines ending in a trailing comma (continuations of a multi-line sequence) produced "Unexpected token Eof in primary expression".

@@ -1,6 +1,44 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `755cd1a` (fix(runtime): convert UriFormatException/IOException/XmlException to FODC0005/FODC0002 in LoadDocument)
+**Current focus:** **QT3 fn-doc document-loading cluster** — 6 runnable tests (`fn-doc-1`, `fn-doc-27`, `fn-doc-28`, `fn-doc-35`, `K2-SeqDocFunc-5`, `K2-SeqDocFunc-14`) were skipped because raw CLR exceptions (`UriFormatException`, `IOException`, `XmlException`) escaped from `EvaluationContext.LoadDocument` instead of being converted to the XPath errors the tests expect (`FODC0005` for invalid URIs, `FODC0002` for retrieval/parse failures). Fixed by wrapping URI resolution and the `DocumentLoader` invocation in a single try/catch that maps `UriFormatException` to `FODC0005` and `IOException`/`XmlException` to `FODC0002`. Full QT3 suite now at **14,983 passed / 0 failed / 16,838 skipped (47.09%)**; runnable pass rate **100%** (14,983 / 14,983). Unit tests **1,379/0**.
+
+## This Session Fixes (6 fn-doc tests)
+
+1. **`EvaluationContext.LoadDocument` converts document-loading exceptions** — Previously only `FileNotFoundException` and `DirectoryNotFoundException` were caught and mapped to `FODC0002`. The new catch blocks also handle:
+   - `UriFormatException` → `FODC0005: Invalid document URI: ...` (covers `fn-doc-1` and `K2-SeqDocFunc-14`).
+   - `IOException` → `FODC0002: Document not available: ...` (covers `K2-SeqDocFunc-5`).
+   - `XmlException` → `FODC0002: Document not available: ...` (covers `fn-doc-27/28/35` with malformed XML content).
+
+2. **URI resolution is now inside the protected region** — The relative-to-base URI resolution (`new Uri(new Uri(BaseUri), uri)`) could itself throw `UriFormatException` for malformed relative references (e.g., `http:\\invalid&gt;URI\someURI` in `fn-doc-1`). That step is now part of the same try/catch, so the exception is correctly reported as `FODC0005`.
+
+3. **Regression safety** — Full QT3 suite improved by **+6 passed, −6 skipped** with no new failures and no regressions in unit tests. All document-loading singletons are now cleared.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (v2.5: convert `UriFormatException`/`IOException`/`XmlException` to `FODC0005`/`FODC0002` in `LoadDocument`)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The `fn-doc` singletons are gone. The remaining non-dependency, non-documented-limitation skips are now:
+- 1 `ArgumentException` (`K-Literals-29` empty expression)
+- 1 documented upstream defect (artifactual leading space)
+- 2 documented platform limitations (`.NET decimal` precision)
+- 2 documented platform limitations (`DateTimeOffset` year -2)
+- 5 XML 1.0-only tests on an XML 1.1 implementation
+- 7 schema-awareness tests
+- 10 XQuery syntax tests
+
+The `K-Literals-29` singleton is the next natural step: it is an empty expression that currently throws `ArgumentException: The value cannot be an empty string. (Parameter 'expression')`. The parser or compiler likely needs to convert that to an appropriate XPath static error (possibly `XPST0003`) instead of letting the raw `ArgumentException` escape.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `861e3e8` (fix(conformance): evaluate multi-line assert-deep-eq as one expression; skip unicode-version dependencies)
 **Current focus:** **QT3 assert-deep-eq parse cluster** — 5 runnable tests (`last-23`, `fn-lower-case-18/19`, `fn-upper-case-18/19`) were skipped because `ResultComparer.CompareAssertDeepEq` split the assertion value by newlines and compiled each line as a separate XPath expression. Multi-line `assert-deep-eq` content is a single sequence expression with line breaks for readability; splitting it produced trailing commas on intermediate lines, which the parser rejected as "Unexpected token Eof in primary expression". Fixed by trimming the entire element value and compiling it as one expression. Two of the tests (`fn-lower-case-19` and `fn-upper-case-19`) require Unicode 7.0 case folding via a `unicode-version` dependency and would now fail on Bosak's .NET-based case folding; added `unicode-version` to `DependencyFilter` so these are correctly reported as unsupported dependencies. Full QT3 suite now at **14,977 passed / 0 failed / 16,844 skipped (47.07%)**; runnable pass rate **100%** (14,977 / 14,977). Unit tests **1,379/0**.
 
