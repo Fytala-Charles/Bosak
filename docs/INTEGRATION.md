@@ -6,12 +6,17 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,972 passed / 0 failed / 16,849 skipped (47.05% / 100% of runnable tests)
+> **QT3 baseline:** 14,974 passed / 0 failed / 16,847 skipped (47.06% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 regex-pattern cluster: `RegexHelper.CacheRegex` now converts `RegexParseException` to `FORX0002`.
+  - 2 runnable tests were skipped because `fn:matches` let .NET `RegexParseException` escape for patterns that XSD validation did not reject: `**%%` (no preceding atom for `*`) and `a{99999999999999999999999999}` (quantifier larger than `Int32.MaxValue`).
+  - `fn-matches-25` (expects `FORX0002`) and `cbcl-matches-004` (expects `assert-false` or `FORX0002`) now pass.
+  - Full QT3 now **14,974 passed / 0 failed / 16,847 skipped = 47.06%** (runnable pass rate **100%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 decimal-overflow cluster: `XPathOptimizer` now skips constant folding when decimal arithmetic overflows, letting the runtime raise `FOAR0002`.
   - 4 runnable tests were skipped because `OptimizeBinary` constant-folded decimal subtraction/division and let `OverflowException` escape to the harness instead of surfacing the XPath `FOAR0002` error.

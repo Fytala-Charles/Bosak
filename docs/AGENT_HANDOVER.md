@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `c3984a7` (fix(regex): convert RegexParseException to FORX0002 in CacheRegex)
+**Current focus:** **QT3 regex-pattern skip cluster** — 2 runnable tests (`fn-matches-25`, `cbcl-matches-004`) were skipped because `fn:matches` allowed .NET `RegexParseException` to escape to the harness. The XSD validation in `RegexHelper.ValidateXsdRegex` rejects many invalid XPath regex constructs, but it does not catch every pattern that .NET's `Regex` constructor still rejects (e.g., `**%%` where the first `*` has no preceding atom, or `a{99999999999999999999999999}` where the quantifier exceeds `Int32.MaxValue`). Fixed by catching `RegexParseException` in `RegexHelper.CacheRegex` and throwing `InvalidOperationException("FORX0002")` so the conformance harness matches the expected `<error code="FORX0002"/>` assertions. Full QT3 suite now at **14,974 passed / 0 failed / 16,847 skipped (47.06%)**; runnable pass rate **100%** (14,974 / 14,974). Unit tests **1,379/0**.
+
+## This Session Fixes (2 regex-pattern tests)
+
+1. **`RegexHelper.CacheRegex` converts `RegexParseException` to `FORX0002`** — The shared regex cache now wraps any `RegexParseException` thrown by `new Regex(...)` in an `InvalidOperationException` with code `FORX0002` (invalid regular expression). This covers patterns that pass the current XSD pre-validation but are still rejected by .NET's regex engine.
+
+2. **`fn:matches-25` and `cbcl-matches-004` now pass** — `fn-matches-25` expects `FORX0002` for pattern `**%%`. `cbcl-matches-004` expects either `assert-false` or `FORX0002` for pattern `a{99999999999999999999999999}`; both alternatives now match.
+
+3. **Regression safety** — Full QT3 suite improved by **+2 passed, −2 skipped** with no new failures and no regressions in unit tests.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/RegexHelper.cs` (v0.9: `CacheRegex` converts `RegexParseException` to `FORX0002`)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The regex-pattern cluster is gone. The remaining non-dependency, non-documented-limitation skips are:
+- 10 `XQuery syntax not supported` (FLWOR features not yet handled by the XPath parser)
+- 7 `Schema awareness not supported`
+- 5 `Could not evaluate assert-deep-eq` (parse errors in the deep-eq assertion)
+- 1 `UriFormatException` (`fn-doc-1` with an invalid hostname)
+- 2 `IOException` (`K2-SeqDocFunc-14` and `K2-SeqDocFunc-5` with malformed URIs used as filenames)
+- 2 `XmlException` (`fn-doc-27/28/35` with invalid XML characters in names)
+- 1 `ArgumentException` (`K-Literals-29` empty expression)
+- 1 documented upstream defect (artifactual leading space)
+
+The 5 `assert-deep-eq` parse failures are a small, focused cluster that may be a single harness issue (e.g., the assertion value is empty or the deep-eq parser is not handling a specific construct). They are a good next quick win. Alternatively, the `fn-doc` URI/XML singletons can be picked off individually.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `3cff06f` (fix(optimizer): skip decimal constant folding on overflow to let runtime raise FOAR0002)
 **Current focus:** **QT3 decimal-overflow skip cluster** — 4 runnable tests (`cbcl-numeric-subtract-001`, `op-numeric-subtract-big-01`, `cbcl-numeric-divide-015`, `op-numeric-divide-big-01`) were skipped because `XPathOptimizer.OptimizeBinary` constant-folded decimal subtraction/division and allowed `OverflowException` to escape to the harness. The tests expect either the computed result or the XPath `FOAR0002` arithmetic-overflow error, but the raw `OverflowException` was treated as an unexpected harness error. Fixed by catching `OverflowException` in the decimal constant-folding path and skipping the fold, so the operation is evaluated at runtime where `VmEngine.Execute` already converts the overflow into `InvalidOperationException("FOAR0002")`. That exception is then matched against the expected `<error code="FOAR0002"/>` assertions. Full QT3 suite now at **14,972 passed / 0 failed / 16,849 skipped (47.05%)**; runnable pass rate **100%** (14,972 / 14,972). Unit tests **1,379/0**.
 
