@@ -1,6 +1,41 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `f267246` (fix(conformance): refine XQuery syntax heuristic so schema-element/attribute tests and name-test constructors run)
+**Current focus:** **QT3 XQuery syntax heuristic cluster** — 10 runnable tests (`K2-ForExprWithout-45`, `K2-Literals-37`, `K2-NameTest-35/36/37/38`, `K2-NodeTest-19/25/26/27`) were skipped because `TestExecutor.LooksLikeXQuery` treated valid XPath constructs as XQuery-only syntax. The heuristic matched `import` at the start of any expression, matched `schema-element(` / `schema-attribute(` as XQuery-only (they are XPath 2.0+ node tests), and matched `element foo` / `attribute foo` name tests as direct constructors (which require a `{`). Fixed by narrowing `import` detection to XQuery prolog forms (`import module ...`, `import schema ...`), removing `schema-element`/`schema-attribute` from the regex, and requiring a `{` for `element`/`attribute` constructors. Full QT3 suite now at **14,994 passed / 0 failed / 16,827 skipped (47.12%)**; runnable pass rate **100%** (14,994 / 14,994). Unit tests **1,379/0**.
+
+## This Session Fixes (10 XQuery-heuristic tests)
+
+1. **`import` is only XQuery when followed by `module` or `schema`** — `K2-Literals-37` (`import gt import`) uses `import` as a name test, which is valid XPath. The heuristic now only flags `import module namespace ...` and `import schema namespace ...` prolog forms.
+
+2. **`schema-element()` and `schema-attribute()` are XPath node tests** — These are valid XPath 2.0+ kind tests, not XQuery-only syntax. They are no longer matched by the heuristic, so the tests that use them (`K2-NameTest-35/36/37/38`, `K2-NodeTest-19/25/26/27`) now run and match the expected `XPST0008`/`XPST0081` errors.
+
+3. **`element`/`attribute` constructors require a `{`** — The previous regex matched `element foo` and `attribute foo` as constructors even though they are XPath name tests. The new regex requires a `{` (with optional name), so `attribute return` in `K2-ForExprWithout-45` is recognized as valid XPath.
+
+4. **Regression safety** — Full QT3 suite improved by **+10 passed, −10 skipped** with no new failures and no regressions in unit tests. The "XQuery syntax not supported" skip category is now empty.
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/TestExecutor.cs` (v0.6: refine XQuery syntax heuristic)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The XQuery-syntax heuristic cluster is gone. The remaining non-dependency skips are now documented limitations or unsupported features:
+- 7 **Schema awareness not supported**
+- 5 **XML 1.0-only tests on an XML 1.1 implementation**
+- 2 **Platform limitation: .NET decimal** precision
+- 2 **Platform limitation: DateTimeOffset** year -2
+- 1 **Upstream defect** (artifactual leading space)
+
+The **XML 1.0-only** cluster (5 tests) is the cleanest next target. These tests declare `<dependency type="xml-version" value="1.0"/>`, but they are currently hardcoded as `DocumentedSkips` in `ConformanceRunner.cs`. Adding `xml-version` to `DependencyFilter` would let the harness skip them as `Unsupported dependency` and remove the hardcoded entries. That would not change the total pass count, but it would make the skip categorization more accurate and reduce the size of the `DocumentedSkips` dictionary. The schema-awareness cluster (7) is a large feature and not a quick win; the platform limitations are genuinely hard limits.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `4daa80e` (fix(api): empty XPath expression reports XPST0003 instead of ArgumentException)
 **Current focus:** **QT3 K-Literals-29 empty-expression singleton** — `K-Literals-29` expects `XPST0003` for an empty XPath expression, but `XPath31Expression.Compile` used `ArgumentException.ThrowIfNullOrEmpty(expression)`, which escaped to the harness as an unhandled `ArgumentException`. Fixed by detecting null/whitespace input and throwing a `ParseException` that is auto-prefixed with `XPST0003`. Full QT3 suite now at **14,984 passed / 0 failed / 16,837 skipped (47.09%)**; runnable pass rate **100%** (14,984 / 14,984). Unit tests **1,379/0**.
 

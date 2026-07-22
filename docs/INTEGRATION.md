@@ -6,12 +6,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,984 passed / 0 failed / 16,837 skipped (47.09% / 100% of runnable tests)
+> **QT3 baseline:** 14,994 passed / 0 failed / 16,827 skipped (47.12% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 XQuery syntax heuristic cluster: `TestExecutor.LooksLikeXQuery` no longer rejects valid XPath constructs.
+  - 10 runnable tests were skipped because the heuristic treated `import` as XQuery syntax, treated `schema-element()`/`schema-attribute()` as XQuery-only, and treated `element foo`/`attribute foo` name tests as XQuery constructors.
+  - `import` is now only flagged for XQuery prolog forms (`import module ...`, `import schema ...`).
+  - `schema-element()` and `schema-attribute()` are recognized as XPath 2.0+ node tests.
+  - `element`/`attribute` constructors are now only detected when followed by `{`.
+  - Full QT3 now **14,994 passed / 0 failed / 16,827 skipped = 47.12%** (runnable pass rate **100%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 K-Literals-29 empty-expression singleton: `XPath31Expression.Compile` now reports `XPST0003` for an empty expression.
   - `K-Literals-29` expects `XPST0003` for an empty XPath expression, but the API previously threw `ArgumentException: The value cannot be an empty string.`.
