@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.6   | 19-07-2026     | AND spec dependencies across dependency elements (fixes XP30-only tests in XP31+ mode) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 21-07-2026     | Skip tests that declare a specific unicode-version dependency                            |
+//                      | Charles Korthout | 0.8   | 21-07-2026     | Skip tests that declare a specific xml-version dependency (Bosak uses XML 1.1)              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -105,9 +106,9 @@ internal sealed class DependencyFilter
 
             if (dep.Type == "xml-version")
             {
-                // Only support XML 1.0
-                if (dep.Value != "1.0")
-                    return false;
+                // Bosak uses XML 1.1 throughout; XML 1.0-only tests are not applicable,
+                // and we do not report per-test XML version support.
+                return false;
             }
 
             if (dep.Type == "xsd-version")

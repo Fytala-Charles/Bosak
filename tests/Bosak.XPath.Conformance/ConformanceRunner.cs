@@ -22,6 +22,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 19-07-2026     | DocumentedSkips: K-CodepointToStringFunc-8/11/12 XML 1.0-only on XML 1.1 implementation |
 //                      | Charles Korthout | 1.2   | 21-07-2026     | Pass test-set base directory to TestCase for assert-xml file resolution                |
+//                      | Charles Korthout | 1.3   | 21-07-2026     | Remove XML 1.0-only DocumentedSkips (now handled by DependencyFilter xml-version)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -47,13 +48,6 @@ internal sealed class ConformanceRunner
         // Upstream defect: the expected value in the catalog carries an artifactual leading
         // space (formatting), but U+09BE by itself is the only correct result.
         ["cbcl-fn-normalize-unicode-006"] = "Upstream defect: expected value has an artifactual leading space",
-        // XML 1.0-specific tests on an XML 1.1-capable implementation: these require FOCH0001
-        // for C0 controls that XML 1.1 allows.
-        ["cbcl-codepoints-to-string-023"] = "XML 1.0-only test on an XML 1.1 implementation",
-        ["cbcl-codepoints-to-string-024"] = "XML 1.0-only test on an XML 1.1 implementation",
-        ["K-CodepointToStringFunc-8"] = "XML 1.0-only test on an XML 1.1 implementation",
-        ["K-CodepointToStringFunc-11"] = "XML 1.0-only test on an XML 1.1 implementation",
-        ["K-CodepointToStringFunc-12"] = "XML 1.0-only test on an XML 1.1 implementation",
         // Platform limitation (AGENTS.md): DateTimeOffset minimum year is 1; year -2 needs a
         // custom date representation.
         ["fo-test-fn-year-from-dateTime-005"] = "Platform limitation: DateTimeOffset does not support year -2",
