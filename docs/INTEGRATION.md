@@ -6,12 +6,17 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,968 passed / 0 failed / 16,853 skipped (47.04% / 100% of runnable tests)
+> **QT3 baseline:** 14,972 passed / 0 failed / 16,849 skipped (47.05% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 decimal-overflow cluster: `XPathOptimizer` now skips constant folding when decimal arithmetic overflows, letting the runtime raise `FOAR0002`.
+  - 4 runnable tests were skipped because `OptimizeBinary` constant-folded decimal subtraction/division and let `OverflowException` escape to the harness instead of surfacing the XPath `FOAR0002` error.
+  - `cbcl-numeric-subtract-001`, `op-numeric-subtract-big-01`, `cbcl-numeric-divide-015`, and `op-numeric-divide-big-01` now pass by matching the `<error code="FOAR0002"/>` alternative.
+  - Full QT3 now **14,972 passed / 0 failed / 16,849 skipped = 47.05%** (runnable pass rate **100%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 date/time harness-error cluster: `ResultComparer` extended-year serialization and `fn:*-from-time` `DateTimeOffset` out-of-range.
   - 17 runnable tests were skipped because `ResultComparer` converted extended-year `xs:dateTime`/`xs:date`/`xs:time` values to `DateTimeOffset`, which does not support years outside 1–9999.

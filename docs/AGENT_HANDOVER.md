@@ -1,6 +1,43 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `3cff06f` (fix(optimizer): skip decimal constant folding on overflow to let runtime raise FOAR0002)
+**Current focus:** **QT3 decimal-overflow skip cluster** — 4 runnable tests (`cbcl-numeric-subtract-001`, `op-numeric-subtract-big-01`, `cbcl-numeric-divide-015`, `op-numeric-divide-big-01`) were skipped because `XPathOptimizer.OptimizeBinary` constant-folded decimal subtraction/division and allowed `OverflowException` to escape to the harness. The tests expect either the computed result or the XPath `FOAR0002` arithmetic-overflow error, but the raw `OverflowException` was treated as an unexpected harness error. Fixed by catching `OverflowException` in the decimal constant-folding path and skipping the fold, so the operation is evaluated at runtime where `VmEngine.Execute` already converts the overflow into `InvalidOperationException("FOAR0002")`. That exception is then matched against the expected `<error code="FOAR0002"/>` assertions. Full QT3 suite now at **14,972 passed / 0 failed / 16,849 skipped (47.05%)**; runnable pass rate **100%** (14,972 / 14,972). Unit tests **1,379/0**.
+
+## This Session Fixes (4 decimal-overflow tests)
+
+1. **Decimal constant folding skips on overflow** — `OptimizeBinary` previously only caught `DivideByZeroException` when folding decimal `+`, `-`, `*`, `/`. If `lc.Value - rc.Value` or `lc.Value / rc.Value` overflowed the .NET `decimal` range, the raw `OverflowException` propagated out of the compiler and was recorded as a harness error. The path now catches `OverflowException` and leaves the operation unfolded.
+
+2. **Runtime surfacing of `FOAR0002` is unchanged** — `VmEngine.Execute` already wraps `OverflowException` as `InvalidOperationException("FOAR0002: ...")`, and `TestExecutor` routes `InvalidOperationException` to `ResultComparer` as a caught error. With the fold skipped, the runtime now evaluates the operation and produces the expected XPath error code.
+
+3. **Regression safety** — Full QT3 suite improved by **+4 passed, −4 skipped** with no new failures and no regressions in unit tests. The 4 targeted decimal-overflow tests now pass.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs` (v0.9: skip decimal constant folding on `OverflowException` to let runtime raise `FOAR0002`)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The decimal-overflow cluster is gone. The remaining non-dependency skip buckets are:
+- 10 `XQuery syntax not supported` (FLWOR features not yet handled by the XPath parser)
+- 7 `Schema awareness not supported`
+- 5 `Could not evaluate assert-deep-eq` (parse errors in the deep-eq assertion)
+- 2 `RegexParseException` (invalid regex patterns that should raise XPath errors instead)
+- 1 `UriFormatException` (`fn-doc` with an invalid hostname)
+- 2 `IOException` (`fn-doc` with malformed URIs used as filenames)
+- 2 `XmlException` (`fn-doc` with invalid XML characters)
+- 1 `ArgumentException` (`K-Literals-29` empty expression)
+- 1 documented upstream defect (artifactual leading space)
+
+The 2 regex-pattern failures are a small, focused cluster: `fn:matches` should be catching the .NET `RegexParseException` and converting it to the appropriate XPath error (`FORX0002`/`FORX0003`) rather than letting it propagate as a harness error. That is a good next quick win. Alternatively, the `assert-deep-eq` parse failures may be a single harness issue.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `c5854bf` (fix(dateTime): ResultComparer extended-year serialization; fn:*-from-time avoid DateTimeOffset out-of-range)
 **Current focus:** **QT3 date/time harness-error skip cluster** — 19 runnable tests were skipped because `ResultComparer.SerializeSingle` and `ResultComparer.ValuesEqual` converted `XPathDateTime` extended-year values (e.g., year `-1999`) to `DateTimeOffset`, which only supports years 1–9999. Two additional time tests (`fn-hours-from-time-3`, `fn-timezone-from-time-11`) failed because `fn:*-from-time` accessed `XdmValue.TimeValue`, which converts a time value anchored at `0001-01-01` to `DateTimeOffset`; positive timezone offsets for early-morning times pushed the UTC instant into year 0 and threw `ArgumentOutOfRangeException`. Fixed `ResultComparer` to use `XdmValue.ToString()` (which delegates to `XPathDateTime` formatting) for date/time serialization and to fall back to canonical string comparison in `ValuesEqual` when either operand is outside the `DateTimeOffset` range. Fixed `HoursFromTime`, `MinutesFromTime`, `SecondsFromTime`, and `TimezoneFromTime` to read components directly from `XdmValue.TimeXPathValue` instead of converting through `DateTimeOffset`. Full QT3 suite now at **14,968 passed / 0 failed / 16,853 skipped (47.04%)**; runnable pass rate **100%** (14,968 / 14,968). Unit tests **1,379/0**.
 
