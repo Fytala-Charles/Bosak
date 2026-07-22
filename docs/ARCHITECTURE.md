@@ -376,14 +376,16 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 ## Extensibility Roadmap
 
-| Phase | Deliverable | Status |
-|-------|-------------|--------|
-| 1 | XPath 3.1 Core | Expression compiler + standard functions ✅ |
-| 2 | XSLT 2.0 / 3.0 | Template matching, sequence constructors, `fn:transform()` ✅ |
-| 3 | Language Server | LSP diagnostics & completions for XPath / XSLT in VS Code ✅ |
-| 4 | XQuery 3.1 | FLWOR expressions, query prolog. Reuses XPath engine entirely. 📋 Planned |
-| 5 | Streaming | `IXdmNode` backed by `XmlReader` with look-ahead constraints. 📋 Planned |
-| 6 | Database backends | `IXdmNode` implementations over XML databases. 📋 Planned |
+| Priority | Phase | Deliverable | Status | Notes |
+|----------|-------|-------------|--------|-------|
+| 1 | 4 | **XQuery 3.1** | 📋 In Progress | FLWOR expressions, query prolog, direct/computed constructors. Reuses XPath engine entirely. |
+| 2 | — | **XSLT 3.0 packages** | 🔮 Planned | `xsl:package`, `xsl:use-package`. Completes the XSLT 3.0 surface. |
+| 3 | — | **Schema awareness / XSD validation** | 🔮 Planned | Cross-cutting feature for XPath + XSLT; clears remaining schema-dependent skips. |
+| 4 | 5 | **Streaming** | 🔮 Planned | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
+| 5 | — | **Custom decimal + date-time types** | 🔮 Planned | Replaces .NET `decimal`/`DateTimeOffset` to clear platform-limitation skips. Large effort, low test impact. |
+| 6 | 6 | **Database backends** | 🔮 Planned | `IXdmNode` implementations over XML databases. |
+| 7 | — | **XPath / XSLT 2.0 legacy certification** | 🔮 Lowest | 3.1/3.0 are supersets; no separate mode planned unless a specific customer requires it. |
+| 8 | — | **XPath 4.0 / XSLT 4.0** | 🔮 Lowest | W3C specs are still drafts; wait for Recommendation status. |
 
 ---
 

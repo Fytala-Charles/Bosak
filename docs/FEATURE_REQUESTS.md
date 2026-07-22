@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-19 (QT3 Tier-2z: op-to / RangeExpr big-integer and lazy comparison fixes — full QT3 suite at **21,632 passed / 305 failed / 9,884 skipped — 67.94%**; runnable pass rate **98.61%**; unit tests **1,343/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests pass)
+> **Living Registry** — Last updated: 2026-07-22 (Roadmap formalized after QT3 sweep; XQuery 3.1 selected as next priority. Full QT3 suite at **14,994 passed / 0 failed / 16,827 skipped — 47.12%**; runnable pass rate **100%**; unit tests **1,379/0**; W3C XSLT 3.0 suite unchanged at **7,109 passed / 0 failed** — 100% of runnable tests pass)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -1750,7 +1750,24 @@ The full W3C QT3 suite could not complete because the `op-same-key` test set (28
 
 ---
 
-## 9. Related Documents
+## 9. Roadmap (post-QT3 sweep)
+
+After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
+
+| Priority | REQ | Capability | Status | Notes |
+|----------|-----|------------|--------|-------|
+| 1 | TBD | **XQuery 3.1 full implementation** | Accepted | Next major language capability. Skeleton (`Bosak.XQuery`) exists; requires prolog parser, FLWOR compiler, and constructors. |
+| 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
+| 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
+| 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |
+| 5 | TBD | **Custom decimal + date-time types** | Pending | Clears 4 platform-limitation skips; requires replacing .NET `decimal`/`DateTimeOffset`. |
+| 6 | TBD | **Database backends** | Pending | `IXdmNode` implementations over XML databases. |
+| 7 | TBD | **XPath / XSLT 2.0 legacy certification** | Pending | Lowest priority — 3.1/3.0 are supersets and no separate mode is planned unless a customer requires it. |
+| 8 | TBD | **XPath 4.0 / XSLT 4.0** | Pending | W3C specs are still drafts; wait for Recommendation status. |
+
+---
+
+## 10. Related Documents
 
 - `D:\Development\Customer A\docs\INTEGRATION.md` — How to consume Bosak from Customer A
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — High-level Bosak architecture and roadmap
