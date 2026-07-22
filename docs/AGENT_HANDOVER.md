@@ -1,6 +1,60 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-22
+**Commit:** `67ed9c4` (feat(xquery): Phase 2 order by clause - tuple-based VM sorting)
+**Current focus:** **XQuery 3.1 Phase 2** — `order by` clause implemented with tuple-based VM sorting. Extended `XPathParser` with an `allowFullFlwor` flag so `XQueryParser` can parse multi-clause `for`/`let`/`where`/`order by` while XPath mode rejects them per `LetExpr020a`. Added `FlworExpressionNode` and `OrderByClauseNode` AST nodes, `OrderBy` and `TupleBind` IR opcodes, and VM handlers. Added 13 XQuery unit tests covering ascending, descending, strings, where, let, and multiple keys. Full `dotnet test Bosak.sln` passes: **1,389 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
+
+## This Session Changes (XQuery 3.1 Phase 2 order by)
+
+1. **`src/Bosak.XPath.Parser/Ast/XPathParser.cs`** — Added `allowFullFlwor` flag to `Parse` and constructor. Parses full XQuery FLWOR (`for`/`let`/`where`/`order by`) when flag is true; raises `XPST0003` for intermediate `for`/`let` or `order by` in XPath mode.
+
+2. **`src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`** — Added `FlworExpressionNode`, `ForClauseNode`, `LetClauseNode`, `WhereClauseNode`, and `OrderByClauseNode`.
+
+3. **`src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`** — Traverses all FLWOR clause types.
+
+4. **`src/Bosak.XPath.Compiler/Ir/IrOpCode.cs`** — Added `OrderBy` and `TupleBind` opcodes.
+
+5. **`src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`** — Implements `LowerFlworExpression`: builds XDM-array tuples, emits `OrderBy`, then iterates sorted tuples with `TupleBind`.
+
+6. **`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`** — Added `OrderBy` (stable sort with key extraction) and `TupleBind` (bind tuple members to named variables) handlers.
+
+7. **`src/Bosak.XQuery/Parser/XQueryParser.cs`** — Parses XQuery body with `allowFullFlwor=true`.
+
+8. **`src/Bosak.XQuery/Api/XQueryCompiler.cs`** — Resolves function namespaces inside `FlworExpressionNode` clauses.
+
+9. **`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`** — Added 13 order by tests.
+
+10. **Documentation** — Updated `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md` (REQ-041), `docs/INTEGRATION.md`, and `README.md`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`
+- `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`
+- `src/Bosak.XPath.Compiler/Ir/IrOpCode.cs`
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `src/Bosak.XQuery/Parser/XQueryParser.cs`
+- `src/Bosak.XQuery/Api/XQueryCompiler.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/ARCHITECTURE.md`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `README.md`
+
+## Next Recommended Step
+
+XQuery 3.1 Phase 2 (`order by`) is complete. The next step is the remainder of Phase 2 — **`group by`**, **`count`**, and **`window`** clauses.
+
+- Start with `group by` because it is the next most common FLWOR clause and requires a grouping opcode on the same tuple infrastructure.
+- Or tackle `count` first, as it is a small positional-variable clause with no sorting requirement.
+- Target the QT3 `prod/GroupByClause.xml` and `prod/CountClause.xml` clusters once support is in place.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-22
 **Commit:** `e88ede4` (feat(xquery): Phase 1 foundation - prolog-less queries compile and execute via XPath pipeline)
 **Current focus:** **XQuery 3.1 Phase 1** — `Bosak.XQuery` now compiles and executes prolog-less XQuery queries by delegating to the proven XPath pipeline. Added `XQueryParser` (top-level grammar + prolog declarations), `XQueryStaticContext`, and wired `XQueryCompiler` / `XQueryExecutable` to the XPath parser, optimizer, IR lowerer, and VM. First passing tests: `for $i in 1 to 3 return $i`, `let $x := 42 return $x`, and `declare namespace math = '...'; math:pi()`. Full `dotnet test Bosak.sln` passes: **1,382 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
