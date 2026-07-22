@@ -16,6 +16,8 @@
 //                      | Charles Korthout | 0.4   | 18-07-2026     | Skip XQ31-only positive spec dependencies (tests using XQuery direct constructors)        |
 //                      | Charles Korthout | 0.6   | 19-07-2026     | AND spec dependencies across dependency elements (fixes XP30-only tests in XP31+ mode) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 21-07-2026     | Skip tests that declare a specific unicode-version dependency                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -122,6 +124,13 @@ internal sealed class DependencyFilter
                 // Bosak only supports "en" as default language
                 if (dep.Value != "en")
                     return false;
+            }
+
+            if (dep.Type == "unicode-version")
+            {
+                // Bosak uses .NET's case folding / Unicode normalization; we do not report or
+                // guarantee a specific Unicode version. Skip tests that depend on one.
+                return false;
             }
         }
 

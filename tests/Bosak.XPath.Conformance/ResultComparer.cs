@@ -32,6 +32,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 21-07-2026     | Serialize extended-year date/time values via XdmValue.ToString                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 21-07-2026     | assert-deep-eq evaluates the whole element text as one XPath expression                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -595,22 +597,15 @@ internal static class ResultComparer
         if (caughtException is not null)
             return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
 
-        var expectedExprs = assertion.Value.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .ToList();
-
-        if (expectedExprs.Count == 0)
+        var expectedExpr = assertion.Value.Trim();
+        if (string.IsNullOrEmpty(expectedExpr))
             return new TestOutcome(TestOutcomeKind.Skipped, "assert-deep-eq: no expected expressions");
 
         try
         {
             var ctx = NewAssertContext();
-            var expectedItems = new List<XdmValue>();
-            foreach (var expr in expectedExprs)
-            {
-                var value = XPath31Expression.Compile(expr).Evaluate(ctx);
-                expectedItems.AddRange(MaterializeValue(value));
-            }
+            var expectedValue = XPath31Expression.Compile(expectedExpr).Evaluate(ctx);
+            var expectedItems = MaterializeValue(expectedValue);
             var actualItems = MaterializeValue(actual);
 
             if (expectedItems.Count != actualItems.Count)
