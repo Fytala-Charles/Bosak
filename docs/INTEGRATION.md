@@ -13,6 +13,12 @@
 
 ## 0. Recent Changes
 
+- **2026-07-21** — QT3 XML 1.0-only skip categorization cleanup: `DependencyFilter` now handles `xml-version` dependencies and the hardcoded `DocumentedSkips` entries are removed.
+  - 5 tests (`cbcl-codepoints-to-string-023/024`, `K-CodepointToStringFunc-8/11/12`) were skipped as "XML 1.0-only test on an XML 1.1 implementation" in `ConformanceRunner.DocumentedSkips`.
+  - The tests already declare `<dependency type="xml-version" value="1.0"/>`; `DependencyFilter` now skips any `xml-version` dependency, so Bosak's XML 1.1 implementation no longer attempts to run XML 1.0-specific tests.
+  - Total pass/skip counts are unchanged; the skips are now reported under "Unsupported dependency".
+  - Full QT3 remains **14,994 passed / 0 failed / 16,827 skipped = 47.12%** (runnable pass rate **100%**); unit tests **1,379/0**.
+
 - **2026-07-21** — QT3 XQuery syntax heuristic cluster: `TestExecutor.LooksLikeXQuery` no longer rejects valid XPath constructs.
   - 10 runnable tests were skipped because the heuristic treated `import` as XQuery syntax, treated `schema-element()`/`schema-attribute()` as XQuery-only, and treated `element foo`/`attribute foo` name tests as XQuery constructors.
   - `import` is now only flagged for XQuery prolog forms (`import module ...`, `import schema ...`).

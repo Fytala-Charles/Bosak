@@ -1,6 +1,46 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `57b7101` (refactor(conformance): move XML 1.0-only skips from DocumentedSkips to DependencyFilter xml-version)
+**Current focus:** **QT3 XML 1.0-only skip categorization cleanup** — The 5 XML 1.0-only tests (`cbcl-codepoints-to-string-023/024`, `K-CodepointToStringFunc-8/11/12`) were hardcoded as `DocumentedSkips` in `ConformanceRunner.cs` with the reason "XML 1.0-only test on an XML 1.1 implementation". All of them already declare `<dependency type="xml-version" value="1.0"/>`, but the existing `DependencyFilter` logic claimed to support XML 1.0 (commented as "Only support XML 1.0") while Bosak actually uses XML 1.1. Fixed by making `DependencyFilter` skip any `xml-version` dependency and removing the five hardcoded entries from `DocumentedSkips`. Full QT3 suite remains at **14,994 passed / 0 failed / 16,827 skipped (47.12%)**; runnable pass rate **100%** (14,994 / 14,994). Unit tests **1,379/0**.
+
+## This Session Changes (5 XML 1.0-only tests re-categorized)
+
+1. **`DependencyFilter` skips `xml-version` dependencies** — Bosak's document loader and `codepoints-to-string` implementation are XML 1.1-based. Tests that declare a specific XML version are now skipped as `Unsupported dependency`, which is the standard mechanism for feature dependencies.
+
+2. **`DocumentedSkips` no longer contains XML 1.0-only entries** — The five hardcoded skips were a workaround for the fact that the previous dependency filter treated `xml-version="1.0"` as supported. With the filter corrected, the workaround is no longer needed.
+
+3. **Skip categorization is now more accurate** — The "XML 1.0-only test on an XML 1.1 implementation" category is gone. Those 5 tests now appear under "Unsupported dependency" alongside the other `xml-version` tests (including the XML 1.1 tests that were already skipped). Total pass/skip counts are unchanged.
+
+4. **Regression safety** — Full QT3 suite unchanged (**14,994 / 0 / 16,827**) with no new failures and no regressions in unit tests.
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/DependencyFilter.cs` (v0.8: skip `xml-version` dependencies)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (v1.3: remove XML 1.0-only `DocumentedSkips`)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The XML 1.0-only cleanup is done. The remaining non-dependency skips are now documented platform limitations or unsupported features:
+- 7 **Schema awareness not supported**
+- 2 **Platform limitation: .NET decimal** precision
+- 2 **Platform limitation: DateTimeOffset** year -2
+- 1 **Upstream defect** (artifactual leading space)
+
+These are the final documented skips. There are no more quick singletons or small clusters to fix without implementing a major feature (schema awareness) or working around hard .NET limits (decimal precision, DateTimeOffset year range). The most useful next step depends on project priorities:
+- **Schema awareness** (7 tests) is a large feature but would clear the last unsupported-feature skip category.
+- **Decimal/DateTimeOffset** (4 tests) would require replacing .NET's `decimal` and `DateTimeOffset` with custom XDM types in the core layer.
+- **Upstream defect** (1 test) is already correctly documented.
+
+A sensible pause point: the harness is now at 100% of runnable QT3 tests passing, with all remaining skips explicitly categorized.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `f267246` (fix(conformance): refine XQuery syntax heuristic so schema-element/attribute tests and name-test constructors run)
 **Current focus:** **QT3 XQuery syntax heuristic cluster** — 10 runnable tests (`K2-ForExprWithout-45`, `K2-Literals-37`, `K2-NameTest-35/36/37/38`, `K2-NodeTest-19/25/26/27`) were skipped because `TestExecutor.LooksLikeXQuery` treated valid XPath constructs as XQuery-only syntax. The heuristic matched `import` at the start of any expression, matched `schema-element(` / `schema-attribute(` as XQuery-only (they are XPath 2.0+ node tests), and matched `element foo` / `attribute foo` name tests as direct constructors (which require a `{`). Fixed by narrowing `import` detection to XQuery prolog forms (`import module ...`, `import schema ...`), removing `schema-element`/`schema-attribute` from the regex, and requiring a `{` for `element`/`attribute` constructors. Full QT3 suite now at **14,994 passed / 0 failed / 16,827 skipped (47.12%)**; runnable pass rate **100%** (14,994 / 14,994). Unit tests **1,379/0**.
 
