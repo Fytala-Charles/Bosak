@@ -6,12 +6,17 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,983 passed / 0 failed / 16,838 skipped (47.09% / 100% of runnable tests)
+> **QT3 baseline:** 14,984 passed / 0 failed / 16,837 skipped (47.09% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 K-Literals-29 empty-expression singleton: `XPath31Expression.Compile` now reports `XPST0003` for an empty expression.
+  - `K-Literals-29` expects `XPST0003` for an empty XPath expression, but the API previously threw `ArgumentException: The value cannot be an empty string.`.
+  - `XPath31Expression.Compile` now detects null/whitespace input and throws `ParseException("Empty expression is not a valid XPath expression", 0)`, which is auto-prefixed to `XPST0003: Empty expression is not a valid XPath expression`.
+  - Full QT3 now **14,984 passed / 0 failed / 16,837 skipped = 47.09%** (runnable pass rate **100%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 fn-doc document-loading cluster: `EvaluationContext.LoadDocument` now maps `UriFormatException`, `IOException`, and `XmlException` to the correct XPath error codes.
   - 6 runnable tests were skipped because raw CLR exceptions escaped during document loading: `fn-doc-1` (invalid hostname → `UriFormatException`), `K2-SeqDocFunc-14` (`':/'` → `UriFormatException`), `K2-SeqDocFunc-5` (invalid `.invalid` domain → `IOException`), and `fn-doc-27/28/35` (malformed XML → `XmlException`).

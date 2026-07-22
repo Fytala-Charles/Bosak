@@ -1,6 +1,40 @@
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
+**Commit:** `4daa80e` (fix(api): empty XPath expression reports XPST0003 instead of ArgumentException)
+**Current focus:** **QT3 K-Literals-29 empty-expression singleton** — `K-Literals-29` expects `XPST0003` for an empty XPath expression, but `XPath31Expression.Compile` used `ArgumentException.ThrowIfNullOrEmpty(expression)`, which escaped to the harness as an unhandled `ArgumentException`. Fixed by detecting null/whitespace input and throwing a `ParseException` that is auto-prefixed with `XPST0003`. Full QT3 suite now at **14,984 passed / 0 failed / 16,837 skipped (47.09%)**; runnable pass rate **100%** (14,984 / 14,984). Unit tests **1,379/0**.
+
+## This Session Fixes (1 empty-expression test)
+
+1. **`XPath31Expression.Compile` converts empty expression to `XPST0003`** — The public API no longer throws `ArgumentException` for `string.IsNullOrWhiteSpace(expression)`. Instead it raises `ParseException("Empty expression is not a valid XPath expression", 0)`, which `ParseException` formats as `XPST0003: Empty expression is not a valid XPath expression` and the conformance harness matches against the expected `XPST0003` error.
+
+2. **Whitespace-only expressions also raise `XPST0003`** — Using `string.IsNullOrWhiteSpace` means expressions consisting only of spaces, tabs, or newlines are treated as empty, which is consistent with the XPath spec (an expression containing only whitespace is not a valid expression).
+
+3. **Regression safety** — Full QT3 suite improved by **+1 passed, −1 skipped** with no new failures and no regressions in unit tests. The `K-Literals-29` singleton is now cleared.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Api/XPath31Expression.cs` (v0.5: empty expression reports `XPST0003` via `ParseException`)
+- `docs/AGENT_HANDOVER.md` (this update)
+- `docs/INTEGRATION.md` (updated baselines)
+
+## Next Recommended Step
+
+The `K-Literals-29` singleton is gone. All remaining non-dependency skips are now documented limitations or unsupported features:
+- 10 **XQuery syntax not supported** (prolog, FLWOR, constructors, etc.)
+- 7 **Schema awareness not supported**
+- 5 **XML 1.0-only tests on an XML 1.1 implementation**
+- 2 **Platform limitation: .NET decimal** precision
+- 2 **Platform limitation: DateTimeOffset** year -2
+- 1 **Upstream defect** (artifactual leading space)
+
+The largest remaining actionable cluster is the **XQuery syntax** group (10 tests). These are tests that use XPath-only grammar but are tagged with XQuery-specific dependencies or prolog syntax that the parser rejects. Fixing them would require extending the parser or dependency filter, depending on whether the tests are genuinely XPath-relevant. Alternatively, the **XML 1.0-only** cluster (5 tests) might be addressable by adjusting the XML version detection in the document loader, but that is a documented implementation choice. There are no more trivial singletons; the next step depends on which documented limitation you want to tackle.
+
+---
+
+# Handover — Bosak XPath/XSLT Implementation
+
+**Date:** 2026-07-21
 **Commit:** `755cd1a` (fix(runtime): convert UriFormatException/IOException/XmlException to FODC0005/FODC0002 in LoadDocument)
 **Current focus:** **QT3 fn-doc document-loading cluster** — 6 runnable tests (`fn-doc-1`, `fn-doc-27`, `fn-doc-28`, `fn-doc-35`, `K2-SeqDocFunc-5`, `K2-SeqDocFunc-14`) were skipped because raw CLR exceptions (`UriFormatException`, `IOException`, `XmlException`) escaped from `EvaluationContext.LoadDocument` instead of being converted to the XPath errors the tests expect (`FODC0005` for invalid URIs, `FODC0002` for retrieval/parse failures). Fixed by wrapping URI resolution and the `DocumentLoader` invocation in a single try/catch that maps `UriFormatException` to `FODC0005` and `IOException`/`XmlException` to `FODC0002`. Full QT3 suite now at **14,983 passed / 0 failed / 16,838 skipped (47.09%)**; runnable pass rate **100%** (14,983 / 14,983). Unit tests **1,379/0**.
 
