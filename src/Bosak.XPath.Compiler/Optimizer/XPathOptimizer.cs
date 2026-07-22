@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 19-07-2026     | Only fold unary plus for numeric literals; non-literals need runtime type check         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 21-07-2026     | Skip decimal constant folding on OverflowException; let runtime raise FOAR0002        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -189,6 +191,10 @@ public sealed class XPathOptimizer
             catch (DivideByZeroException)
             {
                 // Skip constant folding; let runtime evaluate and produce the proper XPath error
+            }
+            catch (OverflowException)
+            {
+                // Skip constant folding; let runtime surface the overflow as FOAR0002
             }
         }
 
