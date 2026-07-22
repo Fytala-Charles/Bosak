@@ -30,6 +30,8 @@
 //                      | Charles Korthout | 1.4   | 21-07-2026     | ToXmlString copies in-scope namespaces; NormalizeXml wraps multi-root fragments for canonical comparison |
 //                      | Charles Korthout | 1.5   | 21-07-2026     | Load assert-xml expected output from external file when file attribute is present        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 21-07-2026     | Serialize extended-year date/time values via XdmValue.ToString                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -299,13 +301,33 @@ internal static class ResultComparer
         if (sa == sb)
             return true;
 
-        // DateTime/Date/Time value comparison: compare instants (timezone-independent)
+        // DateTime/Date/Time value comparison: compare instants (timezone-independent).
+        // For extended years that cannot be represented by DateTimeOffset, fall back to
+        // canonical string comparison (same lexical form => same value).
         if (a.Kind == XdmValueKind.DateTime && b.Kind == XdmValueKind.DateTime)
-            return a.DateTimeValue == b.DateTimeValue;
+        {
+            var aXdt = a.DateTimeXPathValue;
+            var bXdt = b.DateTimeXPathValue;
+            if (aXdt.IsRepresentableAsDateTimeOffset && bXdt.IsRepresentableAsDateTimeOffset)
+                return a.DateTimeValue == b.DateTimeValue;
+            return SerializeValue(a) == SerializeValue(b);
+        }
         if (a.Kind == XdmValueKind.Date && b.Kind == XdmValueKind.Date)
-            return a.DateValue == b.DateValue;
+        {
+            var aXdt = a.DateXPathValue;
+            var bXdt = b.DateXPathValue;
+            if (aXdt.IsRepresentableAsDateTimeOffset && bXdt.IsRepresentableAsDateTimeOffset)
+                return a.DateValue == b.DateValue;
+            return SerializeValue(a) == SerializeValue(b);
+        }
         if (a.Kind == XdmValueKind.Time && b.Kind == XdmValueKind.Time)
-            return a.TimeValue == b.TimeValue;
+        {
+            var aXdt = a.TimeXPathValue;
+            var bXdt = b.TimeXPathValue;
+            if (aXdt.IsRepresentableAsDateTimeOffset && bXdt.IsRepresentableAsDateTimeOffset)
+                return a.TimeValue == b.TimeValue;
+            return SerializeValue(a) == SerializeValue(b);
+        }
 
         // QName comparison: compare namespace URI and local name (prefix is ignored per XPath spec)
         if (a.Kind == XdmValueKind.QName && b.Kind == XdmValueKind.QName)
@@ -407,18 +429,8 @@ internal static class ResultComparer
                 return FormatCanonicalDecimal(value.DecimalValue);
             if (value.Kind == XdmValueKind.String)
                 return value.StringValue;
-            if (value.Kind == XdmValueKind.DateTime)
-                return value.HasTimezone
-                    ? FormatUtcOffset(value.DateTimeValue.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz", System.Globalization.CultureInfo.InvariantCulture))
-                    : value.DateTimeValue.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture);
-            if (value.Kind == XdmValueKind.Date)
-                return value.HasTimezone
-                    ? FormatUtcOffset(value.DateValue.ToString("yyyy-MM-ddzzz", System.Globalization.CultureInfo.InvariantCulture))
-                    : value.DateValue.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-            if (value.Kind == XdmValueKind.Time)
-                return value.HasTimezone
-                    ? FormatUtcOffset(value.TimeValue.ToString("HH:mm:ss.FFFFFFFzzz", System.Globalization.CultureInfo.InvariantCulture))
-                    : value.TimeValue.ToString("HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture);
+            if (value.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time)
+                return value.ToString();
             if (value.Kind == XdmValueKind.Duration)
                 return value.DurationValue;
             return value.ToString();
@@ -520,12 +532,6 @@ internal static class ResultComparer
     {
         // XPath serialization does not use '+' in exponent: E+308 -> E308
         return s.Replace("E+", "E");
-    }
-
-    private static string FormatUtcOffset(string s)
-    {
-        // XPath uses Z for UTC, not +00:00
-        return s.Replace("+00:00", "Z");
     }
 
     private static string FormatCanonicalDecimal(decimal value)

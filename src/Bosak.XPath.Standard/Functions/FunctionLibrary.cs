@@ -162,6 +162,8 @@
 //                      | Charles Korthout | 5.66  | 21-07-2026     | fn:resolve-uri rejects base URIs with fragments and relative refs with colon in first segment |
 //                      | Charles Korthout | 5.68  | 21-07-2026     | Registered xs:dateTimeStamp#1 constructor and added TypeAvailable entry                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.69  | 21-07-2026     | fn:*-from-time use XPathDateTime to avoid DateTimeOffset out-of-range near year boundary |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.67  | 21-07-2026     | year/month-from-dateTime use XPathDateTime to support extended years (fn-*-from-dateTime-6) |
 using System.Collections.Frozen;
 using System.Globalization;
@@ -10059,21 +10061,21 @@ public static class FunctionLibrary
     private static XdmValue HoursFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var v = UnwrapSequenceOrUndefined(args[0]);
-        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.TimeValue.Hour);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.TimeXPathValue.Hour);
     }
 
     private static XdmValue MinutesFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var v = UnwrapSequenceOrUndefined(args[0]);
-        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.TimeValue.Minute);
+        return v.IsUndefined ? XdmValue.Undefined : XdmValue.FromInteger(v.TimeXPathValue.Minute);
     }
 
     private static XdmValue SecondsFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var v = UnwrapSequenceOrUndefined(args[0]);
         if (v.IsUndefined) return XdmValue.Undefined;
-        var dto = v.TimeValue;
-        return XdmValue.FromDecimal(dto.Second + dto.Millisecond / 1000.0m + dto.Microsecond / 1_000_000.0m + dto.Nanosecond / 1_000_000_000.0m);
+        var xdt = v.TimeXPathValue;
+        return XdmValue.FromDecimal(xdt.Second + xdt.Millisecond / 1000.0m);
     }
 
     private static XdmValue TimezoneFromDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -10083,7 +10085,13 @@ public static class FunctionLibrary
         => TimezoneFromValue(UnwrapSequenceOrUndefined(args[0]), v => v.DateValue);
 
     private static XdmValue TimezoneFromTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => TimezoneFromValue(UnwrapSequenceOrUndefined(args[0]), v => v.TimeValue);
+    {
+        var v = UnwrapSequenceOrUndefined(args[0]);
+        if (v.IsUndefined) return XdmValue.Undefined;
+        if (!v.HasTimezone) return XdmValue.Undefined;
+        var offset = TimeSpan.FromMinutes(v.TimeXPathValue.TimezoneOffsetMinutes);
+        return XdmValue.FromDuration(FormatDayTimeDuration(offset));
+    }
 
     private static XdmValue TimezoneFromValue(XdmValue value, Func<XdmValue, DateTimeOffset> getDto)
     {
