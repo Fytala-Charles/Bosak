@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 15-07-2026     | XQuery detection covers constructors/switch/try/FLWOR with string-literal stripping      |
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Bind environment <param> external variables by evaluating their select expressions       |
 //                      | Charles Korthout | 0.5   | 21-07-2026     | Pass test-case base directory through to ResultComparer for assert-xml files             |
+//                      | Charles Korthout | 0.6   | 21-07-2026     | Refine XQuery heuristic: allow schema-element/attribute tests, element/attribute name tests, import name tests |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -111,7 +112,8 @@ internal sealed class TestExecutor
     private static bool LooksLikeXQuery(string expr)
     {
         if (expr.StartsWith("declare ", StringComparison.OrdinalIgnoreCase) ||
-            expr.StartsWith("import ", StringComparison.OrdinalIgnoreCase) ||
+            expr.StartsWith("import module ", StringComparison.OrdinalIgnoreCase) ||
+            expr.StartsWith("import schema ", StringComparison.OrdinalIgnoreCase) ||
             expr.StartsWith("xquery ", StringComparison.OrdinalIgnoreCase))
         return true;
 
@@ -160,13 +162,12 @@ internal sealed class TestExecutor
     }
 
     private static readonly Regex XQueryConstructRegex = new(
-        @"\b(element|attribute)\s+[^\s(]" +           // element foo { ... } (element() is XPath — excluded)
+        @"\b(element|attribute)(\s+\w+\s*)?\{" +   // element/attribute constructors require { (element()/attribute() are XPath kind tests)
         @"|\b(document|text|comment)\s*\{" +        // document { ... }, text { ... }, comment { ... }
         @"|\bprocessing-instruction\s" +
         @"|\bnamespace\s+[A-Za-z_$]" +               // namespace constructor (namespace-uri( unaffected)
         @"|\bswitch\s*\(|\btry\s*\{|\btypeswitch\s*\(" +
         @"|\border\s+by\b|\bgroup\s+by\b|\bcount\s+\$" +  // FLWOR clauses (count( unaffected)
-        @"|\bschema-(element|attribute)\s*\(" +
         @"|\bunordered\s*\{|\bvalidate\s" +
         @"|\b(sliding|tumbling)\s+window\b",
         RegexOptions.Compiled);
