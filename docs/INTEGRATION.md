@@ -6,12 +6,18 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 21 July 2026
 > **Bosak baseline:** 1,379 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,974 passed / 0 failed / 16,847 skipped (47.06% / 100% of runnable tests)
+> **QT3 baseline:** 14,977 passed / 0 failed / 16,844 skipped (47.07% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-21** — QT3 assert-deep-eq parse cluster: multi-line `assert-deep-eq` values are now evaluated as a single XPath expression, and `unicode-version` dependencies are skipped.
+  - 5 runnable tests were skipped because `ResultComparer` split `assert-deep-eq` content by newlines and tried to compile each line as a standalone XPath expression. Lines ending in a trailing comma (continuations of a multi-line sequence) produced "Unexpected token Eof in primary expression".
+  - `ResultComparer.CompareAssertDeepEq` now trims the entire element value and compiles it as one expression; newlines are treated as XPath whitespace.
+  - `DependencyFilter` now skips tests with a `unicode-version` dependency, because Bosak uses .NET's case folding without guaranteeing a specific Unicode version. This correctly skips `fn-lower-case-19` and `fn-upper-case-19` (which require Unicode 7.0) while keeping `fn-lower-case-18`, `fn-upper-case-18`, and `last-23` passing.
+  - Full QT3 now **14,977 passed / 0 failed / 16,844 skipped = 47.07%** (runnable pass rate **100%**); unit tests **1,379/0**.
 
 - **2026-07-21** — QT3 regex-pattern cluster: `RegexHelper.CacheRegex` now converts `RegexParseException` to `FORX0002`.
   - 2 runnable tests were skipped because `fn:matches` let .NET `RegexParseException` escape for patterns that XSD validation did not reject: `**%%` (no preceding atom for `*`) and `a{99999999999999999999999999}` (quantifier larger than `Int32.MaxValue`).
