@@ -43,6 +43,8 @@
 //                      | Charles Korthout | 1.18  | 22-07-2026     | Parse full XQuery FLWOR with order by, empty order, and collation                       |
 //                      | Charles Korthout | 1.19  | 22-07-2026     | Added allowFullFlwor flag to Parse; XPath-only mode rejects multi-clause FLWOR/order by |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.20  | 23-07-2026     | Parse XQuery FLWOR count clause                                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -235,12 +237,13 @@ public sealed class XPathParser
 
     // FLWORExpr ::= InitialClause IntermediateClause* "return" ExprSingle
     // InitialClause ::= ForClause | LetClause
-    // IntermediateClause ::= ForClause | LetClause | WhereClause | OrderByClause
+    // IntermediateClause ::= ForClause | LetClause | WhereClause | CountClause | OrderByClause
     // ForClause ::= "for" ForBinding ("," ForBinding)*
     // ForBinding ::= "$" VarName ("at" "$" VarName)? "in" ExprSingle
     // LetClause ::= "let" LetBinding ("," LetBinding)*
     // LetBinding ::= "$" VarName ":="" ExprSingle
     // WhereClause ::= "where" ExprSingle
+    // CountClause ::= "count" "$" VarName
     // OrderByClause ::= "order by" OrderSpec ("," OrderSpec)*
     // OrderSpec ::= ExprSingle ("ascending" | "descending")? ("empty" ("least" | "greatest"))? ("collation" URILiteral)?
     private XPathAstNode ParseForExpr() => ParseFlworExpr();
@@ -278,6 +281,16 @@ public sealed class XPathParser
                 Advance();
                 clauses.Add(new WhereClauseNode(ParseExprSingle()));
             }
+            else if (Current.Kind == TokenKind.Name && GetString(Current) == "count" && Peek(1).Kind == TokenKind.Dollar)
+            {
+                if (!_allowFullFlwor)
+                    throw new ParseException("XPST0003: XPath does not allow a count clause.", Current.Start);
+                Advance();
+                Expect(TokenKind.Dollar);
+                var nameTok = ExpectName();
+                var (prefix, local, ns) = SplitQName(GetString(nameTok));
+                clauses.Add(new CountClauseNode(local, prefix, ns));
+            }
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "order")
             {
                 if (!_allowFullFlwor)
@@ -302,23 +315,23 @@ public sealed class XPathParser
         Expect(TokenKind.KeywordReturn);
         var body = ParseExprSingle();
 
-        // For simple cases with no order by (and only one initial for/let + optional where),
+        // For simple cases with no order by or count (and only one initial for/let + optional where),
         // preserve the existing nested For/Let/If AST for backward compatibility.
-        if (clauses.Count == 1 && clauses[0] is ForClauseNode forClause && !clauses.Any(c => c is OrderByClauseNode))
+        if (clauses.Count == 1 && clauses[0] is ForClauseNode forClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
         {
             return WithSpan(new ForExpressionNode(forClause.Bindings, body), start, End);
         }
-        if (clauses.Count == 1 && clauses[0] is LetClauseNode letClause && !clauses.Any(c => c is OrderByClauseNode))
+        if (clauses.Count == 1 && clauses[0] is LetClauseNode letClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
         {
             return WithSpan(new LetExpressionNode(letClause.Bindings, body), start, End);
         }
-        if (clauses.Count == 2 && clauses[0] is ForClauseNode forClause2 && clauses[1] is WhereClauseNode whereClause && !clauses.Any(c => c is OrderByClauseNode))
+        if (clauses.Count == 2 && clauses[0] is ForClauseNode forClause2 && clauses[1] is WhereClauseNode whereClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
         {
             var filteredBody = WithSpan(new IfExpressionNode(whereClause.Condition, body,
                 new SequenceExpressionNode(Array.Empty<XPathAstNode>())), start, End);
             return WithSpan(new ForExpressionNode(forClause2.Bindings, filteredBody), start, End);
         }
-        if (clauses.Count == 2 && clauses[0] is LetClauseNode letClause2 && clauses[1] is WhereClauseNode whereClause2 && !clauses.Any(c => c is OrderByClauseNode))
+        if (clauses.Count == 2 && clauses[0] is LetClauseNode letClause2 && clauses[1] is WhereClauseNode whereClause2 && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
         {
             var filteredBody = WithSpan(new IfExpressionNode(whereClause2.Condition, body,
                 new SequenceExpressionNode(Array.Empty<XPathAstNode>())), start, End);

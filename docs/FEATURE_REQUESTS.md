@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-22 (XQuery 3.1 Phase 2 complete: `order by` clause implemented with tuple-based VM sorting; unit tests now **1,389/0**; QT3 and XSLT baselines unchanged)
+> **Living Registry** — Last updated: 2026-07-23 (XQuery 3.1 Phase 2 continued: `count` clause implemented with tuple-path integer counters; unit tests now **1,394/0**; QT3 and XSLT baselines unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -146,6 +146,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-039 | *(internal)* | Resolve QT3 `op-same-key` hang | `XdmMap` copied the whole dictionary on every `map:remove`/`map:put`, causing O(N²) behavior on the 28-test `op-same-key` set; switched to `ImmutableDictionary` structural sharing | **Implemented** | TBD | Charles Korthout | 2026-07-17 |
 | REQ-040 | Bosak / Fytala Stack | XQuery 3.1 Phase 1 — prolog-less query execution | Wire `Bosak.XQuery` to the XPath pipeline so basic XQuery expressions compile and run | **Implemented** | Phase 4 | Charles Korthout | 2026-07-22 |
 | REQ-041 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `order by` clause | Required for full XQuery FLWOR: multi-clause for/let, where, and `order by` with ascending/descending, empty least/greatest, and collation | **Implemented** | Phase 4 | Charles Korthout | 2026-07-22 |
+| REQ-042 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `count` clause | Required for full XQuery FLWOR: `count $var` positional-variable clause, both pre- and post-`order by` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-23 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1845,13 +1846,61 @@ Extend `XPathParser` with an `allowFullFlwor` flag used by `XQueryParser`, add `
 
 ---
 
+### REQ-042: XQuery 3.1 Phase 2 — FLWOR `count` clause
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-23  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 requires the `count $var` FLWOR intermediate clause, which binds an `xs:integer` counting the current tuple in the FLWOR stream (1-based). Without it, queries such as `for $i in ('a','b','c') count $n return $n` cannot be parsed or evaluated.
+
+**Proposed Solution:**  
+Extend the existing tuple-based FLWOR lowering so that `count` clauses maintain a compiler-managed integer counter. Counters are initialised to `0`, incremented for each tuple, and stored under the declared variable name. Variables bound by pre-`order by` counts are captured in the tuple so they can be referenced in `order by` keys and in the return expression; post-`order by` counts are incremented during tuple iteration after sorting.
+
+**Acceptance Criteria:**
+- [x] `XPathParser` parses `count $var` as a FLWOR intermediate clause when `allowFullFlwor` is true.
+- [x] XPath-only mode rejects `count` clauses with `XPST0003`.
+- [x] `count` works with `for`, `let`, `where`, and both pre- and post-`order by` positions.
+- [x] The count value is an `xs:integer` starting at 1 and is filtered by preceding `where` clauses.
+- [x] No regressions in XPath, XSLT, or existing unit tests.
+
+**Implementation Notes:**
+- Added `CountClauseNode` to `XPathAstNode`.
+- `XPathOptimizer` recognises and passes through `CountClauseNode`.
+- `IrLowerer.LowerFlworExpression` routes FLWOR expressions containing `count` through the tuple path.
+- `LowerFlworWithTuples` initialises one counter per `count` clause and emits `LoadVariable`/`Add`/`StoreVariable` to increment it.
+- Post-`order by` counts are handled in `LowerFlworBodyIteration`.
+- No new VM opcodes were required.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | New `CountClauseNode`; `count $var` parsed in full FLWOR mode. |
+| Compiler | Modified | `XPathOptimizer` and `IrLowerer` handle `CountClauseNode`. |
+| Runtime | None | Reuses existing `LoadVariable`, `StoreVariable`, and `Add` opcodes. |
+| Standard | None | No new standard functions. |
+| XSLT | None | No XSLT changes. |
+| API | None | Public `XQueryCompiler` surface unchanged. |
+| Conformance | None | QT3 harness not yet wired to XQuery tests. |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-23 | Kimi | Implement count via tuple-path counters | Reuses the order-by tuple infrastructure and avoids adding a new VM opcode. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 / REQ-041 | **XQuery 3.1 full implementation** | In Progress | Phase 2 in progress: `order by` implemented. `group by`, `count`, `window` (Phase 2 remainder), constructors (Phase 3), and modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 / REQ-041 / REQ-042 | **XQuery 3.1 full implementation** | In Progress | Phase 2 in progress: `order by` and `count` implemented. `group by` and `window` (Phase 2 remainder), constructors (Phase 3), and modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

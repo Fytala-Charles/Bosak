@@ -18,6 +18,8 @@
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Added VariablePrefix/VariableNamespaceUri to QuantifiedBinding (EQName variables)       |
 //                      | Charles Korthout | 1.0   | 22-07-2026     | Added FlworExpressionNode and clause nodes for full XQuery FLWOR (order by)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 23-07-2026     | Added CountClauseNode for XQuery FLWOR count clause                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -113,6 +115,9 @@ public sealed record LetClauseNode(IReadOnlyList<QuantifiedBinding> Bindings) : 
 
 /// <summary>A where clause: <c>where expr</c>.</summary>
 public sealed record WhereClauseNode(XPathAstNode Condition) : FlworClauseNode;
+
+/// <summary>A count clause: <c>count $var</c>.</summary>
+public sealed record CountClauseNode(string VariableName, string? Prefix = null, string? NamespaceUri = null) : FlworClauseNode;
 
 /// <summary>An order by clause: <c>order by key [ascending|descending] [empty least|greatest] [collation 'uri']</c>.</summary>
 public sealed record OrderByClauseNode(IReadOnlyList<OrderSpec> Specs) : FlworClauseNode;

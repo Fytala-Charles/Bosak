@@ -24,6 +24,8 @@
 //                      | Charles Korthout | 0.9   | 21-07-2026     | Skip decimal constant folding on OverflowException; let runtime raise FOAR0002        |
 //                      | Charles Korthout | 1.0   | 22-07-2026     | Optimize FlworExpressionNode and all clause types (XQuery order by)                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 23-07-2026     | Optimize CountClauseNode (XQuery count)                                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -668,6 +670,7 @@ public sealed class XPathOptimizer
             ForClauseNode forClause => OptimizeForClause(forClause, ref changed),
             LetClauseNode letClause => OptimizeLetClause(letClause, ref changed),
             WhereClauseNode whereClause => OptimizeWhereClause(whereClause, ref changed),
+            CountClauseNode countClause => OptimizeCountClause(countClause, ref changed),
             OrderByClauseNode orderClause => OptimizeOrderByClause(orderClause, ref changed),
             _ => clause
         };
@@ -703,6 +706,12 @@ public sealed class XPathOptimizer
     {
         var condition = OptimizeNode(node.Condition, ref changed);
         return condition == node.Condition ? node : node with { Condition = condition };
+    }
+
+    private CountClauseNode OptimizeCountClause(CountClauseNode node, ref bool changed)
+    {
+        // Count clauses have no child expressions; nothing to optimize.
+        return node;
     }
 
     private OrderByClauseNode OptimizeOrderByClause(OrderByClauseNode node, ref bool changed)

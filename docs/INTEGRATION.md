@@ -4,15 +4,23 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 22 July 2026
-> **Bosak baseline:** 1,389 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 23 July 2026
+> **Bosak baseline:** 1,394 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** 14,994 passed / 0 failed / 16,827 skipped (47.12% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 2 — `order by` clause implemented with tuple-based VM sorting
+> **XQuery baseline:** Phase 2 — `order by` and `count` clauses implemented with tuple-based VM lowering
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-23** — XQuery 3.1 Phase 2: `count` clause implemented on top of the tuple-based FLWOR path.
+  - Extended `XPathParser` to parse `count $var` as a FLWOR intermediate clause when `allowFullFlwor` is true.
+  - Added `CountClauseNode` to `XPathAstNode`; `XPathOptimizer` traverses it.
+  - Generalised `IrLowerer.LowerFlworWithTuples` to maintain compiler-managed integer counters for each `count` clause, both before and after any `order by`.
+  - Reuses existing `LoadVariable`, `StoreVariable`, and `Add` opcodes; no new VM opcodes required.
+  - Added 5 XQuery unit tests covering simple count, `where`, `let`, pre-`order by`, and post-`order by` — all pass.
+  - No regressions in XPath, XSLT, or existing unit tests; unit tests now **1,394/0**.
 
 - **2026-07-22** — XQuery 3.1 Phase 2: `order by` clause implemented with tuple-based VM sorting.
   - Extended `XPathParser` with `allowFullFlwor` to parse multi-clause `for`/`let`, `where`, and `order by` (empty ordering, collation) while preserving XPath-only mode.

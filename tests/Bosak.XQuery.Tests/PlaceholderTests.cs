@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.2   | 22-07-2026     | Added first end-to-end FLWOR query test                                                  |
 //                      | Charles Korthout | 0.3   | 22-07-2026     | Added order by clause tests                                                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 23-07-2026     | Added count clause tests                                                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -182,6 +184,71 @@ public class PlaceholderTests
         Assert.True(result.IsSequence, "Expected a sequence result.");
         var items = ToIntegers(result);
         Assert.Equal(new[] { 1L, 1L, 2L, 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Count_Simple()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in ('a', 'b', 'c') count $n return $n");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 2L, 3L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Count_WithWhere()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (5, 1, 4, 2, 3) where $i > 2 count $n return $n");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 2L, 3L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Count_WithLet()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3) let $j := $i * 2 count $n return ($j, $n)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 2L, 1L, 4L, 2L, 6L, 3L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Count_PreOrderBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (3, 1, 2) count $n order by $i return ($i, $n)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 2L, 2L, 3L, 3L, 1L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Count_PostOrderBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (3, 1, 2) order by $i count $n return ($i, $n)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 1L, 2L, 2L, 3L, 3L }, items);
     }
 
     private static List<long> ToIntegers(XdmValue value)

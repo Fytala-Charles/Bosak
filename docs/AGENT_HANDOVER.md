@@ -1,5 +1,40 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-07-23
+**Commit:** *(pending commit)*
+**Current focus:** **XQuery 3.1 Phase 2** — `count` clause implemented on top of the tuple-based FLWOR infrastructure. Extended `XPathParser` to recognise `count $var` as a FLWOR intermediate clause in full-FLWOR mode, added `CountClauseNode` to the AST, and updated `XPathOptimizer` and `IrLowerer` to maintain compiler-managed integer counters during tuple construction and post-`order by` iteration. Added 5 XQuery unit tests covering simple count, count with `where`, count with `let`, pre-`order by` count, and post-`order by` count. Full `dotnet test Bosak.sln` passes: **1,394 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
+
+## This Session Changes (XQuery 3.1 Phase 2 count)
+
+1. **`src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`** — Added `CountClauseNode`.
+2. **`src/Bosak.XPath.Parser/Ast/XPathParser.cs`** — Parses `count $var` as a FLWOR intermediate clause when `allowFullFlwor` is true; XPath-only mode rejects it with `XPST0003`.
+3. **`src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`** — Traverses `CountClauseNode`.
+4. **`src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`** — Generalised `LowerFlworWithOrderBy` to `LowerFlworWithTuples`; routes expressions containing `count` through the tuple path; maintains per-count-clause integer counters that are incremented and bound as `xs:integer` variables.
+5. **`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`** — Added 5 `count` clause tests.
+6. **`docs/FEATURE_REQUESTS.md`** — Added and marked implemented `REQ-042`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+XQuery 3.1 Phase 2 (`order by` and `count`) is complete. The next step is the remainder of Phase 2 — **`group by`** and **`window`** clauses.
+
+- Start with `group by` because it is the next most common FLWOR clause and requires a grouping opcode on the same tuple infrastructure.
+- Or tackle `window` first if grouped sliding/tumbling windows are needed sooner.
+- Target the QT3 `prod/GroupByClause.xml` and `prod/WindowClause.xml` clusters once support is in place.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-07-22
 **Commit:** `67ed9c4` (feat(xquery): Phase 2 order by clause - tuple-based VM sorting)
 **Current focus:** **XQuery 3.1 Phase 2** — `order by` clause implemented with tuple-based VM sorting. Extended `XPathParser` with an `allowFullFlwor` flag so `XQueryParser` can parse multi-clause `for`/`let`/`where`/`order by` while XPath mode rejects them per `LetExpr020a`. Added `FlworExpressionNode` and `OrderByClauseNode` AST nodes, `OrderBy` and `TupleBind` IR opcodes, and VM handlers. Added 13 XQuery unit tests covering ascending, descending, strings, where, let, and multiple keys. Full `dotnet test Bosak.sln` passes: **1,389 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.

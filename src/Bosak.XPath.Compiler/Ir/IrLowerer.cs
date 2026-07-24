@@ -37,6 +37,8 @@
 //                      | Charles Korthout | 1.12  | 19-07-2026     | Emit UnaryPlus opcode instead of Move; runtime validates operand type                    |
 //                      | Charles Korthout | 1.13  | 22-07-2026     | Lower FlworExpressionNode with order by (OrderBy/TupleBind opcodes)                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.14  | 23-07-2026     | Lower XQuery FLWOR count clause via tuple-path counters                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -80,6 +82,7 @@ public sealed class IrLowerer
     private readonly List<IrInstruction> _instructions = new();
     private readonly List<object?> _literalPool = new();
     private int _nextRegister;
+    private int _nextCountCounter;
     private readonly Stack<int> _freeRegisters = new();
 
     public IrModule Lower(XPathAstNode node)
@@ -88,6 +91,7 @@ public sealed class IrLowerer
         _literalPool.Clear();
         _freeRegisters.Clear();
         _nextRegister = 0;
+        _nextCountCounter = 0;
 
         int resultReg = LowerNode(node);
         Emit(IrOpCode.Return, (ushort)resultReg);
@@ -1353,12 +1357,12 @@ public sealed class IrLowerer
     {
         int resultReg = targetReg ?? AllocRegister();
 
-        if (!node.Clauses.Any(c => c is OrderByClauseNode))
+        if (!node.Clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
         {
             return LowerFlworWithoutOrderBy(node, resultReg);
         }
 
-        return LowerFlworWithOrderBy(node, resultReg);
+        return LowerFlworWithTuples(node, resultReg);
     }
 
     private int LowerFlworWithoutOrderBy(FlworExpressionNode node, int resultReg)
@@ -1383,9 +1387,9 @@ public sealed class IrLowerer
         return resultReg;
     }
 
-    private int LowerFlworWithOrderBy(FlworExpressionNode node, int resultReg)
+    private int LowerFlworWithTuples(FlworExpressionNode node, int resultReg)
     {
-        // Find the last order by clause.
+        // Find the last order by clause (-1 if there is none).
         int orderByIndex = -1;
         for (int i = node.Clauses.Count - 1; i >= 0; i--)
         {
@@ -1396,36 +1400,112 @@ public sealed class IrLowerer
             }
         }
 
-        var preClauses = node.Clauses.Take(orderByIndex).ToList();
-        var orderByClause = (OrderByClauseNode)node.Clauses[orderByIndex];
+        var preClauses = orderByIndex >= 0 ? node.Clauses.Take(orderByIndex).ToList() : node.Clauses.ToList();
+        var postClauses = orderByIndex >= 0 ? node.Clauses.Skip(orderByIndex + 1).ToList() : new List<FlworClauseNode>();
+        var orderByClause = orderByIndex >= 0 ? (OrderByClauseNode)node.Clauses[orderByIndex] : null;
 
-        // The variables bound by all for/let clauses before order by must be captured
+        // The variables bound by all for/let/count clauses before order by must be captured
         // before the tuple builder recurses, because that builder adds and removes
         // variables as it unwinds.
         var boundVariables = ComputeBoundVariables(preClauses);
 
+        // Each count clause needs a compiler-managed integer counter that persists
+        // across tuple-builder invocations inside the For loops.
+        var countCounters = PrecomputeCountCounters(node.Clauses);
+        InitializeCountCounters(countCounters);
+
         // Build a sequence of tuples: [var1, var2, ..., key1, key2, ...]
         int tupleSeqReg = AllocRegister();
         var recursionBoundVariables = new List<BoundVariable>();
-        LowerFlworTupleBuilder(preClauses, orderByClause, tupleSeqReg, recursionBoundVariables);
+        LowerFlworTupleBuilder(preClauses, orderByClause, tupleSeqReg, recursionBoundVariables, countCounters);
 
-        // Apply OrderBy.
-        int sortedTupleSeqReg = AllocRegister();
-        var orderByInfo = new OrderByInfo(
-            boundVariables.Count,
-            orderByClause.Specs.Count,
-            orderByClause.Specs.Select(s => s.Descending).ToArray(),
-            orderByClause.Specs.Select(s => s.EmptyOrder).ToArray(),
-            orderByClause.Specs.Select(s => s.CollationUri).ToArray());
-        int orderByPoolIdx = AddToLiteralPool(orderByInfo);
-        Emit(IrOpCode.OrderBy, (ushort)sortedTupleSeqReg, (ushort)tupleSeqReg, 0, orderByPoolIdx);
+        int iterationReg = tupleSeqReg;
+        if (orderByClause is not null)
+        {
+            // Apply OrderBy.
+            int sortedTupleSeqReg = AllocRegister();
+            var orderByInfo = new OrderByInfo(
+                boundVariables.Count,
+                orderByClause.Specs.Count,
+                orderByClause.Specs.Select(s => s.Descending).ToArray(),
+                orderByClause.Specs.Select(s => s.EmptyOrder).ToArray(),
+                orderByClause.Specs.Select(s => s.CollationUri).ToArray());
+            int orderByPoolIdx = AddToLiteralPool(orderByInfo);
+            Emit(IrOpCode.OrderBy, (ushort)sortedTupleSeqReg, (ushort)tupleSeqReg, 0, orderByPoolIdx);
+            FreeRegister(tupleSeqReg);
+            iterationReg = sortedTupleSeqReg;
+        }
 
-        // Iterate over sorted tuples, bind variables, evaluate body.
-        LowerFlworBodyIteration(sortedTupleSeqReg, boundVariables, node.ReturnExpression, resultReg);
+        // Iterate over tuples, bind variables, handle post-order-by clauses, evaluate body.
+        LowerFlworBodyIteration(iterationReg, boundVariables, postClauses, node.ReturnExpression, resultReg, countCounters);
 
-        FreeRegister(tupleSeqReg);
-        FreeRegister(sortedTupleSeqReg);
+        FreeRegister(iterationReg);
         return resultReg;
+    }
+
+    private readonly record struct CountCounterInfo(CountClauseNode Clause, string CounterName);
+
+    private List<CountCounterInfo> PrecomputeCountCounters(IReadOnlyList<FlworClauseNode> clauses)
+    {
+        var result = new List<CountCounterInfo>();
+        foreach (var clause in clauses)
+        {
+            if (clause is CountClauseNode countClause)
+            {
+                result.Add(new CountCounterInfo(countClause, $"__flwor_count_{_nextCountCounter++}"));
+            }
+        }
+        return result;
+    }
+
+    private void InitializeCountCounters(List<CountCounterInfo> countCounters)
+    {
+        if (countCounters.Count == 0) return;
+
+        int zeroReg = AllocRegister();
+        int zeroPoolIdx = AddToLiteralPool(0L);
+        Emit(IrOpCode.LoadInteger, (ushort)zeroReg, operand: zeroPoolIdx);
+        foreach (var info in countCounters)
+        {
+            int counterPoolIdx = AddToLiteralPool(info.CounterName);
+            Emit(IrOpCode.StoreVariable, 0, (ushort)zeroReg, 0, counterPoolIdx);
+        }
+        FreeRegister(zeroReg);
+    }
+
+    private string GetCountCounterName(CountClauseNode clause, List<CountCounterInfo> countCounters)
+    {
+        foreach (var info in countCounters)
+        {
+            if (info.Clause == clause)
+                return info.CounterName;
+        }
+        throw new InvalidOperationException("Count clause has no allocated counter.");
+    }
+
+    private void EmitIncrementCount(CountClauseNode countClause, List<CountCounterInfo> countCounters)
+    {
+        string counterName = GetCountCounterName(countClause, countCounters);
+        int counterPoolIdx = AddToLiteralPool(counterName);
+
+        int oldCounterReg = AllocRegister();
+        Emit(IrOpCode.LoadVariable, (ushort)oldCounterReg, 0, 0, counterPoolIdx);
+
+        int oneReg = AllocRegister();
+        int onePoolIdx = AddToLiteralPool(1L);
+        Emit(IrOpCode.LoadInteger, (ushort)oneReg, operand: onePoolIdx);
+
+        int newCounterReg = AllocRegister();
+        Emit(IrOpCode.Add, (ushort)newCounterReg, (ushort)oldCounterReg, (ushort)oneReg);
+        FreeRegister(oldCounterReg);
+        FreeRegister(oneReg);
+
+        Emit(IrOpCode.StoreVariable, 0, (ushort)newCounterReg, 0, counterPoolIdx);
+
+        var countVar = new BoundVariable(countClause.VariableName, countClause.Prefix, countClause.NamespaceUri);
+        int countVarPoolIdx = AddToLiteralPool(countVar.VariableKey);
+        Emit(IrOpCode.StoreVariable, 0, (ushort)newCounterReg, 0, countVarPoolIdx);
+        FreeRegister(newCounterReg);
     }
 
     private static List<BoundVariable> ComputeBoundVariables(IReadOnlyList<FlworClauseNode> clauses)
@@ -1443,15 +1523,20 @@ public sealed class IrLowerer
                 foreach (var b in letClause.Bindings)
                     result.Add(new BoundVariable(b.VariableName, b.VariablePrefix, b.VariableNamespaceUri));
             }
+            else if (clause is CountClauseNode countClause)
+            {
+                result.Add(new BoundVariable(countClause.VariableName, countClause.Prefix, countClause.NamespaceUri));
+            }
         }
         return result;
     }
 
     private void LowerFlworTupleBuilder(
         IReadOnlyList<FlworClauseNode> clauses,
-        OrderByClauseNode orderByClause,
+        OrderByClauseNode? orderByClause,
         int resultReg,
-        List<BoundVariable> boundVariables)
+        List<BoundVariable> boundVariables,
+        List<CountCounterInfo> countCounters)
     {
         if (clauses.Count == 0)
         {
@@ -1467,11 +1552,14 @@ public sealed class IrLowerer
                 FreeRegister(varReg);
             }
 
-            foreach (var spec in orderByClause.Specs)
+            if (orderByClause is not null)
             {
-                int keyReg = LowerNode(spec.KeyExpression);
-                Emit(IrOpCode.ArrayAdd, (ushort)tupleReg, (ushort)keyReg);
-                FreeRegister(keyReg);
+                foreach (var spec in orderByClause.Specs)
+                {
+                    int keyReg = LowerNode(spec.KeyExpression);
+                    Emit(IrOpCode.ArrayAdd, (ushort)tupleReg, (ushort)keyReg);
+                    FreeRegister(keyReg);
+                }
             }
 
             Emit(IrOpCode.Return, (ushort)tupleReg);
@@ -1484,7 +1572,7 @@ public sealed class IrLowerer
 
         if (clause is ForClauseNode forClause)
         {
-            LowerForClauseForTuples(forClause.Bindings, 0, restClauses, orderByClause, resultReg, boundVariables);
+            LowerForClauseForTuples(forClause.Bindings, 0, restClauses, orderByClause, resultReg, boundVariables, countCounters);
         }
         else if (clause is LetClauseNode letClause)
         {
@@ -1495,7 +1583,7 @@ public sealed class IrLowerer
                 FreeRegister(exprReg);
                 boundVariables.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
             }
-            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables);
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
             foreach (var _ in letClause.Bindings)
             {
                 boundVariables.RemoveAt(boundVariables.Count - 1);
@@ -1506,11 +1594,18 @@ public sealed class IrLowerer
             int condReg = LowerNode(whereClause.Condition);
             int jumpToEmpty = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)condReg);
             FreeRegister(condReg);
-            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables);
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
             int emptyLabel = CurrentInstructionIndex;
             Emit(IrOpCode.LoadEmptySequence, (ushort)resultReg);
             Emit(IrOpCode.Return, (ushort)resultReg);
             PatchJump(jumpToEmpty, emptyLabel);
+        }
+        else if (clause is CountClauseNode countClause)
+        {
+            EmitIncrementCount(countClause, countCounters);
+            boundVariables.Add(new BoundVariable(countClause.VariableName, countClause.Prefix, countClause.NamespaceUri));
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
+            boundVariables.RemoveAt(boundVariables.Count - 1);
         }
     }
 
@@ -1518,9 +1613,10 @@ public sealed class IrLowerer
         IReadOnlyList<QuantifiedBinding> bindings,
         int index,
         IReadOnlyList<FlworClauseNode> restClauses,
-        OrderByClauseNode orderByClause,
+        OrderByClauseNode? orderByClause,
         int resultReg,
-        List<BoundVariable> boundVariables)
+        List<BoundVariable> boundVariables,
+        List<CountCounterInfo> countCounters)
     {
         var binding = bindings[index];
         int seqReg = LowerNode(binding.Expression);
@@ -1537,11 +1633,11 @@ public sealed class IrLowerer
 
         if (index == bindings.Count - 1)
         {
-            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables);
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
         }
         else
         {
-            LowerForClauseForTuples(bindings, index + 1, restClauses, orderByClause, resultReg, boundVariables);
+            LowerForClauseForTuples(bindings, index + 1, restClauses, orderByClause, resultReg, boundVariables, countCounters);
         }
 
         boundVariables.RemoveAt(boundVariables.Count - 1);
@@ -1554,13 +1650,15 @@ public sealed class IrLowerer
     }
 
     private void LowerFlworBodyIteration(
-        int sortedTupleSeqReg,
+        int tupleSeqReg,
         IReadOnlyList<BoundVariable> boundVariables,
+        IReadOnlyList<FlworClauseNode> postClauses,
         XPathAstNode returnExpression,
-        int resultReg)
+        int resultReg,
+        List<CountCounterInfo> countCounters)
     {
         int forIdx = _instructions.Count;
-        Emit(IrOpCode.For, (ushort)resultReg, (ushort)sortedTupleSeqReg, 0, 0);
+        Emit(IrOpCode.For, (ushort)resultReg, (ushort)tupleSeqReg, 0, 0);
 
         int jumpIdx = _instructions.Count;
         Emit(IrOpCode.Jump, 0, 0, 0, 0);
@@ -1577,6 +1675,15 @@ public sealed class IrLowerer
         Emit(IrOpCode.TupleBind, (ushort)tupleReg, 0, 0, tupleBindPoolIdx);
         FreeRegister(tupleReg);
 
+        // Handle post-order-by clauses (currently only count is supported).
+        foreach (var postClause in postClauses)
+        {
+            if (postClause is CountClauseNode countClause)
+            {
+                EmitIncrementCount(countClause, countCounters);
+            }
+        }
+
         int bodyReg = LowerNode(returnExpression);
         Emit(IrOpCode.Return, (ushort)bodyReg);
         FreeRegister(bodyReg);
@@ -1584,7 +1691,7 @@ public sealed class IrLowerer
         int afterRhs = _instructions.Count;
         var info = new QuantifiedLoopInfo("__flwor_tuple", rhsEntry);
         int poolIdx = AddToLiteralPool(info);
-        PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)sortedTupleSeqReg, 0, poolIdx);
+        PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)tupleSeqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
     }
 
