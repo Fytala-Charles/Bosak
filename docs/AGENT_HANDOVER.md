@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-23
-**Commit:** *(pending commit)*
+**Commit:** `19ae4f7` (feat(xquery): Phase 2 count clause - tuple-path positional variable)
 **Current focus:** **XQuery 3.1 Phase 2** — `count` clause implemented on top of the tuple-based FLWOR infrastructure. Extended `XPathParser` to recognise `count $var` as a FLWOR intermediate clause in full-FLWOR mode, added `CountClauseNode` to the AST, and updated `XPathOptimizer` and `IrLowerer` to maintain compiler-managed integer counters during tuple construction and post-`order by` iteration. Added 5 XQuery unit tests covering simple count, count with `where`, count with `let`, pre-`order by` count, and post-`order by` count. Full `dotnet test Bosak.sln` passes: **1,394 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 2 count)
