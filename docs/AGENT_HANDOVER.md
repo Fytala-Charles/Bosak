@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** *(pending — recorded after commit)* (feat(xquery): Phase 2 window clause - Window opcode with tumbling/sliding windows)
+**Commit:** `7fa58d5` (feat(xquery): Phase 2 window clause - Window opcode with tumbling/sliding windows)
 **Current focus:** **XQuery 3.1 Phase 2 complete** — `window` clause implemented on top of the tuple-based FLWOR infrastructure, completing the core FLWOR surface (`order by`, `count`, `group by`, `window`). Extended `XPathParser` to parse `for tumbling|sliding window $var in expr start ... when ... (only)? end ... when ...` in full-FLWOR mode (both as initial and intermediate clause), added `WindowClauseNode`/`WindowCondition` to the AST, and updated `XPathOptimizer`, `XQueryCompiler`, and `IrLowerer`. A new `Window` IR opcode and VM handler implement tumbling (windows open only when none is open) and sliding (possibly overlapping) semantics: conditions are evaluated via `ExecuteBlock` with the declared WindowVars (current/positional/previous/next) bound; each produced window binds the window variable to its items plus the start/end condition variables captured at open/close, then runs the body block. Start positions are 1-based in the input sequence, end positions 1-based within the window. Added 7 XQuery unit tests covering tumbling, `only end`, sliding overlap, start/end variables, previous/next, window + `order by`, and XPath-mode rejection. Full `dotnet test Bosak.sln` passes: **1,409 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 2 window)
