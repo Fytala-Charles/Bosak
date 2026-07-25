@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** *(pending — recorded after commit)* (feat(xquery): close XPST0017/same-key gap clusters - variadic functions, date/time equality)
+**Commit:** `6ed5988` (feat(xquery): close XPST0017/same-key gap clusters - variadic functions, date/time equality)
 **Current focus:** **XQuery conformance gap shrinkage (REQ-045 follow-up)** — closed the two largest `KnownXQueryGaps` clusters. QT3 went from **22,947 passed / 0 failed / 8,874 skipped (72.11%)** to **22,983 passed / 0 failed / 8,838 skipped (72.23%)**; gaps 203 → 167. Full `dotnet test Bosak.sln` passes: **1,429 unit tests / 0 failed**.
 
 ## This Session Changes (gap clusters: XPST0017 + same-key)
