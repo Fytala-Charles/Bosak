@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** *(pending — recorded after commit)* (feat(conformance): wire QT3 harness to XQuery pipeline + conformance sweep)
+**Commit:** `532a340` (feat(conformance): wire QT3 harness to XQuery pipeline + conformance sweep)
 **Current focus:** **QT3 harness wired to the XQuery pipeline** — XQuery-syntax QT3 tests now run through `Bosak.XQuery` instead of skipping. QT3 went from **14,994 passed / 0 failed / 16,827 skipped (47.12%)** to **22,947 passed / 0 failed / 8,874 skipped (72.11%)** (+7,953 passing). The four FLWOR sets are green with 0 failures: WindowClause 34, OrderByClause 39, GroupByClause 14, CountClause 4. The 203 admitted-but-failing tests are recorded in `ConformanceRunner.KnownXQueryGaps` with per-set reasons (work items for future sessions). Full `dotnet test Bosak.sln` passes: **1,421 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (QT3 XQuery routing + conformance sweep)
