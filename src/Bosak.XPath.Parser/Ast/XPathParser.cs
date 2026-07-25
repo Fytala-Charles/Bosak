@@ -47,6 +47,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.21  | 25-07-2026     | Parse XQuery FLWOR group by clause                                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.22  | 25-07-2026     | Parse XQuery FLWOR window clause (tumbling/sliding)                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -229,6 +231,7 @@ public sealed class XPathParser
             // 'for' and 'let' are FLWOR keywords only when followed by a variable binding.
             // Otherwise they are ordinary names (e.g., name tests) (K2-NameTest-78/79).
             TokenKind.KeywordFor when Peek(1).Kind == TokenKind.Dollar => ParseForExpr(),
+            TokenKind.KeywordFor when _allowFullFlwor && IsWindowKeyword(Peek(1)) => ParseForExpr(),
             TokenKind.KeywordLet when Peek(1).Kind == TokenKind.Dollar => ParseLetExpr(),
             TokenKind.KeywordSome or TokenKind.KeywordEvery => ParseQuantifiedExpr(),
             TokenKind.KeywordIf => ParseIfExpr(),
@@ -250,6 +253,10 @@ public sealed class XPathParser
     // OrderSpec ::= ExprSingle ("ascending" | "descending")? ("empty" ("least" | "greatest"))? ("collation" URILiteral)?
     // GroupByClause ::= "group by" GroupingSpec ("," GroupingSpec)*
     // GroupingSpec ::= "$" VarName (":=" ExprSingle)? ("collation" URILiteral)?
+    // WindowClause ::= "for" ("tumbling" | "sliding") "window" "$" VarName "in" ExprSingle WindowStartCondition WindowEndCondition
+    // WindowStartCondition ::= "start" WindowVars "when" ExprSingle
+    // WindowEndCondition ::= ("only")? "end" WindowVars "when" ExprSingle
+    // WindowVars ::= ("$" VarName)? ("at" "$" VarName)? ("previous" "$" VarName)? ("next" "$" VarName)?
     private XPathAstNode ParseForExpr() => ParseFlworExpr();
 
     private XPathAstNode ParseLetExpr() => ParseFlworExpr();
@@ -261,9 +268,22 @@ public sealed class XPathParser
 
         // Initial clause (dispatch guarantees 'for' or 'let').
         if (Current.Kind == TokenKind.KeywordFor)
-            clauses.Add(new ForClauseNode(ParseForClauseBindings()));
+        {
+            if (IsWindowKeyword(Peek(1)))
+            {
+                if (!_allowFullFlwor)
+                    throw new ParseException("XPST0003: XPath does not allow a window clause.", Current.Start);
+                clauses.Add(ParseWindowClause());
+            }
+            else
+            {
+                clauses.Add(new ForClauseNode(ParseForClauseBindings()));
+            }
+        }
         else
+        {
             clauses.Add(new LetClauseNode(ParseLetClauseBindings()));
+        }
 
         // Intermediate clauses.
         while (true)
@@ -272,7 +292,10 @@ public sealed class XPathParser
             {
                 if (!_allowFullFlwor)
                     throw new ParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
-                clauses.Add(new ForClauseNode(ParseForClauseBindings()));
+                if (IsWindowKeyword(Peek(1)))
+                    clauses.Add(ParseWindowClause());
+                else
+                    clauses.Add(new ForClauseNode(ParseForClauseBindings()));
             }
             else if (Current.Kind == TokenKind.KeywordLet)
             {
@@ -436,6 +459,80 @@ public sealed class XPathParser
             specs.Add(new GroupingSpec(local, keyExpression, collation, prefix, ns));
         } while (Match(TokenKind.Comma));
         return specs;
+    }
+
+    private bool IsWindowKeyword(Token token) =>
+        token.Kind == TokenKind.Name && (GetString(token) == "tumbling" || GetString(token) == "sliding");
+
+    private WindowClauseNode ParseWindowClause()
+    {
+        // Current is 'for'; the next token is 'tumbling' or 'sliding'.
+        Expect(TokenKind.KeywordFor);
+        bool sliding = GetString(Current) == "sliding";
+        Advance();
+
+        if (Current.Kind != TokenKind.Name || GetString(Current) != "window")
+            throw new ParseException("XQST0003: Expected 'window' after 'tumbling'/'sliding'.", Current.Start);
+        Advance();
+
+        Expect(TokenKind.Dollar);
+        var nameTok = ExpectName();
+        var (prefix, local, ns) = SplitQName(GetString(nameTok));
+
+        Expect(TokenKind.KeywordIn);
+        var inExpression = ParseExprSingle();
+
+        var startCondition = ParseWindowCondition("start");
+
+        bool onlyEnd = false;
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "only")
+        {
+            onlyEnd = true;
+            Advance();
+        }
+        var endCondition = ParseWindowCondition("end");
+
+        return new WindowClauseNode(sliding, local, inExpression, startCondition, endCondition, onlyEnd, prefix, ns);
+    }
+
+    private WindowCondition ParseWindowCondition(string keyword)
+    {
+        // Current must be the contextual keyword ('start' or 'end').
+        if (Current.Kind != TokenKind.Name || GetString(Current) != keyword)
+            throw new ParseException($"XQST0003: Expected '{keyword}' condition in window clause.", Current.Start);
+        Advance();
+
+        string? currentItem = null, positional = null, previousItem = null, nextItem = null;
+        if (Current.Kind == TokenKind.Dollar)
+        {
+            Advance();
+            currentItem = GetString(ExpectName());
+        }
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "at")
+        {
+            Advance();
+            Expect(TokenKind.Dollar);
+            positional = GetString(ExpectName());
+        }
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "previous")
+        {
+            Advance();
+            Expect(TokenKind.Dollar);
+            previousItem = GetString(ExpectName());
+        }
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "next")
+        {
+            Advance();
+            Expect(TokenKind.Dollar);
+            nextItem = GetString(ExpectName());
+        }
+
+        if (Current.Kind != TokenKind.Name || GetString(Current) != "when")
+            throw new ParseException($"XQST0003: Expected 'when' in window {keyword} condition.", Current.Start);
+        Advance();
+
+        var whenExpression = ParseExprSingle();
+        return new WindowCondition(whenExpression, currentItem, positional, previousItem, nextItem);
     }
 
     private IReadOnlyList<QuantifiedBinding> ParseForClauseBindings()

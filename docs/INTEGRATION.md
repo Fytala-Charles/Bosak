@@ -5,14 +5,23 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 July 2026
-> **Bosak baseline:** 1,402 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,409 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** 14,994 passed / 0 failed / 16,827 skipped (47.12% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 2 — `order by`, `count`, and `group by` clauses implemented with tuple-based VM lowering
+> **XQuery baseline:** Phase 2 complete — `order by`, `count`, `group by`, and `window` clauses implemented with tuple-based VM lowering
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-25** — XQuery 3.1 Phase 2 complete: `window` clause implemented on top of the tuple-based FLWOR path.
+  - Extended `XPathParser` to parse `for tumbling|sliding window $var in expr start ... when ... (only)? end ... when ...` when `allowFullFlwor` is true, both as the initial and as an intermediate clause; XPath-only mode rejects it with `XPST0003`.
+  - Added `WindowClauseNode` and `WindowCondition` to `XPathAstNode`; `XPathOptimizer` and `XQueryCompiler` traverse/resolve the in-expression and both when-expressions.
+  - Added a `Window` IR opcode and `WindowInfo` literal-pool record; `IrLowerer.LowerWindowClauseForTuples` emits start-condition, end-condition, and window-body blocks on the tuple path, and `ComputeBoundVariables` captures the window and condition variables so `order by` keys and the return expression see them.
+  - Added a `Window` VM handler implementing tumbling (windows open only when none is open) and sliding (possibly overlapping) semantics, with current/positional/previous/next WindowVars, `only end`, single-item windows, and unclosed windows at end of input.
+  - Clauses other than `count` after an `order by` (including `window`) now fail fast with `NotSupportedException` instead of being silently dropped.
+  - Added 7 XQuery unit tests covering tumbling, `only end`, sliding overlap, start/end variables, previous/next, window + `order by`, and XPath-mode rejection — all pass.
+  - No regressions in XPath, XSLT, or existing unit tests; unit tests now **1,409/0**.
 
 - **2026-07-25** — XQuery 3.1 Phase 2: `group by` clause implemented on top of the tuple-based FLWOR path.
   - Extended `XPathParser` to parse `group by` grouping specs (`$var` or `$var := expr`, optional `collation`) when `allowFullFlwor` is true; XPath-only mode rejects it with `XPST0003`.
@@ -1040,7 +1049,7 @@ var result = new XQueryCompiler()
 | `order by` | ✅ Working | Tuple-based sorting; ascending/descending, empty least/greatest, collation |
 | `count` | ✅ Working | Compiler-managed integer counters over the tuple path |
 | `group by` | ✅ Working | `GroupBy` opcode; `$var` / `$var := expr` specs with optional collation; post-group `order by`/`count` |
-| `window` | 🔮 Phase 2 | Tumbling/sliding window clauses |
+| `window` | ✅ Working | `Window` opcode; tumbling/sliding, start/end vars (current/position/previous/next), `only end` |
 | Direct / computed constructors | 🔮 Phase 3 | XML-like syntax and node-building opcodes |
 | Library modules / `import module` | 🔮 Phase 4 | Module resolution and shared static context |
 | Serialization | 🔮 Phase 4 | `xml`, `html`, `xhtml`, `text`, `json`, `adaptive` |

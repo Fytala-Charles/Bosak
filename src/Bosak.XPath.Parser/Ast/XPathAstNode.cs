@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 25-07-2026     | Added GroupByClauseNode and GroupingSpec for XQuery FLWOR group by                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 25-07-2026     | Added WindowClauseNode and WindowCondition for XQuery FLWOR window clause               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -140,6 +142,25 @@ public enum EmptyOrder
 
 /// <summary>A group by clause: <c>group by $var (:= expr)? (collation 'uri')?, ...</c>.</summary>
 public sealed record GroupByClauseNode(IReadOnlyList<GroupingSpec> Specs) : FlworClauseNode;
+
+/// <summary>A window clause: <c>for tumbling|sliding window $var in expr start ... when ... (only)? end ... when ...</c>.</summary>
+public sealed record WindowClauseNode(
+    bool Sliding,
+    string VariableName,
+    XPathAstNode InExpression,
+    WindowCondition StartCondition,
+    WindowCondition EndCondition,
+    bool OnlyEnd = false,
+    string? Prefix = null,
+    string? NamespaceUri = null) : FlworClauseNode;
+
+/// <summary>A start or end condition of a window clause: <c>($cur)? (at $pos)? (previous $p)? (next $n)? when expr</c>.</summary>
+public sealed record WindowCondition(
+    XPathAstNode WhenExpression,
+    string? CurrentItemVariable = null,
+    string? PositionalVariable = null,
+    string? PreviousItemVariable = null,
+    string? NextItemVariable = null);
 
 /// <summary>A single grouping specification inside a group by clause.</summary>
 public sealed record GroupingSpec(

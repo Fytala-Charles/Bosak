@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 25-07-2026     | Resolve function namespaces inside GroupByClauseNode specs                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 25-07-2026     | Resolve function namespaces inside WindowClauseNode conditions                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -157,6 +159,18 @@ public sealed class XQueryCompiler
                 {
                     KeyExpression = s.KeyExpression is null ? null : ResolveFunctionNamespaces(s.KeyExpression, context)
                 }).ToList()
+            },
+            WindowClauseNode windowClause => windowClause with
+            {
+                InExpression = ResolveFunctionNamespaces(windowClause.InExpression, context),
+                StartCondition = windowClause.StartCondition with
+                {
+                    WhenExpression = ResolveFunctionNamespaces(windowClause.StartCondition.WhenExpression, context)
+                },
+                EndCondition = windowClause.EndCondition with
+                {
+                    WhenExpression = ResolveFunctionNamespaces(windowClause.EndCondition.WhenExpression, context)
+                }
             },
             _ => clause
         };

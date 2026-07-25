@@ -28,6 +28,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 25-07-2026     | Optimize GroupByClauseNode (XQuery group by)                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 25-07-2026     | Optimize WindowClauseNode (XQuery window)                                               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -675,7 +677,23 @@ public sealed class XPathOptimizer
             CountClauseNode countClause => OptimizeCountClause(countClause, ref changed),
             OrderByClauseNode orderClause => OptimizeOrderByClause(orderClause, ref changed),
             GroupByClauseNode groupClause => OptimizeGroupByClause(groupClause, ref changed),
+            WindowClauseNode windowClause => OptimizeWindowClause(windowClause, ref changed),
             _ => clause
+        };
+    }
+
+    private WindowClauseNode OptimizeWindowClause(WindowClauseNode node, ref bool changed)
+    {
+        var inExpr = OptimizeNode(node.InExpression, ref changed);
+        var startWhen = OptimizeNode(node.StartCondition.WhenExpression, ref changed);
+        var endWhen = OptimizeNode(node.EndCondition.WhenExpression, ref changed);
+        if (inExpr == node.InExpression && startWhen == node.StartCondition.WhenExpression && endWhen == node.EndCondition.WhenExpression)
+            return node;
+        return node with
+        {
+            InExpression = inExpr,
+            StartCondition = node.StartCondition with { WhenExpression = startWhen },
+            EndCondition = node.EndCondition with { WhenExpression = endWhen }
         };
     }
 

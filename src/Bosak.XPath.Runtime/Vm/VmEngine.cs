@@ -111,6 +111,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.64  | 25-07-2026     | Added GroupBy VM handler and grouping-key equality for XQuery FLWOR group by            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.65  | 25-07-2026     | Added Window VM handler for XQuery FLWOR tumbling/sliding windows                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -947,6 +949,124 @@ public static class VmEngine
                         }
 
                         registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(merged));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.Window:
+                    {
+                        var windowInfo = (WindowInfo)literalPool[instr.Operand]!;
+                        var input = registers[instr.RegisterB];
+                        var items = MaterializeSequence(input);
+                        var results = new List<XdmValue>();
+                        string windowNs = windowInfo.VariableNamespaceUri ?? "";
+
+                        // Save the previous bindings of every variable this clause binds.
+                        var boundNames = new List<string> { windowInfo.VariableName };
+                        foreach (var name in new[]
+                        {
+                            windowInfo.StartCurrent, windowInfo.StartPos, windowInfo.StartPrev, windowInfo.StartNext,
+                            windowInfo.EndCurrent, windowInfo.EndPos, windowInfo.EndPrev, windowInfo.EndNext
+                        })
+                        {
+                            if (name is not null && !boundNames.Contains(name))
+                                boundNames.Add(name);
+                        }
+                        var savedBindings = new List<(string Name, bool Had, XdmValue Value)>(boundNames.Count);
+                        foreach (var name in boundNames)
+                        {
+                            bool had = context.TryGetVariable(name, out var saved, name == windowInfo.VariableName ? windowNs : "");
+                            savedBindings.Add((name, had, saved));
+                        }
+
+                        if (windowInfo.Sliding)
+                        {
+                            // Sliding: every item matching the start condition opens a new
+                            // (possibly overlapping) window.
+                            for (int i = 0; i < items.Length; i++)
+                            {
+                                if (!EvaluateWindowCondition(module, context, registers, windowInfo.StartEntryPoint,
+                                        items, i, i + 1,
+                                        windowInfo.StartCurrent, windowInfo.StartPos, windowInfo.StartPrev, windowInfo.StartNext))
+                                    continue;
+
+                                var startBindings = CaptureWindowBindings(items, i, i + 1,
+                                    windowInfo.StartCurrent, windowInfo.StartPos, windowInfo.StartPrev, windowInfo.StartNext);
+
+                                var windowItems = new List<XdmValue>();
+                                bool closed = false;
+                                for (int j = i; j < items.Length; j++)
+                                {
+                                    windowItems.Add(items[j]);
+                                    if (EvaluateWindowCondition(module, context, registers, windowInfo.EndEntryPoint,
+                                            items, j, j - i + 1,
+                                            windowInfo.EndCurrent, windowInfo.EndPos, windowInfo.EndPrev, windowInfo.EndNext))
+                                    {
+                                        EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
+                                            startBindings, items, j, windowItems.Count);
+                                        closed = true;
+                                        break;
+                                    }
+                                }
+                                if (!closed && !windowInfo.OnlyEnd)
+                                {
+                                    EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
+                                        startBindings, items, items.Length - 1, windowItems.Count);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Tumbling: a new window starts only when no window is open.
+                            var windowItems = new List<XdmValue>();
+                            List<(string Name, XdmValue Value)>? startBindings = null;
+                            bool open = false;
+                            for (int i = 0; i < items.Length; i++)
+                            {
+                                if (!open)
+                                {
+                                    if (!EvaluateWindowCondition(module, context, registers, windowInfo.StartEntryPoint,
+                                            items, i, i + 1,
+                                            windowInfo.StartCurrent, windowInfo.StartPos, windowInfo.StartPrev, windowInfo.StartNext))
+                                        continue;
+                                    open = true;
+                                    startBindings = CaptureWindowBindings(items, i, i + 1,
+                                        windowInfo.StartCurrent, windowInfo.StartPos, windowInfo.StartPrev, windowInfo.StartNext);
+                                    windowItems.Add(items[i]);
+                                }
+                                else
+                                {
+                                    windowItems.Add(items[i]);
+                                }
+
+                                if (EvaluateWindowCondition(module, context, registers, windowInfo.EndEntryPoint,
+                                        items, i, windowItems.Count,
+                                        windowInfo.EndCurrent, windowInfo.EndPos, windowInfo.EndPrev, windowInfo.EndNext))
+                                {
+                                    EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
+                                        startBindings!, items, i, windowItems.Count);
+                                    open = false;
+                                    windowItems = new List<XdmValue>();
+                                }
+                            }
+                            if (open && !windowInfo.OnlyEnd)
+                            {
+                                EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
+                                    startBindings!, items, items.Length - 1, windowItems.Count);
+                            }
+                        }
+
+                        // Restore the previous variable bindings.
+                        foreach (var (name, had, value) in savedBindings)
+                        {
+                            string ns = name == windowInfo.VariableName ? windowNs : "";
+                            if (had)
+                                context.WithVariable(name, value, ns);
+                            else
+                                context.RemoveVariable(name, ns);
+                        }
+
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(results));
                         ip++;
                         break;
                     }
@@ -8034,6 +8154,85 @@ public static class VmEngine
     // ------------------------------------------------------------------
     // OrderBy helpers
     // ------------------------------------------------------------------
+
+    private static List<(string Name, XdmValue Value)> CaptureWindowBindings(
+        XdmValue[] items,
+        int index,
+        int position,
+        string? currentVar,
+        string? posVar,
+        string? prevVar,
+        string? nextVar)
+    {
+        var bindings = new List<(string, XdmValue)>(4);
+        if (currentVar is not null)
+            bindings.Add((currentVar, items[index]));
+        if (posVar is not null)
+            bindings.Add((posVar, XdmValue.FromInteger(position)));
+        if (prevVar is not null)
+            bindings.Add((prevVar, index > 0 ? items[index - 1] : XdmValue.FromSequence(XdmSequence.Empty)));
+        if (nextVar is not null)
+            bindings.Add((nextVar, index < items.Length - 1 ? items[index + 1] : XdmValue.FromSequence(XdmSequence.Empty)));
+        return bindings;
+    }
+
+    private static bool EvaluateWindowCondition(
+        IrModule module,
+        EvaluationContext context,
+        XdmValue[] registers,
+        int entryPoint,
+        XdmValue[] items,
+        int index,
+        int position,
+        string? currentVar,
+        string? posVar,
+        string? prevVar,
+        string? nextVar)
+    {
+        foreach (var (name, value) in CaptureWindowBindings(items, index, position, currentVar, posVar, prevVar, nextVar))
+            context.WithVariable(name, value, "");
+        var (condResult, _) = ExecuteBlock(module, context, registers, entryPoint);
+        return condResult.EffectiveBooleanValue();
+    }
+
+    private static void EmitFlworWindow(
+        IrModule module,
+        EvaluationContext context,
+        XdmValue[] registers,
+        WindowInfo info,
+        List<XdmValue> results,
+        List<XdmValue> windowItems,
+        List<(string Name, XdmValue Value)> startBindings,
+        XdmValue[] items,
+        int endIndex,
+        int endPosition)
+    {
+        // Bind the window variable to the window's item sequence.
+        var windowValue = windowItems.Count == 1
+            ? windowItems[0]
+            : XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>(windowItems)));
+        context.WithVariable(info.VariableName, windowValue, info.VariableNamespaceUri ?? "");
+
+        // Bind the start condition variables to the values captured when the window opened.
+        foreach (var (name, value) in startBindings)
+            context.WithVariable(name, value, "");
+
+        // Bind the end condition variables to the values at the closing item.
+        foreach (var (name, value) in CaptureWindowBindings(items, endIndex, endPosition,
+                     info.EndCurrent, info.EndPos, info.EndPrev, info.EndNext))
+            context.WithVariable(name, value, "");
+
+        var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
+        if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
+        {
+            foreach (var r in XdmSequence.FromSource(rhsResult.SequenceValue))
+                results.Add(r);
+        }
+        else if (!rhsResult.IsUndefined)
+        {
+            results.Add(rhsResult);
+        }
+    }
 
     private static bool IsGroupKeySlot(int slot, GroupByInfo info)
     {

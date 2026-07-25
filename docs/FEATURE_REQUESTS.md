@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 2 continued: `group by` clause implemented with a `GroupBy` opcode over the tuple path; unit tests now **1,402/0**; QT3 and XSLT baselines unchanged)
+> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 2 complete: `window` clause (tumbling/sliding) implemented with a `Window` opcode over the tuple path; unit tests now **1,409/0**; QT3 and XSLT baselines unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -148,6 +148,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-041 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `order by` clause | Required for full XQuery FLWOR: multi-clause for/let, where, and `order by` with ascending/descending, empty least/greatest, and collation | **Implemented** | Phase 4 | Charles Korthout | 2026-07-22 |
 | REQ-042 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `count` clause | Required for full XQuery FLWOR: `count $var` positional-variable clause, both pre- and post-`order by` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-23 |
 | REQ-043 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `group by` clause | Required for full XQuery FLWOR: `group by` grouping specs (`$var` or `$var := expr`, optional collation), grouped variable rebinding, and post-group `order by`/`count` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
+| REQ-044 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `window` clause | Required for full XQuery FLWOR: tumbling/sliding windows with start/end conditions (current/positional/previous/next vars) and `only end` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1944,13 +1945,62 @@ Extend the tuple-based FLWOR lowering with a `GroupBy` opcode. Grouping specs of
 
 ---
 
+### REQ-044: XQuery 3.1 Phase 2 — FLWOR `window` clause
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-25  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 requires the `window` FLWOR clause, which partitions or slides over the input sequence to produce a stream of windows. Without it, queries such as `for tumbling window $w in (2,4,6) start when true() end at $p when $p = 2 return $w` cannot be parsed or evaluated.
+
+**Proposed Solution:**  
+Add a `Window` opcode on the tuple-based FLWOR path. The lowerer emits the window input expression, then three blocks: the start-condition when-expression, the end-condition when-expression, and the window body (the remaining clauses/return, lowered as usual). The VM iterates the input sequence, evaluates the conditions with the declared WindowVars (current item, position, previous item, next item) bound, and for each produced window binds the window variable to the window's items plus the start/end condition variables captured at window open/close, then executes the body block. Tumbling windows open only when no window is open; sliding windows open at every matching item and may overlap. With `only end`, windows still open at end of input are discarded.
+
+**Acceptance Criteria:**
+- [x] `XPathParser` parses `for tumbling|sliding window $var in expr start ... when ... (only)? end ... when ...` when `allowFullFlwor` is true, both as the initial and as an intermediate clause.
+- [x] XPath-only mode rejects window clauses with `XPST0003`.
+- [x] Tumbling and sliding semantics, including single-item windows and unclosed windows at end of input (emitted unless `only end`).
+- [x] Start condition position is 1-based in the input sequence; end condition position is 1-based within the window; previous/next items come from the input sequence.
+- [x] Window variable and start/end condition variables are visible in later clauses (`order by` keys) and in the return expression.
+- [x] No regressions in XPath, XSLT, or existing unit tests.
+
+**Implementation Notes:**
+- Added `WindowClauseNode` and `WindowCondition` to `XPathAstNode`.
+- `XPathOptimizer` traverses the in-expression and both when-expressions; `XQueryCompiler` resolves their function namespaces.
+- Added `Window` IR opcode and `WindowInfo` literal-pool record.
+- `IrLowerer` routes window-containing FLWORs through the tuple path; `LowerWindowClauseForTuples` emits the start/end/body blocks; `ComputeBoundVariables` captures the window and condition variables so `order by`/`group by` see them.
+- `VmEngine` `Window` handler implements the tumbling/sliding algorithms with condition evaluation via `ExecuteBlock`, EBV truthiness, and save/restore of all bound variables.
+- Clauses other than `count` after an `order by` (including `window`) now fail fast with `NotSupportedException` instead of being silently dropped.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | New `WindowClauseNode`/`WindowCondition`; `for tumbling|sliding` dispatch in full FLWOR mode. |
+| Compiler | Modified | `XPathOptimizer`, `IrLowerer`, and new `Window` opcode. |
+| Runtime | Modified | New `Window` VM handler and window condition/binding helpers. |
+| Standard | None | No new standard functions. |
+| XSLT | None | No XSLT changes. |
+| API | None | Public `XQueryCompiler` surface unchanged. |
+| Conformance | None | QT3 harness not yet wired to XQuery tests. |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-25 | Kimi | Implement window as a VM opcode with nested start/end/body blocks | The stateful windowing algorithm does not decompose into existing opcodes; the `For`-style `ExecuteBlock` pattern keeps it consistent with the tuple path. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 / REQ-041 / REQ-042 / REQ-043 | **XQuery 3.1 full implementation** | In Progress | Phase 2 in progress: `order by`, `count`, and `group by` implemented. `window` (Phase 2 remainder), constructors (Phase 3), and modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 / REQ-041 / REQ-042 / REQ-043 / REQ-044 | **XQuery 3.1 full implementation** | In Progress | Phase 2 complete: `order by`, `count`, `group by`, and `window` implemented. Constructors (Phase 3) and modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

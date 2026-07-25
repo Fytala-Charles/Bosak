@@ -41,6 +41,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.15  | 25-07-2026     | Lower XQuery FLWOR group by clause (GroupBy opcode, post-group order by re-keying)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.16  | 25-07-2026     | Lower XQuery FLWOR window clause (Window opcode with start/end condition blocks)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -81,6 +83,29 @@ public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, str
 public readonly record struct GroupByInfo(
     IReadOnlyList<int> KeyIndices,
     IReadOnlyList<string?> CollationUri);
+
+/// <summary>
+/// Windowing information stored in the literal pool for the Window opcode.
+/// Carries the window variable, the tumbling/sliding flag, the entry points of the
+/// start condition, end condition, and window body blocks, and the optional
+/// current/positional/previous/next variable names of both conditions.
+/// </summary>
+public readonly record struct WindowInfo(
+    string VariableName,
+    string? VariableNamespaceUri,
+    bool Sliding,
+    bool OnlyEnd,
+    int StartEntryPoint,
+    int EndEntryPoint,
+    int RhsEntryPoint,
+    string? StartCurrent,
+    string? StartPos,
+    string? StartPrev,
+    string? StartNext,
+    string? EndCurrent,
+    string? EndPos,
+    string? EndPrev,
+    string? EndNext);
 
 /// <summary>
 /// Lowers an optimized XPath AST into register-based IR instructions.
@@ -1372,7 +1397,7 @@ public sealed class IrLowerer
             return LowerFlworWithGrouping(node, resultReg);
         }
 
-        if (!node.Clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
+        if (!node.Clauses.Any(c => c is OrderByClauseNode or CountClauseNode or WindowClauseNode))
         {
             return LowerFlworWithoutOrderBy(node, resultReg);
         }
@@ -1569,6 +1594,9 @@ public sealed class IrLowerer
         var postClauses = orderByIndex >= 0 ? node.Clauses.Skip(orderByIndex + 1).ToList() : new List<FlworClauseNode>();
         var orderByClause = orderByIndex >= 0 ? (OrderByClauseNode)node.Clauses[orderByIndex] : null;
 
+        if (postClauses.Any(c => c is not CountClauseNode))
+            throw new NotSupportedException("XPST0003: Only count clauses are supported after an order by clause.");
+
         // The variables bound by all for/let/count clauses before order by must be captured
         // before the tuple builder recurses, because that builder adds and removes
         // variables as it unwinds.
@@ -1692,7 +1720,33 @@ public sealed class IrLowerer
             {
                 result.Add(new BoundVariable(countClause.VariableName, countClause.Prefix, countClause.NamespaceUri));
             }
+            else if (clause is WindowClauseNode windowClause)
+            {
+                result.AddRange(GetWindowBoundVariables(windowClause));
+            }
         }
+        return result;
+    }
+
+    private static List<BoundVariable> GetWindowBoundVariables(WindowClauseNode windowClause)
+    {
+        var result = new List<BoundVariable>
+        {
+            new(windowClause.VariableName, windowClause.Prefix, windowClause.NamespaceUri)
+        };
+        void AddConditionVar(string? name)
+        {
+            if (name is not null)
+                result.Add(new BoundVariable(name, null, null));
+        }
+        AddConditionVar(windowClause.StartCondition.CurrentItemVariable);
+        AddConditionVar(windowClause.StartCondition.PositionalVariable);
+        AddConditionVar(windowClause.StartCondition.PreviousItemVariable);
+        AddConditionVar(windowClause.StartCondition.NextItemVariable);
+        AddConditionVar(windowClause.EndCondition.CurrentItemVariable);
+        AddConditionVar(windowClause.EndCondition.PositionalVariable);
+        AddConditionVar(windowClause.EndCondition.PreviousItemVariable);
+        AddConditionVar(windowClause.EndCondition.NextItemVariable);
         return result;
     }
 
@@ -1772,6 +1826,70 @@ public sealed class IrLowerer
             LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
             boundVariables.RemoveAt(boundVariables.Count - 1);
         }
+        else if (clause is WindowClauseNode windowClause)
+        {
+            LowerWindowClauseForTuples(windowClause, restClauses, orderByClause, resultReg, boundVariables, countCounters);
+        }
+    }
+
+    private void LowerWindowClauseForTuples(
+        WindowClauseNode windowClause,
+        IReadOnlyList<FlworClauseNode> restClauses,
+        OrderByClauseNode? orderByClause,
+        int resultReg,
+        List<BoundVariable> boundVariables,
+        List<CountCounterInfo> countCounters)
+    {
+        int seqReg = LowerNode(windowClause.InExpression);
+
+        int windowIdx = _instructions.Count;
+        Emit(IrOpCode.Window, (ushort)resultReg, (ushort)seqReg, 0, 0);
+        FreeRegister(seqReg);
+
+        int jumpIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+        // Start-condition block: the when-expression is evaluated by the VM with
+        // the start WindowVars (current/positional/previous/next) bound.
+        int startEntry = _instructions.Count;
+        int startReg = LowerNode(windowClause.StartCondition.WhenExpression);
+        Emit(IrOpCode.Return, (ushort)startReg);
+        FreeRegister(startReg);
+
+        // End-condition block.
+        int endEntry = _instructions.Count;
+        int endReg = LowerNode(windowClause.EndCondition.WhenExpression);
+        Emit(IrOpCode.Return, (ushort)endReg);
+        FreeRegister(endReg);
+
+        // Window body block: the VM binds the window variable and the start/end
+        // condition variables for each produced window, then continues the tuple build.
+        int rhsEntry = _instructions.Count;
+        var windowVars = GetWindowBoundVariables(windowClause);
+        boundVariables.AddRange(windowVars);
+        LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
+        boundVariables.RemoveRange(boundVariables.Count - windowVars.Count, windowVars.Count);
+
+        int afterRhs = _instructions.Count;
+        var info = new WindowInfo(
+            windowClause.VariableName,
+            windowClause.NamespaceUri,
+            windowClause.Sliding,
+            windowClause.OnlyEnd,
+            startEntry,
+            endEntry,
+            rhsEntry,
+            windowClause.StartCondition.CurrentItemVariable,
+            windowClause.StartCondition.PositionalVariable,
+            windowClause.StartCondition.PreviousItemVariable,
+            windowClause.StartCondition.NextItemVariable,
+            windowClause.EndCondition.CurrentItemVariable,
+            windowClause.EndCondition.PositionalVariable,
+            windowClause.EndCondition.PreviousItemVariable,
+            windowClause.EndCondition.NextItemVariable);
+        int poolIdx = AddToLiteralPool(info);
+        PatchInstruction(windowIdx, IrOpCode.Window, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
+        PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
     }
 
     private void LowerForClauseForTuples(

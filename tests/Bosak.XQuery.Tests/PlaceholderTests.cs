@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 25-07-2026     | Added group by clause tests                                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 25-07-2026     | Added window clause tests                                                               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -349,6 +351,91 @@ public class PlaceholderTests
     public void XQuery_GroupBy_XPathMode_Rejected()
     {
         var ex = Assert.ThrowsAny<Exception>(() => XPathParser.Parse("for $i in (1, 2) group by $i return $i"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Window_Tumbling_Simple()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for tumbling window $w in (2, 4, 6, 8, 10) start when true() end at $p when $p = 2 return count($w)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 2L, 2L, 1L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Window_Tumbling_OnlyEnd()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for tumbling window $w in (2, 4, 6, 8, 10) start when true() only end at $p when $p = 2 return count($w)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 2L, 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Window_Sliding_Overlapping()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for sliding window $w in (1, 2, 3) start when true() end at $p when $p = 2 return string-join($w, ',')");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToStrings(result);
+        Assert.Equal(new[] { "1,2", "2,3", "3" }, items);
+    }
+
+    [Fact]
+    public void XQuery_Window_StartEndVariables()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for tumbling window $w in (5, 6, 7, 8) start $s at $sp when true() end $e at $ep when $ep = 2 return ($sp, $ep, $w)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 2L, 5L, 6L, 3L, 2L, 7L, 8L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Window_PreviousNext()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for tumbling window $w in (1, 2, 3, 4) start $s next $n when $n = 3 end $e when true() return $w");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Window_WithOrderBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for tumbling window $w in (3, 1, 2, 4) start when true() end at $p when $p = 2 order by sum($w) descending return sum($w)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 6L, 4L }, items);
+    }
+
+    [Fact]
+    public void XQuery_Window_XPathMode_Rejected()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => XPathParser.Parse("for tumbling window $w in (1, 2) start when true() end when true() return $w"));
         Assert.Contains("XPST0003", ex.Message);
     }
 

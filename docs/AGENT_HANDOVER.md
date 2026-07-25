@@ -1,6 +1,56 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
+**Commit:** *(pending — recorded after commit)* (feat(xquery): Phase 2 window clause - Window opcode with tumbling/sliding windows)
+**Current focus:** **XQuery 3.1 Phase 2 complete** — `window` clause implemented on top of the tuple-based FLWOR infrastructure, completing the core FLWOR surface (`order by`, `count`, `group by`, `window`). Extended `XPathParser` to parse `for tumbling|sliding window $var in expr start ... when ... (only)? end ... when ...` in full-FLWOR mode (both as initial and intermediate clause), added `WindowClauseNode`/`WindowCondition` to the AST, and updated `XPathOptimizer`, `XQueryCompiler`, and `IrLowerer`. A new `Window` IR opcode and VM handler implement tumbling (windows open only when none is open) and sliding (possibly overlapping) semantics: conditions are evaluated via `ExecuteBlock` with the declared WindowVars (current/positional/previous/next) bound; each produced window binds the window variable to its items plus the start/end condition variables captured at open/close, then runs the body block. Start positions are 1-based in the input sequence, end positions 1-based within the window. Added 7 XQuery unit tests covering tumbling, `only end`, sliding overlap, start/end variables, previous/next, window + `order by`, and XPath-mode rejection. Full `dotnet test Bosak.sln` passes: **1,409 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
+
+## This Session Changes (XQuery 3.1 Phase 2 window)
+
+1. **`src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`** — Added `WindowClauseNode` and `WindowCondition`.
+2. **`src/Bosak.XPath.Parser/Ast/XPathParser.cs`** — Parses the window clause when `allowFullFlwor` is true (initial and intermediate positions; `for tumbling|sliding` dispatch); XPath-only mode rejects it with `XPST0003`.
+3. **`src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`** — Traverses the in-expression and both when-expressions.
+4. **`src/Bosak.XPath.Compiler/Ir/IrOpCode.cs`** — Added `Window` opcode.
+5. **`src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`** — Added `WindowInfo`; routes window FLWORs through the tuple path; `LowerWindowClauseForTuples` emits start/end/body blocks; `ComputeBoundVariables` captures window + condition vars; post-`order by` clauses other than `count` now fail fast.
+6. **`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`** — Added `Window` handler plus condition-evaluation and binding helpers with save/restore.
+7. **`src/Bosak.XQuery/Api/XQueryCompiler.cs`** — Resolves function namespaces inside `WindowClauseNode` expressions.
+8. **`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`** — Added 7 `window` tests.
+9. **`docs/FEATURE_REQUESTS.md`** — Added and marked implemented `REQ-044`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`
+- `src/Bosak.XPath.Compiler/Ir/IrOpCode.cs`
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `src/Bosak.XQuery/Api/XQueryCompiler.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/ARCHITECTURE.md`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `README.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Scope Limits (window)
+
+- The end condition is mandatory (per the XQuery grammar); `only end` is supported on both tumbling and sliding windows.
+- Window clauses after an `order by` or `group by` are rejected with `NotSupportedException` (only `count` is supported in post positions).
+- Unclosed windows at end of input bind the end-condition variables as if the condition fired at the last item; QT3 `WindowClause` tests should confirm this edge once the harness is wired to XQuery.
+
+## Next Recommended Step
+
+XQuery 3.1 Phase 2 is complete. Candidates for the next session, in order:
+
+1. **Wire the QT3 harness to the XQuery pipeline** — route XQuery-syntax test sets (`prod/WindowClause.xml`, `prod/GroupByClause.xml`, `prod/OrderByClause.xml`, `prod/CountClause.xml`, FLWOR sets) through `XQueryCompiler` to validate the new clauses against the W3C suite and shrink the "XQuery syntax not supported" skip bucket.
+2. **Phase 3 — constructors and XQuery-specific expressions** — direct element/attribute constructors, computed constructors, `typeswitch`, `switch`, `validate` (`docs/ARCHITECTURE.md` Phase 3 table).
+3. **Phase 4 — modules and serialization** — library modules, `import module`, and `declare option output:*`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-25
 **Commit:** `4c32e31` (feat(xquery): Phase 2 group by clause - GroupBy opcode with tuple merging)
 **Current focus:** **XQuery 3.1 Phase 2** — `group by` clause implemented on top of the tuple-based FLWOR infrastructure. Extended `XPathParser` to parse `group by` grouping specs (`$var` or `$var := expr`, optional `collation`) in full-FLWOR mode, added `GroupByClauseNode`/`GroupingSpec` to the AST, and updated `XPathOptimizer`, `XQueryCompiler`, and `IrLowerer`. A new `GroupBy` IR opcode and VM handler group the tuple stream by key equality (first-appearance order) and merge each group: grouping variables keep the shared key value, other variables bind to the concatenated group values. `:=` specs lower as synthetic `let` bindings; a post-group `order by` re-keys grouped tuples in a second tuple pass. Added 8 XQuery unit tests covering simple grouping, computed string keys, aggregation of non-grouping variables, `where`, post-group `order by`, post-group `count`, multiple grouping specs, and XPath-mode rejection. Full `dotnet test Bosak.sln` passes: **1,402 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
