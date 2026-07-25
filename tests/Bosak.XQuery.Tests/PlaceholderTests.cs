@@ -24,6 +24,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 25-07-2026     | Added 'as' type declaration, entity reference, base-uri, collation, stable order tests  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 25-07-2026     | Added g-date group/distinct and map-key timezone-presence tests                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -569,6 +571,45 @@ public class PlaceholderTests
         var ctx = new XQueryContext();
         var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
         Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_GDateKeys_UseImplicitTimezone()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("let $date := adjust-date-to-timezone(xs:date(\"2015-10-10\"), implicit-timezone()) let $keys := ($date cast as xs:gYear, xs:gYear(\"2015\"), xs:gYear(\"2014\")) return count(for $k in $keys group by $k return $k)");
+        var ctx = new XQueryContext();
+        ctx.EvaluationContext.ImplicitTimezoneOffsetMinutes = 120;
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(2L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_DistinctValues_GDates_UseImplicitTimezone()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("let $date := adjust-date-to-timezone(xs:date(\"2015-10-10\"), implicit-timezone()) let $keys := ($date cast as xs:gYear, xs:gYear(\"2015\"), xs:gYear(\"2014\")) return count(distinct-values($keys))");
+        var ctx = new XQueryContext();
+        ctx.EvaluationContext.ImplicitTimezoneOffsetMinutes = 120;
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(2L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_MapKeys_TimezonePresence_IsSignificant()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("map:size(map:merge((map:entry(xs:time('01:30:00'), 1), map:entry(adjust-time-to-timezone(xs:time('01:30:00'), implicit-timezone()), 2))))");
+        var ctx = new XQueryContext();
+        ctx.EvaluationContext.ImplicitTimezoneOffsetMinutes = 120;
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(2L, result.IntegerValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

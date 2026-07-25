@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.2   | 13-07-2026     | Added DynamicImplementation for context-dependent dynamic calls                          |
 //                      | Charles Korthout | 0.3   | 13-07-2026     | Added ParameterTypeNames/ReturnTypeName for function-item type tests                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 25-07-2026     | Added IsVariadic for variable-arity functions (fn:concat arity 2+)                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -71,4 +73,11 @@ public sealed class FunctionSignature
     /// Optional declared return sequence type as a string. See <see cref="ParameterTypeNames"/>.
     /// </summary>
     public string? ReturnTypeName { get; init; }
+
+    /// <summary>
+    /// When true, the function accepts any arity greater than or equal to <see cref="Arity"/>
+    /// (e.g. <c>fn:concat</c> with arity 2+). Resolution falls back to a variadic signature
+    /// when no exact-arity registration exists.
+    /// </summary>
+    public bool IsVariadic { get; init; }
 }

@@ -52,6 +52,8 @@
 //                      | Charles Korthout | 2.19  | 19-07-2026     | Namespace axis order: xml first, document order across elements                        |
 //                      | Charles Korthout | 2.20  | 20-07-2026     | Rewrite chained FLWOR tests as nested expressions (XPath grammar forbids consecutive clauses) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.21  | 25-07-2026     | Added named-function-ref arity (XPST0017) and variadic concat tests                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -3864,6 +3866,47 @@ public class Tier2iMapArrayTests
     public void DeepEqual_MapKeys_IgnoreCollation()
         => Assert.Equal("false", EvalStr(
             "deep-equal(map{'a':1}, map{'A':1}, 'http://www.w3.org/2013/collation/UCA?strength=secondary')"));
+}
+
+// ===========================================================================================================================================================
+// Named function reference arity validation (XPST0017) and variadic function resolution.
+// ===========================================================================================================================================================
+public class NamedFunctionRefArityTests
+{
+    private static XdmValue Evaluate(string xpath)
+    {
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        return XPath31Expression.Compile(xpath).Evaluate(ctx);
+    }
+
+    private static string EvalStr(string xpath) => Evaluate(xpath).ToString();
+
+    [Fact]
+    public void NamedFunctionRef_InvalidArity_RaisesXPST0017()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => Evaluate("fn:filter#0"));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void NamedFunctionRef_InvalidArity_RaisesXPST0017_OnUnresolvedName()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => Evaluate("fn:no-such-function#1"));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void NamedFunctionRef_ValidArity_Resolves()
+        => Assert.Equal("2", EvalStr("fn:function-arity(fn:filter#2)"));
+
+    [Fact]
+    public void VariadicConcat_ArbitraryArityReference_Resolves()
+        => Assert.Equal("99", EvalStr("fn:function-arity(fn:concat#99)"));
+
+    [Fact]
+    public void VariadicConcat_BeyondRegisteredArity_Invokes()
+        => Assert.Equal("abcdefghi", EvalStr("fn:concat('a','b','c','d','e','f','g','h','i')"));
 }
 
 // ===========================================================================================================================================================

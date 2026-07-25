@@ -1,6 +1,44 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
+**Commit:** *(pending — recorded after commit)* (feat(xquery): close XPST0017/same-key gap clusters - variadic functions, date/time equality)
+**Current focus:** **XQuery conformance gap shrinkage (REQ-045 follow-up)** — closed the two largest `KnownXQueryGaps` clusters. QT3 went from **22,947 passed / 0 failed / 8,874 skipped (72.11%)** to **22,983 passed / 0 failed / 8,838 skipped (72.23%)**; gaps 203 → 167. Full `dotnet test Bosak.sln` passes: **1,429 unit tests / 0 failed**.
+
+## This Session Changes (gap clusters: XPST0017 + same-key)
+
+1. **Named function reference arity validation** — the `LoadFunction` opcode's `NamedFunctionItem` branch skipped the arity check the tuple path had; `fn:filter#0` now raises `XPST0017` (~40 tests across `fn-filter`, `fn-function-lookup`, `fn-innermost`, etc.).
+2. **Variadic functions** — `FunctionSignature.IsVariadic`; `TryResolveFunction` falls back to a variadic signature when no exact arity exists; `fn:concat` registered variadic so `fn:concat#99` resolves (`fn-function-arity-016/017`, `fn-function-name-016/017`).
+3. **Group-by collation support** — string grouping keys compare via `context.DefaultCollation` (or per-spec collation with base-URI resolution) instead of ordinal (same-key-002).
+4. **g\* date equality** — `VmEngine.CompareDateTimeValues` is now public with an `int implicitTz` parameter; `fn:distinct-values` and `fn:deep-equal` compare gYear/gYearMonth/gMonth/gMonthDay/gDay values on the timeline (tz-less values use the implicit timezone) instead of lexically (same-key-016..020 distinct-values).
+5. **Group-by g-date branch ordering** — the date/time check in `GroupKeyValuesEqual` now precedes the plain string check so annotated g-date strings reach timeline comparison (same-key-016..020 grouping).
+6. **Map key timezone semantics** — `XdmValueEqualityComparer` requires equal timezone *presence* for date/time keys, and hashes/compares via a throw-safe UTC instant key (`XPathDateTimeHelper.NormalizeToUtc` civil arithmetic) instead of the `DateTimeOffset` projection that overflowed for year-1 values with positive offsets (same-key-015).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (named-ref arity, CompareDateTimeValues public, group-by collation/order)
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (variadic fallback)
+- `src/Bosak.XPath.Runtime/Functions/XPathFunction.cs` (IsVariadic)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (variadic concat, g-date equality)
+- `src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs` (tz-presence, InstantKey)
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (3 date/map regression tests)
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (5 arity/variadic tests)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs` (KnownXQueryGaps regenerated: 167 entries / 66 sets)
+- `docs/*`, `README.md`
+
+## Next Recommended Step
+
+1. **Phase 3 — direct element constructors** (largest remaining unlock: ~98/135 WindowClause skips, most of CompElem/CompAttr).
+2. **Continue shrinking `KnownXQueryGaps`**: next clusters are `misc/CombinedErrorCodes` (9), `prod/Annotation` (8), `prod/FunctionCall` (11 — Q{uri} function names and residual arity forms), `prod/InlineFunctionExpr` (6), `prod/BaseURIDecl` (5), `op/base64Binary-*` (10 — binary ordering comparisons).
+
+## Note — xslt30-test catalog drift
+
+`tests/xslt30-test` is NOT a registered git submodule of this repo (only `tests/qt3tests` is); it is a manual checkout currently at a newer W3C catalog than the documented XSLT baseline (7,109/0) was measured against. A full XSLT conformance run now shows ~60 failures (e.g. `match-002/038/065/066/119`, `as-1101`, `select-*`) that **also fail on a clean `f64c2ca` baseline worktree** — they are pre-existing against the newer catalog, not regressions. Baseline docs continue to reference the older catalog state; either pin the checkout to the documented commit or treat the new failures as an XSLT work item.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-25
 **Commit:** `532a340` (feat(conformance): wire QT3 harness to XQuery pipeline + conformance sweep)
 **Current focus:** **QT3 harness wired to the XQuery pipeline** — XQuery-syntax QT3 tests now run through `Bosak.XQuery` instead of skipping. QT3 went from **14,994 passed / 0 failed / 16,827 skipped (47.12%)** to **22,947 passed / 0 failed / 8,874 skipped (72.11%)** (+7,953 passing). The four FLWOR sets are green with 0 failures: WindowClause 34, OrderByClause 39, GroupByClause 14, CountClause 4. The 203 admitted-but-failing tests are recorded in `ConformanceRunner.KnownXQueryGaps` with per-set reasons (work items for future sessions). Full `dotnet test Bosak.sln` passes: **1,421 unit tests / 0 failed**; XSLT baseline unchanged.
 

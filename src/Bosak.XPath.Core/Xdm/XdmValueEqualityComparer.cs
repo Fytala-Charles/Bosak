@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.2   | 26-06-2026     | String/URI equality and NaN-safe hashing for map keys                                    |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | Exact numeric comparison (no lossy promotion) and duration keys via normalized totals    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 25-07-2026     | Date/time keys require same timezone presence; throw-safe UTC instant keys             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Core.Xdm;
@@ -42,9 +44,9 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
                 XdmValueKind.Boolean => x.BooleanValue == y.BooleanValue,
                 XdmValueKind.String => x.StringValue == y.StringValue,
                 XdmValueKind.Uri => x.StringValue == y.StringValue,
-                XdmValueKind.DateTime => x.DateTimeValue == y.DateTimeValue,
-                XdmValueKind.Date => x.DateValue == y.DateValue,
-                XdmValueKind.Time => x.TimeValue == y.TimeValue,
+                XdmValueKind.DateTime => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),
+                XdmValueKind.Date => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),
+                XdmValueKind.Time => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),
                 XdmValueKind.QName => x.QNameValue.Equals(y.QNameValue),
                 XdmValueKind.Duration => DurationsEqual(x.DurationValue, y.DurationValue),
                 _ => false
@@ -75,9 +77,9 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
             XdmValueKind.Boolean => obj.BooleanValue.GetHashCode(),
             XdmValueKind.String => obj.StringValue.GetHashCode(),
             XdmValueKind.Uri => obj.StringValue.GetHashCode(),
-            XdmValueKind.DateTime => obj.DateTimeValue.GetHashCode(),
-            XdmValueKind.Date => obj.DateValue.GetHashCode(),
-            XdmValueKind.Time => obj.TimeValue.GetHashCode(),
+            XdmValueKind.DateTime => HashCode.Combine(InstantKey(obj), obj.HasTimezone),
+            XdmValueKind.Date => HashCode.Combine(InstantKey(obj), obj.HasTimezone),
+            XdmValueKind.Time => HashCode.Combine(InstantKey(obj), obj.HasTimezone),
             XdmValueKind.QName => obj.QNameValue.GetHashCode(),
             XdmValueKind.Duration => DurationHash(obj.DurationValue),
             _ => (int)obj.Kind
@@ -86,6 +88,25 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
 
     private static bool IsNumeric(XdmValue value)
         => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double;
+
+    /// <summary>
+    /// UTC-normalized instant of a date/time key as milliseconds since 0001-01-01, computed
+    /// with civil-date arithmetic so year-1 values with positive timezones do not overflow
+    /// the .NET DateTimeOffset range. Values without a timezone are used as-is.
+    /// </summary>
+    private static long InstantKey(XdmValue value)
+    {
+        var xdt = value.Kind switch
+        {
+            XdmValueKind.DateTime => value.DateTimeXPathValue,
+            XdmValueKind.Date => value.DateXPathValue,
+            XdmValueKind.Time => value.TimeXPathValue,
+            _ => default
+        };
+        var utc = XPathDateTimeHelper.NormalizeToUtc(xdt);
+        long days = XPathDateTimeHelper.DaysFromCivil(utc.Year, utc.Month, utc.Day);
+        return days * 86_400_000L + ((long)utc.Hour * 3600 + utc.Minute * 60 + utc.Second) * 1000 + utc.Millisecond;
+    }
 
     /// <summary>
     /// Numeric map-key equality (op:same-key semantics): values compare by their exact

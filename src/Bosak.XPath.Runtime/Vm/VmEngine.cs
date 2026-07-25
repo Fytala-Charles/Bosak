@@ -115,6 +115,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.66  | 25-07-2026     | Window end-pos/no-end fixes; EnforceType; NaN ordering; XQST0076; dateTime group keys   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.67  | 25-07-2026     | Named-ref arity validation; group-by collation + g-date key ordering fixes             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -2213,15 +2215,7 @@ public static class VmEngine
                             // Capture the defining context so the function item can still be
                             // resolved if it crosses into another evaluation context (e.g. a
                             // function returned by fn:transform delivery-format="raw").
-                            NamedFunctionItem named => named.DefiningContext != null
-                                ? named
-                                : named with
-                                {
-                                    DefiningContext = context,
-                                    CapturedContextItem = context.ContextItem,
-                                    CapturedContextPosition = context.ContextPosition,
-                                    CapturedContextSize = context.ContextSize
-                                },
+                            NamedFunctionItem named => ResolveNamedFunctionItem(named, context),
                             CurriedFunctionItem curried => curried,
                             InlineFunctionItem inline => inline,
                             CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body, cif.ParameterTypes, cif.ReturnType)
@@ -2529,6 +2523,25 @@ public static class VmEngine
         if (!context.TryResolveFunction(nsUri, localName, tuple.Item2, out _))
             throw new InvalidOperationException($"XPST0017: Function {{{nsUri}}}{localName}#{tuple.Item2} not found.");
         return new NamedFunctionItem(nsUri, localName, tuple.Item2)
+        {
+            DefiningContext = context,
+            CapturedContextItem = context.ContextItem,
+            CapturedContextPosition = context.ContextPosition,
+            CapturedContextSize = context.ContextSize
+        };
+    }
+
+    /// <summary>
+    /// Validates the arity of a compile-time-resolved named function reference and captures
+    /// the defining context (XPST0017 when the function/arity pair is not registered).
+    /// </summary>
+    private static NamedFunctionItem ResolveNamedFunctionItem(NamedFunctionItem named, EvaluationContext context)
+    {
+        if (named.DefiningContext != null)
+            return named;
+        if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, named.Arity, out _))
+            throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.Arity} not found.");
+        return named with
         {
             DefiningContext = context,
             CapturedContextItem = context.ContextItem,
@@ -3416,10 +3429,11 @@ public static class VmEngine
     }
 
     /// <summary>
-    /// Compares two date/time values of the same subtype.
-    /// A value without a timezone is treated as having the implicit timezone from the dynamic context.
+    /// Compares two date/time values of the same subtype on the timeline.
+    /// A value without a timezone is treated as having the supplied implicit timezone.
+    /// Returns null when the comparison is indeterminate.
     /// </summary>
-    private static int? CompareDateTimeValues(XdmValue left, XdmValue right, string subtype, EvaluationContext context)
+    public static int? CompareDateTimeValues(XdmValue left, XdmValue right, string subtype, int implicitTz)
     {
         var leftXdt = AsComparableDateTime(GetXPathDateTime(left, subtype), subtype);
         var rightXdt = AsComparableDateTime(GetXPathDateTime(right, subtype), subtype);
@@ -3432,8 +3446,6 @@ public static class VmEngine
         {
             return XPathDateTimeHelper.CompareComponents(leftXdt, rightXdt);
         }
-
-        int implicitTz = GetImplicitTimezoneOffsetMinutes(context);
 
         var leftEffective = leftHasTz
             ? leftXdt
@@ -4328,7 +4340,7 @@ public static class VmEngine
                     or IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual or IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual)
                     throw new InvalidOperationException("XPTY0004");
 
-                var gCmp = CompareDateTimeValues(left, right, leftDateSub, context);
+                var gCmp = CompareDateTimeValues(left, right, leftDateSub, GetImplicitTimezoneOffsetMinutes(context));
                 if (gCmp.HasValue)
                 {
                     return op switch
@@ -4348,7 +4360,7 @@ public static class VmEngine
                 };
             }
 
-            var cmp = CompareDateTimeValues(left, right, leftDateSub, context);
+            var cmp = CompareDateTimeValues(left, right, leftDateSub, GetImplicitTimezoneOffsetMinutes(context));
             if (cmp.HasValue)
             {
                 return op switch
@@ -8354,13 +8366,14 @@ public static class VmEngine
             int keyIndex = info.KeyIndices[i];
             var keyX = keyIndex < x.Length ? x[keyIndex] : XdmValue.Undefined;
             var keyY = keyIndex < y.Length ? y[keyIndex] : XdmValue.Undefined;
-            if (!GroupKeyValuesEqual(keyX, keyY, context))
+            var collation = info.CollationUri[i] ?? context.DefaultCollation;
+            if (!GroupKeyValuesEqual(keyX, keyY, collation, context))
                 return false;
         }
         return true;
     }
 
-    private static bool GroupKeyValuesEqual(XdmValue left, XdmValue right, EvaluationContext context)
+    private static bool GroupKeyValuesEqual(XdmValue left, XdmValue right, string? collation, EvaluationContext context)
     {
         left = SingleGroupKeyItem(Atomize(left));
         right = SingleGroupKeyItem(Atomize(right));
@@ -8375,26 +8388,29 @@ public static class VmEngine
             return ToDouble(left).Equals(ToDouble(right));
         }
 
+        // Date/time values group by their instant on the timeline (with implicit
+        // timezone), not by lexical form. g* date values are stored as annotated
+        // strings, so this check must precede the plain string comparison.
+        var leftDateSub = GetDateTimeSubtype(left);
+        var rightDateSub = GetDateTimeSubtype(right);
+        if (leftDateSub is not null && rightDateSub is not null && leftDateSub == rightDateSub)
+        {
+            var cmp = CompareDateTimeValues(left, right, leftDateSub, GetImplicitTimezoneOffsetMinutes(context));
+            if (cmp.HasValue)
+                return cmp.Value == 0;
+            return string.Equals(left.ToString(), right.ToString(), StringComparison.Ordinal);
+        }
+
         if (left.Kind == XdmValueKind.String && right.Kind == XdmValueKind.String)
         {
-            return string.Equals(left.StringValue, right.StringValue, StringComparison.Ordinal);
+            // Grouping compares strings with the spec collation (or the default collation).
+            var effectiveCollation = collation is null ? context.DefaultCollation : ResolveCollationUri(collation, context.BaseUri);
+            return CompareStrings(left.StringValue, right.StringValue, effectiveCollation ?? "", context) == 0;
         }
 
         if (left.Kind == XdmValueKind.Boolean && right.Kind == XdmValueKind.Boolean)
         {
             return left.BooleanValue == right.BooleanValue;
-        }
-
-        // Date/time values group by their instant on the timeline (with implicit
-        // timezone), not by lexical form.
-        var leftDateSub = GetDateTimeSubtype(left);
-        var rightDateSub = GetDateTimeSubtype(right);
-        if (leftDateSub is not null && rightDateSub is not null && leftDateSub == rightDateSub)
-        {
-            var cmp = CompareDateTimeValues(left, right, leftDateSub, context);
-            if (cmp.HasValue)
-                return cmp.Value == 0;
-            return string.Equals(left.ToString(), right.ToString(), StringComparison.Ordinal);
         }
 
         if (left.Kind == right.Kind)

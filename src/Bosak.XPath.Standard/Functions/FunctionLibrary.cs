@@ -165,6 +165,9 @@
 //                      | Charles Korthout | 5.69  | 21-07-2026     | fn:*-from-time use XPathDateTime to avoid DateTimeOffset out-of-range near year boundary |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.67  | 21-07-2026     | year/month-from-dateTime use XPathDateTime to support extended years (fn-*-from-dateTime-6) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.70  | 25-07-2026     | Variadic fn:concat registration; g* date equality in distinct-values/deep-equal       |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -345,7 +348,8 @@ public static class FunctionLibrary
                 Arity = 2,
                 ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.String,
-                Implementation = ConcatN
+                Implementation = ConcatN,
+                IsVariadic = true
             },
             [(Namespaces.Fn, "concat", 3)] = new()
             {
@@ -7301,6 +7305,29 @@ public static class FunctionLibrary
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
+    private static bool TypedStringValuesEqual(XdmValue a, XdmValue b, string collation, int implicitTimezoneOffsetMinutes)
+    {
+        // g* date values (stored as annotated strings) compare on the timeline; a value
+        // without a timezone uses the implicit timezone from the dynamic context.
+        var aSubtype = GDateSubtypeName(a.SchemaTypeName);
+        if (aSubtype is not null && aSubtype == GDateSubtypeName(b.SchemaTypeName))
+        {
+            var cmp = VmEngine.CompareDateTimeValues(a, b, aSubtype, implicitTimezoneOffsetMinutes);
+            return cmp.HasValue ? cmp.Value == 0 : string.CompareOrdinal(a.StringValue, b.StringValue) == 0;
+        }
+        return CompareStrings(a.StringValue, b.StringValue, collation) == 0;
+    }
+
+    private static string? GDateSubtypeName(string? schemaTypeName) => schemaTypeName?.ToLowerInvariant() switch
+    {
+        "gyear" => "gYear",
+        "gyearmonth" => "gYearMonth",
+        "gmonth" => "gMonth",
+        "gmonthday" => "gMonthDay",
+        "gday" => "gDay",
+        _ => null
+    };
+
     private static bool BothNaN(XdmValue a, XdmValue b)
     {
         if (!IsNumericValue(a) || !IsNumericValue(b))
@@ -7355,7 +7382,7 @@ public static class FunctionLibrary
 
         return a.Kind switch
         {
-            XdmValueKind.String => CompareStrings(a.StringValue, b.StringValue, collation) == 0,
+            XdmValueKind.String => TypedStringValuesEqual(a, b, collation, implicitTimezoneOffsetMinutes),
             XdmValueKind.Boolean => a.BooleanValue == b.BooleanValue,
             XdmValueKind.Integer => a.IntegerValue == b.IntegerValue,
             XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,
@@ -10455,7 +10482,7 @@ public static class FunctionLibrary
             XdmValueKind.Integer => a.IntegerValue == b.IntegerValue,
             XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => a.DoubleValue == b.DoubleValue,
-            XdmValueKind.String => CompareStrings(a.StringValue, b.StringValue, collation) == 0,
+            XdmValueKind.String => TypedStringValuesEqual(a, b, collation, implicitTimezoneOffsetMinutes),
             XdmValueKind.DateTime => DateTimeEqual(a.DateTimeXPathValue, b.DateTimeXPathValue, a.HasTimezone, b.HasTimezone, implicitTimezoneOffsetMinutes),
             XdmValueKind.Date => DateTimeEqual(a.DateXPathValue, b.DateXPathValue, a.HasTimezone, b.HasTimezone, implicitTimezoneOffsetMinutes),
             XdmValueKind.Time => DateTimeEqual(a.TimeXPathValue, b.TimeXPathValue, a.HasTimezone, b.HasTimezone, implicitTimezoneOffsetMinutes),

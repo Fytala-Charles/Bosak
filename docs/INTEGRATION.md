@@ -5,14 +5,22 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 July 2026
-> **Bosak baseline:** 1,421 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 22,947 passed / 0 failed / 8,874 skipped (72.11% / 100% of runnable tests) — XQuery routing enabled; 203 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,429 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 22,983 passed / 0 failed / 8,838 skipped (72.23% / 100% of runnable tests) — XQuery routing enabled; 167 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 2 complete — `order by`, `count`, `group by`, and `window` clauses implemented with tuple-based VM lowering; QT3 FLWOR sets green (WindowClause 34, OrderByClause 39, GroupByClause 14, CountClause 4)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-25** — XQuery conformance gap shrinkage (REQ-045 follow-up): QT3 **22,983 passed / 0 failed** (from 22,947); gaps 203 → 167.
+  - Named function reference arity validation: `fn:filter#0` and friends now raise `XPST0017` in the `LoadFunction` named-item path (~40 tests across `fn-filter`, `fn-function-lookup`, `fn-innermost`, `fn-outermost`, `fn-for-each-pair`, etc.).
+  - Variadic functions: `FunctionSignature.IsVariadic` with a fallback in `TryResolveFunction`; `fn:concat` is variadic, so `fn:concat#99` resolves.
+  - Group-by string keys compare with the default/spec collation (base-URI resolved), e.g. `html-ascii-case-insensitive` merges `ABC`/`abc`.
+  - `fn:distinct-values`/`fn:deep-equal` compare `gYear`/`gYearMonth`/`gMonth`/`gMonthDay`/`gDay` values on the timeline (implicit timezone for tz-less values) via the now-public `VmEngine.CompareDateTimeValues`.
+  - Map keys treat timezone presence as significant for date/time keys; hashing/comparison uses throw-safe UTC instant keys (civil-date arithmetic) instead of the `DateTimeOffset` projection.
+  - Unit tests now **1,429/0**; XSLT baseline unchanged.
 
 - **2026-07-25** — QT3 harness wired to the XQuery pipeline (REQ-045): **22,947 passed / 0 failed** (from 14,994 / 0).
   - `Bosak.XPath.Conformance` now references `Bosak.XQuery`; tests with positive XQuery-only spec dependencies are admitted when the query uses only supported constructs (`DependencyFilter.IsSupported(..., allowXQuerySpecs)` + `TestExecutor.CanHandleAsXQuery` gating out constructors, switch/typeswitch, annotations, pragmas, string constructors, and unsupported prolog forms).

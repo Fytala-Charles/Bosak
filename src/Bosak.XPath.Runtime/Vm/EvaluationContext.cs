@@ -37,6 +37,8 @@
 //                      | Charles Korthout | 2.4   | 20-07-2026     | Added IsXsltMode to expose XSLT-only functions (fn:current, fn:system-property) only in XSLT mode |
 //                      | Charles Korthout | 2.5   | 21-07-2026     | Convert UriFormatException/IOException/XmlException to FODC0005/FODC0002 in LoadDocument |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.6   | 25-07-2026     | TryResolveFunction falls back to variadic signatures (fn:concat#N for any N >= 2)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -498,7 +500,22 @@ public sealed class EvaluationContext
     }
 
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
-        => _functions.TryGetValue((namespaceUri, localName, arity), out signature!);
+    {
+        if (_functions.TryGetValue((namespaceUri, localName, arity), out signature!))
+            return true;
+        // Variadic fallback: a variadic signature accepts any arity >= its declared arity
+        // (e.g. fn:concat#99 resolves against the variadic fn:concat registration).
+        foreach (var ((ns, name, minArity), sig) in _functions)
+        {
+            if (ns == namespaceUri && name == localName && sig.IsVariadic && arity >= minArity)
+            {
+                signature = sig;
+                return true;
+            }
+        }
+        signature = null!;
+        return false;
+    }
 
     /// <summary>
     /// Removes a registered function signature, if present.

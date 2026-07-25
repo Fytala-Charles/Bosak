@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-25 (QT3 harness wired to the XQuery pipeline: **22,947 passed / 0 failed** (was 14,994); 203 remaining XQuery gaps recorded as reasoned skips; unit tests now **1,421/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-25 (XQuery conformance gap shrinkage: XPST0017 arity validation, variadic functions, group-by collations, g\* date equality, map-key timezone semantics — QT3 now **22,947 → 22,983 passed / 0 failed**; gaps 203 → 167; unit tests **1,429/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -2010,8 +2010,8 @@ Relax the dependency filter for positive XQuery-only spec tokens when the query 
 
 **Acceptance Criteria:**
 - [x] The four FLWOR test sets run with **0 failures** (WindowClause 34, GroupByClause 14, OrderByClause 39, CountClause 4 pass; remainder skipped on unsupported constructs).
-- [x] Full QT3 suite improves from 14,994 passed / 0 failed to **22,947 passed / 0 failed** (+7,953); skipped 16,827 → 8,874 (203 of them recorded in `KnownXQueryGaps` with reasons).
-- [x] XPath-only behavior unchanged; all 1,421 unit tests pass.
+- [x] Full QT3 suite improves from 14,994 passed / 0 failed to **22,983 passed / 0 failed** (+7,989); skipped 16,827 → 8,838 (167 of them recorded in `KnownXQueryGaps` with reasons).
+- [x] XPath-only behavior unchanged; all 1,429 unit tests pass.
 
 **Implementation Notes:**
 - Harness: `Bosak.XPath.Conformance` references `Bosak.XQuery`; `DependencyFilter.IsSupported(..., allowXQuerySpecs)`; `TestExecutor` routes XQ-dep/XQuery-syntax tests through `XQueryCompiler` with construct gating (`CanHandleAsXQuery`); `ConformanceRunner.KnownXQueryGaps` records the 203 remaining gaps as reasoned skips.
@@ -2023,6 +2023,7 @@ Relax the dependency filter for positive XQuery-only spec tokens when the query 
 - XQuery string literals: predefined entity and character references (`&amp;`, `&#65;`), raw `&` rejected with XPST0003.
 - Empty inline-function bodies (`function($x) {}`) evaluate to the empty sequence.
 - Group-by keys: date/time values group by instant on the timeline; positional variables (`at $p`) captured in tuples; grouping-spec type checks apply to the atomized key.
+- *(2026-07-25 follow-up)* Named function reference arity validation (`XPST0017`); variadic functions (`FunctionSignature.IsVariadic`, `fn:concat#N` for any N ≥ 2); group-by string keys honor the default/spec collation; `fn:distinct-values`/`fn:deep-equal` compare g\* dates on the timeline; map keys treat timezone presence as significant with throw-safe UTC instant keys.
 
 **Impact Analysis**
 
@@ -2049,7 +2050,7 @@ After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilitie
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 / REQ-041 / REQ-042 / REQ-043 / REQ-044 / REQ-045 | **XQuery 3.1 full implementation** | In Progress | Phase 2 complete: `order by`, `count`, `group by`, and `window` implemented. QT3 harness wired: 22,947/0 (72.11%); 203 gaps recorded. Constructors (Phase 3) and modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 / REQ-041 / REQ-042 / REQ-043 / REQ-044 / REQ-045 | **XQuery 3.1 full implementation** | In Progress | Phase 2 complete: `order by`, `count`, `group by`, and `window` implemented. QT3 harness wired: 22,983/0 (72.23%); 167 gaps recorded. Constructors (Phase 3) and modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |
