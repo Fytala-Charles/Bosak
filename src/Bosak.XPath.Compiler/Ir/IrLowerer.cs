@@ -43,8 +43,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.16  | 25-07-2026     | Lower XQuery FLWOR window clause (Window opcode with start/end condition blocks)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.17  | 25-07-2026     | Nested-rhs Return fix; positional vars in tuples; 'as' type enforcement (EnforceType)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
+using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Ast;
 
@@ -79,10 +82,19 @@ public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, str
 /// <summary>
 /// Grouping information stored in the literal pool for the GroupBy opcode.
 /// Tuple format: [variable items]; the key indices identify the grouping variables.
+/// Per-spec optional declared types are enforced on each pre-grouping key value.
 /// </summary>
 public readonly record struct GroupByInfo(
     IReadOnlyList<int> KeyIndices,
-    IReadOnlyList<string?> CollationUri);
+    IReadOnlyList<string?> CollationUri,
+    IReadOnlyList<string?> DeclaredTypeNames,
+    IReadOnlyList<OccurrenceIndicator> DeclaredTypeOccurrences);
+
+/// <summary>
+/// Type-enforcement information stored in the literal pool for the EnforceType opcode.
+/// Raises the given error code when the value is not an instance of the declared type.
+/// </summary>
+public readonly record struct EnforceTypeInfo(string TypeName, OccurrenceIndicator Occurrence, string ErrorCode);
 
 /// <summary>
 /// Windowing information stored in the literal pool for the Window opcode.
@@ -105,7 +117,9 @@ public readonly record struct WindowInfo(
     string? EndCurrent,
     string? EndPos,
     string? EndPrev,
-    string? EndNext);
+    string? EndNext,
+    string? DeclaredTypeName = null,
+    OccurrenceIndicator DeclaredTypeOccurrence = OccurrenceIndicator.One);
 
 /// <summary>
 /// Lowers an optimized XPath AST into register-based IR instructions.
@@ -1258,6 +1272,13 @@ public sealed class IrLowerer
         Emit(IrOpCode.Jump, 0, 0, 0, 0);
 
         int rhsEntry = _instructions.Count;
+        if (binding.DeclaredType is not null)
+        {
+            // XQuery 'as SequenceType': each bound item must be an instance of the type.
+            int varReg = LoadVariable(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+            EmitEnforceTypeIfDeclared(binding, varReg, itemLevel: true);
+            FreeRegister(varReg);
+        }
         if (index == bindings.Count - 1)
         {
             int rhsReg = LowerNode(returnExpr);
@@ -1326,6 +1347,13 @@ public sealed class IrLowerer
         Emit(IrOpCode.Jump, 0, 0, 0, 0);
 
         int rhsEntry = _instructions.Count;
+        if (binding.DeclaredType is not null)
+        {
+            // XQuery 'as SequenceType': each bound item must be an instance of the type.
+            int varReg = LoadVariable(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+            EmitEnforceTypeIfDeclared(binding, varReg, itemLevel: true);
+            FreeRegister(varReg);
+        }
         if (index == bindings.Count - 1)
         {
             int rhsReg = LowerNode(satisfiesExpr);
@@ -1356,6 +1384,8 @@ public sealed class IrLowerer
         foreach (var binding in node.Bindings)
         {
             int exprReg = LowerNode(binding.Expression);
+            // XQuery 'as SequenceType': the bound value must match the declared type.
+            EmitEnforceTypeIfDeclared(binding, exprReg, itemLevel: false);
             // Store under the same key form used by variable references:
             // resolved (local, uri) tuple for Q{uri} names, "prefix:local" for
             // prefixed names (resolved at runtime), or the bare local name.
@@ -1373,6 +1403,23 @@ public sealed class IrLowerer
             Emit(IrOpCode.Move, (ushort)resultReg, (ushort)bodyReg);
 
         return resultReg;
+    }
+
+    private void EmitEnforceTypeIfDeclared(QuantifiedBinding binding, int valueReg, bool itemLevel)
+    {
+        if (binding.DeclaredType is null)
+            return;
+        var typeName = binding.DeclaredType.Prefix is null
+            ? binding.DeclaredType.TypeName
+            : $"{binding.DeclaredType.Prefix}:{binding.DeclaredType.TypeName}";
+        // For-bindings check each item (item level); let/grouping bindings check the
+        // whole value against the declared sequence type.
+        var info = new EnforceTypeInfo(
+            typeName,
+            itemLevel ? OccurrenceIndicator.One : binding.DeclaredType.Occurrence,
+            "XPTY0004");
+        int poolIdx = AddToLiteralPool(info);
+        Emit(IrOpCode.EnforceType, (ushort)valueReg, 0, 0, poolIdx);
     }
 
     // ------------------------------------------------------------------
@@ -1445,6 +1492,8 @@ public sealed class IrLowerer
         // Resolve each grouping variable to its tuple slot.
         var keyIndices = new List<int>(groupByClause.Specs.Count);
         var collations = new List<string?>(groupByClause.Specs.Count);
+        var declaredTypeNames = new List<string?>(groupByClause.Specs.Count);
+        var declaredTypeOccurrences = new List<OccurrenceIndicator>(groupByClause.Specs.Count);
         foreach (var spec in groupByClause.Specs)
         {
             int index = boundVariables.FindLastIndex(v => v.Name == spec.VariableName && v.NamespaceUri == spec.NamespaceUri);
@@ -1452,6 +1501,10 @@ public sealed class IrLowerer
                 throw new InvalidOperationException($"XPST0008: Grouping variable '${spec.VariableName}' is not bound in the FLWOR expression.");
             keyIndices.Add(index);
             collations.Add(spec.CollationUri);
+            declaredTypeNames.Add(spec.DeclaredType is null
+                ? null
+                : spec.DeclaredType.Prefix is null ? spec.DeclaredType.TypeName : $"{spec.DeclaredType.Prefix}:{spec.DeclaredType.TypeName}");
+            declaredTypeOccurrences.Add(spec.DeclaredType?.Occurrence ?? OccurrenceIndicator.One);
         }
 
         var countCounters = PrecomputeCountCounters(node.Clauses);
@@ -1464,7 +1517,7 @@ public sealed class IrLowerer
 
         // Group the tuples.
         int groupedSeqReg = AllocRegister();
-        var groupByInfo = new GroupByInfo(keyIndices, collations);
+        var groupByInfo = new GroupByInfo(keyIndices, collations, declaredTypeNames, declaredTypeOccurrences);
         int groupByPoolIdx = AddToLiteralPool(groupByInfo);
         Emit(IrOpCode.GroupBy, (ushort)groupedSeqReg, (ushort)tupleSeqReg, 0, groupByPoolIdx);
         FreeRegister(tupleSeqReg);
@@ -1709,7 +1762,11 @@ public sealed class IrLowerer
             if (clause is ForClauseNode forClause)
             {
                 foreach (var b in forClause.Bindings)
+                {
                     result.Add(new BoundVariable(b.VariableName, b.VariablePrefix, b.VariableNamespaceUri));
+                    if (b.PositionalVariableName is not null)
+                        result.Add(new BoundVariable(b.PositionalVariableName, null, null));
+                }
             }
             else if (clause is LetClauseNode letClause)
             {
@@ -1743,10 +1800,13 @@ public sealed class IrLowerer
         AddConditionVar(windowClause.StartCondition.PositionalVariable);
         AddConditionVar(windowClause.StartCondition.PreviousItemVariable);
         AddConditionVar(windowClause.StartCondition.NextItemVariable);
-        AddConditionVar(windowClause.EndCondition.CurrentItemVariable);
-        AddConditionVar(windowClause.EndCondition.PositionalVariable);
-        AddConditionVar(windowClause.EndCondition.PreviousItemVariable);
-        AddConditionVar(windowClause.EndCondition.NextItemVariable);
+        if (windowClause.EndCondition is not null)
+        {
+            AddConditionVar(windowClause.EndCondition.CurrentItemVariable);
+            AddConditionVar(windowClause.EndCondition.PositionalVariable);
+            AddConditionVar(windowClause.EndCondition.PreviousItemVariable);
+            AddConditionVar(windowClause.EndCondition.NextItemVariable);
+        }
         return result;
     }
 
@@ -1755,7 +1815,8 @@ public sealed class IrLowerer
         OrderByClauseNode? orderByClause,
         int resultReg,
         List<BoundVariable> boundVariables,
-        List<CountCounterInfo> countCounters)
+        List<CountCounterInfo> countCounters,
+        bool insideRhs = false)
     {
         if (clauses.Count == 0)
         {
@@ -1781,7 +1842,19 @@ public sealed class IrLowerer
                 }
             }
 
-            Emit(IrOpCode.Return, (ushort)tupleReg);
+            if (insideRhs)
+            {
+                // Inside a For/Window block: return the tuple to the enclosing iteration.
+                Emit(IrOpCode.Return, (ushort)tupleReg);
+            }
+            else
+            {
+                // Top level (no enclosing iteration): wrap the single tuple into the
+                // tuple-sequence register and fall through to the barrier opcodes.
+                Emit(IrOpCode.SequenceStart, (ushort)resultReg);
+                Emit(IrOpCode.SequenceAdd, (ushort)resultReg, (ushort)tupleReg);
+                Emit(IrOpCode.SequenceEnd, (ushort)resultReg);
+            }
             FreeRegister(tupleReg);
             return;
         }
@@ -1791,18 +1864,20 @@ public sealed class IrLowerer
 
         if (clause is ForClauseNode forClause)
         {
-            LowerForClauseForTuples(forClause.Bindings, 0, restClauses, orderByClause, resultReg, boundVariables, countCounters);
+            LowerForClauseForTuples(forClause.Bindings, 0, restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs);
         }
         else if (clause is LetClauseNode letClause)
         {
             foreach (var binding in letClause.Bindings)
             {
                 int exprReg = LowerNode(binding.Expression);
+                // XQuery 'as SequenceType': the bound value must match the declared type.
+                EmitEnforceTypeIfDeclared(binding, exprReg, itemLevel: false);
                 StoreVariable(binding, exprReg);
                 FreeRegister(exprReg);
                 boundVariables.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
             }
-            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs);
             foreach (var _ in letClause.Bindings)
             {
                 boundVariables.RemoveAt(boundVariables.Count - 1);
@@ -1813,7 +1888,7 @@ public sealed class IrLowerer
             int condReg = LowerNode(whereClause.Condition);
             int jumpToEmpty = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)condReg);
             FreeRegister(condReg);
-            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs);
             int emptyLabel = CurrentInstructionIndex;
             Emit(IrOpCode.LoadEmptySequence, (ushort)resultReg);
             Emit(IrOpCode.Return, (ushort)resultReg);
@@ -1823,12 +1898,12 @@ public sealed class IrLowerer
         {
             EmitIncrementCount(countClause, countCounters);
             boundVariables.Add(new BoundVariable(countClause.VariableName, countClause.Prefix, countClause.NamespaceUri));
-            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs);
             boundVariables.RemoveAt(boundVariables.Count - 1);
         }
         else if (clause is WindowClauseNode windowClause)
         {
-            LowerWindowClauseForTuples(windowClause, restClauses, orderByClause, resultReg, boundVariables, countCounters);
+            LowerWindowClauseForTuples(windowClause, restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs);
         }
     }
 
@@ -1838,7 +1913,8 @@ public sealed class IrLowerer
         OrderByClauseNode? orderByClause,
         int resultReg,
         List<BoundVariable> boundVariables,
-        List<CountCounterInfo> countCounters)
+        List<CountCounterInfo> countCounters,
+        bool insideRhs)
     {
         int seqReg = LowerNode(windowClause.InExpression);
 
@@ -1856,21 +1932,31 @@ public sealed class IrLowerer
         Emit(IrOpCode.Return, (ushort)startReg);
         FreeRegister(startReg);
 
-        // End-condition block.
-        int endEntry = _instructions.Count;
-        int endReg = LowerNode(windowClause.EndCondition.WhenExpression);
-        Emit(IrOpCode.Return, (ushort)endReg);
-        FreeRegister(endReg);
+        // End-condition block (-1 when the clause has no end condition).
+        int endEntry = -1;
+        if (windowClause.EndCondition is not null)
+        {
+            endEntry = _instructions.Count;
+            int endReg = LowerNode(windowClause.EndCondition.WhenExpression);
+            Emit(IrOpCode.Return, (ushort)endReg);
+            FreeRegister(endReg);
+        }
 
         // Window body block: the VM binds the window variable and the start/end
         // condition variables for each produced window, then continues the tuple build.
         int rhsEntry = _instructions.Count;
         var windowVars = GetWindowBoundVariables(windowClause);
         boundVariables.AddRange(windowVars);
-        LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
+        LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs: true);
         boundVariables.RemoveRange(boundVariables.Count - windowVars.Count, windowVars.Count);
 
         int afterRhs = _instructions.Count;
+        if (insideRhs)
+        {
+            // Nested inside another iteration's rhs: after the Window completes, yield
+            // its accumulated tuples to the enclosing block.
+            Emit(IrOpCode.Return, (ushort)resultReg);
+        }
         var info = new WindowInfo(
             windowClause.VariableName,
             windowClause.NamespaceUri,
@@ -1883,10 +1969,16 @@ public sealed class IrLowerer
             windowClause.StartCondition.PositionalVariable,
             windowClause.StartCondition.PreviousItemVariable,
             windowClause.StartCondition.NextItemVariable,
-            windowClause.EndCondition.CurrentItemVariable,
-            windowClause.EndCondition.PositionalVariable,
-            windowClause.EndCondition.PreviousItemVariable,
-            windowClause.EndCondition.NextItemVariable);
+            windowClause.EndCondition?.CurrentItemVariable,
+            windowClause.EndCondition?.PositionalVariable,
+            windowClause.EndCondition?.PreviousItemVariable,
+            windowClause.EndCondition?.NextItemVariable,
+            windowClause.DeclaredType is null
+                ? null
+                : windowClause.DeclaredType.Prefix is null
+                    ? windowClause.DeclaredType.TypeName
+                    : $"{windowClause.DeclaredType.Prefix}:{windowClause.DeclaredType.TypeName}",
+            windowClause.DeclaredType?.Occurrence ?? OccurrenceIndicator.One);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(windowIdx, IrOpCode.Window, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
@@ -1899,7 +1991,8 @@ public sealed class IrLowerer
         OrderByClauseNode? orderByClause,
         int resultReg,
         List<BoundVariable> boundVariables,
-        List<CountCounterInfo> countCounters)
+        List<CountCounterInfo> countCounters,
+        bool insideRhs)
     {
         var binding = bindings[index];
         int seqReg = LowerNode(binding.Expression);
@@ -1913,19 +2006,36 @@ public sealed class IrLowerer
 
         int rhsEntry = _instructions.Count;
         boundVariables.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+        if (binding.PositionalVariableName is not null)
+            boundVariables.Add(new BoundVariable(binding.PositionalVariableName, null, null));
+        if (binding.DeclaredType is not null)
+        {
+            // XQuery 'as SequenceType': each bound item must be an instance of the type.
+            int varReg = LoadVariable(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+            EmitEnforceTypeIfDeclared(binding, varReg, itemLevel: true);
+            FreeRegister(varReg);
+        }
 
         if (index == bindings.Count - 1)
         {
-            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters);
+            LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs: true);
         }
         else
         {
-            LowerForClauseForTuples(bindings, index + 1, restClauses, orderByClause, resultReg, boundVariables, countCounters);
+            LowerForClauseForTuples(bindings, index + 1, restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs: true);
         }
 
         boundVariables.RemoveAt(boundVariables.Count - 1);
+        if (binding.PositionalVariableName is not null)
+            boundVariables.RemoveAt(boundVariables.Count - 1);
 
         int afterRhs = _instructions.Count;
+        if (insideRhs)
+        {
+            // Nested inside another iteration's rhs: after this For completes, yield its
+            // accumulated tuples to the enclosing block.
+            Emit(IrOpCode.Return, (ushort)resultReg);
+        }
         var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);

@@ -49,6 +49,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.22  | 25-07-2026     | Parse XQuery FLWOR window clause (tumbling/sliding)                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.23  | 25-07-2026     | Optional window end condition; XQST0103; stable order by; 'as' type declarations        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -253,7 +255,7 @@ public sealed class XPathParser
     // OrderSpec ::= ExprSingle ("ascending" | "descending")? ("empty" ("least" | "greatest"))? ("collation" URILiteral)?
     // GroupByClause ::= "group by" GroupingSpec ("," GroupingSpec)*
     // GroupingSpec ::= "$" VarName (":=" ExprSingle)? ("collation" URILiteral)?
-    // WindowClause ::= "for" ("tumbling" | "sliding") "window" "$" VarName "in" ExprSingle WindowStartCondition WindowEndCondition
+    // WindowClause ::= "for" ("tumbling" | "sliding") "window" "$" VarName "in" ExprSingle WindowStartCondition WindowEndCondition?
     // WindowStartCondition ::= "start" WindowVars "when" ExprSingle
     // WindowEndCondition ::= ("only")? "end" WindowVars "when" ExprSingle
     // WindowVars ::= ("$" VarName)? ("at" "$" VarName)? ("previous" "$" VarName)? ("next" "$" VarName)?
@@ -331,6 +333,24 @@ public sealed class XPathParser
                 else
                 {
                     throw new ParseException("XQST0003: Expected 'by' after 'order'.", Current.Start);
+                }
+            }
+            else if (Current.Kind == TokenKind.Name && GetString(Current) == "stable" &&
+                     Peek(1).Kind == TokenKind.Name && GetString(Peek(1)) == "order")
+            {
+                // "stable" is the default ordering behavior; parse and ignore it.
+                if (!_allowFullFlwor)
+                    throw new ParseException("XPST0003: XPath does not allow an order by clause.", Current.Start);
+                Advance();
+                Advance();
+                if (Current.Kind == TokenKind.Name && GetString(Current) == "by")
+                {
+                    Advance();
+                    clauses.Add(new OrderByClauseNode(ParseOrderBySpecs()));
+                }
+                else
+                {
+                    throw new ParseException("XQST0003: Expected 'by' after 'stable order'.", Current.Start);
                 }
             }
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "group")
@@ -442,6 +462,14 @@ public sealed class XPathParser
             var nameTok = ExpectName();
             var (prefix, local, ns) = SplitQName(GetString(nameTok));
 
+            FlworTypeDeclaration? declaredType = null;
+            if (Current.Kind == TokenKind.KeywordAs)
+            {
+                Advance();
+                var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+                declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
+            }
+
             XPathAstNode? keyExpression = null;
             if (Match(TokenKind.Assign))
             {
@@ -456,7 +484,7 @@ public sealed class XPathParser
                 collation = Unquote(GetString(lit));
             }
 
-            specs.Add(new GroupingSpec(local, keyExpression, collation, prefix, ns));
+            specs.Add(new GroupingSpec(local, keyExpression, collation, prefix, ns, declaredType));
         } while (Match(TokenKind.Comma));
         return specs;
     }
@@ -479,20 +507,57 @@ public sealed class XPathParser
         var nameTok = ExpectName();
         var (prefix, local, ns) = SplitQName(GetString(nameTok));
 
+        FlworTypeDeclaration? declaredType = null;
+        if (Current.Kind == TokenKind.KeywordAs)
+        {
+            Advance();
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
+        }
+
         Expect(TokenKind.KeywordIn);
         var inExpression = ParseExprSingle();
 
         var startCondition = ParseWindowCondition("start");
 
+        // The end condition is optional; a tumbling window without one closes when the
+        // next window starts (or at the end of the input sequence), and a sliding
+        // window without one extends to the end of the input sequence.
         bool onlyEnd = false;
+        WindowCondition? endCondition = null;
         if (Current.Kind == TokenKind.Name && GetString(Current) == "only")
         {
             onlyEnd = true;
             Advance();
+            endCondition = ParseWindowCondition("end");
         }
-        var endCondition = ParseWindowCondition("end");
+        else if (Current.Kind == TokenKind.Name && GetString(Current) == "end")
+        {
+            endCondition = ParseWindowCondition("end");
+        }
 
-        return new WindowClauseNode(sliding, local, inExpression, startCondition, endCondition, onlyEnd, prefix, ns);
+        // XQST0103: all variables bound by a single window clause must be distinct.
+        var boundNames = new List<string> { local };
+        void Collect(string? name)
+        {
+            if (name is not null)
+                boundNames.Add(name);
+        }
+        Collect(startCondition.CurrentItemVariable);
+        Collect(startCondition.PositionalVariable);
+        Collect(startCondition.PreviousItemVariable);
+        Collect(startCondition.NextItemVariable);
+        if (endCondition is not null)
+        {
+            Collect(endCondition.CurrentItemVariable);
+            Collect(endCondition.PositionalVariable);
+            Collect(endCondition.PreviousItemVariable);
+            Collect(endCondition.NextItemVariable);
+        }
+        if (boundNames.Distinct().Count() != boundNames.Count)
+            throw new ParseException("XQST0103: Duplicate variable binding in window clause.", Current.Start);
+
+        return new WindowClauseNode(sliding, local, inExpression, startCondition, endCondition, onlyEnd, prefix, ns, declaredType);
     }
 
     private WindowCondition ParseWindowCondition(string keyword)
@@ -562,6 +627,18 @@ public sealed class XPathParser
         Expect(TokenKind.Dollar);
         var nameTok = ExpectName();
         var (prefix, local, ns) = SplitQName(GetString(nameTok));
+
+        // XQuery TypeDeclaration ("as SequenceType"); XPath 3.1 does not allow it.
+        FlworTypeDeclaration? declaredType = null;
+        if (Current.Kind == TokenKind.KeywordAs)
+        {
+            if (!_allowFullFlwor)
+                throw new ParseException("XPST0003: XPath does not allow a type declaration in a for binding.", Current.Start);
+            Advance();
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
+        }
+
         string? positionalVar = null;
         // PositionalVar ::= "at" "$" VarName  (contextual keyword, lexed as Name)
         if (allowPositional && Current.Kind == TokenKind.Name && GetString(Current) == "at")
@@ -574,7 +651,7 @@ public sealed class XPathParser
         }
         Expect(TokenKind.KeywordIn);
         var expr = ParseExprSingle();
-        return new QuantifiedBinding(local, expr, positionalVar, prefix, ns);
+        return new QuantifiedBinding(local, expr, positionalVar, prefix, ns, declaredType);
     }
 
     private QuantifiedBinding ParseSimpleLetBinding()
@@ -582,9 +659,21 @@ public sealed class XPathParser
         Expect(TokenKind.Dollar);
         var nameTok = ExpectName();
         var (prefix, local, ns) = SplitQName(GetString(nameTok));
+
+        // XQuery TypeDeclaration ("as SequenceType"); XPath 3.1 does not allow it.
+        FlworTypeDeclaration? declaredType = null;
+        if (Current.Kind == TokenKind.KeywordAs)
+        {
+            if (!_allowFullFlwor)
+                throw new ParseException("XPST0003: XPath does not allow a type declaration in a let binding.", Current.Start);
+            Advance();
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
+        }
+
         Expect(TokenKind.Assign);  // := 
         var expr = ParseExprSingle();
-        return new QuantifiedBinding(local, expr, null, prefix, ns);
+        return new QuantifiedBinding(local, expr, null, prefix, ns, declaredType);
     }
 
     // QuantifiedExpr ::= ("some" | "every") SimpleForBinding ("satisfies" ExprSingle)+
@@ -1559,7 +1648,10 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.LBrace)
         {
             Advance();
-            body = ParseExpr();
+            // EnclosedExpr ::= "{" Expr? "}" — an empty body evaluates to the empty sequence.
+            body = Current.Kind == TokenKind.RBrace
+                ? new SequenceExpressionNode(Array.Empty<XPathAstNode>())
+                : ParseExpr();
             Expect(TokenKind.RBrace);
         }
         else
@@ -1679,7 +1771,7 @@ public sealed class XPathParser
         _ => false
     };
 
-    private static string Unquote(string text)
+    private string Unquote(string text)
     {
         if (text.Length >= 2 &&
             ((text[0] == '\'' && text[^1] == '\'') || (text[0] == '"' && text[^1] == '"')))
@@ -1689,6 +1781,13 @@ public sealed class XPathParser
             var sb = new StringBuilder(inner.Length);
             for (int i = 0; i < inner.Length; i++)
             {
+                // XQuery string literals support predefined entity and character
+                // references; a raw '&' that forms no valid reference is XPST0003.
+                if (_allowFullFlwor && inner[i] == '&')
+                {
+                    sb.Append(ExpandCharReference(inner, ref i));
+                    continue;
+                }
                 sb.Append(inner[i]);
                 if (inner[i] == quote && i + 1 < inner.Length && inner[i + 1] == quote)
                     i++;
@@ -1696,6 +1795,31 @@ public sealed class XPathParser
             return sb.ToString();
         }
         return text;
+    }
+
+    private string ExpandCharReference(string inner, ref int i)
+    {
+        int semi = inner.IndexOf(';', i + 1);
+        if (semi < 0)
+            throw new ParseException("XPST0003: Unterminated entity or character reference in string literal.", Current.Start);
+        var reference = inner[(i + 1)..semi];
+        string result = reference switch
+        {
+            "amp" => "&",
+            "lt" => "<",
+            "gt" => ">",
+            "quot" => "\"",
+            "apos" => "'",
+            _ when reference.StartsWith("#x", StringComparison.Ordinal) &&
+                   int.TryParse(reference[2..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex) &&
+                   hex is >= 0 and <= 0x10FFFF => char.ConvertFromUtf32(hex),
+            _ when reference.StartsWith('#') &&
+                   int.TryParse(reference[1..], NumberStyles.Integer, CultureInfo.InvariantCulture, out var dec) &&
+                   dec is >= 0 and <= 0x10FFFF => char.ConvertFromUtf32(dec),
+            _ => throw new ParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", Current.Start)
+        };
+        i = semi;
+        return result;
     }
 
     private static bool CanStartStepExpr(Token token) => token.Kind switch

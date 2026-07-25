@@ -13,9 +13,15 @@
 //                      | Charles Korthout | 0.1   | 22-07-2026     | Creation — prolog-less delegation to XPathParser                                        |
 //                      | Charles Korthout | 0.2   | 22-07-2026     | Parse XQuery body with allowFullFlwor=true to enable full FLWOR                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 25-07-2026     | Parse 'declare base-uri' prolog declarations                                            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 25-07-2026     | Version/encoding validation; XPST0003 syntax codes; char refs; xquery-name backtrack    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 
@@ -54,24 +60,38 @@ public sealed class XQueryParser
 
         SkipWhitespace();
 
-        // Optional version declaration: "xquery version '...';" or "xquery version '...' encoding '...';"
-        if (TryMatchLiteral("xquery"))
+        // Optional version declaration: "xquery version '...';" or "xquery version '...' encoding '...';".
+        // A leading name 'xquery' that is not followed by 'version' is a path expression,
+        // not a version declaration (e.g. 'xquery gt xquery').
+        int beforeVersionDecl = _position;
+        bool versionDeclParsed = false;
+        if (TryMatchLiteral("xquery") && TryMatchLiteral("version"))
         {
-            SkipWhitespace();
-            ExpectLiteral("version");
             SkipWhitespace();
             var versionLiteral = ReadStringLiteral();
             SkipWhitespace();
 
+            // XQST0031: only XQuery versions supported by this implementation are accepted.
+            if (versionLiteral is not ("1.0" or "3.0" or "3.1"))
+                throw new ParseException($"XQST0031: XQuery version '{versionLiteral}' is not supported.", _position);
+
             if (TryMatchLiteral("encoding"))
             {
                 SkipWhitespace();
-                ReadStringLiteral(); // encoding is currently ignored
+                var encoding = ReadStringLiteral();
+                // XQST0087: the encoding name must match the XML EncName production.
+                if (!IsValidEncodingName(encoding))
+                    throw new ParseException($"XQST0087: Encoding '{encoding}' is not supported.", _position);
                 SkipWhitespace();
             }
 
             ExpectChar(';');
             SkipWhitespace();
+            versionDeclParsed = true;
+        }
+        if (!versionDeclParsed)
+        {
+            _position = beforeVersionDecl;
         }
 
         // Prolog parsing is intentionally minimal in this first iteration.
@@ -137,7 +157,23 @@ public sealed class XQueryParser
             string uri = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
+            // XQST0038: duplicate default collation declaration.
+            if (context.DefaultCollation is not null)
+                throw new ParseException("XQST0038: More than one default collation declaration.", _position);
+            // XQST0087: the collation must be known to the implementation.
+            if (!IsSupportedCollation(ResolveCollationUri(uri, context.BaseUri)))
+                throw new ParseException($"XQST0087: Collation '{uri}' is not supported.", _position);
             context = context.WithDefaultCollation(uri);
+            return true;
+        }
+
+        if (TryMatchLiteral("declare base-uri"))
+        {
+            SkipWhitespace();
+            string uri = ReadStringLiteral();
+            SkipWhitespace();
+            ExpectChar(';');
+            context = context.WithBaseUri(uri);
             return true;
         }
 
@@ -149,6 +185,46 @@ public sealed class XQueryParser
     // ------------------------------------------------------------------
     // Lexical helpers
     // ------------------------------------------------------------------
+
+    private static bool IsValidEncodingName(string encoding)
+    {
+        // XML EncName: [A-Za-z] ([A-Za-z0-9._] | '-')*
+        if (encoding.Length == 0 || !char.IsAsciiLetter(encoding[0]))
+            return false;
+        foreach (char c in encoding)
+        {
+            if (!char.IsAsciiLetterOrDigit(c) && c is not ('.' or '_' or '-'))
+                return false;
+        }
+        return true;
+    }
+
+    private static bool IsSupportedCollation(string collation)
+    {
+        if (collation == "http://www.w3.org/2005/xpath-functions/collation/codepoint")
+            return true;
+        if (collation == "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")
+            return true;
+        if (collation == "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind")
+            return true;
+        if (collation.StartsWith("http://www.w3.org/2013/collation/UCA", StringComparison.Ordinal))
+            return true;
+        return false;
+    }
+
+    private static string ResolveCollationUri(string collation, string? baseUri)
+    {
+        if (string.IsNullOrEmpty(collation))
+            return string.Empty;
+        if (Uri.IsWellFormedUriString(collation, UriKind.Absolute))
+            return collation;
+        if (!string.IsNullOrEmpty(baseUri) &&
+            Uri.TryCreate(new Uri(baseUri), collation, out var resolved))
+        {
+            return resolved.AbsoluteUri;
+        }
+        return collation;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void SkipWhitespace()
@@ -181,7 +257,7 @@ public sealed class XQueryParser
     {
         SkipWhitespace();
         if (!_source.AsSpan(_position).StartsWith(literal.AsSpan(), StringComparison.Ordinal))
-            throw new ParseException($"XQST0003: Expected '{literal}'.", _position);
+            throw new ParseException($"XPST0003: Expected '{literal}'.", _position);
         _position += literal.Length;
     }
 
@@ -189,7 +265,7 @@ public sealed class XQueryParser
     {
         SkipWhitespace();
         if (_position >= _source.Length || _source[_position] != c)
-            throw new ParseException($"XQST0003: Expected '{c}'.", _position);
+            throw new ParseException($"XPST0003: Expected '{c}'.", _position);
         _position++;
     }
 
@@ -197,14 +273,14 @@ public sealed class XQueryParser
     {
         SkipWhitespace();
         if (_position >= _source.Length)
-            throw new ParseException("XQST0003: Expected string literal.", _position);
+            throw new ParseException("XPST0003: Expected string literal.", _position);
 
         char quote = _source[_position];
         if (quote != '"' && quote != '\'')
-            throw new ParseException("XQST0003: Expected string literal.", _position);
+            throw new ParseException("XPST0003: Expected string literal.", _position);
 
         _position++;
-        int start = _position;
+        var value = new StringBuilder();
         while (_position < _source.Length)
         {
             char c = _source[_position];
@@ -213,23 +289,58 @@ public sealed class XQueryParser
                 // Check for doubled quote escape
                 if (_position + 1 < _source.Length && _source[_position + 1] == quote)
                 {
+                    value.Append(quote);
                     _position += 2;
                     continue;
                 }
-                string value = _source[start.._position];
                 _position++;
-                return value;
+                return value.ToString();
             }
+            // XQuery string literals support predefined entity and character references;
+            // a raw '&' that forms no valid reference is XPST0003.
+            if (c == '&')
+            {
+                value.Append(ExpandCharReference());
+                continue;
+            }
+            value.Append(c);
             _position++;
         }
-        throw new ParseException("XQST0003: Unterminated string literal.", start - 1);
+        throw new ParseException("XPST0003: Unterminated string literal.", _position);
+    }
+
+    private string ExpandCharReference()
+    {
+        // _position is at the '&'.
+        int start = _position;
+        int semi = _source.IndexOf(';', _position + 1);
+        if (semi < 0)
+            throw new ParseException("XPST0003: Unterminated entity or character reference in string literal.", start);
+        var reference = _source[(_position + 1)..semi];
+        string result = reference switch
+        {
+            "amp" => "&",
+            "lt" => "<",
+            "gt" => ">",
+            "quot" => "\"",
+            "apos" => "'",
+            _ when reference.StartsWith("#x", StringComparison.Ordinal) &&
+                   int.TryParse(reference[2..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex) &&
+                   hex is >= 0 and <= 0x10FFFF => char.ConvertFromUtf32(hex),
+            _ when reference.StartsWith('#') &&
+                   int.TryParse(reference[1..], NumberStyles.Integer, CultureInfo.InvariantCulture, out var dec) &&
+                   dec is >= 0 and <= 0x10FFFF => char.ConvertFromUtf32(dec),
+            _ => throw new ParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", start)
+        };
+        _position = semi + 1;
+        return result;
     }
 
     private string ReadNCName()
     {
         SkipWhitespace();
         if (_position >= _source.Length || !IsNameStartChar(_source[_position]))
-            throw new ParseException("XQST0003: Expected NCName.", _position);
+            throw new ParseException("XPST0003: Expected NCName.", _position);
 
         int start = _position;
         _position++;

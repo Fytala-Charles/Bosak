@@ -20,6 +20,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 25-07-2026     | Added window clause tests                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 25-07-2026     | Window tests use input-sequence end positions; no-end-condition and XQST0103 tests      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 25-07-2026     | Added 'as' type declaration, entity reference, base-uri, collation, stable order tests  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -358,7 +362,7 @@ public class PlaceholderTests
     public void XQuery_Window_Tumbling_Simple()
     {
         var compiler = new XQueryCompiler();
-        var executable = compiler.Compile("for tumbling window $w in (2, 4, 6, 8, 10) start when true() end at $p when $p = 2 return count($w)");
+        var executable = compiler.Compile("for tumbling window $w in (2, 4, 6, 8, 10) start at $s when true() end at $e when $e - $s = 1 return count($w)");
         var ctx = new XQueryContext();
         var result = executable.Evaluate(ctx);
 
@@ -371,7 +375,7 @@ public class PlaceholderTests
     public void XQuery_Window_Tumbling_OnlyEnd()
     {
         var compiler = new XQueryCompiler();
-        var executable = compiler.Compile("for tumbling window $w in (2, 4, 6, 8, 10) start when true() only end at $p when $p = 2 return count($w)");
+        var executable = compiler.Compile("for tumbling window $w in (2, 4, 6, 8, 10) start at $s when true() only end at $e when $e - $s = 1 return count($w)");
         var ctx = new XQueryContext();
         var result = executable.Evaluate(ctx);
 
@@ -384,7 +388,7 @@ public class PlaceholderTests
     public void XQuery_Window_Sliding_Overlapping()
     {
         var compiler = new XQueryCompiler();
-        var executable = compiler.Compile("for sliding window $w in (1, 2, 3) start when true() end at $p when $p = 2 return string-join($w, ',')");
+        var executable = compiler.Compile("for sliding window $w in (1, 2, 3) start at $s when true() end at $e when $e - $s = 1 return string-join($w, ',')");
         var ctx = new XQueryContext();
         var result = executable.Evaluate(ctx);
 
@@ -403,7 +407,7 @@ public class PlaceholderTests
 
         Assert.True(result.IsSequence, "Expected a sequence result.");
         var items = ToIntegers(result);
-        Assert.Equal(new[] { 1L, 2L, 5L, 6L, 3L, 2L, 7L, 8L }, items);
+        Assert.Equal(new[] { 1L, 2L, 5L, 6L, 3L, 4L, 7L, 8L }, items);
     }
 
     [Fact]
@@ -433,10 +437,138 @@ public class PlaceholderTests
     }
 
     [Fact]
+    public void XQuery_Window_Tumbling_NoEndCondition()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for tumbling window $w in (2, 4, 6, 8, 10, 12, 14) start $first when $first mod 3 = 0 return string-join($w, ',')");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToStrings(result);
+        Assert.Equal(new[] { "6,8,10", "12,14" }, items);
+    }
+
+    [Fact]
+    public void XQuery_Window_DuplicateVariable_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() => compiler.Compile("for tumbling window $w in (1, 2) start $s when true() end $s when true() return $w"));
+        Assert.Contains("XQST0103", ex.Message);
+    }
+
+    [Fact]
     public void XQuery_Window_XPathMode_Rejected()
     {
         var ex = Assert.ThrowsAny<Exception>(() => XPathParser.Parse("for tumbling window $w in (1, 2) start when true() end when true() return $w"));
         Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ForBinding_TypeDeclaration_Matches()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $x as xs:integer in (1, 2, 3) return $x * 2");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 2L, 4L, 6L }, items);
+    }
+
+    [Fact]
+    public void XQuery_ForBinding_TypeDeclaration_Mismatch_Throws()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $x as xs:integer in (1, 'a') return $x");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_LetBinding_TypeDeclaration_Mismatch_Throws()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("let $x as xs:integer := 'a' return $x");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_QuantifiedBinding_TypeDeclaration_Mismatch_Throws()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("every $a as xs:anyURI in (1 to 5) satisfies $a - 10");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_StringLiteral_EntityReferences()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("'fish &amp; chips &lt;3 &#65;&#x42;'");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("fish & chips <3 AB", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_StringLiteral_InvalidReference_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() => compiler.Compile("'a string &;'"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareBaseUri_SetsStaticBaseUri()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("declare base-uri 'http://example.com/base'; static-base-uri()");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("http://example.com/base", result.ToString());
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_UnknownCollation_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $s in ('a', 'b') order by $s collation 'http://example.org/bogus' return $s");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XQST0076", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_StableOrderBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (3, 1, 2) stable order by $i return $i");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 2L, 3L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_DeclaredType_Mismatch_Throws()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $x in (1, 'a', 2) group by $g as xs:integer := $x return $g");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XPTY0004", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

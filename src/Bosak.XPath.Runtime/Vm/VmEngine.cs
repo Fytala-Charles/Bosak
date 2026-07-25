@@ -113,6 +113,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.65  | 25-07-2026     | Added Window VM handler for XQuery FLWOR tumbling/sliding windows                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.66  | 25-07-2026     | Window end-pos/no-end fixes; EnforceType; NaN ordering; XQST0076; dateTime group keys   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -806,6 +808,15 @@ public static class VmEngine
                     {
                         var orderInfo = (OrderByInfo)literalPool[instr.Operand]!;
                         var tupleSequence = registers[instr.RegisterB];
+
+                        // XQST0076: an unknown collation in an order by clause is a static error.
+                        // Relative collation URIs resolve against the static base URI.
+                        foreach (var collation in orderInfo.CollationUri)
+                        {
+                            if (collation is not null && !IsSupportedOrderByCollation(ResolveCollationUri(collation, context.BaseUri)))
+                                throw new InvalidOperationException($"XQST0076: Collation '{collation}' is not supported.");
+                        }
+
                         var tuples = MaterializeSequence(tupleSequence);
                         var materializedTuples = new List<XdmValue[]>();
                         foreach (var tuple in tuples)
@@ -891,10 +902,26 @@ public static class VmEngine
                         var groups = new List<List<XdmValue[]>>();
                         foreach (var tupleItems in materializedTuples)
                         {
+                            // XPTY0004: enforce optional 'as SequenceType' declarations on grouping keys.
+                            // The check applies to the atomized key value.
+                            for (int k = 0; k < groupInfo.KeyIndices.Count; k++)
+                            {
+                                var declaredType = groupInfo.DeclaredTypeNames[k];
+                                if (declaredType is null)
+                                    continue;
+                                int keyIndex = groupInfo.KeyIndices[k];
+                                var keyValue = keyIndex < tupleItems.Length ? tupleItems[keyIndex] : XdmValue.Undefined;
+                                if (!InstanceOf(Atomize(keyValue), declaredType, groupInfo.DeclaredTypeOccurrences[k], null, context))
+                                {
+                                    throw new InvalidOperationException(
+                                        $"XPTY0004: Grouping key does not match the declared type '{declaredType}'.");
+                                }
+                            }
+
                             List<XdmValue[]>? match = null;
                             foreach (var group in groups)
                             {
-                                if (GroupKeysEqual(group[0], tupleItems, groupInfo))
+                                if (GroupKeysEqual(group[0], tupleItems, groupInfo, context))
                                 {
                                     match = group;
                                     break;
@@ -953,6 +980,20 @@ public static class VmEngine
                         break;
                     }
 
+                case IrOpCode.EnforceType:
+                    {
+                        // XQuery 'as SequenceType' enforcement for FLWOR variable bindings.
+                        var enforceInfo = (EnforceTypeInfo)literalPool[instr.Operand]!;
+                        var value = registers[instr.RegisterA];
+                        if (!InstanceOf(value, enforceInfo.TypeName, enforceInfo.Occurrence, null, context))
+                        {
+                            throw new InvalidOperationException(
+                                $"{enforceInfo.ErrorCode}: Value does not match the declared type '{enforceInfo.TypeName}'.");
+                        }
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.Window:
                     {
                         var windowInfo = (WindowInfo)literalPool[instr.Operand]!;
@@ -979,10 +1020,13 @@ public static class VmEngine
                             savedBindings.Add((name, had, saved));
                         }
 
+                        bool hasEndCondition = windowInfo.EndEntryPoint >= 0;
+
                         if (windowInfo.Sliding)
                         {
                             // Sliding: every item matching the start condition opens a new
-                            // (possibly overlapping) window.
+                            // (possibly overlapping) window. Without an end condition each
+                            // window extends to the end of the input sequence.
                             for (int i = 0; i < items.Length; i++)
                             {
                                 if (!EvaluateWindowCondition(module, context, registers, windowInfo.StartEntryPoint,
@@ -995,29 +1039,38 @@ public static class VmEngine
 
                                 var windowItems = new List<XdmValue>();
                                 bool closed = false;
-                                for (int j = i; j < items.Length; j++)
+                                if (hasEndCondition)
                                 {
-                                    windowItems.Add(items[j]);
-                                    if (EvaluateWindowCondition(module, context, registers, windowInfo.EndEntryPoint,
-                                            items, j, j - i + 1,
-                                            windowInfo.EndCurrent, windowInfo.EndPos, windowInfo.EndPrev, windowInfo.EndNext))
+                                    for (int j = i; j < items.Length; j++)
                                     {
-                                        EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
-                                            startBindings, items, j, windowItems.Count);
-                                        closed = true;
-                                        break;
+                                        windowItems.Add(items[j]);
+                                        if (EvaluateWindowCondition(module, context, registers, windowInfo.EndEntryPoint,
+                                                items, j, j + 1,
+                                                windowInfo.EndCurrent, windowInfo.EndPos, windowInfo.EndPrev, windowInfo.EndNext))
+                                        {
+                                            EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
+                                                startBindings, items, j, j + 1);
+                                            closed = true;
+                                            break;
+                                        }
                                     }
+                                }
+                                else
+                                {
+                                    windowItems.AddRange(items.Skip(i));
                                 }
                                 if (!closed && !windowInfo.OnlyEnd)
                                 {
                                     EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
-                                        startBindings, items, items.Length - 1, windowItems.Count);
+                                        startBindings, items, items.Length - 1, items.Length);
                                 }
                             }
                         }
                         else
                         {
                             // Tumbling: a new window starts only when no window is open.
+                            // Without an end condition a window closes when the next one
+                            // starts (exclusive) or at the end of the input sequence.
                             var windowItems = new List<XdmValue>();
                             List<(string Name, XdmValue Value)>? startBindings = null;
                             bool open = false;
@@ -1034,17 +1087,31 @@ public static class VmEngine
                                         windowInfo.StartCurrent, windowInfo.StartPos, windowInfo.StartPrev, windowInfo.StartNext);
                                     windowItems.Add(items[i]);
                                 }
+                                else if (!hasEndCondition &&
+                                         EvaluateWindowCondition(module, context, registers, windowInfo.StartEntryPoint,
+                                             items, i, i + 1,
+                                             windowInfo.StartCurrent, windowInfo.StartPos, windowInfo.StartPrev, windowInfo.StartNext))
+                                {
+                                    // No end condition: the current window closes before a
+                                    // new start; the new window opens at this item.
+                                    EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
+                                        startBindings!, items, i - 1, i);
+                                    startBindings = CaptureWindowBindings(items, i, i + 1,
+                                        windowInfo.StartCurrent, windowInfo.StartPos, windowInfo.StartPrev, windowInfo.StartNext);
+                                    windowItems = new List<XdmValue> { items[i] };
+                                }
                                 else
                                 {
                                     windowItems.Add(items[i]);
                                 }
 
-                                if (EvaluateWindowCondition(module, context, registers, windowInfo.EndEntryPoint,
-                                        items, i, windowItems.Count,
+                                if (open && hasEndCondition &&
+                                    EvaluateWindowCondition(module, context, registers, windowInfo.EndEntryPoint,
+                                        items, i, i + 1,
                                         windowInfo.EndCurrent, windowInfo.EndPos, windowInfo.EndPrev, windowInfo.EndNext))
                                 {
                                     EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
-                                        startBindings!, items, i, windowItems.Count);
+                                        startBindings!, items, i, i + 1);
                                     open = false;
                                     windowItems = new List<XdmValue>();
                                 }
@@ -1052,7 +1119,7 @@ public static class VmEngine
                             if (open && !windowInfo.OnlyEnd)
                             {
                                 EmitFlworWindow(module, context, registers, windowInfo, results, windowItems,
-                                    startBindings!, items, items.Length - 1, windowItems.Count);
+                                    startBindings!, items, items.Length - 1, items.Length);
                             }
                         }
 
@@ -8211,6 +8278,15 @@ public static class VmEngine
         var windowValue = windowItems.Count == 1
             ? windowItems[0]
             : XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>(windowItems)));
+
+        // XPTY0004: enforce an optional 'as SequenceType' declaration on the window variable.
+        if (info.DeclaredTypeName is not null &&
+            !InstanceOf(windowValue, info.DeclaredTypeName, info.DeclaredTypeOccurrence, null, context))
+        {
+            throw new InvalidOperationException(
+                $"XPTY0004: Window variable '${info.VariableName}' does not match the declared type '{info.DeclaredTypeName}'.");
+        }
+
         context.WithVariable(info.VariableName, windowValue, info.VariableNamespaceUri ?? "");
 
         // Bind the start condition variables to the values captured when the window opened.
@@ -8234,6 +8310,33 @@ public static class VmEngine
         }
     }
 
+    private static string ResolveCollationUri(string collation, string? baseUri)
+    {
+        if (string.IsNullOrEmpty(collation))
+            return string.Empty;
+        if (Uri.IsWellFormedUriString(collation, UriKind.Absolute))
+            return collation;
+        if (!string.IsNullOrEmpty(baseUri) &&
+            Uri.TryCreate(new Uri(baseUri), collation, out var resolved))
+        {
+            return resolved.AbsoluteUri;
+        }
+        return collation;
+    }
+
+    private static bool IsSupportedOrderByCollation(string collation)
+    {
+        if (collation == "http://www.w3.org/2005/xpath-functions/collation/codepoint")
+            return true;
+        if (collation == "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")
+            return true;
+        if (collation == "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind")
+            return true;
+        if (collation.StartsWith("http://www.w3.org/2013/collation/UCA", StringComparison.Ordinal))
+            return true;
+        return false;
+    }
+
     private static bool IsGroupKeySlot(int slot, GroupByInfo info)
     {
         for (int i = 0; i < info.KeyIndices.Count; i++)
@@ -8244,20 +8347,20 @@ public static class VmEngine
         return false;
     }
 
-    private static bool GroupKeysEqual(XdmValue[] x, XdmValue[] y, GroupByInfo info)
+    private static bool GroupKeysEqual(XdmValue[] x, XdmValue[] y, GroupByInfo info, EvaluationContext context)
     {
         for (int i = 0; i < info.KeyIndices.Count; i++)
         {
             int keyIndex = info.KeyIndices[i];
             var keyX = keyIndex < x.Length ? x[keyIndex] : XdmValue.Undefined;
             var keyY = keyIndex < y.Length ? y[keyIndex] : XdmValue.Undefined;
-            if (!GroupKeyValuesEqual(keyX, keyY))
+            if (!GroupKeyValuesEqual(keyX, keyY, context))
                 return false;
         }
         return true;
     }
 
-    private static bool GroupKeyValuesEqual(XdmValue left, XdmValue right)
+    private static bool GroupKeyValuesEqual(XdmValue left, XdmValue right, EvaluationContext context)
     {
         left = SingleGroupKeyItem(Atomize(left));
         right = SingleGroupKeyItem(Atomize(right));
@@ -8280,6 +8383,18 @@ public static class VmEngine
         if (left.Kind == XdmValueKind.Boolean && right.Kind == XdmValueKind.Boolean)
         {
             return left.BooleanValue == right.BooleanValue;
+        }
+
+        // Date/time values group by their instant on the timeline (with implicit
+        // timezone), not by lexical form.
+        var leftDateSub = GetDateTimeSubtype(left);
+        var rightDateSub = GetDateTimeSubtype(right);
+        if (leftDateSub is not null && rightDateSub is not null && leftDateSub == rightDateSub)
+        {
+            var cmp = CompareDateTimeValues(left, right, leftDateSub, context);
+            if (cmp.HasValue)
+                return cmp.Value == 0;
+            return string.Equals(left.ToString(), right.ToString(), StringComparison.Ordinal);
         }
 
         if (left.Kind == right.Kind)
@@ -8345,6 +8460,16 @@ public static class VmEngine
         {
             double l = ToDouble(left);
             double r = ToDouble(right);
+            // NaN follows the empty-sequence ordering (least/greatest) rather than
+            // comparing less than every other value.
+            bool leftNaN = double.IsNaN(l);
+            bool rightNaN = double.IsNaN(r);
+            if (leftNaN || rightNaN)
+            {
+                if (leftNaN && rightNaN) return 0;
+                int nanRank = emptyOrder == EmptyOrder.Greatest ? 1 : -1;
+                return leftNaN ? nanRank : -nanRank;
+            }
             return l.CompareTo(r);
         }
 

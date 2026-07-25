@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 25-07-2026     | Optimize WindowClauseNode (XQuery window)                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 25-07-2026     | Optional window end condition                                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -448,7 +450,7 @@ public sealed class XPathOptimizer
         foreach (var b in node.Bindings)
         {
             var expr = OptimizeNode(b.Expression, ref changed);
-            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName, b.VariablePrefix, b.VariableNamespaceUri));
+            bindings.Add(expr == b.Expression ? b : b with { Expression = expr });
         }
 
         var body = OptimizeNode(node.ReturnExpression, ref changed);
@@ -468,7 +470,7 @@ public sealed class XPathOptimizer
         foreach (var b in node.Bindings)
         {
             var expr = OptimizeNode(b.Expression, ref changed);
-            bindings.Add(expr == b.Expression ? b : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName, b.VariablePrefix, b.VariableNamespaceUri));
+            bindings.Add(expr == b.Expression ? b : b with { Expression = expr });
         }
 
         var body = OptimizeNode(node.SatisfiesExpression, ref changed);
@@ -632,7 +634,7 @@ public sealed class XPathOptimizer
         foreach (var binding in node.Bindings)
         {
             var optExpr = OptimizeNode(binding.Expression, ref changed);
-            newBindings.Add(new QuantifiedBinding(binding.VariableName, optExpr, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+            newBindings.Add(binding with { Expression = optExpr });
             if (optExpr != binding.Expression) bindingsChanged = true;
         }
         var body = OptimizeNode(node.Body, ref changed);
@@ -686,14 +688,14 @@ public sealed class XPathOptimizer
     {
         var inExpr = OptimizeNode(node.InExpression, ref changed);
         var startWhen = OptimizeNode(node.StartCondition.WhenExpression, ref changed);
-        var endWhen = OptimizeNode(node.EndCondition.WhenExpression, ref changed);
-        if (inExpr == node.InExpression && startWhen == node.StartCondition.WhenExpression && endWhen == node.EndCondition.WhenExpression)
+        var endWhen = node.EndCondition is null ? null : OptimizeNode(node.EndCondition.WhenExpression, ref changed);
+        if (inExpr == node.InExpression && startWhen == node.StartCondition.WhenExpression && endWhen == node.EndCondition?.WhenExpression)
             return node;
         return node with
         {
             InExpression = inExpr,
             StartCondition = node.StartCondition with { WhenExpression = startWhen },
-            EndCondition = node.EndCondition with { WhenExpression = endWhen }
+            EndCondition = node.EndCondition is null ? null : node.EndCondition with { WhenExpression = endWhen! }
         };
     }
 
@@ -721,7 +723,7 @@ public sealed class XPathOptimizer
             var expr = OptimizeNode(b.Expression, ref changed);
             bindings.Add(expr == b.Expression
                 ? b
-                : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName, b.VariablePrefix, b.VariableNamespaceUri));
+                : b with { Expression = expr });
         }
         return bindings.SequenceEqual(node.Bindings) ? node : node with { Bindings = bindings };
     }
@@ -734,7 +736,7 @@ public sealed class XPathOptimizer
             var expr = OptimizeNode(b.Expression, ref changed);
             bindings.Add(expr == b.Expression
                 ? b
-                : new QuantifiedBinding(b.VariableName, expr, b.PositionalVariableName, b.VariablePrefix, b.VariableNamespaceUri));
+                : b with { Expression = expr });
         }
         return bindings.SequenceEqual(node.Bindings) ? node : node with { Bindings = bindings };
     }

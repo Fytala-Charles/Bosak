@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 2 complete: `window` clause (tumbling/sliding) implemented with a `Window` opcode over the tuple path; unit tests now **1,409/0**; QT3 and XSLT baselines unchanged)
+> **Living Registry** — Last updated: 2026-07-25 (QT3 harness wired to the XQuery pipeline: **22,947 passed / 0 failed** (was 14,994); 203 remaining XQuery gaps recorded as reasoned skips; unit tests now **1,421/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -149,6 +149,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-042 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `count` clause | Required for full XQuery FLWOR: `count $var` positional-variable clause, both pre- and post-`order by` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-23 |
 | REQ-043 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `group by` clause | Required for full XQuery FLWOR: `group by` grouping specs (`$var` or `$var := expr`, optional collation), grouped variable rebinding, and post-group `order by`/`count` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-044 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `window` clause | Required for full XQuery FLWOR: tumbling/sliding windows with start/end conditions (current/positional/previous/next vars) and `only end` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
+| REQ-045 | *(internal)* | QT3 harness XQuery routing + conformance sweep | Validate the XQuery pipeline against the W3C QT3 suite; route supported XQuery tests, fix surfaced engine gaps, keep Failed=0 | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1994,13 +1995,61 @@ Add a `Window` opcode on the tuple-based FLWOR path. The lowerer emits the windo
 
 ---
 
+### REQ-045: QT3 harness XQuery routing + XQuery conformance sweep
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-25  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+With the XQuery 3.1 Phase 2 FLWOR surface complete (`order by`, `count`, `group by`, `window`), the QT3 harness still skipped every XQuery-syntax test — 16,815 tests sat in the "Unsupported dependency" bucket, including the FLWOR test sets (`prod/WindowClause`, `prod/GroupByClause`, `prod/OrderByClause`, `prod/CountClause`) that validate the new clauses. The harness needed to route supported XQuery tests through the `Bosak.XQuery` pipeline.
+
+**Proposed Solution:**  
+Relax the dependency filter for positive XQuery-only spec tokens when the query uses only supported constructs, route admitted tests through `XQueryCompiler` with the harness `EvaluationContext` bridged into `XQueryContext`, and gate out queries using unsupported constructs (constructors, switch/typeswitch, unsupported prolog forms, annotations, pragmas, string constructors). Then drive failures to zero by fixing the engine gaps the newly-routed tests surfaced.
+
+**Acceptance Criteria:**
+- [x] The four FLWOR test sets run with **0 failures** (WindowClause 34, GroupByClause 14, OrderByClause 39, CountClause 4 pass; remainder skipped on unsupported constructs).
+- [x] Full QT3 suite improves from 14,994 passed / 0 failed to **22,947 passed / 0 failed** (+7,953); skipped 16,827 → 8,874 (203 of them recorded in `KnownXQueryGaps` with reasons).
+- [x] XPath-only behavior unchanged; all 1,421 unit tests pass.
+
+**Implementation Notes:**
+- Harness: `Bosak.XPath.Conformance` references `Bosak.XQuery`; `DependencyFilter.IsSupported(..., allowXQuerySpecs)`; `TestExecutor` routes XQ-dep/XQuery-syntax tests through `XQueryCompiler` with construct gating (`CanHandleAsXQuery`); `ConformanceRunner.KnownXQueryGaps` records the 203 remaining gaps as reasoned skips.
+- Window fixes: end-condition positional variable is the input-sequence position (not window-relative); end condition optional (tumbling closes on next start; sliding extends to end of input); `XQST0103` duplicate-variable check.
+- Tuple-path structural fix: nested `For`/`Window` blocks now `Return` their accumulated tuples to the enclosing block (multi-binding `for` + order by, `let` + order by, window nested in `for`).
+- Type declarations: `as SequenceType` on `for`/`let`/`some`/`every` bindings, window variable, and grouping specs, enforced via new `EnforceType` opcode (XPTY0004).
+- Order by: NaN follows empty least/greatest; unknown collations raise XQST0076 with base-URI resolution; `stable order by` accepted.
+- Prolog: `declare base-uri`; version/encoding validation (XQST0031/XQST0087); duplicate default collation (XQST0038); prolog syntax errors are XPST0003; character references in prolog literals; `xquery` as a plain name no longer triggers version-declaration mode.
+- XQuery string literals: predefined entity and character references (`&amp;`, `&#65;`), raw `&` rejected with XPST0003.
+- Empty inline-function bodies (`function($x) {}`) evaluate to the empty sequence.
+- Group-by keys: date/time values group by instant on the timeline; positional variables (`at $p`) captured in tuples; grouping-spec type checks apply to the atomized key.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Optional window end, XQST0103, `stable`, `as` declarations, entity references, empty function bodies. |
+| Compiler | Modified | Nested-rhs Return fix, `EnforceType` opcode, positional vars in tuples, declared types in `GroupByInfo`/`WindowInfo`. |
+| Runtime | Modified | Window semantics, type enforcement, NaN/collation order by, dateTime group keys, `Window` no-end handling. |
+| XQuery | Modified | `declare base-uri`, version/encoding/collation validation, prolog char references. |
+| Conformance | Modified | XQuery routing, construct gating, `KnownXQueryGaps` (203 reasoned skips). |
+| XSLT | None | No XSLT changes; XSLT baseline unchanged. |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-25 | Kimi | Gate XQuery admission by constructs, fix engine gaps to zero failures | Keeps the Failed=0 invariant honest: every admitted test is verifiably handled; remaining gaps are explicit reasoned skips instead of silent failures. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 / REQ-041 / REQ-042 / REQ-043 / REQ-044 | **XQuery 3.1 full implementation** | In Progress | Phase 2 complete: `order by`, `count`, `group by`, and `window` implemented. Constructors (Phase 3) and modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 / REQ-041 / REQ-042 / REQ-043 / REQ-044 / REQ-045 | **XQuery 3.1 full implementation** | In Progress | Phase 2 complete: `order by`, `count`, `group by`, and `window` implemented. QT3 harness wired: 22,947/0 (72.11%); 203 gaps recorded. Constructors (Phase 3) and modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

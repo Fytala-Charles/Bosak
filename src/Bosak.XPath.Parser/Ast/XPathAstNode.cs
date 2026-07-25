@@ -24,6 +24,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 25-07-2026     | Added WindowClauseNode and WindowCondition for XQuery FLWOR window clause               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 25-07-2026     | Optional window end condition; FlworTypeDeclaration for 'as SequenceType' bindings      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -143,16 +145,17 @@ public enum EmptyOrder
 /// <summary>A group by clause: <c>group by $var (:= expr)? (collation 'uri')?, ...</c>.</summary>
 public sealed record GroupByClauseNode(IReadOnlyList<GroupingSpec> Specs) : FlworClauseNode;
 
-/// <summary>A window clause: <c>for tumbling|sliding window $var in expr start ... when ... (only)? end ... when ...</c>.</summary>
+/// <summary>A window clause: <c>for tumbling|sliding window $var (as SequenceType)? in expr start ... when ... ((only)? end ... when ...)?</c>.</summary>
 public sealed record WindowClauseNode(
     bool Sliding,
     string VariableName,
     XPathAstNode InExpression,
     WindowCondition StartCondition,
-    WindowCondition EndCondition,
+    WindowCondition? EndCondition,
     bool OnlyEnd = false,
     string? Prefix = null,
-    string? NamespaceUri = null) : FlworClauseNode;
+    string? NamespaceUri = null,
+    FlworTypeDeclaration? DeclaredType = null) : FlworClauseNode;
 
 /// <summary>A start or end condition of a window clause: <c>($cur)? (at $pos)? (previous $p)? (next $n)? when expr</c>.</summary>
 public sealed record WindowCondition(
@@ -168,9 +171,13 @@ public sealed record GroupingSpec(
     XPathAstNode? KeyExpression = null,
     string? CollationUri = null,
     string? Prefix = null,
-    string? NamespaceUri = null);
+    string? NamespaceUri = null,
+    FlworTypeDeclaration? DeclaredType = null);
 
-public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null);
+/// <summary>An optional type declaration on a FLWOR variable binding: <c>as SequenceType</c>.</summary>
+public sealed record FlworTypeDeclaration(string TypeName, string? Prefix, OccurrenceIndicator Occurrence);
+
+public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null);
 
 // ------------------------------------------------------------------
 // Binary / Unary expressions

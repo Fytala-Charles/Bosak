@@ -17,6 +17,10 @@
 //                      | Charles Korthout | 0.5   | 21-07-2026     | Pass test-case base directory through to ResultComparer for assert-xml files             |
 //                      | Charles Korthout | 0.6   | 21-07-2026     | Refine XQuery heuristic: allow schema-element/attribute tests, element/attribute name tests, import name tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 25-07-2026     | Route supported XQuery-syntax tests through the Bosak.XQuery pipeline                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 25-07-2026     | XQuery routing refinements: dep-admitted tests, constructor/prolog gates                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -27,6 +31,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
+using Bosak.XQuery.Api;
 
 namespace Bosak.XPath.Conformance;
 
@@ -34,7 +39,21 @@ internal sealed class TestExecutor
 {
     public TestOutcome Execute(TestCase testCase, TestEnvironment? environment)
     {
-        var ctx = new EvaluationContext();
+        string expr = testCase.Expression.Trim();
+        bool xquerySyntax = LooksLikeXQuery(expr);
+        bool hasXqDeps = DependencyFilter.HasXQueryOnlySpecDependency(testCase.Dependencies);
+        // Route to the XQuery pipeline when all constructs used are supported and either
+        // the query looks like XQuery or the test was admitted through the XQuery
+        // spec-dependency relaxation (multi-clause FLWOR has no other XQuery markers).
+        // XQ-dep tests route even when expecting a parse error: the XQuery parser rejects
+        // malformed XQuery (and XQuery-only literal rules) with the expected XPST0003.
+        // XPath-dep tests EXPECTING a static parse error keep running on the XPath
+        // pipeline: for XQuery-only syntax a parse failure is exactly the expected outcome.
+        bool routeXQuery = CanHandleAsXQuery(expr) &&
+                           (hasXqDeps || (xquerySyntax && !ExpectsParseError(testCase.ResultElement)));
+
+        var xqContext = routeXQuery ? new XQueryContext() : null;
+        var ctx = xqContext?.EvaluationContext ?? new EvaluationContext();
         FunctionLibrary.Populate(ctx);
         // fn:transform lives in the XSLT layer; register it so the fn-transform test set runs.
         Bosak.Xslt.Api.XsltFunctionLibrary.Populate(ctx);
@@ -63,11 +82,9 @@ internal sealed class TestExecutor
         }
 
         // Detect XQuery-only tests by syntax (declare namespace, constructors, switch, etc.).
-        // Tests EXPECTING a static parse error (XPST0003, or any-error wildcards) still run:
-        // for XQuery-only syntax a parse failure is exactly the expected outcome. Tests
-        // expecting other error codes skip — the parser can never produce them.
-        string expr = testCase.Expression.Trim();
-        if (LooksLikeXQuery(expr) && !ExpectsParseError(testCase.ResultElement))
+        // Tests whose constructs the XQuery pipeline cannot handle yet (constructors,
+        // switch/typeswitch, unsupported prolog forms) still skip.
+        if (xquerySyntax && !ExpectsParseError(testCase.ResultElement) && !routeXQuery)
         {
             return new TestOutcome(TestOutcomeKind.Skipped, "XQuery syntax not supported");
         }
@@ -77,8 +94,16 @@ internal sealed class TestExecutor
 
         try
         {
-            var compiled = XPath31Expression.Compile(expr);
-            result = compiled.Evaluate(ctx);
+            if (routeXQuery)
+            {
+                var executable = new XQueryCompiler().Compile(expr);
+                result = executable.Evaluate(xqContext!);
+            }
+            else
+            {
+                var compiled = XPath31Expression.Compile(expr);
+                result = compiled.Evaluate(ctx);
+            }
         }
         catch (ParseException ex)
         {
@@ -100,6 +125,50 @@ internal sealed class TestExecutor
         }
 
         return ResultComparer.Compare(testCase.ResultElement, result, caughtException, testCase.BaseDirectory);
+    }
+
+    /// <summary>
+    /// True when the expression uses only XQuery constructs the Bosak.XQuery pipeline
+    /// supports today: prolog-less queries, the basic prolog declarations (namespace,
+    /// default element/function namespace, default collation, version), and full FLWOR
+    /// (for/let/where/order by/count/group by/window). Queries using constructors,
+    /// switch/typeswitch, try, unordered/ordered, validate, or unsupported prolog forms
+    /// stay skipped. String literals and comments are stripped before matching.
+    /// </summary>
+    internal static bool CanHandleAsXQuery(string expr)
+    {
+        var stripped = StripLiteralsAndComments(expr).TrimStart();
+
+        // Direct element constructors: an XQuery expression can start with '<', and a
+        // constructor can appear anywhere in the query ('<name'). A comparison '<' is
+        // followed by whitespace, '$', '(', or a literal, never by a bare name.
+        if (stripped.StartsWith('<') || ConstructorStartRegex.IsMatch(stripped))
+            return false;
+
+        // XML comment / processing-instruction / CDATA constructors ('<!--', '<?', '<![')
+        // and """...""" string constructors. Checked on the raw text: stripping only
+        // removes string literals and (: :) comments.
+        if (expr.Contains("<!--") || expr.Contains("<?") || expr.Contains("<![") || expr.Contains("\"\"\""))
+            return false;
+
+        if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
+            return false;
+
+        if (UnsupportedPrologRegex.IsMatch(stripped))
+            return false;
+
+        // The XQuery prolog parser cannot yet handle (: :) comments inside declarations.
+        if ((stripped.StartsWith("declare", StringComparison.OrdinalIgnoreCase) ||
+             stripped.StartsWith("xquery", StringComparison.OrdinalIgnoreCase) ||
+             stripped.StartsWith("import", StringComparison.OrdinalIgnoreCase)))
+        {
+            int semicolon = expr.IndexOf(';');
+            var prologPart = semicolon >= 0 ? expr[..semicolon] : expr;
+            if (prologPart.Contains("(:"))
+                return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -162,7 +231,7 @@ internal sealed class TestExecutor
     }
 
     private static readonly Regex XQueryConstructRegex = new(
-        @"\b(element|attribute)(\s+\w+\s*)?\{" +   // element/attribute constructors require { (element()/attribute() are XPath kind tests)
+        @"\b(element|attribute)(\s+[^\s{(]+)?\s*\{" +   // element/attribute constructors require { (element()/attribute() are XPath kind tests)
         @"|\b(document|text|comment)\s*\{" +        // document { ... }, text { ... }, comment { ... }
         @"|\bprocessing-instruction\s" +
         @"|\bnamespace\s+[A-Za-z_$]" +               // namespace constructor (namespace-uri( unaffected)
@@ -170,6 +239,32 @@ internal sealed class TestExecutor
         @"|\border\s+by\b|\bgroup\s+by\b|\bcount\s+\$" +  // FLWOR clauses (count( unaffected)
         @"|\bunordered\s*\{|\bvalidate\s" +
         @"|\b(sliding|tumbling)\s+window\b",
+        RegexOptions.Compiled);
+
+    // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
+    // keep their "XQuery syntax not supported" skip instead of being routed.
+    private static readonly Regex UnsupportedXQueryConstructRegex = new(
+        @"\b(element|attribute)(\s+[^\s{(]+)?\s*\{" +
+        @"|\b(document|text|comment)\s*\{" +
+        @"|\bprocessing-instruction\s" +
+        @"|\bnamespace\s+[A-Za-z_$]" +
+        @"|\bswitch\s*\(|\btry\s*\{|\btypeswitch\s*\(" +
+        @"|\bunordered\s*\{|\bordered\s*\{|\bvalidate\s" +
+        @"|\bdeclare\s+%" +                              // annotated declarations
+        @"|\(#\s*[A-Za-z_]" +                          // pragma extension expressions (# ... #)
+        @"|``\[" +                                     // string constructors ``[ ... ]``
+        RegexOptions.Compiled);
+
+    // Prolog forms the XQuery parser does NOT support (namespace, default element/function
+    // namespace, default collation, base-uri, and version declarations are supported).
+    private static readonly Regex UnsupportedPrologRegex = new(
+        @"\bdeclare\s+(variable|function|option|boundary-space|default\s+order|default\s+decimal-format|ordering|copy-namespaces|context|decimal-format|construction)\b" +
+        @"|\bimport\s+(module|schema)\b",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    // Direct element constructor opening tag anywhere in the query ('<name').
+    private static readonly Regex ConstructorStartRegex = new(
+        @"<(?=[A-Za-z_])",
         RegexOptions.Compiled);
 
     /// <summary>

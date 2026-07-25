@@ -5,14 +5,22 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 July 2026
-> **Bosak baseline:** 1,409 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 14,994 passed / 0 failed / 16,827 skipped (47.12% / 100% of runnable tests)
+> **Bosak baseline:** 1,421 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 22,947 passed / 0 failed / 8,874 skipped (72.11% / 100% of runnable tests) — XQuery routing enabled; 203 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 2 complete — `order by`, `count`, `group by`, and `window` clauses implemented with tuple-based VM lowering
+> **XQuery baseline:** Phase 2 complete — `order by`, `count`, `group by`, and `window` clauses implemented with tuple-based VM lowering; QT3 FLWOR sets green (WindowClause 34, OrderByClause 39, GroupByClause 14, CountClause 4)
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-25** — QT3 harness wired to the XQuery pipeline (REQ-045): **22,947 passed / 0 failed** (from 14,994 / 0).
+  - `Bosak.XPath.Conformance` now references `Bosak.XQuery`; tests with positive XQuery-only spec dependencies are admitted when the query uses only supported constructs (`DependencyFilter.IsSupported(..., allowXQuerySpecs)` + `TestExecutor.CanHandleAsXQuery` gating out constructors, switch/typeswitch, annotations, pragmas, string constructors, and unsupported prolog forms).
+  - Admitted tests evaluate through `XQueryCompiler` with the harness `EvaluationContext` bridged into `XQueryContext`; result comparison is unchanged. XQ-dep tests expecting parse errors also route (the XQuery parser produces the expected `XPST0003`); XPath-dep parse-error tests stay on the XPath pipeline.
+  - Engine fixes surfaced by the newly-routed tests: window end-positional is the input-sequence position and the end condition is optional; `XQST0103`; nested `For`/`Window` tuple-path blocks now `Return` accumulated tuples (multi-binding `for` + order by, `let` + order by, nested window); `as SequenceType` declarations on `for`/`let`/`some`/`every` bindings, window variables, and grouping specs (new `EnforceType` opcode, `XPTY0004`); NaN follows empty least/greatest; order-by collation validation (`XQST0076`) with base-URI resolution; `stable order by`; `declare base-uri`; version/encoding validation (`XQST0031`/`XQST0087`); duplicate default collation (`XQST0038`); prolog literals expand character references and prolog syntax errors are `XPST0003`; XQuery string literals expand entity/character references; empty inline-function bodies; date/time group keys compare by instant; FLWOR positional variables captured in tuples.
+  - The four FLWOR QT3 sets are green: WindowClause 34, OrderByClause 39, GroupByClause 14, CountClause 4 passed, 0 failed.
+  - The remaining 203 admitted-but-failing tests are recorded in `ConformanceRunner.KnownXQueryGaps` with per-set reasons — the work-item list for closing XQuery conformance (see REQ-045).
+  - QT3: 22,947 passed / 0 failed / 8,874 skipped (72.11%). Unit tests now **1,421/0**. XSLT baseline unchanged.
 
 - **2026-07-25** — XQuery 3.1 Phase 2 complete: `window` clause implemented on top of the tuple-based FLWOR path.
   - Extended `XPathParser` to parse `for tumbling|sliding window $var in expr start ... when ... (only)? end ... when ...` when `allowFullFlwor` is true, both as the initial and as an intermediate clause; XPath-only mode rejects it with `XPST0003`.

@@ -19,6 +19,8 @@
 //                      | Charles Korthout | 0.7   | 21-07-2026     | Skip tests that declare a specific unicode-version dependency                            |
 //                      | Charles Korthout | 0.8   | 21-07-2026     | Skip tests that declare a specific xml-version dependency (Bosak uses XML 1.1)              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 25-07-2026     | Optional allowXQuerySpecs mode: positive XQuery-only spec deps are treated as satisfied |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -59,7 +61,7 @@ internal sealed class DependencyFilter
         "XQ31", "XQ31+",
     };
 
-    public bool IsSupported(IReadOnlyList<Dependency> dependencies)
+    public bool IsSupported(IReadOnlyList<Dependency> dependencies, bool allowXQuerySpecs = false)
     {
 
         foreach (var dep in dependencies)
@@ -84,9 +86,14 @@ internal sealed class DependencyFilter
             {
                 // A positive dependency that is purely XQuery-only means the test uses
                 // XQuery syntax (e.g. direct element constructors) and is not applicable
-                // to an XPath-only processor.
+                // to an XPath-only processor. When the caller can route the query to the
+                // XQuery pipeline (allowXQuerySpecs), these dependencies are satisfied.
                 if (IsXqueryOnlySpec(dep))
+                {
+                    if (allowXQuerySpecs)
+                        continue;
                     return false;
+                }
 
                 var tokens = dep.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 bool thisDepSupported = false;
@@ -151,5 +158,15 @@ internal sealed class DependencyFilter
         // A spec dependency that mentions any XQuery version is not applicable to an
         // XPath-only processor, even when combined with an XPath version (e.g. XQ10+ XP30+).
         return tokens.Any(t => XqueryOnlySpecs.Contains(t));
+    }
+
+    /// <summary>
+    /// True when any dependency carries positive XQuery-only spec tokens. Such tests may
+    /// use XQuery-only grammar (e.g. multi-clause FLWOR) even when the query text does
+    /// not otherwise look like XQuery, so they must run on the XQuery pipeline.
+    /// </summary>
+    public static bool HasXQueryOnlySpecDependency(IReadOnlyList<Dependency> dependencies)
+    {
+        return dependencies.Any(d => d.Satisfied && IsXqueryOnlySpec(d));
     }
 }

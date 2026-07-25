@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 25-07-2026     | Resolve function namespaces inside WindowClauseNode conditions                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 25-07-2026     | Optional window end condition                                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -167,10 +169,12 @@ public sealed class XQueryCompiler
                 {
                     WhenExpression = ResolveFunctionNamespaces(windowClause.StartCondition.WhenExpression, context)
                 },
-                EndCondition = windowClause.EndCondition with
-                {
-                    WhenExpression = ResolveFunctionNamespaces(windowClause.EndCondition.WhenExpression, context)
-                }
+                EndCondition = windowClause.EndCondition is null
+                    ? null
+                    : windowClause.EndCondition with
+                    {
+                        WhenExpression = ResolveFunctionNamespaces(windowClause.EndCondition.WhenExpression, context)
+                    }
             },
             _ => clause
         };
