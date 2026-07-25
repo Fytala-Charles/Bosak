@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** *(pending — recorded after commit)* (feat(xquery): Phase 2 group by clause - GroupBy opcode with tuple merging)
+**Commit:** `4c32e31` (feat(xquery): Phase 2 group by clause - GroupBy opcode with tuple merging)
 **Current focus:** **XQuery 3.1 Phase 2** — `group by` clause implemented on top of the tuple-based FLWOR infrastructure. Extended `XPathParser` to parse `group by` grouping specs (`$var` or `$var := expr`, optional `collation`) in full-FLWOR mode, added `GroupByClauseNode`/`GroupingSpec` to the AST, and updated `XPathOptimizer`, `XQueryCompiler`, and `IrLowerer`. A new `GroupBy` IR opcode and VM handler group the tuple stream by key equality (first-appearance order) and merge each group: grouping variables keep the shared key value, other variables bind to the concatenated group values. `:=` specs lower as synthetic `let` bindings; a post-group `order by` re-keys grouped tuples in a second tuple pass. Added 8 XQuery unit tests covering simple grouping, computed string keys, aggregation of non-grouping variables, `where`, post-group `order by`, post-group `count`, multiple grouping specs, and XPath-mode rejection. Full `dotnet test Bosak.sln` passes: **1,402 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 2 group by)
