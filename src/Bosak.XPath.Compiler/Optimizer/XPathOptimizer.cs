@@ -26,6 +26,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 23-07-2026     | Optimize CountClauseNode (XQuery count)                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 25-07-2026     | Optimize GroupByClauseNode (XQuery group by)                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -672,8 +674,25 @@ public sealed class XPathOptimizer
             WhereClauseNode whereClause => OptimizeWhereClause(whereClause, ref changed),
             CountClauseNode countClause => OptimizeCountClause(countClause, ref changed),
             OrderByClauseNode orderClause => OptimizeOrderByClause(orderClause, ref changed),
+            GroupByClauseNode groupClause => OptimizeGroupByClause(groupClause, ref changed),
             _ => clause
         };
+    }
+
+    private GroupByClauseNode OptimizeGroupByClause(GroupByClauseNode node, ref bool changed)
+    {
+        var specs = new List<GroupingSpec>(node.Specs.Count);
+        foreach (var spec in node.Specs)
+        {
+            if (spec.KeyExpression is null)
+            {
+                specs.Add(spec);
+                continue;
+            }
+            var key = OptimizeNode(spec.KeyExpression, ref changed);
+            specs.Add(key == spec.KeyExpression ? spec : spec with { KeyExpression = key });
+        }
+        return specs.SequenceEqual(node.Specs) ? node : node with { Specs = specs };
     }
 
     private ForClauseNode OptimizeForClause(ForClauseNode node, ref bool changed)

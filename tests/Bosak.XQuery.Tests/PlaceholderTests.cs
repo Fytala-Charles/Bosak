@@ -16,9 +16,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 23-07-2026     | Added count clause tests                                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 25-07-2026     | Added group by clause tests                                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Parser.Ast;
 using Bosak.XQuery.Api;
 using Xunit;
 
@@ -249,6 +252,104 @@ public class PlaceholderTests
         Assert.True(result.IsSequence, "Expected a sequence result.");
         var items = ToIntegers(result);
         Assert.Equal(new[] { 1L, 1L, 2L, 2L, 3L, 3L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_Simple()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3, 4, 5, 6) group by $g := $i mod 2 return ($g, count($i))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 3L, 0L, 3L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_ByComputedStringKey()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $w in ('apple', 'avocado', 'banana', 'cherry', 'apricot') group by $k := substring($w, 1, 1) return $k || ':' || count($w)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToStrings(result);
+        Assert.Equal(new[] { "a:3", "b:1", "c:1" }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_AggregatesNonGroupingVariables()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3, 4) group by $g := $i mod 2 return ($g, $i)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 1L, 3L, 0L, 2L, 4L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_WithWhere()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3, 4, 5, 6) where $i > 2 group by $g := $i mod 2 return ($g, count($i))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 2L, 0L, 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_WithOrderBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3, 4, 5, 6) group by $g := $i mod 3 order by $g return ($g, count($i))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 0L, 2L, 1L, 2L, 2L, 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_WithCount()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1 to 6) group by $g := $i mod 2 count $n return ($g, $n)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 1L, 1L, 0L, 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_MultipleSpecs()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3, 4, 5) group by $a := $i mod 2, $b := $i gt 3 return $a || ':' || $b || ':' || count($i)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToStrings(result);
+        Assert.Equal(new[] { "1:false:2", "0:false:1", "0:true:1", "1:true:1" }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_XPathMode_Rejected()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => XPathParser.Parse("for $i in (1, 2) group by $i return $i"));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

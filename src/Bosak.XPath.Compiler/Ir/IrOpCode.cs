@@ -19,6 +19,8 @@
 //                      | Charles Korthout | 0.6   | 19-07-2026     | Added LoadNode opcode for unit-test node literals                                       |
 //                      | Charles Korthout | 0.7   | 22-07-2026     | Added OrderBy and TupleBind opcodes for XQuery FLWOR order by                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 25-07-2026     | Added GroupBy opcode for XQuery FLWOR group by                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -43,6 +45,7 @@ public enum IrOpCode : byte
     TryCatch,
     OrderBy,
     TupleBind,
+    GroupBy,
     
     // ---- Context -----------------------------------------------------
     LoadContext,

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-23 (XQuery 3.1 Phase 2 continued: `count` clause implemented with tuple-path integer counters; unit tests now **1,394/0**; QT3 and XSLT baselines unchanged)
+> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 2 continued: `group by` clause implemented with a `GroupBy` opcode over the tuple path; unit tests now **1,402/0**; QT3 and XSLT baselines unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -147,6 +147,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-040 | Bosak / Fytala Stack | XQuery 3.1 Phase 1 — prolog-less query execution | Wire `Bosak.XQuery` to the XPath pipeline so basic XQuery expressions compile and run | **Implemented** | Phase 4 | Charles Korthout | 2026-07-22 |
 | REQ-041 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `order by` clause | Required for full XQuery FLWOR: multi-clause for/let, where, and `order by` with ascending/descending, empty least/greatest, and collation | **Implemented** | Phase 4 | Charles Korthout | 2026-07-22 |
 | REQ-042 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `count` clause | Required for full XQuery FLWOR: `count $var` positional-variable clause, both pre- and post-`order by` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-23 |
+| REQ-043 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `group by` clause | Required for full XQuery FLWOR: `group by` grouping specs (`$var` or `$var := expr`, optional collation), grouped variable rebinding, and post-group `order by`/`count` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -1894,13 +1895,62 @@ Extend the existing tuple-based FLWOR lowering so that `count` clauses maintain 
 
 ---
 
+### REQ-043: XQuery 3.1 Phase 2 — FLWOR `group by` clause
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-25  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 requires the `group by` FLWOR intermediate clause, which partitions the tuple stream into groups sharing equal grouping keys and rebinds variables per group: grouping variables take the shared key value; all other variables are bound to the concatenation of their values across the group. Without it, aggregation queries such as `for $i in 1 to 6 group by $g := $i mod 2 return ($g, count($i))` cannot be parsed or evaluated.
+
+**Proposed Solution:**  
+Extend the tuple-based FLWOR lowering with a `GroupBy` opcode. Grouping specs of the form `$var := expr` are lowered as synthetic `let` bindings evaluated per pre-grouping tuple, so every grouping key is a variable captured in the tuple. The VM groups tuples by key equality (preserving first-appearance order) and merges each group into a single tuple. An `order by` after `group by` is supported by re-keying the grouped tuples in a second tuple pass so that sort keys are evaluated against the grouped bindings.
+
+**Acceptance Criteria:**
+- [x] `XPathParser` parses `group by` grouping specs (`$var` or `$var := expr`, optional `collation`) when `allowFullFlwor` is true.
+- [x] XPath-only mode rejects `group by` with `XPST0003`.
+- [x] Grouping variables keep the shared key value; non-grouping variables are bound to the concatenated group values.
+- [x] Empty grouping keys group together; NaN groups with NaN; a multi-item grouping key raises `XPTY0004`.
+- [x] `where` before, and `order by` / `count` after `group by` are supported.
+- [x] No regressions in XPath, XSLT, or existing unit tests.
+
+**Implementation Notes:**
+- Added `GroupByClauseNode` and `GroupingSpec` to `XPathAstNode`.
+- `XPathOptimizer` traverses grouping-spec key expressions; `XQueryCompiler` resolves their function namespaces.
+- Added `GroupBy` IR opcode and `GroupByInfo` literal-pool record.
+- `IrLowerer.LowerFlworWithGrouping` lowers `:=` specs as synthetic `let` bindings, emits `GroupBy`, and re-keys grouped tuples for a post-group `order by`.
+- `VmEngine` `GroupBy` handler groups tuples (first-appearance order) and merges each group; grouping-key equality atomizes keys and compares numerics (NaN = NaN), strings (codepoint), and booleans.
+- Unsupported shapes fail fast at compile time: multiple `group by` clauses, `order by` before `group by`, and post-group clauses other than `order by`/`count`.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | New `GroupByClauseNode`/`GroupingSpec`; `group by` parsed in full FLWOR mode. |
+| Compiler | Modified | `XPathOptimizer`, `IrLowerer`, and new `GroupBy` opcode. |
+| Runtime | Modified | New `GroupBy` VM handler and grouping-key equality helpers. |
+| Standard | None | No new standard functions. |
+| XSLT | None | No XSLT changes. |
+| API | None | Public `XQueryCompiler` surface unchanged. |
+| Conformance | None | QT3 harness not yet wired to XQuery tests. |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-25 | Kimi | Lower `:=` grouping specs as synthetic let bindings; re-key tuples for post-group `order by` | Reuses the proven tuple infrastructure and keeps the `GroupBy` opcode a pure grouping/merge operation. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 / REQ-041 / REQ-042 | **XQuery 3.1 full implementation** | In Progress | Phase 2 in progress: `order by` and `count` implemented. `group by` and `window` (Phase 2 remainder), constructors (Phase 3), and modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 / REQ-041 / REQ-042 / REQ-043 | **XQuery 3.1 full implementation** | In Progress | Phase 2 in progress: `order by`, `count`, and `group by` implemented. `window` (Phase 2 remainder), constructors (Phase 3), and modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

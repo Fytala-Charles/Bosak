@@ -4,15 +4,25 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 23 July 2026
-> **Bosak baseline:** 1,394 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 25 July 2026
+> **Bosak baseline:** 1,402 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** 14,994 passed / 0 failed / 16,827 skipped (47.12% / 100% of runnable tests)
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 2 — `order by` and `count` clauses implemented with tuple-based VM lowering
+> **XQuery baseline:** Phase 2 — `order by`, `count`, and `group by` clauses implemented with tuple-based VM lowering
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-25** — XQuery 3.1 Phase 2: `group by` clause implemented on top of the tuple-based FLWOR path.
+  - Extended `XPathParser` to parse `group by` grouping specs (`$var` or `$var := expr`, optional `collation`) when `allowFullFlwor` is true; XPath-only mode rejects it with `XPST0003`.
+  - Added `GroupByClauseNode` and `GroupingSpec` to `XPathAstNode`; `XPathOptimizer` and `XQueryCompiler` traverse/resolve grouping-spec key expressions.
+  - Added a `GroupBy` IR opcode and `GroupByInfo` literal-pool record; `IrLowerer.LowerFlworWithGrouping` lowers `:=` specs as synthetic `let` bindings so every grouping key is captured in the tuple.
+  - Added a `GroupBy` VM handler that groups tuples by key equality (first-appearance order; empty keys group together, NaN = NaN, multi-item keys raise `XPTY0004`) and merges each group: grouping variables keep the shared key value, other variables bind to the concatenated group values.
+  - A post-group `order by` re-keys the grouped tuples in a second tuple pass so sort keys are evaluated against the grouped bindings; post-group `count` clauses are also supported.
+  - Unsupported shapes fail fast at compile time: multiple `group by` clauses, `order by` before `group by`, and post-group clauses other than `order by`/`count`.
+  - Added 8 XQuery unit tests covering simple grouping, computed string keys, aggregation of non-grouping variables, `where`, post-group `order by`, post-group `count`, multiple grouping specs, and XPath-mode rejection — all pass.
+  - No regressions in XPath, XSLT, or existing unit tests; unit tests now **1,402/0**.
 
 - **2026-07-23** — XQuery 3.1 Phase 2: `count` clause implemented on top of the tuple-based FLWOR path.
   - Extended `XPathParser` to parse `count $var` as a FLWOR intermediate clause when `allowFullFlwor` is true.
@@ -1028,7 +1038,9 @@ var result = new XQueryCompiler()
 | Version declaration / namespace declarations | ✅ Working | Parsed by `XQueryParser` |
 | Default element / function / collation declarations | ✅ Working | Stored in `XQueryStaticContext` |
 | `order by` | ✅ Working | Tuple-based sorting; ascending/descending, empty least/greatest, collation |
-| `group by`, `count`, `window` | 🔮 Phase 2 | New IR/VM opcodes required |
+| `count` | ✅ Working | Compiler-managed integer counters over the tuple path |
+| `group by` | ✅ Working | `GroupBy` opcode; `$var` / `$var := expr` specs with optional collation; post-group `order by`/`count` |
+| `window` | 🔮 Phase 2 | Tumbling/sliding window clauses |
 | Direct / computed constructors | 🔮 Phase 3 | XML-like syntax and node-building opcodes |
 | Library modules / `import module` | 🔮 Phase 4 | Module resolution and shared static context |
 | Serialization | 🔮 Phase 4 | `xml`, `html`, `xhtml`, `text`, `json`, `adaptive` |

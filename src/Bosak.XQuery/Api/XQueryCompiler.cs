@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 1.0   | 22-07-2026     | Wired to XPath parser, optimizer, IR lowerer, and VM                                    |
 //                      | Charles Korthout | 1.1   | 22-07-2026     | Resolve function namespaces inside FlworExpressionNode clauses                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 25-07-2026     | Resolve function namespaces inside GroupByClauseNode specs                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -147,6 +149,13 @@ public sealed class XQueryCompiler
                 Specs = orderClause.Specs.Select(s => s with
                 {
                     KeyExpression = ResolveFunctionNamespaces(s.KeyExpression, context)
+                }).ToList()
+            },
+            GroupByClauseNode groupClause => groupClause with
+            {
+                Specs = groupClause.Specs.Select(s => s with
+                {
+                    KeyExpression = s.KeyExpression is null ? null : ResolveFunctionNamespaces(s.KeyExpression, context)
                 }).ToList()
             },
             _ => clause

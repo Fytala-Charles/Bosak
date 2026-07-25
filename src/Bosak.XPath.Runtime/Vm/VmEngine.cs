@@ -109,6 +109,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.59  | 21-07-2026     | Static function calls apply ParameterTypeNames conversion; URI promotion detects xs:anyURI annotation |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.64  | 25-07-2026     | Added GroupBy VM handler and grouping-key equality for XQuery FLWOR group by            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -857,6 +859,94 @@ public static class VmEngine
                             var item = i < items.Length ? items[i] : XdmValue.Undefined;
                             context.WithVariable(localName, item, nsUri ?? "");
                         }
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.GroupBy:
+                    {
+                        var groupInfo = (GroupByInfo)literalPool[instr.Operand]!;
+                        var tupleSequence = registers[instr.RegisterB];
+                        var tuples = MaterializeSequence(tupleSequence);
+                        var materializedTuples = new List<XdmValue[]>(tuples.Length);
+                        foreach (var tuple in tuples)
+                        {
+                            if (tuple.IsArray && tuple.ArrayValue is not null)
+                            {
+                                materializedTuples.Add(tuple.ArrayValue.Values.ToArray());
+                            }
+                            else if (tuple.IsSequence && tuple.SequenceValue is not null)
+                            {
+                                materializedTuples.Add(MaterializeSequence(tuple));
+                            }
+                            else
+                            {
+                                materializedTuples.Add(new[] { tuple });
+                            }
+                        }
+
+                        // Group tuples by their grouping keys, preserving first-appearance order.
+                        var groups = new List<List<XdmValue[]>>();
+                        foreach (var tupleItems in materializedTuples)
+                        {
+                            List<XdmValue[]>? match = null;
+                            foreach (var group in groups)
+                            {
+                                if (GroupKeysEqual(group[0], tupleItems, groupInfo))
+                                {
+                                    match = group;
+                                    break;
+                                }
+                            }
+                            if (match is null)
+                            {
+                                match = new List<XdmValue[]>();
+                                groups.Add(match);
+                            }
+                            match.Add(tupleItems);
+                        }
+
+                        // Merge each group into a single tuple: grouping variables keep their
+                        // (shared) key value; all other variables are bound to the concatenation
+                        // of their per-tuple values.
+                        var merged = new List<XdmValue>(groups.Count);
+                        foreach (var group in groups)
+                        {
+                            int arity = group[0].Length;
+                            var mergedTuple = new XdmValue[arity];
+                            for (int slot = 0; slot < arity; slot++)
+                            {
+                                if (IsGroupKeySlot(slot, groupInfo))
+                                {
+                                    mergedTuple[slot] = group[0][slot];
+                                    continue;
+                                }
+
+                                var combined = new List<XdmValue>();
+                                foreach (var member in group)
+                                {
+                                    var slotValue = slot < member.Length ? member[slot] : XdmValue.Undefined;
+                                    if (slotValue.IsSequence && slotValue.SequenceValue is not null)
+                                    {
+                                        foreach (var item in XdmSequence.FromSource(slotValue.SequenceValue))
+                                            combined.Add(item);
+                                    }
+                                    else if (!slotValue.IsUndefined)
+                                    {
+                                        combined.Add(slotValue);
+                                    }
+                                }
+                                mergedTuple[slot] = combined.Count switch
+                                {
+                                    0 => XdmValue.FromSequence(MaterializedSequence.FromList(combined)),
+                                    1 => combined[0],
+                                    _ => XdmValue.FromSequence(MaterializedSequence.FromList(combined))
+                                };
+                            }
+                            merged.Add(XdmValue.FromArray(new XdmArray(mergedTuple)));
+                        }
+
+                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(merged));
                         ip++;
                         break;
                     }
@@ -7944,6 +8034,74 @@ public static class VmEngine
     // ------------------------------------------------------------------
     // OrderBy helpers
     // ------------------------------------------------------------------
+
+    private static bool IsGroupKeySlot(int slot, GroupByInfo info)
+    {
+        for (int i = 0; i < info.KeyIndices.Count; i++)
+        {
+            if (info.KeyIndices[i] == slot)
+                return true;
+        }
+        return false;
+    }
+
+    private static bool GroupKeysEqual(XdmValue[] x, XdmValue[] y, GroupByInfo info)
+    {
+        for (int i = 0; i < info.KeyIndices.Count; i++)
+        {
+            int keyIndex = info.KeyIndices[i];
+            var keyX = keyIndex < x.Length ? x[keyIndex] : XdmValue.Undefined;
+            var keyY = keyIndex < y.Length ? y[keyIndex] : XdmValue.Undefined;
+            if (!GroupKeyValuesEqual(keyX, keyY))
+                return false;
+        }
+        return true;
+    }
+
+    private static bool GroupKeyValuesEqual(XdmValue left, XdmValue right)
+    {
+        left = SingleGroupKeyItem(Atomize(left));
+        right = SingleGroupKeyItem(Atomize(right));
+
+        // Two empty grouping keys group together.
+        if (left.IsUndefined || right.IsUndefined)
+            return left.IsUndefined && right.IsUndefined;
+
+        if (IsNumeric(left) && IsNumeric(right))
+        {
+            // Double.Equals treats NaN as equal to NaN, as XQuery grouping requires.
+            return ToDouble(left).Equals(ToDouble(right));
+        }
+
+        if (left.Kind == XdmValueKind.String && right.Kind == XdmValueKind.String)
+        {
+            return string.Equals(left.StringValue, right.StringValue, StringComparison.Ordinal);
+        }
+
+        if (left.Kind == XdmValueKind.Boolean && right.Kind == XdmValueKind.Boolean)
+        {
+            return left.BooleanValue == right.BooleanValue;
+        }
+
+        if (left.Kind == right.Kind)
+        {
+            return string.Equals(left.ToString(), right.ToString(), StringComparison.Ordinal);
+        }
+
+        return false;
+    }
+
+    private static XdmValue SingleGroupKeyItem(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+        if (!value.IsSequence || value.SequenceValue is null)
+            return value;
+        var items = MaterializeSequence(value);
+        if (items.Length > 1)
+            throw new InvalidOperationException("XPTY0004: A grouping key must evaluate to a single atomic value or the empty sequence.");
+        return items.Length == 0 ? XdmValue.Undefined : items[0];
+    }
 
     private static int CompareTuples(XdmValue[] x, XdmValue[] y, OrderByInfo info, EvaluationContext context)
     {

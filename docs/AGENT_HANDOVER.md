@@ -1,5 +1,54 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-07-25
+**Commit:** *(pending — recorded after commit)* (feat(xquery): Phase 2 group by clause - GroupBy opcode with tuple merging)
+**Current focus:** **XQuery 3.1 Phase 2** — `group by` clause implemented on top of the tuple-based FLWOR infrastructure. Extended `XPathParser` to parse `group by` grouping specs (`$var` or `$var := expr`, optional `collation`) in full-FLWOR mode, added `GroupByClauseNode`/`GroupingSpec` to the AST, and updated `XPathOptimizer`, `XQueryCompiler`, and `IrLowerer`. A new `GroupBy` IR opcode and VM handler group the tuple stream by key equality (first-appearance order) and merge each group: grouping variables keep the shared key value, other variables bind to the concatenated group values. `:=` specs lower as synthetic `let` bindings; a post-group `order by` re-keys grouped tuples in a second tuple pass. Added 8 XQuery unit tests covering simple grouping, computed string keys, aggregation of non-grouping variables, `where`, post-group `order by`, post-group `count`, multiple grouping specs, and XPath-mode rejection. Full `dotnet test Bosak.sln` passes: **1,402 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
+
+## This Session Changes (XQuery 3.1 Phase 2 group by)
+
+1. **`src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`** — Added `GroupByClauseNode` and `GroupingSpec`.
+2. **`src/Bosak.XPath.Parser/Ast/XPathParser.cs`** — Parses `group by` grouping specs when `allowFullFlwor` is true; XPath-only mode rejects it with `XPST0003`.
+3. **`src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`** — Traverses grouping-spec key expressions.
+4. **`src/Bosak.XPath.Compiler/Ir/IrOpCode.cs`** — Added `GroupBy` opcode.
+5. **`src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`** — Added `GroupByInfo`; `LowerFlworWithGrouping` lowers `:=` specs as synthetic lets, emits `GroupBy`, and re-keys grouped tuples for a post-group `order by` via `LowerFlworRekeyForOrderBy`.
+6. **`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`** — Added `GroupBy` handler and grouping-key equality helpers (empty keys group together, NaN = NaN, multi-item keys raise `XPTY0004`).
+7. **`src/Bosak.XQuery/Api/XQueryCompiler.cs`** — Resolves function namespaces inside `GroupByClauseNode` specs.
+8. **`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`** — Added 8 `group by` tests.
+9. **`docs/FEATURE_REQUESTS.md`** — Added and marked implemented `REQ-043`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`
+- `src/Bosak.XPath.Compiler/Ir/IrOpCode.cs`
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `src/Bosak.XQuery/Api/XQueryCompiler.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/ARCHITECTURE.md`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `README.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Scope Limits (group by)
+
+- One `group by` clause per FLWOR expression; `order by` is supported only **after** `group by`; post-group clauses are limited to `order by` and `count`. Other shapes raise `NotSupportedException` at compile time.
+- Grouping-spec `collation` is parsed and stored, but string keys compare ordinal (codepoint), matching the existing `order by` behaviour.
+
+## Next Recommended Step
+
+XQuery 3.1 Phase 2 is nearly complete. The remaining Phase 2 item is the **`window`** clause (tumbling/sliding).
+
+- `window` needs new clause AST plus VM support for tumbling/sliding windows over the tuple stream; it is the largest of the Phase 2 clauses.
+- Alternatively, wire the QT3 harness to run `prod/GroupByClause.xml` (and the existing order by / count sets) through the XQuery pipeline now that support exists.
+- Then Phase 3 (constructors) and Phase 4 (modules/serialization) per the roadmap.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-07-23
 **Commit:** `19ae4f7` (feat(xquery): Phase 2 count clause - tuple-path positional variable)
 **Current focus:** **XQuery 3.1 Phase 2** — `count` clause implemented on top of the tuple-based FLWOR infrastructure. Extended `XPathParser` to recognise `count $var` as a FLWOR intermediate clause in full-FLWOR mode, added `CountClauseNode` to the AST, and updated `XPathOptimizer` and `IrLowerer` to maintain compiler-managed integer counters during tuple construction and post-`order by` iteration. Added 5 XQuery unit tests covering simple count, count with `where`, count with `let`, pre-`order by` count, and post-`order by` count. Full `dotnet test Bosak.sln` passes: **1,394 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.

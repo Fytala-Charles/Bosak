@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 23-07-2026     | Added CountClauseNode for XQuery FLWOR count clause                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 25-07-2026     | Added GroupByClauseNode and GroupingSpec for XQuery FLWOR group by                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -135,6 +137,17 @@ public enum EmptyOrder
     Least,
     Greatest
 }
+
+/// <summary>A group by clause: <c>group by $var (:= expr)? (collation 'uri')?, ...</c>.</summary>
+public sealed record GroupByClauseNode(IReadOnlyList<GroupingSpec> Specs) : FlworClauseNode;
+
+/// <summary>A single grouping specification inside a group by clause.</summary>
+public sealed record GroupingSpec(
+    string VariableName,
+    XPathAstNode? KeyExpression = null,
+    string? CollationUri = null,
+    string? Prefix = null,
+    string? NamespaceUri = null);
 
 public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null);
 

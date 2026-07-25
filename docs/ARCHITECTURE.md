@@ -378,7 +378,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 | Priority | Phase | Deliverable | Status | Notes |
 |----------|-------|-------------|--------|-------|
-| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 2 | `order by` and `count` clauses implemented with tuple-based VM lowering. `group by` and `window` (Phase 2 remainder), constructors (Phase 3), and modules/serialization (Phase 4) follow. |
+| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 2 | `order by`, `count`, and `group by` clauses implemented with tuple-based VM lowering. `window` (Phase 2 remainder), constructors (Phase 3), and modules/serialization (Phase 4) follow. |
 | 2 | — | **XSLT 3.0 packages** | 🔮 Planned | `xsl:package`, `xsl:use-package`. Completes the XSLT 3.0 surface. |
 | 3 | — | **Schema awareness / XSD validation** | 🔮 Planned | Cross-cutting feature for XPath + XSLT; clears remaining schema-dependent skips. |
 | 4 | 5 | **Streaming** | 🔮 Planned | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
@@ -582,7 +582,7 @@ src/
 |---------|--------|-------|
 | `order by` | ✅ Implemented | Tuple-based lowering with `OrderBy`/`TupleBind` opcodes; supports ascending/descending, empty least/greatest, and collation |
 | `count` | ✅ Implemented | Compiler-managed integer counters during tuple construction/post-`order by` iteration; no new VM opcode |
-| `group by` | 🔮 Phase 2 | New IR/VM opcode for grouping tuples |
+| `group by` | ✅ Implemented | `GroupBy` opcode merges the tuple stream by grouping-key equality; `:=` specs lowered as synthetic lets; post-group `order by` via a re-keying pass |
 | `window` | 🔮 Phase 2 | Tumbling/sliding window clauses |
 
 #### Phase 3 — Constructors and XQuery-specific expressions

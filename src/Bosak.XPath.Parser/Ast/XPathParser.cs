@@ -45,6 +45,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.20  | 23-07-2026     | Parse XQuery FLWOR count clause                                                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.21  | 25-07-2026     | Parse XQuery FLWOR group by clause                                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -237,7 +239,7 @@ public sealed class XPathParser
 
     // FLWORExpr ::= InitialClause IntermediateClause* "return" ExprSingle
     // InitialClause ::= ForClause | LetClause
-    // IntermediateClause ::= ForClause | LetClause | WhereClause | CountClause | OrderByClause
+    // IntermediateClause ::= ForClause | LetClause | WhereClause | CountClause | OrderByClause | GroupByClause
     // ForClause ::= "for" ForBinding ("," ForBinding)*
     // ForBinding ::= "$" VarName ("at" "$" VarName)? "in" ExprSingle
     // LetClause ::= "let" LetBinding ("," LetBinding)*
@@ -246,6 +248,8 @@ public sealed class XPathParser
     // CountClause ::= "count" "$" VarName
     // OrderByClause ::= "order by" OrderSpec ("," OrderSpec)*
     // OrderSpec ::= ExprSingle ("ascending" | "descending")? ("empty" ("least" | "greatest"))? ("collation" URILiteral)?
+    // GroupByClause ::= "group by" GroupingSpec ("," GroupingSpec)*
+    // GroupingSpec ::= "$" VarName (":=" ExprSingle)? ("collation" URILiteral)?
     private XPathAstNode ParseForExpr() => ParseFlworExpr();
 
     private XPathAstNode ParseLetExpr() => ParseFlworExpr();
@@ -306,6 +310,21 @@ public sealed class XPathParser
                     throw new ParseException("XQST0003: Expected 'by' after 'order'.", Current.Start);
                 }
             }
+            else if (Current.Kind == TokenKind.Name && GetString(Current) == "group")
+            {
+                if (!_allowFullFlwor)
+                    throw new ParseException("XPST0003: XPath does not allow a group by clause.", Current.Start);
+                Advance();
+                if (Current.Kind == TokenKind.Name && GetString(Current) == "by")
+                {
+                    Advance();
+                    clauses.Add(new GroupByClauseNode(ParseGroupingSpecs()));
+                }
+                else
+                {
+                    throw new ParseException("XQST0003: Expected 'by' after 'group'.", Current.Start);
+                }
+            }
             else
             {
                 break;
@@ -315,23 +334,23 @@ public sealed class XPathParser
         Expect(TokenKind.KeywordReturn);
         var body = ParseExprSingle();
 
-        // For simple cases with no order by or count (and only one initial for/let + optional where),
+        // For simple cases with no order by, count, or group by (and only one initial for/let + optional where),
         // preserve the existing nested For/Let/If AST for backward compatibility.
-        if (clauses.Count == 1 && clauses[0] is ForClauseNode forClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
+        if (clauses.Count == 1 && clauses[0] is ForClauseNode forClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode or GroupByClauseNode))
         {
             return WithSpan(new ForExpressionNode(forClause.Bindings, body), start, End);
         }
-        if (clauses.Count == 1 && clauses[0] is LetClauseNode letClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
+        if (clauses.Count == 1 && clauses[0] is LetClauseNode letClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode or GroupByClauseNode))
         {
             return WithSpan(new LetExpressionNode(letClause.Bindings, body), start, End);
         }
-        if (clauses.Count == 2 && clauses[0] is ForClauseNode forClause2 && clauses[1] is WhereClauseNode whereClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
+        if (clauses.Count == 2 && clauses[0] is ForClauseNode forClause2 && clauses[1] is WhereClauseNode whereClause && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode or GroupByClauseNode))
         {
             var filteredBody = WithSpan(new IfExpressionNode(whereClause.Condition, body,
                 new SequenceExpressionNode(Array.Empty<XPathAstNode>())), start, End);
             return WithSpan(new ForExpressionNode(forClause2.Bindings, filteredBody), start, End);
         }
-        if (clauses.Count == 2 && clauses[0] is LetClauseNode letClause2 && clauses[1] is WhereClauseNode whereClause2 && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode))
+        if (clauses.Count == 2 && clauses[0] is LetClauseNode letClause2 && clauses[1] is WhereClauseNode whereClause2 && !clauses.Any(c => c is OrderByClauseNode or CountClauseNode or GroupByClauseNode))
         {
             var filteredBody = WithSpan(new IfExpressionNode(whereClause2.Condition, body,
                 new SequenceExpressionNode(Array.Empty<XPathAstNode>())), start, End);
@@ -387,6 +406,34 @@ public sealed class XPathParser
             }
 
             specs.Add(new OrderSpec(key, descending, emptyOrder, collation));
+        } while (Match(TokenKind.Comma));
+        return specs;
+    }
+
+    private IReadOnlyList<GroupingSpec> ParseGroupingSpecs()
+    {
+        var specs = new List<GroupingSpec>();
+        do
+        {
+            Expect(TokenKind.Dollar);
+            var nameTok = ExpectName();
+            var (prefix, local, ns) = SplitQName(GetString(nameTok));
+
+            XPathAstNode? keyExpression = null;
+            if (Match(TokenKind.Assign))
+            {
+                keyExpression = ParseExprSingle();
+            }
+
+            string? collation = null;
+            if (Current.Kind == TokenKind.Name && GetString(Current) == "collation")
+            {
+                Advance();
+                var lit = Expect(TokenKind.StringLiteral);
+                collation = Unquote(GetString(lit));
+            }
+
+            specs.Add(new GroupingSpec(local, keyExpression, collation, prefix, ns));
         } while (Match(TokenKind.Comma));
         return specs;
     }
