@@ -170,6 +170,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.71  | 25-07-2026     | distinct-values returns atomized values; day-from-dateTime parameter conversion       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.72  | 25-07-2026     | fn:document-uri returns an xs:anyURI-annotated value (K2-DocumentURIFunc-11)            |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -7060,7 +7062,7 @@ public static class FunctionLibrary
         if (node.NodeKind != XdmNodeKind.Document)
             return XdmValue.Undefined;
         var uri = node.DocumentUri;
-        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri, "anyURI");
     }
 
     private static XdmValue DocumentUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7088,7 +7090,7 @@ public static class FunctionLibrary
         if (node.NodeKind != XdmNodeKind.Document)
             return XdmValue.Undefined;
         var uri = node.DocumentUri;
-        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri);
+        return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri, "anyURI");
     }
 
     private static XdmValue Nilled_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

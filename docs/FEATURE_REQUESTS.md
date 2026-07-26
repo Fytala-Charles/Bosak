@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 3 complete: **computed constructors** implemented end-to-end; QT3 now **25,846 passed / 0 failed** (81.22%); unit tests **1,458/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 3 follow-up: **switch / typeswitch expressions** implemented; QT3 now **25,928 passed / 0 failed** (81.48%); unit tests **1,470/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -152,6 +152,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-045 | *(internal)* | QT3 harness XQuery routing + conformance sweep | Validate the XQuery pipeline against the W3C QT3 suite; route supported XQuery tests, fix surfaced engine gaps, keep Failed=0 | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-046 | *(internal)* | XQuery 3.1 Phase 3 — direct element constructors | Required for XQuery element construction: direct element/comment/PI constructors with computed attributes/content, constructor-local namespaces, and copy semantics | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-047 | *(internal)* | XQuery 3.1 Phase 3 — computed constructors | Required for full XQuery construction: `element`/`attribute`/`text`/`document`/`comment`/`processing-instruction`/`namespace` with static EQName or computed (`{expr}`) names | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
+| REQ-048 | *(internal)* | XQuery 3.1 Phase 3 — `switch` / `typeswitch` expressions | Required for full XQuery expressions: `switch` value matching and `typeswitch` type matching with case variables, default clause, and sequence-type unions | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2142,13 +2143,58 @@ AST nodes for the seven computed constructor forms, parser recognition gated on 
 
 ---
 
+### REQ-048: XQuery 3.1 Phase 3 — switch / typeswitch expressions
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-25  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 adds two conditional expressions that XPath 3.1 lacks: `switch` (value matching: `switch (E) case V1 case V2 return R1 ... default return RD`) and `typeswitch` (type matching: `typeswitch (E) case $v as T return R ... default ($d)? return RD`, including sequence-type unions `case $i as xs:integer | xs:string`). Without them, ~200 QT3 tests were gated, and any query using the most common XQuery branching form could not run.
+
+**Proposed Solution:**  
+Parse both forms as dedicated AST nodes (`SwitchExpressionNode`, `TypeswitchExpressionNode`) in XQuery mode only (a `switch`/`typeswitch` name followed by `(`), then desugar in the IR lowerer — no new opcodes. `switch` becomes a synthetic `let` over the operand plus a nested `if`/`or` chain of `eq` value comparisons (case operands evaluate lazily in order, so errors in later cases do not surface after a match). `typeswitch` becomes the same `let` plus a chain of `instance of` checks (one per union member) with the case/default variables bound as nested `let`s, preserving per-branch scoping.
+
+**Acceptance Criteria:**
+- [x] `switch` with single- and multi-value cases, nested switch, lazy case evaluation, and default fallback.
+- [x] `typeswitch` with atomic types (subtype-aware), node kinds, `empty-sequence()`, occurrence indicators, sequence-type unions, case variables, and default variables.
+- [x] Case/default variables scoped to their own branch only.
+- [x] `typeswitch (…)` on the XPath pipeline remains XPST0003 (reserved function name).
+- [x] QT3 sets: SwitchExpr 67/3, TypeswitchExpr 62/3 (the 3 remaining are `K2-sequenceExprTypeswitch-5/9/11`, which require static variable-scope analysis — the engine is dynamically scoped; recorded as gaps). Full suite: **25,928 passed / 0 failed / 5,893 skipped (81.48%)**.
+- [x] Supporting fixes: `fn:document-uri` returns an `xs:anyURI`-annotated value (K2-DocumentURIFunc-11); harness routing keeps XPath-only tests expecting a parse error on the XPath pipeline even inside XQuery test sets (typeswitch-in-xpath); optimizer switch/typeswitch traversal is reference-transparent (no fixpoint loop from fresh list instances).
+
+**Implementation Notes:**
+- Parser: `ParseSwitchExpr`/`ParseTypeswitchExpr` hooked into `ParseExprSingle` gated on `_allowFullFlwor`; `SequenceTypeUnion` (`|`) supported in typeswitch case clauses.
+- Lowerer: `LowerSwitch`/`LowerTypeswitch` synthesize `let`/`if`/`eq`/`or`/`instance-of` AST and lower it (the established FLWOR-without-order-by pattern); synthetic operand variables are numbered `__switch_N`/`__typeswitch_N`.
+- Harness: `TestCase.OwnDependencies` distinguishes case-level from set-level spec dependencies for pipeline routing.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | switch/typeswitch forms; sequence-type unions in case clauses. |
+| Compiler | Modified | Desugar lowering; optimizer traversal for the new nodes. |
+| Runtime | None | No new opcodes; desugared trees run on existing machinery. |
+| Standard | Modified | `fn:document-uri` annotates `xs:anyURI`. |
+| XSLT | None | No XSLT changes; XSLT baseline unchanged. |
+| Conformance | Modified | switch/typeswitch admitted; XPath-only parse-error routing exception; `KnownXQueryGaps` regenerated (310 reasoned skips). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-25 | Kimi | Desugar to let/if/eq/instance-of chains in the lowerer instead of new opcodes | Reuses proven machinery (value comparison, instance-of, let scoping) with zero VM risk; lazy if-chains give the spec's error semantics for free. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-047 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors); QT3 wired (25,846/0, 81.22%). Modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 … REQ-048 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); QT3 wired (25,928/0, 81.48%). Modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

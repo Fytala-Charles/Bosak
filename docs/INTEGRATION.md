@@ -5,14 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 July 2026
-> **Bosak baseline:** 1,458 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 25,846 passed / 0 failed / 5,975 skipped (81.22% / 100% of runnable tests) — XQuery routing enabled; 307 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,470 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 25,928 passed / 0 failed / 5,893 skipped (81.48% / 100% of runnable tests) — XQuery routing enabled; 310 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 3 complete — full core FLWOR + direct and computed constructors with constructor-local namespaces
+> **XQuery baseline:** Phase 3 complete — full core FLWOR, direct and computed constructors, switch/typeswitch expressions
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-25** — XQuery 3.1: **switch / typeswitch expressions** (REQ-048): QT3 **25,928 passed / 0 failed** (from 25,846; +82).
+  - `switch (E) case V1 case V2 return R1 ... default return RD` and `typeswitch (E) case $v as T return R ... default ($d)? return RD` parsed as dedicated AST nodes (XQuery mode only) and desugared in the IR lowerer to synthetic `let` + nested `if` chains — no new opcodes.
+  - `switch` compares with `eq` value-comparison semantics; case operands evaluate lazily in order (errors in later cases never surface after a match). `typeswitch` uses `instance of` checks with per-branch variable scoping; sequence-type unions (`case $i as xs:integer | xs:string`) supported.
+  - Supporting fixes: `fn:document-uri` returns an `xs:anyURI`-annotated value; harness keeps XPath-only tests expecting a parse error on the XPath pipeline even inside XQuery test sets; optimizer traversal for the new nodes is reference-transparent (no fixpoint loop).
+  - QT3 sets: SwitchExpr 67/3, TypeswitchExpr 62/3 (the 3 remaining need static variable-scope analysis — recorded as gaps).
+  - Unit tests now **1,470/0**; XSLT baseline unchanged.
 
 - **2026-07-25** — XQuery 3.1 Phase 3 complete: **computed constructors** (REQ-047): QT3 **25,846 passed / 0 failed** (from 25,060; +786).
   - All seven computed constructor forms (`element`/`attribute`/`document`/`text`/`comment`/`processing-instruction`/`namespace`) with static EQName or computed `{expr}` names; parser recognition hooked into step expressions so `element` is not swallowed as a name test; keywords usable as constructor names (`attribute return {()}`).

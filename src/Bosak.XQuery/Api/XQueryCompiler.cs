@@ -24,6 +24,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 25-07-2026     | Resolve function namespaces inside computed constructors                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 25-07-2026     | Resolve function namespaces inside switch/typeswitch expressions                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -140,6 +142,22 @@ public sealed class XQueryCompiler
             {
                 PrefixExpression = n.PrefixExpression is null ? null : ResolveFunctionNamespaces(n.PrefixExpression, context),
                 UriExpression = ResolveFunctionNamespaces(n.UriExpression, context)
+            },
+            SwitchExpressionNode sw => sw with
+            {
+                Operand = ResolveFunctionNamespaces(sw.Operand, context),
+                Cases = sw.Cases.Select(c => c with
+                {
+                    Values = c.Values.Select(v => ResolveFunctionNamespaces(v, context)).ToList(),
+                    Return = ResolveFunctionNamespaces(c.Return, context)
+                }).ToList(),
+                Default = ResolveFunctionNamespaces(sw.Default, context)
+            },
+            TypeswitchExpressionNode ts => ts with
+            {
+                Operand = ResolveFunctionNamespaces(ts.Operand, context),
+                Cases = ts.Cases.Select(c => c with { Return = ResolveFunctionNamespaces(c.Return, context) }).ToList(),
+                Default = ResolveFunctionNamespaces(ts.Default, context)
             },
             MapConstructorNode mc => mc with { Entries = mc.Entries.Select(e => e with { Key = ResolveFunctionNamespaces(e.Key, context), Value = ResolveFunctionNamespaces(e.Value, context) }).ToList() },
             ArrayConstructorNode ac => ac with { Items = ac.Items.Select(i => ResolveFunctionNamespaces(i, context)).ToList() },

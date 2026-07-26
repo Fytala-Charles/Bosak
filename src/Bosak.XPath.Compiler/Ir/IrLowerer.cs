@@ -51,6 +51,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.20  | 25-07-2026     | Lower computed constructors; window/tuple variable bindings keep prefixes and EQName namespaces |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.21  | 25-07-2026     | Lower switch/typeswitch by desugaring to let/if/eq/instance-of chains                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -243,6 +245,8 @@ public sealed class IrLowerer
             BinaryExpressionNode n => LowerBinary(n, targetReg),
             UnaryExpressionNode n => LowerUnary(n, targetReg),
             IfExpressionNode n => LowerIf(n, targetReg),
+            SwitchExpressionNode n => LowerSwitch(n, targetReg),
+            TypeswitchExpressionNode n => LowerTypeswitch(n, targetReg),
             FunctionCallNode n => LowerFunctionCall(n, targetReg),
             PathExprNode n => LowerPathExpr(n, targetReg),
             StepNode n => LowerStepAsPath(n, targetReg),
@@ -576,6 +580,66 @@ public sealed class IrLowerer
         PatchJump(jumpToEnd, endLabel);
 
         return resultReg;
+    }
+
+    private int _nextSyntheticVar;
+
+    // switch (E) case V1 case V2 return R1 ... default return RD
+    // Desugars to: let $__switch_N := E return
+    //   if ($__switch_N eq V1 or $__switch_N eq V2) then R1 else (... else RD)
+    // Case operands compare with value-comparison (eq) semantics and evaluate lazily
+    // in order, so errors in later cases do not surface after a match.
+    private int LowerSwitch(SwitchExpressionNode node, int? targetReg)
+    {
+        var tmp = $"__switch_{_nextSyntheticVar++}";
+        XPathAstNode body = node.Default;
+        for (int i = node.Cases.Count - 1; i >= 0; i--)
+        {
+            var clause = node.Cases[i];
+            XPathAstNode? condition = null;
+            foreach (var value in clause.Values)
+            {
+                var eq = new BinaryExpressionNode(new VariableReferenceNode(tmp), BinaryOperator.Eq, value);
+                condition = condition is null ? eq : new BinaryExpressionNode(condition, BinaryOperator.Or, eq);
+            }
+            body = new IfExpressionNode(condition!, clause.Return, body);
+        }
+        return LowerNode(new LetExpressionNode(
+            new[] { new QuantifiedBinding(tmp, node.Operand) }, body), targetReg);
+    }
+
+    // typeswitch (E) case $v as T return R ... default ($d)? return RD
+    // Desugars to: let $__typeswitch_N := E return
+    //   if ($__typeswitch_N instance of T) then (let $v := $__typeswitch_N return R) else (...)
+    private int LowerTypeswitch(TypeswitchExpressionNode node, int? targetReg)
+    {
+        var tmp = $"__typeswitch_{_nextSyntheticVar++}";
+
+        XPathAstNode Bind(string? local, string? prefix, string? ns, XPathAstNode expr) =>
+            local is null
+                ? expr
+                : new LetExpressionNode(
+                    new[] { new QuantifiedBinding(local, new VariableReferenceNode(tmp), VariablePrefix: prefix, VariableNamespaceUri: ns) },
+                    expr);
+
+        XPathAstNode body = Bind(node.DefaultVariableName, node.DefaultVariablePrefix, node.DefaultVariableNamespaceUri, node.Default);
+        for (int i = node.Cases.Count - 1; i >= 0; i--)
+        {
+            var clause = node.Cases[i];
+            // A case matches when the operand is an instance of ANY member of the type union.
+            XPathAstNode? condition = null;
+            foreach (var type in clause.Types)
+            {
+                var instanceOf = new InstanceOfNode(new VariableReferenceNode(tmp), type.Local, type.Prefix, type.Occurrence);
+                condition = condition is null ? instanceOf : new BinaryExpressionNode(condition, BinaryOperator.Or, instanceOf);
+            }
+            body = new IfExpressionNode(
+                condition!,
+                Bind(clause.VariableName, clause.VariablePrefix, clause.VariableNamespaceUri, clause.Return),
+                body);
+        }
+        return LowerNode(new LetExpressionNode(
+            new[] { new QuantifiedBinding(tmp, node.Operand) }, body), targetReg);
     }
 
     // ------------------------------------------------------------------

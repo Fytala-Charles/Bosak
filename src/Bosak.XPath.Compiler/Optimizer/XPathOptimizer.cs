@@ -36,6 +36,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 25-07-2026     | Optimize computed constructor nodes                                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 25-07-2026     | Optimize switch/typeswitch nodes (reference-transparent rebuilds)                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -104,6 +106,8 @@ public sealed class XPathOptimizer
             ComputedCommentConstructorNode n => OptimizeComputedConstructor(n, ref changed),
             ComputedPIConstructorNode n => OptimizeComputedConstructor(n, ref changed),
             ComputedNamespaceConstructorNode n => OptimizeComputedConstructor(n, ref changed),
+            SwitchExpressionNode n => OptimizeSwitch(n, ref changed),
+            TypeswitchExpressionNode n => OptimizeTypeswitch(n, ref changed),
             FunctionCallNode call => OptimizeFunctionCall(call, ref changed),
             LetExpressionNode let => OptimizeLet(let, ref changed),
             DynamicFunctionCallNode dyn => OptimizeDynamicFunctionCall(dyn, ref changed),
@@ -141,6 +145,64 @@ public sealed class XPathOptimizer
             },
             _ => node
         };
+    }
+
+    private SwitchExpressionNode OptimizeSwitch(SwitchExpressionNode node, ref bool changed)
+    {
+        var operand = OptimizeNode(node.Operand, ref changed);
+        bool anyChanged = operand != node.Operand;
+        var cases = new List<SwitchCaseClause>(node.Cases.Count);
+        foreach (var clause in node.Cases)
+        {
+            var values = new List<XPathAstNode>(clause.Values.Count);
+            bool valuesChanged = false;
+            foreach (var value in clause.Values)
+            {
+                var optValue = OptimizeNode(value, ref changed);
+                values.Add(optValue);
+                if (optValue != value) valuesChanged = true;
+            }
+            var optReturn = OptimizeNode(clause.Return, ref changed);
+            if (valuesChanged || optReturn != clause.Return)
+            {
+                anyChanged = true;
+                cases.Add(clause with { Values = values, Return = optReturn });
+            }
+            else
+            {
+                cases.Add(clause);
+            }
+        }
+        var optDefault = OptimizeNode(node.Default, ref changed);
+        if (!anyChanged && optDefault == node.Default)
+            return node;
+        changed = true;
+        return node with { Operand = operand, Cases = cases, Default = optDefault };
+    }
+
+    private TypeswitchExpressionNode OptimizeTypeswitch(TypeswitchExpressionNode node, ref bool changed)
+    {
+        var operand = OptimizeNode(node.Operand, ref changed);
+        bool anyChanged = operand != node.Operand;
+        var cases = new List<TypeswitchCaseClause>(node.Cases.Count);
+        foreach (var clause in node.Cases)
+        {
+            var optReturn = OptimizeNode(clause.Return, ref changed);
+            if (optReturn != clause.Return)
+            {
+                anyChanged = true;
+                cases.Add(clause with { Return = optReturn });
+            }
+            else
+            {
+                cases.Add(clause);
+            }
+        }
+        var optDefault = OptimizeNode(node.Default, ref changed);
+        if (!anyChanged && optDefault == node.Default)
+            return node;
+        changed = true;
+        return node with { Operand = operand, Cases = cases, Default = optDefault };
     }
 
     private DirectElementConstructorNode OptimizeDirectElementConstructor(DirectElementConstructorNode node, ref bool changed)

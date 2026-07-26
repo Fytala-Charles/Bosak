@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 25-07-2026     | Added computed constructor and prefixed window variable tests                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 25-07-2026     | Added switch and typeswitch expression tests                                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -932,6 +934,138 @@ public class PlaceholderTests
         var ctx = new XQueryContext();
         var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
         Assert.Contains("XQTY0024", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Switch_BasicMatch()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("switch (\"b\") case \"a\" return \"A\" case \"b\" return \"B\" default return \"?\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("B", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Switch_MultiValueCase()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("switch (2) case 1 case 2 return \"small\" case 3 return \"three\" default return \"big\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("small", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Switch_NoMatch_UsesDefault()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("switch (\"z\") case \"a\" return \"A\" default return \"def\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("def", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Switch_NestedOperand()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("switch (switch (1) case 1 return \"x\" default return \"y\") case \"x\" return \"inner\" default return \"outer\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("inner", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Switch_LaterCaseError_NotSurfaced()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("switch (1) case 1 return \"ok\" case (1 div 0) return \"err\" default return \"d\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("ok", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Typeswitch_AtomicTypes()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("typeswitch (42) case xs:string return \"string\" case xs:integer return \"integer\" default return \"other\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("integer", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Typeswitch_FirstMatchWins()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("typeswitch (42) case xs:decimal return \"decimal\" case xs:integer return \"integer\" default return \"other\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("decimal", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Typeswitch_NodeKind()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("typeswitch (<a/>) case text() return \"text\" case element() return \"element\" default return \"other\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("element", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Typeswitch_CaseVariable()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("typeswitch (\"hi\") case $s as xs:string return concat(\"got:\", $s) default return \"other\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("got:hi", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Typeswitch_DefaultVariable()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("typeswitch (1.5) case xs:integer return \"int\" default $d return concat(\"default:\", $d)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("default:1.5", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Typeswitch_EmptySequence()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("typeswitch (()) case empty-sequence() return \"empty\" default return \"nonempty\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("empty", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Typeswitch_OccurrenceIndicator()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("typeswitch ((1, 2)) case xs:integer return \"one\" case xs:integer+ return \"many\" default return \"other\"");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("many", result.StringValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

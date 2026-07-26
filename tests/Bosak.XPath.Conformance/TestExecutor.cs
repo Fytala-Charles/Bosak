@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 25-07-2026     | Admit computed constructors in the XQuery construct gate                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 25-07-2026     | Admit switch/typeswitch in the XQuery construct gate                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -53,8 +55,16 @@ internal sealed class TestExecutor
         // malformed XQuery (and XQuery-only literal rules) with the expected XPST0003.
         // XPath-dep tests EXPECTING a static parse error keep running on the XPath
         // pipeline: for XQuery-only syntax a parse failure is exactly the expected outcome.
+        // A test whose OWN spec dependencies are XPath-only and that expects a parse error
+        // (e.g. "typeswitch disallowed in XPath") stays on the XPath pipeline even when the
+        // enclosing test set carries XQuery spec dependencies.
+        bool expectsParseError = ExpectsParseError(testCase.ResultElement);
+        bool xpathOnlyCase = expectsParseError &&
+            testCase.OwnDependencies.Any(d => d.Type == "spec") &&
+            !DependencyFilter.HasXQueryOnlySpecDependency(testCase.OwnDependencies);
         bool routeXQuery = CanHandleAsXQuery(expr) &&
-                           (hasXqDeps || (xquerySyntax && !ExpectsParseError(testCase.ResultElement)));
+                           !xpathOnlyCase &&
+                           (hasXqDeps || (xquerySyntax && !expectsParseError));
 
         var xqContext = routeXQuery ? new XQueryContext() : null;
         var ctx = xqContext?.EvaluationContext ?? new EvaluationContext();
@@ -88,7 +98,7 @@ internal sealed class TestExecutor
         // Detect XQuery-only tests by syntax (declare namespace, constructors, switch, etc.).
         // Tests whose constructs the XQuery pipeline cannot handle yet (constructors,
         // switch/typeswitch, unsupported prolog forms) still skip.
-        if (xquerySyntax && !ExpectsParseError(testCase.ResultElement) && !routeXQuery)
+        if (xquerySyntax && !expectsParseError && !routeXQuery)
         {
             return new TestOutcome(TestOutcomeKind.Skipped, "XQuery syntax not supported");
         }
@@ -241,7 +251,7 @@ internal sealed class TestExecutor
     // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
     // keep their "XQuery syntax not supported" skip instead of being routed.
     private static readonly Regex UnsupportedXQueryConstructRegex = new(
-        @"\bswitch\s*\(|\btry\s*\{|\btypeswitch\s*\(" +
+        @"\btry\s*\{" +
         @"|\bunordered\s*\{|\bordered\s*\{|\bvalidate\s" +
         @"|\bdeclare\s+%" +                              // annotated declarations
         @"|\(#\s*[A-Za-z_]" +                          // pragma extension expressions (# ... #)

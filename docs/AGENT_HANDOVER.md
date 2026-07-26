@@ -1,6 +1,40 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
+**Commit:** `TBD` (feat(xquery): switch and typeswitch expressions)
+**Current focus:** **XQuery 3.1 — switch / typeswitch expressions** implemented: both forms parse as dedicated AST nodes in XQuery mode and desugar in the IR lowerer to synthetic `let` + nested `if` chains (`eq` value comparisons for switch, `instance of` checks for typeswitch) — no new opcodes. QT3 went from **25,846 passed / 0 failed / 5,975 skipped (81.22%)** to **25,928 passed / 0 failed / 5,893 skipped (81.48%)** (+82 passing). Full `dotnet test Bosak.sln` passes: **1,470 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (switch / typeswitch)
+
+1. **AST/Parser** — `SwitchExpressionNode`/`SwitchCaseClause`/`TypeswitchExpressionNode`/`TypeswitchCaseClause`/`TypeswitchCaseType` records; `ParseSwitchExpr`/`ParseTypeswitchExpr` hooked into `ParseExprSingle` gated on `_allowFullFlwor` (XPath keeps XPST0003); multi-value `case` accumulation; sequence-type unions (`case $i as xs:integer | xs:string`).
+2. **Lowering (desugar)** — `LowerSwitch`: `let $__switch_N := E return if ($__switch_N eq V1 or …) then R1 else (… else RD)`; `LowerTypeswitch`: same operand let + `instance of` chains with case/default variables bound as nested lets (per-branch scoping). Lazy if-chains give the spec's error semantics (later cases never evaluated after a match).
+3. **Optimizer** — traversal for the new nodes is reference-transparent: rebuild only when a child actually changed (records compare by value, but fresh `List<>` members break fixpoint — caused a compile-time infinite loop on `let … return switch($v) …`).
+4. **Supporting fixes** — `fn:document-uri` returns an `xs:anyURI`-annotated value (K2-DocumentURIFunc-11); harness routing keeps XPath-only tests expecting a parse error on the XPath pipeline even inside XQuery test sets (`TestCase.OwnDependencies`, typeswitch-in-xpath); `KnownXQueryGaps` regenerated from a true-list run (**310 reasoned skips**, +3: `K2-sequenceExprTypeswitch-5/9/11` need static variable-scope analysis — the engine is dynamically scoped for `let`).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/{XPathAstNode,XPathParser}.cs`
+- `src/Bosak.XPath.Compiler/{Optimizer/XPathOptimizer,Ir/IrLowerer}.cs`
+- `src/Bosak.XQuery/Api/XQueryCompiler.cs`
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (document-uri annotation)
+- `tests/Bosak.XPath.Conformance/{TestExecutor,TestCase,ConformanceRunner}.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (310 recorded skips)
+
+Largest clusters: `prod/Annotation` (23), `prod/NameTest` (21), `prod/DirAttributeList` (17), `prod/MapConstructor` (15), `misc/CombinedErrorCodes` (15), `prod/NamespaceDecl` (10), `prod/DirectConstructor` (10), `prod/Literal` (9), `prod/EQName` (7), `misc/HigherOrderFunctions` (7), `fn/in-scope-prefixes` (7). The remaining ~5,200 skips are `try/catch` (only `catch *` exists), `unordered`/`ordered`/`validate`, modules, serialization, and schema awareness.
+
+## Next Recommended Step
+
+1. **Phase 4 — modules/serialization** (`import module`, `declare option`, output serialization parameters; `ser/*` sets).
+2. **`try`/`catch` completion** (named error codes in catch lists; the `TryCatch` opcode exists with `catch *` only) or **`unordered`/`ordered`** (trivial no-op semantics in a non-ordered engine).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-25
 **Commit:** `bcf4d52` (feat(xquery): Phase 3 computed constructors)
 **Current focus:** **XQuery 3.1 Phase 3 complete — computed constructors** implemented end-to-end: all seven forms (`element`/`attribute`/`document`/`text`/`comment`/`processing-instruction`/`namespace`) with static EQName or computed `{expr}` names, a single `ConstructComputed` IR opcode with per-kind VM handlers, and a shared content accumulator implementing the XQuery content rules. QT3 went from **25,060 passed / 0 failed / 6,761 skipped (78.75%)** to **25,846 passed / 0 failed / 5,975 skipped (81.22%)** (+786 passing). Full `dotnet test Bosak.sln` passes: **1,458 unit tests / 0 failed**; XSLT baseline unchanged.
 

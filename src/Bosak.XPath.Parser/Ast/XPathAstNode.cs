@@ -32,6 +32,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.7   | 25-07-2026     | Added computed constructor AST nodes (element/attribute/document/text/comment/PI/ns)    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 25-07-2026     | Added SwitchExpressionNode/TypeswitchExpressionNode AST for XQuery switch and typeswitch|
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -112,6 +114,35 @@ public sealed record IfExpressionNode(XPathAstNode Condition, XPathAstNode ThenB
 public sealed record ForExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode ReturnExpression) : XPathAstNode;
 public sealed record LetExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode Body) : XPathAstNode;
 public sealed record QuantifiedExpressionNode(QuantifierKind Quantifier, IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode SatisfiesExpression) : XPathAstNode;
+
+/// <summary>An XQuery switch expression: <c>switch (E) (case V)+ return R ... default return RD</c>.</summary>
+public sealed record SwitchExpressionNode(
+    XPathAstNode Operand,
+    IReadOnlyList<SwitchCaseClause> Cases,
+    XPathAstNode Default) : XPathAstNode;
+
+/// <summary>One case clause of a switch expression: operand values compared with <c>eq</c> semantics; first match wins.</summary>
+public sealed record SwitchCaseClause(IReadOnlyList<XPathAstNode> Values, XPathAstNode Return);
+
+/// <summary>An XQuery typeswitch expression: <c>typeswitch (E) (case ($v as)? T return R)+ default ($d)? return RD</c>.</summary>
+public sealed record TypeswitchExpressionNode(
+    XPathAstNode Operand,
+    IReadOnlyList<TypeswitchCaseClause> Cases,
+    XPathAstNode Default,
+    string? DefaultVariableName = null,
+    string? DefaultVariablePrefix = null,
+    string? DefaultVariableNamespaceUri = null) : XPathAstNode;
+
+/// <summary>One case clause of a typeswitch expression: an optional bound variable, the sequence-type union to match, and the return expression.</summary>
+public sealed record TypeswitchCaseClause(
+    IReadOnlyList<TypeswitchCaseType> Types,
+    XPathAstNode Return,
+    string? VariableName = null,
+    string? VariablePrefix = null,
+    string? VariableNamespaceUri = null);
+
+/// <summary>One member type of a typeswitch case sequence-type union (<c>xs:integer | xs:string</c>).</summary>
+public sealed record TypeswitchCaseType(string? Prefix, string Local, OccurrenceIndicator Occurrence);
 
 /// <summary>Full XQuery FLWOR expression with clauses and return expression (replaces nested For/Let/Where for full XQuery FLWOR).</summary>
 public sealed record FlworExpressionNode(IReadOnlyList<FlworClauseNode> Clauses, XPathAstNode ReturnExpression) : XPathAstNode;

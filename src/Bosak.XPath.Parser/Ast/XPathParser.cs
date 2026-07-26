@@ -57,6 +57,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.26  | 25-07-2026     | Parse XQuery computed constructors; EQName char/entity reference expansion; boundary-whitespace CDATA fix |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.27  | 25-07-2026     | Parse XQuery switch and typeswitch expressions incl. sequence-type unions in case clauses |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -244,6 +246,10 @@ public sealed class XPathParser
             TokenKind.KeywordSome or TokenKind.KeywordEvery => ParseQuantifiedExpr(),
             TokenKind.KeywordIf => ParseIfExpr(),
             TokenKind.KeywordTry => ParseTryExpr(),
+            // switch/typeswitch are XQuery-only ExprSingle forms; 'switch'/'typeswitch'
+            // followed by '(' anywhere else remains an ordinary name (K2-NameTest-*).
+            TokenKind.Name when _allowFullFlwor && GetString(Current) == "switch" && Peek(1).Kind == TokenKind.LParen => ParseSwitchExpr(),
+            TokenKind.Name when _allowFullFlwor && GetString(Current) == "typeswitch" && Peek(1).Kind == TokenKind.LParen => ParseTypeswitchExpr(),
             _ => ParseOrExpr()
         };
     }
@@ -747,6 +753,91 @@ public sealed class XPathParser
             return WithSpan(new TryCatchNode(tryBody, catchBody), start, End);
         }
         throw new ParseException("Only catch * is currently supported", Current.Start);
+    }
+
+    // SwitchExpr ::= "switch" "(" Expr ")" SwitchCaseClause+ "default" "return" ExprSingle
+    // SwitchCaseClause ::= ("case" ExprSingle)+ "return" ExprSingle
+    // Consecutive 'case' keywords before a 'return' accumulate values of one clause.
+    private XPathAstNode ParseSwitchExpr()
+    {
+        int start = Current.Start;
+        Advance(); // 'switch'
+        Expect(TokenKind.LParen);
+        var operand = ParseExpr();
+        Expect(TokenKind.RParen);
+
+        var cases = new List<SwitchCaseClause>();
+        while (Current.Kind == TokenKind.Name && GetString(Current) == "case")
+        {
+            Advance();
+            var values = new List<XPathAstNode> { ParseExprSingle() };
+            while (Current.Kind == TokenKind.Name && GetString(Current) == "case")
+            {
+                Advance();
+                values.Add(ParseExprSingle());
+            }
+            Expect(TokenKind.KeywordReturn);
+            cases.Add(new SwitchCaseClause(values, ParseExprSingle()));
+        }
+        if (cases.Count == 0)
+            throw new ParseException("XPST0003: A switch expression requires at least one case clause.", Current.Start);
+        if (Current.Kind != TokenKind.Name || GetString(Current) != "default")
+            throw new ParseException("XPST0003: Expected 'default' in switch expression.", Current.Start);
+        Advance();
+        Expect(TokenKind.KeywordReturn);
+        var defaultReturn = ParseExprSingle();
+        return WithSpan(new SwitchExpressionNode(operand, cases, defaultReturn), start, End);
+    }
+
+    // TypeswitchExpr ::= "typeswitch" "(" Expr ")" CaseClause+ "default" ("$" VarName)? "return" ExprSingle
+    // CaseClause ::= "case" ("$" VarName "as")? SequenceType "return" ExprSingle
+    private XPathAstNode ParseTypeswitchExpr()
+    {
+        int start = Current.Start;
+        Advance(); // 'typeswitch'
+        Expect(TokenKind.LParen);
+        var operand = ParseExpr();
+        Expect(TokenKind.RParen);
+
+        var cases = new List<TypeswitchCaseClause>();
+        while (Current.Kind == TokenKind.Name && GetString(Current) == "case")
+        {
+            Advance();
+            string? varLocal = null, varPrefix = null, varNs = null;
+            if (Current.Kind == TokenKind.Dollar)
+            {
+                Advance();
+                var nameTok = ExpectName();
+                (varPrefix, varLocal, varNs) = SplitQName(GetString(nameTok));
+                Expect(TokenKind.KeywordAs);
+            }
+            // SequenceTypeUnion ::= SequenceType ("|" SequenceType)*
+            var types = new List<TypeswitchCaseType>();
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            types.Add(new TypeswitchCaseType(typePrefix, typeLocal, occurrence));
+            while (Match(TokenKind.VBar))
+            {
+                (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+                types.Add(new TypeswitchCaseType(typePrefix, typeLocal, occurrence));
+            }
+            Expect(TokenKind.KeywordReturn);
+            cases.Add(new TypeswitchCaseClause(types, ParseExprSingle(), varLocal, varPrefix, varNs));
+        }
+        if (cases.Count == 0)
+            throw new ParseException("XPST0003: A typeswitch expression requires at least one case clause.", Current.Start);
+        if (Current.Kind != TokenKind.Name || GetString(Current) != "default")
+            throw new ParseException("XPST0003: Expected 'default' in typeswitch expression.", Current.Start);
+        Advance();
+        string? defLocal = null, defPrefix = null, defNs = null;
+        if (Current.Kind == TokenKind.Dollar)
+        {
+            Advance();
+            var nameTok = ExpectName();
+            (defPrefix, defLocal, defNs) = SplitQName(GetString(nameTok));
+        }
+        Expect(TokenKind.KeywordReturn);
+        var defaultReturn = ParseExprSingle();
+        return WithSpan(new TypeswitchExpressionNode(operand, cases, defaultReturn, defLocal, defPrefix, defNs), start, End);
     }
 
     // OrExpr ::= AndExpr ("or" AndExpr)*

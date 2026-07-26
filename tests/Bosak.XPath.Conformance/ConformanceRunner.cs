@@ -26,6 +26,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 25-07-2026     | Route XQuery-only-spec tests to the XQuery pipeline when its constructs are supported   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 25-07-2026     | Regenerate KnownXQueryGaps (310 entries) after switch/typeswitch admission              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -441,6 +443,10 @@ internal sealed class ConformanceRunner
         ["string-constructor-024"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
         ["string-constructor-025"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
         ["string-constructor-026"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        // prod/TypeswitchExpr.xml (3 tests)
+        ["K2-sequenceExprTypeswitch-11"] = "XQuery conformance gap (TypeswitchExpr): see AGENT_HANDOVER REQ-045",
+        ["K2-sequenceExprTypeswitch-5"] = "XQuery conformance gap (TypeswitchExpr): see AGENT_HANDOVER REQ-045",
+        ["K2-sequenceExprTypeswitch-9"] = "XQuery conformance gap (TypeswitchExpr): see AGENT_HANDOVER REQ-045",
         // prod/ValueComp.xml (2 tests)
         ["value-comparison-5"] = "XQuery conformance gap (ValueComp): see AGENT_HANDOVER REQ-045",
         ["value-comparison-7"] = "XQuery conformance gap (ValueComp): see AGENT_HANDOVER REQ-045",

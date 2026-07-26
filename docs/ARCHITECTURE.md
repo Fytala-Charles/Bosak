@@ -378,7 +378,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 | Priority | Phase | Deliverable | Status | Notes |
 |----------|-------|-------------|--------|-------|
-| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 3 complete | Full core FLWOR (`order by`/`count`/`group by`/`window`) + direct and computed constructors with constructor-local namespaces; QT3 harness routes supported XQuery tests (25,846/0, 81.22%). Modules/serialization (Phase 4) follow. |
+| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 3 complete | Full core FLWOR (`order by`/`count`/`group by`/`window`), direct and computed constructors with constructor-local namespaces, switch/typeswitch; QT3 harness routes supported XQuery tests (25,928/0, 81.48%). Modules/serialization (Phase 4) follow. |
 | 2 | — | **XSLT 3.0 packages** | 🔮 Planned | `xsl:package`, `xsl:use-package`. Completes the XSLT 3.0 surface. |
 | 3 | — | **Schema awareness / XSD validation** | 🔮 Planned | Cross-cutting feature for XPath + XSLT; clears remaining schema-dependent skips. |
 | 4 | 5 | **Streaming** | 🔮 Planned | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
@@ -592,7 +592,8 @@ src/
 |---------|--------|-------|
 | Direct element/attribute constructors | ✅ Implemented | Lexer constructor mode + `ConstructElement` opcode; computed attributes/content, constructor-local namespaces, copy semantics |
 | Computed constructors | ✅ Implemented | `ConstructComputed` opcode + shared content accumulator; static EQName or computed `{expr}` names; all seven forms (`element`/`attribute`/`document`/`text`/`comment`/`processing-instruction`/`namespace`) |
-| `typeswitch` / `switch` / `validate` | 🔮 Phase 3 | Lower to conditional IR |
+| `switch` / `typeswitch` | ✅ Implemented | Desugared in the lowerer to `let` + `if`/`eq`/`instance-of` chains; sequence-type unions in case clauses |
+| `validate` | 🔮 Phase 3 | Lower to conditional IR |
 
 #### Phase 4 — Modules, serialization, and advanced features
 **Goal:** Library modules, `import module`, and serialization.

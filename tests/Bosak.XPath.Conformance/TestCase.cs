@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 17-07-2026     | Accept inherited test-set dependencies for dependency filtering                          |
 //                      | Charles Korthout | 0.3   | 21-07-2026     | Add BaseDirectory for resolving assert-xml file references                               |
+//                      | Charles Korthout | 0.4   | 25-07-2026     | Add OwnDependencies (case-level spec deps) for XPath-vs-XQuery pipeline routing          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -26,15 +27,17 @@ internal sealed class TestCase
     public string Description { get; }
     public string Expression { get; }
     public IReadOnlyList<Dependency> Dependencies { get; }
+    public IReadOnlyList<Dependency> OwnDependencies { get; }
     public XElement ResultElement { get; }
     public string BaseDirectory { get; }
 
-    private TestCase(string name, string description, string expression, List<Dependency> dependencies, XElement resultElement, string baseDirectory)
+    private TestCase(string name, string description, string expression, List<Dependency> dependencies, IReadOnlyList<Dependency> ownDependencies, XElement resultElement, string baseDirectory)
     {
         Name = name;
         Description = description;
         Expression = expression;
         Dependencies = dependencies;
+        OwnDependencies = ownDependencies;
         ResultElement = resultElement;
         BaseDirectory = baseDirectory;
     }
@@ -46,14 +49,17 @@ internal sealed class TestCase
         string expression = (string?)element.Element(ns + "test") ?? "";
 
         var dependencies = new List<Dependency>(inheritedDependencies);
+        var ownDependencies = new List<Dependency>();
         foreach (var depElem in element.Elements(ns + "dependency"))
         {
-            dependencies.Add(Dependency.FromElement(depElem));
+            var dep = Dependency.FromElement(depElem);
+            dependencies.Add(dep);
+            ownDependencies.Add(dep);
         }
 
         var resultElem = element.Element(ns + "result") ?? new XElement(ns + "result");
 
-        return new TestCase(name, description, expression, dependencies, resultElem, baseDirectory);
+        return new TestCase(name, description, expression, dependencies, ownDependencies, resultElem, baseDirectory);
     }
 }
 
