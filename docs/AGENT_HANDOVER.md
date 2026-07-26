@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** *(pending — recorded after commit)* (feat(xquery): Phase 3 direct element constructors with constructor-local namespaces)
+**Commit:** `847574b` (feat(xquery): Phase 3 direct element constructors with constructor-local namespaces)
 **Current focus:** **XQuery 3.1 Phase 3 started — direct element constructors** implemented end-to-end: lexer constructor mode (single `Constructor` token per construct), source-level constructor scanner, `ConstructElement`/`ConstructContentNode` IR opcodes, and provider-neutral node construction with dynamic constructor-local namespace scoping. QT3 went from **22,983 passed / 0 failed / 8,838 skipped (72.23%)** to **25,060 passed / 0 failed / 6,761 skipped (78.75%)** (+2,077 passing). Full `dotnet test Bosak.sln` passes: **1,443 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (Phase 3 direct constructors)
