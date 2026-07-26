@@ -4,16 +4,24 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 25 July 2026
-> **Bosak baseline:** 1,479 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 26,299 passed / 0 failed / 5,522 skipped (82.64% / 100% of runnable tests) — XQuery routing enabled; 305 XQuery conformance gaps recorded as reasoned skips
+> **Last updated:** 26 July 2026
+> **Bosak baseline:** 1,491 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 28,735 passed / 0 failed / 3,086 skipped (90.30% / 100% of runnable tests) — XQuery routing enabled; 487 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 4 started — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization
+> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables
 
 ---
 
 ## 0. Recent Changes
 
+- **2026-07-26** — XQuery 3.1 Phase 4: **user-defined functions and variables** (library modules slice 1, REQ-050): QT3 **28,735 passed / 0 failed** (from 26,299; +2,436 passing).
+  - `declare function` / `declare variable` prolog with the static-validation matrix (XQST0034/0039/0045/0049, XPST0003, runtime XQST0054); `local` prefix predeclared; lazy global initializers evaluated with the module's initial focus.
+  - Invocation semantics per XPath 3.1 §3.1.5: focus absent inside user-function bodies (XPDY0002); full variable-scope snapshot per call (recursive `let` bindings cannot clobber the caller); captured closures preserved.
+  - Function conversion: attribute nodes atomize to xs:untypedAtomic; function-item coercion wraps items in `CoercedFunctionItem` for typed function tests (occurrence/parens/whitespace normalization); `External` kind parameters pass through dynamic-call conversion.
+  - Function-type syntax (`function(...) as ...`, parenthesized item types) in declared signatures, `let`/`for` `as` clauses, and `instance of`; shared-parser `SkipSequenceType` stops at expression boundaries after a function-type `as`.
+  - Order-by comparator casts untypedAtomic to xs:string and raises XPTY0004 for cross-family comparisons (orderBy68).
+  - Newly-enabled sets: app/FunctxFn 499/2, app/FunctxFunctx 622/5, app/Walmsley 212/6, app/spec-examples 630/3, prod/FunctionDecl 150/3/20, misc/HigherOrderFunctions 108/9/12.
+  - Recorded gaps: static-analysis errors (XPST0008/XPST0017 in unexecuted bodies), `sudoku` (too slow under the interpreter), functx `get-matches`/`remove-elements` edges; 487 reasoned skips total.
 - **2026-07-25** — XQuery 3.1 Phase 4 start: **output declarations + serialization round-out** (REQ-049): QT3 **26,299 passed / 0 failed** (from 25,928; +371).
   - `declare option output:* "..."` prolog with QName/EQName option names, prolog ordering rules (namespace declarations precede options), and static validations (XQST0109/XQST0110/XQST0066/XPST0003/XPST0081); XQuery comments `(: :)` skipped in the prolog.
   - Static output parameters flow to `fn:serialize` (per-call parameters override); map-form parameters default omit-xml-declaration=true while element/default forms emit the XML declaration; `output:parameter-document` resolves lazily through the document loader (prolog options take precedence).

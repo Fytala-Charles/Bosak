@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 25-07-2026     | Parse declare option (output declarations) with QName/EQName option names               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 26-07-2026     | declare function / declare variable prolog parsing with XQST0034/0039/0045/0049 and XPST0003 validations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -100,7 +102,9 @@ public sealed class XQueryParser
         // Prolog parsing is intentionally minimal in this first iteration.
         // We only consume namespace declarations that are needed for the
         // XPath parser's static context.
-        while (TryParsePrologDeclaration(ref context))
+        while (TryParsePrologDeclaration(ref context)
+               || TryParseFunctionDeclaration(ref context)
+               || TryParseVariableDeclaration(ref context))
         {
             SkipWhitespace();
         }
@@ -230,6 +234,143 @@ public sealed class XQueryParser
         // Not a recognized prolog declaration; stop consuming prolog items.
         _position = savedPosition;
         return false;
+    }
+
+    private bool TryParseFunctionDeclaration(ref XQueryStaticContext context)
+    {
+        int savedPosition = _position;
+        SkipWhitespace();
+        if (!TryMatchLiteral("declare function"))
+        {
+            _position = savedPosition;
+            return false;
+        }
+
+        SkipWhitespace();
+        var (prefix, local, eqNameUri) = ReadQName();
+        string fnNs = eqNameUri
+            ?? (prefix is null
+                ? context.DefaultFunctionNamespace ?? "http://www.w3.org/2005/xpath-functions"
+                : context.Namespaces.TryGetValue(prefix, out var declaredFnNs)
+                    ? declaredFnNs
+                    : throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
+
+        SkipWhitespace();
+        ExpectChar('(');
+        var parameters = new List<UserFunctionParameter>();
+        SkipWhitespace();
+        if (!TryMatchChar(')'))
+        {
+            do
+            {
+                SkipWhitespace();
+                ExpectChar('$');
+                var paramName = ReadQNameText();
+                SkipWhitespace();
+                string? paramType = null;
+                if (TryMatchLiteral("as"))
+                {
+                    SkipWhitespace();
+                    paramType = ReadSequenceTypeText();
+                }
+                parameters.Add(new UserFunctionParameter(paramName, paramType));
+                SkipWhitespace();
+            } while (TryMatchChar(','));
+            ExpectChar(')');
+        }
+        SkipWhitespace();
+        string? returnType = null;
+        if (TryMatchLiteral("as"))
+        {
+            SkipWhitespace();
+            returnType = ReadSequenceTypeText();
+        }
+        SkipWhitespace();
+        var body = ReadBracedExpression();
+        SkipWhitespace();
+        ExpectChar(';');
+
+        // XQST0039: two parameters of one function must not have the same name.
+        if (parameters.Select(p => p.Name).Distinct().Count() != parameters.Count)
+            throw new ParseException($"XQST0039: Function '{local}' declares a parameter name more than once.", _position);
+        // XQST0034: the same function name and arity must not be declared twice.
+        if (context.UserFunctions.Any(f => f.LocalName == local && f.NamespaceUri == fnNs && f.Parameters.Count == parameters.Count))
+            throw new ParseException($"XQST0034: Function '{local}' with arity {parameters.Count} is declared more than once.", _position);
+        // XQST0045: functions must not be declared in a reserved function namespace.
+        if (fnNs is "http://www.w3.org/2005/xpath-functions"
+            or "http://www.w3.org/2005/xpath-functions/math"
+            or "http://www.w3.org/2005/xpath-functions/map"
+            or "http://www.w3.org/2005/xpath-functions/array"
+            or "http://www.w3.org/2001/XMLSchema"
+            or "http://www.w3.org/2001/XMLSchema-instance"
+            or "http://www.w3.org/XML/1998/namespace"
+            or "http://www.w3.org/2000/xmlns/")
+        {
+            throw new ParseException($"XQST0045: Functions must not be declared in the reserved namespace '{fnNs}'.", _position);
+        }
+        // XPST0003: reserved function names cannot be declared as user functions.
+        if (prefix is null && ReservedFunctionNames.Contains(local))
+            throw new ParseException($"XPST0003: '{local}' is a reserved function name and cannot be declared.", _position);
+        context = context.WithUserFunction(new UserFunctionDeclaration(local, fnNs, parameters, returnType, body, _position));
+        return true;
+    }
+
+    private bool TryParseVariableDeclaration(ref XQueryStaticContext context)
+    {
+        int savedPosition = _position;
+        SkipWhitespace();
+        if (!TryMatchLiteral("declare variable"))
+        {
+            _position = savedPosition;
+            return false;
+        }
+
+        SkipWhitespace();
+        ExpectChar('$');
+        var (prefix, local, eqNameUri) = ReadQName();
+        string varNs = eqNameUri
+            ?? (prefix is null
+                ? string.Empty
+                : context.Namespaces.TryGetValue(prefix, out var declaredVarNs)
+                    ? declaredVarNs
+                    : throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
+        SkipWhitespace();
+        string? varType = null;
+        if (TryMatchLiteral("as"))
+        {
+            SkipWhitespace();
+            varType = ReadSequenceTypeText();
+        }
+        SkipWhitespace();
+
+        XPathAstNode? varBody = null;
+        bool isExternal = false;
+        if (TryMatchLiteral("external"))
+        {
+            isExternal = true;
+            SkipWhitespace();
+            // An external declaration may carry a default value.
+            if (TryMatchLiteral(":="))
+            {
+                SkipWhitespace();
+                varBody = ReadExpressionTo(';');
+                SkipWhitespace();
+            }
+        }
+        else
+        {
+            ExpectLiteral(":=");
+            SkipWhitespace();
+            varBody = ReadExpressionTo(';');
+            SkipWhitespace();
+        }
+        ExpectChar(';');
+
+        // XQST0049: the same variable name must not be declared twice.
+        if (context.UserVariables.Any(v => v.LocalName == local && v.NamespaceUri == varNs))
+            throw new ParseException($"XQST0049: Variable '${local}' is declared more than once.", _position);
+        context = context.WithUserVariable(new UserVariableDeclaration(local, varNs, varType, varBody, isExternal, _position));
+        return true;
     }
 
     private bool _seenOptionDecl;
@@ -458,6 +599,18 @@ public sealed class XQueryParser
         "cdata-section-elements", "suppress-indentation", "parameter-document"
     };
 
+    /// <summary>
+    /// Reserved function names (kind-test names and keywords) that cannot be declared as
+    /// unprefixed user functions.
+    /// </summary>
+    private static readonly HashSet<string> ReservedFunctionNames = new(StringComparer.Ordinal)
+    {
+        "attribute", "comment", "document-node", "element", "empty-sequence",
+        "function", "if", "item", "namespace-node", "node", "processing-instruction",
+        "schema-attribute", "schema-element", "switch", "text", "typeswitch",
+        "array", "map"
+    };
+
     // Reads a lexical QName (NCName, prefix:NCName, or Q{uri}NCName) without resolving prefixes.
     private (string? Prefix, string Local, string? NamespaceUri) ReadQName()
     {
@@ -471,12 +624,239 @@ public sealed class XQueryParser
             _position = close + 1;
             return (null, ReadNCName(), uri);
         }
-        if (_position < _source.Length && _source[_position] == ':')
+        if (_position < _source.Length && _source[_position] == ':'
+            && _position + 1 < _source.Length && _source[_position + 1] != '=')
         {
             _position++;
             return (first, ReadNCName(), null);
         }
         return (null, first, null);
+    }
+
+    // Reads a lexical QName and returns it in lexical form (prefix:local or Q{uri}local).
+    private string ReadQNameText()
+    {
+        var (prefix, local, nsUri) = ReadQName();
+        if (nsUri is not null)
+            return $"Q{{{nsUri}}}{local}";
+        return prefix is null ? local : $"{prefix}:{local}";
+    }
+
+    // Reads a sequence type in lexical form: an item type (with optional parenthesized
+    // arguments) possibly unioned with '|', followed by an optional occurrence indicator.
+    private string ReadSequenceTypeText()
+    {
+        SkipWhitespace();
+        int start = _position;
+        ReadItemTypeText();
+        while (TryMatchChar('|'))
+            ReadItemTypeText();
+        if (_position < _source.Length && _source[_position] is '?' or '*' or '+')
+            _position++;
+        var text = _source[start.._position].Trim();
+        // XPST0003: empty-sequence() must not carry an occurrence indicator.
+        if (text.StartsWith("empty-sequence(", StringComparison.Ordinal)
+            && text.Length > "empty-sequence()".Length)
+        {
+            throw new ParseException("XPST0003: empty-sequence() must not have an occurrence indicator.", start);
+        }
+        return text;
+    }
+
+    private void ReadItemTypeText()
+    {
+        SkipWhitespace();
+        // Parenthesized item type: '(' ItemType ('|' ItemType)* ')' — e.g. a function
+        // test used as a declared return type: (function(xs:string) as xs:string*).
+        if (TryMatchChar('('))
+        {
+            ReadItemTypeText();
+            while (TryMatchChar('|'))
+                ReadItemTypeText();
+            SkipWhitespace();
+            ExpectChar(')');
+            return;
+        }
+        int nameStart = _position;
+        while (_position < _source.Length && (IsNameChar(_source[_position]) || _source[_position] == ':' || _source[_position] == '{'))
+        {
+            if (_source[_position] == '{')
+            {
+                int close = _source.IndexOf('}', _position);
+                if (close < 0)
+                    throw new ParseException("XPST0003: Unterminated EQName in sequence type.", _position);
+                _position = close + 1;
+            }
+            else
+            {
+                _position++;
+            }
+        }
+        if (_position == nameStart)
+            throw new ParseException("XPST0003: Expected item type.", _position);
+        // Optional parenthesized arguments: (), (*), (element-name), (*:name), etc.
+        SkipWhitespace();
+        if (_position < _source.Length && _source[_position] == '(')
+        {
+            int depth = 0;
+            do
+            {
+                if (_position >= _source.Length)
+                    throw new ParseException("XPST0003: Unterminated '(' in sequence type.", _position);
+                if (_source[_position] == '(') depth++;
+                else if (_source[_position] == ')') depth--;
+                _position++;
+            } while (depth > 0);
+        }
+        // Function tests may carry a return type: function(xs:integer) as xs:integer.
+        SkipWhitespace();
+        if (TryMatchLiteral("as"))
+        {
+            SkipWhitespace();
+            ReadSequenceTypeText();
+        }
+    }
+
+    // Reads '{' Expr '}' and parses the enclosed expression with the XPath parser.
+    private XPathAstNode ReadBracedExpression()
+    {
+        ExpectChar('{');
+        int start = _position;
+        int depth = 1;
+        while (_position < _source.Length && depth > 0)
+        {
+            char c = _source[_position];
+            if (c == '\'' || c == '"')
+            {
+                SkipStringLiteral(c);
+                continue;
+            }
+            if (c == '(' && _position + 1 < _source.Length && _source[_position + 1] == ':')
+            {
+                SkipComment();
+                continue;
+            }
+            if (c == '{') depth++;
+            else if (c == '}') depth--;
+            _position++;
+        }
+        if (depth > 0)
+            throw new ParseException("XPST0003: Unterminated '{' in function declaration.", _position);
+        var inner = _source[start..(_position - 1)];
+        // An empty (or comment-only) function body is the empty sequence (XQuery 3.1).
+        if (string.IsNullOrWhiteSpace(StripComments(inner)))
+            return new SequenceExpressionNode(Array.Empty<XPathAstNode>());
+        return XPathParser.Parse(inner, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings);
+    }
+
+    // Scans an expression up to the top-level terminator and parses it with the XPath parser.
+    private XPathAstNode ReadExpressionTo(char terminator)
+    {
+        int start = _position;
+        int depth = 0;
+        while (_position < _source.Length)
+        {
+            char c = _source[_position];
+            if (c == '\'' || c == '"')
+            {
+                SkipStringLiteral(c);
+                continue;
+            }
+            if (c == '(' && _position + 1 < _source.Length && _source[_position + 1] == ':')
+            {
+                SkipComment();
+                continue;
+            }
+            if (c == terminator && depth == 0)
+            {
+                var inner = _source[start.._position];
+                return XPathParser.Parse(inner, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings);
+            }
+            if (c is '(' or '[' or '{') depth++;
+            else if (c is ')' or ']' or '}') depth--;
+            _position++;
+        }
+        throw new ParseException($"XPST0003: Expected expression before '{terminator}'.", _position);
+    }
+
+    private void SkipStringLiteral(char quote)
+    {
+        _position++;
+        while (_position < _source.Length)
+        {
+            if (_source[_position] == quote)
+            {
+                if (_position + 1 < _source.Length && _source[_position + 1] == quote)
+                {
+                    _position += 2;
+                    continue;
+                }
+                _position++;
+                return;
+            }
+            _position++;
+        }
+    }
+
+    private void SkipComment()
+    {
+        int depth = 1;
+        _position += 2; // at '(:'
+        while (_position < _source.Length && depth > 0)
+        {
+            if (_position + 1 < _source.Length && _source[_position] == '(' && _source[_position + 1] == ':')
+            {
+                depth++;
+                _position += 2;
+            }
+            else if (_position + 1 < _source.Length && _source[_position] == ':' && _source[_position + 1] == ')')
+            {
+                depth--;
+                _position += 2;
+            }
+            else
+            {
+                _position++;
+            }
+        }
+    }
+
+    private bool TryMatchChar(char c)
+    {
+        SkipWhitespace();
+        if (_position < _source.Length && _source[_position] == c)
+        {
+            _position++;
+            return true;
+        }
+        return false;
+    }
+
+    // Removes XQuery comments (possibly nested) from a text span.
+    private static string StripComments(string text)
+    {
+        var sb = new System.Text.StringBuilder(text.Length);
+        int i = 0;
+        while (i < text.Length)
+        {
+            if (i + 1 < text.Length && text[i] == '(' && text[i + 1] == ':')
+            {
+                int depth = 1;
+                i += 2;
+                while (i < text.Length && depth > 0)
+                {
+                    if (i + 1 < text.Length && text[i] == '(' && text[i + 1] == ':') { depth++; i += 2; }
+                    else if (i + 1 < text.Length && text[i] == ':' && text[i + 1] == ')') { depth--; i += 2; }
+                    else i++;
+                }
+            }
+            else
+            {
+                sb.Append(text[i]);
+                i++;
+            }
+        }
+        return sb.ToString();
     }
 
     private static bool IsNameStartChar(char c)

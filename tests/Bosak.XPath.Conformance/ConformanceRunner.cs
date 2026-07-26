@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 25-07-2026     | Regenerate KnownXQueryGaps (305 entries) after serialization admission                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 26-07-2026     | Regenerate KnownXQueryGaps (487 entries) after declare function/variable admission     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -75,18 +77,32 @@ internal sealed class ConformanceRunner
     {
         // app/CatalogCheck.xml (1 tests)
         ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
+        // app/Demos.xml (1 tests)
+        ["sudoku"] = "XQuery conformance gap (app/Demos): see AGENT_HANDOVER REQ-045",
         // app/Duplicates.xml (1 tests)
         ["duplicates-maps-2"] = "XQuery conformance gap (app/Duplicates): see AGENT_HANDOVER REQ-045",
         // app/FunctxFn.xml (2 tests)
         ["functx-fn-deep-equal-5"] = "XQuery conformance gap (app/FunctxFn): see AGENT_HANDOVER REQ-045",
         ["functx-fn-deep-equal-all"] = "XQuery conformance gap (app/FunctxFn): see AGENT_HANDOVER REQ-045",
+        // app/FunctxFunctx.xml (5 tests)
+        ["functx-functx-get-matches-2"] = "XQuery conformance gap (app/FunctxFunctx): see AGENT_HANDOVER REQ-045",
+        ["functx-functx-get-matches-3"] = "XQuery conformance gap (app/FunctxFunctx): see AGENT_HANDOVER REQ-045",
+        ["functx-functx-get-matches-all"] = "XQuery conformance gap (app/FunctxFunctx): see AGENT_HANDOVER REQ-045",
+        ["functx-functx-remove-elements-3"] = "XQuery conformance gap (app/FunctxFunctx): see AGENT_HANDOVER REQ-045",
+        ["functx-functx-remove-elements-all"] = "XQuery conformance gap (app/FunctxFunctx): see AGENT_HANDOVER REQ-045",
         // app/UseCaseR.xml (1 tests)
         ["rdb-queries-results-q9"] = "XQuery conformance gap (app/UseCaseR): see AGENT_HANDOVER REQ-045",
-        // app/UseCaseR31.xml (3 tests)
+        // app/UseCaseR31.xml (4 tests)
+        ["UseCaseR31-009"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
         ["UseCaseR31-026"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
         ["UseCaseR31-027"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
         ["UseCaseR31-033"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
-        // app/Walmsley.xml (1 tests)
+        // app/Walmsley.xml (6 tests)
+        ["d1e66015"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
+        ["d1e66026"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
+        ["d1e66048"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
+        ["d1e66070"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
+        ["d1e66081"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         ["d1e74610"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         // app/XMark.xml (1 tests)
         ["XMark-Q19"] = "XQuery conformance gap (app/XMark): see AGENT_HANDOVER REQ-045",
@@ -100,6 +116,8 @@ internal sealed class ConformanceRunner
         ["array-sort-collation-1"] = "XQuery conformance gap (array/sort): see AGENT_HANDOVER REQ-045",
         ["array-sort-collation-2"] = "XQuery conformance gap (array/sort): see AGENT_HANDOVER REQ-045",
         ["array-sort-collation-3"] = "XQuery conformance gap (array/sort): see AGENT_HANDOVER REQ-045",
+        // fn/analyze-string.xml (1 tests)
+        ["analyzeString-028"] = "XQuery conformance gap (fn:analyze-string): see AGENT_HANDOVER REQ-045",
         // fn/available-environment-variables.xml (1 tests)
         ["fn-available-environment-variables-011"] = "XQuery conformance gap (fn:available-environment-variables): see AGENT_HANDOVER REQ-045",
         // fn/base-uri.xml (4 tests)
@@ -119,9 +137,14 @@ internal sealed class ConformanceRunner
         ["K2-ConcatFunc-3"] = "XQuery conformance gap (fn:concat): see AGENT_HANDOVER REQ-045",
         // fn/data.xml (1 tests)
         ["K2-DataFunc-4"] = "XQuery conformance gap (fn:data): see AGENT_HANDOVER REQ-045",
-        // fn/deep-equal.xml (1 tests)
+        // fn/deep-equal.xml (3 tests)
+        ["K2-SeqDeepEqualFunc-21"] = "XQuery conformance gap (fn:deep-equal): see AGENT_HANDOVER REQ-045",
+        ["K2-SeqDeepEqualFunc-23"] = "XQuery conformance gap (fn:deep-equal): see AGENT_HANDOVER REQ-045",
         ["cbcl-deep-equal-001"] = "XQuery conformance gap (fn:deep-equal): see AGENT_HANDOVER REQ-045",
-        // fn/doc.xml (1 tests)
+        // fn/distinct-values.xml (1 tests)
+        ["cbcl-distinct-values-002b"] = "XQuery conformance gap (fn:distinct-values): see AGENT_HANDOVER REQ-045",
+        // fn/doc.xml (2 tests)
+        ["fn-doc-33"] = "XQuery conformance gap (fn:doc): see AGENT_HANDOVER REQ-045",
         ["fn-doc-37"] = "XQuery conformance gap (fn:doc): see AGENT_HANDOVER REQ-045",
         // fn/environment-variable.xml (3 tests)
         ["environment-variable-005"] = "XQuery conformance gap (fn:environment-variable): see AGENT_HANDOVER REQ-045",
@@ -130,7 +153,7 @@ internal sealed class ConformanceRunner
         // fn/filter.xml (1 tests)
         ["filter-006"] = "XQuery conformance gap (fn:filter): see AGENT_HANDOVER REQ-045",
         // fn/fold-left.xml (1 tests)
-        ["fold-left-008"] = "XQuery conformance gap (fn:fold-left): see AGENT_HANDOVER REQ-045",
+        ["fold-left-009"] = "XQuery conformance gap (fn:fold-left): see AGENT_HANDOVER REQ-045",
         // fn/format-dateTime.xml (4 tests)
         ["format-dateTime-025b"] = "XQuery conformance gap (fn:format-dateTime): see AGENT_HANDOVER REQ-045",
         ["format-dateTime-025c"] = "XQuery conformance gap (fn:format-dateTime): see AGENT_HANDOVER REQ-045",
@@ -168,6 +191,24 @@ internal sealed class ConformanceRunner
         ["json-doc-035"] = "XQuery conformance gap (fn:json-doc): see AGENT_HANDOVER REQ-045",
         // fn/matches.re.xml (1 tests)
         ["re00987"] = "XQuery conformance gap (fn:matches.re): see AGENT_HANDOVER REQ-045",
+        // fn/max.xml (8 tests)
+        ["cbcl-max-001"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
+        ["cbcl-max-002"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
+        ["cbcl-max-003"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
+        ["cbcl-max-006"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
+        ["cbcl-max-008"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
+        ["cbcl-max-014"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
+        ["cbcl-max-016"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
+        ["cbcl-max-017"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
+        // fn/min.xml (8 tests)
+        ["cbcl-min-001"] = "XQuery conformance gap (fn:min): see AGENT_HANDOVER REQ-045",
+        ["cbcl-min-002"] = "XQuery conformance gap (fn:min): see AGENT_HANDOVER REQ-045",
+        ["cbcl-min-003"] = "XQuery conformance gap (fn:min): see AGENT_HANDOVER REQ-045",
+        ["cbcl-min-006"] = "XQuery conformance gap (fn:min): see AGENT_HANDOVER REQ-045",
+        ["cbcl-min-008"] = "XQuery conformance gap (fn:min): see AGENT_HANDOVER REQ-045",
+        ["cbcl-min-014"] = "XQuery conformance gap (fn:min): see AGENT_HANDOVER REQ-045",
+        ["cbcl-min-016"] = "XQuery conformance gap (fn:min): see AGENT_HANDOVER REQ-045",
+        ["cbcl-min-017"] = "XQuery conformance gap (fn:min): see AGENT_HANDOVER REQ-045",
         // fn/namespace-uri-from-QName.xml (1 tests)
         ["K2-NamespaceURIFromQNameFunc-2"] = "XQuery conformance gap (fn:namespace-uri-from-QName): see AGENT_HANDOVER REQ-045",
         // fn/namespace-uri.xml (1 tests)
@@ -199,15 +240,17 @@ internal sealed class ConformanceRunner
         ["xml-to-json-057"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
         ["xml-to-json-065"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
         ["xml-to-json-071"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
-        // misc/CombinedErrorCodes.xml (15 tests)
+        // misc/CombinedErrorCodes.xml (17 tests)
         ["FODC0001_1"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["FODC0001_2"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XPTY0004_09"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["XPTY0019_1"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
+        ["XPTY0019_2"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["XQST0032"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["XQST0033"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["XQST0038_3"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
+        ["XQST0045-4"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["XQST0046_06"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
+        ["XQST0060"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["XQST0066_1"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["XQST0066_3"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         ["XQST0070_4"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
@@ -217,11 +260,13 @@ internal sealed class ConformanceRunner
         ["XQST0125_2"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         // misc/ErrorsAndOptimization.xml (1 tests)
         ["errors-and-optimization-7"] = "XQuery conformance gap (misc:ErrorsAndOptimization): see AGENT_HANDOVER REQ-045",
-        // misc/HigherOrderFunctions.xml (7 tests)
+        // misc/HigherOrderFunctions.xml (9 tests)
         ["function-item-4"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
         ["function-item-5"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
         ["function-item-6"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["xqhof13"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
+        ["hof-013"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
+        ["hof-042"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
+        ["hof-043"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
         ["xqhof14"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
         ["xqhof8"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
         ["xqhof9"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
@@ -230,6 +275,23 @@ internal sealed class ConformanceRunner
         // misc/XMLEdition.xml (2 tests)
         ["line-ending-Q002"] = "XQuery conformance gap (misc:XMLEdition): see AGENT_HANDOVER REQ-045",
         ["line-ending-Q003"] = "XQuery conformance gap (misc:XMLEdition): see AGENT_HANDOVER REQ-045",
+        // op/add-dayTimeDurations.xml (16 tests)
+        ["cbcl-plus-002"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-004"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-006"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-008"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-010"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-012"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-014"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-016"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-018"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-020"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-022"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-024"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-026"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-028"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-030"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-plus-032"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
         // op/base64Binary-greater-than.xml (5 tests)
         ["base64Binary-gt-15"] = "XQuery conformance gap (op:base64Binary-greater-than): see AGENT_HANDOVER REQ-045",
         ["base64Binary-gt-17"] = "XQuery conformance gap (op:base64Binary-greater-than): see AGENT_HANDOVER REQ-045",
@@ -242,14 +304,59 @@ internal sealed class ConformanceRunner
         ["base64Binary-lt-18"] = "XQuery conformance gap (op:base64Binary-less-than): see AGENT_HANDOVER REQ-045",
         ["base64Binary-lt-25"] = "XQuery conformance gap (op:base64Binary-less-than): see AGENT_HANDOVER REQ-045",
         ["base64Binary-lt-26"] = "XQuery conformance gap (op:base64Binary-less-than): see AGENT_HANDOVER REQ-045",
+        // op/dayTimeDuration-greater-than.xml (6 tests)
+        ["cbcl-value-greater-equal-002"] = "XQuery conformance gap (op:dayTimeDuration-greater-than): see AGENT_HANDOVER REQ-045",
+        ["cbcl-value-greater-equal-006"] = "XQuery conformance gap (op:dayTimeDuration-greater-than): see AGENT_HANDOVER REQ-045",
+        ["cbcl-value-greater-equal-010"] = "XQuery conformance gap (op:dayTimeDuration-greater-than): see AGENT_HANDOVER REQ-045",
+        ["cbcl-value-greater-than-002"] = "XQuery conformance gap (op:dayTimeDuration-greater-than): see AGENT_HANDOVER REQ-045",
+        ["cbcl-value-greater-than-006"] = "XQuery conformance gap (op:dayTimeDuration-greater-than): see AGENT_HANDOVER REQ-045",
+        ["cbcl-value-greater-than-010"] = "XQuery conformance gap (op:dayTimeDuration-greater-than): see AGENT_HANDOVER REQ-045",
+        // op/dayTimeDuration-less-than.xml (3 tests)
+        ["cbcl-value-less-equal-002"] = "XQuery conformance gap (op:dayTimeDuration-less-than): see AGENT_HANDOVER REQ-045",
+        ["cbcl-value-less-equal-006"] = "XQuery conformance gap (op:dayTimeDuration-less-than): see AGENT_HANDOVER REQ-045",
+        ["cbcl-value-less-equal-010"] = "XQuery conformance gap (op:dayTimeDuration-less-than): see AGENT_HANDOVER REQ-045",
+        // op/divide-dayTimeDuration.xml (4 tests)
+        ["cbcl-div-002"] = "XQuery conformance gap (op:divide-dayTimeDuration): see AGENT_HANDOVER REQ-045",
+        ["cbcl-div-004"] = "XQuery conformance gap (op:divide-dayTimeDuration): see AGENT_HANDOVER REQ-045",
+        ["cbcl-div-006"] = "XQuery conformance gap (op:divide-dayTimeDuration): see AGENT_HANDOVER REQ-045",
+        ["cbcl-div-010"] = "XQuery conformance gap (op:divide-dayTimeDuration): see AGENT_HANDOVER REQ-045",
         // op/hexBinary-greater-than.xml (2 tests)
         ["hexBinary-gt-25"] = "XQuery conformance gap (op:hexBinary-greater-than): see AGENT_HANDOVER REQ-045",
         ["hexBinary-gt-26"] = "XQuery conformance gap (op:hexBinary-greater-than): see AGENT_HANDOVER REQ-045",
         // op/hexBinary-less-than.xml (2 tests)
         ["hexBinary-lt-25"] = "XQuery conformance gap (op:hexBinary-less-than): see AGENT_HANDOVER REQ-045",
         ["hexBinary-lt-26"] = "XQuery conformance gap (op:hexBinary-less-than): see AGENT_HANDOVER REQ-045",
+        // op/numeric-integer-divide.xml (1 tests)
+        ["cbcl-numeric-idivide-002"] = "XQuery conformance gap (op:numeric-integer-divide): see AGENT_HANDOVER REQ-045",
         // op/numeric-unary-minus.xml (1 tests)
         ["op-numeric-unary-minus-1"] = "XQuery conformance gap (op:numeric-unary-minus): see AGENT_HANDOVER REQ-045",
+        // op/subtract-dayTimeDurations.xml (11 tests)
+        ["cbcl-minus-002"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-004"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-006"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-008"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-010"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-012"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-014"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-026"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-028"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-030"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        ["cbcl-minus-032"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
+        // prod/AllowingEmpty.xml (14 tests)
+        ["outer-003"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-004"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-007"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-008"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-009"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-010"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-011"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-012"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-013"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-014"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-015"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-016"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-017"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
+        ["outer-018"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
         // prod/Annotation.xml (23 tests)
         ["annotation-3"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
         ["annotation-30"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
@@ -280,11 +387,16 @@ internal sealed class ConformanceRunner
         ["ArrayTest-048"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",
         ["ArrayTest-050"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",
         ["ArrayTest-051"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",
-        // prod/AxisStep.xml (3 tests)
+        // prod/AxisStep.xml (7 tests)
+        ["Axes089"] = "XQuery conformance gap (AxisStep): see AGENT_HANDOVER REQ-045",
         ["Axes112"] = "XQuery conformance gap (AxisStep): see AGENT_HANDOVER REQ-045",
+        ["K2-Axes-1"] = "XQuery conformance gap (AxisStep): see AGENT_HANDOVER REQ-045",
+        ["K2-Axes-2"] = "XQuery conformance gap (AxisStep): see AGENT_HANDOVER REQ-045",
         ["K2-Axes-84"] = "XQuery conformance gap (AxisStep): see AGENT_HANDOVER REQ-045",
         ["K2-Axes-85"] = "XQuery conformance gap (AxisStep): see AGENT_HANDOVER REQ-045",
-        // prod/BaseURIDecl.xml (5 tests)
+        ["K2-Axes-99"] = "XQuery conformance gap (AxisStep): see AGENT_HANDOVER REQ-045",
+        // prod/BaseURIDecl.xml (6 tests)
+        ["K2-BaseURIProlog-4"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
         ["K2-BaseURIProlog-5"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
         ["base-URI-1"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
         ["base-URI-18"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
@@ -293,15 +405,31 @@ internal sealed class ConformanceRunner
         // prod/CastableExpr.xml (2 tests)
         ["K-SeqExprCastable-5a"] = "XQuery conformance gap (CastableExpr): see AGENT_HANDOVER REQ-045",
         ["K-SeqExprCastable-6a"] = "XQuery conformance gap (CastableExpr): see AGENT_HANDOVER REQ-045",
-        // prod/CompNamespaceConstructor.xml (2 tests)
+        // prod/CompNamespaceConstructor.xml (11 tests)
+        ["nscons-001"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
+        ["nscons-002"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
+        ["nscons-003"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
+        ["nscons-004"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
+        ["nscons-005"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
+        ["nscons-006"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
+        ["nscons-010"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
+        ["nscons-011"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
+        ["nscons-012"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
         ["nscons-043"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
         ["nscons-044"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        // prod/DefaultCollationDecl.xml (3 tests)
+        // prod/DefaultCollationDecl.xml (4 tests)
         ["K-CollationProlog-1"] = "XQuery conformance gap (DefaultCollationDecl): see AGENT_HANDOVER REQ-045",
         ["K-CollationProlog-2"] = "XQuery conformance gap (DefaultCollationDecl): see AGENT_HANDOVER REQ-045",
+        ["defaultcolldecl-2"] = "XQuery conformance gap (DefaultCollationDecl): see AGENT_HANDOVER REQ-045",
         ["defaultcolldecl-6"] = "XQuery conformance gap (DefaultCollationDecl): see AGENT_HANDOVER REQ-045",
-        // prod/DefaultNamespaceDecl.xml (1 tests)
+        // prod/DefaultNamespaceDecl.xml (7 tests)
         ["K2-DefaultNamespaceProlog-12a"] = "XQuery conformance gap (DefaultNamespaceDecl): see AGENT_HANDOVER REQ-045",
+        ["K2-DefaultNamespaceProlog-13"] = "XQuery conformance gap (DefaultNamespaceDecl): see AGENT_HANDOVER REQ-045",
+        ["K2-DefaultNamespaceProlog-14"] = "XQuery conformance gap (DefaultNamespaceDecl): see AGENT_HANDOVER REQ-045",
+        ["K2-DefaultNamespaceProlog-15"] = "XQuery conformance gap (DefaultNamespaceDecl): see AGENT_HANDOVER REQ-045",
+        ["defaultnamespacedeclerr-4"] = "XQuery conformance gap (DefaultNamespaceDecl): see AGENT_HANDOVER REQ-045",
+        ["defaultnamespacedeclerr-6"] = "XQuery conformance gap (DefaultNamespaceDecl): see AGENT_HANDOVER REQ-045",
+        ["defaultnamespacedeclerr-8"] = "XQuery conformance gap (DefaultNamespaceDecl): see AGENT_HANDOVER REQ-045",
         // prod/DirAttributeList.xml (9 tests)
         ["Constr-attr-enclexpr-10"] = "XQuery conformance gap (DirAttributeList): see AGENT_HANDOVER REQ-045",
         ["Constr-attr-enclexpr-11"] = "XQuery conformance gap (DirAttributeList): see AGENT_HANDOVER REQ-045",
@@ -324,7 +452,8 @@ internal sealed class ConformanceRunner
         ["K2-DirectConOther-65"] = "XQuery conformance gap (DirectConstructor): see AGENT_HANDOVER REQ-045",
         ["K2-DirectConOther-66"] = "XQuery conformance gap (DirectConstructor): see AGENT_HANDOVER REQ-045",
         ["K2-DirectConOther-67"] = "XQuery conformance gap (DirectConstructor): see AGENT_HANDOVER REQ-045",
-        // prod/EQName.xml (7 tests)
+        // prod/EQName.xml (8 tests)
+        ["eqname-004"] = "XQuery conformance gap (EQName): see AGENT_HANDOVER REQ-045",
         ["eqname-009"] = "XQuery conformance gap (EQName): see AGENT_HANDOVER REQ-045",
         ["eqname-013"] = "XQuery conformance gap (EQName): see AGENT_HANDOVER REQ-045",
         ["eqname-019"] = "XQuery conformance gap (EQName): see AGENT_HANDOVER REQ-045",
@@ -337,17 +466,19 @@ internal sealed class ConformanceRunner
         ["ForExprType009"] = "XQuery conformance gap (ForClause): see AGENT_HANDOVER REQ-045",
         ["ForExprType024"] = "XQuery conformance gap (ForClause): see AGENT_HANDOVER REQ-045",
         // prod/FunctionCall.xml (2 tests)
-        ["FunctionCall-014"] = "XQuery conformance gap (FunctionCall): see AGENT_HANDOVER REQ-045",
-        ["FunctionCall-048"] = "XQuery conformance gap (FunctionCall): see AGENT_HANDOVER REQ-045",
+        ["FunctionCall-022"] = "XQuery conformance gap (FunctionCall): see AGENT_HANDOVER REQ-045",
+        ["function-call-reserved-function-names-005"] = "XQuery conformance gap (FunctionCall): see AGENT_HANDOVER REQ-045",
+        // prod/FunctionDecl.xml (3 tests)
+        ["K-FunctionProlog-37"] = "XQuery conformance gap (FunctionDecl): see AGENT_HANDOVER REQ-045",
+        ["K-FunctionProlog-38"] = "XQuery conformance gap (FunctionDecl): see AGENT_HANDOVER REQ-045",
+        ["K2-FunctionProlog-38"] = "XQuery conformance gap (FunctionDecl): see AGENT_HANDOVER REQ-045",
         // prod/GeneralComp.eq.xml (1 tests)
         ["GenCompEq-8"] = "XQuery conformance gap (GeneralComp.eq): see AGENT_HANDOVER REQ-045",
         // prod/GeneralComp.lt.xml (1 tests)
         ["GenCompLT-10"] = "XQuery conformance gap (GeneralComp.lt): see AGENT_HANDOVER REQ-045",
         // prod/GroupByClause.xml (1 tests)
         ["group-021"] = "XQuery conformance gap (GroupByClause): see AGENT_HANDOVER REQ-045",
-        // prod/InlineFunctionExpr.xml (5 tests)
-        ["inline-fn-005"] = "XQuery conformance gap (InlineFunctionExpr): see AGENT_HANDOVER REQ-045",
-        ["inline-fn-013"] = "XQuery conformance gap (InlineFunctionExpr): see AGENT_HANDOVER REQ-045",
+        // prod/InlineFunctionExpr.xml (3 tests)
         ["inline-fn-015"] = "XQuery conformance gap (InlineFunctionExpr): see AGENT_HANDOVER REQ-045",
         ["inline-fn-031"] = "XQuery conformance gap (InlineFunctionExpr): see AGENT_HANDOVER REQ-045",
         ["inline-fn-037"] = "XQuery conformance gap (InlineFunctionExpr): see AGENT_HANDOVER REQ-045",
@@ -388,8 +519,6 @@ internal sealed class ConformanceRunner
         ["MapConstructor-033"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
         ["MapConstructor-034"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
         ["MapConstructor-035"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        // prod/MapTest.xml (1 tests)
-        ["MapTest-058"] = "XQuery conformance gap (MapTest): see AGENT_HANDOVER REQ-045",
         // prod/NameTest.xml (22 tests)
         ["K2-NameTest-21"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
         ["K2-NameTest-22"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
@@ -413,8 +542,9 @@ internal sealed class ConformanceRunner
         ["NodeTest004"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
         ["nametest-3"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
         ["nametest-4"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        // prod/NamespaceDecl.xml (10 tests)
+        // prod/NamespaceDecl.xml (11 tests)
         ["K2-NamespaceProlog-1"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
+        ["K2-NamespaceProlog-14"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
         ["K2-NamespaceProlog-15"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
         ["K2-NamespaceProlog-2"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
         ["K2-NamespaceProlog-3"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
@@ -432,12 +562,56 @@ internal sealed class ConformanceRunner
         ["PathExpr-9"] = "XQuery conformance gap (PathExpr): see AGENT_HANDOVER REQ-045",
         // prod/Predicate.xml (1 tests)
         ["filter-limits-003"] = "XQuery conformance gap (Predicate): see AGENT_HANDOVER REQ-045",
-        // prod/StringConstructor.xml (5 tests)
+        // prod/StepExpr.xml (6 tests)
+        ["Steps-leading-lone-slash-11"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
+        ["Steps-leading-lone-slash-12"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
+        ["Steps-leading-lone-slash-2"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
+        ["Steps-leading-lone-slash-3"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
+        ["Steps-leading-lone-slash-4"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
+        ["Steps-leading-lone-slash-5"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
+        // prod/StringConstructor.xml (35 tests)
+        ["string-constructor-001"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-002"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-003"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-004"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-005"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-006"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-007"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-008"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-009"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-010"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-011"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-012"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-013"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-014"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-015"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-016"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-017"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-018"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-019"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-020"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
         ["string-constructor-022"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
         ["string-constructor-023"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
         ["string-constructor-024"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
         ["string-constructor-025"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
         ["string-constructor-026"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-028"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-029"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-030"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-031"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-032"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-033"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-034"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-910"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-911"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        ["string-constructor-912"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
+        // prod/SwitchExpr.xml (6 tests)
+        ["switch-006"] = "XQuery conformance gap (SwitchExpr): see AGENT_HANDOVER REQ-045",
+        ["switch-007"] = "XQuery conformance gap (SwitchExpr): see AGENT_HANDOVER REQ-045",
+        ["switch-008"] = "XQuery conformance gap (SwitchExpr): see AGENT_HANDOVER REQ-045",
+        ["switch-009"] = "XQuery conformance gap (SwitchExpr): see AGENT_HANDOVER REQ-045",
+        ["switch-010"] = "XQuery conformance gap (SwitchExpr): see AGENT_HANDOVER REQ-045",
+        ["switch-011"] = "XQuery conformance gap (SwitchExpr): see AGENT_HANDOVER REQ-045",
         // prod/TypeswitchExpr.xml (3 tests)
         ["K2-sequenceExprTypeswitch-11"] = "XQuery conformance gap (TypeswitchExpr): see AGENT_HANDOVER REQ-045",
         ["K2-sequenceExprTypeswitch-5"] = "XQuery conformance gap (TypeswitchExpr): see AGENT_HANDOVER REQ-045",
@@ -445,6 +619,34 @@ internal sealed class ConformanceRunner
         // prod/ValueComp.xml (2 tests)
         ["value-comparison-5"] = "XQuery conformance gap (ValueComp): see AGENT_HANDOVER REQ-045",
         ["value-comparison-7"] = "XQuery conformance gap (ValueComp): see AGENT_HANDOVER REQ-045",
+        // prod/VarDecl.external.xml (17 tests)
+        ["K2-ExternalVariablesWith-11"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-12"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-13"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-14"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-15"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-16"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-17"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-18"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-19"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-24"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-25"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-26"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWith-27"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["K2-ExternalVariablesWithout-3"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["extvardeclwithouttype-24"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["extvardeclwithtype-19"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        ["extvardeclwithtype-24"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
+        // prod/VarDecl.xml (6 tests)
+        ["K-InternalVariablesWith-13"] = "XQuery conformance gap (VarDecl): see AGENT_HANDOVER REQ-045",
+        ["K-InternalVariablesWith-14"] = "XQuery conformance gap (VarDecl): see AGENT_HANDOVER REQ-045",
+        ["K-InternalVariablesWith-15b"] = "XQuery conformance gap (VarDecl): see AGENT_HANDOVER REQ-045",
+        ["K-InternalVariablesWith-5"] = "XQuery conformance gap (VarDecl): see AGENT_HANDOVER REQ-045",
+        ["K2-InternalVariablesWith-1"] = "XQuery conformance gap (VarDecl): see AGENT_HANDOVER REQ-045",
+        ["vardeclwithtype-13"] = "XQuery conformance gap (VarDecl): see AGENT_HANDOVER REQ-045",
+        // prod/VarDefaultValue.xml (2 tests)
+        ["extvardef-002b"] = "XQuery conformance gap (VarDefaultValue): see AGENT_HANDOVER REQ-045",
+        ["extvardef-004"] = "XQuery conformance gap (VarDefaultValue): see AGENT_HANDOVER REQ-045",
         // prod/VersionDecl.xml (1 tests)
         ["version_declaration-023-v3"] = "XQuery conformance gap (VersionDecl): see AGENT_HANDOVER REQ-045",
         // ser/method-xml.xml (4 tests)

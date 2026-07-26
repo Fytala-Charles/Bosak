@@ -61,6 +61,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.28  | 25-07-2026     | xml:space is an ordinary constructor attribute; boundary whitespace stripped at flush time |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.29  | 26-07-2026     | SkipSequenceType stops at expression boundaries (:=/in/return/then/else/|) after function-type 'as' |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -2745,6 +2747,17 @@ public sealed class XPathParser
                 if (Current.Kind == TokenKind.Comma ||
                     Current.Kind == TokenKind.RParen ||
                     Current.Kind == TokenKind.LBrace)
+                {
+                    break;
+                }
+                // Expression boundaries: a sequence type never contains these at top level,
+                // so a function-type return type must stop here (let-`as` before ':=' /
+                // 'in' / 'return', typeswitch unions before '|', if-conditions before
+                // 'then', etc.).
+                if (Current.Kind is TokenKind.Assign or TokenKind.VBar
+                    or TokenKind.KeywordIn or TokenKind.KeywordReturn or TokenKind.KeywordThen
+                    or TokenKind.KeywordElse or TokenKind.KeywordSatisfies
+                    or TokenKind.KeywordFor or TokenKind.KeywordLet)
                 {
                     break;
                 }

@@ -19,16 +19,36 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 25-07-2026     | Seed static output parameters; expand QName lists with the default element namespace    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 26-07-2026     | Register user functions via FunctionSignature dispatch; lazy user variables with XQST0054 cycle detection |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Bosak.XQuery.Compiler;
 
 namespace Bosak.XQuery.Api;
+
+/// <summary>A user function declaration compiled to an executable body module.</summary>
+public sealed record CompiledUserFunction(
+    string LocalName,
+    string NamespaceUri,
+    IReadOnlyList<string> Parameters,
+    IReadOnlyList<string?> ParameterTypes,
+    string? ReturnType,
+    IrModule Body);
+
+/// <summary>A user variable declaration compiled to an executable body module (null for external).</summary>
+public sealed record CompiledUserVariable(
+    string LocalName,
+    string NamespaceUri,
+    string? TypeName,
+    IrModule? Body,
+    bool IsExternal);
 
 /// <summary>
 /// A compiled, thread-safe XQuery that can be evaluated against a context document.
@@ -37,11 +57,19 @@ public sealed class XQueryExecutable
 {
     private readonly IrModule _module;
     private readonly XQueryStaticContext _staticContext;
+    private readonly IReadOnlyList<CompiledUserFunction> _userFunctions;
+    private readonly IReadOnlyList<CompiledUserVariable> _userVariables;
 
-    internal XQueryExecutable(IrModule module, XQueryStaticContext staticContext)
+    internal XQueryExecutable(
+        IrModule module,
+        XQueryStaticContext staticContext,
+        IReadOnlyList<CompiledUserFunction>? userFunctions = null,
+        IReadOnlyList<CompiledUserVariable>? userVariables = null)
     {
         _module = module;
         _staticContext = staticContext;
+        _userFunctions = userFunctions ?? [];
+        _userVariables = userVariables ?? [];
     }
 
     /// <summary>
@@ -103,6 +131,64 @@ public sealed class XQueryExecutable
         foreach (var ((localName, nsUri), value) in _staticContext.Variables)
         {
             ctx.WithVariable(localName, value, nsUri);
+        }
+
+        // User-declared functions dispatch through a compiled InlineFunctionItem body.
+        foreach (var fn in _userFunctions)
+        {
+            var captured = fn;
+            ctx.RegisterFunction(new FunctionSignature
+            {
+                NamespaceUri = captured.NamespaceUri,
+                LocalName = captured.LocalName,
+                Arity = captured.Parameters.Count,
+                ParameterTypes = captured.Parameters.Select(_ => XdmValueKind.External).ToList(),
+                ReturnType = XdmValueKind.External,
+                ParameterTypeNames = captured.ParameterTypes,
+                ReturnTypeName = captured.ReturnType,
+                Implementation = (callCtx, args) => VmEngine.InvokeFunctionItem(
+                    new InlineFunctionItem(captured.Parameters, captured.Body, captured.ParameterTypes, captured.ReturnType),
+                    callCtx, args)
+            });
+        }
+
+        // User-declared variables evaluate lazily on first reference (globals).
+        if (_userVariables.Count > 0)
+        {
+            var previousResolver = ctx.LazyVariableResolver;
+            var inFlight = new HashSet<(string, string)>();
+            // XQuery: a global variable's initializing expression is evaluated with the
+            // module's initial dynamic context — including the initial context item —
+            // regardless of where the variable is first referenced (function-declaration-026).
+            var initialItem = ctx.ContextItem;
+            var initialPosition = ctx.ContextPosition;
+            var initialSize = ctx.ContextSize;
+            ctx.LazyVariableResolver = (local, ns) =>
+            {
+                foreach (var v in _userVariables)
+                {
+                    if (v.LocalName == local && v.NamespaceUri == ns && v.Body is not null)
+                    {
+                        // XQST0054: circular variable dependency.
+                        if (!inFlight.Add((local, ns)))
+                            throw new InvalidOperationException($"XQST0054: Circular variable dependency for variable '${local}'.");
+                        var savedItem = ctx.ContextItem;
+                        var savedPosition = ctx.ContextPosition;
+                        var savedSize = ctx.ContextSize;
+                        try
+                        {
+                            ctx.WithFocus(initialItem, initialPosition, initialSize);
+                            return VmEngine.Execute(v.Body, ctx);
+                        }
+                        finally
+                        {
+                            ctx.WithFocus(savedItem, savedPosition, savedSize);
+                            inFlight.Remove((local, ns));
+                        }
+                    }
+                }
+                return previousResolver?.Invoke(local, ns);
+            };
         }
 
         // Output declarations (declare option output:* "...") become the static

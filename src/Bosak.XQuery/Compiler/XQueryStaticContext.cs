@@ -14,11 +14,35 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 25-07-2026     | Store option declarations in the static context                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 26-07-2026     | UserFunctionDeclaration/UserVariableDeclaration records with storage, cloning, predeclared 'local' prefix |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Parser.Ast;
 
 namespace Bosak.XQuery.Compiler;
+
+/// <summary>A user function declared in the prolog (<c>declare function p:name($p as T, ...) as R { body }</c>).</summary>
+public sealed record UserFunctionDeclaration(
+    string LocalName,
+    string NamespaceUri,
+    IReadOnlyList<UserFunctionParameter> Parameters,
+    string? ReturnType,
+    XPathAstNode Body,
+    int Position);
+
+/// <summary>One parameter of a user function declaration: a name and an optional sequence type.</summary>
+public sealed record UserFunctionParameter(string Name, string? TypeName);
+
+/// <summary>A user variable declared in the prolog (<c>declare variable $p:name (as T)? := expr;</c> or <c>external</c>).</summary>
+public sealed record UserVariableDeclaration(
+    string LocalName,
+    string NamespaceUri,
+    string? TypeName,
+    XPathAstNode? Body,
+    bool IsExternal,
+    int Position);
 
 /// <summary>
 /// The static context derived from an XQuery prolog. It is immutable after construction
@@ -31,6 +55,8 @@ public sealed class XQueryStaticContext
     private readonly Dictionary<(string LocalName, string NamespaceUri), XdmValue> _variables;
     private readonly HashSet<(string LocalName, string NamespaceUri, int Arity)> _functionSignatures;
     private readonly List<(string LocalName, string NamespaceUri, string Value)> _options;
+    private readonly List<UserFunctionDeclaration> _userFunctions;
+    private readonly List<UserVariableDeclaration> _userVariables;
 
     /// <summary>
     /// Creates a static context with the standard XQuery namespace prefixes pre-bound.
@@ -45,11 +71,14 @@ public sealed class XQueryStaticContext
             ["math"] = "http://www.w3.org/2005/xpath-functions/math",
             ["map"] = "http://www.w3.org/2005/xpath-functions/map",
             ["array"] = "http://www.w3.org/2005/xpath-functions/array",
+            ["local"] = "http://www.w3.org/2005/xquery-local-functions",
             ["err"] = "http://www.w3.org/2005/xqt-errors"
         };
         _variables = new Dictionary<(string, string), XdmValue>();
         _functionSignatures = new HashSet<(string, string, int)>();
         _options = new List<(string, string, string)>();
+        _userFunctions = new List<UserFunctionDeclaration>();
+        _userVariables = new List<UserVariableDeclaration>();
     }
 
     private XQueryStaticContext(
@@ -57,6 +86,8 @@ public sealed class XQueryStaticContext
         Dictionary<(string LocalName, string NamespaceUri), XdmValue> variables,
         HashSet<(string LocalName, string NamespaceUri, int Arity)> functionSignatures,
         List<(string LocalName, string NamespaceUri, string Value)> options,
+        List<UserFunctionDeclaration> userFunctions,
+        List<UserVariableDeclaration> userVariables,
         string? defaultElementNamespace,
         string? defaultFunctionNamespace,
         string? defaultCollation,
@@ -66,6 +97,8 @@ public sealed class XQueryStaticContext
         _variables = variables;
         _functionSignatures = functionSignatures;
         _options = options;
+        _userFunctions = userFunctions;
+        _userVariables = userVariables;
         DefaultElementNamespace = defaultElementNamespace;
         DefaultFunctionNamespace = defaultFunctionNamespace;
         DefaultCollation = defaultCollation;
@@ -114,6 +147,12 @@ public sealed class XQueryStaticContext
     /// </summary>
     public IReadOnlyList<(string LocalName, string NamespaceUri, string Value)> Options => _options;
 
+    /// <summary>Returns a read-only view of the user function declarations.</summary>
+    public IReadOnlyList<UserFunctionDeclaration> UserFunctions => _userFunctions;
+
+    /// <summary>Returns a read-only view of the user variable declarations.</summary>
+    public IReadOnlyList<UserVariableDeclaration> UserVariables => _userVariables;
+
     /// <summary>
     /// Creates a new context with an option declaration appended.
     /// </summary>
@@ -121,6 +160,20 @@ public sealed class XQueryStaticContext
     {
         var copy = new List<(string, string, string)>(_options) { (localName, namespaceUri, value) };
         return CloneWith(options: copy);
+    }
+
+    /// <summary>Creates a new context with a user function declaration appended.</summary>
+    public XQueryStaticContext WithUserFunction(UserFunctionDeclaration declaration)
+    {
+        var copy = new List<UserFunctionDeclaration>(_userFunctions) { declaration };
+        return CloneWith(userFunctions: copy);
+    }
+
+    /// <summary>Creates a new context with a user variable declaration appended.</summary>
+    public XQueryStaticContext WithUserVariable(UserVariableDeclaration declaration)
+    {
+        var copy = new List<UserVariableDeclaration>(_userVariables) { declaration };
+        return CloneWith(userVariables: copy);
     }
 
     /// <summary>
@@ -179,6 +232,8 @@ public sealed class XQueryStaticContext
         Dictionary<(string LocalName, string NamespaceUri), XdmValue>? variables = null,
         HashSet<(string LocalName, string NamespaceUri, int Arity)>? functionSignatures = null,
         List<(string LocalName, string NamespaceUri, string Value)>? options = null,
+        List<UserFunctionDeclaration>? userFunctions = null,
+        List<UserVariableDeclaration>? userVariables = null,
         string? defaultElementNamespace = null,
         string? defaultFunctionNamespace = null,
         string? defaultCollation = null,
@@ -189,6 +244,8 @@ public sealed class XQueryStaticContext
             variables ?? _variables,
             functionSignatures ?? _functionSignatures,
             options ?? _options,
+            userFunctions ?? _userFunctions,
+            userVariables ?? _userVariables,
             defaultElementNamespace ?? DefaultElementNamespace,
             defaultFunctionNamespace ?? DefaultFunctionNamespace,
             defaultCollation ?? DefaultCollation,

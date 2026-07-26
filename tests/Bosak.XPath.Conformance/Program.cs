@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added optional test-set name filter argument                                             |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | Absolutize the suite path so relative invocations yield file:/// document URIs           |
 //                      | Charles Korthout | 0.4   | 19-07-2026     | Added optional test-name filter argument for targeted cbcl-style runs                    |
+//                      | Charles Korthout | 0.5   | 26-07-2026     | Run the conformance suite on a dedicated 512MB-stack thread for deep recursion (function-declaration-007, numberformat121) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -53,7 +54,18 @@ internal class Program
 
         var stopwatch = Stopwatch.StartNew();
         var runner = new ConformanceRunner(suitePath, setFilter, testFilter);
-        var report = runner.Run();
+        // Run on a dedicated thread with a large stack: the recursive interpreter needs
+        // deep frames for recursive user functions (function-declaration-007 recurses 100+;
+        // fn-format-number numberformat121/122 recurse 5,000 deep through the user-function
+        // dispatch, which costs several interpreter frames per level).
+        TestReport? report = null;
+        var worker = new Thread(() => report = runner.Run(), maxStackSize: 512 * 1024 * 1024)
+        {
+            IsBackground = true,
+            Name = "conformance-runner"
+        };
+        worker.Start();
+        worker.Join();
         stopwatch.Stop();
 
         report.PrintSummary();

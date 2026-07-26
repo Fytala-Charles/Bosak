@@ -125,6 +125,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.71  | 25-07-2026     | Literal-only attribute whitespace normalization; xml:id collapse normalization                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.72  | 26-07-2026     | User-function semantics: absent focus; full variable-scope snapshot per call; attribute atomization; function coercion; order-by type families |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -701,9 +703,10 @@ public static class VmEngine
 
                         var (bindLocal, bindNs) = ResolveLoopVariableKey(info, context);
 
-                        // Save the bindings of every variable this loop scopes over: the loop
-                        // variable, an optional positional variable, and any additional scoped
-                        // names (e.g. FLWOR tuple-bound variables restored after the body).
+                        // Save the bindings of the loop variable and an optional positional
+                        // variable. Let-bound (scoped) variables are captured separately and
+                        // restored after EACH iteration: their bindings are scoped to the
+                        // tuple and must not persist across iterations or leak out.
                         var savedBindings = new List<(string Name, string Ns, bool Had, XdmValue Value)>();
                         void Save(string name, string ns)
                         {
@@ -712,10 +715,21 @@ public static class VmEngine
                         Save(bindLocal, bindNs);
                         if (info.PositionalVariableName is not null)
                             Save(info.PositionalVariableName, "");
+                        var scopedSaved = new List<(string Name, bool Had, XdmValue Value)>();
                         if (info.ScopedVariableNames is not null)
                         {
                             foreach (var scoped in info.ScopedVariableNames)
-                                Save(scoped, "");
+                                scopedSaved.Add((scoped, context.TryGetVariable(scoped, out var saved, ""), saved));
+                        }
+                        void RestoreScoped()
+                        {
+                            foreach (var (name, had, value) in scopedSaved)
+                            {
+                                if (had)
+                                    context.WithVariable(name, value, "");
+                                else
+                                    context.RemoveVariable(name, "");
+                            }
                         }
 
                         int position = 0;
@@ -747,6 +761,7 @@ public static class VmEngine
                             if (info.PositionalVariableName is not null)
                                 context.WithVariable(info.PositionalVariableName, XdmValue.FromInteger(position));
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
+                            RestoreScoped();
 
                             if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
                             {
@@ -3138,18 +3153,19 @@ public static class VmEngine
                 {
                     if (args.Length != inline.Parameters.Count)
                         throw new InvalidOperationException("XPTY0004: Wrong number of arguments for dynamic call of an inline function.");
+
+                    // Snapshot the entire variable scope: the function body is a new scope.
+                    // Parameters, captured closure variables, and any let/for bindings created
+                    // during execution must not leak back to the caller, and recursive calls
+                    // must not clobber the caller's same-named bindings (functx dynamic-path).
+                    var variableSnapshot = context.SnapshotVariables();
+
                     // Restore captured closure variables (the defining environment) so the
                     // body can reference outer variables after the defining frame exited.
-                    List<(string LocalName, string NamespaceUri, bool Had, XdmValue Value)>? savedCaptured = null;
                     if (inline.CapturedVariables is { Count: > 0 } captured)
                     {
-                        savedCaptured = new List<(string, string, bool, XdmValue)>(captured.Count);
                         foreach (var (key, capturedValue) in captured)
-                        {
-                            bool had = context.TryGetBoundVariable(key.LocalName, out var oldVal, key.NamespaceUri);
-                            savedCaptured.Add((key.LocalName, key.NamespaceUri, had, oldVal));
                             context.WithVariable(key.LocalName, capturedValue, key.NamespaceUri);
-                        }
                     }
 
                     // Apply XPath 3.1 function conversion rules to each argument: atomization,
@@ -3163,8 +3179,15 @@ public static class VmEngine
                         if (!string.IsNullOrEmpty(expectedType))
                         {
                             convertedArgs[i] = ApplyFunctionConversion(args[i], expectedType!);
+                            // Function tests: ApplyFunctionConversion already enforced arity
+                            // and wrapped the items in CoercedFunctionItems, which carry no
+                            // declared signature for ValueMatchesType to match — skip the
+                            // redundant re-validation for function items (hof-040/045).
+                            var trimmedType = expectedType!.TrimStart();
+                            bool functionTest = trimmedType.StartsWith("function", StringComparison.OrdinalIgnoreCase)
+                                || trimmedType.StartsWith("(function", StringComparison.OrdinalIgnoreCase);
                             var converted = convertedArgs[i];
-                            if (!converted.IsUndefined)
+                            if (!converted.IsUndefined && !functionTest)
                             {
                                 if (converted.IsSequence)
                                 {
@@ -3187,74 +3210,33 @@ public static class VmEngine
                         }
                     }
 
-                    var saved = new (string LocalName, string NamespaceUri, bool Had, XdmValue Value)[inline.Parameters.Count];
                     for (int i = 0; i < inline.Parameters.Count; i++)
                     {
                         var (localName, nsUri) = ResolveVariableName(inline.Parameters[i], context);
-                        saved[i].LocalName = localName;
-                        saved[i].NamespaceUri = nsUri;
-                        saved[i].Had = context.TryGetVariable(localName, out var oldVal, nsUri);
-                        saved[i].Value = oldVal;
                         context.WithVariable(localName, i < convertedArgs.Length ? convertedArgs[i] : XdmValue.Undefined, nsUri);
                     }
+                    var savedFocusItem = context.ContextItem;
+                    var savedFocusPosition = context.ContextPosition;
+                    var savedFocusSize = context.ContextSize;
                     try
                     {
+                        // XPath 3.1 §3.1.5 / XQuery: a user-defined function body (declared or
+                        // inline) is evaluated with the context item, position, and size
+                        // absent — the caller's focus must not propagate into the body
+                        // (K2-FunctionProlog-14); references to it raise XPDY0002.
+                        context.WithFocus(XdmValue.Undefined, 0, 0);
                         var result = Execute(inline.Body, context);
-                        // Validate return type
+                        // XPath 3.1 function conversion (atomization, untypedAtomic and URI
+                        // casts, numeric promotion) applies to the result before return-type
+                        // validation; cardinality and type mismatches raise XPTY0004.
                         if (!string.IsNullOrEmpty(inline.ReturnType))
-                        {
-                            bool matches;
-                            if (result.IsUndefined)
-                            {
-                                matches = inline.ReturnType.Trim().EndsWith('?') || inline.ReturnType.Trim().EndsWith('*');
-                            }
-                            else if (result.IsSequence)
-                            {
-                                int count = 0;
-                                matches = true;
-                                foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
-                                {
-                                    count++;
-                                    if (!ValueMatchesType(item, inline.ReturnType, context))
-                                    {
-                                        matches = false;
-                                        break;
-                                    }
-                                }
-                                if (matches && count > 1 &&
-                                    !(inline.ReturnType.Trim().EndsWith('*') || inline.ReturnType.Trim().EndsWith('+')))
-                                {
-                                    matches = false;
-                                }
-                            }
-                            else
-                            {
-                                matches = ValueMatchesType(result, inline.ReturnType, context);
-                            }
-                            if (!matches)
-                                throw new InvalidOperationException("XPTY0004");
-                        }
+                            result = ApplyFunctionConversion(result, inline.ReturnType);
                         return result;
                     }
                     finally
                     {
-                        for (int i = 0; i < inline.Parameters.Count; i++)
-                        {
-                            if (saved[i].Had)
-                                context.WithVariable(saved[i].LocalName, saved[i].Value, saved[i].NamespaceUri);
-                            else
-                                context.RemoveVariable(saved[i].LocalName, saved[i].NamespaceUri);
-                        }
-                        if (savedCaptured != null)
-                        {
-                            foreach (var (localName, nsUri, had, value) in savedCaptured)
-                            {
-                                if (had)
-                                    context.WithVariable(localName, value, nsUri);
-                                else
-                                    context.RemoveVariable(localName, nsUri);
-                            }
-                        }
+                        context.WithFocus(savedFocusItem, savedFocusPosition, savedFocusSize);
+                        context.RestoreVariables(variableSnapshot);
                     }
                 }
 
@@ -7626,8 +7608,10 @@ public static class VmEngine
         for (int i = 0; i < args.Length; i++)
         {
             var expected = i < sig.ParameterTypes.Count ? sig.ParameterTypes[i] : XdmValueKind.Sequence;
+            // External is an opaque/unconstrained kind (user-declared XQuery functions
+            // register with External fillers and convert via type names instead).
             converted[i] = expected is XdmValueKind.Undefined or XdmValueKind.Sequence or XdmValueKind.Node or XdmValueKind.Function
-                or XdmValueKind.Map or XdmValueKind.Array
+                or XdmValueKind.Map or XdmValueKind.Array or XdmValueKind.External
                 ? args[i]
                 : ConvertArgToKind(args[i], expected);
         }
@@ -7716,12 +7700,53 @@ public static class VmEngine
             return value;
 
         var type = targetType.Trim();
-        bool allowsMultiple = type.EndsWith('*') || type.EndsWith('+');
-        bool allowsEmpty = type.EndsWith('?') || type.EndsWith('*');
-        if (type.EndsWith('?') || type.EndsWith('*') || type.EndsWith('+'))
-            type = type[..^1].Trim();
         while (type.Length > 1 && type[0] == '(' && FindMatchingParen(type, 0) == type.Length - 1)
             type = type[1..^1].Trim();
+
+        // Normalize 'function (' / 'map (' / 'array (' to the compact form so function
+        // tests parse regardless of source whitespace (hof-049).
+        foreach (var family in new[] { "function", "map", "array" })
+        {
+            if (type.StartsWith(family, StringComparison.OrdinalIgnoreCase))
+            {
+                int afterKeyword = family.Length;
+                while (afterKeyword < type.Length && char.IsWhiteSpace(type[afterKeyword]))
+                    afterKeyword++;
+                if (afterKeyword < type.Length && type[afterKeyword] == '(' && afterKeyword != family.Length)
+                    type = string.Concat(type.AsSpan(0, family.Length), type.AsSpan(afterKeyword));
+                break;
+            }
+        }
+
+        // Function tests: a trailing occurrence indicator belongs to the function item
+        // only when the test has no 'as' return clause; otherwise it is part of the
+        // return type (function(xs:string) as xs:string*). Handle occurrence before the
+        // generic stripping so the return type is not mangled (hof-028).
+        bool isFunctionTest = type.StartsWith("function(", StringComparison.OrdinalIgnoreCase);
+        bool allowsMultiple;
+        bool allowsEmpty;
+        if (isFunctionTest)
+        {
+            allowsMultiple = false;
+            allowsEmpty = false;
+            if (!TryParseFunctionType(type, out _, out _) && type.Length > 1 && type[^1] is '?' or '*' or '+')
+            {
+                allowsMultiple = type[^1] is '*' or '+';
+                allowsEmpty = type[^1] is '?' or '*';
+                type = type[..^1].TrimEnd();
+            }
+        }
+        else
+        {
+            allowsMultiple = type.EndsWith('*') || type.EndsWith('+');
+            allowsEmpty = type.EndsWith('?') || type.EndsWith('*');
+            if (type.EndsWith('?') || type.EndsWith('*') || type.EndsWith('+'))
+                type = type[..^1].Trim();
+            while (type.Length > 1 && type[0] == '(' && FindMatchingParen(type, 0) == type.Length - 1)
+                type = type[1..^1].Trim();
+            // An occurrence-wrapped parenthesized function test: (function(...) as ...)?
+            isFunctionTest = type.StartsWith("function(", StringComparison.OrdinalIgnoreCase);
+        }
 
         var items = new List<XdmValue>();
         if (!value.IsUndefined)
@@ -7749,10 +7774,32 @@ public static class VmEngine
         var converted = new List<XdmValue>(items.Count);
         foreach (var item in items)
         {
-            var atomic = item.IsNode ? XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic") : item;
+            // Element/text/document/attribute nodes atomize to xs:untypedAtomic; comment,
+            // processing-instruction, and namespace nodes atomize to xs:string (which is
+            // not cast to numeric types by function conversion — K2-FunctionProlog-18/20).
+            var atomic = item.IsNode && item.NodeValue.NodeKind is XdmNodeKind.Element or XdmNodeKind.Text or XdmNodeKind.Document or XdmNodeKind.Attribute
+                ? XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic")
+                : item;
             if (ValueMatchesType(atomic, type))
             {
                 converted.Add(atomic);
+            }
+            else if (isFunctionTest && atomic.IsFunction && FunctionItemCoercibleTo(atomic, type))
+            {
+                // XPath 3.1 function conversion: wrap the item in a CoercedFunctionItem so
+                // invocation converts the arguments and the result to the declared types
+                // (the XSLT engine applies the same pattern — hof-028).
+                if (!type.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
+                    && TryParseFunctionType(type, out var coercionParamTypes, out var coercionReturnType)
+                    && !(coercionParamTypes.Length == 1 && coercionParamTypes[0] == "*")
+                    && atomic.FunctionValue is FunctionItem functionItem)
+                {
+                    converted.Add(XdmValue.FromFunction(new CoercedFunctionItem(functionItem, coercionParamTypes, coercionReturnType)));
+                }
+                else
+                {
+                    converted.Add(atomic);
+                }
             }
             else if (IsUntypedAtomicValue(atomic) && TryCast(atomic, type, out var casted))
             {
@@ -9288,6 +9335,25 @@ public static class VmEngine
         if (left.Kind == XdmValueKind.Integer && right.Kind == XdmValueKind.Integer)
         {
             return left.IntegerValue.CompareTo(right.IntegerValue);
+        }
+
+        // XQuery §3.8.3: values of type xs:untypedAtomic are cast to xs:string for the
+        // purposes of order-by comparison (orderBy68).
+        if (IsUntypedAtomicValue(left))
+            left = XdmValue.FromString(left.StringValue);
+        if (IsUntypedAtomicValue(right))
+            right = XdmValue.FromString(right.StringValue);
+
+        // Remaining atomic kinds are comparable only within the same type family
+        // (xs:string with xs:anyURI; otherwise identical kinds). Cross-family pairs such
+        // as xs:string vs xs:date raise XPTY0004 rather than comparing by string form.
+        bool sameFamily = left.Kind == right.Kind
+            || (left.Kind is XdmValueKind.String or XdmValueKind.Uri
+                && right.Kind is XdmValueKind.String or XdmValueKind.Uri);
+        if (!sameFamily)
+        {
+            throw new InvalidOperationException(
+                $"XPTY0004: Cannot compare {left.Kind} with {right.Kind} in an order by clause.");
         }
 
         // Fallback: convert to string and compare.

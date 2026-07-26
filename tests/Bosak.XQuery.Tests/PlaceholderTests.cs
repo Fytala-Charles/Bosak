@@ -34,6 +34,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 25-07-2026     | Added output declaration and serialization tests                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 26-07-2026     | 12 unit tests for declare function/declare variable (happy paths and XQST/XPST/XPTY error codes) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -1185,6 +1187,129 @@ public class PlaceholderTests
         var result = executable.Evaluate(ctx);
 
         Assert.Contains("xmlns:p=\"\"", result.StringValue);
+    }
+
+    // ------------------------------------------------------------------
+    // User-defined functions and variables (prolog declarations)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void XQuery_DeclareFunction_SimpleCall()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("declare function local:double($x) { $x * 2 }; local:double(21)");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(42L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_DeclareFunction_TypedRecursive()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare function local:fact($n as xs:integer) as xs:integer { if ($n le 1) then 1 else $n * local:fact($n - 1) }; local:fact(5)");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(120L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_DeclareFunction_EmptyBody_ReturnsEmptySequence()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("declare function local:nothing() { }; count(local:nothing())");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(0L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_DeclareFunction_WrongArity_ThrowsXPST0017()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare function local:f($x) { $x }; local:f(1, 2)").Evaluate(new XQueryContext()));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareFunction_DuplicateParameter_ThrowsXQST0039()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare function local:f($x, $x) { $x }; 1"));
+        Assert.Contains("XQST0039", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareFunction_DuplicateDeclaration_ThrowsXQST0034()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare function local:f() { 1 }; declare function local:f() { 2 }; local:f()"));
+        Assert.Contains("XQST0034", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareFunction_ReservedNamespace_ThrowsXQST0045()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare function fn:mine() { 1 }; 1"));
+        Assert.Contains("XQST0045", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareFunction_ParameterTypeMismatch_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare function local:f($x as xs:integer) { $x }; local:f('abc')").Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_Chain()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("declare variable $a := 40; declare variable $b := $a + 2; $b");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(42L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_Duplicate_ThrowsXQST0049()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $a := 1; declare variable $a := 2; $a"));
+        Assert.Contains("XQST0049", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_Circular_ThrowsXQST0054()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $a := $b; declare variable $b := $a; $a").Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0054", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_UsedByFunction()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("declare variable $base := 100; declare function local:add($x) { $x + $base }; local:add(5)");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(105L, result.IntegerValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

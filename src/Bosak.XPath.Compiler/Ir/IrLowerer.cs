@@ -53,6 +53,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.21  | 25-07-2026     | Lower switch/typeswitch by desugaring to let/if/eq/instance-of chains                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.22  | 26-07-2026     | Simple for-loop lowering seeds QuantifiedLoopInfo.ScopedVariableNames from top-level let names |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -1563,10 +1565,25 @@ public sealed class IrLowerer
         }
 
         int afterRhs = _instructions.Count;
-        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri, binding.AllowingEmpty);
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri, binding.AllowingEmpty, CollectTopLevelLetNames(returnExpr));
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
+    }
+
+    // Names of let variables bound by the top-level let chain of a for body's return
+    // expression; their bindings are scoped to one iteration and restored after each
+    // (function-declaration-005/006: a let inside a for must not accumulate).
+    private static string[]? CollectTopLevelLetNames(XPathAstNode node)
+    {
+        List<string>? names = null;
+        while (node is LetExpressionNode letExpr)
+        {
+            foreach (var binding in letExpr.Bindings)
+                (names ??= new List<string>()).Add(binding.VariableName);
+            node = letExpr.Body;
+        }
+        return names?.ToArray();
     }
 
     private int LowerTryCatch(TryCatchNode node, int? targetReg)

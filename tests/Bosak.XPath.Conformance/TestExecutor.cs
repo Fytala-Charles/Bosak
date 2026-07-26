@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 25-07-2026     | Admit declare option; pass static output parameters to result comparison                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.13  | 26-07-2026     | Allow variable/function prolog declarations (removed from the unsupported-prolog gate)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -266,9 +268,10 @@ internal sealed class TestExecutor
         RegexOptions.Compiled);
 
     // Prolog forms the XQuery parser does NOT support (namespace, default element/function
-    // namespace, default collation, base-uri, option, and version declarations are supported).
+    // namespace, default collation, base-uri, option, variable, function, and version
+    // declarations are supported).
     private static readonly Regex UnsupportedPrologRegex = new(
-        @"\bdeclare\s+(variable|function|boundary-space|default\s+order|default\s+decimal-format|ordering|copy-namespaces|context|decimal-format|construction)\b" +
+        @"\bdeclare\s+(boundary-space|default\s+order|default\s+decimal-format|ordering|copy-namespaces|context|decimal-format|construction)\b" +
         @"|\bimport\s+(module|schema)\b",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

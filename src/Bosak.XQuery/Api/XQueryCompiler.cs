@@ -28,6 +28,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 25-07-2026     | Optional XML 1.1 line-ending normalization flag threaded to the parser                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 26-07-2026     | Compile prolog declare function/variable bodies into CompiledUserFunction/CompiledUserVariable records |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -63,11 +65,37 @@ public sealed class XQueryCompiler
         var optimizer = new XPathOptimizer();
         var optimized = optimizer.Optimize(resolvedBody);
 
+        // 3b. Compile user-declared function and variable bodies through the same pipeline.
+        var userFunctions = new List<CompiledUserFunction>();
+        foreach (var fn in parseResult.StaticContext.UserFunctions)
+        {
+            var fnBodyAst = ResolveFunctionNamespaces(fn.Body, parseResult.StaticContext);
+            var fnModule = new IrLowerer().Lower(optimizer.Optimize(fnBodyAst));
+            userFunctions.Add(new CompiledUserFunction(
+                fn.LocalName,
+                fn.NamespaceUri,
+                fn.Parameters.Select(p => p.Name).ToList(),
+                fn.Parameters.Select(p => p.TypeName).ToList(),
+                fn.ReturnType,
+                fnModule));
+        }
+        var userVariables = new List<CompiledUserVariable>();
+        foreach (var v in parseResult.StaticContext.UserVariables)
+        {
+            IrModule? varModule = null;
+            if (v.Body is not null)
+            {
+                var varBodyAst = ResolveFunctionNamespaces(v.Body, parseResult.StaticContext);
+                varModule = new IrLowerer().Lower(optimizer.Optimize(varBodyAst));
+            }
+            userVariables.Add(new CompiledUserVariable(v.LocalName, v.NamespaceUri, v.TypeName, varModule, v.IsExternal));
+        }
+
         // 4. Lower to IR.
         var lowerer = new IrLowerer();
         var module = lowerer.Lower(optimized);
 
-        return new XQueryExecutable(module, parseResult.StaticContext);
+        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables);
     }
 
     private const string DefaultFunctionNamespace = "http://www.w3.org/2005/xpath-functions";
