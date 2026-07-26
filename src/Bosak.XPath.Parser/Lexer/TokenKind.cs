@@ -34,6 +34,8 @@ public enum TokenKind : short
     Name,
     /// <summary>The wildcard '*'.</summary>
     Star,
+    /// <summary>A whole XQuery direct element constructor (&lt;name ...&gt;...&lt;/name&gt;), emitted as one token when the lexer is in constructor mode.</summary>
+    Constructor,
 
     // ---- Grouping / punctuation --------------------------------------
     LParen,          // (

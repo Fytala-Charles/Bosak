@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 25-07-2026     | Optional window end condition                                                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 25-07-2026     | Resolve function namespaces inside DirectElementConstructorNode parts                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -106,6 +108,14 @@ public sealed class XQueryCompiler
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, context), Key = ResolveFunctionNamespaces(lookup.Key, context) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, context) },
             InlineFunctionNode inf => inf with { Body = ResolveFunctionNamespaces(inf.Body, context) },
+            DirectElementConstructorNode elem => elem with
+            {
+                Attributes = elem.Attributes.Select(a => a with
+                {
+                    ValueParts = a.ValueParts.Select(p => ResolveFunctionNamespaces(p, context)).ToList()
+                }).ToList(),
+                Content = elem.Content.Select(p => ResolveFunctionNamespaces(p, context)).ToList()
+            },
             MapConstructorNode mc => mc with { Entries = mc.Entries.Select(e => e with { Key = ResolveFunctionNamespaces(e.Key, context), Value = ResolveFunctionNamespaces(e.Value, context) }).ToList() },
             ArrayConstructorNode ac => ac with { Items = ac.Items.Select(i => ResolveFunctionNamespaces(i, context)).ToList() },
             PostfixPredicateNode pp => pp with { Expression = ResolveFunctionNamespaces(pp.Expression, context), Predicate = ResolveFunctionNamespaces(pp.Predicate, context) },

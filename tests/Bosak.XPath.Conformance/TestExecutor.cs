@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 25-07-2026     | XQuery routing refinements: dep-admitted tests, constructor/prolog gates                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 25-07-2026     | Admit direct element constructors (implemented); keep string-constructor gate           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -139,16 +141,9 @@ internal sealed class TestExecutor
     {
         var stripped = StripLiteralsAndComments(expr).TrimStart();
 
-        // Direct element constructors: an XQuery expression can start with '<', and a
-        // constructor can appear anywhere in the query ('<name'). A comparison '<' is
-        // followed by whitespace, '$', '(', or a literal, never by a bare name.
-        if (stripped.StartsWith('<') || ConstructorStartRegex.IsMatch(stripped))
-            return false;
-
-        // XML comment / processing-instruction / CDATA constructors ('<!--', '<?', '<![')
-        // and """...""" string constructors. Checked on the raw text: stripping only
-        // removes string literals and (: :) comments.
-        if (expr.Contains("<!--") || expr.Contains("<?") || expr.Contains("<![") || expr.Contains("\"\"\""))
+        // """...""" string constructors are not supported (checked on the raw text:
+        // stripping removes string literals and (: :) comments).
+        if (expr.Contains("\"\"\""))
             return false;
 
         if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
@@ -261,11 +256,6 @@ internal sealed class TestExecutor
         @"\bdeclare\s+(variable|function|option|boundary-space|default\s+order|default\s+decimal-format|ordering|copy-namespaces|context|decimal-format|construction)\b" +
         @"|\bimport\s+(module|schema)\b",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-    // Direct element constructor opening tag anywhere in the query ('<name').
-    private static readonly Regex ConstructorStartRegex = new(
-        @"<(?=[A-Za-z_])",
-        RegexOptions.Compiled);
 
     /// <summary>
     /// Removes string literals (with doubled-quote escapes) and XQuery comments

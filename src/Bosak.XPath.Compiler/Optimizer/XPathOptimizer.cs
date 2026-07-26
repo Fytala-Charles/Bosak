@@ -32,6 +32,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 25-07-2026     | Optional window end condition                                                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 25-07-2026     | Optimize DirectElementConstructorNode                                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -92,12 +94,41 @@ public sealed class XPathOptimizer
             MapConstructorNode map => OptimizeMap(map, ref changed),
             ArrayConstructorNode arr => OptimizeArray(arr, ref changed),
             InlineFunctionNode inline => OptimizeInline(inline, ref changed),
+            DirectElementConstructorNode element => OptimizeDirectElementConstructor(element, ref changed),
             FunctionCallNode call => OptimizeFunctionCall(call, ref changed),
             LetExpressionNode let => OptimizeLet(let, ref changed),
             DynamicFunctionCallNode dyn => OptimizeDynamicFunctionCall(dyn, ref changed),
             FlworExpressionNode flwor => OptimizeFlwor(flwor, ref changed),
             _ => node
         };
+    }
+
+    private DirectElementConstructorNode OptimizeDirectElementConstructor(DirectElementConstructorNode node, ref bool changed)
+    {
+        var attributes = new List<DirectAttributeNode>(node.Attributes.Count);
+        bool attrsChanged = false;
+        foreach (var attr in node.Attributes)
+        {
+            var parts = new List<XPathAstNode>(attr.ValueParts.Count);
+            foreach (var part in attr.ValueParts)
+            {
+                var optimized = OptimizeNode(part, ref changed);
+                parts.Add(optimized);
+                if (optimized != part) attrsChanged = true;
+            }
+            attributes.Add(attrsChanged ? attr with { ValueParts = parts } : attr);
+        }
+        var content = new List<XPathAstNode>(node.Content.Count);
+        bool contentChanged = false;
+        foreach (var part in node.Content)
+        {
+            var optimized = OptimizeNode(part, ref changed);
+            content.Add(optimized);
+            if (optimized != part) contentChanged = true;
+        }
+        if (!attrsChanged && !contentChanged)
+            return node;
+        return node with { Attributes = attributes, Content = content };
     }
 
     // ------------------------------------------------------------------

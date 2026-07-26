@@ -38,6 +38,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 20-07-2026     | FormatXPathFloat expands R-scientific to fixed-point inside the decimal range (1e-6)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.1   | 25-07-2026     | FromDecimal normalizes negative zero (XPath decimals have no -0)                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -93,10 +95,15 @@ public readonly struct XdmValue
     public static XdmValue FromFloat(float value) => new(XdmValueKind.Float, @double: value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromDecimal(decimal value) => new(XdmValueKind.Decimal, reference: value);
+    public static XdmValue FromDecimal(decimal value) => new(XdmValueKind.Decimal, reference: NormalizeZero(value));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromDecimal(decimal value, string schemaTypeName) => new(XdmValueKind.Decimal, reference: value, schemaTypeName: schemaTypeName);
+    public static XdmValue FromDecimal(decimal value, string schemaTypeName) => new(XdmValueKind.Decimal, reference: NormalizeZero(value), schemaTypeName: schemaTypeName);
+
+    // XPath decimals have no negative zero; the .NET decimal type preserves a -0.0 sign
+    // that would leak into casts and string conversions. Clear it, preserving scale.
+    private static decimal NormalizeZero(decimal value) =>
+        value == 0m && decimal.GetBits(value)[3] < 0 ? new decimal(0, 0, 0, false, value.Scale) : value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromString(string value) => new(XdmValueKind.String, reference: value);

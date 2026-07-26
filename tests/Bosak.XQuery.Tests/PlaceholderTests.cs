@@ -26,6 +26,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 25-07-2026     | Added g-date group/distinct and map-key timezone-presence tests                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 25-07-2026     | Added direct constructor tests (elements, attributes, comments, PIs, scoping)          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -610,6 +612,161 @@ public class PlaceholderTests
 
         Assert.Equal(XdmValueKind.Integer, result.Kind);
         Assert.Equal(2L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_Simple()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<out>hello</out>");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsNode, "Expected an element node result.");
+        Assert.Equal("out", result.NodeValue.LocalName);
+        Assert.Equal("hello", result.NodeValue.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_ComputedAttributeAndContent()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("let $e := <out a=\"two {1 + 1}\">{ for $i in (1, 2) return <item n=\"{$i}\">{$i}</item> }</out> return ($e/@a, $e/item[1]/@n, string($e))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item.ToString());
+        Assert.Equal(new[] { "two 2", "1", "12" }, items);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_NestedAtomicJoining()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("string(<out>{ (1, 2, 3) }{ (4, 5) }</out>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("1 2 34 5", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_BoundaryWhitespaceStripped()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("string(<out>  { 1 }  </out>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("1", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_XmlSpacePreserve()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("string(<out xml:space=\"preserve\">  { 1 }  </out>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("  1  ", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_CommentAndPI()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("string(<out><!-- c --><?pi d?>text</out>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("text", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_StandalonePIConstructor()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("string(<pi>{<?pi x?>}</pi>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_EntityReferencesAndBraceEscapes()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("string(<out>fish &amp; chips {{ok}}</out>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("fish & chips {ok}", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_DuplicateAttribute_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<out a=\"1\" a=\"2\"/>");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XQDY0025", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_UndeclaredPrefix_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<foo:out/>");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XPST0081", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_MismatchedTag_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() => compiler.Compile("<a></b>"));
+        Assert.Contains("XQST0118", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ForBinding_AllowingEmpty()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("count(for $x allowing empty in () return 1)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(1L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_Predicate_NodeResult_AlwaysTrue()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("count(<root><a/><b/></root>/*[self::*])");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(2L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_Window_VariableDoesNotLeak_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for tumbling window $w1 in (for tumbling window $w in (1 to 4) start when true() end at $p when $p = 2 return $w) start when true() end at $p when $p = 2 return $w");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XPST0008", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

@@ -117,6 +117,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.67  | 25-07-2026     | Named-ref arity validation; group-by collation + g-date key ordering fixes             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.68  | 25-07-2026     | Constructor opcodes; default-elem-ns tags; group-key atomization; predicate EBV; scoping |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.69  | 25-07-2026     | Attributes in content (XQTY0024); ctor-local ns; type-prefix resolution; array content  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -692,12 +696,44 @@ public static class VmEngine
                         var results = new List<XdmValue>();
 
                         var (bindLocal, bindNs) = ResolveLoopVariableKey(info, context);
-                        bool hadVariable = context.TryGetVariable(bindLocal, out var savedVar, bindNs);
-                        XdmValue savedPosVar = default;
-                        bool hadPosVariable = info.PositionalVariableName is not null &&
-                                              context.TryGetVariable(info.PositionalVariableName, out savedPosVar);
+
+                        // Save the bindings of every variable this loop scopes over: the loop
+                        // variable, an optional positional variable, and any additional scoped
+                        // names (e.g. FLWOR tuple-bound variables restored after the body).
+                        var savedBindings = new List<(string Name, string Ns, bool Had, XdmValue Value)>();
+                        void Save(string name, string ns)
+                        {
+                            savedBindings.Add((name, ns, context.TryGetVariable(name, out var saved, ns), saved));
+                        }
+                        Save(bindLocal, bindNs);
+                        if (info.PositionalVariableName is not null)
+                            Save(info.PositionalVariableName, "");
+                        if (info.ScopedVariableNames is not null)
+                        {
+                            foreach (var scoped in info.ScopedVariableNames)
+                                Save(scoped, "");
+                        }
 
                         int position = 0;
+                        if (items.Length == 0 && info.AllowingEmpty)
+                        {
+                            // XQuery "allowing empty": one iteration with the variable bound to
+                            // the empty sequence (and a declared positional variable bound to 0).
+                            context.WithVariable(bindLocal, XdmValue.FromSequence(XdmSequence.Empty), bindNs);
+                            if (info.PositionalVariableName is not null)
+                                context.WithVariable(info.PositionalVariableName, XdmValue.FromInteger(0));
+                            var (emptyResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
+                            if (emptyResult.IsSequence && emptyResult.SequenceValue is not null)
+                            {
+                                foreach (var r in XdmSequence.FromSource(emptyResult.SequenceValue))
+                                    results.Add(r);
+                            }
+                            else if (!emptyResult.IsUndefined)
+                            {
+                                results.Add(emptyResult);
+                            }
+                        }
+
                         foreach (var item in items)
                         {
                             position++;
@@ -719,17 +755,12 @@ public static class VmEngine
                             }
                         }
 
-                        if (hadVariable)
-                            context.WithVariable(bindLocal, savedVar, bindNs);
-                        else
-                            context.RemoveVariable(bindLocal, bindNs);
-
-                        if (info.PositionalVariableName is not null)
+                        foreach (var (name, ns, had, value) in savedBindings)
                         {
-                            if (hadPosVariable)
-                                context.WithVariable(info.PositionalVariableName, savedPosVar);
+                            if (had)
+                                context.WithVariable(name, value, ns);
                             else
-                                context.RemoveVariable(info.PositionalVariableName);
+                                context.RemoveVariable(name, ns);
                         }
 
                         registers[instr.RegisterA] = XdmValue.FromSequence(
@@ -938,8 +969,8 @@ public static class VmEngine
                         }
 
                         // Merge each group into a single tuple: grouping variables keep their
-                        // (shared) key value; all other variables are bound to the concatenation
-                        // of their per-tuple values.
+                        // (shared) key value atomized (per the XQuery grouping rules); all other
+                        // variables are bound to the concatenation of their per-tuple values.
                         var merged = new List<XdmValue>(groups.Count);
                         foreach (var group in groups)
                         {
@@ -949,7 +980,8 @@ public static class VmEngine
                             {
                                 if (IsGroupKeySlot(slot, groupInfo))
                                 {
-                                    mergedTuple[slot] = group[0][slot];
+                                    var keyValue = group[0][slot];
+                                    mergedTuple[slot] = SingleGroupKeyItem(Atomize(keyValue));
                                     continue;
                                 }
 
@@ -992,6 +1024,231 @@ public static class VmEngine
                             throw new InvalidOperationException(
                                 $"{enforceInfo.ErrorCode}: Value does not match the declared type '{enforceInfo.TypeName}'.");
                         }
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.SaveNamespaces:
+                    // Snapshot namespace bindings and the default element namespace for
+                    // constructor-local namespace scoping (restored by RestoreNamespaces).
+                    registers[instr.RegisterA] = XdmValue.FromExternal(
+                        (context.SnapshotNamespaces(), context.DefaultElementNamespace));
+                    ip++;
+                    break;
+
+                case IrOpCode.DeclareNamespace:
+                    {
+                        // Constructor-local namespace declaration (prefix operand in the pool,
+                        // URI value in RegisterB). Empty prefix sets the default element namespace.
+                        string prefix = (string)literalPool[instr.Operand]!;
+                        var nsValue = registers[instr.RegisterB];
+                        string uri = nsValue.IsUndefined ? string.Empty : Atomize(nsValue).ToString();
+                        if (prefix.Length == 0)
+                        {
+                            // An empty URI undeclares the default namespace.
+                            context.DefaultElementNamespace = uri.Length == 0 ? null : uri;
+                        }
+                        else if (uri.Length == 0)
+                        {
+                            // An empty URI undeclares the prefix.
+                            context.RemoveNamespace(prefix);
+                        }
+                        else
+                        {
+                            context.WithNamespace(prefix, uri);
+                        }
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.RestoreNamespaces:
+                    {
+                        var snapshot = ((Dictionary<string, string> Namespaces, string? DefaultNs))registers[instr.RegisterB].ExternalValue!;
+                        context.RestoreNamespaces(snapshot.Namespaces);
+                        context.DefaultElementNamespace = snapshot.DefaultNs;
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.ConstructElement:
+                    {
+                        var ctorInfo = (ConstructElementInfo)literalPool[instr.Operand]!;
+
+                        // Evaluate all attribute values first.
+                        var evaluatedAttrs = new List<(string LocalName, string? Prefix, string Value)>(ctorInfo.Attributes.Length);
+                        foreach (var attr in ctorInfo.Attributes)
+                        {
+                            var valueParts = new List<string>();
+                            for (int i = attr.FirstPart; i < attr.FirstPart + attr.PartCount; i++)
+                            {
+                                var part = ctorInfo.Parts[i];
+                                valueParts.Add(part.Kind == ConstructPartKind.Literal
+                                    ? (string)literalPool[part.Index]!
+                                    : JoinAtomizedItems(registers[instr.RegisterB + part.Index], " "));
+                            }
+                            var value = string.Concat(valueParts);
+
+                            // Direct constructor attribute values are whitespace-normalized
+                            // (collapse runs and trim), per the XQuery construction rules.
+                            value = NormalizeConstructorAttributeValue(value);
+                            evaluatedAttrs.Add((attr.LocalName, attr.Prefix, value));
+                        }
+
+                        // Tag prefix resolves against the static context (constructor-local
+                        // declarations were applied by DeclareNamespace); an unprefixed tag
+                        // uses the default element namespace (attribute names never do).
+                        string? tagNs = null;
+                        if (ctorInfo.Prefix is not null)
+                        {
+                            if (!context.TryResolveNamespace(ctorInfo.Prefix, out var resolvedTagNs))
+                                throw new InvalidOperationException($"XPST0081: Prefix '{ctorInfo.Prefix}' is not declared.");
+                            tagNs = resolvedTagNs;
+                        }
+                        else if (!string.IsNullOrEmpty(context.DefaultElementNamespace))
+                        {
+                            tagNs = context.DefaultElementNamespace;
+                        }
+
+                        var attributes = new List<XdmAttributeValue>(evaluatedAttrs.Count);
+                        var seenAttrs = new HashSet<(string, string)>();
+                        foreach (var (attrLocalName, attrPrefix, attrValue) in evaluatedAttrs)
+                        {
+                            string? attrNs = null;
+                            if (attrPrefix is not null && attrPrefix != "xmlns")
+                            {
+                                if (!context.TryResolveNamespace(attrPrefix, out var resolvedAttrNs))
+                                    throw new InvalidOperationException($"XPST0081: Prefix '{attrPrefix}' is not declared.");
+                                attrNs = resolvedAttrNs;
+                            }
+
+                            // XQDY0025: duplicate expanded attribute names are an error
+                            // (xmlns declarations are not ordinary attributes).
+                            if (attrLocalName != "xmlns" && attrPrefix != "xmlns" &&
+                                !seenAttrs.Add((attrLocalName, attrNs ?? "")))
+                            {
+                                throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrLocalName}'.");
+                            }
+                            attributes.Add(new XdmAttributeValue(attrLocalName, attrPrefix, attrNs, attrValue));
+                        }
+
+                        var content = new List<XdmContentItem>();
+                        string? pendingAtomic = null;
+                        bool seenNonAttributeContent = false;
+                        void FlushAtomic()
+                        {
+                            if (pendingAtomic is not null)
+                            {
+                                content.Add(new XdmContentItem(XdmContentKind.Text, pendingAtomic));
+                                pendingAtomic = null;
+                                seenNonAttributeContent = true;
+                            }
+                        }
+
+                        for (int i = ctorInfo.FirstContentPart; i < ctorInfo.FirstContentPart + ctorInfo.ContentPartCount; i++)
+                        {
+                            var part = ctorInfo.Parts[i];
+                            switch (part.Kind)
+                            {
+                                case ConstructPartKind.Literal:
+                                    FlushAtomic();
+                                    content.Add(new XdmContentItem(XdmContentKind.Text, (string)literalPool[part.Index]!));
+                                    seenNonAttributeContent = true;
+                                    break;
+                                case ConstructPartKind.Comment:
+                                    FlushAtomic();
+                                    content.Add(new XdmContentItem(XdmContentKind.Comment, (string)literalPool[part.Index]!));
+                                    seenNonAttributeContent = true;
+                                    break;
+                                case ConstructPartKind.ProcessingInstruction:
+                                    FlushAtomic();
+                                    content.Add(new XdmContentItem(XdmContentKind.ProcessingInstruction,
+                                        (string)literalPool[part.Index]!, null, (string)literalPool[part.Index2]!));
+                                    seenNonAttributeContent = true;
+                                    break;
+                                default:
+                                    foreach (var item in MaterializeSequence(registers[instr.RegisterB + part.Index]))
+                                    {
+                                        // XQuery content rules: attribute nodes in content become
+                                        // attributes of the element, but only before any other
+                                        // content (XQTY0024 after non-attribute content).
+                                        if (item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Attribute)
+                                        {
+                                            if (seenNonAttributeContent)
+                                                throw new InvalidOperationException("XQTY0024: An attribute node in element content must not follow other content.");
+                                            var attrNode = item.NodeValue;
+                                            // The attribute keeps the namespace it had in the source.
+                                            string? itemNs = string.IsNullOrEmpty(attrNode.NamespaceUri) ? null : attrNode.NamespaceUri;
+                                            if (attrNode.LocalName != "xmlns" && attrNode.Prefix != "xmlns" &&
+                                                !seenAttrs.Add((attrNode.LocalName, itemNs ?? "")))
+                                            {
+                                                throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrNode.LocalName}'.");
+                                            }
+                                            attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue));
+                                            continue;
+                                        }
+                                        if (item.IsNode)
+                                        {
+                                            FlushAtomic();
+                                            content.Add(new XdmContentItem(XdmContentKind.Node, null, item));
+                                            seenNonAttributeContent = true;
+                                        }
+                                        else if (item.IsArray && item.ArrayValue is not null)
+                                        {
+                                            // Arrays in content are flattened: their members are
+                                            // processed recursively as content.
+                                            foreach (var member in item.ArrayValue.Values)
+                                            {
+                                                if (member.IsNode)
+                                                {
+                                                    FlushAtomic();
+                                                    content.Add(new XdmContentItem(XdmContentKind.Node, null, member));
+                                                    seenNonAttributeContent = true;
+                                                }
+                                                else
+                                                {
+                                                    var memberText = member.ToString();
+                                                    pendingAtomic = pendingAtomic is null ? memberText : pendingAtomic + " " + memberText;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Adjacent atomic values WITHIN one enclosed expression join
+                                            // with single spaces; separate expressions concatenate
+                                            // without a separator.
+                                            var text = item.ToString();
+                                            pendingAtomic = pendingAtomic is null ? text : pendingAtomic + " " + text;
+                                            seenNonAttributeContent = true;
+                                        }
+                                    }
+                                    // End of one enclosed expression: flush so the next part starts fresh.
+                                    FlushAtomic();
+                                    break;
+                            }
+                        }
+                        FlushAtomic();
+
+                        if (context.ElementConstructorHook is null)
+                        {
+                            throw new InvalidOperationException(
+                                "Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
+                        }
+
+                        var spec = new XdmElementSpec(ctorInfo.LocalName, ctorInfo.Prefix, tagNs, attributes, content, context.BaseUri);
+                        registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.ConstructContentNode:
+                    {
+                        var item = (XdmContentItem)literalPool[instr.Operand]!;
+                        if (context.ContentNodeConstructorHook is null)
+                        {
+                            throw new InvalidOperationException(
+                                "Node construction is not available: no content-node provider is registered (EvaluationContext.ContentNodeConstructorHook).");
+                        }
+                        registers[instr.RegisterA] = XdmValue.FromNode(context.ContentNodeConstructorHook(item));
                         ip++;
                         break;
                     }
@@ -1300,21 +1557,40 @@ public static class VmEngine
                             context.WithFocus(items[i], i + 1, items.Length);
                             var (predResult, _) = ExecuteBlock(module, context, registers, predicateEntry);
 
-                            // Predicate results are atomized before checking numeric/EBV.
-                            // Atomization of a multi-item sequence raises XPTY0004; an empty
-                            // sequence yields false; a singleton numeric value is a positional
-                            // predicate; any other singleton is evaluated as EBV.
-                            var predAtomized = Atomize(predResult);
-
-                            // Numeric predicate: [n] means position() = n
-                            // XPath 2.0 §3.2.4: true iff the numeric value is equal to context position.
-                            // Any numeric type (integer, decimal, float, double) counts.
-                            if (IsNumeric(predAtomized))
+                            // Predicate semantics (XPath §2.4): a singleton whose single item
+                            // is numeric is a positional predicate ([n] means position() = n);
+                            // everything else uses effective boolean value — a node is always
+                            // true, so the result must NOT be atomized before the EBV check.
+                            bool numericPredicate = false;
+                            double numericValue = 0;
+                            if (!predResult.IsUndefined)
                             {
-                                if (ToDouble(predAtomized) == i + 1)
+                                if (IsNumeric(predResult))
+                                {
+                                    numericPredicate = true;
+                                    numericValue = ToDouble(predResult);
+                                }
+                                else if (predResult.IsSequence && predResult.SequenceValue is not null)
+                                {
+                                    var predItems = MaterializeSequence(predResult);
+                                    if (predItems.Length == 1 && !predItems[0].IsNode)
+                                    {
+                                        var atomizedItem = Atomize(predItems[0]);
+                                        if (IsNumeric(atomizedItem))
+                                        {
+                                            numericPredicate = true;
+                                            numericValue = ToDouble(atomizedItem);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (numericPredicate)
+                            {
+                                if (numericValue == i + 1)
                                     kept.Add(items[i]);
                             }
-                            else if (predAtomized.EffectiveBooleanValue())
+                            else if (predResult.EffectiveBooleanValue())
                             {
                                 kept.Add(items[i]);
                             }
@@ -4908,6 +5184,24 @@ public static class VmEngine
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
             normalized = normalized[..^1].TrimEnd();
 
+        // A prefixed type name resolves via the in-scope namespaces (constructor-local
+        // declarations included): the XML Schema namespace maps to the bare type.
+        if (normalized.Contains(':') && !normalized.Contains('{'))
+        {
+            int colon = normalized.IndexOf(':');
+            var typePrefix = normalized[..colon];
+            if (context is not null && context.TryResolveNamespace(typePrefix, out var resolvedTypeNs))
+            {
+                if (resolvedTypeNs != "http://www.w3.org/2001/XMLSchema")
+                    throw new InvalidOperationException("XPST0051");
+                normalized = normalized[(colon + 1)..];
+            }
+            else
+            {
+                throw new InvalidOperationException($"XPST0081: Prefix '{typePrefix}' is not declared.");
+            }
+        }
+
         // Empty sequence casts to empty sequence for all types
         if (value.IsUndefined)
         {
@@ -6160,11 +6454,22 @@ public static class VmEngine
         {
             effective = normalized.StartsWith("xsd:") ? normalized[4..] : normalized;
         }
-        else if (typeName.Contains(':') && !typeName.Contains('('))
+        else if (typeName.Contains(':') && !typeName.Contains('(') && !typeName.Contains('{'))
         {
-            // A prefixed name that is not a node-kind test and not in the XML Schema
-            // namespace is not a valid sequence type name.
-            throw new InvalidOperationException("XPST0051");
+            // A prefixed type name resolves via the in-scope namespaces: the XML Schema
+            // namespace maps to the bare type; any other (or undeclared) prefix errors.
+            int colon = typeName.IndexOf(':');
+            var typePrefix = typeName[..colon];
+            if (context is not null && context.TryResolveNamespace(typePrefix, out var resolvedTypeNs))
+            {
+                if (resolvedTypeNs != "http://www.w3.org/2001/XMLSchema")
+                    throw new InvalidOperationException("XPST0051");
+                effective = normalized[(normalized.IndexOf(':') + 1)..];
+            }
+            else
+            {
+                throw new InvalidOperationException($"XPST0081: Prefix '{typePrefix}' is not declared.");
+            }
         }
         else
         {
@@ -8334,6 +8639,32 @@ public static class VmEngine
             return resolved.AbsoluteUri;
         }
         return collation;
+    }
+
+    /// <summary>
+    /// Atomizes a value and joins the string forms of its items with a separator
+    /// (used for computed attribute values in element constructors).
+    /// </summary>
+    private static string JoinAtomizedItems(XdmValue value, string separator)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+        if (!value.IsSequence || value.SequenceValue is null)
+            return Atomize(value).ToString();
+        var items = MaterializeSequence(value);
+        if (items.Length == 0)
+            return string.Empty;
+        var parts = new string[items.Length];
+        for (int i = 0; i < items.Length; i++)
+            parts[i] = Atomize(items[i]).ToString();
+        return string.Join(separator, parts);
+    }
+
+    /// <summary>Collapses whitespace runs and trims (fn:normalize-space semantics).</summary>
+    private static string NormalizeConstructorAttributeValue(string value)
+    {
+        var parts = value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        return string.Join(' ', parts);
     }
 
     private static bool IsSupportedOrderByCollation(string collation)

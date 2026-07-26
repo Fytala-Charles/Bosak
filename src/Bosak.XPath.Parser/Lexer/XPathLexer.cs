@@ -16,6 +16,8 @@
 //                      | Charles Korthout | 0.4   | 19-07-2026     | NumericLiteral followed by NameStartChar is Invalid (10idiv → XPST0003)                 |
 //                      | Charles Korthout | 0.5   | 20-07-2026     | Unterminated XPath comments now raise XPST0003                                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 25-07-2026     | Constructor mode: direct element/comment/PI constructors as single tokens               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -28,11 +30,13 @@ namespace Bosak.XPath.Parser.Lexer;
 public ref struct XPathLexer
 {
     private readonly ReadOnlySpan<char> _source;
+    private readonly bool _allowConstructors;
     private int _position;
 
-    public XPathLexer(ReadOnlySpan<char> source)
+    public XPathLexer(ReadOnlySpan<char> source, bool allowConstructors = false)
     {
         _source = source;
+        _allowConstructors = allowConstructors;
         _position = 0;
     }
 
@@ -52,6 +56,42 @@ public ref struct XPathLexer
 
         int start = _position;
         char c = _source[_position];
+
+        // ---- XQuery direct element constructors -----------------------
+        // '<' followed by a name-start char begins a constructor; the whole span
+        // (attributes, text, nested elements, enclosed expressions) is one token.
+        // Anything that does not match the structure falls back to the '<' operator.
+        if (_allowConstructors && c == '<' && _position + 1 < _source.Length && IsNameStartChar(_source[_position + 1]))
+        {
+            var ctor = TryScanConstructor(start);
+            if (ctor.Kind != TokenKind.Invalid)
+            {
+                _position = start + ctor.Length;
+                return ctor;
+            }
+            _position = start;
+        }
+
+        // Direct comment / processing-instruction constructors (standalone expressions).
+        if (_allowConstructors && c == '<' && _position + 1 < _source.Length && _source[_position + 1] == '?')
+        {
+            int close = IndexOf(_position + 2, "?>");
+            if (close >= 0)
+            {
+                _position = close + 2;
+                return new Token(TokenKind.Constructor, start, _position - start);
+            }
+        }
+        if (_allowConstructors && c == '<' && _position + 1 < _source.Length && _source[_position + 1] == '!' &&
+            _position + 3 < _source.Length && _source[_position + 2] == '-' && _source[_position + 3] == '-')
+        {
+            int close = IndexOf(_position + 4, "-->");
+            if (close >= 0)
+            {
+                _position = close + 3;
+                return new Token(TokenKind.Constructor, start, _position - start);
+            }
+        }
 
         // ---- Literals ------------------------------------------------
         if (c == '"' || c == '\'')
@@ -586,6 +626,294 @@ public ref struct XPathLexer
         if (SeqEqual(text, "transform")) return TokenKind.Name;
         if (SeqEqual(text, "typeswitch")) return TokenKind.Name; // XQuery
         return TokenKind.Name;
+    }
+
+    // ------------------------------------------------------------------
+    // XQuery direct element constructors
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Attempts to scan a whole direct element constructor starting at '<'. Returns an
+    /// Invalid token when the structure does not hold (the caller then re-lexes '<' as
+    /// the comparison operator). Structure validation is shallow: name matching and
+    /// expression parsing are left to the parser.
+    /// </summary>
+    private Token TryScanConstructor(int start)
+    {
+        int pos = start + 1;
+        if (!ScanNcName(ref pos))
+            return default;
+
+        // Attributes / open tag.
+        while (true)
+        {
+            ScanWhitespace(ref pos);
+            if (pos >= _source.Length)
+                return default;
+            char c = _source[pos];
+            if (c == '>')
+            {
+                pos++;
+                break;
+            }
+            if (c == '/' && pos + 1 < _source.Length && _source[pos + 1] == '>')
+                return new Token(TokenKind.Constructor, start, pos + 2 - start);
+            if (!ScanNcName(ref pos))
+                return default;
+            ScanWhitespace(ref pos);
+            if (pos >= _source.Length || _source[pos] != '=')
+                return default;
+            pos++;
+            ScanWhitespace(ref pos);
+            if (pos >= _source.Length || (_source[pos] != '"' && _source[pos] != '\''))
+                return default;
+            char quote = _source[pos++];
+            if (!ScanConstructorAttributeValue(ref pos, quote))
+                return default;
+        }
+
+        // Content until the matching end tag (depth tracks nested open elements).
+        int depth = 1;
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == '<')
+            {
+                if (MatchesAt(pos, "<!--"))
+                {
+                    int close = IndexOf(pos + 4, "-->");
+                    if (close < 0) return default;
+                    pos = close + 3;
+                    continue;
+                }
+                if (MatchesAt(pos, "<![CDATA["))
+                {
+                    int close = IndexOf(pos + 9, "]]>");
+                    if (close < 0) return default;
+                    pos = close + 3;
+                    continue;
+                }
+                if (pos + 1 < _source.Length && _source[pos + 1] == '?')
+                {
+                    int close = IndexOf(pos + 2, "?>");
+                    if (close < 0) return default;
+                    pos = close + 2;
+                    continue;
+                }
+                if (pos + 1 < _source.Length && _source[pos + 1] == '/')
+                {
+                    pos += 2;
+                    ScanWhitespace(ref pos);
+                    if (!ScanNcName(ref pos))
+                        return default;
+                    ScanWhitespace(ref pos);
+                    if (pos >= _source.Length || _source[pos] != '>')
+                        return default;
+                    pos++;
+                    depth--;
+                    if (depth == 0)
+                        return new Token(TokenKind.Constructor, start, pos - start);
+                    continue;
+                }
+                if (pos + 1 < _source.Length && IsNameStartChar(_source[pos + 1]))
+                {
+                    pos++;
+                    if (!ScanNcName(ref pos))
+                        return default;
+                    bool selfClosed = false;
+                    while (true)
+                    {
+                        ScanWhitespace(ref pos);
+                        if (pos >= _source.Length)
+                            return default;
+                        char c2 = _source[pos];
+                        if (c2 == '>')
+                        {
+                            pos++;
+                            break;
+                        }
+                        if (c2 == '/' && pos + 1 < _source.Length && _source[pos + 1] == '>')
+                        {
+                            pos += 2;
+                            selfClosed = true;
+                            break;
+                        }
+                        if (!ScanNcName(ref pos))
+                            return default;
+                        ScanWhitespace(ref pos);
+                        if (pos >= _source.Length || _source[pos] != '=')
+                            return default;
+                        pos++;
+                        ScanWhitespace(ref pos);
+                        if (pos >= _source.Length || (_source[pos] != '"' && _source[pos] != '\''))
+                            return default;
+                        char quote2 = _source[pos++];
+                        if (!ScanConstructorAttributeValue(ref pos, quote2))
+                            return default;
+                    }
+                    if (!selfClosed)
+                        depth++;
+                    continue;
+                }
+                return default;
+            }
+            if (c == '{')
+            {
+                if (pos + 1 < _source.Length && _source[pos + 1] == '{')
+                {
+                    pos += 2;
+                    continue;
+                }
+                if (!ScanBalancedBraces(ref pos))
+                    return default;
+                continue;
+            }
+            if (c == '}' && pos + 1 < _source.Length && _source[pos + 1] == '}')
+            {
+                pos += 2;
+                continue;
+            }
+            pos++;
+        }
+        return default;
+    }
+
+    private bool ScanNcName(ref int pos)
+    {
+        if (pos >= _source.Length || !IsNameStartChar(_source[pos]) || _source[pos] == ':')
+            return false;
+        pos++;
+        while (pos < _source.Length && IsNameChar(_source[pos]) && _source[pos] != ':')
+            pos++;
+        // Optional prefix:local part.
+        if (pos < _source.Length && _source[pos] == ':')
+        {
+            pos++;
+            if (pos >= _source.Length || !IsNameStartChar(_source[pos]) || _source[pos] == ':')
+                return false;
+            pos++;
+            while (pos < _source.Length && IsNameChar(_source[pos]))
+                pos++;
+        }
+        return true;
+    }
+
+    private void ScanWhitespace(ref int pos)
+    {
+        while (pos < _source.Length && char.IsWhiteSpace(_source[pos]))
+            pos++;
+    }
+
+    private bool MatchesAt(int pos, string text)
+        => _source.Length - pos >= text.Length && _source.Slice(pos, text.Length).SequenceEqual(text.AsSpan());
+
+    private int IndexOf(int from, string text)
+    {
+        int idx = _source.Slice(from).IndexOf(text.AsSpan(), StringComparison.Ordinal);
+        return idx < 0 ? -1 : from + idx;
+    }
+
+    private bool ScanConstructorAttributeValue(ref int pos, char quote)
+    {
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == quote)
+            {
+                // A doubled quote is an escaped literal quote, not the delimiter.
+                if (pos + 1 < _source.Length && _source[pos + 1] == quote)
+                {
+                    pos += 2;
+                    continue;
+                }
+                pos++;
+                return true;
+            }
+            if (c == '{')
+            {
+                if (pos + 1 < _source.Length && _source[pos + 1] == '{')
+                {
+                    pos += 2;
+                    continue;
+                }
+                if (!ScanBalancedBraces(ref pos))
+                    return false;
+                continue;
+            }
+            if (c == '}' && pos + 1 < _source.Length && _source[pos + 1] == '}')
+            {
+                pos += 2;
+                continue;
+            }
+            pos++;
+        }
+        return false;
+    }
+
+    private bool ScanBalancedBraces(ref int pos)
+    {
+        int depth = 1;
+        pos++;
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == '{')
+            {
+                depth++;
+            }
+            else if (c == '}')
+            {
+                depth--;
+                if (depth == 0)
+                {
+                    pos++;
+                    return true;
+                }
+            }
+            else if (c == '\'' || c == '"')
+            {
+                char q = c;
+                pos++;
+                while (pos < _source.Length)
+                {
+                    if (_source[pos] == q)
+                    {
+                        if (pos + 1 < _source.Length && _source[pos + 1] == q)
+                        {
+                            pos += 2;
+                            continue;
+                        }
+                        break;
+                    }
+                    pos++;
+                }
+            }
+            else if (c == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':')
+            {
+                int commentDepth = 1;
+                pos += 2;
+                while (pos < _source.Length && commentDepth > 0)
+                {
+                    if (_source[pos] == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':')
+                    {
+                        commentDepth++;
+                        pos += 2;
+                    }
+                    else if (_source[pos] == ':' && pos + 1 < _source.Length && _source[pos + 1] == ')')
+                    {
+                        commentDepth--;
+                        pos += 2;
+                    }
+                    else
+                    {
+                        pos++;
+                    }
+                }
+                continue;
+            }
+            pos++;
+        }
+        return false;
     }
 
     // ------------------------------------------------------------------

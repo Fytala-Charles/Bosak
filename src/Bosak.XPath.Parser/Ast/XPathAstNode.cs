@@ -26,6 +26,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 25-07-2026     | Optional window end condition; FlworTypeDeclaration for 'as SequenceType' bindings      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 25-07-2026     | Added direct constructor AST nodes (element/attribute/comment/PI)                       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 25-07-2026     | Added SignificantTextNode; AllowingEmpty on QuantifiedBinding                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -177,7 +181,38 @@ public sealed record GroupingSpec(
 /// <summary>An optional type declaration on a FLWOR variable binding: <c>as SequenceType</c>.</summary>
 public sealed record FlworTypeDeclaration(string TypeName, string? Prefix, OccurrenceIndicator Occurrence);
 
-public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null);
+// ------------------------------------------------------------------
+// XQuery direct constructors
+// ------------------------------------------------------------------
+
+/// <summary>
+/// A direct element constructor: <c>&lt;name a="v"&gt;content {expr}&lt;/name&gt;</c>.
+/// Content and attribute values are lists of parts: <see cref="StringLiteralNode"/> for
+/// literal text, expression nodes for enclosed expressions, and nested
+/// <see cref="DirectElementConstructorNode"/> for nested elements.
+/// </summary>
+public sealed record DirectElementConstructorNode(
+    string TagName,
+    string? Prefix,
+    IReadOnlyList<DirectAttributeNode> Attributes,
+    IReadOnlyList<XPathAstNode> Content) : XPathAstNode;
+
+/// <summary>A direct attribute constructor: <c>name="literal {expr} literal"</c>.</summary>
+public sealed record DirectAttributeNode(
+    string Name,
+    string? Prefix,
+    IReadOnlyList<XPathAstNode> ValueParts);
+
+/// <summary>A comment constructor inside direct element content: <c>&lt;!-- ... --&gt;</c>.</summary>
+public sealed record DirectCommentNode(string Value) : XPathAstNode;
+
+/// <summary>A processing-instruction constructor inside direct element content: <c>&lt;?target data?&gt;</c>.</summary>
+public sealed record DirectProcessingInstructionNode(string Target, string Value) : XPathAstNode;
+
+/// <summary>Literal text in element content that contains a character/entity reference and is therefore never boundary whitespace.</summary>
+public sealed record SignificantTextNode(string Value) : XPathAstNode;
+
+public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null, bool AllowingEmpty = false);
 
 // ------------------------------------------------------------------
 // Binary / Unary expressions

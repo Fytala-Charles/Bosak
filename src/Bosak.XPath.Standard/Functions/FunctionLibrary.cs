@@ -168,6 +168,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.70  | 25-07-2026     | Variadic fn:concat registration; g* date equality in distinct-values/deep-equal       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.71  | 25-07-2026     | distinct-values returns atomized values; day-from-dateTime parameter conversion       |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1824,6 +1826,7 @@ public static class FunctionLibrary
                 LocalName = "day-from-dateTime",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.DateTime],
+                ParameterTypeNames = ["xs:dateTime?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = DayFromDateTime
             },
@@ -7299,7 +7302,8 @@ public static class FunctionLibrary
             if (isDistinct)
             {
                 seen.Add(atomized);
-                result.Add(item);
+                // fn:distinct-values returns the atomized values, not the original nodes.
+                result.Add(atomized);
             }
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));

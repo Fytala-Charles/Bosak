@@ -17,6 +17,12 @@
 //                      | Charles Korthout | 0.5   | 15-07-2026     | Added LoadXml overload with explicit baseUri for published resource URIs                |
 //                      | Charles Korthout | 0.6   | 19-07-2026     | Added LoadXml overload with optional XML Schema validation and PSVI annotations         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 25-07-2026     | Added ConstructElement for XQuery element constructors (ElementConstructorHook)        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 25-07-2026     | Added ConstructContentNode; xmlns:xml redundancy and xmlns:xmlns rejection             |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 25-07-2026     | Namespace fixup; in-scope namespace copying on clones; base-URI annotation             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -56,6 +62,225 @@ public static class XDocumentProvider
             XDocumentNode.RegisterOrderMap(doc, map);
         }
         return new XDocumentNode(element);
+    }
+
+    /// <summary>
+    /// Builds an XDocument-backed element node from provider-neutral construction data
+    /// (the <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.ElementConstructorHook"/>).
+    /// Prefixes used by the tag and attributes are declared on the element so that
+    /// serialization honors them; existing nodes are deep-copied into the new tree.
+    /// </summary>
+    /// <param name="spec">The provider-neutral element construction data.</param>
+    /// <returns>The constructed element node.</returns>
+    public static IXdmNode ConstructElement(XdmElementSpec spec)
+    {
+        ArgumentNullException.ThrowIfNull(spec);
+
+        XNamespace ns = spec.NamespaceUri is null ? XNamespace.None : XNamespace.Get(spec.NamespaceUri);
+        var element = new XElement(ns + spec.LocalName);
+
+        // The constructed element's base URI is the static base URI of the query
+        // (honored by XDocumentNode.ResolveXmlBase through the string annotation).
+        if (!string.IsNullOrEmpty(spec.BaseUri))
+            element.AddAnnotation(spec.BaseUri);
+
+        // Declare prefixes so serialization uses the source prefixes rather than generated ones.
+        // Explicit xmlns declarations in the constructor always win over generated ones.
+        var declared = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var attr in spec.Attributes)
+        {
+            if (attr.Prefix == "xmlns")
+                declared.Add(attr.LocalName);
+            else if (attr.LocalName == "xmlns" && attr.Prefix is null)
+                declared.Add("");
+        }
+        void Declare(string? prefix, string? nsUri)
+        {
+            if (string.IsNullOrEmpty(nsUri))
+                return;
+            if (prefix is null)
+            {
+                if (declared.Add(""))
+                    element.Add(new XAttribute("xmlns", nsUri));
+            }
+            else if (prefix is not ("xml" or "xmlns") && declared.Add(prefix))
+            {
+                element.Add(new XAttribute(XNamespace.Xmlns + prefix, nsUri));
+            }
+        }
+        Declare(spec.Prefix, spec.NamespaceUri);
+
+        foreach (var attr in spec.Attributes)
+        {
+            if (attr.Prefix == "xmlns")
+            {
+                // xmlns:xml is redundant (the xml prefix is implicitly bound);
+                // xmlns:xmlns is a reserved-namespace error (XQDY0074).
+                if (attr.LocalName == "xmlns")
+                    throw new InvalidOperationException("XQDY0074: The 'xmlns' prefix must not be declared.");
+                if (attr.LocalName != "xml")
+                    element.Add(new XAttribute(XNamespace.Xmlns + attr.LocalName, attr.Value));
+            }
+            else if (attr.LocalName == "xmlns" && attr.Prefix is null)
+            {
+                element.Add(new XAttribute("xmlns", attr.Value));
+            }
+            else
+            {
+                Declare(attr.Prefix, attr.NamespaceUri);
+                XNamespace ans = attr.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attr.NamespaceUri);
+                element.Add(new XAttribute(ans + attr.LocalName, attr.Value));
+            }
+        }
+
+        string? pendingText = null;
+        void FlushText()
+        {
+            if (pendingText is not null)
+            {
+                element.Add(pendingText);
+                pendingText = null;
+            }
+        }
+
+        foreach (var item in spec.Content)
+        {
+            switch (item.Kind)
+            {
+                case XdmContentKind.Text:
+                    pendingText = pendingText is null ? item.Text : pendingText + item.Text;
+                    break;
+                case XdmContentKind.Comment:
+                    FlushText();
+                    element.Add(new XComment(item.Text ?? string.Empty));
+                    break;
+                case XdmContentKind.ProcessingInstruction:
+                    FlushText();
+                    element.Add(new XProcessingInstruction(item.Target ?? string.Empty, item.Text ?? string.Empty));
+                    break;
+                default:
+                    FlushText();
+                    var childNode = CloneNode(item.Node!.Value);
+                    if (childNode is XElement childElement)
+                        ApplyNamespaceFixup(element, childElement);
+                    element.Add(childNode);
+                    break;
+            }
+        }
+        FlushText();
+
+        return new XDocumentNode(element);
+    }
+
+    /// <summary>
+    /// Builds an XDocument-backed comment or processing-instruction node
+    /// (the <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.ContentNodeConstructorHook"/>).
+    /// </summary>
+    /// <param name="item">The content item to construct.</param>
+    /// <returns>The constructed node.</returns>
+    public static IXdmNode ConstructContentNode(XdmContentItem item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        return item.Kind switch
+        {
+            XdmContentKind.Comment => new XDocumentNode(new XComment(item.Text ?? string.Empty)),
+            XdmContentKind.ProcessingInstruction => new XDocumentNode(new XProcessingInstruction(item.Target ?? string.Empty, item.Text ?? string.Empty)),
+            _ => throw new ArgumentException($"ConstructContentNode does not handle kind '{item.Kind}'.", nameof(item))
+        };
+    }
+
+    /// <summary>
+    /// Removes namespace declarations from a child element that are identical to bindings
+    /// already in scope at the parent (XML namespace fixup: redundant re-declarations are
+    /// omitted from the output).
+    /// </summary>
+    private static void ApplyNamespaceFixup(XElement parent, XElement child)
+    {
+        var inScope = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var ancestor in parent.AncestorsAndSelf())
+        {
+            foreach (var attr in ancestor.Attributes())
+            {
+                if (!attr.IsNamespaceDeclaration)
+                    continue;
+                string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                inScope.TryAdd(prefix, attr.Value);
+            }
+        }
+
+        var redundant = child.Attributes()
+            .Where(a => a.IsNamespaceDeclaration)
+            .Where(a =>
+            {
+                string prefix = a.Name.LocalName == "xmlns" ? string.Empty : a.Name.LocalName;
+                return inScope.TryGetValue(prefix, out var uri) && uri == a.Value;
+            })
+            .ToList();
+        foreach (var attr in redundant)
+            attr.Remove();
+    }
+
+    private static XNode CloneNode(XdmValue nodeValue)
+    {
+        var node = nodeValue.NodeValue;
+        XNode clone;
+        if (node is XDocumentNode xDocumentNode)
+        {
+            clone = xDocumentNode.UnderlyingObject switch
+            {
+                XElement element => new XElement(element),
+                System.Xml.Linq.XDocument document => new XDocument(document),
+                XText text => new XText(text.Value),
+                XComment comment => new XComment(comment.Value),
+                XProcessingInstruction pi => new XProcessingInstruction(pi.Target, pi.Data),
+                XAttribute => throw new InvalidOperationException("FOTY0013: Cannot copy a free-standing attribute node."),
+                _ => XElement.Parse(node.StringValue)
+            };
+        }
+        else
+        {
+            // Non-XDocument providers: round-trip through the serialized form.
+            clone = XElement.Parse(node.StringValue);
+        }
+
+        // A copied element carries the in-scope namespace declarations it needs
+        // (prefixes used by its name, attribute names, and subtree).
+        if (clone is XElement cloneElement && node is XDocumentNode sourceNode &&
+            sourceNode.UnderlyingObject is XElement sourceElement)
+        {
+            CopyInScopeNamespaces(sourceElement, cloneElement);
+        }
+        return clone;
+    }
+
+    private static void CopyInScopeNamespaces(XElement source, XElement clone)
+    {
+        // Declarations in scope at the source element (own + inherited) are part of the copy.
+        var declared = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var ancestor in source.AncestorsAndSelf())
+        {
+            foreach (var attr in ancestor.Attributes())
+            {
+                if (!attr.IsNamespaceDeclaration)
+                    continue;
+                string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                declared.TryAdd(prefix, attr.Value);
+            }
+        }
+
+        var declaredOnClone = new HashSet<string>(
+            clone.Attributes().Where(a => a.IsNamespaceDeclaration)
+                .Select(a => a.Name.LocalName == "xmlns" ? string.Empty : a.Name.LocalName),
+            StringComparer.Ordinal);
+        foreach (var (prefix, uri) in declared)
+        {
+            if (declaredOnClone.Contains(prefix))
+                continue;
+            if (prefix.Length == 0)
+                clone.Add(new XAttribute("xmlns", uri));
+            else if (prefix is not ("xml" or "xmlns"))
+                clone.Add(new XAttribute(XNamespace.Xmlns + prefix, uri));
+        }
     }
 
     /// <summary>

@@ -45,6 +45,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.17  | 25-07-2026     | Nested-rhs Return fix; positional vars in tuples; 'as' type enforcement (EnforceType)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.18  | 25-07-2026     | Constructor lowering; FLWOR tuple vars scoped to the body For; count counter ref-eq     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.19  | 25-07-2026     | Constructor-local namespace declarations (SaveNamespaces/DeclareNamespace)              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -56,7 +60,7 @@ namespace Bosak.XPath.Compiler.Ir;
 /// <summary>
 /// Loop information stored in the literal pool for For/Some/Every opcodes.
 /// </summary>
-public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null);
+public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, bool AllowingEmpty = false, IReadOnlyList<string>? ScopedVariableNames = null);
 
 /// <summary>
 /// Try/catch information stored in the literal pool for the TryCatch opcode.
@@ -95,6 +99,45 @@ public readonly record struct GroupByInfo(
 /// Raises the given error code when the value is not an instance of the declared type.
 /// </summary>
 public readonly record struct EnforceTypeInfo(string TypeName, OccurrenceIndicator Occurrence, string ErrorCode);
+
+/// <summary>
+/// Attribute metadata for the ConstructElement opcode; the attribute's value parts are a
+/// slice of the shared <see cref="ConstructElementInfo.Parts"/> list.
+/// </summary>
+public readonly record struct ConstructAttributeInfo(string LocalName, string? Prefix, int FirstPart, int PartCount);
+
+/// <summary>
+/// Element construction information stored in the literal pool for the ConstructElement opcode.
+/// Expression parts reference registers relative to the instruction's RegisterB base
+/// (packed consecutive by the lowerer).
+/// </summary>
+public readonly record struct ConstructElementInfo(
+    string LocalName,
+    string? Prefix,
+    ConstructAttributeInfo[] Attributes,
+    int FirstContentPart,
+    int ContentPartCount,
+    ConstructPartInfo[] Parts);
+
+/// <summary>
+/// One element-construction part: a literal text string (literal-pool index), an evaluated
+/// value (register offset from the instruction's RegisterB base), a comment (literal-pool
+/// index of its value), or a processing instruction (literal-pool indices of data and target).
+/// </summary>
+public readonly record struct ConstructPartInfo(ConstructPartKind Kind, int Index, int Index2 = -1);
+
+/// <summary>The kind of one element-construction part.</summary>
+public enum ConstructPartKind : byte
+{
+    /// <summary>Literal text; Index is the literal-pool index of the string.</summary>
+    Literal,
+    /// <summary>An evaluated expression value; Index is the register offset from RegisterB.</summary>
+    Value,
+    /// <summary>A comment node; Index is the literal-pool index of the comment value.</summary>
+    Comment,
+    /// <summary>A processing instruction; Index is the data pool index, Index2 the target pool index.</summary>
+    ProcessingInstruction
+}
 
 /// <summary>
 /// Windowing information stored in the literal pool for the Window opcode.
@@ -178,6 +221,9 @@ public sealed class IrLowerer
             TreatNode n => LowerTreat(n, targetReg),
             ArrowExprNode n => LowerArrow(n, targetReg),
             NamedFunctionRefNode n => LowerNamedFunctionRef(n, targetReg),
+            DirectElementConstructorNode n => LowerDirectElementConstructor(n, targetReg),
+            DirectCommentNode n => LowerDirectComment(n, targetReg),
+            DirectProcessingInstructionNode n => LowerDirectProcessingInstruction(n, targetReg),
             MapConstructorNode n => LowerMapConstructor(n, targetReg),
             ArrayConstructorNode n => LowerArrayConstructor(n, targetReg),
             LookupNode n => LowerLookup(n, targetReg),
@@ -639,6 +685,109 @@ public sealed class IrLowerer
         var funcTuple = (qname, node.Arity);
         int poolIdx = AddToLiteralPool(funcTuple);
         Emit(IrOpCode.LoadFunction, (ushort)resultReg, operand: poolIdx);
+        return resultReg;
+    }
+
+    private int LowerDirectElementConstructor(DirectElementConstructorNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+
+        var parts = new List<ConstructPartInfo>();
+        var attrs = new List<ConstructAttributeInfo>();
+        var exprRegs = new List<int>();
+
+        // Constructor-local namespace declarations are applied before any content is
+        // evaluated (nested constructors see them) and restored afterwards.
+        var nsDecls = node.Attributes
+            .Where(a => a.Prefix == "xmlns" || (a.Name == "xmlns" && a.Prefix is null))
+            .ToList();
+        int nsSaveReg = AllocRegister();
+        if (nsDecls.Count > 0)
+        {
+            Emit(IrOpCode.SaveNamespaces, (ushort)nsSaveReg);
+            foreach (var decl in nsDecls)
+            {
+                // The parser enforces literal-only namespace URIs (XQST0022).
+                var uri = NormalizeNamespaceDeclValue(string.Concat(
+                    decl.ValueParts.OfType<StringLiteralNode>().Select(p => p.Value)));
+                int valReg = AllocRegister();
+                int valPoolIdx = AddToLiteralPool(uri);
+                Emit(IrOpCode.LoadString, (ushort)valReg, operand: valPoolIdx);
+                int prefixPoolIdx = AddToLiteralPool(decl.Prefix == "xmlns" ? decl.Name : "");
+                Emit(IrOpCode.DeclareNamespace, 0, (ushort)valReg, 0, prefixPoolIdx);
+                FreeRegister(valReg);
+            }
+        }
+
+        void AddPart(XPathAstNode part)
+        {
+            if (part is StringLiteralNode literal)
+            {
+                parts.Add(new ConstructPartInfo(ConstructPartKind.Literal, AddToLiteralPool(literal.Value)));
+            }
+            else if (part is SignificantTextNode significant)
+            {
+                parts.Add(new ConstructPartInfo(ConstructPartKind.Literal, AddToLiteralPool(significant.Value)));
+            }
+            else if (part is DirectCommentNode comment)
+            {
+                parts.Add(new ConstructPartInfo(ConstructPartKind.Comment, AddToLiteralPool(comment.Value)));
+            }
+            else if (part is DirectProcessingInstructionNode pi)
+            {
+                parts.Add(new ConstructPartInfo(ConstructPartKind.ProcessingInstruction, AddToLiteralPool(pi.Value), AddToLiteralPool(pi.Target)));
+            }
+            else
+            {
+                int reg = LowerNode(part);
+                exprRegs.Add(reg);
+                parts.Add(new ConstructPartInfo(ConstructPartKind.Value, exprRegs.Count - 1));
+            }
+        }
+
+        foreach (var attr in node.Attributes)
+        {
+            int firstPart = parts.Count;
+            foreach (var p in attr.ValueParts)
+                AddPart(p);
+            attrs.Add(new ConstructAttributeInfo(attr.Name, attr.Prefix, firstPart, attr.ValueParts.Count));
+        }
+
+        int firstContentPart = parts.Count;
+        foreach (var p in node.Content)
+            AddPart(p);
+
+        int baseReg = exprRegs.Count > 0 ? PackArgumentsConsecutive(exprRegs.ToArray()) : 0;
+        var info = new ConstructElementInfo(node.TagName, node.Prefix, attrs.ToArray(), firstContentPart, node.Content.Count, parts.ToArray());
+        int poolIdx = AddToLiteralPool(info);
+        Emit(IrOpCode.ConstructElement, (ushort)resultReg, (ushort)baseReg, 0, poolIdx);
+
+        if (nsDecls.Count > 0)
+        {
+            Emit(IrOpCode.RestoreNamespaces, 0, (ushort)nsSaveReg);
+        }
+        return resultReg;
+    }
+
+    private static string NormalizeNamespaceDeclValue(string value)
+    {
+        var parts = value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        return string.Join(' ', parts);
+    }
+
+    private int LowerDirectComment(DirectCommentNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+        int poolIdx = AddToLiteralPool(new XdmContentItem(XdmContentKind.Comment, node.Value));
+        Emit(IrOpCode.ConstructContentNode, (ushort)resultReg, 0, 0, poolIdx);
+        return resultReg;
+    }
+
+    private int LowerDirectProcessingInstruction(DirectProcessingInstructionNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+        int poolIdx = AddToLiteralPool(new XdmContentItem(XdmContentKind.ProcessingInstruction, node.Value, null, node.Target));
+        Emit(IrOpCode.ConstructContentNode, (ushort)resultReg, 0, 0, poolIdx);
         return resultReg;
     }
 
@@ -1292,7 +1441,7 @@ public sealed class IrLowerer
         }
 
         int afterRhs = _instructions.Count;
-        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri);
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri, binding.AllowingEmpty);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
@@ -1723,7 +1872,9 @@ public sealed class IrLowerer
     {
         foreach (var info in countCounters)
         {
-            if (info.Clause == clause)
+            // Reference equality: two count clauses may bind the same variable name and
+            // are still distinct counters (records compare by value otherwise).
+            if (ReferenceEquals(info.Clause, clause))
                 return info.CounterName;
         }
         throw new InvalidOperationException("Count clause has no allocated counter.");
@@ -2036,7 +2187,7 @@ public sealed class IrLowerer
             // accumulated tuples to the enclosing block.
             Emit(IrOpCode.Return, (ushort)resultReg);
         }
-        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri);
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri, binding.AllowingEmpty);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
@@ -2082,7 +2233,10 @@ public sealed class IrLowerer
         FreeRegister(bodyReg);
 
         int afterRhs = _instructions.Count;
-        var info = new QuantifiedLoopInfo("__flwor_tuple", rhsEntry);
+        // The body For saves and restores the tuple-bound variables so they do not leak
+        // out of the FLWOR's lexical scope.
+        var scopedNames = boundVariables.Select(v => v.Name).Distinct().ToArray();
+        var info = new QuantifiedLoopInfo("__flwor_tuple", rhsEntry, ScopedVariableNames: scopedNames);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)tupleSeqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);

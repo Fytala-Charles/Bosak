@@ -34,6 +34,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.7   | 21-07-2026     | assert-deep-eq evaluates the whole element text as one XPath expression                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 25-07-2026     | Canonical serialization skips empty namespace undeclarations                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -891,7 +893,9 @@ internal static class ResultComparer
                 var attrs = el.Attributes().ToList();
                 if (!ignorePrefixes)
                 {
-                    foreach (var a in attrs.Where(a => a.IsNamespaceDeclaration).OrderBy(a => a.Name.ToString(), StringComparer.Ordinal))
+                    // Empty namespace undeclarations (xmlns="" / xmlns:p="") are no-ops for
+                    // comparison; they are output only when needed for inheritance fixup.
+                    foreach (var a in attrs.Where(a => a.IsNamespaceDeclaration && a.Value.Length > 0).OrderBy(a => a.Name.ToString(), StringComparer.Ordinal))
                         CanonicalSerializeAttribute(sb, a, false);
                 }
                 foreach (var a in attrs.Where(a => !a.IsNamespaceDeclaration).OrderBy(a => a.Name.ToString(), StringComparer.Ordinal))

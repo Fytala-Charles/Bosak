@@ -378,7 +378,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 | Priority | Phase | Deliverable | Status | Notes |
 |----------|-------|-------------|--------|-------|
-| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 2 complete | `order by`, `count`, `group by`, and `window` clauses implemented with tuple-based VM lowering; QT3 harness routes supported XQuery tests (22,983/0, 72.23%). Constructors (Phase 3) and modules/serialization (Phase 4) follow. |
+| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 3 started | Full core FLWOR (`order by`/`count`/`group by`/`window`) + direct element/comment/PI constructors with constructor-local namespaces; QT3 harness routes supported XQuery tests (25,060/0, 78.75%). Computed constructors (Phase 3 remainder) and modules/serialization (Phase 4) follow. |
 | 2 | — | **XSLT 3.0 packages** | 🔮 Planned | `xsl:package`, `xsl:use-package`. Completes the XSLT 3.0 surface. |
 | 3 | — | **Schema awareness / XSD validation** | 🔮 Planned | Cross-cutting feature for XPath + XSLT; clears remaining schema-dependent skips. |
 | 4 | 5 | **Streaming** | 🔮 Planned | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
@@ -590,7 +590,7 @@ src/
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Direct element/attribute constructors | 🔮 Phase 3 | XML-like literal syntax; lowers to node-building VM opcodes |
+| Direct element/attribute constructors | ✅ Implemented | Lexer constructor mode + `ConstructElement` opcode; computed attributes/content, constructor-local namespaces, copy semantics |
 | Computed constructors | 🔮 Phase 3 | `element { } { }`, `attribute { } { }`, etc. |
 | `typeswitch` / `switch` / `validate` | 🔮 Phase 3 | Lower to conditional IR |
 

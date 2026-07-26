@@ -1,6 +1,45 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
+**Commit:** *(pending — recorded after commit)* (feat(xquery): Phase 3 direct element constructors with constructor-local namespaces)
+**Current focus:** **XQuery 3.1 Phase 3 started — direct element constructors** implemented end-to-end: lexer constructor mode (single `Constructor` token per construct), source-level constructor scanner, `ConstructElement`/`ConstructContentNode` IR opcodes, and provider-neutral node construction with dynamic constructor-local namespace scoping. QT3 went from **22,983 passed / 0 failed / 8,838 skipped (72.23%)** to **25,060 passed / 0 failed / 6,761 skipped (78.75%)** (+2,077 passing). Full `dotnet test Bosak.sln` passes: **1,443 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (Phase 3 direct constructors)
+
+1. **Lexer** (`XPathLexer`, `TokenKind.Constructor`) — constructor mode emits a whole direct element/comment/PI constructor as ONE token; structure falls back to the `<` operator (comparisons unaffected).
+2. **Parser** (`XPathParser`) — source-level scanner: tags/attributes/content with entity refs, `{{`/`}}` escapes, quote doubling, CDATA, comments, PIs, nested constructors, enclosed expressions (comment-aware brace matching); empty-`{}` is XPST0003, comment-only `{}` is the empty sequence; `allowing empty` for-bindings.
+3. **AST** — `DirectElementConstructorNode`, `DirectAttributeNode`, `DirectCommentNode`, `DirectProcessingInstructionNode`, `SignificantTextNode` (reference/CDATA-significant text).
+4. **IR/VM** — `ConstructElement`/`ConstructContentNode`/`SaveNamespaces`/`DeclareNamespace`/`RestoreNamespaces` opcodes; handler does prefix resolution (constructor-local via dynamic scope), attribute normalization (collapse+trim), XQTY0024 attribute-in-content rules, per-enclosed-expression space joining, array flattening.
+5. **Provider** — `XDocumentProvider.ConstructElement` (prefix declarations, redundant-declaration namespace fixup, in-scope namespace copying on clones, static base-URI annotation) and `ConstructContentNode`; hooks registered by `XQueryExecutable`.
+6. **Validations** — XQST0118 (tag mismatch), XQDY0025 (duplicate attributes), XQST0070 (xml/xmlns prefix misuse), XQST0071 (duplicate prefix), XQST0022 (computed ns URI), XQST0046 (invalid ns URI char), XQST0090 (invalid char reference), XPST0081 (undeclared prefix incl. prefixed type names in `instance of`/casts).
+7. **Supporting fixes** — predicate EBV no longer atomizes node results (self-axis predicates, UseCase18/19); FLWOR tuple variables scoped to the body `For` via `QuantifiedLoopInfo.ScopedVariableNames` (no leaking → XPST0008, TumblingWindowExpr541); grouping keys atomized; default element namespace for unprefixed tags; `fn:distinct-values` returns atomized values; `day-from-dateTime` parameter conversion; decimal −0 normalization; `xsi`/`local` predefined prefixes; `EnforceType` for `as` declarations; reference-equality count counters (count-007).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Lexer/{XPathLexer,TokenKind}.cs`, `src/Bosak.XPath.Parser/Ast/{XPathAstNode,XPathParser}.cs`
+- `src/Bosak.XPath.Compiler/Ir/{IrOpCode,IrLowerer}.cs`, `src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs`
+- `src/Bosak.XPath.Runtime/Vm/{VmEngine,EvaluationContext}.cs`, `src/Bosak.XPath.Core/Xdm/{XdmElementSpec,XdmValue,XdmValueEqualityComparer}.cs`
+- `src/Bosak.XPath.Providers/XDocument/{XDocumentProvider,XDocumentNode}.cs`
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `src/Bosak.XQuery/{Parser/XQueryParser,Api/XQueryCompiler,Api/XQueryExecutable}.cs`
+- `tests/Bosak.XPath.Conformance/{ConformanceRunner,TestExecutor,ResultComparer}.cs` (+ csproj)
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`, `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (284 recorded skips)
+
+Largest clusters: `misc/CombinedErrorCodes` (specific error codes), `prod/Annotation` (annotations), `prod/FunctionCall` (XPST0017 static arity residuals), `op/base64Binary-*` (binary ordering comparisons), `prod/InlineFunctionExpr`, `prod/StringConstructor` (string constructors), `prod/CastableExpr`, `xs/error`, `fn/QName`, `fn/function-lookup`, `misc/Surrogates`, plus constructor-adjacent singletons: `K2-DirectConElemContent-26a` (catalog contradiction on `{}`), `K2-DirectConElemContent-35` (`element(*, xs:untyped)` semantics), `cbcl-ns-fixup-1` (prefix renaming on conflicting attributes), `Constr-namespace-29` (XPDY0002-vs-XPST0081 precedence), `K2-DirectConElem-53a` (computed `namespace` constructor). The remaining 6,477 skips are mostly computed constructors (Phase 3 remainder: `element`/`attribute`/`text`/`document`/`comment`/`processing-instruction`/`namespace` computed forms), `switch`/`typeswitch`, modules, and schema awareness.
+
+## Next Recommended Step
+
+1. **Phase 3 remainder — computed constructors** (`element`/`attribute`/`text`/`document`/`comment`/`processing-instruction`/`namespace` with computed names). The node-construction infrastructure (hooks, fixup, scoping) is in place; the work is parser forms + a `ConstructComputedElement`-style opcode sharing the same VM/provider paths. Unlocks CompElemConstructor (350 tests), CompAttrConstructor, CompTextConstructor, CompCommentConstructor, CompPIConstructor, CompDocConstructor, CompNamespaceConstructor.
+2. **`switch`/`typeswitch`**, then Phase 4 (modules/serialization).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-25
 **Commit:** `6ed5988` (feat(xquery): close XPST0017/same-key gap clusters - variadic functions, date/time equality)
 **Current focus:** **XQuery conformance gap shrinkage (REQ-045 follow-up)** — closed the two largest `KnownXQueryGaps` clusters. QT3 went from **22,947 passed / 0 failed / 8,874 skipped (72.11%)** to **22,983 passed / 0 failed / 8,838 skipped (72.23%)**; gaps 203 → 167. Full `dotnet test Bosak.sln` passes: **1,429 unit tests / 0 failed**.
 

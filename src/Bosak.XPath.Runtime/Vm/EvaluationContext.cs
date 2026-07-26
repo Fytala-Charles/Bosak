@@ -39,6 +39,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.6   | 25-07-2026     | TryResolveFunction falls back to variadic signatures (fn:concat#N for any N >= 2)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.7   | 25-07-2026     | Added ElementConstructorHook and ContentNodeConstructorHook for XQuery constructors    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.8   | 25-07-2026     | Added RemoveNamespace; predefined xsi and local namespace prefixes                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -105,6 +109,19 @@ public sealed class EvaluationContext
     /// </summary>
     public Func<string, string, string, int>? CollationComparer { get; set; }
 
+    /// <summary>
+    /// Provider hook for XQuery element constructors. When set, the ConstructElement
+    /// opcode builds nodes through it; when null, element construction raises an error.
+    /// The API layers register an XDocument-based implementation by default.
+    /// </summary>
+    public Func<XdmElementSpec, IXdmNode>? ElementConstructorHook { get; set; }
+
+    /// <summary>
+    /// Provider hook for standalone comment and processing-instruction constructors.
+    /// The API layers register an XDocument-based implementation by default.
+    /// </summary>
+    public Func<XdmContentItem, IXdmNode>? ContentNodeConstructorHook { get; set; }
+
     // Namespace prefixes
     private readonly Dictionary<string, string> _namespaces;
 
@@ -133,10 +150,12 @@ public sealed class EvaluationContext
         {
             ["xml"] = "http://www.w3.org/XML/1998/namespace",
             ["xs"] = "http://www.w3.org/2001/XMLSchema",
+            ["xsi"] = "http://www.w3.org/2001/XMLSchema-instance",
             ["fn"] = "http://www.w3.org/2005/xpath-functions",
             ["math"] = "http://www.w3.org/2005/xpath-functions/math",
             ["map"] = "http://www.w3.org/2005/xpath-functions/map",
             ["array"] = "http://www.w3.org/2005/xpath-functions/array",
+            ["local"] = "http://www.w3.org/2005/xquery-local-functions",
             ["err"] = "http://www.w3.org/2005/xqt-errors"
         };
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
@@ -453,6 +472,13 @@ public sealed class EvaluationContext
     public EvaluationContext WithNamespace(string prefix, string namespaceUri)
     {
         _namespaces[prefix] = namespaceUri;
+        return this;
+    }
+
+    /// <summary>Removes a namespace prefix binding (used for namespace undeclarations).</summary>
+    public EvaluationContext RemoveNamespace(string prefix)
+    {
+        _namespaces.Remove(prefix);
         return this;
     }
 

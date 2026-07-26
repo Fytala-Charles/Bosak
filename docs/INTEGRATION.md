@@ -5,14 +5,25 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 July 2026
-> **Bosak baseline:** 1,429 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 22,983 passed / 0 failed / 8,838 skipped (72.23% / 100% of runnable tests) — XQuery routing enabled; 167 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,443 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 25,060 passed / 0 failed / 6,761 skipped (78.75% / 100% of runnable tests) — XQuery routing enabled; 284 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 2 complete — `order by`, `count`, `group by`, and `window` clauses implemented with tuple-based VM lowering; QT3 FLWOR sets green (WindowClause 34, OrderByClause 39, GroupByClause 14, CountClause 4)
+> **XQuery baseline:** Phase 3 started — full core FLWOR + direct element/comment/PI constructors with constructor-local namespaces
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-25** — XQuery 3.1 Phase 3 start: **direct element constructors** (REQ-046): QT3 **25,060 passed / 0 failed** (from 22,983; +2,077).
+  - New lexer constructor mode: a whole direct constructor (`<name a="v">text {expr}<nested/></name>`, `<!-- c -->`, `<?pi d?>`) is emitted as a single `Constructor` token, keeping quotes, `&`, and raw text out of the token stream; structure falls back to the `<` comparison operator when it does not hold.
+  - Source-level constructor scanner builds `DirectElementConstructorNode`/`DirectCommentNode`/`DirectProcessingInstructionNode` (entity refs, `{{`/`}}` escapes, quote doubling, comment-aware enclosed expressions, empty-`{}` rules).
+  - New IR opcodes: `ConstructElement`, `ConstructContentNode`, `SaveNamespaces`/`DeclareNamespace`/`RestoreNamespaces` (constructor-local `xmlns` with dynamic scoping, `xmlns=""` undeclarations, redundant-declaration fixup, in-scope copying for cloned nodes).
+  - Provider-neutral node construction via `EvaluationContext.ElementConstructorHook`/`ContentNodeConstructorHook` with an XDocument implementation (prefix declarations, namespace fixup, clone copying, static base-URI annotation).
+  - Constructor semantics: attribute values normalized (collapse+trim), items joined with single spaces per enclosed expression, attribute nodes in content become element attributes (XQTY0024), arrays flattened, boundary whitespace stripped unless `xml:space="preserve"` or reference/CDATA-significant, standalone comment/PI constructors as primary expressions.
+  - Validations: XQST0118 (tag mismatch), XQDY0025 (duplicate attributes), XQST0070/0071 (prefix misuse/duplicates), XQST0022 (computed ns URI), XQST0046 (invalid ns URI char), XQST0090 (invalid character reference), XPST0081 (undeclared prefix incl. prefixed type names in `instance of`/casts).
+  - Supporting fixes: predicate EBV no longer atomizes node results (self-axis predicates work), FLWOR tuple variables scoped to the body `For` (XPST0008 on reference after scope ends), `fn:distinct-values` returns atomized values, `day-from-dateTime` parameter conversion, decimal −0 normalization, `xsi`/`local` predefined prefixes, `allowing empty` for-bindings.
+  - QT3 sets: WindowClause 117/0, OrderByClause 191/0, GroupByClause 30/0, CountClause 13/0, DirElemConstructor 62/1, DirElemContent.namespace 111/1, DirElemContent 227/4, DirElemContent.whitespace 19/0.
+  - Unit tests now **1,443/0**; XSLT baseline unchanged.
 
 - **2026-07-25** — XQuery conformance gap shrinkage (REQ-045 follow-up): QT3 **22,983 passed / 0 failed** (from 22,947); gaps 203 → 167.
   - Named function reference arity validation: `fn:filter#0` and friends now raise `XPST0017` in the `LoadFunction` named-item path (~40 tests across `fn-filter`, `fn-function-lookup`, `fn-innermost`, `fn-outermost`, `fn-for-each-pair`, etc.).

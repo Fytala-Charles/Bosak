@@ -25,6 +25,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.0   | 25-07-2026     | Added EnforceType opcode for XQuery 'as SequenceType' FLWOR bindings                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 25-07-2026     | Added ConstructElement and ConstructContentNode opcodes for XQuery constructors         |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 25-07-2026     | Added SaveNamespaces/DeclareNamespace/RestoreNamespaces for constructor-local scopes    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -52,6 +56,11 @@ public enum IrOpCode : byte
     GroupBy,
     Window,
     EnforceType,
+    ConstructElement,
+    ConstructContentNode,
+    SaveNamespaces,
+    DeclareNamespace,
+    RestoreNamespaces,
     
     // ---- Context -----------------------------------------------------
     LoadContext,

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-25 (XQuery conformance gap shrinkage: XPST0017 arity validation, variadic functions, group-by collations, g\* date equality, map-key timezone semantics — QT3 now **22,947 → 22,983 passed / 0 failed**; gaps 203 → 167; unit tests **1,429/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 3 start: **direct element/comment/PI constructors** implemented end-to-end with constructor-local namespaces; QT3 now **25,060 passed / 0 failed** (78.75%); unit tests **1,443/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -150,6 +150,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-043 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `group by` clause | Required for full XQuery FLWOR: `group by` grouping specs (`$var` or `$var := expr`, optional collation), grouped variable rebinding, and post-group `order by`/`count` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-044 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `window` clause | Required for full XQuery FLWOR: tumbling/sliding windows with start/end conditions (current/positional/previous/next vars) and `only end` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-045 | *(internal)* | QT3 harness XQuery routing + conformance sweep | Validate the XQuery pipeline against the W3C QT3 suite; route supported XQuery tests, fix surfaced engine gaps, keep Failed=0 | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
+| REQ-046 | *(internal)* | XQuery 3.1 Phase 3 — direct element constructors | Required for XQuery element construction: direct element/comment/PI constructors with computed attributes/content, constructor-local namespaces, and copy semantics | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2044,13 +2045,61 @@ Relax the dependency filter for positive XQuery-only spec tokens when the query 
 
 ---
 
+### REQ-046: XQuery 3.1 Phase 3 — direct element constructors
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-25  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 requires direct element constructors (`<out a="{1+1}">text {expr}<nested/></out>`), comment constructors (`<!-- c -->`), and processing-instruction constructors (`<?pi data?>`), including computed attribute values, enclosed expressions in content, constructor-local namespace declarations, and copy semantics for existing nodes. Without them, ~2,000 QT3 tests were constructor-gated, including most of the FLWOR use cases and the DirElem* test sets.
+
+**Proposed Solution:**  
+Add a lexer constructor mode that emits a whole direct constructor as a single token (robust against quotes, `&`, and text that is not tokenizable), a source-level constructor scanner in the parser producing `DirectElementConstructorNode`/`DirectCommentNode`/`DirectProcessingInstructionNode` AST, `ConstructElement`/`ConstructContentNode` IR opcodes, and a provider-neutral node-construction hook (`EvaluationContext.ElementConstructorHook` / `ContentNodeConstructorHook`) with an XDocument implementation. Constructor-local `xmlns` declarations are applied dynamically (`SaveNamespaces`/`DeclareNamespace`/`RestoreNamespaces` opcodes) so nested constructors and in-scope paths see them.
+
+**Acceptance Criteria:**
+- [x] Direct element constructors with literal/computed attributes, enclosed expressions (items joined per-expression with single spaces), nested constructors, comments, PIs, and CDATA.
+- [x] Standalone comment/PI constructors as primary expressions (`<?pi x?>` valid anywhere).
+- [x] Constructor-local namespace declarations with dynamic scoping, undeclarations (`xmlns=""`), redundant-declaration fixup, and in-scope copying for cloned nodes.
+- [x] Static validations: `XQST0118` (tag mismatch), `XQDY0025` (duplicate attributes), `XQTY0024` (attribute after content), `XQST0070/0071` (prefix misuse/duplicates), `XQST0022` (computed ns URI), `XQST0046` (invalid ns URI char), `XQST0090` (invalid character reference), `XPST0081` (undeclared prefix).
+- [x] Boundary whitespace handling (`strip` default, `xml:space="preserve"`, reference/CDATA-significant text).
+- [x] Attribute nodes in content become element attributes; arrays in content flatten; base URI annotates constructed elements.
+- [x] QT3 sets: WindowClause 117/0, OrderByClause 191/0, GroupByClause 30/0, CountClause 13/0, DirElemConstructor 62/1, DirElemContent.namespace 111/1, DirElemContent 227/4, DirElemContent.whitespace 19/0. Full suite: **25,060 passed / 0 failed / 8,477 skipped**.
+
+**Implementation Notes:**
+- Lexer: `TokenKind.Constructor` with structure-validated span scanning (falls back to the `<` operator for comparisons).
+- Parser: source-level scanner for tags/attributes/content (entity refs, `{{`/`}}` escapes, quote doubling, XQuery comment awareness in enclosed expressions).
+- VM: `ConstructElement` handler (prefix resolution, attribute normalization, XQTY0024 attribute rules, atomic joining per enclosed expression, array flattening) and `ConstructContentNode` for standalone comment/PI.
+- Provider: `XDocumentProvider.ConstructElement` (prefix declarations, namespace fixup, in-scope copying on clones, base-URI annotation) and `ConstructContentNode`.
+- Supporting fixes: predicate EBV must not atomize node results (self-axis predicates), FLWOR tuple variables scoped to the body `For` (no leaking), `day-from-dateTime` parameter conversion, `fn:distinct-values` returns atomized values, decimal −0 normalization, `xsi`/`local` predefined prefixes, prefixed type-name resolution for `instance of`/casts, `allowing empty` for-bindings.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Constructor lexer mode + source scanner; `allowing empty`; validation error codes. |
+| Compiler | Modified | `ConstructElement`/`ConstructContentNode`/`SaveNamespaces`/`DeclareNamespace`/`RestoreNamespaces` opcodes; scoped FLWOR variables. |
+| Runtime | Modified | Constructor VM handlers; namespace scoping; type-prefix resolution. |
+| Providers | Modified | `ConstructElement`/`ConstructContentNode`; namespace fixup; clone copying; base-URI annotation. |
+| XSLT | None | No XSLT changes; XSLT baseline unchanged. |
+| Conformance | Modified | Direct constructors admitted; `KnownXQueryGaps` regenerated (284 reasoned skips). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-25 | Kimi | Lexer-level constructor tokens + provider-neutral construction hooks | Token-level delimiting keeps text/quotes/`&` out of the token stream; hooks keep the Runtime provider-neutral (XDocument is only the default). |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 / REQ-041 / REQ-042 / REQ-043 / REQ-044 / REQ-045 | **XQuery 3.1 full implementation** | In Progress | Phase 2 complete: `order by`, `count`, `group by`, and `window` implemented. QT3 harness wired: 22,983/0 (72.23%); 167 gaps recorded. Constructors (Phase 3) and modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 … REQ-046 | **XQuery 3.1 full implementation** | In Progress | Phase 2 complete (full core FLWOR); QT3 wired (25,060/0, 78.75%). Phase 3 started: direct constructors implemented. Computed constructors (Phase 3 remainder) and modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

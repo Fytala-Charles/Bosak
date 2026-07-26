@@ -34,7 +34,7 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 - **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), FLWOR, JSON functions
 - **XSD Regex with Pinned Unicode 9.0** — Full `\p{X}`/`\P{X}` category and `\p{IsBlock}` support, class subtraction, astral-safe matching
 - **XSLT 3.0 Transform Engine** — Template matching, sequence constructors, `xsl:copy`/`xsl:copy-of`, `xsl:for-each-group`, `xsl:analyze-string`, `xsl:where-populated`, `xsl:on-empty`, `xsl:iterate`/`xsl:break`, `fn:transform()`
-- **XQuery 3.1 (Phase 2 complete)** — `order by`, `count`, `group by`, and `window` clauses implemented with tuple-based VM lowering; QT3 wired (22,983/0); constructors and modules remain
+- **XQuery 3.1 (Phase 3 started)** — full core FLWOR + direct element/comment/PI constructors with constructor-local namespaces; QT3 wired (25,060/0); computed constructors and modules remain
 
 ---
 
@@ -131,7 +131,7 @@ flowchart TB
 | **XDM Core** | `Bosak.XPath.Core` | `XdmValue`, `IXdmNode`, `XdmSequence`, axis kinds |
 | **Node Providers** | `Bosak.XPath.Providers` | `XDocument`, `XmlDocument`, streaming adapters *(planned)* |
 | **XSLT** | `Bosak.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
-| **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, `XQueryExecutable`, `XQueryParser`, `XQueryStaticContext`; Phase 2 complete (all core FLWOR clauses); QT3 wired (22,983/0) |
+| **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, `XQueryExecutable`, `XQueryParser`, `XQueryStaticContext`; full core FLWOR + direct constructors; QT3 wired (25,060/0) |
 | **Language Server** | `Bosak.LanguageServer` | LSP server for XPath / XSLT diagnostics & completions |
 | **VS Code Extension** | `vscode-bosak/` | TypeScript client for the language server |
 

@@ -13,10 +13,13 @@
 //                      | Charles Korthout | 0.1   | 06-06-2026     | Creation — placeholder skeleton                                                          |
 //                      | Charles Korthout | 1.0   | 22-07-2026     | Execute via XPath VM using static context                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 25-07-2026     | Register element/content-node constructor hooks for XQuery constructors                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Bosak.XQuery.Compiler;
@@ -51,6 +54,10 @@ public sealed class XQueryExecutable
         var savedDefaultNs = evaluationContext.DefaultElementNamespace;
         var savedBaseUri = evaluationContext.BaseUri;
         var savedCollation = evaluationContext.DefaultCollation;
+
+        // XQuery element constructors need a node-building provider; default to XDocument.
+        evaluationContext.ElementConstructorHook ??= XDocumentProvider.ConstructElement;
+        evaluationContext.ContentNodeConstructorHook ??= XDocumentProvider.ConstructContentNode;
 
         try
         {

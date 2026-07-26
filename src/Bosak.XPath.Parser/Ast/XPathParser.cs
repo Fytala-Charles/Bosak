@@ -51,6 +51,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.23  | 25-07-2026     | Optional window end condition; XQST0103; stable order by; 'as' type declarations        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.24  | 25-07-2026     | Direct element/comment/PI constructors; allowing empty; XQST0118 tag mismatch           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.25  | 25-07-2026     | Constructor validations: XQST0022/0046/0070/0071/0090; CDATA/ref text; empty-expr rules |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -112,7 +116,7 @@ public sealed class XPathParser
     /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax (multiple for/let/where/order-by clauses). Default is false (XPath-only FLWOR).</param>
     public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false)
     {
-        var lexer = new XPathLexer(xpath.AsSpan());
+        var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
         var tokens = new List<Token>();
         Token tok;
         while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
@@ -332,7 +336,7 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XQST0003: Expected 'by' after 'order'.", Current.Start);
+                    throw new ParseException("XPST0003: Expected 'by' after 'order'.", Current.Start);
                 }
             }
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "stable" &&
@@ -350,7 +354,7 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XQST0003: Expected 'by' after 'stable order'.", Current.Start);
+                    throw new ParseException("XPST0003: Expected 'by' after 'stable order'.", Current.Start);
                 }
             }
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "group")
@@ -365,7 +369,7 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XQST0003: Expected 'by' after 'group'.", Current.Start);
+                    throw new ParseException("XPST0003: Expected 'by' after 'group'.", Current.Start);
                 }
             }
             else
@@ -437,7 +441,7 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XQST0003: Expected 'greatest' or 'least' after 'empty'.", Current.Start);
+                    throw new ParseException("XPST0003: Expected 'greatest' or 'least' after 'empty'.", Current.Start);
                 }
             }
 
@@ -500,7 +504,7 @@ public sealed class XPathParser
         Advance();
 
         if (Current.Kind != TokenKind.Name || GetString(Current) != "window")
-            throw new ParseException("XQST0003: Expected 'window' after 'tumbling'/'sliding'.", Current.Start);
+            throw new ParseException("XPST0003: Expected 'window' after 'tumbling'/'sliding'.", Current.Start);
         Advance();
 
         Expect(TokenKind.Dollar);
@@ -564,7 +568,7 @@ public sealed class XPathParser
     {
         // Current must be the contextual keyword ('start' or 'end').
         if (Current.Kind != TokenKind.Name || GetString(Current) != keyword)
-            throw new ParseException($"XQST0003: Expected '{keyword}' condition in window clause.", Current.Start);
+            throw new ParseException($"XPST0003: Expected '{keyword}' condition in window clause.", Current.Start);
         Advance();
 
         string? currentItem = null, positional = null, previousItem = null, nextItem = null;
@@ -593,7 +597,7 @@ public sealed class XPathParser
         }
 
         if (Current.Kind != TokenKind.Name || GetString(Current) != "when")
-            throw new ParseException($"XQST0003: Expected 'when' in window {keyword} condition.", Current.Start);
+            throw new ParseException($"XPST0003: Expected 'when' in window {keyword} condition.", Current.Start);
         Advance();
 
         var whenExpression = ParseExprSingle();
@@ -649,9 +653,23 @@ public sealed class XPathParser
             var (_, posLocal, _) = SplitQName(GetString(posTok));
             positionalVar = posLocal;
         }
+
+        // XQuery "allowing empty" option; XPath 3.1 does not allow it.
+        bool allowingEmpty = false;
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "allowing")
+        {
+            if (!_allowFullFlwor)
+                throw new ParseException("XPST0003: XPath does not allow 'allowing empty' in a for binding.", Current.Start);
+            Advance();
+            if (Current.Kind != TokenKind.Name || GetString(Current) != "empty")
+                throw new ParseException("XPST0003: Expected 'empty' after 'allowing'.", Current.Start);
+            Advance();
+            allowingEmpty = true;
+        }
+
         Expect(TokenKind.KeywordIn);
         var expr = ParseExprSingle();
-        return new QuantifiedBinding(local, expr, positionalVar, prefix, ns, declaredType);
+        return new QuantifiedBinding(local, expr, positionalVar, prefix, ns, declaredType, allowingEmpty);
     }
 
     private QuantifiedBinding ParseSimpleLetBinding()
@@ -1450,6 +1468,9 @@ public sealed class XPathParser
         int start = Current.Start;
         switch (Current.Kind)
         {
+            case TokenKind.Constructor:
+                return ParseDirectElementConstructor();
+
             case TokenKind.StringLiteral:
                 var s = Unquote(GetString(Current));
                 Advance();
@@ -1660,6 +1681,564 @@ public sealed class XPathParser
         }
         return WithSpan(new InlineFunctionNode(parameters, body, returnType), start, End);
     }
+
+    // ------------------------------------------------------------------
+    // XQuery direct element constructors
+    // ------------------------------------------------------------------
+
+    private XPathAstNode ParseDirectElementConstructor()
+    {
+        // The lexer emitted the whole constructor as a single token; build the AST by
+        // scanning the raw source text (attribute values and text are not tokenizable).
+        int start = Current.Start;
+        int pos = start;
+        char after = pos + 1 < _source.Length ? _source[pos + 1] : '\0';
+        XPathAstNode node;
+        if (after == '?')
+        {
+            node = ScanPiConstructor(ref pos, start);
+        }
+        else if (after == '!')
+        {
+            node = ScanCommentConstructor(ref pos, start);
+        }
+        else
+        {
+            node = ScanElementConstructor(ref pos, start);
+        }
+        Advance();
+        return WithSpan(node, start, pos);
+    }
+
+    private DirectProcessingInstructionNode ScanPiConstructor(ref int pos, int ctorStart)
+    {
+        // pos is at '<', source[pos+1] is '?'.
+        pos += 2;
+        int targetStart = pos;
+        if (pos >= _source.Length || (!char.IsLetter(_source[pos]) && _source[pos] != '_'))
+            throw ConstructorError("expected a processing instruction target", pos);
+        while (pos < _source.Length && IsConstructorNameChar(_source[pos]))
+            pos++;
+        var target = _source[targetStart..pos];
+        if (target.Equals("xml", StringComparison.OrdinalIgnoreCase))
+            throw ConstructorError("processing instruction target 'xml' is reserved", targetStart);
+
+        SkipConstructorWhitespace(ref pos);
+        int close = _source.IndexOf("?>", pos, StringComparison.Ordinal);
+        if (close < 0)
+            throw ConstructorError("unterminated processing instruction", ctorStart);
+        var data = _source[pos..close];
+        pos = close + 2;
+        return new DirectProcessingInstructionNode(target, data);
+    }
+
+    private DirectCommentNode ScanCommentConstructor(ref int pos, int ctorStart)
+    {
+        // pos is at '<', source is "<!--".
+        int dataStart = pos + 4;
+        int close = _source.IndexOf("-->", dataStart, StringComparison.Ordinal);
+        if (close < 0)
+            throw ConstructorError("unterminated comment", ctorStart);
+        var data = _source[dataStart..close];
+        if (data.Contains("--", StringComparison.Ordinal) || data.EndsWith('-'))
+            throw ConstructorError("comment must not contain '--' or end with '-'", dataStart);
+        pos = close + 3;
+        return new DirectCommentNode(data);
+    }
+
+    private XPathAstNode ScanElementConstructor(ref int pos, int ctorStart)
+    {
+        // pos is at '<'.
+        pos++;
+        var (tagPrefix, tagLocal) = ScanConstructorQName(ref pos, ctorStart);
+
+        var attributes = new List<DirectAttributeNode>();
+        var content = new List<XPathAstNode>();
+        var declaredPrefixes = new HashSet<string>(StringComparer.Ordinal);
+        bool xmlSpacePreserve = false;
+
+        while (true)
+        {
+            SkipConstructorWhitespace(ref pos);
+            if (pos >= _source.Length)
+                throw ConstructorError("unterminated element constructor", ctorStart);
+            char c = _source[pos];
+            if (c == '>')
+            {
+                pos++;
+                break;
+            }
+            if (c == '/' && pos + 1 < _source.Length && _source[pos + 1] == '>')
+            {
+                pos += 2;
+                return new DirectElementConstructorNode(tagLocal, tagPrefix, attributes, content);
+            }
+
+            var (attrPrefix, attrLocal) = ScanConstructorQName(ref pos, ctorStart);
+            SkipConstructorWhitespace(ref pos);
+            if (pos >= _source.Length || _source[pos] != '=')
+                throw ConstructorError("expected '=' after attribute name", pos);
+            pos++;
+            SkipConstructorWhitespace(ref pos);
+            if (pos >= _source.Length || (_source[pos] != '"' && _source[pos] != '\''))
+                throw ConstructorError("expected quoted attribute value", pos);
+            char quote = _source[pos++];
+            bool isNamespaceDecl = (attrLocal == "xmlns" && attrPrefix is null) || attrPrefix == "xmlns";
+            var valueParts = ScanConstructorAttributeValue(ref pos, quote, ctorStart, isNamespaceDecl);
+
+            // XQST0070: the xml prefix must only be declared with the XML namespace URI,
+            // no other prefix may use the XML namespace URI, and xmlns must not be declared.
+            if (isNamespaceDecl)
+            {
+                var nsValue = string.Concat(valueParts.OfType<StringLiteralNode>().Select(p => p.Value));
+                if (attrPrefix == "xmlns" && attrLocal == "xmlns")
+                    throw new ParseException("XQST0070: The 'xmlns' prefix must not be declared.", ctorStart);
+                if (attrPrefix == "xmlns" && attrLocal == "xml" &&
+                    nsValue != "http://www.w3.org/XML/1998/namespace")
+                    throw new ParseException("XQST0070: The 'xml' prefix must only be bound to the XML namespace URI.", ctorStart);
+                if (attrPrefix == "xmlns" && attrLocal != "xml" &&
+                    nsValue == "http://www.w3.org/XML/1998/namespace")
+                    throw new ParseException("XQST0070: The XML namespace URI must only be bound to the 'xml' prefix.", ctorStart);
+            }
+
+            if (attrLocal == "space" && attrPrefix == "xml" &&
+                valueParts.Count == 1 && valueParts[0] is StringLiteralNode spaceValue && spaceValue.Value == "preserve")
+            {
+                xmlSpacePreserve = true;
+            }
+
+            // XQST0071: the same namespace prefix must not be declared twice in one constructor.
+            if (isNamespaceDecl)
+            {
+                string declPrefix = attrPrefix == "xmlns" ? attrLocal : "";
+                if (!declaredPrefixes.Add(declPrefix))
+                    throw new ParseException($"XQST0071: The namespace prefix '{(declPrefix.Length == 0 ? "(default)" : declPrefix)}' is declared more than once.", ctorStart);
+            }
+
+            attributes.Add(new DirectAttributeNode(attrLocal, attrPrefix, valueParts));
+        }
+
+        ScanConstructorContent(ref pos, tagLocal, tagPrefix, content, ctorStart);
+
+        if (!xmlSpacePreserve)
+        {
+            content = content
+                .Where(part => part is not StringLiteralNode literal || !IsXmlWhitespaceOnly(literal.Value))
+                .ToList();
+        }
+
+        return new DirectElementConstructorNode(tagLocal, tagPrefix, attributes, content);
+    }
+
+    private void ScanConstructorContent(ref int pos, string tagLocal, string? tagPrefix, List<XPathAstNode> content, int ctorStart)
+    {
+        var text = new StringBuilder();
+        bool textHasReference = false;
+        void FlushText()
+        {
+            if (text.Length > 0)
+            {
+                // Text containing a character/entity reference is never boundary whitespace.
+                content.Add(textHasReference
+                    ? new SignificantTextNode(text.ToString())
+                    : new StringLiteralNode(text.ToString()));
+                text.Clear();
+                textHasReference = false;
+            }
+        }
+
+        while (true)
+        {
+            if (pos >= _source.Length)
+                throw ConstructorError("unterminated element content", ctorStart);
+            char c = _source[pos];
+            if (c == '<')
+            {
+                if (pos + 1 >= _source.Length)
+                    throw ConstructorError("unterminated element content", ctorStart);
+                char next = _source[pos + 1];
+                if (next == '/')
+                {
+                    pos += 2;
+                    var (endPrefix, endLocal) = ScanConstructorQName(ref pos, ctorStart);
+                    SkipConstructorWhitespace(ref pos);
+                    if (pos >= _source.Length || _source[pos] != '>')
+                        throw ConstructorError("expected '>' in end tag", pos);
+                    pos++;
+                    if (endLocal != tagLocal || endPrefix != tagPrefix)
+                    {
+                        string expected = tagPrefix is null ? tagLocal : $"{tagPrefix}:{tagLocal}";
+                        string found = endPrefix is null ? endLocal : $"{endPrefix}:{endLocal}";
+                        throw new ParseException($"XQST0118: Mismatched end tag '</{found}>' (expected '</{expected}>').", pos);
+                    }
+                    FlushText();
+                    return;
+                }
+                if (next == '!')
+                {
+                    if (_source.AsSpan(pos).StartsWith("<!--", StringComparison.Ordinal))
+                    {
+                        FlushText();
+                        int dataStart = pos + 4;
+                        int close = _source.IndexOf("-->", dataStart, StringComparison.Ordinal);
+                        if (close < 0)
+                            throw ConstructorError("unterminated comment", pos);
+                        var data = _source[dataStart..close];
+                        if (data.Contains("--", StringComparison.Ordinal) || data.EndsWith('-'))
+                            throw ConstructorError("comment must not contain '--' or end with '-'", pos);
+                        content.Add(new DirectCommentNode(data));
+                        pos = close + 3;
+                        continue;
+                    }
+                    if (_source.AsSpan(pos).StartsWith("<![CDATA[", StringComparison.Ordinal))
+                    {
+                        int dataStart = pos + 9;
+                        int close = _source.IndexOf("]]>", dataStart, StringComparison.Ordinal);
+                        if (close < 0)
+                            throw ConstructorError("unterminated CDATA section", pos);
+                        // CDATA content (and its mere presence) is never boundary whitespace.
+                        text.Append(NormalizeNewlines(_source[dataStart..close]));
+                        textHasReference = true;
+                        pos = close + 3;
+                        continue;
+                    }
+                    throw ConstructorError("unsupported markup declaration in element content", pos);
+                }
+                if (next == '?')
+                {
+                    FlushText();
+                    int dataStart = pos + 2;
+                    int close = _source.IndexOf("?>", dataStart, StringComparison.Ordinal);
+                    if (close < 0)
+                        throw ConstructorError("unterminated processing instruction", pos);
+                    var pi = _source[dataStart..close];
+                    int space = IndexOfWhitespace(pi);
+                    var (target, data) = space < 0 ? (pi, string.Empty) : (pi[..space], pi[(space + 1)..]);
+                    if (target.Length == 0 || target.Equals("xml", StringComparison.OrdinalIgnoreCase))
+                        throw ConstructorError($"invalid processing instruction target '{target}'", pos);
+                    content.Add(new DirectProcessingInstructionNode(target, data));
+                    pos = close + 2;
+                    continue;
+                }
+                if (char.IsLetter(next) || next == '_')
+                {
+                    FlushText();
+                    content.Add(ScanElementConstructor(ref pos, ctorStart));
+                    continue;
+                }
+                throw ConstructorError("unexpected '<' in element content", pos);
+            }
+            if (c == '{')
+            {
+                if (pos + 1 < _source.Length && _source[pos + 1] == '{')
+                {
+                    text.Append('{');
+                    pos += 2;
+                    continue;
+                }
+                FlushText();
+                content.Add(ScanEnclosedExpression(ref pos, ctorStart));
+                continue;
+            }
+            if (c == '}')
+            {
+                if (pos + 1 < _source.Length && _source[pos + 1] == '}')
+                {
+                    text.Append('}');
+                    pos += 2;
+                    continue;
+                }
+                throw ConstructorError("unescaped '}' in element content (use '}}')", pos);
+            }
+            if (c == '&')
+            {
+                text.Append(ScanConstructorCharReference(ref pos, ctorStart));
+                textHasReference = true;
+                continue;
+            }
+            if (c == '\r')
+            {
+                text.Append('\n');
+                pos++;
+                if (pos < _source.Length && _source[pos] == '\n')
+                    pos++;
+                continue;
+            }
+            text.Append(c);
+            pos++;
+        }
+    }
+
+    private IReadOnlyList<XPathAstNode> ScanConstructorAttributeValue(ref int pos, char quote, int ctorStart, bool isNamespaceDecl = false)
+    {
+        var parts = new List<XPathAstNode>();
+        var text = new StringBuilder();
+        void FlushText()
+        {
+            if (text.Length > 0)
+            {
+                parts.Add(new StringLiteralNode(text.ToString()));
+                text.Clear();
+            }
+        }
+
+        while (true)
+        {
+            if (pos >= _source.Length)
+                throw ConstructorError("unterminated attribute value", ctorStart);
+            char c = _source[pos];
+            if (c == quote)
+            {
+                // A doubled quote is an escaped literal quote in the value.
+                if (pos + 1 < _source.Length && _source[pos + 1] == quote)
+                {
+                    text.Append(quote);
+                    pos += 2;
+                    continue;
+                }
+                pos++;
+                FlushText();
+                var result = parts;
+                if (isNamespaceDecl)
+                {
+                    var uri = string.Concat(result.OfType<StringLiteralNode>().Select(p => p.Value));
+                    if (uri.Any(char.IsWhiteSpace))
+                        throw new ParseException($"XQST0046: Invalid character in namespace URI '{uri}'.", ctorStart);
+                }
+                return result;
+            }
+            if (c == '{')
+            {
+                if (pos + 1 < _source.Length && _source[pos + 1] == '{')
+                {
+                    text.Append('{');
+                    pos += 2;
+                    continue;
+                }
+                if (isNamespaceDecl)
+                    throw new ParseException("XQST0022: A namespace declaration must have a literal URI.", pos);
+                FlushText();
+                parts.Add(ScanEnclosedExpression(ref pos, ctorStart));
+                continue;
+            }
+            if (c == '}')
+            {
+                if (pos + 1 < _source.Length && _source[pos + 1] == '}')
+                {
+                    text.Append('}');
+                    pos += 2;
+                    continue;
+                }
+                throw ConstructorError("unescaped '}' in attribute value (use '}}')", pos);
+            }
+            if (c == '&')
+            {
+                text.Append(ScanConstructorCharReference(ref pos, ctorStart));
+                continue;
+            }
+            if (c == '<')
+            {
+                // A raw '<' is never allowed literally in an attribute value (use '&lt;').
+                throw ConstructorError("attribute values must not contain a literal '<'", pos);
+            }
+            // XML attribute-value normalization: raw whitespace becomes a space.
+            text.Append(c is '\t' or '\n' or '\r' ? ' ' : c);
+            pos++;
+        }
+    }
+
+    private XPathAstNode ScanEnclosedExpression(ref int pos, int ctorStart)
+    {
+        // pos is at '{'.
+        int exprStart = ++pos;
+        int depth = 1;
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == '{')
+            {
+                depth++;
+            }
+            else if (c == '}')
+            {
+                depth--;
+                if (depth == 0)
+                {
+                    var inner = _source[exprStart..pos];
+                    pos++;
+                    // An enclosed expression with no tokens at all (pure whitespace) is a
+                    // syntax error; a comment-only expression evaluates to the empty sequence.
+                    if (string.IsNullOrWhiteSpace(inner))
+                        throw new ParseException("XPST0003: An enclosed expression must not be empty.", exprStart);
+                    if (string.IsNullOrWhiteSpace(StripXQueryComments(inner)))
+                        return new SequenceExpressionNode(Array.Empty<XPathAstNode>());
+                    return Parse(inner, _allowFullFlwor);
+                }
+            }
+            else if (c == '\'' || c == '"')
+            {
+                char q = c;
+                pos++;
+                while (pos < _source.Length)
+                {
+                    if (_source[pos] == q)
+                    {
+                        if (pos + 1 < _source.Length && _source[pos + 1] == q)
+                        {
+                            pos += 2;
+                            continue;
+                        }
+                        break;
+                    }
+                    pos++;
+                }
+            }
+            else if (c == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':')
+            {
+                int commentDepth = 1;
+                pos += 2;
+                while (pos < _source.Length && commentDepth > 0)
+                {
+                    if (_source[pos] == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':')
+                    {
+                        commentDepth++;
+                        pos += 2;
+                    }
+                    else if (_source[pos] == ':' && pos + 1 < _source.Length && _source[pos + 1] == ')')
+                    {
+                        commentDepth--;
+                        pos += 2;
+                    }
+                    else
+                    {
+                        pos++;
+                    }
+                }
+                continue;
+            }
+            pos++;
+        }
+        throw ConstructorError("unterminated enclosed expression", ctorStart);
+    }
+
+    private string ScanConstructorCharReference(ref int pos, int ctorStart)
+    {
+        int semi = _source.IndexOf(';', pos + 1);
+        if (semi < 0)
+            throw ConstructorError("unterminated entity or character reference", pos);
+        var reference = _source[(pos + 1)..semi];
+        pos = semi + 1;
+        return reference switch
+        {
+            "amp" => "&",
+            "lt" => "<",
+            "gt" => ">",
+            "quot" => "\"",
+            "apos" => "'",
+            _ when reference.StartsWith("#x", StringComparison.Ordinal) &&
+                   int.TryParse(reference[2..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex) =>
+                ValidateCharReference(hex, ctorStart),
+            _ when reference.StartsWith('#') &&
+                   int.TryParse(reference[1..], NumberStyles.Integer, CultureInfo.InvariantCulture, out var dec) =>
+                ValidateCharReference(dec, ctorStart),
+            _ => throw ConstructorError($"invalid entity or character reference '&{reference};'", ctorStart)
+        };
+    }
+
+    // XQST0090: a character reference must denote a valid XML 1.1 character.
+    private string ValidateCharReference(int codePoint, int ctorStart)
+    {
+        bool valid = codePoint is 0x9 or 0xA or 0xD
+            || (codePoint >= 0x20 && codePoint <= 0xD7FF)
+            || (codePoint >= 0xE000 && codePoint <= 0xFFFD)
+            || (codePoint >= 0x10000 && codePoint <= 0x10FFFF);
+        if (!valid)
+            throw new ParseException($"XQST0090: Character reference '&#{codePoint};' does not denote a valid XML character.", ctorStart);
+        return char.ConvertFromUtf32(codePoint);
+    }
+
+    private (string? Prefix, string Local) ScanConstructorQName(ref int pos, int ctorStart)
+    {
+        int nameStart = pos;
+        if (pos >= _source.Length || (!char.IsLetter(_source[pos]) && _source[pos] != '_'))
+            throw ConstructorError("expected a name", pos);
+        pos++;
+        while (pos < _source.Length && IsConstructorNameChar(_source[pos]))
+            pos++;
+        var first = _source[nameStart..pos];
+        if (pos < _source.Length && _source[pos] == ':')
+        {
+            pos++;
+            int localStart = pos;
+            if (pos >= _source.Length || (!char.IsLetter(_source[pos]) && _source[pos] != '_'))
+                throw ConstructorError("expected a local name after ':'", pos);
+            pos++;
+            while (pos < _source.Length && IsConstructorNameChar(_source[pos]))
+                pos++;
+            return (first, _source[localStart..pos]);
+        }
+        return (null, first);
+    }
+
+    private static bool IsConstructorNameChar(char c) =>
+        char.IsLetterOrDigit(c) || c is '_' or '-' or '.';
+
+    private void SkipConstructorWhitespace(ref int pos)
+    {
+        while (pos < _source.Length && char.IsWhiteSpace(_source[pos]))
+            pos++;
+    }
+
+    private static int IndexOfWhitespace(string text)
+    {
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (char.IsWhiteSpace(text[i]))
+                return i;
+        }
+        return -1;
+    }
+
+    private static string NormalizeNewlines(string text) =>
+        text.Replace("\r\n", "\n").Replace('\r', '\n');
+
+    /// <summary>Removes XQuery comments (possibly nested) so emptiness can be detected.</summary>
+    private static string StripXQueryComments(string text)
+    {
+        var sb = new StringBuilder(text.Length);
+        int i = 0;
+        while (i < text.Length)
+        {
+            if (text[i] == '(' && i + 1 < text.Length && text[i + 1] == ':')
+            {
+                int depth = 1;
+                i += 2;
+                while (i < text.Length && depth > 0)
+                {
+                    if (text[i] == '(' && i + 1 < text.Length && text[i + 1] == ':') { depth++; i += 2; }
+                    else if (text[i] == ':' && i + 1 < text.Length && text[i + 1] == ')') { depth--; i += 2; }
+                    else i++;
+                }
+                continue;
+            }
+            sb.Append(text[i]);
+            i++;
+        }
+        return sb.ToString();
+    }
+
+    private static bool IsXmlWhitespaceOnly(string text)
+    {
+        foreach (char c in text)
+        {
+            if (c is not (' ' or '\t' or '\n' or '\r'))
+                return false;
+        }
+        return true;
+    }
+
+    private ParseException ConstructorError(string message, int pos) =>
+        new($"XPST0003: {message}.", pos);
 
     private MapConstructorNode ParseMapConstructor(int start)
     {
