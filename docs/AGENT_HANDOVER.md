@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `TBD` (feat(xquery): Phase 4 output declarations and serialization round-out)
+**Commit:** `3c82b3d` (feat(xquery): Phase 4 output declarations and serialization round-out)
 **Current focus:** **XQuery 3.1 Phase 4 started — output declarations + serialization round-out**: `declare option output:*` prolog with static serialization parameter merging into `fn:serialize` (per-call parameters win), `output:parameter-document`, and a full Serialization 3.1 fidelity pass over the serializer. QT3 went from **25,928 passed / 0 failed / 5,893 skipped (81.48%)** to **26,299 passed / 0 failed / 5,522 skipped (82.64%)** (+371 passing). Full `dotnet test Bosak.sln` passes: **1,479 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (output declarations + serialization)
