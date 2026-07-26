@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `TBD` (feat(xquery): switch and typeswitch expressions)
+**Commit:** `b21848f` (feat(xquery): switch and typeswitch expressions)
 **Current focus:** **XQuery 3.1 — switch / typeswitch expressions** implemented: both forms parse as dedicated AST nodes in XQuery mode and desugar in the IR lowerer to synthetic `let` + nested `if` chains (`eq` value comparisons for switch, `instance of` checks for typeswitch) — no new opcodes. QT3 went from **25,846 passed / 0 failed / 5,975 skipped (81.22%)** to **25,928 passed / 0 failed / 5,893 skipped (81.48%)** (+82 passing). Full `dotnet test Bosak.sln` passes: **1,470 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (switch / typeswitch)
