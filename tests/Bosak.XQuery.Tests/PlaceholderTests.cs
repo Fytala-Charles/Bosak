@@ -28,6 +28,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.0   | 25-07-2026     | Added direct constructor tests (elements, attributes, comments, PIs, scoping)          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 25-07-2026     | Added computed constructor and prefixed window variable tests                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -767,6 +769,169 @@ public class PlaceholderTests
         var ctx = new XQueryContext();
         var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
         Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Window_PrefixedVariable_Resolves()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare namespace window = \"foo:bar\";\n" +
+            "string(for tumbling window $window:w in (1 to 3) start $s when true() end $e when false() return <w>{$window:w}</w>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("1 2 3", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedElement_StaticName()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("name(element foo { \"text\" })");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("foo", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedElement_ComputedNameAndAtomicContent()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("(name(element { \"dyn\" } { 1, 2, 3 }), string(element { \"dyn\" } { 1, 2, 3 }))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(new[] { "dyn", "1 2 3" }, ToStrings(result));
+    }
+
+    [Fact]
+    public void XQuery_ComputedElement_EQNameName()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("(name(element { \"Q{http://u}x\" } {}), namespace-uri(element { \"Q{http://u}x\" } {}))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(new[] { "x", "http://u" }, ToStrings(result));
+    }
+
+    [Fact]
+    public void XQuery_ComputedElement_EmptyContent()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("(string(count(element e {})), string(element e {}))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(new[] { "1", "" }, ToStrings(result));
+    }
+
+    [Fact]
+    public void XQuery_ComputedElement_TextNodeMergesWithoutSeparator()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("string(element e { 7, text{\"t\"}, text{\"t\"}, 8 })");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("7tt8", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedAttribute_AddsToElement()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("string(<e>{ attribute href { \"http://x\" } }</e>/@href)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("http://x", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedAttribute_XmlPrefixCoerced()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("prefix-from-QName(node-name(attribute { QName(\"http://www.w3.org/XML/1998/namespace\", \"space\") } { \"preserve\" }))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("xml", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedTextCommentAndPI()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("(string(text { \"abc\" }), string(comment { \"c\" }), name(processing-instruction pi { \"d\" }), string(processing-instruction pi { \"d\" }))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(new[] { "abc", "c", "pi", "d" }, ToStrings(result));
+    }
+
+    [Fact]
+    public void XQuery_ComputedDocument_WrapsContent()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("count(document { element a { \"x\" }, \"tail\" }/a)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(1L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedNamespace_BecomesDeclaration()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("contains(serialize(element e { namespace z { \"http://z\" } }), \"xmlns:z\")");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedComment_DoubleHyphen_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("comment { \"a--b\" }");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XQDY0072", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ComputedPI_NestedTerminator_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("processing-instruction p { \"a?>b\" }");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XQDY0026", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ComputedElement_XmlnsPrefix_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("element { \"xmlns:x\" } {}");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XQDY0096", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ComputedAttribute_AfterContent_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("element e { \"x\", attribute a { \"b\" } }");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("XQTY0024", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

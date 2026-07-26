@@ -49,6 +49,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.19  | 25-07-2026     | Constructor-local namespace declarations (SaveNamespaces/DeclareNamespace)              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.20  | 25-07-2026     | Lower computed constructors; window/tuple variable bindings keep prefixes and EQName namespaces |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -81,7 +83,7 @@ public readonly record struct OrderByInfo(
 /// <summary>
 /// Variable-binding information stored in the literal pool for the TupleBind opcode.
 /// </summary>
-public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, string? NamespaceUri)> Variables);
+public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, string? Prefix, string? NamespaceUri)> Variables);
 
 /// <summary>
 /// Grouping information stored in the literal pool for the GroupBy opcode.
@@ -138,6 +140,37 @@ public enum ConstructPartKind : byte
     /// <summary>A processing instruction; Index is the data pool index, Index2 the target pool index.</summary>
     ProcessingInstruction
 }
+
+/// <summary>The kind of a computed constructor (element/attribute/document/text/comment/PI/namespace).</summary>
+public enum ComputedConstructorKind : byte
+{
+    /// <summary><c>element name { content }</c></summary>
+    Element,
+    /// <summary><c>attribute name { value }</c></summary>
+    Attribute,
+    /// <summary><c>document { content }</c></summary>
+    Document,
+    /// <summary><c>text { value }</c></summary>
+    Text,
+    /// <summary><c>comment { value }</c></summary>
+    Comment,
+    /// <summary><c>processing-instruction target { value }</c></summary>
+    ProcessingInstruction,
+    /// <summary><c>namespace prefix { uri }</c></summary>
+    Namespace
+}
+
+/// <summary>
+/// Construction information stored in the literal pool for the ConstructComputed opcode.
+/// Static name parts when present; when HasNameExpression is true the name/target/prefix is
+/// evaluated from the register in RegisterB instead.
+/// </summary>
+public readonly record struct ComputedConstructorInfo(
+    ComputedConstructorKind Kind,
+    string? LocalName,
+    string? Prefix,
+    string? NamespaceUri,
+    bool HasNameExpression);
 
 /// <summary>
 /// Windowing information stored in the literal pool for the Window opcode.
@@ -224,6 +257,13 @@ public sealed class IrLowerer
             DirectElementConstructorNode n => LowerDirectElementConstructor(n, targetReg),
             DirectCommentNode n => LowerDirectComment(n, targetReg),
             DirectProcessingInstructionNode n => LowerDirectProcessingInstruction(n, targetReg),
+            ComputedElementConstructorNode n => LowerComputedConstructor(ComputedConstructorKind.Element, n.NameExpression, n.TagName, n.TagPrefix, n.TagNamespaceUri, n.ContentExpression, targetReg),
+            ComputedAttributeConstructorNode n => LowerComputedConstructor(ComputedConstructorKind.Attribute, n.NameExpression, n.Name, n.Prefix, n.NamespaceUri, n.ValueExpression, targetReg),
+            ComputedDocumentConstructorNode n => LowerComputedConstructor(ComputedConstructorKind.Document, null, null, null, null, n.ContentExpression, targetReg),
+            ComputedTextConstructorNode n => LowerComputedConstructor(ComputedConstructorKind.Text, null, null, null, null, n.ValueExpression, targetReg),
+            ComputedCommentConstructorNode n => LowerComputedConstructor(ComputedConstructorKind.Comment, null, null, null, null, n.ValueExpression, targetReg),
+            ComputedPIConstructorNode n => LowerComputedConstructor(ComputedConstructorKind.ProcessingInstruction, n.TargetExpression, n.Target, null, null, n.ValueExpression, targetReg),
+            ComputedNamespaceConstructorNode n => LowerComputedConstructor(ComputedConstructorKind.Namespace, n.PrefixExpression, n.Prefix, null, null, n.UriExpression, targetReg),
             MapConstructorNode n => LowerMapConstructor(n, targetReg),
             ArrayConstructorNode n => LowerArrayConstructor(n, targetReg),
             LookupNode n => LowerLookup(n, targetReg),
@@ -773,6 +813,24 @@ public sealed class IrLowerer
     {
         var parts = value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
         return string.Join(' ', parts);
+    }
+
+    private int LowerComputedConstructor(
+        ComputedConstructorKind kind,
+        XPathAstNode? nameExpression,
+        string? localName,
+        string? prefix,
+        string? namespaceUri,
+        XPathAstNode contentExpression,
+        int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+        int nameReg = nameExpression is not null ? LowerNode(nameExpression) : -1;
+        int contentReg = LowerNode(contentExpression);
+        var info = new ComputedConstructorInfo(kind, localName, prefix, namespaceUri, nameReg >= 0);
+        int poolIdx = AddToLiteralPool(info);
+        Emit(IrOpCode.ConstructComputed, (ushort)resultReg, (ushort)(nameReg >= 0 ? nameReg : 0), (ushort)contentReg, poolIdx);
+        return resultReg;
     }
 
     private int LowerDirectComment(DirectCommentNode node, int? targetReg)
@@ -1724,7 +1782,7 @@ public sealed class IrLowerer
         int tupleVarPoolIdx = AddToLiteralPool("__flwor_tuple");
         Emit(IrOpCode.LoadVariable, (ushort)tupleReg, 0, 0, tupleVarPoolIdx);
 
-        var tupleBindInfo = new TupleBindInfo(boundVariables.Select(v => (v.Name, v.NamespaceUri)).ToArray());
+        var tupleBindInfo = new TupleBindInfo(boundVariables.Select(v => (v.Name, v.Prefix, v.NamespaceUri)).ToArray());
         int tupleBindPoolIdx = AddToLiteralPool(tupleBindInfo);
         Emit(IrOpCode.TupleBind, (ushort)tupleReg, 0, 0, tupleBindPoolIdx);
         FreeRegister(tupleReg);
@@ -1945,7 +2003,13 @@ public sealed class IrLowerer
         void AddConditionVar(string? name)
         {
             if (name is not null)
-                result.Add(new BoundVariable(name, null, null));
+            {
+                // Condition variable names are stored in lexical form (prefix:local or
+                // Q{uri}local); split them so both forms key consistently with the
+                // variable references that resolve against declared namespaces.
+                var (local, prefix, ns) = SplitVariableName(name);
+                result.Add(new BoundVariable(local, prefix, ns));
+            }
         }
         AddConditionVar(windowClause.StartCondition.CurrentItemVariable);
         AddConditionVar(windowClause.StartCondition.PositionalVariable);
@@ -1959,6 +2023,19 @@ public sealed class IrLowerer
             AddConditionVar(windowClause.EndCondition.NextItemVariable);
         }
         return result;
+    }
+
+    // Splits a lexical variable name (local, prefix:local, or Q{uri}local) into its parts.
+    private static (string Local, string? Prefix, string? NamespaceUri) SplitVariableName(string name)
+    {
+        if (name.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int closeBrace = name.IndexOf('}');
+            if (closeBrace > 1)
+                return (name[(closeBrace + 1)..], null, name[2..closeBrace]);
+        }
+        int colon = name.IndexOf(':');
+        return colon < 0 ? (name, null, null) : (name[(colon + 1)..], name[..colon], null);
     }
 
     private void LowerFlworTupleBuilder(
@@ -2109,7 +2186,13 @@ public sealed class IrLowerer
             Emit(IrOpCode.Return, (ushort)resultReg);
         }
         var info = new WindowInfo(
-            windowClause.VariableName,
+            // The lexical variable name (prefix:local or Q{uri}local) so the VM can
+            // resolve the binding exactly the way references to the variable resolve.
+            windowClause.NamespaceUri is not null
+                ? $"Q{{{windowClause.NamespaceUri}}}{windowClause.VariableName}"
+                : windowClause.Prefix is not null
+                    ? $"{windowClause.Prefix}:{windowClause.VariableName}"
+                    : windowClause.VariableName,
             windowClause.NamespaceUri,
             windowClause.Sliding,
             windowClause.OnlyEnd,
@@ -2214,7 +2297,7 @@ public sealed class IrLowerer
         int tupleVarPoolIdx = AddToLiteralPool("__flwor_tuple");
         Emit(IrOpCode.LoadVariable, (ushort)tupleReg, 0, 0, tupleVarPoolIdx);
 
-        var tupleBindInfo = new TupleBindInfo(boundVariables.Select(v => (v.Name, v.NamespaceUri)).ToArray());
+        var tupleBindInfo = new TupleBindInfo(boundVariables.Select(v => (v.Name, v.Prefix, v.NamespaceUri)).ToArray());
         int tupleBindPoolIdx = AddToLiteralPool(tupleBindInfo);
         Emit(IrOpCode.TupleBind, (ushort)tupleReg, 0, 0, tupleBindPoolIdx);
         FreeRegister(tupleReg);

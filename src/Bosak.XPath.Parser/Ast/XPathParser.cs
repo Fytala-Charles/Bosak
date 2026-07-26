@@ -55,6 +55,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.25  | 25-07-2026     | Constructor validations: XQST0022/0046/0070/0071/0090; CDATA/ref text; empty-expr rules |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.26  | 25-07-2026     | Parse XQuery computed constructors; EQName char/entity reference expansion; boundary-whitespace CDATA fix |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1149,6 +1151,13 @@ public sealed class XPathParser
             }
         }
 
+        // XQuery computed constructors (element/attribute/text/document/comment/PI/namespace)
+        // are primary expressions, not name-test steps.
+        if (_allowFullFlwor && Current.Kind == TokenKind.Name && IsComputedConstructorForm(GetString(Current)))
+        {
+            return ParsePostfixExpr();
+        }
+
         // Name test or wildcard in a step context
         // Exclude names followed by LParen (function calls/kind tests already handled)
         // Exclude names followed by Hash (named function refs)
@@ -1530,6 +1539,8 @@ public sealed class XPathParser
 
             case TokenKind.Name:
                 var name = GetString(Current);
+                if (_allowFullFlwor && IsComputedConstructorForm(name))
+                    return ParseComputedConstructor(start);
                 var (prefix, local, _) = SplitQName(name);
                 if (Peek(1).Kind == TokenKind.LParen)
                     return ParseFunctionCall(start);
@@ -1558,6 +1569,98 @@ public sealed class XPathParser
 
             default:
                 throw new ParseException($"Unexpected token {Current.Kind} in primary expression", start);
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // XQuery computed constructors
+    // ------------------------------------------------------------------
+
+    private bool IsComputedConstructorForm(string name)
+    {
+        switch (name)
+        {
+            case "element":
+            case "attribute":
+            case "processing-instruction":
+            case "namespace":
+                // "keyword" "{" | "keyword" QName "{"
+                // The name may itself be a keyword used as an ordinary NCName
+                // (e.g. 'attribute return {()}' constructs an attribute named 'return').
+                return Peek(1).Kind == TokenKind.LBrace ||
+                       ((Peek(1).Kind == TokenKind.Name || IsKeywordName(Peek(1).Kind)) && Peek(2).Kind == TokenKind.LBrace);
+            case "text":
+            case "document":
+            case "comment":
+                return Peek(1).Kind == TokenKind.LBrace;
+            default:
+                return false;
+        }
+    }
+
+    private XPathAstNode ParseComputedConstructor(int start)
+    {
+        string keyword = GetString(Current);
+        Advance();
+
+        switch (keyword)
+        {
+            case "element":
+            case "attribute":
+            case "processing-instruction":
+            case "namespace":
+            {
+                // Name form: EQName (possibly Q{uri}local) or computed "{" Expr "}".
+                XPathAstNode? nameExpression = null;
+                string? local = null, prefix = null, ns = null;
+                if (Current.Kind == TokenKind.LBrace)
+                {
+                    Advance();
+                    nameExpression = ParseExpr();
+                    Expect(TokenKind.RBrace);
+                }
+                else
+                {
+                    var nameTok = ExpectName();
+                    (prefix, local, ns) = SplitQName(GetString(nameTok));
+                    // A static processing-instruction target must be an NCName; a
+                    // prefixed or URI-qualified name is a syntax error (XPST0003).
+                    if (keyword == "processing-instruction" && (prefix is not null || ns is not null))
+                        throw new ParseException($"XPST0003: A processing-instruction target must be an unprefixed NCName, not '{GetString(nameTok)}'.", start);
+                }
+                Expect(TokenKind.LBrace);
+                // Computed constructor content may be empty ({}), producing the empty sequence.
+                var content = Current.Kind == TokenKind.RBrace
+                    ? new SequenceExpressionNode(Array.Empty<XPathAstNode>())
+                    : ParseExpr();
+                Expect(TokenKind.RBrace);
+                return keyword switch
+                {
+                    "element" => WithSpan(new ComputedElementConstructorNode(nameExpression, local, prefix, ns, content), start, End),
+                    "attribute" => WithSpan(new ComputedAttributeConstructorNode(nameExpression, local, prefix, ns, content), start, End),
+                    "processing-instruction" => WithSpan(new ComputedPIConstructorNode(nameExpression, local, content), start, End),
+                    _ => WithSpan(new ComputedNamespaceConstructorNode(nameExpression, local, content), start, End)
+                };
+            }
+            case "text":
+            case "document":
+            case "comment":
+            {
+                Expect(TokenKind.LBrace);
+                // Computed constructor content may be empty ({}), producing the empty sequence.
+                var content = Current.Kind == TokenKind.RBrace
+                    ? new SequenceExpressionNode(Array.Empty<XPathAstNode>())
+                    : ParseExpr();
+                Expect(TokenKind.RBrace);
+                return keyword switch
+                {
+                    "text" => WithSpan(new ComputedTextConstructorNode(content), start, End),
+                    "document" => WithSpan(new ComputedDocumentConstructorNode(content), start, End),
+                    _ => WithSpan(new ComputedCommentConstructorNode(content), start, End)
+                };
+            }
+            default:
+                throw new ParseException($"XPST0003: Unknown computed constructor '{keyword}'.", start);
         }
     }
 
@@ -1843,8 +1946,9 @@ public sealed class XPathParser
                     ? new SignificantTextNode(text.ToString())
                     : new StringLiteralNode(text.ToString()));
                 text.Clear();
-                textHasReference = false;
             }
+            // Always reset: a reference/CDATA only protects the text run it belongs to.
+            textHasReference = false;
         }
 
         while (true)
@@ -1896,7 +2000,8 @@ public sealed class XPathParser
                         int close = _source.IndexOf("]]>", dataStart, StringComparison.Ordinal);
                         if (close < 0)
                             throw ConstructorError("unterminated CDATA section", pos);
-                        // CDATA content (and its mere presence) is never boundary whitespace.
+                        // CDATA content (and its mere presence) is never boundary whitespace:
+                        // even an empty CDATA section protects the surrounding text run.
                         text.Append(NormalizeNewlines(_source[dataStart..close]));
                         textHasReference = true;
                         pos = close + 3;
@@ -2306,7 +2411,10 @@ public sealed class XPathParser
             int closeBrace = qname.IndexOf('}');
             if (closeBrace >= 2)
             {
-                string nsUri = NormalizeEQNameUri(qname[2..closeBrace]);
+                // Braced URI literals may not contain braces (XPST0003).
+                if (qname[2..closeBrace].Contains('{'))
+                    throw new ParseException($"XPST0003: Braces are not allowed in the URI part of an EQName ('{qname}').", 0);
+                string nsUri = NormalizeEQNameUri(ExpandEQNameRefs(qname[2..closeBrace]));
                 string rest = qname[(closeBrace + 1)..];
                 int restColon = rest.IndexOf(':');
                 return restColon < 0 ? (null, rest, nsUri) : (rest[..restColon], rest[(restColon + 1)..], nsUri);
@@ -2338,6 +2446,58 @@ public sealed class XPathParser
                 sb.Append(' ');
             pendingSpace = false;
             sb.Append(c);
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Expands character references (<c>&amp;#x20;</c>, <c>&amp;#32;</c>) and predefined
+    /// entity references (<c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>, <c>&amp;quot;</c>,
+    /// <c>&amp;apos;</c>) in the braced URI literal of an EQName. Malformed or unknown
+    /// references are a syntax error (XPST0003).
+    /// </summary>
+    private static string ExpandEQNameRefs(string uri)
+    {
+        if (!uri.Contains('&'))
+            return uri;
+        var sb = new System.Text.StringBuilder(uri.Length);
+        for (int i = 0; i < uri.Length; i++)
+        {
+            char c = uri[i];
+            if (c != '&')
+            {
+                sb.Append(c);
+                continue;
+            }
+            int semi = uri.IndexOf(';', i + 1);
+            if (semi < 0)
+                throw new ParseException($"XPST0003: Unterminated reference in EQName URI ('{uri}').", 0);
+            var body = uri[(i + 1)..semi];
+            if (body.StartsWith("#x", StringComparison.Ordinal) || body.StartsWith("#X", StringComparison.Ordinal))
+            {
+                if (!int.TryParse(body[2..], System.Globalization.NumberStyles.HexNumber, null, out int hex) || hex is < 1 or > 0x10FFFF)
+                    throw new ParseException($"XPST0003: Invalid character reference '&{body};' in EQName URI.", 0);
+                sb.Append(char.ConvertFromUtf32(hex));
+            }
+            else if (body.StartsWith('#'))
+            {
+                if (!int.TryParse(body[1..], System.Globalization.NumberStyles.None, null, out int dec) || dec is < 1 or > 0x10FFFF)
+                    throw new ParseException($"XPST0003: Invalid character reference '&{body};' in EQName URI.", 0);
+                sb.Append(char.ConvertFromUtf32(dec));
+            }
+            else
+            {
+                sb.Append(body switch
+                {
+                    "amp" => '&',
+                    "lt" => '<',
+                    "gt" => '>',
+                    "quot" => '"',
+                    "apos" => '\'',
+                    _ => throw new ParseException($"XPST0003: Unknown entity reference '&{body};' in EQName URI.", 0)
+                });
+            }
+            i = semi;
         }
         return sb.ToString();
     }

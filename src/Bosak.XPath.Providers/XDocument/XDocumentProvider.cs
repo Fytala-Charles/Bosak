@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 25-07-2026     | Namespace fixup; in-scope namespace copying on clones; base-URI annotation             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 25-07-2026     | ConstructAttribute/ConstructDocument for computed constructors; namespace declarations and text content nodes |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -158,6 +160,13 @@ public static class XDocumentProvider
                     FlushText();
                     element.Add(new XProcessingInstruction(item.Target ?? string.Empty, item.Text ?? string.Empty));
                     break;
+                case XdmContentKind.Namespace:
+                    FlushText();
+                    if (string.IsNullOrEmpty(item.Target))
+                        element.Add(new XAttribute("xmlns", item.Text ?? string.Empty));
+                    else
+                        element.Add(new XAttribute(XNamespace.Xmlns + item.Target, item.Text ?? string.Empty));
+                    break;
                 default:
                     FlushText();
                     var childNode = CloneNode(item.Node!.Value);
@@ -183,8 +192,14 @@ public static class XDocumentProvider
         ArgumentNullException.ThrowIfNull(item);
         return item.Kind switch
         {
+            XdmContentKind.Text => new XDocumentNode(new XText(item.Text ?? string.Empty)),
             XdmContentKind.Comment => new XDocumentNode(new XComment(item.Text ?? string.Empty)),
             XdmContentKind.ProcessingInstruction => new XDocumentNode(new XProcessingInstruction(item.Target ?? string.Empty, item.Text ?? string.Empty)),
+            XdmContentKind.Namespace => XDocumentNode.CreateNamespaceNode(
+                string.IsNullOrEmpty(item.Target)
+                    ? new XAttribute("xmlns", item.Text ?? string.Empty)
+                    : new XAttribute(XNamespace.Xmlns + item.Target, item.Text ?? string.Empty),
+                new XElement("__ns_owner__")),
             _ => throw new ArgumentException($"ConstructContentNode does not handle kind '{item.Kind}'.", nameof(item))
         };
     }
@@ -218,6 +233,82 @@ public static class XDocumentProvider
             .ToList();
         foreach (var attr in redundant)
             attr.Remove();
+    }
+
+    /// <summary>
+    /// Builds an XDocument-backed free-standing attribute node for a computed attribute
+    /// constructor (the <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.AttributeConstructorHook"/>).
+    /// </summary>
+    /// <param name="attribute">The computed attribute (name and value).</param>
+    /// <returns>The constructed attribute node.</returns>
+    public static IXdmNode ConstructAttribute(XdmAttributeValue attribute)
+    {
+        ArgumentNullException.ThrowIfNull(attribute);
+        XNamespace ns = attribute.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attribute.NamespaceUri);
+        var xattr = new XAttribute(ns + attribute.LocalName, attribute.Value);
+        // LINQ attributes cannot carry a prefix; record it as an annotation so the
+        // free-standing attribute still reports its constructed prefix.
+        if (!string.IsNullOrEmpty(attribute.Prefix))
+            xattr.AddAnnotation(new AttributePrefixAnnotation(attribute.Prefix));
+        return new XDocumentNode(xattr);
+    }
+
+    /// <summary>
+    /// Builds an XDocument-backed document node for a computed document constructor
+    /// (the <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.DocumentConstructorHook"/>).
+    /// </summary>
+    /// <param name="content">The document content items.</param>
+    /// <returns>The constructed document node.</returns>
+    public static IXdmNode ConstructDocument(IReadOnlyList<XdmContentItem> content)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
+        // LINQ documents allow a single root element; XDM document nodes allow any content.
+        // Use the engine's synthetic document-root wrapper for anything else.
+        bool singleElementRoot = content.Count == 1 && content[0].Kind == XdmContentKind.Node &&
+            content[0].Node!.Value.NodeValue.NodeKind == XdmNodeKind.Element;
+        var document = new System.Xml.Linq.XDocument();
+        XContainer container = document;
+        if (!singleElementRoot)
+        {
+            var wrapper = new XElement("__xdm_doc__");
+            document.Add(wrapper);
+            container = wrapper;
+        }
+
+        string? pendingText = null;
+        void FlushText()
+        {
+            if (pendingText is not null)
+            {
+                container.Add(pendingText);
+                pendingText = null;
+            }
+        }
+
+        foreach (var item in content)
+        {
+            switch (item.Kind)
+            {
+                case XdmContentKind.Text:
+                    pendingText = pendingText is null ? item.Text : pendingText + item.Text;
+                    break;
+                case XdmContentKind.Comment:
+                    FlushText();
+                    container.Add(new XComment(item.Text ?? string.Empty));
+                    break;
+                case XdmContentKind.ProcessingInstruction:
+                    FlushText();
+                    container.Add(new XProcessingInstruction(item.Target ?? string.Empty, item.Text ?? string.Empty));
+                    break;
+                default:
+                    FlushText();
+                    container.Add(CloneNode(item.Node!.Value));
+                    break;
+            }
+        }
+        FlushText();
+        return new XDocumentNode(document);
     }
 
     private static XNode CloneNode(XdmValue nodeValue)

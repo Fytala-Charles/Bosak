@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 25-07-2026     | Optional allowXQuerySpecs mode: positive XQuery-only spec deps are treated as satisfied |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 25-07-2026     | XQuery 3.1 spec-token awareness: exact XQ10/XQ30-only tests are not applicable          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -61,6 +63,14 @@ internal sealed class DependencyFilter
         "XQ31", "XQ31+",
     };
 
+    // XQuery spec tokens satisfied by Bosak's XQuery 3.1 processor: XQ31 and any
+    // "or later" range that includes 3.1. Exact earlier versions (XQ10, XQ30) do
+    // not match — tests gated to those versions assert pre-3.1 semantics.
+    private static readonly HashSet<string> SupportedXQuerySpecs = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "XQ10+", "XQ30+", "XQ31", "XQ31+",
+    };
+
     public bool IsSupported(IReadOnlyList<Dependency> dependencies, bool allowXQuerySpecs = false)
     {
 
@@ -90,9 +100,15 @@ internal sealed class DependencyFilter
                 // XQuery pipeline (allowXQuerySpecs), these dependencies are satisfied.
                 if (IsXqueryOnlySpec(dep))
                 {
-                    if (allowXQuerySpecs)
-                        continue;
-                    return false;
+                    if (!allowXQuerySpecs)
+                        return false;
+                    // Bosak implements XQuery 3.1: exact earlier-version tokens
+                    // (XQ10, XQ30) are not satisfied; '+' ranges and XQ31 are.
+                    // XPath tokens in a mixed dependency follow the XPath rules.
+                    var xqTokens = dep.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    if (!xqTokens.Any(t => SupportedXQuerySpecs.Contains(t) || SupportedSpecs.Contains(t)))
+                        return false;
+                    continue;
                 }
 
                 var tokens = dep.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);

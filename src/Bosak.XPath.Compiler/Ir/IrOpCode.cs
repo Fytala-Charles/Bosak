@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 25-07-2026     | Added SaveNamespaces/DeclareNamespace/RestoreNamespaces for constructor-local scopes    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 25-07-2026     | Added ConstructComputed opcode and ComputedConstructorKind for XQuery computed constructors |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -58,6 +60,7 @@ public enum IrOpCode : byte
     EnforceType,
     ConstructElement,
     ConstructContentNode,
+    ConstructComputed,
     SaveNamespaces,
     DeclareNamespace,
     RestoreNamespaces,

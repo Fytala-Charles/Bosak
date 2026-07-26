@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 25-07-2026     | Admit direct element constructors (implemented); keep string-constructor gate           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 25-07-2026     | Admit computed constructors in the XQuery construct gate                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -239,11 +241,7 @@ internal sealed class TestExecutor
     // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
     // keep their "XQuery syntax not supported" skip instead of being routed.
     private static readonly Regex UnsupportedXQueryConstructRegex = new(
-        @"\b(element|attribute)(\s+[^\s{(]+)?\s*\{" +
-        @"|\b(document|text|comment)\s*\{" +
-        @"|\bprocessing-instruction\s" +
-        @"|\bnamespace\s+[A-Za-z_$]" +
-        @"|\bswitch\s*\(|\btry\s*\{|\btypeswitch\s*\(" +
+        @"\bswitch\s*\(|\btry\s*\{|\btypeswitch\s*\(" +
         @"|\bunordered\s*\{|\bordered\s*\{|\bvalidate\s" +
         @"|\bdeclare\s+%" +                              // annotated declarations
         @"|\(#\s*[A-Za-z_]" +                          // pragma extension expressions (# ... #)

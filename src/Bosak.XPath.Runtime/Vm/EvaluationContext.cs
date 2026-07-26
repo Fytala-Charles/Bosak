@@ -43,6 +43,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.8   | 25-07-2026     | Added RemoveNamespace; predefined xsi and local namespace prefixes                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.9   | 25-07-2026     | Added AttributeConstructorHook and DocumentConstructorHook                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -121,6 +123,18 @@ public sealed class EvaluationContext
     /// The API layers register an XDocument-based implementation by default.
     /// </summary>
     public Func<XdmContentItem, IXdmNode>? ContentNodeConstructorHook { get; set; }
+
+    /// <summary>
+    /// Provider hook for computed attribute constructors (free-standing attribute nodes).
+    /// The API layers register an XDocument-based implementation by default.
+    /// </summary>
+    public Func<XdmAttributeValue, IXdmNode>? AttributeConstructorHook { get; set; }
+
+    /// <summary>
+    /// Provider hook for computed document constructors. The API layers register an
+    /// XDocument-based implementation by default.
+    /// </summary>
+    public Func<IReadOnlyList<XdmContentItem>, IXdmNode>? DocumentConstructorHook { get; set; }
 
     // Namespace prefixes
     private readonly Dictionary<string, string> _namespaces;

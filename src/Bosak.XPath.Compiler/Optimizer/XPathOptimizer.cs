@@ -34,6 +34,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.5   | 25-07-2026     | Optimize DirectElementConstructorNode                                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 25-07-2026     | Optimize computed constructor nodes                                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -95,10 +97,48 @@ public sealed class XPathOptimizer
             ArrayConstructorNode arr => OptimizeArray(arr, ref changed),
             InlineFunctionNode inline => OptimizeInline(inline, ref changed),
             DirectElementConstructorNode element => OptimizeDirectElementConstructor(element, ref changed),
+            ComputedElementConstructorNode n => OptimizeComputedConstructor(n, ref changed),
+            ComputedAttributeConstructorNode n => OptimizeComputedConstructor(n, ref changed),
+            ComputedDocumentConstructorNode n => OptimizeComputedConstructor(n, ref changed),
+            ComputedTextConstructorNode n => OptimizeComputedConstructor(n, ref changed),
+            ComputedCommentConstructorNode n => OptimizeComputedConstructor(n, ref changed),
+            ComputedPIConstructorNode n => OptimizeComputedConstructor(n, ref changed),
+            ComputedNamespaceConstructorNode n => OptimizeComputedConstructor(n, ref changed),
             FunctionCallNode call => OptimizeFunctionCall(call, ref changed),
             LetExpressionNode let => OptimizeLet(let, ref changed),
             DynamicFunctionCallNode dyn => OptimizeDynamicFunctionCall(dyn, ref changed),
             FlworExpressionNode flwor => OptimizeFlwor(flwor, ref changed),
+            _ => node
+        };
+    }
+
+    private XPathAstNode OptimizeComputedConstructor(XPathAstNode node, ref bool changed)
+    {
+        return node switch
+        {
+            ComputedElementConstructorNode n => n with
+            {
+                NameExpression = n.NameExpression is null ? null : OptimizeNode(n.NameExpression, ref changed),
+                ContentExpression = OptimizeNode(n.ContentExpression, ref changed)
+            },
+            ComputedAttributeConstructorNode n => n with
+            {
+                NameExpression = n.NameExpression is null ? null : OptimizeNode(n.NameExpression, ref changed),
+                ValueExpression = OptimizeNode(n.ValueExpression, ref changed)
+            },
+            ComputedDocumentConstructorNode n => n with { ContentExpression = OptimizeNode(n.ContentExpression, ref changed) },
+            ComputedTextConstructorNode n => n with { ValueExpression = OptimizeNode(n.ValueExpression, ref changed) },
+            ComputedCommentConstructorNode n => n with { ValueExpression = OptimizeNode(n.ValueExpression, ref changed) },
+            ComputedPIConstructorNode n => n with
+            {
+                TargetExpression = n.TargetExpression is null ? null : OptimizeNode(n.TargetExpression, ref changed),
+                ValueExpression = OptimizeNode(n.ValueExpression, ref changed)
+            },
+            ComputedNamespaceConstructorNode n => n with
+            {
+                PrefixExpression = n.PrefixExpression is null ? null : OptimizeNode(n.PrefixExpression, ref changed),
+                UriExpression = OptimizeNode(n.UriExpression, ref changed)
+            },
             _ => node
         };
     }

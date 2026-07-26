@@ -5,14 +5,24 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 July 2026
-> **Bosak baseline:** 1,443 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 25,060 passed / 0 failed / 6,761 skipped (78.75% / 100% of runnable tests) — XQuery routing enabled; 284 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,458 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 25,846 passed / 0 failed / 5,975 skipped (81.22% / 100% of runnable tests) — XQuery routing enabled; 307 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 3 started — full core FLWOR + direct element/comment/PI constructors with constructor-local namespaces
+> **XQuery baseline:** Phase 3 complete — full core FLWOR + direct and computed constructors with constructor-local namespaces
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-25** — XQuery 3.1 Phase 3 complete: **computed constructors** (REQ-047): QT3 **25,846 passed / 0 failed** (from 25,060; +786).
+  - All seven computed constructor forms (`element`/`attribute`/`document`/`text`/`comment`/`processing-instruction`/`namespace`) with static EQName or computed `{expr}` names; parser recognition hooked into step expressions so `element` is not swallowed as a name test; keywords usable as constructor names (`attribute return {()}`).
+  - Single `ConstructComputed` IR opcode with per-kind VM handlers and a shared content accumulator: attributes before content only (XQTY0024), duplicate attributes (XQDY0025), namespace nodes become declarations (XQDY0102 incl. spec bug 22032), adjacent atomic values joined with single spaces, text nodes merged without separator, arrays flattened.
+  - Computed name resolution: EQName `Q{uri}local` (whitespace normalization, char/entity reference expansion, literal `{` rejected), `prefix:local` via context namespaces, `xs:QName` instances; full error-code coverage (XPTY0004, XQDY0074, XPST0081, XQDY0096, XQDY0044, XQDY0041/0064, XQDY0026, XQDY0072, XQDY0091, XQDY0101); static PI targets must be NCNames (XPST0003).
+  - Attribute prefix rules: XML namespace coerces to the `xml` prefix, other namespaces get a generated prefix, and prefixes survive on free-standing attributes via a provider annotation (LINQ attributes cannot carry one).
+  - Computed `text {}` with empty content produces no node; a zero-length string still constructs a text node.
+  - Supporting fixes: window-clause and FLWOR tuple variable bindings keep prefixes/EQName namespaces (`TupleBindInfo` carries prefixes, resolved at bind time); empty-CDATA boundary whitespace; XQuery 3.1 spec-token awareness in the harness dependency filter (XQ10/XQ30-only tests skip on an XQ31 processor).
+  - QT3 sets fully green: CompText 38/0, CompComment 27/0, CompDoc 40/0, CompElem 86/0, CompAttr 111/0, CompPI 56/0, CompNamespace 11/0; supporting: WindowClause 123/0, OrderByClause 194/0, GroupByClause 30/0, CountClause 13/0, DirElemConstructor 62/0.
+  - Unit tests now **1,458/0**; XSLT baseline unchanged.
 
 - **2026-07-25** — XQuery 3.1 Phase 3 start: **direct element constructors** (REQ-046): QT3 **25,060 passed / 0 failed** (from 22,983; +2,077).
   - New lexer constructor mode: a whole direct constructor (`<name a="v">text {expr}<nested/></name>`, `<!-- c -->`, `<?pi d?>`) is emitted as a single `Constructor` token, keeping quotes, `&`, and raw text out of the token stream; structure falls back to the `<` comparison operator when it does not hold.

@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 25-07-2026     | Added BaseUri for static-base-URI annotation on constructed elements                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 25-07-2026     | Added XdmContentKind.Namespace for computed namespace constructors                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -27,7 +29,9 @@ public enum XdmContentKind
     /// <summary>A comment node.</summary>
     Comment,
     /// <summary>A processing-instruction node.</summary>
-    ProcessingInstruction
+    ProcessingInstruction,
+    /// <summary>A namespace node.</summary>
+    Namespace
 }
 
 /// <summary>

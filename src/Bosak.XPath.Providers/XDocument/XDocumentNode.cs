@@ -35,6 +35,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.2   | 21-07-2026     | ToXmlString copies in-scope namespaces for standalone element serialization           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.3   | 25-07-2026     | Prefix annotation preserves prefixes of free-standing computed attributes              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
@@ -192,7 +194,8 @@ public sealed class XDocumentNode : IXdmNode
             return _node switch
             {
                 XElement e => Decode(e.GetPrefixOfNamespace(e.Name.Namespace) ?? string.Empty),
-                XAttribute a => Decode((a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty),
+                XAttribute a => Decode(a.Annotation<AttributePrefixAnnotation>()?.Prefix
+                    ?? (a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty),
                 _ => string.Empty
             };
         }
@@ -207,7 +210,8 @@ public sealed class XDocumentNode : IXdmNode
             return _node switch
             {
                 XElement e => e.GetPrefixOfNamespace(e.Name.Namespace) ?? string.Empty,
-                XAttribute a => (a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty,
+                XAttribute a => a.Annotation<AttributePrefixAnnotation>()?.Prefix
+                    ?? (a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty,
                 _ => string.Empty
             };
         }
@@ -1233,4 +1237,20 @@ public sealed class XDocumentNode : IXdmNode
     /// </summary>
     private static XElement? GetSyntheticWrapper(System.Xml.Linq.XDocument doc)
         => doc.Root?.Name == XName.Get("__xdm_doc__") ? doc.Root : null;
+}
+
+/// <summary>
+/// Records the namespace prefix of a free-standing computed attribute.
+/// LINQ-to-XML <see cref="XAttribute"/> instances cannot carry a prefix (it is
+/// derived from in-scope declarations on a parent element), so the constructed
+/// prefix is stored as an annotation for <see cref="XDocumentNode"/> to report.
+/// </summary>
+internal sealed class AttributePrefixAnnotation
+{
+    /// <summary>The recorded namespace prefix.</summary>
+    public string Prefix { get; }
+
+    /// <summary>Creates the annotation for the given prefix.</summary>
+    /// <param name="prefix">The namespace prefix to record.</param>
+    public AttributePrefixAnnotation(string prefix) => Prefix = prefix;
 }

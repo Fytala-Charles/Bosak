@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 25-07-2026     | Register element/content-node constructor hooks for XQuery constructors                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 25-07-2026     | Register attribute and document constructor hooks                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
@@ -58,6 +60,8 @@ public sealed class XQueryExecutable
         // XQuery element constructors need a node-building provider; default to XDocument.
         evaluationContext.ElementConstructorHook ??= XDocumentProvider.ConstructElement;
         evaluationContext.ContentNodeConstructorHook ??= XDocumentProvider.ConstructContentNode;
+        evaluationContext.AttributeConstructorHook ??= XDocumentProvider.ConstructAttribute;
+        evaluationContext.DocumentConstructorHook ??= XDocumentProvider.ConstructDocument;
 
         try
         {

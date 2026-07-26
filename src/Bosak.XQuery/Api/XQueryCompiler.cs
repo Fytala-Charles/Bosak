@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.5   | 25-07-2026     | Resolve function namespaces inside DirectElementConstructorNode parts                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 25-07-2026     | Resolve function namespaces inside computed constructors                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -115,6 +117,29 @@ public sealed class XQueryCompiler
                     ValueParts = a.ValueParts.Select(p => ResolveFunctionNamespaces(p, context)).ToList()
                 }).ToList(),
                 Content = elem.Content.Select(p => ResolveFunctionNamespaces(p, context)).ToList()
+            },
+            ComputedElementConstructorNode n => n with
+            {
+                NameExpression = n.NameExpression is null ? null : ResolveFunctionNamespaces(n.NameExpression, context),
+                ContentExpression = ResolveFunctionNamespaces(n.ContentExpression, context)
+            },
+            ComputedAttributeConstructorNode n => n with
+            {
+                NameExpression = n.NameExpression is null ? null : ResolveFunctionNamespaces(n.NameExpression, context),
+                ValueExpression = ResolveFunctionNamespaces(n.ValueExpression, context)
+            },
+            ComputedDocumentConstructorNode n => n with { ContentExpression = ResolveFunctionNamespaces(n.ContentExpression, context) },
+            ComputedTextConstructorNode n => n with { ValueExpression = ResolveFunctionNamespaces(n.ValueExpression, context) },
+            ComputedCommentConstructorNode n => n with { ValueExpression = ResolveFunctionNamespaces(n.ValueExpression, context) },
+            ComputedPIConstructorNode n => n with
+            {
+                TargetExpression = n.TargetExpression is null ? null : ResolveFunctionNamespaces(n.TargetExpression, context),
+                ValueExpression = ResolveFunctionNamespaces(n.ValueExpression, context)
+            },
+            ComputedNamespaceConstructorNode n => n with
+            {
+                PrefixExpression = n.PrefixExpression is null ? null : ResolveFunctionNamespaces(n.PrefixExpression, context),
+                UriExpression = ResolveFunctionNamespaces(n.UriExpression, context)
             },
             MapConstructorNode mc => mc with { Entries = mc.Entries.Select(e => e with { Key = ResolveFunctionNamespaces(e.Key, context), Value = ResolveFunctionNamespaces(e.Value, context) }).ToList() },
             ArrayConstructorNode ac => ac with { Items = ac.Items.Select(i => ResolveFunctionNamespaces(i, context)).ToList() },

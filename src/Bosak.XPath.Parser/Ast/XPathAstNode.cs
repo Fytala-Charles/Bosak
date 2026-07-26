@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 25-07-2026     | Added SignificantTextNode; AllowingEmpty on QuantifiedBinding                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 25-07-2026     | Added computed constructor AST nodes (element/attribute/document/text/comment/PI/ns)    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -211,6 +213,47 @@ public sealed record DirectProcessingInstructionNode(string Target, string Value
 
 /// <summary>Literal text in element content that contains a character/entity reference and is therefore never boundary whitespace.</summary>
 public sealed record SignificantTextNode(string Value) : XPathAstNode;
+
+// ------------------------------------------------------------------
+// XQuery computed constructors
+// ------------------------------------------------------------------
+
+/// <summary>A computed element constructor: <c>element (QName | "{" Expr "}") "{" Expr "}"</c>.</summary>
+public sealed record ComputedElementConstructorNode(
+    XPathAstNode? NameExpression,
+    string? TagName,
+    string? TagPrefix,
+    string? TagNamespaceUri,
+    XPathAstNode ContentExpression) : XPathAstNode;
+
+/// <summary>A computed attribute constructor: <c>attribute (QName | "{" Expr "}") "{" Expr "}"</c>.</summary>
+public sealed record ComputedAttributeConstructorNode(
+    XPathAstNode? NameExpression,
+    string? Name,
+    string? Prefix,
+    string? NamespaceUri,
+    XPathAstNode ValueExpression) : XPathAstNode;
+
+/// <summary>A computed document constructor: <c>document "{" Expr "}"</c>.</summary>
+public sealed record ComputedDocumentConstructorNode(XPathAstNode ContentExpression) : XPathAstNode;
+
+/// <summary>A computed text constructor: <c>text "{" Expr "}"</c>.</summary>
+public sealed record ComputedTextConstructorNode(XPathAstNode ValueExpression) : XPathAstNode;
+
+/// <summary>A computed comment constructor: <c>comment "{" Expr "}"</c>.</summary>
+public sealed record ComputedCommentConstructorNode(XPathAstNode ValueExpression) : XPathAstNode;
+
+/// <summary>A computed processing-instruction constructor: <c>processing-instruction (NCName | "{" Expr "}") "{" Expr "}"</c>.</summary>
+public sealed record ComputedPIConstructorNode(
+    XPathAstNode? TargetExpression,
+    string? Target,
+    XPathAstNode ValueExpression) : XPathAstNode;
+
+/// <summary>A computed namespace constructor: <c>namespace (NCName | "{" Expr "}") "{" Expr "}"</c>.</summary>
+public sealed record ComputedNamespaceConstructorNode(
+    XPathAstNode? PrefixExpression,
+    string? Prefix,
+    XPathAstNode UriExpression) : XPathAstNode;
 
 public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null, bool AllowingEmpty = false);
 

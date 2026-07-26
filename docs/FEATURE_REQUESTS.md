@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 3 start: **direct element/comment/PI constructors** implemented end-to-end with constructor-local namespaces; QT3 now **25,060 passed / 0 failed** (78.75%); unit tests **1,443/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 3 complete: **computed constructors** implemented end-to-end; QT3 now **25,846 passed / 0 failed** (81.22%); unit tests **1,458/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -151,6 +151,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-044 | *(internal)* | XQuery 3.1 Phase 2 — FLWOR `window` clause | Required for full XQuery FLWOR: tumbling/sliding windows with start/end conditions (current/positional/previous/next vars) and `only end` | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-045 | *(internal)* | QT3 harness XQuery routing + conformance sweep | Validate the XQuery pipeline against the W3C QT3 suite; route supported XQuery tests, fix surfaced engine gaps, keep Failed=0 | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-046 | *(internal)* | XQuery 3.1 Phase 3 — direct element constructors | Required for XQuery element construction: direct element/comment/PI constructors with computed attributes/content, constructor-local namespaces, and copy semantics | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
+| REQ-047 | *(internal)* | XQuery 3.1 Phase 3 — computed constructors | Required for full XQuery construction: `element`/`attribute`/`text`/`document`/`comment`/`processing-instruction`/`namespace` with static EQName or computed (`{expr}`) names | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2093,13 +2094,61 @@ Add a lexer constructor mode that emits a whole direct constructor as a single t
 
 ---
 
+### REQ-047: XQuery 3.1 Phase 3 — computed constructors
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-25  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 computed constructors (`element e { ... }`, `attribute a { ... }`, `document { ... }`, `text { ... }`, `comment { ... }`, `processing-instruction pi { ... }`, `namespace n { ... }`) build nodes whose names are static EQNames or computed from enclosed expressions (`element { $name } { ... }`). Without them, ~800 QT3 tests were constructor-gated, including the whole Comp* and nscons test sets and many FLWOR use cases that return constructed nodes.
+
+**Proposed Solution:**  
+AST nodes for the seven computed constructor forms, parser recognition gated on XQuery mode (keyword + `{`, or keyword + name + `{`, hooked into step expressions so `element` is not swallowed as a name test), a single `ConstructComputed` IR opcode with per-kind VM handlers, and a shared content accumulator implementing the XQuery content rules. Computed names resolve from EQName strings, prefixed QNames (context namespaces), or `xs:QName` instances; constructed attribute prefixes survive on free-standing attributes via a provider annotation.
+
+**Acceptance Criteria:**
+- [x] All seven computed constructor forms with static (`NCName`/EQName) and computed (`{expr}`) names; empty `{}` content legal (XQ31).
+- [x] Content rules: attributes before content only (`XQTY0024`), duplicate attributes (`XQDY0025`), namespace nodes become declarations with conflict checks (`XQDY0102` incl. spec bug 22032 default-namespace rule), adjacent atomic values joined with single spaces, text nodes merged without separator, arrays flattened.
+- [x] Name resolution: EQName `Q{uri}local` (whitespace normalization, char/entity reference expansion in source literals, literal `{` rejected), `prefix:local` via context namespaces, `xs:QName` instances; error codes `XPTY0004` (empty/wrong-typed name), `XQDY0074` (malformed), `XPST0081` (undeclared prefix), `XQDY0096` (xml/xmlns misuse), `XQDY0044` (xmlns attribute forms), `XQDY0041`/`XQDY0064` (PI target), `XQDY0026` (`?>` in PI data), `XQDY0072` (comment `--`), `XQDY0091` (xml:id whitespace), `XQDY0101` (namespace constructor reserved forms).
+- [x] Static PI target must be an NCName (`XPST0003` for prefixed names); computed PI target must be string-typed (`XPTY0004`).
+- [x] Attribute prefix rules: XML namespace coerces to the `xml` prefix; any other namespace without a prefix gets a generated one; prefixes preserved on free-standing attributes.
+- [x] Computed `text {}` with empty content produces no node; a zero-length string still constructs a text node.
+- [x] QT3 sets fully green: CompText 38/0, CompComment 27/0, CompDoc 40/0, CompElem 86/0, CompAttr 111/0, CompPI 56/0, CompNamespace 11/0; supporting sets: WindowClause 123/0, OrderByClause 194/0, GroupByClause 30/0, CountClause 13/0, DirElemConstructor 62/0. Full suite: **25,846 passed / 0 failed / 5,975 skipped (81.22%)**.
+- [x] Supporting fixes: window-clause and FLWOR tuple variable bindings keep prefixes/EQName namespaces (`TupleBindInfo` carries prefixes, resolved at bind time); keyword-named constructors (`attribute return {()}` constructs an attribute named `return`); empty-CDATA boundary whitespace; XQuery 3.1 spec-token awareness in the harness dependency filter (XQ10/XQ30-only tests skip on an XQ31 processor).
+
+**Implementation Notes:**
+- Parser: `IsComputedConstructorForm` + `ParseComputedConstructor` gated on `_allowFullFlwor`; hooked into `ParseStepExpr`; EQName URI part expands char/entity references and rejects literal braces (`XPST0003`).
+- IR/VM: `IrOpCode.ConstructComputed` with `ComputedConstructorInfo`; `ComputedContentAccumulator` (attribute ordering, duplicates, namespace-node declarations, text merging with atomic-adjacency tracking); `ResolveComputedName`.
+- Provider: `XDocumentProvider.ConstructAttribute`/`ConstructDocument` (synthetic `__xdm_doc__` wrapper for non-single-root content); `AttributePrefixAnnotation` preserves constructed prefixes (LINQ attributes cannot carry one); `ConstructContentNode` handles text/namespace kinds.
+- Harness: constructor forms admitted by the XQuery gate; `KnownXQueryGaps` regenerated from a true-list run (307 reasoned skips).
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Computed constructor forms; EQName reference expansion; keyword-named constructors; empty-CDATA boundary whitespace. |
+| Compiler | Modified | `ConstructComputed` opcode + lowering; window/tuple bindings keep prefixes. |
+| Runtime | Modified | `ConstructComputed` VM handler; content accumulator; name resolution; window variable binding resolution. |
+| Providers | Modified | `ConstructAttribute`/`ConstructDocument`; prefix annotation; text/namespace content nodes. |
+| XSLT | None | No XSLT changes; XSLT baseline unchanged. |
+| Conformance | Modified | Computed constructors admitted; XQ31 spec-token dependency awareness; `KnownXQueryGaps` regenerated (307 reasoned skips). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-25 | Kimi | Single `ConstructComputed` opcode + shared content accumulator; prefix annotation for free-standing attributes | Mirrors the direct-constructor pipeline; LINQ attributes cannot carry prefixes, so the constructed prefix rides as an annotation the node wrapper reports. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-046 | **XQuery 3.1 full implementation** | In Progress | Phase 2 complete (full core FLWOR); QT3 wired (25,060/0, 78.75%). Phase 3 started: direct constructors implemented. Computed constructors (Phase 3 remainder) and modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 … REQ-047 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors); QT3 wired (25,846/0, 81.22%). Modules/serialization (Phase 4) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |
