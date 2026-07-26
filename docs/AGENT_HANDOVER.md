@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `TBD` (feat(xquery): Phase 3 computed constructors)
+**Commit:** `bcf4d52` (feat(xquery): Phase 3 computed constructors)
 **Current focus:** **XQuery 3.1 Phase 3 complete — computed constructors** implemented end-to-end: all seven forms (`element`/`attribute`/`document`/`text`/`comment`/`processing-instruction`/`namespace`) with static EQName or computed `{expr}` names, a single `ConstructComputed` IR opcode with per-kind VM handlers, and a shared content accumulator implementing the XQuery content rules. QT3 went from **25,060 passed / 0 failed / 6,761 skipped (78.75%)** to **25,846 passed / 0 failed / 5,975 skipped (81.22%)** (+786 passing). Full `dotnet test Bosak.sln` passes: **1,458 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (Phase 3 computed constructors)
