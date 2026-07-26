@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-26
-**Commit:** `PENDING` (feat(xquery): user-defined functions and variables — Phase 4 modules slice 1)
+**Commit:** `f7bcda1` (feat(xquery): user-defined functions and variables — Phase 4 modules slice 1)
 **Current focus:** **XQuery 3.1 Phase 4 — library modules slice 1: `declare function` / `declare variable`**: prolog declarations with the full static-validation matrix, lazy globals with initial-focus semantics, absent-focus function bodies, per-call variable-scope snapshots, function-item coercion, and function-type syntax in both parsers. QT3 went from **26,299 passed / 0 failed / 5,522 skipped (82.64%)** to **28,735 passed / 0 failed / 3,086 skipped (90.30%)** (+2,436 passing; ~2,900 previously prolog-gated tests now run). Full `dotnet test Bosak.sln` passes: **1,491 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (user-defined functions and variables)
