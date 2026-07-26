@@ -5,14 +5,23 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 July 2026
-> **Bosak baseline:** 1,470 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 25,928 passed / 0 failed / 5,893 skipped (81.48% / 100% of runnable tests) — XQuery routing enabled; 310 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,479 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 26,299 passed / 0 failed / 5,522 skipped (82.64% / 100% of runnable tests) — XQuery routing enabled; 305 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 3 complete — full core FLWOR, direct and computed constructors, switch/typeswitch expressions
+> **XQuery baseline:** Phase 4 started — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-07-25** — XQuery 3.1 Phase 4 start: **output declarations + serialization round-out** (REQ-049): QT3 **26,299 passed / 0 failed** (from 25,928; +371).
+  - `declare option output:* "..."` prolog with QName/EQName option names, prolog ordering rules (namespace declarations precede options), and static validations (XQST0109/XQST0110/XQST0066/XPST0003/XPST0081); XQuery comments `(: :)` skipped in the prolog.
+  - Static output parameters flow to `fn:serialize` (per-call parameters override); map-form parameters default omit-xml-declaration=true while element/default forms emit the XML declaration; `output:parameter-document` resolves lazily through the document loader (prolog options take precedence).
+  - Serializer driven to Serialization 3.1 fidelity: declaration/DOCTYPE matrix, html/html5/xhtml variants, adaptive constructor-form atomics, JSON character maps, CDATA rules, indent/suppress-indentation/xml:space, namespace fixup with a declaration scope stack, XML 1.1 namespace undeclarations (undeclare-prefixes), and XML 1.1 line-ending normalization gated on the test's xml-version.
+  - QT3 fully green: all six ser/* method sets (38+18+45+40+73+87), fn/serialize 168/0, OptionDecl 41/0, OptionDecl.serialization 36/0, Comment 72/0.
+  - Supporting fixes: attribute normalization is literal-only with xml:id collapse; map keys distinguish string-family subtypes from g* date types; inline-function instance-of uses declared types; XML 1.1 character references and namespace undeclarations honored end-to-end.
+  - Harness: `serialization-matches`/`assert-serialization`/`assert-serialization-error` assertions with flags and `not`; assert-type delegates parenthesized types to the engine.
+  - Unit tests now **1,479/0**; XSLT baseline unchanged.
 
 - **2026-07-25** — XQuery 3.1: **switch / typeswitch expressions** (REQ-048): QT3 **25,928 passed / 0 failed** (from 25,846; +82).
   - `switch (E) case V1 case V2 return R1 ... default return RD` and `typeswitch (E) case $v as T return R ... default ($d)? return RD` parsed as dedicated AST nodes (XQuery mode only) and desugared in the IR lowerer to synthetic `let` + nested `if` chains — no new opcodes.

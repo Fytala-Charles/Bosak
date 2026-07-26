@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Added BackwardsCompatible for XSLT 1.0 static constant folding                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 25-07-2026     | Added Xml11LineEndings for XML 1.1 line-ending normalization in string literals        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Api;
 
@@ -43,6 +45,13 @@ public sealed class CompileOptions
     /// in XPath expressions. When null or empty, unprefixed names match no namespace.
     /// </summary>
     public string? DefaultElementNamespace { get; init; }
+
+    /// <summary>
+    /// Enables XML 1.1 line-ending normalization in string literals (#xD#xA, #xD#x85,
+    /// lone #xD, #x85, and #x2028 all normalize to #xA). Disabled: character references
+    /// produce their exact characters (the XML 1.0 behavior expected by most QT3 tests).
+    /// </summary>
+    public bool Xml11LineEndings { get; init; }
 
     /// <summary>
     /// The default namespace URI of the element that contains the XPath expression.

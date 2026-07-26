@@ -32,6 +32,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 25-07-2026     | Added switch and typeswitch expression tests                                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 25-07-2026     | Added output declaration and serialization tests                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -671,12 +673,14 @@ public class PlaceholderTests
     [Fact]
     public void XQuery_Constructor_XmlSpacePreserve()
     {
+        // xml:space is an ordinary attribute for element constructors: it does not
+        // preserve boundary whitespace (XQuery 3.1 §3.9.1.1; K2-Serialization-41).
         var compiler = new XQueryCompiler();
         var executable = compiler.Compile("string(<out xml:space=\"preserve\">  { 1 }  </out>)");
         var ctx = new XQueryContext();
         var result = executable.Evaluate(ctx);
 
-        Assert.Equal("  1  ", result.StringValue);
+        Assert.Equal("1", result.StringValue);
     }
 
     [Fact]
@@ -1066,6 +1070,121 @@ public class PlaceholderTests
         var result = executable.Evaluate(ctx);
 
         Assert.Equal("many", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_OutputOption_TextMethod()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n" +
+            "declare option output:method \"text\";\n" +
+            "fn:serialize(<a>x</a>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("x", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_OutputOption_ItemSeparator()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n" +
+            "declare option output:item-separator \"|\";\n" +
+            "fn:serialize(1 to 3)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>1|2|3", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_OutputOption_Indent()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n" +
+            "declare option output:indent \"yes\";\n" +
+            "fn:serialize(<a><b/><c/></a>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Contains("\n   <b/>", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_OutputOption_Standalone()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n" +
+            "declare option output:standalone \"yes\";\n" +
+            "fn:serialize(<a/>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Contains("standalone=\"yes\"", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_OutputOption_EQNameForm()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare option Q{http://www.w3.org/2010/xslt-xquery-serialization}method \"text\";\n" +
+            "fn:serialize(<a>x</a>)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("x", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_OutputOption_Duplicate_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() => compiler.Compile(
+            "declare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n" +
+            "declare option output:method \"xml\";\n" +
+            "declare option output:method \"text\";\n" +
+            "fn:serialize(<a/>)"));
+        Assert.Contains("XQST0110", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Serialize_MapWithXmlMethod_Rejected()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("fn:serialize(map{\"a\":1})");
+        var ctx = new XQueryContext();
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        Assert.Contains("SENR0001", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Serialize_AdaptiveDefaultSeparator()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("fn:serialize((1,2,3), map{\"method\":\"adaptive\"})");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal("1\n2\n3", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Serialize_UndeclarePrefixes()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "fn:serialize(fn:parse-xml(\"<?xml version='1.1'?><p:chapter xmlns:p='http://example.com/p'><section xmlns:p=''><para/></section></p:chapter>\"), " +
+            "map{\"version\":\"1.1\",\"undeclare-prefixes\":true()})");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Contains("xmlns:p=\"\"", result.StringValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

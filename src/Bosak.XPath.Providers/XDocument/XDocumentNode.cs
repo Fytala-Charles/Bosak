@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.3   | 25-07-2026     | Prefix annotation preserves prefixes of free-standing computed attributes              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.4   | 25-07-2026     | Exposed XML 1.1 prefixed namespace undeclarations                                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
@@ -72,6 +74,15 @@ public sealed class XDocumentNode : IXdmNode
 
     /// <summary>Gets the underlying LINQ to XML node.</summary>
     public XObject UnderlyingObject => _node;
+
+    /// <summary>
+    /// XML 1.1 prefixed namespace undeclarations (<c>xmlns:p=""</c>) recorded on this
+    /// element when the document was parsed; empty for other nodes.
+    /// </summary>
+    public IReadOnlyList<string> Xml11UndeclaredPrefixes
+        => _node is XElement element && element.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations
+            ? undeclarations.Prefixes
+            : Array.Empty<string>();
 
     /// <summary>
     /// Annotation stored on an <see cref="XDocument"/> to record its document URI
@@ -834,14 +845,23 @@ public sealed class XDocumentNode : IXdmNode
         // Because we walk upward, this produces current-to-root order; we will
         // reverse it below so the final axis order is root-to-current.
         var collected = new List<XdmValue>();
+        var undeclared = new HashSet<string>();
         while (current is not null)
         {
+            // XML 1.1 prefixed namespace undeclarations on this element hide the
+            // same prefixes declared at or above it for this subtree.
+            if (current.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
+                foreach (var undeclaredPrefix in undeclarations.Prefixes)
+                    undeclared.Add(undeclaredPrefix);
+
             foreach (var attr in current.Attributes())
             {
                 if (!attr.IsNamespaceDeclaration)
                     continue;
 
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                if (undeclared.Contains(prefix))
+                    continue;
                 AddNamespaceNode(collected, seen, prefix, attr.Value, element);
 
                 if (elementNsIsNonEmpty)

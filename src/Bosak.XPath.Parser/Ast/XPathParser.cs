@@ -59,6 +59,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.27  | 25-07-2026     | Parse XQuery switch and typeswitch expressions incl. sequence-type unions in case clauses |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.28  | 25-07-2026     | xml:space is an ordinary constructor attribute; boundary whitespace stripped at flush time |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -78,6 +80,7 @@ public sealed class XPathParser
     private readonly Token[] _tokens;
     private readonly string _source;
     private readonly bool _allowFullFlwor;
+    private bool _xml11LineEndings;
     private int _position;
 
     public XPathParser(Token[] tokens, string source, bool allowFullFlwor = false)
@@ -118,7 +121,9 @@ public sealed class XPathParser
     /// </summary>
     /// <param name="xpath">The XPath expression to parse.</param>
     /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax (multiple for/let/where/order-by clauses). Default is false (XPath-only FLWOR).</param>
-    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false)
+    /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending
+    /// normalization; when false (default), references produce their exact characters.</param>
+    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false)
     {
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
         var tokens = new List<Token>();
@@ -126,7 +131,7 @@ public sealed class XPathParser
         while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
             tokens.Add(tok);
 
-        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor);
+        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings };
         return parser.ParseExpression();
     }
 
@@ -1995,13 +2000,9 @@ public sealed class XPathParser
                     throw new ParseException("XQST0070: The XML namespace URI must only be bound to the 'xml' prefix.", ctorStart);
             }
 
-            if (attrLocal == "space" && attrPrefix == "xml" &&
-                valueParts.Count == 1 && valueParts[0] is StringLiteralNode spaceValue && spaceValue.Value == "preserve")
-            {
-                xmlSpacePreserve = true;
-            }
-
-            // XQST0071: the same namespace prefix must not be declared twice in one constructor.
+            // xml:space is an ordinary attribute for element constructors: it does NOT
+            // affect boundary-whitespace stripping (XQuery 3.1 §3.9.1.1 note; the
+            // serializer honors it instead). XQST0071: duplicate prefix declarations.
             if (isNamespaceDecl)
             {
                 string declPrefix = attrPrefix == "xmlns" ? attrLocal : "";
@@ -2012,19 +2013,12 @@ public sealed class XPathParser
             attributes.Add(new DirectAttributeNode(attrLocal, attrPrefix, valueParts));
         }
 
-        ScanConstructorContent(ref pos, tagLocal, tagPrefix, content, ctorStart);
-
-        if (!xmlSpacePreserve)
-        {
-            content = content
-                .Where(part => part is not StringLiteralNode literal || !IsXmlWhitespaceOnly(literal.Value))
-                .ToList();
-        }
+        ScanConstructorContent(ref pos, tagLocal, tagPrefix, content, ctorStart, xmlSpacePreserve);
 
         return new DirectElementConstructorNode(tagLocal, tagPrefix, attributes, content);
     }
 
-    private void ScanConstructorContent(ref int pos, string tagLocal, string? tagPrefix, List<XPathAstNode> content, int ctorStart)
+    private void ScanConstructorContent(ref int pos, string tagLocal, string? tagPrefix, List<XPathAstNode> content, int ctorStart, bool xmlSpacePreserve)
     {
         var text = new StringBuilder();
         bool textHasReference = false;
@@ -2033,9 +2027,15 @@ public sealed class XPathParser
             if (text.Length > 0)
             {
                 // Text containing a character/entity reference is never boundary whitespace.
-                content.Add(textHasReference
-                    ? new SignificantTextNode(text.ToString())
-                    : new StringLiteralNode(text.ToString()));
+                // A plain whitespace-only literal run IS boundary whitespace and is stripped
+                // (unless xml:space="preserve"). Enclosed expressions never pass through
+                // here, so a whitespace-only {' '} result is always preserved.
+                if (textHasReference || xmlSpacePreserve || !IsXmlWhitespaceOnly(text.ToString()))
+                {
+                    content.Add(textHasReference
+                        ? new SignificantTextNode(text.ToString())
+                        : new StringLiteralNode(text.ToString()));
+                }
                 text.Clear();
             }
             // Always reset: a reference/CDATA only protects the text run it belongs to.
@@ -2341,11 +2341,12 @@ public sealed class XPathParser
         };
     }
 
-    // XQST0090: a character reference must denote a valid XML 1.1 character.
+    // XQST0090: a character reference must denote a valid XML 1.1 character (any
+    // codepoint except NUL, surrogates, and noncharacters; control characters are
+    // permitted as references in XML 1.1).
     private string ValidateCharReference(int codePoint, int ctorStart)
     {
-        bool valid = codePoint is 0x9 or 0xA or 0xD
-            || (codePoint >= 0x20 && codePoint <= 0xD7FF)
+        bool valid = codePoint is >= 0x1 and <= 0xD7FF
             || (codePoint >= 0xE000 && codePoint <= 0xFFFD)
             || (codePoint >= 0x10000 && codePoint <= 0x10FFFF);
         if (!valid)
@@ -2611,9 +2612,9 @@ public sealed class XPathParser
             var sb = new StringBuilder(inner.Length);
             for (int i = 0; i < inner.Length; i++)
             {
-                // XQuery string literals support predefined entity and character
-                // references; a raw '&' that forms no valid reference is XPST0003.
-                if (_allowFullFlwor && inner[i] == '&')
+                // Predefined entity and character references expand in both XPath and
+                // XQuery string literals; a raw '&' that forms no valid reference is XPST0003.
+                if (inner[i] == '&')
                 {
                     sb.Append(ExpandCharReference(inner, ref i));
                     continue;
@@ -2622,9 +2623,38 @@ public sealed class XPathParser
                 if (inner[i] == quote && i + 1 < inner.Length && inner[i + 1] == quote)
                     i++;
             }
-            return sb.ToString();
+            // Line-ending normalization applies only in XML 1.1 mode (xml-version
+            // dependency); otherwise references produce their exact characters.
+            return _xml11LineEndings ? NormalizeXml11LineEndings(sb.ToString()) : sb.ToString();
         }
         return text;
+    }
+
+    // XML 1.1 line-ending normalization (applied only in XML 1.1 mode): #xD#xA and
+    // #xD#x85 normalize to #xA, and lone #xD, #x85 (NEL), and #x2028 (LS) to #xA.
+    private static string NormalizeXml11LineEndings(string text)
+    {
+        if (text.IndexOfAny('\r', '\u0085', '\u2028') < 0)
+            return text;
+        var sb = new StringBuilder(text.Length);
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (c == '\r')
+            {
+                sb.Append('\n');
+                if (i + 1 < text.Length && (text[i + 1] == '\n' || text[i + 1] == '\u0085'))
+                    i++;
+                continue;
+            }
+            if (c is '\u0085' or '\u2028')
+            {
+                sb.Append('\n');
+                continue;
+            }
+            sb.Append(c);
+        }
+        return sb.ToString();
     }
 
     private string ExpandCharReference(string inner, ref int i)

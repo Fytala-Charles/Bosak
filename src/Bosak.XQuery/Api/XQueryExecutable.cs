@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 25-07-2026     | Register attribute and document constructor hooks                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 25-07-2026     | Seed static output parameters; expand QName lists with the default element namespace    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
@@ -102,5 +104,54 @@ public sealed class XQueryExecutable
         {
             ctx.WithVariable(localName, value, nsUri);
         }
+
+        // Output declarations (declare option output:* "...") become the static
+        // serialization parameters consumed by fn:serialize.
+        var outputOptions = _staticContext.Options
+            .Where(o => o.NamespaceUri == "http://www.w3.org/2010/xslt-xquery-serialization")
+            .ToList();
+        if (outputOptions.Count > 0)
+        {
+            var parameters = new Dictionary<(string, string), string>();
+            foreach (var (local, ns, value) in outputOptions)
+            {
+                parameters[(ns, local)] = local is "cdata-section-elements" or "suppress-indentation"
+                    ? ExpandQNameList(value)
+                    : value;
+            }
+            ctx.StaticOutputParameters = parameters;
+        }
+    }
+
+    // Expands QName tokens in a whitespace-separated list to '{uri}local' form using the
+    // prolog's namespace bindings ('{uri}local' forms pass through; unprefixed names stay
+    // in no namespace).
+    private string ExpandQNameList(string value)
+    {
+        var tokens = value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < tokens.Length; i++)
+        {
+            var token = tokens[i];
+            if (token.StartsWith("Q{", StringComparison.Ordinal))
+                token = token[1..]; // Q{uri}local → {uri}local
+            if (token.StartsWith('{'))
+            {
+                tokens[i] = token;
+                continue;
+            }
+            int colon = token.IndexOf(':');
+            if (colon <= 0)
+            {
+                // Unprefixed names in these lists are in the default element namespace.
+                tokens[i] = string.IsNullOrEmpty(_staticContext.DefaultElementNamespace)
+                    ? token
+                    : $"{{{_staticContext.DefaultElementNamespace}}}{token}";
+                continue;
+            }
+            if (!_staticContext.Namespaces.TryGetValue(token[..colon], out var prefixNs))
+                throw new InvalidOperationException($"XPST0081: Prefix '{token[..colon]}' is not declared.");
+            tokens[i] = $"{{{prefixNs}}}{token[(colon + 1)..]}";
+        }
+        return string.Join(' ', tokens);
     }
 }

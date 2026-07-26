@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-07-2026     | Creation — minimal static context for prolog-less queries                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 25-07-2026     | Store option declarations in the static context                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -28,6 +30,7 @@ public sealed class XQueryStaticContext
     private readonly Dictionary<string, string> _namespaces;
     private readonly Dictionary<(string LocalName, string NamespaceUri), XdmValue> _variables;
     private readonly HashSet<(string LocalName, string NamespaceUri, int Arity)> _functionSignatures;
+    private readonly List<(string LocalName, string NamespaceUri, string Value)> _options;
 
     /// <summary>
     /// Creates a static context with the standard XQuery namespace prefixes pre-bound.
@@ -46,12 +49,14 @@ public sealed class XQueryStaticContext
         };
         _variables = new Dictionary<(string, string), XdmValue>();
         _functionSignatures = new HashSet<(string, string, int)>();
+        _options = new List<(string, string, string)>();
     }
 
     private XQueryStaticContext(
         Dictionary<string, string> namespaces,
         Dictionary<(string LocalName, string NamespaceUri), XdmValue> variables,
         HashSet<(string LocalName, string NamespaceUri, int Arity)> functionSignatures,
+        List<(string LocalName, string NamespaceUri, string Value)> options,
         string? defaultElementNamespace,
         string? defaultFunctionNamespace,
         string? defaultCollation,
@@ -60,6 +65,7 @@ public sealed class XQueryStaticContext
         _namespaces = namespaces;
         _variables = variables;
         _functionSignatures = functionSignatures;
+        _options = options;
         DefaultElementNamespace = defaultElementNamespace;
         DefaultFunctionNamespace = defaultFunctionNamespace;
         DefaultCollation = defaultCollation;
@@ -101,6 +107,21 @@ public sealed class XQueryStaticContext
     /// Returns a read-only view of the declared function signatures.
     /// </summary>
     public IReadOnlyCollection<(string LocalName, string NamespaceUri, int Arity)> FunctionSignatures => _functionSignatures;
+
+    /// <summary>
+    /// Returns a read-only view of the option declarations
+    /// (<c>declare option output:* "..."</c>) in prolog order.
+    /// </summary>
+    public IReadOnlyList<(string LocalName, string NamespaceUri, string Value)> Options => _options;
+
+    /// <summary>
+    /// Creates a new context with an option declaration appended.
+    /// </summary>
+    public XQueryStaticContext WithOption(string localName, string namespaceUri, string value)
+    {
+        var copy = new List<(string, string, string)>(_options) { (localName, namespaceUri, value) };
+        return CloneWith(options: copy);
+    }
 
     /// <summary>
     /// Creates a new context with the specified namespace binding added or replaced.
@@ -157,6 +178,7 @@ public sealed class XQueryStaticContext
         Dictionary<string, string>? namespaces = null,
         Dictionary<(string LocalName, string NamespaceUri), XdmValue>? variables = null,
         HashSet<(string LocalName, string NamespaceUri, int Arity)>? functionSignatures = null,
+        List<(string LocalName, string NamespaceUri, string Value)>? options = null,
         string? defaultElementNamespace = null,
         string? defaultFunctionNamespace = null,
         string? defaultCollation = null,
@@ -166,6 +188,7 @@ public sealed class XQueryStaticContext
             namespaces ?? _namespaces,
             variables ?? _variables,
             functionSignatures ?? _functionSignatures,
+            options ?? _options,
             defaultElementNamespace ?? DefaultElementNamespace,
             defaultFunctionNamespace ?? DefaultFunctionNamespace,
             defaultCollation ?? DefaultCollation,

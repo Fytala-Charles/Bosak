@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-07-2026     | Creation (QT3 Tier-2h: fn-serialize pool)                                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 25-07-2026     | Serialization 3.1 fidelity: declaration/doctype matrix, html-family rules, adaptive constructor forms, JSON char-maps, CDATA/indent/namespace fixup, undeclare-prefixes |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -51,7 +53,7 @@ internal static class XdmSerializer
         public string Version = "1.0";
         public string? Encoding;
         public bool Indent;
-        public bool OmitXmlDeclaration = true;
+        public bool OmitXmlDeclaration;
         public bool? Standalone;                          // null = omit
         public string? ItemSeparator;                     // null = default (" " for xml family)
         public Dictionary<string, string>? CharacterMaps; // single-char key → replacement
@@ -64,9 +66,12 @@ internal static class XdmSerializer
         public string? DoctypeSystem;
         public string? DoctypePublic;
         public string? NormalizationForm;
+        public bool IncludeContentType = true;
+        public bool EscapeUriAttributes = true;
+        public bool? UndeclarePrefixes;   // null: default (yes for XML 1.1)
 
         /// <summary>The separator used between top-level items.</summary>
-        public string Separator => ItemSeparator ?? (Method == "text" ? string.Empty : " ");
+        public string Separator => ItemSeparator ?? (Method == "adaptive" ? "\n" : " ");
     }
 
     // =====================================================================================
@@ -81,27 +86,35 @@ internal static class XdmSerializer
     /// a map, an <c>output:serialization-parameters</c> element, or the empty sequence (defaults).
     /// </summary>
     public static string Serialize(XdmValue input, XdmValue optionsArg)
+        => Serialize(input, optionsArg, null);
+
+    /// <summary>
+    /// Serializes <paramref name="input"/> with parameters taken from <paramref name="optionsArg"/>
+    /// applied over <paramref name="baseParams"/> (the static output declarations, when any):
+    /// explicitly supplied parameters take precedence.
+    /// </summary>
+    public static string Serialize(XdmValue input, XdmValue optionsArg, SerializationParameters? baseParams)
     {
         SerializationParameters parameters;
         if (optionsArg.IsMap)
         {
-            parameters = ParseMapOptions(optionsArg.MapValue);
+            parameters = ParseMapOptions(optionsArg.MapValue, baseParams);
         }
         else if (optionsArg.IsNode)
         {
-            parameters = ParseElementOptions(UnwrapDocument(optionsArg.NodeValue));
+            parameters = ParseElementOptions(UnwrapDocument(optionsArg.NodeValue), baseParams);
         }
         else if (optionsArg.IsUndefined)
         {
-            parameters = new SerializationParameters();
+            parameters = baseParams ?? new SerializationParameters();
         }
         else if (optionsArg.IsSequence && optionsArg.SequenceValue is not null)
         {
             var items = ToItemList(optionsArg);
             if (items.Count == 0)
-                parameters = new SerializationParameters();
+                parameters = baseParams ?? new SerializationParameters();
             else if (items.Count == 1 && items[0].IsNode)
-                parameters = ParseElementOptions(UnwrapDocument(items[0].NodeValue));
+                parameters = ParseElementOptions(UnwrapDocument(items[0].NodeValue), baseParams);
             else
                 throw new InvalidOperationException(
                     $"XPTY0004: fn:serialize options must be a map, a serialization-parameters element, or the empty sequence; got {optionsArg.Kind}.");
@@ -126,6 +139,20 @@ internal static class XdmSerializer
         };
     }
 
+    // Unicode normalization of source text (normalization-form parameter), applied
+    // per text run BEFORE character mapping (map replacements are not normalized).
+    private static string ApplyNormalizationForm(string result, string? form)
+        => form is null or "none" ? result
+            : form.Trim().ToUpperInvariant() switch
+            {
+                "NFC" => result.Normalize(System.Text.NormalizationForm.FormC),
+                "NFD" => result.Normalize(System.Text.NormalizationForm.FormD),
+                "NFKC" => result.Normalize(System.Text.NormalizationForm.FormKC),
+                "NFKD" => result.Normalize(System.Text.NormalizationForm.FormKD),
+                "FULLY-NORMALIZED" => result.Normalize(System.Text.NormalizationForm.FormC),
+                _ => throw new InvalidOperationException($"SENR0003: Unknown normalization form '{form}'.")
+            };
+
     private static List<XdmValue> ToItemList(XdmValue value)
     {
         var list = new List<XdmValue>();
@@ -141,13 +168,91 @@ internal static class XdmSerializer
         return list;
     }
 
+    /// <summary>
+    /// Builds serialization parameters from an <c>output:serialization-parameters</c>
+    /// document (the <c>output:parameter-document</c> option).
+    /// </summary>
+    internal static SerializationParameters ParametersFromElementForm(IXdmNode document)
+        => ParseElementOptions(UnwrapDocument(document));
+
+    /// <summary>
+    /// Builds serialization parameters from static output declarations
+    /// (<c>declare option output:* "..."</c>). QName-valued parameters arrive as
+    /// space-separated expanded <c>{uri}local</c> tokens (unprefixed names are plain).
+    /// </summary>
+    internal static SerializationParameters ParametersFromOutputDictionary(
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string> options,
+        SerializationParameters? baseParams = null)
+    {
+        var p = baseParams ?? new SerializationParameters();
+        foreach (var ((ns, local), value) in options)
+        {
+            if (ns != OutputNs)
+                continue; // vendor options are ignored
+            switch (local)
+            {
+                case "parameter-document": break; // resolved separately by fn:serialize
+                case "method": p.Method = value.Trim().ToLowerInvariant(); break;
+                case "indent": p.Indent = AsElementBoolean(value, local); break;
+                case "omit-xml-declaration": p.OmitXmlDeclaration = AsElementBoolean(value, local); break;
+                case "standalone":
+                    p.Standalone = value.Trim() == "omit" ? null : AsElementBoolean(value, local);
+                    break;
+                case "item-separator": p.ItemSeparator = value; break;
+                case "encoding": p.Encoding = value; break;
+                case "version": p.Version = value; break;
+                case "media-type": p.MediaType = value; break;
+                case "doctype-system": p.DoctypeSystem = value; break;
+                case "doctype-public": p.DoctypePublic = value; break;
+                case "normalization-form": p.NormalizationForm = value; break;
+                case "json-node-output-method": p.JsonNodeOutputMethod = value.Trim().ToLowerInvariant(); break;
+                case "html-version":
+                    if (decimal.TryParse(value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var hv))
+                        p.HtmlVersion = hv;
+                    break;
+                case "allow-duplicate-names": p.AllowDuplicateNames = AsElementBoolean(value, local); break;
+                case "cdata-section-elements": p.CdataSectionElements = ParseExpandedQNameSet(value); break;
+                case "suppress-indentation": p.SuppressIndentation = ParseExpandedQNameSet(value); break;
+                case "include-content-type": p.IncludeContentType = AsElementBoolean(value, local); break;
+                case "escape-uri-attributes": p.EscapeUriAttributes = AsElementBoolean(value, local); break;
+                case "undeclare-prefixes": p.UndeclarePrefixes = AsElementBoolean(value, local); break;
+                case "byte-order-mark":
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        $"SEPM0017: Unknown serialization parameter '{local}' in the serialization namespace.");
+            }
+        }
+        return p;
+    }
+
+    private static HashSet<(string Ns, string Local)> ParseExpandedQNameSet(string value)
+    {
+        var result = new HashSet<(string, string)>();
+        foreach (var token in value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (token.StartsWith('{'))
+            {
+                int close = token.IndexOf('}');
+                result.Add((token[1..close], token[(close + 1)..]));
+            }
+            else
+            {
+                result.Add((string.Empty, token));
+            }
+        }
+        return result;
+    }
+
     // =====================================================================================
     // Option parsing — map form (option parameter conventions)
     // =====================================================================================
 
-    private static SerializationParameters ParseMapOptions(XdmMap map)
+    private static SerializationParameters ParseMapOptions(XdmMap map, SerializationParameters? baseParams = null)
     {
-        var p = new SerializationParameters();
+        // Option parameter conventions: when parameters are supplied as a map,
+        // omit-xml-declaration defaults to true (serialize-xml-127a).
+        var p = baseParams ?? new SerializationParameters { OmitXmlDeclaration = true };
         foreach (var kvp in map.Entries)
         {
             string name;
@@ -158,7 +263,8 @@ internal static class XdmSerializer
             else if (kvp.Key.Kind == XdmValueKind.QName)
             {
                 // xs:QName keys identify implementation-defined serialization parameters;
-                // unrecognized ones are ignored (this includes absent-namespace QNames).
+                // unrecognized ones are ignored (this includes absent-namespace QNames;
+                // QT3 bug 29373).
                 continue;
             }
             else
@@ -221,10 +327,16 @@ internal static class XdmSerializer
             case "allow-duplicate-names":
                 p.AllowDuplicateNames = AsBoolean(name, rawValue);
                 break;
-            case "byte-order-mark":
-            case "escape-uri-attributes":
             case "include-content-type":
+                p.IncludeContentType = AsBoolean(name, rawValue);
+                break;
+            case "escape-uri-attributes":
+                p.EscapeUriAttributes = AsBoolean(name, rawValue);
+                break;
             case "undeclare-prefixes":
+                p.UndeclarePrefixes = AsBoolean(name, rawValue);
+                break;
+            case "byte-order-mark":
                 _ = AsBoolean(name, rawValue); // recognized, no effect
                 break;
             case "use-character-maps":
@@ -413,7 +525,7 @@ internal static class XdmSerializer
         return node;
     }
 
-    private static SerializationParameters ParseElementOptions(IXdmNode node)
+    private static SerializationParameters ParseElementOptions(IXdmNode node, SerializationParameters? baseParams = null)
     {
         if (node.NodeKind != XdmNodeKind.Element
             || node.LocalName != "serialization-parameters"
@@ -432,7 +544,7 @@ internal static class XdmSerializer
                     $"SEPM0017: Attribute '{attr.LocalName}' is not allowed on output:serialization-parameters.");
         }
 
-        var p = new SerializationParameters();
+        var p = baseParams ?? new SerializationParameters();
         var seen = new HashSet<(string Ns, string Local)>();
         foreach (var childValue in node.Children(XdmNodeKind.Element))
         {
@@ -491,10 +603,10 @@ internal static class XdmSerializer
                         p.HtmlVersion = hv;
                     break;
                 case "allow-duplicate-names": p.AllowDuplicateNames = AsElementBoolean(value, local); break;
+                case "include-content-type": p.IncludeContentType = AsElementBoolean(value, local); break;
+                case "escape-uri-attributes": p.EscapeUriAttributes = AsElementBoolean(value, local); break;
+                case "undeclare-prefixes": p.UndeclarePrefixes = AsElementBoolean(value, local); break;
                 case "byte-order-mark":
-                case "escape-uri-attributes":
-                case "include-content-type":
-                case "undeclare-prefixes":
                     _ = AsElementBoolean(value, local);
                     break;
                 case "cdata-section-elements":
@@ -579,6 +691,16 @@ internal static class XdmSerializer
             return set;
         foreach (var lexical in value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
         {
+            // EQName braced form: Q{uri}local.
+            if (lexical.StartsWith("Q{", StringComparison.Ordinal))
+            {
+                int close = lexical.IndexOf('}');
+                if (close > 1)
+                {
+                    set.Add((lexical[2..close], lexical[(close + 1)..]));
+                    continue;
+                }
+            }
             int colon = lexical.IndexOf(':');
             if (colon >= 0)
             {
@@ -589,7 +711,8 @@ internal static class XdmSerializer
             }
             else
             {
-                set.Add((string.Empty, lexical));
+                // Unprefixed names use the default element namespace in scope.
+                set.Add((ResolvePrefix(element, "") ?? string.Empty, lexical));
             }
         }
         return set;
@@ -618,6 +741,44 @@ internal static class XdmSerializer
 
     private static string SerializeXmlFamily(List<XdmValue> items, SerializationParameters p)
     {
+        // Sequence normalization: arrays in the input sequence are flattened (recursively)
+        // into their members before serialization; maps and function items cannot appear.
+        items = FlattenArrays(items);
+
+        // SEPM0009: omit-xml-declaration=yes conflicts with any explicit standalone value.
+        if (p.OmitXmlDeclaration && p.Standalone is not null)
+            throw new InvalidOperationException(
+                "SEPM0009: The omit-xml-declaration parameter must not be 'yes' when a standalone value is set.");
+
+        // SEPM0004: standalone or a doctype requires a single top-level element node.
+        if ((p.Standalone is not null || p.DoctypeSystem is not null || p.DoctypePublic is not null)
+            && p.Method is "xml" or "xhtml" or "html")
+        {
+            int elementCount = 0;
+            int nodeCount = 0;
+            foreach (var item in items)
+            {
+                if (!item.IsNode)
+                    continue;
+                nodeCount++;
+                if (item.NodeValue.NodeKind == XdmNodeKind.Element)
+                {
+                    elementCount++;
+                }
+                else if (item.NodeValue.NodeKind == XdmNodeKind.Document)
+                {
+                    int docElements = 0;
+                    foreach (var _ in item.NodeValue.Children(XdmNodeKind.Element))
+                        docElements++;
+                    if (docElements == 1)
+                        elementCount++;
+                }
+            }
+            if (elementCount != 1 || nodeCount != 1)
+                throw new InvalidOperationException(
+                    "SEPM0004: A standalone or doctype parameter requires the sequence to consist of a single element or document node.");
+        }
+
         var writer = new NodeWriter(p);
 
         // SENR0001: free-standing attribute/namespace nodes and function items cannot be
@@ -634,8 +795,9 @@ internal static class XdmSerializer
             }
         }
 
-        // XML declaration (only for xml/xhtml when not omitted).
-        if (p.Method is "xml" or "xhtml" && !p.OmitXmlDeclaration)
+        // XML declaration (only for xml/xhtml; emitted when not omitted, and always
+        // when an explicit standalone value forces it).
+        if (p.Method is "xml" or "xhtml" && (!p.OmitXmlDeclaration || p.Standalone is not null))
         {
             writer.Raw("<?xml version=\"");
             writer.Raw(p.Version);
@@ -651,9 +813,47 @@ internal static class XdmSerializer
             writer.Raw("?>");
         }
 
-        // HTML5 doctype: emitted when a top-level html element is serialized.
-        if (p.Method == "html" && p.HtmlVersion is >= 5 && FirstTopLevelElementIsHtml(items))
-            writer.Raw("<!DOCTYPE HTML>\n");
+        // DOCTYPE rules (Serialization 3.1 §5/§6, per the QT3 ser/* matrix):
+        // - doctype-system always produces a SYSTEM (optionally PUBLIC+SYSTEM) doctype.
+        // - doctype-public alone produces a PUBLIC-only doctype for the html method only
+        //   (an XML doctype requires a system identifier; xhtml falls back to the version rule).
+        // - html with html-version set, and xhtml with html-version 5+, get the bare
+        //   '<!DOCTYPE html>' regardless of doctype-public; html with only 'version' gets
+        //   it when no doctype-public/system is set. In all cases a top-level non-html
+        //   document element suppresses the bare form.
+        bool firstIsHtml = FirstTopLevelElementIsHtml(items);
+        bool bareDoctype =
+            (p.Method == "html" && p.HtmlVersion is not null && firstIsHtml)
+            || (p.Method == "xhtml" && p.HtmlVersion is >= 5 && firstIsHtml);
+        if (p.DoctypeSystem is not null
+            && (p.Method is "xml" or "xhtml" || (p.Method == "html" && p.HtmlVersion is null)))
+        {
+            var docName = FirstElementName(items);
+            if (docName is not null)
+            {
+                var doctype = new StringBuilder("<!DOCTYPE ").Append(docName);
+                if (p.DoctypePublic is not null)
+                    doctype.Append(" PUBLIC \"").Append(p.DoctypePublic).Append('"');
+                doctype.Append(p.DoctypePublic is null ? " SYSTEM \"" : " \"").Append(p.DoctypeSystem).Append('"');
+                doctype.Append('>');
+                writer.Raw(doctype.ToString());
+            }
+        }
+        else if (!bareDoctype && p.DoctypePublic is not null && p.Method == "html" && p.HtmlVersion is null)
+        {
+            var docName = FirstElementName(items);
+            if (docName is not null)
+                writer.Raw($"<!DOCTYPE {docName} PUBLIC \"{p.DoctypePublic}\">");
+        }
+        else if (bareDoctype)
+        {
+            writer.Raw("<!DOCTYPE html>");
+        }
+        else if (p.Method == "html" && p.HtmlVersion is null && firstIsHtml
+                 && decimal.TryParse(p.Version, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
+        {
+            writer.Raw("<!DOCTYPE html>");
+        }
 
         string separator = p.Separator;
         for (int i = 0; i < items.Count; i++)
@@ -668,8 +868,10 @@ internal static class XdmSerializer
                 var node = item.NodeValue;
                 if (node.NodeKind is XdmNodeKind.Attribute or XdmNodeKind.Namespace)
                 {
-                    // text method: attributes and namespaces contribute their string value.
-                    writer.Text(node.StringValue);
+                    // SENR0001: free-standing attribute/namespace nodes cannot be serialized
+                    // (any method; the xml family pre-check rejects them earlier).
+                    throw new InvalidOperationException(
+                        $"SENR0001: Cannot serialize a free-standing {node.NodeKind.ToString().ToLowerInvariant()} node.");
                 }
                 else
                 {
@@ -686,6 +888,30 @@ internal static class XdmSerializer
             }
         }
         return writer.ToString();
+    }
+
+    // Recursively replaces arrays in a top-level item list with their members
+    // (serialization sequence normalization for the xml method family).
+    private static List<XdmValue> FlattenArrays(List<XdmValue> items)
+    {
+        if (!items.Any(i => i.IsArray))
+            return items;
+        var flattened = new List<XdmValue>(items.Count);
+        void Append(XdmValue value)
+        {
+            if (value.IsArray && value.ArrayValue is not null)
+            {
+                foreach (var member in value.ArrayValue.Values)
+                    Append(member);
+            }
+            else
+            {
+                flattened.Add(value);
+            }
+        }
+        foreach (var item in items)
+            Append(item);
+        return flattened;
     }
 
     private static bool FirstTopLevelElementIsHtml(List<XdmValue> items)
@@ -708,7 +934,27 @@ internal static class XdmSerializer
         return false;
 
         static bool IsHtmlElement(IXdmNode node)
-            => node.LocalName.Equals("html", StringComparison.OrdinalIgnoreCase) && node.NamespaceUri.Length == 0;
+            => node.LocalName.Equals("html", StringComparison.OrdinalIgnoreCase)
+               && (node.NamespaceUri.Length == 0 || node.NamespaceUri == "http://www.w3.org/1999/xhtml");
+    }
+
+    // The qualified name of the first element in the sequence (through document nodes).
+    private static string? FirstElementName(List<XdmValue> items)
+    {
+        foreach (var item in items)
+        {
+            if (!item.IsNode)
+                continue;
+            var node = item.NodeValue;
+            if (node.NodeKind == XdmNodeKind.Element)
+                return node.Prefix.Length > 0 ? node.Prefix + ":" + node.LocalName : node.LocalName;
+            if (node.NodeKind == XdmNodeKind.Document)
+            {
+                foreach (var childValue in node.Children(XdmNodeKind.Element))
+                    return FirstElementName(new List<XdmValue> { childValue });
+            }
+        }
+        return null;
     }
 
     /// <summary>Recursive node writer implementing the xml/xhtml/html output rules.</summary>
@@ -717,6 +963,8 @@ internal static class XdmSerializer
         private readonly SerializationParameters _p;
         private readonly StringBuilder _sb = new();
         private bool _metaInjected;
+        private int _xmlSpacePreserve;
+        private readonly List<(string Prefix, string Uri)> _nsScopes = new();
 
         public NodeWriter(SerializationParameters p) => _p = p;
 
@@ -729,6 +977,17 @@ internal static class XdmSerializer
 
         public void WriteNode(IXdmNode node, int depth, bool suppressIndent)
         {
+            // Text method: elements and documents contribute their descendant text content
+            // only; comments and processing instructions are dropped entirely.
+            if (_p.Method == "text" && node.NodeKind is XdmNodeKind.Element or XdmNodeKind.Document)
+            {
+                foreach (var childValue in node.Children())
+                    WriteNode(childValue.NodeValue, depth, suppressIndent);
+                return;
+            }
+            if (_p.Method == "text" && node.NodeKind is XdmNodeKind.Comment or XdmNodeKind.ProcessingInstruction)
+                return;
+
             switch (node.NodeKind)
             {
                 case XdmNodeKind.Document:
@@ -749,7 +1008,8 @@ internal static class XdmSerializer
                     string data = node.StringValue;
                     if (data.Length > 0)
                         _sb.Append(' ').Append(data);
-                    _sb.Append("?>");
+                    // HTML processing instructions end with '>' (not '?>').
+                    _sb.Append(_p.Method == "html" ? '>' : "?>");
                     break;
                 default:
                     WriteTextContent(node.StringValue);
@@ -759,14 +1019,103 @@ internal static class XdmSerializer
 
         private void WriteElement(IXdmNode element, int depth, bool suppressIndent)
         {
-            string name = QualifiedName(element);
+            // HTML 5: elements in the XHTML namespace serialize with their local name and a
+            // default-namespace declaration (prefixes are not used in HTML); HTML 4 keeps them.
+            string effectivePrefix = element.Prefix;
+            string effectiveNs = element.NamespaceUri;
+            bool html5 = _p.HtmlVersion is >= 5
+                         || (_p.HtmlVersion is null
+                             && decimal.TryParse(_p.Version, NumberStyles.Float, CultureInfo.InvariantCulture, out var docVersion)
+                             && docVersion >= 5);
+            bool dropXhtmlPrefix = _p.Method == "html" && html5 && element.Prefix.Length > 0 && element.NamespaceUri == "http://www.w3.org/1999/xhtml";
+            if (dropXhtmlPrefix)
+                effectivePrefix = "";
+            string name = effectivePrefix.Length > 0 ? effectivePrefix + ":" + element.LocalName : element.LocalName;
             _sb.Append('<').Append(name);
+            // Namespace fixup: the element's expanded name must be bound in scope; a
+            // declaration is added when the parent scope lacks it (or an undeclaration
+            // when the element is in no namespace under a default one).
+            int scopeMark = _nsScopes.Count;
+            (string Prefix, string Uri)? addedDecl = null;
+            {
+                string? inScope = LookupNamespace(effectivePrefix);
+                if (effectiveNs.Length == 0)
+                {
+                    if (effectivePrefix.Length == 0 && !string.IsNullOrEmpty(inScope))
+                    {
+                        _sb.Append(" xmlns=\"\"");
+                        addedDecl = ("", "");
+                    }
+                }
+                else if (inScope != effectiveNs && effectivePrefix != "xml")
+                {
+                    // Not needed when the element's own attributes already declare it.
+                    bool selfDeclared = false;
+                    foreach (var attrValue in element.Attributes())
+                    {
+                        var a = attrValue.NodeValue;
+                        if (IsNamespaceDeclaration(a) &&
+                            (effectivePrefix.Length == 0
+                                ? a.LocalName == "xmlns" && a.NamespaceUri.Length == 0
+                                : a.LocalName == effectivePrefix && a.NamespaceUri == XmlnsNs))
+                        {
+                            selfDeclared = true;
+                            break;
+                        }
+                    }
+                    if (!selfDeclared)
+                    {
+                        addedDecl = (effectivePrefix, effectiveNs);
+                        _sb.Append(effectivePrefix.Length == 0
+                            ? $" xmlns=\"{effectiveNs}\""
+                            : $" xmlns:{effectivePrefix}=\"{effectiveNs}\"");
+                    }
+                }
+            }
+            bool entersPreserve = false;
             foreach (var attrValue in element.Attributes())
             {
                 var attr = attrValue.NodeValue;
+                // A prefixed XHTML declaration is redundant once the element is rewritten
+                // to the default-namespace form (HTML5).
+                if (dropXhtmlPrefix && IsNamespaceDeclaration(attr) && attr.StringValue == "http://www.w3.org/1999/xhtml")
+                    continue;
+                if (attr.LocalName == "space" && attr.Prefix == "xml" && attr.StringValue == "preserve")
+                    entersPreserve = true;
+                // XML 1.1 prefixed namespace undeclarations travel as a placeholder URI
+                // and serialize back as xmlns:p="".
+                bool isXml11Undeclaration = attr.NamespaceUri == XmlnsNs
+                    && attr.StringValue.StartsWith("urn:bosak-xml11-undecl:", StringComparison.Ordinal);
+                // Push the element's own namespace declarations for its children.
+                if (IsNamespaceDeclaration(attr))
+                {
+                    var declValue = isXml11Undeclaration ? "" : attr.StringValue;
+                    if (attr.LocalName == "xmlns" && attr.NamespaceUri.Length == 0)
+                        _nsScopes.Add(("", declValue));
+                    else if (attr.NamespaceUri == XmlnsNs)
+                        _nsScopes.Add((attr.LocalName, declValue));
+                }
                 _sb.Append(' ').Append(AttributeName(attr)).Append("=\"");
-                WriteAttributeContent(attr.StringValue);
+                var attrText = isXml11Undeclaration ? "" : attr.StringValue;
+                // HTML URI attributes are percent-encoded unless escape-uri-attributes is off.
+                if (_p.Method == "html" && _p.EscapeUriAttributes && IsUriAttribute(attr.LocalName))
+                    attrText = EscapeUri(attrText);
+                WriteAttributeContent(attrText);
                 _sb.Append('"');
+            }
+            if (addedDecl is not null)
+                _nsScopes.Add(addedDecl.Value);
+
+            // XML 1.1 prefixed namespace undeclarations recorded at parse time round-trip
+            // as xmlns:p="" when undeclare-prefixes applies (explicit yes, or XML 1.1 default).
+            bool undeclare = _p.UndeclarePrefixes ?? _p.Version == "1.1";
+            if (undeclare && element is Bosak.XPath.Providers.Xml.XDocumentNode xn && xn.Xml11UndeclaredPrefixes.Count > 0)
+            {
+                foreach (var undeclaredPrefix in xn.Xml11UndeclaredPrefixes)
+                {
+                    _sb.Append(" xmlns:").Append(undeclaredPrefix).Append("=\"\"");
+                    _nsScopes.Add((undeclaredPrefix, ""));
+                }
             }
 
             var children = new List<IXdmNode>();
@@ -775,27 +1124,64 @@ internal static class XdmSerializer
 
             bool isHtml = _p.Method == "html";
             bool isVoid = isHtml && HtmlVoidElements.Contains(element.LocalName);
+            bool injectingMeta = InjectMeta(element);
 
-            if (children.Count == 0 && !InjectMeta(element) && !isVoid)
+            if (children.Count == 0 && !injectingMeta && !isVoid)
             {
-                _sb.Append("/>");
+                // HTML: non-void elements always get a separate end tag (no self-closing).
+                // XHTML: only the HTML void elements self-close; others get an end tag.
+                if (isHtml || _p.Method == "xhtml")
+                {
+                    _sb.Append("></").Append(name).Append('>');
+                }
+                else
+                {
+                    _sb.Append("/>");
+                }
+                _nsScopes.RemoveRange(scopeMark, _nsScopes.Count - scopeMark);
                 return;
             }
             _sb.Append('>');
 
-            if (InjectMeta(element))
+            if (injectingMeta)
             {
                 _metaInjected = true;
-                _sb.Append("<meta charset=\"").Append(_p.Encoding ?? "UTF-8").Append("\"");
-                _sb.Append(isHtml ? ">" : "/>");
+                if (isHtml && _p.HtmlVersion is >= 5)
+                {
+                    // HTML5: the short charset form.
+                    _sb.Append("<meta charset=\"").Append(_p.Encoding ?? "UTF-8").Append("\">");
+                }
+                else
+                {
+                    _sb.Append("<meta http-equiv=\"content-type\" content=\"text/html; charset=")
+                      .Append(_p.Encoding ?? "UTF-8").Append('"');
+                    _sb.Append(isHtml ? ">" : "/>");
+                }
             }
             if (isVoid)
+            {
+                _nsScopes.RemoveRange(scopeMark, _nsScopes.Count - scopeMark);
                 return;
+            }
 
-            bool cdata = _p.CdataSectionElements is not null
-                         && _p.CdataSectionElements.Contains((element.NamespaceUri, element.LocalName));
+            bool cdata = _p.Method is "xml" or "xhtml" && InCdataList(element);
+            // HTML: listed elements in no namespace get raw (unescaped) text; namespaced
+            // ones keep CDATA sections. Under HTML5, CDATA survives only in foreign
+            // (non-XHTML) content — XHTML-namespace and no-namespace listed content is raw.
+            bool rawHtmlText = _p.Method == "html" && InCdataList(element)
+                && (html5
+                    ? element.NamespaceUri is "" or "http://www.w3.org/1999/xhtml"
+                    : element.NamespaceUri.Length == 0);
+            bool cdataHtml = _p.Method == "html" && InCdataList(element)
+                && (html5
+                    ? element.NamespaceUri is not ("" or "http://www.w3.org/1999/xhtml")
+                    : element.NamespaceUri.Length > 0);
+            // xml:space="preserve" suppresses indentation for the element's content.
+            if (entersPreserve)
+                _xmlSpacePreserve++;
             bool indentContent = _p.Indent
                                  && !suppressIndent
+                                 && _xmlSpacePreserve == 0
                                  && children.Count > 0
                                  && ElementOnlyContent(children);
 
@@ -806,49 +1192,155 @@ internal static class XdmSerializer
                     _sb.Append('\n');
                     for (int i = 0; i <= depth; i++)
                         _sb.Append("   ");
-                    WriteNode(child, depth + 1, IsSuppressed(child));
+                    // Suppression propagates to the whole subtree (not just the listed element).
+                    WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
                 }
                 _sb.Append('\n');
                 for (int i = 0; i < depth; i++)
                     _sb.Append("   ");
             }
-            else if (cdata)
+            else if (cdata || cdataHtml)
             {
-                WriteCdataChildren(children, depth);
+                WriteCdataChildren(children, depth, suppressIndent);
+            }
+            else if (rawHtmlText)
+            {
+                WriteRawTextChildren(children, depth, suppressIndent);
             }
             else
             {
                 foreach (var child in children)
-                    WriteNode(child, depth + 1, IsSuppressed(child));
+                {
+                    // A pre-existing content-type meta is replaced by the injected one.
+                    if (injectingMeta && IsContentTypeMeta(child))
+                        continue;
+                    WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
+                }
             }
 
+            if (entersPreserve)
+                _xmlSpacePreserve--;
+            _nsScopes.RemoveRange(scopeMark, _nsScopes.Count - scopeMark);
             _sb.Append("</").Append(name).Append('>');
         }
 
-        /// <summary>Whether a meta charset element must be injected into this (head) element.</summary>
+        // The URI currently bound to a prefix in the writer's declaration scopes.
+        private string? LookupNamespace(string prefix)
+        {
+            for (int i = _nsScopes.Count - 1; i >= 0; i--)
+            {
+                if (_nsScopes[i].Prefix == prefix)
+                    return _nsScopes[i].Uri;
+            }
+            return null;
+        }
+
+        /// <summary>Whether a meta element must be injected into this (head) element.</summary>
         private bool InjectMeta(IXdmNode element)
-            => _p.Method == "html"
-               && _p.HtmlVersion is >= 5
+            => _p.Method is "html" or "xhtml"
+               && _p.IncludeContentType
                && !_metaInjected
                && element.LocalName.Equals("head", StringComparison.OrdinalIgnoreCase)
-               && element.NamespaceUri.Length == 0;
+               && (element.NamespaceUri.Length == 0 || element.NamespaceUri == "http://www.w3.org/1999/xhtml");
+
+        // An existing meta with http-equiv=content-type (any casing) is replaced by the
+        // injected one when content-type injection applies.
+        private static bool IsContentTypeMeta(IXdmNode node)
+        {
+            if (node.NodeKind != XdmNodeKind.Element || !node.LocalName.Equals("meta", StringComparison.OrdinalIgnoreCase))
+                return false;
+            foreach (var attrValue in node.Attributes())
+            {
+                var attr = attrValue.NodeValue;
+                if (attr.LocalName.Equals("http-equiv", StringComparison.OrdinalIgnoreCase))
+                    return attr.StringValue.Equals("content-type", StringComparison.OrdinalIgnoreCase);
+            }
+            return false;
+        }
+
+        private void WriteRawTextChildren(List<IXdmNode> children, int depth, bool suppressIndent)
+        {
+            foreach (var child in children)
+            {
+                if (child.NodeKind == XdmNodeKind.Text)
+                    _sb.Append(child.StringValue);
+                else
+                    WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
+            }
+        }
+
+        // HTML attributes known to carry URIs (Serialization 3.1 §7.4.13).
+        private static bool IsUriAttribute(string localName)
+            => localName is "href" or "src" or "action" or "cite" or "data" or "longdesc" or "usemap";
+
+        // Percent-encodes characters outside the printable ASCII range as UTF-8 %HH bytes.
+        private static string EscapeUri(string s)
+        {
+            var sb = new StringBuilder(s.Length);
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[i];
+                if (c <= 0x7E)
+                {
+                    sb.Append(c);
+                    continue;
+                }
+                string ch = char.IsHighSurrogate(c) && i + 1 < s.Length
+                    ? s.Substring(i++, 2)
+                    : c.ToString();
+                foreach (var b in Encoding.UTF8.GetBytes(ch))
+                    sb.Append('%').Append(b.ToString("X2", CultureInfo.InvariantCulture));
+            }
+            return sb.ToString();
+        }
 
         private bool IsSuppressed(IXdmNode node)
-            => node.NodeKind == XdmNodeKind.Element
-               && _p.SuppressIndentation is not null
-               && _p.SuppressIndentation.Contains((node.NamespaceUri, node.LocalName));
+        {
+            if (node.NodeKind != XdmNodeKind.Element || _p.SuppressIndentation is null)
+                return false;
+            // The html method matches element names case-insensitively.
+            if (_p.Method == "html")
+            {
+                foreach (var (ns, local) in _p.SuppressIndentation)
+                {
+                    if (ns == node.NamespaceUri && local.Equals(node.LocalName, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+                return false;
+            }
+            return _p.SuppressIndentation.Contains((node.NamespaceUri, node.LocalName));
+        }
+
+        // Whether an element is listed in cdata-section-elements (case-insensitive for html).
+        private bool InCdataList(IXdmNode element)
+        {
+            if (_p.CdataSectionElements is null)
+                return false;
+            if (_p.Method == "html")
+            {
+                foreach (var (ns, local) in _p.CdataSectionElements)
+                {
+                    if (ns == element.NamespaceUri && local.Equals(element.LocalName, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+                return false;
+            }
+            return _p.CdataSectionElements.Contains((element.NamespaceUri, element.LocalName));
+        }
 
         private static bool ElementOnlyContent(List<IXdmNode> children)
         {
             foreach (var child in children)
             {
-                if (child.NodeKind == XdmNodeKind.Text)
+                // Indentation is only added for element-only content: a text, comment,
+                // or processing-instruction child makes the content mixed.
+                if (child.NodeKind is XdmNodeKind.Text or XdmNodeKind.Comment or XdmNodeKind.ProcessingInstruction)
                     return false;
             }
             return true;
         }
 
-        private void WriteCdataChildren(List<IXdmNode> children, int depth)
+        private void WriteCdataChildren(List<IXdmNode> children, int depth, bool suppressIndent)
         {
             var textRun = new StringBuilder();
             foreach (var child in children)
@@ -859,7 +1351,7 @@ internal static class XdmSerializer
                     continue;
                 }
                 FlushCdata(textRun);
-                WriteNode(child, depth + 1, IsSuppressed(child));
+                WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
             }
             FlushCdata(textRun);
         }
@@ -870,17 +1362,63 @@ internal static class XdmSerializer
                 return;
             string text = textRun.ToString();
             textRun.Clear();
-            // Split embedded "]]>" sequences across two CDATA sections.
-            _sb.Append("<![CDATA[").Append(text.Replace("]]>", "]]]]><![CDATA[>")).Append("]]>");
+            // Characters not representable in the encoding are output as character
+            // references, splitting the CDATA section around them; embedded "]]>"
+            // sequences are likewise split across two sections.
+            _sb.Append("<![CDATA[");
+            var segment = new StringBuilder();
+            void FlushSegment()
+            {
+                if (segment.Length == 0) return;
+                _sb.Append(segment.ToString().Replace("]]>", "]]]]><![CDATA[>"));
+                segment.Clear();
+            }
+            foreach (char c in text)
+            {
+                if (!IsRepresentableInEncoding(c))
+                {
+                    FlushSegment();
+                    _sb.Append("]]>").Append("&#x").Append(((int)c).ToString("X", CultureInfo.InvariantCulture)).Append(';').Append("<![CDATA[");
+                }
+                else
+                {
+                    segment.Append(c);
+                }
+            }
+            FlushSegment();
+            _sb.Append("]]>");
+        }
+
+        // Whether a character is representable in the chosen output encoding
+        // (conservative: unknown encodings accept everything).
+        private bool IsRepresentableInEncoding(char c)
+        {
+            if (_p.Encoding is null || _p.Encoding.StartsWith("utf", StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (_p.Encoding.Equals("us-ascii", StringComparison.OrdinalIgnoreCase)
+                || _p.Encoding.Equals("ascii", StringComparison.OrdinalIgnoreCase))
+                return c <= 0x7F;
+            if (_p.Encoding.StartsWith("iso-8859", StringComparison.OrdinalIgnoreCase)
+                || _p.Encoding.Equals("latin1", StringComparison.OrdinalIgnoreCase))
+                return c <= 0xFF;
+            return true;
         }
 
         private void WriteTextContent(string s)
         {
+            // Normalization-form applies to source text before character mapping.
+            s = ApplyNormalizationForm(s, _p.NormalizationForm);
             foreach (char c in s)
             {
                 if (_p.CharacterMaps is not null && _p.CharacterMaps.TryGetValue(c.ToString(), out var replacement))
                 {
                     _sb.Append(replacement);
+                    continue;
+                }
+                // The text output method writes characters raw (no escaping at all).
+                if (_p.Method == "text")
+                {
+                    _sb.Append(c);
                     continue;
                 }
                 switch (c)
@@ -889,13 +1427,21 @@ internal static class XdmSerializer
                     case '<': _sb.Append("&lt;"); break;
                     case '>': _sb.Append("&gt;"); break;
                     case '\r': _sb.Append("&#xD;"); break;
-                    default: _sb.Append(c); break;
+                    default:
+                        // XML 1.1: control characters other than tab/LF/CR serialize as char refs.
+                        if (c < ' ' && c is not ('\t' or '\n'))
+                            _sb.Append("&#x").Append(((int)c).ToString("X", CultureInfo.InvariantCulture)).Append(';');
+                        else
+                            _sb.Append(c);
+                        break;
                 }
             }
         }
 
         private void WriteAttributeContent(string s)
         {
+            // Normalization-form applies to source text before character mapping.
+            s = ApplyNormalizationForm(s, _p.NormalizationForm);
             foreach (char c in s)
             {
                 if (_p.CharacterMaps is not null && _p.CharacterMaps.TryGetValue(c.ToString(), out var replacement))
@@ -911,7 +1457,13 @@ internal static class XdmSerializer
                     case '\t': _sb.Append("&#x9;"); break;
                     case '\n': _sb.Append("&#xA;"); break;
                     case '\r': _sb.Append("&#xD;"); break;
-                    default: _sb.Append(c); break;
+                    default:
+                        // XML 1.1: remaining control characters serialize as char refs.
+                        if (c < ' ')
+                            _sb.Append("&#x").Append(((int)c).ToString("X", CultureInfo.InvariantCulture)).Append(';');
+                        else
+                            _sb.Append(c);
+                        break;
                 }
             }
         }
@@ -1034,6 +1586,10 @@ internal static class XdmSerializer
 
         if (value.IsNode)
         {
+            // SENR0001: free-standing attribute/namespace nodes cannot be serialized.
+            if (value.NodeValue.NodeKind is XdmNodeKind.Attribute or XdmNodeKind.Namespace)
+                throw new InvalidOperationException(
+                    $"SENR0001: Cannot serialize a free-standing {value.NodeValue.NodeKind.ToString().ToLowerInvariant()} node.");
             sb.Append(EncodeJsonString(JsonNodeToString(value.NodeValue, p), p));
             return;
         }
@@ -1083,10 +1639,18 @@ internal static class XdmSerializer
     {
         bool escapeNonAscii = p.Encoding is not null
                               && !p.Encoding.StartsWith("utf", StringComparison.OrdinalIgnoreCase);
+        // Normalization-form applies to source text before character mapping.
+        value = ApplyNormalizationForm(value, p.NormalizationForm);
         var sb = new StringBuilder(value.Length + 2);
         sb.Append('"');
         foreach (char c in value)
         {
+            // Character maps apply to JSON string content before escaping.
+            if (p.CharacterMaps is not null && p.CharacterMaps.TryGetValue(c.ToString(), out var replacement))
+            {
+                sb.Append(replacement);
+                continue;
+            }
             switch (c)
             {
                 case '"': sb.Append("\\\""); break;
@@ -1116,7 +1680,7 @@ internal static class XdmSerializer
     private static string SerializeAdaptiveMethod(List<XdmValue> items, SerializationParameters p)
     {
         var sb = new StringBuilder();
-        string separator = p.ItemSeparator ?? " ";
+        string separator = p.Separator;
         for (int i = 0; i < items.Count; i++)
         {
             if (i > 0)
@@ -1151,17 +1715,74 @@ internal static class XdmSerializer
         switch (value.Kind)
         {
             case XdmValueKind.String:
-                sb.Append('"').Append(value.StringValue.Replace("\"", "\"\"")).Append('"');
+                // Typed strings outside the string family (dates, durations, g* types)
+                // serialize in constructor form with the primitive type name; string-family
+                // values (including subtypes) are quoted.
+                if (TypedStringFamily(value) is { } family)
+                {
+                    sb.Append("xs:").Append(family).Append("(\"").Append(value.StringValue).Append("\")");
+                }
+                else
+                {
+                    sb.Append('"').Append(value.StringValue.Replace("\"", "\"\"")).Append('"');
+                }
                 return;
             case XdmValueKind.Boolean:
                 sb.Append(value.BooleanValue ? "true()" : "false()");
                 return;
             case XdmValueKind.Integer:
             case XdmValueKind.Decimal:
-            case XdmValueKind.Double:
-            case XdmValueKind.Float:
                 sb.Append(value.ToString());
                 return;
+            case XdmValueKind.Double:
+                sb.Append(CanonicalDouble(value.DoubleValue));
+                return;
+            case XdmValueKind.Float:
+                // Adaptive: floats use constructor form; negative infinity stays lexical.
+                if (double.IsNegativeInfinity(value.DoubleValue))
+                    sb.Append("-INF");
+                else
+                    sb.Append("xs:float(\"").Append(value.ToString()).Append("\")");
+                return;
+        }
+
+        if (value.Kind == XdmValueKind.QName)
+        {
+            var q = value.QNameValue;
+            sb.Append("Q{").Append(q.NamespaceUri).Append('}').Append(q.LocalName);
+            return;
+        }
+
+        if (value.IsFunction)
+        {
+            // Adaptive: a named function serializes as name#arity, an anonymous one as
+            // (anonymous-function)#arity.
+            if (value.FunctionValue is NamedFunctionItem nfi)
+            {
+                sb.Append(FunctionPrefix(nfi.NamespaceUri)).Append(nfi.LocalName).Append('#').Append(nfi.Arity);
+            }
+            else if (value.FunctionValue is FunctionItem fi)
+            {
+                sb.Append("(anonymous-function)#").Append(fi.Arity);
+            }
+            return;
+        }
+
+        if (value.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time
+            or XdmValueKind.Duration or XdmValueKind.Uri)
+        {
+            // Remaining atomic types serialize in constructor form with the primitive
+            // type name: xs:TYPE("lexical").
+            string typeName = PrimitiveTypeName(value.SchemaTypeName ?? value.Kind switch
+            {
+                XdmValueKind.DateTime => "dateTime",
+                XdmValueKind.Date => "date",
+                XdmValueKind.Time => "time",
+                XdmValueKind.Duration => "duration",
+                _ => "anyURI"
+            });
+            sb.Append("xs:").Append(typeName).Append("(\"").Append(value.ToString()).Append("\")");
+            return;
         }
 
         if (value.IsNode)
@@ -1171,7 +1792,7 @@ internal static class XdmSerializer
             {
                 sb.Append(node.Prefix.Length > 0 ? node.Prefix + ":" + node.LocalName : node.LocalName);
                 sb.Append("=\"");
-                sb.Append(node.StringValue.Replace("&", "&amp;").Replace("<", "&lt;").Replace("\"", "&quot;"));
+                sb.Append(node.StringValue.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;"));
                 sb.Append('"');
                 return;
             }
@@ -1228,5 +1849,59 @@ internal static class XdmSerializer
 
         // Remaining atomic types (anyURI, QName, dates, durations, binary): quoted string.
         sb.Append('"').Append(value.ToString().Replace("\"", "\"\"")).Append('"');
+    }
+
+    // Conventional prefix for a function namespace in adaptive serialization.
+    private static string FunctionPrefix(string ns) => ns switch
+    {
+        "http://www.w3.org/2005/xpath-functions" => "fn:",
+        "http://www.w3.org/2005/xpath-functions/math" => "math:",
+        "http://www.w3.org/2005/xpath-functions/map" => "map:",
+        "http://www.w3.org/2005/xpath-functions/array" => "array:",
+        "http://www.w3.org/2001/XMLSchema" => "xs:",
+        "http://www.w3.org/2005/xquery-local-functions" => "local:",
+        "" => "",
+        var other => $"Q{{{other}}}"
+    };
+
+    // The primitive type name used in adaptive constructor-form serialization.
+    private static string PrimitiveTypeName(string typeName) => typeName switch
+    {
+        "dateTimeStamp" => "dateTime",
+        "yearMonthDuration" or "dayTimeDuration" => "duration",
+        _ => typeName
+    };
+
+    // Constructor-form family for Kind String values in adaptive serialization:
+    // null for the string family (plain quoted form), otherwise the primitive type name.
+    private static string? TypedStringFamily(XdmValue value)
+        => value.SchemaTypeName is null || StringFamilyNames.Contains(value.SchemaTypeName)
+            ? null
+            : PrimitiveTypeName(value.SchemaTypeName);
+
+    // String-family type names (case-insensitive): values of these types serialize as
+    // plain quoted strings (and share one map-key family).
+    private static readonly HashSet<string> StringFamilyNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "", "string", "untypedAtomic", "anyURI",
+        "normalizedString", "token", "language", "NMTOKEN", "NMTOKENS",
+        "Name", "NCName", "ID", "IDREF", "IDREFS", "ENTITY", "ENTITIES",
+        "ncname", "id", "idref", "idrefs", "entity", "entities", "nmtoken", "nmtokens",
+        "name", "normalizedstring"
+    };
+
+    // Canonical xs:double lexical form (mantissa with one digit before the point and at
+    // least one after, exponent without sign padding): 1.0e0, 1.5e0, 1.0e-3.
+    private static string CanonicalDouble(double d)
+    {
+        if (double.IsNaN(d)) return "NaN";
+        if (double.IsPositiveInfinity(d)) return "INF";
+        if (double.IsNegativeInfinity(d)) return "-INF";
+        var s = d.ToString("0.################E0", CultureInfo.InvariantCulture);
+        int e = s.IndexOf('E');
+        var mantissa = s[..e];
+        if (!mantissa.Contains('.'))
+            mantissa += ".0";
+        return mantissa + "e" + s[(e + 1)..];
     }
 }

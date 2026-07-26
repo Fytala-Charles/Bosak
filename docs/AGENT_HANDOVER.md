@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
+**Commit:** `TBD` (feat(xquery): Phase 4 output declarations and serialization round-out)
+**Current focus:** **XQuery 3.1 Phase 4 started — output declarations + serialization round-out**: `declare option output:*` prolog with static serialization parameter merging into `fn:serialize` (per-call parameters win), `output:parameter-document`, and a full Serialization 3.1 fidelity pass over the serializer. QT3 went from **25,928 passed / 0 failed / 5,893 skipped (81.48%)** to **26,299 passed / 0 failed / 5,522 skipped (82.64%)** (+371 passing). Full `dotnet test Bosak.sln` passes: **1,479 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (output declarations + serialization)
+
+1. **Prolog `declare option`** — prefixed/unprefixed/EQName option names; ordering rules (namespace declarations precede options, `XPST0003`; deferred prefix resolution, `XPST0081`); validations: `XQST0109` (unknown serialization parameter), `XQST0110` (duplicate parameter), `XQST0066` (duplicate default namespace); XQuery comments `(: :)` are whitespace in the prolog.
+2. **Static serialization parameters** — `EvaluationContext.StaticOutputParameters` seeded from the static context; `fn:serialize` merges per-call parameters on top; map-form parameters default `omit-xml-declaration=true` while element/default forms emit the declaration (serialize-xml-127a vs K2-Serialization-24); `output:parameter-document` resolves lazily through `LoadDocument` with prolog options taking precedence.
+3. **Serializer fidelity (XdmSerializer)** — XML declaration + DOCTYPE matrix (bare/PUBLIC/SYSTEM per method and version knobs), html/html5/xhtml variants (void elements, PI syntax, include-content-type meta with replacement, escape-uri-attributes, CDATA namespace rules), adaptive constructor-form atomics (`xs:TYPE("v")`, `fn:name#arity`, canonical doubles), JSON character maps, text-method raw output, item separators (adaptive defaults to newline), CDATA encoding splits, indent with suppress-indentation propagation and xml:space, namespace fixup with a declaration scope stack (HTML5 drops XHTML prefixes), XML 1.1 namespace undeclarations (`undeclare-prefixes`, `xmlns:p=""` round-trip through placeholder annotations).
+4. **Supporting engine fixes** — direct-constructor attribute normalization is literal-only (xml:id gets whiteSpace=collapse); map keys distinguish string-family subtypes from g* date types (Serialization-adaptive-31); inline-function `instance of` uses declared parameter/return types; XML 1.1 character references accepted (`XQST0090` range); namespace axis / `in-scope-prefixes` / `namespace-uri-for-prefix` honor `PrefixedNamespaceUndeclarations`; `xml:space` is an ordinary constructor attribute (boundary whitespace stripped at flush time); string-literal references expand on both pipelines with XML 1.1 line-ending normalization gated on the test's xml-version (`Xml11LineEndings` flag threaded through `CompileOptions`/`XQueryCompiler`).
+5. **Harness** — `serialization-matches` / `assert-serialization` / `assert-serialization-error` assertions with `flags` (`q` literal, `i`/`x`/`m` regex) and the `not` wrapper; assert-type delegates parenthesized types to the engine's `instance of`; `TestCase.OwnDependencies` keeps XPath-only parse-error tests on the XPath pipeline; `KnownXQueryGaps` regenerated from a true-list run (**305 reasoned skips**).
+
+## Files Changed (this session)
+
+- `src/Bosak.XQuery/{Parser/XQueryParser,Compiler/XQueryStaticContext,Api/XQueryCompiler,Api/XQueryExecutable}.cs`
+- `src/Bosak.XPath.Runtime/Vm/{EvaluationContext,VmEngine}.cs`, `src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs`
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`, `src/Bosak.XPath.Api/{CompileOptions,XPath31Expression}.cs`
+- `src/Bosak.XPath.Providers/XDocument/{XDocumentProvider,XDocumentNode}.cs`
+- `src/Bosak.XPath.Standard/Functions/{FunctionLibrary,XdmSerializer}.cs`
+- `tests/Bosak.XPath.Conformance/{TestExecutor,TestCase,ResultComparer,DependencyFilter,ConformanceRunner}.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`, `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (305 recorded skips)
+
+Largest clusters: `prod/Annotation` (23 — function/variable annotations), `prod/NameTest` (22), `prod/Literal` (16), `prod/MapConstructor` (15), `misc/CombinedErrorCodes` (15), `prod/NamespaceDecl` (10 — prolog XQST0033/0070), `prod/DirAttributeList` (9), `prod/EQName` (7), `misc/HigherOrderFunctions` (7), `fn/in-scope-prefixes` (7 — namespace axis on constructed elements). The remaining ~4,900 skips are `try/catch` (only `catch *` exists), `unordered`/`ordered`/`validate`, modules, string constructors, and schema awareness.
+
+## Next Recommended Step
+
+1. **Phase 4 remainder — library modules** (`module namespace`, `import module`, module resolution); the largest remaining structural feature.
+2. **`try`/`catch` completion** (named error codes in catch lists; the `TryCatch` opcode exists with `catch *` only) or **`unordered`/`ordered`** (trivial no-op semantics in a non-ordered engine) or **string constructors** (`` `[...]` ``).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-25
 **Commit:** `b21848f` (feat(xquery): switch and typeswitch expressions)
 **Current focus:** **XQuery 3.1 — switch / typeswitch expressions** implemented: both forms parse as dedicated AST nodes in XQuery mode and desugar in the IR lowerer to synthetic `let` + nested `if` chains (`eq` value comparisons for switch, `instance of` checks for typeswitch) — no new opcodes. QT3 went from **25,846 passed / 0 failed / 5,975 skipped (81.22%)** to **25,928 passed / 0 failed / 5,893 skipped (81.48%)** (+82 passing). Full `dotnet test Bosak.sln` passes: **1,470 unit tests / 0 failed**; XSLT baseline unchanged.
 

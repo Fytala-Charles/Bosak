@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 25-07-2026     | ConstructAttribute/ConstructDocument for computed constructors; namespace declarations and text content nodes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 25-07-2026     | Preserve XML 1.1 undeclaration annotations across the base-URI reparse                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -418,10 +420,19 @@ public static class XDocumentProvider
         StripDocumentLevelWhitespace(document);
         if (!string.IsNullOrEmpty(baseUri))
         {
-            // Reparse with the published URI so element BaseUri values reflect it.
+            // Reparse with the published URI so element BaseUri values reflect it;
+            // XML 1.1 namespace-undeclaration annotations do not survive ToString(),
+            // so they are transferred explicitly.
+            var originals = document.Descendants().ToList();
             document = Xml11Loader.Parse(document.ToString(),
                 LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace, baseUri);
             StripDocumentLevelWhitespace(document);
+            var reparsed = document.Descendants().ToList();
+            for (int i = 0; i < originals.Count; i++)
+            {
+                if (originals[i].Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
+                    reparsed[i].AddAnnotation(undeclarations);
+            }
         }
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
@@ -447,9 +458,18 @@ public static class XDocumentProvider
         StripDocumentLevelWhitespace(document);
         if (!string.IsNullOrEmpty(baseUri))
         {
+            // See LoadXml(filePath, baseUri): preserve XML 1.1 undeclaration annotations
+            // across the reparse for the published base URI.
+            var originals = document.Descendants().ToList();
             document = Xml11Loader.Parse(document.ToString(),
                 LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace, baseUri);
             StripDocumentLevelWhitespace(document);
+            var reparsed = document.Descendants().ToList();
+            for (int i = 0; i < originals.Count; i++)
+            {
+                if (originals[i].Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
+                    reparsed[i].AddAnnotation(undeclarations);
+            }
         }
         if (schemaSet is not null)
         {

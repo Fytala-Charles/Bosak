@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 17-07-2026     | Accept inherited test-set dependencies for dependency filtering                          |
 //                      | Charles Korthout | 0.3   | 21-07-2026     | Add BaseDirectory for resolving assert-xml file references                               |
 //                      | Charles Korthout | 0.4   | 25-07-2026     | Add OwnDependencies (case-level spec deps) for XPath-vs-XQuery pipeline routing          |
+//                      | Charles Korthout | 0.5   | 25-07-2026     | OwnDependencies for XPath-only pipeline routing                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 

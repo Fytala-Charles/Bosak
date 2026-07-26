@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 25-07-2026     | Admit switch/typeswitch in the XQuery construct gate                                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 25-07-2026     | Admit declare option; pass static output parameters to result comparison                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -62,6 +64,10 @@ internal sealed class TestExecutor
         bool xpathOnlyCase = expectsParseError &&
             testCase.OwnDependencies.Any(d => d.Type == "spec") &&
             !DependencyFilter.HasXQueryOnlySpecDependency(testCase.OwnDependencies);
+        // XML 1.1 tests (xml-version dependency) enable line-ending normalization in
+        // string literals; everything else keeps reference-produced characters exact.
+        bool xml11LineEndings = testCase.Dependencies.Any(d =>
+            d.Type == "xml-version" && d.Value.Contains("1.1", StringComparison.Ordinal));
         bool routeXQuery = CanHandleAsXQuery(expr) &&
                            !xpathOnlyCase &&
                            (hasXqDeps || (xquerySyntax && !expectsParseError));
@@ -110,12 +116,13 @@ internal sealed class TestExecutor
         {
             if (routeXQuery)
             {
-                var executable = new XQueryCompiler().Compile(expr);
+                var executable = new XQueryCompiler().Compile(expr, xml11LineEndings);
                 result = executable.Evaluate(xqContext!);
             }
             else
             {
-                var compiled = XPath31Expression.Compile(expr);
+                var compiled = XPath31Expression.Compile(expr,
+                    new CompileOptions { Xml11LineEndings = xml11LineEndings });
                 result = compiled.Evaluate(ctx);
             }
         }
@@ -138,7 +145,7 @@ internal sealed class TestExecutor
             return new TestOutcome(TestOutcomeKind.Skipped, $"Unexpected error: {ex.GetType().Name}: {ex.Message}");
         }
 
-        return ResultComparer.Compare(testCase.ResultElement, result, caughtException, testCase.BaseDirectory);
+        return ResultComparer.Compare(testCase.ResultElement, result, caughtException, testCase.BaseDirectory, ctx.StaticOutputParameters);
     }
 
     /// <summary>
@@ -259,9 +266,9 @@ internal sealed class TestExecutor
         RegexOptions.Compiled);
 
     // Prolog forms the XQuery parser does NOT support (namespace, default element/function
-    // namespace, default collation, base-uri, and version declarations are supported).
+    // namespace, default collation, base-uri, option, and version declarations are supported).
     private static readonly Regex UnsupportedPrologRegex = new(
-        @"\bdeclare\s+(variable|function|option|boundary-space|default\s+order|default\s+decimal-format|ordering|copy-namespaces|context|decimal-format|construction)\b" +
+        @"\bdeclare\s+(variable|function|boundary-space|default\s+order|default\s+decimal-format|ordering|copy-namespaces|context|decimal-format|construction)\b" +
         @"|\bimport\s+(module|schema)\b",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

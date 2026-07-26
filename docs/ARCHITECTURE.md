@@ -378,7 +378,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 | Priority | Phase | Deliverable | Status | Notes |
 |----------|-------|-------------|--------|-------|
-| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 3 complete | Full core FLWOR (`order by`/`count`/`group by`/`window`), direct and computed constructors with constructor-local namespaces, switch/typeswitch; QT3 harness routes supported XQuery tests (25,928/0, 81.48%). Modules/serialization (Phase 4) follow. |
+| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 4 started | Full core FLWOR (`order by`/`count`/`group by`/`window`), direct and computed constructors with constructor-local namespaces, switch/typeswitch, output declarations and serialization; QT3 harness routes supported XQuery tests (26,299/0, 82.64%). Modules (Phase 4 remainder) follow. |
 | 2 | — | **XSLT 3.0 packages** | 🔮 Planned | `xsl:package`, `xsl:use-package`. Completes the XSLT 3.0 surface. |
 | 3 | — | **Schema awareness / XSD validation** | 🔮 Planned | Cross-cutting feature for XPath + XSLT; clears remaining schema-dependent skips. |
 | 4 | 5 | **Streaming** | 🔮 Planned | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |
@@ -600,8 +600,9 @@ src/
 
 | Feature | Status | Notes |
 |---------|--------|-------|
+| Serialization | ✅ Implemented | All six output methods (`xml`, `xhtml`, `html`, `text`, `json`, `adaptive`) with full Serialization 3.1 parameter fidelity; ser/* sets and fn/serialize all green |
+| Output declarations | ✅ Implemented | `declare option output:*` with static parameter merging and `output:parameter-document` |
 | Library modules | 🔮 Phase 4 | `module namespace` and module import resolution |
-| Serialization | 🔮 Phase 4 | `xml`, `html`, `xhtml`, `text`, `json`, `adaptive` output methods |
 | Advanced prolog options | 🔮 Phase 4 | Boundary-space, construction mode, ordering mode, copy-namespaces, decimal formats, context-item declaration |
 
 ### Parser Layering Strategy

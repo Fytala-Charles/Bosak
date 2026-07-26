@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 25-07-2026     | XQuery 3.1 spec-token awareness: exact XQ10/XQ30-only tests are not applicable          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 25-07-2026     | serialization feature supported; XML 1.1 xml-version admitted                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -38,7 +40,6 @@ internal sealed class DependencyFilter
         "static-typing",
         "staticTyping",
         "typedData",
-        "serialization",
         "moduleImport",
         "xpath-1.0-compatibility",
         "advanced-uca-fallback",
@@ -129,9 +130,11 @@ internal sealed class DependencyFilter
 
             if (dep.Type == "xml-version")
             {
-                // Bosak uses XML 1.1 throughout; XML 1.0-only tests are not applicable,
-                // and we do not report per-test XML version support.
-                return false;
+                // Bosak uses XML 1.1 throughout; XML 1.0-only tests are not applicable.
+                // Tests allowing 1.1 (value "1.1" or "1.0 1.1") are supported.
+                var tokens = dep.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (!tokens.Contains("1.1"))
+                    return false;
             }
 
             if (dep.Type == "xsd-version")

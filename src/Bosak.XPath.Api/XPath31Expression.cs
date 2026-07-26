@@ -16,6 +16,8 @@
 //                      | Charles Korthout | 0.4   | 27-06-2026     | Preserve explicit braced-URI namespace URIs in function calls and named function refs    |
 //                      | Charles Korthout | 0.5   | 21-07-2026     | Empty expression reports XPST0003 via ParseException instead of ArgumentException         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 25-07-2026     | Xml11LineEndings option threaded to the parser                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
@@ -65,7 +67,7 @@ public sealed class XPath31Expression
             throw new ParseException("Empty expression is not a valid XPath expression", 0);
 
         // 1. Lex + Parse -> AST
-        var ast = XPathParser.Parse(expression);
+        var ast = XPathParser.Parse(expression, xml11LineEndings: options.Xml11LineEndings);
 
         // 2. Resolve function-call namespaces using the supplied static context and
         // report static errors for functions that have been removed from the spec.

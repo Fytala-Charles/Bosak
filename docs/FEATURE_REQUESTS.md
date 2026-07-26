@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 3 follow-up: **switch / typeswitch expressions** implemented; QT3 now **25,928 passed / 0 failed** (81.48%); unit tests **1,470/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-25 (XQuery 3.1 Phase 4 start: **output declarations + serialization round-out**; QT3 now **26,299 passed / 0 failed** (82.64%); unit tests **1,479/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -153,6 +153,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-046 | *(internal)* | XQuery 3.1 Phase 3 — direct element constructors | Required for XQuery element construction: direct element/comment/PI constructors with computed attributes/content, constructor-local namespaces, and copy semantics | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-047 | *(internal)* | XQuery 3.1 Phase 3 — computed constructors | Required for full XQuery construction: `element`/`attribute`/`text`/`document`/`comment`/`processing-instruction`/`namespace` with static EQName or computed (`{expr}`) names | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-048 | *(internal)* | XQuery 3.1 Phase 3 — `switch` / `typeswitch` expressions | Required for full XQuery expressions: `switch` value matching and `typeswitch` type matching with case variables, default clause, and sequence-type unions | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
+| REQ-049 | *(internal)* | XQuery 3.1 Phase 4 — output declarations + serialization round-out | Required for XQuery serialization: `declare option output:*` prolog, static serialization parameters, parameter-document, and full Serialization 3.1 method/parameter fidelity | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2188,13 +2189,61 @@ Parse both forms as dedicated AST nodes (`SwitchExpressionNode`, `TypeswitchExpr
 
 ---
 
+### REQ-049: XQuery 3.1 Phase 4 — output declarations + serialization round-out
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-25  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 output declarations (`declare option output:method "xml"`, and the other `output:*` serialization parameters) are the standard way to control serialization from a query, and `fn:serialize` must honor them as static serialization parameters — including `output:parameter-document` (an external parameters file). Without them, ~350 QT3 tests were gated: the entire `ser/*` sets (six output methods), `fn/serialize`, `prod/OptionDecl*`, and the serialization-adjacent clusters. The serializer itself (built for the fn-serialize pool) had never been validated against the ser/* sets and diverged from the Serialization 3.1 spec in dozens of details.
+
+**Proposed Solution:**  
+Parse `declare option QName "value"` in the prolog (with QName/EQName option names, XQuery comment awareness, prolog ordering rules, and static validations XQST0109/XQST0110/XQST0066/XPST0003/XPST0081), carry the options in the static context, and seed them into the evaluation context as static serialization parameters that `fn:serialize` merges under explicit per-call parameters. `output:parameter-document` resolves lazily through the document loader to element-form parameters underneath the prolog's own. Then drive the serializer to Serialization 3.1 fidelity against the ser/* matrix: XML declaration and DOCTYPE emission rules, html/xhtml/html-version/html5 variants, adaptive constructor-form atomics, JSON maps and character maps, CDATA section rules, indent/suppress-indentation/xml:space, namespace fixup with a declaration scope stack, XML 1.1 namespace undeclarations (undeclare-prefixes), and XML 1.1 line-ending normalization gated on the test's xml-version.
+
+**Acceptance Criteria:**
+- [x] `declare option` prolog (prefixed, unprefixed, and `Q{uri}local` option names); ordering rules (namespace declarations precede options); validations XQST0109 (unknown parameter), XQST0110 (duplicate parameter), XQST0066 (duplicate default namespace), XPST0081 (undeclared prefix), XPST0003 (ordering/body-missing).
+- [x] Static output parameters flow to `fn:serialize`; explicit per-call parameters override them; map-form parameters default omit-xml-declaration=true while element/default forms emit the declaration.
+- [x] `output:parameter-document` (lazy load, character maps included; prolog options take precedence).
+- [x] QT3 fully green: ser/method-xml 38/0, ser/method-text 18/0, ser/method-html 45/0, ser/method-xhtml 40/0, ser/method-json 73/0, ser/method-adaptive 87/0, fn/serialize 168/0, prod/OptionDecl 41/0, prod/OptionDecl.serialization 36/0, prod/DefaultNamespaceDecl 22/1, prod/Comment 72/0.
+- [x] Supporting fixes: attribute normalization is literal-only with xml:id collapse; map keys distinguish string-family subtypes from g* date types; inline-function instance-of uses declared types; XML 1.1 character references accepted; XML 1.1 namespace undeclarations honored by the namespace axis, in-scope-prefixes, and namespace-uri-for-prefix; prolog comments `(: :)` skipped; `xml:space` is an ordinary constructor attribute; boundary whitespace stripped at flush time.
+- [x] Harness: `serialization-matches`/`assert-serialization`/`assert-serialization-error` assertions with flags (`q`/`i`/`x`/`m`) and `not` wrapper; assert-type delegates parenthesized types to the engine; xml-version 1.1 enables line-ending normalization through a threaded `Xml11LineEndings` flag. Full suite: **26,299 passed / 0 failed / 5,522 skipped (82.64%)**.
+
+**Implementation Notes:**
+- Prolog: `XQueryParser` gains `declare option` parsing with deferred prefix resolution (XPST0081 vs XPST0003 ordering), the validations above, and XQuery-comment-aware whitespace.
+- Runtime: `EvaluationContext.StaticOutputParameters`; `XQueryExecutable` seeds them with QName-list expansion against the default element namespace.
+- Serializer: `XdmSerializer` parameter merging (`ParametersFromOutputDictionary`/`ParametersFromElementForm`), character-map application in JSON encoding, and the large fidelity set above.
+- Harness: `TestCase.OwnDependencies` for pipeline routing; serialization assertions serialize the actual result through the engine with the query's static parameters and test-set base URI.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `declare option`; prolog validations; XML 1.1 char refs; comment skipping; xml:space ordinary; flush-time boundary whitespace. |
+| XQuery | Modified | Static-context options; seeding; EQName option names. |
+| Runtime | Modified | StaticOutputParameters; attribute normalization; inline-function instance-of. |
+| Standard | Modified | fn:serialize merge logic; serializer fidelity; fn:document-uri anyURI annotation. |
+| Providers | Modified | XML 1.1 undeclaration annotations exposed and honored (namespace axis, reparse transfer). |
+| XSLT | None | No XSLT changes; XSLT baseline unchanged. |
+| Conformance | Modified | serialization assertions; pipeline routing; xml-version flag; `KnownXQueryGaps` regenerated (305 reasoned skips). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-25 | Kimi | Static parameters merged under per-call parameters; map-form omits the declaration by default | Matches the Serialization 3.1 defaults proven by the QT3 ser/* matrix (serialize-xml-127a vs K2-Serialization-24). |
+| 2026-07-25 | Kimi | Line-ending normalization gated on the xml-version dependency | The QT3 evidence is split: xml-version 1.1 tests demand normalization (line-ending-Q004-6) while 1.0-mode tests demand exact reference characters (P002, re00127a). |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-048 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); QT3 wired (25,928/0, 81.48%). Modules/serialization (Phase 4) remain. |
+| 1 | REQ-040 … REQ-049 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4 started (output declarations + serialization); QT3 wired (26,299/0, 82.64%). Modules (Phase 4 remainder) remain. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

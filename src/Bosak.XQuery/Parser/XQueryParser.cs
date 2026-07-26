@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 25-07-2026     | Version/encoding validation; XPST0003 syntax codes; char refs; xquery-name backtrack    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 25-07-2026     | Parse declare option (output declarations) with QName/EQName option names               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -47,10 +49,11 @@ public sealed class XQueryParser
     /// Parses the supplied XQuery source text.
     /// </summary>
     /// <param name="source">The XQuery source text.</param>
+    /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending normalization.</param>
     /// <returns>A parse result containing the static context and the query body AST.</returns>
-    public static XQueryParseResult Parse(string source)
+    public static XQueryParseResult Parse(string source, bool xml11LineEndings = false)
     {
-        var parser = new XQueryParser(source);
+        var parser = new XQueryParser(source) { _xml11LineEndings = xml11LineEndings };
         return parser.ParseModule();
     }
 
@@ -102,13 +105,24 @@ public sealed class XQueryParser
             SkipWhitespace();
         }
 
+        // Deferred option-prefix resolution: a prefix undeclared after the whole
+        // prolog is XPST0081 (an option that precedes namespace declarations was
+        // already rejected with XPST0003 by the ordering check).
+        foreach (var (prefix, local, value, position) in _pendingOptions)
+        {
+            if (!context.Namespaces.TryGetValue(prefix, out var deferredNs))
+                throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", position);
+            ValidateOutputOption(context, local, deferredNs, position);
+            context = context.WithOption(local, deferredNs, value);
+        }
+
         // The rest of the source is the query body (an Expr).
         int bodyStart = _position;
         var remaining = _source[bodyStart..];
         if (string.IsNullOrWhiteSpace(remaining))
-            throw new ParseException("XQST0003: Query body is missing.", _position);
+            throw new ParseException("XPST0003: Query body is missing.", _position);
 
-        var bodyAst = XPathParser.Parse(remaining, allowFullFlwor: true);
+        var bodyAst = XPathParser.Parse(remaining, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings);
         return new XQueryParseResult(context, bodyAst);
     }
 
@@ -119,6 +133,9 @@ public sealed class XQueryParser
 
         if (TryMatchLiteral("declare namespace"))
         {
+            // XQuery prolog ordering: namespace declarations precede option declarations.
+            if (_seenOptionDecl)
+                throw new ParseException("XPST0003: Namespace declarations must precede option declarations.", _position);
             SkipWhitespace();
             string prefix = ReadNCName();
             SkipWhitespace();
@@ -133,20 +150,31 @@ public sealed class XQueryParser
 
         if (TryMatchLiteral("declare default element namespace"))
         {
+            if (_seenOptionDecl)
+                throw new ParseException("XPST0003: Namespace declarations must precede option declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
+            // XQST0066: the default element namespace must not be declared twice.
+            if (context.DefaultElementNamespace is not null)
+                throw new ParseException("XQST0066: More than one default element namespace declaration.", _position);
             context = context.WithDefaultElementNamespace(uri);
             return true;
         }
 
         if (TryMatchLiteral("declare default function namespace"))
         {
+            if (_seenOptionDecl)
+                throw new ParseException("XPST0003: Namespace declarations must precede option declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
+            // XQST0066: the default function namespace must not be declared twice.
+            if (context.DefaultFunctionNamespace is not null
+                && context.DefaultFunctionNamespace != "http://www.w3.org/2005/xpath-functions")
+                throw new ParseException("XQST0066: More than one default function namespace declaration.", _position);
             context = context.WithDefaultFunctionNamespace(uri);
             return true;
         }
@@ -177,9 +205,46 @@ public sealed class XQueryParser
             return true;
         }
 
+        if (TryMatchLiteral("declare option"))
+        {
+            SkipWhitespace();
+            var (prefix, local, eqNameUri) = ReadQName();
+            SkipWhitespace();
+            string value = ReadStringLiteral();
+            SkipWhitespace();
+            ExpectChar(';');
+            _seenOptionDecl = true;
+            if (eqNameUri is null && prefix is not null && !context.Namespaces.ContainsKey(prefix))
+            {
+                // The prefix may be declared by a later namespace declaration — but that
+                // is an ordering violation (XPST0003); otherwise it is undeclared (XPST0081).
+                _pendingOptions.Add((prefix, local, value, _position));
+                return true;
+            }
+            string optionNs = eqNameUri ?? (prefix is null ? string.Empty : context.Namespaces[prefix]);
+            ValidateOutputOption(context, local, optionNs, _position);
+            context = context.WithOption(local, optionNs, value);
+            return true;
+        }
+
         // Not a recognized prolog declaration; stop consuming prolog items.
         _position = savedPosition;
         return false;
+    }
+
+    private bool _seenOptionDecl;
+    private bool _xml11LineEndings;
+    private readonly List<(string Prefix, string Local, string Value, int Position)> _pendingOptions = new();
+
+    // XQST0109/XQST0110 validation for output declarations in the serialization namespace.
+    private void ValidateOutputOption(XQueryStaticContext context, string local, string optionNs, int position)
+    {
+        if (optionNs != "http://www.w3.org/2010/xslt-xquery-serialization")
+            return;
+        if (!SerializationParameterNames.Contains(local))
+            throw new ParseException($"XQST0109: Unknown serialization parameter '{local}'.", position);
+        if (context.Options.Any(o => o.NamespaceUri == optionNs && o.LocalName == local))
+            throw new ParseException($"XQST0110: Duplicate output declaration for serialization parameter '{local}'.", position);
     }
 
     // ------------------------------------------------------------------
@@ -229,8 +294,39 @@ public sealed class XQueryParser
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void SkipWhitespace()
     {
-        while (_position < _source.Length && char.IsWhiteSpace(_source[_position]))
-            _position++;
+        while (_position < _source.Length)
+        {
+            if (char.IsWhiteSpace(_source[_position]))
+            {
+                _position++;
+                continue;
+            }
+            // XQuery comments (: ... :) nest and are whitespace to the prolog parser.
+            if (_position + 1 < _source.Length && _source[_position] == '(' && _source[_position + 1] == ':')
+            {
+                int depth = 1;
+                _position += 2;
+                while (_position < _source.Length && depth > 0)
+                {
+                    if (_position + 1 < _source.Length && _source[_position] == '(' && _source[_position + 1] == ':')
+                    {
+                        depth++;
+                        _position += 2;
+                    }
+                    else if (_position + 1 < _source.Length && _source[_position] == ':' && _source[_position + 1] == ')')
+                    {
+                        depth--;
+                        _position += 2;
+                    }
+                    else
+                    {
+                        _position++;
+                    }
+                }
+                continue;
+            }
+            break;
+        }
     }
 
     private bool TryMatchLiteral(string literal)
@@ -348,6 +444,39 @@ public sealed class XQueryParser
             _position++;
 
         return _source[start.._position];
+    }
+
+    /// <summary>
+    /// Known serialization parameter names for output declarations (XQST0109 validation).
+    /// </summary>
+    private static readonly HashSet<string> SerializationParameterNames = new(StringComparer.Ordinal)
+    {
+        "method", "version", "encoding", "indent", "omit-xml-declaration", "standalone",
+        "item-separator", "media-type", "doctype-system", "doctype-public", "normalization-form",
+        "json-node-output-method", "html-version", "allow-duplicate-names", "byte-order-mark",
+        "escape-uri-attributes", "include-content-type", "undeclare-prefixes",
+        "cdata-section-elements", "suppress-indentation", "parameter-document"
+    };
+
+    // Reads a lexical QName (NCName, prefix:NCName, or Q{uri}NCName) without resolving prefixes.
+    private (string? Prefix, string Local, string? NamespaceUri) ReadQName()
+    {
+        string first = ReadNCName();
+        if (first == "Q" && _position < _source.Length && _source[_position] == '{')
+        {
+            int close = _source.IndexOf('}', _position);
+            if (close < 0)
+                throw new ParseException("XPST0003: Unterminated braced URI literal in EQName.", _position);
+            var uri = _source[(_position + 1)..close];
+            _position = close + 1;
+            return (null, ReadNCName(), uri);
+        }
+        if (_position < _source.Length && _source[_position] == ':')
+        {
+            _position++;
+            return (first, ReadNCName(), null);
+        }
+        return (null, first, null);
     }
 
     private static bool IsNameStartChar(char c)

@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 25-07-2026     | Date/time keys require same timezone presence; throw-safe UTC instant keys             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 25-07-2026     | Map keys distinguish string-family subtypes from g* date types                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Core.Xdm;
@@ -42,8 +44,8 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
             {
                 XdmValueKind.Undefined => true,
                 XdmValueKind.Boolean => x.BooleanValue == y.BooleanValue,
-                XdmValueKind.String => x.StringValue == y.StringValue,
-                XdmValueKind.Uri => x.StringValue == y.StringValue,
+                XdmValueKind.String => x.StringValue == y.StringValue && StringFamily(x) == StringFamily(y),
+                XdmValueKind.Uri => x.StringValue == y.StringValue && StringFamily(x) == StringFamily(y),
                 XdmValueKind.DateTime => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),
                 XdmValueKind.Date => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),
                 XdmValueKind.Time => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),
@@ -75,8 +77,8 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
         return obj.Kind switch
         {
             XdmValueKind.Boolean => obj.BooleanValue.GetHashCode(),
-            XdmValueKind.String => obj.StringValue.GetHashCode(),
-            XdmValueKind.Uri => obj.StringValue.GetHashCode(),
+            XdmValueKind.String => HashCode.Combine(obj.StringValue, StringFamily(obj)),
+            XdmValueKind.Uri => HashCode.Combine(obj.StringValue, StringFamily(obj)),
             XdmValueKind.DateTime => HashCode.Combine(InstantKey(obj), obj.HasTimezone),
             XdmValueKind.Date => HashCode.Combine(InstantKey(obj), obj.HasTimezone),
             XdmValueKind.Time => HashCode.Combine(InstantKey(obj), obj.HasTimezone),
@@ -85,6 +87,24 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
             _ => (int)obj.Kind
         };
     }
+
+    // Map-key type family for string/URI values: the string-family subtypes and
+    // xs:anyURI share one family; the g* date types (and any other named type) form
+    // their own, so xs:gYear('2015') is not the same key as xs:string('2015')
+    // (Serialization-adaptive-31).
+    private static string StringFamily(XdmValue value)
+        => value.SchemaTypeName is null || StringFamilyNames.Contains(value.SchemaTypeName)
+            ? ""
+            : value.SchemaTypeName;
+
+    private static readonly HashSet<string> StringFamilyNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "", "string", "untypedAtomic", "anyURI",
+        "normalizedString", "token", "language", "NMTOKEN", "NMTOKENS",
+        "Name", "NCName", "ID", "IDREF", "IDREFS", "ENTITY", "ENTITIES",
+        "ncname", "id", "idref", "idrefs", "entity", "entities", "nmtoken", "nmtokens",
+        "name", "normalizedstring"
+    };
 
     private static bool IsNumeric(XdmValue value)
         => value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double;

@@ -54,6 +54,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.21  | 25-07-2026     | Added named-function-ref arity (XPST0017) and variadic concat tests                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.22  | 25-07-2026     | Align serialize expectations with the spec defaults                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -2191,27 +2193,27 @@ public class FunctionLibraryTests
     public void Serialize_Element()
     {
         var result = EvalStr("serialize(parse-xml('<root><item>hello</item></root>')/root)");
-        Assert.Equal("<root><item>hello</item></root>", result);
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root><item>hello</item></root>", result);
     }
 
     [Fact]
     public void Serialize_Document()
     {
         var result = EvalStr("serialize(parse-xml('<root><item>hello</item></root>'))");
-        Assert.Equal("<root><item>hello</item></root>", result);
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root><item>hello</item></root>", result);
     }
 
     [Fact]
     public void Serialize_Atomic()
     {
-        Assert.Equal("42", EvalStr("serialize(42)"));
-        Assert.Equal("hello", EvalStr("serialize('hello')"));
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>42", EvalStr("serialize(42)"));
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>hello", EvalStr("serialize('hello')"));
     }
 
     [Fact]
     public void Serialize_EmptySequence()
     {
-        Assert.Equal("", EvalStr("serialize(())"));
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", EvalStr("serialize(())"));
     }
 
     // ------------------------------------------------------------------
@@ -2326,7 +2328,7 @@ public class FunctionLibraryTests
     {
         const string paramsDoc = "'<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\">"
                                  + "<output:method value=\"xml\"/><output:item-separator value=\"|\"/></output:serialization-parameters>'";
-        Assert.Equal("1|2|3", EvalStr($"serialize(1 to 3, parse-xml({paramsDoc}))"));
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>1|2|3", EvalStr($"serialize(1 to 3, parse-xml({paramsDoc}))"));
     }
 
     [Fact]
@@ -2345,7 +2347,7 @@ public class FunctionLibraryTests
             "serialize(parse-xml('<e/>'), parse-xml('<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\"><output:use-character-maps><output:character-map character=\"$\" map-string=\"a\"/><output:character-map character=\"$\" map-string=\"b\"/></output:use-character-maps></output:serialization-parameters>'))"));
         Assert.Contains("SEPM0018", ex3.Message);
         // Vendor-namespace parameter is ignored
-        Assert.Equal("<e/>", EvalStr(
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><e/>", EvalStr(
             "serialize(parse-xml('<e/>'), parse-xml('<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\"><v:x value=\"yes\" xmlns:v=\"http://vendor.example.com/\"/></output:serialization-parameters>'))"));
     }
 
@@ -2354,7 +2356,7 @@ public class FunctionLibraryTests
     {
         var result = EvalStr(
             "serialize(parse-xml('<html><head/><body><p>Hello World!</p></body></html>'), map{'method':'html','html-version':5})");
-        Assert.Contains("<!DOCTYPE HTML>", result);
+        Assert.Contains("<!DOCTYPE html>", result);
         Assert.Contains("<meta charset", result);
         // Fragment (no html element) → no DOCTYPE.
         Assert.Equal("<body><p>Hello World!</p></body>",

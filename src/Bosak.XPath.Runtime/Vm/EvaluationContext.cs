@@ -45,6 +45,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.9   | 25-07-2026     | Added AttributeConstructorHook and DocumentConstructorHook                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.10  | 25-07-2026     | Added StaticOutputParameters for XQuery output declarations                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -135,6 +137,15 @@ public sealed class EvaluationContext
     /// XDocument-based implementation by default.
     /// </summary>
     public Func<IReadOnlyList<XdmContentItem>, IXdmNode>? DocumentConstructorHook { get; set; }
+
+    /// <summary>
+    /// Static output declarations from an XQuery prolog (<c>declare option output:* "..."</c>),
+    /// keyed by (namespace URI, local name). QName-valued parameters
+    /// (cdata-section-elements, suppress-indentation) carry space-separated expanded
+    /// <c>{uri}local</c> tokens. Consumed by <c>fn:serialize</c> as default serialization
+    /// parameters.
+    /// </summary>
+    public IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? StaticOutputParameters { get; set; }
 
     // Namespace prefixes
     private readonly Dictionary<string, string> _namespaces;

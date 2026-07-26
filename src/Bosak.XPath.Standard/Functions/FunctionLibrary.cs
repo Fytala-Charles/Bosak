@@ -172,6 +172,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.72  | 25-07-2026     | fn:document-uri returns an xs:anyURI-annotated value (K2-DocumentURIFunc-11)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.73  | 25-07-2026     | fn:serialize honors static output parameters and parameter-document                     |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -4521,7 +4523,24 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Serialize_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(XdmSerializer.Serialize(args[0]));
+        => XdmValue.FromString(ctx.StaticOutputParameters is not null
+            ? XdmSerializer.Serialize(args[0], BuildStaticSerializationParameters(ctx))
+            : XdmSerializer.Serialize(args[0]));
+
+    // Static serialization parameters from the query's output declarations. An
+    // output:parameter-document option resolves (lazily) to element-form parameters over
+    // which the remaining output declarations take precedence.
+    private static XdmSerializer.SerializationParameters BuildStaticSerializationParameters(EvaluationContext ctx)
+    {
+        var dict = ctx.StaticOutputParameters!;
+        XdmSerializer.SerializationParameters? baseParams = null;
+        if (dict.TryGetValue(("http://www.w3.org/2010/xslt-xquery-serialization", "parameter-document"), out var paramDocUri))
+        {
+            var doc = ctx.LoadDocument(paramDocUri);
+            baseParams = XdmSerializer.ParametersFromElementForm(doc);
+        }
+        return XdmSerializer.ParametersFromOutputDictionary(dict, baseParams);
+    }
 
     private static XdmValue ParseXmlFragment_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -6845,7 +6864,10 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Serialize_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(XdmSerializer.Serialize(args[0], args[1]));
+        => XdmValue.FromString(XdmSerializer.Serialize(args[0], args[1],
+            ctx.StaticOutputParameters is not null
+                ? BuildStaticSerializationParameters(ctx)
+                : null));
 
     private static XdmValue Error_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => throw new InvalidOperationException("fn:error() called");
@@ -12218,14 +12240,22 @@ public static class FunctionLibrary
             }
 
             // Process from target element toward the root so that innermost
-            // declarations (and undeclarations) win.
+            // declarations (and undeclarations) win. XML 1.1 prefixed namespace
+            // undeclarations hide the same prefixes declared at or above them.
+            var undeclared = new HashSet<string>();
             foreach (var el in path)
             {
+                if (el.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
+                    foreach (var undeclaredPrefix in undeclarations.Prefixes)
+                        undeclared.Add(undeclaredPrefix);
+
                 foreach (var attr in el.Attributes())
                 {
                     if (attr.IsNamespaceDeclaration)
                     {
                         var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                        if (undeclared.Contains(prefix))
+                            continue;
                         if (attr.Value == "" && prefix == "")
                         {
                             // xmlns="" undeclares the default namespace.
@@ -12260,14 +12290,21 @@ public static class FunctionLibrary
         if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
         {
             var current = elem;
+            var undeclared = new HashSet<string>();
             while (current != null)
             {
+                // XML 1.1 prefixed namespace undeclarations hide the same prefixes
+                // declared at or above them.
+                if (current.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
+                    foreach (var undeclaredPrefix in undeclarations.Prefixes)
+                        undeclared.Add(undeclaredPrefix);
+
                 foreach (var attr in current.Attributes())
                 {
                     if (attr.IsNamespaceDeclaration)
                     {
                         var attrPrefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
-                        if (attrPrefix == prefix)
+                        if (attrPrefix == prefix && !undeclared.Contains(attrPrefix))
                         {
                             // xmlns="" undeclares the default namespace.
                             if (attr.Value == "" && prefix == "")

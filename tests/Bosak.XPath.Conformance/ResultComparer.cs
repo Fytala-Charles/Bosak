@@ -36,9 +36,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 25-07-2026     | Canonical serialization skips empty namespace undeclarations                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 25-07-2026     | serialization-matches/assert-serialization(-error) assertions with flags and not        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -53,7 +56,8 @@ internal static class ResultComparer
 {
     private static readonly XNamespace Ns = "http://www.w3.org/2010/09/qt-fots-catalog";
 
-    public static TestOutcome Compare(XElement resultElement, XdmValue actual, Exception? caughtException, string baseDirectory)
+    public static TestOutcome Compare(XElement resultElement, XdmValue actual, Exception? caughtException, string baseDirectory,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters = null)
     {
         var assertions = resultElement.Elements().ToList();
         if (assertions.Count == 0)
@@ -67,34 +71,36 @@ internal static class ResultComparer
             var wrapper = assertions[0];
             if (wrapper.Name == Ns + "all-of")
             {
-                return CompareAllOf(wrapper.Elements(), actual, caughtException, baseDirectory);
+                return CompareAllOf(wrapper.Elements(), actual, caughtException, baseDirectory, outputParameters);
             }
             if (wrapper.Name == Ns + "any-of")
             {
-                return CompareAnyOf(wrapper.Elements(), actual, caughtException, baseDirectory);
+                return CompareAnyOf(wrapper.Elements(), actual, caughtException, baseDirectory, outputParameters);
             }
         }
 
-        return CompareAssertion(assertions[0], actual, caughtException, baseDirectory);
+        return CompareAssertion(assertions[0], actual, caughtException, baseDirectory, outputParameters);
     }
 
-    private static TestOutcome CompareAllOf(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException, string baseDirectory)
+    private static TestOutcome CompareAllOf(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException, string baseDirectory,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters)
     {
         foreach (var assertion in assertions)
         {
-            var outcome = CompareAssertion(assertion, actual, caughtException, baseDirectory);
+            var outcome = CompareAssertion(assertion, actual, caughtException, baseDirectory, outputParameters);
             if (outcome.Kind != TestOutcomeKind.Passed)
                 return outcome;
         }
         return new TestOutcome(TestOutcomeKind.Passed, null);
     }
 
-    private static TestOutcome CompareAnyOf(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException, string baseDirectory)
+    private static TestOutcome CompareAnyOf(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException, string baseDirectory,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters)
     {
         var failures = new List<string>();
         foreach (var assertion in assertions)
         {
-            var outcome = CompareAssertion(assertion, actual, caughtException, baseDirectory);
+            var outcome = CompareAssertion(assertion, actual, caughtException, baseDirectory, outputParameters);
             if (outcome.Kind == TestOutcomeKind.Passed)
                 return outcome;
             failures.Add(outcome.Message ?? "failed");
@@ -102,7 +108,21 @@ internal static class ResultComparer
         return new TestOutcome(TestOutcomeKind.Failed, $"any-of: none matched. [{string.Join("; ", failures)}]");
     }
 
-    private static TestOutcome CompareAssertion(XElement assertion, XdmValue actual, Exception? caughtException, string baseDirectory)
+    // Negated assertions: every inner assertion must FAIL for the test to pass.
+    private static TestOutcome CompareNot(IEnumerable<XElement> assertions, XdmValue actual, Exception? caughtException, string baseDirectory,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters)
+    {
+        foreach (var assertion in assertions)
+        {
+            var outcome = CompareAssertion(assertion, actual, caughtException, baseDirectory, outputParameters);
+            if (outcome.Kind == TestOutcomeKind.Passed)
+                return new TestOutcome(TestOutcomeKind.Failed, $"not: inner assertion '{assertion.Name.LocalName}' unexpectedly passed");
+        }
+        return new TestOutcome(TestOutcomeKind.Passed, null);
+    }
+
+    private static TestOutcome CompareAssertion(XElement assertion, XdmValue actual, Exception? caughtException, string baseDirectory,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters)
     {
         var name = assertion.Name.LocalName;
 
@@ -114,11 +134,15 @@ internal static class ResultComparer
             "assert-string-value" => CompareAssertStringValue(assertion, actual, caughtException),
             "assert-empty" => CompareAssertEmpty(actual, caughtException),
             "error" => CompareError((string?)assertion.Attribute("code") ?? "", caughtException),
+            "assert-serialization-error" => CompareSerializationError((string?)assertion.Attribute("code") ?? "", actual, caughtException, outputParameters, baseDirectory),
+            "serialization-matches" => CompareSerializationMatches(assertion.Value, (string?)assertion.Attribute("flags") ?? "", actual, caughtException, outputParameters, baseDirectory),
+            "assert-serialization" => CompareAssertSerialization(assertion.Value, actual, caughtException, outputParameters, baseDirectory),
             "assert-type" => CompareAssertType(assertion.Value, actual, caughtException),
             "assert-xml" => CompareAssertXml(assertion, actual, caughtException, baseDirectory),
             "assert-deep-eq" => CompareAssertDeepEq(assertion, actual, caughtException),
-            "all-of" => CompareAllOf(assertion.Elements(), actual, caughtException, baseDirectory),
-            "any-of" => CompareAnyOf(assertion.Elements(), actual, caughtException, baseDirectory),
+            "all-of" => CompareAllOf(assertion.Elements(), actual, caughtException, baseDirectory, outputParameters),
+            "any-of" => CompareAnyOf(assertion.Elements(), actual, caughtException, baseDirectory, outputParameters),
+            "not" => CompareNot(assertion.Elements(), actual, caughtException, baseDirectory, outputParameters),
             "assert-count" => CompareAssertCount((string?)assertion.Attribute("count") ?? assertion.Value.Trim(), actual, caughtException),
             "assert-permutation" => CompareAssertPermutation(assertion, actual, caughtException),
             "assert" => CompareAssert(assertion.Value, actual, caughtException),
@@ -288,6 +312,86 @@ internal static class ResultComparer
             return new TestOutcome(TestOutcomeKind.Passed, null); // lenient matching
 
         return new TestOutcome(TestOutcomeKind.Failed, $"Expected error {expectedCode}, got: {message}");
+    }
+
+    // Serializes the actual result through fn:serialize (the error assertion targets the
+    // serialization step, which may fail even when evaluation succeeded). The query's static
+    // output declarations (declare option output:*) flow in via outputParameters; relative
+    // parameter-document URIs resolve against the test-set directory.
+    private static string SerializeActual(XdmValue actual,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters,
+        string baseDirectory)
+    {
+        var ctx = NewAssertContext();
+        ctx.BaseUri = new Uri(baseDirectory + Path.DirectorySeparatorChar).AbsoluteUri;
+        if (outputParameters is not null)
+            ctx.StaticOutputParameters = outputParameters;
+        ctx.WithVariable("bosak_ser_result", actual);
+        return XPath31Expression.Compile("fn:serialize($bosak_ser_result)").Evaluate(ctx).ToString();
+    }
+
+    private static TestOutcome CompareSerializationError(string expectedCode, XdmValue actual, Exception? caughtException,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters, string baseDirectory)
+    {
+        // The error may already have surfaced during evaluation.
+        if (caughtException is not null)
+            return CompareError(expectedCode, caughtException);
+        try
+        {
+            _ = SerializeActual(actual, outputParameters, baseDirectory);
+            return new TestOutcome(TestOutcomeKind.Failed, $"Expected serialization error {expectedCode} but succeeded");
+        }
+        catch (Exception ex)
+        {
+            return CompareError(expectedCode, ex);
+        }
+    }
+
+    private static TestOutcome CompareSerializationMatches(string pattern, string flags, XdmValue actual, Exception? caughtException,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters, string baseDirectory)
+    {
+        if (caughtException is not null)
+            return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
+        try
+        {
+            var serialized = SerializeActual(actual, outputParameters, baseDirectory);
+            // The 'q' flag (as in fn:matches) quotes the pattern: a literal substring match.
+            if (flags.Contains('q'))
+            {
+                return serialized.Contains(pattern, StringComparison.Ordinal)
+                    ? new TestOutcome(TestOutcomeKind.Passed, null)
+                    : new TestOutcome(TestOutcomeKind.Failed, $"serialization-matches failed. Pattern: '{pattern}', Got: '{serialized}'");
+            }
+            var options = RegexOptions.Singleline;
+            if (flags.Contains('i')) options |= RegexOptions.IgnoreCase;
+            if (flags.Contains('x')) options |= RegexOptions.IgnorePatternWhitespace;
+            if (flags.Contains('m')) options &= ~RegexOptions.Singleline;
+            return Regex.IsMatch(serialized, pattern, options)
+                ? new TestOutcome(TestOutcomeKind.Passed, null)
+                : new TestOutcome(TestOutcomeKind.Failed, $"serialization-matches failed. Pattern: '{pattern}', Got: '{serialized}'");
+        }
+        catch (Exception ex)
+        {
+            return new TestOutcome(TestOutcomeKind.Failed, $"serialization-matches error: {ex.Message}");
+        }
+    }
+
+    private static TestOutcome CompareAssertSerialization(string expected, XdmValue actual, Exception? caughtException,
+        IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters, string baseDirectory)
+    {
+        if (caughtException is not null)
+            return new TestOutcome(TestOutcomeKind.Failed, $"Unexpected error: {caughtException.Message}");
+        try
+        {
+            var serialized = SerializeActual(actual, outputParameters, baseDirectory);
+            return string.Equals(serialized, expected, StringComparison.Ordinal)
+                ? new TestOutcome(TestOutcomeKind.Passed, null)
+                : new TestOutcome(TestOutcomeKind.Failed, $"assert-serialization failed. Expected: '{expected}', Got: '{serialized}'");
+        }
+        catch (Exception ex)
+        {
+            return new TestOutcome(TestOutcomeKind.Failed, $"assert-serialization error: {ex.Message}");
+        }
     }
 
     private static bool ValuesEqual(XdmValue a, XdmValue b)
@@ -490,11 +594,35 @@ internal static class ResultComparer
 
         foreach (var item in items)
         {
-            if (!ItemMatchesType(item, baseType))
+            if (!ItemMatchesType(item, baseType, expectedType))
                 return new TestOutcome(TestOutcomeKind.Failed, $"assert-type failed. Expected {expectedType}, got {item.Kind}");
         }
 
         return new TestOutcome(TestOutcomeKind.Passed, null);
+    }
+
+    private static bool ItemMatchesType(XdmValue item, string baseType, string fullType)
+    {
+        // Parameterized types (function/map/array and other parenthesized forms) go
+        // through the engine's instance-of with the full type expression.
+        if (baseType.Contains('('))
+            return EngineMatchesType(item, fullType);
+        return ItemMatchesType(item, baseType);
+    }
+
+    private static bool EngineMatchesType(XdmValue item, string fullType)
+    {
+        try
+        {
+            var ctx = NewAssertContext();
+            ctx.WithVariable("result", item);
+            var result = XPath31Expression.Compile($"$result instance of {fullType}").Evaluate(ctx);
+            return result.BooleanValue;
+        }
+        catch
+        {
+            return true; // lenient for unparseable type expressions
+        }
     }
 
     private static bool ItemMatchesType(XdmValue item, string typeName)

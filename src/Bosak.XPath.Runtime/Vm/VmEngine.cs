@@ -123,6 +123,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.70  | 25-07-2026     | Computed constructor execution with content accumulator and name resolution; window variable namespace binding |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.71  | 25-07-2026     | Literal-only attribute whitespace normalization; xml:id collapse normalization                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1224,15 +1226,18 @@ public static class VmEngine
                             for (int i = attr.FirstPart; i < attr.FirstPart + attr.PartCount; i++)
                             {
                                 var part = ctorInfo.Parts[i];
+                                // Whitespace normalization (tab/CR/LF → space) applies to
+                                // LITERAL parts only; enclosed-expression values are preserved.
                                 valueParts.Add(part.Kind == ConstructPartKind.Literal
-                                    ? (string)literalPool[part.Index]!
+                                    ? NormalizeConstructorAttributeValue((string)literalPool[part.Index]!)
                                     : JoinAtomizedItems(registers[instr.RegisterB + part.Index], " "));
                             }
                             var value = string.Concat(valueParts);
 
-                            // Direct constructor attribute values are whitespace-normalized
-                            // (collapse runs and trim), per the XQuery construction rules.
-                            value = NormalizeConstructorAttributeValue(value);
+                            // xml:id additionally uses whiteSpace="collapse" normalization
+                            // (the xml:id specification; K2-DirectConElem-51).
+                            if (attr.LocalName == "id" && attr.Prefix == "xml")
+                                value = string.Join(' ', value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
                             evaluatedAttrs.Add((attr.LocalName, attr.Prefix, value));
                         }
 
@@ -7562,6 +7567,21 @@ public static class VmEngine
             return IsSequenceTypeSubtype(actualReturn, testReturnType);
         }
 
+        if (func is InlineFunctionItem inline)
+        {
+            // Inline functions: undeclared parameter/return types are item()*; subsumption
+            // uses contravariant parameters and a covariant result.
+            if (inline.Parameters.Count != testParamTypes.Length)
+                return false;
+            for (int i = 0; i < testParamTypes.Length; i++)
+            {
+                var actualParam = i < inline.ParameterTypes.Count ? inline.ParameterTypes[i] ?? "item()*" : "item()*";
+                if (!IsSequenceTypeSubtype(testParamTypes[i], actualParam))
+                    return false;
+            }
+            return IsSequenceTypeSubtype(inline.ReturnType ?? "item()*", testReturnType);
+        }
+
         return ValueMatchesType(value, typeName);
     }
 
@@ -8889,11 +8909,11 @@ public static class VmEngine
     }
 
     /// <summary>Collapses whitespace runs and trims (fn:normalize-space semantics).</summary>
+    // XQuery 3.1 §3.9.1.1: direct constructor attribute values are normalized by
+    // replacing each whitespace character (#x9, #xA, #xD) with a space — no
+    // collapsing or trimming (a whitespace-only value is preserved).
     private static string NormalizeConstructorAttributeValue(string value)
-    {
-        var parts = value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
-        return string.Join(' ', parts);
-    }
+        => value.Replace('\t', ' ').Replace('\n', ' ').Replace('\r', ' ');
 
     /// <summary>
     /// Accumulates computed-constructor content items, applying the XQuery content rules:

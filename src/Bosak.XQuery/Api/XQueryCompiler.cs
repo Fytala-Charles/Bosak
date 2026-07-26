@@ -26,6 +26,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.7   | 25-07-2026     | Resolve function namespaces inside switch/typeswitch expressions                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 25-07-2026     | Optional XML 1.1 line-ending normalization flag threaded to the parser                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -45,13 +47,14 @@ public sealed class XQueryCompiler
     /// Compiles the supplied XQuery source text.
     /// </summary>
     /// <param name="query">The XQuery 3.1 source text.</param>
+    /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending normalization.</param>
     /// <returns>An executable query plan.</returns>
-    public XQueryExecutable Compile(string query)
+    public XQueryExecutable Compile(string query, bool xml11LineEndings = false)
     {
         ArgumentException.ThrowIfNullOrEmpty(query);
 
         // 1. Parse the XQuery module (prolog + query body).
-        var parseResult = XQueryParser.Parse(query);
+        var parseResult = XQueryParser.Parse(query, xml11LineEndings);
 
         // 2. Resolve function-call namespaces using the static context derived from the prolog.
         var resolvedBody = ResolveFunctionNamespaces(parseResult.Body, parseResult.StaticContext);
