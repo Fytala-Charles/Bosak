@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 26-07-2026     | declare function / declare variable prolog parsing with XQST0034/0039/0045/0049 and XPST0003 validations |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 27-07-2026     | Library module declaration, import module, %public/%private annotations (XQST0047/0048/0070/0088/0106/0116) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -99,10 +101,37 @@ public sealed class XQueryParser
             _position = beforeVersionDecl;
         }
 
+        // Optional library module declaration: 'module namespace prefix = "uri";'.
+        // Only a library module carries one; XQueryCompiler rejects it for a main module.
+        int beforeModuleDecl = _position;
+        if (TryMatchLiteral("module") && TryMatchLiteral("namespace"))
+        {
+            SkipWhitespace();
+            string modulePrefix = ReadNCName();
+            SkipWhitespace();
+            ExpectLiteral("=");
+            SkipWhitespace();
+            string moduleNs = NormalizeModuleUri(ReadStringLiteral());
+            SkipWhitespace();
+            ExpectChar(';');
+            // XQST0088: the target namespace of a library module must not be empty.
+            if (moduleNs.Length == 0)
+                throw new ParseException("XQST0088: The target namespace of a library module must not be a zero-length string.", _position);
+            // The module declaration also binds its prefix in the module's own static context.
+            context = context.WithModuleNamespace(moduleNs).WithNamespace(modulePrefix, moduleNs);
+            _isLibraryModule = true;
+            SkipWhitespace();
+        }
+        else
+        {
+            _position = beforeModuleDecl;
+        }
+
         // Prolog parsing is intentionally minimal in this first iteration.
         // We only consume namespace declarations that are needed for the
         // XPath parser's static context.
         while (TryParsePrologDeclaration(ref context)
+               || TryParseModuleImport(ref context)
                || TryParseFunctionDeclaration(ref context)
                || TryParseVariableDeclaration(ref context))
         {
@@ -120,9 +149,35 @@ public sealed class XQueryParser
             context = context.WithOption(local, deferredNs, value);
         }
 
-        // The rest of the source is the query body (an Expr).
+        // The rest of the source is the query body (an Expr) — a library module has none.
         int bodyStart = _position;
         var remaining = _source[bodyStart..];
+        if (_isLibraryModule)
+        {
+            // XQST0048: every function and variable declared in a library module must be
+            // in the module's target namespace.
+            string targetNs = context.ModuleNamespaceUri!;
+            foreach (var fn in context.UserFunctions)
+            {
+                if (fn.NamespaceUri != targetNs)
+                    throw new ParseException($"XQST0048: Function '{fn.LocalName}' is not in the library module's target namespace '{targetNs}'.", fn.Position);
+            }
+            foreach (var v in context.UserVariables)
+            {
+                if (v.NamespaceUri != targetNs)
+                    throw new ParseException($"XQST0048: Variable '${v.LocalName}' is not in the library module's target namespace '{targetNs}'.", v.Position);
+            }
+            // XQST0108: an output declaration must not appear in a library module.
+            foreach (var (local, optionNs, _) in context.Options)
+            {
+                if (optionNs == "http://www.w3.org/2010/xslt-xquery-serialization")
+                    throw new ParseException($"XQST0108: An output declaration ('{local}') must not appear in a library module.", _position);
+            }
+            // XPST0003: a library module must not contain a query body expression.
+            if (!string.IsNullOrWhiteSpace(StripComments(remaining)))
+                throw new ParseException("XPST0003: A library module must not contain a query body expression.", _position);
+            return new XQueryParseResult(context, new SequenceExpressionNode(Array.Empty<XPathAstNode>()), isLibraryModule: true);
+        }
         if (string.IsNullOrWhiteSpace(remaining))
             throw new ParseException("XPST0003: Query body is missing.", _position);
 
@@ -130,12 +185,72 @@ public sealed class XQueryParser
         return new XQueryParseResult(context, bodyAst);
     }
 
+    private bool TryParseModuleImport(ref XQueryStaticContext context)
+    {
+        int savedPosition = _position;
+        SkipWhitespace();
+        if (!TryMatchLiteral("import") || !TryMatchLiteral("module"))
+        {
+            // 'import schema' and bare 'import' used as a name are not module imports.
+            _position = savedPosition;
+            return false;
+        }
+
+        SkipWhitespace();
+        string? importPrefix = null;
+        if (TryMatchLiteral("namespace"))
+        {
+            SkipWhitespace();
+            importPrefix = ReadNCName();
+            SkipWhitespace();
+            ExpectLiteral("=");
+            SkipWhitespace();
+        }
+        string importNs = NormalizeModuleUri(ReadStringLiteral());
+        var locationHints = new List<string>();
+        SkipWhitespace();
+        if (TryMatchLiteral("at"))
+        {
+            do
+            {
+                SkipWhitespace();
+                locationHints.Add(NormalizeModuleUri(ReadStringLiteral()));
+                SkipWhitespace();
+            } while (TryMatchChar(','));
+        }
+        ExpectChar(';');
+
+        // XQST0088: the target namespace of a module import must not be empty.
+        if (importNs.Length == 0)
+            throw new ParseException("XQST0088: The target namespace of a module import must not be a zero-length string.", _position);
+        // XQST0070: the prefixes xml and xmlns must not be (re)bound by a module import.
+        if (importPrefix == "xmlns"
+            || (importPrefix == "xml" && importNs != "http://www.w3.org/XML/1998/namespace"))
+        {
+            throw new ParseException($"XQST0070: The prefix '{importPrefix}' must not be bound by a module import.", _position);
+        }
+        // XQST0047: one module must not import the same target namespace twice.
+        if (context.ImportedModules.Any(m => m.NamespaceUri == importNs))
+            throw new ParseException($"XQST0047: The module namespace '{importNs}' is imported more than once.", _position);
+
+        if (importPrefix is not null)
+            context = context.WithNamespace(importPrefix, importNs);
+        context = context.WithImportedModule(new ModuleImport(importPrefix, importNs, locationHints, _position));
+        return true;
+    }
+
     private bool TryParsePrologDeclaration(ref XQueryStaticContext context)
     {
         int savedPosition = _position;
         SkipWhitespace();
 
-        if (TryMatchLiteral("declare namespace"))
+        if (!TryMatchLiteral("declare"))
+        {
+            _position = savedPosition;
+            return false;
+        }
+
+        if (TryMatchPhrase("namespace"))
         {
             // XQuery prolog ordering: namespace declarations precede option declarations.
             if (_seenOptionDecl)
@@ -152,7 +267,7 @@ public sealed class XQueryParser
             return true;
         }
 
-        if (TryMatchLiteral("declare default element namespace"))
+        if (TryMatchPhrase("default", "element", "namespace"))
         {
             if (_seenOptionDecl)
                 throw new ParseException("XPST0003: Namespace declarations must precede option declarations.", _position);
@@ -167,7 +282,7 @@ public sealed class XQueryParser
             return true;
         }
 
-        if (TryMatchLiteral("declare default function namespace"))
+        if (TryMatchPhrase("default", "function", "namespace"))
         {
             if (_seenOptionDecl)
                 throw new ParseException("XPST0003: Namespace declarations must precede option declarations.", _position);
@@ -183,7 +298,7 @@ public sealed class XQueryParser
             return true;
         }
 
-        if (TryMatchLiteral("declare default collation"))
+        if (TryMatchPhrase("default", "collation"))
         {
             SkipWhitespace();
             string uri = ReadStringLiteral();
@@ -199,17 +314,20 @@ public sealed class XQueryParser
             return true;
         }
 
-        if (TryMatchLiteral("declare base-uri"))
+        if (TryMatchPhrase("base-uri"))
         {
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
+            // XQST0032: the base URI must not be declared twice.
+            if (context.BaseUri is not null)
+                throw new ParseException("XQST0032: More than one base URI declaration.", _position);
             context = context.WithBaseUri(uri);
             return true;
         }
 
-        if (TryMatchLiteral("declare option"))
+        if (TryMatchPhrase("option"))
         {
             SkipWhitespace();
             var (prefix, local, eqNameUri) = ReadQName();
@@ -231,6 +349,48 @@ public sealed class XQueryParser
             return true;
         }
 
+        // A library module may declare the context item (type constraint and/or external);
+        // an initial or default value in a library module is XQST0113. The declaration is
+        // parsed and validated but its type constraint is not enforced at runtime.
+        if (_isLibraryModule && TryMatchPhrase("context", "item"))
+        {
+            SkipWhitespace();
+            if (TryMatchLiteral("as"))
+            {
+                SkipWhitespace();
+                ReadSequenceTypeText();
+            }
+            SkipWhitespace();
+            bool hasValue = false;
+            if (TryMatchLiteral("external"))
+            {
+                SkipWhitespace();
+                if (TryMatchLiteral(":="))
+                {
+                    hasValue = true;
+                    SkipWhitespace();
+                    ReadExpressionTo(';');
+                    SkipWhitespace();
+                }
+            }
+            else if (TryMatchLiteral(":="))
+            {
+                hasValue = true;
+                SkipWhitespace();
+                ReadExpressionTo(';');
+                SkipWhitespace();
+            }
+            ExpectChar(';');
+            // XQST0113: more than one context item declaration in one module.
+            if (_seenContextItemDecl)
+                throw new ParseException("XQST0113: More than one context item declaration in a module.", _position);
+            _seenContextItemDecl = true;
+            // XQST0113: an initial or default value is not allowed in a library module.
+            if (hasValue)
+                throw new ParseException("XQST0113: A context item declaration in a library module must not specify an initial or default value.", _position);
+            return true;
+        }
+
         // Not a recognized prolog declaration; stop consuming prolog items.
         _position = savedPosition;
         return false;
@@ -240,11 +400,18 @@ public sealed class XQueryParser
     {
         int savedPosition = _position;
         SkipWhitespace();
-        if (!TryMatchLiteral("declare function"))
+        if (!TryMatchLiteral("declare"))
         {
             _position = savedPosition;
             return false;
         }
+        var annotations = ReadAnnotations();
+        if (!TryMatchLiteral("function"))
+        {
+            _position = savedPosition;
+            return false;
+        }
+        bool isPrivate = ValidateAnnotations(context, annotations, isFunction: true);
 
         SkipWhitespace();
         var (prefix, local, eqNameUri) = ReadQName();
@@ -311,7 +478,7 @@ public sealed class XQueryParser
         // XPST0003: reserved function names cannot be declared as user functions.
         if (prefix is null && ReservedFunctionNames.Contains(local))
             throw new ParseException($"XPST0003: '{local}' is a reserved function name and cannot be declared.", _position);
-        context = context.WithUserFunction(new UserFunctionDeclaration(local, fnNs, parameters, returnType, body, _position));
+        context = context.WithUserFunction(new UserFunctionDeclaration(local, fnNs, parameters, returnType, body, _position, isPrivate));
         return true;
     }
 
@@ -319,11 +486,18 @@ public sealed class XQueryParser
     {
         int savedPosition = _position;
         SkipWhitespace();
-        if (!TryMatchLiteral("declare variable"))
+        if (!TryMatchLiteral("declare"))
         {
             _position = savedPosition;
             return false;
         }
+        var annotations = ReadAnnotations();
+        if (!TryMatchLiteral("variable"))
+        {
+            _position = savedPosition;
+            return false;
+        }
+        bool isPrivate = ValidateAnnotations(context, annotations, isFunction: false);
 
         SkipWhitespace();
         ExpectChar('$');
@@ -369,13 +543,180 @@ public sealed class XQueryParser
         // XQST0049: the same variable name must not be declared twice.
         if (context.UserVariables.Any(v => v.LocalName == local && v.NamespaceUri == varNs))
             throw new ParseException($"XQST0049: Variable '${local}' is declared more than once.", _position);
-        context = context.WithUserVariable(new UserVariableDeclaration(local, varNs, varType, varBody, isExternal, _position));
+        context = context.WithUserVariable(new UserVariableDeclaration(local, varNs, varType, varBody, isExternal, _position, isPrivate));
         return true;
     }
 
+    // Reads a sequence of annotations ('%' EQName ('(' Literal (',' Literal)* ')')?) after
+    // 'declare'. Annotation arguments must be literals (XPST0003 otherwise); the annotations
+    // themselves are validated only once the declaration kind is known (ValidateAnnotations).
+    private List<(string? Prefix, string Local, string? NamespaceUri, int Position)> ReadAnnotations()
+    {
+        var annotations = new List<(string? Prefix, string Local, string? NamespaceUri, int Position)>();
+        while (true)
+        {
+            SkipWhitespace();
+            if (_position >= _source.Length || _source[_position] != '%')
+                break;
+            _position++;
+            var (prefix, local, eqNameUri) = ReadQName();
+            annotations.Add((prefix, local, eqNameUri, _position));
+            SkipWhitespace();
+            if (_position < _source.Length && _source[_position] == '(')
+            {
+                _position++;
+                SkipWhitespace();
+                if (TryMatchChar(')'))
+                    continue;
+                while (true)
+                {
+                    SkipWhitespace();
+                    ReadAnnotationArgumentLiteral();
+                    SkipWhitespace();
+                    if (TryMatchChar(','))
+                        continue;
+                    ExpectChar(')');
+                    break;
+                }
+            }
+        }
+        return annotations;
+    }
+
+    // Annotation arguments are restricted to string and numeric literals.
+    private void ReadAnnotationArgumentLiteral()
+    {
+        if (_position >= _source.Length)
+            throw new ParseException("XPST0003: Expected a literal in annotation arguments.", _position);
+        char c = _source[_position];
+        if (c is '"' or '\'')
+        {
+            ReadStringLiteral();
+            return;
+        }
+        int start = _position;
+        while (_position < _source.Length && char.IsAsciiDigit(_source[_position]))
+            _position++;
+        if (_position < _source.Length && _source[_position] == '.')
+        {
+            _position++;
+            while (_position < _source.Length && char.IsAsciiDigit(_source[_position]))
+                _position++;
+        }
+        if (_position < _source.Length && _source[_position] is 'e' or 'E')
+        {
+            _position++;
+            if (_position < _source.Length && _source[_position] is '+' or '-')
+                _position++;
+            while (_position < _source.Length && char.IsAsciiDigit(_source[_position]))
+                _position++;
+        }
+        if (_position == start)
+            throw new ParseException("XPST0003: Annotation arguments must be literals.", start);
+    }
+
+    // Validates the annotations on a declaration and returns whether it is private:
+    //   - %public/%private (unprefixed or in the XQuery namespace) set visibility; more than
+    //     one visibility annotation on a single declaration is XQST0106 (function) or
+    //     XQST0116 (variable);
+    //   - annotations in a reserved namespace (fn, math, map, array, xs, xsi, xml, xmlns) or
+    //     unknown annotations in the XQuery namespace are XQST0045;
+    //   - annotations in any other (bound) namespace are ignored.
+    private bool ValidateAnnotations(
+        XQueryStaticContext context,
+        List<(string? Prefix, string Local, string? NamespaceUri, int Position)> annotations,
+        bool isFunction)
+    {
+        int visibilityCount = 0;
+        bool isPrivate = false;
+        foreach (var (prefix, local, eqNameUri, position) in annotations)
+        {
+            string? ns = eqNameUri
+                ?? (prefix is null
+                    ? null
+                    : context.Namespaces.TryGetValue(prefix, out var annotationNs)
+                        ? annotationNs
+                        : throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", position));
+            // XQST0045: annotations must not be in a reserved namespace.
+            if (ns is "http://www.w3.org/2005/xpath-functions"
+                or "http://www.w3.org/2005/xpath-functions/math"
+                or "http://www.w3.org/2005/xpath-functions/map"
+                or "http://www.w3.org/2005/xpath-functions/array"
+                or "http://www.w3.org/2001/XMLSchema"
+                or "http://www.w3.org/2001/XMLSchema-instance"
+                or "http://www.w3.org/XML/1998/namespace"
+                or "http://www.w3.org/2000/xmlns/")
+            {
+                throw new ParseException($"XQST0045: Annotation '%{local}' is in the reserved namespace '{ns}'.", position);
+            }
+            // Unprefixed annotation names are in the XQuery namespace, where only the
+            // reserved visibility annotations are defined; anything else is XQST0045.
+            if (ns is null or "http://www.w3.org/2012/xquery")
+            {
+                if (local is not ("public" or "private"))
+                    throw new ParseException($"XQST0045: Unknown annotation '%{local}' in the XQuery namespace.", position);
+                visibilityCount++;
+                isPrivate = local == "private";
+            }
+            // Annotations in other namespaces are implementation-defined and ignored.
+        }
+        if (visibilityCount > 1)
+        {
+            throw new ParseException(
+                isFunction
+                    ? "XQST0106: A function declaration must not contain more than one %public or %private annotation."
+                    : "XQST0116: A variable declaration must not contain more than one %public or %private annotation.",
+                _position);
+        }
+        return isPrivate;
+    }
+
+    // Module namespace URIs and location hints get whitespace normalization: leading and
+    // trailing whitespace is removed and internal whitespace runs collapse to a single space.
+    internal static string NormalizeModuleUri(string uri)
+    {
+        var trimmed = uri.Trim();
+        var sb = new StringBuilder(trimmed.Length);
+        bool inWhitespaceRun = false;
+        foreach (char c in trimmed)
+        {
+            if (c is ' ' or '\t' or '\r' or '\n')
+            {
+                inWhitespaceRun = true;
+                continue;
+            }
+            if (inWhitespaceRun)
+            {
+                sb.Append(' ');
+                inWhitespaceRun = false;
+            }
+            sb.Append(c);
+        }
+        return sb.ToString();
+    }
+
     private bool _seenOptionDecl;
+    private bool _seenContextItemDecl;
+    private bool _isLibraryModule;
     private bool _xml11LineEndings;
     private readonly List<(string Prefix, string Local, string Value, int Position)> _pendingOptions = new();
+
+    // Matches a sequence of prolog keywords, each separated by optional whitespace/comments.
+    // On failure the position is restored to the phrase start so the next alternative
+    // phrase can be attempted.
+    private bool TryMatchPhrase(params string[] words)
+    {
+        int start = _position;
+        foreach (var word in words)
+        {
+            if (!TryMatchLiteral(word))
+            {
+                _position = start;
+                return false;
+            }
+        }
+        return true;
+    }
 
     // XQST0109/XQST0110 validation for output declarations in the serialization namespace.
     private void ValidateOutputOption(XQueryStaticContext context, string local, string optionNs, int position)
@@ -882,13 +1223,20 @@ public sealed class XQueryParseResult
     public XQueryStaticContext StaticContext { get; }
 
     /// <summary>
-    /// The query body expression AST.
+    /// The query body expression AST (the empty sequence for a library module).
     /// </summary>
     public XPathAstNode Body { get; }
 
-    internal XQueryParseResult(XQueryStaticContext staticContext, XPathAstNode body)
+    /// <summary>
+    /// True when the source was a library module (<c>module namespace ...;</c>) rather
+    /// than a main module.
+    /// </summary>
+    public bool IsLibraryModule { get; }
+
+    internal XQueryParseResult(XQueryStaticContext staticContext, XPathAstNode body, bool isLibraryModule = false)
     {
         StaticContext = staticContext;
         Body = body;
+        IsLibraryModule = isLibraryModule;
     }
 }

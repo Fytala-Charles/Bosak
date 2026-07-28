@@ -31,6 +31,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.13  | 26-07-2026     | Allow variable/function prolog declarations (removed from the unsupported-prolog gate)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.14  | 27-07-2026     | Admit module import + annotations; comment-tolerant prolog gate; register test-case modules with XQueryCompiler |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -118,7 +120,16 @@ internal sealed class TestExecutor
         {
             if (routeXQuery)
             {
-                var executable = new XQueryCompiler().Compile(expr, xml11LineEndings);
+                var compiler = new XQueryCompiler();
+                foreach (var module in testCase.Modules)
+                {
+                    // Unreadable module files are simply not registered: an import that
+                    // needs them then fails with XQST0059 (e.g. module-URIs-4).
+                    if (!File.Exists(module.FilePath))
+                        continue;
+                    compiler.WithModule(module.Uri, File.ReadAllText(module.FilePath), module.Location);
+                }
+                var executable = compiler.Compile(expr, xml11LineEndings);
                 result = executable.Evaluate(xqContext!);
             }
             else
@@ -170,19 +181,11 @@ internal sealed class TestExecutor
         if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
             return false;
 
-        if (UnsupportedPrologRegex.IsMatch(stripped))
+        // The prolog gate matches a comment-tolerant form in which comments collapse to a
+        // single space, so keyword phrases stay detectable ('declare(::)default(::)order'
+        // must stay gated even though the supported prolog forms handle comments inline).
+        if (UnsupportedPrologRegex.IsMatch(StripLiteralsNormalizeComments(expr)))
             return false;
-
-        // The XQuery prolog parser cannot yet handle (: :) comments inside declarations.
-        if ((stripped.StartsWith("declare", StringComparison.OrdinalIgnoreCase) ||
-             stripped.StartsWith("xquery", StringComparison.OrdinalIgnoreCase) ||
-             stripped.StartsWith("import", StringComparison.OrdinalIgnoreCase)))
-        {
-            int semicolon = expr.IndexOf(';');
-            var prologPart = semicolon >= 0 ? expr[..semicolon] : expr;
-            if (prologPart.Contains("(:"))
-                return false;
-        }
 
         return true;
     }
@@ -262,18 +265,64 @@ internal sealed class TestExecutor
     private static readonly Regex UnsupportedXQueryConstructRegex = new(
         @"\btry\s*\{" +
         @"|\bunordered\s*\{|\bordered\s*\{|\bvalidate\s" +
-        @"|\bdeclare\s+%" +                              // annotated declarations
         @"|\(#\s*[A-Za-z_]" +                          // pragma extension expressions (# ... #)
         @"|``\[" +                                     // string constructors ``[ ... ]``
         RegexOptions.Compiled);
 
     // Prolog forms the XQuery parser does NOT support (namespace, default element/function
-    // namespace, default collation, base-uri, option, variable, function, and version
-    // declarations are supported).
+    // namespace, default collation, base-uri, option, variable, function, module import,
+    // and version declarations are supported).
     private static readonly Regex UnsupportedPrologRegex = new(
         @"\bdeclare\s+(boundary-space|default\s+order|default\s+decimal-format|ordering|copy-namespaces|context|decimal-format|construction)\b" +
-        @"|\bimport\s+(module|schema)\b",
+        @"|\bimport\s+schema\b",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    /// <summary>
+    /// Removes string literals (with doubled-quote escapes) like
+    /// <see cref="StripLiteralsAndComments"/>, but replaces every XQuery comment with a
+    /// single space so keyword phrases separated by comments remain visible to regex gates.
+    /// </summary>
+    private static string StripLiteralsNormalizeComments(string expr)
+    {
+        var sb = new StringBuilder(expr.Length);
+        int i = 0;
+        while (i < expr.Length)
+        {
+            char c = expr[i];
+            if (c == '\'' || c == '"')
+            {
+                char quote = c;
+                i++;
+                while (i < expr.Length)
+                {
+                    if (expr[i] == quote)
+                    {
+                        if (i + 1 < expr.Length && expr[i + 1] == quote) { i += 2; continue; }
+                        i++;
+                        break;
+                    }
+                    i++;
+                }
+                continue;
+            }
+            if (c == '(' && i + 1 < expr.Length && expr[i + 1] == ':')
+            {
+                int depth = 1;
+                i += 2;
+                while (i < expr.Length && depth > 0)
+                {
+                    if (expr[i] == '(' && i + 1 < expr.Length && expr[i + 1] == ':') { depth++; i += 2; }
+                    else if (expr[i] == ':' && i + 1 < expr.Length && expr[i + 1] == ')') { depth--; i += 2; }
+                    else i++;
+                }
+                sb.Append(' ');
+                continue;
+            }
+            sb.Append(c);
+            i++;
+        }
+        return sb.ToString();
+    }
 
     /// <summary>
     /// Removes string literals (with doubled-quote escapes) and XQuery comments

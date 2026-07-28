@@ -16,6 +16,8 @@
 //                      | Charles Korthout | 0.4   | 25-07-2026     | Add OwnDependencies (case-level spec deps) for XPath-vs-XQuery pipeline routing          |
 //                      | Charles Korthout | 0.5   | 25-07-2026     | OwnDependencies for XPath-only pipeline routing                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 27-07-2026     | Parse <module> catalog entries (uri, location, resolved file path)                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -31,8 +33,9 @@ internal sealed class TestCase
     public IReadOnlyList<Dependency> OwnDependencies { get; }
     public XElement ResultElement { get; }
     public string BaseDirectory { get; }
+    public IReadOnlyList<TestCaseModule> Modules { get; }
 
-    private TestCase(string name, string description, string expression, List<Dependency> dependencies, IReadOnlyList<Dependency> ownDependencies, XElement resultElement, string baseDirectory)
+    private TestCase(string name, string description, string expression, List<Dependency> dependencies, IReadOnlyList<Dependency> ownDependencies, XElement resultElement, string baseDirectory, IReadOnlyList<TestCaseModule> modules)
     {
         Name = name;
         Description = description;
@@ -41,6 +44,7 @@ internal sealed class TestCase
         OwnDependencies = ownDependencies;
         ResultElement = resultElement;
         BaseDirectory = baseDirectory;
+        Modules = modules;
     }
 
     public static TestCase FromElement(XElement element, XNamespace ns, IEnumerable<Dependency> inheritedDependencies, string baseDirectory)
@@ -58,11 +62,26 @@ internal sealed class TestCase
             ownDependencies.Add(dep);
         }
 
+        // Library modules referenced by the query's module imports; the file path is
+        // relative to the test-set document (catalog-schema xsd for <module>).
+        var modules = new List<TestCaseModule>();
+        foreach (var moduleElem in element.Elements(ns + "module"))
+        {
+            string uri = (string?)moduleElem.Attribute("uri") ?? "";
+            string? location = (string?)moduleElem.Attribute("location");
+            string file = (string?)moduleElem.Attribute("file") ?? "";
+            string resolvedPath = Path.IsPathRooted(file) ? file : Path.Combine(baseDirectory, file);
+            modules.Add(new TestCaseModule(uri, location, resolvedPath));
+        }
+
         var resultElem = element.Element(ns + "result") ?? new XElement(ns + "result");
 
-        return new TestCase(name, description, expression, dependencies, ownDependencies, resultElem, baseDirectory);
+        return new TestCase(name, description, expression, dependencies, ownDependencies, resultElem, baseDirectory, modules);
     }
 }
+
+/// <summary>A QT3 <c>&lt;module uri="..." location="..." file="..."/&gt;</c> entry with the file path resolved.</summary>
+internal sealed record TestCaseModule(string Uri, string? Location, string FilePath);
 
 internal sealed class Dependency
 {

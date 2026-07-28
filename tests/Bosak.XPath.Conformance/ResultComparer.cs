@@ -38,6 +38,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 25-07-2026     | serialization-matches/assert-serialization(-error) assertions with flags and not        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.0   | 27-07-2026     | assert expressions also evaluate with the query result as the context item              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -685,6 +687,10 @@ internal static class ResultComparer
         {
             var ctx = NewAssertContext();
             ctx = ctx.WithVariable("result", actual);
+            // FOTS assertions may also address the result through the context item
+            // (absolute paths such as /result/impl in prod/ModuleImport).
+            if (!actual.IsUndefined)
+                ctx = ctx.WithFocus(actual, 1, 1);
             var result = XPath31Expression.Compile(assertExpr).Evaluate(ctx);
             // FOTS assert expressions are truthy: the effective boolean value decides.
             if (EffectiveBooleanValue(result))

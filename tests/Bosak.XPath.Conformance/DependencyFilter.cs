@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 25-07-2026     | serialization feature supported; XML 1.1 xml-version admitted                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 27-07-2026     | moduleImport feature supported (library modules implemented)                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -40,7 +42,6 @@ internal sealed class DependencyFilter
         "static-typing",
         "staticTyping",
         "typedData",
-        "moduleImport",
         "xpath-1.0-compatibility",
         "advanced-uca-fallback",
         "olson-timezone",

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-26 (XQuery 3.1 Phase 4: **user-defined functions and variables** — library modules slice 1; QT3 now **28,735 passed / 0 failed** (90.30%); unit tests **1,491/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-27 (XQuery 3.1 Phase 4: **library modules** — slice 2; QT3 now **28,931 passed / 0 failed** (90.92%); unit tests **1,509/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -155,6 +155,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-048 | *(internal)* | XQuery 3.1 Phase 3 — `switch` / `typeswitch` expressions | Required for full XQuery expressions: `switch` value matching and `typeswitch` type matching with case variables, default clause, and sequence-type unions | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-049 | *(internal)* | XQuery 3.1 Phase 4 — output declarations + serialization round-out | Required for XQuery serialization: `declare option output:*` prolog, static serialization parameters, parameter-document, and full Serialization 3.1 method/parameter fidelity | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-050 | *(internal)* | XQuery 3.1 Phase 4 — user-defined functions and variables (library modules slice 1) | Required for XQuery modules: `declare function` / `declare variable` prolog with static validations, lazy globals, function-item coercion, and function-type syntax | **Implemented** | Phase 4 | Charles Korthout | 2026-07-26 |
+| REQ-051 | *(internal)* | XQuery 3.1 Phase 4 — library modules (slice 2) | Required for XQuery modules: `module namespace` / `import module` with location hints, transitive import graph, %public/%private visibility, and per-module static contexts | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2294,13 +2295,65 @@ Parse `declare function` / `declare variable` in the prolog with the full static
 
 ---
 
+### REQ-051: XQuery 3.1 Phase 4 — library modules (slice 2)
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-27  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+With user-defined functions and variables in place (REQ-050), the remaining structural feature of the XQuery module system was the library module itself: `module namespace` declarations and `import module` with optional location hints. Without it, 256 `prod/ModuleImport` QT3 tests plus every module-dependent test in other sets (`prod/ContextItemDecl`, `misc/HigherOrderFunctions`, `fn/id`, `app/Walmsley`, …) stayed skipped, and consumers could not organize queries into reusable modules. The semantics go well beyond text inclusion: each module has its own static context (namespaces, base URI, collation), imports are not transitive, several modules may share one target namespace, import cycles are legal, and `%private` declarations must be invisible across module boundaries.
+
+**Proposed Solution:**  
+Parse library module declarations and module imports in the prolog with the full static-validation matrix; register library module sources on the compiler (`XQueryCompiler.WithModule`) and resolve imports to the transitive closure of the module graph, merging same-namespace modules; compile every module's declarations with its own static context and execute its bodies with that module's runtime context applied; enforce public/private visibility statically (XPST0017/XPST0008 across module boundaries) without disturbing the dynamically scoped runtime; admit `<module>` catalog entries in the QT3 harness.
+
+**Acceptance Criteria:**
+- [x] `module namespace prefix = "uri";` library modules (no query body, XPST0003 when evaluated as a query; body in a library module is XPST0003) and `import module (namespace p =)? "uri" (at "loc", ...)?;` in main and library modules; module namespace URIs and `at` hints are whitespace-normalized (module-URIs-1..25).
+- [x] Static validations: XQST0047 (duplicate import), XQST0088 (empty target namespace), XQST0059 (not found / target-namespace mismatch), XQST0048 (declaration outside target namespace), XQST0070 (xml/xmlns import prefix), XQST0108 (output declaration in a library module), XQST0113 (context-item initial/default value or duplicate in a library module), XQST0032 (duplicate base-uri), XQST0034/XQST0049 (same-namespace merge collisions and own-vs-imported collisions), self-import is legal (XQST0093a).
+- [x] `%public`/`%private` annotations: visibility enforced statically for calls, named function references, and variable references (XPST0017/XPST0008); conflicting/duplicate visibility annotations are XQST0106/XQST0116; reserved-namespace or unknown XQuery-namespace annotations are XQST0045; annotation arguments must be literals (XPST0003); unknown annotations in other namespaces are ignored; `xsi` predeclared.
+- [x] Module graph: transitive closure with incremental per-(namespace, location-hint) loading (modules-30..33); import cycles terminate (modules-circular, errata8); all public declarations of every loaded module in an imported namespace are visible regardless of load route (XQ 3.1 §4.12.2, modules-31).
+- [x] Per-module contexts: library module bodies compile with the module's own static context and execute with its namespaces, base URI, default element namespace, and default collation applied (cbcl-module-002); the importing module's context is restored afterwards.
+- [x] Prolog parser tokenization: comments/whitespace between prolog keywords (`declare(::)base-uri`, `import(::)module`) parse correctly (K-*Prolog comment variants); duplicate `declare base-uri` is XQST0032.
+- [x] Harness: `<module uri location? file>` catalog entries parsed and registered (unreadable files simply never satisfy an import → XQST0059, module-URIs-4); `moduleImport` feature admitted; inline `<context-item select="..."/>` applied as initial focus; `<assert>` comparisons bind the query result as the context item; comment-tolerant unsupported-prolog gate.
+- [x] QT3: prod/ModuleImport 106/0/22 (remaining skips XQ10-only or schema-import-gated); full suite **28,931 passed / 0 failed / 2,890 skipped (90.92%)**; 499 reasoned gaps (12 new: closure context-capture in module function items (xqhof16/18), map-as-function coercion (UseCaseR31-012), copy.xq `fn:id` FODC0001 semantics (fn-id-4, fn-idref-4, K2-SeqIDFunc-4..7), `fn:path` over copied nodes (path014), context-item type enforcement (contextDecl-054), function-test annotation assertions (annotation-assertion-20)).
+- [x] Unit tests: 18 new module/annotation tests; full suite **1,509/0**.
+
+**Implementation Notes:**
+- Parser: `XQueryParser` parses the module declaration before the prolog (binding its prefix), `import module` as a prolog declaration, and annotations on function/variable declarations; prolog phrase matching is token-based (comment-tolerant); library-module-only `declare context item` is parsed with XQST0113.
+- Static context: `ModuleImport` records, `ImportedModules`, `ModuleNamespaceUri`, and `IsPrivate` flags on user declarations; `xsi` predeclared.
+- Compiler: `XQueryCompiler.WithModule(uri, source, location?)` builds the catalog; `LoadModuleNamespace` resolves imports incrementally by (namespace, hints) with cycle tolerance and merge-collision checks; `ModuleVisibilityValidator` statically checks module-namespace references against per-module visibility sets (own declarations plus publics of direct imports) with lexical bound-variable tracking.
+- Runtime: `CompiledUserFunction`/`CompiledUserVariable` carry the declaring module's runtime context (namespaces, base URI, default element namespace, default collation); invocation and lazy global initializers apply and restore it — no VM changes were required.
+- Harness: `TestCaseModule` entries resolve files against the test-set directory; `TestExecutor` registers sources per test; the `import\s+module` and `declare\s+%` gates removed; `ResultComparer` binds the context item for `<assert>`.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| XQuery | Modified | Parser (module declaration, imports, annotations, tokenized prolog), static context (imports, privacy), compiler (module graph, visibility), executable (per-module runtime context). |
+| Runtime | None | No VM changes; modules reuse `FunctionSignature` registration and the lazy variable resolver. |
+| Conformance | Modified | `<module>` catalog support, inline `<context-item>`, context-item assert binding, comment-tolerant gates; `KnownXQueryGaps` regenerated (499 entries). |
+| XSLT | None | XSLT baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-27 | Kimi | Per-module runtime context wrapper instead of compile-time namespace rewriting | Constructor prefixes and variable prefixes resolve at runtime in this engine; applying the declaring module's namespaces/base URI around body execution covers both uniformly (cbcl-module-002) with zero VM churn. |
+| 2026-07-27 | Kimi | Static visibility checks limited to module namespaces | The engine is dynamically scoped; checking only references into loaded module target namespaces enforces %private and import transitivity rules without false positives on local/dynamic bindings (bound-variable tracking covers FLWOR/inline-function shadowing). |
+| 2026-07-27 | Kimi | Incremental same-namespace loading keyed by (namespace, location hints) | XQ 3.1 §4.12.2 requires all public declarations of every loaded module in an imported namespace to be visible regardless of participation route (modules-31); a namespace already in the graph is extended when a later import names additional sources. |
+| 2026-07-27 | Kimi | Unreadable module files are not registered rather than failing the test | The QT3 catalog itself contains a misspelled file reference (module-URIs-4); the import then raises the expected XQST0059. |
+| 2026-07-27 | Kimi | Closure context-capture (xqhof16/18), map-as-function coercion (UseCaseR31-012), copy.xq `fn:id` semantics, context-item type enforcement, and function-test annotation assertions recorded as gaps | Engine semantics beyond the module-system slice (function items capturing static context, map coercion in function conversion, document-less `fn:id` roots, XQ 3.1 §4.14 type checks, annotation assertions in sequence types); recorded as reasoned skips. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-050 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done; QT3 wired (28,735/0, 90.30%). Module namespace/import (Phase 4 remainder) follows. |
+| 1 | REQ-040 … REQ-051 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done; QT3 wired (28,931/0, 90.92%). `try`/`catch` named error codes, string constructors, `unordered`/`ordered` follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

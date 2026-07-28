@@ -1,5 +1,42 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-07-27
+**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xquery): library modules — Phase 4 modules slice 2)
+**Current focus:** **XQuery 3.1 Phase 4 — library modules slice 2: `module namespace` / `import module`**: library module declarations, module imports with location hints, the transitive import graph with same-namespace merging and cycle tolerance, `%public`/`%private` declaration annotations with static visibility enforcement, and per-module static contexts at compile time and runtime. QT3 went from **28,735 passed / 0 failed / 3,086 skipped (90.30%)** to **28,931 passed / 0 failed / 2,890 skipped (90.92%)** (+196 passing). Full `dotnet test Bosak.sln` passes: **1,509 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (library modules)
+
+1. **Module declaration & import parsing** — `module namespace prefix = "uri";` (library modules; no query body — a library module evaluated as a query is XPST0003, K2-ModuleProlog-1) and `import module (namespace p =)? "uri" (at "loc", ...)?;` in both module kinds. Module namespace URIs and `at` hints get whitespace normalization (trim + collapse, module-URIs-1..25). Validations: XQST0047 (duplicate import), XQST0088 (empty target namespace), XQST0070 (xml/xmlns import prefix), XQST0048 (declaration outside the target namespace), XQST0108 (output declaration in a library module), XQST0113 (context-item initial/default value or duplicate in a library module), XQST0032 (duplicate base-uri). Prolog phrase matching is now token-based, so comments/whitespace between keywords parse (`declare(::)base-uri`, `import(::)module`; K-*Prolog comment variants).
+2. **Annotations** — `%name` / `%name(literals)` on `declare function`/`declare variable`: `%public`/`%private` (unprefixed or XQuery-namespace) set visibility; more than one visibility annotation is XQST0106 (function)/XQST0116 (variable); annotations in reserved namespaces or unknown XQuery-namespace annotations are XQST0045; arguments must be literals (XPST0003); unknown annotations in other bound namespaces are ignored; `xsi` is now predeclared.
+3. **Module graph (`XQueryCompiler`)** — `WithModule(uri, source, location?)` registers library module sources; imports load the transitive closure keyed by target namespace with incremental per-(namespace, location-hint) extension (modules-31/32/33: all public declarations of every loaded module in an imported namespace are visible regardless of participation route, XQ 3.1 §4.12.2); import cycles terminate (modules-circular, errata8, XQST0093a self-import); same-namespace modules merge with XQST0034/XQST0049 collision checks (incl. own-vs-imported); unresolved imports are XQST0059.
+4. **Static visibility (`ModuleVisibilityValidator`)** — function calls, named function references, and variable references into a loaded module's target namespace are checked against the referencing module's visible set (own declarations + publics of direct imports): XPST0017 for private/invisible functions (incl. `defs:f#0`), XPST0008 for variables (cbcl-module-003: imports are not transitive). Lexical bound-variable tracking (FLWOR clauses, window conditions, typeswitch cases, inline function params, enclosing function params) prevents false positives; everything outside module namespaces stays dynamically scoped.
+5. **Per-module contexts at runtime** — each library module's declarations compile with its own static context; `CompiledUserFunction`/`CompiledUserVariable` carry the module's namespaces/base-URI/default-element-namespace/default-collation, applied and restored around function invocation and lazy global initializers (cbcl-module-002: the module's base URI wins over the importer's). No VM changes were needed.
+6. **Harness** — `<module uri location? file>` catalog entries parsed into `TestCaseModule` (files resolved against the test-set directory; unreadable files simply never satisfy an import → XQST0059, module-URIs-4); `moduleImport` feature admitted; `import\s+module` and `declare\s+%` gates removed and the unsupported-prolog gate made comment-tolerant; inline `<context-item select="..."/>` applied as the initial focus; `<assert>` comparisons bind the query result as the context item (modules-31/32/33 absolute-path asserts).
+7. **Gaps recorded (499 reasoned skips, +12)** — closure context-capture in module function items (xqhof16/18 — `fn:static-base-uri#0` returned from a module must see the module's base URI), map-as-function coercion in function conversion (UseCaseR31-012), copy.xq `fn:id` FODC0001 document-root semantics (fn-id-4, fn-idref-4, K2-SeqIDFunc-4..7), `fn:path` over copied parentless nodes (path014), context-item type enforcement (contextDecl-054), function-test annotation assertions (annotation-assertion-20), plus the previously-recorded 487.
+
+## Files Changed (this session)
+
+- `src/Bosak.XQuery/{Parser/XQueryParser,Compiler/XQueryStaticContext,Compiler/ModuleVisibilityValidator,Api/XQueryCompiler,Api/XQueryExecutable}.cs` (ModuleVisibilityValidator is new)
+- `tests/Bosak.XPath.Conformance/{TestCase,TestExecutor,TestEnvironment,ResultComparer,DependencyFilter,ConformanceRunner}.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+18 module/annotation tests)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (499 recorded skips)
+
+Largest clusters: `prod/StringConstructor` (35 — string constructors `` `[...]` `` not implemented), `prod/Annotation` (24 — inline-function annotations and annotation assertions in function tests), `prod/NameTest` (22), `prod/VarDecl.external` (17 — external variable semantics), `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/NamespaceDecl` (11), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,300 skips are `try/catch` (only `catch *` exists), `unordered`/`ordered`/`validate`, schema awareness, `fn:load-xquery-module`, and `sudoku` (too slow).
+
+**XSLT note:** unchanged from the previous handover — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **`try`/`catch` completion** (named error codes in catch lists; the `TryCatch` opcode exists with `catch *` only) — the largest remaining skip driver.
+2. **String constructors** (`` `[...]` ``; 35-test cluster, the largest single gap set) or **`unordered`/`ordered`** (trivial no-op semantics in a non-ordered engine).
+3. **prod/NameTest cluster** (22 tests) or **inline-function annotations** (prod/Annotation remainder).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-07-26
 **Commit:** `f7bcda1` (feat(xquery): user-defined functions and variables — Phase 4 modules slice 1)
 **Current focus:** **XQuery 3.1 Phase 4 — library modules slice 1: `declare function` / `declare variable`**: prolog declarations with the full static-validation matrix, lazy globals with initial-focus semantics, absent-focus function bodies, per-call variable-scope snapshots, function-item coercion, and function-type syntax in both parsers. QT3 went from **26,299 passed / 0 failed / 5,522 skipped (82.64%)** to **28,735 passed / 0 failed / 3,086 skipped (90.30%)** (+2,436 passing; ~2,900 previously prolog-gated tests now run). Full `dotnet test Bosak.sln` passes: **1,491 unit tests / 0 failed**; XSLT baseline unchanged.

@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 26-07-2026     | UserFunctionDeclaration/UserVariableDeclaration records with storage, cloning, predeclared 'local' prefix |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 27-07-2026     | ModuleImport record, ImportedModules/ModuleNamespaceUri state, IsPrivate declaration flags |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -30,7 +32,8 @@ public sealed record UserFunctionDeclaration(
     IReadOnlyList<UserFunctionParameter> Parameters,
     string? ReturnType,
     XPathAstNode Body,
-    int Position);
+    int Position,
+    bool IsPrivate = false);
 
 /// <summary>One parameter of a user function declaration: a name and an optional sequence type.</summary>
 public sealed record UserFunctionParameter(string Name, string? TypeName);
@@ -42,6 +45,14 @@ public sealed record UserVariableDeclaration(
     string? TypeName,
     XPathAstNode? Body,
     bool IsExternal,
+    int Position,
+    bool IsPrivate = false);
+
+/// <summary>A module import declaration (<c>import module namespace p = "uri" at "loc", ...;</c>).</summary>
+public sealed record ModuleImport(
+    string? Prefix,
+    string NamespaceUri,
+    IReadOnlyList<string> LocationHints,
     int Position);
 
 /// <summary>
@@ -57,6 +68,7 @@ public sealed class XQueryStaticContext
     private readonly List<(string LocalName, string NamespaceUri, string Value)> _options;
     private readonly List<UserFunctionDeclaration> _userFunctions;
     private readonly List<UserVariableDeclaration> _userVariables;
+    private readonly List<ModuleImport> _importedModules;
 
     /// <summary>
     /// Creates a static context with the standard XQuery namespace prefixes pre-bound.
@@ -67,6 +79,7 @@ public sealed class XQueryStaticContext
         {
             ["xml"] = "http://www.w3.org/XML/1998/namespace",
             ["xs"] = "http://www.w3.org/2001/XMLSchema",
+            ["xsi"] = "http://www.w3.org/2001/XMLSchema-instance",
             ["fn"] = "http://www.w3.org/2005/xpath-functions",
             ["math"] = "http://www.w3.org/2005/xpath-functions/math",
             ["map"] = "http://www.w3.org/2005/xpath-functions/map",
@@ -79,6 +92,7 @@ public sealed class XQueryStaticContext
         _options = new List<(string, string, string)>();
         _userFunctions = new List<UserFunctionDeclaration>();
         _userVariables = new List<UserVariableDeclaration>();
+        _importedModules = new List<ModuleImport>();
     }
 
     private XQueryStaticContext(
@@ -88,10 +102,12 @@ public sealed class XQueryStaticContext
         List<(string LocalName, string NamespaceUri, string Value)> options,
         List<UserFunctionDeclaration> userFunctions,
         List<UserVariableDeclaration> userVariables,
+        List<ModuleImport> importedModules,
         string? defaultElementNamespace,
         string? defaultFunctionNamespace,
         string? defaultCollation,
-        string? baseUri)
+        string? baseUri,
+        string? moduleNamespaceUri)
     {
         _namespaces = namespaces;
         _variables = variables;
@@ -99,10 +115,12 @@ public sealed class XQueryStaticContext
         _options = options;
         _userFunctions = userFunctions;
         _userVariables = userVariables;
+        _importedModules = importedModules;
         DefaultElementNamespace = defaultElementNamespace;
         DefaultFunctionNamespace = defaultFunctionNamespace;
         DefaultCollation = defaultCollation;
         BaseUri = baseUri;
+        ModuleNamespaceUri = moduleNamespaceUri;
     }
 
     /// <summary>
@@ -125,6 +143,12 @@ public sealed class XQueryStaticContext
     /// The static base URI for resolving relative URIs in the query.
     /// </summary>
     public string? BaseUri { get; private init; }
+
+    /// <summary>
+    /// The target namespace of a library module (<c>module namespace p = "uri";</c>);
+    /// null for the main module.
+    /// </summary>
+    public string? ModuleNamespaceUri { get; private init; }
 
     /// <summary>
     /// Returns a read-only view of the namespace bindings (prefix → URI).
@@ -153,6 +177,9 @@ public sealed class XQueryStaticContext
     /// <summary>Returns a read-only view of the user variable declarations.</summary>
     public IReadOnlyList<UserVariableDeclaration> UserVariables => _userVariables;
 
+    /// <summary>Returns a read-only view of the module import declarations in prolog order.</summary>
+    public IReadOnlyList<ModuleImport> ImportedModules => _importedModules;
+
     /// <summary>
     /// Creates a new context with an option declaration appended.
     /// </summary>
@@ -175,6 +202,17 @@ public sealed class XQueryStaticContext
         var copy = new List<UserVariableDeclaration>(_userVariables) { declaration };
         return CloneWith(userVariables: copy);
     }
+
+    /// <summary>Creates a new context with a module import declaration appended.</summary>
+    public XQueryStaticContext WithImportedModule(ModuleImport import)
+    {
+        var copy = new List<ModuleImport>(_importedModules) { import };
+        return CloneWith(importedModules: copy);
+    }
+
+    /// <summary>Creates a new context with the library module target namespace set.</summary>
+    public XQueryStaticContext WithModuleNamespace(string? namespaceUri)
+        => CloneWith(moduleNamespaceUri: namespaceUri);
 
     /// <summary>
     /// Creates a new context with the specified namespace binding added or replaced.
@@ -234,10 +272,12 @@ public sealed class XQueryStaticContext
         List<(string LocalName, string NamespaceUri, string Value)>? options = null,
         List<UserFunctionDeclaration>? userFunctions = null,
         List<UserVariableDeclaration>? userVariables = null,
+        List<ModuleImport>? importedModules = null,
         string? defaultElementNamespace = null,
         string? defaultFunctionNamespace = null,
         string? defaultCollation = null,
-        string? baseUri = null)
+        string? baseUri = null,
+        string? moduleNamespaceUri = null)
     {
         return new XQueryStaticContext(
             namespaces ?? _namespaces,
@@ -246,9 +286,11 @@ public sealed class XQueryStaticContext
             options ?? _options,
             userFunctions ?? _userFunctions,
             userVariables ?? _userVariables,
+            importedModules ?? _importedModules,
             defaultElementNamespace ?? DefaultElementNamespace,
             defaultFunctionNamespace ?? DefaultFunctionNamespace,
             defaultCollation ?? DefaultCollation,
-            baseUri ?? BaseUri);
+            baseUri ?? BaseUri,
+            moduleNamespaceUri ?? ModuleNamespaceUri);
     }
 }

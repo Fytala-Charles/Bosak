@@ -1312,6 +1312,248 @@ public class PlaceholderTests
         Assert.Equal(105L, result.IntegerValue);
     }
 
+    [Fact]
+    public void XQuery_ImportModule_SimpleCall()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/greet", """
+                module namespace g = "http://example.com/greet";
+                declare function g:hello($name as xs:string) as xs:string { "hello " || $name };
+                """);
+        var executable = compiler.Compile(
+            "import module namespace g = \"http://example.com/greet\"; g:hello(\"world\")");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("hello world", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_PublicVariableVisible()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/const", """
+                module namespace c = "http://example.com/const";
+                declare variable $c:answer := 42;
+                """);
+        var executable = compiler.Compile(
+            "import module namespace c = \"http://example.com/const\"; $c:answer + 1");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(43L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_TwoModulesShareNamespace()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/impl", """
+                module namespace impl = "http://example.com/impl";
+                declare function impl:f1($a as xs:string) as xs:string { $a };
+                """, "http://example.com/impl1.xqm")
+            .WithModule("http://example.com/impl", """
+                module namespace impl = "http://example.com/impl";
+                declare function impl:f1($a as xs:string, $b as xs:string) as xs:string { $a || $b };
+                """, "http://example.com/impl2.xqm");
+        var executable = compiler.Compile(
+            "import module namespace impl = \"http://example.com/impl\" at \"http://example.com/impl1.xqm\", \"http://example.com/impl2.xqm\"; impl:f1(\"a\") || impl:f1(\"b\", \"c\")");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("abc", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_CircularImportsAllowed()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/a", """
+                module namespace a = "http://example.com/a";
+                import module namespace b = "http://example.com/b";
+                declare function a:ok() as xs:string { b:ok() };
+                """)
+            .WithModule("http://example.com/b", """
+                module namespace b = "http://example.com/b";
+                import module namespace a = "http://example.com/a";
+                declare function b:ok() as xs:string { "ok" };
+                """);
+        var executable = compiler.Compile(
+            "import module namespace a = \"http://example.com/a\"; a:ok()");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("ok", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_LibraryBaseUriAppliesInsideModule()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/lib", """
+                module namespace lib = "http://example.com/lib";
+                declare base-uri "http://www.example.org/correct/";
+                declare variable $lib:node := <a><b/></a>;
+                """);
+        var executable = compiler.Compile(
+            "import module namespace lib = \"http://example.com/lib\"; declare base-uri \"http://www.example.org/wrong/\"; base-uri($lib:node)");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal("http://www.example.org/correct/", result.ToString());
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_NamespaceUriWhitespaceNormalized()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://www.w3.org/Test Modules/test", """
+                module namespace test = "http://www.w3.org/Test   Modules/test";
+                declare function test:ok() as xs:string { "ok" };
+                """);
+        var executable = compiler.Compile(
+            "import module namespace test=\"  http://www.w3.org/Test Modules/test \"; test:ok()");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("ok", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_LibraryModule_AsQuery_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("module namespace m = \"http://example.com/m\"; \"expr\""));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_DuplicateImport_ThrowsXQST0047()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile(
+                "import module namespace a = \"http://example.com/m\"; import module namespace b = \"http://example.com/m\"; 1"));
+        Assert.Contains("XQST0047", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_EmptyNamespace_ThrowsXQST0088()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("import module namespace a = \"\"; 1"));
+        Assert.Contains("XQST0088", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_XmlPrefix_ThrowsXQST0070()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("import module namespace xml = \"http://example.com/m\"; 1"));
+        Assert.Contains("XQST0070", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_NotFound_ThrowsXQST0059()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("import module namespace m = \"http://example.com/missing\"; 1"));
+        Assert.Contains("XQST0059", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_WrongTargetNamespace_ThrowsXQST0059()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/registered", """
+                module namespace m = "http://example.com/actual";
+                declare function m:ok() as xs:string { "ok" };
+                """);
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("import module namespace m = \"http://example.com/registered\"; m:ok()"));
+        Assert.Contains("XQST0059", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_LibraryModule_DeclarationOutsideTargetNamespace_ThrowsXQST0048()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/lib", """
+                module namespace lib = "http://example.com/lib";
+                declare namespace other = "http://example.com/other";
+                declare function other:f() as xs:string { "x" };
+                """);
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("import module namespace lib = \"http://example.com/lib\"; 1"));
+        Assert.Contains("XQST0048", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_PrivateFunction_ThrowsXPST0017()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/lib", """
+                module namespace lib = "http://example.com/lib";
+                declare %private function lib:f() as xs:integer { 23 };
+                declare function lib:g() as xs:integer { lib:f() };
+                """);
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("import module namespace lib = \"http://example.com/lib\"; lib:f()"));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_PrivateVariable_ThrowsXPST0008()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/lib", """
+                module namespace lib = "http://example.com/lib";
+                declare %private variable $lib:secret := 23;
+                """);
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("import module namespace lib = \"http://example.com/lib\"; $lib:secret"));
+        Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImportModule_PrivateVisibleInsideOwnModule()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("http://example.com/lib", """
+                module namespace lib = "http://example.com/lib";
+                declare %private function lib:f() as xs:integer { 23 };
+                declare %private variable $lib:two := 2;
+                declare function lib:g() as xs:integer { lib:f() + $lib:two };
+                """);
+        var executable = compiler.Compile(
+            "import module namespace lib = \"http://example.com/lib\"; lib:g()");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(25L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_DeclareFunction_ConflictingAnnotations_ThrowsXQST0106()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare %private %public function local:foo() { () }; 1"));
+        Assert.Contains("XQST0106", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_DuplicateAnnotation_ThrowsXQST0116()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare %public %public variable $foo := (); 1"));
+        Assert.Contains("XQST0116", ex.Message);
+    }
+
     private static List<long> ToIntegers(XdmValue value)
     {
         var sequence = XdmSequence.FromSource(value.SequenceValue!);

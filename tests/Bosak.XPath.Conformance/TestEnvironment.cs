@@ -21,6 +21,8 @@
 //                      | Charles Korthout | 0.9   | 19-07-2026     | Parse <source validation> and <schema> for strict XML Schema validation of sources     |
 //                      | Charles Korthout | 1.0   | 20-07-2026     | Map environment <namespace prefix=""> to EvaluationContext.DefaultElementNamespace    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 27-07-2026     | Apply inline <context-item select="..."/> as the initial focus                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -44,6 +46,8 @@ internal sealed class TestEnvironment
     public Dictionary<string, List<string>> Collections { get; } = new();
     public string? DefaultCollation { get; set; }
     public string? BaseUri { get; set; }
+    /// <summary>The select expression of an inline <c>&lt;context-item select="..."/&gt;</c>, if any.</summary>
+    public string? ContextItemSelect { get; set; }
 
     /// <summary>Maps published resource URIs (typically http:) to local suite files.</summary>
     public Dictionary<string, string> UriMap { get; } = new(StringComparer.Ordinal);
@@ -161,6 +165,12 @@ internal sealed class TestEnvironment
         if (staticBaseUri is not null)
         {
             env.BaseUri = (string?)staticBaseUri.Attribute("uri");
+        }
+
+        var contextItemElem = element.Element(ns + "context-item");
+        if (contextItemElem is not null)
+        {
+            env.ContextItemSelect = (string?)contextItemElem.Attribute("select");
         }
 
         foreach (var colElem in element.Elements(ns + "collation"))
@@ -327,6 +337,14 @@ internal sealed class TestEnvironment
         if (!string.IsNullOrEmpty(DefaultCollation))
         {
             ctx.WithDefaultCollation(DefaultCollation);
+        }
+
+        // An inline <context-item select="..."/> (no source document) is evaluated in the
+        // prepared environment and becomes the initial focus (prod/ContextItemDecl).
+        if (!string.IsNullOrEmpty(ContextItemSelect))
+        {
+            var contextItem = Bosak.XPath.Api.XPath31Expression.Compile(ContextItemSelect).Evaluate(ctx);
+            ctx = ctx.WithFocus(contextItem, 1, 1);
         }
 
         // Note: External parameters are not yet supported; they require evaluating the select expression

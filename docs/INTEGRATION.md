@@ -4,16 +4,24 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 26 July 2026
-> **Bosak baseline:** 1,491 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 28,735 passed / 0 failed / 3,086 skipped (90.30% / 100% of runnable tests) — XQuery routing enabled; 487 XQuery conformance gaps recorded as reasoned skips
+> **Last updated:** 27 July 2026
+> **Bosak baseline:** 1,509 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 28,931 passed / 0 failed / 2,890 skipped (90.92% / 100% of runnable tests) — XQuery routing enabled; 499 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables
+> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules
 
 ---
 
 ## 0. Recent Changes
 
+- **2026-07-27** — XQuery 3.1 Phase 4: **library modules** (slice 2, REQ-051): QT3 **28,931 passed / 0 failed** (from 28,735; +196 passing).
+  - `module namespace prefix = "uri";` library modules and `import module (namespace p =)? "uri" (at "loc", ...)?;` in main and library modules; module namespace URIs and location hints get whitespace normalization; import cycles are legal; multiple modules may share one target namespace (merged, XQST0034/XQST0049 on collisions).
+  - Static validations: XQST0047 (duplicate import), XQST0088 (empty target namespace), XQST0059 (module not found / target-namespace mismatch), XQST0048 (declaration outside the target namespace), XQST0070 (xml/xmlns import prefix), XQST0108 (output declaration in a library module), XQST0113 (context-item value/default in a library module), XQST0032 (duplicate base-uri), XPST0003 (library module as query / body in a library module).
+  - `%public` / `%private` declaration annotations with visibility enforcement: private functions/variables are invisible to importing modules (XPST0017/XPST0008, statically checked incl. named function references); conflicting/duplicate visibility annotations are XQST0106/XQST0116; annotations in reserved namespaces or unknown XQuery-namespace annotations are XQST0045; annotation arguments must be literals; unknown annotations in other namespaces are ignored; `xsi` is now a predeclared prefix.
+  - Module loading: `XQueryCompiler.WithModule(uri, source, location?)` registers library module sources; imports resolve to the transitive closure with per-(namespace, location-hint) incremental loading — all public declarations of every loaded module in an imported namespace are visible (XQ 3.1 §4.12.2, modules-31).
+  - Per-module static contexts: each library module's function/variable bodies compile with its own prolog context and execute with its namespaces, base URI, default element namespace, and default collation applied (cbcl-module-002: module-local base URIs win over the importing module's).
+  - Harness: `<module uri location? file>` catalog entries parsed and registered; `moduleImport` feature admitted; inline `<context-item select="..."/>` environments applied as the initial focus; `<assert>` comparisons also bind the query result as the context item; the unsupported-prolog gate is comment-tolerant.
+  - prod/ModuleImport 106/0/22 (remaining skips are XQ10-only or schema-import-gated); prod/ContextItemDecl, prod/Annotation, misc/CombinedErrorCodes module tests green; 499 reasoned skips total (new: closure context-capture in module function items xqhof16/18, map-as-function coercion UseCaseR31-012, copy.xq `fn:id` FODC0001 semantics, context-item type enforcement contextDecl-054, function-test annotation assertions).
 - **2026-07-26** — XQuery 3.1 Phase 4: **user-defined functions and variables** (library modules slice 1, REQ-050): QT3 **28,735 passed / 0 failed** (from 26,299; +2,436 passing).
   - `declare function` / `declare variable` prolog with the static-validation matrix (XQST0034/0039/0045/0049, XPST0003, runtime XQST0054); `local` prefix predeclared; lazy global initializers evaluated with the module's initial focus.
   - Invocation semantics per XPath 3.1 §3.1.5: focus absent inside user-function bodies (XPDY0002); full variable-scope snapshot per call (recursive `let` bindings cannot clobber the caller); captured closures preserved.
@@ -1100,7 +1108,34 @@ var result = new XQueryCompiler()
     .Evaluate(context);
 ```
 
-### 4.4 Current Status
+### 4.4 Library Modules
+
+Register library module sources with `WithModule(uri, source, location?)`; queries import
+them by target namespace (optionally narrowed by `at` location hints):
+
+```csharp
+var compiler = new XQueryCompiler()
+    .WithModule("http://example.com/greet", """
+        module namespace g = "http://example.com/greet";
+        declare function g:hello($n as xs:string) as xs:string { "hello " || $n };
+        """);
+
+var result = compiler
+    .Compile("import module namespace g = \"http://example.com/greet\"; g:hello(\"world\")")
+    .Evaluate(new XQueryContext());
+// => "hello world"
+```
+
+- Imports resolve to the transitive closure; cycles are legal. Multiple modules may share
+  one target namespace — all their public declarations merge (`at` hints select by location).
+- `%public` / `%private` annotations control cross-module visibility (private declarations
+  are invisible to importers: XPST0017 / XPST0008).
+- Each library module's bodies compile and execute with its own prolog context (namespaces,
+  base URI, default element namespace, default collation).
+- A library module cannot be evaluated as a query (XPST0003); unresolved imports raise
+  XQST0059; duplicate imports of one namespace raise XQST0047.
+
+### 4.5 Current Status
 
 | Feature | Status | Notes |
 |---------|--------|-------|
@@ -1111,9 +1146,11 @@ var result = new XQueryCompiler()
 | `count` | ✅ Working | Compiler-managed integer counters over the tuple path |
 | `group by` | ✅ Working | `GroupBy` opcode; `$var` / `$var := expr` specs with optional collation; post-group `order by`/`count` |
 | `window` | ✅ Working | `Window` opcode; tumbling/sliding, start/end vars (current/position/previous/next), `only end` |
-| Direct / computed constructors | 🔮 Phase 3 | XML-like syntax and node-building opcodes |
-| Library modules / `import module` | 🔮 Phase 4 | Module resolution and shared static context |
-| Serialization | 🔮 Phase 4 | `xml`, `html`, `xhtml`, `text`, `json`, `adaptive` |
+| Direct / computed constructors | ✅ Working | All seven forms; constructor-local namespaces, copy semantics |
+| `switch` / `typeswitch` | ✅ Working | Desugared to `let` + `if`/`eq`/`instance-of` chains |
+| User-defined functions and variables | ✅ Working | `declare function` / `declare variable` with %public/%private annotations |
+| Library modules / `import module` | ✅ Working | Transitive import graph, location hints, per-module static contexts |
+| Serialization | ✅ Working | `xml`, `html`, `xhtml`, `text`, `json`, `adaptive`; `declare option output:*` |
 
 ---
 

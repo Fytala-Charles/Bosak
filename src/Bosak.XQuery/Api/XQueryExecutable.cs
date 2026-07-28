@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 26-07-2026     | Register user functions via FunctionSignature dispatch; lazy user variables with XQST0054 cycle detection |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 27-07-2026     | Per-library-module runtime context (namespaces, base URI) around user function/variable body execution |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
@@ -33,22 +35,33 @@ using Bosak.XQuery.Compiler;
 
 namespace Bosak.XQuery.Api;
 
-/// <summary>A user function declaration compiled to an executable body module.</summary>
+/// <summary>A user function declaration compiled to an executable body module. The optional
+/// module fields carry the declaring library module's runtime static context (null for the
+/// main module) so the body executes with that module's namespaces and base URI.</summary>
 public sealed record CompiledUserFunction(
     string LocalName,
     string NamespaceUri,
     IReadOnlyList<string> Parameters,
     IReadOnlyList<string?> ParameterTypes,
     string? ReturnType,
-    IrModule Body);
+    IrModule Body,
+    IReadOnlyDictionary<string, string>? ModuleNamespaces = null,
+    string? ModuleBaseUri = null,
+    string? ModuleDefaultElementNamespace = null,
+    string? ModuleDefaultCollation = null);
 
-/// <summary>A user variable declaration compiled to an executable body module (null for external).</summary>
+/// <summary>A user variable declaration compiled to an executable body module (null for external).
+/// The optional module fields mirror <see cref="CompiledUserFunction"/>.</summary>
 public sealed record CompiledUserVariable(
     string LocalName,
     string NamespaceUri,
     string? TypeName,
     IrModule? Body,
-    bool IsExternal);
+    bool IsExternal,
+    IReadOnlyDictionary<string, string>? ModuleNamespaces = null,
+    string? ModuleBaseUri = null,
+    string? ModuleDefaultElementNamespace = null,
+    string? ModuleDefaultCollation = null);
 
 /// <summary>
 /// A compiled, thread-safe XQuery that can be evaluated against a context document.
@@ -146,9 +159,7 @@ public sealed class XQueryExecutable
                 ReturnType = XdmValueKind.External,
                 ParameterTypeNames = captured.ParameterTypes,
                 ReturnTypeName = captured.ReturnType,
-                Implementation = (callCtx, args) => VmEngine.InvokeFunctionItem(
-                    new InlineFunctionItem(captured.Parameters, captured.Body, captured.ParameterTypes, captured.ReturnType),
-                    callCtx, args)
+                Implementation = (callCtx, args) => InvokeWithModuleContext(captured, callCtx, args)
             });
         }
 
@@ -178,7 +189,7 @@ public sealed class XQueryExecutable
                         try
                         {
                             ctx.WithFocus(initialItem, initialPosition, initialSize);
-                            return VmEngine.Execute(v.Body, ctx);
+                            return EvaluateWithModuleContext(v, ctx);
                         }
                         finally
                         {
@@ -207,6 +218,82 @@ public sealed class XQueryExecutable
             }
             ctx.StaticOutputParameters = parameters;
         }
+    }
+
+    // Invokes a user function body, applying the declaring library module's runtime static
+    // context (namespaces, base URI, default element namespace, default collation) when the
+    // function was declared in a library module (cbcl-module-002: module-local base URIs).
+    private static XdmValue InvokeWithModuleContext(CompiledUserFunction function, EvaluationContext callCtx, ReadOnlySpan<XdmValue> args)
+    {
+        if (function.ModuleNamespaces is null)
+        {
+            return VmEngine.InvokeFunctionItem(
+                new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
+                callCtx, args);
+        }
+        var snapshot = callCtx.SnapshotNamespaces();
+        var savedDefaultNs = callCtx.DefaultElementNamespace;
+        var savedBaseUri = callCtx.BaseUri;
+        var savedCollation = callCtx.DefaultCollation;
+        try
+        {
+            ApplyModuleContext(callCtx, function.ModuleNamespaces, function.ModuleBaseUri,
+                function.ModuleDefaultElementNamespace, function.ModuleDefaultCollation);
+            return VmEngine.InvokeFunctionItem(
+                new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
+                callCtx, args);
+        }
+        finally
+        {
+            callCtx.RestoreNamespaces(snapshot);
+            callCtx.DefaultElementNamespace = savedDefaultNs;
+            callCtx.BaseUri = savedBaseUri;
+            callCtx.DefaultCollation = savedCollation;
+        }
+    }
+
+    // Evaluates a global variable initializer with the declaring module's runtime context.
+    private static XdmValue EvaluateWithModuleContext(CompiledUserVariable variable, EvaluationContext ctx)
+    {
+        if (variable.ModuleNamespaces is null)
+            return VmEngine.Execute(variable.Body!, ctx);
+        var snapshot = ctx.SnapshotNamespaces();
+        var savedDefaultNs = ctx.DefaultElementNamespace;
+        var savedBaseUri = ctx.BaseUri;
+        var savedCollation = ctx.DefaultCollation;
+        try
+        {
+            ApplyModuleContext(ctx, variable.ModuleNamespaces, variable.ModuleBaseUri,
+                variable.ModuleDefaultElementNamespace, variable.ModuleDefaultCollation);
+            return VmEngine.Execute(variable.Body!, ctx);
+        }
+        finally
+        {
+            ctx.RestoreNamespaces(snapshot);
+            ctx.DefaultElementNamespace = savedDefaultNs;
+            ctx.BaseUri = savedBaseUri;
+            ctx.DefaultCollation = savedCollation;
+        }
+    }
+
+    private static void ApplyModuleContext(
+        EvaluationContext ctx,
+        IReadOnlyDictionary<string, string> namespaces,
+        string? baseUri,
+        string? defaultElementNamespace,
+        string? defaultCollation)
+    {
+        foreach (var (prefix, nsUri) in namespaces)
+        {
+            if (!string.IsNullOrEmpty(prefix))
+                ctx.WithNamespace(prefix, nsUri);
+        }
+        if (!string.IsNullOrEmpty(baseUri))
+            ctx.BaseUri = baseUri;
+        if (!string.IsNullOrEmpty(defaultElementNamespace))
+            ctx.DefaultElementNamespace = defaultElementNamespace;
+        if (!string.IsNullOrEmpty(defaultCollation))
+            ctx.DefaultCollation = defaultCollation;
     }
 
     // Expands QName tokens in a whitespace-separated list to '{uri}local' form using the
