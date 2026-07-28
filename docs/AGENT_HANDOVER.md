@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
-**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xpath): try/catch named error codes and error variables)
+**Commit:** `fe6fa9e` (feat(xpath): try/catch named error codes and error variables)
 **Current focus:** **try/catch completion — named error codes, multiple catch clauses, and the `err:*` error variables**: full XPath 3.1 try/catch semantics on both pipelines (it is XPath grammar, not XQuery-only). QT3 went from **28,931 passed / 0 failed / 2,890 skipped (90.92%)** to **29,114 passed / 0 failed / 2,707 skipped (91.49%)** (+183 passing). Full `dotnet test Bosak.sln` passes: **1,524 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (try/catch)
