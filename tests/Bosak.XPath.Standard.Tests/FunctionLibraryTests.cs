@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 2.23  | 27-07-2026     | 15 try/catch tests: named codes, clause order, wildcards, err vars, static bypass |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -2005,6 +2007,101 @@ public class FunctionLibraryTests
     {
         var result = EvalStr("try { fn:error(QName('http://www.w3.org/2005/xqt-errors', 'FOER0000'), 'boom') } catch * { $err:description }");
         Assert.Contains("boom", result);
+    }
+
+    [Fact]
+    public void TryCatch_NamedCodeMatches()
+    {
+        Assert.Equal("caught", EvalStr("try { 'x' cast as xs:integer } catch err:FORG0001 { 'caught' }"));
+    }
+
+    [Fact]
+    public void TryCatch_NamedCodeMismatch_Propagates()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            EvalStr("try { 'x' cast as xs:integer } catch err:FOAR0001 { 'caught' }"));
+        Assert.Contains("FORG0001", ex.Message);
+    }
+
+    [Fact]
+    public void TryCatch_FirstMatchingClauseWins()
+    {
+        Assert.Equal("second", EvalStr(
+            "try { 'x' cast as xs:integer } " +
+            "catch err:FOAR0001 { 'first' } " +
+            "catch err:FORG0001 { 'second' } " +
+            "catch err:* { 'fallback' }"));
+    }
+
+    [Fact]
+    public void TryCatch_NamespaceWildcard()
+    {
+        Assert.Equal("caught", EvalStr("try { 'x' cast as xs:integer } catch *:FORG0001 { 'caught' }"));
+    }
+
+    [Fact]
+    public void TryCatch_PrefixWildcard()
+    {
+        Assert.Equal("caught", EvalStr("try { 'x' cast as xs:integer } catch err:* { 'caught' }"));
+    }
+
+    [Fact]
+    public void TryCatch_BracedUriForm()
+    {
+        Assert.Equal("caught", EvalStr(
+            "try { 'x' cast as xs:integer } catch Q{http://www.w3.org/2005/xqt-errors}FORG0001 { 'caught' }"));
+    }
+
+    [Fact]
+    public void TryCatch_ErrorCodeIsQName()
+    {
+        Assert.Equal("FORG0001", EvalStr(
+            "try { 'x' cast as xs:integer } catch * { local-name-from-QName($err:code) }"));
+    }
+
+    [Fact]
+    public void TryCatch_DefaultFnErrorCode()
+    {
+        Assert.Equal("FOER0000", EvalStr(
+            "try { fn:error() } catch * { local-name-from-QName($err:code) }"));
+    }
+
+    [Fact]
+    public void TryCatch_ErrorValue()
+    {
+        Assert.Equal("42", EvalStr(
+            "try { fn:error(QName('http://www.w3.org/2005/xqt-errors', 'FOER0000'), 'boom', 42) } " +
+            "catch * { string($err:value) }"));
+    }
+
+    [Fact]
+    public void TryCatch_AdditionalVariableExists()
+    {
+        Assert.Equal("0", EvalStr("try { fn:error() } catch * { count($err:additional) }"));
+    }
+
+    [Fact]
+    public void TryCatch_StaticError_Propagates()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStr("try { $undefinedVariable } catch * { 'caught' }"));
+        Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void TryCatch_EmptyBodies()
+    {
+        Assert.Equal("(sequence)", EvalStr("try {} catch * { 'x' }"));
+        Assert.Equal("(sequence)", EvalStr("try { fn:error() } catch * {}"));
+    }
+
+    [Fact]
+    public void TryCatch_ErrorVariablesRestoredAfterInnerTry()
+    {
+        var result = EvalSequence(
+            "try { fn:error(QName('http://www.w3.org/2005/xqt-errors', 'FOOQ0001')) } " +
+            "catch * { (try { fn:error(QName('http://www.w3.org/2005/xqt-errors', 'FOOQ0002')) } " +
+            "catch * { local-name-from-QName($err:code) }, local-name-from-QName($err:code)) }");
+        Assert.Equal(new[] { "FOOQ0002", "FOOQ0001" }, result);
     }
 
     // ------------------------------------------------------------------

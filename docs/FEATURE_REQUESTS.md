@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-27 (XQuery 3.1 Phase 4: **library modules** — slice 2; QT3 now **28,931 passed / 0 failed** (90.92%); unit tests **1,509/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-27 (**try/catch completion**: named error codes, multiple clauses, `err:*` variables; QT3 now **29,114 passed / 0 failed** (91.49%); unit tests **1,524/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -156,6 +156,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-049 | *(internal)* | XQuery 3.1 Phase 4 — output declarations + serialization round-out | Required for XQuery serialization: `declare option output:*` prolog, static serialization parameters, parameter-document, and full Serialization 3.1 method/parameter fidelity | **Implemented** | Phase 4 | Charles Korthout | 2026-07-25 |
 | REQ-050 | *(internal)* | XQuery 3.1 Phase 4 — user-defined functions and variables (library modules slice 1) | Required for XQuery modules: `declare function` / `declare variable` prolog with static validations, lazy globals, function-item coercion, and function-type syntax | **Implemented** | Phase 4 | Charles Korthout | 2026-07-26 |
 | REQ-051 | *(internal)* | XQuery 3.1 Phase 4 — library modules (slice 2) | Required for XQuery modules: `module namespace` / `import module` with location hints, transitive import graph, %public/%private visibility, and per-module static contexts | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
+| REQ-052 | *(internal)* | try/catch completion — named error codes and error variables | Required for XPath/XQuery 3.1 conformance: catch code patterns (`err:XPTY0004`, `err:*`, `*:local`, `Q{uri}local`), multiple catch clauses, and the `err:*` error variables | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2347,13 +2348,64 @@ Parse library module declarations and module imports in the prolog with the full
 
 ---
 
+### REQ-052: try/catch completion — named error codes and error variables
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-27  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+try/catch is XPath 3.1 grammar shared by both pipelines, but the engine supported only a single `catch *` clause, bound a spec-noncompliant `$err:code` (the CLR type name as a string), and had no structured error representation: `fn:error` raised message-only exceptions, discarding the code QName and the error value. The whole `prod/TryCatchExpr` set (173 tests) and incidental try/catch users sat behind the harness's construct gate — the largest remaining QT3 skip driver.
+
+**Proposed Solution:**  
+Extend the AST to multiple catch clauses with error-code name-test patterns (`*`, `prefix:local`, `prefix:*`, `*:local`, `Q{uri}local`, `Q{uri}*`, NCName); introduce a structured error carrier in the Runtime layer (`XPathErrorException` + `XPathError` helpers, ported from the XSLT engine's proven catch implementation); match clauses first-match-wins in the `TryCatch` opcode and bind the seven `err:*` variables with save/restore; make `fn:error` throw structured errors; and honor the two bypass rules: static errors and global-variable-initializer errors are never caught.
+
+**Acceptance Criteria:**
+- [x] Grammar: `catch CodePatternList { Expr }` with one-or-more clauses on both pipelines (try/catch is XPath grammar); code patterns `*`, `err:X`, `err:*`, `*:X`, `Q{uri}X`, `Q{uri}*`, unprefixed NCName (empty namespace); empty try/catch bodies are the empty sequence (try-019/020); no matching clause → the error propagates unchanged.
+- [x] `err:*` variables: `err:code` as `xs:QName` (prefix preserved through `fn:error`), `err:description`, `err:value` (fn:error's third argument, sequences included), `err:module`/`err:line-number`/`err:column-number` (empty/zero — no source tracking), `err:additional` (empty, implementation-defined); previous bindings restored after the catch (nested try, try-011).
+- [x] `fn:error`: empty code argument behaves as `err:FOER0000` (fn-error-5/6, K-ErrorFunc); code/description/value surface structuredly; the XSLT engine recognizes the new exception type (its `xsl:catch` unchanged).
+- [x] Bypass rules: static-coded errors (XPST/XQST not raised by `fn:error`) are never caught, even when a pattern matches (try-catch-static-error-1..4); lazy global variable initializer errors bypass try/catch via `GlobalVariableEvaluationException` (try-006/007), unwrapped at the executable boundary.
+- [x] Error-code hygiene: `cast` FORG0001, `treat as` XPDY0050, computed-constructor unresolvable prefix XQDY0074, `fn:zero-or-one`/`one-or-more`/`exactly-one` FORG0003/0004/0005, `fn:parse-xml`/`parse-xml-fragment` FODC0006 with external-DTD resolution against the static base URI and validated text declarations in fragments.
+- [x] QT3: prod/TryCatchExpr **172/0/1**; full suite **29,114 passed / 0 failed / 2,707 skipped (91.49%)**; gaps unchanged (499 reasoned skips — no new entries).
+- [x] Unit tests: 15 new try/catch tests (both pipelines); full suite **1,524/0**.
+
+**Implementation Notes:**
+- `TryCatchNode` → `(TryExpression, IReadOnlyList<TryCatchClause>)` with `CatchCodePattern` records; `XPathParser.ParseTryExpr` accepts the full `CatchErrorList` grammar (the lexer already tokenizes `Q{uri}*` and wildcard prefixes); `TryCatchInfo`/`CatchClauseInfo` carry ordered clause entry points in the literal pool.
+- `XPathError` (new, Runtime/Vm): `GetErrorDetails` (structured pass-through + legacy message parsing), `CatchPatternMatches` (context-resolved prefixes), `BindCatchErrorVariables`/`RestoreCatchErrorVariables` (seven variables, save/restore), `IsUncatchableStaticError` (XPST/XQST bypass for non-`fn:error` errors); `GlobalVariableEvaluationException` marks lazy-global failures, wrapped by the XQuery resolver and unwrapped at `XQueryExecutable.Evaluate`.
+- `fn:error` throws `XPathErrorException` (empty code → FOER0000); `TransformEngine.GetErrorDetails` recognizes it.
+- All AST traversals updated for the new node shape (`XPath31Expression`, `XQueryCompiler`, `ModuleVisibilityValidator`); the optimizer keeps its reference-transparent default.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `TryCatchNode` multi-clause shape + catch pattern parsing (shared by XPath and XQuery). |
+| Compiler | Modified | `TryCatchInfo`/`CatchClauseInfo` records; multi-clause lowering. |
+| Runtime | Modified | `TryCatch` opcode semantics; `XPathError` infrastructure (new file); FORG0001/XPDY0050/XQDY0074 codes in cast/treat/computed-name paths. |
+| Standard | Modified | `fn:error` structured; FORG0003/0004/0005 codes; parse-xml(-fragment) FODC0006, DTD base URI, text declarations. |
+| XSLT | Modified | `GetErrorDetails` handles `XPathErrorException` (one branch; `xsl:catch` behavior unchanged). |
+| XQuery | Modified | Global-variable error marking; traversal updates for the new node shape. |
+| Conformance | Modified | try/catch admitted by the construct gate; gaps unchanged (499). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-27 | Kimi | New `XPathErrorException` in the Runtime layer rather than reusing `XsltRuntimeException` | The XSLT type is engine-internal with XSLT-specific codes; a small Runtime type is consumable by both pipelines and by the XSLT catch via one extra branch. |
+| 2026-07-27 | Kimi | Static-error bypass keyed on XPST/XQST codes *not* raised by `fn:error` | Spec: try/catch catches dynamic errors only. The engine raises static codes dynamically (dynamic scoping); bypassing them matches observable spec behavior (try-catch-static-error-1..4), while user-thrown `fn:error` values stay catchable per spec. |
+| 2026-07-27 | Kimi | `err:additional` bound to empty rather than a blanket resolver | try-021 requires the implementation-defined `err:additional` to exist while try-catch-err-other-variable-1 requires arbitrary `err:*` names to stay undefined (XPST0008). |
+| 2026-07-27 | Kimi | Lazy-global errors bypass catch via a marker exception | XQuery defers global initializers to first reference; the marker (unwrapped at the executable boundary) reproduces the spec rule that such errors are not caught by try/catch (try-006/007). |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-051 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done; QT3 wired (28,931/0, 90.92%). `try`/`catch` named error codes, string constructors, `unordered`/`ordered` follow. |
+| 1 | REQ-040 … REQ-052 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done; QT3 wired (29,114/0, 91.49%). String constructors, `unordered`/`ordered` follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

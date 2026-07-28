@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 2.1   | 27-07-2026     | Namespace resolution traversal for multi-clause TryCatchNode |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 06 June 2026
@@ -379,7 +381,11 @@ public sealed class XQueryCompiler
             InstanceOfNode io => io with { Expression = ResolveFunctionNamespaces(io.Expression, context) },
             TreatNode treat => treat with { Expression = ResolveFunctionNamespaces(treat.Expression, context) },
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, context), Target = ResolveFunctionNamespaces(arrow.Target, context) },
-            TryCatchNode tc => tc with { TryExpression = ResolveFunctionNamespaces(tc.TryExpression, context), CatchExpression = ResolveFunctionNamespaces(tc.CatchExpression, context) },
+            TryCatchNode tc => tc with
+            {
+                TryExpression = ResolveFunctionNamespaces(tc.TryExpression, context),
+                Clauses = tc.Clauses.Select(c => c with { Expression = ResolveFunctionNamespaces(c.Expression, context) }).ToList()
+            },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, context), Key = ResolveFunctionNamespaces(lookup.Key, context) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, context) },
             InlineFunctionNode inf => inf with { Body = ResolveFunctionNamespaces(inf.Body, context) },

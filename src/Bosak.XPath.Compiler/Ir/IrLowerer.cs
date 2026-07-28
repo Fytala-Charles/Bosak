@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 1.23  | 27-07-2026     | TryCatchInfo carries ordered catch clauses with code patterns |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -69,9 +71,16 @@ namespace Bosak.XPath.Compiler.Ir;
 public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, bool AllowingEmpty = false, IReadOnlyList<string>? ScopedVariableNames = null);
 
 /// <summary>
-/// Try/catch information stored in the literal pool for the TryCatch opcode.
+/// Try/catch information stored in the literal pool for the TryCatch opcode: the try block
+/// entry point and the catch clauses in declaration order (first matching clause wins).
 /// </summary>
-public readonly record struct TryCatchInfo(int TryEntryPoint, int CatchEntryPoint);
+public sealed record TryCatchInfo(int TryEntryPoint, IReadOnlyList<CatchClauseInfo> Clauses);
+
+/// <summary>
+/// One catch clause of a <see cref="TryCatchInfo"/>: the error-code patterns that select it
+/// and its body entry point.
+/// </summary>
+public sealed record CatchClauseInfo(IReadOnlyList<CatchCodePattern> Patterns, int EntryPoint);
 
 /// <summary>
 /// Ordering information stored in the literal pool for the OrderBy opcode.
@@ -1600,12 +1609,17 @@ public sealed class IrLowerer
         int tryReg = LowerNode(node.TryExpression);
         Emit(IrOpCode.Return, (ushort)tryReg);
 
-        int catchEntry = _instructions.Count;
-        int catchReg = LowerNode(node.CatchExpression);
-        Emit(IrOpCode.Return, (ushort)catchReg);
+        var clauseInfos = new List<CatchClauseInfo>();
+        foreach (var clause in node.Clauses)
+        {
+            int clauseEntry = _instructions.Count;
+            int clauseReg = LowerNode(clause.Expression);
+            Emit(IrOpCode.Return, (ushort)clauseReg);
+            clauseInfos.Add(new CatchClauseInfo(clause.Patterns, clauseEntry));
+        }
 
         int afterCatch = _instructions.Count;
-        var info = new TryCatchInfo(tryEntry, catchEntry);
+        var info = new TryCatchInfo(tryEntry, clauseInfos);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(tryCatchIdx, IrOpCode.TryCatch, (ushort)resultReg, 0, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterCatch);

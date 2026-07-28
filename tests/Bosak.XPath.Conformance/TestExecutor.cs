@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 0.15  | 27-07-2026     | Admit try/catch (named codes + multiple clauses implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 20 mei 2026
@@ -263,8 +265,7 @@ internal sealed class TestExecutor
     // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
     // keep their "XQuery syntax not supported" skip instead of being routed.
     private static readonly Regex UnsupportedXQueryConstructRegex = new(
-        @"\btry\s*\{" +
-        @"|\bunordered\s*\{|\bordered\s*\{|\bvalidate\s" +
+        @"\bunordered\s*\{|\bordered\s*\{|\bvalidate\s" +
         @"|\(#\s*[A-Za-z_]" +                          // pragma extension expressions (# ... #)
         @"|``\[" +                                     // string constructors ``[ ... ]``
         RegexOptions.Compiled);

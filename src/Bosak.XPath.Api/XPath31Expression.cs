@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 0.7   | 27-07-2026     | Namespace resolution traversal for multi-clause TryCatchNode |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -138,7 +140,11 @@ public sealed class XPath31Expression
             InstanceOfNode io => io with { Expression = ResolveFunctionNamespaces(io.Expression, options) },
             TreatNode treat => treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options) },
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveFunctionNamespaces(arrow.Target, options) },
-            TryCatchNode tc => tc with { TryExpression = ResolveFunctionNamespaces(tc.TryExpression, options), CatchExpression = ResolveFunctionNamespaces(tc.CatchExpression, options) },
+            TryCatchNode tc => tc with
+            {
+                TryExpression = ResolveFunctionNamespaces(tc.TryExpression, options),
+                Clauses = tc.Clauses.Select(c => c with { Expression = ResolveFunctionNamespaces(c.Expression, options) }).ToList()
+            },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, options), Key = ResolveFunctionNamespaces(lookup.Key, options) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, options) },
             InlineFunctionNode inf => inf with { Body = ResolveFunctionNamespaces(inf.Body, options) },

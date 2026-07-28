@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 1.6   | 27-07-2026     | Global-variable initializer errors marked to bypass try/catch (try-006/007) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 06 June 2026
@@ -111,6 +113,11 @@ public sealed class XQueryExecutable
             ApplyStaticContext(evaluationContext);
             return VmEngine.Execute(_module, evaluationContext);
         }
+        // Unwrap global-variable error markers so callers see the original error.
+        catch (GlobalVariableEvaluationException gve) when (gve.InnerException is not null)
+        {
+            throw gve.InnerException;
+        }
         finally
         {
             evaluationContext.RestoreNamespaces(snapshot);
@@ -190,6 +197,13 @@ public sealed class XQueryExecutable
                         {
                             ctx.WithFocus(initialItem, initialPosition, initialSize);
                             return EvaluateWithModuleContext(v, ctx);
+                        }
+                        // Errors raised while evaluating a global variable initializer are
+                        // not caught by try/catch expressions (XQuery try-006/007); mark
+                        // them so the VM's TryCatch opcode lets them propagate.
+                        catch (Exception ex) when (ex is not GlobalVariableEvaluationException)
+                        {
+                            throw new GlobalVariableEvaluationException(ex);
                         }
                         finally
                         {

@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 2.73  | 27-07-2026     | TryCatch: code-pattern clause matching, err:* binding, static-error bypass; FORG0001/XPDY0050/XQDY0074 codes |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -1622,13 +1624,46 @@ public static class VmEngine
                             var (result, _) = ExecuteBlock(module, context, registers, info.TryEntryPoint);
                             registers[instr.RegisterA] = result;
                         }
-                        catch (Exception ex)
+                        // Errors raised by lazy global variable initializers are not caught
+                        // by try/catch (XQuery try-006/007).
+                        catch (Exception ex) when (ex is not GlobalVariableEvaluationException)
                         {
-                            const string ErrNs = "http://www.w3.org/2005/xqt-errors";
-                            context.WithVariable("code", XdmValue.FromString(ex.GetType().Name), ErrNs);
-                            context.WithVariable("description", XdmValue.FromString(ex.Message), ErrNs);
-                            var (catchResult, _) = ExecuteBlock(module, context, registers, info.CatchEntryPoint);
-                            registers[instr.RegisterA] = catchResult;
+                            var details = XPathError.GetErrorDetails(ex);
+                            // try/catch catches dynamic errors only: static (XPST/XQST)
+                            // errors propagate even when a pattern would match them.
+                            if (XPathError.IsUncatchableStaticError(ex, details))
+                                throw;
+                            CatchClauseInfo? matched = null;
+                            foreach (var clause in info.Clauses)
+                            {
+                                bool clauseMatches = false;
+                                foreach (var pattern in clause.Patterns)
+                                {
+                                    if (XPathError.CatchPatternMatches(pattern, details, context))
+                                    {
+                                        clauseMatches = true;
+                                        break;
+                                    }
+                                }
+                                if (clauseMatches)
+                                {
+                                    matched = clause;
+                                    break;
+                                }
+                            }
+                            // No catch clause matches the error: it propagates unchanged.
+                            if (matched is null)
+                                throw;
+                            var previousErrorVars = XPathError.BindCatchErrorVariables(context, details);
+                            try
+                            {
+                                var (catchResult, _) = ExecuteBlock(module, context, registers, matched.EntryPoint);
+                                registers[instr.RegisterA] = catchResult;
+                            }
+                            finally
+                            {
+                                XPathError.RestoreCatchErrorVariables(context, previousErrorVars);
+                            }
                         }
                         ip++;
                         break;
@@ -2326,7 +2361,7 @@ public static class VmEngine
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var value = registers[instr.RegisterB];
                         if (!InstanceOf(value, typeName, occurrence, context.DefaultElementNamespace, context))
-                            throw new InvalidOperationException($"Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
+                            throw new InvalidOperationException($"XPDY0050: Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
                         registers[instr.RegisterA] = value;
                         ip++;
                         break;
@@ -5354,7 +5389,7 @@ public static class VmEngine
     public static XdmValue Cast(XdmValue value, string typeName, EvaluationContext? context)
     {
         if (!TryCast(value, typeName, context, out var result))
-            throw new InvalidOperationException($"Cannot cast '{value}' to {typeName}.");
+            throw new InvalidOperationException($"FORG0001: Cannot cast '{value}' to {typeName}.");
         return result;
     }
 
@@ -9134,7 +9169,7 @@ public static class VmEngine
             if (prefixPart == "xmlns")
                 throw new InvalidOperationException($"XQDY0096: A computed {construct} name must not use the 'xmlns' prefix.");
             if (!context.TryResolveNamespace(prefixPart, out var pns))
-                throw new InvalidOperationException($"XPST0081: Prefix '{prefixPart}' is not declared.");
+                throw new InvalidOperationException($"XQDY0074: The prefix of the computed {construct} name '{text}' cannot be resolved.");
             if (!IsValidNcName(localPart))
                 throw new InvalidOperationException($"XQDY0074: Invalid {construct} name '{text}'.");
             ValidateComputedNamePrefix(prefixPart, pns, construct);

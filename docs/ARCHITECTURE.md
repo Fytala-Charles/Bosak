@@ -378,7 +378,7 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 | Priority | Phase | Deliverable | Status | Notes |
 |----------|-------|-------------|--------|-------|
-| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 4 | Full core FLWOR (`order by`/`count`/`group by`/`window`), direct and computed constructors with constructor-local namespaces, switch/typeswitch, output declarations and serialization, user-defined functions and variables (`declare function`/`declare variable` with function-item coercion), library modules (`module namespace`/`import module` with %public/%private visibility); QT3 harness routes supported XQuery tests (28,931/0, 90.92%). Remaining: `try`/`catch` named error codes, string constructors, `unordered`/`ordered`. |
+| 1 | 4 | **XQuery 3.1** | 🚧 In Progress — Phase 4 | Full core FLWOR (`order by`/`count`/`group by`/`window`), direct and computed constructors with constructor-local namespaces, switch/typeswitch, output declarations and serialization, user-defined functions and variables (`declare function`/`declare variable` with function-item coercion), library modules (`module namespace`/`import module` with %public/%private visibility), try/catch with named error codes and `err:*` variables; QT3 harness routes supported XQuery tests (29,114/0, 91.49%). Remaining: string constructors, `unordered`/`ordered`. |
 | 2 | — | **XSLT 3.0 packages** | 🔮 Planned | `xsl:package`, `xsl:use-package`. Completes the XSLT 3.0 surface. |
 | 3 | — | **Schema awareness / XSD validation** | 🔮 Planned | Cross-cutting feature for XPath + XSLT; clears remaining schema-dependent skips. |
 | 4 | 5 | **Streaming** | 🔮 Planned | `IXdmNode` backed by `XmlReader` with look-ahead constraints. |

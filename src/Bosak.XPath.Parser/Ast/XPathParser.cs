@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 1.30  | 27-07-2026     | Full try/catch parsing: named code patterns, multiple clauses, empty bodies |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -743,23 +745,88 @@ public sealed class XPathParser
     // TryExpr ::= TryClause CatchClause+
     // TryClause ::= "try" "{" Expr "}"
     // CatchClause ::= "catch" CatchErrorList "{" Expr "}"
-    // For now: only "catch *" is supported
+    // CatchErrorList ::= NameTest ("|" NameTest)*   — error-code name tests:
+    //   '*', 'prefix:local', 'prefix:*', '*:local', 'Q{uri}local', 'Q{uri}*', NCName
     private XPathAstNode ParseTryExpr()
     {
         int start = Current.Start;
         Expect(TokenKind.KeywordTry);
         Expect(TokenKind.LBrace);
-        var tryBody = ParseExpr();
+        // An empty try body is the empty sequence (try-019).
+        var tryBody = Current.Kind == TokenKind.RBrace
+            ? new SequenceExpressionNode(Array.Empty<XPathAstNode>())
+            : ParseExpr();
         Expect(TokenKind.RBrace);
-        Expect(TokenKind.KeywordCatch);
+
+        var clauses = new List<TryCatchClause>();
+        while (Current.Kind == TokenKind.KeywordCatch)
+        {
+            Advance();
+            var patterns = new List<CatchCodePattern>();
+            do
+            {
+                patterns.Add(ParseCatchCodePattern());
+            } while (Match(TokenKind.VBar));
+            Expect(TokenKind.LBrace);
+            // An empty catch body is the empty sequence (try-020).
+            var catchBody = Current.Kind == TokenKind.RBrace
+                ? new SequenceExpressionNode(Array.Empty<XPathAstNode>())
+                : ParseExpr();
+            Expect(TokenKind.RBrace);
+            clauses.Add(new TryCatchClause(patterns, catchBody));
+        }
+        if (clauses.Count == 0)
+            throw new ParseException("XPST0003: Expected at least one catch clause after 'try { ... }'.", Current.Start);
+        return WithSpan(new TryCatchNode(tryBody, clauses), start, End);
+    }
+
+    // Parses one error-code name test of a catch clause.
+    private CatchCodePattern ParseCatchCodePattern()
+    {
+        int start = Current.Start;
+
+        // Wildcard: '*' (any error) or '*:local' (any namespace).
         if (Match(TokenKind.Star))
         {
-            Expect(TokenKind.LBrace);
-            var catchBody = ParseExpr();
-            Expect(TokenKind.RBrace);
-            return WithSpan(new TryCatchNode(tryBody, catchBody), start, End);
+            if (Match(TokenKind.Colon))
+            {
+                var wildcardLocal = GetString(ExpectName());
+                return new CatchCodePattern("*", wildcardLocal, null);
+            }
+            return new CatchCodePattern(null, null, null);
         }
-        throw new ParseException("Only catch * is currently supported", Current.Start);
+
+        if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
+        {
+            var name = GetString(Current);
+
+            // URI-qualified wildcard: Q{uri}* (including the empty URI Q{}*).
+            if (name.Length > 2 && name[0] == 'Q' && name[1] == '{' && name[^1] == '*')
+            {
+                int closeBrace = name.IndexOf('}');
+                if (closeBrace >= 2)
+                {
+                    Advance();
+                    return new CatchCodePattern(null, null, name[2..closeBrace]);
+                }
+            }
+
+            Advance();
+
+            // prefix:* (namespace wildcard).
+            if (Match(TokenKind.Colon) && Match(TokenKind.Star))
+                return new CatchCodePattern(name, null, null);
+
+            var (prefix, local, nsUri) = SplitQName(name);
+            if (nsUri is not null)
+                return new CatchCodePattern(null, local, nsUri);
+            if (prefix is not null)
+                return new CatchCodePattern(prefix, local, null);
+            // An unprefixed code name matches the empty namespace.
+            return new CatchCodePattern(null, local, "");
+        }
+
+        throw new ParseException($"XPST0003: Expected error code pattern but found {Current.Kind}", start);
     }
 
     // SwitchExpr ::= "switch" "(" Expr ")" SwitchCaseClause+ "default" "return" ExprSingle

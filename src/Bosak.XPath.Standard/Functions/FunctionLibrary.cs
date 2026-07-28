@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 5.74  | 27-07-2026     | fn:error throws structured XPathErrorException; FORG0003/0004/0005 codes; parse-xml(-fragment) FODC0006 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -4516,8 +4518,17 @@ public static class FunctionLibrary
     {
         string xml = AtomizedString(args[0]);
         if (string.IsNullOrEmpty(xml))
-            throw new InvalidOperationException("fn:parse-xml argument must not be empty.");
-        var doc = Xml11Loader.Parse(xml, LoadOptions.PreserveWhitespace);
+            throw new InvalidOperationException("FODC0006: fn:parse-xml argument must not be empty.");
+        XDocument doc;
+        try
+        {
+            // The static base URI feeds external DTD/entity resolution (parse-xml-008).
+            doc = Xml11Loader.Parse(xml, LoadOptions.PreserveWhitespace, ctx.BaseUri);
+        }
+        catch (System.Xml.XmlException ex)
+        {
+            throw new InvalidOperationException($"FODC0006: Error parsing XML: {ex.Message}");
+        }
         XDocumentProvider.StripDocumentLevelWhitespace(doc);
         return XdmValue.FromNode(doc.ToXdmNode());
     }
@@ -4547,10 +4558,35 @@ public static class FunctionLibrary
         string xml = AtomizedString(args[0]);
         if (string.IsNullOrEmpty(xml))
             return XdmValue.Undefined;
+        // The fragment is parsed as external-entity content; a leading text declaration
+        // (<?xml ...?>) is legal there and ignored (parse-xml-fragment-001). The text
+        // declaration requires an encoding and forbids 'standalone' (FODC0006).
+        var trimmed = xml.TrimStart();
+        if (trimmed.StartsWith("<?xml", StringComparison.Ordinal))
+        {
+            int declEnd = trimmed.IndexOf("?>", StringComparison.Ordinal);
+            if (declEnd >= 0)
+            {
+                var declaration = trimmed[5..declEnd];
+                if (declaration.Contains("standalone", StringComparison.Ordinal))
+                    throw new InvalidOperationException("FODC0006: A text declaration in an external parsed entity must not contain 'standalone'.");
+                if (!declaration.Contains("encoding", StringComparison.Ordinal))
+                    throw new InvalidOperationException("FODC0006: A text declaration in an external parsed entity requires an encoding.");
+                xml = trimmed[(declEnd + 2)..];
+            }
+        }
         // Parse the fragment inside a synthetic document wrapper so it can hold any
         // sequence of top-level nodes. The wrapper is transparent to XDM axes.
         var wrapper = $"<__xdm_doc__>{xml}</__xdm_doc__>";
-        var doc = XDocument.Parse(wrapper, LoadOptions.PreserveWhitespace);
+        XDocument doc;
+        try
+        {
+            doc = XDocument.Parse(wrapper, LoadOptions.PreserveWhitespace);
+        }
+        catch (System.Xml.XmlException ex)
+        {
+            throw new InvalidOperationException($"FODC0006: Error parsing XML fragment: {ex.Message}");
+        }
         XDocumentProvider.StripDocumentLevelWhitespace(doc);
         return XdmValue.FromNode(new XDocumentNode(doc));
     }
@@ -6870,16 +6906,32 @@ public static class FunctionLibrary
                 : null));
 
     private static XdmValue Error_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => throw new InvalidOperationException("fn:error() called");
+        => throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", "fn:error() called");
 
     private static XdmValue Error_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => throw new InvalidOperationException($"fn:error({args[0].QNameValue}) called");
+    {
+        // An empty code argument behaves as err:FOER0000.
+        if (IsEmptySequence(args[0]))
+            throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", "fn:error() called");
+        var code = args[0].QNameValue;
+        throw new XPathErrorException(code.NamespaceUri, code.LocalName, code.Prefix, $"fn:error({code}) called");
+    }
 
     private static XdmValue Error_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => throw new InvalidOperationException($"fn:error({args[0].QNameValue}): {args[1]}");
+    {
+        if (IsEmptySequence(args[0]))
+            throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", args[1].ToString());
+        var code = args[0].QNameValue;
+        throw new XPathErrorException(code.NamespaceUri, code.LocalName, code.Prefix, args[1].ToString());
+    }
 
     private static XdmValue Error_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => throw new InvalidOperationException($"fn:error({args[0].QNameValue}): {args[1]}");
+    {
+        if (IsEmptySequence(args[0]))
+            throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", args[1].ToString(), args[2]);
+        var code = args[0].QNameValue;
+        throw new XPathErrorException(code.NamespaceUri, code.LocalName, code.Prefix, args[1].ToString(), args[2]);
+    }
 
     private static XdmValue Trace_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -6997,7 +7049,7 @@ public static class FunctionLibrary
         if (!arg.IsSequence)
             return arg;
         if (SequenceLength(arg) > 1)
-            throw new InvalidOperationException("fn:zero-or-one called with a sequence containing more than one item.");
+            throw new InvalidOperationException("FORG0003: fn:zero-or-one called with a sequence containing more than one item.");
         // Sequence contains exactly one item: return that item.
         foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
             return item;
@@ -7008,7 +7060,7 @@ public static class FunctionLibrary
     {
         var arg = args[0];
         if (IsEmptySequence(arg))
-            throw new InvalidOperationException("fn:one-or-more called with an empty sequence.");
+            throw new InvalidOperationException("FORG0004: fn:one-or-more called with an empty sequence.");
         if (!arg.IsSequence)
             return arg;
         return arg;
@@ -7018,7 +7070,7 @@ public static class FunctionLibrary
     {
         var arg = args[0];
         if (IsEmptySequence(arg))
-            throw new InvalidOperationException("fn:exactly-one called with an empty sequence.");
+            throw new InvalidOperationException("FORG0005: fn:exactly-one called with an empty sequence.");
         if (!arg.IsSequence)
             return arg;
         XdmValue first = default;
@@ -7028,10 +7080,10 @@ public static class FunctionLibrary
             first = item;
             count++;
             if (count > 1)
-                throw new InvalidOperationException("fn:exactly-one called with a sequence containing more than one item.");
+                throw new InvalidOperationException("FORG0005: fn:exactly-one called with a sequence containing more than one item.");
         }
         if (count == 0)
-            throw new InvalidOperationException("fn:exactly-one called with an empty sequence.");
+            throw new InvalidOperationException("FORG0005: fn:exactly-one called with an empty sequence.");
         return first;
     }
 

@@ -1,6 +1,44 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
+**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xpath): try/catch named error codes and error variables)
+**Current focus:** **try/catch completion — named error codes, multiple catch clauses, and the `err:*` error variables**: full XPath 3.1 try/catch semantics on both pipelines (it is XPath grammar, not XQuery-only). QT3 went from **28,931 passed / 0 failed / 2,890 skipped (90.92%)** to **29,114 passed / 0 failed / 2,707 skipped (91.49%)** (+183 passing). Full `dotnet test Bosak.sln` passes: **1,524 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (try/catch)
+
+1. **Catch code patterns & multiple clauses** — `TryCatchNode` now holds `IReadOnlyList<TryCatchClause>`; each clause carries a `CatchCodePattern` list (`*`, `prefix:local`, `prefix:*`, `*:local`, `Q{uri}local`, `Q{uri}*`, unprefixed NCName → empty namespace). The shared `XPathParser` accepts the full `CatchErrorList` grammar on both pipelines, one-or-more catch clauses, first-match-wins, and **empty try/catch bodies** (try-019/020). An error matching no clause propagates unchanged.
+2. **Structured errors** — new `XPathErrorException` (Runtime layer: code ns/local/prefix, description, error value) thrown by `fn:error` (empty code → `err:FOER0000` per spec, fn-error-5); `XPathError.GetErrorDetails` decomposes it directly and parses legacy `fn:error(Q{uri}local): desc`, `CODE: desc`, and bare-`CODE` messages back (ported from the XSLT engine's helper, which now also recognizes the new exception type).
+3. **Catch matching & `err:*` variables (VM)** — `TryCatchInfo` carries ordered clauses; the `TryCatch` opcode matches patterns (prefixes resolved via the evaluation context) and binds all **seven** error variables with previous-value save/restore (nested try, try-011): `err:code` as an `xs:QName` (prefix preserved), `err:description`, `err:value` (fn:error's third argument), `err:module`/`err:line-number`/`err:column-number` (empty/zero — the VM tracks no source positions), and `err:additional` (empty — implementation-defined; try-021 vs try-catch-err-other-variable-1).
+4. **Errors that bypass catch** — static-coded errors (XPST/XQST from the message convention, i.e. not raised by `fn:error`) propagate even when a pattern matches (try-catch-static-error-1..4); errors from **lazy global variable initializers** are wrapped in `GlobalVariableEvaluationException` by the XQuery resolver, never caught by try/catch (try-006/007), and unwrapped at the `XQueryExecutable` boundary.
+5. **Error-code hygiene surfaced by the tests** — `cast` failures carry FORG0001 (try-011/015, spec examples), `treat as` XPDY0050, computed-constructor unresolvable name prefix XQDY0074 (was XPST0081), `fn:zero-or-one`/`one-or-more`/`exactly-one` FORG0003/0004/0005, `fn:parse-xml`/`parse-xml-fragment` wrap `XmlException` as FODC0006; `parse-xml` resolves external DTDs against the static base URI (parse-xml-008..010); `parse-xml-fragment` accepts and validates a leading text declaration (encoding mandatory, `standalone` forbidden; parse-xml-fragment-001/016/017).
+6. **Gaps unchanged (499 reasoned skips)** — all try/catch-cluster failures were fixed, none gap-listed; prod/TryCatchExpr **172/0/1** (the one skip is dependency-gated).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/{XPathAstNode,XPathParser}.cs`, `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `src/Bosak.XPath.Runtime/Vm/{VmEngine,XPathError}.cs` (XPathError is new)
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`
+- `src/Bosak.XPath.Api/XPath31Expression.cs`, `src/Bosak.XQuery/{Api/XQueryCompiler,Api/XQueryExecutable,Compiler/ModuleVisibilityValidator}.cs`
+- `tests/Bosak.XPath.Conformance/TestExecutor.cs`, `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (+15 tests), `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+2 tests)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (499 recorded skips)
+
+Largest clusters: `prod/StringConstructor` (35 — string constructors `` `[...]` `` not implemented), `prod/Annotation` (24 — inline-function annotations and annotation assertions in function tests), `prod/NameTest` (22), `prod/VarDecl.external` (17 — external variable semantics), `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/NamespaceDecl` (11), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,200 skips are `unordered`/`ordered`/`validate`, schema awareness, `fn:load-xquery-module`, and `sudoku` (too slow).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **String constructors** (`` `[...]` ``; 35-test cluster, the largest single gap set).
+2. **`unordered`/`ordered`** (trivial no-op semantics in a non-ordered engine).
+3. **prod/NameTest cluster** (22 tests) or **external variable semantics** (`prod/VarDecl.external`, 17 tests).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-27
 **Commit:** `57c5bc3` (feat(xquery): library modules — Phase 4 modules slice 2)
 **Current focus:** **XQuery 3.1 Phase 4 — library modules slice 2: `module namespace` / `import module`**: library module declarations, module imports with location hints, the transitive import graph with same-namespace merging and cycle tolerance, `%public`/`%private` declaration annotations with static visibility enforcement, and per-module static contexts at compile time and runtime. QT3 went from **28,735 passed / 0 failed / 3,086 skipped (90.30%)** to **28,931 passed / 0 failed / 2,890 skipped (90.92%)** (+196 passing). Full `dotnet test Bosak.sln` passes: **1,509 unit tests / 0 failed**; XSLT baseline unchanged.
 

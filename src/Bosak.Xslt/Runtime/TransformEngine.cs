@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 6.17  | 27-07-2026     | GetErrorDetails handles XPathErrorException from the XPath/XQuery fn:error |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 25 mei 2026
@@ -10177,6 +10179,12 @@ public sealed class TransformEngine
         if (ex is XsltRuntimeException xre)
         {
             return (new XsQName(xre.ErrorCode, ErrNs, string.Empty), xre.Message, xre.ErrorValue);
+        }
+
+        // Structured errors from fn:error (XPath/XQuery pipeline) carry their code directly.
+        if (ex is Bosak.XPath.Runtime.Vm.XPathErrorException xee)
+        {
+            return (new XsQName(xee.CodeLocalName, xee.CodeNamespaceUri, xee.CodePrefix), xee.Message, xee.ErrorValue);
         }
 
         if (ex is InvalidOperationException ioe)

@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 0.2   | 27-07-2026     | Traversal for multi-clause TryCatchNode |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 27 July 2026
@@ -293,7 +295,8 @@ internal static class ModuleVisibilityValidator
                     break;
                 case TryCatchNode tc:
                     Walk(tc.TryExpression);
-                    Walk(tc.CatchExpression);
+                    foreach (var c in tc.Clauses)
+                        Walk(c.Expression);
                     break;
                 case LookupNode lookup:
                     Walk(lookup.Expression);

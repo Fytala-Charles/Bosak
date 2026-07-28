@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 27 July 2026
-> **Bosak baseline:** 1,509 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 28,931 passed / 0 failed / 2,890 skipped (90.92% / 100% of runnable tests) — XQuery routing enabled; 499 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,524 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,114 passed / 0 failed / 2,707 skipped (91.49% / 100% of runnable tests) — XQuery routing enabled; 499 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules
 
@@ -14,6 +14,13 @@
 
 ## 0. Recent Changes
 
+- **2026-07-27** — **try/catch completion** (REQ-052): QT3 **29,114 passed / 0 failed** (from 28,931; +183 passing).
+  - Full XPath 3.1 catch grammar on both pipelines: `catch CodePatternList { Expr }` with one-or-more clauses (first match wins), patterns `*`, `err:X`, `err:*`, `*:X`, `Q{uri}X`, `Q{uri}*`, NCName; empty try/catch bodies; unmatched errors propagate.
+  - All seven `err:*` variables bound with save/restore: `err:code` as `xs:QName` (prefix preserved), `err:description`, `err:value`, `err:module`, `err:line-number`, `err:column-number`, `err:additional` (empty).
+  - `fn:error` throws structured `XPathErrorException` (Runtime layer); empty code → `err:FOER0000`; error value surfaced via `$err:value`.
+  - Bypass rules: static-coded errors (XPST/XQST not from `fn:error`) and lazy global-variable initializer errors are never caught.
+  - Error-code hygiene: `cast` FORG0001, `treat as` XPDY0050, computed-constructor prefix XQDY0074, `fn:zero-or-one`/`one-or-more`/`exactly-one` FORG0003/0004/0005, `fn:parse-xml`/`parse-xml-fragment` FODC0006 with external-DTD resolution against the static base URI and validated text declarations in fragments.
+  - prod/TryCatchExpr 172/0/1; gaps unchanged (499 reasoned skips).
 - **2026-07-27** — XQuery 3.1 Phase 4: **library modules** (slice 2, REQ-051): QT3 **28,931 passed / 0 failed** (from 28,735; +196 passing).
   - `module namespace prefix = "uri";` library modules and `import module (namespace p =)? "uri" (at "loc", ...)?;` in main and library modules; module namespace URIs and location hints get whitespace normalization; import cycles are legal; multiple modules may share one target namespace (merged, XQST0034/XQST0049 on collisions).
   - Static validations: XQST0047 (duplicate import), XQST0088 (empty target namespace), XQST0059 (module not found / target-namespace mismatch), XQST0048 (declaration outside the target namespace), XQST0070 (xml/xmlns import prefix), XQST0108 (output declaration in a library module), XQST0113 (context-item value/default in a library module), XQST0032 (duplicate base-uri), XPST0003 (library module as query / body in a library module).

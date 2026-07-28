@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 1.5   | 27-07-2026     | try/catch named-code and global-variable-not-caught tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 06 June 2026
@@ -1310,6 +1312,32 @@ public class PlaceholderTests
 
         Assert.Equal(XdmValueKind.Integer, result.Kind);
         Assert.Equal(105L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_TryCatch_NamedCodeInQuery()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "try { fn:error(fn:QName('http://www.w3.org/2005/xqt-errors', 'err:FOER0001')) } " +
+            "catch err:FOAR0001 { 'first' } catch err:FOER0001 { 'second' } catch * { 'fallback' }");
+        var result = executable.Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("second", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_TryCatch_GlobalVariableErrorNotCaught()
+    {
+        // Errors raised while evaluating a global variable initializer are NOT caught by
+        // try/catch (QT3 try-006/007).
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare variable $boom := fn:error(fn:QName('http://www.w3.org/2005/xqt-errors', 'err:FOER0001')); " +
+            "try { $boom } catch * { 'caught' }");
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(new XQueryContext()));
+        Assert.Contains("FOER0001", ex.Message);
     }
 
     [Fact]

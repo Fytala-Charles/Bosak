@@ -1,3 +1,5 @@
+//                      | Charles Korthout | 1.9   | 27-07-2026     | TryCatchNode holds multiple catch clauses with error-code name-test patterns |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -311,8 +313,21 @@ public sealed record TreatNode(XPathAstNode Expression, string TypeName, string?
 /// <summary>Arrow expression: <c>$x => upper-case()</c></summary>
 public sealed record ArrowExprNode(XPathAstNode Source, XPathAstNode Target) : XPathAstNode;
 
-/// <summary>Try/catch expression: <c>try { A } catch * { B }</c></summary>
-public sealed record TryCatchNode(XPathAstNode TryExpression, XPathAstNode CatchExpression) : XPathAstNode;
+/// <summary>Try/catch expression: <c>try { A } catch CodePatternList { B } (catch CodePatternList { C })*</c></summary>
+public sealed record TryCatchNode(XPathAstNode TryExpression, IReadOnlyList<TryCatchClause> Clauses) : XPathAstNode;
+
+/// <summary>One catch clause of a try/catch expression: <c>catch PatternList { Expr }</c>; first matching clause wins.</summary>
+public sealed record TryCatchClause(IReadOnlyList<CatchCodePattern> Patterns, XPathAstNode Expression);
+
+/// <summary>
+/// One error-code pattern of a catch clause (an XPath NameTest over error codes):
+/// <c>*</c> matches everything; <c>prefix:local</c>/<c>prefix:*</c> resolve the prefix at
+/// runtime; <c>*:local</c> matches any namespace (<see cref="Prefix"/> is "*");
+/// <c>Q{uri}local</c>/<c>Q{uri}*</c> carry the namespace in <see cref="NamespaceUri"/>;
+/// an unprefixed name matches the empty namespace (<see cref="NamespaceUri"/> is "").
+/// A null <see cref="LocalName"/> is a namespace-local wildcard.
+/// </summary>
+public sealed record CatchCodePattern(string? Prefix, string? LocalName, string? NamespaceUri);
 
 /// <summary>Lookup (postfix): <c>$map?key</c> or <c>$array?1</c></summary>
 public sealed record LookupNode(XPathAstNode Expression, XPathAstNode Key) : XPathAstNode;
