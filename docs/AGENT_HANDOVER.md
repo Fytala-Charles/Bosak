@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
-**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xquery): library modules — Phase 4 modules slice 2)
+**Commit:** `57c5bc3` (feat(xquery): library modules — Phase 4 modules slice 2)
 **Current focus:** **XQuery 3.1 Phase 4 — library modules slice 2: `module namespace` / `import module`**: library module declarations, module imports with location hints, the transitive import graph with same-namespace merging and cycle tolerance, `%public`/`%private` declaration annotations with static visibility enforcement, and per-module static contexts at compile time and runtime. QT3 went from **28,735 passed / 0 failed / 3,086 skipped (90.30%)** to **28,931 passed / 0 failed / 2,890 skipped (90.92%)** (+196 passing). Full `dotnet test Bosak.sln` passes: **1,509 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (library modules)
