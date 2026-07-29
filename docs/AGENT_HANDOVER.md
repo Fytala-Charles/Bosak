@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
-**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xquery): string constructors)
+**Commit:** `5413242` (feat(xquery): string constructors)
 **Current focus:** **XQuery 3.1 string constructors** (`` `[literal `{expr}` literal]``) implemented end-to-end: lexer whole-span tokenization with full nesting awareness, a `StringConstructorNode` AST, and a spec-faithful desugar to `fn:string-join`. QT3 went from **29,114 passed / 0 failed / 2,707 skipped (91.49%)** to **29,150 passed / 0 failed / 2,671 skipped (91.61%)** (+36 passing; the StringConstructor set went 14/0/38 to **49/0/3**). Full `dotnet test Bosak.sln` passes: **1,536 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (string constructors)
