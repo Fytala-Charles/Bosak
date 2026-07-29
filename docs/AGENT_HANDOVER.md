@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
-**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xquery): ordered/unordered expressions and ordering declarations)
+**Commit:** `6c9e828` (feat(xquery): ordered/unordered expressions and ordering declarations)
 **Current focus:** **XQuery ordering features**: `ordered { E }` / `unordered { E }` expressions (identity in this engine — sequences are always produced in document order, a valid implementation of both ordering modes), the `declare ordering` prolog (XQST0065), and `declare default order empty least|greatest` (XQST0069) with the default applied to order-by clauses lacking an explicit empty modifier. QT3 went from **29,150 passed / 0 failed / 2,671 skipped (91.61%)** to **29,244 passed / 0 failed / 2,577 skipped (91.90%)** (+94 passing). Full `dotnet test Bosak.sln` passes: **1,544 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (ordering)
