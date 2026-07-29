@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 27-07-2026     | Global-variable initializer errors marked to bypass try/catch (try-006/007) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 29-07-2026     | Typed external-variable binding check (XPTY0004); undeclared prefixes unbound at runtime |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
@@ -148,6 +150,11 @@ public sealed class XQueryExecutable
                 ctx.WithNamespace(prefix, nsUri);
         }
 
+        // Namespace undeclarations (declare namespace p = "") must also unbind the
+        // predeclared bindings of the runtime context (K2-NamespaceProlog-4/9).
+        foreach (var prefix in _staticContext.UndeclaredPrefixes)
+            ctx.RemoveNamespace(prefix);
+
         foreach (var ((localName, nsUri), value) in _staticContext.Variables)
         {
             ctx.WithVariable(localName, value, nsUri);
@@ -214,6 +221,20 @@ public sealed class XQueryExecutable
                 }
                 return previousResolver?.Invoke(local, ns);
             };
+        }
+
+        // External variables with a declared type: the supplied value is checked strictly
+        // (atomization plus instance-of, no casts or promotions) — XPTY0004 on mismatch
+        // (extvardeclwithtype-19). Unbound externals resolve to XPST0008 on reference.
+        foreach (var v in _userVariables)
+        {
+            if (!v.IsExternal || v.TypeName is null)
+                continue;
+            if (!ctx.TryGetVariable(v.LocalName, out var externalValue, v.NamespaceUri))
+                continue;
+            var valueToCheck = IsNodeKindTestText(v.TypeName) ? externalValue : AtomizeItemsForTypeCheck(externalValue);
+            if (!VmEngine.ValueMatchesType(valueToCheck, v.TypeName, ctx))
+                throw new InvalidOperationException($"XPTY0004: The value of the external variable '${v.LocalName}' does not match the declared type '{v.TypeName}'.");
         }
 
         // Output declarations (declare option output:* "...") become the static
@@ -308,6 +329,41 @@ public sealed class XQueryExecutable
             ctx.DefaultElementNamespace = defaultElementNamespace;
         if (!string.IsNullOrEmpty(defaultCollation))
             ctx.DefaultCollation = defaultCollation;
+    }
+
+    // Atomizes node items in an external variable's value for strict type checking
+    // (XQuery 3.1 §4.16: nodes become xs:untypedAtomic; atomic values pass through).
+    private static XdmValue AtomizeItemsForTypeCheck(XdmValue value)
+    {
+        if (value.IsNode)
+            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
+        if (!value.IsSequence || value.SequenceValue is null)
+            return value;
+        var items = new List<XdmValue>();
+        bool anyNode = false;
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+        {
+            if (item.IsNode)
+                anyNode = true;
+            items.Add(item.IsNode ? XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic") : item);
+        }
+        return anyNode ? XdmValue.FromSequence(MaterializedSequence.FromList(items)) : value;
+    }
+
+    // True when a sequence-type text is a node kind test (matched on nodes, no atomization).
+    private static bool IsNodeKindTestText(string typeName)
+    {
+        var t = typeName.TrimStart();
+        return t.StartsWith("element(", StringComparison.Ordinal)
+            || t.StartsWith("attribute(", StringComparison.Ordinal)
+            || t.StartsWith("document-node(", StringComparison.Ordinal)
+            || t.StartsWith("comment(", StringComparison.Ordinal)
+            || t.StartsWith("text(", StringComparison.Ordinal)
+            || t.StartsWith("processing-instruction(", StringComparison.Ordinal)
+            || t.StartsWith("namespace-node(", StringComparison.Ordinal)
+            || t.StartsWith("schema-element(", StringComparison.Ordinal)
+            || t.StartsWith("schema-attribute(", StringComparison.Ordinal)
+            || t.StartsWith("node(", StringComparison.Ordinal);
     }
 
     // Expands QName tokens in a whitespace-separated list to '{uri}local' form using the

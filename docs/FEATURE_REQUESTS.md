@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-28 (XPath/XQuery: **NameTest cluster closed** (22 → 2) + constructor namespace semantics; QT3 now **29,264 passed / 0 failed** (91.96%); unit tests **1,558/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external cluster closed** (17 → 0) — strict typed initializers, ExprSingle initializers, namespace undeclaration, typed external variables; QT3 now **29,281 passed / 0 failed** (92.02%); unit tests **1,570/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -160,6 +160,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-053 | *(internal)* | XQuery 3.1 string constructors | Required for XQuery 3.1 conformance: `` `[literal `{expr}` literal]`` string constructors with interpolations, the largest single QT3 gap cluster (35 tests) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 | REQ-054 | *(internal)* | XQuery 3.1 ordering features | Required for XQuery 3.1 conformance: `ordered`/`unordered` expressions, `declare ordering`, and `declare default order empty least/greatest` with the default applied to order-by | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 | REQ-055 | *(internal)* | Name tests, kind-test types, and constructor namespace semantics | Required for XPath/XQuery conformance: XPST0081/XPST0008 name-test errors, kind-test schema type names, PI name validation, and spec-correct in-scope namespaces on constructed elements | **Implemented** | Phase 4 | Charles Korthout | 2026-07-28 |
+| REQ-056 | *(internal)* | Variable declaration type strictness and external variables | Required for XQuery conformance: ExprSingle initializers, strict `as T` enforcement (no casts/promotions), kind-test occurrence validation, namespace undeclaration, and typed external-variable binding checks | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2544,13 +2545,60 @@ Fix the four error-code clusters at their sources (VM namespace tests, kind-test
 
 ---
 
+### REQ-056: Variable declaration type strictness and external variables
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The prod/VarDecl.external cluster (17 recorded gaps) covered five non-conformances in `declare variable`: initializers were parsed as full `Expr` so a top-level comma was silently accepted; a declared `as T` caused implicit conversion instead of a strict check (untypedAtomic→integer, numeric promotion, URI promotion all wrongly succeeded); occurrence indicators inside kind-test type names (`element(*, xs:untyped+)`) were accepted; `declare namespace p = ""` removed the binding statically but left the runtime's predeclared bindings live (so undeclaring `xs` did nothing); and external variables with a declared type never had their supplied values checked.
+
+**Proposed Solution:**  
+Parse initializers as `ExprSingle` (new `XPathParser.ParseExprSingle` entry); enforce declared types strictly via an `EnforceType` instruction appended to the initializer module (atomization + instance check, XPTY0004); validate kind-test type occurrence indicators in the XQuery parser (XPST0003 for `*`/`+`, `?` allowed as the XSD 1.1 nullable marker); track undeclared prefixes in the static context and unbind them in the runtime context; check typed external-variable bindings at execution start; and resolve prefixed harness `<param>` names against the param element's own in-scope namespaces.
+
+**Acceptance Criteria:**
+- [x] `declare variable $i := 1, 1;` raises **XPST0003** (K2-ExternalVariablesWith-11).
+- [x] Typed initializers are strict: `xs:integer := xs:untypedAtomic("1")`, `xs:float|xs:double := 1` / `:= 1.1` / `:= xs:float(3)`, `xs:string := xs:untypedAtomic(...)` / `:= xs:anyURI(...)` all raise **XPTY0004** (K2-ExternalVariablesWith-12..19); nodes atomize to `xs:untypedAtomic` for the check (the variable keeps its original value).
+- [x] `element(*, xs:untyped+)` / `element(*, xs:untyped*)` (and named-element forms) raise **XPST0003**; `element(*, xs:untyped?)` and `element(elementName, xs:anyType?)` work (K2-ExternalVariablesWith-22..27).
+- [x] `declare namespace xs = ""; xs:integer(1)` raises **XPST0081** (K2-NamespaceProlog-4/9); `declare namespace prefix = ""; declare variable $prefix:x external;` raises **XPST0081** (K2-ExternalVariablesWithout-3); unbound function/variable prefixes report XPST0081 (previously a code-less message).
+- [x] Typed external variables: bound values are checked strictly, mismatch raises **XPTY0004** (extvardeclwithtype-19); prefixed external bindings resolve through the `<param>` element's own namespaces (extvardeclwithouttype-24, extvardeclwithtype-24).
+- [x] QT3: prod/VarDecl.external **96/0/3**; full suite **29,281 passed / 0 failed / 2,540 skipped (92.02%)**; gaps **445** (−17).
+- [x] Unit tests: 12 new tests; full suite **1,570/0**.
+
+**Implementation Notes:**
+- `XPathParser.ParseExprSingle(xpath, allowFullFlwor, xml11LineEndings)` parses one ExprSingle and raises XPST0003 on trailing tokens; the XQuery parser's `ReadExpressionTo(';')` (variable initializers and context-item initial values — all ExprSingle per grammar) routes through it.
+- `XQueryCompiler.WithEnforcedType` splits a trailing occurrence indicator off the type text and inserts an `EnforceType` instruction (pool entry `EnforceTypeInfo(typeName, occurrence, "XPTY0004")`) before the initializer module's final Return; the VM's EnforceType opcode atomizes per item unless the type is a node kind test.
+- `XQueryStaticContext.UndeclaredPrefixes` records prefixes undeclared and not later redeclared; `XQueryExecutable.ApplyStaticContext` calls `EvaluationContext.RemoveNamespace` for each — this is what makes undeclaring the *predeclared* `xs` prefix observable.
+- Two NamespaceProlog tests were previously false-passing: the old code threw XPST0017 (function-not-found after resolving `xs` to the empty URI) which the comparer's lenient `InvalidOperationException` matching accepted for the expected XPST0081.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `ParseExprSingle` entry; kind-test occurrence validation; initializers as ExprSingle. |
+| Runtime | Modified | EnforceType atomization; namespace undeclaration in `WithNamespace`/`RemoveNamespace`; XPST0081 codes for unbound prefixes. |
+| XQuery | Modified | `WithEnforcedType`; `UndeclaredPrefixes`; typed external binding check. |
+| Conformance | Modified | Prefixed `<param>` namespace resolution; gaps 445. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Strict type enforcement (no casts/promotions) for variable declarations | XQuery 3.1 §4.16: the declared type is checked after atomization; the function conversion rules do NOT apply to variable initializers (K2-ExternalVariablesWith-12..19). |
+| 2026-07-29 | Kimi | `?` allowed inside kind-test type names, `*`/`+` rejected | `?` is the XSD 1.1 nullable-type marker (K2-ExternalVariablesWith-22a/23 expect success); occurrence indicators `*`/`+` are grammatically excluded (K2-ExternalVariablesWith-24..27). |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-055 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed; QT3 wired (29,264/0, 91.96%). VarDecl.external, Annotation, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-056 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed; QT3 wired (29,281/0, 92.02%). Annotation, NamespaceDecl, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

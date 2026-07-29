@@ -71,6 +71,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.33  | 28-07-2026     | PI kind test: trimmed NCName argument with XPTY0004/XPST0003; kind-test schema type names captured |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.34  | 29-07-2026     | ParseExprSingle entry point: single ExprSingle, trailing tokens raise XPST0003 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -143,6 +145,29 @@ public sealed class XPathParser
 
         var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings };
         return parser.ParseExpression();
+    }
+
+    /// <summary>
+    /// Convenience method: lexes and parses a single XPath ExprSingle, requiring the whole
+    /// input to be consumed. XQuery variable initializers and context-item initial values
+    /// are ExprSingle, not Expr (a top-level comma is XPST0003, K2-ExternalVariablesWith-11).
+    /// </summary>
+    /// <param name="xpath">The XPath expression to parse.</param>
+    /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax. Default is false.</param>
+    /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending normalization.</param>
+    public static XPathAstNode ParseExprSingle(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false)
+    {
+        var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
+        var tokens = new List<Token>();
+        Token tok;
+        while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
+            tokens.Add(tok);
+
+        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings };
+        var result = parser.ParseExprSingle();
+        if (!parser.IsAtEnd)
+            throw new ParseException($"XPST0003: Unexpected token {parser.Current.Kind} after the expression.", parser.Current.Start);
+        return result;
     }
 
     // ------------------------------------------------------------------

@@ -47,6 +47,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.10  | 25-07-2026     | Added StaticOutputParameters for XQuery output declarations                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.11  | 29-07-2026     | WithNamespace removes the binding on zero-length URI (namespace undeclaration) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -496,7 +498,11 @@ public sealed class EvaluationContext
 
     public EvaluationContext WithNamespace(string prefix, string namespaceUri)
     {
-        _namespaces[prefix] = namespaceUri;
+        // A zero-length URI undeclares the prefix (XQuery namespace undeclaration).
+        if (namespaceUri.Length == 0 && prefix.Length > 0)
+            _namespaces.Remove(prefix);
+        else
+            _namespaces[prefix] = namespaceUri;
         return this;
     }
 

@@ -6,10 +6,6 @@
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : License.txt
-//                      | Charles Korthout | 2.73  | 27-07-2026     | TryCatch: code-pattern clause matching, err:* binding, static-error bypass; FORG0001/XPDY0050/XQDY0074 codes |
-//                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 2.74  | 28-07-2026     | NameTest XPST0081 for unbound prefixes; KindTestType opcode; instance-of prefixed-name ns check; attr type compat supertypes |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -130,6 +126,12 @@
 //                      | Charles Korthout | 2.71  | 25-07-2026     | Literal-only attribute whitespace normalization; xml:id collapse normalization                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.72  | 26-07-2026     | User-function semantics: absent focus; full variable-scope snapshot per call; attribute atomization; function coercion; order-by type families |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.73  | 27-07-2026     | TryCatch: code-pattern clause matching, err:* binding, static-error bypass; FORG0001/XPDY0050/XQDY0074 codes |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.74  | 28-07-2026     | NameTest XPST0081 for unbound prefixes; KindTestType opcode; instance-of prefixed-name ns check; attr type compat supertypes |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.75  | 29-07-2026     | EnforceType atomization for typed variable initializers; XPST0081 for unbound function/variable prefixes |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1046,9 +1048,13 @@ public static class VmEngine
 
                 case IrOpCode.EnforceType:
                     {
-                        // XQuery 'as SequenceType' enforcement for FLWOR variable bindings.
+                        // XQuery 'as SequenceType' enforcement for variable bindings: the
+                        // value is atomized (unless the target is a node-kind test) and then
+                        // instance-checked — no casts or promotions (XQuery 3.1 §4.16/§4.10).
                         var enforceInfo = (EnforceTypeInfo)literalPool[instr.Operand]!;
                         var value = registers[instr.RegisterA];
+                        if (!IsNodeKindTest(enforceInfo.TypeName))
+                            value = AtomizeItems(value);
                         if (!InstanceOf(value, enforceInfo.TypeName, enforceInfo.Occurrence, null, context))
                         {
                             throw new InvalidOperationException(
@@ -2968,7 +2974,7 @@ public static class VmEngine
         if (prefix is not null)
         {
             if (context is null || !context.TryResolveNamespace(prefix, out nsUri))
-                throw new InvalidOperationException($"Unknown namespace prefix: {prefix}");
+                throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
         }
         else
         {
@@ -3006,7 +3012,7 @@ public static class VmEngine
         if (prefix is not null)
         {
             if (!context.TryResolveNamespace(prefix, out var resolvedNs))
-                throw new InvalidOperationException($"Unknown namespace prefix: {prefix}");
+                throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
             nsUri = resolvedNs;
         }
 
@@ -3376,6 +3382,49 @@ public static class VmEngine
         }
 
         return value;
+    }
+
+    // Atomizes node items in a value (one level; sequence items are mapped individually)
+    // for variable-declaration type checking (XQuery 3.1 §4.16).
+    private static XdmValue AtomizeItems(XdmValue value)
+    {
+        if (value.IsNode)
+            return Atomize(value);
+        if (!value.IsSequence || value.SequenceValue is null)
+            return value;
+        var items = MaterializeSequence(value);
+        bool anyNode = false;
+        foreach (var item in items)
+        {
+            if (item.IsNode)
+            {
+                anyNode = true;
+                break;
+            }
+        }
+        if (!anyNode)
+            return value;
+        var atomized = new List<XdmValue>(items.Length);
+        foreach (var item in items)
+            atomized.Add(item.IsNode ? Atomize(item) : item);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(atomized));
+    }
+
+    // True when a sequence-type text is a node kind test (element/attribute/node/...),
+    // whose matching applies to the nodes themselves without atomization.
+    private static bool IsNodeKindTest(string typeName)
+    {
+        var t = typeName.TrimStart();
+        return t.StartsWith("element(", StringComparison.Ordinal)
+            || t.StartsWith("attribute(", StringComparison.Ordinal)
+            || t.StartsWith("document-node(", StringComparison.Ordinal)
+            || t.StartsWith("comment(", StringComparison.Ordinal)
+            || t.StartsWith("text(", StringComparison.Ordinal)
+            || t.StartsWith("processing-instruction(", StringComparison.Ordinal)
+            || t.StartsWith("namespace-node(", StringComparison.Ordinal)
+            || t.StartsWith("schema-element(", StringComparison.Ordinal)
+            || t.StartsWith("schema-attribute(", StringComparison.Ordinal)
+            || t.StartsWith("node(", StringComparison.Ordinal);
     }
 
     private static string AtomizedStringValue(XdmValue value)

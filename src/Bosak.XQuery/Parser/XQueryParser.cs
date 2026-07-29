@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 27-07-2026     | declare ordering (XQST0065) and declare default order empty (XQST0069) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 29-07-2026     | Variable initializers parsed as ExprSingle; element/attribute type +/* occurrence rejected (XPST0003) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -1068,10 +1070,12 @@ public sealed class XQueryParser
         }
         if (_position == nameStart)
             throw new ParseException("XPST0003: Expected item type.", _position);
+        var itemTypeName = _source[nameStart.._position];
         // Optional parenthesized arguments: (), (*), (element-name), (*:name), etc.
         SkipWhitespace();
         if (_position < _source.Length && _source[_position] == '(')
         {
+            int contentStart = _position + 1;
             int depth = 0;
             do
             {
@@ -1081,6 +1085,19 @@ public sealed class XQueryParser
                 else if (_source[_position] == ')') depth--;
                 _position++;
             } while (depth > 0);
+            // Inside a kind test (element/attribute/schema-element/schema-attribute), the
+            // optional type name must not carry an occurrence indicator ('*' or '+';
+            // '?' is the XSD 1.1 nullable-type marker and is allowed — K2-ExternalVariablesWith-22a/23 vs 24..27).
+            if (itemTypeName is "element" or "attribute" or "schema-element" or "schema-attribute")
+            {
+                var trimmed = _source[contentStart..(_position - 1)].Trim();
+                bool badOccurrence = trimmed.Length > 0 && trimmed[^1] == '+';
+                bool badStar = trimmed.Length > 1 && trimmed[^1] == '*'
+                    && !trimmed.EndsWith(":*", StringComparison.Ordinal)
+                    && !trimmed.EndsWith("}*", StringComparison.Ordinal);
+                if (badOccurrence || badStar)
+                    throw new ParseException($"XPST0003: An occurrence indicator ('*' or '+') is not allowed inside the {itemTypeName}() type.", nameStart);
+            }
         }
         // Function tests may carry a return type: function(xs:integer) as xs:integer.
         SkipWhitespace();
@@ -1124,6 +1141,8 @@ public sealed class XQueryParser
     }
 
     // Scans an expression up to the top-level terminator and parses it with the XPath parser.
+    // Variable initializers and context-item initial values are ExprSingle per the grammar:
+    // a top-level comma is a syntax error (K2-ExternalVariablesWith-11).
     private XPathAstNode ReadExpressionTo(char terminator)
     {
         int start = _position;
@@ -1144,7 +1163,7 @@ public sealed class XQueryParser
             if (c == terminator && depth == 0)
             {
                 var inner = _source[start.._position];
-                return XPathParser.Parse(inner, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings);
+                return XPathParser.ParseExprSingle(inner, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings);
             }
             if (c is '(' or '[' or '{') depth++;
             else if (c is ')' or ']' or '}') depth--;

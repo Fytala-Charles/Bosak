@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 28 July 2026
-> **Bosak baseline:** 1,558 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,264 passed / 0 failed / 2,557 skipped (91.96% / 100% of runnable tests) — XQuery routing enabled; 462 XQuery conformance gaps recorded as reasoned skips
+> **Last updated:** 29 July 2026
+> **Bosak baseline:** 1,570 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,281 passed / 0 failed / 2,540 skipped (92.02% / 100% of runnable tests) — XQuery routing enabled; 445 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,12 @@
 
 ## 0. Recent Changes
 
+- **2026-07-29** — XQuery: **VarDecl.external cluster closed** (REQ-056): QT3 **29,281 passed / 0 failed** (from 29,264; +17 passing; gaps 445, −17).
+  - Variable initializers and context-item initial values are parsed as **ExprSingle**: a top-level comma is **XPST0003** (K2-ExternalVariablesWith-11).
+  - Declared `as T` on variable declarations is enforced **strictly** — atomization plus an instance check, no casts and no numeric/URI promotion; mismatch raises **XPTY0004** (K2-ExternalVariablesWith-12..19, extvardeclwithtype-19).
+  - Occurrence indicators inside kind-test type names: `element(*, xs:untyped+)` / `xs:untyped*` are **XPST0003**; `?` stays legal as the XSD 1.1 nullable marker.
+  - Namespace undeclarations (`declare namespace p = "";`) now unbind the runtime context too — undeclaring the predeclared `xs` prefix makes `xs:integer(1)` raise **XPST0081** (K2-NamespaceProlog-4/9); unbound function/variable prefixes report XPST0081.
+  - prod/VarDecl.external 96/0/3; prod/VarDecl, prod/NamespaceDecl, prod/FunctionDecl, FLWOR clause sets all green.
 - **2026-07-28** — XPath/XQuery: **NameTest cluster closed** (REQ-055): QT3 **29,264 passed / 0 failed** (from 29,244; +20 passing; gaps 462, −20).
   - Name tests with unresolvable prefixes raise **XPST0081**; kind-test schema type names are validated (**XPST0008** for undeclared types) and matched (untyped elements/attributes match untyped types and supertypes); `processing-instruction(...)` arguments are trimmed and NCName-validated (**XPTY0004**; **XPST0003** for invalid forms); `Q{   }*` normalizes to the empty-namespace wildcard.
   - Constructor in-scope namespaces are now spec-correct: explicit xmlns declarations and element-name bindings **propagate** to nested constructors with override semantics, while **attribute-name-implied** bindings stay local to the carrying element (`NonPropagatingNamespaceBinding` markers on constructed trees; `in-scope-prefixes`, `namespace-uri-for-prefix`, and the namespace axis honor them).

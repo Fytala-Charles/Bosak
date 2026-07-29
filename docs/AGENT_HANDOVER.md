@@ -1,5 +1,41 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): variable declaration type strictness and external variables)
+**Current focus:** **prod/VarDecl.external cluster closed** (17 gaps → 0): variable initializers are ExprSingle, declared-type initializers are enforced strictly (no casts/promotions), kind-test type occurrence indicators validated, namespace undeclarations propagated to the runtime, and typed external-variable bindings checked. QT3 went from **29,264 passed / 0 failed / 2,557 skipped (91.96%)** to **29,281 passed / 0 failed / 2,540 skipped (92.02%)** (+17 passing). Full `dotnet test Bosak.sln` passes: **1,570 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (VarDecl.external cluster)
+
+1. **Variable initializers are ExprSingle, not Expr** — new `XPathParser.ParseExprSingle` entry point (parses one ExprSingle, trailing tokens raise **XPST0003**); the XQuery parser's `ReadExpressionTo(';')` (variable initializers and context-item initial values) uses it, so `declare variable $i := 1, 1;` is a syntax error (K2-ExternalVariablesWith-11).
+2. **Strict typed initializers** — a declared `as T` on a variable wraps the initializer module with an `EnforceType` instruction (new `XQueryCompiler.WithEnforcedType`): atomization plus an instance check, **no casts, no numeric promotion, no URI/string promotion** (**XPTY0004**, K2-ExternalVariablesWith-12..19). The VM's `EnforceType` opcode atomizes per item (nodes → `xs:untypedAtomic`) unless the type is a node kind test.
+3. **Kind-test type occurrence indicators** — inside `element()`/`attribute()`/`schema-element()`/`schema-attribute()`, a type name carrying `*` or `+` is **XPST0003** (K2-ExternalVariablesWith-24..27); `?` stays legal as the XSD 1.1 nullable marker (K2-ExternalVariablesWith-22a/23).
+4. **Namespace undeclaration** — `declare namespace p = "";` removes the binding from the static context (already), and now also records it in `XQueryStaticContext.UndeclaredPrefixes` so `XQueryExecutable.ApplyStaticContext` unbinds it in the runtime context — undeclaring the predeclared `xs` prefix makes `xs:integer(1)` raise **XPST0081** (K2-NamespaceProlog-4/9, previously false-passing through lenient error matching after an XPST0017). Unbound function/variable prefixes in the VM now report the proper **XPST0081** code (was a code-less "Unknown namespace prefix" message).
+5. **Typed external variables** — `ApplyStaticContext` checks each bound value for an `external` variable with a declared type strictly (atomize, instance check; **XPTY0004** on mismatch, extvardeclwithtype-19). Harness: prefixed `<param>` names now resolve namespaces in scope on the `<param>` element itself, so `xmlns:test`-qualified external bindings reach the query (extvardeclwithouttype-24, extvardeclwithtype-24).
+6. **Gaps: 445 reasoned skips (−17)** — the whole `prod/VarDecl.external` cluster is implemented; the set runs **96/0/3** (remaining skips: K2-NameTest-5 keywords-as-names, NodeTest004 schema assertion, one typedData dependency).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`, `src/Bosak.XPath.Runtime/Vm/{EvaluationContext,VmEngine}.cs`
+- `src/Bosak.XQuery/{Parser/XQueryParser,Compiler/XQueryStaticContext,Api/XQueryCompiler,Api/XQueryExecutable}.cs`
+- `tests/Bosak.XPath.Conformance/{ConformanceRunner,TestEnvironment,TestExecutor}.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+12)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (445 recorded skips)
+
+Largest clusters: `prod/Annotation` (24 — inline-function annotations and annotation assertions in function tests), `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/NamespaceDecl` (11), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries from the previous session.
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **prod/NamespaceDecl cluster** (11 tests — adjacent to this session's undeclaration work: duplicate/contradictory declarations and default-namespace edge cases).
+2. **inline-function annotations** (prod/Annotation remainder, 24 tests — `%eg:*` on inline functions and annotation assertions in function tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-07-28
 **Commit:** `66d9e70` (feat(xpath): name tests, kind-test types, and constructor namespace semantics)
 **Current focus:** **prod/NameTest cluster closed** (22 gaps → 2) plus a deep pass over constructor in-scope namespace semantics. QT3 went from **29,244 passed / 0 failed / 2,577 skipped (91.90%)** to **29,264 passed / 0 failed / 2,557 skipped (91.96%)** (+20 passing). Full `dotnet test Bosak.sln` passes: **1,558 unit tests / 0 failed**; XSLT baseline unchanged.

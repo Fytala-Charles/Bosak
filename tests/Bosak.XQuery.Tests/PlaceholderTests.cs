@@ -44,6 +44,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 28-07-2026     | 4 constructor namespace-semantics tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 29-07-2026     | 12 typed variable declaration and namespace undeclaration tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -1793,6 +1795,126 @@ public class PlaceholderTests
         var ex = Assert.ThrowsAny<Exception>(() =>
             compiler.Compile("declare %public %public variable $foo := (); 1"));
         Assert.Contains("XQST0116", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_InitializerIsExprSingle_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $i := 1, 1; 1"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_UntypedAtomicNotConverted_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $i as xs:integer := xs:untypedAtomic(\"1\"); $i")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_NoNumericPromotion_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $i as xs:double := 1; $i")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_NoUriPromotion_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $i as xs:string := xs:anyURI(\"http://www.example.com/\"); $i")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_TypedMatch_Passes()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $i as xs:integer := 2; $i")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(2L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_NodeAtomizedToUntypedAtomic_Matches()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $v as xs:untypedAtomic := <e>text</e>; string($v)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("text", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_ElementAtomicPlus_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $v as element(*, xs:untyped+)+ := <e/>; 1"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_ElementAtomicQuestionMark_Allowed()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $v as element(*, xs:untyped?)+ := <e/>; exists($v/*)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Boolean, result.Kind);
+        Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_DeclareVariable_UndeclaredPrefix_ThrowsXPST0081()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare namespace prefix = \"\"; declare variable $prefix:x external; 1"));
+        Assert.Contains("XPST0081", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ExternalVariable_TypedMismatch_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $x as xs:integer external; $x")
+                .Evaluate(new XQueryContext().WithVariable("x", XdmValue.FromString("abc"))));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ExternalVariable_TypedMatch_Passes()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $x as xs:integer external; $x")
+            .Evaluate(new XQueryContext().WithVariable("x", XdmValue.FromInteger(42)));
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(42L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_UndeclareXsPrefix_ThrowsXPST0081()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare namespace xs = \"\"; xs:integer(1)")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPST0081", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

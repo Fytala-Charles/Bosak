@@ -38,6 +38,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.10  | 28-07-2026     | Gap list: NameTest cluster fixed (2 reasoned entries remain) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11  | 29-07-2026     | Drop 17 VarDecl.external gap entries (implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -583,24 +585,6 @@ internal sealed class ConformanceRunner
         // prod/ValueComp.xml (2 tests)
         ["value-comparison-5"] = "XQuery conformance gap (ValueComp): see AGENT_HANDOVER REQ-045",
         ["value-comparison-7"] = "XQuery conformance gap (ValueComp): see AGENT_HANDOVER REQ-045",
-        // prod/VarDecl.external.xml (17 tests)
-        ["K2-ExternalVariablesWith-11"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-12"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-13"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-14"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-15"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-16"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-17"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-18"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-19"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-24"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-25"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-26"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWith-27"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["K2-ExternalVariablesWithout-3"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["extvardeclwithouttype-24"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["extvardeclwithtype-19"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
-        ["extvardeclwithtype-24"] = "XQuery conformance gap (VarDecl.external): see AGENT_HANDOVER REQ-045",
         // prod/VarDecl.xml (6 tests)
         ["K-InternalVariablesWith-13"] = "XQuery conformance gap (VarDecl): see AGENT_HANDOVER REQ-045",
         ["K-InternalVariablesWith-14"] = "XQuery conformance gap (VarDecl): see AGENT_HANDOVER REQ-045",

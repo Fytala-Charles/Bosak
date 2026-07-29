@@ -39,6 +39,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.17  | 27-07-2026     | Admit ordered/unordered, declare ordering, declare default order empty |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.18  | 29-07-2026     | External param prefix binding prefers the param element's own namespace |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -101,7 +103,7 @@ internal sealed class TestExecutor
                 try
                 {
                     var value = XPath31Expression.Compile(param.SelectExpression).Evaluate(ctx);
-                    var (local, ns) = SplitVariableQName(param.Name, environment);
+                    var (local, ns) = SplitVariableQName(param, environment);
                     ctx = ctx.WithVariable(local, value, ns);
                 }
                 catch (Exception ex)
@@ -224,13 +226,17 @@ internal sealed class TestExecutor
     }
 
     /// <summary>Resolves a possibly prefixed variable name to (local, namespaceUri).</summary>
-    private static (string Local, string NamespaceUri) SplitVariableQName(string name, TestEnvironment environment)
+    private static (string Local, string NamespaceUri) SplitVariableQName(ExternalParameter param, TestEnvironment environment)
     {
+        string name = param.Name;
         int colon = name.IndexOf(':');
         if (colon < 0)
             return (name, "");
         var prefix = name.Substring(0, colon);
         var local = name.Substring(colon + 1);
+        // The prefix may be declared on the <param> element itself; that binding wins.
+        if (param.NamespaceUri is not null)
+            return (local, param.NamespaceUri);
         var binding = environment.Namespaces.FirstOrDefault(n => n.Prefix == prefix);
         return (local, binding?.Uri ?? "");
     }

@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 27-07-2026     | Apply inline <context-item select="..."/> as the initial focus                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 29-07-2026     | Prefixed <param> names resolve namespaces in scope on the param element itself |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -157,7 +159,13 @@ internal sealed class TestEnvironment
             string? select = (string?)param.Attribute("select");
             if (name is not null)
             {
-                env.Parameters.Add(new ExternalParameter(name, select ?? ""));
+                // A prefixed parameter name resolves against the namespaces in scope on the
+                // <param> element itself (extvardeclwithouttype-24's xmlns:test).
+                string? paramNs = null;
+                int colon = name.IndexOf(':');
+                if (colon > 0)
+                    paramNs = param.GetNamespaceOfPrefix(name[..colon])?.NamespaceName;
+                env.Parameters.Add(new ExternalParameter(name, select ?? "", paramNs));
             }
         }
 
@@ -371,5 +379,5 @@ internal sealed class TestEnvironment
 internal sealed record SourceDocument(string Role, string FilePath, string? Uri, string? Validation);
 internal sealed record SourceSchema(string? Uri, string FilePath);
 internal sealed record NamespaceBinding(string Prefix, string Uri);
-internal sealed record ExternalParameter(string Name, string SelectExpression);
+internal sealed record ExternalParameter(string Name, string SelectExpression, string? NamespaceUri = null);
 internal sealed record DecimalFormatEntry(string Name, string NamespaceUri, DecimalFormat Format);

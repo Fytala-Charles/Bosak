@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 27-07-2026     | DefaultEmptyOrderLeast static-context property |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 29-07-2026     | UndeclaredPrefixes tracking for namespace undeclarations (declare namespace p = "") |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -71,6 +73,7 @@ public sealed class XQueryStaticContext
     private readonly List<UserFunctionDeclaration> _userFunctions;
     private readonly List<UserVariableDeclaration> _userVariables;
     private readonly List<ModuleImport> _importedModules;
+    private readonly HashSet<string> _undeclaredPrefixes;
 
     /// <summary>
     /// Creates a static context with the standard XQuery namespace prefixes pre-bound.
@@ -95,6 +98,7 @@ public sealed class XQueryStaticContext
         _userFunctions = new List<UserFunctionDeclaration>();
         _userVariables = new List<UserVariableDeclaration>();
         _importedModules = new List<ModuleImport>();
+        _undeclaredPrefixes = new HashSet<string>(StringComparer.Ordinal);
     }
 
     private XQueryStaticContext(
@@ -105,6 +109,7 @@ public sealed class XQueryStaticContext
         List<UserFunctionDeclaration> userFunctions,
         List<UserVariableDeclaration> userVariables,
         List<ModuleImport> importedModules,
+        HashSet<string> undeclaredPrefixes,
         string? defaultElementNamespace,
         string? defaultFunctionNamespace,
         string? defaultCollation,
@@ -119,6 +124,7 @@ public sealed class XQueryStaticContext
         _userFunctions = userFunctions;
         _userVariables = userVariables;
         _importedModules = importedModules;
+        _undeclaredPrefixes = undeclaredPrefixes;
         DefaultElementNamespace = defaultElementNamespace;
         DefaultFunctionNamespace = defaultFunctionNamespace;
         DefaultCollation = defaultCollation;
@@ -191,6 +197,12 @@ public sealed class XQueryStaticContext
     public IReadOnlyList<ModuleImport> ImportedModules => _importedModules;
 
     /// <summary>
+    /// Prefixes explicitly undeclared in the prolog (<c>declare namespace p = "";</c>) and not
+    /// later redeclared. The runtime context must unbind these (K2-NamespaceProlog-4/9).
+    /// </summary>
+    public IReadOnlyCollection<string> UndeclaredPrefixes => _undeclaredPrefixes;
+
+    /// <summary>
     /// Creates a new context with an option declaration appended.
     /// </summary>
     public XQueryStaticContext WithOption(string localName, string namespaceUri, string value)
@@ -226,11 +238,23 @@ public sealed class XQueryStaticContext
 
     /// <summary>
     /// Creates a new context with the specified namespace binding added or replaced.
+    /// A zero-length URI undeclares the prefix (XQuery namespace undeclaration, K2-ExternalVariablesWithout-3).
     /// </summary>
     public XQueryStaticContext WithNamespace(string prefix, string namespaceUri)
     {
-        var copy = new Dictionary<string, string>(_namespaces) { [prefix] = namespaceUri };
-        return CloneWith(namespaces: copy);
+        var copy = new Dictionary<string, string>(_namespaces);
+        var undeclared = new HashSet<string>(_undeclaredPrefixes, StringComparer.Ordinal);
+        if (namespaceUri.Length == 0 && prefix.Length > 0)
+        {
+            copy.Remove(prefix);
+            undeclared.Add(prefix);
+        }
+        else
+        {
+            copy[prefix] = namespaceUri;
+            undeclared.Remove(prefix);
+        }
+        return CloneWith(namespaces: copy, undeclaredPrefixes: undeclared);
     }
 
     /// <summary>
@@ -289,6 +313,7 @@ public sealed class XQueryStaticContext
         List<UserFunctionDeclaration>? userFunctions = null,
         List<UserVariableDeclaration>? userVariables = null,
         List<ModuleImport>? importedModules = null,
+        HashSet<string>? undeclaredPrefixes = null,
         string? defaultElementNamespace = null,
         string? defaultFunctionNamespace = null,
         string? defaultCollation = null,
@@ -304,6 +329,7 @@ public sealed class XQueryStaticContext
             userFunctions ?? _userFunctions,
             userVariables ?? _userVariables,
             importedModules ?? _importedModules,
+            undeclaredPrefixes ?? _undeclaredPrefixes,
             defaultElementNamespace ?? DefaultElementNamespace,
             defaultFunctionNamespace ?? DefaultFunctionNamespace,
             defaultCollation ?? DefaultCollation,

@@ -38,11 +38,14 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.3   | 27-07-2026     | Thread prolog default order empty into the IR lowerer |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.4   | 29-07-2026     | WithEnforcedType wraps typed variable initializers with a strict EnforceType check |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
+using Bosak.XPath.Core;
 using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 using Bosak.XQuery.Compiler;
@@ -339,6 +342,10 @@ public sealed class XQueryCompiler
                     varBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables);
                 varModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
                     .Lower(optimizer.Optimize(varBodyAst));
+                // A declared type is enforced strictly on the initializer: atomization plus
+                // an instance check — no casts or promotions (XPTY0004, K2-ExternalVariablesWith-12..19).
+                if (v.TypeName is not null)
+                    varModule = WithEnforcedType(varModule, v.TypeName);
             }
             userVariables.Add(new CompiledUserVariable(
                 v.LocalName, v.NamespaceUri, v.TypeName, varModule, v.IsExternal,
@@ -347,6 +354,29 @@ public sealed class XQueryCompiler
                 moduleRuntimeContext?.DefaultElementNamespace,
                 moduleRuntimeContext?.DefaultCollation));
         }
+    }
+
+    // Splits a trailing occurrence indicator off a sequence-type text.
+    private static (string TypeName, OccurrenceIndicator Occurrence) SplitOccurrence(string typeText)
+    {
+        var t = typeText.Trim();
+        if (t.EndsWith('?')) return (t[..^1].TrimEnd(), OccurrenceIndicator.ZeroOrOne);
+        if (t.EndsWith('*')) return (t[..^1].TrimEnd(), OccurrenceIndicator.ZeroOrMore);
+        if (t.EndsWith('+')) return (t[..^1].TrimEnd(), OccurrenceIndicator.OneOrMore);
+        return (t, OccurrenceIndicator.One);
+    }
+
+    // Appends an EnforceType check for the module's result register before its final Return.
+    private static IrModule WithEnforcedType(IrModule module, string typeText)
+    {
+        var (typeName, occurrence) = SplitOccurrence(typeText);
+        var instructions = module.Instructions.ToArray().ToList();
+        var pool = module.LiteralPool.ToArray().ToList();
+        var returnInstr = instructions[^1];
+        pool.Add(new EnforceTypeInfo(typeName, occurrence, "XPTY0004"));
+        instructions.Insert(instructions.Count - 1,
+            new IrInstruction(IrOpCode.EnforceType, returnInstr.RegisterA, 0, 0, pool.Count - 1));
+        return new IrModule(instructions.ToArray(), pool.ToArray(), module.MaxRegisterCount);
     }
 
     private const string DefaultFunctionNamespace = "http://www.w3.org/2005/xpath-functions";
