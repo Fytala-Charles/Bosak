@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): variable declaration type strictness and external variables)
+**Commit:** `29309e1` (feat(xquery): variable declaration type strictness and external variables)
 **Current focus:** **prod/VarDecl.external cluster closed** (17 gaps → 0): variable initializers are ExprSingle, declared-type initializers are enforced strictly (no casts/promotions), kind-test type occurrence indicators validated, namespace undeclarations propagated to the runtime, and typed external-variable bindings checked. QT3 went from **29,264 passed / 0 failed / 2,557 skipped (91.96%)** to **29,281 passed / 0 failed / 2,540 skipped (92.02%)** (+17 passing). Full `dotnet test Bosak.sln` passes: **1,570 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (VarDecl.external cluster)
