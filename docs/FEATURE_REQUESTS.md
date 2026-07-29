@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-27 (XQuery 3.1: **ordering features** (`ordered`/`unordered`, `declare ordering`, `declare default order empty`); QT3 now **29,244 passed / 0 failed** (91.90%); unit tests **1,544/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-28 (XPath/XQuery: **NameTest cluster closed** (22 → 2) + constructor namespace semantics; QT3 now **29,264 passed / 0 failed** (91.96%); unit tests **1,558/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -159,6 +159,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-052 | *(internal)* | try/catch completion — named error codes and error variables | Required for XPath/XQuery 3.1 conformance: catch code patterns (`err:XPTY0004`, `err:*`, `*:local`, `Q{uri}local`), multiple catch clauses, and the `err:*` error variables | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 | REQ-053 | *(internal)* | XQuery 3.1 string constructors | Required for XQuery 3.1 conformance: `` `[literal `{expr}` literal]`` string constructors with interpolations, the largest single QT3 gap cluster (35 tests) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 | REQ-054 | *(internal)* | XQuery 3.1 ordering features | Required for XQuery 3.1 conformance: `ordered`/`unordered` expressions, `declare ordering`, and `declare default order empty least/greatest` with the default applied to order-by | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
+| REQ-055 | *(internal)* | Name tests, kind-test types, and constructor namespace semantics | Required for XPath/XQuery conformance: XPST0081/XPST0008 name-test errors, kind-test schema type names, PI name validation, and spec-correct in-scope namespaces on constructed elements | **Implemented** | Phase 4 | Charles Korthout | 2026-07-28 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2494,13 +2495,62 @@ Ordering expressions pass their body through unchanged (the engine always produc
 
 ---
 
+### REQ-055: Name tests, kind-test types, and constructor namespace semantics
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-28  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The prod/NameTest cluster (22 recorded gaps) covered several distinct non-conformances: name tests with unbound prefixes silently matched the empty namespace instead of raising XPST0081; kind-test schema type names (`element(foo, T)`) were discarded rather than validated (XPST0008) and matched; `processing-instruction(...)` arguments were unvalidated; and constructed elements' in-scope namespaces were computed incorrectly in both directions (prolog bindings leaked in, explicit constructor declarations didn't propagate). The last item turned out to be the deepest: getting K2-NameTest-30/31 (no inheritance) and K2-DirectConElemNamespace-40/41 (explicit declarations propagate) to hold simultaneously requires distinguishing binding kinds.
+
+**Proposed Solution:**  
+Fix the four error-code clusters at their sources (VM namespace tests, kind-test parsing and a new `KindTestType` opcode, PI argument validation, prefixed instance-of name checks with `ApplyFunctionConversion` context threading), and implement the precise in-scope namespace model: explicit xmlns declarations and element-name bindings propagate to nested constructors with override semantics, while attribute-name-implied bindings stay local to the carrying element — with redundant declarations omitted at serialization/comparison time.
+
+**Acceptance Criteria:**
+- [x] Name tests and wildcard namespace tests with unresolvable prefixes raise **XPST0081** (nametest-3/4, K2-NameTest-66/67/72/73); `Q{   }*` whitespace-normalizes to the empty-namespace wildcard (eqname-023).
+- [x] Kind-test schema type names: unknown types raise **XPST0008**, unbound type prefixes **XPST0081** (K2-NameTest-69/70/74/75/87..90); untyped elements/attributes match only their untyped compatible types and supertypes (K2-NameTest-68/71); prefixed kind-test name arguments get a namespace check (K2-NameTest-66/72); instance-of `element(P:L)`/`attribute(P:L)` compare the resolved namespace URI with `ApplyFunctionConversion` threading the runtime context (K2-DirectConElemNamespace-79, Catalog005/006).
+- [x] `processing-instruction("...")` arguments trimmed and NCName-validated (**XPTY0004**); non-NCName/unquoted-invalid arguments are **XPST0003** (K2-NameTest-21..27).
+- [x] Constructor in-scope namespaces: parent's attribute-name-implied bindings are NOT inherited by children (K2-NameTest-30/31), while explicit xmlns declarations and element-name bindings propagate with override (K2-DirectConElemNamespace-40/41, K2-InScopePrefixesFunc-9/10/16/28); redundant declarations omitted in serialization and canonical comparison (K2-DirectConElemNamespace-27/42/43, Constr-inscope-*).
+- [x] `Q{whitespace}` URI-qualified wildcards normalize to the empty namespace.
+- [x] QT3: prod/NameTest **125/0/2**; full suite **29,264 passed / 0 failed / 2,557 skipped (91.96%)**; gaps **462** (−20; remaining: K2-NameTest-5 keywords-as-names, NodeTest004 schema type assertion).
+- [x] Unit tests: 14 new tests; full suite **1,558/0**.
+
+**Implementation Notes:**
+- `NodeTest.KindTestTypeName` carries the schema type name; `KindTestType` opcode validates (built-in XSD type registry) and filters by kind-appropriate compatibility; prefixed kind-test arguments emit a preceding `NamespaceTest` (with a fresh result register — an in-place emission initially corrupted operand registers in intersect/except).
+- The in-scope model is encoded physically: `NonPropagatingNamespaceBinding` annotations mark attribute-name-implied xmlns attributes; `in-scope-prefixes`, `namespace-uri-for-prefix`, and the namespace axis skip them on ancestors; `CloneNode` preserves annotations. The old `ApplyNamespaceFixup` (which destroyed children bindings) was removed; redundancy omission lives in `XdmSerializer`, `ElementToXmlStringWithNamespaces` (per-branch scope), and the harness canonicalizer — trees stay semantically complete while output matches SAXON.
+- `ApplyFunctionConversion` gained an optional `EvaluationContext` parameter; prefixed-name namespace checks are enforced only when a context is present (context-less function-item type tests keep local-name matching).
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | PI argument validation; kind-test type capture; `Q{ }*` normalization. |
+| Compiler | Modified | `KindTestType` opcode; prefixed kind-test arg `NamespaceTest` (register-lifetime fix). |
+| Runtime | Modified | NamespaceTest XPST0081; kind-test type registry + validation; instance-of prefixed-name ns check; `ApplyFunctionConversion` context. |
+| Providers | Modified | Non-propagating-binding markers; annotation-preserving clones; per-branch redundancy omission. |
+| Standard | Modified | Traversal sites skip marked ancestor bindings; serializer redundancy omission + xmlns="" guard. |
+| Conformance | Modified | Canonical comparison omits redundant declarations; gaps 462. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-28 | Kimi | Attribute-name-implied bindings marked non-propagating; everything else propagates with override | The only model consistent with all QT3 data points: K2-NameTest-30 (no inheritance of prolog/attribute-name bindings), K2-DirectConElemNamespace-40/41 and InScopePrefixesFunc-9 (explicit declarations inherited), K2-InScopePrefixesFunc-28 (override of the default namespace). |
+| 2026-07-28 | Kimi | Redundant declarations omitted at serialization/comparison, never removed from the tree | K2-NameTest-30 requires the child's binding to exist semantically; the constructor sets require SAXON-style omission in output. |
+| 2026-07-28 | Kimi | Prefixed-name namespace checks enforced only when a resolution context is present | `ApplyFunctionConversion` historically ran context-free (local-name matching); null-context function-item type tests keep that behavior while the runtime-enforced paths (EnforceType, parameter conversion) resolve prefixes properly. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-054 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done; QT3 wired (29,244/0, 91.90%). NameTest/Annotation/VarDecl.external clusters follow. |
+| 1 | REQ-040 … REQ-055 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed; QT3 wired (29,264/0, 91.96%). VarDecl.external, Annotation, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

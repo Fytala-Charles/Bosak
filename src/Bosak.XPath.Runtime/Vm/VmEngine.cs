@@ -8,6 +8,8 @@
 // LICENSE              : License.txt
 //                      | Charles Korthout | 2.73  | 27-07-2026     | TryCatch: code-pattern clause matching, err:* binding, static-error bypass; FORG0001/XPDY0050/XQDY0074 codes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.74  | 28-07-2026     | NameTest XPST0081 for unbound prefixes; KindTestType opcode; instance-of prefixed-name ns check; attr type compat supertypes |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -252,7 +254,7 @@ public static class VmEngine
                             {
                                 var paramType = sig.ParameterTypeNames[i];
                                 if (!string.IsNullOrEmpty(paramType))
-                                    args[i] = ApplyFunctionConversion(args[i], paramType!);
+                                    args[i] = ApplyFunctionConversion(args[i], paramType!, context);
                             }
                         }
 
@@ -1763,6 +1765,19 @@ public static class VmEngine
                         break;
                     }
 
+                case IrOpCode.KindTestType:
+                    {
+                        string typeName = (string)literalPool[instr.Operand]!;
+                        var input = registers[instr.RegisterB];
+                        ValidateKindTestTypeName(typeName, context);
+                        var filtered = FilterNodes(input, n => n.NodeKind == XdmNodeKind.Attribute
+                            ? IsAttributeTypeCompatible(typeName)
+                            : IsElementTypeCompatible(typeName));
+                        registers[instr.RegisterA] = filtered;
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.NamespaceTest:
                     {
                         string prefix = (string)literalPool[instr.Operand]!;
@@ -1777,11 +1792,16 @@ public static class VmEngine
                             // Operand is a URI (e.g. from Q{uri}local syntax) — use directly
                             filtered = FilterNodes(input, n => n.NamespaceUri == prefix);
                         }
+                        else if (prefix.Length == 0)
+                        {
+                            // Empty prefix stands for the default element namespace:
+                            // none is declared, so match the empty namespace.
+                            filtered = FilterNodes(input, n => n.NamespaceUri == "");
+                        }
                         else
                         {
-                            // Unresolved prefix (including empty prefix for default element namespace):
-                            // match empty namespace
-                            filtered = FilterNodes(input, n => n.NamespaceUri == "");
+                            // XPST0081: a name test with an unresolvable prefix is a static error.
+                            throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
                         }
                         registers[instr.RegisterA] = filtered;
                         ip++;
@@ -3176,12 +3196,12 @@ public static class VmEngine
                         var paramType = coerced.ParamTypes[i];
                         convertedArgs[i] = string.IsNullOrEmpty(paramType)
                             ? args[i]
-                            : ApplyFunctionConversion(args[i], paramType!);
+                            : ApplyFunctionConversion(args[i], paramType!, context);
                     }
                     var coercedResult = InvokeFunctionItem(coerced.Inner, context, convertedArgs);
                     return string.IsNullOrEmpty(coerced.ReturnType)
                         ? coercedResult
-                        : ApplyFunctionConversion(coercedResult, coerced.ReturnType!);
+                        : ApplyFunctionConversion(coercedResult, coerced.ReturnType!, context);
                 }
 
             case InlineFunctionItem inline:
@@ -3213,7 +3233,7 @@ public static class VmEngine
                         var expectedType = i < inline.ParameterTypes.Count ? inline.ParameterTypes[i] : null;
                         if (!string.IsNullOrEmpty(expectedType))
                         {
-                            convertedArgs[i] = ApplyFunctionConversion(args[i], expectedType!);
+                            convertedArgs[i] = ApplyFunctionConversion(args[i], expectedType!, context);
                             // Function tests: ApplyFunctionConversion already enforced arity
                             // and wrapped the items in CoercedFunctionItems, which carry no
                             // declared signature for ValueMatchesType to match — skip the
@@ -3265,7 +3285,7 @@ public static class VmEngine
                         // casts, numeric promotion) applies to the result before return-type
                         // validation; cardinality and type mismatches raise XPTY0004.
                         if (!string.IsNullOrEmpty(inline.ReturnType))
-                            result = ApplyFunctionConversion(result, inline.ReturnType);
+                            result = ApplyFunctionConversion(result, inline.ReturnType, context);
                         return result;
                     }
                     finally
@@ -7011,11 +7031,59 @@ public static class VmEngine
         typeName = typeName.ToLowerInvariant().Replace("xs:", "").Replace("*", "").Trim();
         if (typeName.EndsWith('?'))
             typeName = typeName[..^1].Trim();
-        // In non-schema-aware processing, attributes have type xs:untypedAtomic.
-        // xs:untypedAtomic is derived from xs:anyAtomicType, so both match.
-        // xs:anyType and xs:untyped are element types, not attribute types.
-        return typeName is "untypedatomic" or "anyatomictype";
+        // In non-schema-aware processing, attributes have type xs:untypedAtomic, which
+        // derives from xs:anyAtomicType ⊂ xs:anySimpleType ⊂ xs:anyType.
+        // xs:untyped is an element type, not an attribute type.
+        return typeName is "untypedatomic" or "anyatomictype" or "anysimpletype" or "anytype";
     }
+
+    // Validates a schema type name used in a kind test (element(foo, T) / attribute(foo, T)):
+    // the name must resolve (XPST0081 for an undeclared prefix) and must designate a known
+    // built-in schema type (XPST0008 otherwise, since no schemas are imported).
+    private static void ValidateKindTestTypeName(string typeName, EvaluationContext context)
+    {
+        string local;
+        string ns;
+        if (typeName.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int close = typeName.IndexOf('}');
+            ns = close > 2 ? typeName[2..close] : string.Empty;
+            local = close >= 0 ? typeName[(close + 1)..] : typeName;
+        }
+        else
+        {
+            int colon = typeName.IndexOf(':');
+            if (colon > 0)
+            {
+                var prefix = typeName[..colon];
+                if (!context.TryResolveNamespace(prefix, out var resolved))
+                    throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+                ns = resolved;
+                local = typeName[(colon + 1)..];
+            }
+            else
+            {
+                ns = context.DefaultElementNamespace ?? string.Empty;
+                local = typeName;
+            }
+        }
+        if (ns != "http://www.w3.org/2001/XMLSchema" || !BuiltInSchemaTypes.Contains(local))
+            throw new InvalidOperationException($"XPST0008: The type '{typeName}' is not declared.");
+    }
+
+    /// <summary>The built-in XML Schema type names (XSD 1.0 + 1.1) plus the XPath types.</summary>
+    private static readonly HashSet<string> BuiltInSchemaTypes = new(StringComparer.Ordinal)
+    {
+        "anyType", "anySimpleType", "anyAtomicType", "untyped", "untypedAtomic",
+        "string", "normalizedString", "token", "language", "NMTOKEN", "NMTOKENS",
+        "Name", "NCName", "ID", "IDREF", "IDREFS", "ENTITY", "ENTITIES",
+        "boolean", "decimal", "float", "double", "duration", "dateTime", "time", "date",
+        "gYearMonth", "gYear", "gMonthDay", "gDay", "gMonth",
+        "hexBinary", "base64Binary", "anyURI", "QName", "NOTATION",
+        "integer", "nonPositiveInteger", "negativeInteger", "long", "int", "short", "byte",
+        "nonNegativeInteger", "unsignedLong", "unsignedInt", "unsignedShort", "unsignedByte",
+        "positiveInteger", "dateTimeStamp", "dayTimeDuration", "yearMonthDuration",
+    };
 
     private static bool IsCastAllowed(string? sourceSchemaType, string targetType)
     {
@@ -7196,6 +7264,17 @@ public static class VmEngine
                 var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
                 if (value.NodeValue.LocalName != testLocalName)
                     return false;
+                // A prefixed element name also matches on the resolved namespace URI when a
+                // resolution context is available (K2-DirectConElemNamespace-79: element(P:L)
+                // distinguishes URL1 from URL2); context-less checks stay local-name-only.
+                if (namePart.Contains(':') && context is not null)
+                {
+                    var namePrefix = namePart[..namePart.IndexOf(':')];
+                    if (!context.TryResolveNamespace(namePrefix, out var nameNs))
+                        throw new InvalidOperationException($"XPST0081: Prefix '{namePrefix}' is not declared.");
+                    if (value.NodeValue.NamespaceUri != nameNs)
+                        return false;
+                }
             }
             if (inner.Contains(','))
             {
@@ -7229,6 +7308,16 @@ public static class VmEngine
                 var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
                 if (value.NodeValue.LocalName != testLocalName)
                     return false;
+                // A prefixed attribute name also matches on the resolved namespace URI when a
+                // resolution context is available; context-less checks stay local-name-only.
+                if (namePart.Contains(':') && context is not null)
+                {
+                    var namePrefix = namePart[..namePart.IndexOf(':')];
+                    if (!context.TryResolveNamespace(namePrefix, out var nameNs))
+                        throw new InvalidOperationException($"XPST0081: Prefix '{namePrefix}' is not declared.");
+                    if (value.NodeValue.NamespaceUri != nameNs)
+                        return false;
+                }
             }
             if (inner.Contains(','))
             {
@@ -7729,9 +7818,9 @@ public static class VmEngine
     /// sequence type: subtype substitution, node atomization, untypedAtomic casting,
     /// numeric promotion, and URI promotion. Raises XPTY0004 when no rule applies.
     /// </summary>
-    internal static XdmValue ApplyFunctionConversion(XdmValue value, string targetType)
+    internal static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
     {
-        if (ValueMatchesType(value, targetType))
+        if (ValueMatchesType(value, targetType, context))
             return value;
 
         var type = targetType.Trim();

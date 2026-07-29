@@ -36,6 +36,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 27-07-2026     | Drop 35 StringConstructor gap entries (implemented); 464 entries remain        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.10  | 28-07-2026     | Gap list: NameTest cluster fixed (2 reasoned entries remain) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -537,29 +539,9 @@ internal sealed class ConformanceRunner
         ["MapConstructor-033"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
         ["MapConstructor-034"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
         ["MapConstructor-035"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        // prod/NameTest.xml (22 tests)
-        ["K2-NameTest-21"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-22"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-23"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-30"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-31"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-5"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-66"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-67"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-68"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-69"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-70"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-72"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-73"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-74"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-75"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-87"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-88"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-89"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["K2-NameTest-90"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["NodeTest004"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["nametest-3"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
-        ["nametest-4"] = "XQuery conformance gap (NameTest): see AGENT_HANDOVER REQ-045",
+        // prod/NameTest.xml (2 tests)
+        ["K2-NameTest-5"] = "XQuery conformance gap (NameTest): keywords usable as element names in expression positions (tokenizer-torture)",
+        ["NodeTest004"] = "XQuery conformance gap (NameTest): schema-aware element type assertion element(Root)",
         // prod/NamespaceDecl.xml (11 tests)
         ["K2-NamespaceProlog-1"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
         ["K2-NamespaceProlog-14"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",

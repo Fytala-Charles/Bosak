@@ -42,6 +42,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.7   | 27-07-2026     | 8 ordered/unordered/ordering-declaration tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 28-07-2026     | 4 constructor namespace-semantics tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -1491,6 +1493,64 @@ public class PlaceholderTests
         var ex = Assert.ThrowsAny<Exception>(() =>
             EvalStrC("declare default order empty least; declare default order empty greatest; 42"));
         Assert.Contains("XQST0069", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_AttributeNameBindingNotInherited()
+    {
+        // K2-NameTest-30: the parent's attribute-name bindings are not inherited by children.
+        var result = new XQueryCompiler().Compile("""
+            declare namespace a = "http://example.com/1";
+            declare namespace b = "http://example.com/2";
+            let $e := <e a:n1="content" b:n1="content"><a:n1/><b:n1/><n1/></e>
+            return (empty(namespace-uri-for-prefix("b", $e/*:n1[1])),
+                    empty(namespace-uri-for-prefix("a", $e/*:n1[2])),
+                    namespace-uri-for-prefix("a", $e/*:n1[1]))
+            """).Evaluate(new XQueryContext());
+        var values = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            values.Add(item.ToString()!);
+        Assert.Equal(new[] { "true", "true", "http://example.com/1" }, values);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_ExplicitDeclarationsPropagateToChildren()
+    {
+        // K2-InScopePrefixesFunc-9: a parent's xmlns declarations are inherited by children.
+        var result = new XQueryCompiler().Compile(
+            "for $i in fn:in-scope-prefixes(<e xmlns:p=\"http://example.com\" xmlns:a=\"http://example.com\"> <b/> </e>/b) order by $i return $i")
+            .Evaluate(new XQueryContext());
+        Assert.Equal(new[] { "a", "p", "xml" }, ToStrings(result));
+    }
+
+    [Fact]
+    public void XQuery_Constructor_ElementNameBindingOnChild()
+    {
+        // The child's own element-name prefix is in its in-scope namespaces.
+        var result = new XQueryCompiler().Compile("""
+            declare namespace a = "http://example.com/1";
+            namespace-uri-for-prefix("a", <e><a:n1/></e>/a:n1)
+            """).Evaluate(new XQueryContext());
+        Assert.Equal("http://example.com/1", result.ToString());
+    }
+
+    [Fact]
+    public void XQuery_LetAsElementPrefixedName_NamespaceMismatch_ThrowsXPTY0004()
+    {
+        // K2-DirectConElemNamespace-79: element(P:L) distinguishes the rebound namespace.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("""
+            declare namespace P = "http://ns.example.com/URL1";
+            let $e := document{(<X1:L xmlns:X1="http://ns.example.com/URL1">1</X1:L>, <X2:L xmlns:X2="http://ns.example.com/URL2">2</X2:L>)}
+            return <outer xmlns:P="http://ns.example.com/URL1"> {
+                let $outer as element(P:L) := $e/element(P:L)
+                return <inner xmlns:P="http://ns.example.com/URL2"> {
+                    let $inner as element(P:L) := $outer return $inner
+                } </inner>
+            } </outer>
+            """);
+        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
     }
 
     [Fact]

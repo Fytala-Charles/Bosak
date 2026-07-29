@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 25-07-2026     | Preserve XML 1.1 undeclaration annotations across the base-URI reparse                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 28-07-2026     | Non-propagating namespace-binding markers for attribute-name bindings; no content fixup; clone annotations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -98,7 +100,7 @@ public static class XDocumentProvider
             else if (attr.LocalName == "xmlns" && attr.Prefix is null)
                 declared.Add("");
         }
-        void Declare(string? prefix, string? nsUri)
+        void Declare(string? prefix, string? nsUri, bool impliedByAttributeName = false)
         {
             if (string.IsNullOrEmpty(nsUri))
                 return;
@@ -109,7 +111,12 @@ public static class XDocumentProvider
             }
             else if (prefix is not ("xml" or "xmlns") && declared.Add(prefix))
             {
-                element.Add(new XAttribute(XNamespace.Xmlns + prefix, nsUri));
+                var declAttr = new XAttribute(XNamespace.Xmlns + prefix, nsUri);
+                // Bindings implied by an attribute's name are part of this element's
+                // in-scope namespaces but do not propagate to nested constructors.
+                if (impliedByAttributeName)
+                    declAttr.AddAnnotation(new NonPropagatingNamespaceBinding());
+                element.Add(declAttr);
             }
         }
         Declare(spec.Prefix, spec.NamespaceUri);
@@ -131,7 +138,7 @@ public static class XDocumentProvider
             }
             else
             {
-                Declare(attr.Prefix, attr.NamespaceUri);
+                Declare(attr.Prefix, attr.NamespaceUri, impliedByAttributeName: true);
                 XNamespace ans = attr.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attr.NamespaceUri);
                 element.Add(new XAttribute(ans + attr.LocalName, attr.Value));
             }
@@ -172,8 +179,9 @@ public static class XDocumentProvider
                 default:
                     FlushText();
                     var childNode = CloneNode(item.Node!.Value);
-                    if (childNode is XElement childElement)
-                        ApplyNamespaceFixup(element, childElement);
+                    // XQuery: a constructed child element keeps its own computed in-scope
+                    // namespace bindings — they are not "redundant" with the parent's
+                    // (K2-NameTest-30/31), so no namespace fixup is applied here.
                     element.Add(childNode);
                     break;
             }
@@ -321,7 +329,7 @@ public static class XDocumentProvider
         {
             clone = xDocumentNode.UnderlyingObject switch
             {
-                XElement element => new XElement(element),
+                XElement element => CloneWithAttributeAnnotations(element),
                 System.Xml.Linq.XDocument document => new XDocument(document),
                 XText text => new XText(text.Value),
                 XComment comment => new XComment(comment.Value),
@@ -342,6 +350,25 @@ public static class XDocumentProvider
             sourceNode.UnderlyingObject is XElement sourceElement)
         {
             CopyInScopeNamespaces(sourceElement, cloneElement);
+            // Preserve annotation-based semantics: the namespace inheritance barrier,
+            // prefixed namespace undeclarations, and the base-URI annotation.
+            foreach (var annotation in sourceElement.Annotations<object>())
+                cloneElement.AddAnnotation(annotation);
+        }
+        return clone;
+    }
+
+    // Clones an element; the XElement copy constructor does not carry attribute
+    // annotations, so non-propagating namespace-binding markers are re-applied.
+    private static XElement CloneWithAttributeAnnotations(XElement source)
+    {
+        var clone = new XElement(source);
+        foreach (var sourceAttr in source.Attributes())
+        {
+            if (sourceAttr.Annotation<NonPropagatingNamespaceBinding>() is null)
+                continue;
+            var cloneAttr = clone.Attribute(sourceAttr.Name);
+            cloneAttr?.AddAnnotation(new NonPropagatingNamespaceBinding());
         }
         return clone;
     }

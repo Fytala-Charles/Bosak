@@ -61,6 +61,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.25  | 27-07-2026     | DefaultEmptyOrder property applied to order-by specs without explicit empty order |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.26  | 28-07-2026     | Emit KindTestType and NamespaceTest for prefixed kind-test arguments |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -1170,9 +1172,33 @@ public sealed class IrLowerer
                 // emit a NameTest to filter by that name.
                 if (!string.IsNullOrEmpty(node.NodeTest.KindTestArgument))
                 {
-                    int argPoolIdx = AddToLiteralPool(node.NodeTest.KindTestArgument);
+                    var kindArg = node.NodeTest.KindTestArgument;
+                    // A prefixed name-test argument (prefix:local or prefix:*) also gets its
+                    // namespace checked (raising XPST0081 for an unbound prefix, K2-NameTest-66/72).
+                    int argColon = kindArg.IndexOf(':');
+                    if (argColon > 0 && !kindArg.StartsWith("Q{", StringComparison.Ordinal))
+                    {
+                        int argNsPoolIdx = AddToLiteralPool(kindArg[..argColon]);
+                        int nsTestReg = AllocRegister();
+                        Emit(IrOpCode.NamespaceTest, (ushort)nsTestReg, (ushort)axisReg, operand: argNsPoolIdx);
+                        FreeRegister(axisReg);
+                        axisReg = nsTestReg;
+                    }
+                    int argPoolIdx = AddToLiteralPool(kindArg);
                     afterTestReg = AllocRegister();
                     Emit(IrOpCode.NameTest, (ushort)afterTestReg, (ushort)axisReg, operand: argPoolIdx);
+                    FreeRegister(axisReg);
+                    axisReg = afterTestReg;
+                }
+
+                // If the kind test carries a schema type name (element(foo, xs:integer)),
+                // emit a KindTestType filter (validates the type name and checks type
+                // compatibility: unknown type names raise XPST0008 at evaluation time).
+                if (!string.IsNullOrEmpty(node.NodeTest.KindTestTypeName))
+                {
+                    int typePoolIdx = AddToLiteralPool(node.NodeTest.KindTestTypeName);
+                    afterTestReg = AllocRegister();
+                    Emit(IrOpCode.KindTestType, (ushort)afterTestReg, (ushort)axisReg, operand: typePoolIdx);
                     FreeRegister(axisReg);
                     axisReg = afterTestReg;
                 }

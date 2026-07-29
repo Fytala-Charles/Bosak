@@ -1,5 +1,42 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-07-28
+**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xpath): name tests, kind-test types, and constructor namespace semantics)
+**Current focus:** **prod/NameTest cluster closed** (22 gaps → 2) plus a deep pass over constructor in-scope namespace semantics. QT3 went from **29,244 passed / 0 failed / 2,577 skipped (91.90%)** to **29,264 passed / 0 failed / 2,557 skipped (91.96%)** (+20 passing). Full `dotnet test Bosak.sln` passes: **1,558 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (NameTest cluster)
+
+1. **Name-test prefix errors** — name tests and wildcard namespace tests with an unresolvable prefix now raise **XPST0081** instead of silently matching the empty namespace (nametest-3/4, K2-NameTest-66/67/72/73).
+2. **Kind-test schema type names** — `element(foo, T)` / `attribute(foo, T)` capture the type name into `NodeTest.KindTestTypeName`; a new `KindTestType` opcode validates it at evaluation (**XPST0008** for undeclared types, **XPST0081** for unbound prefixes) and checks type compatibility (untyped elements/attributes match only `xs:untyped`/`xs:anyType` and `xs:untypedAtomic`/`xs:anyAtomicType`/`xs:anySimpleType`/`xs:anyType` respectively). Prefixed kind-test name arguments also get a `NamespaceTest` (K2-NameTest-66/72), and instance-of `element(P:L)`/`attribute(P:L)` now compare the resolved namespace URI (K2-DirectConElemNamespace-79 → XPTY0004).
+3. **PI kind test** — `processing-instruction("...")` trims the literal and validates the NCName (**XPTY0004** for `"123ncname"`/`"prefix:b"`, `"b "` trims and matches); unquoted non-NCName arguments are **XPST0003** (K2-NameTest-24/25).
+4. **Constructor in-scope namespaces (the deep one)** — a precise model now distinguishes binding kinds: explicit `xmlns` declarations and element-name bindings **propagate** to nested constructors with normal override semantics (K2-DirectConElemNamespace-40/41, K2-InScopePrefixesFunc-9/10/16), while bindings **implied by attribute names** are part of the carrying element's own in-scope set but do **not** propagate (K2-NameTest-30/31). Encoding: `NonPropagatingNamespaceBinding` annotations on implied xmlns attributes; `in-scope-prefixes`, `namespace-uri-for-prefix`, and the namespace axis skip marked ancestors. The old `ApplyNamespaceFixup` (which destroyed children bindings) and the barrier approach are gone; `CloneNode` preserves annotations. Redundant namespace declarations are **omitted at serialization/comparison time** (XdmSerializer, `ElementToXmlStringWithNamespaces`, and the harness canonicalizer), keeping the tree semantically correct while output matches SAXON's (K2-DirectConElemNamespace-27/42/43, Constr-inscope-*). Also fixed: `fn:parse-xml` DTD resolution against the static base URI (parse-xml-008..010 from the try/catch session) and the serializer's `xmlns=""` double-write for self-undeclared elements.
+5. **Gaps: 462 reasoned skips (−20)** — NameTest cluster closed except `K2-NameTest-5` (keywords usable as element names in expression positions — the tokenizer-torture query, a large parser redesign) and `NodeTest004` (schema-aware `element(Root)` type assertion).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/{VmEngine,XPathError}.cs` (VmEngine only), `src/Bosak.XPath.Parser/Ast/{XPathAstNode,XPathParser}.cs`
+- `src/Bosak.XPath.Compiler/Ir/{IrOpCode,IrLowerer}.cs`
+- `src/Bosak.XPath.Providers/XDocument/{XDocumentProvider,XDocumentNode,NonPropagatingNamespaceBinding}.cs` (marker is new)
+- `src/Bosak.XPath.Standard/Functions/{FunctionLibrary,XdmSerializer}.cs`
+- `tests/Bosak.XPath.Conformance/{ResultComparer,ConformanceRunner}.cs`, `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (+10), `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+4)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (462 recorded skips)
+
+Largest clusters: `prod/Annotation` (24 — inline-function annotations and annotation assertions in function tests), `prod/VarDecl.external` (17 — external variable semantics), `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/NamespaceDecl` (11), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,100 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries above.
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **External variable semantics** (`prod/VarDecl.external`, 17 tests — XQST0059-style external-variable edge cases).
+2. **inline-function annotations** (prod/Annotation remainder, 24 tests — `%eg:*` on inline functions and annotation assertions in function tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-07-27
 **Commit:** `6c9e828` (feat(xquery): ordered/unordered expressions and ordering declarations)
 **Current focus:** **XQuery ordering features**: `ordered { E }` / `unordered { E }` expressions (identity in this engine — sequences are always produced in document order, a valid implementation of both ordering modes), the `declare ordering` prolog (XQST0065), and `declare default order empty least|greatest` (XQST0069) with the default applied to order-by clauses lacking an explicit empty modifier. QT3 went from **29,150 passed / 0 failed / 2,671 skipped (91.61%)** to **29,244 passed / 0 failed / 2,577 skipped (91.90%)** (+94 passing). Full `dotnet test Bosak.sln` passes: **1,544 unit tests / 0 failed**; XSLT baseline unchanged.

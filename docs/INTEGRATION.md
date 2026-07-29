@@ -4,9 +4,9 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 27 July 2026
-> **Bosak baseline:** 1,544 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,244 passed / 0 failed / 2,577 skipped (91.90% / 100% of runnable tests) — XQuery routing enabled; 464 XQuery conformance gaps recorded as reasoned skips
+> **Last updated:** 28 July 2026
+> **Bosak baseline:** 1,558 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,264 passed / 0 failed / 2,557 skipped (91.96% / 100% of runnable tests) — XQuery routing enabled; 462 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,12 @@
 
 ## 0. Recent Changes
 
+- **2026-07-28** — XPath/XQuery: **NameTest cluster closed** (REQ-055): QT3 **29,264 passed / 0 failed** (from 29,244; +20 passing; gaps 462, −20).
+  - Name tests with unresolvable prefixes raise **XPST0081**; kind-test schema type names are validated (**XPST0008** for undeclared types) and matched (untyped elements/attributes match untyped types and supertypes); `processing-instruction(...)` arguments are trimmed and NCName-validated (**XPTY0004**; **XPST0003** for invalid forms); `Q{   }*` normalizes to the empty-namespace wildcard.
+  - Constructor in-scope namespaces are now spec-correct: explicit xmlns declarations and element-name bindings **propagate** to nested constructors with override semantics, while **attribute-name-implied** bindings stay local to the carrying element (`NonPropagatingNamespaceBinding` markers on constructed trees; `in-scope-prefixes`, `namespace-uri-for-prefix`, and the namespace axis honor them).
+  - Redundant namespace declarations are omitted at serialization/comparison time (trees stay semantically complete; output matches SAXON).
+  - Instance-of `element(P:L)`/`attribute(P:L)` compares the resolved namespace URI; `ApplyFunctionConversion` threads the runtime context.
+  - prod/NameTest 125/0/2; prod/DirElemContent(.namespace), fn/in-scope-prefixes, op/union, op/intersect, op/except, app/CatalogCheck, app/FunctxFunctx all green.
 - **2026-07-27** — XQuery 3.1: **ordering features** (REQ-054): QT3 **29,244 passed / 0 failed** (from 29,150; +94 passing).
   - `ordered { E }` / `unordered { E }` expressions (identity — document order is always produced, valid under both modes; empty bodies are the empty sequence); `declare ordering ordered|unordered;` with XQST0065 on duplicate.
   - `declare default order empty least|greatest;` with XQST0069; the default flows through the static context into the IR lowerer and applies to order-by clauses without an explicit `empty` modifier (an explicit modifier wins).

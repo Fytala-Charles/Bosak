@@ -69,6 +69,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.32  | 27-07-2026     | ordered/unordered expressions (identity); empty bodies; explicit empty least/greatest tracked |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.33  | 28-07-2026     | PI kind test: trimmed NCName argument with XPTY0004/XPST0003; kind-test schema type names captured |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1423,14 +1425,16 @@ public sealed class XPathParser
             var name = GetString(Current);
             var (prefix, local, nsUri) = SplitQName(name);
 
-            // URI-qualified wildcard: Q{uri}* (including empty URI Q{}*).
+            // URI-qualified wildcard: Q{uri}* (including empty URI Q{}*). The URI part is
+            // whitespace-normalized, so Q{   }* matches the empty namespace (eqname-023).
             if (name.Length > 3 && name[0] == 'Q' && name[1] == '{' && name[^1] == '*')
             {
                 int closeBrace = name.IndexOf('}');
                 if (closeBrace >= 2)
                 {
                     Advance();
-                    return new NodeTest(NameTestKind.NamespaceAny, null, name[2..closeBrace]);
+                    var wildcardNs = string.Join(' ', name[2..closeBrace].Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+                    return new NodeTest(NameTestKind.NamespaceAny, null, wildcardNs);
                 }
             }
 
@@ -1473,6 +1477,7 @@ public sealed class XPathParser
         Expect(TokenKind.LParen);
 
         string? argument = null;
+        string? typeName = null;
 
         // Parse simple kind-test arguments: processing-instruction(name), element(name), attribute(name).
         // For now we do not parse schema types or nested kind tests (e.g. document-node(element(x))).
@@ -1482,18 +1487,36 @@ public sealed class XPathParser
         }
         else if (name == "processing-instruction")
         {
-            // argument is an NCName or string literal
+            // The argument must be an NCName or a string literal holding a valid NCName
+            // (anything else is XPST0003); a string literal is whitespace-trimmed and
+            // validated (XPTY0004, K2-NameTest-21/23).
             if (Current.Kind == TokenKind.StringLiteral)
-                argument = Unquote(GetString(Current));
+            {
+                argument = Unquote(GetString(Current)).Trim();
+                if (!IsValidNCName(argument))
+                    throw new ParseException($"XPTY0004: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
+                Advance();
+            }
             else if (Current.Kind == TokenKind.Name)
+            {
                 argument = GetString(Current);
+                // Only an unprefixed NCName is a syntactically valid PI name (K2-NameTest-25).
+                if (!IsValidNCName(argument))
+                    throw new ParseException($"XPST0003: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
+                Advance();
+            }
+            else
+            {
+                throw new ParseException($"XPST0003: The processing-instruction() argument must be a name or string literal but found {Current.Kind}.", Current.Start);
+            }
             // skip to closing paren
             while (!IsAtEnd && Current.Kind != TokenKind.RParen)
                 Advance();
         }
         else if (name == "element" || name == "attribute")
         {
-            // argument is a name test (QName, *, prefix:*, or NCName)
+            // argument is a name test (QName, *, prefix:*, or NCName), optionally followed
+            // by a comma and a schema type name (attribute(foo, xs:integer)).
             if (Current.Kind == TokenKind.Star)
             {
                 argument = "*";
@@ -1522,7 +1545,20 @@ public sealed class XPathParser
                     argument = argName;
                 }
             }
-            // skip remainder (e.g. comma + type) to closing paren
+            // Optional schema type name after a comma (validated at evaluation time).
+            if (Match(TokenKind.Comma))
+            {
+                if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
+                {
+                    typeName = GetString(Current);
+                    Advance();
+                }
+                // An occurrence indicator may follow the type name; it does not affect
+                // single-node kind-test matching.
+                if (Current.Kind == TokenKind.Question)
+                    Advance();
+            }
+            // skip any remaining content to the closing paren
             while (!IsAtEnd && Current.Kind != TokenKind.RParen)
                 Advance();
         }
@@ -1539,7 +1575,7 @@ public sealed class XPathParser
         }
 
         Expect(TokenKind.RParen);
-        return new NodeTest(NameTestKind.KindTest, name, KindTestArgument: argument);
+        return new NodeTest(NameTestKind.KindTest, name, KindTestArgument: argument, KindTestTypeName: typeName);
     }
 
     private List<XPathAstNode> ParsePredicateList()
@@ -2676,6 +2712,20 @@ public sealed class XPathParser
 
     private static bool IsConstructorNameChar(char c) =>
         char.IsLetterOrDigit(c) || c is '_' or '-' or '.';
+
+    // XML NCName: letter or '_' start, then letters/digits/'_'/'-'/'.'.
+    private static bool IsValidNCName(string name)
+    {
+        if (name.Length == 0 || !(char.IsLetter(name[0]) || name[0] == '_'))
+            return false;
+        for (int i = 1; i < name.Length; i++)
+        {
+            char c = name[i];
+            if (!char.IsLetterOrDigit(c) && c is not ('_' or '-' or '.'))
+                return false;
+        }
+        return true;
+    }
 
     private void SkipConstructorWhitespace(ref int pos)
     {

@@ -8,6 +8,8 @@
 // LICENSE              : License.txt
 //                      | Charles Korthout | 5.74  | 27-07-2026     | fn:error throws structured XPathErrorException; FORG0003/0004/0005 codes; parse-xml(-fragment) FODC0006 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.75  | 28-07-2026     | in-scope-prefixes/namespace-uri-for-prefix skip non-propagating ancestor bindings |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -12295,6 +12297,7 @@ public static class FunctionLibrary
             // declarations (and undeclarations) win. XML 1.1 prefixed namespace
             // undeclarations hide the same prefixes declared at or above them.
             var undeclared = new HashSet<string>();
+            bool isTargetElement = true;
             foreach (var el in path)
             {
                 if (el.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
@@ -12303,6 +12306,10 @@ public static class FunctionLibrary
 
                 foreach (var attr in el.Attributes())
                 {
+                    // Bindings implied by attribute names do not propagate to descendants
+                    // (they count only on the element that carries them).
+                    if (!isTargetElement && attr.Annotation<NonPropagatingNamespaceBinding>() is not null)
+                        continue;
                     if (attr.IsNamespaceDeclaration)
                     {
                         var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
@@ -12319,6 +12326,7 @@ public static class FunctionLibrary
                         }
                     }
                 }
+                isTargetElement = false;
             }
         }
 
@@ -12343,6 +12351,7 @@ public static class FunctionLibrary
         {
             var current = elem;
             var undeclared = new HashSet<string>();
+            bool isTargetElement = true;
             while (current != null)
             {
                 // XML 1.1 prefixed namespace undeclarations hide the same prefixes
@@ -12353,6 +12362,9 @@ public static class FunctionLibrary
 
                 foreach (var attr in current.Attributes())
                 {
+                    // Bindings implied by attribute names do not propagate to descendants.
+                    if (!isTargetElement && attr.Annotation<NonPropagatingNamespaceBinding>() is not null)
+                        continue;
                     if (attr.IsNamespaceDeclaration)
                     {
                         var attrPrefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
@@ -12365,6 +12377,7 @@ public static class FunctionLibrary
                         }
                     }
                 }
+                isTargetElement = false;
                 current = current.Parent;
 
                 // Stop at namespace inheritance barrier (inherit-namespaces="no").

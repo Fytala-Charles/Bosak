@@ -40,6 +40,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.11  | 27-07-2026     | OrderSpec.EmptyOrder nullable (unspecified uses the prolog default) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.12  | 28-07-2026     | NodeTest.KindTestTypeName for schema type names in kind tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -363,7 +365,7 @@ public sealed record ArrayConstructorNode(IReadOnlyList<XPathAstNode> Items, boo
 // Node tests
 // ------------------------------------------------------------------
 
-public sealed record NodeTest(NameTestKind Kind, string? Name = null, string? NamespaceUri = null, string? KindTestArgument = null);
+public sealed record NodeTest(NameTestKind Kind, string? Name = null, string? NamespaceUri = null, string? KindTestArgument = null, string? KindTestTypeName = null);
 
 // ------------------------------------------------------------------
 // Enums

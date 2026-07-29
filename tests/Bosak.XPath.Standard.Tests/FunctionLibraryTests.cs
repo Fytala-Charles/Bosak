@@ -58,6 +58,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.23  | 27-07-2026     | 15 try/catch tests: named codes, clause order, wildcards, err vars, static bypass |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.24  | 28-07-2026     | 10 name-test/kind-test unit tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -2102,6 +2104,72 @@ public class FunctionLibraryTests
             "catch * { (try { fn:error(QName('http://www.w3.org/2005/xqt-errors', 'FOOQ0002')) } " +
             "catch * { local-name-from-QName($err:code) }, local-name-from-QName($err:code)) }");
         Assert.Equal(new[] { "FOOQ0002", "FOOQ0001" }, result);
+    }
+
+    [Fact]
+    public void NameTest_UndeclaredPrefix_ThrowsXPST0081()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStr("fn:parse-xml(\"<a><b/></a>\")/child::pr:b"));
+        Assert.Contains("XPST0081", ex.Message);
+    }
+
+    [Fact]
+    public void NameTest_UndeclaredPrefixWildcard_ThrowsXPST0081()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStr("fn:parse-xml(\"<a><b/></a>\")/child::pr:*"));
+        Assert.Contains("XPST0081", ex.Message);
+    }
+
+    [Fact]
+    public void KindTest_UnknownTypeName_ThrowsXPST0008()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStr("fn:parse-xml(\"<e foo='1'/>\")/*/attribute(foo, doesNotExistExampleCom)"));
+        Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void KindTest_KnownTypeName_ThrowsXPST0008WhenPrefixedUnknown()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStr("fn:parse-xml(\"<e foo='1'/>\")/*/attribute(foo, xs:doesNotExistExampleCom)"));
+        Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void KindTest_AttributeUntypedAtomicMatches()
+    {
+        Assert.Equal("1", EvalStr("string(fn:parse-xml(\"<e foo='1'/>\")/*/attribute(foo, xs:untypedAtomic))"));
+    }
+
+    [Fact]
+    public void KindTest_AttributeTypedMismatchEmpty()
+    {
+        Assert.Equal("(sequence)", EvalStr("fn:parse-xml(\"<e foo='1'/>\")/*/attribute(foo, xs:integer)"));
+    }
+
+    [Fact]
+    public void KindTest_AttributeAnyTypeMatches()
+    {
+        Assert.Equal("1", EvalStr("string(fn:parse-xml(\"<e foo='1'/>\")/*/attribute(foo, xs:anyType))"));
+    }
+
+    [Fact]
+    public void KindTest_PiStringLiteralTrimmedAndMatched()
+    {
+        Assert.Equal("b", EvalStr("string(fn:parse-xml(\"<a><?b asd?></a>\")/a/processing-instruction(\"b \")/name())"));
+    }
+
+    [Fact]
+    public void KindTest_PiInvalidName_ThrowsXPTY0004()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStr("fn:parse-xml(\"<a/>\")/a/processing-instruction(\"123ncname\")"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void KindTest_PiPrefixedName_ThrowsXPST0003()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStr("fn:parse-xml(\"<a/>\")/a/processing-instruction(prefix:ncname)"));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     // ------------------------------------------------------------------

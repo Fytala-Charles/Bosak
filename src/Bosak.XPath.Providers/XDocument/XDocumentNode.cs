@@ -39,6 +39,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.4   | 25-07-2026     | Exposed XML 1.1 prefixed namespace undeclarations                                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 28-07-2026     | Namespace axis skips non-propagating ancestor bindings; redundant xmlns omitted in ToXmlString |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
@@ -846,6 +848,7 @@ public sealed class XDocumentNode : IXdmNode
         // reverse it below so the final axis order is root-to-current.
         var collected = new List<XdmValue>();
         var undeclared = new HashSet<string>();
+        bool isTargetElement = true;
         while (current is not null)
         {
             // XML 1.1 prefixed namespace undeclarations on this element hide the
@@ -857,6 +860,11 @@ public sealed class XDocumentNode : IXdmNode
             foreach (var attr in current.Attributes())
             {
                 if (!attr.IsNamespaceDeclaration)
+                    continue;
+
+                // Bindings implied by attribute names do not propagate to descendants
+                // (they are part of the carrying element's own namespace axis only).
+                if (!isTargetElement && attr.Annotation<NonPropagatingNamespaceBinding>() is not null)
                     continue;
 
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
@@ -873,6 +881,7 @@ public sealed class XDocumentNode : IXdmNode
                 }
             }
 
+            isTargetElement = false;
             current = current.Parent;
 
             // Stop walking up when we hit an element that was created with
@@ -1162,6 +1171,25 @@ public sealed class XDocumentNode : IXdmNode
             XName name = string.IsNullOrEmpty(prefix) ? "xmlns" : XNamespace.Xmlns + prefix;
             clone.SetAttributeValue(name, attr.StringValue);
         }
+
+        // Namespace fixup: a declaration identical to one already in scope *from an
+        // ancestor* is redundant and omitted (K2-DirectConElemNamespace-27/42/43).
+        // Siblings do not share scope, so the walk is per-branch.
+        void OmitRedundantDeclarations(XElement el, Dictionary<string, string> ancestorScope)
+        {
+            var scope = new Dictionary<string, string>(ancestorScope, StringComparer.Ordinal);
+            foreach (var attr in el.Attributes().Where(a => a.IsNamespaceDeclaration).ToList())
+            {
+                var declPrefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                if (ancestorScope.TryGetValue(declPrefix, out var inScope) && inScope == attr.Value)
+                    attr.Remove();
+                else
+                    scope[declPrefix] = attr.Value;
+            }
+            foreach (var child in el.Elements())
+                OmitRedundantDeclarations(child, scope);
+        }
+        OmitRedundantDeclarations(clone, new Dictionary<string, string>(StringComparer.Ordinal));
 
         return clone.ToString(SaveOptions.DisableFormatting);
     }

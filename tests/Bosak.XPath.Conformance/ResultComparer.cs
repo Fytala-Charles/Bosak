@@ -40,6 +40,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.0   | 27-07-2026     | assert expressions also evaluate with the query result as the context item              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.1   | 28-07-2026     | Canonical comparison omits redundant namespace declarations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -1018,19 +1020,30 @@ internal static class ResultComparer
         return sb.ToString();
     }
 
-    private static void CanonicalSerializeNode(XNode node, StringBuilder sb, bool ignorePrefixes)
+    private static void CanonicalSerializeNode(XNode node, StringBuilder sb, bool ignorePrefixes, Dictionary<string, string>? nsScope = null)
     {
         switch (node)
         {
             case XElement el:
                 sb.Append('<').Append(CanonicalName(el.Name, ignorePrefixes));
                 var attrs = el.Attributes().ToList();
+                // Descendants see this element's in-scope bindings on top of the ancestors'.
+                var childScope = new Dictionary<string, string>(nsScope ?? new Dictionary<string, string>(StringComparer.Ordinal), StringComparer.Ordinal);
                 if (!ignorePrefixes)
                 {
                     // Empty namespace undeclarations (xmlns="" / xmlns:p="") are no-ops for
                     // comparison; they are output only when needed for inheritance fixup.
                     foreach (var a in attrs.Where(a => a.IsNamespaceDeclaration && a.Value.Length > 0).OrderBy(a => a.Name.ToString(), StringComparer.Ordinal))
-                        CanonicalSerializeAttribute(sb, a, false);
+                    {
+                        // Namespace fixup: a declaration identical to one already in scope
+                        // is redundant and omitted (K2-DirectConElemNamespace-27/42/43).
+                        var declPrefix = a.Name.LocalName == "xmlns" ? "" : a.Name.LocalName;
+                        if (!childScope.TryGetValue(declPrefix, out var inScope) || inScope != a.Value)
+                        {
+                            childScope[declPrefix] = a.Value;
+                            CanonicalSerializeAttribute(sb, a, false);
+                        }
+                    }
                 }
                 foreach (var a in attrs.Where(a => !a.IsNamespaceDeclaration).OrderBy(a => a.Name.ToString(), StringComparer.Ordinal))
                     CanonicalSerializeAttribute(sb, a, ignorePrefixes);
@@ -1042,7 +1055,7 @@ internal static class ResultComparer
                 {
                     sb.Append('>');
                     foreach (var child in el.Nodes())
-                        CanonicalSerializeNode(child, sb, ignorePrefixes);
+                        CanonicalSerializeNode(child, sb, ignorePrefixes, childScope);
                     sb.Append("</").Append(CanonicalName(el.Name, ignorePrefixes)).Append('>');
                 }
                 break;

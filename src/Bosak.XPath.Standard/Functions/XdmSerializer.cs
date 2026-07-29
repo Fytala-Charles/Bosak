@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 25-07-2026     | Serialization 3.1 fidelity: declaration/doctype matrix, html-family rules, adaptive constructor forms, JSON char-maps, CDATA/indent/namespace fixup, undeclare-prefixes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 28-07-2026     | Omit redundant xmlns declarations; guard xmlns="" double-write when self-declared |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -1041,10 +1043,25 @@ internal static class XdmSerializer
                 string? inScope = LookupNamespace(effectivePrefix);
                 if (effectiveNs.Length == 0)
                 {
+                    // An element in no namespace under a default one needs an undeclaration —
+                    // unless the element already declares xmlns="" itself (K2-InScopePrefixesFunc-28).
                     if (effectivePrefix.Length == 0 && !string.IsNullOrEmpty(inScope))
                     {
-                        _sb.Append(" xmlns=\"\"");
-                        addedDecl = ("", "");
+                        bool selfUndeclared = false;
+                        foreach (var attrValue in element.Attributes())
+                        {
+                            var a = attrValue.NodeValue;
+                            if (a.LocalName == "xmlns" && a.NamespaceUri.Length == 0 && a.StringValue.Length == 0)
+                            {
+                                selfUndeclared = true;
+                                break;
+                            }
+                        }
+                        if (!selfUndeclared)
+                        {
+                            _sb.Append(" xmlns=\"\"");
+                            addedDecl = ("", "");
+                        }
                     }
                 }
                 else if (inScope != effectiveNs && effectivePrefix != "xml")
@@ -1090,6 +1107,11 @@ internal static class XdmSerializer
                 if (IsNamespaceDeclaration(attr))
                 {
                     var declValue = isXml11Undeclaration ? "" : attr.StringValue;
+                    var declPrefix = attr.LocalName == "xmlns" && attr.NamespaceUri.Length == 0 ? "" : attr.LocalName;
+                    // Namespace fixup: a declaration identical to one already in scope is
+                    // redundant and omitted (the binding remains in scope from the ancestor).
+                    if (LookupNamespace(declPrefix) == declValue)
+                        continue;
                     if (attr.LocalName == "xmlns" && attr.NamespaceUri.Length == 0)
                         _nsScopes.Add(("", declValue));
                     else if (attr.NamespaceUri == XmlnsNs)
