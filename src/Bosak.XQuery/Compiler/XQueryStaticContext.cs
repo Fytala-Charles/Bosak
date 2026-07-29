@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 27-07-2026     | ModuleImport record, ImportedModules/ModuleNamespaceUri state, IsPrivate declaration flags |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 27-07-2026     | DefaultEmptyOrderLeast static-context property |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -107,7 +109,8 @@ public sealed class XQueryStaticContext
         string? defaultFunctionNamespace,
         string? defaultCollation,
         string? baseUri,
-        string? moduleNamespaceUri)
+        string? moduleNamespaceUri,
+        bool? defaultEmptyOrderLeast)
     {
         _namespaces = namespaces;
         _variables = variables;
@@ -121,6 +124,7 @@ public sealed class XQueryStaticContext
         DefaultCollation = defaultCollation;
         BaseUri = baseUri;
         ModuleNamespaceUri = moduleNamespaceUri;
+        DefaultEmptyOrderLeast = defaultEmptyOrderLeast;
     }
 
     /// <summary>
@@ -143,6 +147,12 @@ public sealed class XQueryStaticContext
     /// The static base URI for resolving relative URIs in the query.
     /// </summary>
     public string? BaseUri { get; private init; }
+
+    /// <summary>
+    /// The prolog's default order for empty sequences in order-by clauses
+    /// (<c>declare default order empty least|greatest</c>); null means "least".
+    /// </summary>
+    public bool? DefaultEmptyOrderLeast { get; private init; }
 
     /// <summary>
     /// The target namespace of a library module (<c>module namespace p = "uri";</c>);
@@ -248,6 +258,12 @@ public sealed class XQueryStaticContext
         => CloneWith(baseUri: baseUri);
 
     /// <summary>
+    /// Creates a new context with the specified default order for empty sequences.
+    /// </summary>
+    public XQueryStaticContext WithDefaultEmptyOrderLeast(bool? least)
+        => CloneWith(defaultEmptyOrderLeast: least);
+
+    /// <summary>
     /// Creates a new context with a declared variable.
     /// </summary>
     public XQueryStaticContext WithVariable(string localName, string namespaceUri, XdmValue value)
@@ -277,7 +293,8 @@ public sealed class XQueryStaticContext
         string? defaultFunctionNamespace = null,
         string? defaultCollation = null,
         string? baseUri = null,
-        string? moduleNamespaceUri = null)
+        string? moduleNamespaceUri = null,
+        bool? defaultEmptyOrderLeast = null)
     {
         return new XQueryStaticContext(
             namespaces ?? _namespaces,
@@ -291,6 +308,7 @@ public sealed class XQueryStaticContext
             defaultFunctionNamespace ?? DefaultFunctionNamespace,
             defaultCollation ?? DefaultCollation,
             baseUri ?? BaseUri,
-            moduleNamespaceUri ?? ModuleNamespaceUri);
+            moduleNamespaceUri ?? ModuleNamespaceUri,
+            defaultEmptyOrderLeast ?? DefaultEmptyOrderLeast);
     }
 }

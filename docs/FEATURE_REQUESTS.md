@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-27 (XQuery 3.1: **string constructors**; QT3 now **29,150 passed / 0 failed** (91.61%); unit tests **1,536/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-27 (XQuery 3.1: **ordering features** (`ordered`/`unordered`, `declare ordering`, `declare default order empty`); QT3 now **29,244 passed / 0 failed** (91.90%); unit tests **1,544/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -158,6 +158,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-051 | *(internal)* | XQuery 3.1 Phase 4 — library modules (slice 2) | Required for XQuery modules: `module namespace` / `import module` with location hints, transitive import graph, %public/%private visibility, and per-module static contexts | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 | REQ-052 | *(internal)* | try/catch completion — named error codes and error variables | Required for XPath/XQuery 3.1 conformance: catch code patterns (`err:XPTY0004`, `err:*`, `*:local`, `Q{uri}local`), multiple catch clauses, and the `err:*` error variables | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 | REQ-053 | *(internal)* | XQuery 3.1 string constructors | Required for XQuery 3.1 conformance: `` `[literal `{expr}` literal]`` string constructors with interpolations, the largest single QT3 gap cluster (35 tests) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
+| REQ-054 | *(internal)* | XQuery 3.1 ordering features | Required for XQuery 3.1 conformance: `ordered`/`unordered` expressions, `declare ordering`, and `declare default order empty least/greatest` with the default applied to order-by | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2448,13 +2449,58 @@ Follow the established direct-element-constructor architecture: the lexer scans 
 
 ---
 
+### REQ-054: XQuery 3.1 ordering features
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-27  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+Three QT3 sets sat behind the harness's ordering gates: `prod/UnorderedExpr` (28), `prod/OrderingModeDecl` (27), and `prod/EmptyOrderDecl` (32). The expressions `ordered { E }` / `unordered { E }` and the prolog declarations `declare ordering` and `declare default order empty least|greatest` were unparseable, and the order-by engine had no way to take a prolog default for empty-key placement.
+
+**Proposed Solution:**  
+Ordering expressions pass their body through unchanged (the engine always produces document order, which is a valid implementation of both ordering modes); parse the two prolog declarations with their duplicate validations; and thread the default-empty-order through the static context into the IR lowerer, where order-by specs without an explicit modifier pick it up.
+
+**Acceptance Criteria:**
+- [x] `ordered { E }` / `unordered { E }` are primary expressions (XQuery only; intercepted before the name-test step path); identity semantics; empty bodies are the empty sequence (K-OrderExpr-1a/2a); postfix chains (`ordered {E}[2]`) work.
+- [x] `declare ordering ordered|unordered;` with XQST0065 on duplicate (incl. comment variants K-DefaultOrderingProlog-1/2/3); `ordering` stays usable as an element name (K2-DefaultOrderingProlog-1/2).
+- [x] `declare default order empty least|greatest;` with XQST0069 on duplicate; the default applies to order-by clauses lacking an explicit `empty least/greatest` (emptyorderdecl-2: empties sort last under `greatest`); an explicit modifier in the clause wins.
+- [x] `OrderSpec.EmptyOrder` is nullable (null = use the prolog default, itself defaulting to least); the IR lowerer's `DefaultEmptyOrder` property is threaded per module (library modules keep their own prolog default).
+- [x] QT3: prod/UnorderedExpr 26/0/2, prod/OrderingModeDecl 27/0/0, prod/EmptyOrderDecl 32/0/0, prod/OrderByClause 198/0/7 (unchanged); full suite **29,244 passed / 0 failed / 2,577 skipped (91.90%)**; gaps unchanged (464).
+- [x] Unit tests: 8 new tests; full suite **1,544/0**.
+
+**Implementation Notes:**
+- The ordered/unordered intercept sits next to the computed-constructor intercept in `ParseStepExpr`; the actual parse is in `ParsePrimaryExpr` (name + `{`).
+- `XQueryStaticContext.DefaultEmptyOrderLeast` (bool?); `IrLowerer.DefaultEmptyOrder` (EmptyOrder?) applied at both OrderByInfo construction sites via `ResolveEmptyOrder(spec ?? default ?? Least)`.
+- Harness: construct gate now contains only `\bvalidate\s` and the pragma alternative; the prolog gate keeps `boundary-space`, `construction`, `context`, decimal-format, `copy-namespaces`, and `import schema`.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | ordered/unordered expressions; `OrderSpec.EmptyOrder` nullable. |
+| XQuery | Modified | Two prolog declarations with duplicate validations; static-context property; lowerer threading. |
+| Compiler | Modified | `IrLowerer.DefaultEmptyOrder`. |
+| Conformance | Modified | Gates narrowed; gaps unchanged (464). |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-27 | Kimi | Identity semantics for ordering expressions | The spec permits any result order under `unordered` and requires document order under `ordered`; the engine always produces document order, satisfying both with zero runtime cost. |
+| 2026-07-27 | Kimi | Nullable `OrderSpec.EmptyOrder` resolved in the lowerer | Distinguishes "explicit least" from "unspecified" so the prolog default applies exactly where the grammar leaves it open, without touching the runtime comparator. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-053 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done; QT3 wired (29,150/0, 91.61%). `unordered`/`ordered`, NameTest/Annotation clusters follow. |
+| 1 | REQ-040 … REQ-054 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done; QT3 wired (29,244/0, 91.90%). NameTest/Annotation/VarDecl.external clusters follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

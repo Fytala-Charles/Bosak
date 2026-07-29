@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 27-07-2026     | Library module declaration, import module, %public/%private annotations (XQST0047/0048/0070/0088/0106/0116) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 27-07-2026     | declare ordering (XQST0065) and declare default order empty (XQST0069) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -311,6 +313,36 @@ public sealed class XQueryParser
             if (!IsSupportedCollation(ResolveCollationUri(uri, context.BaseUri)))
                 throw new ParseException($"XQST0087: Collation '{uri}' is not supported.", _position);
             context = context.WithDefaultCollation(uri);
+            return true;
+        }
+
+        if (TryMatchPhrase("default", "order", "empty"))
+        {
+            SkipWhitespace();
+            var emptyMode = ReadNCName();
+            if (emptyMode is not ("least" or "greatest"))
+                throw new ParseException($"XPST0003: Expected 'least' or 'greatest' after 'declare default order empty' but found '{emptyMode}'.", _position);
+            SkipWhitespace();
+            ExpectChar(';');
+            // XQST0069: the default order for empty sequences must not be declared twice.
+            if (context.DefaultEmptyOrderLeast is not null)
+                throw new ParseException("XQST0069: More than one 'declare default order empty' declaration.", _position);
+            context = context.WithDefaultEmptyOrderLeast(emptyMode == "least");
+            return true;
+        }
+
+        if (TryMatchPhrase("ordering"))
+        {
+            SkipWhitespace();
+            var mode = ReadNCName();
+            if (mode is not ("ordered" or "unordered"))
+                throw new ParseException($"XPST0003: Expected 'ordered' or 'unordered' after 'declare ordering' but found '{mode}'.", _position);
+            SkipWhitespace();
+            ExpectChar(';');
+            // XQST0065: the ordering mode must not be declared twice.
+            if (_seenOrderingDecl)
+                throw new ParseException("XQST0065: More than one ordering mode declaration.", _position);
+            _seenOrderingDecl = true;
             return true;
         }
 
@@ -697,6 +729,7 @@ public sealed class XQueryParser
 
     private bool _seenOptionDecl;
     private bool _seenContextItemDecl;
+    private bool _seenOrderingDecl;
     private bool _isLibraryModule;
     private bool _xml11LineEndings;
     private readonly List<(string Prefix, string Local, string Value, int Position)> _pendingOptions = new();

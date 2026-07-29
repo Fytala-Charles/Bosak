@@ -36,6 +36,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.2   | 27-07-2026     | Namespace resolution traversal for StringConstructorNode |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.3   | 27-07-2026     | Thread prolog default order empty into the IR lowerer |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -138,11 +140,14 @@ public sealed class XQueryCompiler
         }
 
         // 5. Lower to IR.
-        var lowerer = new IrLowerer();
+        var lowerer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast) };
         var module = lowerer.Lower(optimized);
 
         return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables);
     }
+
+    private static EmptyOrder? ToEmptyOrder(bool? least)
+        => least is null ? null : (least.Value ? EmptyOrder.Least : EmptyOrder.Greatest);
 
     /// <summary>The runtime static-context snapshot of a library module, applied around the
     /// execution of its function bodies and global variable initializers (null for the main module).</summary>
@@ -310,7 +315,8 @@ public sealed class XQueryCompiler
             ModuleVisibilityValidator.Validate(
                 fnBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables,
                 fn.Parameters.Select(p => p.Name));
-            var fnModule = new IrLowerer().Lower(optimizer.Optimize(fnBodyAst));
+            var fnModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
+                .Lower(optimizer.Optimize(fnBodyAst));
             userFunctions.Add(new CompiledUserFunction(
                 fn.LocalName,
                 fn.NamespaceUri,
@@ -331,7 +337,8 @@ public sealed class XQueryCompiler
                 var varBodyAst = ResolveFunctionNamespaces(v.Body, context);
                 ModuleVisibilityValidator.Validate(
                     varBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables);
-                varModule = new IrLowerer().Lower(optimizer.Optimize(varBodyAst));
+                varModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
+                    .Lower(optimizer.Optimize(varBodyAst));
             }
             userVariables.Add(new CompiledUserVariable(
                 v.LocalName, v.NamespaceUri, v.TypeName, varModule, v.IsExternal,

@@ -40,6 +40,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 27-07-2026     | 12 string-constructor tests (literals, interpolations, escapes, errors) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 27-07-2026     | 8 ordered/unordered/ordering-declaration tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -1425,6 +1427,70 @@ public class PlaceholderTests
     {
         var ex = Assert.ThrowsAny<Exception>(() => EvalStrC("``[abc]`"));
         Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_OrderedExpression_IsIdentity()
+    {
+        Assert.Equal("1 2 3", EvalStrC("fn:string-join(ordered { 1 to 3 } ! xs:string(.), ' ')"));
+    }
+
+    [Fact]
+    public void XQuery_UnorderedExpression_IsIdentity()
+    {
+        Assert.Equal("1 2 3", EvalStrC("fn:string-join(unordered { 1 to 3 } ! xs:string(.), ' ')"));
+    }
+
+    [Fact]
+    public void XQuery_OrderedUnordered_EmptyBodies()
+    {
+        Assert.Equal("(sequence)", EvalStrC("ordered {}"));
+        Assert.Equal("(sequence)", EvalStrC("unordered {}"));
+    }
+
+    [Fact]
+    public void XQuery_DeclareOrdering_Accepted()
+    {
+        Assert.Equal("42", EvalStrC("declare ordering unordered; 42"));
+        Assert.Equal("42", EvalStrC("declare ordering ordered; 42"));
+    }
+
+    [Fact]
+    public void XQuery_DeclareOrdering_Duplicate_ThrowsXQST0065()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            EvalStrC("declare ordering unordered; declare ordering ordered; 42"));
+        Assert.Contains("XQST0065", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareDefaultOrderEmpty_GreatestAppliesToOrderBy()
+    {
+        // emptyorderdecl-2 shape: the empty key sorts last with 'empty greatest'.
+        var result = new XQueryCompiler().Compile(
+            "declare default order empty greatest; " +
+            "for $i in (<a>1</a>,<a>4</a>,<a></a>,<a>7</a>) order by zero-or-one($i/text()) ascending return xs:string($i)")
+            .Evaluate(new XQueryContext());
+        Assert.Equal(new[] { "1", "4", "7", "" }, ToStrings(result));
+    }
+
+    [Fact]
+    public void XQuery_DeclareDefaultOrderEmpty_ExplicitLeastWinsOverPrologGreatest()
+    {
+        var result = new XQueryCompiler().Compile(
+            "declare default order empty greatest; " +
+            "for $i in (<a>1</a>,<a>4</a>,<a></a>,<a>7</a>) order by zero-or-one($i/text()) ascending empty least return xs:string($i)")
+            .Evaluate(new XQueryContext());
+        Assert.Equal(new[] { "", "1", "4", "7" }, ToStrings(result));
+    }
+
+
+    [Fact]
+    public void XQuery_DeclareDefaultOrderEmpty_Duplicate_ThrowsXQST0069()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            EvalStrC("declare default order empty least; declare default order empty greatest; 42"));
+        Assert.Contains("XQST0069", ex.Message);
     }
 
     [Fact]

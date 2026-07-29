@@ -5,15 +5,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 27 July 2026
-> **Bosak baseline:** 1,536 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,150 passed / 0 failed / 2,671 skipped (91.61% / 100% of runnable tests) — XQuery routing enabled; 464 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,544 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,244 passed / 0 failed / 2,577 skipped (91.90% / 100% of runnable tests) — XQuery routing enabled; 464 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors
+> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
 ---
 
 ## 0. Recent Changes
 
+- **2026-07-27** — XQuery 3.1: **ordering features** (REQ-054): QT3 **29,244 passed / 0 failed** (from 29,150; +94 passing).
+  - `ordered { E }` / `unordered { E }` expressions (identity — document order is always produced, valid under both modes; empty bodies are the empty sequence); `declare ordering ordered|unordered;` with XQST0065 on duplicate.
+  - `declare default order empty least|greatest;` with XQST0069; the default flows through the static context into the IR lowerer and applies to order-by clauses without an explicit `empty` modifier (an explicit modifier wins).
+  - Sets: prod/UnorderedExpr 26/0/2, prod/OrderingModeDecl 27/0/0, prod/EmptyOrderDecl 32/0/0; gaps unchanged (464).
 - **2026-07-27** — XQuery 3.1: **string constructors** (REQ-053): QT3 **29,150 passed / 0 failed** (from 29,114; +36 passing; gaps 464, −35).
   - `` `[literal `{expr}` literal]`` with full nesting awareness: interpolations inside interpolations, string constructors inside direct element constructors and vice versa; literal text is raw (no reference expansion, whitespace preserved, single backticks literal); unterminated forms are XPST0003.
   - Interpolations desugar to `fn:string-join(fn:data(E) ! fn:string(.), " ")` — atomization raises FOTY0013 for maps, arrays flatten, sequence items space-join, parts concatenate without separator; empty interpolations are empty strings.

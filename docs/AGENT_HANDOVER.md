@@ -1,6 +1,41 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
+**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xquery): ordered/unordered expressions and ordering declarations)
+**Current focus:** **XQuery ordering features**: `ordered { E }` / `unordered { E }` expressions (identity in this engine — sequences are always produced in document order, a valid implementation of both ordering modes), the `declare ordering` prolog (XQST0065), and `declare default order empty least|greatest` (XQST0069) with the default applied to order-by clauses lacking an explicit empty modifier. QT3 went from **29,150 passed / 0 failed / 2,671 skipped (91.61%)** to **29,244 passed / 0 failed / 2,577 skipped (91.90%)** (+94 passing). Full `dotnet test Bosak.sln` passes: **1,544 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (ordering)
+
+1. **Ordering expressions** — `ordered { E }` / `unordered { E }` parse as primary expressions (XQuery mode only, intercepted before the name-test step path, mirroring the computed-constructor intercept) and pass the body through unchanged; empty bodies are the empty sequence (K-OrderExpr-1a/2a).
+2. **`declare ordering ordered|unordered;`** — tokenized prolog phrase with XQST0065 on duplicate (K-DefaultOrderingProlog comment variants included).
+3. **`declare default order empty least|greatest;`** — new static-context property `DefaultEmptyOrderLeast` with XQST0069 on duplicate; `OrderSpec.EmptyOrder` is now nullable (null = use the prolog default, itself defaulting to least); the IR lowerer's new `DefaultEmptyOrder` property applies it at both order-by lowering sites, threaded per module by `XQueryCompiler` (emptyorderdecl-2: empty keys sort last under `empty greatest`; an explicit `empty least` in the clause wins).
+4. **Harness** — `\bunordered\s*\{|\bordered\s*\{` removed from the construct gate; `default\s+order` and `ordering` removed from the prolog gate (`\bvalidate\s` and pragmas stay gated; `boundary-space`, `construction`, `context`, decimal-format, `copy-namespaces`, `import schema` stay gated).
+5. **Gaps unchanged (464 reasoned skips)** — all admitted sets are green: prod/UnorderedExpr 26/0/2, prod/OrderingModeDecl 27/0/0, prod/EmptyOrderDecl 32/0/0, prod/OrderByClause 198/0/7 (unchanged).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/{XPathAstNode,XPathParser}.cs`, `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `src/Bosak.XQuery/{Parser/XQueryParser,Compiler/XQueryStaticContext,Api/XQueryCompiler}.cs`
+- `tests/Bosak.XPath.Conformance/TestExecutor.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+8 tests)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (464 recorded skips)
+
+Largest clusters: `prod/Annotation` (24 — inline-function annotations and annotation assertions in function tests), `prod/NameTest` (22), `prod/VarDecl.external` (17 — external variable semantics), `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/NamespaceDecl` (11), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,100 skips are `validate` (schema awareness), `fn:load-xquery-module`, and `sudoku` (too slow).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **prod/NameTest cluster** (22 tests) or **external variable semantics** (`prod/VarDecl.external`, 17 tests).
+2. **inline-function annotations** (prod/Annotation remainder, 24 tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-27
 **Commit:** `5413242` (feat(xquery): string constructors)
 **Current focus:** **XQuery 3.1 string constructors** (`` `[literal `{expr}` literal]``) implemented end-to-end: lexer whole-span tokenization with full nesting awareness, a `StringConstructorNode` AST, and a spec-faithful desugar to `fn:string-join`. QT3 went from **29,114 passed / 0 failed / 2,707 skipped (91.49%)** to **29,150 passed / 0 failed / 2,671 skipped (91.61%)** (+36 passing; the StringConstructor set went 14/0/38 to **49/0/3**). Full `dotnet test Bosak.sln` passes: **1,536 unit tests / 0 failed**; XSLT baseline unchanged.
 

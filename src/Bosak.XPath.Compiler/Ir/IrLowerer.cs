@@ -59,6 +59,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 27-07-2026     | String constructors desugar to fn:string-join(fn:data(E) ! fn:string(.)) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.25  | 27-07-2026     | DefaultEmptyOrder property applied to order-by specs without explicit empty order |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -224,6 +226,16 @@ public sealed class IrLowerer
     private int _nextRegister;
     private int _nextCountCounter;
     private readonly Stack<int> _freeRegisters = new();
+
+    /// <summary>
+    /// The static context's default order for empty sequences in order-by clauses
+    /// (from the prolog's <c>declare default order empty least|greatest</c>);
+    /// null means <see cref="EmptyOrder.Least"/>.
+    /// </summary>
+    public EmptyOrder? DefaultEmptyOrder { get; set; }
+
+    private EmptyOrder ResolveEmptyOrder(EmptyOrder? specEmptyOrder)
+        => specEmptyOrder ?? DefaultEmptyOrder ?? EmptyOrder.Least;
 
     public IrModule Lower(XPathAstNode node)
     {
@@ -1872,7 +1884,7 @@ public sealed class IrLowerer
                 boundVariables.Count,
                 postOrderByClause.Specs.Count,
                 postOrderByClause.Specs.Select(s => s.Descending).ToArray(),
-                postOrderByClause.Specs.Select(s => s.EmptyOrder).ToArray(),
+                postOrderByClause.Specs.Select(s => ResolveEmptyOrder(s.EmptyOrder)).ToArray(),
                 postOrderByClause.Specs.Select(s => s.CollationUri).ToArray());
             int orderByPoolIdx = AddToLiteralPool(orderByInfo);
             Emit(IrOpCode.OrderBy, (ushort)sortedSeqReg, (ushort)rekeyedSeqReg, 0, orderByPoolIdx);
@@ -2008,7 +2020,7 @@ public sealed class IrLowerer
                 boundVariables.Count,
                 orderByClause.Specs.Count,
                 orderByClause.Specs.Select(s => s.Descending).ToArray(),
-                orderByClause.Specs.Select(s => s.EmptyOrder).ToArray(),
+                orderByClause.Specs.Select(s => ResolveEmptyOrder(s.EmptyOrder)).ToArray(),
                 orderByClause.Specs.Select(s => s.CollationUri).ToArray());
             int orderByPoolIdx = AddToLiteralPool(orderByInfo);
             Emit(IrOpCode.OrderBy, (ushort)sortedTupleSeqReg, (ushort)tupleSeqReg, 0, orderByPoolIdx);

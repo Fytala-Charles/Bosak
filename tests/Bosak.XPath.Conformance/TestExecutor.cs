@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.16  | 27-07-2026     | Admit string constructors; fix RegexOptions.Compiled glued into construct-gate pattern |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.17  | 27-07-2026     | Admit ordered/unordered, declare ordering, declare default order empty |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -267,15 +269,15 @@ internal sealed class TestExecutor
     // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
     // keep their "XQuery syntax not supported" skip instead of being routed.
     private static readonly Regex UnsupportedXQueryConstructRegex = new(
-        @"\bunordered\s*\{|\bordered\s*\{|\bvalidate\s" +
+        @"\bvalidate\s" +
         @"|\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
         RegexOptions.Compiled);
 
     // Prolog forms the XQuery parser does NOT support (namespace, default element/function
-    // namespace, default collation, base-uri, option, variable, function, module import,
-    // and version declarations are supported).
+    // namespace, default collation, default order empty, ordering, base-uri, option,
+    // variable, function, module import, and version declarations are supported).
     private static readonly Regex UnsupportedPrologRegex = new(
-        @"\bdeclare\s+(boundary-space|default\s+order|default\s+decimal-format|ordering|copy-namespaces|context|decimal-format|construction)\b" +
+        @"\bdeclare\s+(boundary-space|default\s+decimal-format|copy-namespaces|context|decimal-format|construction)\b" +
         @"|\bimport\s+schema\b",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

@@ -38,6 +38,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.10  | 27-07-2026     | StringConstructorNode for XQuery string constructors |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11  | 27-07-2026     | OrderSpec.EmptyOrder nullable (unspecified uses the prolog default) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -169,11 +171,13 @@ public sealed record CountClauseNode(string VariableName, string? Prefix = null,
 /// <summary>An order by clause: <c>order by key [ascending|descending] [empty least|greatest] [collation 'uri']</c>.</summary>
 public sealed record OrderByClauseNode(IReadOnlyList<OrderSpec> Specs) : FlworClauseNode;
 
-/// <summary>A single ordering specification inside an order by clause.</summary>
+/// <summary>A single ordering specification inside an order by clause. When
+/// <see cref="EmptyOrder"/> is null the static context's default order for empty
+/// sequences applies (itself defaulting to <see cref="EmptyOrder.Least"/>).</summary>
 public sealed record OrderSpec(
     XPathAstNode KeyExpression,
     bool Descending = false,
-    EmptyOrder EmptyOrder = EmptyOrder.Least,
+    EmptyOrder? EmptyOrder = null,
     string? CollationUri = null);
 
 /// <summary>How to order empty sequences in an order by clause.</summary>

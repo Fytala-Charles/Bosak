@@ -67,6 +67,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 27-07-2026     | String constructor scanning; XPath-mode string literals no longer expand references |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.32  | 27-07-2026     | ordered/unordered expressions (identity); empty bodies; explicit empty least/greatest tracked |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -433,7 +435,7 @@ public sealed class XPathParser
         {
             var key = ParseExprSingle();
             bool descending = false;
-            var emptyOrder = EmptyOrder.Least;
+            EmptyOrder? emptyOrder = null;
             string? collation = null;
 
             if (Current.Kind == TokenKind.Name && GetString(Current) == "ascending")
@@ -457,6 +459,7 @@ public sealed class XPathParser
                 else if (Current.Kind == TokenKind.Name && GetString(Current) == "least")
                 {
                     Advance();
+                    emptyOrder = EmptyOrder.Least;
                 }
                 else
                 {
@@ -1325,6 +1328,14 @@ public sealed class XPathParser
             return ParsePostfixExpr();
         }
 
+        // OrderedExpr / UnorderedExpr (XQuery only) are primary expressions, not name-test steps.
+        if (_allowFullFlwor && Current.Kind == TokenKind.Name
+            && GetString(Current) is "ordered" or "unordered"
+            && Peek(1).Kind == TokenKind.LBrace)
+        {
+            return ParsePostfixExpr();
+        }
+
         // Name test or wildcard in a step context
         // Exclude names followed by LParen (function calls/kind tests already handled)
         // Exclude names followed by Hash (named function refs)
@@ -1708,6 +1719,20 @@ public sealed class XPathParser
                 var name = GetString(Current);
                 if (_allowFullFlwor && IsComputedConstructorForm(name))
                     return ParseComputedConstructor(start);
+                // OrderedExpr / UnorderedExpr (XQuery only): identity in this engine —
+                // sequences are always produced in document order, which is a valid
+                // implementation of both ordering modes. An empty body is the empty
+                // sequence (K-OrderExpr-1a/2a).
+                if (_allowFullFlwor && name is "ordered" or "unordered" && Peek(1).Kind == TokenKind.LBrace)
+                {
+                    Advance();
+                    Expect(TokenKind.LBrace);
+                    if (Match(TokenKind.RBrace))
+                        return WithSpan(new SequenceExpressionNode(Array.Empty<XPathAstNode>()), start, End);
+                    var orderedBody = ParseExpr();
+                    Expect(TokenKind.RBrace);
+                    return orderedBody;
+                }
                 var (prefix, local, _) = SplitQName(name);
                 if (Peek(1).Kind == TokenKind.LParen)
                     return ParseFunctionCall(start);
