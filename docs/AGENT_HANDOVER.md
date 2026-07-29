@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): inline-function annotations and function-test annotation assertions)
+**Commit:** `3623b37` (feat(xquery): inline-function annotations and function-test annotation assertions)
 **Current focus:** **prod/Annotation cluster closed** (24 gaps → 0): annotations on inline function expressions, annotation assertions in function tests, literal-only annotation arguments, and reserved annotation namespaces (XQST0045). QT3 went from **29,292 passed / 0 failed / 2,529 skipped (92.05%)** to **29,316 passed / 0 failed / 2,505 skipped (92.13%)** (+24 passing). Full `dotnet test Bosak.sln` passes: **1,584 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (Annotation cluster)
