@@ -46,6 +46,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 29-07-2026     | 12 typed variable declaration and namespace undeclaration tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.10  | 29-07-2026     | 7 namespace declaration static-error tests (XQST0033/XQST0070/XPST0003) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -1915,6 +1917,70 @@ public class PlaceholderTests
             compiler.Compile("declare namespace xs = \"\"; xs:integer(1)")
                 .Evaluate(new XQueryContext()));
         Assert.Contains("XPST0081", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareNamespace_DuplicatePrefix_ThrowsXQST0033()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare namespace p = \"http://example.com/\"; declare namespace p = \"http://example.com/other\"; 1"));
+        Assert.Contains("XQST0033", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareNamespace_UndeclareCountsAsDeclaration_ThrowsXQST0033()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare namespace p = \"http://example.com/\"; declare namespace p = \"\"; 1"));
+        Assert.Contains("XQST0033", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareNamespace_XmlPrefix_ThrowsXQST0070()
+    {
+        var compiler = new XQueryCompiler();
+        // Even binding xml to its proper namespace name is rejected (namespaceDecl-3).
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare namespace xml = \"http://www.w3.org/XML/1998/namespace\"; \"a\""));
+        Assert.Contains("XQST0070", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareNamespace_XmlnsPrefix_ThrowsXQST0070()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare namespace xmlns = \"http://example.com/examples\"; \"a\""));
+        Assert.Contains("XQST0070", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareNamespace_XmlNamespaceName_ThrowsXQST0070()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare namespace foo = \"http://www.w3.org/XML/1998/namespace\"; \"a\""));
+        Assert.Contains("XQST0070", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DeclareNamespace_AfterVariable_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $x := 2; declare namespace p = \"http://example.com/\"; 1"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_SetterDeclaration_AfterVariable_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $x := 2; declare base-uri \"http://example.com/\"; 1"));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 29-07-2026     | Variable initializers parsed as ExprSingle; element/attribute type +/* occurrence rejected (XPST0003) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 29-07-2026     | XQST0033 duplicate namespace declarations; XQST0070 reserved xml/xmlns checks; two-phase prolog ordering |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -200,6 +202,11 @@ public sealed class XQueryParser
             return false;
         }
 
+        // XQuery prolog ordering: imports are phase-1 declarations and must precede
+        // variable, function, option, and context item declarations.
+        if (_seenSecondPhaseDecl)
+            throw new ParseException("XPST0003: Module imports must precede variable, function, option, and context item declarations.", _position);
+
         SkipWhitespace();
         string? importPrefix = null;
         if (TryMatchLiteral("namespace"))
@@ -256,9 +263,11 @@ public sealed class XQueryParser
 
         if (TryMatchPhrase("namespace"))
         {
-            // XQuery prolog ordering: namespace declarations precede option declarations.
-            if (_seenOptionDecl)
-                throw new ParseException("XPST0003: Namespace declarations must precede option declarations.", _position);
+            // XQuery prolog ordering (two-phase grammar): namespace declarations are
+            // phase-1 declarations and must precede variable, function, option, and
+            // context item declarations (K2-NamespaceProlog-14).
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string prefix = ReadNCName();
             SkipWhitespace();
@@ -267,14 +276,26 @@ public sealed class XQueryParser
             string uri = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
+            // XQST0070: the prefix xml must not be (re)declared at all and the prefix
+            // xmlns must not be declared or undeclared (K2-NamespaceProlog-6/7/15,
+            // namespaceDecl-3/5); no prefix may be bound to the XML or XMLNS namespace
+            // names (namespaceDecl-4).
+            if (prefix is "xml" or "xmlns")
+                throw new ParseException($"XQST0070: The namespace prefix '{prefix}' must not be declared.", _position);
+            if (uri is "http://www.w3.org/XML/1998/namespace" or "http://www.w3.org/2000/xmlns/")
+                throw new ParseException($"XQST0070: The namespace '{uri}' must not be bound to the prefix '{prefix}'.", _position);
+            // XQST0033: a prefix must not be declared twice in one prolog — an
+            // undeclaration counts as a declaration (K2-NamespaceProlog-1/2/3).
+            if (!_declaredNamespacePrefixes.Add(prefix))
+                throw new ParseException($"XQST0033: The namespace prefix '{prefix}' is declared more than once.", _position);
             context = context.WithNamespace(prefix, uri);
             return true;
         }
 
         if (TryMatchPhrase("default", "element", "namespace"))
         {
-            if (_seenOptionDecl)
-                throw new ParseException("XPST0003: Namespace declarations must precede option declarations.", _position);
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
@@ -288,8 +309,8 @@ public sealed class XQueryParser
 
         if (TryMatchPhrase("default", "function", "namespace"))
         {
-            if (_seenOptionDecl)
-                throw new ParseException("XPST0003: Namespace declarations must precede option declarations.", _position);
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
@@ -304,6 +325,8 @@ public sealed class XQueryParser
 
         if (TryMatchPhrase("default", "collation"))
         {
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
@@ -320,6 +343,8 @@ public sealed class XQueryParser
 
         if (TryMatchPhrase("default", "order", "empty"))
         {
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             var emptyMode = ReadNCName();
             if (emptyMode is not ("least" or "greatest"))
@@ -335,6 +360,8 @@ public sealed class XQueryParser
 
         if (TryMatchPhrase("ordering"))
         {
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             var mode = ReadNCName();
             if (mode is not ("ordered" or "unordered"))
@@ -350,6 +377,8 @@ public sealed class XQueryParser
 
         if (TryMatchPhrase("base-uri"))
         {
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
@@ -369,7 +398,7 @@ public sealed class XQueryParser
             string value = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
-            _seenOptionDecl = true;
+            _seenSecondPhaseDecl = true;
             if (eqNameUri is null && prefix is not null && !context.Namespaces.ContainsKey(prefix))
             {
                 // The prefix may be declared by a later namespace declaration — but that
@@ -419,6 +448,7 @@ public sealed class XQueryParser
             if (_seenContextItemDecl)
                 throw new ParseException("XQST0113: More than one context item declaration in a module.", _position);
             _seenContextItemDecl = true;
+            _seenSecondPhaseDecl = true;
             // XQST0113: an initial or default value is not allowed in a library module.
             if (hasValue)
                 throw new ParseException("XQST0113: A context item declaration in a library module must not specify an initial or default value.", _position);
@@ -513,6 +543,7 @@ public sealed class XQueryParser
         if (prefix is null && ReservedFunctionNames.Contains(local))
             throw new ParseException($"XPST0003: '{local}' is a reserved function name and cannot be declared.", _position);
         context = context.WithUserFunction(new UserFunctionDeclaration(local, fnNs, parameters, returnType, body, _position, isPrivate));
+        _seenSecondPhaseDecl = true;
         return true;
     }
 
@@ -578,6 +609,7 @@ public sealed class XQueryParser
         if (context.UserVariables.Any(v => v.LocalName == local && v.NamespaceUri == varNs))
             throw new ParseException($"XQST0049: Variable '${local}' is declared more than once.", _position);
         context = context.WithUserVariable(new UserVariableDeclaration(local, varNs, varType, varBody, isExternal, _position, isPrivate));
+        _seenSecondPhaseDecl = true;
         return true;
     }
 
@@ -729,9 +761,13 @@ public sealed class XQueryParser
         return sb.ToString();
     }
 
-    private bool _seenOptionDecl;
+    // Phase-2 prolog declarations (context item, function, variable, option) close the
+    // phase-1 window: afterwards namespace/setter/import declarations are XPST0003.
+    private bool _seenSecondPhaseDecl;
     private bool _seenContextItemDecl;
     private bool _seenOrderingDecl;
+    // Prefixes bound by 'declare namespace' in this prolog (XQST0033 duplicate detection).
+    private readonly HashSet<string> _declaredNamespacePrefixes = new(StringComparer.Ordinal);
     private bool _isLibraryModule;
     private bool _xml11LineEndings;
     private readonly List<(string Prefix, string Local, string Value, int Position)> _pendingOptions = new();

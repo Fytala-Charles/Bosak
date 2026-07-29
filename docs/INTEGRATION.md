@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 29 July 2026
-> **Bosak baseline:** 1,570 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,281 passed / 0 failed / 2,540 skipped (92.02% / 100% of runnable tests) — XQuery routing enabled; 445 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,577 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,292 passed / 0 failed / 2,529 skipped (92.05% / 100% of runnable tests) — XQuery routing enabled; 434 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,11 @@
 
 ## 0. Recent Changes
 
+- **2026-07-29** — XQuery: **NamespaceDecl cluster closed** (REQ-057): QT3 **29,292 passed / 0 failed** (from 29,281; +11 passing; gaps 434, −11).
+  - Duplicate namespace prefix declarations raise **XQST0033** — undeclarations count as declarations (K2-NamespaceProlog-1/2/3).
+  - Reserved names raise **XQST0070**: the `xml` prefix must not be declared at all, `xmlns` must not be declared or undeclared, and no prefix may be bound to the XML/XMLNS namespace names.
+  - Two-phase prolog ordering enforced: namespace, default-namespace, setter, and import declarations after a context-item/function/variable/option declaration are **XPST0003** (K2-NamespaceProlog-14).
+  - prod/NamespaceDecl 44/0/0; module-import, option, base-uri, collation, ordering, and default-namespace sets all green.
 - **2026-07-29** — XQuery: **VarDecl.external cluster closed** (REQ-056): QT3 **29,281 passed / 0 failed** (from 29,264; +17 passing; gaps 445, −17).
   - Variable initializers and context-item initial values are parsed as **ExprSingle**: a top-level comma is **XPST0003** (K2-ExternalVariablesWith-11).
   - Declared `as T` on variable declarations is enforced **strictly** — atomization plus an instance check, no casts and no numeric/URI promotion; mismatch raises **XPTY0004** (K2-ExternalVariablesWith-12..19, extvardeclwithtype-19).

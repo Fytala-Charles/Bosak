@@ -40,6 +40,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.11  | 29-07-2026     | Drop 17 VarDecl.external gap entries (implemented) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.12  | 29-07-2026     | Drop 11 NamespaceDecl gap entries (implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -544,18 +546,6 @@ internal sealed class ConformanceRunner
         // prod/NameTest.xml (2 tests)
         ["K2-NameTest-5"] = "XQuery conformance gap (NameTest): keywords usable as element names in expression positions (tokenizer-torture)",
         ["NodeTest004"] = "XQuery conformance gap (NameTest): schema-aware element type assertion element(Root)",
-        // prod/NamespaceDecl.xml (11 tests)
-        ["K2-NamespaceProlog-1"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["K2-NamespaceProlog-14"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["K2-NamespaceProlog-15"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["K2-NamespaceProlog-2"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["K2-NamespaceProlog-3"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["K2-NamespaceProlog-6"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["K2-NamespaceProlog-7"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["cbcl-declare-namespace-001"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["namespaceDecl-3"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["namespaceDecl-4"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
-        ["namespaceDecl-5"] = "XQuery conformance gap (NamespaceDecl): see AGENT_HANDOVER REQ-045",
         // prod/PathExpr.xml (5 tests)
         ["PathExpr-14"] = "XQuery conformance gap (PathExpr): see AGENT_HANDOVER REQ-045",
         ["PathExpr-5"] = "XQuery conformance gap (PathExpr): see AGENT_HANDOVER REQ-045",

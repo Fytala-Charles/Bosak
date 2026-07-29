@@ -1,6 +1,40 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): namespace declaration static errors and prolog ordering)
+**Current focus:** **prod/NamespaceDecl cluster closed** (11 gaps → 0): duplicate namespace declarations (XQST0033), reserved `xml`/`xmlns` prefix rules (XQST0070), and two-phase prolog ordering (XPST0003). QT3 went from **29,281 passed / 0 failed / 2,540 skipped (92.02%)** to **29,292 passed / 0 failed / 2,529 skipped (92.05%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,577 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (NamespaceDecl cluster)
+
+1. **XQST0033 duplicate declarations** — a prefix must not be declared twice in one prolog, and an undeclaration (`declare namespace p = ""`) counts as a declaration for this purpose (K2-NamespaceProlog-1/2/3). Tracked via a parser-local `_declaredNamespacePrefixes` set (predeclared prefixes like `xs` may still be bound once).
+2. **XQST0070 reserved names** — the `xml` prefix must not be declared at all (not even to its proper namespace name, namespaceDecl-3), `xmlns` must not be declared or undeclared (K2-NamespaceProlog-6/7, namespaceDecl-5), and no prefix may be bound to the XML or XMLNS namespace names (namespaceDecl-4, K2-NamespaceProlog-15).
+3. **Two-phase prolog ordering (XPST0003)** — the parser now enforces the grammar's phase structure: once a context-item, function, variable, or option declaration is seen (`_seenSecondPhaseDecl`), further namespace declarations, default element/function namespace declarations, setters (default collation, default order empty, ordering, base-uri), and module imports are syntax errors (K2-NamespaceProlog-14). Replaces the narrower option-declaration-only check.
+4. **cbcl-declare-namespace-001** — already fixed by the previous session's undeclaration propagation (`declare namespace test=""; <test:a />` → XPST0081); un-gapped here.
+5. **Gaps: 434 reasoned skips (−11)** — prod/NamespaceDecl runs **44/0/0**.
+
+## Files Changed (this session)
+
+- `src/Bosak.XQuery/Parser/XQueryParser.cs` (all checks)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+7)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (434 recorded skips)
+
+Largest clusters: `prod/Annotation` (24 — inline-function annotations and annotation assertions in function tests), `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **inline-function annotations** (prod/Annotation remainder, 24 tests — `%eg:*` on inline functions and annotation assertions in function tests).
+2. **prod/Literal cluster** (16 tests) or **misc/CombinedErrorCodes** (17 tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `29309e1` (feat(xquery): variable declaration type strictness and external variables)
 **Current focus:** **prod/VarDecl.external cluster closed** (17 gaps → 0): variable initializers are ExprSingle, declared-type initializers are enforced strictly (no casts/promotions), kind-test type occurrence indicators validated, namespace undeclarations propagated to the runtime, and typed external-variable bindings checked. QT3 went from **29,264 passed / 0 failed / 2,557 skipped (91.96%)** to **29,281 passed / 0 failed / 2,540 skipped (92.02%)** (+17 passing). Full `dotnet test Bosak.sln` passes: **1,570 unit tests / 0 failed**; XSLT baseline unchanged.
 

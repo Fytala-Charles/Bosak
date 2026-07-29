@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external cluster closed** (17 → 0) — strict typed initializers, ExprSingle initializers, namespace undeclaration, typed external variables; QT3 now **29,281 passed / 0 failed** (92.02%); unit tests **1,570/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl clusters closed** (17 → 0, 11 → 0) — strict typed initializers, namespace undeclaration, namespace static errors, prolog ordering; QT3 now **29,292 passed / 0 failed** (92.05%); unit tests **1,577/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -161,6 +161,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-054 | *(internal)* | XQuery 3.1 ordering features | Required for XQuery 3.1 conformance: `ordered`/`unordered` expressions, `declare ordering`, and `declare default order empty least/greatest` with the default applied to order-by | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 | REQ-055 | *(internal)* | Name tests, kind-test types, and constructor namespace semantics | Required for XPath/XQuery conformance: XPST0081/XPST0008 name-test errors, kind-test schema type names, PI name validation, and spec-correct in-scope namespaces on constructed elements | **Implemented** | Phase 4 | Charles Korthout | 2026-07-28 |
 | REQ-056 | *(internal)* | Variable declaration type strictness and external variables | Required for XQuery conformance: ExprSingle initializers, strict `as T` enforcement (no casts/promotions), kind-test occurrence validation, namespace undeclaration, and typed external-variable binding checks | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-057 | *(internal)* | Namespace declaration static errors and prolog ordering | Required for XQuery conformance: XQST0033 duplicate prefix declarations, XQST0070 reserved xml/xmlns prefix rules, and two-phase prolog ordering (XPST0003) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2592,13 +2593,56 @@ Parse initializers as `ExprSingle` (new `XPathParser.ParseExprSingle` entry); en
 
 ---
 
+### REQ-057: Namespace declaration static errors and prolog ordering
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The prod/NamespaceDecl cluster (11 recorded gaps) covered three unchecked static errors in `declare namespace`: duplicate declarations of one prefix were accepted (even when one was an undeclaration); the reserved `xml`/`xmlns` prefixes and the XML/XMLNS namespace names could be (re)bound freely; and the prolog's two-phase grammar was unenforced, so namespace declarations after variable declarations parsed silently.
+
+**Proposed Solution:**  
+Track per-prolog declared prefixes in the parser (XQST0033, undeclarations count); reject any declaration of `xml` or `xmlns` and any binding to the XML/XMLNS namespace names (XQST0070); and enforce the two-phase prolog structure with a `_seenSecondPhaseDecl` flag set by context-item/function/variable/option declarations and checked by every phase-1 declaration branch (XPST0003).
+
+**Acceptance Criteria:**
+- [x] Duplicate prefix declarations raise **XQST0033**, including declare-then-undeclare and undeclare-then-declare (K2-NamespaceProlog-1/2/3).
+- [x] `declare namespace xml = ...` raises **XQST0070** even for the proper XML namespace name (namespaceDecl-3, K2-NamespaceProlog-6/15); `declare namespace xmlns = ...` (any URI, including empty) raises **XQST0070** (namespaceDecl-5, K2-NamespaceProlog-7); binding another prefix to `http://www.w3.org/XML/1998/namespace` or `http://www.w3.org/2000/xmlns/` raises **XQST0070** (namespaceDecl-4).
+- [x] Namespace/default-namespace/setter/import declarations after a context-item, function, variable, or option declaration raise **XPST0003** (K2-NamespaceProlog-14).
+- [x] `declare namespace test=""; <test:a />` raises **XPST0081** (cbcl-declare-namespace-001, via the previous session's undeclaration propagation).
+- [x] QT3: prod/NamespaceDecl **44/0/0**; full suite **29,292 passed / 0 failed / 2,529 skipped (92.05%)**; gaps **434** (−11).
+- [x] Unit tests: 7 new tests; full suite **1,577/0**.
+
+**Implementation Notes:**
+- All checks live in `XQueryParser`: `_declaredNamespacePrefixes` (parser-local `HashSet<string>`) for XQST0033 — predeclared prefixes such as `xs` may still be bound once per prolog; reserved-name checks run before the duplicate check.
+- `_seenSecondPhaseDecl` replaces the narrower `_seenOptionDecl`; it is set by context-item, function, variable, and option declarations and checked in the `namespace`, `default element namespace`, `default function namespace`, `default collation`, `default order empty`, `ordering`, `base-uri`, and `import module` branches.
+- The XQST0070 rule for `xml` is deliberately stricter than the module-import rule: a namespace declaration may not declare `xml` at all (namespaceDecl-3), while an import may bind `xml` to its proper namespace name.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| XQuery Parser | Modified | XQST0033/XQST0070 checks; two-phase prolog ordering enforcement. |
+| Conformance | Modified | Gaps 434. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Undeclarations count as declarations for XQST0033 | K2-NamespaceProlog-1/2/3 expect XQST0033 for declare-then-undeclare, undeclare-then-declare, and declare-redeclare-undeclare sequences. |
+| 2026-07-29 | Kimi | `xml` may not be declared even to its proper namespace name | namespaceDecl-3 expects XQST0070 for `declare namespace xml = "http://www.w3.org/XML/1998/namespace"` — unlike module imports, where the proper binding is tolerated. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-056 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed; QT3 wired (29,281/0, 92.02%). Annotation, NamespaceDecl, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-057 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed; QT3 wired (29,292/0, 92.05%). Annotation, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |
