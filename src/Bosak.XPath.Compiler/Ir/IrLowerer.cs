@@ -1,5 +1,3 @@
-//                      | Charles Korthout | 1.23  | 27-07-2026     | TryCatchInfo carries ordered catch clauses with code patterns |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -56,6 +54,10 @@
 //                      | Charles Korthout | 1.21  | 25-07-2026     | Lower switch/typeswitch by desugaring to let/if/eq/instance-of chains                   |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.22  | 26-07-2026     | Simple for-loop lowering seeds QuantifiedLoopInfo.ScopedVariableNames from top-level let names |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.23  | 27-07-2026     | TryCatchInfo carries ordered catch clauses with code patterns |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.24  | 27-07-2026     | String constructors desugar to fn:string-join(fn:data(E) ! fn:string(.)) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -286,6 +288,7 @@ public sealed class IrLowerer
             ForExpressionNode n => LowerForExpression(n, targetReg),
             QuantifiedExpressionNode n => LowerQuantifiedExpression(n, targetReg),
             TryCatchNode n => LowerTryCatch(n, targetReg),
+            StringConstructorNode n => LowerStringConstructor(n, targetReg),
             LetExpressionNode n => LowerLetExpression(n, targetReg),
             FlworExpressionNode n => LowerFlworExpression(n, targetReg),
             InlineFunctionNode n => LowerInlineFunction(n, targetReg),
@@ -1625,6 +1628,35 @@ public sealed class IrLowerer
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterCatch);
 
         return resultReg;
+    }
+
+    // ``[ literal `{expr}` ... ]`` desugars to
+    //   fn:string-join((literal, fn:string-join(fn:data(expr) ! fn:string(.), " "), ...), "")
+    // Per XQuery 3.1 §3.11.2: an interpolation's value is atomized (fn:data — maps raise
+    // FOTY0013), each atomic value is cast to xs:string and joined with a single space,
+    // and the parts concatenate without a separator.
+    private int LowerStringConstructor(StringConstructorNode node, int? targetReg)
+    {
+        XPathAstNode JoinPart(XPathAstNode part) =>
+            part is StringLiteralNode
+                ? part
+                : new FunctionCallNode("string-join",
+                    new XPathAstNode[]
+                    {
+                        new BinaryExpressionNode(
+                            new FunctionCallNode("data", new[] { part }, "fn"),
+                            BinaryOperator.SimpleMap,
+                            new FunctionCallNode("string", new XPathAstNode[] { new ContextItemNode() }, "fn")),
+                        new StringLiteralNode(" ")
+                    },
+                    "fn");
+
+        var parts = node.Parts.Select(JoinPart).ToList();
+        XPathAstNode desugared = parts.Count == 0
+            ? new StringLiteralNode("")
+            : new FunctionCallNode("string-join",
+                new XPathAstNode[] { new SequenceExpressionNode(parts), new StringLiteralNode("") }, "fn");
+        return LowerNode(desugared, targetReg);
     }
 
     private int LowerQuantifiedExpression(QuantifiedExpressionNode node, int? targetReg)

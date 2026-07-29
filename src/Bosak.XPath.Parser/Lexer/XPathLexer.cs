@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 25-07-2026     | Constructor mode: direct element/comment/PI constructors as single tokens               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 27-07-2026     | Whole-span token scan for XQuery string constructors (interpolation/nesting aware) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -91,6 +93,21 @@ public ref struct XPathLexer
                 _position = close + 3;
                 return new Token(TokenKind.Constructor, start, _position - start);
             }
+        }
+
+        // ---- XQuery string constructors --------------------------------------
+        // "``[" begins a string constructor; the whole span (literal text and
+        // `{`...`}` interpolations, including nested constructors) is one token.
+        if (_allowConstructors && c == '`' && _position + 2 < _source.Length
+            && _source[_position + 1] == '`' && _source[_position + 2] == '[')
+        {
+            int end = ScanStringConstructorEnd(start + 3);
+            if (end >= 0)
+            {
+                _position = end;
+                return new Token(TokenKind.Constructor, start, end - start);
+            }
+            _position = start;
         }
 
         // ---- Literals ------------------------------------------------
@@ -941,5 +958,104 @@ public ref struct XPathLexer
             || c == '\u00B7'
             || (c >= '\u0300' && c <= '\u036F')
             || (c >= '\u203F' && c <= '\u2040');
+    }
+
+    // ------------------------------------------------------------------
+    // XQuery string constructors
+    // ------------------------------------------------------------------
+
+    // Scans the body of a string constructor starting just past the opening "``[".
+    // Returns the position just past the closing "]``" or -1 when unterminated.
+    // Interpolations are skipped with full expression awareness: string literals,
+    // nested comments, brace depth, and nested string constructors.
+    private int ScanStringConstructorEnd(int pos)
+    {
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == ']' && pos + 2 < _source.Length && _source[pos + 1] == '`' && _source[pos + 2] == '`')
+                return pos + 3;
+            if (c == '`' && pos + 1 < _source.Length && _source[pos + 1] == '{')
+            {
+                pos = ScanStringInterpolationEnd(pos + 2);
+                if (pos < 0)
+                    return -1;
+                continue;
+            }
+            pos++;
+        }
+        return -1;
+    }
+
+    // Scans one string-constructor interpolation body starting just past "`{".
+    // Returns the position just past the closing "}`" or -1 when unterminated.
+    private int ScanStringInterpolationEnd(int pos)
+    {
+        int depth = 1;
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == '\'' || c == '"')
+            {
+                char q = c;
+                pos++;
+                while (pos < _source.Length)
+                {
+                    if (_source[pos] == q)
+                    {
+                        if (pos + 1 < _source.Length && _source[pos + 1] == q)
+                        {
+                            pos += 2;
+                            continue;
+                        }
+                        pos++;
+                        break;
+                    }
+                    pos++;
+                }
+                continue;
+            }
+            if (c == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':')
+            {
+                int commentDepth = 1;
+                pos += 2;
+                while (pos < _source.Length && commentDepth > 0)
+                {
+                    if (_source[pos] == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':') { commentDepth++; pos += 2; }
+                    else if (_source[pos] == ':' && pos + 1 < _source.Length && _source[pos + 1] == ')') { commentDepth--; pos += 2; }
+                    else pos++;
+                }
+                continue;
+            }
+            if (c == '`' && pos + 2 < _source.Length && _source[pos + 1] == '`' && _source[pos + 2] == '[')
+            {
+                // A nested string constructor inside the interpolation expression.
+                pos = ScanStringConstructorEnd(pos + 3);
+                if (pos < 0)
+                    return -1;
+                continue;
+            }
+            if (c == '{')
+            {
+                depth++;
+                pos++;
+                continue;
+            }
+            if (c == '}')
+            {
+                depth--;
+                if (depth == 0)
+                {
+                    // The interpolation must close with '}`'.
+                    if (pos + 1 < _source.Length && _source[pos + 1] == '`')
+                        return pos + 2;
+                    return -1;
+                }
+                pos++;
+                continue;
+            }
+            pos++;
+        }
+        return -1;
     }
 }

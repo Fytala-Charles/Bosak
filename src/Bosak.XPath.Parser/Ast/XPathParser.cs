@@ -1,5 +1,3 @@
-//                      | Charles Korthout | 1.30  | 27-07-2026     | Full try/catch parsing: named code patterns, multiple clauses, empty bodies |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -64,6 +62,10 @@
 //                      | Charles Korthout | 1.28  | 25-07-2026     | xml:space is an ordinary constructor attribute; boundary whitespace stripped at flush time |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.29  | 26-07-2026     | SkipSequenceType stops at expression boundaries (:=/in/return/then/else/|) after function-type 'as' |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.30  | 27-07-2026     | Full try/catch parsing: named code patterns, multiple clauses, empty bodies |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.31  | 27-07-2026     | String constructor scanning; XPath-mode string literals no longer expand references |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1962,7 +1964,11 @@ public sealed class XPathParser
         int pos = start;
         char after = pos + 1 < _source.Length ? _source[pos + 1] : '\0';
         XPathAstNode node;
-        if (after == '?')
+        if (_source[pos] == '`')
+        {
+            node = ScanStringConstructor(ref pos, start);
+        }
+        else if (after == '?')
         {
             node = ScanPiConstructor(ref pos, start);
         }
@@ -1976,6 +1982,203 @@ public sealed class XPathParser
         }
         Advance();
         return WithSpan(node, start, pos);
+    }
+
+    // Scans an XQuery string constructor "``[ ... ]``": literal text runs become
+    // StringLiteralNode parts, interpolations "`{` Expr `}`" become expression parts.
+    private XPathAstNode ScanStringConstructor(ref int pos, int ctorStart)
+    {
+        // pos is at the first '`' of "``[".
+        pos += 3;
+        var parts = new List<XPathAstNode>();
+        var text = new StringBuilder();
+        void FlushText()
+        {
+            if (text.Length > 0)
+            {
+                parts.Add(new StringLiteralNode(text.ToString()));
+                text.Clear();
+            }
+        }
+        while (true)
+        {
+            if (pos >= _source.Length)
+                throw ConstructorError("unterminated string constructor", ctorStart);
+            char c = _source[pos];
+            if (c == ']' && pos + 2 < _source.Length && _source[pos + 1] == '`' && _source[pos + 2] == '`')
+            {
+                pos += 3;
+                FlushText();
+                return new StringConstructorNode(parts);
+            }
+            if (c == '`' && pos + 1 < _source.Length && _source[pos + 1] == '{')
+            {
+                FlushText();
+                parts.Add(ScanStringInterpolation(ref pos, ctorStart));
+                continue;
+            }
+            text.Append(c);
+            pos++;
+        }
+    }
+
+    // Scans one string-constructor interpolation body (pos is at the '`' of "`{") and
+    // returns the parsed expression; an empty or comment-only body is the empty sequence.
+    private XPathAstNode ScanStringInterpolation(ref int pos, int ctorStart)
+    {
+        int exprStart = (pos += 2);
+        int depth = 1;
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == '\'' || c == '"')
+            {
+                char q = c;
+                pos++;
+                while (pos < _source.Length)
+                {
+                    if (_source[pos] == q)
+                    {
+                        if (pos + 1 < _source.Length && _source[pos + 1] == q)
+                        {
+                            pos += 2;
+                            continue;
+                        }
+                        pos++;
+                        break;
+                    }
+                    pos++;
+                }
+                continue;
+            }
+            if (c == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':')
+            {
+                SkipConstructorComment(ref pos);
+                continue;
+            }
+            if (c == '`' && pos + 2 < _source.Length && _source[pos + 1] == '`' && _source[pos + 2] == '[')
+            {
+                // A nested string constructor inside the interpolation expression.
+                if (!SkipStringConstructorSpan(ref pos))
+                    throw ConstructorError("unterminated string constructor", ctorStart);
+                continue;
+            }
+            if (c == '{')
+            {
+                depth++;
+            }
+            else if (c == '}')
+            {
+                depth--;
+                if (depth == 0)
+                {
+                    // The interpolation must close with '}`' (XPST0003 otherwise).
+                    if (pos + 1 >= _source.Length || _source[pos + 1] != '`')
+                        throw new ParseException("XPST0003: An interpolation in a string constructor must end with '}`'.", pos);
+                    var inner = _source[exprStart..pos];
+                    pos += 2;
+                    // An empty or comment-only interpolation is the empty sequence.
+                    if (string.IsNullOrWhiteSpace(StripXQueryComments(inner)))
+                        return new SequenceExpressionNode(Array.Empty<XPathAstNode>());
+                    return Parse(inner, _allowFullFlwor);
+                }
+            }
+            pos++;
+        }
+        throw ConstructorError("unterminated interpolation in string constructor", ctorStart);
+    }
+
+    // Skips a nested string constructor span (pos is at the first '`' of "``["),
+    // interpolation-aware. Returns false when unterminated.
+    private bool SkipStringConstructorSpan(ref int pos)
+    {
+        pos += 3;
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == ']' && pos + 2 < _source.Length && _source[pos + 1] == '`' && _source[pos + 2] == '`')
+            {
+                pos += 3;
+                return true;
+            }
+            if (c == '`' && pos + 1 < _source.Length && _source[pos + 1] == '{')
+            {
+                // Skip the nested interpolation with the same scanning rules.
+                int exprStart = (pos += 2);
+                int depth = 1;
+                bool closed = false;
+                while (pos < _source.Length)
+                {
+                    char ic = _source[pos];
+                    if (ic == '\'' || ic == '"')
+                    {
+                        char q = ic;
+                        pos++;
+                        while (pos < _source.Length)
+                        {
+                            if (_source[pos] == q)
+                            {
+                                if (pos + 1 < _source.Length && _source[pos + 1] == q)
+                                {
+                                    pos += 2;
+                                    continue;
+                                }
+                                pos++;
+                                break;
+                            }
+                            pos++;
+                        }
+                        continue;
+                    }
+                    if (ic == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':')
+                    {
+                        SkipConstructorComment(ref pos);
+                        continue;
+                    }
+                    if (ic == '`' && pos + 2 < _source.Length && _source[pos + 1] == '`' && _source[pos + 2] == '[')
+                    {
+                        if (!SkipStringConstructorSpan(ref pos))
+                            return false;
+                        continue;
+                    }
+                    if (ic == '{')
+                    {
+                        depth++;
+                    }
+                    else if (ic == '}')
+                    {
+                        depth--;
+                        if (depth == 0)
+                        {
+                            if (pos + 1 >= _source.Length || _source[pos + 1] != '`')
+                                return false;
+                            pos += 2;
+                            closed = true;
+                            break;
+                        }
+                    }
+                    pos++;
+                }
+                if (!closed)
+                    return false;
+                continue;
+            }
+            pos++;
+        }
+        return false;
+    }
+
+    private void SkipConstructorComment(ref int pos)
+    {
+        // pos is at '(:' — XQuery comments nest.
+        int depth = 1;
+        pos += 2;
+        while (pos < _source.Length && depth > 0)
+        {
+            if (_source[pos] == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':') { depth++; pos += 2; }
+            else if (_source[pos] == ':' && pos + 1 < _source.Length && _source[pos + 1] == ')') { depth--; pos += 2; }
+            else pos++;
+        }
     }
 
     private DirectProcessingInstructionNode ScanPiConstructor(ref int pos, int ctorStart)
@@ -2681,9 +2884,10 @@ public sealed class XPathParser
             var sb = new StringBuilder(inner.Length);
             for (int i = 0; i < inner.Length; i++)
             {
-                // Predefined entity and character references expand in both XPath and
-                // XQuery string literals; a raw '&' that forms no valid reference is XPST0003.
-                if (inner[i] == '&')
+                // Predefined entity and character references expand in XQuery string
+                // literals only; XPath 3.1 does not expand them (assert-eq expectations
+                // evaluate per XPath rules, e.g. string-constructor-029).
+                if (inner[i] == '&' && _allowFullFlwor)
                 {
                     sb.Append(ExpandCharReference(inner, ref i));
                     continue;

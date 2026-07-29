@@ -38,6 +38,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.7   | 25-07-2026     | Optimize switch/typeswitch nodes (reference-transparent rebuilds)                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 27-07-2026     | Reference-transparent traversal for StringConstructorNode |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -112,8 +114,25 @@ public sealed class XPathOptimizer
             LetExpressionNode let => OptimizeLet(let, ref changed),
             DynamicFunctionCallNode dyn => OptimizeDynamicFunctionCall(dyn, ref changed),
             FlworExpressionNode flwor => OptimizeFlwor(flwor, ref changed),
+            StringConstructorNode n => OptimizeStringConstructor(n, ref changed),
             _ => node
         };
+    }
+
+    private XPathAstNode OptimizeStringConstructor(StringConstructorNode node, ref bool changed)
+    {
+        var parts = new List<XPathAstNode>(node.Parts.Count);
+        bool anyChanged = false;
+        foreach (var part in node.Parts)
+        {
+            var optPart = OptimizeNode(part, ref changed);
+            parts.Add(optPart);
+            if (optPart != part) anyChanged = true;
+        }
+        if (!anyChanged)
+            return node;
+        changed = true;
+        return node with { Parts = parts };
     }
 
     private XPathAstNode OptimizeComputedConstructor(XPathAstNode node, ref bool changed)

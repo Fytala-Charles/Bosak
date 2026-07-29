@@ -1,5 +1,3 @@
-//                      | Charles Korthout | 0.15  | 27-07-2026     | Admit try/catch (named codes + multiple clauses implemented) |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 20 mei 2026
@@ -34,6 +32,10 @@
 //                      | Charles Korthout | 0.13  | 26-07-2026     | Allow variable/function prolog declarations (removed from the unsupported-prolog gate)  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.14  | 27-07-2026     | Admit module import + annotations; comment-tolerant prolog gate; register test-case modules with XQueryCompiler |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.15  | 27-07-2026     | Admit try/catch (named codes + multiple clauses implemented) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.16  | 27-07-2026     | Admit string constructors; fix RegexOptions.Compiled glued into construct-gate pattern |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -266,8 +268,7 @@ internal sealed class TestExecutor
     // keep their "XQuery syntax not supported" skip instead of being routed.
     private static readonly Regex UnsupportedXQueryConstructRegex = new(
         @"\bunordered\s*\{|\bordered\s*\{|\bvalidate\s" +
-        @"|\(#\s*[A-Za-z_]" +                          // pragma extension expressions (# ... #)
-        @"|``\[" +                                     // string constructors ``[ ... ]``
+        @"|\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
         RegexOptions.Compiled);
 
     // Prolog forms the XQuery parser does NOT support (namespace, default element/function

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-27 (**try/catch completion**: named error codes, multiple clauses, `err:*` variables; QT3 now **29,114 passed / 0 failed** (91.49%); unit tests **1,524/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-27 (XQuery 3.1: **string constructors**; QT3 now **29,150 passed / 0 failed** (91.61%); unit tests **1,536/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -157,6 +157,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-050 | *(internal)* | XQuery 3.1 Phase 4 — user-defined functions and variables (library modules slice 1) | Required for XQuery modules: `declare function` / `declare variable` prolog with static validations, lazy globals, function-item coercion, and function-type syntax | **Implemented** | Phase 4 | Charles Korthout | 2026-07-26 |
 | REQ-051 | *(internal)* | XQuery 3.1 Phase 4 — library modules (slice 2) | Required for XQuery modules: `module namespace` / `import module` with location hints, transitive import graph, %public/%private visibility, and per-module static contexts | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 | REQ-052 | *(internal)* | try/catch completion — named error codes and error variables | Required for XPath/XQuery 3.1 conformance: catch code patterns (`err:XPTY0004`, `err:*`, `*:local`, `Q{uri}local`), multiple catch clauses, and the `err:*` error variables | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
+| REQ-053 | *(internal)* | XQuery 3.1 string constructors | Required for XQuery 3.1 conformance: `` `[literal `{expr}` literal]`` string constructors with interpolations, the largest single QT3 gap cluster (35 tests) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-27 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2399,13 +2400,61 @@ Extend the AST to multiple catch clauses with error-code name-test patterns (`*`
 
 ---
 
+### REQ-053: XQuery 3.1 string constructors
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-27  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+XQuery 3.1 string constructors (`` `[literal `{expr}` literal]``) were the largest single QT3 gap cluster (35 recorded skips in `prod/StringConstructor`, 52 tests). The syntax mixes raw literal text (no reference expansion, whitespace preserved, backticks literal) with `` `{` Expr `}` `` interpolations that nest full expressions — including nested string constructors — so it cannot be tokenized naively. The feature is the idiomatic way to build JSON/CSS/SPARQL text in XQuery.
+
+**Proposed Solution:**  
+Follow the established direct-element-constructor architecture: the lexer scans the whole constructor span (interpolation-aware) into one token; the parser re-scans the span into literal runs and interpolation expressions; evaluation desugars to `fn:string-join` with spec-faithful atomization semantics — no new opcodes.
+
+**Acceptance Criteria:**
+- [x] Lexical rules: `` ``[ `` … `]` `` ` `` delimiters; `` `{` Expr? `}` `` interpolations; single backticks literal unless starting an interpolation; unterminated forms are XPST0003 (string-constructor-901..905); nesting inside interpolations (009/020/028) and inside direct element constructors (010/011/029..034).
+- [x] Literal text is raw: no entity/character-reference expansion (`&lt;` stays literal, 004/029..034), whitespace and newlines preserved (014).
+- [x] Interpolation semantics: atomize with `fn:data` (maps raise FOTY0013, 910/911; arrays flatten, 017), cast each item to `xs:string`, join with single spaces (912), concatenate parts without a separator (006); empty interpolations are the empty string (024/025).
+- [x] String constructors work as operands: predicates (013), parenthesized selection (015), if/else branches (012), direct element content and attributes (010/011), `declare variable` initializers (003).
+- [x] Not valid where the grammar forbids expressions: attribute-value literals (913) and prolog namespace literals (914) are XPST0003.
+- [x] XPath-mode string literals no longer expand entity/character references (spec: expansion is XQuery-only) — assert-eq expectations evaluate per XPath rules (029..034).
+- [x] Harness construct-gate regex fixed: `RegexOptions.Compiled` was glued into the pattern by a trailing `+`; the enum is a proper argument again (pragma gating restored).
+- [x] QT3: prod/StringConstructor **49/0/3** (from 14/0/38); full suite **29,150 passed / 0 failed / 2,671 skipped (91.61%)**; gaps **464** (−35).
+- [x] Unit tests: 12 new tests; full suite **1,536/0**.
+
+**Implementation Notes:**
+- Lexer: `ScanStringConstructorEnd`/`ScanStringInterpolationEnd` skip the whole span with string-literal, comment, brace-depth, and nested-constructor awareness; emitted as one `Constructor` token (constructor mode only).
+- Parser: `ScanStringConstructor`/`ScanStringInterpolation` split the span into `StringLiteralNode` runs and parsed interpolation bodies (`Parse(inner, allowFullFlwor)` recurses for nesting); empty bodies become the empty sequence.
+- Lowering: desugars each interpolation to `fn:string-join(fn:data(E) ! fn:string(.), " ")` and the whole to `fn:string-join((…), "")` — mirrors the switch/typeswitch desugar precedent; optimizer and namespace-resolution traversals updated.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Lexer span scan; `StringConstructorNode`; span re-scan; XPath-mode literals no longer expand references. |
+| Compiler | Modified | String-constructor lowering + optimizer traversal. |
+| Conformance | Modified | Construct-gate regex fixed; 35 gap entries removed (464 remain). |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-27 | Kimi | Whole-span token + parser re-scan (same architecture as direct element constructors) | Interpolations nest full expressions (including nested constructors); a mode-switching token stream would be far more invasive. |
+| 2026-07-27 | Kimi | Desugar to `fn:string-join(fn:data(E) ! fn:string(.), " ")` | Reuses battle-tested atomization/join semantics (FOTY0013 for maps, array flattening, space-joined items) with zero new opcodes. |
+| 2026-07-27 | Kimi | Restrict reference expansion to XQuery-mode string literals | Spec: XPath 3.1 does not expand predefined entity/character references; the previous both-modes expansion made XPath-evaluated assertions disagree with raw string-constructor output (029..034). |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-052 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done; QT3 wired (29,114/0, 91.49%). String constructors, `unordered`/`ordered` follow. |
+| 1 | REQ-040 … REQ-053 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done; QT3 wired (29,150/0, 91.61%). `unordered`/`ordered`, NameTest/Annotation clusters follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

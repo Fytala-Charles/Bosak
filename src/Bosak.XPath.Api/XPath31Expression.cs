@@ -1,5 +1,3 @@
-//                      | Charles Korthout | 0.7   | 27-07-2026     | Namespace resolution traversal for multi-clause TryCatchNode |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -19,6 +17,10 @@
 //                      | Charles Korthout | 0.5   | 21-07-2026     | Empty expression reports XPST0003 via ParseException instead of ArgumentException         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 25-07-2026     | Xml11LineEndings option threaded to the parser                                          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 27-07-2026     | Namespace resolution traversal for multi-clause TryCatchNode |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 27-07-2026     | Namespace resolution traversal for StringConstructorNode |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -145,6 +147,7 @@ public sealed class XPath31Expression
                 TryExpression = ResolveFunctionNamespaces(tc.TryExpression, options),
                 Clauses = tc.Clauses.Select(c => c with { Expression = ResolveFunctionNamespaces(c.Expression, options) }).ToList()
             },
+            StringConstructorNode sc => sc with { Parts = sc.Parts.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, options), Key = ResolveFunctionNamespaces(lookup.Key, options) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, options) },
             InlineFunctionNode inf => inf with { Body = ResolveFunctionNamespaces(inf.Body, options) },

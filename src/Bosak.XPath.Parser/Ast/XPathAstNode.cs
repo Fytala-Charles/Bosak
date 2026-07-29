@@ -1,5 +1,3 @@
-//                      | Charles Korthout | 1.9   | 27-07-2026     | TryCatchNode holds multiple catch clauses with error-code name-test patterns |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
@@ -35,6 +33,10 @@
 //                      | Charles Korthout | 1.7   | 25-07-2026     | Added computed constructor AST nodes (element/attribute/document/text/comment/PI/ns)    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 25-07-2026     | Added SwitchExpressionNode/TypeswitchExpressionNode AST for XQuery switch and typeswitch|
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 27-07-2026     | TryCatchNode holds multiple catch clauses with error-code name-test patterns |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.10  | 27-07-2026     | StringConstructorNode for XQuery string constructors |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
@@ -342,6 +344,13 @@ public sealed record ParamNode(string Name, string? TypeName = null);
 /// <summary>Map constructor: <c>map { "a": 1, "b": 2 }</c></summary>
 public sealed record MapConstructorNode(IReadOnlyList<MapEntryNode> Entries) : XPathAstNode;
 public sealed record MapEntryNode(XPathAstNode Key, XPathAstNode Value) : XPathAstNode;
+
+/// <summary>
+/// An XQuery string constructor: <c>``[literal `{expr}` literal]``</c>. Parts are literal
+/// text runs (<see cref="StringLiteralNode"/>) and interpolation expressions; the result is
+/// their concatenation, each interpolation's atomized items joined with single spaces.
+/// </summary>
+public sealed record StringConstructorNode(IReadOnlyList<XPathAstNode> Parts) : XPathAstNode;
 
 /// <summary>Array constructor: <c>[1, 2, 3]</c> or <c>array { $seq }</c></summary>
 public sealed record ArrayConstructorNode(IReadOnlyList<XPathAstNode> Items, bool IsSquare = true) : XPathAstNode;

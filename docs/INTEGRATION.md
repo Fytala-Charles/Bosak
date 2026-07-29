@@ -5,15 +5,21 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 27 July 2026
-> **Bosak baseline:** 1,524 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,114 passed / 0 failed / 2,707 skipped (91.49% / 100% of runnable tests) — XQuery routing enabled; 499 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,536 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,150 passed / 0 failed / 2,671 skipped (91.61% / 100% of runnable tests) — XQuery routing enabled; 464 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules
+> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors
 
 ---
 
 ## 0. Recent Changes
 
+- **2026-07-27** — XQuery 3.1: **string constructors** (REQ-053): QT3 **29,150 passed / 0 failed** (from 29,114; +36 passing; gaps 464, −35).
+  - `` `[literal `{expr}` literal]`` with full nesting awareness: interpolations inside interpolations, string constructors inside direct element constructors and vice versa; literal text is raw (no reference expansion, whitespace preserved, single backticks literal); unterminated forms are XPST0003.
+  - Interpolations desugar to `fn:string-join(fn:data(E) ! fn:string(.), " ")` — atomization raises FOTY0013 for maps, arrays flatten, sequence items space-join, parts concatenate without separator; empty interpolations are empty strings.
+  - XPath-mode string literals no longer expand predefined entity/character references (spec: expansion is XQuery-only; assert-eq expectations evaluate per XPath rules).
+  - Harness: construct-gate regex fixed (`RegexOptions.Compiled` had been glued into the pattern, breaking pragma gating after the string-constructor alternative was removed).
+  - prod/StringConstructor 49/0/3 (was 14/0/38).
 - **2026-07-27** — **try/catch completion** (REQ-052): QT3 **29,114 passed / 0 failed** (from 28,931; +183 passing).
   - Full XPath 3.1 catch grammar on both pipelines: `catch CodePatternList { Expr }` with one-or-more clauses (first match wins), patterns `*`, `err:X`, `err:*`, `*:X`, `Q{uri}X`, `Q{uri}*`, NCName; empty try/catch bodies; unmatched errors propagate.
   - All seven `err:*` variables bound with save/restore: `err:code` as `xs:QName` (prefix preserved), `err:description`, `err:value`, `err:module`, `err:line-number`, `err:column-number`, `err:additional` (empty).

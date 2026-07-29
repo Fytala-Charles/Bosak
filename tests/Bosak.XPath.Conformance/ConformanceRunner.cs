@@ -34,6 +34,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 27-07-2026     | Regenerate KnownXQueryGaps (499 entries) after library module admission                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 27-07-2026     | Drop 35 StringConstructor gap entries (implemented); 464 entries remain        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -585,42 +587,6 @@ internal sealed class ConformanceRunner
         ["Steps-leading-lone-slash-3"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
         ["Steps-leading-lone-slash-4"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
         ["Steps-leading-lone-slash-5"] = "XQuery conformance gap (StepExpr): see AGENT_HANDOVER REQ-045",
-        // prod/StringConstructor.xml (35 tests)
-        ["string-constructor-001"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-002"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-003"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-004"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-005"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-006"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-007"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-008"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-009"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-010"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-011"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-012"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-013"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-014"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-015"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-016"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-017"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-018"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-019"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-020"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-022"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-023"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-024"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-025"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-026"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-028"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-029"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-030"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-031"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-032"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-033"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-034"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-910"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-911"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
-        ["string-constructor-912"] = "XQuery conformance gap (StringConstructor): see AGENT_HANDOVER REQ-045",
         // prod/SwitchExpr.xml (6 tests)
         ["switch-006"] = "XQuery conformance gap (SwitchExpr): see AGENT_HANDOVER REQ-045",
         ["switch-007"] = "XQuery conformance gap (SwitchExpr): see AGENT_HANDOVER REQ-045",

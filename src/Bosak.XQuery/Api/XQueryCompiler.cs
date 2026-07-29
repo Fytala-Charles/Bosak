@@ -1,5 +1,3 @@
-//                      | Charles Korthout | 2.1   | 27-07-2026     | Namespace resolution traversal for multi-clause TryCatchNode |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 06 June 2026
@@ -33,6 +31,10 @@
 //                      | Charles Korthout | 1.9   | 26-07-2026     | Compile prolog declare function/variable bodies into CompiledUserFunction/CompiledUserVariable records |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.0   | 27-07-2026     | Library modules: WithModule catalog, transitive import graph (XQST0059), visibility validation, per-module compilation |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.1   | 27-07-2026     | Namespace resolution traversal for multi-clause TryCatchNode |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.2   | 27-07-2026     | Namespace resolution traversal for StringConstructorNode |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -386,6 +388,7 @@ public sealed class XQueryCompiler
                 TryExpression = ResolveFunctionNamespaces(tc.TryExpression, context),
                 Clauses = tc.Clauses.Select(c => c with { Expression = ResolveFunctionNamespaces(c.Expression, context) }).ToList()
             },
+            StringConstructorNode sc => sc with { Parts = sc.Parts.Select(p => ResolveFunctionNamespaces(p, context)).ToList() },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, context), Key = ResolveFunctionNamespaces(lookup.Key, context) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, context) },
             InlineFunctionNode inf => inf with { Body = ResolveFunctionNamespaces(inf.Body, context) },

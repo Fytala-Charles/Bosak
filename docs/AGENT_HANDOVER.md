@@ -1,6 +1,43 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
+**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xquery): string constructors)
+**Current focus:** **XQuery 3.1 string constructors** (`` `[literal `{expr}` literal]``) implemented end-to-end: lexer whole-span tokenization with full nesting awareness, a `StringConstructorNode` AST, and a spec-faithful desugar to `fn:string-join`. QT3 went from **29,114 passed / 0 failed / 2,707 skipped (91.49%)** to **29,150 passed / 0 failed / 2,671 skipped (91.61%)** (+36 passing; the StringConstructor set went 14/0/38 to **49/0/3**). Full `dotnet test Bosak.sln` passes: **1,536 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (string constructors)
+
+1. **Lexer** — `XPathLexer` scans `` ``[ `` … `]` `` ` `` as a single `Constructor` token (constructor mode only), skipping interpolations with full expression awareness: string literals with doubled-quote escapes, nested `(: :)` comments, brace depth, and **nested string constructors** inside interpolation expressions (string-constructor-009/020/028).
+2. **Parser/AST** — `StringConstructorNode(Parts)`; the parser re-scans the token span: literal text runs (raw — no reference expansion, whitespace preserved, backticks literal unless starting an interpolation) and `` `{` Expr `}` `` interpolations (empty/comment-only bodies are the empty sequence; unterminated constructor/interpolation is XPST0003, string-constructor-901..905).
+3. **Evaluation (desugar, no new opcodes)** — each interpolation lowers as `fn:string-join(fn:data(E) ! fn:string(.), " ")` (atomization raises FOTY0013 for maps; sequence items space-joined), the parts concatenate via `fn:string-join((…), "")` — mirroring the switch/typeswitch desugar pattern.
+4. **XPath-mode string literals no longer expand references** — predefined entity/character references now expand in **XQuery only** (spec-correct); previously both modes expanded, which made assert-eq expectations (evaluated per XPath rules) disagree with raw string-constructor output (string-constructor-029..034).
+5. **Harness construct-gate regex bug fixed** — `UnsupportedXQueryConstructRegex` had `RegexOptions.Compiled` glued into the *pattern* by a trailing `+` (`…[A-Za-z_]Compiled`). It previously sat harmlessly on the never-matching `` ``\[ `` alternative; removing that alternative moved the glue onto the pragma alternative and broke pragma gating (46 extexpr/eqname tests routed and failed). The enum is now a proper second argument. Side discovery: the old `` ``\[ `` gate never actually matched, which is why StringConstructor tests were gap-listed rather than construct-gated.
+6. **Gaps: 464 reasoned skips (−35)** — all 35 `StringConstructor` entries removed (feature implemented).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Lexer/XPathLexer.cs`, `src/Bosak.XPath.Parser/Ast/{XPathAstNode,XPathParser}.cs`
+- `src/Bosak.XPath.Compiler/{Ir/IrLowerer,Optimizer/XPathOptimizer}.cs`
+- `src/Bosak.XPath.Api/XPath31Expression.cs`, `src/Bosak.XQuery/{Api/XQueryCompiler,Compiler/ModuleVisibilityValidator}.cs`
+- `tests/Bosak.XPath.Conformance/{TestExecutor,ConformanceRunner}.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+12 tests)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (464 recorded skips)
+
+Largest clusters: `prod/Annotation` (24 — inline-function annotations and annotation assertions in function tests), `prod/NameTest` (22), `prod/VarDecl.external` (17 — external variable semantics), `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/NamespaceDecl` (11), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,200 skips are `unordered`/`ordered`/`validate`, schema awareness, `fn:load-xquery-module`, and `sudoku` (too slow).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **`unordered`/`ordered`** (trivial no-op semantics in a non-ordered engine — unlocks the remaining gated sets).
+2. **prod/NameTest cluster** (22 tests) or **external variable semantics** (`prod/VarDecl.external`, 17 tests).
+3. **inline-function annotations** (prod/Annotation remainder, 24 tests).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-27
 **Commit:** `fe6fa9e` (feat(xpath): try/catch named error codes and error variables)
 **Current focus:** **try/catch completion — named error codes, multiple catch clauses, and the `err:*` error variables**: full XPath 3.1 try/catch semantics on both pipelines (it is XPath grammar, not XQuery-only). QT3 went from **28,931 passed / 0 failed / 2,890 skipped (90.92%)** to **29,114 passed / 0 failed / 2,707 skipped (91.49%)** (+183 passing). Full `dotnet test Bosak.sln` passes: **1,524 unit tests / 0 failed**; XSLT baseline unchanged.
 

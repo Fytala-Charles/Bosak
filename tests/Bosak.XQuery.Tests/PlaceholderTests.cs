@@ -1,5 +1,3 @@
-//                      | Charles Korthout | 1.5   | 27-07-2026     | try/catch named-code and global-variable-not-caught tests |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 06 June 2026
@@ -37,6 +35,10 @@
 //                      | Charles Korthout | 1.3   | 25-07-2026     | Added output declaration and serialization tests                                          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 26-07-2026     | 12 unit tests for declare function/declare variable (happy paths and XQST/XPST/XPTY error codes) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 27-07-2026     | try/catch named-code and global-variable-not-caught tests |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 27-07-2026     | 12 string-constructor tests (literals, interpolations, escapes, errors) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1338,6 +1340,91 @@ public class PlaceholderTests
             "try { $boom } catch * { 'caught' }");
         var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(new XQueryContext()));
         Assert.Contains("FOER0001", ex.Message);
+    }
+
+    private static string EvalStrC(string query)
+    {
+        var result = new XQueryCompiler().Compile(query).Evaluate(new XQueryContext());
+        return result.ToString();
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_Literal()
+    {
+        Assert.Equal("hello", EvalStrC("``[hello]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_Empty()
+    {
+        Assert.Equal("", EvalStrC("``[]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_Interpolation()
+    {
+        Assert.Equal("There were 10 green bottles",
+            EvalStrC("declare variable $n := 10; ``[There were `{$n}` green bottles]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_AdjacentInterpolationsNoSeparator()
+    {
+        Assert.Equal("101112",
+            EvalStrC("declare variable $n := 10; ``[`{$n}``{$n+1}``{$n+2}`]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_SequenceJoinedWithSpaces()
+    {
+        Assert.Equal("1 2 3", EvalStrC("``[`{1 to 3}`]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_EmptyInterpolation()
+    {
+        // QT3 string-constructor-024 shape.
+        Assert.Equal("` ** `", EvalStrC("``[` *`{}`* `]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_BacktickEscapes()
+    {
+        // QT3 string-constructor-019: doubled backtick is literal; `{` starts an interpolation.
+        Assert.Equal("`10`", EvalStrC("declare variable $n := 10; ``[``{$n}``]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_NoReferenceExpansion()
+    {
+        Assert.Equal("&lt;", EvalStrC("``[&lt;]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_NewlinesPreserved()
+    {
+        Assert.Equal("a\nb", EvalStrC("``[a\nb]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_NestedInInterpolation()
+    {
+        Assert.Equal("There were at least 10 green bottles",
+            EvalStrC("declare variable $n := 10; ``[There were `{``[at least `{$n}`]``}` green bottles]``"));
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_MapInterpolation_ThrowsFOTY0013()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStrC("``[`{map{'a':1}}`]``"));
+        Assert.Contains("FOTY0013", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_StringConstructor_Unterminated_ThrowsXPST0003()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => EvalStrC("``[abc]`"));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     [Fact]
