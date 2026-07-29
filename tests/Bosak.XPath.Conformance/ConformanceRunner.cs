@@ -42,6 +42,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.12  | 29-07-2026     | Drop 11 NamespaceDecl gap entries (implemented) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.13  | 29-07-2026     | Drop 24 Annotation gap entries (implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -378,31 +380,6 @@ internal sealed class ConformanceRunner
         ["outer-016"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
         ["outer-017"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
         ["outer-018"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        // prod/Annotation.xml (24 tests)
-        ["annotation-3"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-30"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-31"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-32"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-1"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-10"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-11"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-12"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-13"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-14"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-15"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-16"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-17"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-18"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-19"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-2"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-20"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-3"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-4"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-5"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-6"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-7"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-8"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
-        ["annotation-assertion-9"] = "XQuery conformance gap (Annotation): see AGENT_HANDOVER REQ-045",
         // prod/ArrayTest.xml (5 tests)
         ["ArrayTest-028"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",
         ["ArrayTest-047"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",

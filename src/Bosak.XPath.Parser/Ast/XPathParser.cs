@@ -73,6 +73,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.34  | 29-07-2026     | ParseExprSingle entry point: single ExprSingle, trailing tokens raise XPST0003 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.35  | 29-07-2026     | XQuery annotations: inline-function annotations, function-test assertions (XQuery-only, literals only) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1808,6 +1810,16 @@ public sealed class XPathParser
                     return ParseFunctionCall(start);
                 throw new ParseException($"Unexpected token {Current.Kind} in primary expression", start);
 
+            case TokenKind.Percent:
+                // Annotations on an inline function expression (annotation-3/30/31/32).
+                // Annotations are an XQuery-only grammar extension (inline-fn-016).
+                if (!_allowFullFlwor)
+                    throw new ParseException("XPST0003: Annotations are not allowed in XPath.", start);
+                SkipInlineAnnotations();
+                if (Current.Kind != TokenKind.KeywordFunction)
+                    throw new ParseException($"XPST0003: Expected 'function' after annotations but found {Current.Kind}", Current.Start);
+                return ParseInlineFunction(start);
+
             case TokenKind.KeywordFunction:
                 return ParseInlineFunction(start);
 
@@ -2036,6 +2048,40 @@ public sealed class XPathParser
             body = ParsePrimaryExpr();
         }
         return WithSpan(new InlineFunctionNode(parameters, body, returnType), start, End);
+    }
+
+    // Parses and discards annotations on an inline function expression:
+    // ('%' EQName ('(' Literal (',' Literal)* ')')?)*. Annotation names are
+    // implementation-defined; unrecognized annotations are ignored (XQuery 3.1 §4.15).
+    private void SkipInlineAnnotations()
+    {
+        while (Current.Kind == TokenKind.Percent)
+        {
+            Advance();
+            if (Current.Kind != TokenKind.Name)
+                throw new ParseException($"XPST0003: Expected an annotation name after '%' but found {Current.Kind}", Current.Start);
+            Advance(); // EQName (plain, prefixed, or Q{uri}local)
+            if (Current.Kind == TokenKind.LParen)
+                SkipAnnotationArguments();
+        }
+    }
+
+    // Annotation arguments must be literals: '(' Literal (',' Literal)* ')' — a
+    // non-literal expression such as true() is XPST0003 (annotation-33).
+    private void SkipAnnotationArguments()
+    {
+        Expect(TokenKind.LParen);
+        SkipAnnotationLiteral();
+        while (Match(TokenKind.Comma))
+            SkipAnnotationLiteral();
+        Expect(TokenKind.RParen);
+    }
+
+    private void SkipAnnotationLiteral()
+    {
+        if (Current.Kind is not (TokenKind.StringLiteral or TokenKind.IntegerLiteral or TokenKind.DecimalLiteral or TokenKind.DoubleLiteral))
+            throw new ParseException($"XPST0003: Expected a literal in the annotation argument list but found {Current.Kind}", Current.Start);
+        Advance();
     }
 
     // ------------------------------------------------------------------
@@ -3178,6 +3224,9 @@ public sealed class XPathParser
 
     private (string? Prefix, string Local, bool HasParens) ParseTypeNameAndParens()
     {
+        // Annotation assertions preceding a function test are captured verbatim into the
+        // type text; the runtime type matcher validates (XQST0045) and ignores them.
+        string annotations = CaptureAnnotations();
         string name;
         if (Current.Kind == TokenKind.Name)
         {
@@ -3278,7 +3327,35 @@ public sealed class XPathParser
             }
         }
 
-        return (prefix, local, hasParens);
+        return (prefix, annotations.Length > 0 ? annotations + " " + local : local, hasParens);
+    }
+
+    // Captures the verbatim source text of annotation assertions
+    // ('%' EQName ('(' Literal (',' Literal)* ')')?)* preceding a function test;
+    // returns the empty string when there are none.
+    private string CaptureAnnotations()
+    {
+        if (Current.Kind != TokenKind.Percent)
+            return string.Empty;
+        // Annotation assertions are an XQuery-only grammar extension (inline-fn-016).
+        if (!_allowFullFlwor)
+            throw new ParseException("XPST0003: Annotations are not allowed in XPath.", Current.Start);
+        int start = Current.Start;
+        int end = Current.Start;
+        while (Current.Kind == TokenKind.Percent)
+        {
+            Advance();
+            if (Current.Kind != TokenKind.Name)
+                throw new ParseException($"XPST0003: Expected an annotation name after '%' but found {Current.Kind}", Current.Start);
+            end = Current.Start + Current.Length;
+            Advance(); // EQName (plain, prefixed, or Q{uri}local)
+            if (Current.Kind == TokenKind.LParen)
+            {
+                SkipAnnotationArguments();
+                end = End;
+            }
+        }
+        return _source[start..end];
     }
 }
 

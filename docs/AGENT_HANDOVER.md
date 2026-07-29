@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): inline-function annotations and function-test annotation assertions)
+**Current focus:** **prod/Annotation cluster closed** (24 gaps → 0): annotations on inline function expressions, annotation assertions in function tests, literal-only annotation arguments, and reserved annotation namespaces (XQST0045). QT3 went from **29,292 passed / 0 failed / 2,529 skipped (92.05%)** to **29,316 passed / 0 failed / 2,505 skipped (92.13%)** (+24 passing). Full `dotnet test Bosak.sln` passes: **1,584 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (Annotation cluster)
+
+1. **Inline-function annotations** — `%eg:sequential function () { "bar" }` parses (with literal parameters, EQName forms, and multiples) and is ignored: annotation names are implementation-defined and unrecognized ones are discarded (annotation-3/30/31/32). The lexer gained a `Percent` token.
+2. **Annotation assertions in function tests** — `instance of %eg:x("abc", 12e34, 567) function(*)` parses; the assertion text rides along in the sequence-type string and the VM's `InstanceOf` strips leading assertions before matching (assertion-1..10/19). Assertions can only restrict matches, and ignoring them is a conformant choice; `local:three#0 instance of %public %private function(xs:integer) as xs:integer` correctly returns false on arity (assertion-20, any-of).
+3. **XQST0045 reserved annotation namespaces** — annotation names resolving to the XML, XMLSchema, XMLSchema-instance, xpath-functions, xpath-functions/math, or 2012/xquery namespaces are rejected (assertion-11..18); unprefixed names (`%public`/`%private`) are in no namespace and always allowed; unbound prefixes raise XPST0081.
+4. **Literal-only arguments** — annotation argument lists accept only string/integer/decimal/double literals; `%eg:sequential(true())` is **XPST0003** (annotation-33, previously false-passing through lenient error matching).
+5. **XQuery-only grammar** — annotations are rejected with **XPST0003** in XPath mode (`_allowFullFlwor` gate; inline-fn-016, caught as a regression by the set sweep).
+6. **Gaps: 410 reasoned skips (−24)** — prod/Annotation runs **58/0/0**.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Lexer/{TokenKind,XPathLexer}.cs`, `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+7)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (410 recorded skips)
+
+Largest clusters: `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **prod/Literal cluster** (16 tests) or **misc/CombinedErrorCodes** (17 tests).
+2. **prod/MapConstructor** (15 tests) or **prod/AllowingEmpty** (14 tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `658a077` (feat(xquery): namespace declaration static errors and prolog ordering)
 **Current focus:** **prod/NamespaceDecl cluster closed** (11 gaps → 0): duplicate namespace declarations (XQST0033), reserved `xml`/`xmlns` prefix rules (XQST0070), and two-phase prolog ordering (XPST0003). QT3 went from **29,281 passed / 0 failed / 2,540 skipped (92.02%)** to **29,292 passed / 0 failed / 2,529 skipped (92.05%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,577 unit tests / 0 failed**; XSLT baseline unchanged.
 

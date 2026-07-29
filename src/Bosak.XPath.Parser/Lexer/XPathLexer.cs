@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 27-07-2026     | Whole-span token scan for XQuery string constructors (interpolation/nesting aware) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 29-07-2026     | Lex '%' as Percent token for XQuery annotations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -455,6 +457,8 @@ public ref struct XPathLexer
                 return new Token(TokenKind.Question, start, 1);
             case '#':
                 return new Token(TokenKind.Hash, start, 1);
+            case '%':
+                return new Token(TokenKind.Percent, start, 1);
             case ';':
                 return new Token(TokenKind.Semicolon, start, 1);
 

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl clusters closed** (17 → 0, 11 → 0) — strict typed initializers, namespace undeclaration, namespace static errors, prolog ordering; QT3 now **29,292 passed / 0 failed** (92.05%); unit tests **1,577/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation clusters closed** (17 → 0, 11 → 0, 24 → 0); QT3 now **29,316 passed / 0 failed** (92.13%); unit tests **1,584/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -162,6 +162,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-055 | *(internal)* | Name tests, kind-test types, and constructor namespace semantics | Required for XPath/XQuery conformance: XPST0081/XPST0008 name-test errors, kind-test schema type names, PI name validation, and spec-correct in-scope namespaces on constructed elements | **Implemented** | Phase 4 | Charles Korthout | 2026-07-28 |
 | REQ-056 | *(internal)* | Variable declaration type strictness and external variables | Required for XQuery conformance: ExprSingle initializers, strict `as T` enforcement (no casts/promotions), kind-test occurrence validation, namespace undeclaration, and typed external-variable binding checks | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-057 | *(internal)* | Namespace declaration static errors and prolog ordering | Required for XQuery conformance: XQST0033 duplicate prefix declarations, XQST0070 reserved xml/xmlns prefix rules, and two-phase prolog ordering (XPST0003) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-058 | *(internal)* | Inline-function annotations and function-test annotation assertions | Required for XQuery conformance: `%eg:*` annotations on inline functions, annotation assertions in function tests, literal-only annotation arguments, and reserved annotation namespaces (XQST0045) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2636,13 +2637,59 @@ Track per-prolog declared prefixes in the parser (XQST0033, undeclarations count
 
 ---
 
+### REQ-058: Inline-function annotations and function-test annotation assertions
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The prod/Annotation cluster (24 recorded gaps) covered the two annotation grammar forms the engine did not parse at all (the lexer had no `%` token): annotations on inline function expressions (`%eg:sequential function () { ... }`, with literal parameters, EQNames, and multiples) and annotation assertions in function tests (`instance of %eg:x function(*)`), including the reserved-namespace error (XQST0045) and the literals-only argument rule.
+
+**Proposed Solution:**  
+Lex `%` as a `Percent` token; parse-and-discard annotations on inline functions in the XPath parser (gated to XQuery mode — annotations are an XQuery-only grammar extension); capture function-test assertion text verbatim into the sequence-type string and strip/validate it in the VM's `InstanceOf` (assertions may be ignored per spec, but their namespaces are validated: XQST0045 for reserved namespaces, XPST0081 for unbound prefixes); enforce literal-only annotation arguments (XPST0003).
+
+**Acceptance Criteria:**
+- [x] Inline-function annotations parse and evaluate: bare, with literal parameters, EQName form, and multiple annotations (annotation-3/30/31/32).
+- [x] Function-test annotation assertions parse and are ignored for matching (assertion-1..10/19); `%public %private` on a function item is allowed (assertion-20, any-of).
+- [x] Annotation names in reserved namespaces (XML, XMLSchema, XMLSchema-instance, xpath-functions, xpath-functions/math, 2012/xquery) raise **XQST0045** (assertion-11..18); unprefixed names are always allowed; unbound prefixes raise **XPST0081**.
+- [x] Non-literal annotation arguments (`%eg:sequential(true())`) raise **XPST0003** (annotation-33).
+- [x] Annotations in XPath mode raise **XPST0003** (inline-fn-016 — XQuery-only grammar).
+- [x] QT3: prod/Annotation **58/0/0**; full suite **29,316 passed / 0 failed / 2,505 skipped (92.13%)**; gaps **410** (−24).
+- [x] Unit tests: 7 new tests; full suite **1,584/0**.
+
+**Implementation Notes:**
+- The lexer gained `TokenKind.Percent`; the parser's `ParsePrimaryExpr` handles `%`-prefixed inline functions, and `ParseTypeNameAndParens` captures assertion text verbatim (`CaptureAnnotations`) into the type string — no AST shape changes.
+- `VmEngine.StripAnnotationAssertions` runs at the top of `InstanceOf`: it validates each annotation's namespace via the evaluation context and returns the bare type text, so all downstream matching is untouched.
+- Both annotation argument lists share `SkipAnnotationArguments`/`SkipAnnotationLiteral` (string/integer/decimal/double literals only, commas between).
+- annotation-33 was previously false-passing through the comparer's lenient `InvalidOperationException` matching (the lexer error carried no code); gating annotations to XQuery mode also fixed the XP30+-spec inline-fn-016 expectation.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `Percent` token; inline annotations; function-test assertion capture (XQuery-mode gated). |
+| Runtime | Modified | `InstanceOf` strips and validates annotation assertions (XQST0045/XPST0081). |
+| Conformance | Modified | Gaps 410. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Annotation assertions validated but ignored for matching | XQuery 3.1: assertions can only restrict the matched set; ignoring them is a conformant implementation choice, and every catalog expectation in the cluster holds under it. |
+| 2026-07-29 | Kimi | Annotations gated to XQuery mode | inline-fn-016 (spec XP30+) expects XPST0003 — the annotation grammar is an XQuery extension of the XPath grammar. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-057 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed; QT3 wired (29,292/0, 92.05%). Annotation, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-058 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed; QT3 wired (29,316/0, 92.13%). Literal, MapConstructor, AllowingEmpty, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

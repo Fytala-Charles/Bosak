@@ -48,6 +48,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.10  | 29-07-2026     | 7 namespace declaration static-error tests (XQST0033/XQST0070/XPST0003) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11  | 29-07-2026     | 7 annotation tests (inline annotations, assertions, XQST0045, XPath-mode rejection) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -1980,6 +1982,78 @@ public class PlaceholderTests
         var compiler = new XQueryCompiler();
         var ex = Assert.ThrowsAny<Exception>(() =>
             compiler.Compile("declare variable $x := 2; declare base-uri \"http://example.com/\"; 1"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_InlineFunctionAnnotation_Works()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare namespace eg = \"http://example.com\"; %eg:sequential function () { \"bar\" } ()")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("bar", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_InlineFunctionAnnotations_WithParamsAndMultiple_Work()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare namespace eg = \"http://example.com\"; %eg:sequential(\"abc\", 3) %eg:memo-function function () { \"bar\" } ()")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("bar", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_InlineFunctionAnnotation_NonLiteralArgument_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare namespace eg = \"http://example.com\"; %eg:sequential(true()) function () { 1 } ()"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_FunctionTestAnnotationAssertion_Parses()
+    {
+        var compiler = new XQueryCompiler();
+        // () does not match function(*) regardless of the (ignored) assertion.
+        var result = compiler.Compile("declare namespace eg = \"http://example.com\"; () instance of %eg:x(\"abc\", 12e34, 567) function(*)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Boolean, result.Kind);
+        Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_FunctionTestAnnotationAssertion_ReservedNamespace_ThrowsXQST0045()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("() instance of %xs:x function(*)")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0045", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_FunctionTestAnnotationAssertion_PublicPrivateAllowed()
+    {
+        var compiler = new XQueryCompiler();
+        // %public/%private are in no namespace: allowed and ignored; the arity-0 function
+        // does not match function(xs:integer) (accepted by any-of in annotation-assertion-20).
+        var result = compiler.Compile("declare %public function local:three() as xs:integer {3}; local:three#0 instance of %public %private function(xs:integer) as xs:integer")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Boolean, result.Kind);
+        Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XPath_InlineFunctionAnnotation_ThrowsXPST0003()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            Bosak.XPath.Api.XPath31Expression.Compile("let $add := %Q{http://example.com/speed}fast function($x, $y) {$x + $y} return $add(2,2)"));
         Assert.Contains("XPST0003", ex.Message);
     }
 

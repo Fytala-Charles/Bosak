@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 29 July 2026
-> **Bosak baseline:** 1,577 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,292 passed / 0 failed / 2,529 skipped (92.05% / 100% of runnable tests) — XQuery routing enabled; 434 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,584 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,316 passed / 0 failed / 2,505 skipped (92.13% / 100% of runnable tests) — XQuery routing enabled; 410 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,11 @@
 
 ## 0. Recent Changes
 
+- **2026-07-29** — XQuery: **Annotation cluster closed** (REQ-058): QT3 **29,316 passed / 0 failed** (from 29,292; +24 passing; gaps 410, −24).
+  - Inline-function annotations (`%eg:sequential function () { ... }`) parse with literal parameters, EQName forms, and multiples; unrecognized annotations are ignored.
+  - Function-test annotation assertions (`instance of %eg:x function(*)`) parse and are ignored for matching (a conformant choice); reserved annotation namespaces raise **XQST0045**, unbound prefixes **XPST0081**.
+  - Annotation arguments must be literals — `%eg:sequential(true())` is **XPST0003**; annotations in XPath mode are **XPST0003** (XQuery-only grammar).
+  - prod/Annotation 58/0/0; instance-of, cast/castable, treat, typeswitch, inline-function, and higher-order-function sets all green.
 - **2026-07-29** — XQuery: **NamespaceDecl cluster closed** (REQ-057): QT3 **29,292 passed / 0 failed** (from 29,281; +11 passing; gaps 434, −11).
   - Duplicate namespace prefix declarations raise **XQST0033** — undeclarations count as declarations (K2-NamespaceProlog-1/2/3).
   - Reserved names raise **XQST0070**: the `xml` prefix must not be declared at all, `xmlns` must not be declared or undeclared, and no prefix may be bound to the XML/XMLNS namespace names.

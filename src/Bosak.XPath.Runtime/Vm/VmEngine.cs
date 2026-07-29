@@ -133,6 +133,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.75  | 29-07-2026     | EnforceType atomization for typed variable initializers; XPST0081 for unbound function/variable prefixes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.76  | 29-07-2026     | Function-test annotation assertions stripped in InstanceOf; XQST0045 for reserved annotation namespaces |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -6697,8 +6699,89 @@ public static class VmEngine
         return true;
     }
 
+    // Annotation assertions must not be in a reserved namespace (XQST0045,
+    // annotation-assertion-11..18). Unprefixed names (e.g. %public/%private) are in no
+    // namespace and are always allowed.
+    private static readonly string[] ReservedAnnotationNamespaces =
+    {
+        "http://www.w3.org/XML/1998/namespace",
+        "http://www.w3.org/2001/XMLSchema",
+        "http://www.w3.org/2001/XMLSchema-instance",
+        "http://www.w3.org/2005/xpath-functions",
+        "http://www.w3.org/2005/xpath-functions/math",
+        "http://www.w3.org/2012/xquery",
+    };
+
+    // Strips leading annotation assertions ('%name', '%name(literal, ...)') from a
+    // function-test type text, validating the annotation namespaces (XQST0045) and
+    // resolving prefixes against the evaluation context (XPST0081 when unbound).
+    private static string StripAnnotationAssertions(string typeName, EvaluationContext? context)
+    {
+        var s = typeName.TrimStart();
+        while (s.Length > 0 && s[0] == '%')
+        {
+            int i = 1;
+            while (i < s.Length && char.IsWhiteSpace(s[i])) i++;
+            string? annotationNs = null;
+            if (i + 1 < s.Length && s[i] == 'Q' && s[i + 1] == '{')
+            {
+                int closeBrace = s.IndexOf('}', i + 2);
+                if (closeBrace < 0)
+                    throw new InvalidOperationException($"XPST0003: Unclosed EQName in annotation assertion '{s}'.");
+                annotationNs = s[(i + 2)..closeBrace];
+                i = closeBrace + 1;
+                while (i < s.Length && IsAnnotationNameChar(s[i])) i++;
+            }
+            else
+            {
+                int nameStart = i;
+                while (i < s.Length && (IsAnnotationNameChar(s[i]) || s[i] == ':')) i++;
+                var rawName = s[nameStart..i];
+                int colon = rawName.IndexOf(':');
+                if (colon > 0)
+                {
+                    var prefix = rawName[..colon];
+                    if (context is null || !context.TryResolveNamespace(prefix, out var resolvedNs))
+                        throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+                    annotationNs = resolvedNs;
+                }
+            }
+            if (annotationNs is not null && ReservedAnnotationNamespaces.Contains(annotationNs))
+                throw new InvalidOperationException($"XQST0045: The annotation namespace '{annotationNs}' is reserved.");
+            // Optional literal argument list: skip balanced parens with string awareness.
+            while (i < s.Length && char.IsWhiteSpace(s[i])) i++;
+            if (i < s.Length && s[i] == '(')
+            {
+                int depth = 0;
+                do
+                {
+                    char c = s[i];
+                    if (c is '"' or '\'')
+                    {
+                        char quote = c;
+                        i++;
+                        while (i < s.Length && s[i] != quote) i++;
+                        if (i < s.Length) i++;
+                        continue;
+                    }
+                    if (c == '(') depth++;
+                    else if (c == ')') depth--;
+                    i++;
+                } while (depth > 0 && i < s.Length);
+            }
+            s = s[i..].TrimStart();
+        }
+        return s;
+    }
+
+    private static bool IsAnnotationNameChar(char c)
+        => char.IsLetterOrDigit(c) || c is '.' or '-' or '_';
+
     private static bool InstanceOf(XdmValue value, string typeName, OccurrenceIndicator occurrence, string? defaultElementNamespace, EvaluationContext? context = null)
     {
+        // Annotation assertions preceding a function test are validated (XQST0045) and
+        // ignored: they can only restrict matches, which implementations may decline to do.
+        typeName = StripAnnotationAssertions(typeName, context);
         string normalized = NormalizeTypeName(typeName);
 
         if (normalized is "empty-sequence" or "empty-sequence()")
