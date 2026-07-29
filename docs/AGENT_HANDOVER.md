@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-28
-**Commit:** *(uncommitted — record hash after the feature commit)* (feat(xpath): name tests, kind-test types, and constructor namespace semantics)
+**Commit:** `66d9e70` (feat(xpath): name tests, kind-test types, and constructor namespace semantics)
 **Current focus:** **prod/NameTest cluster closed** (22 gaps → 2) plus a deep pass over constructor in-scope namespace semantics. QT3 went from **29,244 passed / 0 failed / 2,577 skipped (91.90%)** to **29,264 passed / 0 failed / 2,557 skipped (91.96%)** (+20 passing). Full `dotnet test Bosak.sln` passes: **1,558 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (NameTest cluster)
