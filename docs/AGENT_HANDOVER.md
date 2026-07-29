@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): namespace declaration static errors and prolog ordering)
+**Commit:** `658a077` (feat(xquery): namespace declaration static errors and prolog ordering)
 **Current focus:** **prod/NamespaceDecl cluster closed** (11 gaps → 0): duplicate namespace declarations (XQST0033), reserved `xml`/`xmlns` prefix rules (XQST0070), and two-phase prolog ordering (XPST0003). QT3 went from **29,281 passed / 0 failed / 2,540 skipped (92.02%)** to **29,292 passed / 0 failed / 2,529 skipped (92.05%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,577 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (NamespaceDecl cluster)
