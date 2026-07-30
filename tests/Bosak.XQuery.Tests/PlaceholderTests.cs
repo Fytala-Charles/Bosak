@@ -50,6 +50,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.11  | 29-07-2026     | 7 annotation tests (inline annotations, assertions, XQST0045, XPath-mode rejection) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.12  | 29-07-2026     | 9 character/entity reference tests (expansion, XQST0090, XPST0003, XPath no-expansion) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -2055,6 +2057,90 @@ public class PlaceholderTests
         var ex = Assert.ThrowsAny<Exception>(() =>
             Bosak.XPath.Api.XPath31Expression.Compile("let $add := %Q{http://example.com/speed}fast function($x, $y) {$x + $y} return $add(2,2)"));
         Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_StringLiteral_CharacterReferenceExpands()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("\"&#8364;\"")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("€", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_StringLiteral_AstralCharacterReferenceExpands()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("\"&#x1F600;\"")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("\U0001F600", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_StringLiteral_EntityReferencesExpand()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("\"&amp;&lt;&gt;\"")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("&<>", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_StringLiteral_NulCharacterReference_ThrowsXQST0090()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("\"&#x00;\""));
+        Assert.Contains("XQST0090", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_StringLiteral_ZeroCharacterReference_ThrowsXQST0090()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("'&#x0;'"));
+        Assert.Contains("XQST0090", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_StringLiteral_SignedCharacterReference_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("\"&#+20;\""));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_OverflowHexCharacterReference_ThrowsXQST0090()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("<p>FA&#xFF000000F6;IL</p>"));
+        Assert.Contains("XQST0090", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Constructor_OverflowDecimalCharacterReference_ThrowsXQST0090()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("<p>FA&#18446744073709551862;IL</p>"));
+        Assert.Contains("XQST0090", ex.Message);
+    }
+
+    [Fact]
+    public void XPath_StringLiteral_ReferencesDoNotExpand()
+    {
+        var result = Bosak.XPath.Api.XPath31Expression.Compile("\"&amp;\"")
+            .Evaluate(new Bosak.XPath.Runtime.Vm.EvaluationContext());
+
+        Assert.Equal("&amp;", result.StringValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

@@ -1,6 +1,40 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): character and entity reference validation in literals and constructors)
+**Current focus:** **prod/Literal cluster closed** (16 gaps → 0): XQuery character-reference validation (XQST0090 for invalid/overflow values, XPST0003 for malformed references); 8 of the 16 entries turned out to be stale (XPath-mode non-expansion already worked). QT3 went from **29,316 passed / 0 failed / 2,505 skipped (92.13%)** to **29,332 passed / 0 failed / 2,489 skipped (92.18%)** (+16 passing). Full `dotnet test Bosak.sln` passes: **1,593 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (Literal cluster)
+
+1. **XQST0090 in string literals** — character references to invalid XML characters now raise XQST0090 instead of silently producing the codepoint: `"&#x00;"`/`'&#x0;'` (NUL; K2-Literals-1, cbcl-literals-004/008). Validation uses the same XML 1.1 rules as the constructor path (any codepoint except NUL, surrogates, and noncharacters; controls permitted).
+2. **Overflow references are XQST0090** — numeric character references whose digits are syntactically valid but whose value exceeds the codepoint range (including 64-bit overflows like `&#18446744073709551862;`) raise XQST0090 in both string literals and direct constructors (K2-Literals-16..19), instead of falling through to a generic XPST0003. Implemented by digit-count pre-screening plus exact parsing (`ExpandNumericCharReference` shared by both paths).
+3. **Malformed references are XPST0003** — a sign or non-digit in a character reference (`"&#+20;"`) is a syntax error (K2-Literals-25); previously `NumberStyles.Integer` silently accepted the leading `+`.
+4. **Stale XPath-mode entries** — Literals056a..061a and K-Literals-31a/47a (XP20+: references must NOT expand in XPath) already behaved correctly; un-gapped without code changes.
+5. **Gaps: 394 reasoned skips (−16)** — prod/Literal runs **171/0/3**.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+9)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (394 recorded skips)
+
+Largest clusters: `misc/CombinedErrorCodes` (17), `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **misc/CombinedErrorCodes** (17 tests) or **prod/MapConstructor** (15 tests).
+2. **prod/AllowingEmpty** (14 tests) or **prod/CompNamespaceConstructor** (11 tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `3623b37` (feat(xquery): inline-function annotations and function-test annotation assertions)
 **Current focus:** **prod/Annotation cluster closed** (24 gaps → 0): annotations on inline function expressions, annotation assertions in function tests, literal-only annotation arguments, and reserved annotation namespaces (XQST0045). QT3 went from **29,292 passed / 0 failed / 2,529 skipped (92.05%)** to **29,316 passed / 0 failed / 2,505 skipped (92.13%)** (+24 passing). Full `dotnet test Bosak.sln` passes: **1,584 unit tests / 0 failed**; XSLT baseline unchanged.
 

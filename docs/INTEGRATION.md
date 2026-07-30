@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 29 July 2026
-> **Bosak baseline:** 1,584 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,316 passed / 0 failed / 2,505 skipped (92.13% / 100% of runnable tests) — XQuery routing enabled; 410 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,593 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,332 passed / 0 failed / 2,489 skipped (92.18% / 100% of runnable tests) — XQuery routing enabled; 394 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,10 @@
 
 ## 0. Recent Changes
 
+- **2026-07-29** — XQuery: **Literal cluster closed** (REQ-059): QT3 **29,332 passed / 0 failed** (from 29,316; +16 passing; gaps 394, −16).
+  - Character references to invalid XML characters raise **XQST0090** in string literals and constructors (`&#x00;`, `&#x0;`); numeric overflows — including 64-bit — are **XQST0090**; malformed references (`&#+20;`) are **XPST0003**.
+  - Valid references expand normally (predefined entities, decimal/hex, astral codepoints); XPath mode does not expand references (8 stale gap entries removed).
+  - prod/Literal 171/0/3; direct/computed constructor, string-constructor, and EQName sets all green.
 - **2026-07-29** — XQuery: **Annotation cluster closed** (REQ-058): QT3 **29,316 passed / 0 failed** (from 29,292; +24 passing; gaps 410, −24).
   - Inline-function annotations (`%eg:sequential function () { ... }`) parse with literal parameters, EQName forms, and multiples; unrecognized annotations are ignored.
   - Function-test annotation assertions (`instance of %eg:x function(*)`) parse and are ignored for matching (a conformant choice); reserved annotation namespaces raise **XQST0045**, unbound prefixes **XPST0081**.

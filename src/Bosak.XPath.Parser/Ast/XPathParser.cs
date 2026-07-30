@@ -75,6 +75,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.35  | 29-07-2026     | XQuery annotations: inline-function annotations, function-test assertions (XQuery-only, literals only) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.36  | 29-07-2026     | Char-reference validation: XQST0090 for invalid/overflow values, XPST0003 for malformed refs |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -2736,25 +2738,24 @@ public sealed class XPathParser
             "quot" => "\"",
             "apos" => "'",
             _ when reference.StartsWith("#x", StringComparison.Ordinal) &&
-                   int.TryParse(reference[2..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex) =>
-                ValidateCharReference(hex, ctorStart),
+                   IsAsciiDigitRun(reference[2..], isHex: true) =>
+                ExpandNumericCharReference(reference, reference[2..], isHex: true, ctorStart),
             _ when reference.StartsWith('#') &&
-                   int.TryParse(reference[1..], NumberStyles.Integer, CultureInfo.InvariantCulture, out var dec) =>
-                ValidateCharReference(dec, ctorStart),
+                   IsAsciiDigitRun(reference[1..], isHex: false) =>
+                ExpandNumericCharReference(reference, reference[1..], isHex: false, ctorStart),
             _ => throw ConstructorError($"invalid entity or character reference '&{reference};'", ctorStart)
         };
     }
+
+    private static bool IsAsciiDigitRun(string digits, bool isHex)
+        => digits.Length > 0 && digits.All(isHex ? Uri.IsHexDigit : IsAsciiDigit);
 
     // XQST0090: a character reference must denote a valid XML 1.1 character (any
     // codepoint except NUL, surrogates, and noncharacters; control characters are
     // permitted as references in XML 1.1).
     private string ValidateCharReference(int codePoint, int ctorStart)
     {
-        bool valid = codePoint is >= 0x1 and <= 0xD7FF
-            || (codePoint >= 0xE000 && codePoint <= 0xFFFD)
-            || (codePoint >= 0x10000 && codePoint <= 0x10FFFF);
-        if (!valid)
-            throw new ParseException($"XQST0090: Character reference '&#{codePoint};' does not denote a valid XML character.", ctorStart);
+        ValidateXmlCharReference(codePoint, $"#{codePoint}", ctorStart);
         return char.ConvertFromUtf32(codePoint);
     }
 
@@ -3089,17 +3090,49 @@ public sealed class XPathParser
             "gt" => ">",
             "quot" => "\"",
             "apos" => "'",
-            _ when reference.StartsWith("#x", StringComparison.Ordinal) &&
-                   int.TryParse(reference[2..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex) &&
-                   hex is >= 0 and <= 0x10FFFF => char.ConvertFromUtf32(hex),
-            _ when reference.StartsWith('#') &&
-                   int.TryParse(reference[1..], NumberStyles.Integer, CultureInfo.InvariantCulture, out var dec) &&
-                   dec is >= 0 and <= 0x10FFFF => char.ConvertFromUtf32(dec),
+            _ when reference.StartsWith("#x", StringComparison.Ordinal) =>
+                ExpandNumericCharReference(reference, reference[2..], isHex: true, Current.Start),
+            _ when reference.StartsWith('#') =>
+                ExpandNumericCharReference(reference, reference[1..], isHex: false, Current.Start),
             _ => throw new ParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", Current.Start)
         };
         i = semi;
         return result;
     }
+
+    // Expands the digit run of a character reference. Syntactically invalid references
+    // (empty, a sign, or non-digits) are XPST0003 (K2-Literals-25); values that do not
+    // denote a valid XML character — including values overflowing the codepoint range —
+    // are XQST0090 (K2-Literals-1/16..19, cbcl-literals-004/008).
+    private static string ExpandNumericCharReference(string reference, string digits, bool isHex, int errorPosition)
+    {
+        if (digits.Length == 0 || !digits.All(isHex ? Uri.IsHexDigit : IsAsciiDigit))
+            throw new ParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", errorPosition);
+        // More digits than the maximum codepoint (0x10FFFF) needs: the value overflows
+        // even if it exceeds 64 bits (K2-Literals-18/19).
+        var trimmed = digits.TrimStart('0');
+        if (trimmed.Length > (isHex ? 6 : 7))
+            throw new ParseException($"XQST0090: Character reference '&{reference};' does not denote a valid XML character.", errorPosition);
+        int codePoint = isHex
+            ? int.Parse(digits, NumberStyles.HexNumber, CultureInfo.InvariantCulture)
+            : int.Parse(digits, NumberStyles.None, CultureInfo.InvariantCulture);
+        ValidateXmlCharReference(codePoint, reference, errorPosition);
+        return char.ConvertFromUtf32(codePoint);
+    }
+
+    // XQST0090: a character reference must denote a valid XML 1.1 character (any
+    // codepoint except NUL, surrogates, and noncharacters; control characters are
+    // permitted as references in XML 1.1).
+    private static void ValidateXmlCharReference(int codePoint, string reference, int errorPosition)
+    {
+        bool valid = codePoint is >= 0x1 and <= 0xD7FF
+            || (codePoint >= 0xE000 && codePoint <= 0xFFFD)
+            || (codePoint >= 0x10000 && codePoint <= 0x10FFFF);
+        if (!valid)
+            throw new ParseException($"XQST0090: Character reference '&{reference};' does not denote a valid XML character.", errorPosition);
+    }
+
+    private static bool IsAsciiDigit(char c) => c is >= '0' and <= '9';
 
     private static bool CanStartStepExpr(Token token) => token.Kind switch
     {

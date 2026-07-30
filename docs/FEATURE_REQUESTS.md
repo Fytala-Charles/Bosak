@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation clusters closed** (17 → 0, 11 → 0, 24 → 0); QT3 now **29,316 passed / 0 failed** (92.13%); unit tests **1,584/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0); QT3 now **29,332 passed / 0 failed** (92.18%); unit tests **1,593/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -163,6 +163,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-056 | *(internal)* | Variable declaration type strictness and external variables | Required for XQuery conformance: ExprSingle initializers, strict `as T` enforcement (no casts/promotions), kind-test occurrence validation, namespace undeclaration, and typed external-variable binding checks | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-057 | *(internal)* | Namespace declaration static errors and prolog ordering | Required for XQuery conformance: XQST0033 duplicate prefix declarations, XQST0070 reserved xml/xmlns prefix rules, and two-phase prolog ordering (XPST0003) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-058 | *(internal)* | Inline-function annotations and function-test annotation assertions | Required for XQuery conformance: `%eg:*` annotations on inline functions, annotation assertions in function tests, literal-only annotation arguments, and reserved annotation namespaces (XQST0045) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-059 | *(internal)* | Character and entity reference validation in literals and constructors | Required for XQuery conformance: XQST0090 for invalid/overflow character references, XPST0003 for malformed references, XPath-mode non-expansion | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2683,13 +2684,56 @@ Lex `%` as a `Percent` token; parse-and-discard annotations on inline functions 
 
 ---
 
+### REQ-059: Character and entity reference validation in literals and constructors
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The prod/Literal cluster (16 recorded gaps) covered character-reference validation in XQuery string literals and direct constructors: references to invalid XML characters produced the codepoint instead of XQST0090; numeric overflows (32/64-bit) fell through to a generic XPST0003 instead of XQST0090; and a signed reference (`&#+20;`) was silently accepted because `NumberStyles.Integer` permits a leading sign.
+
+**Proposed Solution:**  
+Share one numeric-reference expander between the string-literal and constructor paths: digit-run pre-screening (malformed → XPST0003), digit-count overflow detection plus exact parsing (invalid value → XQST0090, XML 1.1 character rules).
+
+**Acceptance Criteria:**
+- [x] `"&#x00;"` / `'&#x0;'` raise **XQST0090** (K2-Literals-1, cbcl-literals-004/008).
+- [x] Overflow references `&#xFF000000F6;`, `&#4294967542;`, `&#xFFFFFFFF000000F6;`, `&#18446744073709551862;` raise **XQST0090** in direct constructors (K2-Literals-16..19).
+- [x] `"&#+20;"` raises **XPST0003** (K2-Literals-25).
+- [x] Valid references still expand, including astral codepoints (`&#x1F600;`) and the predefined entities (`&amp;` `&lt;` `&gt;` `&quot;` `&apos;`).
+- [x] XPath mode does not expand references (Literals056a..061a, K-Literals-31a/47a — 8 stale gap entries un-gapped without code changes).
+- [x] QT3: prod/Literal **171/0/3**; full suite **29,332 passed / 0 failed / 2,489 skipped (92.18%)**; gaps **394** (−16).
+- [x] Unit tests: 9 new tests; full suite **1,593/0**.
+
+**Implementation Notes:**
+- `XPathParser.ExpandNumericCharReference` serves both `ExpandCharReference` (string literals) and `ScanConstructorCharReference` (direct constructors); `ValidateXmlCharReference` holds the XML 1.1 validity ranges (NUL, surrogates, and noncharacters excluded; controls permitted as references).
+- Overflow detection avoids `BigInteger`: after stripping leading zeros, more digits than 0x10FFFF needs (6 hex / 7 decimal) means the value overflows by construction; otherwise `int.Parse` is exact and range-checked.
+- ASCII-only digit checks (`Uri.IsHexDigit`, own `IsAsciiDigit`) keep signs, whitespace, and non-ASCII digits on the XPST0003 path.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | Char-reference validation shared between string literals and constructors. |
+| Conformance | Modified | Gaps 394. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Malformed references → XPST0003, invalid values → XQST0090 | The catalog distinguishes syntax errors (`&#+20;` — K2-Literals-25) from valid-syntax-but-invalid-character references (`&#x00;`, overflows — K2-Literals-1/16..19). |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-058 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed; QT3 wired (29,316/0, 92.13%). Literal, MapConstructor, AllowingEmpty, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-059 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed; QT3 wired (29,332/0, 92.18%). MapConstructor, AllowingEmpty, CombinedErrorCodes, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

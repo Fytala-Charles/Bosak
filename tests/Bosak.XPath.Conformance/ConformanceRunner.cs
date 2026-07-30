@@ -44,6 +44,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.13  | 29-07-2026     | Drop 24 Annotation gap entries (implemented) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.14  | 29-07-2026     | Drop 16 Literal gap entries (implemented or stale) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -487,23 +489,6 @@ internal sealed class ConformanceRunner
         ["instanceof134"] = "XQuery conformance gap (InstanceofExpr): see AGENT_HANDOVER REQ-045",
         // prod/LetClause.xml (1 tests)
         ["K-LetExprWithout-1"] = "XQuery conformance gap (LetClause): see AGENT_HANDOVER REQ-045",
-        // prod/Literal.xml (16 tests)
-        ["K-Literals-31a"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["K-Literals-47a"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["K2-Literals-1"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["K2-Literals-16"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["K2-Literals-17"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["K2-Literals-18"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["K2-Literals-19"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["K2-Literals-25"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["Literals056a"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["Literals057a"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["Literals058a"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["Literals059a"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["Literals060a"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["Literals061a"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["cbcl-literals-004"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
-        ["cbcl-literals-008"] = "XQuery conformance gap (Literal): see AGENT_HANDOVER REQ-045",
         // prod/MapConstructor.xml (15 tests)
         ["MapConstructor-015"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
         ["MapConstructor-017"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
