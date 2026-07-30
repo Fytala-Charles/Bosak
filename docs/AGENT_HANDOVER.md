@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): character and entity reference validation in literals and constructors)
+**Commit:** `4f95947` (feat(xquery): character and entity reference validation in literals and constructors)
 **Current focus:** **prod/Literal cluster closed** (16 gaps → 0): XQuery character-reference validation (XQST0090 for invalid/overflow values, XPST0003 for malformed references); 8 of the 16 entries turned out to be stale (XPath-mode non-expansion already worked). QT3 went from **29,316 passed / 0 failed / 2,505 skipped (92.13%)** to **29,332 passed / 0 failed / 2,489 skipped (92.18%)** (+16 passing). Full `dotnet test Bosak.sln` passes: **1,593 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (Literal cluster)
