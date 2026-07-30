@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): reject plain xs:duration in date/time arithmetic)
+**Commit:** `ce65b8c` (feat(xquery): reject plain xs:duration in date/time arithmetic)
 **Current focus:** **op/add-dayTimeDurations + op/subtract-dayTimeDurations clusters closed** (16 + 11 gaps → 0): plain `xs:duration` values are now rejected in date/time arithmetic. QT3 went from **29,400 passed / 0 failed / 2,421 skipped (92.39%)** to **29,427 passed / 0 failed / 2,394 skipped (92.48%)** (+27 passing). Full `dotnet test Bosak.sln` passes: **1,636 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (dayTimeDurations clusters)
