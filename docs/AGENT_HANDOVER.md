@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): map constructors in step position with key disambiguation)
+**Commit:** `758249e` (feat(xquery): map constructors in step position with key disambiguation)
 **Current focus:** **prod/MapConstructor cluster closed** (15 gaps → 0): map constructors in step/`!` position with step expressions as keys and values, plus the deep-equal sequence-semantics fix that their deep-equal expectations exposed. QT3 went from **29,349 passed / 0 failed / 2,472 skipped (92.23%)** to **29,364 passed / 0 failed / 2,457 skipped (92.28%)** (+15 passing). Full `dotnet test Bosak.sln` passes: **1,610 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (MapConstructor cluster)
