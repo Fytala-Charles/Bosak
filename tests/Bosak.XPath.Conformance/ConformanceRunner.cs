@@ -52,6 +52,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.17  | 29-07-2026     | Drop 14 AllowingEmpty gap entries (implemented) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.18  | 29-07-2026     | Drop 11 CompNamespaceConstructor gap entries (implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -379,18 +381,6 @@ internal sealed class ConformanceRunner
         // prod/CastableExpr.xml (2 tests)
         ["K-SeqExprCastable-5a"] = "XQuery conformance gap (CastableExpr): see AGENT_HANDOVER REQ-045",
         ["K-SeqExprCastable-6a"] = "XQuery conformance gap (CastableExpr): see AGENT_HANDOVER REQ-045",
-        // prod/CompNamespaceConstructor.xml (11 tests)
-        ["nscons-001"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-002"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-003"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-004"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-005"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-006"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-010"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-011"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-012"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-043"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
-        ["nscons-044"] = "XQuery conformance gap (CompNamespaceConstructor): see AGENT_HANDOVER REQ-045",
         // prod/ContextItemDecl.xml (1 tests)
         ["contextDecl-054"] = "XQuery conformance gap (ContextItemDecl): see AGENT_HANDOVER REQ-045",
         // prod/DefaultCollationDecl.xml (4 tests)

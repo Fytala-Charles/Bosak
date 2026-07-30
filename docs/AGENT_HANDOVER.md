@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): computed namespace constructors in element content)
+**Current focus:** **prod/CompNamespaceConstructor cluster closed** (11 gaps → 0): computed namespace constructors as element content — interleaving with attributes, declaration dedupe, name-prefix conflict resolution, prefix type checking, and spec-correct namespace-node identity. QT3 went from **29,378 passed / 0 failed / 2,443 skipped (92.32%)** to **29,389 passed / 0 failed / 2,432 skipped (92.36%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,622 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (CompNamespaceConstructor cluster)
+
+1. **Namespaces are not "other content"** — a namespace declaration in element content no longer trips XQTY0024 when attributes follow it: attributes and namespace declarations interleave freely at the start of content, in both the direct-constructor content loop and `ComputedContentAccumulator` (nscons-001/010).
+2. **Declaration dedupe and xmlns:xml** — duplicate namespace declarations with the same prefix *and* URI merge silently (nscons-005/006; different URIs were already XQDY0102), and a redundant `xmlns:xml` declaration is omitted (nscons-004).
+3. **Name-prefix conflicts** — content namespace declarations take precedence over name-implied bindings: an attribute or element name whose prefix is redeclared with a different URI gets a generated prefix (`ns1`, `ns2`, …), so `prefix-from-QName(node-name(.)) != 'p'` while `in-scope-prefixes` still contains `p` (nscons-010/011).
+4. **Prefix expression rules** — `namespace {expr} {uri}`: the atomized prefix must be a single xs:string / xs:untypedAtomic / xs:NCName value (**XPTY0004** for xs:anyURI, xs:duration — nscons-043/044); an empty prefix expression yields a default namespace declaration (nscons-015).
+5. **Namespace-node identity** — computed namespace nodes are **parentless** (`ParentlessNamespaceNode` marker on the synthetic owner, honored by both the `Parent` property and the parent/ancestor axes; nscons-012) and their typed value is **xs:string** per XDM §2.7.2 (fn:data and the VM atomizer; `instance of xs:untypedAtomic` is false).
+6. **Gaps: 337 reasoned skips (−11)** — prod/CompNamespaceConstructor runs **32/0/12**.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `src/Bosak.XPath.Providers/XDocument/{XDocumentProvider,XDocumentNode,ParentlessNamespaceNode}.cs` (marker is new)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+7)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (337 recorded skips)
+
+Largest clusters: `op/add-dayTimeDurations` (16), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **misc/HigherOrderFunctions** (11 tests — the last double-digit function-semantics cluster).
+2. **op/add-dayTimeDurations** (16 tests — decimal-precision platform limits; likely mostly unfixable without arbitrary-precision decimals).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `387153a` (feat(xquery): allowing empty in for clauses — grammar order and typed bindings)
 **Current focus:** **prod/AllowingEmpty cluster closed** (14 gaps → 0): `allowing empty` accepted in grammar position (before the positional variable) and checked against declared type occurrences. QT3 went from **29,364 passed / 0 failed / 2,457 skipped (92.28%)** to **29,378 passed / 0 failed / 2,443 skipped (92.32%)** (+14 passing). Full `dotnet test Bosak.sln` passes: **1,615 unit tests / 0 failed**; XSLT baseline unchanged.
 

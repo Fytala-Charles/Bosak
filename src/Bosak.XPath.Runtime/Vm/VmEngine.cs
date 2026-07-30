@@ -139,6 +139,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.78  | 29-07-2026     | Singleton-sequence unwrap for map/array/function-typed call parameters |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.79  | 29-07-2026     | Computed namespace prefix type check (XPTY0004); ns decls not XQTY0024 content; ns nodes atomize to xs:string |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1188,9 +1190,33 @@ public static class VmEngine
                             }
                             case ComputedConstructorKind.Namespace:
                             {
-                                string nsPrefix = computedInfo.HasNameExpression
-                                    ? JoinAtomizedItems(registers[instr.RegisterB], " ").Trim()
-                                    : computedInfo.LocalName!;
+                                string nsPrefix;
+                                if (computedInfo.HasNameExpression)
+                                {
+                                    var prefixAtom = Atomize(registers[instr.RegisterB]);
+                                    if (prefixAtom.IsUndefined)
+                                    {
+                                        // An empty prefix expression yields a default
+                                        // namespace declaration (nscons-015).
+                                        nsPrefix = string.Empty;
+                                    }
+                                    else
+                                    {
+                                        // XPTY0004: the prefix expression must atomize to a single
+                                        // xs:string / xs:untypedAtomic / xs:NCName value
+                                        // (nscons-043/044: xs:anyURI and xs:duration are rejected).
+                                        if (prefixAtom.Kind != XdmValueKind.String
+                                            || prefixAtom.SchemaTypeName is not (null or "untypedAtomic" or "NCName"))
+                                        {
+                                            throw new InvalidOperationException("XPTY0004: The computed namespace prefix must be a single xs:string, xs:untypedAtomic, or xs:NCName value.");
+                                        }
+                                        nsPrefix = prefixAtom.ToString().Trim();
+                                    }
+                                }
+                                else
+                                {
+                                    nsPrefix = computedInfo.LocalName!;
+                                }
                                 var uri = JoinAtomizedItems(registers[instr.RegisterC], " ");
                                 // XQDY0101: reserved/invalid namespace-node forms.
                                 if (nsPrefix == "xmlns")
@@ -1405,7 +1431,9 @@ public static class VmEngine
                                                 context.WithNamespace(declPrefix, declUri);
                                             }
                                             content.Add(new XdmContentItem(XdmContentKind.Namespace, declUri, null, declPrefix));
-                                            seenNonAttributeContent = true;
+                                            // Namespace declarations are not "other content": they may
+                                            // interleave freely with attributes at the start of the
+                                            // content (nscons-001 — no XQTY0024 between them).
                                             continue;
                                         }
                                         if (item.IsNode && item.NodeValue.NodeKind is XdmNodeKind.Text)
@@ -3384,7 +3412,13 @@ public static class VmEngine
             return XdmValue.Undefined;
 
         if (value.IsNode)
-            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
+        {
+            // Namespace nodes have an xs:string typed value; all other (untyped) nodes
+            // atomize to xs:untypedAtomic (XDM §2.7.2, nscons-012).
+            return value.NodeValue.NodeKind == XdmNodeKind.Namespace
+                ? XdmValue.FromString(value.NodeValue.StringValue)
+                : XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
+        }
 
         if (value.IsSequence)
         {
@@ -9322,7 +9356,8 @@ public static class VmEngine
                 else
                     context.WithNamespace(declPrefix, declUri);
                 _content.Add(new XdmContentItem(XdmContentKind.Namespace, declUri, null, declPrefix));
-                _seenNonAttributeContent = true;
+                // Namespace declarations are not "other content": they may interleave
+                // freely with attributes at the start of the content (no XQTY0024).
                 return;
             }
             if (item.IsNode && item.NodeValue.NodeKind is XdmNodeKind.Text)

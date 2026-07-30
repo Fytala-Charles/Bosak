@@ -182,6 +182,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.75  | 29-07-2026     | deep-equal compares map values and array members with sequence semantics |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.76  | 29-07-2026     | fn:data returns xs:string for namespace nodes (XDM typed value) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -10029,7 +10031,8 @@ public static class FunctionLibrary
             var node = value.NodeValue;
             if (node.HasNoTypedValue)
                 throw new InvalidOperationException("FOTY0012: The argument node does not have a typed value.");
-            if (node.NodeKind is XdmNodeKind.ProcessingInstruction or XdmNodeKind.Comment)
+            // XDM §2.7.2: namespace nodes also have an xs:string typed value (nscons-012).
+            if (node.NodeKind is XdmNodeKind.ProcessingInstruction or XdmNodeKind.Comment or XdmNodeKind.Namespace)
                 return XdmValue.FromString(node.StringValue);
             return XdmValue.FromString(node.StringValue, "untypedAtomic");
         }

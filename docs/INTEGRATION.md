@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 29 July 2026
-> **Bosak baseline:** 1,615 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,378 passed / 0 failed / 2,443 skipped (92.32% / 100% of runnable tests) — XQuery routing enabled; 348 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,622 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,389 passed / 0 failed / 2,432 skipped (92.36% / 100% of runnable tests) — XQuery routing enabled; 337 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,11 @@
 
 ## 0. Recent Changes
 
+- **2026-07-29** — XQuery: **CompNamespaceConstructor cluster closed** (REQ-063): QT3 **29,389 passed / 0 failed** (from 29,378; +11 passing; gaps 337, −11).
+  - Namespace declarations in element content interleave freely with attributes (no XQTY0024); same-URI duplicates merge; redundant xmlns:xml omitted.
+  - Content namespace declarations win over name-implied prefixes — conflicting element/attribute names get a generated prefix; `namespace {expr} {uri}` validates the prefix type (**XPTY0004**), empty expression = default declaration.
+  - Computed namespace nodes are parentless with an xs:string typed value (XDM §2.7.2).
+  - prod/CompNamespaceConstructor 32/0/12; constructor, namespace-axis, in-scope-prefixes, name-test, and fn:data sets all green.
 - **2026-07-29** — XQuery: **AllowingEmpty cluster closed** (REQ-062): QT3 **29,378 passed / 0 failed** (from 29,364; +14 passing; gaps 348, −14).
   - `for $x allowing empty at $p in E` parses in grammar position (before the positional variable); empty input binds `$x = ()` with position 0.
   - The empty binding is checked against the declared type occurrence: `as xs:integer?` accepts it, `as xs:integer` raises **XPTY0004**.

@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 28-07-2026     | Non-propagating namespace-binding markers for attribute-name bindings; no content fixup; clone annotations |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 29-07-2026     | Content ns declarations win over name prefixes (generated prefixes); xmlns:xml omitted; parentless ns nodes |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -100,6 +102,32 @@ public static class XDocumentProvider
             else if (attr.LocalName == "xmlns" && attr.Prefix is null)
                 declared.Add("");
         }
+
+        // Computed namespace declarations in content take precedence over name-implied
+        // bindings: a tag or attribute name whose prefix they redeclare with a different
+        // URI gets a generated prefix instead (nscons-010/011).
+        var contentNsDecls = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var item in spec.Content)
+        {
+            if (item.Kind == XdmContentKind.Namespace)
+            {
+                var declPrefix = item.Target ?? string.Empty;
+                if (!contentNsDecls.ContainsKey(declPrefix))
+                    contentNsDecls[declPrefix] = item.Text ?? string.Empty;
+            }
+        }
+        string GeneratePrefix()
+        {
+            // Only probe membership: Declare() performs the declared.Add itself
+            // (adding here would suppress the declaration entirely).
+            for (int i = 1; ; i++)
+            {
+                var candidate = $"ns{i}";
+                if (!declared.Contains(candidate))
+                    return candidate;
+            }
+        }
+
         void Declare(string? prefix, string? nsUri, bool impliedByAttributeName = false)
         {
             if (string.IsNullOrEmpty(nsUri))
@@ -119,7 +147,12 @@ public static class XDocumentProvider
                 element.Add(declAttr);
             }
         }
-        Declare(spec.Prefix, spec.NamespaceUri);
+        // Tag: a conflicting name-implied prefix is replaced by a generated one.
+        if (spec.Prefix is not null && contentNsDecls.TryGetValue(spec.Prefix, out var tagDeclUri)
+            && tagDeclUri != (spec.NamespaceUri ?? string.Empty))
+            Declare(GeneratePrefix(), spec.NamespaceUri);
+        else
+            Declare(spec.Prefix, spec.NamespaceUri);
 
         foreach (var attr in spec.Attributes)
         {
@@ -138,7 +171,13 @@ public static class XDocumentProvider
             }
             else
             {
-                Declare(attr.Prefix, attr.NamespaceUri, impliedByAttributeName: true);
+                // Attribute name: a prefix redeclared by a content namespace declaration
+                // with a different URI is replaced by a generated prefix (nscons-010).
+                if (attr.Prefix is not null && contentNsDecls.TryGetValue(attr.Prefix, out var attrDeclUri)
+                    && attrDeclUri != (attr.NamespaceUri ?? string.Empty))
+                    Declare(GeneratePrefix(), attr.NamespaceUri, impliedByAttributeName: true);
+                else
+                    Declare(attr.Prefix, attr.NamespaceUri, impliedByAttributeName: true);
                 XNamespace ans = attr.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attr.NamespaceUri);
                 element.Add(new XAttribute(ans + attr.LocalName, attr.Value));
             }
@@ -171,10 +210,22 @@ public static class XDocumentProvider
                     break;
                 case XdmContentKind.Namespace:
                     FlushText();
-                    if (string.IsNullOrEmpty(item.Target))
-                        element.Add(new XAttribute("xmlns", item.Text ?? string.Empty));
-                    else
-                        element.Add(new XAttribute(XNamespace.Xmlns + item.Target, item.Text ?? string.Empty));
+                    var nsDeclPrefix = item.Target ?? string.Empty;
+                    var nsDeclUri = item.Text ?? string.Empty;
+                    // xmlns:xml is redundant: the xml prefix is implicitly bound (nscons-004).
+                    if (nsDeclPrefix == "xml")
+                        break;
+                    // Duplicate declarations with the same URI merge silently (nscons-005/006);
+                    // different-URI redeclarations were already rejected by the runtime (XQDY0102).
+                    if (nsDeclPrefix.Length == 0)
+                    {
+                        if (declared.Add(""))
+                            element.Add(new XAttribute("xmlns", nsDeclUri));
+                    }
+                    else if (declared.Add(nsDeclPrefix))
+                    {
+                        element.Add(new XAttribute(XNamespace.Xmlns + nsDeclPrefix, nsDeclUri));
+                    }
                     break;
                 default:
                     FlushText();
@@ -189,6 +240,13 @@ public static class XDocumentProvider
         FlushText();
 
         return new XDocumentNode(element);
+    }
+
+    private static XElement ParentlessOwner()
+    {
+        var owner = new XElement("__ns_owner__");
+        owner.AddAnnotation(new ParentlessNamespaceNode());
+        return owner;
     }
 
     /// <summary>
@@ -209,7 +267,8 @@ public static class XDocumentProvider
                 string.IsNullOrEmpty(item.Target)
                     ? new XAttribute("xmlns", item.Text ?? string.Empty)
                     : new XAttribute(XNamespace.Xmlns + item.Target, item.Text ?? string.Empty),
-                new XElement("__ns_owner__")),
+                // Computed namespace constructors create parentless nodes (nscons-012).
+                ParentlessOwner()),
             _ => throw new ArgumentException($"ConstructContentNode does not handle kind '{item.Kind}'.", nameof(item))
         };
     }

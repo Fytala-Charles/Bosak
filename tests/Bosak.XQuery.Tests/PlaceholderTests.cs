@@ -58,6 +58,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.15  | 29-07-2026     | 5 allowing-empty for-clause tests (positions, typed bindings, XPath rejection) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.16  | 29-07-2026     | 7 computed namespace constructor tests (conflicts, XPTY0004, parentless, typed value) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -2366,6 +2368,79 @@ public class PlaceholderTests
         var ex = Assert.ThrowsAny<Exception>(() =>
             Bosak.XPath.Api.XPath31Expression.Compile("for $x allowing empty in 1 to 3 return $x"));
         Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ComputedNamespace_InterleavesWithAttributes()
+    {
+        var compiler = new XQueryCompiler();
+        // Namespace declarations and attributes may interleave freely (no XQTY0024).
+        var result = compiler.Compile("declare variable $s := \"http://saxon.sf.net/\"; fn:serialize(<e>{ namespace saxon {$s}, attribute a {23} }</e>)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Contains("xmlns:saxon=\"http://saxon.sf.net/\"", result.StringValue);
+        Assert.Contains("a=\"23\"", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedNamespace_DuplicateSameUriMerges()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $s := \"http://saxon.sf.net/\"; fn:serialize(element {QName(\"http://saxon.sf.net/\", \"saxon:extension\")} { namespace saxon {$s}, namespace saxon {$s}, element f {42} })")
+            .Evaluate(new XQueryContext());
+
+        Assert.Contains("<saxon:extension", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedNamespace_AttributePrefixConflictGetsGeneratedPrefix()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $p1 := \"http://example.com/one\"; declare variable $p2 := \"http://example.com/two\"; declare variable $r := <e> { namespace p {$p1}, attribute {QName($p2, \"p:att\")} {93.7} }</e>; string-join((exists($r/@*:att[prefix-from-QName(node-name(.))!='p']), exists(in-scope-prefixes($r)[.='p'])), ' ')")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("true true", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedNamespace_PrefixExpressionTypeError_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("let $pre := xs:anyURI('ns') return <e>{ namespace { $pre } { \"http://x/\" } }</e>")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ComputedNamespace_NonStringPrefixType_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("let $pre := xs:duration('P1D') return <e>{ namespace { $pre } { \"http://x/\" } }</e>")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ComputedNamespace_NodeIsParentless()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("exists((namespace p {\"http://example.com/one\"})/..)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Boolean, result.Kind);
+        Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_ComputedNamespace_TypedValueIsString()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("data(namespace p {\"http://example.com/one\"}) instance of xs:string")
+            .Evaluate(new XQueryContext());
+
+        Assert.True(result.BooleanValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

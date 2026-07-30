@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0); QT3 now **29,378 passed / 0 failed** (92.32%); unit tests **1,615/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty + CompNamespaceConstructor clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0, 11 → 0); QT3 now **29,389 passed / 0 failed** (92.36%); unit tests **1,622/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -167,6 +167,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-060 | *(internal)* | Combined error-code conformance (FODC0001, XPTY0019, collation and prolog statics) | Required for XQuery conformance: document-root requirement for fn:id/idref, XPTY0019 for path steps over atomics, XQST0038 collation errors, XQST0060/0089/0125 statics | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-061 | *(internal)* | Map constructors in step position with key disambiguation | Required for XPath/XQuery conformance: `map{...}` in step and `!` position, step expressions as keys/values, entry-colon disambiguation, and deep-equal sequence semantics for map values | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-062 | *(internal)* | `allowing empty` in for clauses — grammar order and typed bindings | Required for XQuery conformance: `allowing empty` before the positional variable, and the empty binding checked against the declared type occurrence (XPTY0004) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-063 | *(internal)* | Computed namespace constructors in element content | Required for XQuery conformance: namespace declarations in content (interleaving, dedupe, prefix conflicts, prefix type checks) and namespace-node identity (parentless, xs:string typed value) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2868,13 +2869,58 @@ Accept `allowing empty` in grammar position (after the optional type declaration
 
 ---
 
+### REQ-063: Computed namespace constructors in element content
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The prod/CompNamespaceConstructor cluster (11 recorded gaps) covered computed namespace constructors (`namespace p {uri}`, `namespace {expr} {uri}`) as element content: they were treated as attribute-like content (tripping XQTY0024 when attributes followed), same-URI duplicates raised "Duplicate attribute", name prefixes conflicting with declarations were not regenerated, prefix expressions went untyped, and constructed namespace nodes had the wrong identity (a parent, and an untypedAtomic typed value).
+
+**Proposed Solution:**  
+Stop treating namespace declarations as "other content" for XQTY0024; merge same-prefix-same-URI duplicates and omit redundant xmlns:xml; give conflicting element/attribute names a generated prefix; validate the prefix expression type (string-family only, XPTY0004) with an empty expression meaning a default declaration; and mark computed namespace nodes parentless with an xs:string typed value.
+
+**Acceptance Criteria:**
+- [x] Namespace declarations and attributes interleave freely at the start of element content (nscons-001/010) in both direct and computed constructors.
+- [x] Duplicate declarations with the same prefix and URI merge silently (nscons-005/006); redundant `xmlns:xml` is omitted (nscons-004); `xml` bound to its proper URI is allowed (nscons-004), anything else is XQDY0101.
+- [x] Name-prefix conflicts: `prefix-from-QName(node-name(.)) != 'p'` for a conflicting attribute/element name while `in-scope-prefixes` still contains `p` (nscons-010/011).
+- [x] `namespace {expr} {uri}`: xs:anyURI/xs:duration prefixes raise **XPTY0004** (nscons-043/044); an empty prefix expression yields a default namespace declaration (nscons-015).
+- [x] Computed namespace nodes are parentless and their typed value is xs:string (nscons-012).
+- [x] QT3: prod/CompNamespaceConstructor **32/0/12**; full suite **29,389 passed / 0 failed / 2,432 skipped (92.36%)**; gaps **337** (−11).
+- [x] Unit tests: 7 new tests; full suite **1,622/0**.
+
+**Implementation Notes:**
+- The generated-prefix mechanism lives in the XDocument provider (`GeneratePrefix` probing only — it must not pre-add to the `declared` set, or `Declare` suppresses the declaration; caught by nscons-010).
+- `ParentlessNamespaceNode` is a marker annotation on the synthetic owner element, honored by both the `Parent` property and `GetXPathParent` (the parent/ancestor axes); namespace-axis nodes keep their real owners.
+- fn:data and the VM atomizer return plain `xs:string` for namespace nodes (XDM §2.7.2) — comments and PIs already took that branch.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Runtime | Modified | XQTY0024 exemption; prefix type check; ns atomization to xs:string. |
+| Standard | Modified | fn:data xs:string for namespace nodes. |
+| Providers | Modified | Declaration dedupe; generated prefixes; xmlns:xml omission; parentless marker. |
+| Conformance | Modified | Gaps 337. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Content namespace declarations take precedence over name-implied bindings, with generated prefixes for the names | nscons-010/011 require `prefix-from-QName != 'p'` for the name while `in-scope-prefixes` contains `p` — the declaration wins the prefix, the name keeps its namespace. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-062 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed; QT3 wired (29,378/0, 92.32%). CompNamespaceConstructor, HigherOrderFunctions, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-063 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed, CompNamespaceConstructor cluster closed; QT3 wired (29,389/0, 92.36%). HigherOrderFunctions, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

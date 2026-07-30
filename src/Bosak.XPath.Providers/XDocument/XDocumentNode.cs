@@ -41,6 +41,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 28-07-2026     | Namespace axis skips non-propagating ancestor bindings; redundant xmlns omitted in ToXmlString |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 29-07-2026     | Parentless-namespace-node marker: parent axis and Parent honor it |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
@@ -625,7 +627,8 @@ public sealed class XDocumentNode : IXdmNode
         get
         {
             if (_isNamespaceNode)
-                return _namespaceOwner is not null ? new XDocumentNode(_namespaceOwner) : null;
+                return _namespaceOwner is not null && _namespaceOwner.Annotation<ParentlessNamespaceNode>() is null
+                    ? new XDocumentNode(_namespaceOwner) : null;
             var parent = GetXPathParent(_node);
             return parent is not null ? new XDocumentNode(parent) : null;
         }
@@ -760,9 +763,10 @@ public sealed class XDocumentNode : IXdmNode
     private XObject? GetXPathParent(XObject node)
     {
         // Namespace nodes: parent is the element whose namespace axis includes the node,
-        // not the element where the underlying XAttribute declaration resides.
+        // not the element where the underlying XAttribute declaration resides. Nodes from
+        // computed namespace constructors are parentless (nscons-012).
         if (node == _node && _isNamespaceNode && _namespaceOwner is not null)
-            return _namespaceOwner;
+            return _namespaceOwner.Annotation<ParentlessNamespaceNode>() is null ? _namespaceOwner : null;
 
         var parent = node.Parent;
         if (parent is not null)
