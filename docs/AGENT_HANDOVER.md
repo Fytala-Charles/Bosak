@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): residual-cluster sweep — stable order-by, switch semantics, arrays, min/max, error codes)
+**Commit:** `2a0cb37` (feat(xquery): residual-cluster sweep — stable order-by, switch semantics, arrays, min/max, error codes)
 **Current focus:** **Residual-cluster sweep closed** (83 gaps → 0): a broad sweep across AxisStep, VarDecl, StepExpr, SwitchExpr, PathExpr, ArrayTest, DefaultNamespaceDecl, fn:id/idref, fn:in-scope-prefixes, fn:min, fn:base-uri, fn:doc, fn:generate-id, xs:error, and op/divide-dayTimeDuration. QT3 went from **29,427 passed / 0 failed / 2,394 skipped (92.48%)** to **29,510 passed / 0 failed / 2,311 skipped (92.74%)** (+83 passing). Full `dotnet test Bosak.sln` passes: **1,660 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (residual sweep)
