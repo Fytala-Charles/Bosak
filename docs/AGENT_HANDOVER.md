@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): allowing empty in for clauses — grammar order and typed bindings)
+**Commit:** `387153a` (feat(xquery): allowing empty in for clauses — grammar order and typed bindings)
 **Current focus:** **prod/AllowingEmpty cluster closed** (14 gaps → 0): `allowing empty` accepted in grammar position (before the positional variable) and checked against declared type occurrences. QT3 went from **29,364 passed / 0 failed / 2,457 skipped (92.28%)** to **29,378 passed / 0 failed / 2,443 skipped (92.32%)** (+14 passing). Full `dotnet test Bosak.sln` passes: **1,615 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (AllowingEmpty cluster)
