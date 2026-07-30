@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): combined error-code conformance — FODC0001, XPTY0019, collation and prolog statics)
+**Commit:** `b8d6c79` (feat(xquery): combined error-code conformance — FODC0001, XPTY0019, collation and prolog statics)
 **Current focus:** **misc/CombinedErrorCodes cluster closed** (17 gaps → 0; 7 entries were stale after the NamespaceDecl/Literal sessions). QT3 went from **29,332 passed / 0 failed / 2,489 skipped (92.18%)** to **29,349 passed / 0 failed / 2,472 skipped (92.23%)** (+17 passing). Full `dotnet test Bosak.sln` passes: **1,603 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (CombinedErrorCodes cluster)
