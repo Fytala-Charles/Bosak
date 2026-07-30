@@ -60,6 +60,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.16  | 29-07-2026     | 7 computed namespace constructor tests (conflicts, XPTY0004, parentless, typed value) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.17  | 29-07-2026     | 9 higher-order-function tests (typed lets, conversions, focus, base URI, error codes) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -2441,6 +2443,97 @@ public class PlaceholderTests
             .Evaluate(new XQueryContext());
 
         Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_Hof_FunctionSequenceTypedLet()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare function local:f($x as xs:integer) as xs:integer { $x + 3 }; declare function local:g($x as xs:integer) as xs:integer { $x + 4 }; declare function local:h($x as xs:integer) as xs:integer { $x + 5 }; let $f as (function(xs:integer) as xs:integer)* := (local:f#1, local:g#1, local:h#1) return $f[3](2)[1]")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(7L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_Hof_FunctionComparison_ThrowsFOTY0013()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("string-join#1 eq string-join#1").Evaluate(new XQueryContext()));
+        Assert.Contains("FOTY0013", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Hof_FunctionInElementContent_ThrowsXQTY0105()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("element a { avg#1 }").Evaluate(new XQueryContext()));
+        Assert.Contains("XQTY0105", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Hof_FunctionInAttributeContent_ThrowsFOTY0013()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("attribute a { avg#1 }").Evaluate(new XQueryContext()));
+        Assert.Contains("FOTY0013", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Hof_PartialApplicationArityMismatch_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("concat#2(\"one\", ?, \"three\")").Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Hof_NamedRefAbsentFocus_ThrowsXPDY0002()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("let $f := name#0 return <a/>/$f()").Evaluate(new XQueryContext()));
+        Assert.Contains("XPDY0002", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Hof_AttributeArgumentAtomizes()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("upper-case#1(<a name=\"Michael Kay\"/>/@name)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("MICHAEL KAY", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Hof_PartialApplicationUntypedAtomicCasts()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("string(round-half-to-even(?, 2)(xs:untypedAtomic('123.456')))")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("123.46", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Hof_NamedRefCapturesDefiningModuleBaseUri()
+    {
+        var compiler = new XQueryCompiler()
+            .WithModule("lib", """
+                module namespace lib="lib";
+                declare base-uri "lib";
+                declare function lib:getfun() { fn:static-base-uri#0 };
+                """);
+        var result = compiler.Compile("declare base-uri \"main\"; import module namespace lib = \"lib\"; string-join((lib:getfun()(), fn:static-base-uri()), '|')")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("lib|main", result.StringValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

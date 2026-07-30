@@ -1,6 +1,43 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): higher-order function conformance — conversions, focus, base URI, error codes)
+**Current focus:** **misc/HigherOrderFunctions cluster closed** (11 gaps → 0): function-item error codes, partial-application arity, dynamic-call conversions, absent-focus named references, per-module base-URI capture, and parenthesized sequence types. QT3 went from **29,389 passed / 0 failed / 2,432 skipped (92.36%)** to **29,400 passed / 0 failed / 2,421 skipped (92.39%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,631 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (HigherOrderFunctions cluster)
+
+1. **Function-item error codes** — value comparisons on function items raise **FOTY0013** (string-join#1 eq string-join#1), atomizing a function in attribute/text content raises **FOTY0013** (attribute a { avg#1 }), and a function item in element content raises **XQTY0105** (element a { avg#1 }).
+2. **Partial-application arity** — the `Curry` opcode validates that argument positions (placeholders included) equal the function's arity: `concat#4("one", ?, "three")` and `concat#2("one", ?, "three")` raise **XPTY0004** (xqhof8/9).
+3. **Dynamic-call conversions** — the function conversion rules now run for dynamic invokes: singleton sequences unwrap before atomization (hof-042: an attribute node against xs:string), user-declared `ParameterTypeNames` drive `ApplyFunctionConversion` on dynamic calls (hof-043: xs:untypedAtomic against xs:double), and `fn:round-half-to-even` itself coerces untypedAtomic to double (it was the one numeric rounding function missing that branch).
+4. **Absent-focus named references** — a named function reference created without a focus (`let $f := name#0`) invokes with an **absent** focus rather than the call-site focus: `<a/>/$f()` raises **XPDY0002** (xqhof14). The legacy "use the defining context's current focus" fallback (which saw the caller's mutated context) is gone.
+5. **Per-module base-URI capture** — `NamedFunctionItem.CapturedBaseUri` records the static base URI at materialization; invocation switches to it (xqhof16/18: `lib:getfun()()` → "lib" while main-module refs give "main", including via `function-lookup` inside the library module).
+6. **Parenthesized sequence types** — `(function(xs:integer) as xs:integer)*` parses and matches (hof-013); outer parens unwrap in the parser, `ValueMatchesType`, and `InstanceOf`.
+7. **Gaps: 326 reasoned skips (−11)** — misc/HigherOrderFunctions runs **126/0/3**.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/FunctionItem.cs`, `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+9)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (326 recorded skips)
+
+Largest clusters: `op/add-dayTimeDurations` (16), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **op/add-dayTimeDurations** (16 tests — mostly decimal-precision platform limits; check what is actually fixable).
+2. **Small residual clusters** — CastableExpr (2), ContextItemDecl (1), LetClause (1), ErrorsAndOptimization (1), StaticContext (1), ValueComp (2), VarDecl (6), PathExpr (5), ArrayTest (5), AxisStep (7), StepExpr (6), SwitchExpr (6), fn:* singles.
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `2eee587` (feat(xquery): computed namespace constructors in element content)
 **Current focus:** **prod/CompNamespaceConstructor cluster closed** (11 gaps → 0): computed namespace constructors as element content — interleaving with attributes, declaration dedupe, name-prefix conflict resolution, prefix type checking, and spec-correct namespace-node identity. QT3 went from **29,378 passed / 0 failed / 2,443 skipped (92.32%)** to **29,389 passed / 0 failed / 2,432 skipped (92.36%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,622 unit tests / 0 failed**; XSLT baseline unchanged.
 

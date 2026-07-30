@@ -141,6 +141,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.79  | 29-07-2026     | Computed namespace prefix type check (XPTY0004); ns decls not XQTY0024 content; ns nodes atomize to xs:string |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.80  | 29-07-2026     | HOF: FOTY0013/XQTY0105 function items; Curry arity check; absent-focus named refs; base-URI capture; paren types |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1451,6 +1453,12 @@ public static class VmEngine
                                             FlushAtomic();
                                             content.Add(new XdmContentItem(XdmContentKind.Node, null, item));
                                             seenNonAttributeContent = true;
+                                        }
+                                        else if (item.IsFunction)
+                                        {
+                                            // XQTY0105: element content must not contain function items
+                                            // (function-item-5: element a { avg#1 }).
+                                            throw new InvalidOperationException("XQTY0105: Element content must not contain a function item.");
                                         }
                                         else if (item.IsArray && item.ArrayValue is not null)
                                         {
@@ -2833,6 +2841,10 @@ public static class VmEngine
                     {
                         var baseFunc = (FunctionItem)registers[instr.RegisterB].FunctionValue;
                         var descriptor = (int[])literalPool[instr.Operand]!;
+                        // XPTY0004: a partial application must supply exactly the function's
+                        // arity in argument positions, placeholders included (xqhof8/9).
+                        if (descriptor.Length != baseFunc.Arity)
+                            throw new InvalidOperationException($"XPTY0004: Partial application of a function of arity {baseFunc.Arity} with {descriptor.Length} argument positions.");
                         var fixedArgs = new XdmValue?[descriptor.Length];
                         for (int i = 0; i < descriptor.Length; i++)
                         {
@@ -3127,7 +3139,8 @@ public static class VmEngine
             DefiningContext = context,
             CapturedContextItem = context.ContextItem,
             CapturedContextPosition = context.ContextPosition,
-            CapturedContextSize = context.ContextSize
+            CapturedContextSize = context.ContextSize,
+            CapturedBaseUri = context.BaseUri
         };
     }
 
@@ -3146,7 +3159,8 @@ public static class VmEngine
             DefiningContext = context,
             CapturedContextItem = context.ContextItem,
             CapturedContextPosition = context.ContextPosition,
-            CapturedContextSize = context.ContextSize
+            CapturedContextSize = context.ContextSize,
+            CapturedBaseUri = context.BaseUri
         };
     }
 
@@ -3208,26 +3222,39 @@ public static class VmEngine
                     context.WithFocus(named.CapturedContextItem, named.CapturedContextPosition, named.CapturedContextSize);
                     restoreFocus = true;
                 }
-                else if (named.DefiningContext is EvaluationContext definingCtx)
+                else if (!context.ContextItem.IsUndefined)
                 {
-                    // Legacy fallback: older function items captured only the defining context
-                    // reference; use its current focus.
+                    // No focus was captured at creation: the function item's focus is
+                    // absent. Context-dependent calls see XPDY0002 rather than the
+                    // call-site focus (xqhof14: <a/>/(name#0)()).
                     savedItem = context.ContextItem;
                     savedPosition = context.ContextPosition;
                     savedSize = context.ContextSize;
-                    context.WithFocus(definingCtx.ContextItem, definingCtx.ContextPosition, definingCtx.ContextSize);
+                    context.WithFocus(XdmValue.Undefined, 0, 0);
                     restoreFocus = true;
+                }
+                // Static base URI: context-dependent functions resolve against the base URI
+                // of the module that materialized the function item (xqhof16/18).
+                string? savedBaseUri = null;
+                bool restoreBaseUri = false;
+                if (named.CapturedBaseUri is not null && named.CapturedBaseUri != context.BaseUri)
+                {
+                    savedBaseUri = context.BaseUri;
+                    context.BaseUri = named.CapturedBaseUri;
+                    restoreBaseUri = true;
                 }
                 try
                 {
                     // XSLT context-dependent functions (e.g. current-group) supply a separate
                     // implementation for dynamic invocation through a function item.
-                    return (sig.DynamicImplementation ?? sig.Implementation)(context, ConvertDynamicCallArgs(sig, args));
+                    return (sig.DynamicImplementation ?? sig.Implementation)(context, ConvertDynamicCallArgs(sig, args, context));
                 }
                 finally
                 {
                     if (restoreFocus)
                         context.WithFocus(savedItem, savedPosition, savedSize);
+                    if (restoreBaseUri)
+                        context.BaseUri = savedBaseUri;
                 }
 
             case DelegateFunctionItem del:
@@ -4710,6 +4737,11 @@ public static class VmEngine
 
         left = Atomize(left);
         right = Atomize(right);
+
+        // Function items cannot be atomized: any comparison involving one is FOTY0013
+        // (function-item-4 — string-join#1 eq string-join#1).
+        if (left.IsFunction || right.IsFunction)
+            throw new InvalidOperationException("FOTY0013: A comparison operand must not be a function item.");
 
         // XPath value comparisons with empty sequence operand return empty sequence
         if (left.IsUndefined || right.IsUndefined)
@@ -6850,6 +6882,9 @@ public static class VmEngine
         // Annotation assertions preceding a function test are validated (XQST0045) and
         // ignored: they can only restrict matches, which implementations may decline to do.
         typeName = StripAnnotationAssertions(typeName, context);
+        // Unwrap redundant outer parentheses (hof-013).
+        while (typeName.Length > 1 && typeName[0] == '(' && FindMatchingParen(typeName, 0) == typeName.Length - 1)
+            typeName = typeName[1..^1].Trim();
         string normalized = NormalizeTypeName(typeName);
 
         if (normalized is "empty-sequence" or "empty-sequence()")
@@ -7357,6 +7392,13 @@ public static class VmEngine
     public static bool ValueMatchesType(XdmValue value, string typeName, EvaluationContext? context)
     {
         if (string.IsNullOrEmpty(typeName)) return true;
+
+        // Unwrap redundant outer parentheses: (function(xs:integer) as xs:integer) is the
+        // same type as function(xs:integer) as xs:integer (hof-013).
+        var unwrapped = typeName.Trim();
+        while (unwrapped.Length > 1 && unwrapped[0] == '(' && FindMatchingParen(unwrapped, 0) == unwrapped.Length - 1)
+            unwrapped = unwrapped[1..^1].Trim();
+        typeName = unwrapped;
 
         // empty-sequence() only matches the empty sequence.
         if (typeName.Trim().Equals("empty-sequence()", StringComparison.OrdinalIgnoreCase))
@@ -7926,11 +7968,20 @@ public static class VmEngine
     /// named function: node atomization, untypedAtomic casting, numeric promotion, and
     /// URI promotion; anything else raises XPTY0004 (higher-order-functions-064).
     /// </summary>
-    private static XdmValue[] ConvertDynamicCallArgs(FunctionSignature sig, ReadOnlySpan<XdmValue> args)
+    private static XdmValue[] ConvertDynamicCallArgs(FunctionSignature sig, ReadOnlySpan<XdmValue> args, EvaluationContext? context = null)
     {
         var converted = new XdmValue[args.Length];
         for (int i = 0; i < args.Length; i++)
         {
+            // User-declared functions register precise parameter type names: apply the full
+            // function conversion rules (atomization, untypedAtomic casting, numeric/URI
+            // promotion) — hof-043: xs:untypedAtomic against xs:double.
+            if (sig.ParameterTypeNames is not null && i < sig.ParameterTypeNames.Count
+                && !string.IsNullOrEmpty(sig.ParameterTypeNames[i]))
+            {
+                converted[i] = ApplyFunctionConversion(args[i], sig.ParameterTypeNames[i]!, context);
+                continue;
+            }
             var expected = i < sig.ParameterTypes.Count ? sig.ParameterTypes[i] : XdmValueKind.Sequence;
             // External is an opaque/unconstrained kind (user-declared XQuery functions
             // register with External fillers and convert via type names instead).
@@ -7962,6 +8013,13 @@ public static class VmEngine
         }
 
         // Function conversion atomizes nodes to xs:untypedAtomic before casting.
+        // A singleton sequence unwraps first (hof-042: an attribute node argument).
+        if (arg.IsSequence && arg.SequenceValue is not null)
+        {
+            var argItems = MaterializeSequence(arg);
+            if (argItems.Length == 1)
+                arg = argItems[0];
+        }
         var atomic = arg.IsNode ? XdmValue.FromString(arg.NodeValue.StringValue, "untypedAtomic") : arg;
         if (atomic.Kind == expected)
             return atomic;
@@ -9269,13 +9327,22 @@ public static class VmEngine
         if (value.IsUndefined)
             return string.Empty;
         if (!value.IsSequence || value.SequenceValue is null)
+        {
+            // Function items cannot be atomized (function-item-6: attribute a { avg#1 }).
+            if (value.IsFunction)
+                throw new InvalidOperationException("FOTY0013: Atomization of a function item is not allowed.");
             return Atomize(value).ToString();
+        }
         var items = MaterializeSequence(value);
         if (items.Length == 0)
             return string.Empty;
         var parts = new string[items.Length];
         for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i].IsFunction)
+                throw new InvalidOperationException("FOTY0013: Atomization of a function item is not allowed.");
             parts[i] = Atomize(items[i]).ToString();
+        }
         return string.Join(separator, parts);
     }
 
@@ -9376,6 +9443,11 @@ public static class VmEngine
                 _content.Add(new XdmContentItem(XdmContentKind.Node, null, item));
                 _seenNonAttributeContent = true;
                 return;
+            }
+            if (item.IsFunction)
+            {
+                // XQTY0105: element content must not contain function items.
+                throw new InvalidOperationException("XQTY0105: Element content must not contain a function item.");
             }
             if (item.IsArray && item.ArrayValue is not null)
             {

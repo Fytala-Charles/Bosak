@@ -184,6 +184,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.76  | 29-07-2026     | fn:data returns xs:string for namespace nodes (XDM typed value) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.77  | 29-07-2026     | fn:round-half-to-even coerces untypedAtomic to double (hof-043) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -5879,7 +5881,8 @@ public static class FunctionLibrary
                 DefiningContext = ctx,
                 CapturedContextItem = ctx.ContextItem,
                 CapturedContextPosition = ctx.ContextPosition,
-                CapturedContextSize = ctx.ContextSize
+                CapturedContextSize = ctx.ContextSize,
+                CapturedBaseUri = ctx.BaseUri
             });
         return XdmValue.Undefined;
     }
@@ -8990,6 +8993,17 @@ public static class FunctionLibrary
         // is the identity function (avoids int overflow for huge precisions).
         if (precision > 1000)
             return arg;
+
+        // For non-numeric types (string, untypedAtomic, etc.), convert to double first:
+        // the function conversion rules cast untypedAtomic to xs:double for an xs:numeric
+        // parameter (hof-043).
+        bool isNumeric = arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+        if (!isNumeric)
+        {
+            double d = ConvertToDouble(arg);
+            if (double.IsNaN(d)) return XdmValue.FromDouble(double.NaN);
+            return XdmValue.FromDouble(RoundHalfToEvenDouble(d, (int)precision));
+        }
 
         if (precision >= 0)
         {

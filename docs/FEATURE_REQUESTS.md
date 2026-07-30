@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty + CompNamespaceConstructor clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0, 11 → 0); QT3 now **29,389 passed / 0 failed** (92.36%); unit tests **1,622/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty + CompNamespaceConstructor + HigherOrderFunctions clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0, 11 → 0, 11 → 0); QT3 now **29,400 passed / 0 failed** (92.39%); unit tests **1,631/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -168,6 +168,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-061 | *(internal)* | Map constructors in step position with key disambiguation | Required for XPath/XQuery conformance: `map{...}` in step and `!` position, step expressions as keys/values, entry-colon disambiguation, and deep-equal sequence semantics for map values | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-062 | *(internal)* | `allowing empty` in for clauses — grammar order and typed bindings | Required for XQuery conformance: `allowing empty` before the positional variable, and the empty binding checked against the declared type occurrence (XPTY0004) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-063 | *(internal)* | Computed namespace constructors in element content | Required for XQuery conformance: namespace declarations in content (interleaving, dedupe, prefix conflicts, prefix type checks) and namespace-node identity (parentless, xs:string typed value) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-064 | *(internal)* | Higher-order function conformance — conversions, focus, base URI, error codes | Required for XPath/XQuery conformance: function-item error codes (FOTY0013/XQTY0105), partial-application arity, dynamic-call conversions, absent-focus named references, per-module base-URI capture, parenthesized sequence types | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2914,13 +2915,61 @@ Stop treating namespace declarations as "other content" for XQTY0024; merge same
 
 ---
 
+### REQ-064: Higher-order function conformance — conversions, focus, base URI, error codes
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The misc/HigherOrderFunctions cluster (11 recorded gaps) covered six distinct non-conformances in function-item semantics: comparisons and atomization of function items returned values instead of error codes; partial applications never validated arity; dynamic invokes skipped the function conversion rules for node sequences and untypedAtomic; named references created without a focus saw the call-site focus; function items forgot which module's base URI they were created with; and parenthesized sequence types `(function(...) as ...)*` were rejected.
+
+**Proposed Solution:**  
+Raise FOTY0013 in comparisons and content atomization and XQTY0105 in element content; validate partial-application arity in the `Curry` opcode (XPTY0004); unwrap singleton sequences before kind conversion and drive dynamic-call conversion from declared `ParameterTypeNames`; coerce untypedAtomic in `fn:round-half-to-even`; invoke named references with an absent focus when none was captured (XPDY0002); capture the static base URI on `NamedFunctionItem` and switch to it on invocation; and unwrap outer parentheses in sequence-type parsing and matching.
+
+**Acceptance Criteria:**
+- [x] `string-join#1 eq string-join#1` raises **FOTY0013** (function-item-4); `element a { avg#1 }` raises **XQTY0105** (function-item-5); `attribute a { avg#1 }` raises **FOTY0013** (function-item-6).
+- [x] `concat#4("one", ?, "three")` and `concat#2("one", ?, "three")` raise **XPTY0004** (xqhof8/9).
+- [x] Implicit atomization and untypedAtomic casting for all function kinds (hof-042/043: named refs, user functions, inline functions, partial applications — exact expected strings).
+- [x] `<a/>/(name#0)()` raises **XPDY0002** (xqhof14).
+- [x] Function items capture their module's static base URI: `lib:getfun()()` → "lib", main-module refs → "main", including via `function-lookup` in the library (xqhof16/18).
+- [x] `let $f as (function(xs:integer) as xs:integer)* := ...` parses and enforces (hof-013).
+- [x] QT3: misc/HigherOrderFunctions **126/0/3**; full suite **29,400 passed / 0 failed / 2,421 skipped (92.39%)**; gaps **326** (−11).
+- [x] Unit tests: 9 new tests; full suite **1,631/0**.
+
+**Implementation Notes:**
+- `NamedFunctionItem.CapturedBaseUri` is set at all three materialization sites (named-ref lowering resolution, runtime tuple resolution, `fn:function-lookup`); invocation switches `EvaluationContext.BaseUri` for the call's duration and restores it.
+- The absent-focus change removes the legacy "defining context's current focus" fallback: a function item created without a focus now invokes with `WithFocus(Undefined, 0, 0)` when the caller has one.
+- `fn:round-half-to-even` mirrors `fn:round`'s untypedAtomic→double coercion branch (it was the only rounding function missing it).
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Core | Modified | `CapturedBaseUri` on `NamedFunctionItem`. |
+| Parser | Modified | Parenthesized sequence types. |
+| Runtime | Modified | Error codes; Curry arity; conversions; focus; base URI; paren types. |
+| Standard | Modified | `fn:round-half-to-even` coercion; `fn:function-lookup` capture. |
+| Conformance | Modified | Gaps 326. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Absent captured focus means absent focus at call, replacing the legacy fallback | xqhof14 requires `<a/>/(name#0)()` to fail with XPDY0002; the fallback saw the caller's mutated context object. |
+| 2026-07-29 | Kimi | Base URI captured by value on the function item | Module contexts are swapped and restored on one shared `EvaluationContext`, so a reference capture would see the restored (wrong) base URI. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-063 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed, CompNamespaceConstructor cluster closed; QT3 wired (29,389/0, 92.36%). HigherOrderFunctions, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-064 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed, CompNamespaceConstructor cluster closed, HigherOrderFunctions cluster closed; QT3 wired (29,400/0, 92.39%). dayTimeDuration precision, residual singles, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

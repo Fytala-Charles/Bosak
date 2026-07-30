@@ -54,6 +54,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.18  | 29-07-2026     | Drop 11 CompNamespaceConstructor gap entries (implemented) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.19  | 29-07-2026     | Drop 11 HigherOrderFunctions gap entries (implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -273,18 +275,6 @@ internal sealed class ConformanceRunner
         ["xml-to-json-071"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
         // misc/ErrorsAndOptimization.xml (1 tests)
         ["errors-and-optimization-7"] = "XQuery conformance gap (misc:ErrorsAndOptimization): see AGENT_HANDOVER REQ-045",
-        // misc/HigherOrderFunctions.xml (11 tests)
-        ["function-item-4"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["function-item-5"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["function-item-6"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["hof-013"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["hof-042"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["hof-043"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["xqhof14"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["xqhof16"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["xqhof18"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["xqhof8"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
-        ["xqhof9"] = "XQuery conformance gap (misc:HigherOrderFunctions): see AGENT_HANDOVER REQ-045",
         // misc/StaticContext.xml (1 tests)
         ["static-context-1"] = "XQuery conformance gap (misc:StaticContext): see AGENT_HANDOVER REQ-045",
         // misc/XMLEdition.xml (2 tests)

@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.2    | 14-07-2026     | NamedFunctionItem.DefiningContext for cross-context function items (fn:transform)      |
 //                      | Charles Korthout | 0.3    | 18-07-2026     | Capture creation focus for context-dependent dynamic named-function calls            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4    | 29-07-2026     | NamedFunctionItem.CapturedBaseUri for per-module static-base-uri capture           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -54,6 +56,13 @@ public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, in
 
     /// <summary>Captured context size from the materialization focus.</summary>
     public int CapturedContextSize { get; init; }
+
+    /// <summary>
+    /// The static base URI of the module in which the function item was materialized.
+    /// Context-dependent functions such as fn:static-base-uri invoked through this
+    /// function item resolve against it rather than the call-site base URI (xqhof16/18).
+    /// </summary>
+    public string? CapturedBaseUri { get; init; }
 }
 
 /// <summary>

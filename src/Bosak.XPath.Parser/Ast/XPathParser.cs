@@ -83,6 +83,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.39  | 29-07-2026     | For-binding grammar order: 'allowing empty' precedes the positional variable |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.40  | 29-07-2026     | Parenthesized sequence types in 'as' declarations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -3293,6 +3295,30 @@ public sealed class XPathParser
 
     private (string? Prefix, string Local, OccurrenceIndicator Occurrence) ParseSequenceType()
     {
+        // A sequence type may be parenthesized: (function(xs:integer) as xs:integer)*
+        // (hof-013). The inner occurrence stays inside the text.
+        if (Match(TokenKind.LParen))
+        {
+            var inner = ParseSequenceType();
+            Expect(TokenKind.RParen);
+            var innerText = (inner.Prefix is null ? inner.Local : $"{inner.Prefix}:{inner.Local}")
+                + inner.Occurrence switch
+                {
+                    OccurrenceIndicator.ZeroOrOne => "?",
+                    OccurrenceIndicator.ZeroOrMore => "*",
+                    OccurrenceIndicator.OneOrMore => "+",
+                    _ => ""
+                };
+            OccurrenceIndicator outerOccurrence = OccurrenceIndicator.One;
+            if (Match(TokenKind.Question))
+                outerOccurrence = OccurrenceIndicator.ZeroOrOne;
+            else if (Match(TokenKind.Star))
+                outerOccurrence = OccurrenceIndicator.ZeroOrMore;
+            else if (Match(TokenKind.Plus))
+                outerOccurrence = OccurrenceIndicator.OneOrMore;
+            return (null, $"({innerText})", outerOccurrence);
+        }
+
         var (prefix, local, _) = ParseTypeNameAndParens();
 
         OccurrenceIndicator occurrence = OccurrenceIndicator.One;

@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 29 July 2026
-> **Bosak baseline:** 1,622 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,389 passed / 0 failed / 2,432 skipped (92.36% / 100% of runnable tests) — XQuery routing enabled; 337 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,631 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,400 passed / 0 failed / 2,421 skipped (92.39% / 100% of runnable tests) — XQuery routing enabled; 326 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,11 @@
 
 ## 0. Recent Changes
 
+- **2026-07-29** — XQuery: **HigherOrderFunctions cluster closed** (REQ-064): QT3 **29,400 passed / 0 failed** (from 29,389; +11 passing; gaps 326, −11).
+  - Function-item error codes: **FOTY0013** for comparisons and content atomization, **XQTY0105** for element content; partial-application arity validated (**XPTY0004**).
+  - Dynamic invokes apply the function conversion rules (singleton unwrap, atomization, untypedAtomic casting) for named refs, user functions, inline functions, and partial applications; `fn:round-half-to-even` coerces untypedAtomic.
+  - Named references created without a focus invoke with an absent focus (**XPDY0002**); function items capture their module's static base URI; parenthesized sequence types `(function(...) as ...)*` parse and match.
+  - misc/HigherOrderFunctions 126/0/3; function-lookup, round, comparison, constructor, and cast sets all green.
 - **2026-07-29** — XQuery: **CompNamespaceConstructor cluster closed** (REQ-063): QT3 **29,389 passed / 0 failed** (from 29,378; +11 passing; gaps 337, −11).
   - Namespace declarations in element content interleave freely with attributes (no XQTY0024); same-URI duplicates merge; redundant xmlns:xml omitted.
   - Content namespace declarations win over name-implied prefixes — conflicting element/attribute names get a generated prefix; `namespace {expr} {uri}` validates the prefix type (**XPTY0004**), empty expression = default declaration.
