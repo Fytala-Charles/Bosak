@@ -52,6 +52,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.12  | 29-07-2026     | 9 character/entity reference tests (expansion, XQST0090, XPST0003, XPath no-expansion) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.13  | 29-07-2026     | 10 combined-error-code tests (FODC0001, XPTY0019, XQST0038/0060/0089/0125) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -2141,6 +2143,97 @@ public class PlaceholderTests
             .Evaluate(new Bosak.XPath.Runtime.Vm.EvaluationContext());
 
         Assert.Equal("&amp;", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_FnId_ConstructedElement_ThrowsFODC0001()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("fn:id('id', <a/>)").Evaluate(new XQueryContext()));
+        Assert.Contains("FODC0001", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_FnIdref_ConstructedElement_ThrowsFODC0001()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("<a/>/fn:idref('id')").Evaluate(new XQueryContext()));
+        Assert.Contains("FODC0001", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_FnId_ConstructedDocument_Works()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("fn:id('id', document { <a/> })")
+            .Evaluate(new XQueryContext());
+
+        Assert.True(result.IsUndefined || result.IsSequence);
+    }
+
+    [Fact]
+    public void XQuery_PathStep_MixedSequenceInput_ThrowsXPTY0019()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("(<a/>, 1)/node()").Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0019", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_PathStep_IntermediateAtomicResult_ThrowsXPTY0019()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("<a/>/1/node()").Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0019", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DefaultCollation_Unsupported_ThrowsXQST0038()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare default collation \"http://www.example.org/\"; 1"));
+        Assert.Contains("XQST0038", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DefaultFunctionNamespace_Empty_ThrowsXQST0060()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare default function namespace \"\"; declare function foo() { 1 }; 1"));
+        Assert.Contains("XQST0060", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ForClause_PositionalVariableDuplicatesRange_ThrowsXQST0089()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("for $x at $x in (1, 2, 3) return $x"));
+        Assert.Contains("XQST0089", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_InlineFunction_PublicAnnotation_ThrowsXQST0125()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("let $f := %public function($a) { $a } return $f(1)"));
+        Assert.Contains("XQST0125", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_InlineFunction_PrivateAnnotation_ThrowsXQST0125()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("let $f := %private function($a) { $a } return $f(1)"));
+        Assert.Contains("XQST0125", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0); QT3 now **29,332 passed / 0 failed** (92.18%); unit tests **1,593/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0); QT3 now **29,349 passed / 0 failed** (92.23%); unit tests **1,603/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -164,6 +164,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-057 | *(internal)* | Namespace declaration static errors and prolog ordering | Required for XQuery conformance: XQST0033 duplicate prefix declarations, XQST0070 reserved xml/xmlns prefix rules, and two-phase prolog ordering (XPST0003) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-058 | *(internal)* | Inline-function annotations and function-test annotation assertions | Required for XQuery conformance: `%eg:*` annotations on inline functions, annotation assertions in function tests, literal-only annotation arguments, and reserved annotation namespaces (XQST0045) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-059 | *(internal)* | Character and entity reference validation in literals and constructors | Required for XQuery conformance: XQST0090 for invalid/overflow character references, XPST0003 for malformed references, XPath-mode non-expansion | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-060 | *(internal)* | Combined error-code conformance (FODC0001, XPTY0019, collation and prolog statics) | Required for XQuery conformance: document-root requirement for fn:id/idref, XPTY0019 for path steps over atomics, XQST0038 collation errors, XQST0060/0089/0125 statics | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2727,13 +2728,61 @@ Share one numeric-reference expander between the string-literal and constructor 
 
 ---
 
+### REQ-060: Combined error-code conformance (FODC0001, XPTY0019, collation and prolog statics)
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The misc/CombinedErrorCodes cluster (17 recorded gaps) mixed several distinct non-conformances: `fn:id`/`fn:idref` silently searched constructed element fragments instead of requiring a document-rooted tree; path steps silently skipped atomic items in their input sequence instead of raising XPTY0019; an unsupported collation in `declare default collation` raised the nonstandard XQST0087; an empty default function namespace was accepted (XQST0060); a positional variable duplicating the range variable was accepted (XQST0089); and inline functions could be annotated `%public`/`%private` (XQST0125).
+
+**Proposed Solution:**  
+Add the document-root check to the id functions; make `ApplyAxis` reject atomic items in sequence inputs; correct the collation error code to XQST0038; and add the three parser statics (empty default function namespace, positional-variable duplicate, inline %public/%private).
+
+**Acceptance Criteria:**
+- [x] `fn:id`/`fn:idref`/`fn:element-with-id` raise **FODC0001** when the target node's tree is not rooted at a document node (FODC0001_1/2); constructed documents still work.
+- [x] Path steps raise **XPTY0019** when their input sequence contains atomic values (`<a/>/1/node()`, `(<a/>,1)/node()`, `foo:something()/a`); the XPTY0020 context-item check is unchanged.
+- [x] Unsupported/malformed default collation URIs raise **XQST0038** (XQST0038_3, XQST0046_06 via its alternative).
+- [x] `declare default function namespace ""` raises **XQST0060**.
+- [x] `for $x at $x` raises **XQST0089**.
+- [x] `%public`/`%private` on inline functions raises **XQST0125**.
+- [x] Stale entries XQST0032/0033/0045-4/0066_1/0066_3/0070_4/0090 un-gapped without code changes.
+- [x] QT3: misc/CombinedErrorCodes **210/0/49**; full suite **29,349 passed / 0 failed / 2,472 skipped (92.23%)**; gaps **377** (−17).
+- [x] Unit tests: 10 new tests; full suite **1,603/0**.
+
+**Implementation Notes:**
+- `RequireDocumentRootedTree` (FunctionLibrary) walks `Parent` to the tree root and checks `NodeKind == Document`; it runs before the id-token search in all six id-function overloads.
+- `ApplyAxis`'s sequence branch previously filtered non-nodes silently; it now throws XPTY0019, which covers both the intermediate-step rule and the FOTS mixed-sequence axis-step expectation.
+- XQST0087 remains in use only for the version-declaration encoding check (its legitimate purpose).
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | XQST0060/0089/0125 statics; collation error code. |
+| Runtime | Modified | `ApplyAxis` XPTY0019 for atomic sequence items. |
+| Standard | Modified | FODC0001 document-root check in id functions. |
+| Conformance | Modified | Gaps 377. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Unsupported collation → XQST0038 (dropping XQST0087 for collations) | XQST0038_3 expects exactly XQST0038 for an unsupported collation URI; XQST0087 is only the encoding-declaration code. |
+| 2026-07-29 | Kimi | XPTY0019 raised in `ApplyAxis` for any atomic sequence item | Covers both spec readings exercised by the catalog: intermediate steps producing atomics and axis steps over mixed sequences (XPTY0019_1/2). |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-059 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed; QT3 wired (29,332/0, 92.18%). MapConstructor, AllowingEmpty, CombinedErrorCodes, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-060 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed; QT3 wired (29,349/0, 92.23%). MapConstructor, AllowingEmpty, CompNamespaceConstructor, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

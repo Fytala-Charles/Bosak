@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 29 July 2026
-> **Bosak baseline:** 1,593 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,332 passed / 0 failed / 2,489 skipped (92.18% / 100% of runnable tests) — XQuery routing enabled; 394 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,603 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,349 passed / 0 failed / 2,472 skipped (92.23% / 100% of runnable tests) — XQuery routing enabled; 377 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,9 @@
 
 ## 0. Recent Changes
 
+- **2026-07-29** — XQuery: **CombinedErrorCodes cluster closed** (REQ-060): QT3 **29,349 passed / 0 failed** (from 29,332; +17 passing; gaps 377, −17).
+  - `fn:id`/`fn:idref`/`fn:element-with-id` require a document-rooted tree (**FODC0001**); path steps over atomic items raise **XPTY0019**; unsupported default collations raise **XQST0038**; empty default function namespace is **XQST0060**; `for $x at $x` is **XQST0089**; inline `%public`/`%private` is **XQST0125**.
+  - misc/CombinedErrorCodes 210/0/49; fn-id/idref, axis-step, for-clause, collation, and annotation sets all green (7 stale entries removed).
 - **2026-07-29** — XQuery: **Literal cluster closed** (REQ-059): QT3 **29,332 passed / 0 failed** (from 29,316; +16 passing; gaps 394, −16).
   - Character references to invalid XML characters raise **XQST0090** in string literals and constructors (`&#x00;`, `&#x0;`); numeric overflows — including 64-bit — are **XQST0090**; malformed references (`&#+20;`) are **XPST0003**.
   - Valid references expand normally (predefined entities, decimal/hex, astral codepoints); XPath mode does not expand references (8 stale gap entries removed).

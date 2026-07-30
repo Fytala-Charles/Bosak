@@ -1,6 +1,44 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): combined error-code conformance — FODC0001, XPTY0019, collation and prolog statics)
+**Current focus:** **misc/CombinedErrorCodes cluster closed** (17 gaps → 0; 7 entries were stale after the NamespaceDecl/Literal sessions). QT3 went from **29,332 passed / 0 failed / 2,489 skipped (92.18%)** to **29,349 passed / 0 failed / 2,472 skipped (92.23%)** (+17 passing). Full `dotnet test Bosak.sln` passes: **1,603 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (CombinedErrorCodes cluster)
+
+1. **FODC0001** — `fn:id`, `fn:idref`, and `fn:element-with-id` now require the target node to be in a tree whose root is a **document node**; constructed element fragments raise FODC0001 instead of silently searching from the element (FODC0001_1/2).
+2. **XPTY0019 for path steps over atomics** — `ApplyAxis` no longer skips non-node items in a sequence input: a path step whose input contains atomic values raises XPTY0019 (`<a/>/1/node()`, `(<a/>,1)/node()`, `foo:something()/a`). The XPTY0020 context-item check is unchanged.
+3. **Collation errors** — an unsupported (or malformed) collation URI in `declare default collation` is **XQST0038** (was the nonstandard XQST0087; XQST0038_3, XQST0046_06 via its alternative). The XQST0087 encoding check is untouched.
+4. **XQST0060** — `declare default function namespace ""` is rejected (the default function namespace cannot be undeclared, unlike the default element namespace).
+5. **XQST0089** — a positional variable with the same name as the range variable (`for $x at $x`) is rejected in `ParseSimpleForBinding`.
+6. **XQST0125** — inline functions must not be annotated `%public`/`%private` (declaration-only annotations), checked in the inline-annotation parser.
+7. **Stale entries (7)** — XQST0032, XQST0033, XQST0045-4, XQST0066_1/3, XQST0070_4, XQST0090 already passed after the last two sessions; un-gapped without code changes.
+8. **Gaps: 377 reasoned skips (−17)** — misc/CombinedErrorCodes runs **210/0/49**.
+
+## Files Changed (this session)
+
+- `src/Bosak.XQuery/Parser/XQueryParser.cs`, `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+10)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (377 recorded skips)
+
+Largest clusters: `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `prod/AllowingEmpty` (14), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **prod/MapConstructor** (15 tests) or **prod/AllowingEmpty** (14 tests).
+2. **prod/CompNamespaceConstructor** (11 tests) or **misc/HigherOrderFunctions** (11 tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `4f95947` (feat(xquery): character and entity reference validation in literals and constructors)
 **Current focus:** **prod/Literal cluster closed** (16 gaps → 0): XQuery character-reference validation (XQST0090 for invalid/overflow values, XPST0003 for malformed references); 8 of the 16 entries turned out to be stale (XPath-mode non-expansion already worked). QT3 went from **29,316 passed / 0 failed / 2,505 skipped (92.13%)** to **29,332 passed / 0 failed / 2,489 skipped (92.18%)** (+16 passing). Full `dotnet test Bosak.sln` passes: **1,593 unit tests / 0 failed**; XSLT baseline unchanged.
 

@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.0   | 29-07-2026     | XQST0033 duplicate namespace declarations; XQST0070 reserved xml/xmlns checks; two-phase prolog ordering |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 29-07-2026     | Unsupported collation is XQST0038; empty default function namespace is XQST0060 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -315,6 +317,10 @@ public sealed class XQueryParser
             string uri = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
+            // XQST0060: the default function namespace must not be a zero-length string
+            // (unlike the default element namespace, it cannot be undeclared).
+            if (uri.Length == 0)
+                throw new ParseException("XQST0060: The default function namespace must not be a zero-length string.", _position);
             // XQST0066: the default function namespace must not be declared twice.
             if (context.DefaultFunctionNamespace is not null
                 && context.DefaultFunctionNamespace != "http://www.w3.org/2005/xpath-functions")
@@ -334,9 +340,10 @@ public sealed class XQueryParser
             // XQST0038: duplicate default collation declaration.
             if (context.DefaultCollation is not null)
                 throw new ParseException("XQST0038: More than one default collation declaration.", _position);
-            // XQST0087: the collation must be known to the implementation.
+            // XQST0038: the collation must be known to the implementation (XQST0038_3,
+            // XQST0046_06 — an unsupported or malformed collation URI is the same error).
             if (!IsSupportedCollation(ResolveCollationUri(uri, context.BaseUri)))
-                throw new ParseException($"XQST0087: Collation '{uri}' is not supported.", _position);
+                throw new ParseException($"XQST0038: Collation '{uri}' is not supported.", _position);
             context = context.WithDefaultCollation(uri);
             return true;
         }

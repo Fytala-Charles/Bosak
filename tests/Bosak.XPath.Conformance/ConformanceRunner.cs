@@ -46,6 +46,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.14  | 29-07-2026     | Drop 16 Literal gap entries (implemented or stale) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.15  | 29-07-2026     | Drop 17 CombinedErrorCodes gap entries (implemented or stale) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -263,24 +265,6 @@ internal sealed class ConformanceRunner
         ["xml-to-json-057"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
         ["xml-to-json-065"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
         ["xml-to-json-071"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
-        // misc/CombinedErrorCodes.xml (17 tests)
-        ["FODC0001_1"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["FODC0001_2"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XPTY0019_1"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XPTY0019_2"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0032"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0033"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0038_3"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0045-4"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0046_06"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0060"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0066_1"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0066_3"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0070_4"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0089"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0090"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0125_1"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
-        ["XQST0125_2"] = "XQuery conformance gap (misc:CombinedErrorCodes): see AGENT_HANDOVER REQ-045",
         // misc/ErrorsAndOptimization.xml (1 tests)
         ["errors-and-optimization-7"] = "XQuery conformance gap (misc:ErrorsAndOptimization): see AGENT_HANDOVER REQ-045",
         // misc/HigherOrderFunctions.xml (11 tests)

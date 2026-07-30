@@ -178,6 +178,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.73  | 25-07-2026     | fn:serialize honors static output parameters and parameter-document                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.74  | 29-07-2026     | fn:id/idref/element-with-id require a document-rooted tree (FODC0001) |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -6119,6 +6122,7 @@ public static class FunctionLibrary
         var focus = ctx.ContextItem;
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:id() context item is not a node.");
+        RequireDocumentRootedTree(focus.NodeValue, "fn:id");
 
         var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
@@ -6136,6 +6140,7 @@ public static class FunctionLibrary
         var node = FirstNode(args[1]);
         if (node == null)
             throw new InvalidOperationException("XPTY0004: fn:id() argument is not a node.");
+        RequireDocumentRootedTree(node, "fn:id");
 
         var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
@@ -6148,11 +6153,23 @@ public static class FunctionLibrary
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
+    // FODC0001: fn:id/fn:idref/fn:element-with-id require the target node to be in a
+    // tree whose root is a document node (a constructed element fragment is not).
+    private static void RequireDocumentRootedTree(IXdmNode node, string functionName)
+    {
+        var root = node;
+        while (root.Parent is not null)
+            root = root.Parent;
+        if (root.NodeKind != XdmNodeKind.Document)
+            throw new InvalidOperationException($"FODC0001: {functionName} requires a node in a tree whose root is a document node.");
+    }
+
     private static XdmValue ElementWithId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var focus = ctx.ContextItem;
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:element-with-id() context item is not a node.");
+        RequireDocumentRootedTree(focus.NodeValue, "fn:element-with-id");
 
         var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
@@ -6213,6 +6230,7 @@ public static class FunctionLibrary
         var node = FirstNode(args[1]);
         if (node == null)
             throw new InvalidOperationException("XPTY0004: fn:element-with-id() argument is not a node.");
+        RequireDocumentRootedTree(node, "fn:element-with-id");
 
         var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
@@ -6230,6 +6248,7 @@ public static class FunctionLibrary
         var focus = ctx.ContextItem;
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:idref() context item is not a node.");
+        RequireDocumentRootedTree(focus.NodeValue, "fn:idref");
 
         var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)
@@ -6247,6 +6266,7 @@ public static class FunctionLibrary
         var node = FirstNode(args[1]);
         if (node == null)
             throw new InvalidOperationException("XPTY0004: fn:idref() argument is not a node.");
+        RequireDocumentRootedTree(node, "fn:idref");
 
         var ids = ParseIdTokens(args[0]);
         if (ids.Count == 0)

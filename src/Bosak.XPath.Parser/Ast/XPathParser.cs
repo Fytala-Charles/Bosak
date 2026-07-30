@@ -77,6 +77,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.36  | 29-07-2026     | Char-reference validation: XQST0090 for invalid/overflow values, XPST0003 for malformed refs |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.37  | 29-07-2026     | XQST0089 positional-variable duplicate; XQST0125 for %public/%private inline annotations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -703,6 +705,9 @@ public sealed class XPathParser
             Advance();
             Expect(TokenKind.Dollar);
             var posTok = ExpectName();
+            // XQST0089: the positional variable must not have the same name as the range variable.
+            if (GetString(posTok) == GetString(nameTok))
+                throw new ParseException($"XQST0089: The positional variable '${GetString(posTok)}' has the same name as the range variable.", posTok.Start);
             var (_, posLocal, _) = SplitQName(GetString(posTok));
             positionalVar = posLocal;
         }
@@ -2062,6 +2067,10 @@ public sealed class XPathParser
             Advance();
             if (Current.Kind != TokenKind.Name)
                 throw new ParseException($"XPST0003: Expected an annotation name after '%' but found {Current.Kind}", Current.Start);
+            // XQST0125: an inline function must not be annotated %public or %private —
+            // those are function-declaration annotations only.
+            if (GetString(Current) is "public" or "private")
+                throw new ParseException($"XQST0125: An inline function expression must not be annotated %{GetString(Current)}.", Current.Start);
             Advance(); // EQName (plain, prefixed, or Q{uri}local)
             if (Current.Kind == TokenKind.LParen)
                 SkipAnnotationArguments();

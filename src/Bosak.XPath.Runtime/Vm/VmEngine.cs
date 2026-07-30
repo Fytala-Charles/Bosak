@@ -135,6 +135,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.76  | 29-07-2026     | Function-test annotation assertions stripped in InstanceOf; XQST0045 for reserved annotation namespaces |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.77  | 29-07-2026     | ApplyAxis raises XPTY0019 for atomic items in a path step's input sequence |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3055,12 +3057,14 @@ public static class VmEngine
             var result = new List<XdmValue>();
             foreach (var item in items)
             {
-                if (item.IsNode)
-                {
-                    var seq = item.NodeValue.Axis(axis);
-                    foreach (var node in seq)
-                        result.Add(node);
-                }
+                // A path step whose input contains atomic values is a type error
+                // (XPTY0019 — this covers both intermediate steps and axis steps
+                // applied to a mixed sequence, XPTY0019_1/2).
+                if (!item.IsNode)
+                    throw new InvalidOperationException("XPTY0019: A path step requires nodes, but the step input contains an atomic value.");
+                var seq = item.NodeValue.Axis(axis);
+                foreach (var node in seq)
+                    result.Add(node);
             }
             return XdmValue.FromSequence(MaterializedSequence.FromList(result));
         }
