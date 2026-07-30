@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty + CompNamespaceConstructor + HigherOrderFunctions clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0, 11 → 0, 11 → 0); QT3 now **29,400 passed / 0 failed** (92.39%); unit tests **1,631/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty + CompNamespaceConstructor + HigherOrderFunctions + dayTimeDurations clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0, 11 → 0, 11 → 0, 27 → 0); QT3 now **29,427 passed / 0 failed** (92.48%); unit tests **1,636/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -169,6 +169,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-062 | *(internal)* | `allowing empty` in for clauses — grammar order and typed bindings | Required for XQuery conformance: `allowing empty` before the positional variable, and the empty binding checked against the declared type occurrence (XPTY0004) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-063 | *(internal)* | Computed namespace constructors in element content | Required for XQuery conformance: namespace declarations in content (interleaving, dedupe, prefix conflicts, prefix type checks) and namespace-node identity (parentless, xs:string typed value) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-064 | *(internal)* | Higher-order function conformance — conversions, focus, base URI, error codes | Required for XPath/XQuery conformance: function-item error codes (FOTY0013/XQTY0105), partial-application arity, dynamic-call conversions, absent-focus named references, per-module base-URI capture, parenthesized sequence types | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-065 | *(internal)* | Reject plain xs:duration in date/time arithmetic | Required for XPath/XQuery conformance: duration operands in date/time arithmetic must be xs:dayTimeDuration or xs:yearMonthDuration (XPTY0004 for plain xs:duration) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2963,13 +2964,54 @@ Raise FOTY0013 in comparisons and content atomization and XQTY0105 in element co
 
 ---
 
+### REQ-065: Reject plain xs:duration in date/time arithmetic
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The op/add-dayTimeDurations (16) and op/subtract-dayTimeDurations (11) clusters are all one rule: an operand annotated plain `xs:duration` in date/time arithmetic must raise XPTY0004 — only the `xs:dayTimeDuration` and `xs:yearMonthDuration` subtypes are permitted. The engine's arithmetic dispatch analyzed the duration's *string pattern* to choose the addition algorithm, which accepted any well-formed duration regardless of its type annotation.
+
+**Proposed Solution:**  
+Validate duration operands at the `Add`/`Subtract` dispatch: a value of kind Duration whose subtype resolves to plain `xs:duration` (annotation first, pattern fallback via the existing `GetDurationSubtype`) raises XPTY0004 before the arithmetic proceeds.
+
+**Acceptance Criteria:**
+- [x] `xs:date + xs:duration("P1D")` and `xs:duration("P1D") + xs:date(...)` raise **XPTY0004** (cbcl-plus-002..032).
+- [x] `xs:dayTimeDuration + xs:duration` raises **XPTY0004** (duration±duration operands covered too).
+- [x] `xs:date − xs:duration("P1D")` raises **XPTY0004** (cbcl-minus-002..032).
+- [x] Proper subtypes still work in both directions and for duration±duration.
+- [x] QT3: op/add-dayTimeDurations **61/0/0**, op/subtract-dayTimeDurations **69/0/0**; full suite **29,427 passed / 0 failed / 2,394 skipped (92.48%)**; gaps **299** (−27).
+- [x] Unit tests: 5 new tests; full suite **1,636/0**.
+
+**Implementation Notes:**
+- One helper (`RequireProperDurationSubtype`) guards all five dispatch branches (date+duration, duration+date, duration+duration, date−duration, duration−duration).
+- String-kind operands are untouched: untypedAtomic continues to cast into the arithmetic (the pattern fallback in `GetDurationSubtype` keeps unannotated values working).
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Runtime | Modified | Duration subtype validation in Add/Subtract dispatch. |
+| Conformance | Modified | Gaps 299. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Enforce at dispatch, not in the addition helpers | One check site covers every branch; helpers like `AddDurations` never see a plain duration after the guard. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-064 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed, CompNamespaceConstructor cluster closed, HigherOrderFunctions cluster closed; QT3 wired (29,400/0, 92.39%). dayTimeDuration precision, residual singles, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-065 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed, CompNamespaceConstructor cluster closed, HigherOrderFunctions cluster closed, dayTimeDurations clusters closed; QT3 wired (29,427/0, 92.48%). Residual singles, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

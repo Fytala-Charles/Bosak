@@ -1,6 +1,37 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): reject plain xs:duration in date/time arithmetic)
+**Current focus:** **op/add-dayTimeDurations + op/subtract-dayTimeDurations clusters closed** (16 + 11 gaps → 0): plain `xs:duration` values are now rejected in date/time arithmetic. QT3 went from **29,400 passed / 0 failed / 2,421 skipped (92.39%)** to **29,427 passed / 0 failed / 2,394 skipped (92.48%)** (+27 passing). Full `dotnet test Bosak.sln` passes: **1,636 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (dayTimeDurations clusters)
+
+1. **Duration subtype enforcement** — the `Add`/`Subtract` dispatch now requires duration operands in date/time arithmetic to be `xs:dayTimeDuration` or `xs:yearMonthDuration`: a value annotated plain `xs:duration` raises **XPTY0004** (cbcl-plus-002..032, cbcl-minus-002..032 — date±duration, duration+date, duration±duration). The dispatch previously analyzed the duration *string pattern*, which accepted any well-formed duration regardless of its type annotation; the check uses the existing `GetDurationSubtype` (annotation first, pattern fallback).
+2. **Gaps: 299 reasoned skips (−27)** — op/add-dayTimeDurations **61/0/0**, op/subtract-dayTimeDurations **69/0/0**; all other duration-arithmetic sets remain green (52/27/26/45/22/27/27/33).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+5)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (299 recorded skips)
+
+Residual clusters: AxisStep (7), VarDecl (6), StepExpr (6), SwitchExpr (6), ArrayTest (5), BaseURIDecl (6), PathExpr (5), fn:min (8), fn:id (7), fn:in-scope-prefixes (7), DefaultNamespaceDecl (7), app/Walmsley (6), op/dayTimeDuration-greater-than (6), BaseURIDecl (6), fn:base-uri (6), and ~30 smaller singles/pairs. The ~2,095 bulk skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **Small residual clusters** — sweep several at once: AxisStep (7), VarDecl (6), StepExpr (6), SwitchExpr (6), ArrayTest (5), PathExpr (5), fn:min (8), fn:id (7), fn:in-scope-prefixes (7), DefaultNamespaceDecl (7).
+2. **op/divide-dayTimeDuration + op/numeric-integer-divide** (4 + 1 — same duration-subtype family, likely the same fix pattern).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `1f45d1f` (feat(xquery): higher-order function conformance — conversions, focus, base URI, error codes)
 **Current focus:** **misc/HigherOrderFunctions cluster closed** (11 gaps → 0): function-item error codes, partial-application arity, dynamic-call conversions, absent-focus named references, per-module base-URI capture, and parenthesized sequence types. QT3 went from **29,389 passed / 0 failed / 2,432 skipped (92.36%)** to **29,400 passed / 0 failed / 2,421 skipped (92.39%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,631 unit tests / 0 failed**; XSLT baseline unchanged.
 

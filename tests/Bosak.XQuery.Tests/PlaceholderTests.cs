@@ -62,6 +62,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.17  | 29-07-2026     | 9 higher-order-function tests (typed lets, conversions, focus, base URI, error codes) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.18  | 29-07-2026     | 5 duration subtype arithmetic tests (XPTY0004 for plain xs:duration) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -2534,6 +2536,56 @@ public class PlaceholderTests
             .Evaluate(new XQueryContext());
 
         Assert.Equal("lib|main", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_DurationArithmetic_PlainDurationRejected_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("xs:date(\"1997-01-01\") + xs:duration(\"P1D\")")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DurationArithmetic_PlainDurationOnLeftRejected_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("xs:duration(\"P1D\") + xs:dateTime(\"1997-01-01T12:00:00\")")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DurationArithmetic_PlainDurationInDurationSum_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("xs:dayTimeDuration(\"PT1H\") + xs:duration(\"P1D\")")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DurationArithmetic_PlainDurationSubtraction_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("xs:date(\"1997-01-15\") - xs:duration(\"P1D\")")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DurationArithmetic_SubtypesStillWork()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("xs:date(\"1997-01-01\") + xs:dayTimeDuration(\"P1D\")")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("1997-01-02", result.ToString());
     }
 
     private static List<long> ToIntegers(XdmValue value)

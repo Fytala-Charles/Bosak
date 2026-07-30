@@ -143,6 +143,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.80  | 29-07-2026     | HOF: FOTY0013/XQTY0105 function items; Curry arity check; absent-focus named refs; base-URI capture; paren types |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.81  | 29-07-2026     | Plain xs:duration rejected in date/time arithmetic (XPTY0004, cbcl-plus/minus) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3695,13 +3697,23 @@ public static class VmEngine
 
         // Date/Time + Duration
         if ((left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time) && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
+        {
+            RequireProperDurationSubtype(right);
             return AddDuration(left, right.ToString());
+        }
         if ((right.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time) && (left.Kind == XdmValueKind.String || left.Kind == XdmValueKind.Duration))
+        {
+            RequireProperDurationSubtype(left);
             return AddDuration(right, left.ToString());
+        }
 
         // Duration + Duration
         if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
+        {
+            RequireProperDurationSubtype(left);
+            RequireProperDurationSubtype(right);
             return AddDurations(left, right);
+        }
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
@@ -3719,6 +3731,14 @@ public static class VmEngine
             return XdmValue.FromDecimal(ToDecimal(left) + ToDecimal(right));
 
         return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), false);
+    }
+
+    // A duration operand in date/time arithmetic must be an xs:dayTimeDuration or
+    // xs:yearMonthDuration — a plain xs:duration is a type error (cbcl-plus/minus-*).
+    private static void RequireProperDurationSubtype(XdmValue value)
+    {
+        if (value.Kind == XdmValueKind.Duration && GetDurationSubtype(value) == DurationSubtype.Duration)
+            throw new InvalidOperationException("XPTY0004: A plain xs:duration value is not allowed in date/time arithmetic (xs:dayTimeDuration or xs:yearMonthDuration required).");
     }
 
     private static XdmValue AddDuration(XdmValue dateTimeValue, string duration)
@@ -3827,11 +3847,18 @@ public static class VmEngine
             return XdmValue.FromDuration(FormatDurationFromDateTimeDiff(leftRef, rightRef));
         }
         if (left.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time && (right.Kind == XdmValueKind.String || right.Kind == XdmValueKind.Duration))
+        {
+            RequireProperDurationSubtype(right);
             return SubtractDuration(left, right.ToString());
+        }
 
         // Duration - Duration
         if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
+        {
+            RequireProperDurationSubtype(left);
+            RequireProperDurationSubtype(right);
             return SubtractDurations(left, right);
+        }
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);

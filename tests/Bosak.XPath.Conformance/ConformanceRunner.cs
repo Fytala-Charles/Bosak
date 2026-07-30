@@ -56,6 +56,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.19  | 29-07-2026     | Drop 11 HigherOrderFunctions gap entries (implemented) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.20  | 29-07-2026     | Drop 27 add/subtract-dayTimeDurations gap entries (implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -280,23 +282,6 @@ internal sealed class ConformanceRunner
         // misc/XMLEdition.xml (2 tests)
         ["line-ending-Q002"] = "XQuery conformance gap (misc:XMLEdition): see AGENT_HANDOVER REQ-045",
         ["line-ending-Q003"] = "XQuery conformance gap (misc:XMLEdition): see AGENT_HANDOVER REQ-045",
-        // op/add-dayTimeDurations.xml (16 tests)
-        ["cbcl-plus-002"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-004"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-006"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-008"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-010"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-012"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-014"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-016"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-018"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-020"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-022"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-024"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-026"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-028"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-030"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-plus-032"] = "XQuery conformance gap (op:add-dayTimeDurations): see AGENT_HANDOVER REQ-045",
         // op/base64Binary-greater-than.xml (5 tests)
         ["base64Binary-gt-15"] = "XQuery conformance gap (op:base64Binary-greater-than): see AGENT_HANDOVER REQ-045",
         ["base64Binary-gt-17"] = "XQuery conformance gap (op:base64Binary-greater-than): see AGENT_HANDOVER REQ-045",
@@ -335,18 +320,6 @@ internal sealed class ConformanceRunner
         ["cbcl-numeric-idivide-002"] = "XQuery conformance gap (op:numeric-integer-divide): see AGENT_HANDOVER REQ-045",
         // op/numeric-unary-minus.xml (1 tests)
         ["op-numeric-unary-minus-1"] = "XQuery conformance gap (op:numeric-unary-minus): see AGENT_HANDOVER REQ-045",
-        // op/subtract-dayTimeDurations.xml (11 tests)
-        ["cbcl-minus-002"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-004"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-006"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-008"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-010"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-012"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-014"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-026"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-028"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-030"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        ["cbcl-minus-032"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
         // prod/ArrayTest.xml (5 tests)
         ["ArrayTest-028"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",
         ["ArrayTest-047"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",
