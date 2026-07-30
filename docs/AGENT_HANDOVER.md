@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): higher-order function conformance — conversions, focus, base URI, error codes)
+**Commit:** `1f45d1f` (feat(xquery): higher-order function conformance — conversions, focus, base URI, error codes)
 **Current focus:** **misc/HigherOrderFunctions cluster closed** (11 gaps → 0): function-item error codes, partial-application arity, dynamic-call conversions, absent-focus named references, per-module base-URI capture, and parenthesized sequence types. QT3 went from **29,389 passed / 0 failed / 2,432 skipped (92.36%)** to **29,400 passed / 0 failed / 2,421 skipped (92.39%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,631 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (HigherOrderFunctions cluster)
