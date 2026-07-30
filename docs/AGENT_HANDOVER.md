@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): map constructors in step position with key disambiguation)
+**Current focus:** **prod/MapConstructor cluster closed** (15 gaps → 0): map constructors in step/`!` position with step expressions as keys and values, plus the deep-equal sequence-semantics fix that their deep-equal expectations exposed. QT3 went from **29,349 passed / 0 failed / 2,472 skipped (92.23%)** to **29,364 passed / 0 failed / 2,457 skipped (92.28%)** (+15 passing). Full `dotnet test Bosak.sln` passes: **1,610 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (MapConstructor cluster)
+
+1. **Map-constructor key disambiguation** — the entry `:` is now correctly separated from name-test colons, in both directions: `prefix:*` no longer consumes a following entry colon unless it is followed by `*`... specifically: in `ParseNodeTest`, the `prefix:*` form requires Colon+Star by peeking (was destructive `Match`), and inside a map key (`_mapKeyDepth`) both `prefix:*` and `*:local` apply only when the entry `:` follows the wildcard (so `map{a:b:*}` = key `a:b` value `*`, `map{a:*:*}` = key `a:*` value `*`, `map{* :b}` = key `*` value `b`).
+2. **One-colon QNames in the lexer** — `z:b:z:b` no longer lexes as one "name"; a QName carries at most one colon, so map entries with prefixed names on both sides tokenize as `z:b` `:` `z:b` (MapConstructor-026).
+3. **`*:b:b` token split** — a merged `*:b:b` run is spliced back into `*:b` `:` `b` at key-parse time (MapConstructor-019); `self:2` and `self::a: b` parse as intended (`self` is an element name, MapConstructor-021).
+4. **Singleton-sequence unwrap for map/array/function parameters** — the VM's static-call path unwraps a singleton sequence when the parameter kind is Map, Array, or Function, so `map:size($ctx ! map{...})` and path-position constructors work (the result of `!`/`/` is always a sequence).
+5. **deep-equal sequence semantics** — map entry values and array members are arbitrary sequences: `DeepEqualMap`/`DeepEqualArray` now compare them via the materializing `DeepEqualValue` (a step-built value `(<c>,)` compares equal to a bare `<c>` node) — the fix for every deep-equal expectation in the cluster (027..035).
+6. **Gaps: 362 reasoned skips (−15)** — prod/MapConstructor runs **42/0/0**.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Lexer/XPathLexer.cs`, `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+7)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (362 recorded skips)
+
+Largest clusters: `op/add-dayTimeDurations` (16), `prod/AllowingEmpty` (14), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **prod/AllowingEmpty** (14 tests — `allowing empty` in outer for clauses).
+2. **prod/CompNamespaceConstructor** (11 tests) or **misc/HigherOrderFunctions** (11 tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `b8d6c79` (feat(xquery): combined error-code conformance — FODC0001, XPTY0019, collation and prolog statics)
 **Current focus:** **misc/CombinedErrorCodes cluster closed** (17 gaps → 0; 7 entries were stale after the NamespaceDecl/Literal sessions). QT3 went from **29,332 passed / 0 failed / 2,489 skipped (92.18%)** to **29,349 passed / 0 failed / 2,472 skipped (92.23%)** (+17 passing). Full `dotnet test Bosak.sln` passes: **1,603 unit tests / 0 failed**; XSLT baseline unchanged.
 

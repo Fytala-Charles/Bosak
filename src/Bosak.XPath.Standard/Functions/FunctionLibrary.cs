@@ -180,6 +180,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.74  | 29-07-2026     | fn:id/idref/element-with-id require a document-rooted tree (FODC0001) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.75  | 29-07-2026     | deep-equal compares map values and array members with sequence semantics |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -10486,17 +10488,23 @@ public static class FunctionLibrary
     }
 
     private static XdmValue DeepEqual(XdmValue a, XdmValue b, string collation, int implicitTimezoneOffsetMinutes)
+        => XdmValue.FromBoolean(DeepEqualValue(a, b, collation, implicitTimezoneOffsetMinutes));
+
+    // Compares two values with sequence semantics: map entry values and array members are
+    // arbitrary sequences, and a singleton sequence must compare equal to its bare item
+    // (step-built map values are sequence-wrapped while constructor values are bare nodes).
+    private static bool DeepEqualValue(XdmValue a, XdmValue b, string collation, int implicitTimezoneOffsetMinutes)
     {
         var itemsA = ToItemList(a);
         var itemsB = ToItemList(b);
         if (itemsA.Count != itemsB.Count)
-            return XdmValue.False;
+            return false;
         for (int i = 0; i < itemsA.Count; i++)
         {
             if (!DeepEqualItem(itemsA[i], itemsB[i], collation, implicitTimezoneOffsetMinutes))
-                return XdmValue.False;
+                return false;
         }
-        return XdmValue.True;
+        return true;
     }
 
     private static List<XdmValue> ToItemList(XdmValue value)
@@ -10710,7 +10718,7 @@ public static class FunctionLibrary
             {
                 // Map keys are compared with op:same-key semantics: the collation
                 // parameter does NOT apply to keys (fn-deep-equal-maps-13).
-                if (XdmValueEqualityComparer.Instance.Equals(keyA, keyB) && DeepEqualItem(valA, valB, collation, implicitTimezoneOffsetMinutes))
+                if (XdmValueEqualityComparer.Instance.Equals(keyA, keyB) && DeepEqualValue(valA, valB, collation, implicitTimezoneOffsetMinutes))
                 {
                     found = true;
                     break;
@@ -10730,7 +10738,7 @@ public static class FunctionLibrary
         var bv = b.Values.ToList();
         for (int i = 0; i < av.Count; i++)
         {
-            if (!DeepEqualItem(av[i], bv[i], collation, implicitTimezoneOffsetMinutes))
+            if (!DeepEqualValue(av[i], bv[i], collation, implicitTimezoneOffsetMinutes))
                 return false;
         }
         return true;

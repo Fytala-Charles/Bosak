@@ -48,6 +48,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.15  | 29-07-2026     | Drop 17 CombinedErrorCodes gap entries (implemented or stale) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.16  | 29-07-2026     | Drop 15 MapConstructor gap entries (implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -473,22 +475,6 @@ internal sealed class ConformanceRunner
         ["instanceof134"] = "XQuery conformance gap (InstanceofExpr): see AGENT_HANDOVER REQ-045",
         // prod/LetClause.xml (1 tests)
         ["K-LetExprWithout-1"] = "XQuery conformance gap (LetClause): see AGENT_HANDOVER REQ-045",
-        // prod/MapConstructor.xml (15 tests)
-        ["MapConstructor-015"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-017"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-019"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-020"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-021"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-026"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-027"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-028"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-029"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-030"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-031"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-032"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-033"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-034"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
-        ["MapConstructor-035"] = "XQuery conformance gap (MapConstructor): see AGENT_HANDOVER REQ-045",
         // prod/NameTest.xml (2 tests)
         ["K2-NameTest-5"] = "XQuery conformance gap (NameTest): keywords usable as element names in expression positions (tokenizer-torture)",
         ["NodeTest004"] = "XQuery conformance gap (NameTest): schema-aware element type assertion element(Root)",

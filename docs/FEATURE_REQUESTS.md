@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0); QT3 now **29,349 passed / 0 failed** (92.23%); unit tests **1,603/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0); QT3 now **29,364 passed / 0 failed** (92.28%); unit tests **1,610/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -165,6 +165,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-058 | *(internal)* | Inline-function annotations and function-test annotation assertions | Required for XQuery conformance: `%eg:*` annotations on inline functions, annotation assertions in function tests, literal-only annotation arguments, and reserved annotation namespaces (XQST0045) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-059 | *(internal)* | Character and entity reference validation in literals and constructors | Required for XQuery conformance: XQST0090 for invalid/overflow character references, XPST0003 for malformed references, XPath-mode non-expansion | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-060 | *(internal)* | Combined error-code conformance (FODC0001, XPTY0019, collation and prolog statics) | Required for XQuery conformance: document-root requirement for fn:id/idref, XPTY0019 for path steps over atomics, XQST0038 collation errors, XQST0060/0089/0125 statics | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-061 | *(internal)* | Map constructors in step position with key disambiguation | Required for XPath/XQuery conformance: `map{...}` in step and `!` position, step expressions as keys/values, entry-colon disambiguation, and deep-equal sequence semantics for map values | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2776,13 +2777,61 @@ Add the document-root check to the id functions; make `ApplyAxis` reject atomic 
 
 ---
 
+### REQ-061: Map constructors in step position with key disambiguation
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The prod/MapConstructor cluster (15 recorded gaps) covered map constructors in step and `!` position whose keys and values are step expressions — a parsing minefield around the entry `:`: `map{b:2}` failed because `prefix:*` destructively consumed the entry colon; `map{* :b}` vs `map{*:b:*}` needed context-sensitive wildcard greediness; `map{*:b:b}` lexed as one run; `map{z:b:z:b}` lexed as a multi-colon "QName"; and `self:2` had to read `self` as an element name. Their deep-equal expectations also exposed that map values built from steps (sequence-wrapped) compared unequal to bare-node values.
+
+**Proposed Solution:**  
+Make the `prefix:*` name test non-destructive; gate both wildcard name-test forms inside map keys on a following entry colon; cap QNames at one colon in the lexer; splice the merged `*:b:b` run at key-parse time; unwrap singleton sequences for map/array/function-typed call parameters; and compare map values and array members with sequence semantics in fn:deep-equal.
+
+**Acceptance Criteria:**
+- [x] `<a><b>x</b></a>/map{b:2}` evaluates in step position; `map:size` receives the constructed map (MapConstructor-015/017/021).
+- [x] `map{* :b}` = key `*` value `b`; `map{*:b:*}` = key `*:b` value `*`; `map{*:b:b}` = key `*:b` value `b` (MapConstructor-019/020/032).
+- [x] `map{a:b:*}` = key `a:b` value `*`; `map{a:*:*}` = key `a:*` value `*`; `map{a:*:c}` = key `a:*` value `c` (MapConstructor-028/030/031).
+- [x] `map{z:b:z:b}` = key `z:b` value `z:b` (MapConstructor-026); `self:2` reads `self` as an element name (MapConstructor-021).
+- [x] deep-equal of step-built maps against literal maps holds (MapConstructor-027..035), including `map{*:*div*,*||*:*}` (div/concat operators in entries).
+- [x] QT3: prod/MapConstructor **42/0/0**; full suite **29,364 passed / 0 failed / 2,457 skipped (92.28%)**; gaps **362** (−15).
+- [x] Unit tests: 7 new tests; full suite **1,610/0**.
+
+**Implementation Notes:**
+- `_mapKeyDepth` in the XPath parser gates both wildcard name-test forms (`prefix:*` and `*:local`) while a map key parses: the wildcard form applies only when the entry `:` follows it.
+- The lexer no longer produces multi-colon "QNames" (`z:b:z:b` → `z:b` `:` `z:b`); `ParseMapConstructorKey` splices a merged `*:b:b` token back into three tokens before delegating to the normal expression parser.
+- `VmEngine.UnwrapSingletonItem` applies the function conversion rules to kind-typed parameters (Map/Array/Function) at the static-call site — sequence-producing operators (`!`, `/`) can now feed `map:size` and friends directly.
+- `DeepEqualValue` materializes both sides item-wise (as top-level deep-equal always did); `DeepEqualMap` and `DeepEqualArray` use it for values/members.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Lexer | Modified | One-colon QNames. |
+| Parser | Modified | Map-key wildcard gating; `*:b:b` splice; non-destructive `prefix:*`. |
+| Runtime | Modified | Singleton unwrap for map/array/function parameters. |
+| Standard | Modified | deep-equal sequence semantics for map values and array members. |
+| Conformance | Modified | Gaps 362. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Wildcard name tests gated on a following entry colon inside map keys | The only rule consistent with all catalog data points: `map{* :b}` vs `map{*:b:*}` vs `map{a:b:*}` vs `map{a:*:*}`. |
+| 2026-07-29 | Kimi | Singleton unwrap at the VM call site rather than per-function | One edit covers all map/array/function parameters; every such signature takes a single item, never a sequence of them. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-060 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed; QT3 wired (29,349/0, 92.23%). MapConstructor, AllowingEmpty, CompNamespaceConstructor, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-061 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed; QT3 wired (29,364/0, 92.28%). AllowingEmpty, CompNamespaceConstructor, HigherOrderFunctions, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

@@ -137,6 +137,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.77  | 29-07-2026     | ApplyAxis raises XPTY0019 for atomic items in a path step's input sequence |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.78  | 29-07-2026     | Singleton-sequence unwrap for map/array/function-typed call parameters |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -250,6 +252,16 @@ public static class VmEngine
                         XdmValue[] args = new XdmValue[argCount];
                         for (int i = 0; i < argCount; i++)
                             args[i] = registers[firstArgReg + i];
+
+                        // A singleton sequence unwraps to its item when the parameter is
+                        // declared as a map, array, or function item (the function
+                        // conversion rules applied to kind-typed parameters — covers
+                        // map:size($ctx ! map{...}) and path-position map constructors).
+                        for (int i = 0; i < argCount && i < sig.ParameterTypes.Count; i++)
+                        {
+                            if (sig.ParameterTypes[i] is XdmValueKind.Map or XdmValueKind.Array or XdmValueKind.Function)
+                                args[i] = UnwrapSingletonItem(args[i], sig.ParameterTypes[i]);
+                        }
 
                         // Apply XPath 3.1 function conversion rules when the function signature
                         // declares precise parameter sequence types. This covers untypedAtomic casting,
@@ -6780,6 +6792,24 @@ public static class VmEngine
 
     private static bool IsAnnotationNameChar(char c)
         => char.IsLetterOrDigit(c) || c is '.' or '-' or '_';
+
+    // Unwraps a singleton sequence whose item matches the declared parameter kind
+    // (map, array, or function item); anything else passes through unchanged so the
+    // implementation's own type error still applies.
+    private static XdmValue UnwrapSingletonItem(XdmValue value, XdmValueKind kind)
+    {
+        if (!value.IsSequence || value.SequenceValue is null)
+            return value;
+        XdmValue single = default;
+        int count = 0;
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+        {
+            count++;
+            if (count == 1) single = item;
+            if (count > 1) return value;
+        }
+        return count == 1 && single.Kind == kind ? single : value;
+    }
 
     private static bool InstanceOf(XdmValue value, string typeName, OccurrenceIndicator occurrence, string? defaultElementNamespace, EvaluationContext? context = null)
     {

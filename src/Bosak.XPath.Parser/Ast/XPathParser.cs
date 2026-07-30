@@ -79,6 +79,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.37  | 29-07-2026     | XQST0089 positional-variable duplicate; XQST0125 for %public/%private inline annotations |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.38  | 29-07-2026     | Map-constructor key disambiguation: gated wildcard name tests, '*:b:b' token split |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -95,11 +97,14 @@ namespace Bosak.XPath.Parser.Ast;
 /// </summary>
 public sealed class XPathParser
 {
-    private readonly Token[] _tokens;
+    private Token[] _tokens;
     private readonly string _source;
     private readonly bool _allowFullFlwor;
     private bool _xml11LineEndings;
     private int _position;
+    // > 0 while parsing a map-constructor key: '*:local' name tests are no longer
+    // greedy — the entry ':' must follow the local name (map{* :b}, MapConstructor-020).
+    private int _mapKeyDepth;
 
     public XPathParser(Token[] tokens, string source, bool allowFullFlwor = false)
     {
@@ -1445,9 +1450,15 @@ public sealed class XPathParser
         // Wildcard: *
         if (Match(TokenKind.Star))
         {
-            // *:local
-            if (Match(TokenKind.Colon))
+            // *:local — greedy, except inside a map-constructor key where the wildcard
+            // form applies only when the entry ':' follows the local name; otherwise
+            // '*' alone is the key and the first ':' is the entry separator (map{* :b}).
+            if (Current.Kind == TokenKind.Colon &&
+                (_mapKeyDepth == 0
+                    || (Peek(1).Kind == TokenKind.Name && !GetString(Peek(1)).Contains(':')
+                        && Peek(2).Kind == TokenKind.Colon)))
             {
+                Advance(); // ':'
                 var local = ExpectName();
                 return new NodeTest(NameTestKind.QName, GetString(local), "*");
             }
@@ -1481,9 +1492,15 @@ public sealed class XPathParser
 
             Advance();
 
-            // prefix:*
-            if (Match(TokenKind.Colon) && Match(TokenKind.Star))
+            // prefix:* — peek rather than consume: a ':' not followed by '*' is a
+            // map-constructor entry separator (map{b:2}), not part of the name test.
+            // Inside a map key the wildcard form applies only when the entry ':' follows
+            // the '*' (map{a:b:*} vs map{a:*:c}, MapConstructor-028/030).
+            if (Current.Kind == TokenKind.Colon && Peek(1).Kind == TokenKind.Star &&
+                (_mapKeyDepth == 0 || Peek(2).Kind == TokenKind.Colon))
             {
+                Advance(); // ':'
+                Advance(); // '*'
                 return new NodeTest(NameTestKind.NamespaceAny, name);
             }
 
@@ -2874,7 +2891,7 @@ public sealed class XPathParser
         {
             do
             {
-                var key = ParseExprSingle();
+                var key = ParseMapConstructorKey();
                 if (Current.Kind == TokenKind.Assign)
                     throw new ParseException("XPST0003: Invalid map constructor syntax (use ':' to separate key and value)", Current.Start);
                 Expect(TokenKind.Colon);
@@ -2884,6 +2901,40 @@ public sealed class XPathParser
             Expect(TokenKind.RBrace);
         }
         return WithSpan(new MapConstructorNode(entries), start, End);
+    }
+
+    // Parses a map-constructor key. Inside the key, '*:local' name tests are not greedy
+    // (_mapKeyDepth gates ParseNodeTest): '*' alone is the key when no entry ':' follows
+    // the local name (map{* :b} vs map{*:b:*}). A merged '*:b:b' token run is split so
+    // that '*:b' becomes the key and 'b' the value (MapConstructor-019).
+    private XPathAstNode ParseMapConstructorKey()
+    {
+        if (Current.Kind == TokenKind.Star && Peek(1).Kind == TokenKind.Colon &&
+            Peek(2).Kind == TokenKind.Name && GetString(Peek(2)).Contains(':'))
+        {
+            var merged = Peek(2);
+            var text = GetString(merged);
+            int colonIdx = text.IndexOf(':');
+            var parts = new[]
+            {
+                new Token(TokenKind.Name, merged.Start, colonIdx),
+                new Token(TokenKind.Colon, merged.Start + colonIdx, 1),
+                new Token(TokenKind.Name, merged.Start + colonIdx + 1, merged.Length - colonIdx - 1)
+            };
+            var list = _tokens.ToList();
+            list.RemoveAt(_position + 2);
+            list.InsertRange(_position + 2, parts);
+            _tokens = list.ToArray();
+        }
+        _mapKeyDepth++;
+        try
+        {
+            return ParseExprSingle();
+        }
+        finally
+        {
+            _mapKeyDepth--;
+        }
     }
 
     private ArrayConstructorNode ParseSquareArrayConstructor(int start)

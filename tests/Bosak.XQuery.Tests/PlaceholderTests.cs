@@ -54,6 +54,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.13  | 29-07-2026     | 10 combined-error-code tests (FODC0001, XPTY0019, XQST0038/0060/0089/0125) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.14  | 29-07-2026     | 7 map constructor disambiguation and deep-equal sequence-semantics tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -2234,6 +2236,85 @@ public class PlaceholderTests
         var ex = Assert.ThrowsAny<Exception>(() =>
             compiler.Compile("let $f := %private function($a) { $a } return $f(1)"));
         Assert.Contains("XQST0125", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_MapConstructor_InStepPosition()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("map:size(<a><b>x</b></a>/map{b:2})")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(1L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_MapConstructor_WildcardOnlyKey()
+    {
+        var compiler = new XQueryCompiler();
+        // '*' alone is the key; the ':' is the entry separator (MapConstructor-020).
+        var result = compiler.Compile("map:size(<a><b>x</b></a>/map{* :b})")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(1L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_MapConstructor_WildcardPrefixedKeyWithMergedToken()
+    {
+        var compiler = new XQueryCompiler();
+        // '*:b:b' splits into key '*:b' and value 'b' (MapConstructor-019).
+        var result = compiler.Compile("map:size(<a><b>x</b></a>/map{*:b:b})")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(1L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_MapConstructor_PrefixedNamesBothSides()
+    {
+        var compiler = new XQueryCompiler();
+        // A QName carries at most one colon: key 'z:b', value 'z:b' (MapConstructor-026).
+        var result = compiler.Compile("declare namespace z = \"http://z.com\"; map:size(<a><z:b>x</z:b></a>/map{z:b:z:b})")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(1L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_MapConstructor_PrefixWildcardKeyVsValue()
+    {
+        var compiler = new XQueryCompiler();
+        // map{a:b:*}: key 'a:b', value '*'; map{a:*:*}: key 'a:*', value '*'.
+        var r1 = compiler.Compile("declare namespace a = \"http://example.com\"; deep-equal(<dot><a:b>key</a:b></dot> ! map{a:b:*}, map{\"key\":<a:b xmlns:a=\"http://example.com\">key</a:b>})")
+            .Evaluate(new XQueryContext());
+        var r2 = compiler.Compile("declare namespace a = \"http://example.com\"; deep-equal(<dot><a:b>key</a:b></dot> ! map{a:*:*}, map{\"key\":<a:b xmlns:a=\"http://example.com\">key</a:b>})")
+            .Evaluate(new XQueryContext());
+
+        Assert.True(r1.BooleanValue);
+        Assert.True(r2.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_DeepEqual_StepBuiltMapVsLiteralMap()
+    {
+        var compiler = new XQueryCompiler();
+        // Map values are sequences: a singleton sequence compares equal to its bare item.
+        var result = compiler.Compile("deep-equal(<e><f>foo</f></e> ! map{*:*}, map{\"foo\":<f>foo</f>})")
+            .Evaluate(new XQueryContext());
+
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_MapFunction_SingletonSequenceArgumentUnwraps()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("map:size(<a><b>x</b></a> ! map{b:2})")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(1L, result.IntegerValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

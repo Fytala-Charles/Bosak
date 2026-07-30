@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 29-07-2026     | Lex '%' as Percent token for XQuery annotations |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 29-07-2026     | QNames carry at most one colon (map constructor entry disambiguation) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -344,10 +346,11 @@ public ref struct XPathLexer
                 return new Token(TokenKind.Name, start, _position - start);
             }
 
-            // Read local name or prefix:local
+            // Read local name or prefix:local — a QName carries at most one colon;
+            // a further colon starts a new token (map constructor entries).
             if (_position < _source.Length && IsNameStartChar(_source[_position]))
             {
-                while (_position < _source.Length && IsNameChar(_source[_position]))
+                while (_position < _source.Length && IsNameChar(_source[_position]) && _source[_position] != ':')
                     _position++;
 
                 // Handle prefix:local
@@ -357,7 +360,7 @@ public ref struct XPathLexer
                     _position++;
                     if (_position < _source.Length && IsNameStartChar(_source[_position]))
                     {
-                        while (_position < _source.Length && IsNameChar(_source[_position]))
+                        while (_position < _source.Length && IsNameChar(_source[_position]) && _source[_position] != ':')
                             _position++;
                         return new Token(TokenKind.Name, start, _position - start);
                     }
@@ -388,10 +391,11 @@ public ref struct XPathLexer
                 return new Token(TokenKind.Name, start, colonPos - start);
             }
 
-            // prefix:localname
+            // prefix:localname — a QName carries at most one colon; a further colon
+            // starts a new token (map constructor entries, map{z:b:z:b}).
             if (_position < _source.Length && IsNameStartChar(_source[_position]))
             {
-                while (_position < _source.Length && IsNameChar(_source[_position]))
+                while (_position < _source.Length && IsNameChar(_source[_position]) && _source[_position] != ':')
                     _position++;
 
                 return new Token(TokenKind.Name, start, _position - start);
