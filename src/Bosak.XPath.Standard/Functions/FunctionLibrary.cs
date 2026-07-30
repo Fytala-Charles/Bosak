@@ -186,6 +186,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.77  | 29-07-2026     | fn:round-half-to-even coerces untypedAtomic to double (hof-043) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.78  | 29-07-2026     | min/max booleans and FORG0006; fn:error empty arg; generate-id checks; base-uri static fallback |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -2903,8 +2905,8 @@ public static class FunctionLibrary
             [(Namespaces.Xs, "error", 1)] = new()
             {
                 NamespaceUri = Namespaces.Xs, LocalName = "error", Arity = 1,
-                ParameterTypes = [XdmValueKind.QName], ReturnType = XdmValueKind.Undefined,
-                Implementation = Error_1
+                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Undefined,
+                Implementation = XsError_1
             },
 
             // ----- fn:parse-json ----------------------------------------------
@@ -6939,7 +6941,7 @@ public static class FunctionLibrary
 
     private static XdmValue Error_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        // An empty code argument behaves as err:FOER0000.
+        // An empty code argument behaves as err:FOER0000 (fn-error-5/6).
         if (IsEmptySequence(args[0]))
             throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", "fn:error() called");
         var code = args[0].QNameValue;
@@ -6960,6 +6962,16 @@ public static class FunctionLibrary
             throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", args[1].ToString(), args[2]);
         var code = args[0].QNameValue;
         throw new XPathErrorException(code.NamespaceUri, code.LocalName, code.Prefix, args[1].ToString(), args[2]);
+    }
+
+    // xs:error type constructor: the abstract error type has no instances — the empty
+    // sequence is returned unchanged (xs-error-034/035/041); any non-empty value is a
+    // cast error (FORG0001, xs-error-038/039).
+    private static XdmValue XsError_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        throw new InvalidOperationException("FORG0001: Cannot cast a value to xs:error (the type is abstract and has no instances).");
     }
 
     private static XdmValue Trace_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -7124,6 +7136,11 @@ public static class FunctionLibrary
         if (!item.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:base-uri() context item is not a node.");
         var uri = item.NodeValue!.BaseUri;
+        // A node with no base URI of its own (constructed documents and their content)
+        // inherits the static base URI of the query — elements and documents only;
+        // comments, PIs, and text have no base URI (fn-base-uri-4/5 vs 12/32).
+        if (string.IsNullOrEmpty(uri) && item.NodeValue.NodeKind is XdmNodeKind.Element or XdmNodeKind.Document)
+            uri = ctx.BaseUri;
         return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri, "anyURI");
     }
 
@@ -7151,6 +7168,8 @@ public static class FunctionLibrary
         if (!arg.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:base-uri() argument is not a node.");
         var uri = arg.NodeValue!.BaseUri;
+        if (string.IsNullOrEmpty(uri) && arg.NodeValue.NodeKind is XdmNodeKind.Element or XdmNodeKind.Document)
+            uri = ctx.BaseUri;
         return string.IsNullOrEmpty(uri) ? XdmValue.Undefined : XdmValue.FromString(uri, "anyURI");
     }
 
@@ -8610,17 +8629,51 @@ public static class FunctionLibrary
             if (IsUntypedAtomic(atomized[i]))
                 atomized[i] = XdmValue.FromDouble(CastUntypedAtomicToDouble(atomized[i].StringValue));
 
-        // All date/time
-        bool allDateTime = atomized.All(a => a.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.Duration);
-        if (allDateTime)
+        // All booleans: xs:boolean is orderable (false < true) and the result is a
+        // boolean — not the 0/1 numeric coercion (cbcl-min-001/002).
+        if (atomized.Count > 0 && atomized.All(a => a.Kind == XdmValueKind.Boolean))
         {
-            // A generic xs:duration is not orderable — only its subtypes
-            // xs:yearMonthDuration and xs:dayTimeDuration are (fn-max-9/fn-min-9).
-            foreach (var a in atomized)
-                if (a.Kind == XdmValueKind.Duration && !IsOrderableDurationLexical(a.ToString()))
-                    throw new InvalidOperationException("FORG0006: xs:duration is not orderable (only xs:yearMonthDuration and xs:dayTimeDuration are)");
-            var first = atomized[0];
-            var result = first;
+            var result = atomized[0].BooleanValue;
+            for (int i = 1; i < atomized.Count; i++)
+            {
+                if (min ? (!atomized[i].BooleanValue && result) : (atomized[i].BooleanValue && !result))
+                    result = atomized[i].BooleanValue;
+            }
+            return XdmValue.FromBoolean(result);
+        }
+        // Booleans mixed with any other type are not comparable (cbcl-min-003).
+        if (atomized.Any(a => a.Kind == XdmValueKind.Boolean))
+            throw new InvalidOperationException("FORG0006: fn:min/fn:max arguments must not mix xs:boolean with other types");
+
+        // Date/time family: each kind is orderable only within itself (dates, times,
+        // dateTimes, and durations within one orderable subtype); any mix is FORG0006
+        // (cbcl-min-006/014/016/017).
+        if (atomized.All(a => a.Kind is XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.Duration))
+        {
+            var kinds = new HashSet<XdmValueKind>(atomized.Select(a => a.Kind));
+            if (kinds.Count > 1)
+                throw new InvalidOperationException("FORG0006: fn:min/fn:max arguments must not mix date/time kinds");
+            if (kinds.Contains(XdmValueKind.Duration))
+            {
+                // Only the orderable duration subtypes compare — plain xs:duration is
+                // FORG0006 by type annotation (cbcl-min-008, fn-max-9/fn-min-9); values
+                // without an annotation fall back to the lexical pattern, and the two
+                // subtypes do not mix.
+                bool anyYearMonth = false, anyDayTime = false;
+                foreach (var a in atomized)
+                {
+                    var lexical = a.ToString();
+                    if (a.SchemaTypeName?.Equals("duration", StringComparison.OrdinalIgnoreCase) == true)
+                        throw new InvalidOperationException("FORG0006: xs:duration is not orderable (only xs:yearMonthDuration and xs:dayTimeDuration are)");
+                    if (!IsOrderableDurationLexical(lexical))
+                        throw new InvalidOperationException("FORG0006: xs:duration is not orderable (only xs:yearMonthDuration and xs:dayTimeDuration are)");
+                    anyYearMonth |= IsYearMonthDurationString(lexical);
+                    anyDayTime |= IsDayTimeDurationString(lexical);
+                }
+                if (anyYearMonth && anyDayTime)
+                    throw new InvalidOperationException("FORG0006: fn:min/fn:max arguments must not mix xs:yearMonthDuration and xs:dayTimeDuration");
+            }
+            var result = atomized[0];
             for (int i = 1; i < atomized.Count; i++)
             {
                 var cmp = CompareDateTimeValues(atomized[i], result);
@@ -8651,10 +8704,10 @@ public static class FunctionLibrary
         }
 
         // Anything that is not numeric cannot be compared against numbers or mixed
-        // with strings: FORG0006. Booleans are tolerated as 0/1 (engine extension).
+        // with strings: FORG0006.
         bool allNumeric = true;
         foreach (var a in atomized)
-            if (a.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double or XdmValueKind.Boolean))
+            if (a.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double))
                 allNumeric = false;
         if (!allNumeric)
             throw new InvalidOperationException("FORG0006: fn:min/fn:max requires arguments of a single comparable type");
@@ -10768,15 +10821,34 @@ public static class FunctionLibrary
     private static XdmValue GenerateId_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var item = ctx.ContextItem;
+        // XPDY0002 when the context item is absent; XPTY0004 when it is not a node
+        // (generate-id-901).
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: fn:generate-id() requires a context item.");
         if (!item.IsNode)
-            return XdmValue.FromString(string.Empty);
+            throw new InvalidOperationException("XPTY0004: fn:generate-id() context item must be a node.");
         return XdmValue.FromString(GetNodeId(item.NodeValue));
     }
 
     private static XdmValue GenerateId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
+        // The argument must be a single node or the empty sequence (generate-id-902..905).
+        if (IsEmptySequence(args[0]))
+            return XdmValue.FromString(string.Empty);
+        if (args[0].IsSequence && args[0].SequenceValue is not null)
+        {
+            int count = 0;
+            foreach (var _ in XdmSequence.FromSource(args[0].SequenceValue))
+            {
+                count++;
+                if (count > 1)
+                    throw new InvalidOperationException("XPTY0004: fn:generate-id() argument must be a single node.");
+            }
+        }
         var node = GetNodeFromValue(args[0]);
-        return XdmValue.FromString(node is null ? string.Empty : GetNodeId(node));
+        if (node is null)
+            throw new InvalidOperationException("XPTY0004: fn:generate-id() argument must be a node.");
+        return XdmValue.FromString(GetNodeId(node));
     }
 
     private static string GetNodeId(IXdmNode node)

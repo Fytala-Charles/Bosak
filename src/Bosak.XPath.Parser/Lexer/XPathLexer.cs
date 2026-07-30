@@ -24,6 +24,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 29-07-2026     | QNames carry at most one colon (map constructor entry disambiguation) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 29-07-2026     | ScanDirectConstructorLength for prolog-level constructor skipping |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -49,6 +51,23 @@ public ref struct XPathLexer
     public ReadOnlySpan<char> Source => _source;
     public int Position => _position;
     public bool IsAtEnd => _position >= _source.Length;
+
+    /// <summary>
+    /// Attempts to scan a direct element constructor at the start of <paramref name="source"/>.
+    /// Returns the constructor's length in characters, or 0 when the text does not form a
+    /// structurally valid constructor (the caller then treats '&lt;' as an operator).
+    /// Prolog-level scanners use this to skip constructor text with quote fidelity
+    /// (K2-Axes-1/2: apostrophes in element content are not string delimiters).
+    /// </summary>
+    /// <param name="source">The source text positioned at '&lt;'.</param>
+    public static int ScanDirectConstructorLength(ReadOnlySpan<char> source)
+    {
+        if (source.Length < 2 || source[0] != '<' || !IsNameStartChar(source[1]))
+            return 0;
+        var lexer = new XPathLexer(source, allowConstructors: true);
+        var token = lexer.TryScanConstructor(0);
+        return token.Kind == TokenKind.Constructor ? token.Length : 0;
+    }
 
     /// <summary>
     /// Returns the next token and advances the lexer.

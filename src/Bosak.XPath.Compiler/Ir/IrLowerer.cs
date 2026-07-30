@@ -65,6 +65,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.27  | 29-07-2026     | 'allowing empty' checks the empty binding against the declared type occurrence |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.28  | 29-07-2026     | Switch desugar: error-tolerant case comparisons; operand/case cardinality checks |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -630,12 +632,56 @@ public sealed class IrLowerer
             foreach (var value in clause.Values)
             {
                 var eq = new BinaryExpressionNode(new VariableReferenceNode(tmp), BinaryOperator.Eq, value);
-                condition = condition is null ? eq : new BinaryExpressionNode(condition, BinaryOperator.Or, eq);
+                // XQuery 3.0 §3.12.2: a case whose comparison raises an error does not
+                // match (switch-006/007: decimal operand vs a current-time() case); but a
+                // multi-item case operand is XPTY0004 before that rule applies (switch-902).
+                // An empty switch operand matches an empty case operand (switch-009).
+                XPathAstNode guarded = new IfExpressionNode(
+                    new BinaryExpressionNode(
+                        new FunctionCallNode("count", new XPathAstNode[] { value }),
+                        BinaryOperator.Gt,
+                        new IntegerLiteralNode(1)),
+                    new FunctionCallNode("error",
+                        new XPathAstNode[]
+                        {
+                            new FunctionCallNode("QName", new XPathAstNode[]
+                            {
+                                new StringLiteralNode("http://www.w3.org/2005/xqt-errors"),
+                                new StringLiteralNode("err:XPTY0004")
+                            })
+                        }),
+                    new BinaryExpressionNode(
+                        new BinaryExpressionNode(
+                            new FunctionCallNode("empty", new XPathAstNode[] { new VariableReferenceNode(tmp) }),
+                            BinaryOperator.And,
+                            new FunctionCallNode("empty", new XPathAstNode[] { value })),
+                        BinaryOperator.Or,
+                        new TryCatchNode(eq,
+                            new[] { new TryCatchClause(new[] { new CatchCodePattern(null, null, null) }, new BooleanLiteralNode(false)) })));
+                condition = condition is null ? guarded : new BinaryExpressionNode(condition, BinaryOperator.Or, guarded);
             }
             body = new IfExpressionNode(condition!, clause.Return, body);
         }
+        // The switch operand must be a single atomic value (or empty): a multi-item
+        // operand is XPTY0004, raised before — and independently of — the guarded case
+        // comparisons (switch-901/902).
+        XPathAstNode cardinalityGuard = new IfExpressionNode(
+            new BinaryExpressionNode(
+                new FunctionCallNode("count", new XPathAstNode[] { new VariableReferenceNode(tmp) }),
+                BinaryOperator.Gt,
+                new IntegerLiteralNode(1)),
+            new FunctionCallNode("error",
+                new XPathAstNode[]
+                {
+                    new FunctionCallNode("QName", new XPathAstNode[]
+                    {
+                        new StringLiteralNode("http://www.w3.org/2005/xqt-errors"),
+                        new StringLiteralNode("err:XPTY0004")
+                    })
+                }),
+            body);
         return LowerNode(new LetExpressionNode(
-            new[] { new QuantifiedBinding(tmp, node.Operand) }, body), targetReg);
+            new[] { new QuantifiedBinding(tmp, node.Operand) }, cardinalityGuard), targetReg);
     }
 
     // typeswitch (E) case $v as T return R ... default ($d)? return RD

@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty + CompNamespaceConstructor + HigherOrderFunctions + dayTimeDurations clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0, 11 → 0, 11 → 0, 27 → 0); QT3 now **29,427 passed / 0 failed** (92.48%); unit tests **1,636/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty + CompNamespaceConstructor + HigherOrderFunctions + dayTimeDurations + residual sweep closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0, 11 → 0, 11 → 0, 27 → 0, 83 → 0); QT3 now **29,510 passed / 0 failed** (92.74%); unit tests **1,660/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -170,6 +170,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-063 | *(internal)* | Computed namespace constructors in element content | Required for XQuery conformance: namespace declarations in content (interleaving, dedupe, prefix conflicts, prefix type checks) and namespace-node identity (parentless, xs:string typed value) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-064 | *(internal)* | Higher-order function conformance — conversions, focus, base URI, error codes | Required for XPath/XQuery conformance: function-item error codes (FOTY0013/XQTY0105), partial-application arity, dynamic-call conversions, absent-focus named references, per-module base-URI capture, parenthesized sequence types | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-065 | *(internal)* | Reject plain xs:duration in date/time arithmetic | Required for XPath/XQuery conformance: duration operands in date/time arithmetic must be xs:dayTimeDuration or xs:yearMonthDuration (XPTY0004 for plain xs:duration) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-066 | *(internal)* | Residual-cluster sweep (83 QT3 gaps) | Required for XPath/XQuery conformance: stable order-by, switch semantics, array atomization/flattening, min/max type families, computed-element default namespaces, constructor-local propagation, kind-test errors, and assorted error codes | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -3005,13 +3006,65 @@ Validate duration operands at the `Add`/`Subtract` dispatch: a value of kind Dur
 
 ---
 
+### REQ-066: Residual-cluster sweep (83 QT3 gaps)
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+A broad tail of 83 recorded gaps across ~17 sets: AxisStep (7), VarDecl (6), StepExpr (6), SwitchExpr (6), ArrayTest (5), PathExpr (5), DefaultNamespaceDecl (7), fn:id/idref (8), fn:in-scope-prefixes (7), fn:min (8), fn:base-uri (4), fn:doc (2), fn:generate-id (5), xs:error (5), and op/divide-dayTimeDuration (4). The causes spanned a genuinely unstable order-by sort, missing switch-case semantics, incomplete array handling, wrong min/max type-family rules, missing default-namespace and constructor-local propagation, and a dozen smaller error-code gaps. About a third of the entries were stale after the preceding sessions.
+
+**Proposed Solution:**  
+Sweep the clusters in one pass: index-decorated stable sort; switch case no-match-on-error with pre-guarded cardinality checks; array atomization and recursive content flattening; min/max boolean and date/time family rules; computed-element default namespace plus constructor-local prefix propagation; constructor and empty-paren steps with `<`-after-slash XPST0003; schema kind-test grammar/runtime error split; and the remaining targeted fixes (external function declarations, initializer self-reference exclusion, XQST0070/XQST0052 namespace rules, type-text comment stripping, xs:error constructor, generate-id and base-uri checks, xml:id NCName validity, duration-division subtype rule).
+
+**Acceptance Criteria (highlights):**
+- [x] Stable order-by preserves input order for equal keys at any scale (fn-doc-33, 40-item stability repro).
+- [x] Switch: erroring cases don't match (switch-006/007); multi-item operand/case values raise XPTY0004 (switch-901/902); empty matches empty (switch-009).
+- [x] Array operands atomize in arithmetic; nested arrays flatten in content; attribute content joins members (AT-028/047/050/051).
+- [x] min/max: all-boolean → boolean; boolean mixes, date/time kind mixes, and plain xs:duration → FORG0006 (cbcl-min-001..017).
+- [x] Computed element names apply the default element namespace; xmlns="" materialized; constructor-local prefixes propagate (K2-InScopePrefixesFunc-12/13/18/29/30, fn-in-scope-prefixes-6).
+- [x] Constructors and `()` steps after `/`; `<` after `/` is XPST0003 in XQuery (PathExpr/StepExpr sets green).
+- [x] `schema-element`/`schema-attribute` syntax errors at parse, XPST0008 unprefixed, XPST0081 unbound prefix; implicit namespace-node() is XQST0134 in XQuery only (Axes112 vs 115/117).
+- [x] `declare function … external` parses; initializer self-reference is XPST0008; XQST0070 reserved default function namespace; XQST0052 non-XSD cast types; comments stripped from type text; xs:error(()) → (), xs:error(non-empty) → FORG0001; generate-id/base-uri/xml:id validity checks; plain xs:duration rejected in division.
+- [x] QT3: full suite **29,510 passed / 0 failed / 2,311 skipped (92.74%)**; gaps **216** (−83); every swept set fully green.
+- [x] Unit tests: 24 new tests; full suite **1,660/0**.
+
+**Implementation Notes:**
+- `List<T>.Sort` is introsort and unstable — order-by tuples are now decorated with input position; this was the single highest-impact fix (every large stable sort in the suite).
+- `xs:error` is the abstract *type constructor* (returns () for empty input, FORG0001 otherwise) — distinct from `fn:error`, which still raises FOER0000 on an empty code argument; the previous registration mistakenly aliased it to fn:error.
+- The `<`-after-slash rule is positional (XQuery mode only): the lexer falls back to the less-than operator when a constructor doesn't scan, and the parser raises XPST0003 where a step is expected.
+- xml:id attributes count as IDs only with a valid NCName value (fn-id-25: "789x" and " a123 " never match).
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Lexer/Parser | Modified | Constructor scanning, step rules, kind tests, type-text comments. |
+| Compiler | Modified | Switch desugar; stable sort is runtime. |
+| Runtime | Modified | Sort stability, arrays, computed names, propagation, division rule. |
+| Standard | Modified | min/max families, fn:error/xs:error, generate-id, base-uri. |
+| Providers | Modified | xml:id NCName validity. |
+| Conformance | Modified | Gaps 216. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | Implicit-axis-only XQST0134 for namespace-node() in XQuery | The catalog requires the error only for `/*/namespace-node()` (Axes112) while `self::`/`attribute::` namespace-node() and the namespace axis keep working (Axes115/117, generate-id). |
+| 2026-07-29 | Kimi | XQST0070 for default function namespace covers only XML/XMLNS URIs | defaultnamespacedeclerr-4/6/8 pin those two; hof-007 proves XMLSchema is legal as a default function namespace. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-065 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed, CompNamespaceConstructor cluster closed, HigherOrderFunctions cluster closed, dayTimeDurations clusters closed; QT3 wired (29,427/0, 92.48%). Residual singles, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-066 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed, CompNamespaceConstructor cluster closed, HigherOrderFunctions cluster closed, dayTimeDurations clusters closed, residual sweep closed; QT3 wired (29,510/0, 92.74%). Residual singles, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

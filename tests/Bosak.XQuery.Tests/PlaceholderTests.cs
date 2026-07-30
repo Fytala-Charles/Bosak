@@ -64,6 +64,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.18  | 29-07-2026     | 5 duration subtype arithmetic tests (XPTY0004 for plain xs:duration) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.19  | 29-07-2026     | 22 residual-sweep tests (switch, arrays, min, steps, stable sort, error codes) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -2586,6 +2588,237 @@ public class PlaceholderTests
             .Evaluate(new XQueryContext());
 
         Assert.Equal("1997-01-02", result.ToString());
+    }
+
+    [Fact]
+    public void XQuery_VariableInitializer_SelfReference_ThrowsXPST0008()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare variable $var1 := $var1; true()"));
+        Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DefaultFunctionNamespace_ReservedXml_ThrowsXQST0070()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("declare default function namespace \"http://www.w3.org/XML/1998/namespace\"; declare function go() {3}; go()"));
+        Assert.Contains("XQST0070", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DefaultFunctionNamespace_XmlSchemaAllowed()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare default function namespace \"http://www.w3.org/2001/XMLSchema\"; let $f := date#1 return $f('2008-01-31')")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("2008-01-31", result.ToString());
+    }
+
+    [Fact]
+    public void XQuery_Cast_NonXsdDefaultNamespace_ThrowsXQST0052()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("<b xmlns=\"http://www.w3.org/1999/XSL/Transform\">{2 cast as byte}</b>")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0052", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Predicate_ConstructorAfterSlashWorks()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $var := document {<a>123</a>}; count($var[/<a/>])")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(1L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_Predicate_LessThanAfterSlash_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("fn:count(.[/ < 5])"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Switch_ErroringCaseDoesNotMatch()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $number as xs:decimal := 42; switch ($number) case 21 return \"Moo\" case current-time() return \"Meow\" case 42 return \"Quack\" default return \"Baa\"")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("Quack", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_Switch_MultiItemOperand_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("switch (1 to 2) case 1 return \"Moo\" default return \"Baa\"")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_Switch_EmptyOperandMatchesEmptyCase()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("switch (()) case 42 return \"Moo\" case () return \"Woof\" default return \"Baa\"")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("Woof", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ArrayArithmetic_AtomizesMembers()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("let $x := <root><elem>1</elem><elem>2</elem></root> return [$x/elem[1]] + [$x/elem[2]]")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(3, result.DoubleValue);
+    }
+
+    [Fact]
+    public void XQuery_Min_AllBooleansReturnsBoolean()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("min((true(), true(), true())) instance of xs:boolean")
+            .Evaluate(new XQueryContext());
+
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_Min_MixedBooleanAndNumber_ThrowsFORG0006()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("min((true(), true(), 3))").Evaluate(new XQueryContext()));
+        Assert.Contains("FORG0006", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DurationDivide_PlainDuration_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("xs:duration(\"P1Y\") div xs:yearMonthDuration(\"P1M\")")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_SchemaAttributeKindTest_WithName_ThrowsXPST0008()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("<e/>/attribute::schema-attribute(foo)"));
+        Assert.Contains("XPST0008", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_SchemaAttributeKindTest_Empty_ThrowsXPST0003()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("<e/>/attribute::schema-attribute()"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_ImplicitNamespaceNodeStep_ThrowsXQST0134()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("/*/namespace-node()"));
+        Assert.Contains("XQST0134", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_FnError_EmptyArgument_RaisesFOER0000()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("fn:error(())").Evaluate(new XQueryContext()));
+        var errorEx = Assert.IsType<Bosak.XPath.Runtime.Vm.XPathErrorException>(ex);
+        Assert.Equal("FOER0000", errorEx.CodeLocalName);
+    }
+
+    [Fact]
+    public void XQuery_XsErrorConstructor_EmptyReturnsEmpty()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("empty(xs:error(()))")
+            .Evaluate(new XQueryContext());
+
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_XsErrorConstructor_NonEmpty_ThrowsFORG0001()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("xs:error(1)").Evaluate(new XQueryContext()));
+        Assert.Contains("FORG0001", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_GenerateId_NonNodeArgument_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("generate-id(3)").Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_StableSortPreservesInputOrder()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("string-join(for $x in <r><i k=\"b\">1</i><i k=\"a\">2</i><i k=\"a\">3</i><i k=\"b\">4</i></r>/i stable order by $x/@k return $x/text(), ',')")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("2,3,1,4", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ParameterType_CommentStripped()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare function local:f($square as xs:integer (: range 0 to 63 :)) as xs:integer { $square + 1 }; local:f(5)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(6L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_BaseUri_ConstructedDocumentInheritsStaticBaseUri()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare base-uri \"http://example.org\"; fn:string(fn:base-uri(document {<aDocument>content</aDocument>}))")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("http://example.org", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ConstructorText_ApostropheInVariableInitializer()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare variable $var := document{<e><f>f's value</f></e>}; string-join($var/(/)/(/)//f/text(), '')")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("f's value", result.StringValue);
     }
 
     private static List<long> ToIntegers(XdmValue value)

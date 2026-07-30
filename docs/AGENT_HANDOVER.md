@@ -1,6 +1,47 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): residual-cluster sweep — stable order-by, switch semantics, arrays, min/max, error codes)
+**Current focus:** **Residual-cluster sweep closed** (83 gaps → 0): a broad sweep across AxisStep, VarDecl, StepExpr, SwitchExpr, PathExpr, ArrayTest, DefaultNamespaceDecl, fn:id/idref, fn:in-scope-prefixes, fn:min, fn:base-uri, fn:doc, fn:generate-id, xs:error, and op/divide-dayTimeDuration. QT3 went from **29,427 passed / 0 failed / 2,394 skipped (92.48%)** to **29,510 passed / 0 failed / 2,311 skipped (92.74%)** (+83 passing). Full `dotnet test Bosak.sln` passes: **1,660 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (residual sweep)
+
+1. **Stable order-by at scale** — the order-by sort used `List<T>.Sort` (introsort, unstable); tuples are now decorated with their input position for tie-breaking (fn-doc-33's knight-tour-of-idents and any large stable sort).
+2. **Switch semantics** — case comparisons that raise errors are treated as no-match (switch-006/007), but operand and case-value cardinality violations are XPTY0004 raised before that rule (switch-901/902), and an empty operand matches an empty case value (switch-009).
+3. **Arrays** — atomization of array operands in arithmetic (`[$x/elem[1]] + [$x/elem[2]]` = 3, AT-028); recursive content flattening with sequence unwrapping and nested arrays (AT-047/051); arrays in attribute content joined with spaces (AT-050).
+4. **min/max type families** — all-boolean returns a boolean (cbcl-min-001/002), boolean+anything is FORG0006 (003), date/time kind mixes are FORG0006 (006/014/016/017), plain xs:duration is FORG0006 by annotation (008).
+5. **Computed elements get the default element namespace** (`element b {}` — K2-InScopePrefixesFunc-12/13/18/29/30), with xmlns="" materialized for no-namespace children; constructor-local prefix declarations propagate to built elements (K2-18).
+6. **Steps** — constructors after `/` in predicates (PathExpr-14, Steps-11); `<` after `/` is a constructor start — invalid forms are XPST0003 (Steps-2/3/4/5, PathExpr-5/7/8/9); empty-parens steps work; prolog-level scanners skip constructor spans so apostrophes in content don't break initializers (K2-Axes-1/2, XQDY0050 for non-document roots).
+7. **Kind tests** — `schema-element`/`schema-attribute` grammar errors at parse (empty/wildcard/string → XPST0003), unprefixed names XPST0008, prefixed names resolve at runtime (XPST0081 unbound, K2-NameTest-33..36, K2-NodeTest-8/9/26/27); implicit-axis `namespace-node()` is XQST0134 in XQuery (Axes112) while explicit axes keep working (Axes115/117).
+8. **Functions and misc** — `declare function … external` parses (reserved ns → XQST0045, else XPST0017); variable initializers exclude the variable being declared (XPST0008, K-InternalVariablesWith-15b); XQST0070 reserved XML/XMLNS default function namespace (XMLSchema stays legal, hof-007); XQST0052 for cast types under a non-XSD default namespace; XQuery comments stripped from sequence-type text (Axes089); xs:error type constructor returns empty for ()/FORG0001 otherwise (fn:error itself still FOER0000); generate-id argument checks (XPDY0002/XPTY0004); fn:base-uri inherits the static base URI for element/document nodes (fn-base-uri-12/32 vs 4/5); xml:id attributes are IDs only with a valid NCName value (fn-id-25); plain xs:duration rejected in division (cbcl-div-*).
+9. **Gaps: 216 reasoned skips (−83)** — every swept set runs fully green.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.{Parser/Lexer/XPathLexer, Parser/Ast/XPathParser, Compiler/Ir/IrLowerer}.cs`
+- `src/Bosak.XPath.Runtime/Vm/{VmEngine,EvaluationContext}.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`
+- `src/Bosak.XQuery/{Parser/XQueryParser,Compiler/ModuleVisibilityValidator,Api/XQueryCompiler}.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+22)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (216 recorded skips)
+
+Residual clusters: fn:min (0 — closed), AxisStep (0 — closed); remaining: app/FunctxFunctx (5), app/UseCaseR31 (5), PathExpr (0), StepExpr (0), plus scattered singles (fn:base-uri? none left) — the remaining sets are small singles/pairs across fn:*, op:*, and app:*. The ~2,095 bulk skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **Remaining singles/pairs sweep** — fn:*, op:*, app:* residuals (~40 entries across ~25 sets).
+2. **fn:load-xquery-module** — the only remaining feature-level gap of size.
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `ce65b8c` (feat(xquery): reject plain xs:duration in date/time arithmetic)
 **Current focus:** **op/add-dayTimeDurations + op/subtract-dayTimeDurations clusters closed** (16 + 11 gaps → 0): plain `xs:duration` values are now rejected in date/time arithmetic. QT3 went from **29,400 passed / 0 failed / 2,421 skipped (92.39%)** to **29,427 passed / 0 failed / 2,394 skipped (92.48%)** (+27 passing). Full `dotnet test Bosak.sln` passes: **1,636 unit tests / 0 failed**; XSLT baseline unchanged.
 

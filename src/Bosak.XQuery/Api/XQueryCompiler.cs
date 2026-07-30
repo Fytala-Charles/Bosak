@@ -40,6 +40,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.4   | 29-07-2026     | WithEnforcedType wraps typed variable initializers with a strict EnforceType check |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.5   | 29-07-2026     | Variable initializers exclude the variable being declared (XPST0008 self-reference) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -338,8 +340,11 @@ public sealed class XQueryCompiler
             if (v.Body is not null)
             {
                 var varBodyAst = ResolveFunctionNamespaces(v.Body, context);
+                // A variable is not in scope within its own initializer (XPST0008,
+                // K-InternalVariablesWith-15b).
                 ModuleVisibilityValidator.Validate(
-                    varBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables);
+                    varBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables,
+                    excludeVariable: (v.LocalName, v.NamespaceUri));
                 varModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
                     .Lower(optimizer.Optimize(varBodyAst));
                 // A declared type is enforced strictly on the initializer: atomization plus

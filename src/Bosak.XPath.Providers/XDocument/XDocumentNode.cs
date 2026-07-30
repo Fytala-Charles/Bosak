@@ -43,6 +43,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 29-07-2026     | Parentless-namespace-node marker: parent axis and Parent honor it |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.13  | 29-07-2026     | xml:id/id attributes are IDs only when the value is a valid NCName (fn-id-25) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
@@ -1231,14 +1233,36 @@ public sealed class XDocumentNode : IXdmNode
                 return true;
         }
 
-        // Infoset fallback: attributes named "id" (no namespace) or "xml:id" are IDs.
+        // Infoset fallback: attributes named "id" (no namespace) or "xml:id" are IDs —
+        // but only when the value is a valid NCName (fn-id-25: "789x" and " a123 "
+        // are not valid xml:id values and must not match).
         if (attr.Name.LocalName == "id" && attr.Name.NamespaceName.Length == 0)
-            return true;
+            return IsValidNCName(attr.Value);
         if (attr.Name.LocalName == "id" && attr.Name.NamespaceName == "http://www.w3.org/XML/1998/namespace")
-            return true;
+            return IsValidNCName(attr.Value);
 
         return false;
     }
+
+    // NCName per XML Namespaces 1.0: a letter or '_' start, then letters, digits,
+    // '.', '-', '_' (simplified ASCII rule, matching the parser's constructor check).
+    private static bool IsValidNCName(string value)
+    {
+        if (value.Length == 0)
+            return false;
+        if (!IsNameStartChar(value[0]))
+            return false;
+        for (int i = 1; i < value.Length; i++)
+        {
+            char c = value[i];
+            if (!IsNameStartChar(c) && c is not ('-' or '.') && !char.IsDigit(c))
+                return false;
+        }
+        return true;
+    }
+
+    private static bool IsNameStartChar(char c)
+        => char.IsLetter(c) || c == '_';
 
     private static bool IsIdElement(XElement element)
     {

@@ -31,6 +31,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.1   | 29-07-2026     | Unsupported collation is XQST0038; empty default function namespace is XQST0060 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 29-07-2026     | XQST0070 reserved dfn; external fn decls; comments stripped from type text; constructor span skipping |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -38,6 +40,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
+using Bosak.XPath.Parser.Lexer;
 
 namespace Bosak.XQuery.Compiler;
 
@@ -321,6 +324,13 @@ public sealed class XQueryParser
             // (unlike the default element namespace, it cannot be undeclared).
             if (uri.Length == 0)
                 throw new ParseException("XQST0060: The default function namespace must not be a zero-length string.", _position);
+            // XQST0070: the default function namespace must not be the XML or XMLNS
+            // namespace (defaultnamespacedeclerr-4/6/8). The XML Schema namespaces are
+            // legal here (hof-007 uses xs:date via the default function namespace).
+            if (uri is "http://www.w3.org/XML/1998/namespace" or "http://www.w3.org/2000/xmlns/")
+            {
+                throw new ParseException($"XQST0070: The default function namespace must not be the reserved namespace '{uri}'.", _position);
+            }
             // XQST0066: the default function namespace must not be declared twice.
             if (context.DefaultFunctionNamespace is not null
                 && context.DefaultFunctionNamespace != "http://www.w3.org/2005/xpath-functions")
@@ -524,6 +534,17 @@ public sealed class XQueryParser
             returnType = ReadSequenceTypeText();
         }
         SkipWhitespace();
+        // External function declarations ('external' in place of the body) are not
+        // supported; the reserved-namespace check still applies first (K2-Axes-99: an
+        // unprefixed name lands in the reserved fn namespace — XQST0045).
+        if (TryMatchLiteral("external"))
+        {
+            SkipWhitespace();
+            ExpectChar(';');
+            if (IsReservedFunctionNamespace(fnNs))
+                throw new ParseException($"XQST0045: Functions must not be declared in the reserved namespace '{fnNs}'.", _position);
+            throw new ParseException($"XPST0017: External function declarations are not supported ('{local}').", _position);
+        }
         var body = ReadBracedExpression();
         SkipWhitespace();
         ExpectChar(';');
@@ -535,14 +556,7 @@ public sealed class XQueryParser
         if (context.UserFunctions.Any(f => f.LocalName == local && f.NamespaceUri == fnNs && f.Parameters.Count == parameters.Count))
             throw new ParseException($"XQST0034: Function '{local}' with arity {parameters.Count} is declared more than once.", _position);
         // XQST0045: functions must not be declared in a reserved function namespace.
-        if (fnNs is "http://www.w3.org/2005/xpath-functions"
-            or "http://www.w3.org/2005/xpath-functions/math"
-            or "http://www.w3.org/2005/xpath-functions/map"
-            or "http://www.w3.org/2005/xpath-functions/array"
-            or "http://www.w3.org/2001/XMLSchema"
-            or "http://www.w3.org/2001/XMLSchema-instance"
-            or "http://www.w3.org/XML/1998/namespace"
-            or "http://www.w3.org/2000/xmlns/")
+        if (IsReservedFunctionNamespace(fnNs))
         {
             throw new ParseException($"XQST0045: Functions must not be declared in the reserved namespace '{fnNs}'.", _position);
         }
@@ -553,6 +567,16 @@ public sealed class XQueryParser
         _seenSecondPhaseDecl = true;
         return true;
     }
+
+    private static bool IsReservedFunctionNamespace(string ns)
+        => ns is "http://www.w3.org/2005/xpath-functions"
+            or "http://www.w3.org/2005/xpath-functions/math"
+            or "http://www.w3.org/2005/xpath-functions/map"
+            or "http://www.w3.org/2005/xpath-functions/array"
+            or "http://www.w3.org/2001/XMLSchema"
+            or "http://www.w3.org/2001/XMLSchema-instance"
+            or "http://www.w3.org/XML/1998/namespace"
+            or "http://www.w3.org/2000/xmlns/";
 
     private bool TryParseVariableDeclaration(ref XQueryStaticContext context)
     {
@@ -1072,7 +1096,10 @@ public sealed class XQueryParser
             ReadItemTypeText();
         if (_position < _source.Length && _source[_position] is '?' or '*' or '+')
             _position++;
-        var text = _source[start.._position].Trim();
+        // The raw slice may contain XQuery comments that SkipWhitespace stepped over
+        // (Axes089: "$square as xs:integer (: range 0 to 63 :)") — they are not part of
+        // the type text.
+        var text = StripComments(_source[start.._position]).Trim();
         // XPST0003: empty-sequence() must not carry an occurrence indicator.
         if (text.StartsWith("empty-sequence(", StringComparison.Ordinal)
             && text.Length > "empty-sequence()".Length)
@@ -1160,6 +1187,16 @@ public sealed class XQueryParser
         while (_position < _source.Length && depth > 0)
         {
             char c = _source[_position];
+            if (c == '<')
+            {
+                // Direct element constructor: skip the whole span (K2-Axes-1/2).
+                int ctorLength = XPathLexer.ScanDirectConstructorLength(_source[_position..]);
+                if (ctorLength > 0)
+                {
+                    _position += ctorLength;
+                    continue;
+                }
+            }
             if (c == '\'' || c == '"')
             {
                 SkipStringLiteral(c);
@@ -1193,6 +1230,18 @@ public sealed class XQueryParser
         while (_position < _source.Length)
         {
             char c = _source[_position];
+            if (c == '<')
+            {
+                // Direct element constructor: skip the whole span so apostrophes and
+                // quotes in text content are not mistaken for string delimiters
+                // (K2-Axes-1/2). '<' that does not begin a valid constructor is an operator.
+                int ctorLength = XPathLexer.ScanDirectConstructorLength(_source[_position..]);
+                if (ctorLength > 0)
+                {
+                    _position += ctorLength;
+                    continue;
+                }
+            }
             if (c == '\'' || c == '"')
             {
                 SkipStringLiteral(c);

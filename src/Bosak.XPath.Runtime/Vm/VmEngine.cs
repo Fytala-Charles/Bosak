@@ -145,6 +145,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.81  | 29-07-2026     | Plain xs:duration rejected in date/time arithmetic (XPTY0004, cbcl-plus/minus) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.82  | 29-07-2026     | Residual sweep: stable order-by; array atomize/flatten; default-ns computed names; div duration rule |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -898,27 +900,36 @@ public static class VmEngine
                         }
 
                         var tuples = MaterializeSequence(tupleSequence);
-                        var materializedTuples = new List<XdmValue[]>();
+                        // List<T>.Sort is introsort and NOT stable: decorate with the
+                        // original position so equal keys keep their input order
+                        // ('stable order by' semantics, fn-doc-33).
+                        var materializedTuples = new List<(XdmValue[] Items, int Index)>();
+                        int tupleIndex = 0;
                         foreach (var tuple in tuples)
                         {
                             if (tuple.IsArray && tuple.ArrayValue is not null)
                             {
-                                materializedTuples.Add(tuple.ArrayValue.Values.ToArray());
+                                materializedTuples.Add((tuple.ArrayValue.Values.ToArray(), tupleIndex));
                             }
                             else if (tuple.IsSequence && tuple.SequenceValue is not null)
                             {
-                                materializedTuples.Add(MaterializeSequence(tuple));
+                                materializedTuples.Add((MaterializeSequence(tuple), tupleIndex));
                             }
                             else
                             {
-                                materializedTuples.Add(new[] { tuple });
+                                materializedTuples.Add((new[] { tuple }, tupleIndex));
                             }
+                            tupleIndex++;
                         }
 
-                        materializedTuples.Sort((x, y) => CompareTuples(x, y, orderInfo, context));
+                        materializedTuples.Sort((x, y) =>
+                        {
+                            int cmp = CompareTuples(x.Items, y.Items, orderInfo, context);
+                            return cmp != 0 ? cmp : x.Index.CompareTo(y.Index);
+                        });
 
                         var sorted = new List<XdmValue>(materializedTuples.Count);
-                        foreach (var tupleItems in materializedTuples)
+                        foreach (var (tupleItems, _) in materializedTuples)
                         {
                             sorted.Add(XdmValue.FromArray(new XdmArray(tupleItems)));
                         }
@@ -1098,6 +1109,12 @@ public static class VmEngine
                                 foreach (var item in MaterializeSequence(registers[instr.RegisterC]))
                                     accumulator.Add(item, context);
                                 accumulator.Flush();
+                                // An element in no namespace under a non-empty default namespace
+                                // undeclares it: xmlns="" is materialized so in-scope-prefixes and
+                                // the namespace axis see it (K2-InScopePrefixesFunc-12/29).
+                                if (ns is null && !string.IsNullOrEmpty(context.DefaultElementNamespace))
+                                    accumulator.Content.Insert(0, new XdmContentItem(XdmContentKind.Namespace, "", null, ""));
+                                AppendConstructorLocalNamespaces(accumulator.Content, accumulator.Attributes, context, prefix);
                                 if (context.ElementConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
                                 var spec = new XdmElementSpec(local, prefix, ns, accumulator.Attributes, accumulator.Content, context.BaseUri);
@@ -1247,7 +1264,7 @@ public static class VmEngine
                     // Snapshot namespace bindings and the default element namespace for
                     // constructor-local namespace scoping (restored by RestoreNamespaces).
                     registers[instr.RegisterA] = XdmValue.FromExternal(
-                        (context.SnapshotNamespaces(), context.DefaultElementNamespace));
+                        (context.SnapshotNamespaces(), context.DefaultElementNamespace, context.ConstructorLocalNamespaceCount));
                     ip++;
                     break;
 
@@ -1258,6 +1275,8 @@ public static class VmEngine
                         string prefix = (string)literalPool[instr.Operand]!;
                         var nsValue = registers[instr.RegisterB];
                         string uri = nsValue.IsUndefined ? string.Empty : Atomize(nsValue).ToString();
+                        if (prefix.Length > 0)
+                            context.AddConstructorLocalNamespace(prefix, uri);
                         if (prefix.Length == 0)
                         {
                             // An empty URI undeclares the default namespace.
@@ -1278,9 +1297,10 @@ public static class VmEngine
 
                 case IrOpCode.RestoreNamespaces:
                     {
-                        var snapshot = ((Dictionary<string, string> Namespaces, string? DefaultNs))registers[instr.RegisterB].ExternalValue!;
+                        var snapshot = ((Dictionary<string, string> Namespaces, string? DefaultNs, int LocalCount))registers[instr.RegisterB].ExternalValue!;
                         context.RestoreNamespaces(snapshot.Namespaces);
                         context.DefaultElementNamespace = snapshot.DefaultNs;
+                        context.TruncateConstructorLocalNamespaces(snapshot.LocalCount);
                         ip++;
                         break;
                     }
@@ -1362,6 +1382,49 @@ public static class VmEngine
                                 lastWasAtomic = false;
                                 seenNonAttributeContent = true;
                             }
+                        }
+
+                        // One array member (or sequence item) as content: flattened recursively
+                        // (nested arrays and sequence members included, ArrayTest-047/051).
+                        void AddArrayMember(XdmValue member)
+                        {
+                            if (member.IsSequence && member.SequenceValue is not null)
+                            {
+                                foreach (var inner in XdmSequence.FromSource(member.SequenceValue))
+                                    AddArrayMember(inner);
+                                return;
+                            }
+                            if (member.IsArray && member.ArrayValue is not null)
+                            {
+                                foreach (var nested in member.ArrayValue.Values)
+                                    AddArrayMember(nested);
+                                return;
+                            }
+                            if (member.IsNode && member.NodeValue.NodeKind == XdmNodeKind.Attribute)
+                            {
+                                if (seenNonAttributeContent)
+                                    throw new InvalidOperationException("XQTY0024: An attribute node in element content must not follow other content.");
+                                var attrNode = member.NodeValue;
+                                string? itemNs = string.IsNullOrEmpty(attrNode.NamespaceUri) ? null : attrNode.NamespaceUri;
+                                if (attrNode.LocalName != "xmlns" && attrNode.Prefix != "xmlns" &&
+                                    !seenAttrs.Add((attrNode.LocalName, itemNs ?? "")))
+                                {
+                                    throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrNode.LocalName}'.");
+                                }
+                                attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue));
+                                return;
+                            }
+                            if (member.IsNode)
+                            {
+                                FlushAtomic();
+                                content.Add(new XdmContentItem(XdmContentKind.Node, null, member));
+                                seenNonAttributeContent = true;
+                                return;
+                            }
+                            var memberText = member.ToString();
+                            pendingAtomic = pendingAtomic is null ? memberText : pendingAtomic + (lastWasAtomic ? " " : "") + memberText;
+                            lastWasAtomic = true;
+                            seenNonAttributeContent = true;
                         }
 
                         for (int i = ctorInfo.FirstContentPart; i < ctorInfo.FirstContentPart + ctorInfo.ContentPartCount; i++)
@@ -1465,22 +1528,9 @@ public static class VmEngine
                                         else if (item.IsArray && item.ArrayValue is not null)
                                         {
                                             // Arrays in content are flattened: their members are
-                                            // processed recursively as content.
+                                            // processed recursively as content (ArrayTest-047/051).
                                             foreach (var member in item.ArrayValue.Values)
-                                            {
-                                                if (member.IsNode)
-                                                {
-                                                    FlushAtomic();
-                                                    content.Add(new XdmContentItem(XdmContentKind.Node, null, member));
-                                                    seenNonAttributeContent = true;
-                                                }
-                                                else
-                                                {
-                                                    var memberText = member.ToString();
-                                                    pendingAtomic = pendingAtomic is null ? memberText : pendingAtomic + (lastWasAtomic ? " " : "") + memberText;
-                                                    lastWasAtomic = true;
-                                                }
-                                            }
+                                                AddArrayMember(member);
                                         }
                                         else
                                         {
@@ -1500,6 +1550,7 @@ public static class VmEngine
                             }
                         }
                         FlushAtomic();
+                        AppendConstructorLocalNamespaces(content, attributes, context, ctorInfo.Prefix);
 
                         if (context.ElementConstructorHook is null)
                         {
@@ -3449,6 +3500,32 @@ public static class VmEngine
                 : XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
         }
 
+        if (value.IsArray && value.ArrayValue is not null)
+        {
+            // fn:data semantics: atomizing an array atomizes its members (ArrayTest-028).
+            var members = new List<XdmValue>();
+            foreach (var member in value.ArrayValue.Values)
+            {
+                if (member.IsSequence && member.SequenceValue is not null)
+                {
+                    foreach (var inner in XdmSequence.FromSource(member.SequenceValue))
+                        members.Add(inner);
+                }
+                else if (!member.IsUndefined)
+                {
+                    members.Add(member);
+                }
+            }
+            if (members.Count == 0)
+                return XdmValue.Undefined;
+            if (members.Count == 1)
+                return Atomize(members[0]);
+            // Singleton requirement (arithmetic, value comparisons): atomization of a
+            // multi-item array is a type error, as with multi-item sequences.
+            throw new InvalidOperationException(
+                "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with " + members.Count + " items");
+        }
+
         if (value.IsSequence)
         {
             var items = MaterializeSequence(value);
@@ -3661,6 +3738,11 @@ public static class VmEngine
             "attribute" => node.NodeKind == XdmNodeKind.Attribute,
             "document-node" => node.NodeKind == XdmNodeKind.Document,
             "namespace-node" => node.NodeKind == XdmNodeKind.Namespace,
+            // Schema-aware kind tests are XPST0008 (no schema awareness); a prefixed
+            // name argument has already been namespace-checked by a preceding
+            // NamespaceTest opcode (XPST0081 for unbound prefixes, K2-NameTest-35/36).
+            "schema-element" or "schema-attribute" =>
+                throw new InvalidOperationException("XPST0008: Schema-aware kind tests are not supported (no schema awareness)."),
             _ => true // permissive fallback
         };
     }
@@ -4530,11 +4612,18 @@ public static class VmEngine
 
         // Duration div number
         if (left.Kind == XdmValueKind.Duration && !IsDuration(right))
+        {
+            RequireProperDurationSubtype(left);
             return DivideDuration(left, right);
+        }
 
         // Duration div Duration
         if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
+        {
+            RequireProperDurationSubtype(left);
+            RequireProperDurationSubtype(right);
             return DivideDurationByDuration(left, right);
+        }
 
         ValidateNumericOperand(left);
         ValidateNumericOperand(right);
@@ -5582,6 +5671,17 @@ public static class VmEngine
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "").Replace("xsd:", "");
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
             normalized = normalized[..^1].TrimEnd();
+
+        // An unprefixed type name resolves against the default element namespace: when it
+        // is set and is not the XML Schema namespace, the name is not a built-in type
+        // (XQST0052, K2-DefaultNamespaceProlog-12a — '2 cast as byte' under the XSL namespace).
+        if (!typeName.Contains(':') && !typeName.StartsWith("Q{", StringComparison.Ordinal)
+            && context is not null
+            && !string.IsNullOrEmpty(context.DefaultElementNamespace)
+            && context.DefaultElementNamespace != "http://www.w3.org/2001/XMLSchema")
+        {
+            throw new InvalidOperationException($"XQST0052: The type '{typeName}' is not a known simple type in the namespace '{context.DefaultElementNamespace}'.");
+        }
 
         // A prefixed type name resolves via the in-scope namespaces (constructor-local
         // declarations included): the XML Schema namespace maps to the bare type.
@@ -8307,6 +8407,8 @@ public static class VmEngine
 
         if (!occOk) return false;
         if (actual == test) return true;
+        // empty-sequence() is a subtype of every sequence type (xs-015/016).
+        if (actual is "empty-sequence" or "empty-sequence()") return true;
 
         if (actualFamily || testFamily)
             return IsFunctionFamilySubtype(actual, test);
@@ -9358,6 +9460,15 @@ public static class VmEngine
             // Function items cannot be atomized (function-item-6: attribute a { avg#1 }).
             if (value.IsFunction)
                 throw new InvalidOperationException("FOTY0013: Atomization of a function item is not allowed.");
+            // An array in attribute content: its members are joined with single spaces
+            // (ArrayTest-050).
+            if (value.IsArray && value.ArrayValue is not null)
+            {
+                var memberParts = new List<string>();
+                foreach (var member in value.ArrayValue.Values)
+                    memberParts.Add(JoinAtomizedItems(member, separator));
+                return string.Join(separator, memberParts);
+            }
             return Atomize(value).ToString();
         }
         var items = MaterializeSequence(value);
@@ -9385,6 +9496,33 @@ public static class VmEngine
     /// attributes only before any other content (XQTY0024), duplicate attribute detection
     /// (XQDY0025), array flattening, and single-space joining of adjacent atomic values.
     /// </summary>
+    // Constructor-local namespace bindings (xmlns declarations of enclosing constructors)
+    // propagate to a built element; prefixes the element itself declares (xmlns
+    // attributes, computed namespace constructors in content, or the tag prefix) are
+    // skipped so propagation neither duplicates them nor triggers the name-conflict
+    // resolution reserved for real content declarations (K2-DirectConElemNamespace-77).
+    private static void AppendConstructorLocalNamespaces(
+        List<XdmContentItem> content, IReadOnlyList<XdmAttributeValue> attributes, EvaluationContext context,
+        string? tagPrefix)
+    {
+        var declared = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var attr in attributes)
+        {
+            if (attr.Prefix == "xmlns") declared.Add(attr.LocalName);
+            else if (attr.LocalName == "xmlns" && attr.Prefix is null) declared.Add("");
+        }
+        foreach (var item in content)
+            if (item.Kind == XdmContentKind.Namespace)
+                declared.Add(item.Target ?? "");
+        if (tagPrefix is not null)
+            declared.Add(tagPrefix);
+        foreach (var (prefix, uri) in context.ConstructorLocalNamespaces)
+        {
+            if (!declared.Contains(prefix))
+                content.Add(new XdmContentItem(XdmContentKind.Namespace, uri, null, prefix));
+        }
+    }
+
     private sealed class ComputedContentAccumulator
     {
         private readonly List<XdmAttributeValue> _attributes = new();
@@ -9409,6 +9547,13 @@ public static class VmEngine
 
         public void Add(XdmValue item, EvaluationContext context)
         {
+            // A sequence member is flattened item by item (array members are sequences).
+            if (item.IsSequence && item.SequenceValue is not null)
+            {
+                foreach (var inner in XdmSequence.FromSource(item.SequenceValue))
+                    Add(inner, context);
+                return;
+            }
             if (item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Attribute)
             {
                 if (!_allowAttributes || _seenNonAttributeContent)
@@ -9514,6 +9659,10 @@ public static class VmEngine
                     throw new InvalidOperationException($"XPST0081: Prefix '{info.Prefix}' is not declared.");
                 ns = resolved;
             }
+            // An unprefixed computed element name uses the default element namespace
+            // (K2-InScopePrefixesFunc-12/13; attribute names never do).
+            if (ns is null && construct == "element" && !string.IsNullOrEmpty(context.DefaultElementNamespace))
+                ns = context.DefaultElementNamespace;
             return (info.LocalName!, info.Prefix, ns);
         }
 

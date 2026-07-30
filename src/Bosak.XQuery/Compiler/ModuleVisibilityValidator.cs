@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 27-07-2026     | Traversal for StringConstructorNode |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 29-07-2026     | excludeVariable parameter for initializer self-reference checks |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Parser;
@@ -42,15 +44,21 @@ internal static class ModuleVisibilityValidator
     /// <param name="visibleFunctions">Functions visible in the declaring module, as (ns, local, arity).</param>
     /// <param name="visibleVariables">Variables visible in the declaring module, as (ns, local).</param>
     /// <param name="parameterNames">Lexical parameter names of the enclosing function declaration, if any.</param>
+    /// <param name="excludeVariable">
+    /// When set (the global variable whose initializer is being compiled), a reference to
+    /// it that is not shadowed by a lexical binding raises XPST0008 — a variable is not in
+    /// scope within its own initializer (K-InternalVariablesWith-15b).
+    /// </param>
     public static void Validate(
         XPathAstNode body,
         XQueryStaticContext moduleContext,
         IReadOnlyCollection<string> moduleNamespaces,
         IReadOnlySet<(string Ns, string Local, int Arity)> visibleFunctions,
         IReadOnlySet<(string Ns, string Local)> visibleVariables,
-        IEnumerable<string>? parameterNames = null)
+        IEnumerable<string>? parameterNames = null,
+        (string Local, string Ns)? excludeVariable = null)
     {
-        var walker = new Walker(moduleContext, moduleNamespaces, visibleFunctions, visibleVariables);
+        var walker = new Walker(moduleContext, moduleNamespaces, visibleFunctions, visibleVariables, excludeVariable);
         if (parameterNames is not null)
         {
             foreach (var name in parameterNames)
@@ -65,6 +73,7 @@ internal static class ModuleVisibilityValidator
         private readonly IReadOnlyCollection<string> _moduleNamespaces;
         private readonly IReadOnlySet<(string Ns, string Local, int Arity)> _visibleFunctions;
         private readonly IReadOnlySet<(string Ns, string Local)> _visibleVariables;
+        private readonly (string Local, string Ns)? _excludeVariable;
         private readonly List<HashSet<(string Prefix, string Local)>> _boundLexical = new();
         private readonly List<HashSet<(string Ns, string Local)>> _boundResolved = new();
 
@@ -72,12 +81,14 @@ internal static class ModuleVisibilityValidator
             XQueryStaticContext moduleContext,
             IReadOnlyCollection<string> moduleNamespaces,
             IReadOnlySet<(string Ns, string Local, int Arity)> visibleFunctions,
-            IReadOnlySet<(string Ns, string Local)> visibleVariables)
+            IReadOnlySet<(string Ns, string Local)> visibleVariables,
+            (string Local, string Ns)? excludeVariable = null)
         {
             _moduleContext = moduleContext;
             _moduleNamespaces = moduleNamespaces;
             _visibleFunctions = visibleFunctions;
             _visibleVariables = visibleVariables;
+            _excludeVariable = excludeVariable;
         }
 
         // ------------------------------------------------------------------
@@ -178,6 +189,12 @@ internal static class ModuleVisibilityValidator
             if (string.IsNullOrEmpty(ns) && !string.IsNullOrEmpty(node.Prefix))
                 _moduleContext.Namespaces.TryGetValue(node.Prefix, out ns);
             ns ??= string.Empty;
+            if (!IsBound(node, ns) && _excludeVariable is { } excluded
+                && excluded.Local == node.LocalName && excluded.Ns == ns)
+            {
+                throw new ParseException(
+                    $"XPST0008: Variable ${(node.Prefix is null ? "" : node.Prefix + ":")}{node.LocalName} is not defined in the initializer of the variable being declared.", 0);
+            }
             if (!_moduleNamespaces.Contains(ns) || IsBound(node, ns))
                 return;
             if (!_visibleVariables.Contains((ns, node.LocalName)))

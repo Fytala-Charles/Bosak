@@ -5,8 +5,8 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 29 July 2026
-> **Bosak baseline:** 1,636 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,427 passed / 0 failed / 2,394 skipped (92.48% / 100% of runnable tests) — XQuery routing enabled; 299 XQuery conformance gaps recorded as reasoned skips
+> **Bosak baseline:** 1,660 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,510 passed / 0 failed / 2,311 skipped (92.74% / 100% of runnable tests) — XQuery routing enabled; 216 XQuery conformance gaps recorded as reasoned skips
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
 
@@ -14,6 +14,11 @@
 
 ## 0. Recent Changes
 
+- **2026-07-29** — XQuery: **residual-cluster sweep closed** (REQ-066): QT3 **29,510 passed / 0 failed** (from 29,427; +83 passing; gaps 216, −83).
+  - Stable order-by (index-decorated sort — `List<T>.Sort` is unstable); switch no-match-on-error with cardinality pre-checks and empty-matches-empty; array atomization and recursive content flattening; min/max boolean and date/time family rules.
+  - Computed elements apply the default element namespace (xmlns="" materialized); constructor-local prefixes propagate; constructor/`()` steps after `/` with `<`-after-slash XPST0003; schema kind-test grammar/runtime error split; implicit namespace-node() is XQST0134 in XQuery.
+  - External function declarations, initializer self-reference XPST0008, XQST0070/XQST0052 namespace rules, type-text comments, xs:error constructor, generate-id/base-uri/xml:id checks, duration-division rule.
+  - Every swept set runs fully green (AxisStep, VarDecl, StepExpr, SwitchExpr, PathExpr, ArrayTest, DefaultNamespaceDecl, fn:id/idref, in-scope-prefixes, min, base-uri, doc, generate-id, xs:error, divide-dayTimeDuration).
 - **2026-07-29** — XQuery: **dayTimeDurations clusters closed** (REQ-065): QT3 **29,427 passed / 0 failed** (from 29,400; +27 passing; gaps 299, −27).
   - Plain `xs:duration` operands in date/time arithmetic now raise **XPTY0004** — only `xs:dayTimeDuration`/`xs:yearMonthDuration` are permitted (cbcl-plus/minus family).
   - op/add-dayTimeDurations 61/0/0, op/subtract-dayTimeDurations 69/0/0; all other duration-arithmetic sets remain green.

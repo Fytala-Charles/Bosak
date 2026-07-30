@@ -85,6 +85,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.40  | 29-07-2026     | Parenthesized sequence types in 'as' declarations |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.41  | 29-07-2026     | Constructor steps after /; '<' after slash is XPST0003; schema-attribute and namespace-node() kind-test errors |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1285,11 +1287,21 @@ public sealed class XPathParser
     // ------------------------------------------------------------------
 
     // PathExpr ::= ("/" RelativePathExpr?) | ("//" RelativePathExpr) | RelativePathExpr
+    // In XQuery, '<' after '/' or '//' begins a direct element constructor — when the
+    // lexer could not scan one it is a syntax error, not the less-than operator
+    // (Steps-leading-lone-slash-2/3/4/5, PathExpr-5/7/8/9).
+    private void ThrowIfConstructorLessThan()
+    {
+        if (_allowFullFlwor && Current.Kind == TokenKind.LessThan)
+            throw new ParseException("XPST0003: '<' after '/' does not start a valid direct element constructor.", Current.Start);
+    }
+
     private XPathAstNode ParsePathExpr()
     {
         int start = Current.Start;
         if (Match(TokenKind.Slash))
         {
+            ThrowIfConstructorLessThan();
             if (IsAtEnd || !CanStartStepExpr(Current))
                 return WithSpan(new PathExprNode(true, Array.Empty<XPathAstNode>()), start, End);
             var steps = ParseRelativePathExpr();
@@ -1297,6 +1309,7 @@ public sealed class XPathParser
         }
         if (Match(TokenKind.SlashSlash))
         {
+            ThrowIfConstructorLessThan();
             var steps = ParseRelativePathExpr();
             steps.Insert(0, new StepNode(XdmAxis.DescendantOrSelf, new NodeTest(NameTestKind.KindTest, "node"), Array.Empty<XPathAstNode>()));
             return WithSpan(new PathExprNode(true, steps), start, End);
@@ -1315,10 +1328,12 @@ public sealed class XPathParser
         {
             if (Match(TokenKind.Slash))
             {
+                ThrowIfConstructorLessThan();
                 steps.Add(ParseStepExpr());
             }
             else if (Match(TokenKind.SlashSlash))
             {
+                ThrowIfConstructorLessThan();
                 steps.Add(new StepNode(XdmAxis.DescendantOrSelf, new NodeTest(NameTestKind.KindTest, "node"), Array.Empty<XPathAstNode>()));
                 steps.Add(ParseStepExpr());
             }
@@ -1410,6 +1425,15 @@ public sealed class XPathParser
         }
         var test = ParseNodeTest();
         var preds = ParsePredicateList();
+
+        // XQST0134: an implicit-axis namespace-node() step uses the namespace axis,
+        // which XQuery does not support (Axes112). Explicit axes (self, attribute, and
+        // the engine's namespace-axis support) are unaffected.
+        if (!axisExplicit && _allowFullFlwor
+            && test.Kind == NameTestKind.KindTest && test.Name == "namespace-node")
+        {
+            throw new ParseException("XQST0134: The namespace axis is not supported in XQuery.", start);
+        }
 
         // XPath 2.0 §3.2.1.1: default axis for attribute/namespace kind tests
         if (!axisExplicit && test.Kind == NameTestKind.KindTest)
@@ -1535,6 +1559,23 @@ public sealed class XPathParser
         string? argument = null;
         string? typeName = null;
 
+        // Schema-aware kind tests require schema awareness, which this engine does not
+        // support. Grammar errors are checked here: the empty form, a wildcard, and a
+        // string literal argument are XPST0003 (K2-Axes-85, K2-NodeTest-8/9,
+        // K2-NameTest-33/34). Unprefixed names are XPST0008 (K2-Axes-84); prefixed
+        // names flow to evaluation where an unbound prefix is XPST0081 (K2-NameTest-35/36).
+        if (name is "schema-element" or "schema-attribute")
+        {
+            if (Current.Kind == TokenKind.RParen)
+                throw new ParseException($"XPST0003: The {name}() kind test requires a name argument.", Current.Start);
+            if (Current.Kind == TokenKind.Star)
+                throw new ParseException($"XPST0003: The {name}() kind test requires a name, not a wildcard.", Current.Start);
+            if (Current.Kind == TokenKind.StringLiteral)
+                throw new ParseException($"XPST0003: The {name}() kind test requires a name, not a string literal.", Current.Start);
+            if (Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
+                throw new ParseException($"XPST0008: Schema-aware kind test {name}() is not supported (no schema awareness).", Current.Start);
+        }
+
         // Parse simple kind-test arguments: processing-instruction(name), element(name), attribute(name).
         // For now we do not parse schema types or nested kind tests (e.g. document-node(element(x))).
         if (Current.Kind == TokenKind.RParen)
@@ -1569,7 +1610,7 @@ public sealed class XPathParser
             while (!IsAtEnd && Current.Kind != TokenKind.RParen)
                 Advance();
         }
-        else if (name == "element" || name == "attribute")
+        else if (name == "element" || name == "attribute" || name is "schema-element" or "schema-attribute")
         {
             // argument is a name test (QName, *, prefix:*, or NCName), optionally followed
             // by a comma and a schema type name (attribute(foo, xs:integer)).
@@ -3206,7 +3247,8 @@ public sealed class XPathParser
         or TokenKind.StringLiteral or TokenKind.IntegerLiteral
         or TokenKind.DecimalLiteral or TokenKind.DoubleLiteral
         or TokenKind.KeywordFunction or TokenKind.KeywordMap
-        or TokenKind.KeywordArray or TokenKind.LBracket => true,
+        or TokenKind.KeywordArray or TokenKind.LBracket
+        or TokenKind.Constructor => true,
         _ => IsKeywordName(token.Kind)
     };
 

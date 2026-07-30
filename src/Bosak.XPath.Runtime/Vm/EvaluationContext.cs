@@ -49,6 +49,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.11  | 29-07-2026     | WithNamespace removes the binding on zero-length URI (namespace undeclaration) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.12  | 29-07-2026     | Constructor-local namespace tracking for materialization on built elements |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -511,6 +513,42 @@ public sealed class EvaluationContext
     {
         _namespaces.Remove(prefix);
         return this;
+    }
+
+    // Constructor-local namespace declarations (xmlns on enclosing constructors, applied
+    // via the DeclareNamespace opcode). Elements built inside a constructor materialize
+    // these bindings; the element's own declarations win (K2-InScopePrefixesFunc-18).
+    private readonly List<(string Prefix, string Uri)> _constructorLocalNamespaces = new();
+
+    /// <summary>The constructor-local namespace bindings currently in effect.</summary>
+    public IReadOnlyList<(string Prefix, string Uri)> ConstructorLocalNamespaces => _constructorLocalNamespaces;
+
+    /// <summary>The number of constructor-local bindings (for snapshot/restore).</summary>
+    public int ConstructorLocalNamespaceCount => _constructorLocalNamespaces.Count;
+
+    /// <summary>
+    /// Records a constructor-local namespace declaration; an empty URI undeclares the
+    /// prefix (removing any earlier local binding of the same prefix).
+    /// </summary>
+    public void AddConstructorLocalNamespace(string prefix, string uri)
+    {
+        for (int i = _constructorLocalNamespaces.Count - 1; i >= 0; i--)
+        {
+            if (_constructorLocalNamespaces[i].Prefix == prefix)
+            {
+                _constructorLocalNamespaces.RemoveAt(i);
+                break;
+            }
+        }
+        if (uri.Length > 0)
+            _constructorLocalNamespaces.Add((prefix, uri));
+    }
+
+    /// <summary>Drops constructor-local bindings recorded after the given snapshot point.</summary>
+    public void TruncateConstructorLocalNamespaces(int count)
+    {
+        if (_constructorLocalNamespaces.Count > count)
+            _constructorLocalNamespaces.RemoveRange(count, _constructorLocalNamespaces.Count - count);
     }
 
     public bool TryResolveNamespace(string prefix, out string namespaceUri)
