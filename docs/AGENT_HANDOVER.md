@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `TBD` (feat(xquery): computed namespace constructors in element content)
+**Commit:** `2eee587` (feat(xquery): computed namespace constructors in element content)
 **Current focus:** **prod/CompNamespaceConstructor cluster closed** (11 gaps → 0): computed namespace constructors as element content — interleaving with attributes, declaration dedupe, name-prefix conflict resolution, prefix type checking, and spec-correct namespace-node identity. QT3 went from **29,378 passed / 0 failed / 2,443 skipped (92.32%)** to **29,389 passed / 0 failed / 2,432 skipped (92.36%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,622 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (CompNamespaceConstructor cluster)
