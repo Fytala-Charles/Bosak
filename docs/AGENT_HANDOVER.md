@@ -1,6 +1,38 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
+**Commit:** `TBD` (feat(xquery): allowing empty in for clauses — grammar order and typed bindings)
+**Current focus:** **prod/AllowingEmpty cluster closed** (14 gaps → 0): `allowing empty` accepted in grammar position (before the positional variable) and checked against declared type occurrences. QT3 went from **29,364 passed / 0 failed / 2,457 skipped (92.28%)** to **29,378 passed / 0 failed / 2,443 skipped (92.32%)** (+14 passing). Full `dotnet test Bosak.sln` passes: **1,615 unit tests / 0 failed**; XSLT baseline unchanged.
+
+## This Session Changes (AllowingEmpty cluster)
+
+1. **Grammar order** — `for $x allowing empty at $p in E` now parses: the for-binding parser accepted `allowing empty` only *after* `at $p`, but the grammar (and every catalog query) puts it before (outer-003..018). The VM's `For` opcode already implemented the semantics (one iteration with the variable bound to () and the positional variable at 0).
+2. **Declared-type occurrence on the empty binding** — with `allowing empty`, the () binding is checked against the *declared* occurrence instead of item-level One: `as xs:integer?` accepts the empty binding (outer-012), `as xs:integer` raises **XPTY0004** (outer-013). One emitted `EnforceType` instruction covers both regular and empty iterations.
+3. **Gaps: 348 reasoned skips (−14)** — prod/AllowingEmpty runs **19/0/0**.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (binding order), `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs` (occurrence)
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+5)
+- `docs/*`, `README.md`
+
+## Remaining XQuery Conformance Gaps (348 recorded skips)
+
+Largest clusters: `op/add-dayTimeDurations` (16), `prod/CompNamespaceConstructor` (11), `misc/HigherOrderFunctions` (11), `op/subtract-dayTimeDurations` (11). The remaining ~2,095 skips are `validate` (schema awareness), `fn:load-xquery-module`, `sudoku` (too slow), and the two NameTest entries (K2-NameTest-5, NodeTest004).
+
+**XSLT note:** unchanged — `function-lookup-008` remains the single failing XSLT-engine test candidate for the next XSLT conformance sweep.
+
+## Next Recommended Step
+
+1. **prod/CompNamespaceConstructor** (11 tests — computed namespace constructors `namespace {expr} {expr}`).
+2. **misc/HigherOrderFunctions** (11 tests) or **op/add-dayTimeDurations** (16 tests).
+3. **XSLT conformance sweep** — the XSLT engine is untouched this week; `function-lookup-008` is still the one failing test there.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-07-29
 **Commit:** `758249e` (feat(xquery): map constructors in step position with key disambiguation)
 **Current focus:** **prod/MapConstructor cluster closed** (15 gaps → 0): map constructors in step/`!` position with step expressions as keys and values, plus the deep-equal sequence-semantics fix that their deep-equal expectations exposed. QT3 went from **29,349 passed / 0 failed / 2,472 skipped (92.23%)** to **29,364 passed / 0 failed / 2,457 skipped (92.28%)** (+15 passing). Full `dotnet test Bosak.sln` passes: **1,610 unit tests / 0 failed**; XSLT baseline unchanged.
 

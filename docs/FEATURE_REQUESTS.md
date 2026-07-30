@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0); QT3 now **29,364 passed / 0 failed** (92.28%); unit tests **1,610/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty clusters closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0); QT3 now **29,378 passed / 0 failed** (92.32%); unit tests **1,615/0**; XSLT baseline unchanged)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -166,6 +166,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-059 | *(internal)* | Character and entity reference validation in literals and constructors | Required for XQuery conformance: XQST0090 for invalid/overflow character references, XPST0003 for malformed references, XPath-mode non-expansion | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-060 | *(internal)* | Combined error-code conformance (FODC0001, XPTY0019, collation and prolog statics) | Required for XQuery conformance: document-root requirement for fn:id/idref, XPTY0019 for path steps over atomics, XQST0038 collation errors, XQST0060/0089/0125 statics | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 | REQ-061 | *(internal)* | Map constructors in step position with key disambiguation | Required for XPath/XQuery conformance: `map{...}` in step and `!` position, step expressions as keys/values, entry-colon disambiguation, and deep-equal sequence semantics for map values | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
+| REQ-062 | *(internal)* | `allowing empty` in for clauses — grammar order and typed bindings | Required for XQuery conformance: `allowing empty` before the positional variable, and the empty binding checked against the declared type occurrence (XPTY0004) | **Implemented** | Phase 4 | Charles Korthout | 2026-07-29 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2825,13 +2826,55 @@ Make the `prefix:*` name test non-destructive; gate both wildcard name-test form
 
 ---
 
+### REQ-062: `allowing empty` in for clauses — grammar order and typed bindings
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-07-29  
+**Status:** Implemented  
+**Target Version:** Phase 4
+
+**Problem Statement:**  
+The prod/AllowingEmpty cluster (14 recorded gaps) covered `for $x allowing empty at $p in E` in all combinations — positions, multiple and dependent bindings, and `as` type declarations. The VM already implemented the runtime semantics, but the parser only accepted `allowing empty` *after* the positional variable (the grammar, and every catalog query, puts it before), and the empty-sequence binding was checked with a hardcoded item-level occurrence, so `as xs:integer?` wrongly rejected it.
+
+**Proposed Solution:**  
+Accept `allowing empty` in grammar position (after the optional type declaration, before `at $p`); with `allowing empty`, enforce the declared type's own occurrence on the () binding — `xs:integer?` accepts it, `xs:integer` raises XPTY0004.
+
+**Acceptance Criteria:**
+- [x] `for $x allowing empty at $p in 1 to $n` parses and evaluates: non-empty input iterates normally (outer-003), empty input produces one iteration with `$x = ()` and `$p = 0` (outer-004).
+- [x] Multiple bindings with `allowing empty` on the first/second/both (outer-007..010), including dependent sequences `($x+1) to $n` (outer-011).
+- [x] Typed bindings: `as xs:integer?` accepts the empty binding (outer-012/014/016/017), `as xs:integer` raises **XPTY0004** (outer-013).
+- [x] `allowing empty` in XPath mode is **XPST0003** (unchanged).
+- [x] QT3: prod/AllowingEmpty **19/0/0**; full suite **29,378 passed / 0 failed / 2,443 skipped (92.32%)**; gaps **348** (−14).
+- [x] Unit tests: 5 new tests; full suite **1,615/0**.
+
+**Implementation Notes:**
+- Only two files needed changes: the for-binding parser (order) and the IR lowerer's `EmitEnforceTypeIfDeclared` (occurrence selection). The VM's `For` opcode already bound () and positional 0 for the empty case and jumped into the RHS block, so a single emitted `EnforceType` instruction with the right occurrence covers both iteration kinds.
+- Regular (single-item) iterations match any occurrence, so switching the emitted occurrence to the declared one under `allowing empty` cannot regress non-empty inputs.
+
+**Impact Analysis**
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Modified | `allowing empty` in grammar position. |
+| Compiler | Modified | Declared-occurrence enforcement for allowing-empty bindings. |
+| Conformance | Modified | Gaps 348. |
+| XSLT | None | Baseline unchanged (143/0). |
+
+**Decision Log**
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-07-29 | Kimi | One EnforceType instruction with the declared occurrence under `allowing empty` | Single items match every occurrence, so the same instruction is correct for regular iterations, the nullable empty case, and the XPTY0004 empty case. |
+
+---
+
 ## 9. Roadmap (post-QT3 sweep)
 
 After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilities are queued for future work. They are ranked by **strategic value / effort** and are expected to be tracked as individual requests when work begins.
 
 | Priority | REQ | Capability | Status | Notes |
 |----------|-----|------------|--------|-------|
-| 1 | REQ-040 … REQ-061 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed; QT3 wired (29,364/0, 92.28%). AllowingEmpty, CompNamespaceConstructor, HigherOrderFunctions, fn:load-xquery-module follow. |
+| 1 | REQ-040 … REQ-062 | **XQuery 3.1 full implementation** | In Progress | Phase 3 complete (direct + computed constructors, switch/typeswitch); Phase 4: output declarations + serialization done, user-defined functions/variables done, library modules done, try/catch done, string constructors done, ordering features done, NameTest cluster closed, VarDecl.external cluster closed, NamespaceDecl cluster closed, Annotation cluster closed, Literal cluster closed, CombinedErrorCodes cluster closed, MapConstructor cluster closed, AllowingEmpty cluster closed; QT3 wired (29,378/0, 92.32%). CompNamespaceConstructor, HigherOrderFunctions, fn:load-xquery-module follow. |
 | 2 | TBD | **XSLT 3.0 packages** (`xsl:package`, `xsl:use-package`) | Pending | Completes the XSLT 3.0 spec surface. |
 | 3 | TBD | **Schema awareness / XSD validation** | Pending | Cross-cutting for XPath + XSLT; clears schema-dependent test skips. |
 | 4 | TBD | **Streaming** (`streamable="yes"`, `XmlReader`-backed XDM) | Pending | Performance/scalability for large documents. |

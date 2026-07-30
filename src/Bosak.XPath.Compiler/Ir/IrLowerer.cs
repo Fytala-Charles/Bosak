@@ -63,6 +63,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.26  | 28-07-2026     | Emit KindTestType and NamespaceTest for prefixed kind-test arguments |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.27  | 29-07-2026     | 'allowing empty' checks the empty binding against the declared type occurrence |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -1785,11 +1787,14 @@ public sealed class IrLowerer
             ? binding.DeclaredType.TypeName
             : $"{binding.DeclaredType.Prefix}:{binding.DeclaredType.TypeName}";
         // For-bindings check each item (item level); let/grouping bindings check the
-        // whole value against the declared sequence type.
-        var info = new EnforceTypeInfo(
-            typeName,
-            itemLevel ? OccurrenceIndicator.One : binding.DeclaredType.Occurrence,
-            "XPTY0004");
+        // whole value against the declared sequence type. With 'allowing empty', the
+        // empty-sequence binding is checked against the declared occurrence instead:
+        // xs:integer? accepts (), xs:integer raises XPTY0004 (outer-012/013). A regular
+        // (single-item) iteration matches any occurrence, so one instruction covers both.
+        var occurrence = itemLevel && !binding.AllowingEmpty
+            ? OccurrenceIndicator.One
+            : binding.DeclaredType.Occurrence;
+        var info = new EnforceTypeInfo(typeName, occurrence, "XPTY0004");
         int poolIdx = AddToLiteralPool(info);
         Emit(IrOpCode.EnforceType, (ushort)valueReg, 0, 0, poolIdx);
     }

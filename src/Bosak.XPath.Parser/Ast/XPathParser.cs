@@ -81,6 +81,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.38  | 29-07-2026     | Map-constructor key disambiguation: gated wildcard name tests, '*:b:b' token split |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.39  | 29-07-2026     | For-binding grammar order: 'allowing empty' precedes the positional variable |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -703,6 +705,20 @@ public sealed class XPathParser
             declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
         }
 
+        // Grammar order: TypeDeclaration? AllowingEmpty? PositionalVar? — 'allowing empty'
+        // precedes 'at $p' (outer-003). XQuery only; XPath 3.1 does not allow it.
+        bool allowingEmpty = false;
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "allowing")
+        {
+            if (!_allowFullFlwor)
+                throw new ParseException("XPST0003: XPath does not allow 'allowing empty' in a for binding.", Current.Start);
+            Advance();
+            if (Current.Kind != TokenKind.Name || GetString(Current) != "empty")
+                throw new ParseException("XPST0003: Expected 'empty' after 'allowing'.", Current.Start);
+            Advance();
+            allowingEmpty = true;
+        }
+
         string? positionalVar = null;
         // PositionalVar ::= "at" "$" VarName  (contextual keyword, lexed as Name)
         if (allowPositional && Current.Kind == TokenKind.Name && GetString(Current) == "at")
@@ -715,19 +731,6 @@ public sealed class XPathParser
                 throw new ParseException($"XQST0089: The positional variable '${GetString(posTok)}' has the same name as the range variable.", posTok.Start);
             var (_, posLocal, _) = SplitQName(GetString(posTok));
             positionalVar = posLocal;
-        }
-
-        // XQuery "allowing empty" option; XPath 3.1 does not allow it.
-        bool allowingEmpty = false;
-        if (Current.Kind == TokenKind.Name && GetString(Current) == "allowing")
-        {
-            if (!_allowFullFlwor)
-                throw new ParseException("XPST0003: XPath does not allow 'allowing empty' in a for binding.", Current.Start);
-            Advance();
-            if (Current.Kind != TokenKind.Name || GetString(Current) != "empty")
-                throw new ParseException("XPST0003: Expected 'empty' after 'allowing'.", Current.Start);
-            Advance();
-            allowingEmpty = true;
         }
 
         Expect(TokenKind.KeywordIn);

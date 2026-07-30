@@ -50,6 +50,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.16  | 29-07-2026     | Drop 15 MapConstructor gap entries (implemented) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.17  | 29-07-2026     | Drop 14 AllowingEmpty gap entries (implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -353,21 +355,6 @@ internal sealed class ConformanceRunner
         ["cbcl-minus-028"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
         ["cbcl-minus-030"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
         ["cbcl-minus-032"] = "XQuery conformance gap (op:subtract-dayTimeDurations): see AGENT_HANDOVER REQ-045",
-        // prod/AllowingEmpty.xml (14 tests)
-        ["outer-003"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-004"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-007"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-008"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-009"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-010"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-011"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-012"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-013"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-014"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-015"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-016"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-017"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
-        ["outer-018"] = "XQuery conformance gap (AllowingEmpty): see AGENT_HANDOVER REQ-045",
         // prod/ArrayTest.xml (5 tests)
         ["ArrayTest-028"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",
         ["ArrayTest-047"] = "XQuery conformance gap (ArrayTest): see AGENT_HANDOVER REQ-045",

@@ -56,6 +56,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.14  | 29-07-2026     | 7 map constructor disambiguation and deep-equal sequence-semantics tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.15  | 29-07-2026     | 5 allowing-empty for-clause tests (positions, typed bindings, XPath rejection) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -2315,6 +2317,55 @@ public class PlaceholderTests
             .Evaluate(new XQueryContext());
 
         Assert.Equal(1L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_ForClause_AllowingEmpty_BindsEmptySequence()
+    {
+        var compiler = new XQueryCompiler();
+        // Empty input: one iteration with $x = () and the positional variable at 0.
+        var result = compiler.Compile("string-join(for $x allowing empty at $p in 1 to 0 return string($p), \",\")")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("0", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ForClause_AllowingEmpty_NonEmptyIterations()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("string-join(for $x allowing empty at $p in (10, 20) return string($p), \",\")")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("1,2", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ForClause_AllowingEmpty_NullableTypeAcceptsEmpty()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("string-join(for $x as xs:integer? allowing empty at $p in 1 to 0 return string($p), \",\")")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("0", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_ForClause_AllowingEmpty_RequiredTypeRejectsEmpty_ThrowsXPTY0004()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            compiler.Compile("for $x as xs:integer allowing empty at $p in 1 to 0 return $p")
+                .Evaluate(new XQueryContext()));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XPath_ForClause_AllowingEmpty_ThrowsXPST0003()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            Bosak.XPath.Api.XPath31Expression.Compile("for $x allowing empty in 1 to 3 return $x"));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)
